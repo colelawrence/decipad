@@ -1,12 +1,14 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 import path from 'path';
+import dotenv from 'dotenv';
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -14,6 +16,11 @@ import path from 'path';
 
 export const STORAGE_STATE = path.join(__dirname, './utils/src/user.json');
 export const STORAGE_STATE2 = path.join(__dirname, './utils/src/user2.json');
+
+export const STORAGE_STATE_PRODUCTION = path.join(
+  __dirname,
+  './utils/src/user_production.json'
+);
 
 const config: PlaywrightTestConfig = {
   testDir: './tests',
@@ -57,13 +64,33 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup',
-      testMatch: '**/**/*.setup.ts',
+      name: 'setup_localhost',
+      testMatch: '**/**/login-localhost.setup.ts',
       testDir: './utils/src',
     },
     {
+      name: 'setup_production',
+      testMatch: '**/**/login-production.setup.ts',
+      testDir: './utils/src',
+    },
+    {
+      name: 'regression',
+      dependencies: ['setup_production'],
+      testDir: './tests/regression',
+      testMatch: '**/**/*.regression.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE_PRODUCTION,
+        trace: 'retain-on-failure',
+        contextOptions: {
+          // chromium-specific permissions
+          permissions: ['clipboard-read', 'clipboard-write'],
+        },
+      },
+    },
+    {
       name: 'smoke',
-      dependencies: ['setup'],
+      dependencies: ['setup_localhost'],
       testDir: './tests/smoke',
       testMatch: '**/**/*.smoke.ts',
       use: {
@@ -78,7 +105,7 @@ const config: PlaywrightTestConfig = {
     },
     {
       name: 'chromium',
-      dependencies: ['setup'],
+      dependencies: ['setup_localhost'],
       testMatch: '**/*.spec.ts',
       testIgnore: '**/**/*.smoke.ts',
       use: {

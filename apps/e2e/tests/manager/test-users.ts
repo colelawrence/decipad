@@ -142,7 +142,7 @@ export class User {
   }
 
   /**
-   * Click Trye Decipad and create account
+   * Click Try Decipad and create account
    *
    * **Usage**
    *

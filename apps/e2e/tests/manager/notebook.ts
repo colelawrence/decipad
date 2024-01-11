@@ -516,7 +516,8 @@ export class Notebook {
    * ```
    */
   async updateNotebookTitle(title: string) {
-    await this.notebookTitle.click();
+    // make sure notebook is editable in 3s
+    await this.notebookTitle.click({ timeout: 3000 });
     await ControlPlus(this.page, 'A');
     await this.page.keyboard.press('Delete');
     await this.notebookTitle.fill(title);
