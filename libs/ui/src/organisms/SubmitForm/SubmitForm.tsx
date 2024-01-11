@@ -88,9 +88,6 @@ const baseFormContainerStyles = css({
       background: cssVar('backgroundAccent'),
     },
   },
-  '> svg': {
-    maxWidth: 16,
-  },
 });
 
 const innerFormContainerStyles = {
@@ -99,6 +96,9 @@ const innerFormContainerStyles = {
   gridTemplateColumns: '13px 1fr auto',
   alignItems: 'center',
   gap: '8px',
+  '> svg': {
+    maxWidth: 16,
+  },
 };
 
 const formContainerErrorStyles = css({
