@@ -14,7 +14,10 @@ import {
   useEditorRef,
   focusEditor,
   getEndPoint,
+  getBlockAbove,
+  select,
 } from '@udecode/plate-common';
+import { ELEMENT_TD } from '@decipad/editor-types';
 
 export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
   const { cellProps, value, onChange, onConfirm, onCancel } = props;
@@ -29,19 +32,68 @@ export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
   const editor = useEditorRef();
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    const cellEntry = getBlockAbove(editor, {
+      at: editor.selection?.focus,
+      match: { type: ELEMENT_TD },
+    });
+    if (!cellEntry) return;
+
+    const path = cellEntry[1];
+
     switch (event.key) {
-      case 'Tab':
-        onSelectNextCell?.();
+      case 'Tab': {
         onConfirm();
+        if (event.shiftKey) {
+          if (path[2] === 0) break;
+          const newPath = [...path];
+          newPath[2] = path[2] - 1;
+          select(editor, newPath);
+          break;
+        }
         event.preventDefault();
+        onSelectNextCell?.();
         break;
-      case 'Enter':
+      }
+      case 'Enter': {
         onConfirm();
+
+        const newPath = [...path];
+        if (event.shiftKey) {
+          if (path[1] < 3) break;
+          newPath[1] = path[1] - 1;
+          select(editor, newPath);
+          break;
+        }
+
+        newPath[1] = path[1] + 1;
+        try {
+          select(editor, newPath);
+        } catch (e) {
+          // swallow the error as it means we're on the last row
+        }
         break;
-      case 'Escape':
+      }
+      case 'ArrowUp': {
+        const newPath = [...path];
+        newPath[1] = path[1] - 1;
+        select(editor, newPath);
+        break;
+      }
+      case 'ArrowDown': {
+        const newPath = [...path];
+        newPath[1] = path[1] + 1;
+        try {
+          select(editor, newPath);
+        } catch (e) {
+          // swallow the error as it means we're on the last row
+        }
+        break;
+      }
+      case 'Escape': {
         onChange(initialValue);
         onCancel();
         break;
+      }
     }
   };
 

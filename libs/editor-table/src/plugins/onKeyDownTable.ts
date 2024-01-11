@@ -17,6 +17,7 @@ import {
   getNodeEntries,
   Value,
   getBlockAbove,
+  getPointBefore,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { addColumn } from '../hooks/index';
@@ -71,6 +72,22 @@ export const onKeyDownTable =
       if (entry) {
         const [, path] = entry;
         selectNextCell(editor as any, path);
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+
+    if (isHotkey('shift+tab', event)) {
+      const entry = getBlockAbove(editor, {
+        match: { type: [ELEMENT_TD, ELEMENT_TH] },
+      });
+
+      if (entry) {
+        const [, path] = entry;
+        const after = getPointBefore(editor, path);
+        if (after) {
+          select(editor, after);
+        }
         event.stopPropagation();
         event.preventDefault();
       }

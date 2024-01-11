@@ -91,7 +91,7 @@ export const CellEditorDefault = (cellProps: CellProps) => {
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       // Start editing on Enter
-      if (isHotkey('enter', event)) {
+      if (isHotkey('enter', event) || isHotkey('shift+enter', event)) {
         startEditing();
         event.preventDefault();
         return;
