@@ -51,6 +51,7 @@ import { BaseEditor, isNormalizing, Path, setNormalizing } from 'slate';
 import { RootEditorController } from './types';
 import { getMirrorEditorNormalizers } from './plugins/index';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
+import stringify from 'json-stringify-safe';
 
 const INITIAL_TAB_NAME = 'New Tab';
 const TITLE_EDITOR_INDEX = 0;
@@ -107,6 +108,20 @@ export class EditorController implements RootEditorController {
     this.mirrorEditor = this.createMirrorEditor();
   }
 
+  private debugPrintMirrorState() {
+    // eslint-disable-next-line no-console
+    console.log(
+      'mirror editor children:',
+      stringify(this.mirrorEditor.children)
+    );
+    // eslint-disable-next-line no-console
+    console.log('title editor children:', stringify(this.titleEditor.children));
+    this.tabEditors.forEach((editor, index) => {
+      // eslint-disable-next-line no-console
+      console.log(`tab editor ${index} children:`, stringify(editor.children));
+    });
+  }
+
   private createTitleEditor(): TitleEditor {
     const titleEditor = createTitleEditor();
     titleEditor.children = [];
@@ -142,7 +157,8 @@ export class EditorController implements RootEditorController {
       try {
         apply(op);
       } catch (err) {
-        console.error('Error applying op to mirror', op);
+        console.error('Error applying op to mirror', stringify(op, null, '\t'));
+        this.debugPrintMirrorState();
         console.error(err);
         throw err;
       }
