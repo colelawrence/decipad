@@ -115,6 +115,7 @@ export const engageAssistant = async ({
 
   const isPremium = await isPremiumWorkspace(workspaceId);
   const internalEmail = isInternalEmail(user.email);
+  const isN1NEmail = user.email && getEmailDomain(user.email) === 'n1n.co';
 
   const workspaceTotalTokensUsed =
     (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
@@ -125,12 +126,15 @@ export const engageAssistant = async ({
   // Lets not have limits for dev/staging with n1n.co workspace names.
   // Let's also not limit "internal" emails. Look at `isInternalEmail`.
   //
-
-  if (
-    !internalEmail &&
-    !(isDevOrStaging && !isTesting(workspaceName)) &&
-    workspaceTotalTokensUsed > limit
-  ) {
+  if (isDevOrStaging) {
+    if (
+      isTesting(workspaceName) &&
+      !isN1NEmail &&
+      workspaceTotalTokensUsed > limit
+    ) {
+      throw Boom.tooManyRequests("You've exceeded AI quota");
+    }
+  } else if (!internalEmail && workspaceTotalTokensUsed > limit) {
     throw Boom.tooManyRequests("You've exceeded AI quota");
   }
 
