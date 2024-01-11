@@ -78,6 +78,7 @@ let overrides: Flags = {
   SILLY_NAMES: false,
   RESOURCE_USAGE_COUNT: true,
   AI_ASSISTANT_CHAT: true,
+  AI_BUY_MORE_CREDITS: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
