@@ -99,4 +99,5 @@ export { UpdatePrompt } from './UpdatePrompt/UpdatePrompt';
 export { VoidBlock } from './VoidBlock/VoidBlock';
 export { UpgradePlanWarning } from './UpgradePlanWarning/UpgradePlanWarning';
 export { UpgradePlanWarningTooltip } from './UpgradePlanWarning/UpgradePlanWarningTooltip';
+export { MathBlock } from './MathBlock/MathBlock';
 export * from './placeholders';

@@ -1,6 +1,8 @@
 import { RemoteComputer } from '@decipad/remote-computer';
 import {
+  ELEMENT_MATH,
   ELEMENT_SMART_REF,
+  MathElement,
   MyEditor,
   MyElement,
   MyNode,
@@ -24,6 +26,7 @@ import { dndStore } from '@udecode/plate-dnd';
 import React from 'react';
 import { BasePoint, Path } from 'slate';
 import { insertSmartRef } from './insertSmartRef';
+import { nanoid } from 'nanoid';
 
 export const onDropSmartRef =
   (computer: RemoteComputer) =>
@@ -67,6 +70,23 @@ export const onDropSmartRef =
         {};
 
       if (textBefore == null || textAfter == null) {
+        return;
+      }
+
+      // Special case for math block, here we want to insert a math block into an empty paragraph
+      if (
+        textBefore.length === 0 &&
+        textAfter.length === 0 &&
+        result.result?.type.kind === 'function'
+      ) {
+        const math: MathElement = {
+          id: nanoid(),
+          type: ELEMENT_MATH,
+          blockId,
+          children: [{ text: '' }],
+        };
+
+        insertNodes(editor, [math]);
         return;
       }
 

@@ -22,6 +22,7 @@ import type {
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+  ELEMENT_MATH,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
@@ -213,6 +214,17 @@ export interface DisplayElement extends BaseElement {
 }
 
 /**
+ * Math Element is used for displaying math formulas
+ * It's only function is to display the formula
+ */
+export interface MathElement extends BaseElement {
+  type: typeof ELEMENT_MATH;
+  /** blockId of the original codeline */
+  blockId: string;
+  children: [EmptyText];
+}
+
+/**
  * Dropdown element defines the element that lives in a VariableDef
  * to enable dropdown behavior.
  */
@@ -292,6 +304,7 @@ export type InteractiveElement =
   | LiveConnectionElement
   | LiveDataSetElement
   | PlotElement
+  | MathElement
   | DisplayElement
   | DeprecatedInputElement
   | ExpressionElement

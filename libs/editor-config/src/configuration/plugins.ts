@@ -60,6 +60,7 @@ import {
   createTypeErrorHighlightPlugin,
   createUserEventPlugin,
   createTabSelectionPlugin,
+  createMathPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -234,6 +235,9 @@ export const plugins = ({
       createMigrateStructuredInputs(),
       createMigrateTableDropdownToId(),
       createPreventInvalidSelectionPlugin(),
+
+      // math display
+      createMathPlugin(),
     ],
     {
       components: components(computer),

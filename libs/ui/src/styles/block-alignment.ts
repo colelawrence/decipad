@@ -70,3 +70,5 @@ export const live: StyleData = {};
 export const draw: StyleData = {};
 
 export const structured: StyleData = {};
+
+export const math: StyleData = {};

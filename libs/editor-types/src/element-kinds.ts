@@ -33,6 +33,7 @@ export const ELEMENT_DROPDOWN = 'dropdown';
 export const ELEMENT_SLIDER = 'slider';
 export const ELEMENT_STRUCTURED_IN = 'structured_input';
 export const ELEMENT_STRUCTURED_IN_CHILD = 'structured_input_child';
+export const ELEMENT_MATH = 'math';
 
 export const ELEMENT_DISPLAY = 'display';
 

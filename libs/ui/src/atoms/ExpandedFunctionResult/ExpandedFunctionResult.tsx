@@ -8,8 +8,10 @@ const functionResultStyles = css({
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   display: 'inline',
+  padding: '1px 0px 2px',
   verticalAlign: 'baseline',
-  lineHeight: 1.2,
+  lineHeight: 1.6,
+  fontSize: '90%',
 });
 
 export const ExpandedFunctionResult: FC<CodeResultProps<'function'>> = ({
