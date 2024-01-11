@@ -14,7 +14,7 @@ import {
   DataViewMenu,
   VoidBlock,
 } from '@decipad/ui';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';
@@ -26,7 +26,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW);
-  const [deleted, setDeleted] = useState(false);
   const editor = useTEditorRef();
 
   const path = useNodePath(element);
@@ -54,7 +53,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   const {
     variableNames,
     tableName,
-    onDelete,
     onVariableNameChange,
     sortedColumns,
     selectedAggregationTypes,
@@ -68,11 +66,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   const wideTable = (sortedColumns?.length || 0) >= WIDE_MIN_COL_COUNT;
 
   const { color: defaultColor } = useEditorStylesContext();
-
-  const onBlockDelete = useCallback(() => {
-    setDeleted(true);
-    onDelete();
-  }, [onDelete]);
 
   const rotate = element.rotate ?? false;
   const headers = useMemo((): ReactNode[] => {
@@ -93,11 +86,10 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     ));
   }, [element.children, rotate, path]);
 
-  return !deleted ? (
+  return (
     <DraggableBlock
       element={element}
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-      onDelete={onBlockDelete}
       {...attributes}
     >
       <UIDataView
@@ -137,5 +129,5 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         </VoidBlock>
       </UIDataView>
     </DraggableBlock>
-  ) : null;
+  );
 };

@@ -31,13 +31,11 @@ import { useSelectedCells } from './useSelectedCells';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
-  const [deleted, setDeleted] = useState(false);
 
   const editor = useTEditorRef();
 
   const [tableFrozen, setTableFrozen] = useState(false);
   const {
-    onDelete,
     onAddRow,
     onAddColumn,
     onChangeColumnAggregation,
@@ -85,59 +83,52 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   const { color: defaultColor } = useEditorStylesContext();
 
   return (
-    (!deleted && (
-      <DraggableBlock
-        element={element}
-        blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-        onDelete={() => {
-          setDeleted(true);
-          onDelete();
-        }}
-        {...attributes}
-        suppressContentEditableWarning
-        id={blockId}
-        dependencyId={blockId}
-        key={blockId}
-        isDownloadable
-        onDownload={onDownload}
-      >
-        <EditorTableContext.Provider value={contextValue}>
-          <EditorTableResultContext.Provider
-            value={materializedTableResult ?? defaultTableResultValue}
-          >
-            <TableDndProvider editor={editor} table={element}>
-              <EditorTable
-                id={element.id}
-                onChangeIcon={onSaveIcon}
-                onChangeColor={onSaveColor}
-                onSetCollapsed={onSetCollapsed}
-                hideFormulas={element.hideFormulas}
-                onSetHideFormulas={onSetHideFormulas}
-                icon={(element.icon ?? 'TableSmall') as UserIconKey}
-                color={(element.color ?? defaultColor) as AvailableSwatchColor}
-                isCollapsed={element.isCollapsed}
-                onAddRow={onAddRow}
-                onAddColumn={onAddColumn}
-                tableWidth={wideTable ? 'WIDE' : 'SLIM'}
-                isSelectingCell={!!selectedCells}
-                smartRow={
-                  <SmartRow
-                    onAggregationTypeNameChange={onChangeColumnAggregation}
-                    aggregationTypeNames={headers.map((h) => h.aggregation)}
-                    tableName={name}
-                    tablePath={tablePath}
-                    columns={columns}
-                    element={element}
-                  />
-                }
-              >
-                {children}
-              </EditorTable>
-            </TableDndProvider>
-          </EditorTableResultContext.Provider>
-        </EditorTableContext.Provider>
-      </DraggableBlock>
-    )) ||
-    null
+    <DraggableBlock
+      element={element}
+      blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
+      {...attributes}
+      suppressContentEditableWarning
+      id={blockId}
+      dependencyId={blockId}
+      key={blockId}
+      isDownloadable
+      onDownload={onDownload}
+    >
+      <EditorTableContext.Provider value={contextValue}>
+        <EditorTableResultContext.Provider
+          value={materializedTableResult ?? defaultTableResultValue}
+        >
+          <TableDndProvider editor={editor} table={element}>
+            <EditorTable
+              id={element.id}
+              onChangeIcon={onSaveIcon}
+              onChangeColor={onSaveColor}
+              onSetCollapsed={onSetCollapsed}
+              hideFormulas={element.hideFormulas}
+              onSetHideFormulas={onSetHideFormulas}
+              icon={(element.icon ?? 'TableSmall') as UserIconKey}
+              color={(element.color ?? defaultColor) as AvailableSwatchColor}
+              isCollapsed={element.isCollapsed}
+              onAddRow={onAddRow}
+              onAddColumn={onAddColumn}
+              tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+              isSelectingCell={!!selectedCells}
+              smartRow={
+                <SmartRow
+                  onAggregationTypeNameChange={onChangeColumnAggregation}
+                  aggregationTypeNames={headers.map((h) => h.aggregation)}
+                  tableName={name}
+                  tablePath={tablePath}
+                  columns={columns}
+                  element={element}
+                />
+              }
+            >
+              {children}
+            </EditorTable>
+          </TableDndProvider>
+        </EditorTableResultContext.Provider>
+      </EditorTableContext.Provider>
+    </DraggableBlock>
   );
 };
