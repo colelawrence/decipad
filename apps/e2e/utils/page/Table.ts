@@ -202,7 +202,11 @@ export async function addRow(page: Page, tableName?: string) {
   focusOnTable(page, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  page.getByRole('button', { name: 'Add row' }).click({ force: true });
+  const selector = getTableOrPage(page, tableName).getByTestId(
+    'editor-table-add-row'
+  );
+  await selector.hover({ force: true });
+  await selector.click();
 }
 
 export async function removeRow(page: Page, line: number, tableName?: string) {

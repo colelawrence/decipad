@@ -44,6 +44,7 @@ export const AddTableRowButton = ({
         <button
           css={[buttonStyles, !mouseOver && hiddenStyles]}
           onClick={onAddRow}
+          data-testid="editor-table-add-row"
         >
           <span css={iconWrapperStyles}>
             <Create />

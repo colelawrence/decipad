@@ -82,6 +82,55 @@ test('Testing magic numbers', async ({ testUser }) => {
 
     await page.getByText('AdvancedChanged').click();
   });
+
+  await test.step('block and variable search in sidebar', async () => {
+    await testUser.notebook.openSidebar();
+    await expect(
+      page.getByTestId('editor-sidebar').getByText('Number Input').first()
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('editor-sidebar').getByText('Slider').nth(2)
+    ).toBeVisible();
+
+    await page.getByTestId('sidebar-Insert').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('Slider');
+
+    await expect(
+      page.getByTestId('editor-sidebar').getByText('Number Input')
+    ).toBeHidden();
+    await expect(
+      page.getByTestId('editor-sidebar').getByText('Slider').nth(2)
+    ).toBeVisible();
+
+    for (let i = 0; i < 6; i++) {
+      await page.keyboard.press('Backspace');
+    }
+    await page.getByTestId('sidebar-Data').click();
+    await expect(
+      page.getByTestId('editor-sidebar').getByText('AdvancedChanged')
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('editor-sidebar').getByTestId('number-result:1,234')
+    ).toBeVisible();
+  });
+
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('Formula');
+
+  await expect(
+    page.getByTestId('editor-sidebar').getByText('Formula')
+  ).toBeVisible();
+
+  await expect(
+    page.getByTestId('editor-sidebar').getByTestId('number-result:50')
+  ).toBeVisible();
+  await expect(
+    page.getByTestId('editor-sidebar').getByText('AdvancedChanged')
+  ).toBeHidden();
+  await expect(
+    page.getByTestId('editor-sidebar').getByTestId('number-result:1,234')
+  ).toBeHidden();
 });
 
 test('Navigating with magic numbers', async ({ testUser }) => {
