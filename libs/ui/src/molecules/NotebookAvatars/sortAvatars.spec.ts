@@ -1,7 +1,4 @@
-import {
-  PermissionType,
-  UserAccessMetaFragment,
-} from '@decipad/graphql-client';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 import { sortAvatars } from './sortAvatars';
 
 describe('sortAvatars', () => {
@@ -12,7 +9,7 @@ describe('sortAvatars', () => {
         name: 'John Doe',
         email: 'john.doe@example.com',
       },
-      permission: PermissionType.Read,
+      permission: 'READ',
       canComment: true,
     };
 
@@ -22,7 +19,7 @@ describe('sortAvatars', () => {
         name: 'Alice Smith',
         email: 'alice.smith@example.com',
       },
-      permission: PermissionType.Write,
+      permission: 'WRITE',
       canComment: true,
     };
 
@@ -32,7 +29,7 @@ describe('sortAvatars', () => {
         name: 'Bob John',
         email: 'bob.john@example.com',
       },
-      permission: PermissionType.Admin,
+      permission: 'ADMIN',
       canComment: true,
     };
 
@@ -42,7 +39,7 @@ describe('sortAvatars', () => {
         name: 'Zane Smith',
         email: 'zane.smith@example.com',
       },
-      permission: PermissionType.Write,
+      permission: 'WRITE',
       canComment: true,
     };
 
@@ -52,7 +49,7 @@ describe('sortAvatars', () => {
         name: 'Mary Smith',
         email: 'mary.smith@example.com',
       },
-      permission: PermissionType.Write,
+      permission: 'WRITE',
       canComment: true,
     };
 

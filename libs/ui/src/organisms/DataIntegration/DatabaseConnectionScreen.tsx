@@ -2,10 +2,7 @@
 import { ImportElementSource } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, FormEvent, useCallback, useState } from 'react';
-import {
-  ExternalProvider,
-  useWorkspaceExternalData,
-} from '@decipad/graphql-client';
+import { useWorkspaceExternalData } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
@@ -274,7 +271,7 @@ function NewDataConnection({
       externalId: url,
       workspace_id: workspaceId,
       padId: undefined, // Resource belongs to the workspace, and not a specific notebook
-      provider: ExternalProvider.Postgresql,
+      provider: 'postgresql',
       dataSourceName: name,
     }).then((success) => {
       if (success) {

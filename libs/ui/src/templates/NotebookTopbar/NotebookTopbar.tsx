@@ -550,7 +550,7 @@ export const NotebookTopbar = ({
                   onChange={notebookAccessActions.onChangeAccess}
                   onRemove={notebookAccessActions.onRemoveAccess}
                 />
-              ) : isPublished || permissionType !== PermissionType.Read ? (
+              ) : isPublished || permissionType !== 'READ' ? (
                 isGPTGenerated ? (
                   <Button type={'primaryBrand'} onClick={onClaimNotebook}>
                     Claim notebook

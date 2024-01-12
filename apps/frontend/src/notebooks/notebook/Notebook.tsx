@@ -7,8 +7,6 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import {
   EditorNotebookFragment,
-  Gist,
-  PermissionType,
   useClaimNotebookMutation,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
@@ -397,7 +395,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
 
-  const isGPTGenerated = meta.data?.getPadById?.gist === Gist.Ai;
+  const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 
   const permission = meta.data?.getPadById?.myPermissionType;
 
@@ -576,7 +574,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   } = useAiUsage();
 
   const isReadOnly =
-    meta.data?.getPadById?.myPermissionType === PermissionType.Read ||
+    meta.data?.getPadById?.myPermissionType === 'READ' ||
     meta.data?.getPadById?.myPermissionType == null;
 
   const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);

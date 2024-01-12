@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://127.0.0.1:3000/graphql'
+schema: 'http://127.0.0.1:3333/graphql'
 documents: 'libs/graphql-client/src/**/*.graphql'
 generates:
   libs/graphql-client/src/generated.ts:
@@ -10,6 +10,7 @@ generates:
       - 'typescript-urql-graphcache'
     config:
       withHooks: true
+      enumsAsTypes: true
   libs/graphql-client/src/schema.generated.json:
     plugins:
       - 'introspection'

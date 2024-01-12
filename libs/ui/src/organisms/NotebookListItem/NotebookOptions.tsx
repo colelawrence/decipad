@@ -1,6 +1,5 @@
 import {
   NotebookMetaDataFragment,
-  PermissionType,
   WorkspaceSwitcherWorkspaceFragment,
 } from '@decipad/graphql-client';
 import { NotebookMetaActionsType } from '@decipad/react-contexts';
@@ -79,13 +78,13 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         onChangeOpen={setIsOpen}
         trigger={trigger}
       >
-        {permissionType === PermissionType.Read && (
+        {permissionType === 'READ' && (
           <ReaderInfo>
             As a Reader, you can not download or copy this notebook.
           </ReaderInfo>
         )}
         {workspaces.length !== 0 &&
-          permissionType !== PermissionType.Read &&
+          permissionType !== 'READ' &&
           (workspaces.length > 1 ? (
             <MenuList
               itemTrigger={
@@ -118,7 +117,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             </MenuItem>
           ))}
         {notebookStatus && notebookStatus}
-        {permissionType === PermissionType.Admin && workspaces.length > 1 && (
+        {permissionType === 'ADMIN' && workspaces.length > 1 && (
           <MenuList
             itemTrigger={
               <TriggerMenuItem icon={<Switch />}>
@@ -140,7 +139,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             ))}
           </MenuList>
         )}
-        {permissionType !== PermissionType.Read && (
+        {permissionType !== 'READ' && (
           <>
             <MenuItem
               icon={<Download />}
@@ -162,7 +161,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             </MenuItem>
           </>
         )}
-        {permissionType !== PermissionType.Read && isArchived && (
+        {permissionType !== 'READ' && isArchived && (
           <MenuItem
             icon={<FolderOpen />}
             onSelect={() => {
@@ -174,18 +173,17 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
           </MenuItem>
         )}
 
-        {permissionType !== PermissionType.Read &&
-          (canDelete || !isArchived) && (
-            <MenuItem
-              icon={isArchived ? <Trash /> : <Archive />}
-              onSelect={() => {
-                onDelete(id, true);
-                setIsOpen(false);
-              }}
-            >
-              {isArchived ? 'Delete' : 'Archive'}
-            </MenuItem>
-          )}
+        {permissionType !== 'READ' && (canDelete || !isArchived) && (
+          <MenuItem
+            icon={isArchived ? <Trash /> : <Archive />}
+            onSelect={() => {
+              onDelete(id, true);
+              setIsOpen(false);
+            }}
+          >
+            {isArchived ? 'Delete' : 'Archive'}
+          </MenuItem>
+        )}
 
         {creationDate && (
           <li css={creationDateStyles}>

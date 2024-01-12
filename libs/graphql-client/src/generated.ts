@@ -89,24 +89,22 @@ export type ExternalKey = {
   lastUsedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export enum ExternalProvider {
-  Cockroachdb = 'cockroachdb',
-  Csv = 'csv',
-  Decipad = 'decipad',
-  Gsheets = 'gsheets',
-  Json = 'json',
-  Mariadb = 'mariadb',
-  Mssql = 'mssql',
-  Mysql = 'mysql',
-  Notion = 'notion',
-  Oracledb = 'oracledb',
-  Postgresql = 'postgresql',
-  Redshift = 'redshift'
-}
+export type ExternalProvider =
+  | 'cockroachdb'
+  | 'csv'
+  | 'decipad'
+  | 'gsheets'
+  | 'json'
+  | 'mariadb'
+  | 'mssql'
+  | 'mysql'
+  | 'notion'
+  | 'oracledb'
+  | 'postgresql'
+  | 'redshift';
 
-export enum Gist {
-  Ai = 'AI'
-}
+export type Gist =
+  | 'AI';
 
 export type GoalFulfilmentInput = {
   goalName: Scalars['String']['input'];
@@ -624,11 +622,10 @@ export type Permission = {
   user: User;
 };
 
-export enum PermissionType {
-  Admin = 'ADMIN',
-  Read = 'READ',
-  Write = 'WRITE'
-}
+export type PermissionType =
+  | 'ADMIN'
+  | 'READ'
+  | 'WRITE';
 
 export type Query = {
   __typename?: 'Query';
@@ -898,22 +895,20 @@ export type SubscriptionTagsChangedArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
-export enum SubscriptionPaymentStatus {
-  NoPaymentRequired = 'no_payment_required',
-  Paid = 'paid',
-  Unpaid = 'unpaid'
-}
+export type SubscriptionPaymentStatus =
+  | 'no_payment_required'
+  | 'paid'
+  | 'unpaid';
 
-export enum SubscriptionStatus {
-  Active = 'active',
-  Canceled = 'canceled',
-  Incomplete = 'incomplete',
-  IncompleteExpired = 'incomplete_expired',
-  PastDue = 'past_due',
-  Paused = 'paused',
-  Trialing = 'trialing',
-  Unpaid = 'unpaid'
-}
+export type SubscriptionStatus =
+  | 'active'
+  | 'canceled'
+  | 'incomplete'
+  | 'incomplete_expired'
+  | 'past_due'
+  | 'paused'
+  | 'trialing'
+  | 'unpaid';
 
 export type TagChanges = {
   __typename?: 'TagChanges';
@@ -1020,7 +1015,6 @@ export type WorkspaceInput = {
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
-  customer_id?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   paymentLink: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
@@ -2712,7 +2706,6 @@ export type GraphCacheResolvers = {
     workspace?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, WithTypename<Workspace> | string>
   },
   WorkspaceSubscription?: {
-    customer_id?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     paymentLink?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     paymentStatus?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, SubscriptionPaymentStatus | string>,
@@ -3143,7 +3136,6 @@ export type GraphCacheUpdaters = {
     workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>
   },
   WorkspaceSubscription?: {
-    customer_id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     paymentLink?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     paymentStatus?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,

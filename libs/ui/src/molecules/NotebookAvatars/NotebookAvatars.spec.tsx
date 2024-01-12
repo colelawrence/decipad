@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
-import { PermissionType } from '@decipad/graphql-client';
 
 const props: NotebookAvatarsProps = {
   invitedUsers: [
@@ -11,7 +10,7 @@ const props: NotebookAvatarsProps = {
         name: 'John Doe',
         email: 'foo@nar.com',
       },
-      permission: PermissionType.Write,
+      permission: 'WRITE',
       canComment: true,
     },
     {
@@ -20,7 +19,7 @@ const props: NotebookAvatarsProps = {
         name: 'Blake Doe',
         email: 'blake@nar.com',
       },
-      permission: PermissionType.Read,
+      permission: 'READ',
       canComment: true,
     },
     {
@@ -29,7 +28,7 @@ const props: NotebookAvatarsProps = {
         name: 'Chris Doe',
         email: 'chris@nar.com',
       },
-      permission: PermissionType.Admin,
+      permission: 'ADMIN',
       canComment: true,
     },
   ],

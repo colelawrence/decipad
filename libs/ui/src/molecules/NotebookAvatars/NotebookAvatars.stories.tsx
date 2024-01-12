@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { NotebookAvatars } from './NotebookAvatars';
-import { PermissionType } from '@decipad/graphql-client';
 
 const args: ComponentProps<typeof NotebookAvatars> = {
   invitedUsers: [
@@ -11,7 +10,7 @@ const args: ComponentProps<typeof NotebookAvatars> = {
         name: 'Doe John',
         email: 'dough@nar.com',
       },
-      permission: PermissionType.Write,
+      permission: 'WRITE',
       canComment: true,
     },
     {
@@ -20,7 +19,7 @@ const args: ComponentProps<typeof NotebookAvatars> = {
         name: 'John Doe',
         email: 'foo@nar.com',
       },
-      permission: PermissionType.Admin,
+      permission: 'ADMIN',
       canComment: true,
     },
   ],

@@ -9,7 +9,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
-import { PermissionType } from '@decipad/graphql-client';
 // eslint-disable-next-line no-restricted-imports
 import { IntercomProvider } from 'react-use-intercom';
 
@@ -114,7 +113,7 @@ describe('Notebook Topbar', () => {
           notebookMeta={{
             id: 'id',
             name: 'name',
-            myPermissionType: PermissionType.Read,
+            myPermissionType: 'READ',
             snapshots: [],
             createdAt: 0,
             access: {
@@ -134,7 +133,7 @@ describe('Notebook Topbar', () => {
           notebookMeta={{
             id: 'id',
             name: 'name',
-            myPermissionType: PermissionType.Admin,
+            myPermissionType: 'ADMIN',
             snapshots: [],
             createdAt: 0,
             access: {
@@ -157,7 +156,7 @@ it('renders well for writers', () => {
         notebookMeta={{
           id: 'id',
           name: 'name',
-          myPermissionType: PermissionType.Write,
+          myPermissionType: 'WRITE',
           snapshots: [],
           createdAt: 0,
           access: {
