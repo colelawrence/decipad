@@ -47,7 +47,7 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
     >
       <ModalWrapper>
         <ModalSubtitle>
-          <p>${nrOfCredits} Credits</p>
+          <p>{nrOfCredits} Credits</p>
           <p>$15</p>
         </ModalSubtitle>
         <p css={p14Regular}>Add 500 credits to your workspace</p>

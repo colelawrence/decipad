@@ -99,7 +99,8 @@ const MembersCounter: React.FC<{ number: number }> = ({ number }) =>
 
 const addMoreCreditsButton = css({
   borderRadius: '4px',
-  padding: '4px',
+  padding: '2px 4px',
+  lineHeight: '1.4',
   backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
   color: componentCssVars('ButtonTertiaryAltDefaultText'),
   display: 'inline',
