@@ -142,6 +142,7 @@ export type PadInput = {
   isTemplate?: number;
   isPublic?: boolean;
   isPublicWritable?: boolean;
+  gist?: PadRecord['gist'];
 };
 
 export type SectionInput = {
@@ -341,6 +342,8 @@ export interface PadRecord extends TableRecordBase {
   section_id?: string;
   archived?: boolean;
   isTemplate?: number;
+
+  gist?: 'ai';
 }
 
 export interface SectionRecord extends TableRecordBase {

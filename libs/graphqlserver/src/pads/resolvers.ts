@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { unauthorized } from '@hapi/boom';
+import { badRequest, unauthorized } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
 import { PadRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
@@ -40,6 +40,7 @@ import {
   User,
   Workspace,
 } from '@decipad/graphqlserver-types';
+import { claimNotebook } from './claimNotebook';
 
 const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
 
@@ -143,6 +144,23 @@ const resolvers: Resolvers = {
     movePad,
     importPad: async (parent, args, context) =>
       padResource.toGraphql(await importPad(parent, args, context)),
+
+    async claimNotebook(_, { notebookId }, context) {
+      if (context.user?.id == null) {
+        throw badRequest('no user');
+      }
+
+      const data = await tables();
+
+      const toClaimNotebook = await data.pads.get({ id: notebookId });
+      if (toClaimNotebook == null || toClaimNotebook.gist !== 'ai') {
+        throw badRequest('Bad notebook');
+      }
+
+      await claimNotebook(context.user.id, notebookId);
+
+      return true;
+    },
   },
 
   Pad: {
@@ -226,6 +244,21 @@ const resolvers: Resolvers = {
         params,
         context
       );
+
+      // TODO: Refactor
+      // Move this into own helper function.
+      // + Add `gist` field to graphql
+      if (pad.workspaceId == null) {
+        const initialState = await getNotebookInitialState(pad.id);
+        if (initialState.length >= MAX_INITIAL_STATE_PAYLOAD_SIZE) {
+          return null;
+        }
+        return Buffer.from(initialState).toString('base64');
+      }
+
+      // TODO: Refactor before merge.
+      // if you see this in code review, dont approve :)
+
       const snapshotName =
         (permissionType == null || permissionType === 'READ') &&
         !context.snapshotName

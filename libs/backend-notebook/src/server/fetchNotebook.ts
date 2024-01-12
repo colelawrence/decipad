@@ -8,6 +8,13 @@ export const fetchNotebook = async (notebookId: string) => {
     throw notFound(`notebook with id ${notebookId} not found`);
   }
 
+  // TODO: Add authentication here for notebooks without users.
+
+  if (notebook.gist === 'ai') {
+    // This is a `gist`, AI should be able to edit it.
+    return notebook;
+  }
+
   if (!notebook.isPublicWritable) {
     throw forbidden('Needs authentication');
   }

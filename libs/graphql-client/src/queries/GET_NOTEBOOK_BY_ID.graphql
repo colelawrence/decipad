@@ -30,6 +30,7 @@ fragment EditorNotebook on Pad {
   isPublic
   createdAt
   archived
+  gist
   workspace {
     id
     name

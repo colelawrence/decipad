@@ -20,6 +20,10 @@ export interface SearchNotebookTemplatesResult {
   foundNotebookTemplates: Array<NotebookTemplate>;
 }
 
+export interface AssignNotebookResult {
+  assigned: boolean;
+}
+
 export interface ServerSideNotebookApi extends NotebookOpenApi {
   createNotebook: (params: { title: string }) => CreateNotebookResult;
   evalCode: (params: { code: string }) => Result.Result;
@@ -31,4 +35,8 @@ export interface ServerSideNotebookApi extends NotebookOpenApi {
   injectNotebookTemplate: (params: {
     notebookTemplateId: string;
   }) => AllNotebookElementsDescriptionResult;
+  assignNotebook: (params: {
+    notebookId: string;
+    userId: string;
+  }) => AssignNotebookResult;
 }

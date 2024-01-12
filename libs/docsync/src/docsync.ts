@@ -1,9 +1,10 @@
 import { Session } from 'next-auth';
 import { Awareness } from 'y-protocols/awareness';
-import { applyUpdate, Doc as YDoc } from 'yjs';
+import { applyUpdate, encodeStateAsUpdate, Doc as YDoc } from 'yjs';
 import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
 import {
+  applySlateOps,
   SyncElement,
   toSlateDoc,
   withCursor,
@@ -28,6 +29,7 @@ export const slateYjsSymbol = Symbol('slate-yjs');
 declare global {
   interface Window {
     yjsToJson: (text: string) => void;
+    jsonToYjs: (json: string) => void;
   }
 }
 
@@ -44,6 +46,27 @@ if (
     const yjsDoc = new YDoc();
     applyUpdate(yjsDoc, data);
     return { children: toSlateDoc(yjsDoc.getArray()) };
+  };
+
+  window.jsonToYjs = (json: string) => {
+    const nodes = (JSON.parse(json) as { children: Array<object> }).children;
+    const insertOps = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+      insertOps.push({
+        type: 'insert_node',
+        path: [i],
+        node: nodes[i],
+      });
+    }
+
+    const doc = new YDoc();
+    const arr = doc.getArray<SyncElement>();
+
+    applySlateOps(arr, insertOps as any, slateYjsSymbol);
+
+    const buf = encodeStateAsUpdate(doc);
+    return Buffer.from(buf).toString('base64');
   };
 }
 

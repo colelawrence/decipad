@@ -45,6 +45,8 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   hasUnpublishedChanges: false,
   toggleAIMode: noop,
   aiMode: false,
+  onClaimNotebook: noop,
+  isGPTGenerated: false,
 };
 
 interface WithProvidersProps {

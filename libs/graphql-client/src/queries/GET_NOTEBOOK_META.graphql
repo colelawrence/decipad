@@ -17,6 +17,7 @@ fragment NotebookMetaData on Pad {
   isPublic
   createdAt
   initialState
+  gist
   workspace {
     id
     name

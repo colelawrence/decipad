@@ -33,6 +33,8 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   toggleAIMode: noop,
   aiMode: false,
   UndoButtons: undefined,
+  isGPTGenerated: false,
+  onClaimNotebook: noop,
 };
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',

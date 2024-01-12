@@ -98,6 +98,7 @@ jobs:
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
+          OPENAI_DECIPAD_GPT_BEARER_KEY: '${{ secrets.OPENAI_DECIPAD_GPT_BEARER_KEY }}'
 
         run: |
           export SAM_BUCKET="decipad-backend-sam"

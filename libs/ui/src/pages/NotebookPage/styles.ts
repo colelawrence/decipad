@@ -33,12 +33,14 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
   }),
 
   '& > header': {
+    position: 'relative',
     height: '64px',
     width: '100%',
     padding: '0px 32px',
     backgroundColor: cssVar('backgroundAccent'),
     display: 'flex',
     alignItems: 'center',
+    zIndex: 50,
 
     [smallScreenQuery]: {
       padding: '4px 8px 0px',

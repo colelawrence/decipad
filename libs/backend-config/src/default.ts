@@ -76,6 +76,7 @@ const defaultEnvValues = {
   DECI_MAX_CREDITS_FREE: '50',
   DECI_MAX_CREDITS_PRO: '500',
   DECI_TOKENS_TO_CREDITS: '2000',
+  OPENAI_DECIPAD_GPT_BEARER_KEY: 'hello',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

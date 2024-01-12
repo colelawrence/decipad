@@ -1,7 +1,7 @@
 import typeDefs from './generated/typedefs';
 
 export * from './generated/graphql-types';
-export * from './context';
+export * from './generated/context';
 
 export { typeDefs };
 

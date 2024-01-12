@@ -50,7 +50,7 @@ export const createNotebook: CustomAction<
     const notebook = await createNotebookRecord(undefined, {
       name: title,
       isPublic: true,
-      isPublicWritable: true,
+      gist: 'ai',
     });
     await createNotebookContent<NotebookValue>(notebook.id, [
       {

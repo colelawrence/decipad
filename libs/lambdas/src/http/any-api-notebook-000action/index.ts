@@ -50,6 +50,7 @@ export const handler: APIGatewayProxyHandlerV2 = handle(
       console.log('Replying', response);
       return response;
     }
+
     const { notebookId, ...rest } = event.queryStringParameters ?? {};
     const { action } = event.pathParameters ?? {};
     if (!action) {

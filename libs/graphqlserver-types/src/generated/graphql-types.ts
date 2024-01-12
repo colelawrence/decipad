@@ -102,6 +102,9 @@ export type ExternalProvider =
   | 'postgresql'
   | 'redshift';
 
+export type Gist =
+  | 'AI';
+
 export type GoalFulfilmentInput = {
   goalName: Scalars['String']['input'];
 };
@@ -129,6 +132,7 @@ export type Mutation = {
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
+  claimNotebook: Scalars['Boolean']['output'];
   createExternalDataSource?: Maybe<ExternalDataSource>;
   createLogs?: Maybe<Scalars['Boolean']['output']>;
   createOrUpdateSnapshot: Scalars['Boolean']['output'];
@@ -205,6 +209,11 @@ export type MutationAddTagToPadArgs = {
 
 export type MutationAttachFileToPadArgs = {
   handle: Scalars['ID']['input'];
+};
+
+
+export type MutationClaimNotebookArgs = {
+  notebookId: Scalars['ID']['input'];
 };
 
 
@@ -528,6 +537,7 @@ export type Pad = {
   attachments: Array<Attachment>;
   createdAt: Scalars['DateTime']['output'];
   document: Scalars['String']['output'];
+  gist?: Maybe<Gist>;
   icon?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   initialState?: Maybe<Scalars['String']['output']>;
@@ -1104,6 +1114,7 @@ export type ResolversTypes = {
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ResolverTypeWrapper<ExternalKey>;
   ExternalProvider: ExternalProvider;
+  Gist: Gist;
   GoalFulfilmentInput: GoalFulfilmentInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -1294,6 +1305,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
   addTagToPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>>;
   attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
+  claimNotebook?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
   createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
   createLogs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateLogsArgs, 'input'>>;
   createOrUpdateSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>>;
@@ -1360,6 +1372,7 @@ export type PadResolvers<ContextType = GraphqlContext, ParentType extends Resolv
   attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gist?: Resolver<Maybe<ResolversTypes['Gist']>, ParentType, ContextType>;
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   initialState?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

@@ -1,4 +1,4 @@
-import { notAcceptable } from '@hapi/boom';
+import { notAcceptable, unauthorized } from '@hapi/boom';
 import {
   APIGatewayProxyStructuredResultV2,
   APIGatewayProxyEventV2,
@@ -16,8 +16,11 @@ import { actions } from '../actions';
 import { fetchNotebook } from './fetchNotebook';
 import { track } from '@decipad/backend-analytics';
 import { syncComputer } from './syncComputer';
+import { thirdParty } from '@decipad/backend-config';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
+
+const gptKey = thirdParty().openai.decipadGptBearerKey;
 
 export const server = async (
   event: APIGatewayProxyEventV2,
@@ -25,6 +28,13 @@ export const server = async (
   actionName: keyof typeof actions,
   params: Record<string, unknown>
 ): Promise<APIGatewayProxyStructuredResultV2> => {
+  // Will throw without API-key
+  // We might want to change this in the future if we want to allow others
+  // to edit notebooks.
+  if (event.headers.authorization !== `Bearer ${gptKey}`) {
+    throw unauthorized('API_KEY wrong');
+  }
+
   const action = actions[actionName] as CustomAction;
   if (!action) {
     throw notAcceptable(`Unknown function ${actionName as string}`);
@@ -34,7 +44,7 @@ export const server = async (
     properties: params,
   });
 
-  const computer = await getRemoteComputer();
+  const computer = getRemoteComputer();
 
   let result: MaybeWrappedInActionResult<ReturnType<typeof action.handler>>;
   if (action.requiresNotebook) {

@@ -129,6 +129,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_PRO);
     case 'DECI_TOKENS_TO_CREDITS':
       return valueOrDefault(name, process.env.DECI_TOKENS_TO_CREDITS);
+    case 'OPENAI_DECIPAD_GPT_BEARER_KEY':
+      return valueOrDefault(name, process.env.OPENAI_DECIPAD_GPT_BEARER_KEY);
   }
 }
 
@@ -267,6 +269,7 @@ export function thirdParty() {
     },
     openai: {
       apiKey: env('OPENAI_API_KEY'),
+      decipadGptBearerKey: env('OPENAI_DECIPAD_GPT_BEARER_KEY'),
     },
     stripe: {
       apiVersion: '2023-08-16' as const,

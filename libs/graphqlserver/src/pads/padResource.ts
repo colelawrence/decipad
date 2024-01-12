@@ -42,6 +42,7 @@ export const padResource = Resource<
     createdAt: d.createdAt != null ? d.createdAt * 1000 : undefined,
     workspaceId: d.workspace_id,
     sectionId: d.section_id,
+    gist: d.gist === 'ai' ? 'AI' : undefined,
   }),
   isPublic: (d) => Boolean(d.isPublic),
 

@@ -54,6 +54,7 @@ import { closeButtonStyles } from '../../styles/buttons';
 import { Anchor, TColorStatus } from '../../utils';
 import * as Styled from './styles';
 import { deciOverflowXStyles } from '../../styles/scrollbars';
+import { GeneratedByAi } from './GeneratedByAi';
 
 const topBarWrapperStyles = (isEmbed: boolean) =>
   css(deciOverflowXStyles, {
@@ -143,12 +144,13 @@ export type NotebookTopbarProps = {
   // AI Assistant
   readonly aiMode: boolean;
   readonly toggleAIMode: () => void;
-
   readonly onClearAll: () => void;
+  readonly onClaimNotebook: () => void;
 
   readonly UndoButtons: React.ReactNode;
 
   readonly isEmbed: boolean;
+  readonly isGPTGenerated: boolean;
 
   // Important that this can be undefined
   // Because when you re-fetch the query, its going to be
@@ -171,17 +173,14 @@ export const NotebookTopbar = ({
   aiMode,
   isNewNotebook,
   hasUnpublishedChanges,
-
   onClearAll,
-
-  // Status dropdown
   isEmbed,
-
+  isGPTGenerated,
   notebookMeta,
   notebookMetaActions,
   notebookAccessActions,
   userWorkspaces,
-
+  onClaimNotebook,
   // Composition components
   UndoButtons,
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -195,7 +194,9 @@ export const NotebookTopbar = ({
   const permission = notebookMeta?.myPermissionType ?? 'READ';
   const status = (notebookMeta?.status ?? 'Draft') as TColorStatus;
   const isArchived = Boolean(notebookMeta?.archived);
-  const isReadOnly = notebookMeta?.myPermissionType === 'READ';
+  const isReadOnly =
+    notebookMeta?.myPermissionType == null ||
+    notebookMeta?.myPermissionType === 'READ';
   const notebookName = notebookMeta?.name ?? 'My Notebook';
   const snapshots = notebookMeta?.snapshots ?? [];
   const workspaceAccess = notebookMeta?.workspace?.myPermissionType;
@@ -430,15 +431,6 @@ export const NotebookTopbar = ({
                   </em>
                 </div>
               )}
-              {canUseDom && sessionStatus === 'authenticated' && !isEmbed && (
-                <div>
-                  <HelpMenu
-                    discordUrl="http://discord.gg/decipad"
-                    docsUrl={docs({}).$}
-                    releaseUrl={docs({}).page({ name: 'releases' }).$}
-                  />
-                </div>
-              )}
               {isWriter && (
                 <div
                   css={{
@@ -466,8 +458,11 @@ export const NotebookTopbar = ({
                 </div>
               )}
             </div>
+            {/* for the love of everything, please refactor me */}
             {isWriter && <VerticalDivider />}
-            {sessionStatus === 'authenticated' ? (
+            {isGPTGenerated ? (
+              <GeneratedByAi />
+            ) : sessionStatus === 'authenticated' ? (
               isWriter && !isServerSideRendering() ? null : (
                 <div
                   css={css(p13Medium, {
@@ -516,10 +511,23 @@ export const NotebookTopbar = ({
                 Authors behind this notebook
               </p>
             )}
-            <NotebookAvatars
-              isWriter={!!isWriter}
-              invitedUsers={usersWithAccess}
-            />
+
+            {usersWithAccess.length > 0 && (
+              <NotebookAvatars
+                isWriter={!!isWriter}
+                invitedUsers={usersWithAccess}
+              />
+            )}
+
+            {canUseDom && sessionStatus === 'authenticated' && !isEmbed && (
+              <div>
+                <HelpMenu
+                  discordUrl="http://discord.gg/decipad"
+                  docsUrl={docs({}).$}
+                  releaseUrl={docs({}).page({ name: 'releases' }).$}
+                />
+              </div>
+            )}
 
             {sessionStatus === 'authenticated' ? (
               (isAdmin || isWriter) && !isServerSideRendering() ? (
@@ -543,14 +551,20 @@ export const NotebookTopbar = ({
                   onRemove={notebookAccessActions.onRemoveAccess}
                 />
               ) : isPublished || permissionType !== PermissionType.Read ? (
-                <Button
-                  disabled={isDuplicating}
-                  type="primaryBrand"
-                  onClick={duplicateNotebook}
-                  testId="duplicate-button"
-                >
-                  {isDuplicating ? 'Duplicating...' : 'Duplicate notebook'}
-                </Button>
+                isGPTGenerated ? (
+                  <Button type={'primaryBrand'} onClick={onClaimNotebook}>
+                    Claim notebook
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={isDuplicating}
+                    type="primaryBrand"
+                    onClick={duplicateNotebook}
+                    testId="duplicate-button"
+                  >
+                    {isDuplicating ? 'Duplicating...' : 'Duplicate notebook'}
+                  </Button>
+                )
               ) : null
             ) : (
               <Button
@@ -561,12 +575,26 @@ export const NotebookTopbar = ({
                 type={'primaryBrand'}
                 onClick={onTryDecipadClick}
               >
-                Try Decipad
+                {isGPTGenerated ? 'Sign up to edit' : 'Try Decipad'}
               </Button>
             )}
           </div>
         )}
       </div>
+      {sessionStatus !== 'authenticated' && isGPTGenerated && (
+        <Styled.GPTNotification>
+          <p>
+            <Anchor
+              href={`/?redirectAfterLogin=${encodeURIComponent(
+                window.location.pathname
+              )}`}
+            >
+              Sign in to your Decipad account
+            </Anchor>{' '}
+            to continue editing and save your changes.
+          </p>
+        </Styled.GPTNotification>
+      )}
     </div>
   );
 };

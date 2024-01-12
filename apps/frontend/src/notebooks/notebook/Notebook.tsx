@@ -7,7 +7,9 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import {
   EditorNotebookFragment,
+  Gist,
   PermissionType,
+  useClaimNotebookMutation,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
   useGetWorkspacesQuery,
@@ -395,10 +397,14 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
 
+  const isGPTGenerated = meta.data?.getPadById?.gist === Gist.Ai;
+
   const permission = meta.data?.getPadById?.myPermissionType;
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
+
+  const [, claimNotebook] = useClaimNotebookMutation();
 
   /**
    * Edge case. We default to a closed sidebar,
@@ -508,6 +514,12 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       toggleSidebar={sidebarData.toggleSidebar}
       aiMode={aiModeData.aiMode}
       toggleAIMode={aiModeData.toggleAiMode}
+      isGPTGenerated={isGPTGenerated}
+      onClaimNotebook={() => {
+        claimNotebook({ notebookId }).then(() => {
+          window.location.reload();
+        });
+      }}
       UndoButtons={
         <UndoButtons
           canUndo={canUndo}

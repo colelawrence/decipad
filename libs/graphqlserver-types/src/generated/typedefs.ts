@@ -228,6 +228,10 @@ type PadConnectionParams {
   token: String!
 }
 
+enum Gist {
+  AI
+}
+
 type Pad {
   id: ID!
   name: String!
@@ -237,6 +241,7 @@ type Pad {
   # Helps with resolvers and frontend.
   workspaceId: ID
   workspace: Workspace
+
   createdAt: DateTime!
   isPublic: Boolean
   icon: String
@@ -246,6 +251,11 @@ type Pad {
   # Helps with resolvers and frontend.
   sectionId: ID
   section: Section
+
+  # Gist | Is this notebook a gist, meaning the doesnt belong to anyone.
+  # And can be claimed by any user.
+  gist: Gist
+
   padConnectionParams: PadConnectionParams!
   initialState: String
   snapshots: [PadSnapshot!]!
@@ -336,6 +346,8 @@ extend type Mutation {
   createOrUpdateSnapshot(params: CreateOrUpdateSnapshotInput!): Boolean!
 
   createSnapshot(notebookId: ID!): Boolean!
+
+  claimNotebook(notebookId: ID!): Boolean!
 }
 
 extend type Subscription {
@@ -722,5 +734,39 @@ extend type Mutation {
 
 extend type Subscription {
   workspacesChanged: WorkspacesChanges!
+}
+enum SubscriptionStatus {
+  active
+  canceled
+  unpaid
+  trialing
+  incomplete
+  incomplete_expired
+  past_due
+  paused
+}
+
+enum SubscriptionPaymentStatus {
+  paid
+  unpaid
+  no_payment_required
+}
+
+type WorkspaceSubscription {
+  id: String!
+  customer_id: String
+  paymentStatus: SubscriptionPaymentStatus!
+  paymentLink: String!
+  status: SubscriptionStatus
+  workspace: Workspace
+  seats: Int
+}
+
+extend type Mutation {
+  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
+}
+
+extend type Workspace {
+  workspaceSubscription: WorkspaceSubscription
 }
 `;
