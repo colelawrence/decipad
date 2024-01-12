@@ -31,6 +31,7 @@ import {
   changeColumnMonth,
   changeColumnDay,
   doubleClickCell,
+  downloadTableCSV,
 } from '../utils/page/Table';
 
 import notebookSource from '../__fixtures__/006-notebook-formula-tables.json';
@@ -636,6 +637,13 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
           .getByTestId('number-result:1')
       ).toBeVisible(),
     ]);
+  });
+
+  await test.step("download csv and check it's correct", async () => {
+    const csvData = await downloadTableCSV(testUser.page, 'Table');
+    expect(csvData).toBe(
+      'Index,Driver,Age,Year,Checkbox\n1,"Sebastian Vettel","23 years, 134 days",2010,false\n2,"Lewis Hamilton","23 years, 300 days",2008,true\n3,"Fernando Alonso","24 years, 59 days",2005,false'
+    );
   });
 });
 

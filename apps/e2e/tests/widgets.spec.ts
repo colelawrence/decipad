@@ -2,6 +2,7 @@ import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
 import {
   clickCell,
   createTable,
+  downloadTableCSV,
   getFromTable,
   openColTypeMenu,
   writeInTable,
@@ -382,6 +383,13 @@ test('dropdown widget', async ({ testUser }) => {
       .innerText();
 
     expect(dropDownText).toBe('One');
+  });
+
+  await test.step('Get CSV for table', async () => {
+    const csvData = await downloadTableCSV(page, 'Table');
+    expect(csvData).toBe(
+      'Column1,Column2,Column3\n"One","","500%"\n"Two","",""\n"Three","",""'
+    );
   });
 });
 

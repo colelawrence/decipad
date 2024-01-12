@@ -4,6 +4,7 @@ import { createSliderBelow } from 'apps/e2e/utils/page/Block';
 import {
   addColumn,
   createTable,
+  downloadTableCSV,
   focusOnTableColumnFormula,
   getFromTable,
   renameColumn,
@@ -90,7 +91,7 @@ test('Creating a basic model', async ({ testUser }) => {
     expect(sanitise(totalProfit)).toBe('£107.5');
   });
 
-  /* Todo skiping this tep
+  /* Todo skiping this while waiting on bug fix
   await test.step('Swap columns', async () => {
     await swapTableColumns(page, 0, 2);
     await swapTableColumns(page, 0, 3);
@@ -111,4 +112,11 @@ test('Creating a basic model', async ({ testUser }) => {
     expect(sanitise(totalProfit)).toBe('£107.5');
   });
   */
+
+  await test.step('download table csv', async () => {
+    const csvData = await downloadTableCSV(page, 'Table');
+    expect(csvData).toBe(
+      'Index,Year,TotalInvested (£),TotalProfit (£),TotalMoney (£)\n1,2023,1100,50,1150\n2,2024,1200,107.5,1307.5\n3,2025,1300,172.875,1472.875'
+    );
+  });
 });
