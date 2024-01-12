@@ -1,7 +1,7 @@
 import { editorStatsStore } from '@decipad/react-contexts';
 import { AggregationKind, DataGroup, VirtualColumn } from '../../types';
 import { generateGroups } from './generateGroups';
-import { generateTotalGroup } from './generateTotalGroup';
+import { generateSmartRow } from './generateSmartRow';
 
 interface LayoutPowerDataProps {
   columns: VirtualColumn[];
@@ -33,14 +33,20 @@ export const layoutPowerData = async ({
 
   const totalGroup =
     includeTotal &&
-    generateTotalGroup({
+    generateSmartRow({
       columns,
+      columnIndex: 0,
       aggregationTypes,
+      previousColumns: [],
+      global: true,
+      rotate: false,
     });
 
   const result = await Promise.all([
     ...rootGroups,
-    ...(totalGroup ? [totalGroup] : []),
+    ...(totalGroup && !!aggregationTypes.filter((f) => f).length
+      ? [totalGroup]
+      : []),
   ]);
   const elapsedMs = Date.now() - start;
   editorStatsStore

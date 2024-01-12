@@ -619,17 +619,20 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
     await Promise.all([
       expect(
         testUser.page
-          .getByRole('row', { name: 'Total' })
+          .locator('output')
+          .filter({ hasText: 'Count values:' })
           .getByTestId('number-result:3')
       ).toBeVisible(),
       expect(
         testUser.page
-          .getByRole('row', { name: 'Total' })
+          .locator('output')
+          .filter({ hasText: 'Time span:' })
           .getByTestId('number-result:5 years')
       ).toBeVisible(),
       expect(
         testUser.page
-          .getByRole('row', { name: 'Total' })
+          .locator('output')
+          .filter({ hasText: 'Count true:' })
           .getByTestId('number-result:1')
       ).toBeVisible(),
     ]);
