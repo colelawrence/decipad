@@ -10,7 +10,6 @@ import {
   SliderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useNodePath } from '@decipad/editor-hooks';
 import { assertElementType, mutateText } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
@@ -18,7 +17,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 import assert from 'assert';
 import { parseNumberWithUnit } from '@decipad/computer';
-import { getNodeString } from '@udecode/plate-common';
+import { findNodePath, getNodeString } from '@udecode/plate-common';
 import { Path } from 'slate';
 
 /**
@@ -46,7 +45,7 @@ function useOnSliderChange(
   element: SliderElement
 ): [number, (newValue: number) => void, (toggleSync: boolean) => void] {
   const editor = useTEditorRef();
-  const path = useNodePath(element);
+  const path = findNodePath(editor, element);
   assert(path != null, 'path must always be defined');
 
   const expression = getParentExpression(editor, path);

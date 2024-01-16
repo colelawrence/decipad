@@ -113,6 +113,21 @@ test('Creating a basic model', async ({ testUser }) => {
   });
   */
 
+  await test.step('Reorder slides and add blocks', async () => {
+    await page
+      .getByTestId('drag-handle')
+      .nth(1)
+      .dragTo(page.getByTestId('drag-handle').nth(0));
+    await page.getByTestId('plus-block-button').nth(0).click();
+    await expect(page.getByRole('menu')).toBeVisible();
+    await notebook.deleteBlock(2);
+    await expect(page.getByRole('menu')).toBeHidden();
+    await page.getByTestId('plus-block-button').nth(1).click();
+    await expect(page.getByRole('menu')).toBeVisible();
+    await notebook.deleteBlock(2);
+    await expect(page.getByRole('menu')).toBeHidden();
+  });
+
   await test.step('download table csv', async () => {
     const csvData = await downloadTableCSV(page, 'Table');
     expect(csvData).toBe(

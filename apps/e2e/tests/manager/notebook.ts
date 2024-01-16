@@ -1358,4 +1358,9 @@ export class Notebook {
 
     await this.page.keyboard.type(value);
   }
+
+  async deleteBlock(index: number) {
+    await this.page.getByTestId('drag-handle').nth(index).click();
+    await this.page.getByRole('menuitem', { name: 'Delete Delete' }).click();
+  }
 }

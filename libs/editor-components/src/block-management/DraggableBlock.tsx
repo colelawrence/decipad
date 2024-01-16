@@ -350,13 +350,10 @@ const insertSameNodeType = (
 const openSlashMenu = (editor: MyEditor, element: MyElement) => {
   const currentLine = getNodeString(element);
   let currentPath = findNodePath(editor, element);
-  const nextNode = getNextNode(editor, {
-    at: currentPath,
-    match: (_, path) => path.at(0) !== currentPath?.at(0),
-  });
+  if (!currentPath) return;
+  const nextNode = getNextNode(editor, { at: currentPath.slice(0, 1) });
   const [nextElement, nextPath] = nextNode || [];
   if (currentLine === '/') return;
-  if (!currentPath) return;
 
   const slashAlreadyCreated =
     currentLine !== '' && nextElement && getNodeString(nextElement) === '/';
@@ -370,7 +367,7 @@ const openSlashMenu = (editor: MyEditor, element: MyElement) => {
   const isParagraph = element.type === ELEMENT_PARAGRAPH;
   const createNewParagraph = currentLine || !isParagraph;
 
-  if (createNewParagraph && nextPath && currentPath.at(0) !== nextPath.at(0)) {
+  if (createNewParagraph && nextPath) {
     insertNodes(
       editor,
       [
