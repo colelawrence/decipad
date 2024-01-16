@@ -86,6 +86,7 @@ export class User {
     await this.goToWorkspace(workspaceId);
     await this.newNotebook.waitFor();
     await this.newNotebook.click();
+    await this.aiAssistant.closePannel();
     await this.page.waitForSelector('[data-slate-editor] h1');
   }
 

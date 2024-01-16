@@ -280,6 +280,25 @@ export class AiAssistant {
   }
 
   /**
+   * Close AI Assistant Pannel.
+   */
+  async closePannel() {
+    // Check if the ai-switch component is disabled
+    const aiSwitch = this.page.getByTestId('ai-switch');
+    const isAiSwitchChecked = await aiSwitch.getAttribute('aria-checked');
+
+    if (isAiSwitchChecked) {
+      return;
+    }
+
+    await expect(async () => {
+      await expect(this.messageInput).toBeVisible();
+      await this.chatToggle.click();
+      await expect(this.messageInput).toBeHidden();
+    }, "AI didn't close").toPass();
+  }
+
+  /**
    * Return ai chat messages.
    *
    * **Usage**

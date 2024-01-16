@@ -235,9 +235,11 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     try {
       await initNewDocument(createdNotebookData.createPad.id);
       navigate(
-        notebooks({}).notebook({
-          notebook: createdNotebookData.createPad,
-        }).$
+        `${
+          notebooks({}).notebook({
+            notebook: createdNotebookData.createPad,
+          }).$
+        }?openAiPanel=true`
       );
     } catch (e) {
       console.error(e);

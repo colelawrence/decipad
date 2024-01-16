@@ -49,6 +49,10 @@ smoketest(
     // Start modeling
 
     await smoketest.step('create 4 new tabs tabs called Tab #', async () => {
+      await userANotebook.waitForEditorToLoad();
+      await userANotebook.checkNotebookTitle(notebookTitle);
+      await userBNotebook.waitForEditorToLoad();
+      await userBNotebook.checkNotebookTitle(notebookTitle);
       await userANotebook.createTabs(['Tab 2', 'Tab 3', 'Tab 4', 'Tab 5']);
 
       // 5 total tabs = initial tab + 4 created

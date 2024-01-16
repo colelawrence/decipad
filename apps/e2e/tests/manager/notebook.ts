@@ -76,8 +76,11 @@ export class Notebook {
   async createTab(name: string | null = null) {
     await this.newTab.click();
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.computerDelay);
+
     if (name) {
-      await this.page.keyboard.type(name);
+      await this.page.keyboard.type(name, { delay: 100 });
     }
     await this.page.keyboard.press('Enter');
   }

@@ -44,6 +44,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from 'react';
 import { Subject, interval, debounce } from 'rxjs';
 import { ErrorPage, RequireSession } from '../../meta';
@@ -53,7 +54,7 @@ import { lazyLoad } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { useEditorUndoState } from './hooks';
 import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useActiveEditor, useTabs } from '@decipad/editor-hooks';
 import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
@@ -360,12 +361,17 @@ const SNAPSHOT_NAME = 'Published 1';
  */
 const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const docsync = useContext(DocsyncEditorProvider);
+  const [searchParams] = useSearchParams();
 
   const actions = useNotebookMetaActions();
   const accessActions = useNotebookAccessActions();
 
   const [result] = useGetWorkspacesQuery();
   const { data: workspaceData } = result;
+  const [isNotebookCreated, setIsNotebookCreated] = useState(
+    searchParams.get('openAiPanel') === 'true'
+  );
+  const isNotebookCreatedRef = useRef(false);
 
   const allWorkspaces = useMemo(
     () =>
@@ -388,6 +394,16 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     aiMode: state.aiMode,
     toggleAiMode: state.toggleAIMode,
   }));
+
+  useEffect(() => {
+    if (isNotebookCreated && !isNotebookCreatedRef.current) {
+      setIsNotebookCreated(false);
+      if (!aiModeData.aiMode) {
+        aiModeData.toggleAiMode();
+      }
+      isNotebookCreatedRef.current = true;
+    }
+  }, [isNotebookCreated, aiModeData]);
 
   const [canUndo, canRedo] = useEditorUndoState(docsync);
 

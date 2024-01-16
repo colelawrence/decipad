@@ -87,6 +87,7 @@ export const AIModeSwitch: React.FC<AIModeSwitchProps> = ({
         id="ai-mode"
         checked={value}
         onCheckedChange={onChange}
+        data-testid="ai-switch"
       >
         <motion.button layout css={switchStyles}>
           <Switch.Thumb asChild>
