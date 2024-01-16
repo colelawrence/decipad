@@ -16,10 +16,8 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
     variables: { workspaceId },
   });
 
-  const workspaceExternalData =
-    data?.getExternalDataSourcesWorkspace.items.filter(
-      (x): x is ExternalDataSource => x.__typename === 'ExternalDataSource'
-    );
+  const workspaceExternalData = data?.getExternalDataSourcesWorkspace
+    .items as ExternalDataSource[];
 
   const createExternalData = useMutationResultHandler(
     useCreateExternalDataSourceMutation()[1],

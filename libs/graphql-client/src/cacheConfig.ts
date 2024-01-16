@@ -4,6 +4,9 @@
 import { Cache } from '@urql/exchange-graphcache';
 import {
   DashboardWorkspaceFragment,
+  ExternalDataSource,
+  GetExternalDataSourcesWorkspaceDocument,
+  GetExternalDataSourcesWorkspaceQuery,
   GetNotebookByIdDocument,
   GetNotebookByIdQuery,
   GetNotebookMetaDocument,
@@ -181,6 +184,26 @@ export const graphCacheConfig: GraphCacheConfig = {
                 updatedAt: new Date().getTime(),
               });
             }
+
+            return data;
+          }
+        );
+      },
+      createExternalDataSource: (_result, args, cache) => {
+        if (typeof args.dataSource.workspace_id !== 'string') return;
+        cache.updateQuery<GetExternalDataSourcesWorkspaceQuery>(
+          {
+            query: GetExternalDataSourcesWorkspaceDocument,
+            variables: {
+              workspaceId: args.dataSource.workspace_id,
+            },
+          },
+          (data) => {
+            if (!data?.getExternalDataSourcesWorkspace) return data;
+
+            data.getExternalDataSourcesWorkspace.items.push(
+              args.dataSource as ExternalDataSource
+            );
 
             return data;
           }

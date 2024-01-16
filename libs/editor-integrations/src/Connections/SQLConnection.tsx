@@ -13,6 +13,7 @@ import { ConnectionProps } from './types';
 import { fetchQuery } from '../utils';
 
 export const SQLConnection: FC<ConnectionProps> = ({
+  setRawResult,
   setResultPreview,
   typeMapping,
 }) => {
@@ -28,17 +29,19 @@ export const SQLConnection: FC<ConnectionProps> = ({
         sqlStore.Query
       );
       if (!queryExec) {
-        // TODO: Handle Error
+        onExecute({ status: 'error', err: 'Something went wrong.' });
+        setLog([{ status: 'error', err: 'Something went wrong.' }]);
         return;
       }
 
       if (queryExec.type === 'success') {
         sqlStore.Set({ latestResult: JSON.stringify(queryExec.data) });
-        setResultPreview(
-          importFromUnknownJson(queryExec.data, {
-            columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
-          })
-        );
+        const res = importFromUnknownJson(queryExec.data, {
+          columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
+        });
+        setResultPreview(res);
+
+        setRawResult(JSON.stringify(queryExec.data));
         onExecute({ status: 'success', ok: true });
       } else {
         onExecute({ status: 'error', err: queryExec.message });
@@ -46,6 +49,8 @@ export const SQLConnection: FC<ConnectionProps> = ({
       }
     } else {
       console.error('NO EXTERNAL DATA ID');
+      onExecute({ status: 'error', err: 'No data connection selected.' });
+      setLog([{ status: 'error', err: 'No data connection selected.' }]);
     }
   }, [onExecute, setResultPreview, sqlStore, typeMapping]);
 
