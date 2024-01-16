@@ -12,7 +12,6 @@ import { useCellType, useCellAnchor, useCellSelected } from '../../hooks';
 import { useMemoPath } from '@decipad/react-utils';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
 import { setCellText } from '../../utils/setCellText';
-import { useTableCellWidth } from '../../hooks/useTableCellWidth';
 import { useEditorTableContext } from '@decipad/react-contexts';
 import { TableData, CellEditor } from '@decipad/ui';
 import { changeColumnType } from '../../utils/changeColumnType';
@@ -60,7 +59,6 @@ export const TableCell: PlateComponent = ({
   const { tableFrozen } = useEditorTableContext();
   const cellType = useCellType(element);
   const path = useMemoPath(findNodePath(editor, element)!);
-  const width = useTableCellWidth(element);
   const value = getNodeString(element);
   const [editing, setEditing] = useState(false); // Controlled by CellEditor
   const [cellEventTarget] = useState<EventTarget>(() => new EventTarget());
@@ -115,7 +113,7 @@ export const TableCell: PlateComponent = ({
         if (cellEvent.defaultPrevented) event.preventDefault();
       }}
     >
-      <div contentEditable={false} css={width && { width }}>
+      <div contentEditable={false}>
         <CellEditor
           isTableFrozen={tableFrozen}
           type={cellType}

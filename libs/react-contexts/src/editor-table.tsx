@@ -8,7 +8,6 @@ export type EditorTableContextValue = Readonly<{
   columnBlockIds: string[];
   tableFrozen: boolean;
   setTableFrozen: (b: boolean) => void;
-  columnWidths: Array<number | undefined>;
 }>;
 
 const defaultValue: EditorTableContextValue = {
@@ -17,7 +16,6 @@ const defaultValue: EditorTableContextValue = {
   columnBlockIds: [],
   tableFrozen: false,
   setTableFrozen: noop,
-  columnWidths: [],
 };
 
 export const EditorTableContext =

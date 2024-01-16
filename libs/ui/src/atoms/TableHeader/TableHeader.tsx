@@ -9,7 +9,6 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
   FC,
-  MouseEvent,
   ReactNode,
   forwardRef,
   useCallback,
@@ -17,6 +16,8 @@ import {
   useRef,
   useState,
   useMemo,
+  MouseEvent as ReactMouseEvent,
+  useEffect,
 } from 'react';
 import {
   ConnectDragPreview,
@@ -137,7 +138,7 @@ export const TableHeader = ({
   isFirst,
   error,
 }: TableHeaderProps): ReturnType<FC> => {
-  const tempWidth = useRef<number | undefined>(undefined);
+  const [tempWidth, setTempWidth] = useState<number | undefined>(undefined);
   const [open, onChangeOpen] = useState(false);
   const {
     workspaceInfo: { queryCount, quotaLimit, id },
@@ -163,7 +164,7 @@ export const TableHeader = ({
   const thRef = useMergedRef(attributes?.ref, dropTarget);
   const sizeRef = useRef<HTMLDivElement>(null);
 
-  const handleResize = (mouseDownEvent: MouseEvent) => {
+  const handleResize = (mouseDownEvent: ReactMouseEvent) => {
     if (readOnly) {
       return;
     }
@@ -173,30 +174,37 @@ export const TableHeader = ({
 
     document.body.style.cursor = 'col-resize';
 
-    const startSize =
-      tempWidth.current ?? sizeRef.current?.offsetWidth ?? width ?? 150;
+    const startSize = tempWidth ?? sizeRef.current?.offsetWidth ?? width ?? 150;
     const startPosition = mouseDownEvent.pageX;
 
+    let newWidth: number | undefined;
+
     const onMouseMove = (mouseMoveEvent: MouseEvent) => {
-      const newWidth = startSize - startPosition + mouseMoveEvent.pageX;
-      if (newWidth < tdMinWidth) {
-        return;
-      }
-      tempWidth.current = newWidth;
-      setWidth?.(tempWidth.current);
+      newWidth = Math.max(
+        startSize - startPosition + mouseMoveEvent.pageX,
+        tdMinWidth
+      );
+      setTempWidth(newWidth);
     };
 
     const onMouseUp = () => {
-      // @ts-ignore
       document.body.removeEventListener('mousemove', onMouseMove);
-      tempWidth.current = undefined;
+      if (newWidth) setWidth?.(newWidth);
       document.body.style.cursor = 'auto';
     };
 
-    // @ts-ignore
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
+
+  /**
+   * Set tempWidth to undefined when the width prop changes. Waiting for the
+   * width to change before unseting tempWidth prevents the width from
+   * flickering, compared to unsetting tempWidth immediately on mouse up.
+   */
+  useEffect(() => {
+    setTempWidth(undefined);
+  }, [width]);
 
   const columOptionItems = [
     {
@@ -251,7 +259,7 @@ export const TableHeader = ({
     <></>
   );
   const overrideWithUserSetWith = css({
-    width: tempWidth.current ?? width,
+    width: tempWidth ?? width,
   });
 
   const leftSide = showDragMenuToTheLeft ? (
@@ -302,12 +310,12 @@ export const TableHeader = ({
             display: 'inline-block',
           },
         },
-        overrideWithUserSetWith,
       ]}
       ref={thRef}
       data-highlight={highlight}
       contentEditable={isEditable}
     >
+      <div css={overrideWithUserSetWith} />
       <div ref={sizeRef} css={[tableHeaderStyles, headerWrapperStyles]}>
         {dropDirection === 'left' && (
           <ColumnDropLine
@@ -334,7 +342,7 @@ export const TableHeader = ({
           data-testid="table-column-name"
           css={[
             childrenWrapperStyles,
-            width && { maxWidth: tempWidth.current ?? width - 40 },
+            width && { maxWidth: tempWidth ?? width - 40 },
           ]}
           spellCheck={false}
         >
@@ -361,8 +369,9 @@ const absoluteLeftAdjustment = css(absoluteRightAdjustment, {
 
 const resizeStyles = css(absoluteRightAdjustment, {
   position: 'absolute',
-  width: '1px',
+  width: '3px',
   cursor: 'col-resize',
+  transform: 'translateX(50%)',
 });
 
 const showDragHandleStyles = css({
