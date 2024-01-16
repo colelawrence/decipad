@@ -31,7 +31,7 @@ import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
 import { useWriteLock } from './utils/useWriteLock';
-import { Scrubber } from 'slate';
+import { BaseEditor, Scrubber, Editor as SlateEditor } from 'slate';
 import { editorOnCopy } from './utils/editorOnCopy';
 import { editorOnPaste } from './utils/editorOnPaste';
 
@@ -83,6 +83,18 @@ const InsidePlate = ({
 
 export const Editor = (props: EditorProps) => {
   const { editor, readOnly, workspaceId, notebookId } = props;
+
+  //
+  // It's important we don't run this in a useEffect.
+  // Because, React will render before the useEffect can run.
+  // At which point we will crash if the children make any assumptions.
+  //
+  // Like this, we can run normalizations on load.
+  // And this component will no re-render when user is simply editing.
+  //
+  if (editor != null) {
+    SlateEditor.normalize(editor as BaseEditor, { force: true });
+  }
 
   //
   // Why do we need this?
