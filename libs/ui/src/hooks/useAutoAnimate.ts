@@ -6,7 +6,7 @@ import {
   shortAnimationDurationMs as defaultDuration,
 } from '../primitives';
 
-const supportsAnimation = process.browser && 'IntersectionObserver' in global;
+const supportsAnimation = 'IntersectionObserver' in global;
 
 /**
  * AutoAnimate hook for adding dead-simple transitions and animations to react.

@@ -27,7 +27,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./scripts/build-ssr-lambdas.mjs",
+        "command": "(cd ../../apps/frontend && node build-worker.mjs) && ./scripts/build-ssr-lambdas.mjs",
         "cwd": "libs/server-side-rendering"
       }
     },

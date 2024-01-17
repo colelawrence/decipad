@@ -611,8 +611,8 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     const tokensLimit =
       aiUsage[0]?.quotaLimit ??
       (isWorkspacePremium
-        ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
-        : Number(process.env.REACT_APP_MAX_CREDITS_FREE));
+        ? Number(import.meta.env.VITE_MAX_CREDITS_PRO)
+        : Number(import.meta.env.VITE_MAX_CREDITS_FREE));
 
     // we only want to update the usage with the DB values when the user refreshes the page
     if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {

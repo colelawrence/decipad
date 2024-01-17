@@ -100,7 +100,7 @@ export async function createSandboxEnv(
     DECI_SEARCH_PORT: searchPort,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     OVERRIDE_DECI_APP_URL_BASE: `http://localhost:${portBase}`,
-    REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
+    VITE_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
     JWT_SECRET: process.env.JWT_SECRET || nanoid(),
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,

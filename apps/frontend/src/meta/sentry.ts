@@ -12,10 +12,10 @@ import {
   useNavigationType,
 } from 'react-router-dom';
 
-const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
 
 const analytics = (): AnalyticsBrowser | undefined => {
-  const writeKey = process.env.REACT_APP_ANALYTICS_WRITE_KEY;
+  const writeKey = import.meta.env.VITE_ANALYTICS_WRITE_KEY;
   if (writeKey) {
     try {
       return AnalyticsBrowser.load({ writeKey });

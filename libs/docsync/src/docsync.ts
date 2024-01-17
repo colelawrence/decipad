@@ -123,7 +123,7 @@ export function createDocSyncEditor(
   getSession: () => Session | undefined = () => undefined
 ) {
   // breaks tests otherwise
-  if (!isTesting) {
+  if (typeof window !== 'undefined') {
     global.document.cookie = `docsync_session_token=${nanoid()}; path=/;`;
   }
   const doc = new YDoc();

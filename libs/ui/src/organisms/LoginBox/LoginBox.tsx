@@ -3,7 +3,6 @@ import { PropsWithChildren } from 'react';
 import { css } from '@emotion/react';
 
 import { cssVar, mobileQuery } from '../../primitives';
-import { gridTile } from '../../images';
 
 export const LoginBox: React.FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -23,7 +22,7 @@ const outerWrapperStyles = css({
 
   background: `
     radial-gradient(rgba(0,0,0,0), ${cssVar('backgroundMain')} 70%),
-    center repeat url(${gridTile})
+    center repeat url('../../images/grid-tile.svg')
   `,
 });
 

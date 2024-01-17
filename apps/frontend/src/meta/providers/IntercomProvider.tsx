@@ -12,7 +12,7 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
   return (
     <ErrorBoundary fallback={<></>}>
       <Provider
-        appId={process.env.REACT_APP_INTERCOM_APP_ID!}
+        appId={import.meta.env.VITE_INTERCOM_APP_ID!}
         autoBoot
         autoBootProps={{
           email: session.data?.user?.email,
@@ -22,7 +22,7 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
         }}
         shouldInitialize={session.status === 'authenticated'}
         initializeDelay={2000}
-        apiBase={process.env.REACT_APP_INTERCOM_API_BASE}
+        apiBase={import.meta.env.VITE_INTERCOM_API_BASE}
       >
         {children}
       </Provider>

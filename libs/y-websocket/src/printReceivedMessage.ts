@@ -1,5 +1,3 @@
-import { Buffer } from 'buffer';
-
 const logsColor = `
   color: green;
 `;

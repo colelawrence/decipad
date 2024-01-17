@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/live-connect/**/*.{ts,tsx,js,jsx}"],
+        "lintFilePatterns": ["libs/live-connect/**/*.{ts,tsx,jsx}"],
         "maxWarnings": 0
       }
     },

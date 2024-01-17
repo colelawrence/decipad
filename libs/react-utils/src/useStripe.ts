@@ -1,3 +1,5 @@
+import { env } from '@decipad/utils';
+
 /* istanbul ignore file */
 type WorkspaceTrait = {
   id: string;
@@ -10,9 +12,8 @@ type NotebookAvatarTrait = {
 };
 
 const MAX_NOTEBOOK_COLLABORATORS = 3;
-const STRIPE_PAYMENT_LINK = process.env.REACT_APP_STRIPE_PAYMENT_LINK;
-const STRIPE_CUSTOMER_PORTAL_LINK =
-  process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK;
+const STRIPE_PAYMENT_LINK = env.VITE_STRIPE_PAYMENT_LINK;
+const STRIPE_CUSTOMER_PORTAL_LINK = env.VITE_STRIPE_CUSTOMER_PORTAL_LINK;
 
 export const useStripeLinks = (workspace: WorkspaceTrait) => {
   const paymentLink = `${STRIPE_PAYMENT_LINK}?client_reference_id=${workspace.id}`;

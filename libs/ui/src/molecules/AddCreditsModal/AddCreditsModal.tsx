@@ -6,6 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { ClosableModal } from '../../organisms';
 import { cssVar, p14Regular, p18Medium } from '../../primitives';
 import { AddCreditsPaymentComponent } from './AddCreditsPaymentComponent';
+import { env } from '@decipad/utils';
 
 type AddCreditsModalProps = {
   closeAction: () => void;
@@ -37,7 +38,7 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
   closeAction,
   resourceId,
 }) => {
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY || '');
+  const stripePromise = loadStripe(env.VITE_STRIPE_API_KEY);
 
   return (
     <ClosableModal

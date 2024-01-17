@@ -49,7 +49,7 @@ const defaultEnvValues = {
   DISCORD_PUBLIC_KEY: 'LjZeWHYTwsps07NJfu1J',
   DISCORD_APP_ID: 'discord app id',
 
-  REACT_APP_ANALYTICS_WRITE_KEY: '',
+  VITE_ANALYTICS_WRITE_KEY: '',
 
   // Tests-related
   DECI_TEST_USER_SECRET: '8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
@@ -62,9 +62,8 @@ const defaultEnvValues = {
   STRIPE_SECRET_KEY:
     'sk_test_51J3IJaB0kCiHMJmL1UViJeQBjwEvCoDKBEtN2xLyCpjEKB6s6FF3PGcwNC4G5xCZSCtqbOgneM9vORbwrrRh29t200ySTx8I57',
   STRIPE_EXTRA_CREDITS_PRODUCT_ID: 'prod_PBHKc0MuyDLPro',
-  REACT_APP_STRIPE_PAYMENT_LINK:
-    'https://buy.stripe.com/test_7sI16U2EX4xcgVO000',
-  REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK:
+  VITE_STRIPE_PAYMENT_LINK: 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000',
+  VITE_STRIPE_CUSTOMER_PORTAL_LINK:
     'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
 
   NOTION_TOKEN: 'secret_g0S3h99PyM20tZ6oxPonoQ66xwxxmUtNaaDTHVKFPFn',

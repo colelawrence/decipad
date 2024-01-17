@@ -13,7 +13,10 @@ interface StartWorkerResult {
 }
 
 const createRPCWorker = async (): Promise<StartWorkerResult> => {
-  const worker = new Worker(new URL('./LiveConnect.worker', import.meta.url));
+  const worker = new Worker(
+    new URL('./LiveConnect.worker.bundle.js', import.meta.url),
+    { type: 'module' }
+  );
 
   const rpc = new RPC({
     target: {

@@ -63,7 +63,7 @@ services_setup () {
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
 
   echo " ⌛ ~ starting frontend... ~ "
-  nx serve frontend &
+  nx preview frontend &
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
 
   services_wait localhost:3333

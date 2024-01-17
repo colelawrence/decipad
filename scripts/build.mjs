@@ -14,8 +14,8 @@ const pExec = promisify(exec);
 
 const envVarNames = [
   'NEXTAUTH_URL',
-  'REACT_APP_ANALYTICS_WRITE_KEY',
-  'REACT_APP_HOTJAR_SITE_ID',
+  'VITE_ANALYTICS_WRITE_KEY',
+  'VITE_HOTJAR_SITE_ID',
   'GIT_COMMIT_HASH',
   'GITHUB_CLIENT_ID',
   'GITHUB_CLIENT_SECRET',
@@ -48,11 +48,11 @@ const envVarNames = [
   'STRIPE_WEBHOOK_SECRET',
   'STRIPE_SECRET_KEY',
   'STRIPE_EXTRA_CREDITS_PRODUCT_ID',
-  'REACT_APP_STRIPE_PAYMENT_LINK',
-  'REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK',
-  'REACT_APP_STRIPE_API_KEY',
-  'REACT_APP_MAX_CREDITS_FREE',
-  'REACT_APP_MAX_CREDITS_PRO',
+  'VITE_STRIPE_PAYMENT_LINK',
+  'VITE_STRIPE_CUSTOMER_PORTAL_LINK',
+  'VITE_STRIPE_API_KEY',
+  'VITE_MAX_CREDITS_FREE',
+  'VITE_MAX_CREDITS_PRO',
   'NOTION_TOKEN',
   'DISCORD_FEEDBACK_CHANNEL_TOKEN',
   'DISCORD_FEEDBACK_CHANNEL_ID',
@@ -195,6 +195,6 @@ const buildSSRLambdas = async (watch) => {
   await installLambdaDependencies();
   await buildTraditionalLambdas();
   if (process.env.DECI_SSR) {
-    await buildSSRLambdas();
+    // await buildSSRLambdas();
   }
 })();

@@ -5,7 +5,7 @@ import {
   shortAnimationDurationMs as defaultDuration,
 } from '@decipad/ui';
 
-const supportsAnimation = process.browser && 'IntersectionObserver' in global;
+const supportsAnimation = 'IntersectionObserver' in global;
 
 interface AutoAnimateValue {
   onRefChange: (ref: MutableRefObject<HTMLElement | undefined>) => void;

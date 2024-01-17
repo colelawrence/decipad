@@ -1,5 +1,3 @@
-import { Buffer } from 'buffer';
-
 export const isValidMessage = (m: Uint8Array | string): boolean => {
   const s = m instanceof Uint8Array ? Buffer.from(m).toString('base64') : m;
   if (s.length > 10_000) {

@@ -17,6 +17,7 @@ import type {
   Subscription,
   SubscriptionId,
 } from './types';
+import type { StartNotebook } from './notebook';
 import { materializeImportResult } from './utils/materializeImportResult';
 
 setErrorReporter((err) => {
@@ -207,7 +208,6 @@ const subscribeInternal = async (
   subscriptions.set(subscriptionId, subscription);
   const { params } = subscription;
   if (params.source === 'decipad') {
-    const { startNotebook } = await import('./notebook');
     const { docId } = getURLComponents(subscription.params.url);
     const { hasAccess, exists } = await getNotebook(docId);
     const error = !exists
@@ -219,7 +219,16 @@ const subscribeInternal = async (
       deferError(error);
       return;
     }
-    await startNotebook(
+
+    // Hacky, but gets types working!
+    // eslint-ignore-next-line import/no-unresolved
+    const { startNotebook: _startNotebook } = await import(
+      './notebook.bundle' as string
+    );
+
+    const startNotebook = _startNotebook as StartNotebook;
+
+    startNotebook(
       subscription,
       observe(subscriptionId),
       onError(subscriptionId, params)

@@ -12,8 +12,17 @@ import suppressWarnings from './suppressWarnings';
 import AppLoader from './AppLoader';
 import { requiresHydration } from './utils/requiresHydration';
 import { loadCrucialDependencies } from './loadCrucialDependencies';
+import { Buffer } from 'buffer';
 
 suppressWarnings();
+
+// IMPORTANT.
+// We removed node polyfills from the project (except for this one).
+// But we import it manually instead of letting the bundler work magic for us.
+globalThis.Buffer = Buffer;
+if (Buffer == null) {
+  throw new Error('Buffer must always be defined as a global property');
+}
 
 const cache = createCache({ key: 'deci' });
 

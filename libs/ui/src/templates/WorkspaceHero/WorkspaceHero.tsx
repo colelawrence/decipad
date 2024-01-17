@@ -13,6 +13,7 @@ import {
 } from '../../primitives';
 import { RainbowText } from '../../styles/card';
 import { WorkspaceHeroHeader } from './WorkspaceHeroHeader.private';
+import { env } from '@decipad/utils';
 
 type WorkspaceHeroProps = {
   name: string;
@@ -44,8 +45,8 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   const limit =
     tokensQuotaLimit ??
     (isPremium
-      ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
-      : Number(process.env.REACT_APP_MAX_CREDITS_FREE));
+      ? Number(env.VITE_MAX_CREDITS_PRO)
+      : Number(env.VITE_MAX_CREDITS_FREE));
   const creditsUsed = Math.floor(
     (promptTokensUsed + completionTokensUsed) / 2_000
   );

@@ -81,7 +81,7 @@ test('Count how many times table cells render', async ({ testUser }) => {
      * the expected count. Congratulations, you've made tables more efficient!
      */
     const cellCount = 9;
-    const expectedPerCell = 4;
+    const expectedPerCell = 3;
     expect(renderCount).toBe(cellCount * expectedPerCell);
   });
 });

@@ -83,7 +83,9 @@ let overrides: Flags = {
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 
-const testOverrides: Flags = {};
+const testOverrides: Flags = {
+  COUNT_TABLE_CELL_RENDERS: true,
+};
 
 const queryStringOverrides: Flags = getQueryStringOverrides();
 

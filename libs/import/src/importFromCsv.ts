@@ -1,4 +1,4 @@
-import { parse as parseCSV } from 'csv-parse';
+import { parse as parseCSV } from 'csv-parse/browser/esm';
 import { RemoteComputer, Result } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';

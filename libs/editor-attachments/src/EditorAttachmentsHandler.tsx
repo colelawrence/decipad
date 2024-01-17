@@ -219,7 +219,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 
   const showUploading = useDelayedTrue(attachments.uploading.length > 0);
 
-  if (!editor || editor.isReadOnly || process.env.REACT_APP_E2E) {
+  if (!editor || editor.isReadOnly || import.meta.env.VITE_E2E) {
     return <>{children}</>;
   }
 

@@ -302,3 +302,8 @@ libs/server-side-rendering/build
 
 # Doc verbalizer build (used in fine-tuning AI)
 build
+
+# SWC
+
+apps/frontend/.swc
+libs/live-connect/**/*.bundle.js

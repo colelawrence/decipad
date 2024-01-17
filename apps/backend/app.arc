@@ -58,7 +58,7 @@ any /api/ai/complete-column
 post /api/ai/feedback
 
 # Server-side rendering
-get /n/:notebookid
+# get /n/:notebookid
 
 # Stripe endpoints
 post /api/stripe/webhook

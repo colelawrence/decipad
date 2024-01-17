@@ -13,6 +13,6 @@ const valueOrDefault = (key: SupportedEnvKey, value?: string): string => {
 
 export const thirdParty = once(() => ({
   googleSheets: {
-    apiKey: valueOrDefault('REACT_APP_GOOGLE_SHEETS_API_KEY'),
+    apiKey: valueOrDefault('VITE_GOOGLE_SHEETS_API_KEY'),
   },
 }));

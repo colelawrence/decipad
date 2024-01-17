@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { getDefined } from '@decipad/utils';
-import { Buffer } from 'buffer';
 import * as decoding from 'lib0/decoding';
 import * as encoding from 'lib0/encoding';
 import { Observable } from 'lib0/observable';
@@ -380,8 +379,10 @@ class WebsocketProvider
     }
 
     if (typeof window !== 'undefined') {
+      // We must be running in the browser.
       window.addEventListener('beforeunload', this._beforeUnloadHandler);
-    } else if (typeof process !== 'undefined') {
+    } else {
+      // We must be running in node.
       process.on('exit', () => this._beforeUnloadHandler);
     }
     if (!readOnly) {

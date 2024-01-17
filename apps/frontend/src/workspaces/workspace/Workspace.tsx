@@ -148,8 +148,8 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
 
   useEffect(() => {
     let quotaLimit = currentWorkspace?.isPremium
-      ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
-      : Number(process.env.REACT_APP_MAX_CREDITS_FREE);
+      ? Number(import.meta.env.VITE_MAX_CREDITS_PRO)
+      : Number(import.meta.env.VITE_MAX_CREDITS_FREE);
     let pTokens = 0;
     let cTokens = 0;
     (currentWorkspace?.resourceUsages || [])

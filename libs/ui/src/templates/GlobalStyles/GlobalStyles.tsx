@@ -144,7 +144,6 @@ const DatePickerStyles: FC = () => {
             ...p13Medium,
             color: cssVar('textDefault'),
             lineHeight: '28px',
-            width: '28px',
             margin: '2px',
 
             '&:hover': {

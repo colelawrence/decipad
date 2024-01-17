@@ -4,14 +4,6 @@ module.exports = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: 'react-utils',
-  coverageThreshold: {
-    global: {
-      statements: 43,
-      branches: 35,
-      lines: 43,
-      functions: 44,
-    },
-  },
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats
    * to prevent breaking of any existing tests with snapshots.

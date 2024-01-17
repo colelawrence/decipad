@@ -20,11 +20,17 @@ const debounceGetValueMs = 500;
 
 export type OnErrorCallback = (error: Error) => void;
 
-export const startNotebook = (
+export type StartNotebook = (
   subscription: Subscription,
   observeExternal: Observe,
   onError: OnErrorCallback
-): RemoteComputer => {
+) => RemoteComputer;
+
+export const startNotebook: StartNotebook = (
+  subscription,
+  observeExternal,
+  onError
+) => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
   const editor = new EditorController(docId);
   const syncEditor = createDocSyncEditor(docId, {

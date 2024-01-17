@@ -96,8 +96,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.OPENAI_API_KEY);
     case 'NEXTAUTH_URL':
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
-    case 'REACT_APP_ANALYTICS_WRITE_KEY':
-      return valueOrDefault(name, process.env.REACT_APP_ANALYTICS_WRITE_KEY);
+    case 'VITE_ANALYTICS_WRITE_KEY':
+      return valueOrDefault(name, process.env.VITE_ANALYTICS_WRITE_KEY);
     case 'SENTRY_DSN':
       return valueOrDefault(name, process.env.SENTRY_DSN);
     case 'INTERCOM_SECRET_ID':
@@ -110,13 +110,10 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
     case 'STRIPE_EXTRA_CREDITS_PRODUCT_ID':
       return valueOrDefault(name, process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID);
-    case 'REACT_APP_STRIPE_PAYMENT_LINK':
-      return valueOrDefault(name, process.env.REACT_APP_STRIPE_PAYMENT_LINK);
-    case 'REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK':
-      return valueOrDefault(
-        name,
-        process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK
-      );
+    case 'VITE_STRIPE_PAYMENT_LINK':
+      return valueOrDefault(name, process.env.VITE_STRIPE_PAYMENT_LINK);
+    case 'VITE_STRIPE_CUSTOMER_PORTAL_LINK':
+      return valueOrDefault(name, process.env.VITE_STRIPE_CUSTOMER_PORTAL_LINK);
     case 'NOTION_TOKEN':
       return valueOrDefault(name, process.env.NOTION_TOKEN);
     case 'DISCORD_FEEDBACK_CHANNEL_TOKEN':
@@ -200,7 +197,7 @@ export function monitor() {
 
 export function analytics() {
   return {
-    secretKey: env('REACT_APP_ANALYTICS_WRITE_KEY'),
+    secretKey: env('VITE_ANALYTICS_WRITE_KEY'),
   };
 }
 
