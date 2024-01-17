@@ -15858,7 +15858,7 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1534.0:
+aws-sdk@2.1534.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
   version "2.1534.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1534.0.tgz#168d17e1ac0694abbe5da3cb33fde646a786d16b"
   integrity sha512-J0PUq4C4HS+OuDhYKknPEfUBwcd1b833723rwJiyp4VHT90V5K34rwYQ2DVq7DC5tUgG3ufa4EhZ1eNn5qgP9A==
@@ -15888,22 +15888,6 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
-
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1530.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1530.0.tgz#85b5f9d46bc2e17c662c9af21c9d4d7c760ea27f"
-  integrity sha512-00hEQvur+ohBQiBzyLm5YU3B5UrU2QgEzmIuvB88i4vrViRIcxHotWmdMMSQPOhHjyQb8RwfksfUMpstnyGWxg==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.5.0"
 
 aws4@^1.11.0:
   version "1.12.0"
@@ -28287,10 +28271,10 @@ openai-chat-tokens@^0.2.8:
   dependencies:
     js-tiktoken "^1.0.7"
 
-openai@^4.20.0, openai@^4.6.1:
-  version "4.20.1"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.20.1.tgz#afa0d496d125b5a0f6cebcb4b9aeabf71e00214e"
-  integrity sha512-Dd3q8EvINfganZFtg6V36HjrMaihqRgIcKiHua4Nq9aw/PxOP48dhbsk8x5klrxajt5Lpnc1KTOG5i1S6BKAJA==
+openai@^4.24.7, openai@^4.6.1:
+  version "4.24.7"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.24.7.tgz#65b206bcf15c11202f758b5e1e945ffa13fd6b7f"
+  integrity sha512-JUesECWPtsDHO0TlZGb6q73hnAmXUdzj9NrwgZeL4lqlRt/kR1sWrXoy8LocxN/6uOtitywvcJqe0O1PLkG45g==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
