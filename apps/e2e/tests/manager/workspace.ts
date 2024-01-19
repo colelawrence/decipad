@@ -316,7 +316,7 @@ export class Workspace {
     await this.page.locator('input[type="email"]').fill(email);
 
     if (role === 'Admin') {
-      await this.page.getByTestId('text-icon-button:member').click();
+      await this.page.getByTestId('text-icon-button:member').first().click();
       await this.page.getByText('Workspace admin').click();
     }
     await this.page.getByText('Send invitation').click();

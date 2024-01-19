@@ -13,20 +13,20 @@ export interface AggregationType {
 const aggregationTypes: { [type: string]: AggregationType[] } = {
   boolean: [
     {
-      name: 'count true',
+      name: 'Count true',
       expression: (colRef) => `countif(${colRef} == true)`,
     },
     {
-      name: 'count false',
+      name: 'Count false',
       expression: (colRef) => `countif(${colRef} == false)`,
     },
     {
-      name: '% true',
+      name: 'Percent true',
       expression: (colRef) =>
         `countif(${colRef} == true) / count(${colRef}) in %`,
     },
     {
-      name: '% false',
+      name: 'Percent false',
       expression: (colRef) =>
         `countif(${colRef} == false) / count(${colRef}) in %`,
     },
@@ -34,57 +34,57 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
 
   date: [
     {
-      name: 'min',
+      name: 'Earliest',
       expression: (colRef) => `min(${colRef})`,
     },
     {
-      name: 'max',
+      name: 'Latest',
       expression: (colRef) => `max(${colRef})`,
     },
     {
-      name: `span`,
+      name: `Time span`,
       shortName: 'Span',
       expression: (colRef) => `max(${colRef}) - min(${colRef})`,
     },
   ],
   number: [
     {
-      name: 'sum',
+      name: 'Sum',
       expression: (colRef) => `sum(${colRef})`,
     },
     {
-      name: 'max',
+      name: 'Maximum value',
       shortName: 'Max',
       expression: (colRef) => `max(${colRef})`,
     },
     {
-      name: 'min',
+      name: 'Minimum value',
       shortName: 'Min',
       expression: (colRef) => `min(${colRef})`,
     },
     {
-      name: 'avg',
+      name: 'Average',
       expression: (colRef) => `average(${colRef})`,
     },
     {
-      name: 'median',
+      name: 'Median',
       expression: (colRef) => `median(${colRef})`,
     },
     {
-      name: 'stddev',
+      name: 'Standard deviation',
       expression: (colRef) => `stddev(${colRef})`,
     },
     {
-      name: 'span',
+      name: 'Span',
       expression: (colRef) => `max(${colRef}) - min(${colRef})`,
     },
     {
-      name: 'count uniq',
+      name: 'Count unique values',
       shortName: 'Unique',
       expression: (colRef) => `count(unique(${colRef}))`,
     },
     {
-      name: 'count',
+      name: 'Count values',
       shortName: 'Count',
       expression: (colRef) => `count(${colRef})`,
     },
@@ -97,12 +97,12 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
   ],
   string: [
     {
-      name: 'count uniq',
+      name: 'Count unique values',
       shortName: 'Unique',
       expression: (colRef) => `count(unique(${colRef}))`,
     },
     {
-      name: 'count',
+      name: 'Count values',
       shortName: 'Count',
       expression: (colRef) => `count(${colRef})`,
     },
