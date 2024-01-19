@@ -5,8 +5,8 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ChatCompletionMessage } from 'openai/resources';
 import { resourceFromRoomName } from './roomName';
 import { engageAssistant } from '../notebookAssistant/engageAssistant';
-import { ws } from '@architect/functions';
 import { boomify, badRequest } from '@hapi/boom';
+import { tryWSSend } from '@decipad/backend-utils';
 
 export interface ChatAgentMessage {
   connectionId: string;
@@ -53,19 +53,13 @@ export const onQueueMessage = async (
       notebookId: resource.id,
     });
 
-    await ws.send({
-      id: connectionId,
-      payload: response,
-    });
+    await tryWSSend(connectionId, response);
   } catch (err) {
     const bErr = boomify(err as Error);
     if (bErr.isBoom) {
       // eslint-disable-next-line no-console
       console.error(bErr);
     }
-    await ws.send({
-      id: connectionId,
-      payload: bErr.output.payload,
-    });
+    await tryWSSend(connectionId, bErr.output.payload);
   }
 };
