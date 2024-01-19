@@ -45,6 +45,7 @@ export const editorOnPaste = (
     if (!editorIds.some((ele) => dataIds.includes(ele))) return;
 
     e.preventDefault();
+    e.stopPropagation();
     insertFragment(
       editor,
       decodedData.map((node: MyNode) => clone(computer, node)),
