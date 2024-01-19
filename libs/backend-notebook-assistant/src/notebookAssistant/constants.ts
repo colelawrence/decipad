@@ -1,12 +1,12 @@
 export const MODE_DETECTION_PROMPT = `
 Determine the intent of user message.
-Only options are 'conversation', 'creation'.
+Only options are 'conversation', 'creation' and 'fetch_data'.
 Conversation is when user is asking a question, making a statement or asking for help, implying they need to be asked follow-up questions.
 Creation is when user wants to make a change to the document, ask you to create something or asks if you are capable of creating something, implying they don't need to be asked follow-up questions.
-Prioritize 'creation' over 'conversation'.
+Prioritize 'creation' over 'conversation' and 'fetch_data'.
 Respond with a valid JSON that represents probability of each intent.
 Make sure JSON is valid and can be parsed by JSON.parse().
-Example: { "conversation": 0.7, "creation": 0.2 }
+Example: { "conversation": 0.7, "creation": 0.2, "fetch_data": 0.1 }
 `;
 
 const LANGUAGE_DESCRIPTION = `
