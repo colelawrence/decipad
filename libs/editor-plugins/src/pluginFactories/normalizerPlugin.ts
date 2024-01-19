@@ -165,11 +165,13 @@ const withNormalizerOverride = <
       try {
         const [node] = entry;
 
-        if (!acceptedTypes || isElement(node)) {
+        // eslint-disable-next-line no-labels
+        thisNormalize: if (!acceptedTypes || isElement(node)) {
           if (acceptedTypes) {
             if (acceptedTypes.indexOf((node as MyElement).type) < 0) {
               // no match, break early
-              return nextNormalizer(entry);
+              // eslint-disable-next-line no-labels
+              break thisNormalize;
             }
             if (removeUnacceptableElementProperties(entry)) {
               return;
