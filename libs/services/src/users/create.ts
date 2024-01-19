@@ -10,7 +10,6 @@ import {
 import { MyElement } from '@decipad/editor-types';
 import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
-import { timeout } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { forbidden, notAcceptable } from '@hapi/boom';
@@ -40,26 +39,38 @@ async function createInitialWorkspace(
 
   const initialWorkspaceSpec = initialWorkspace();
 
-  const notebooks = [];
+  const notebooks: Array<PadRecord> = [];
   /* eslint-disable no-await-in-loop */
-  for (const notebook of initialWorkspaceSpec.notebooks) {
-    const pad = await createPad(
-      workspace.id,
-      {
-        name: notebook.title,
-        icon: notebook.icon,
-        status: notebook.status,
-      },
-      user
-    );
-    await createContent(pad.id, notebook.content.children as MyElement[]);
-    notebooks.push(pad);
 
-    // Giving it some time so the notebooks won't end up with the same timestamp and therefore
-    // random order in the frontend.
-    await timeout(1000);
+  await Promise.all(
+    initialWorkspaceSpec.notebooks.map(async (notebook) => {
+      const pad = await createPad(
+        workspace.id,
+        {
+          name: notebook.title,
+          icon: notebook.icon,
+          status: notebook.status,
+        },
+        user
+      );
+      await createContent(pad.id, notebook.content.children as MyElement[]);
+      notebooks.push(pad);
+    })
+  );
+
+  let createdAt = new Date().getTime();
+
+  //
+  // Sort by name, and assign a different createdAt for each.
+  // That way we have a consistent order of notebooks in the frontend,
+  // as they are arranged by creation time.
+  //
+
+  notebooks.sort((a, b) => (a.name > b.name ? 1 : -1));
+  for (const notebook of notebooks) {
+    notebook.createdAt = createdAt;
+    createdAt += 1000;
   }
-  /* eslint-enable no-await-in-loop */
 
   const data = await tables();
 

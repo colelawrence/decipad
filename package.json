@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "yarn serve:all",
-    "serve:all:prod": "nx serve backend && nx preview frontend",
+    "serve:all:prod": "nx serve backend & nx preview frontend",
     "serve:all": "NODE_OPTIONS='--enable-source-maps' run-p serve:backend serve:frontend",
     "serve:all:e2e": "DECI_E2E=1 run-p serve:backend serve:frontend",
     "serve:all:ssr": "DECI_SSR=1 yarn serve:all",
