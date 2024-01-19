@@ -32,7 +32,7 @@ jobs:
 
       - name: Undeploy
         run: |
-          export SAM_BUCKET="decipad-dev-backend-sam/${{ github.event.pull_request.number }}.staging.decipad.com"
+          export SAM_BUCKET="decipad-dev-backend-sam"
           export SAM_LOCATION="s3://decipad-dev-backend-sam/${{ github.event.pull_request.number }}.staging.decipad.com"
 
           ./scripts/aws-delete-stack.sh ${{ github.event.pull_request.number }}
