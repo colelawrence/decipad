@@ -150,8 +150,6 @@ test.describe('date widget read mode', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay);
     await page.locator('[aria-roledescription="enable publishing"]').click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
     await page.getByTestId('copy-published-link').click();
     sharedPageLocation = (
       (await page.evaluate('navigator.clipboard.readText()')) as string

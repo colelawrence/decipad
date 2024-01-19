@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { Result } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
+import type { Result } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { DragEvent, FC, ReactNode, RefObject, useState } from 'react';
 import { antiwiggle, cssVar, p12Regular, wiggle } from '../../primitives';

@@ -1,12 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { currencyUnits, Unit, UnitOfMeasure } from '@decipad/remote-computer';
 import type {
   CellValueType,
   ColumnMenuDropdown,
   TableCellType,
 } from '@decipad/editor-types';
+import { formatUnit } from '@decipad/format';
+import { commonCurrencies } from '@decipad/language-units';
 import { N, ONE } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
+import { Unit, UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
@@ -39,14 +41,13 @@ import {
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
-import { formatUnit } from '@decipad/format';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',
 });
 
-const presentableCurrencyUnits = currencyUnits.filter((f) => {
-  return !!f.pretty && f.pretty.length <= 3;
+const presentableCurrencyUnits = currencyUnits.filter((unit) => {
+  return commonCurrencies.includes(unit.name);
 });
 
 type ExpandableColumns = 'currency' | 'date' | 'series' | 'dropdowns' | null;
@@ -172,7 +173,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 selected={type.kind === 'number' && sameUnits(type.unit, unit)}
                 itemAlignment="center"
               >
-                <span css={{ marginLeft: '2px' }}>{unit.baseQuantity}</span>
+                <span css={{ marginLeft: '6px' }}>{unit.baseQuantity}</span>
               </MenuItem>
             ))}
           </MenuList>

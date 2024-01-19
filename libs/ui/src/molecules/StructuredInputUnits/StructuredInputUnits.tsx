@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { commonCurrencies } from '@decipad/language-units';
 import { AST, currencyUnits, UnitOfMeasure } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
@@ -31,8 +32,8 @@ const ExpandableColumnsArr = [
 ] as const;
 type ExpandableColumns = typeof ExpandableColumnsArr[number][0] | null;
 
-const presentableCurrencyUnits = currencyUnits.filter((f) => {
-  return !!f.pretty && f.pretty.length <= 3;
+const presentableCurrencyUnits = currencyUnits.filter((unit) => {
+  return commonCurrencies.includes(unit.name);
 });
 
 const unitCategories: Record<
@@ -190,7 +191,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
                 icon={<span>{currency.pretty ?? currency.name}</span>}
                 onSelect={() => onChangeUnit(u(currency))}
               >
-                {currency.baseQuantity}
+                <span css={{ marginLeft: '6px' }}>{currency.baseQuantity}</span>
               </MenuItem>
             ))}
           </MenuList>
