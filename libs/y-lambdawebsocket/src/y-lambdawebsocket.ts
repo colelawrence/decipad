@@ -208,7 +208,7 @@ const persistentSend = async (connId: string, payload: string) => {
   try {
     await ws.send({ id: connId, payload });
   } catch (err) {
-    if (!isSeriousError(err as Error)) {
+    if (!isSeriousError(err as Error) && !errorIs(err, 'Gone')) {
       // try again a bit later
       setTimeout(
         () => persistentSend(connId, payload),
