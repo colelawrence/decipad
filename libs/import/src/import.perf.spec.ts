@@ -3,7 +3,7 @@ import { createServer, Server } from 'http';
 import path from 'path';
 import handler from 'serve-handler';
 import getPort from 'get-port';
-import { getDefined } from '@decipad/utils';
+import { getDefined, timeout } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { tryImport } from '.';
 
@@ -68,6 +68,9 @@ describe('import performance', () => {
   it(
     'imports big csv',
     async () => {
+      // Wait a little bit, otherwise we get a fail here.
+      await timeout(2000);
+
       const computer = getRemoteComputer();
       const address = getDefined(server.address());
       const file = '/big1.csv';
