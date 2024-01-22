@@ -30,10 +30,22 @@
     "noUnusedParameters": true,
     "noErrorTruncation": true,
     "paths": {
-      "@decipad/frontend": ["apps/frontend/src/index.tsx"],
       "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
+      "@decipad/backend-auth": ["libs/backend-auth/src/index.ts"],
+      "@decipad/backend-code-assistant": [
+        "libs/backend-code-assistant/src/index.ts"
+      ],
+      "@decipad/backend-config": ["libs/backend-config/src/index.ts"],
       "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
+      "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"],
+      "@decipad/backend-notebook-assistant": [
+        "libs/backend-notebook-assistant/src/index.ts"
+      ],
+      "@decipad/backend-notebook-content": [
+        "libs/backend-notebook-content/src/index.ts"
+      ],
       "@decipad/backend-resources": ["libs/backend-resources/src/index.ts"],
+      "@decipad/backend-search": ["libs/backend-search/src/index.ts"],
       "@decipad/backend-test-sandbox": [
         "libs/backend-test-sandbox/src/index.ts"
       ],
@@ -44,22 +56,18 @@
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
       "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
-      "@decipad/backend-config": ["libs/backend-config/src/index.ts"],
-      "@decipad/frontend-config": ["libs/frontend-config/src/index.ts"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
+      "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
-      "@decipad/notebook-maintenance": [
-        "libs/notebook-maintenance/src/index.ts"
-      ],
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
       "@decipad/editor-ai-assistant": ["libs/editor-ai-assistant/src/index.ts"],
-      "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
       "@decipad/editor-attachments": ["libs/editor-attachments/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
+      "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
       "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
       "@decipad/editor-draw": ["libs/editor-draw/src/index.ts"],
       "@decipad/editor-hooks": ["libs/editor-hooks/src/index.ts"],
@@ -86,6 +94,8 @@
       "@decipad/fnqueue": ["libs/fnqueue/src/index.ts"],
       "@decipad/format": ["libs/format/src/index.ts"],
       "@decipad/fraction": ["libs/fraction/src/index.ts"],
+      "@decipad/frontend": ["apps/frontend/src/index.tsx"],
+      "@decipad/frontend-config": ["libs/frontend-config/src/index.ts"],
       "@decipad/generator-utils": ["libs/generator-utils/src/index.ts"],
       "@decipad/graphql-client": ["libs/graphql-client/src/index.ts"],
       "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],
@@ -99,15 +109,20 @@
       "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
       "@decipad/interfaces": ["libs/interfaces/src/index.ts"],
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
+      "@decipad/lambdas": ["libs/lambdas/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
-      "@decipad/language-utils": ["libs/language-utils/src/index.ts"],
-      "@decipad/language-units": ["libs/language-units/src/index.ts"],
-      "@decipad/language-types": ["libs/language-types/src/index.ts"],
       "@decipad/language-builtins": ["libs/language-builtins/src/index.ts"],
+      "@decipad/language-types": ["libs/language-types/src/index.ts"],
+      "@decipad/language-units": ["libs/language-units/src/index.ts"],
+      "@decipad/language-utils": ["libs/language-utils/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/message-packer": ["libs/message-packer/src/index.ts"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
       "@decipad/notebook": ["libs/notebook/src/index.ts"],
+      "@decipad/notebook-maintenance": [
+        "libs/notebook-maintenance/src/index.ts"
+      ],
+      "@decipad/notebook-open-api": ["libs/notebook-open-api/src/index.ts"],
       "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
       "@decipad/notebook-tabs": ["libs/notebook-tabs/src/index.ts"],
       "@decipad/number": ["libs/number/src/index.ts"],
@@ -134,12 +149,12 @@
       "@decipad/services/invites": ["libs/services/src/invites"],
       "@decipad/services/monitor": ["libs/services/src/monitor"],
       "@decipad/services/notebooks": ["libs/services/src/notebooks/index.ts"],
+      "@decipad/services/pad-content": ["libs/services/src/pad-content"],
       "@decipad/services/permissions": ["libs/services/src/permissions"],
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/utils": ["libs/services/src/utils"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
-      "@decipad/services/pad-content": ["libs/services/src/pad-content"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [
@@ -155,24 +170,14 @@
       "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
-      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
-      "@decipad/lambdas": ["libs/lambdas/src/index.ts"],
-      "@decipad/backend-search": ["libs/backend-search/src/index.ts"],
-      "@decipad/backend-notebook-assistant": [
-        "libs/backend-notebook-assistant/src/index.ts"
-      ],
-      "@decipad/backend-code-assistant": [
-        "libs/backend-code-assistant/src/index.ts"
-      ],
-      "@decipad/backend-notebook-content": [
-        "libs/backend-notebook-content/src/index.ts"
-      ],
-      "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"],
-      "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"],
-      "@decipad/backend-auth": ["libs/backend-auth/src/index.ts"],
-      "@decipad/notebook-open-api": ["libs/notebook-open-api/src/index.ts"]
+      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"]
     }
   },
   "files": [],
-  "include": []
+  "include": [],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

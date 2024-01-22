@@ -35,7 +35,7 @@
       "executor": "@nx/storybook:storybook",
       "options": {
         "port": 4400,
-        "configDir": "libs/ui/storybook"
+        "configDir": "libs/ui/.storybook"
       },
       "configurations": {
         "ci": {
@@ -47,13 +47,19 @@
       "executor": "@nx/storybook:build",
       "outputs": ["{options.outputDir}"],
       "options": {
-        "configDir": "libs/ui/storybook",
-        "outputDir": "dist/storybook/ui"
+        "outputDir": "dist/storybook/ui",
+        "configDir": "libs/ui/.storybook"
       },
       "configurations": {
         "ci": {
           "quiet": true
         }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c libs/ui/.storybook --url=http://localhost:4400"
       }
     }
   },

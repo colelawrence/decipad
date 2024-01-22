@@ -3,7 +3,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { CSSProperties } from 'react';
 import * as Icons from '.';
-import { UserIconKey, userIconKeys } from '../utils';
+import { UserIconKey, userIconKeys } from '@decipad/editor-types';
 
 const wrapperStyle = {
   display: 'grid',

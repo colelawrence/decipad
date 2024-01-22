@@ -8,11 +8,7 @@
     "jest.config.js"
   ],
   "rules": {
-    "import/no-extraneous-dependencies": [
-      // TODO re-enable when properly using Yarn workspaces
-      "off"
-    ],
-    // "custom-emotion/css-prop-named-variable": "error",
+    "import/no-extraneous-dependencies": ["off"],
     "decipad/css-prop-named-variable": "error",
     "no-restricted-imports": [
       "error",
@@ -30,12 +26,7 @@
     {
       "files": ["src/test-utils/**"],
       "rules": {
-        "import/no-extraneous-dependencies": [
-          // TODO restore comment when properly using Yarn workspaces
-          "off"
-          // "error",
-          // { "devDependencies": true }
-        ]
+        "import/no-extraneous-dependencies": ["off"]
       }
     }
   ]

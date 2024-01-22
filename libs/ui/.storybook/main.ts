@@ -1,0 +1,42 @@
+/* eslint-disable no-param-reassign */
+import type { StorybookConfig } from '@storybook/react-vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import react from '@vitejs/plugin-react-swc';
+
+const viteStoryBookConfig: StorybookConfig = {
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
+  },
+
+  async viteFinal(config) {
+    config.plugins = config.plugins.filter(
+      (plugin) =>
+        !(Array.isArray(plugin) && plugin[0]?.name.includes('vite:react'))
+    );
+
+    config.plugins.push(
+      react({
+        exclude: [/\.stories\.(t|j)sx?$/, /node_modules/],
+        jsxImportSource: '@emotion/react',
+        babel: {
+          plugins: ['@emotion/babel-plugin'],
+        },
+      })
+    );
+
+    config.plugins.push(tsconfigPaths());
+
+    config.define = {
+      process: {
+        env: {},
+      },
+    };
+
+    return config;
+  },
+};
+
+export default viteStoryBookConfig;
