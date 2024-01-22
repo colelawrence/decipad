@@ -11,7 +11,6 @@ import {
   getNode,
   isEditorNormalizing,
   isElement,
-  normalizeEditor,
   PlateEditor,
   removeNodes,
   TDescendant,
@@ -44,14 +43,15 @@ import {
   translateOpUp,
   translatePathUp,
 } from './TranslatePaths';
-import { IsTab } from './utils';
+import { IsTab, IsTitle } from './utils';
 import { ElementObserver } from './ElementObserver';
 import { createTitleEditor, TitleEditor } from './TitleEditor';
 import { BaseEditor, isNormalizing, Path, setNormalizing } from 'slate';
 import { RootEditorController } from './types';
-import { getMirrorEditorNormalizers } from './plugins/index';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import stringify from 'json-stringify-safe';
+import { normalizeCurried } from './RootEditor/normalizeNode';
+import { normalizers } from './RootEditor/plugins';
 
 const INITIAL_TAB_NAME = 'New Tab';
 const TITLE_EDITOR_INDEX = 0;
@@ -149,9 +149,14 @@ export class EditorController implements RootEditorController {
 
   private createMirrorEditor(): PlateEditor<NotebookValue> {
     const mirrorEditor = createPlateEditor<NotebookValue>({
-      plugins: getMirrorEditorNormalizers(),
+      plugins: [],
     }) as PlateEditor<NotebookValue>;
     const { apply, onChange } = mirrorEditor;
+
+    mirrorEditor.normalize = normalizeCurried(
+      mirrorEditor,
+      normalizers(mirrorEditor)
+    );
 
     const tryApplyingOpToMirror = (op: TOperation) => {
       try {
@@ -174,7 +179,7 @@ export class EditorController implements RootEditorController {
       }
       if (!op.FROM_ROOT) {
         op.FROM_MIRROR = true;
-        this.applyFromMirrorEditor(op);
+        this.apply(op);
       }
     };
 
@@ -412,7 +417,9 @@ export class EditorController implements RootEditorController {
 
   private InsertTitle(op: TInsertNodeOperation<AnyElement>): void {
     op.FROM_ROOT = true;
-    this.titleEditor.apply(op);
+    if (IsTitle(op.node)) {
+      this.titleEditor.apply(op);
+    }
   }
 
   private InsertTab(op: TInsertNodeOperation<TabElement>): void {
@@ -511,49 +518,6 @@ export class EditorController implements RootEditorController {
     const index = op.path[0];
     this.tabEditors.splice(index - 1, 1);
     this.events.next({ type: 'remove-tab' });
-  }
-
-  private applyFromMirrorEditor(op: TOperation): void {
-    if (op.type === 'set_selection' || op.path.length === 0) {
-      return;
-    }
-
-    const [childIndex] = op.path;
-    if (childIndex > 0) {
-      if (op.type !== 'move_node') {
-        const targetNode = this.mirrorEditor.children[childIndex];
-        if (!isElement(targetNode) || targetNode.type !== ELEMENT_TAB) {
-          return;
-        }
-        const targetTabIndex = this.mirrorEditor.children
-          .filter(IsTab)
-          .indexOf(targetNode);
-        if (targetTabIndex < 0) {
-          throw new Error(
-            `Could not find tab index for tab at mirror position ${childIndex}`
-          );
-        }
-        return this.apply({
-          ...op,
-          path: [targetTabIndex + 1, ...op.path.slice(1)],
-        });
-      }
-      // op.type === 'move_node'
-      const [targetChildIndex] = op.newPath;
-      const targetNode = this.mirrorEditor.children[targetChildIndex];
-      if (isElement(targetNode) && targetNode.type === ELEMENT_TAB) {
-        const targetTabIndex = this.mirrorEditor.children
-          .filter(IsTab)
-          .indexOf(targetNode);
-        this.apply({
-          ...op,
-          newPath: [targetTabIndex + 1, ...op.newPath.slice(1)],
-        });
-      }
-    }
-    if (childIndex === 0) {
-      this.apply(op);
-    }
   }
 
   /**
@@ -832,6 +796,6 @@ export class EditorController implements RootEditorController {
 
   // for tests only
   public forceNormalize() {
-    normalizeEditor(this.mirrorEditor, { force: true });
+    this.mirrorEditor.normalize();
   }
 }

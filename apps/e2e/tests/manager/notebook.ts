@@ -1352,13 +1352,13 @@ export class Notebook {
   async updateSlider(index: number, value: string) {
     const sliderInput = this.page.getByTestId('widget-input').nth(index);
     await sliderInput.waitFor({ state: 'visible' });
+
+    // Selection sometimes isn't selected fully by a single click.
     await sliderInput.click();
-    const { length } = await sliderInput.innerText();
+    await sliderInput.click();
 
-    for (let i = 0; i < length; i += 1) {
-      await this.page.keyboard.press('Backspace');
-    }
-
+    await this.page.keyboard.press('Control+a');
+    await this.page.keyboard.press('Backspace');
     await this.page.keyboard.type(value);
   }
 

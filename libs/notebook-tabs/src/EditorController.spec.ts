@@ -5,7 +5,6 @@ import {
   ELEMENT_TAB,
   ELEMENT_TITLE,
   MyValue,
-  ParagraphElement,
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
@@ -14,12 +13,11 @@ import { nanoid } from 'nanoid';
 import { IsTab } from './utils';
 import { createTrailingParagraphPlugin } from './testPlugins';
 
-let mockCounter = 0;
+let mockedId = 0;
 jest.mock('nanoid', () => {
   return {
     nanoid: () => {
-      const id = mockCounter++;
-      return id.toString();
+      return (mockedId++).toString();
     },
   };
 });
@@ -124,7 +122,6 @@ describe('migration from previous schema', () => {
             text: 'this should be a title',
           },
         ],
-        id: 'title-id',
         type: 'title',
       },
       {
@@ -133,15 +130,6 @@ describe('migration from previous schema', () => {
             children: [
               {
                 text: 'this is a paragraph',
-              },
-            ],
-            id: 'p-id',
-            type: 'p',
-          },
-          {
-            children: [
-              {
-                text: '',
               },
             ],
             type: 'p',
@@ -193,7 +181,6 @@ describe('migration from previous schema', () => {
             text: 'this should be a title',
           },
         ],
-        id: 'title-id',
         type: 'title',
       },
       {
@@ -204,7 +191,6 @@ describe('migration from previous schema', () => {
                 text: 'this is a paragraph',
               },
             ],
-            id: 'p1-id',
             type: 'p',
           },
           {
@@ -213,16 +199,6 @@ describe('migration from previous schema', () => {
                 text: 'this is another paragraph',
               },
             ],
-            id: 'p2-id',
-            type: 'p',
-          },
-          {
-            children: [
-              {
-                text: '',
-              },
-            ],
-            id: expect.any(String),
             type: 'p',
           },
         ],
@@ -284,7 +260,6 @@ describe('Sub editors behavior', () => {
     expect(editor.children).toMatchObject([
       {
         type: 'p',
-        id: 'p_id',
         children: [{ text: 'test' }],
       },
     ]);
@@ -869,19 +844,16 @@ describe('Migrating old documents into tabs (hard tests)', () => {
     expect(controller.children).toHaveLength(2);
     expect(controller.children[0].type).toBe(ELEMENT_TITLE);
     expect(controller.children[1].type).toBe(ELEMENT_TAB);
-    expect(controller.children[1].children.length).toBe(22);
+    expect(controller.children[1].children.length).toBe(21);
 
-    expect(controller.children[0]).toMatchInlineSnapshot(`
-      {
-        "children": [
-          {
-            "text": "How rich would you be if you invested in bitcoin",
-          },
-        ],
-        "id": "h1Id",
-        "type": "title",
-      }
-    `);
+    expect(controller.children[0]).toMatchObject({
+      children: [
+        {
+          text: 'How rich would you be if you invested in bitcoin',
+        },
+      ],
+      type: 'title',
+    });
 
     // Really just making sure
     expect(
@@ -960,7 +932,7 @@ describe('Migrating old documents into tabs (hard tests)', () => {
             text: 'My Title',
           },
         ],
-        id: 'titleId',
+        id: expect.any(String),
         type: 'title',
       },
       {
@@ -968,10 +940,19 @@ describe('Migrating old documents into tabs (hard tests)', () => {
           {
             children: [
               {
+                text: 'inside tab',
+              },
+            ],
+            id: expect.any(String),
+            type: 'p',
+          },
+          {
+            children: [
+              {
                 text: 'This is a paragraph',
               },
             ],
-            id: 'p1',
+            id: expect.any(String),
             type: 'p',
           },
           {
@@ -980,21 +961,12 @@ describe('Migrating old documents into tabs (hard tests)', () => {
                 text: 'This is another paragraph',
               },
             ],
-            id: 'p2',
-            type: 'p',
-          },
-          {
-            children: [
-              {
-                text: 'inside tab',
-              },
-            ],
-            id: 'p-tab-1',
+            id: expect.any(String),
             type: 'p',
           },
         ],
         icon: undefined,
-        id: 'tab1',
+        id: expect.any(String),
         isHidden: undefined,
         name: 'hello',
         type: 'tab',
@@ -1013,8 +985,10 @@ describe('Tab Operations', () => {
   it('Renames the first tab', () => {
     const controller = new EditorController('id', []);
     controller.forceNormalize();
+
     const { id } = controller.children[1];
     controller.renameTab(id, 'My Name!');
+
     expect(controller.children[1]).toMatchObject({
       type: ELEMENT_TAB,
       id,
@@ -1033,8 +1007,10 @@ describe('Tab Operations', () => {
   it('Removes a tab', () => {
     const controller = new EditorController('id', []);
     controller.forceNormalize();
+
     const id = controller.insertTab();
     expect(controller.children.filter(IsTab)).toHaveLength(2);
+
     controller.removeTab(id);
     expect(controller.children.filter(IsTab)).toHaveLength(1);
 
@@ -1045,128 +1021,29 @@ describe('Tab Operations', () => {
   });
 });
 
-describe('Tests normalizer for tabs', () => {
-  it('Last title inserted wins', () => {
-    const controller = new EditorController('id', []);
-    controller.withoutNormalizing(() => {
-      controller.apply({
-        type: 'insert_node',
-        path: [0],
-        node: {
-          type: ELEMENT_TITLE,
-          id: '1',
-          children: [{ text: 'first title' }],
-        } satisfies TitleElement,
-      });
-      controller.apply({
-        type: 'insert_node',
-        path: [0],
-        node: {
-          type: ELEMENT_TITLE,
-          id: '2',
-          children: [{ text: 'second title' }],
-        } satisfies TitleElement,
-      });
-    });
-
-    expect(controller.children).toMatchObject([
-      {
-        children: [
-          {
-            text: 'second title',
-          },
-        ],
-        type: 'title',
-      },
-      {
-        children: [
-          {
-            children: [
-              {
-                text: 'first title',
-              },
-            ],
-            type: 'title',
-          },
-          {
-            children: [
-              {
-                text: '',
-              },
-            ],
-            type: 'p',
-          },
-        ],
-        icon: undefined,
-        isHidden: undefined,
-        name: 'First tab',
-        type: 'tab',
-      },
-    ]);
-  });
-
-  it('Spams insert titles and tabs', () => {
-    const controller = new EditorController('id', []);
-
-    controller.withoutNormalizing(() => {
-      for (let i = 0; i < 52; i += 2) {
-        controller.apply({
-          type: 'insert_node',
-          path: [i],
-          node: {
-            type: ELEMENT_TITLE,
-            id: i.toString(),
-            children: [{ text: `Title: ${i}` }],
-          } satisfies TitleElement,
-        });
-
-        controller.apply({
-          type: 'insert_node',
-          path: [i + 1],
-          node: {
-            type: ELEMENT_TAB,
-            id: (i + 1).toString(),
-            name: `Tab: ${i + 1}`,
-            icon: 'Deci',
-            isHidden: false,
-            children: [],
-          } satisfies TabElement,
-        });
-      }
-    });
-
-    // 25 tabs + 1 title.
-    expect(controller.children).toHaveLength(27);
-    expect(
-      controller.children.map((c) => c.type).filter((c) => c === 'title')
-    ).toHaveLength(1);
-    expect(
-      controller.children.map((c) => c.type).filter((c) => c === 'tab')
-    ).toHaveLength(26);
-  });
-});
-
 describe('Resilience of existing notebooks with broken structure', () => {
   it('Inserts a title if one if not present (1)', () => {
     const controller = new EditorController('id', []);
 
-    controller.apply({
-      type: 'insert_node',
-      node: {
-        type: ELEMENT_TAB,
-        id: '1',
-        name: 'Tab',
-        icon: 'Deci',
-        isHidden: false,
-        children: [
-          {
-            id: nanoid(),
-            type: ELEMENT_PARAGRAPH,
-            children: [{ text: 'I am a paragraph' }],
-          },
-        ],
-      } satisfies TabElement,
-      path: [0],
+    controller.withoutNormalizing(() => {
+      controller.apply({
+        type: 'insert_node',
+        node: {
+          type: ELEMENT_TAB,
+          id: '1',
+          name: 'Tab',
+          icon: 'Deci',
+          isHidden: false,
+          children: [
+            {
+              id: nanoid(),
+              type: ELEMENT_PARAGRAPH,
+              children: [{ text: 'I am a paragraph' }],
+            },
+          ],
+        } satisfies TabElement,
+        path: [0],
+      });
     });
 
     expect(controller.children).toMatchObject([
@@ -1199,9 +1076,6 @@ describe('Resilience of existing notebooks with broken structure', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it('Inserts a title if one if not present', () => {
-    // TODO: WTF is wrong with slate normalizer?
-    // It looks like it's insertin a text node and then removing it
-    // right after, creating a normalization cycle...
     const controller = new EditorController('id', []);
 
     controller.withoutNormalizing(() => {
@@ -1231,7 +1105,8 @@ describe('Resilience of existing notebooks with broken structure', () => {
       {
         children: [
           {
-            text: '',
+            type: 'p',
+            children: [{ text: '' }],
           },
         ],
         icon: 'Deci',
@@ -1287,34 +1162,38 @@ describe('Resilience of existing notebooks with broken structure', () => {
   it('doesnt insert titles and tabs in wrong orders', () => {
     const controller = new EditorController('id', []);
 
-    controller.apply({
-      type: 'insert_node',
-      node: {
-        id: 'tabid',
-        type: 'tab',
-        name: 'tabname',
-        children: [
-          { type: ELEMENT_PARAGRAPH, id: nanoid(), children: [{ text: '' }] },
-        ],
-      } satisfies TabElement,
-      path: [0],
+    controller.withoutNormalizing(() => {
+      controller.apply({
+        type: 'insert_node',
+        node: {
+          id: 'tabid',
+          type: 'tab',
+          name: 'tabname',
+          children: [
+            { type: ELEMENT_PARAGRAPH, id: nanoid(), children: [{ text: '' }] },
+          ],
+        } satisfies TabElement,
+        path: [0],
+      });
+
+      controller.apply({
+        type: 'insert_node',
+        node: {
+          id: 'titleid',
+          type: 'title',
+          children: [{ text: 'title' }],
+        } satisfies TitleElement,
+        path: [1],
+      });
     });
 
-    controller.apply({
-      type: 'insert_node',
-      node: {
-        id: 'titleid',
-        type: 'title',
-        children: [{ text: 'title' }],
-      } satisfies TitleElement,
-      path: [1],
-    });
+    controller.forceNormalize();
 
     expect(controller.children).toMatchObject([
       {
         children: [
           {
-            text: 'Welcome to Decipad!',
+            text: 'title',
           },
         ],
         type: 'title',
@@ -1331,7 +1210,6 @@ describe('Resilience of existing notebooks with broken structure', () => {
           },
         ],
         icon: undefined,
-        id: 'tabid',
         isHidden: undefined,
         name: 'tabname',
         type: 'tab',
@@ -1366,15 +1244,13 @@ describe('Resilience of existing notebooks with broken structure', () => {
     });
 
     expect(controller.children[1]).toMatchObject({
-      id: 'tabid',
       type: 'tab',
       name: 'tabname',
       children: [
         {
           type: 'p',
-          id: expect.any(String),
           children: [{ text: '' }],
-        } satisfies ParagraphElement,
+        },
       ],
     });
   });

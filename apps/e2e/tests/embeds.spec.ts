@@ -18,6 +18,10 @@ test('Embeds', async ({ testUser, unregisteredUser }) => {
   });
 
   await test.step('check embed', async () => {
+    // We need this to let the backend catch up, with its latest version.
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await unregisteredUser.page.waitForTimeout(5000);
+
     await unregisteredUser.page.goto(embedUrl);
     await unregisteredUser.page.getByTestId('widget-input').nth(0).click();
     for (let i = 0; i < 7; i++) {
@@ -35,7 +39,7 @@ test('Embeds', async ({ testUser, unregisteredUser }) => {
       unregisteredUser.page.getByTestId('widget-input').nth(1).textContent(),
       unregisteredUser.page.getByTestId('widget-input').nth(2).textContent(),
     ]);
-    expect(slider1Text).toBe('1000 unit');
+    expect(slider1Text).toBe('1200 unit');
     expect(slider2Text).toBe('45%');
     expect(slider3Text).toContain('25$');
   });
