@@ -1,3 +1,3 @@
 export * from './createMigrateStructuredIn';
 export * from './createMigrateTableDropdownToId';
-export * from './createRemoveH1';
+export * from './createTransformH1';

@@ -61,7 +61,7 @@ import {
   createUserEventPlugin,
   createTabSelectionPlugin,
   createMathPlugin,
-  createRemoveH1,
+  createTransformH1,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -236,7 +236,7 @@ export const plugins = ({
       createMigrateStructuredInputs(),
       createMigrateTableDropdownToId(),
       createPreventInvalidSelectionPlugin(),
-      createRemoveH1(),
+      createTransformH1(),
 
       // math display
       createMathPlugin(),
