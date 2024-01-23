@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Button } from '../../atoms';
-import { gridTile } from '../../images';
 import {
   banner,
   cssVar,
@@ -33,7 +32,6 @@ const styles = css({
       ${cssVar('backgroundMain')} 0%,
       transparent 100%
     ),
-    center repeat url(${gridTile}),
     linear-gradient(
       180deg, ${cssVar('backgroundMain')} 30.41%, ${cssVar(
     'backgroundHeavy'
