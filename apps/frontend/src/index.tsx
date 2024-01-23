@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle,func-names,no-extend-native,no-param-reassign */
 import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,6 +22,15 @@ suppressWarnings();
 globalThis.Buffer = Buffer;
 if (Buffer == null) {
   throw new Error('Buffer must always be defined as a global property');
+}
+
+if (!Array.prototype.at) {
+  Array.prototype.at = function (index) {
+    index = Math.trunc(index) || 0;
+    if (index < 0) index += this.length;
+    if (index < 0 || index >= this.length) return undefined;
+    return this[index];
+  };
 }
 
 const cache = createCache({ key: 'deci' });
