@@ -172,4 +172,16 @@ test.describe('Loading and snapshot of big notebook', () => {
       }
     );
   });
+
+  test('error page', async () => {
+    incognito.clearCookies();
+    publishedNotebookPage = (await incognito.newPage()) as Page;
+    publishedNotebookPage.goto(`/dfsfdfsdf`);
+
+    // Magic numbers are delayed
+    await page.getByText('The requested URL was not found').isVisible();
+    await snapshot(publishedNotebookPage, 'Decipad: Error Page', {
+      mobile: true,
+    });
+  });
 });
