@@ -124,6 +124,7 @@ test('shows workspace in dark mode mode', async ({
     }
   }).toPass();
   await page.reload({ waitUntil: 'load' });
+  await expect(page.getByTestId('dashboard')).toBeVisible();
   await snapshot(page as Page, 'Dashboard: Initial Notebooks Darkmode');
 });
 

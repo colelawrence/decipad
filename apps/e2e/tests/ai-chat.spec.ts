@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
 
-// TODO: we skip these tests because apparenly we can't mock websockets using playwright
+// TODO: we skip these tests because apparenly we can't mock websockets using playwright.
 
 test.skip('AI adds variable block @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;

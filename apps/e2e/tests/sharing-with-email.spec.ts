@@ -59,8 +59,6 @@ test.describe('Sharing pad with email', () => {
     await page.locator('text="Notebook reader"').click();
     await page.getByTestId('send-invitation').click();
 
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
     await expect(async () => {
       await expect(page.getByText('invited-lama2@ranch.org')).toBeVisible();
     }).toPass();
@@ -189,8 +187,6 @@ test.describe('[free account] notebook invite flow', () => {
       .locator('.notebook-collaborate-tab input')
       .fill('invited-lama-1@ranch.org');
     await page.getByTestId('send-invitation').click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
     await expect(page.getByText('invited-lama-1@ranch.org')).toBeVisible();
 
     // invite reader
@@ -200,8 +196,6 @@ test.describe('[free account] notebook invite flow', () => {
       .locator('.notebook-collaborate-tab input')
       .fill('invited-lama-2@ranch.org');
     await page.getByTestId('send-invitation').click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
 
     await expect(async () => {
       await expect(page.getByText('invited-lama-2@ranch.org')).toBeVisible();
@@ -230,9 +224,6 @@ test.describe('[free account] notebook invite flow', () => {
       .click();
     await page.getByText('Notebook reader').click();
 
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
-
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
 
@@ -258,9 +249,6 @@ test.describe('[free account] notebook invite flow', () => {
       .click();
     await page.getByText('remove').click();
 
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
-
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
 
@@ -285,8 +273,6 @@ test.describe('[free account] notebook invite flow', () => {
       .locator('.notebook-collaborate-tab input')
       .fill('invited-lama-1@ranch.org');
     await page.getByTestId('send-invitation').click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
     await expect(page.getByText('invited-lama-1@ranch.org')).toBeVisible();
 
     collaborators = await page

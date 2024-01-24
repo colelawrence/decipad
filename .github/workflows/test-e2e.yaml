@@ -20,7 +20,7 @@ on:
       - '.yarn/**'
       - 'apps/docs/**'
 env:
-  PERCY_PARALLEL_NONCE: ${{ github.run_id }}-${{ github.run_number }}
+  PERCY_PARALLEL_NONCE: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
 
 jobs:
   build:
