@@ -122,7 +122,6 @@ const DeciLogo = styled.div({
 
 const Title = styled.h2(p32Medium, {
   color: cssVar('textHeavy'),
-  lineHeight: 1.1,
 });
 
 const StatusLine = styled.div(p14Medium, {

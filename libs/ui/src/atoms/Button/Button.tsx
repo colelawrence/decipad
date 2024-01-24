@@ -20,7 +20,7 @@ import { Anchor } from '../../utils';
 
 const styles = css(p13Bold, {
   flexGrow: 1,
-
+  lineHeight: '1rem',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

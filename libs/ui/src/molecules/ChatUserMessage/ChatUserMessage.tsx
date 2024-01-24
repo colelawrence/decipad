@@ -20,8 +20,10 @@ const avatarStyles = css({
 });
 
 const contentStyles = css(p14Regular, {
-  lineHeight: '20px',
-  padding: '2px 6px',
+  lineHeight: '22px',
+  padding: '0px 6px',
+  display: 'flex',
+  alignItems: 'center',
   backgroundColor: cssVar('backgroundDefault'),
   color: cssVar('textHeavy'),
   borderRadius: 12,

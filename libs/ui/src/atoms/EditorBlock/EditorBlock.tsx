@@ -6,7 +6,7 @@ import { p16Regular } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
-const defaultVerticalSpacing = `calc(${p16Regular.fontSize} * ${p16Regular.lineHeight})`;
+const defaultVerticalSpacing = `calc(${p16Regular.lineHeight})`;
 
 // Here lies the main responsability of this block, to define the edge cases of spacings between
 // different components.

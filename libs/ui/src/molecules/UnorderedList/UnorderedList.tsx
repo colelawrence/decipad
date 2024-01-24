@@ -26,7 +26,7 @@ const bulletStyles = css({
   alignSelf: 'start',
 
   width: '6px',
-  height: `calc(${p16Regular.lineHeight} * ${p16Regular.fontSize})`,
+  height: `${p16Regular.lineHeight}`,
 
   display: 'grid',
   alignContent: 'center',

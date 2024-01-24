@@ -53,7 +53,7 @@ const avatarStyles = css({
 const contentStyles = css(p14Regular, {
   position: 'relative',
   width: '100%',
-  lineHeight: '20px',
+  lineHeight: '22px',
   padding: '2px 0px',
   color: cssVar('textHeavy'),
   borderRadius: 12,
@@ -73,7 +73,7 @@ const suggestionContainerStyles = css({
 const suggestionStyles = css(p12Medium, {
   border: `1px solid ${cssVar('borderDefault')}`,
   color: componentCssVars('AIAssistantHighlightTextColor'),
-  padding: '5px 8px 3px',
+  padding: '6px 8px',
   borderRadius: 8,
   cursor: 'pointer',
 

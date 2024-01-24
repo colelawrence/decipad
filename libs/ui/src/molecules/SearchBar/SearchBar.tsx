@@ -218,6 +218,7 @@ const filtersStyles = css({
 
 const inputStyles = css({
   display: 'flex',
+  alignItems: 'center',
   gap: 12,
   flex: 1,
   minWidth: '24ch',

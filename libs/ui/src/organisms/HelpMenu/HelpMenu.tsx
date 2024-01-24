@@ -113,8 +113,20 @@ const CustomMenuItem = ({
   const children = (
     <div css={menuItemWrapperStyles}>
       <span css={{ width: '20px' }}>{icon}</span>
-      <span css={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <span css={[p14Medium, { display: 'flex', gap: '8px' }]}>
+      <span
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: 2,
+        }}
+      >
+        <span
+          css={[
+            p14Medium,
+            { display: 'flex', alignItems: 'center', gap: '8px' },
+          ]}
+        >
           {title}
 
           {external && (

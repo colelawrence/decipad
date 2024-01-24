@@ -95,10 +95,9 @@ const TextWithIcon = styled.div({
   alignItems: 'center',
   justifyContent: 'center',
   gap: '4px',
-  lineHeight: 'normal',
 
   svg: {
-    height: '1.231em',
-    width: '1.231em',
+    height: 'max(1.2em, 16px)',
+    width: 'max(1.2em, 16px)',
   },
 });

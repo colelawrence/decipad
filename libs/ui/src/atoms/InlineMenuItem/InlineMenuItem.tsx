@@ -8,7 +8,7 @@ import { soonStyles } from '../../styles/menu';
 
 const inlineMenuStyles = css({
   display: 'grid',
-  alignItems: 'start',
+  alignItems: 'center',
   gridTemplateColumns: 'auto 1fr',
   columnGap: '12px',
 

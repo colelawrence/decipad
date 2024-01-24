@@ -6,5 +6,5 @@ import { ColorStatusProps } from './ColorStatusProps';
 export const ColorStatusCircle: FC<ColorStatusProps> = ({
   name = 'draft',
 }: ColorStatusProps) => {
-  return <Dot color={statusColors[name]} variant />;
+  return <Dot position="relative" color={statusColors[name]} variant />;
 };

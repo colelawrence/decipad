@@ -206,7 +206,7 @@ export const NotebookPublishTab = ({
                 <span
                   css={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}
                 >
-                  <Dot noBorder size={4} position="relative" />
+                  <Dot noBorder size={8} position="relative" />
                   Publish with new changes
                 </span>
               )}
@@ -246,7 +246,7 @@ export const NotebookPublishTab = ({
                         css={copyInnerButtonStyles}
                       >
                         <Link />
-                        <span css={{ paddingTop: '1px' }}>Copy</span>
+                        <span>Copy</span>
                       </button>
                     </CopyToClipboard>
                   </div>

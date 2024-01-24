@@ -44,7 +44,6 @@ const tagInlineStyles = css({
 });
 
 const tagInlineTextAdjustmentForFont = css({
-  transform: 'translateY(1px)',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   overflow: 'hidden',

@@ -728,8 +728,9 @@ const TabName = styled.span({
 
 const TabContent = styled.div({
   display: 'flex',
-  alignItems: 'flex-end',
+  alignItems: 'center',
   margin: '0px 28px 0px 4px',
+  paddingTop: '2px',
   minWidth: '80px',
   gap: '4px',
 });

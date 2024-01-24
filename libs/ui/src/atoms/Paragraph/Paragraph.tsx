@@ -6,6 +6,7 @@ import { blockAlignment } from '../../styles';
 
 const placeholderStyles = css({
   cursor: 'text',
+  lineHeight: 1.6,
 
   // overlap content (blinking caret) and placeholder
   display: 'grid',
@@ -15,7 +16,7 @@ const placeholderStyles = css({
 
   label: {
     ...p16Regular,
-
+    lineHeight: 1.6,
     pointerEvents: 'none',
     userSelect: 'none',
   },

@@ -22,7 +22,7 @@ export type TypographyStyles = Readonly<
       | 'letterSpacing'
       | 'fontFeatureSettings'
     > & {
-      lineHeight: number;
+      lineHeight: number | string;
     }
   >
 >;
@@ -41,7 +41,7 @@ const hDefault: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 500,
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: 1.3,
+  lineHeight: `${32 / usualRemPxs}rem`,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -49,21 +49,24 @@ const hDefault: TypographyStyles = {
 export const banner: TypographyStyles = {
   ...hDefault,
   fontSize: `${56 / usualRemPxs}rem`,
+  lineHeight: `${64 / usualRemPxs}rem`,
 };
 export const display: TypographyStyles = {
   ...hDefault,
   fontSize: `${32 / usualRemPxs}rem`,
-  lineHeight: 1.21,
+  lineHeight: `${40 / usualRemPxs}rem`,
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
   ...hDefault,
   fontSize: `${24 / usualRemPxs}rem`,
+  lineHeight: `${32 / usualRemPxs}rem`,
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 export const h2: TypographyStyles = {
   ...hDefault,
   fontSize: `${20 / usualRemPxs}rem`,
+  lineHeight: `${28 / usualRemPxs}rem`,
 };
 
 // paragraph
@@ -79,7 +82,7 @@ const pDefault: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '1rem',
-  lineHeight: 1,
+  lineHeight: 1.5,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -98,7 +101,7 @@ export const p10Regular: TypographyStyles = {
   ...pDefault,
 
   fontSize: `${10 / usualRemPxs}rem`,
-  lineHeight: 1,
+  lineHeight: `${12 / usualRemPxs}rem`,
 };
 export const p10Medium: TypographyStyles = {
   ...p10Regular,
@@ -108,7 +111,7 @@ export const p12Regular: TypographyStyles = {
   ...pDefault,
 
   fontSize: `${12 / usualRemPxs}rem`,
-  lineHeight: 1.4,
+  lineHeight: `${14 / usualRemPxs}rem`,
 };
 export const p12Medium: TypographyStyles = {
   ...p12Regular,
@@ -118,7 +121,7 @@ export const p12Medium: TypographyStyles = {
 export const p13Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${13 / usualRemPxs}rem`,
-  lineHeight: 1.36,
+  lineHeight: `${14 / usualRemPxs}rem`,
 };
 export const p13Medium: TypographyStyles = {
   ...p13Regular,
@@ -137,32 +140,28 @@ export const p13Bold: TypographyStyles = {
 export const p14Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: 1.4,
+  lineHeight: `${18 / usualRemPxs}rem`,
 };
 export const p14Medium: TypographyStyles = {
   ...p14Regular,
   fontWeight: 500,
 };
 export const p14Bold: TypographyStyles = {
-  ...pDefault,
+  ...p14Regular,
   fontWeight: 700,
-  fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: 1.4,
 };
 export const p15Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${15 / usualRemPxs}rem`,
-  lineHeight: 1.4,
+  lineHeight: `${16 / usualRemPxs}rem`,
 };
 export const p15Medium: TypographyStyles = {
   ...p15Regular,
-
   fontWeight: 500,
-  lineHeight: 1,
 };
 export const p16Regular: TypographyStyles = {
   ...pDefault,
-  lineHeight: 1.625,
+  lineHeight: `${24 / usualRemPxs}rem`,
 };
 export const p16Medium: TypographyStyles = {
   ...p16Regular,
@@ -175,7 +174,7 @@ export const p16Bold: TypographyStyles = {
 export const p18Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${18 / usualRemPxs}rem`,
-  lineHeight: 1.45,
+  lineHeight: `${24 / usualRemPxs}rem`,
 };
 export const p18Medium: TypographyStyles = {
   ...pDefault,
@@ -183,20 +182,17 @@ export const p18Medium: TypographyStyles = {
 };
 export const p20Medium: TypographyStyles = {
   ...pDefault,
-
   fontWeight: 500,
 };
 export const p24Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: 1.3,
+  lineHeight: `${32 / usualRemPxs}rem`,
 };
 export const p32Medium: TypographyStyles = {
-  ...pDefault,
+  ...p24Medium,
   fontWeight: 500,
-  fontSize: `${32 / usualRemPxs}rem`,
-  lineHeight: 1.36,
 };
 
 // monospace
@@ -212,7 +208,7 @@ export const jsCode: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${13 / usualRemPxs}rem`,
-  lineHeight: 1.3,
+  lineHeight: `${16 / usualRemPxs}rem`,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -223,7 +219,7 @@ export const code: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: 1.4,
+  lineHeight: `${16 / usualRemPxs}rem`,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -234,7 +230,7 @@ export const codeLog: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${12 / usualRemPxs}rem`,
-  lineHeight: 1.2,
+  lineHeight: `${14 / usualRemPxs}rem`,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };

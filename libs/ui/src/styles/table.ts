@@ -9,7 +9,7 @@ export const thMinHeight = 32;
 export const tdMinHeight = 36;
 export const tdMinWidth = 75;
 export const tdMaxWidth = 240;
-export const tdVerticalPadding = 8;
+export const tdVerticalPadding = 10;
 export const tdHorizontalPadding = 12;
 
 export const firstTdPaddingLeft = 34;

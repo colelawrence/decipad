@@ -204,7 +204,7 @@ export const DraggableBlock = ({
               paddingTop: typography
                 ? // Align with first line of text in addition to paddingTop
                   `calc((
-                  ${typography.lineHeight} * ${typography.fontSize}
+                  ${typography.lineHeight}
                   -
                   ${editorLayout.gutterHandleHeight()}
                 ) / 2
