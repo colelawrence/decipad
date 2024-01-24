@@ -105,6 +105,11 @@ const resolvers: Resolvers = {
             w.isPremium = true;
             w.plan = plans().pro;
           }
+
+          // small hack to handle existing workspaces
+          if (!w.plan) {
+            w.plan = w.isPremium ? plans().pro : plans().free;
+          }
           return w;
         });
 
