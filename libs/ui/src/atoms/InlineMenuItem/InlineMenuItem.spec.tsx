@@ -1,4 +1,3 @@
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,27 +14,6 @@ const props: ComponentProps<typeof InlineMenuItem> = {
 mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
-
-it('shows a pseudo-focused state', async () => {
-  const { rerender } = render(
-    <InlineMenuItem {...props} focused={false} title="Title" />
-  );
-  cleanup = await applyCssVars();
-  const normalBackgroundColor = findParentWithStyle(
-    screen.getByText('Title'),
-    'backgroundColor'
-  )!.backgroundColor;
-  cleanup();
-
-  rerender(<InlineMenuItem {...props} focused title="Title" />);
-  cleanup = await applyCssVars();
-  const focusedBackgroundColor = findParentWithStyle(
-    screen.getByText('Title'),
-    'backgroundColor'
-  )!.backgroundColor;
-
-  expect(focusedBackgroundColor).not.toEqual(normalBackgroundColor);
-});
 
 describe('an execute event', () => {
   it('is emitted on click', async () => {

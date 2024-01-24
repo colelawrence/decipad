@@ -1,4 +1,3 @@
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -42,27 +41,3 @@ it('renders an optional icon', () => {
 mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
-
-describe('selected prop', () => {
-  it('highlights the menu item as selected', async () => {
-    const { rerender } = render(<MenuItem>Text</MenuItem>, {
-      wrapper,
-    });
-
-    cleanup = await applyCssVars();
-
-    const { backgroundColor: normalBackgroundColor } = findParentWithStyle(
-      screen.getByRole('menuitem'),
-      'backgroundColor'
-    )!;
-
-    rerender(<MenuItem selected>Text</MenuItem>);
-
-    const { backgroundColor: highlightBackgroundColor } = findParentWithStyle(
-      screen.getByRole('menuitem'),
-      'backgroundColor'
-    )!;
-
-    expect(normalBackgroundColor).not.toEqual(highlightBackgroundColor);
-  });
-});

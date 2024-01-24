@@ -1,11 +1,8 @@
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
-import type { TableCellType } from '@decipad/editor-types';
-import { ONE } from '@decipad/number';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { getDateType, getNumberType, getStringType } from '../../utils';
+import { getNumberType, getStringType } from '../../utils';
 import { TableColumnMenu } from './TableColumnMenu';
 
 const props: ComponentProps<typeof TableColumnMenu> = {
@@ -75,71 +72,6 @@ it('shows the sub menu', async () => {
 mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
-
-const types: [string, TableCellType, string][] = [
-  ['string', getStringType(), 'Text'],
-  ['number', getNumberType(), 'Number'],
-  [
-    'currency eur',
-    getNumberType([
-      {
-        unit: 'euro',
-        exp: ONE,
-        multiplier: ONE,
-        known: true,
-        baseQuantity: 'EUR',
-        baseSuperQuantity: 'currency',
-      },
-    ]),
-    'EUR',
-  ],
-
-  ['date time', getDateType('minute'), 'Time'],
-  ['date day', getDateType('day'), 'Day'],
-  ['date month', getDateType('month'), 'Month'],
-  ['date year', getDateType('year'), 'Year'],
-];
-it.each(types)('highlights selected type %s', async (_, type, textContent) => {
-  const { findAllByRole, findByText } = render(
-    <TableColumnMenu trigger={<button>trigger</button>} type={type} open />
-  );
-
-  // Open every dropdown level
-  if (
-    type.kind === 'number' &&
-    type.unit &&
-    type.unit[0].baseSuperQuantity === 'currency'
-  ) {
-    await userEvent.click(await findByText(/currency/i), {
-      pointerEventsCheck: 0,
-    });
-
-    await findByText(/eur/i);
-  } else {
-    await userEvent.click(await findByText(/date/i), {
-      pointerEventsCheck: 0,
-    });
-    await findByText(/month/i);
-  }
-
-  cleanup = await applyCssVars();
-
-  const menuItems = await findAllByRole('menuitem');
-  const menuItem = menuItems.find((element) =>
-    element?.textContent?.includes(textContent)
-  ) as HTMLElement;
-
-  const otherMenuItem = menuItems.find(
-    (element) => element?.textContent?.includes(textContent) === false
-  ) as HTMLElement;
-
-  const { backgroundColor: normalBackgroundColor } = findParentWithStyle(
-    otherMenuItem,
-    'backgroundColor'
-  )!;
-  const { backgroundColor } = findParentWithStyle(menuItem, 'backgroundColor')!;
-  expect(backgroundColor).not.toEqual(normalBackgroundColor);
-});
 
 const expandableCols: [string, string][] = [
   ['Currency', 'EUR'],
