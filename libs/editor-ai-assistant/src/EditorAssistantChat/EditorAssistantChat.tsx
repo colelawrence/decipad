@@ -6,20 +6,20 @@ import { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
 import { EElementOrText, insertNodes } from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
-import { TOKENS_TO_CREDITS, getLimit } from './limits';
+import { TOKENS_TO_CREDITS } from './limits';
 
 type EditorAssistantChatProps = {
   notebookId: string;
   workspaceId: string;
   editor: MyEditor;
-  isPremium: boolean;
+  limitPerPlan: number;
 };
 
 export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   notebookId,
   workspaceId,
   editor,
-  isPremium,
+  limitPerPlan,
 }) => {
   const {
     messages,
@@ -35,7 +35,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   const { promptTokensUsed, completionTokensUsed, tokensQuotaLimit } =
     useAiUsage();
 
-  const limit = tokensQuotaLimit ?? getLimit(Boolean(isPremium));
+  const limit = tokensQuotaLimit ?? limitPerPlan;
   const creditsUsed = Math.floor(
     (promptTokensUsed + completionTokensUsed) / TOKENS_TO_CREDITS
   );

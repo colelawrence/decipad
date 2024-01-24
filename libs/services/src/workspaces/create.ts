@@ -6,6 +6,7 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { create as createResourcePermission } from '../permissions/create';
+import { plans } from '@decipad/backend-config';
 
 export async function create(
   workspace: WorkspaceInput,
@@ -15,6 +16,7 @@ export async function create(
     id: nanoid(),
     name: workspace.name,
     isPublic: workspace.isPublic || false,
+    plan: plans().free,
   };
 
   const data = await tables();

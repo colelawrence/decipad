@@ -114,6 +114,8 @@ export async function createSandboxEnv(
     DECI_SEARCH_URL: process.env.DECI_SEARCH_URL,
     DECI_SEARCH_USERNAME: process.env.DECI_SEARCH_USERNAME,
     DECI_SEARCH_PASSWORD: process.env.DECI_SEARCH_PASSWORD,
+    WORKSPACE_FREE_PLAN: process.env.WORKSPACE_FREE_PLAN,
+    WORKSPACE_PRO_PLAN: process.env.WORKSPACE_PRO_PLAN,
   };
 
   // the final sandbox environment:

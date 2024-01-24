@@ -13,11 +13,12 @@ import {
 } from '../../primitives';
 import { RainbowText } from '../../styles/card';
 import { WorkspaceHeroHeader } from './WorkspaceHeroHeader.private';
-import { env } from '@decipad/utils';
 
 type WorkspaceHeroProps = {
   name: string;
   isPremium: boolean;
+  planName: string;
+  creditsPlan: number;
   membersCount: number;
   membersHref?: string;
   creditsHref?: string;
@@ -28,25 +29,19 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   name,
   isPremium,
   membersCount,
+  planName,
+  creditsPlan,
   membersHref,
   creditsHref,
   onCreateNotebook,
 }) => {
-  const plan = isPremium ? (
-    <span css={RainbowText}>Pro Plan</span>
-  ) : (
-    'Free plan'
-  );
+  const plan = isPremium ? <span css={RainbowText}>{planName}</span> : planName;
   const members = <MembersCounter number={membersCount} />;
   const navigate = useNavigate();
   const { promptTokensUsed, completionTokensUsed, tokensQuotaLimit } =
     useAiUsage();
 
-  const limit =
-    tokensQuotaLimit ??
-    (isPremium
-      ? Number(env.VITE_MAX_CREDITS_PRO)
-      : Number(env.VITE_MAX_CREDITS_FREE));
+  const limit = tokensQuotaLimit ?? creditsPlan;
   const creditsUsed = Math.floor(
     (promptTokensUsed + completionTokensUsed) / 2_000
   );

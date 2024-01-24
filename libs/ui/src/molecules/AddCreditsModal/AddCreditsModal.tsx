@@ -1,4 +1,7 @@
-import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
+import {
+  useGetCreditsPlansQuery,
+  useGetNotebookMetaQuery,
+} from '@decipad/graphql-client';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { Elements } from '@stripe/react-stripe-js';
@@ -10,14 +13,13 @@ import { env } from '@decipad/utils';
 
 type AddCreditsModalProps = {
   closeAction: () => void;
+  credits?: number;
   resourceId?: string;
 };
 
-// TODO: refactor this when we have multiple plans.
-const nrOfCredits = 500;
-
 const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
   closeAction,
+  credits,
 }) => {
   const { notebook } = useRouteParams(notebooks({}).notebook);
   const [meta] = useGetNotebookMetaQuery({
@@ -29,7 +31,7 @@ const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
     <AddCreditsPaymentComponent
       resourceId={workspaceId}
       closeAction={closeAction}
-      nrOfCredits={nrOfCredits}
+      credits={credits ?? 0}
     />
   );
 };
@@ -39,32 +41,51 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
   resourceId,
 }) => {
   const stripePromise = loadStripe(env.VITE_STRIPE_API_KEY);
+  const [creditsPlans] = useGetCreditsPlansQuery();
+
+  const creditsPlanData = creditsPlans.data?.getCreditsPlans;
+  const defaultPlan = creditsPlanData?.plans.filter((p) => p.isDefault);
 
   return (
     <ClosableModal
-      title="Add AI Credits"
+      title={creditsPlanData?.title ?? ''}
       Heading="h2"
       closeAction={closeAction}
     >
-      <ModalWrapper>
-        <ModalSubtitle>
-          <p>{nrOfCredits} Credits</p>
-          <p>$15</p>
-        </ModalSubtitle>
-        <p css={p14Regular}>Add 500 credits to your workspace</p>
-      </ModalWrapper>
-      <StripeWrapper>
-        <Elements stripe={stripePromise}>
-          {resourceId && (
-            <AddCreditsPaymentComponent
-              resourceId={resourceId}
-              closeAction={closeAction}
-              nrOfCredits={nrOfCredits}
-            />
-          )}
-          {!resourceId && <WrapperAddCreditsModal closeAction={closeAction} />}
-        </Elements>
-      </StripeWrapper>
+      {(defaultPlan || []).map((plan) => {
+        const price = Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: plan.currency ?? 'usd',
+        }).format((plan?.price ?? 0) / 100);
+        return (
+          <>
+            <ModalWrapper>
+              <ModalSubtitle>
+                <p>{plan?.credits} Credits</p>
+                <p>{price}</p>
+              </ModalSubtitle>
+              <p css={p14Regular}>{plan?.description}</p>
+            </ModalWrapper>
+            <StripeWrapper>
+              <Elements stripe={stripePromise}>
+                {resourceId && (
+                  <AddCreditsPaymentComponent
+                    resourceId={resourceId}
+                    closeAction={closeAction}
+                    credits={plan?.credits ?? 0}
+                  />
+                )}
+                {!resourceId && (
+                  <WrapperAddCreditsModal
+                    closeAction={closeAction}
+                    credits={plan?.credits ?? 0}
+                  />
+                )}
+              </Elements>
+            </StripeWrapper>
+          </>
+        );
+      })}
     </ClosableModal>
   );
 };

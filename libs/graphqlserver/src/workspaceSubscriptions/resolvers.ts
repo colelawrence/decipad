@@ -4,8 +4,8 @@ import { syncWorkspaceSeats } from './syncWorkspaceSeats';
 
 const resolvers: Resolvers = {
   Workspace: {
-    async workspaceSubscription(workspace, _, context) {
-      return getWorkspaceSubscription(workspace.id, context);
+    async workspaceSubscription(workspace) {
+      return getWorkspaceSubscription(workspace.id);
     },
   },
 

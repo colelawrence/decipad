@@ -21,6 +21,7 @@ type Workspace {
   access: WorkspaceAccess
   secrets: [Secret!]!
   membersCount: Int
+  plan: String
 }
 
 type WorkspacesChanges {

@@ -21,6 +21,13 @@ fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
   quotaLimit
 }
 
+fragment WorkspaceSubscriptionData on WorkspaceSubscription {
+  credits
+  queries
+  storage
+  seats
+}
+
 fragment EditorNotebook on Pad {
   id
   name
@@ -35,8 +42,12 @@ fragment EditorNotebook on Pad {
     id
     name
     isPremium
+    plan
     workspaceExecutedQuery {
       ...WorkspaceExecutedQueryData
+    }
+    workspaceSubscription {
+      ...WorkspaceSubscriptionData
     }
   }
   padConnectionParams {

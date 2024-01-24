@@ -18,6 +18,7 @@ import Boom from '@hapi/boom';
 import { getNodeString } from '@udecode/plate-common';
 import { MutationResolvers } from '@decipad/graphqlserver-types';
 import { padResource } from './padResource';
+import { plans } from '@decipad/backend-config';
 
 const notebooks = resource('notebook');
 const PUBLISHED_SNAPSHOT_NAME = 'Published 1';
@@ -143,6 +144,7 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
         // and non premium workspaces
         if (isLocalDev() && workspaceName.includes('@n1n.co')) {
           ws.isPremium = true;
+          ws.plan = plans().pro;
         }
 
         workspaceRecords.push(ws);

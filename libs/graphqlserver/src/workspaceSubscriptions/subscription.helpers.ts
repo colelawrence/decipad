@@ -1,8 +1,7 @@
 import tables from '@decipad/tables';
 import { Stripe } from 'stripe';
-import { thirdParty } from '@decipad/backend-config';
-import { resource } from '@decipad/backend-resources';
-import { GraphqlContext, ID } from '@decipad/backendtypes';
+import { limits, plans, thirdParty } from '@decipad/backend-config';
+import { ID } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import {
@@ -10,23 +9,14 @@ import {
   WorkspaceSubscription,
 } from '@decipad/graphqlserver-types';
 
-const { secretKey, apiVersion } = thirdParty().stripe;
+const { secretKey, apiVersion, subscriptionsProdId } = thirdParty().stripe;
 const stripe = new Stripe(secretKey, {
   apiVersion,
 });
 
-const workspacesResource = resource('workspace');
-
 export const getWorkspaceSubscription = async (
-  workspaceId: string,
-  context: GraphqlContext
+  workspaceId: string
 ): Promise<WorkspaceSubscription | null> => {
-  await workspacesResource.expectAuthorizedForGraphql({
-    context,
-    recordId: workspaceId,
-    minimumPermissionType: 'READ',
-  });
-
   const data = await tables();
   const workspaceSubs = (
     await data.workspacesubscriptions.query({
@@ -39,7 +29,32 @@ export const getWorkspaceSubscription = async (
   ).Items[0];
 
   if (workspaceSubs == null) {
-    return null;
+    // for now let's return a free subscription dummy
+    return {
+      id: 'free',
+      paymentStatus: 'unpaid',
+      paymentLink: '',
+      queries: limits().maxCredits.free,
+      credits: limits().maxCredits.free,
+    };
+  }
+
+  // Retroactively populating limits for the current PRO plan - TODO: get rid of this in the future
+  const isProPlan =
+    (await data.workspaces.get({ id: workspaceId }))?.plan === plans().pro;
+  const subsPlans = (
+    await stripe.prices.list({
+      product: subscriptionsProdId,
+    })
+  ).data;
+  const proPlan = subsPlans.find((plan) => plan.metadata.isDefault === 'true');
+
+  if (!workspaceSubs.credits && isProPlan) {
+    workspaceSubs.credits = Number(proPlan?.metadata.credits) || 0;
+  }
+
+  if (!workspaceSubs.queries && isProPlan) {
+    workspaceSubs.queries = Number(proPlan?.metadata.queries) || 0;
   }
 
   // Cast because the _technical_ type is an enum.

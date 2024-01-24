@@ -110,6 +110,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
     case 'STRIPE_EXTRA_CREDITS_PRODUCT_ID':
       return valueOrDefault(name, process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID);
+    case 'STRIPE_SUBSCRIPTIONS_PRODUCT_ID':
+      return valueOrDefault(name, process.env.STRIPE_SUBSCRIPTIONS_PRODUCT_ID);
     case 'VITE_STRIPE_PAYMENT_LINK':
       return valueOrDefault(name, process.env.VITE_STRIPE_PAYMENT_LINK);
     case 'VITE_STRIPE_CUSTOMER_PORTAL_LINK':
@@ -126,6 +128,12 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_PRO);
     case 'DECI_TOKENS_TO_CREDITS':
       return valueOrDefault(name, process.env.DECI_TOKENS_TO_CREDITS);
+    case 'WORKSPACE_FREE_PLAN':
+      return valueOrDefault(name, process.env.WORKSPACE_FREE_PLAN);
+    case 'WORKSPACE_PRO_PLAN':
+      return valueOrDefault(name, process.env.WORKSPACE_PRO_PLAN);
+    case 'WORKSPACE_FREE_PLAN_NAME':
+      return valueOrDefault(name, process.env.WORKSPACE_FREE_PLAN_NAME);
     case 'OPENAI_DECIPAD_GPT_BEARER_KEY':
       return valueOrDefault(name, process.env.OPENAI_DECIPAD_GPT_BEARER_KEY);
   }
@@ -215,6 +223,14 @@ export function auth() {
   };
 }
 
+export function plans() {
+  return {
+    free: env('WORKSPACE_FREE_PLAN'),
+    freePlanName: env('WORKSPACE_FREE_PLAN_NAME'),
+    pro: env('WORKSPACE_PRO_PLAN'),
+  };
+}
+
 export function limits() {
   const maxCredits = {
     free: Number(env('DECI_MAX_CREDITS_FREE')),
@@ -274,6 +290,7 @@ export function thirdParty() {
       secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
       apiKey: env('STRIPE_API_KEY'), // 'pk_test_...
       extraCreditsProdId: env('STRIPE_EXTRA_CREDITS_PRODUCT_ID'), // prod_...
+      subscriptionsProdId: env('STRIPE_SUBSCRIPTIONS_PRODUCT_ID'),
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

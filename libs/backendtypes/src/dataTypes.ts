@@ -224,6 +224,39 @@ export type ExternalDataSourceProvider =
   | 'redshift'
   | 'mariadb';
 
+export interface CreditsPricePlan {
+  id: ID;
+  name?: string;
+  description?: string;
+  price: number;
+  credits: number;
+  isDefault?: boolean;
+  promotionTag?: string;
+  currency: string;
+}
+
+export interface CreditsPlan {
+  id: ID;
+  title?: string;
+  description?: string;
+  plans: CreditsPricePlan[];
+}
+
+export interface SubscriptionPlan {
+  paymentLink?: string;
+  credits?: number;
+  queries?: number;
+  seats?: number;
+  description?: string;
+  price?: number;
+  currency?: string;
+  title: string;
+  id: string;
+  key: string;
+  isDefault?: boolean;
+  storage?: number;
+}
+
 /* Pagination */
 
 export type PageInput = {
@@ -357,6 +390,7 @@ export interface WorkspaceRecord extends TableRecordBase {
   name: string;
   isPublic?: boolean;
   isPremium?: boolean;
+  plan?: string;
 }
 
 export interface TagRecord extends TableRecordBase {
@@ -502,6 +536,10 @@ export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   paymentLink: string;
   paymentStatus: string;
   email: string;
+  credits?: number;
+  queries?: number;
+  storage?: number;
+  seats?: number;
 }
 
 export interface WorkspaceExecutedQueryRecord extends TableRecordBase {

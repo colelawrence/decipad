@@ -370,6 +370,43 @@ type PagedResult {
 }
 
 union Pageable = SharedResource | ExternalDataSource
+type CreditPricePlan {
+  id: ID!
+  title: String
+  description: String
+  price: Int!
+  currency: String!
+  credits: Int!
+  isDefault: Boolean
+  promotionTag: String
+}
+
+type CreditsPlan {
+  id: ID!
+  title: String
+  description: String
+  plans: [CreditPricePlan!]!
+}
+
+type SubscriptionPlan {
+  paymentLink: String
+  credits: Int
+  queries: Int
+  seats: Int
+  storage: Int
+  description: String
+  price: Int
+  currency: String
+  title: String
+  id: ID!
+  key: String!
+  isDefault: Boolean
+}
+
+extend type Query {
+  getCreditsPlans: CreditsPlan
+  getSubscriptionsPlans: [SubscriptionPlan]
+}
 extend type Mutation {
   createUserViaMagicLink(email: String!): User!
   resendRegistrationMagicLinkEmail(email: String!): Boolean
@@ -674,6 +711,9 @@ type WorkspaceSubscription {
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
 }
 
 extend type Mutation {
@@ -706,6 +746,7 @@ type Workspace {
   access: WorkspaceAccess
   secrets: [Secret!]!
   membersCount: Int
+  plan: String
 }
 
 type WorkspacesChanges {

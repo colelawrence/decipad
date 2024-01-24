@@ -49,6 +49,26 @@ export type CreateOrUpdateSnapshotInput = {
   snapshotName: Scalars['String']['input'];
 };
 
+export type CreditPricePlan = {
+  __typename?: 'CreditPricePlan';
+  credits: Scalars['Int']['output'];
+  currency: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isDefault?: Maybe<Scalars['Boolean']['output']>;
+  price: Scalars['Int']['output'];
+  promotionTag?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type CreditsPlan = {
+  __typename?: 'CreditsPlan';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  plans: Array<CreditPricePlan>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 export type ExternalDataSource = {
   __typename?: 'ExternalDataSource';
   access: ResourceAccess;
@@ -629,11 +649,13 @@ export type PermissionType =
 export type Query = {
   __typename?: 'Query';
   featuredPad?: Maybe<Pad>;
+  getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
   getExternalDataSources: PagedResult;
   getExternalDataSourcesWorkspace: PagedResult;
   getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
+  getSubscriptionsPlans?: Maybe<Array<Maybe<SubscriptionPlan>>>;
   getWorkspaceById?: Maybe<Workspace>;
   getWorkspaceSecrets: Array<Secret>;
   me?: Maybe<User>;
@@ -899,6 +921,22 @@ export type SubscriptionPaymentStatus =
   | 'paid'
   | 'unpaid';
 
+export type SubscriptionPlan = {
+  __typename?: 'SubscriptionPlan';
+  credits?: Maybe<Scalars['Int']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isDefault?: Maybe<Scalars['Boolean']['output']>;
+  key: Scalars['String']['output'];
+  paymentLink?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Int']['output']>;
+  queries?: Maybe<Scalars['Int']['output']>;
+  seats?: Maybe<Scalars['Int']['output']>;
+  storage?: Maybe<Scalars['Int']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 export type SubscriptionStatus =
   | 'active'
   | 'canceled'
@@ -979,6 +1017,7 @@ export type Workspace = {
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String']['output'];
   pads: PagedPadResult;
+  plan?: Maybe<Scalars['String']['output']>;
   resourceUsages?: Maybe<Array<Maybe<ResourceUsage>>>;
   roles?: Maybe<Array<Role>>;
   secrets: Array<Secret>;
@@ -1014,11 +1053,14 @@ export type WorkspaceInput = {
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
+  credits?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   paymentLink: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
+  queries?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<SubscriptionStatus>;
+  storage?: Maybe<Scalars['Int']['output']>;
   workspace?: Maybe<Workspace>;
 };
 
@@ -1108,6 +1150,8 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateAttachmentForm: ResolverTypeWrapper<CreateAttachmentForm>;
   CreateOrUpdateSnapshotInput: CreateOrUpdateSnapshotInput;
+  CreditPricePlan: ResolverTypeWrapper<CreditPricePlan>;
+  CreditsPlan: ResolverTypeWrapper<CreditsPlan>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ExternalDataSource: ResolverTypeWrapper<ExternalDataSource>;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
@@ -1159,6 +1203,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionPaymentStatus: SubscriptionPaymentStatus;
+  SubscriptionPlan: ResolverTypeWrapper<SubscriptionPlan>;
   SubscriptionStatus: SubscriptionStatus;
   TagChanges: ResolverTypeWrapper<TagChanges>;
   TagRecord: ResolverTypeWrapper<TagRecord>;
@@ -1182,6 +1227,8 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateAttachmentForm: CreateAttachmentForm;
   CreateOrUpdateSnapshotInput: CreateOrUpdateSnapshotInput;
+  CreditPricePlan: CreditPricePlan;
+  CreditsPlan: CreditsPlan;
   DateTime: Scalars['DateTime']['output'];
   ExternalDataSource: ExternalDataSource;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
@@ -1229,6 +1276,7 @@ export type ResolversParentTypes = {
   SharedWithUser: SharedWithUser;
   String: Scalars['String']['output'];
   Subscription: {};
+  SubscriptionPlan: SubscriptionPlan;
   TagChanges: TagChanges;
   TagRecord: TagRecord;
   UnshareWithRoleInput: UnshareWithRoleInput;
@@ -1263,6 +1311,26 @@ export type CreateAttachmentFormResolvers<ContextType = GraphqlContext, ParentTy
   fields?: Resolver<Array<ResolversTypes['KeyValue']>, ParentType, ContextType>;
   handle?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreditPricePlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CreditPricePlan'] = ResolversParentTypes['CreditPricePlan']> = {
+  credits?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  promotionTag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreditsPlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CreditsPlan'] = ResolversParentTypes['CreditsPlan']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  plans?: Resolver<Array<ResolversTypes['CreditPricePlan']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1446,11 +1514,13 @@ export type PermissionResolvers<ContextType = GraphqlContext, ParentType extends
 
 export type QueryResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   featuredPad?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType>;
+  getCreditsPlans?: Resolver<Maybe<ResolversTypes['CreditsPlan']>, ParentType, ContextType>;
   getExternalDataSource?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourceArgs, 'id'>>;
   getExternalDataSources?: Resolver<ResolversTypes['PagedResult'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesArgs, 'notebookId' | 'page'>>;
   getExternalDataSourcesWorkspace?: Resolver<ResolversTypes['PagedResult'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'page' | 'workspaceId'>>;
   getNotion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryGetNotionArgs, 'notebookId' | 'url'>>;
   getPadById?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<QueryGetPadByIdArgs, 'id'>>;
+  getSubscriptionsPlans?: Resolver<Maybe<Array<Maybe<ResolversTypes['SubscriptionPlan']>>>, ParentType, ContextType>;
   getWorkspaceById?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceByIdArgs, 'id'>>;
   getWorkspaceSecrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceSecretsArgs, 'workspaceId'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -1607,6 +1677,22 @@ export type SubscriptionResolvers<ContextType = GraphqlContext, ParentType exten
   workspacesChanged?: SubscriptionResolver<ResolversTypes['WorkspacesChanges'], "workspacesChanged", ParentType, ContextType>;
 };
 
+export type SubscriptionPlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SubscriptionPlan'] = ResolversParentTypes['SubscriptionPlan']> = {
+  credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paymentLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TagChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TagChanges'] = ResolversParentTypes['TagChanges']> = {
   added?: Resolver<Array<ResolversTypes['TagRecord']>, ParentType, ContextType>;
   removed?: Resolver<Array<ResolversTypes['TagRecord']>, ParentType, ContextType>;
@@ -1664,6 +1750,7 @@ export type WorkspaceResolvers<ContextType = GraphqlContext, ParentType extends 
   myPermissionType?: Resolver<Maybe<ResolversTypes['PermissionType']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<WorkspacePadsArgs, 'page'>>;
+  plan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   resourceUsages?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>, ParentType, ContextType>;
   roles?: Resolver<Maybe<Array<ResolversTypes['Role']>>, ParentType, ContextType>;
   secrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType>;
@@ -1690,11 +1777,14 @@ export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, Parent
 };
 
 export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
+  credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentLink?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
+  queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['SubscriptionStatus']>, ParentType, ContextType>;
+  storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1709,6 +1799,8 @@ export type WorkspacesChangesResolvers<ContextType = GraphqlContext, ParentType 
 export type Resolvers<ContextType = GraphqlContext> = {
   Attachment?: AttachmentResolvers<ContextType>;
   CreateAttachmentForm?: CreateAttachmentFormResolvers<ContextType>;
+  CreditPricePlan?: CreditPricePlanResolvers<ContextType>;
+  CreditsPlan?: CreditsPlanResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   ExternalDataSource?: ExternalDataSourceResolvers<ContextType>;
   ExternalKey?: ExternalKeyResolvers<ContextType>;
@@ -1743,6 +1835,7 @@ export type Resolvers<ContextType = GraphqlContext> = {
   SharedWithRole?: SharedWithRoleResolvers<ContextType>;
   SharedWithUser?: SharedWithUserResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionPlan?: SubscriptionPlanResolvers<ContextType>;
   TagChanges?: TagChangesResolvers<ContextType>;
   TagRecord?: TagRecordResolvers<ContextType>;
   UnshareWithRoleInput?: UnshareWithRoleInputResolvers<ContextType>;

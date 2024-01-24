@@ -22,6 +22,9 @@ type WorkspaceSubscription {
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
 }
 
 extend type Mutation {

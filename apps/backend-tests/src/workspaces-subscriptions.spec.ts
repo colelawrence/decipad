@@ -7,7 +7,7 @@ import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseI
 import { defaultEnv } from '../../../libs/backend-config/src/default';
 // eslint-disable-next-line import/no-relative-packages
 import { GetWorkspacesDocument } from '../../../libs/graphql-client/src/generated';
-import { thirdParty } from '@decipad/backend-config';
+import { limits, thirdParty } from '@decipad/backend-config';
 
 const stripeApiVersion = thirdParty().stripe.apiVersion;
 
@@ -109,7 +109,13 @@ test('workspaces', (ctx) => {
           invoice_creation: null,
           livemode: false,
           locale: 'auto',
-          metadata: {},
+          metadata: {
+            credits: '500',
+            queries: '500',
+            seats: '1',
+            key: 'pro',
+            storage: '10',
+          },
           mode: 'subscription',
           payment_intent: null,
           payment_link: 'foo.bar',
@@ -181,8 +187,9 @@ test('workspaces', (ctx) => {
       workspaces[0];
 
     expect(workspaceSubscription.paymentStatus).toBe('paid');
+    expect(workspaceSubscription.credits).toBe(limits().maxCredits.pro);
     expect(isPremium).toBeTruthy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(500);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.pro);
   });
 
   it('can update a subscription', async () => {
@@ -211,9 +218,10 @@ test('workspaces', (ctx) => {
     const { workspaceSubscription, isPremium, workspaceExecutedQuery } =
       workspaces[0];
 
-    expect(workspaceSubscription).not.toBeNull();
+    expect(workspaceSubscription.paymentStatus).toBe('paid');
+    expect(workspaceSubscription.credits).toBe(limits().maxCredits.pro);
     expect(isPremium).toBeTruthy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(500);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.pro);
   });
 
   it('can reset the query count when a subscription is renewed', async () => {
@@ -244,7 +252,7 @@ test('workspaces', (ctx) => {
 
     const { workspaceSubscription, workspaceExecutedQuery } = workspaces[0];
 
-    expect(workspaceSubscription).not.toBeNull();
+    expect(workspaceSubscription.paymentStatus).toBe('paid');
     expect(workspaceExecutedQuery.queryCount).toBe(0);
   });
 
@@ -284,8 +292,9 @@ test('workspaces', (ctx) => {
     const { workspaceSubscription, isPremium, workspaceExecutedQuery } =
       workspaces[0];
 
-    expect(workspaceSubscription).toBeNull();
+    expect(workspaceSubscription.paymentStatus).toBe('unpaid');
+    expect(workspaceSubscription.credits).toBe(limits().maxCredits.free);
     expect(isPremium).toBeFalsy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(50);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.free);
   });
 });

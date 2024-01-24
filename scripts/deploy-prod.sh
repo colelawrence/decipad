@@ -20,8 +20,6 @@ echo "INTERCOM_SECRET_ID=${INTERCOM_SECRET_ID:-}" >> apps/frontend/.env.producti
 echo "VITE_STRIPE_PAYMENT_LINK"=${VITE_STRIPE_PAYMENT_LINK:-} >> apps/frontend/.env.production
 echo "VITE_STRIPE_CUSTOMER_PORTAL_LINK"=${VITE_STRIPE_CUSTOMER_PORTAL_LINK:-} >> apps/frontend/.env.production
 echo "VITE_STRIPE_API_KEY"=${VITE_STRIPE_API_KEY:-} >> apps/frontend/.env.production
-echo "VITE_MAX_CREDITS_PRO"=${VITE_STRIPE_CREDITS_PRO:-} >> apps/frontend/.env.production
-echo "VITE_MAX_CREDITS_FREE"=${VITE_STRIPE_CREDITS_FREE:-} >> apps/frontend/.env.production
 
 echo "Building frontend..."
 yarn build:frontend

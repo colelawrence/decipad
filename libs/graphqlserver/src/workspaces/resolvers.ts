@@ -27,6 +27,7 @@ import {
 import { WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
+import { plans } from '@decipad/backend-config';
 
 const workspaces = resource('workspace');
 
@@ -102,6 +103,7 @@ const resolvers: Resolvers = {
         .map((w) => {
           if (w.name.includes('@n1n.co')) {
             w.isPremium = true;
+            w.plan = plans().pro;
           }
           return w;
         });

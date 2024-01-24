@@ -1,0 +1,16 @@
+query GetSubscriptionsPlans {
+  getSubscriptionsPlans {
+    paymentLink
+    credits
+    queries
+    seats
+    storage
+    description
+    price
+    currency
+    title
+    id
+    key
+    isDefault
+  }
+}

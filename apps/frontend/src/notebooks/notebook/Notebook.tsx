@@ -18,6 +18,7 @@ import {
   ControllerProvider,
   EditorChangeContextProvider,
   EditorStylesContext,
+  useAiCreditsStore,
   useAiUsage,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
@@ -34,6 +35,7 @@ import {
   EditorIcon,
   NotebookTabs,
   AssistantChatPlaceholder,
+  AddCreditsModal,
 } from '@decipad/ui';
 import {
   FC,
@@ -103,6 +105,9 @@ export const NewNotebook: FC = () => {
   useAnimateMutations();
   useFinishOnboarding();
 
+  const { isBuyCreditsModalOpen, setIsBuyCreditsModalOpen } =
+    useAiCreditsStore();
+
   if (error) {
     return getNotebookError(error);
   }
@@ -142,6 +147,15 @@ export const NewNotebook: FC = () => {
             }
             isEmbed={isEmbed}
           />
+          {
+            <Suspense>
+              {isBuyCreditsModalOpen && (
+                <AddCreditsModal
+                  closeAction={() => setIsBuyCreditsModalOpen(false)}
+                />
+              )}
+            </Suspense>
+          }
         </ComputerContextProvider>
       </ControllerProvider.Provider>
     </DocsyncEditorProvider.Provider>
@@ -262,7 +276,6 @@ const NewEditor: FC<{
       setError(actions.error);
     }
   }, [actions.error, setError]);
-
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
   const onNotebookTitleChange = useNotebookTitleChange(
@@ -581,7 +594,6 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
-  const isPremium = Boolean(meta.data?.getPadById?.workspace?.isPremium);
   const {
     updateUsage,
     promptTokensUsed,
@@ -598,21 +610,19 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
+  const quotaLimitFromPlan =
+    actions.notebook?.workspace?.workspaceSubscription?.credits ?? 0;
+
   useEffect(() => {
     const workspace = meta.data?.getPadById?.workspace;
     const usageList = workspace?.resourceUsages ?? [];
-    const isWorkspacePremium = workspace?.isPremium;
 
     const aiUsage = usageList.filter((u) => u?.resourceType === 'openai') ?? [];
     const promptTokens =
       aiUsage.find((u) => u?.id.includes('prompt'))?.consumption ?? 0;
     const completionTokens =
       aiUsage.find((u) => u?.id.includes('completion'))?.consumption ?? 0;
-    const tokensLimit =
-      aiUsage[0]?.quotaLimit ??
-      (isWorkspacePremium
-        ? Number(import.meta.env.VITE_MAX_CREDITS_PRO)
-        : Number(import.meta.env.VITE_MAX_CREDITS_FREE));
+    const tokensLimit = aiUsage[0]?.quotaLimit ?? quotaLimitFromPlan;
 
     // we only want to update the usage with the DB values when the user refreshes the page
     if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {
@@ -628,6 +638,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     promptTokensUsed,
     completionTokensUsed,
     tokensQuotaLimit,
+    quotaLimitFromPlan,
   ]);
 
   if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
@@ -636,7 +647,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
         notebookId={notebookId}
         workspaceId={actions.notebook?.workspace?.id ?? ''}
         editor={editor}
-        isPremium={isPremium}
+        limitPerPlan={quotaLimitFromPlan}
       />
     );
   }

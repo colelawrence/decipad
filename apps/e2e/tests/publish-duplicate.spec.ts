@@ -16,6 +16,9 @@ const moreText = 'Should work even with some delay';
 const justOneMore = 'One more time we gonna celibate';
 const unpublishedParagraph = 'This paragraph isnt published';
 
+// tests on this file can't be ran in paparell, make them flaky, might be related to the workspace reuse
+test.describe.configure({ mode: 'serial' });
+
 test('publish notebook, check logged out reader + logged in duplication', async ({
   testUser,
   anotherTestUser,

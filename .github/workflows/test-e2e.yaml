@@ -66,11 +66,11 @@ jobs:
         env:
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
+          STRIPE_EXTRA_CREDITS_PRODUCT_ID: '${{secrets.DEV_STRIPE_EXTRA_CREDITS_PRODUCT_ID}}'
+          STRIPE_SUBSCRIPTIONS_PRODUCT_ID: '${{secrets.DEV_STRIPE_SUBSCRIPTIONS_PRODUCT_ID}}'
           VITE_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           VITE_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           VITE_STRIPE_API_KEY: '${{secrets.DEV_STRIPE_API_KEY}}'
-          VITE_MAX_CREDITS_FREE: '${{secrets.DECI_MAX_CREDITS_FREE}}'
-          VITE_MAX_CREDITS_PRO: '${{secrets.DECI_MAX_CREDITS_PRO}}'
           DECI_VERBOSE: true
           PERCY_PARALLEL_TOTAL: 2
         run: ./scripts/e2e.sh ${{ matrix.shard }} ${{ strategy.job-total }}

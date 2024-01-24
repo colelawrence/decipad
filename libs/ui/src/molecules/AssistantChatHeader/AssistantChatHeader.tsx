@@ -11,7 +11,7 @@ import { Magic, Trash } from '../../icons';
 import { Button, Tooltip } from '../../atoms';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAiCreditsStore } from '@decipad/react-contexts';
 
 export const wrapperStyles = css({
   display: 'flex',
@@ -141,7 +141,7 @@ const Credits: React.FC<{
   creditsUsed: number;
   creditsQuota: number;
 }> = ({ creditsUsed, creditsQuota }) => {
-  const navigate = useNavigate();
+  const { setIsBuyCreditsModalOpen } = useAiCreditsStore();
   const creditsLeft = Math.max(0, creditsQuota - creditsUsed);
   return (
     <Tooltip
@@ -155,7 +155,7 @@ const Credits: React.FC<{
             <Button
               type="secondary"
               styles={addMoreCreditsButton}
-              onClick={() => navigate('add-credits', { relative: 'path' })}
+              onClick={() => setIsBuyCreditsModalOpen(true)}
             >
               Buy more
             </Button>

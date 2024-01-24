@@ -22,6 +22,7 @@ fragment NotebookMetaData on Pad {
     id
     name
     isPremium
+    plan
     myPermissionType
     access {
       id

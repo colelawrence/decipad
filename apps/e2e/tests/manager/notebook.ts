@@ -77,10 +77,10 @@ export class Notebook {
     await this.newTab.click();
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await this.page.waitForTimeout(Timeouts.computerDelay);
+    await this.page.waitForTimeout(Timeouts.syncDelay);
 
     if (name) {
-      await this.page.keyboard.type(name, { delay: 100 });
+      await this.page.keyboard.type(name, { delay: 200 });
     }
     await this.page.keyboard.press('Enter');
   }
@@ -234,7 +234,10 @@ export class Notebook {
     } else {
       await this.getTab(oldTab).dblclick();
     }
-    await this.page.keyboard.type(newName);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.syncDelay);
+
+    await this.page.keyboard.type(newName, { delay: 200 });
     await this.page.keyboard.press('Enter');
   }
 

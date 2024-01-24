@@ -55,6 +55,8 @@ fragment WorkspaceMembers on Workspace {
 
 fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
   paymentStatus
+  credits
+  queries
 }
 
 fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
@@ -66,6 +68,7 @@ fragment DashboardWorkspace on Workspace {
   id
   name
   isPremium
+  plan
   pads(page: { maxItems: 10000 }) {
     items {
       ...WorkspaceNotebook

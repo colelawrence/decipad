@@ -4,6 +4,7 @@ import {
   useCreateWorkspaceMutation,
   useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
+  useGetSubscriptionsPlansQuery,
   useGetWorkspacesQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
@@ -136,6 +137,14 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     [allWorkspaces, workspaceId]
   );
 
+  const [subscriptionPlans] = useGetSubscriptionsPlansQuery();
+
+  const currentSubscriptionPlan = useMemo(() => {
+    const plans = subscriptionPlans.data?.getSubscriptionsPlans ?? [];
+
+    return plans.find((p) => p?.key === currentWorkspace?.plan);
+  }, [currentWorkspace?.plan, subscriptionPlans.data?.getSubscriptionsPlans]);
+
   const {
     updateUsage,
     promptTokensUsed,
@@ -147,9 +156,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const [prevWorkspaceId, setPrevWorkspaceId] = useState(currentWorkspace?.id);
 
   useEffect(() => {
-    let quotaLimit = currentWorkspace?.isPremium
-      ? Number(import.meta.env.VITE_MAX_CREDITS_PRO)
-      : Number(import.meta.env.VITE_MAX_CREDITS_FREE);
+    let quotaLimit = currentWorkspace?.workspaceSubscription?.credits || 0;
     let pTokens = 0;
     let cTokens = 0;
     (currentWorkspace?.resourceUsages || [])
@@ -191,6 +198,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     tokensQuotaLimit,
     currentWorkspace?.id,
     prevWorkspaceId,
+    currentWorkspace?.workspaceSubscription?.credits,
   ]);
 
   useEffect(() => {
@@ -301,6 +309,8 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                     <WorkspaceHero
                       name={currentWorkspace.name}
                       isPremium={!!currentWorkspace.isPremium}
+                      planName={currentSubscriptionPlan?.title ?? ''}
+                      creditsPlan={currentSubscriptionPlan?.credits ?? 0}
                       membersCount={currentWorkspace.membersCount ?? 1}
                       onCreateNotebook={handleCreateNotebook}
                       membersHref={currentWorkspaceRoute.members({}).$}

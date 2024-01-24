@@ -11,12 +11,12 @@ import { cssVarHex } from '../../primitives';
 type AddCreditsPaymentComponentProps = {
   resourceId: string;
   closeAction: () => void;
-  nrOfCredits: number | string;
+  credits: number | string;
 };
 
 export const AddCreditsPaymentComponent: React.FC<
   AddCreditsPaymentComponentProps
-> = ({ resourceId, closeAction, nrOfCredits }) => {
+> = ({ resourceId, closeAction, credits }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [, UpdateResourceQuotaLimit] = useUpdateResourceQuotaLimitMutation();
@@ -67,7 +67,7 @@ export const AddCreditsPaymentComponent: React.FC<
               type: 'workspace',
               id: resourceId,
             },
-            amount: nrOfCredits,
+            amount: credits,
             error: {
               code: result.error.code,
               message: result.error.message,
@@ -89,9 +89,10 @@ export const AddCreditsPaymentComponent: React.FC<
                 type: 'workspace',
                 id: resourceId,
               },
-              amount: nrOfCredits,
+              amount: credits,
             });
           }
+
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
             0;

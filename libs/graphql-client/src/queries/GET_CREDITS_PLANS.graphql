@@ -1,0 +1,17 @@
+query GetCreditsPlans {
+  getCreditsPlans {
+    id
+    title
+    description
+    plans {
+      id
+      title
+      description
+      price
+      credits
+      isDefault
+      promotionTag
+      currency
+    }
+  }
+}

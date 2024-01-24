@@ -80,23 +80,15 @@ export const updateExtraAiAllowance = async (
     apiVersion,
   });
 
-  const product = await stripe.products.retrieve(extraCreditsProdId);
-  /* eslint-disable camelcase */
-  const {
-    default_price,
-    metadata: { credits },
-  } = product;
-  let price;
-
-  if (typeof default_price === 'string') {
-    const priceObj = await stripe.prices.retrieve(default_price);
-    price = priceObj.unit_amount ?? 0;
-  } else {
-    price = default_price?.unit_amount ?? 0;
-  }
+  // TODO: refactor this when we'll have multiple prices
+  const product = (
+    await stripe.prices.list({ product: extraCreditsProdId })
+  ).data.find((p) => p.metadata.isDefault === 'true');
+  const credits = product?.metadata?.credits;
 
   await stripe.paymentIntents.create({
-    amount: price,
+    /* eslint-disable camelcase */
+    amount: product?.unit_amount ?? 0,
     currency: 'usd',
     receipt_email: user.email ?? undefined,
     metadata: {
@@ -111,10 +103,19 @@ export const updateExtraAiAllowance = async (
     },
   });
 
-  const { workspaces } = await tables();
+  const { workspaces, workspacesubscriptions } = await tables();
   const workspace = await workspaces.get({ id: consumerId });
+  const workspaceSubscription = await workspacesubscriptions.get({
+    id: consumerId,
+  });
   const { maxCredits } = limits();
-  const quotaLimit = workspace?.isPremium ? maxCredits.pro : maxCredits.free;
+  let quotaLimit = 0;
+
+  if (workspaceSubscription?.queries) {
+    quotaLimit = workspaceSubscription?.queries;
+  } else {
+    quotaLimit = workspace?.isPremium ? maxCredits.pro : maxCredits.free;
+  }
 
   const tokensUsed: Array<ResourceUsageRecord | undefined> = await getResources(
     [

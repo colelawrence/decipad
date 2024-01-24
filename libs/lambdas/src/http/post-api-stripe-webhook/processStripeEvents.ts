@@ -4,26 +4,25 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { timestamp, tables } from '@decipad/tables';
-import { limits } from '@decipad/backend-config';
+import { limits, plans } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
-const updateQueryExecutionTable = async (
-  workspaceId: string,
-  isPremium: boolean
-) => {
+const updateQueryExecutionTable = async (workspaceId: string, plan: string) => {
   const data = await tables();
   const queryExecutionRecord = await data.workspacexecutedqueries.get({
     id: workspaceId,
   });
 
+  const limitsPerPlan = (limits().maxCredits as { [key: string]: number })[
+    plan
+  ];
+
   if (queryExecutionRecord) {
     await data.workspacexecutedqueries.put({
       ...queryExecutionRecord,
-      quotaLimit: isPremium
-        ? limits().maxCredits.pro
-        : limits().maxCredits.free,
+      quotaLimit: limitsPerPlan ?? limits().maxCredits.free,
     });
   }
 };
@@ -54,12 +53,23 @@ export const processSessionComplete = async (
     payment_status,
     customer_details,
     subscription,
+    metadata,
   } = event.data.object as Stripe.Checkout.Session;
+
   const data = await tables();
+  let plan = plans().free;
+
+  if (payment_status === 'paid') {
+    plan = metadata?.key ?? plans().pro;
+  }
   const paymentLink =
     typeof payment_link === 'string' ? payment_link : payment_link?.id || '';
   const subscriptionId =
-    typeof subscription === 'string' ? subscription : subscription?.id || '';
+    typeof subscription === 'string' ? subscription : subscription?.id ?? '';
+  const credits = Number(metadata?.credits) || 0;
+  const seats = Number(metadata?.seats) || 0;
+  const storage = Number(metadata?.storage) || 0;
+  const queries = Number(metadata?.queries) || 0;
 
   if (!client_reference_id) {
     throw Boom.badRequest('Webhook Error: invalid client reference');
@@ -91,13 +101,18 @@ export const processSessionComplete = async (
     paymentLink,
     paymentStatus: payment_status,
     email: customer_details?.email || '',
+    credits,
+    queries,
+    seats,
+    storage,
   });
 
   await data.workspaces.put({
     ...workspace,
     isPremium: payment_status === 'paid',
+    plan,
   });
-  updateQueryExecutionTable(workspace.id, payment_status === 'paid');
+  updateQueryExecutionTable(workspace.id, plan);
 
   await track(req, {
     event: 'Stripe subscription created',
@@ -120,6 +135,7 @@ export const processSubscriptionDeleted = async (
 ) => {
   const { id, status } = event.data.object as Stripe.Subscription;
   const data = await tables();
+  const freePlan = plans().free;
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id,
@@ -143,8 +159,9 @@ export const processSubscriptionDeleted = async (
     await data.workspaces.put({
       ...workspace,
       isPremium: false,
+      plan: freePlan,
     });
-    updateQueryExecutionTable(workspace.id, false);
+    updateQueryExecutionTable(workspace.id, freePlan);
 
     await track(req, {
       event: 'Stripe subscription immediately cancelled',
@@ -170,6 +187,7 @@ export const processSubscriptionUpdated = async (
     .object as Stripe.Subscription;
   const data = await tables();
   let isPremium = false;
+  let plan = plans().free;
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id,
@@ -191,6 +209,7 @@ export const processSubscriptionUpdated = async (
 
   if (VALID_SUBSCRIPTION_STATES.includes(status)) {
     isPremium = true;
+    plan = workspace.plan ?? plans().pro;
   }
 
   if (cancel_at_period_end) {
@@ -207,8 +226,9 @@ export const processSubscriptionUpdated = async (
   await data.workspaces.put({
     ...workspace,
     isPremium,
+    plan,
   });
-  updateQueryExecutionTable(workspace.id, isPremium);
+  updateQueryExecutionTable(workspace.id, plan);
 
   return {
     statusCode: 200,
