@@ -30,6 +30,7 @@ import {
   jsCode,
   componentCssVars,
 } from '../../primitives';
+import { defaultScrollbarWidth } from '../../styles/scrollbars';
 
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
@@ -236,6 +237,20 @@ const mainStyles = (hasLogs: boolean) =>
     },
     '.cm-theme, .cm-editor,': {
       borderRadius: `12px 12px ${hasLogs ? '0 0' : '12px 12px'}`,
+    },
+    '.cm-scroller::-webkit-scrollbar': {
+      width: defaultScrollbarWidth,
+      height: defaultScrollbarWidth,
+    },
+    '.cm-scroller::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '.cm-scroller::-webkit-scrollbar-thumb': {
+      backgroundColor: cssVar('iconColorDefault'),
+      borderRadius: defaultScrollbarWidth,
+    },
+    '.cm-scroller::-webkit-scrollbar-corner': {
+      backgroundColor: 'transparent',
     },
   });
 

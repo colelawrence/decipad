@@ -7,13 +7,7 @@ import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
 import { nanoid } from 'nanoid';
-import {
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_INTEGRATION,
-  ELEMENT_STRUCTURED_VARNAME,
-  MyValue,
-} from '@decipad/editor-types';
+import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { EElementOrText } from '@udecode/plate-common';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { useWorker } from '@decipad/editor-hooks';
@@ -34,6 +28,7 @@ import {
 import { ResultPreview } from './ResultPreview';
 import { SecretInput } from './SecretInput';
 import { CodeEditor } from '../../organisms';
+import { useToast } from '@decipad/toast';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -215,9 +210,11 @@ const Integration = ({
   const [resultJSON, setResultJSON] = useState<DataPreview>({
     status: 'not asked',
   });
+  const [tempCode, setTempCode] = useState(functionBody);
   const [timeOfLastRun, setTimeofLastRun] = useState<string | null>(null);
   const { onExecute } = useContext(ExecutionContext);
   const { secrets } = useWorkspaceSecrets(workspaceId);
+  const toast = useToast();
 
   const msgStream = useCallback(
     (msg: WorkerMessageType) => {
@@ -254,42 +251,27 @@ const Integration = ({
   const [worker] = useWorker(msgStream, errorStream, notebookId);
 
   const runCode = useCallback(() => {
-    const codeWithEnvVars = addEnvVars(functionBody, envVarValues);
+    const codeWithEnvVars = addEnvVars(tempCode, envVarValues);
 
     worker?.execute(codeWithEnvVars, Object.fromEntries(paramValues));
-  }, [worker, functionBody, paramValues, envVarValues]);
+  }, [worker, paramValues, envVarValues, tempCode]);
 
   const insertIntegration = useCallback(() => {
     if (!functionBody) throw new Error('no code');
-    if (resultJSON.status !== 'success') throw new Error('no results');
-    const vars = [...paramValues.entries()].map(
-      ([name, value]): EElementOrText<MyValue> => {
-        return {
-          id: nanoid(),
-          type: ELEMENT_CODE_LINE_V2,
-          children: [
-            {
-              id: nanoid(),
-              type: ELEMENT_STRUCTURED_VARNAME,
-              children: [
-                {
-                  text: name,
-                },
-              ],
-            },
-            {
-              id: nanoid(),
-              type: ELEMENT_CODE_LINE_V2_CODE,
-              children: [
-                {
-                  text: `"${value}"`,
-                },
-              ],
-            },
-          ],
-        };
-      }
-    );
+    if (resultJSON.status !== 'success') {
+      toast.error(
+        'No results to insert. You must run your integration before inserting.'
+      );
+      throw new Error('no results');
+    }
+
+    const varsString = [...paramValues.entries()]
+      .map(([name, value]) => {
+        return `this.${name} = "${value}"`;
+      })
+      .join(';\n');
+    const code = `${varsString}\n\n${addEnvVars(functionBody, envVarValues)}`;
+
     const newIntegration: EElementOrText<MyValue> = {
       id: nanoid(),
       type: ELEMENT_INTEGRATION,
@@ -297,12 +279,12 @@ const Integration = ({
       typeMappings: [],
       integrationType: {
         type: 'codeconnection',
-        code: addEnvVars(functionBody, envVarValues),
+        code,
         latestResult: resultJSON.result,
         timeOfLastRun,
       },
     };
-    insertNodes([...vars, newIntegration]);
+    insertNodes([newIntegration]);
   }, [
     functionBody,
     resultJSON,
@@ -311,6 +293,7 @@ const Integration = ({
     fnName,
     envVarValues,
     paramValues,
+    toast,
   ]);
 
   return (
@@ -329,8 +312,10 @@ const Integration = ({
         </div>
         {showCode && (
           <CodeEditor
-            code={functionBody}
-            setCode={() => {}}
+            code={tempCode}
+            setCode={(code) => {
+              setTempCode(code);
+            }}
             lang="javascript"
             log={[]}
             setLog={() => {}}
