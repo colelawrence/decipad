@@ -1,7 +1,7 @@
 import { DragEvent, FC, useCallback } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { useTEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { SmartProps } from '../../types';
@@ -28,7 +28,7 @@ export const SmartCell: FC<SmartProps> = ({
   global = false,
   rotate,
 }: SmartProps) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
 
   const { result, expression } = useAggregation({

@@ -1,4 +1,4 @@
-import { IntegrationTypes, useTEditorRef } from '@decipad/editor-types';
+import { IntegrationTypes, useMyEditorRef } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,
@@ -20,7 +20,7 @@ import { getNewIntegration } from '../utils';
  * Used to create an integration with all its state in the editor
  */
 export const useCreateIntegration = () => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const [createIntegration] = useConnectionStore((state) => [
     state.createIntegration,
   ]);

@@ -1,6 +1,6 @@
 import { isMarkActive, toggleMark } from '@udecode/plate-common';
 import { FC, useState } from 'react';
-import { MyMark, useTEditorRef } from '@decipad/editor-types';
+import { MyMark, useMyEditorRef } from '@decipad/editor-types';
 import { FloatingButton } from '@decipad/ui';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { dividerStyle } from '../../styles/divider';
@@ -16,7 +16,7 @@ export const ToggleMarkButton = ({
   icon,
   divider,
 }: ToggleMarkButtonProps): ReturnType<FC> => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const editorActive = useEditorChange(
     () => !!editor?.selection && isMarkActive(editor, type)
   );

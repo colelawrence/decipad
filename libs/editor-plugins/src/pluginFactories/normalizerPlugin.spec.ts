@@ -1,5 +1,5 @@
 import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
-import { createTPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
+import { createMyPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from './normalizerPlugin';
 
 describe('createNormalizerPluginFactory', () => {
@@ -9,7 +9,7 @@ describe('createNormalizerPluginFactory', () => {
       elementType: ELEMENT_EXPRESSION,
       acceptableElementProperties: ['prop1', 'prop2'],
     });
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [plugin()],
     });
     editor.children = [

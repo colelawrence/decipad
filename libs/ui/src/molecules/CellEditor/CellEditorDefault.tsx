@@ -1,9 +1,9 @@
 import {
-  useState,
-  useEffect,
   useCallback,
-  useRef,
+  useEffect,
   useLayoutEffect,
+  useRef,
+  useState,
 } from 'react';
 import { useSelected } from 'slate-react';
 import { useOverridableState } from '@decipad/react-utils';
@@ -12,9 +12,9 @@ import { useIsCellEditable } from './useIsCellEditable';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
 import { CellEditorDefaultEditing } from './CellEditorDefaultEditing';
 import { focusEditor } from '@udecode/plate-common';
-import { useTEditorRef } from '@decipad/editor-types';
 import isHotkey from 'is-hotkey';
 import { useCellDOMEvents } from './useCellDOMEvents';
+import { useMyEditorRef } from '@decipad/editor-types';
 
 export const CellEditorDefault = (cellProps: CellProps) => {
   const {
@@ -27,7 +27,7 @@ export const CellEditorDefault = (cellProps: CellProps) => {
 
   const readOnlyComponent = <CellEditorDefaultReadOnly {...cellProps} />;
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const focused = useSelected();
   const editable = useIsCellEditable(cellProps);
 

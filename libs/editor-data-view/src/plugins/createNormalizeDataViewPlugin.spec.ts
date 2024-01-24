@@ -13,7 +13,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
   TableElement,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import { TEditor, findNode, normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
@@ -21,7 +21,7 @@ import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 describe('createNormalizeDataViewPlugin', () => {
   let editor: TEditor;
   beforeEach(() => {
-    editor = createTPlateEditor({
+    editor = createMyPlateEditor({
       plugins: [createNormalizeDataViewPlugin()],
     });
   });

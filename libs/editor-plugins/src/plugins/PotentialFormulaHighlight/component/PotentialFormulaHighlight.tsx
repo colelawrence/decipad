@@ -8,7 +8,7 @@ import {
   MyEditor,
   PlateComponent,
   RichText,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
@@ -35,7 +35,7 @@ import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
 export const PotentialFormulaHighlight: PlateComponent<{
   leaf: PotentialFormulaDecoration & RichText;
 }> = ({ attributes, children, text, leaf }) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const selected = useIsPotentialFormulaSelected(editor, leaf);
 

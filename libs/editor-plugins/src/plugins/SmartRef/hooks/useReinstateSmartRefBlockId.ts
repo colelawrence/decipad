@@ -2,14 +2,14 @@ import { findNodePath, setNodes } from '@udecode/plate-common';
 import { Subscription, debounceTime, filter } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
-import { SmartRefElement, useTEditorRef } from '@decipad/editor-types';
+import { SmartRefElement, useMyEditorRef } from '@decipad/editor-types';
 
 const debounceTimeMs = 5_000;
 
 // reinstate symbol name if found elsewhere on the notebook
 export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
   const computer = useComputer();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const [missingRef, setMissingRef] = useState(false);
 
   useEffect(() => {

@@ -1,17 +1,17 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import {
-  DeprecatedCodeBlockElement,
   CodeLineElement,
   DEPRECATED_ELEMENT_CODE_BLOCK,
+  DeprecatedCodeBlockElement,
   ELEMENT_CODE_LINE,
   MyValue,
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, PlateContent, PlatePlugin } from '@udecode/plate-common';
 import {
-  RemoteComputer,
   getRemoteComputer,
   parseBlock,
+  RemoteComputer,
 } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
 import { ComputerContextProvider } from '@decipad/react-contexts';
@@ -38,11 +38,15 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
               children,
             } as never,
           ]}
-          plugins={[
-            createCodeLinePlugin(computer),
-            createCodeVariableHighlightPlugin(),
-          ]}
-        />
+          plugins={
+            [
+              createCodeLinePlugin(computer),
+              createCodeVariableHighlightPlugin(),
+            ] as PlatePlugin[]
+          }
+        >
+          <PlateContent />
+        </Plate>
       </BrowserRouter>
     </ComputerContextProvider>
   </DndProvider>

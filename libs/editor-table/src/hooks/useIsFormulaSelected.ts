@@ -1,14 +1,14 @@
 import { useSelection } from '@decipad/editor-hooks';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { getNode, isCollapsed } from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 export const useIsFormulaSelected = (headerBlockId: string): boolean => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const selection = useSelection(true);
   return useMemo(() => {
     if (!selection || !isCollapsed(selection)) {

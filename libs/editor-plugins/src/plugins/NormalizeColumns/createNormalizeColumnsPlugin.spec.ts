@@ -1,7 +1,7 @@
 import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import {
   ColumnsElement,
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_COLUMNS,
   ELEMENT_PARAGRAPH,
   ELEMENT_VARIABLE_DEF,
@@ -12,7 +12,7 @@ import { createNormalizeColumnsPlugin } from './createNormalizeColumnsPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeColumnsPlugin()],
   });
 });

@@ -5,7 +5,7 @@ import {
   ELEMENT_TABLE,
   PlateComponent,
   UserIconKey,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -32,7 +32,7 @@ import { useSelectedCells } from './useSelectedCells';
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const [tableFrozen, setTableFrozen] = useState(false);
   const {

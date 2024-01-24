@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
@@ -8,7 +8,7 @@ import { createNormalizeImagePlugin } from './createNormalizeImagePlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeImagePlugin()],
   });
 });

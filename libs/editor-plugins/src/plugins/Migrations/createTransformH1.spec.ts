@@ -2,12 +2,12 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import { createTransformH1 } from './createTransformH1';
 import { normalizeEditor } from '@udecode/plate-common';
 
-const editor = createTPlateEditor({
+const editor = createMyPlateEditor({
   plugins: [createTransformH1()],
 });
 

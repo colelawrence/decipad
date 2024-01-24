@@ -1,5 +1,5 @@
 import { useSelection } from '@decipad/editor-hooks';
-import { ELEMENT_TABLE, useTEditorRef } from '@decipad/editor-types';
+import { ELEMENT_TABLE, useMyEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import {
   getAboveNode,
@@ -9,7 +9,7 @@ import {
 import { useMemo } from 'react';
 
 export const useTableCaption = (): string | undefined => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const selection = useSelection();
   return useMemo(() => {
     if (selection && isCollapsed(selection)) {

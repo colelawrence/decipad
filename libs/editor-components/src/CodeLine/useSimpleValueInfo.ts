@@ -9,7 +9,7 @@ import {
 import {
   CodeLineV2Element,
   ELEMENT_SMART_REF,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { findNodePath, insertText } from '@udecode/plate-common';
@@ -21,7 +21,7 @@ export function useSimpleValueInfo(
 ) {
   const definedVariables = computer.getSetOfNamesDefined$.use();
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   // What state are we in? Code line, input, or error?
   const hasSmartRefs = useMemo(

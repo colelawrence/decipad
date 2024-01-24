@@ -8,7 +8,7 @@ import {
   ELEMENT_TR,
   PlateComponent,
   TableElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
@@ -24,7 +24,7 @@ const DRAG_ITEM_ROW = 'row';
 
 export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TR);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
 
   const { isCollapsed } = useContext(TableStyleContext);

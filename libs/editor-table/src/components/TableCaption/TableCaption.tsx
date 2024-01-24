@@ -9,7 +9,7 @@ import {
   ELEMENT_TABLE_CAPTION,
   PlateComponent,
   TableElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -34,7 +34,7 @@ export const TableCaption: PlateComponent = ({
 
   assertElementType(element, ELEMENT_TABLE_CAPTION);
   const columnCount = useTableColumnCount(element);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = findNodePath(editor, element);
   const parent = getAboveNodeSafe<TableElement>(editor, {
     at: path,

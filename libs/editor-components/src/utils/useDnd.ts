@@ -3,11 +3,11 @@ import {
   elementKinds,
   MyEditor,
   MyElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   createPathRef,
-  createStore,
+  createZustandStore,
   findNode,
   findNodePath,
   focusEditor,
@@ -69,7 +69,7 @@ export interface UseDndNodeOptions extends Pick<UseDropNodeOptions, 'nodeRef'> {
 
 const DEFAULT_AXIS: Axis = { horizontal: false, vertical: true };
 
-export const dndStore = createStore('dnd')({
+export const dndStore = createZustandStore('dnd')({
   draggingIds: new Set<string>(),
   canDrop: false,
 });
@@ -84,7 +84,7 @@ export const useDnd = ({
 }: UseDndNodeOptions) => {
   const { id, type } = element;
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const elementRef = useRef<MyElement>(element);
   elementRef.current = element;
 

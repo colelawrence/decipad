@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
-import { createTPluginFactory, ELEMENT_HR } from '@decipad/editor-types';
+import { createMyPluginFactory, ELEMENT_HR } from '@decipad/editor-types';
 import { Divider } from '@decipad/editor-components';
 import { deserializeDividerHtml } from './deserializeDividerHtml';
 import { serializeDividerHtml } from './serializeDividerHtml';
 
-export const createDividerPlugin = createTPluginFactory({
+export const createDividerPlugin = createMyPluginFactory({
   key: ELEMENT_HR,
   isVoid: true,
   isElement: true,

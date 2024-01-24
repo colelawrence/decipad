@@ -1,23 +1,24 @@
 import { Image } from '@decipad/editor-components';
 import {
-  createTAutoformatPlugin,
-  createTPlateEditor,
+  createMyAutoformatPlugin,
+  createMyPlateEditor,
+  createMyPlugins,
   ELEMENT_H1,
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { createPlugins, select, TEditor } from '@udecode/plate-common';
+import { select, TEditor } from '@udecode/plate-common';
 import { autoformatImages } from './autoformatImages';
 import { createImagePlugin } from '@udecode/plate-media';
 
 describe('autoformatting images from markdown', () => {
   let editor: TEditor;
   beforeEach(() => {
-    editor = createTPlateEditor({
-      plugins: createPlugins(
+    editor = createMyPlateEditor({
+      plugins: createMyPlugins(
         [
           createImagePlugin(),
-          createTAutoformatPlugin({ options: { rules: autoformatImages } }),
+          createMyAutoformatPlugin({ options: { rules: autoformatImages } }),
         ],
         {
           components: {

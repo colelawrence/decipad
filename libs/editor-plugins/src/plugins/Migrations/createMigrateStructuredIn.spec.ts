@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
@@ -7,7 +7,7 @@ import {
 import { normalizeEditor } from '@udecode/plate-common';
 import { createMigrateStructuredInputs } from './createMigrateStructuredIn';
 
-const editor = createTPlateEditor({
+const editor = createMyPlateEditor({
   plugins: [createMigrateStructuredInputs()],
 });
 

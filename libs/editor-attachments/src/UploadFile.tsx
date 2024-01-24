@@ -1,5 +1,5 @@
 import { insertLiveConnection } from '@decipad/editor-components';
-import { MyEditor, useTEditorRef } from '@decipad/editor-types';
+import { MyEditor, useMyEditorRef } from '@decipad/editor-types';
 import { insertEmbedBelow, insertImageBelow } from '@decipad/editor-utils';
 import {
   useAttachFileToNotebookMutation,
@@ -54,7 +54,7 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
 
   const arcEndpoint = useCallback((id: string) => `/api/pads/${id}/images`, []);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const toast = useToast();
 
   const insertByUrl = useCallback(

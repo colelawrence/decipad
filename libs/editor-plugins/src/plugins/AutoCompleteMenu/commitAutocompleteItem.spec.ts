@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
@@ -11,7 +11,7 @@ import { commitAutocompleteItem } from './commitAutocompleteItem';
 
 let editor: MyEditor;
 beforeEach(() => {
-  editor = createTPlateEditor();
+  editor = createMyPlateEditor();
 });
 
 const selection = (point: BasePoint) => ({ anchor: point, focus: point });

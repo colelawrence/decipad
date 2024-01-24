@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_FETCH,
   DEPRECATED_ELEMENT_TABLE_INPUT,
   MyElement,
@@ -10,7 +10,7 @@ import { createNormalizeVoidPlugin } from './createNormalizeVoidPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeVoidPlugin()],
   });
 });

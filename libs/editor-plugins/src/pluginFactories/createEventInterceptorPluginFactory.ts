@@ -1,5 +1,5 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   EventInterceptor,
   MyElement,
 } from '@decipad/editor-types';
@@ -20,7 +20,7 @@ export const createEventInterceptorPluginFactory = ({
   elementTypes,
   interceptor,
 }: EventInterceptorPluginProps) => {
-  return createTPluginFactory({
+  return createMyPluginFactory({
     key: name,
     withOverrides: (editor) => {
       const prevInterceptor = editor.interceptEvent ?? (() => false);

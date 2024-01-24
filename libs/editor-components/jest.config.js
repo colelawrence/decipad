@@ -4,6 +4,7 @@ module.exports = {
   ...domConfig,
   rootDir: __dirname,
   displayName: 'editor-components',
+  setupFilesAfterEnv: [...domConfig.setupFilesAfterEnv, './jest.setup.js'],
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats
    * to prevent breaking of any existing tests with snapshots.

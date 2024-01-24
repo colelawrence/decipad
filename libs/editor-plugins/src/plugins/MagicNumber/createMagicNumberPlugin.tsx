@@ -1,6 +1,6 @@
 import { MagicNumber } from '@decipad/editor-components';
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   MARK_MAGICNUMBER,
   MyEditor,
   MyValue,
@@ -12,7 +12,7 @@ import {
   createNormalizeMagicNumbersPlugin,
 } from './plugins';
 
-export const createMagicNumberPlugin = createTPluginFactory<
+export const createMagicNumberPlugin = createMyPluginFactory<
   object,
   MyValue,
   MyEditor

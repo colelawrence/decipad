@@ -24,7 +24,7 @@ import {
 } from '@udecode/plate-common';
 import {
   AnyElement,
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
@@ -747,7 +747,7 @@ export class EditorController implements RootEditorController {
     const tabId = _tabId ?? nanoid();
     const tabName = _tabName ?? INITIAL_TAB_NAME;
 
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       id: tabId,
       plugins: this.editorPlugins,
       disableCorePlugins: { history: true },

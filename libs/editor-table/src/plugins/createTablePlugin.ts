@@ -34,6 +34,7 @@ import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
 import { TablePlugin } from '@udecode/plate-table';
+import { TableAboveEditable } from './TableAboveEditable';
 
 type Attributes =
   | {
@@ -66,6 +67,7 @@ export const createTablePlugin = <
       addRow(editor, tablePath);
     },
   },
+  renderAboveEditable: TableAboveEditable,
   withOverrides: withTable(),
   handlers: {
     onDrop: onDropSmartCellResult() as any,

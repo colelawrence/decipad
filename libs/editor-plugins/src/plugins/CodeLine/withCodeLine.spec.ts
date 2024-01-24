@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
@@ -13,7 +13,7 @@ describe('withCodeLine', () => {
   let computer: RemoteComputer;
   beforeEach(() => {
     computer = getRemoteComputer();
-    editor = createTPlateEditor({
+    editor = createMyPlateEditor({
       plugins: [createCodeLinePlugin(computer)],
     });
   });

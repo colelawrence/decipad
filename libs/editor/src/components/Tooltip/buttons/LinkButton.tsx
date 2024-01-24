@@ -1,13 +1,13 @@
 import { focusEditor, getPluginType, someNode } from '@udecode/plate-common';
 import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
-import { ELEMENT_LINK, useTEditorRef } from '@decipad/editor-types';
+import { ELEMENT_LINK, useMyEditorRef } from '@decipad/editor-types';
 import { FloatingButton, useEventNoEffect } from '@decipad/ui';
 import { triggerFloatingLink, unwrapLink } from '@udecode/plate-link';
 
 export const LinkButton = (
   props: ComponentProps<typeof FloatingButton>
 ): ReturnType<FC> => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const type = getPluginType(editor, ELEMENT_LINK);
   const isLink = !!editor?.selection && someNode(editor, { match: { type } });

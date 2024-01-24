@@ -1,6 +1,6 @@
 import { normalizeEditor } from '@udecode/plate-common';
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
@@ -26,7 +26,7 @@ const expVarDef = (name = '', value = '') => ({
 
 describe('createNormalizeVariablePlugin for variable def expressions', () => {
   it('inserts missing elements', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [{ type: ELEMENT_VARIABLE_DEF, children: [] } as never];
@@ -35,7 +35,7 @@ describe('createNormalizeVariablePlugin for variable def expressions', () => {
   });
 
   it('does not remove valuable attributes', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [expVarDef('varName', 'valueString') as never];
@@ -46,7 +46,7 @@ describe('createNormalizeVariablePlugin for variable def expressions', () => {
   });
 
   it('removes extra attributes', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [{ ...expVarDef(), abc: 'def' } as never];
@@ -80,7 +80,7 @@ const sliderVarDef = (name = '', value = '') => ({
 
 describe('createNormalizeVariablePlugin for variable def slider', () => {
   it('inserts missing elements', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [
@@ -91,7 +91,7 @@ describe('createNormalizeVariablePlugin for variable def slider', () => {
   });
 
   it('does not remove valuable attributes', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [sliderVarDef('varName', '10') as never];
@@ -100,7 +100,7 @@ describe('createNormalizeVariablePlugin for variable def slider', () => {
   });
 
   it('removes extra attributes', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     editor.children = [
@@ -129,7 +129,7 @@ const dropdownVarDef = (name = '') => ({
 
 describe('createNormalizeVariablePlugin for dropdown elements', () => {
   it('changes options array from strings to objects', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     const myDropdown = dropdownVarDef('hello');
@@ -169,7 +169,7 @@ describe('createNormalizeVariablePlugin for dropdown elements', () => {
   });
 
   it('adds options array if not present', () => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
     const myDropdown = dropdownVarDef('hello');

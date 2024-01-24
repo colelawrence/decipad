@@ -3,7 +3,7 @@ import {
   ELEMENT_CALLOUT,
   PlateComponent,
   UserIconKey,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -20,7 +20,7 @@ import { useTurnIntoProps } from '../utils';
 export const Callout: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CALLOUT);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const path = useNodePath(element);
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Callout');

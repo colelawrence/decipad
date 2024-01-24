@@ -1,14 +1,15 @@
-import type { EditorAboveOptions, Element, NodeEntry } from 'slate';
+import type { EditorAboveOptions, NodeEntry } from 'slate';
 import type { MyElement, MyNode } from '@decipad/editor-types';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 import { useCallback } from 'react';
 import { useNodePath } from './useNodePath';
 import { useEditorChange } from './useEditorChange';
+import { TElement } from '@udecode/plate-common';
 
 export const useElementAbove = (
   node: MyNode,
-  options: EditorAboveOptions<Element>
-): Element | undefined => {
+  options: EditorAboveOptions<TElement>
+): TElement | undefined => {
   const path = useNodePath(node);
   const entry = useEditorChange<NodeEntry<MyElement> | undefined>(
     useCallback(

@@ -5,6 +5,7 @@ import {
   createPlateEditor,
   createPlugins,
   Plate,
+  PlateContent,
   PlateEditor,
   PlatePlugin,
   PlateProps,
@@ -12,7 +13,7 @@ import {
 import { Expression } from './Expression';
 import { BrowserRouter } from 'react-router-dom';
 
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
 beforeEach(() => {
   const inputPlugin: PlatePlugin = {
@@ -23,7 +24,6 @@ beforeEach(() => {
   const plugins = createPlugins([inputPlugin]);
   plateProps = {
     plugins,
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [
       {
         type: ELEMENT_EXPRESSION,
@@ -35,11 +35,16 @@ beforeEach(() => {
 });
 
 it('renders the element properties', () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper({ children }) {
-      return <BrowserRouter>{children}</BrowserRouter>;
-    },
-  });
+  const { getByText } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper({ children }) {
+        return <BrowserRouter>{children}</BrowserRouter>;
+      },
+    }
+  );
 
   expect(getByText('expression')).toBeVisible();
 });

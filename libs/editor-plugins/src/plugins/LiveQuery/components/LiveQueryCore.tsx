@@ -6,7 +6,7 @@ import {
   MyEditor,
   MyValue,
   TableCellType,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
@@ -46,7 +46,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   element,
   showLiveQueryResults = false,
 }) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
 
   const liveQuery = useLiveQuery({

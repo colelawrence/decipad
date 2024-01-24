@@ -1,22 +1,17 @@
 import {
   CodeLineElement,
-  createTPlateEditor,
+  createMyPlateEditor,
+  createMyPlugins,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_PARAGRAPH,
   ELEMENT_SMART_REF,
-  MyEditor,
-  MyValue,
+  ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
+import { normalizeEditor, PlateEditor } from '@udecode/plate-common';
 import {
-  createPlugins,
-  normalizeEditor,
-  PlateEditor,
-} from '@udecode/plate-common';
-import {
-  createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineCodePlugin,
+  createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
 import { getRemoteComputer } from '@decipad/remote-computer';
@@ -50,12 +45,12 @@ function codeLine(varName?: string, code?: string): CodeLineElement {
 let editor: PlateEditor;
 beforeEach(() => {
   const computer = getRemoteComputer();
-  const plugins = createPlugins<MyValue, MyEditor>([
+  const plugins = createMyPlugins([
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),
   ]);
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins,
   }) as never;
 });

@@ -4,7 +4,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_DISPLAY,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -46,7 +46,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const siblingCodeLines = useSiblingCodeLines(element);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
 
   useCodeLineClickReference(editor, selected, codeLineContent);

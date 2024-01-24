@@ -1,4 +1,4 @@
-import { MyElement, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, useMyEditorRef } from '@decipad/editor-types';
 import { focusAndSetSelection } from '@decipad/editor-utils';
 import { useSelection } from '@decipad/editor-hooks';
 import { ShadowCalcReference } from '@decipad/react-contexts';
@@ -22,7 +22,7 @@ export const useFocusControl = (
   const [focusState, setFocusState] = useState<FocusStatus>(FocusStatus.None);
 
   const useWatchTeleported = (elementId: string, element: MyElement) => {
-    const editor = useTEditorRef();
+    const editor = useMyEditorRef();
     const selection = useSelection();
     const selected = useSelected();
 

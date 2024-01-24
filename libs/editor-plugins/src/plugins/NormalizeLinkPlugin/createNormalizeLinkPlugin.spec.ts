@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   markKinds,
@@ -10,7 +10,7 @@ import { createNormalizeLinkPlugin } from './createNormalizeLinkPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeLinkPlugin()],
   });
 });

@@ -1,5 +1,5 @@
 import { normalizeEditor } from '@udecode/plate-common';
-import { createTPlateEditor, ELEMENT_SLIDER } from '@decipad/editor-types';
+import { createMyPlateEditor, ELEMENT_SLIDER } from '@decipad/editor-types';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 
 const expectedSliderElement = ({
@@ -16,9 +16,9 @@ const expectedSliderElement = ({
   children: [{ text: '' }],
 });
 
-let editor: ReturnType<typeof createTPlateEditor>;
+let editor: ReturnType<typeof createMyPlateEditor>;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeSliderPlugin()],
   });
 });

@@ -1,15 +1,19 @@
 import {
   MyElement,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps, useState } from 'react';
-import { Editable, Slate } from 'slate-react';
 
-import { createTEditor, findNodePath, withTReact } from '@udecode/plate-common';
+import {
+  createPlateEditor,
+  findNodePath,
+  Plate,
+  PlateContent,
+} from '@udecode/plate-common';
 import { usePathMutatorCallback } from './usePathMutatorCallback';
 
 describe('usePathMutatorCallback', () => {
@@ -17,14 +21,14 @@ describe('usePathMutatorCallback', () => {
     ComponentProps<PlateComponent> & { sideEffects: () => void }
   > = ({ element, attributes, children, sideEffects }) => {
     const [text, setText] = useState('');
-    const editor = useTEditorRef();
+    const editor = useMyEditorRef();
     const mutateElement = usePathMutatorCallback(
       editor,
       findNodePath(editor, element as MyElement),
       'url',
       'test',
       sideEffects
-    );
+    ) as any;
     return (
       <div {...attributes}>
         <div contentEditable={false}>
@@ -44,9 +48,9 @@ describe('usePathMutatorCallback', () => {
 
   it('hook tests', async () => {
     const sideEffects = jest.fn();
-    const editor = withTReact(createTEditor());
+    const editor = createPlateEditor();
     const { getByText, getByLabelText } = render(
-      <Slate
+      <Plate
         editor={editor as never}
         initialValue={
           [
@@ -55,7 +59,7 @@ describe('usePathMutatorCallback', () => {
         }
         onChange={noop}
       >
-        <Editable
+        <PlateContent
           renderElement={(props) => (
             <Link
               {...(props as ComponentProps<PlateComponent>)}
@@ -63,7 +67,7 @@ describe('usePathMutatorCallback', () => {
             />
           )}
         />
-      </Slate>
+      </Plate>
     );
 
     await userEvent.type(getByLabelText('value'), 'test');

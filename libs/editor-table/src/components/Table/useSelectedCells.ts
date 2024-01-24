@@ -1,5 +1,5 @@
 import { useSelected } from 'slate-react';
-import { useTEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useEffect } from 'react';
 import { dequal } from '@decipad/utils';
 import { useTableStore } from '../../contexts/tableStore';
@@ -7,7 +7,7 @@ import { getSelectedCells } from '../../utils/getSelectedCells';
 
 export const useSelectedCells = () => {
   const selected = useSelected();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const [selectedCells, setSelectedCells] = useTableStore().use.selectedCells();
 

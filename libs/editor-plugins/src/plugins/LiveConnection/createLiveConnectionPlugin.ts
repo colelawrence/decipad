@@ -1,5 +1,5 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_LIVE_DATASET,
@@ -17,11 +17,11 @@ import {
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
 import {
+  ENodeEntry,
   getChildren,
   insertNodes,
   removeNodes,
   Value,
-  ENodeEntry,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
@@ -43,7 +43,7 @@ export const createLiveConnectionPlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >() =>
-  createTPluginFactory<object, TV, TE>({
+  createMyPluginFactory<object, TV, TE>({
     key: ELEMENT_LIVE_CONNECTION,
     isElement: true,
     component: LazyLiveConnection,
@@ -92,7 +92,7 @@ export const createLiveDataSetPlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >() =>
-  createTPluginFactory<unknown, TV, TE>({
+  createMyPluginFactory<unknown, TV, TE>({
     key: ELEMENT_LIVE_DATASET,
     isElement: true,
     component: LazyLiveConnection,

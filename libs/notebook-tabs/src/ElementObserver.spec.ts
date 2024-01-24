@@ -15,7 +15,7 @@ import {
   ParagraphElement,
   SmartRefElement,
   VariableDropdownElement,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import {
   insertNodes,
@@ -27,7 +27,7 @@ import { setSelection } from '@decipad/editor-utils';
 import { ElementObserver } from './ElementObserver';
 
 describe('observes changes in specific elements', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
 
   const change = new ElementObserver();
@@ -400,7 +400,7 @@ describe('observes changes in specific elements', () => {
 });
 
 describe('Listens to change on specific IDs', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
 
   const change = new ElementObserver();
@@ -727,7 +727,7 @@ describe('Listens to change on specific IDs', () => {
 });
 
 describe('Doesnt care about paths', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = [
     { type: ELEMENT_H1, id: '1', children: [{ text: '' }] },
     {
@@ -853,7 +853,7 @@ describe('Doesnt care about paths', () => {
 });
 
 describe('Observer clean up', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
 
   const change = new ElementObserver();

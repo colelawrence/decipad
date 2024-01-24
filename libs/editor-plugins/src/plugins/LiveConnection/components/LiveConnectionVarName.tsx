@@ -13,7 +13,7 @@ import {
   LiveConnectionElement,
   MyEditor,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -65,7 +65,7 @@ export const LiveConnectionVarName: PlateComponent = ({
   children,
 }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
-  const editor: MyEditor = useTEditorRef();
+  const editor: MyEditor = useMyEditorRef();
   const path = findNodePath(editor, element);
   const parent: TNodeEntry<LiveConnectionElement> | undefined =
     path && getParentNode(editor, path);

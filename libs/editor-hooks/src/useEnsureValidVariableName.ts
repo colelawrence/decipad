@@ -2,7 +2,7 @@ import {
   RemoteComputer,
   identifierRegExpGlobal,
 } from '@decipad/remote-computer';
-import { MyElement, PlainText, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, PlainText, useMyEditorRef } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
@@ -28,7 +28,7 @@ export function useEnsureValidVariableName(
   blockIds: Array<string | undefined> = [],
   defaultVarName = generateVarName(isFlagEnabled('SILLY_NAMES'))
 ): string | undefined {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
 
   const [validationMessage$] = useState(

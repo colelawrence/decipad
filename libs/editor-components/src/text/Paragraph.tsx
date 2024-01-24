@@ -3,21 +3,21 @@ import {
   MyEditor,
   MyElement,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
 import {
+  useEditorChange,
   useNodePath,
   useNodeText,
-  useEditorChange,
 } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
+import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
 import {
+  findNodePath,
   insertText,
   isElementEmpty,
   isSelectionExpanded,
-  findNodePath,
 } from '@udecode/plate-common';
 import { Range } from 'slate';
 import { useState } from 'react';
@@ -55,7 +55,7 @@ export const Paragraph: PlateComponent = ({
   const readOnly = useIsEditorReadOnly();
 
   // Performance improvement as opposed to use something like `useTEditorState()`.
-  // We couldn't use `useTEditorRef()` because we need the paragraph to re-render
+  // We couldn't use `useMyEditorRef()` because we need the paragraph to re-render
   // when the amount of editor children change.
   const showPlaceHolder = useEditorChange(
     (editor) =>
@@ -72,7 +72,7 @@ export const Paragraph: PlateComponent = ({
     readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
 
   const turnIntoProps = useTurnIntoProps(element);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });

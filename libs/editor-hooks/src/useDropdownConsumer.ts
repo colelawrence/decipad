@@ -1,11 +1,11 @@
-import { Result, materializeResult } from '@decipad/computer';
+import { materializeResult, Result } from '@decipad/computer';
 import {
-  ELEMENT_VARIABLE_DEF,
   CellValueType,
-  useTEditorRef,
+  ELEMENT_VARIABLE_DEF,
+  useMyEditorRef,
   VariableDropdownElement,
 } from '@decipad/editor-types';
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
 import { CallbackObserver, useElementObserver } from './ElementChange';
@@ -53,7 +53,7 @@ export const useDropdownConsumer = ({
   blockId,
   cellType,
 }: UseDropDownConsumerProps): UseDropDownConsumerResults => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const materializedDropdownResult = useMaterializedDropdownResult(blockId);
 

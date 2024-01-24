@@ -6,7 +6,7 @@ import {
   TableCellType,
   TableElement,
   TableHeaderElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getNode } from '@udecode/plate-common';
@@ -51,7 +51,7 @@ export const useTableHeaderCell = (
   element: TableHeaderElement
 ): UseTableHeaderCellResult | undefined => {
   const computer = useComputer();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
   const columnIndex = path?.[path.length - 1];
   const tablePath = path && Path.parent(Path.parent(path));

@@ -1,5 +1,5 @@
 import { ErrorInfo, FC, ReactNode, useCallback } from 'react';
-import { MyElement, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, useMyEditorRef } from '@decipad/editor-types';
 import { removeNodes } from '@udecode/plate-common';
 import { ErrorBlock } from '@decipad/ui';
 import { useNodePath } from '@decipad/editor-hooks';
@@ -19,7 +19,7 @@ const DefaultFallback: FC<FallbackProps> = ({
   resetErrorBoundary,
 }) => {
   console.error(error);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const isReadOnly = useIsEditorReadOnly();
 
   const delPath = useNodePath(element);

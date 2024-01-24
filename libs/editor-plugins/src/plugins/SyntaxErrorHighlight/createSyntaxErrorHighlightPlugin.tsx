@@ -1,10 +1,10 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   DECORATE_SYNTAX_ERROR,
 } from '@decipad/editor-types';
 import { SyntaxErrorHighlight } from './SyntaxErrorHighlight';
 
-export const createSyntaxErrorHighlightPlugin = createTPluginFactory({
+export const createSyntaxErrorHighlightPlugin = createMyPluginFactory({
   key: DECORATE_SYNTAX_ERROR,
   isLeaf: true,
   component: (props) => (

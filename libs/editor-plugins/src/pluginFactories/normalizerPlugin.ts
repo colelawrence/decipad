@@ -1,20 +1,20 @@
 import {
+  deleteText,
   EElement,
   ENodeEntry,
+  getNode,
+  hasNode,
+  isElement,
   PlateEditor,
   TDescendant,
   TEditor,
   TElement,
   TNodeEntry,
-  Value,
-  deleteText,
-  getNode,
-  hasNode,
-  isElement,
   unsetNodes,
+  Value,
 } from '@udecode/plate-common';
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   getMyEditor,
   MyElement,
   MyPlatePlugin,
@@ -230,7 +230,7 @@ export const createNormalizerPluginFactory = <
   name,
   ...props
 }: NormalizerPluginProps<TV, TE>) => {
-  return createTPluginFactory({
+  return createMyPluginFactory({
     key: name,
     withOverrides: withNormalizerOverride<TV, TE>(name, props),
   });

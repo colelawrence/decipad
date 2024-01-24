@@ -1,15 +1,15 @@
 import {
   findNodePath,
   useEditorRef,
+  useEditorSelection,
   useElement,
-  usePlateSelection,
 } from '@udecode/plate-common';
 import { useMemo } from 'react';
 import { Path } from 'slate';
 
 export const useCellAnchor = () => {
   const editor = useEditorRef();
-  const selection = usePlateSelection();
+  const selection = useEditorSelection();
   const element = useElement();
 
   return useMemo(() => {

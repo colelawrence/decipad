@@ -1,7 +1,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { ColumnDesc, materializeColumnDesc } from '@decipad/remote-computer';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import { DropdownElement, useTPlateEditorRef } from '@decipad/editor-types';
+import { DropdownElement, useMyEditorRef } from '@decipad/editor-types';
 import { formatResultPreview } from '@decipad/format';
 import {
   EditorChangeContext,
@@ -9,7 +9,7 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
-import { SelectItems, icons } from '@decipad/ui';
+import { icons, SelectItems } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
 import { insertText, nanoid } from '@udecode/plate-common';
 import { MaterializedColumnDesc } from 'libs/computer/src/types';
@@ -28,7 +28,7 @@ interface UseDropdownResult {
 }
 
 export const useDropdown = (element: DropdownElement): UseDropdownResult => {
-  const editor = useTPlateEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const editorChanges = useContext(EditorChangeContext);
   const path = useNodePath(element);

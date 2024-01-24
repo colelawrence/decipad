@@ -1,15 +1,12 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineElement,
-  createTPlateEditor,
+  createMyPlateEditor,
+  createMyPlugins,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import {
-  createPlugins,
-  normalizeEditor,
-  PlateEditor,
-} from '@udecode/plate-common';
+import { normalizeEditor, PlateEditor } from '@udecode/plate-common';
 import { createNormalizeCodeLinePlugin } from './createNormalizeCodeLinePlugin';
 
 function codeLine(code: string): CodeLineElement {
@@ -22,8 +19,8 @@ function codeLine(code: string): CodeLineElement {
 let editor: PlateEditor;
 beforeEach(() => {
   const computer = getRemoteComputer();
-  const plugins = createPlugins([createNormalizeCodeLinePlugin(computer)]);
-  editor = createTPlateEditor({
+  const plugins = createMyPlugins([createNormalizeCodeLinePlugin(computer)]);
+  editor = createMyPlateEditor({
     plugins,
   }) as never;
 });

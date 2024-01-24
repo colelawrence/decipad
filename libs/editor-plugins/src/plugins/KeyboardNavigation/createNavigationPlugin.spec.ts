@@ -9,7 +9,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -17,7 +17,7 @@ import { createNavigationPlugin } from './createNavigationPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNavigationPlugin()()],
   });
 });

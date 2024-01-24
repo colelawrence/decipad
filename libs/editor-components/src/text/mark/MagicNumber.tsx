@@ -4,7 +4,7 @@ import {
   MyElement,
   PlateComponent,
   RichText,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   getAboveNodeSafe,
@@ -54,7 +54,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
 
   const result = useResult(blockId)?.result;
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const [inlineExpEditorVisible, setInlineExpEditorVisible] = useState(false);
   const [magicNumberInput, setMagicNumberInput] = useState(exp);

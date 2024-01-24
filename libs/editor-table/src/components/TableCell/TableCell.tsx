@@ -4,7 +4,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -52,7 +52,7 @@ export const TableCell: PlateComponent = ({
     });
   }
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const anchor = useCellAnchor();
   const selected = useCellSelected();
   const focused = useFocused();

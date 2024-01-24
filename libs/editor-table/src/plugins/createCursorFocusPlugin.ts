@@ -1,4 +1,4 @@
-import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
+import { createMyPluginFactory, MyEditor } from '@decipad/editor-types';
 import { Path } from 'slate';
 import { focusAndSetSelection, pluginStore } from '@decipad/editor-utils';
 import { hasNode } from '@udecode/plate-common';
@@ -11,7 +11,7 @@ interface FocusTarget {
 
 const PLUGIN_KEY = 'CURSOR_FOCUS_PLUGIN';
 
-export const createCursorFocusPlugin = createTPluginFactory({
+export const createCursorFocusPlugin = createMyPluginFactory({
   key: PLUGIN_KEY,
   withOverrides: (editor) => {
     const { onChange } = editor;

@@ -7,7 +7,7 @@ import {
   ELEMENT_PARAGRAPH,
   PlateComponent,
   SlashCommand,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
 
@@ -23,7 +23,7 @@ export const InteractiveParagraph =
     const paragraphElement = props.element;
     assertElementType(paragraphElement, ELEMENT_PARAGRAPH);
 
-    const editor = useTEditorRef();
+    const editor = useMyEditorRef();
     const clientEvent = useContext(ClientEventsContext);
     const [isDarkTheme] = useThemeFromStore();
 

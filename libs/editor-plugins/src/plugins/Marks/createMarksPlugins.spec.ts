@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   MyEditor,
@@ -12,7 +12,7 @@ describe('Ctrl+b', () => {
   let plugins: MyPlatePlugin[];
   beforeEach(() => {
     plugins = createMarksPlugins();
-    editor = createTPlateEditor({
+    editor = createMyPlateEditor({
       plugins,
     });
   });

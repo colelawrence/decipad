@@ -1,7 +1,7 @@
 import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineElement,
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   ELEMENT_TABLE,
@@ -28,7 +28,7 @@ jest.mock('nanoid', () => ({
 let editor: MyEditor;
 let computer: RemoteComputer;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createSmartRefPlugin()],
   });
   editor.children = [

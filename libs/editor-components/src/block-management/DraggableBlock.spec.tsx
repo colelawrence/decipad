@@ -6,11 +6,12 @@ import {
   createPlateEditor,
   createPlugins,
   Plate,
+  PlateContent,
   PlateEditor,
   PlatePlugin,
   PlateProps,
 } from '@udecode/plate-common';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { EditorReadOnlyContext } from '@decipad/react-contexts';
@@ -31,12 +32,11 @@ const DraggableParagraphPlugin: PlatePlugin = {
 };
 
 let editor: PlateEditor;
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([DraggableParagraphPlugin]);
   plateProps = {
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [
       { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'text' }] },
     ],
@@ -51,16 +51,26 @@ beforeEach(() => {
 });
 
 it('renders the main block', async () => {
-  const { getByTestId } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByTestId } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper,
+    }
+  );
   expect(getByTestId('draggable')).toBeVisible();
 });
 
 it('renders a drag handle', async () => {
-  const { getAllByTitle } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getAllByTitle } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper,
+    }
+  );
   expect(getAllByTitle(/drag/i)[0]).toBeInTheDocument();
 });
 
@@ -69,7 +79,6 @@ describe('when editor is in readOnly mode', () => {
     const props = {
       ...plateProps,
       readOnly: true,
-      editableProps: { ...plateProps.editableProps },
     };
     const { queryByTitle } = render(
       <EditorReadOnlyContext.Provider
@@ -79,7 +88,9 @@ describe('when editor is in readOnly mode', () => {
             thro(new Error('not implemented, see: useWriteLock')),
         }}
       >
-        <Plate {...props} editor={editor} />
+        <Plate {...props} editor={editor}>
+          <PlateContent scrollSelectionIntoView={noop} />
+        </Plate>
       </EditorReadOnlyContext.Provider>,
       {
         wrapper,
@@ -98,7 +109,9 @@ it('can delete the block', async () => {
         { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'first' }] },
         { type: ELEMENT_PARAGRAPH, id: '1', children: [{ text: 'second' }] },
       ]}
-    />,
+    >
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -107,14 +120,9 @@ it('can delete the block', async () => {
   const [, secondDragHandle] = dragHandles;
   await userEvent.click(secondDragHandle);
 
-  expect(editor.children).toEqual([
-    expect.objectContaining({ children: [{ text: 'first' }] }),
-    expect.objectContaining({ children: [{ text: 'second' }] }),
-  ]);
+  expect(editor.children).toHaveChildrenText(['first', 'second']);
   await userEvent.click(getByTitle(/delete/i));
-  expect(editor.children).toEqual([
-    expect.objectContaining({ children: [{ text: 'first' }] }),
-  ]);
+  expect(editor.children).toHaveChildrenText(['first']);
 });
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -134,7 +142,9 @@ it('can move the block', async () => {
     { type: ELEMENT_PARAGRAPH, id: '1', children: [{ text: 'second' }] },
   ];
   const { getByText, getAllByTitle } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
     {
       wrapper,
     }
@@ -159,10 +169,7 @@ it('can move the block', async () => {
     fireEvent.dragEnter(getByText('second'), { clientX: 100, clientY: 100 });
     fireEvent.dragOver(getByText('second'), { clientX: 100, clientY: 100 });
   });
-  expect(editor.children).toEqual([
-    expect.objectContaining({ children: [{ text: 'first' }] }),
-    expect.objectContaining({ children: [{ text: 'second' }] }),
-  ]);
+  expect(editor.children).toHaveChildrenText(['first', 'second']);
 
   await act(async () => {
     fireEvent.drop(getByText('second'), {
@@ -170,8 +177,5 @@ it('can move the block', async () => {
       clientY: 100,
     });
   });
-  expect(editor.children).toEqual([
-    expect.objectContaining({ children: [{ text: 'second' }] }),
-    expect.objectContaining({ children: [{ text: 'first' }] }),
-  ]);
+  expect(editor.children).toHaveChildrenText(['second', 'first']);
 });

@@ -1,7 +1,7 @@
 import {
   ELEMENT_H1,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -12,7 +12,7 @@ import { isElementEmpty } from '@udecode/plate-common';
 
 export const Title: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_H1);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const readOnly = useIsEditorReadOnly();
 
   const embed = isEmbed();

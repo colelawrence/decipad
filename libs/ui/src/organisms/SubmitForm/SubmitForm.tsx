@@ -1,12 +1,12 @@
 import {
   AvailableSwatchColor,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { exportProgramByVarname } from '@decipad/import';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { TextAndIconButton, Button, InputField, IconButton } from '../../atoms';
+import { Button, IconButton, InputField, TextAndIconButton } from '../../atoms';
 import {
   useComputer,
   useCurrentWorkspaceStore,
@@ -21,12 +21,13 @@ import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { SelectInput } from '../../SelectInput';
-import { Email, Send, Close, Spinner } from '../../icons';
+import { Close, Email, Send, Spinner } from '../../icons';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { brand200, cssVar, white } from '../../primitives';
 import { useToast } from '@decipad/toast';
 import { wrapperStyles } from '../VariableEditor/VariableEditor';
 import { swatchesThemed } from '../../utils';
+import { TElement } from '@udecode/plate-common';
 
 const configContainerStyles = css({
   display: 'grid',
@@ -226,7 +227,7 @@ type FormStatus =
   | { status: 'error'; error: string };
 
 export const SubmitForm: SubmitFormProps = ({ ...props }) => {
-  const { element } = props;
+  const element = props.element as TElement;
   const [email, setEmail] = useState('');
   const {
     workspaceInfo: { id: workspaceId },
@@ -237,9 +238,9 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
 
   const proxyUrl = BackendUrl.fetchProxy(notebookId).toString();
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
-  const path = useNodePath(element);
+  const path = useNodePath(element as any);
 
   const [formStatus, setFormStatus] = useState<FormStatus>({ status: 'idle' });
 

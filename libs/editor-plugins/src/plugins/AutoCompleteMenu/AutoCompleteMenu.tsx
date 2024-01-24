@@ -2,7 +2,7 @@ import {
   AutocompleteName,
   getBuiltinsForAutocomplete,
 } from '@decipad/remote-computer';
-import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
+import { PlateComponent, useMyEditorRef } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
@@ -51,7 +51,7 @@ export const AutoCompleteMenu: PlateComponent<{
 
   const selected = useSelected();
   const focused = useFocused();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const [menuSuppressed, setMenuSuppressed] = useState(false);
   const showAutoComplete = selected && focused && word && !menuSuppressed;

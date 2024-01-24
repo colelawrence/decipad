@@ -4,7 +4,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
   UserIconKey,
-  useTEditorRef,
+  useMyEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { getNodeString, isElement } from '@udecode/plate-common';
@@ -25,7 +25,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Caption is meant to render caption elements`);
   }
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const focused = useFocused();
   const userEvents = useContext(ClientEventsContext);
 

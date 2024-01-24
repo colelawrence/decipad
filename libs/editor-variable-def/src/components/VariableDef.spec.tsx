@@ -10,6 +10,7 @@ import {
   createPlateEditor,
   createPlugins,
   Plate,
+  PlateContent,
   PlateEditor,
   PlatePlugin,
   PlateProps,
@@ -20,7 +21,7 @@ import { VariableDef } from './VariableDef';
 import { BrowserRouter } from 'react-router-dom';
 
 describe('Variable def expression element', () => {
-  let plateProps: PlateProps;
+  let plateProps: Omit<PlateProps, 'children'>;
   let editor: PlateEditor;
   let wrapper: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -34,7 +35,6 @@ describe('Variable def expression element', () => {
     const plugins = createPlugins([inputPlugin]);
     plateProps = {
       plugins,
-      editableProps: { scrollSelectionIntoView: noop },
       initialValue: [
         {
           type: 'foo',
@@ -68,9 +68,14 @@ describe('Variable def expression element', () => {
   });
 
   it('renders the element properties', () => {
-    const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
+    const { getByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      {
+        wrapper,
+      }
+    );
 
     expect(getByText('var')).toBeVisible();
     expect(getByText('10')).toBeVisible();
@@ -78,7 +83,7 @@ describe('Variable def expression element', () => {
 });
 
 describe('Variable def slider element', () => {
-  let plateProps: PlateProps;
+  let plateProps: Omit<PlateProps, 'children'>;
   let editor: PlateEditor;
   let wrapper: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -92,7 +97,6 @@ describe('Variable def slider element', () => {
     const plugins = createPlugins([inputPlugin]);
     plateProps = {
       plugins,
-      editableProps: { scrollSelectionIntoView: noop },
       initialValue: [
         {
           type: ELEMENT_VARIABLE_DEF,
@@ -130,9 +134,14 @@ describe('Variable def slider element', () => {
   });
 
   it('renders the element properties', () => {
-    const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
+    const { getByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      {
+        wrapper,
+      }
+    );
 
     expect(getByText('var')).toBeVisible();
   });

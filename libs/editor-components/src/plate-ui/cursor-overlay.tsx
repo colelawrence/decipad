@@ -1,4 +1,4 @@
-import { createStore } from '@udecode/plate-common';
+import { createZustandStore } from '@udecode/plate-common';
 import {
   CursorData,
   CursorOverlay as CursorOverlayPrimitive,
@@ -7,7 +7,7 @@ import {
 } from '@udecode/plate-cursor';
 import { cn } from '@decipad/ui';
 
-export const dynamicCursorStore = createStore('cursor')({
+export const dynamicCursorStore = createZustandStore('cursor')({
   cursors: {},
 });
 

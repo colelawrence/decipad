@@ -1,5 +1,5 @@
 import { useNodePath, useSelection } from '@decipad/editor-hooks';
-import { ParagraphElement, useTEditorRef } from '@decipad/editor-types';
+import { ParagraphElement, useMyEditorRef } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { dequal } from '@decipad/utils';
 import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate-common';
@@ -70,7 +70,7 @@ export const useSlashMenu = (
   );
   useWindowListener('keydown', onKeyDown, true);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const selectionFocus = selection?.focus;
   const shouldJumpToEnd =
     !isInline && showSlashCommands && elementPath && isCollapsed(selection);

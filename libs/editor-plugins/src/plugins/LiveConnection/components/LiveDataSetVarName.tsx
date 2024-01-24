@@ -7,7 +7,7 @@ import {
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   LiveDataSetElement,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -47,7 +47,7 @@ export const LiveDataSetVarName: PlateComponent = ({
   assertElementType(element, ELEMENT_LIVE_DATASET_VARIABLE_NAME);
 
   const { changeOpen } = useConnectionStore();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   // refactor to useeditorselector
   const parent = useParentNodeEntry<LiveDataSetElement>(element);
   if (parent) {

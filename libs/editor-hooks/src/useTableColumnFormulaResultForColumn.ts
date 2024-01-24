@@ -4,7 +4,7 @@ import {
   MyReactEditor,
   TableCellElement,
   TableHeaderElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { useEditorTableResultContext } from '@decipad/react-contexts';
 import { useMemo } from 'react';
@@ -14,7 +14,7 @@ import { useResolved } from '@decipad/react-utils';
 export function useTableColumnFormulaResultForCell(
   element: TableCellElement | TableHeaderElement
 ): Result.Result | undefined {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);
   const columnResult = useTableColumnFormulaResultForColumn(colIndex);
   return useMemo(

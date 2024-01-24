@@ -12,7 +12,7 @@ import {
   PlateComponent,
   VariableDropdownElement,
   VariableSliderElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -38,7 +38,7 @@ export const VariableDef: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_VARIABLE_DEF);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
   const path = useNodePath(element);

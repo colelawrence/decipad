@@ -1,7 +1,7 @@
 import { select, TEditor } from '@udecode/plate-common';
 import {
-  createTAutoformatPlugin,
-  createTPlateEditor,
+  createMyAutoformatPlugin,
+  createMyPlateEditor,
   ELEMENT_H2,
   ELEMENT_LI,
   ELEMENT_OL,
@@ -14,9 +14,9 @@ import { createListPlugin } from '@udecode/plate-list';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [
-      createTAutoformatPlugin({ options: { rules: autoformatLists } }),
+      createMyAutoformatPlugin({ options: { rules: autoformatLists } }),
       createListPlugin(),
     ],
   });

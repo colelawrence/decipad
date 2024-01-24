@@ -3,7 +3,7 @@ import {
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   MyEditor,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
@@ -17,7 +17,7 @@ describe('withUpdateComputerOverride', () => {
   let editor: MyEditor;
   let computer: RemoteComputer;
   beforeEach(() => {
-    const ed = createTPlateEditor();
+    const ed = createMyPlateEditor();
     ed.children = [
       { type: ELEMENT_H1, children: [{ text: 'title' }], id: 'id1' },
       {

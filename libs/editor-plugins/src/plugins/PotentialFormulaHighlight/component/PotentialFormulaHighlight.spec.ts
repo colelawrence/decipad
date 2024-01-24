@@ -1,6 +1,6 @@
 import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
@@ -12,7 +12,7 @@ import { commitPotentialFormula } from './PotentialFormulaHighlight';
 let editor: TEditor;
 let computer: RemoteComputer;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createInlineNumberPlugin()],
   });
   computer = getRemoteComputer();

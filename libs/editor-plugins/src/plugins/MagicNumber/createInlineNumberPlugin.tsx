@@ -1,10 +1,10 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   ELEMENT_INLINE_NUMBER,
 } from '@decipad/editor-types';
 import { InlineNumber } from '@decipad/editor-components';
 
-export const createInlineNumberPlugin = createTPluginFactory({
+export const createInlineNumberPlugin = createMyPluginFactory({
   key: ELEMENT_INLINE_NUMBER,
   type: ELEMENT_INLINE_NUMBER,
   isInline: true,

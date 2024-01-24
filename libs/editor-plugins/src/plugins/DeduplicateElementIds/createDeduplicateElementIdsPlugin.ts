@@ -1,20 +1,20 @@
 import {
   AnyElement,
+  createMyPluginFactory,
   MyValue,
-  createTPluginFactory,
 } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { captureException } from '@sentry/browser';
 import {
-  PlateEditor,
-  TEditor,
-  TNodeProps,
-  Value,
   findNode,
   isElement,
   nanoid,
+  PlateEditor,
   setNodes,
+  TEditor,
+  TNodeProps,
+  Value,
 } from '@udecode/plate-common';
 import { Element } from 'slate';
 
@@ -34,7 +34,7 @@ export const createDeduplicateElementIdsPlugin = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >() =>
-  createTPluginFactory<object, TV, TE>({
+  createMyPluginFactory<object, TV, TE>({
     key,
     withOverrides: (editor) => {
       const { seenIds, needsDeduping } = pluginStore<

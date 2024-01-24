@@ -1,5 +1,5 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
@@ -11,12 +11,12 @@ import {
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
 import {
-  removeNodes,
+  ENodeEntry,
   getChildren,
   insertNodes,
   nanoid,
+  removeNodes,
   Value,
-  ENodeEntry,
 } from '@udecode/plate-common';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveQueryVarName } from './components/LiveQueryVarName';
@@ -37,7 +37,7 @@ export const createLiveQueryPlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >() =>
-  createTPluginFactory<object, TV, TE>({
+  createMyPluginFactory<object, TV, TE>({
     key: ELEMENT_LIVE_QUERY,
     isElement: true,
     component: LazyLiveQuery,

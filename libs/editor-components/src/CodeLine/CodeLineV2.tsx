@@ -10,8 +10,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   MyElement,
   PlateComponent,
-  useTEditorRef,
-  useTPlateEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -82,7 +81,7 @@ export const CodeLineV2: PlateComponent = ({
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
   const computer = useComputer();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const sourceCode = getCodeLineSource(element.children[1]);
 
   useAutoConvertToSmartRef(element);
@@ -231,7 +230,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
 
   const [contentEditable, setContentEditable] = useState(false);
   const element = useElement<CodeLineV2Element>(ELEMENT_CODE_LINE_V2);
-  const editor = useTPlateEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const varResult = useContext(VarResultContext);
   const simpleValue = useContext(SimpleValueContext);

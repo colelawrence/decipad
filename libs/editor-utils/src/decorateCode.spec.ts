@@ -1,6 +1,7 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineElement,
+  createMyPlateEditor,
   DECORATE_AUTO_COMPLETE_MENU,
   DECORATE_CODE_VARIABLE,
   ELEMENT_CODE_LINE,
@@ -17,7 +18,6 @@ import {
   MyEditor,
   MyElementEntry,
   MyValue,
-  createTPlateEditor,
 } from '@decipad/editor-types';
 import { getDefined, getOnly } from '@decipad/utils';
 import {
@@ -30,7 +30,7 @@ import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 
-let editor = createTPlateEditor({});
+let editor = createMyPlateEditor({});
 const computer = getRemoteComputer();
 let codeLine: CodeLineElement;
 beforeEach(() => {

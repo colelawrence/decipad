@@ -1,7 +1,7 @@
 import {
   COLUMN_KINDS,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -21,7 +21,7 @@ export const Blockquote: PlateComponent = ({
   assertElementType(element, 'blockquote');
   const turnIntoProps = useTurnIntoProps(element);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });

@@ -5,7 +5,7 @@ import {
   getExprRef,
   isTable as isComputerTable,
 } from '@decipad/remote-computer';
-import { PlotElement, useTEditorRef } from '@decipad/editor-types';
+import { PlotElement, useMyEditorRef } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
@@ -69,7 +69,7 @@ export type Shape = typeof shapes[number];
 
 export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const [isDarkMode] = useThemeFromStore();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const path = useNodePath(element);
 

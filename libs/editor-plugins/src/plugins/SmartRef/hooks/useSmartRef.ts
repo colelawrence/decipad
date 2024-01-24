@@ -8,7 +8,7 @@ import {
   ELEMENT_SMART_REF,
   MyElement,
   SmartRefElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import {
@@ -70,7 +70,7 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
     { debounceTimeMs: smartRefDebounceTimeMs }
   );
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
   const setLastSeenVariableName = usePathMutatorCallback(
     editor,

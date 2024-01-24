@@ -1,7 +1,7 @@
 import {
   ELEMENT_LIVE_QUERY_QUERY,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { LiveQueryQuery as LiveQueryQueryUI } from '@decipad/ui';
@@ -25,7 +25,7 @@ export const LiveQueryQuery: PlateComponent = ({
   const { showAiPanel, toggle } = useContext(AIPanelContext);
 
   assertElementType(element, ELEMENT_LIVE_QUERY_QUERY);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const computer = useComputer();
   const url = useLiveConnectionUrl(element, computer);

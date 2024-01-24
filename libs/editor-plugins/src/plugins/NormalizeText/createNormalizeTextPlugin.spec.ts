@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
 } from '@decipad/editor-types';
@@ -8,7 +8,7 @@ import { createNormalizeTextPlugin } from './createNormalizeTextPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeTextPlugin()],
   });
 });

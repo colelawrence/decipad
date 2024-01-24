@@ -1,7 +1,7 @@
 import { CodeLine } from '@decipad/editor-components';
 import { CodeLineElement, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { render, screen } from '@testing-library/react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
 import React, { createRef, PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -33,7 +33,10 @@ describe('Placeholders', () => {
 const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>
     <BrowserRouter>
-      <Plate>{children}</Plate>
+      <Plate>
+        <PlateContent />
+        {children}
+      </Plate>
     </BrowserRouter>
   </DndProvider>
 );

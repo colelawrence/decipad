@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-disabled-tests */
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
@@ -19,7 +19,7 @@ let plugin: MyPlatePlugin;
 beforeEach(() => {
   const computer = getRemoteComputer();
   plugin = createAutoFormatCodeLinePlugin(computer)();
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [plugin, createNormalizeCodeLinePlugin(computer)],
   });
 });

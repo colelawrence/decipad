@@ -4,7 +4,7 @@ import {
   TeleportEditor,
 } from '@decipad/editor-components';
 import { plugins } from '@decipad/editor-config';
-import type { MyValue } from '@decipad/editor-types';
+import { createMyPlateEditor, MyValue } from '@decipad/editor-types';
 import {
   ComputerContextProvider,
   EditorChangeContextProvider,
@@ -14,7 +14,7 @@ import {
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
-import { Plate, createPlateEditor } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
 import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ReactEditor, withReact } from 'slate-react';
@@ -52,7 +52,7 @@ export const NoDocSyncEditorInternal: FC = () => {
   );
 
   const [editor] = useState(() =>
-    createPlateEditor<MyValue>({ plugins: editorPlugins })
+    createMyPlateEditor({ plugins: editorPlugins })
   );
 
   const [changeSubject] = useState(() => new Subject<undefined>());
@@ -118,6 +118,7 @@ export const NoDocSyncEditorInternal: FC = () => {
                       }
                       readOnly={isWritingLocked}
                     >
+                      <PlateContent />
                       <Tooltip />
                     </Plate>
                   </TeleportEditor>

@@ -2,7 +2,7 @@ import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_MATH,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, setSelection } from '@decipad/editor-utils';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -19,7 +19,7 @@ import { useCallback, useEffect, useState } from 'react';
 const Math: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_MATH);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
 

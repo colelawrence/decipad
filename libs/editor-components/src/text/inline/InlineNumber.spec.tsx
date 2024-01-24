@@ -3,6 +3,7 @@ import {
   createPlateEditor,
   createPlugins,
   Plate,
+  PlateContent,
   PlateEditor,
   PlateProps,
 } from '@udecode/plate-common';
@@ -18,15 +19,20 @@ import { InlineNumber } from '.';
 import { Paragraph } from '../Paragraph';
 
 it('Renders children', async () => {
-  render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper,
+    }
+  );
   await waitFor(() => {
     expect(screen.getByText('20 apples')).not.toBeNull();
   });
 });
 
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
 beforeEach(() => {
   const plugins = createPlugins([], {
@@ -36,7 +42,6 @@ beforeEach(() => {
     },
   });
   plateProps = {
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [
       {
         type: ELEMENT_PARAGRAPH,

@@ -1,7 +1,7 @@
 import { useCallback, useContext } from 'react';
 import type { Context } from 'react';
 import { useToast } from '@decipad/toast';
-import { useTEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import type { ImportElementSource } from '@decipad/editor-types';
 import type {
   ExternalDataSource,
@@ -33,7 +33,7 @@ export const useLiveConnectionAuth = ({
   context,
 }: UseLiveConnectionAuthProps): LiveConnectionAuthResult => {
   const { externalDataSources, createExternalDataSource } = useContext(context);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const toast = useToast();
   const authenticate = useCallback(async () => {

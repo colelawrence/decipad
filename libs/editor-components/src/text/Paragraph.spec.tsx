@@ -7,6 +7,7 @@ import {
   deleteText,
   insertText,
   Plate,
+  PlateContent,
   PlateEditor,
   PlateProps,
   select,
@@ -25,7 +26,7 @@ const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
   </DndProvider>
 );
 
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
@@ -46,7 +47,9 @@ it('shows a placeholder when notebook empty and not selected', async () => {
       {...plateProps}
       editor={editor}
       initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]}
-    />,
+    >
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -59,7 +62,9 @@ it('shows a placeholder when notebook empty and not selected', async () => {
 // eslint-disable-next-line jest/no-disabled-tests
 it.skip('shows a placeholder when empty and selected', async () => {
   const { getByText, getAllByTestId } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -84,7 +89,9 @@ it.skip('shows a placeholder when empty and selected', async () => {
 
 it('does not show a placeholder when not empty', async () => {
   const { getByText, getAllByTestId } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -116,7 +123,9 @@ it('does not show a placeholder when not selected', async () => {
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
-    />,
+    >
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -149,7 +158,9 @@ it('does not show a placeholder when selecting more than the paragraph', async (
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
-    />,
+    >
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }
@@ -184,7 +195,9 @@ it('does not show a placeholder when in readOnly mode', async () => {
   editor = createPlateEditor({ plugins: plateProps.plugins });
   const { editor: _editor, ...restProps } = plateProps;
   const { getByText, getByTestId } = render(
-    <Plate {...restProps} editor={editor} />,
+    <Plate {...restProps} editor={editor}>
+      <PlateContent />
+    </Plate>,
     {
       wrapper,
     }

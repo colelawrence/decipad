@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_OL,
@@ -12,7 +12,7 @@ import { createNormalizeListPlugin } from './createNormalizeListPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeListPlugin()],
   });
 });

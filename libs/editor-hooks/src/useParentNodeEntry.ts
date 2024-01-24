@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { MyNode, useTEditorRef } from '@decipad/editor-types';
+import { MyNode, useMyEditorRef } from '@decipad/editor-types';
 import { TNodeEntry, getParentNode } from '@udecode/plate-common';
 import { useNodePath } from './useNodePath';
 import { useEditorChange } from './useEditorChange';
@@ -8,7 +8,7 @@ export const useParentNodeEntry = <TRNode extends MyNode = MyNode>(
   node: MyNode
 ): TNodeEntry<TRNode> | undefined => {
   const path = useNodePath(node);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   return useEditorChange(
     useCallback(

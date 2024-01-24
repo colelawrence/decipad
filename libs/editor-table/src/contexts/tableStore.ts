@@ -1,20 +1,19 @@
 import { createAtomStore, TElement } from '@udecode/plate-common';
-import { ELEMENT_TABLE, ELEMENT_TR } from '@decipad/editor-types';
 
-export const { useTableStore } = createAtomStore(
+export const { useTableStore, TableProvider } = createAtomStore(
   {
     selectedCells: null as TElement[] | null,
     hoveredRowId: null as string | null,
     hoveredRowBottomId: null as string | null,
   },
-  { name: 'table', scope: ELEMENT_TABLE }
+  { name: 'table' }
 );
 
-export const { useTableRowStore } = createAtomStore(
+export const { useTableRowStore, TableRowProvider } = createAtomStore(
   {
     // Drop line direction for rows (horizontal)
     dropLine: '',
     rowWidth: null as number | null,
   },
-  { name: 'tableRow', scope: ELEMENT_TR }
+  { name: 'tableRow' }
 );

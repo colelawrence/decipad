@@ -12,7 +12,7 @@ import {
   MyElement,
   PlateComponent,
   SimpleTableCellType,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
@@ -101,7 +101,7 @@ export const IntegrationBlock: PlateComponent = ({
   const observable = useRef(new Subject<ContextActions>());
   const [animated, setAnimated] = useState(false);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
   const { workspaceInfo, setCurrentWorkspaceInfo, isQuotaLimitBeingReached } =

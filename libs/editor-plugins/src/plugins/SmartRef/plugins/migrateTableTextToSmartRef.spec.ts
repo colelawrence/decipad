@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -22,7 +22,7 @@ jest.mock('nanoid', () => ({
 }));
 
 it('migrates from the old to the new format and sets the version', () => {
-  const editor = createTPlateEditor({
+  const editor = createMyPlateEditor({
     plugins: [createSmartRefPlugin()],
   });
   editor.children = [mkTable()] as any as MyValue;

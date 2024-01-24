@@ -4,7 +4,7 @@ import {
   ELEMENT_DATA_VIEW,
   PlateComponent,
   UserIconKey,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useEditorStylesContext } from '@decipad/react-contexts';
@@ -26,7 +26,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const path = useNodePath(element);
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'DataView');

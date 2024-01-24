@@ -1,4 +1,4 @@
-import { MyElement, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, useMyEditorRef } from '@decipad/editor-types';
 import {
   defaultConvertInto,
   defaultTextConversions,
@@ -6,7 +6,7 @@ import {
 import { useMemo } from 'react';
 
 export const useTurnIntoProps = (element: MyElement) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const onTurnInto = useMemo(
     () => defaultConvertInto(editor, element),

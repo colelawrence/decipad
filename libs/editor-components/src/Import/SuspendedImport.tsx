@@ -1,7 +1,7 @@
 import { isTableResult } from '@decipad/remote-computer';
 import {
   ImportElement,
-  useTEditorRef,
+  useMyEditorRef,
   MAX_IMPORT_CELL_COUNT,
 } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
@@ -23,7 +23,7 @@ interface SuspendedImportProps {
 }
 
 export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
 
   const [fetched, setFetched] = useState(false);

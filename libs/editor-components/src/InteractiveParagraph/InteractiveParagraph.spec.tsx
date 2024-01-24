@@ -1,11 +1,13 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { createParagraphPlugin } from '@udecode/plate-paragraph';
 import {
   createPlateEditor,
   createPlugins,
+  deselect,
   focusEditor,
   insertText,
   Plate,
+  PlateContent,
   PlateEditor,
   PlateProps,
   select,
@@ -25,7 +27,7 @@ import { ToastDisplay } from '@decipad/ui';
 import { BrowserRouter } from 'react-router-dom';
 
 let editor: PlateEditor;
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
@@ -35,7 +37,6 @@ beforeEach(() => {
   });
 
   plateProps = {
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '/' }] }],
     plugins,
   };
@@ -62,9 +63,14 @@ beforeEach(() => {
 });
 
 it('renders the menu when typing in the selected paragraph starting with a /', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByText } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper,
+    }
+  );
 
   await act(async () => {
     focusEditor(editor);
@@ -81,7 +87,9 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
 
 it('does not render the menu when the editor is not focused', async () => {
   const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
     { wrapper }
   );
 
@@ -99,7 +107,9 @@ it('does not render the menu when the editor is not focused', async () => {
 
 it('does not render the menu when the paragraph is not selected', async () => {
   const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
     { wrapper }
   );
 
@@ -111,6 +121,7 @@ it('does not render the menu when the paragraph is not selected', async () => {
         offset: '/'.length,
       },
     });
+    deselect(editor);
     await timeout(500);
   });
 
@@ -119,7 +130,9 @@ it('does not render the menu when the paragraph is not selected', async () => {
 
 it('does not render the menu before typing', async () => {
   const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
     { wrapper }
   );
 
@@ -139,7 +152,9 @@ it.each([' /cmd', '/cmd#', '/42'])(
   'does not render the menu for the non-command text "%s"',
   async (text) => {
     const { getByText, queryByText } = render(
-      <Plate {...plateProps} editor={editor} />,
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
       { wrapper }
     );
 
@@ -166,9 +181,14 @@ it.each([' /cmd', '/cmd#', '/42'])(
 
 describe('the menu', () => {
   it('is scrolled into view on opening', async () => {
-    const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
+    const { getByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      {
+        wrapper,
+      }
+    );
 
     await act(async () => {
       focusEditor(editor);
@@ -188,7 +208,9 @@ describe('the menu', () => {
 
   it('is scrolled into view when typing', async () => {
     const { getByText, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
       {
         wrapper,
       }
@@ -224,7 +246,9 @@ describe('the menu', () => {
 describe('the escape key', () => {
   it('hides the menu until typing again', async () => {
     const { getByText, queryByText, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
       { wrapper }
     );
 
@@ -246,9 +270,14 @@ describe('the escape key', () => {
   });
 
   it('does not hide the menu while holding shift', async () => {
-    const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
+    const { getByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      {
+        wrapper,
+      }
+    );
 
     await act(async () => {
       focusEditor(editor);
@@ -266,9 +295,14 @@ describe('the escape key', () => {
 });
 
 it('executes a command on click', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByText } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
+    {
+      wrapper,
+    }
+  );
 
   await act(async () => {
     focusEditor(editor);
@@ -290,7 +324,9 @@ it('executes a command on click', async () => {
 
 it('uses the text after the slash to search for commands', async () => {
   const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor} />,
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>,
     { wrapper }
   );
 

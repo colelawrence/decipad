@@ -1,6 +1,6 @@
-import { createStore } from '@udecode/plate-common';
+import { createZustandStore } from '@udecode/plate-common';
 
-export const cursorStore = createStore('cursor')({
+export const cursorStore = createZustandStore('cursor')({
   cursors: {},
 }).extendActions((set) => ({
   reset() {

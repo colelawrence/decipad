@@ -5,7 +5,7 @@ import {
   TestResultsProvider,
 } from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
 import { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -85,6 +85,7 @@ const PlotWithProviders = ({
         <TestResultsProvider blockResults={blockResults}>
           <ComputerContextProvider>
             <Plate>
+              <PlateContent />
               <Plot
                 attributes={{
                   'data-slate-node': 'element',

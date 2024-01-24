@@ -1,7 +1,7 @@
 import {
   LiveConnectionElement,
   LiveDataSetElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
@@ -21,7 +21,7 @@ export const useSyncLiveConnectionMetadata = ({
   element,
   result,
 }: UseSyncLiveConnectionMetadataProps) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const mutated = useRef(false);
 

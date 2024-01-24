@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -24,7 +24,7 @@ const h1Element = () =>
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeEditorPlugin()],
   });
 });

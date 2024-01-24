@@ -1,4 +1,4 @@
-import { createTPlateEditor } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import * as plate from '@udecode/plate-common';
 import { eventEditorActions } from '@udecode/plate-common';
 import { shouldResetContentEditable } from './CodeVariableDefinition';
@@ -9,7 +9,7 @@ jest.mock('@udecode/plate-common', () => ({
 }));
 
 describe('shouldResetContentEditable', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
 
   beforeEach(() => {
     eventEditorActions.blur('');

@@ -9,7 +9,7 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
   MyElement,
-  useTEditorRef,
+  useMyEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
@@ -34,7 +34,7 @@ export const useTurnIntoProps = (
   computer: RemoteComputer,
   lineId: string
 ) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const symbol = computer.getSymbolDefinedInBlock$.use(lineId);
   const parseableType = computer.getParseableTypeInBlock$.use(lineId);

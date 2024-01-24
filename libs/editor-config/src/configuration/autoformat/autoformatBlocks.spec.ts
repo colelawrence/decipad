@@ -1,5 +1,6 @@
 import {
-  createTAutoformatPlugin,
+  createMyAutoformatPlugin,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -8,15 +9,15 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { createPlateEditor, select } from '@udecode/plate-common';
+import { select } from '@udecode/plate-common';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { autoformatRules } from './index';
 
 let editor: MyEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [
-      createTAutoformatPlugin({
+      createMyAutoformatPlugin({
         options: { rules: autoformatRules(getRemoteComputer()) },
       }),
     ],

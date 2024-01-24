@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_TABLE_CAPTION,
 } from '@decipad/editor-types';
 import { Range } from 'slate';
@@ -7,7 +7,7 @@ import { selectColumn } from './selectColumn';
 
 describe('selectColumn', () => {
   it('should be', () => {
-    const editor = createTPlateEditor();
+    const editor = createMyPlateEditor();
     editor.children = [
       {
         type: 'table',

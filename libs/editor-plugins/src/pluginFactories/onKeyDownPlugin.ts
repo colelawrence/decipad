@@ -1,5 +1,5 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   MyGenericEditor,
   MyKeyboardHandler,
 } from '@decipad/editor-types';
@@ -17,7 +17,7 @@ export const createOnKeyDownPluginFactory = <
   name,
   plugin,
 }: OnKeyDownFactoryArgs<TV, TE>) =>
-  createTPluginFactory<object, TV, TE>({
+  createMyPluginFactory<object, TV, TE>({
     key: name,
     handlers: {
       onKeyDown: plugin,

@@ -1,10 +1,10 @@
 import { type TOperation, withoutNormalizing } from '@udecode/plate-common';
-import { createTPlateEditor, type Document } from '@decipad/editor-types';
+import { createMyPlateEditor, type Document } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import cloneDeep from 'lodash.clonedeep';
 
 export const applyOperations = (doc: Document, ops: TOperation[]) => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = cloneDeep(doc.children);
   editor.normalize = noop; // prevent normalisation
 

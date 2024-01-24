@@ -1,4 +1,5 @@
 import {
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_FETCH,
   ELEMENT_H2,
@@ -9,7 +10,6 @@ import {
   ELEMENT_VARIABLE_DEF,
   ElementKind,
   SlashCommand,
-  createTPlateEditor,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin } from '@udecode/plate-code-block';
 import { execute } from './slashCommands';
@@ -30,7 +30,7 @@ const getAvailableIdentifier = (prefix: string, start?: number) =>
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
   'command "%s" replaces the block with a "%s" block',
   (command, expectedType) => {
-    const editor = createTPlateEditor({
+    const editor = createMyPlateEditor({
       plugins: [createCodeBlockPlugin()],
     });
     editor.children = [
@@ -44,8 +44,6 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       getAvailableIdentifier,
       select: false,
     });
-    expect(editor.children).toEqual([
-      expect.objectContaining({ type: expectedType }),
-    ]);
+    expect(editor.children[0]).toHaveType(expectedType);
   }
 );

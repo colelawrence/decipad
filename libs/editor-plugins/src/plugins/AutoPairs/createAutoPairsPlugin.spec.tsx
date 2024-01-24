@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   MyEditor,
@@ -39,7 +39,7 @@ describe('in a code block', () => {
     ${'['} | ${'[]'}
     ${'{'} | ${'{}'}
   `('expands to $pair when pressing $key', ({ key, pair }) => {
-    const editor = createTPlateEditor();
+    const editor = createMyPlateEditor();
     editor.children = [
       { type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] } as never,
     ];
@@ -60,7 +60,7 @@ describe('in a code block', () => {
     ${'['}
     ${'{'}
   `('does not expand when $key is pressed with text on right', ({ key }) => {
-    const editor = createTPlateEditor();
+    const editor = createMyPlateEditor();
     editor.children = [
       { type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] } as never,
     ];
@@ -83,7 +83,7 @@ describe('in a code block', () => {
   `(
     'skips the $key in $pair when pressing it at the end of a pair',
     ({ key, pair }) => {
-      const editor = createTPlateEditor();
+      const editor = createMyPlateEditor();
       editor.children = [
         { type: ELEMENT_CODE_LINE, children: [{ text: pair }] } as never,
       ];
@@ -108,7 +108,7 @@ describe('in a code block', () => {
   `(
     'deletes the whole pair when pressing backspace in the middle of a pair',
     ({ pair }) => {
-      const editor = createTPlateEditor();
+      const editor = createMyPlateEditor();
       editor.children = [
         { type: ELEMENT_CODE_LINE, children: [{ text: pair }] } as never,
       ];
@@ -125,7 +125,7 @@ describe('in a code block', () => {
   );
 
   it('supports closing a paren before a \\n (not before the end of the code)', () => {
-    const editor = createTPlateEditor();
+    const editor = createMyPlateEditor();
     const fname = 'func';
     const text = '[\nfunc\n]';
     editor.children = [
@@ -145,7 +145,7 @@ describe('in a code block', () => {
 
 describe('outside a code block', () => {
   it('does not expand a parenthesis', () => {
-    const editor = createTPlateEditor();
+    const editor = createMyPlateEditor();
     editor.children = [
       { type: ELEMENT_PARAGRAPH, children: [{ text: 'John' }] } as never,
     ];

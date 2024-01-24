@@ -2,7 +2,7 @@ import { Expression as UIExpression } from '@decipad/ui';
 import {
   ELEMENT_EXPRESSION,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/remote-computer';
@@ -50,7 +50,7 @@ export const Expression: PlateComponent = ({
   }
 
   const path = useNodePath(element);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const parent = useMemo(
     () => path && getParentNode<VariableDefinitionElement>(editor, path)?.[0],
     [editor, path]

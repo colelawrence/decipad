@@ -1,15 +1,15 @@
 import { getMagicNumberPath } from './getMagicNumberPath';
-import { MARK_MAGICNUMBER, createTPlateEditor } from '@decipad/editor-types';
+import { MARK_MAGICNUMBER, createMyPlateEditor } from '@decipad/editor-types';
 
 it('returns undefined if node not present', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   expect(
     getMagicNumberPath(editor, { [MARK_MAGICNUMBER]: true, text: '' })
   ).toBeUndefined();
 });
 
 it('returns path if node is found', () => {
-  const editor = createTPlateEditor();
+  const editor = createMyPlateEditor();
   editor.children = [
     {
       type: 'p',

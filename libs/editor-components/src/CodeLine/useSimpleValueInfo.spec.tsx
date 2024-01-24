@@ -1,16 +1,16 @@
 import { renderHook } from '@testing-library/react';
 
 import {
-  createTPlateEditor,
-  MyEditor,
-  MyValue,
   CodeLineV2Element,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
+  MyEditor,
   MyElement,
+  MyValue,
 } from '@decipad/editor-types';
-import { Plate, getNodeString } from '@udecode/plate-common';
+import { getNodeString, Plate, PlateContent } from '@udecode/plate-common';
 import { useState } from 'react';
 
 import {
@@ -46,13 +46,16 @@ it('displays a simple value on empty state', async () => {
     {
       wrapper: function Wrapper(props) {
         const [editor] = useState(() => {
-          const e = createTPlateEditor();
+          const e = createMyPlateEditor();
           e.children = [element as MyElement] as MyValue;
           return e;
         });
 
         return (
-          <Plate<MyValue, MyEditor> editor={editor}>{props.children}</Plate>
+          <Plate<MyValue, MyEditor> editor={editor}>
+            <PlateContent />
+            {props.children}
+          </Plate>
         );
       },
       initialProps: { element, value: '' },
@@ -70,13 +73,16 @@ it('displays unit when pre-fixed unit', async () => {
     {
       wrapper: function Wrapper(props) {
         const [editor] = useState(() => {
-          const e = createTPlateEditor();
+          const e = createMyPlateEditor();
           e.children = [element as MyElement] as MyValue;
           return e;
         });
 
         return (
-          <Plate<MyValue, MyEditor> editor={editor}>{props.children}</Plate>
+          <Plate<MyValue, MyEditor> editor={editor}>
+            <PlateContent />
+            {props.children}
+          </Plate>
         );
       },
       initialProps: { element, value: '$' },
@@ -94,13 +100,16 @@ it('should work', async () => {
     {
       wrapper: function Wrapper(props) {
         const [editor] = useState(() => {
-          const e = createTPlateEditor();
+          const e = createMyPlateEditor();
           e.children = [element as MyElement] as MyValue;
           return e;
         });
 
         return (
-          <Plate<MyValue, MyEditor> editor={editor}>{props.children}</Plate>
+          <Plate<MyValue, MyEditor> editor={editor}>
+            <PlateContent />
+            {props.children}
+          </Plate>
         );
       },
       initialProps: { element, value: '1 meter' },

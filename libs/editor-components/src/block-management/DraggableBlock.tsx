@@ -10,7 +10,7 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
@@ -106,7 +106,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
   ) => {
     const [deleted, setDeleted] = useState(false);
 
-    const editor = useTEditorRef();
+    const editor = useMyEditorRef();
     const readOnly = useIsEditorReadOnly();
     const computer = useComputer();
     const tabs = useFilteredTabs();

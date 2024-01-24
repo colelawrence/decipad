@@ -2,7 +2,7 @@ import {
   COLUMN_KINDS,
   ELEMENT_IMAGE,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -19,7 +19,7 @@ export const Image: PlateComponent = (props) => {
   assertElementType(element, ELEMENT_IMAGE);
   const readOnly = useIsEditorReadOnly();
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
 
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);

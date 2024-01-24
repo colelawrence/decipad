@@ -1,10 +1,10 @@
-import { createTPlateEditor, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { createMyPlateEditor, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeElementIdPlugin } from './createNormalizeElementIdPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeElementIdPlugin()()],
   });
 });

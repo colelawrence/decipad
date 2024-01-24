@@ -1,13 +1,13 @@
 import {
-  createTPluginFactory,
-  ELEMENT_DISPLAY,
+  createMyPluginFactory,
   DisplayElement,
+  ELEMENT_DISPLAY,
 } from '@decipad/editor-types';
 import { Display } from '@decipad/editor-components';
 import { nanoid } from 'nanoid';
 import { createEventInterceptorPluginFactory } from '../../pluginFactories';
 
-export const createDisplayPlugin = createTPluginFactory({
+export const createDisplayPlugin = createMyPluginFactory({
   key: ELEMENT_DISPLAY,
   isElement: true,
   isVoid: true,

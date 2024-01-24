@@ -1,4 +1,4 @@
-import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
+import { createMyPluginFactory, MyEditor } from '@decipad/editor-types';
 
 interface CreateOverrideApplyPluginFactoryProps {
   name: string;
@@ -9,7 +9,7 @@ export const createOverrideApplyPluginFactory = ({
   name,
   plugin,
 }: CreateOverrideApplyPluginFactoryProps) =>
-  createTPluginFactory({
+  createMyPluginFactory({
     key: name,
     withOverrides: (editor) => {
       const { apply } = editor;

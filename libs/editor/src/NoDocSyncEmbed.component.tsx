@@ -1,7 +1,7 @@
 import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { Subject } from 'rxjs';
-import { createPlateEditor, Plate } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import {
   ComputerContextProvider,
@@ -10,10 +10,10 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { MyValue } from '@decipad/editor-types';
+import { createMyPlateEditor, MyValue } from '@decipad/editor-types';
 import {
-  TeleportEditor,
   BlockLengthSynchronizationProvider,
+  TeleportEditor,
 } from '@decipad/editor-components';
 import { ClientEventsContext } from '@decipad/client-events';
 import { plugins } from '@decipad/editor-config';
@@ -41,7 +41,7 @@ export const NoDocSyncEmbedInternal: FC = () => {
   );
 
   const [editor] = useState(() =>
-    createPlateEditor<MyValue>({ plugins: editorPlugins })
+    createMyPlateEditor({ plugins: editorPlugins })
   );
 
   const [changeSubject] = useState(() => new Subject<undefined>());
@@ -67,6 +67,7 @@ export const NoDocSyncEmbedInternal: FC = () => {
                   initialValue={embedNotebook()}
                   readOnly={true}
                 >
+                  <PlateContent />
                   <Tooltip />
                 </Plate>
               </TeleportEditor>

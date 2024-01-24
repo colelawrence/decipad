@@ -3,7 +3,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyEditor,
   MyElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
@@ -88,7 +88,7 @@ export const convertInto =
 const turnIntoResultDebounceMs = 500;
 
 export const useTurnIntoProps = (element: MyElement) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
 
   const result = computer.getBlockIdResult$.useWithSelectorDebounced(

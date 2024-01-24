@@ -2,7 +2,7 @@ import {
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
   LiveQueryElement,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
@@ -36,7 +36,7 @@ export const LiveQueryVarName: PlateComponent = ({
   children,
 }) => {
   assertElementType(element, ELEMENT_LIVE_QUERY_VARIABLE_NAME);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const parent = useParentNodeEntry<LiveQueryElement>(element);
 
   // ensure var name is unique

@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,
   MyEditor,
@@ -23,7 +23,7 @@ const triggerKeyDownEvent = (
 
 let editor: MyEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [
       {
         key: ELEMENT_PARAGRAPH,

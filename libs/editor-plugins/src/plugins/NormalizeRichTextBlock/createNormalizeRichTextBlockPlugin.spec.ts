@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_LIC,
   ELEMENT_LINK,
@@ -14,7 +14,7 @@ import { upsertLink } from '@udecode/plate-link';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizeRichTextBlockPlugin(), createLinkPlugin() as any],
   });
 });

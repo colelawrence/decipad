@@ -1,4 +1,4 @@
-import { useTPlateEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   allowsTextStyling,
   getPathContainingSelection,
@@ -28,7 +28,7 @@ const floatingOptions: UseVirtualFloatingOptions = {
 };
 
 export const useEditorTooltip = () => {
-  const editor = useTPlateEditorRef();
+  const editor = useMyEditorRef();
 
   const floatingToolbarState = useFloatingToolbarState({
     floatingOptions,

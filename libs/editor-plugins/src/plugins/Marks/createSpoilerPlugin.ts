@@ -1,7 +1,7 @@
 import { Spoiler } from '@decipad/editor-components';
-import { createTPluginFactory, MARK_SPOILER } from '@decipad/editor-types';
+import { createMyPluginFactory, MARK_SPOILER } from '@decipad/editor-types';
 
-export const createSpoilerPlugin = createTPluginFactory({
+export const createSpoilerPlugin = createMyPluginFactory({
   key: MARK_SPOILER,
   type: MARK_SPOILER,
   isInline: true,

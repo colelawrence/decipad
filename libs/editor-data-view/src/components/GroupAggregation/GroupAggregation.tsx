@@ -1,7 +1,7 @@
+import type { DragEvent, FC } from 'react';
 import { useCallback } from 'react';
-import type { FC, DragEvent } from 'react';
 import { Aggregation } from '@decipad/ui';
-import { AnyElement, useTEditorRef } from '@decipad/editor-types';
+import { AnyElement, useMyEditorRef } from '@decipad/editor-types';
 import { SerializedType } from '@decipad/remote-computer';
 import { ColumnLike, Comparable } from '@decipad/column';
 import { useOnDragEnd } from '@decipad/editor-components';
@@ -32,7 +32,7 @@ export const GroupAggregation: FC<GroupAggregationProps> = ({
   roundings,
 }) => {
   const computer = useComputer();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const { result, expression } = useAggregation({
     tableName,

@@ -5,13 +5,14 @@ import {
   createPlateEditor,
   createPlugins,
   Plate,
+  PlateContent,
   PlateEditor,
   PlatePlugin,
   PlateProps,
 } from '@udecode/plate-common';
 import { Caption } from './Caption';
 
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
 beforeEach(() => {
   const inputPlugin: PlatePlugin = {
@@ -22,7 +23,6 @@ beforeEach(() => {
   const plugins = createPlugins([inputPlugin]);
   plateProps = {
     plugins,
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [
       {
         type: ELEMENT_CAPTION,
@@ -34,7 +34,11 @@ beforeEach(() => {
 });
 
 it('renders the element properties', () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />);
+  const { getByText } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>
+  );
 
   expect(getByText('var')).toBeVisible();
 });

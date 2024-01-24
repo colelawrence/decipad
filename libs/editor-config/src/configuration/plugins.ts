@@ -65,19 +65,17 @@ import {
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
+  createMyAutoformatPlugin,
+  createMyPlugins,
   ELEMENT_DRAW,
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
-  MyEditor,
-  MyValue,
-  createTAutoformatPlugin,
 } from '@decipad/editor-types';
 import { noopPromise } from '@decipad/editor-utils';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import type { UserInteraction } from '@decipad/react-contexts';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { createDndPlugin } from '@udecode/plate-dnd';
-import { createPlugins } from '@udecode/plate-common';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
 import { autoformatRules } from './autoformat';
@@ -107,7 +105,7 @@ export const plugins = ({
   readOnly,
   interactions,
 }: PluginOptions) =>
-  createPlugins<MyValue, MyEditor>(
+  createMyPlugins(
     [
       // basic blocks
       createParagraphPlugin(),
@@ -177,7 +175,7 @@ export const plugins = ({
       createCaptionPlugin({
         options: { pluginKeys: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED] },
       }),
-      createTAutoformatPlugin({
+      createMyAutoformatPlugin({
         options: { rules: autoformatRules(computer) },
       }),
       createAutoFormatCodeLinePlugin(computer)(),

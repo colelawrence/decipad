@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { MyValue, useTEditorRef } from '@decipad/editor-types';
+import { MyValue, useMyEditorRef } from '@decipad/editor-types';
 import {
   isPotentiallyWideElement,
   isTopLevelBlock,
@@ -38,7 +38,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
     selection,
   } = cursor;
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const entries =
     selection && hasNode(editor, selection.focus.path)

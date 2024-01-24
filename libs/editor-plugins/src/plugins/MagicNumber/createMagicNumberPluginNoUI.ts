@@ -1,11 +1,11 @@
 import {
-  createTPluginFactory,
+  createMyPluginFactory,
   MARK_MAGICNUMBER,
   type MyEditor,
   type MyValue,
 } from '@decipad/editor-types';
 
-export const createMagicNumberPluginNoUI = createTPluginFactory<
+export const createMagicNumberPluginNoUI = createMyPluginFactory<
   object,
   MyValue,
   MyEditor

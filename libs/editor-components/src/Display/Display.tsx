@@ -11,7 +11,7 @@ import {
   ELEMENT_DISPLAY,
   PlateComponent,
   UserIconKey,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -47,7 +47,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const userEvents = useContext(ClientEventsContext);
   const readOnly = useIsEditorReadOnly();
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = useNodePath(element);
 
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Display');

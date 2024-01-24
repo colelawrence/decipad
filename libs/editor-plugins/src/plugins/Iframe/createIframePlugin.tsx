@@ -1,7 +1,7 @@
 import { IframeEmbed } from '@decipad/editor-components';
-import { ELEMENT_IFRAME, createTPluginFactory } from '@decipad/editor-types';
+import { createMyPluginFactory, ELEMENT_IFRAME } from '@decipad/editor-types';
 
-export const createIframePlugin = createTPluginFactory({
+export const createIframePlugin = createMyPluginFactory({
   key: ELEMENT_IFRAME,
   isElement: true,
   isVoid: true,

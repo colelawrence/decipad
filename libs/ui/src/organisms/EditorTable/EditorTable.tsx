@@ -21,16 +21,16 @@ import { TableWidth } from '../Table/Table';
 import { UserIconKey } from '@decipad/editor-types';
 import {
   findNodePath,
-  PlateEditor,
-  toSlateNode,
-  usePlateEditorRef,
-  setSelection,
-  getAboveNode,
-  useElement,
-  TElement,
   focusEditor,
+  getAboveNode,
+  PlateEditor,
+  setSelection,
+  TElement,
+  toSlateNode,
+  useEditorRef,
+  useElement,
 } from '@udecode/plate-common';
-import { ELEMENT_TD, ELEMENT_TABLE } from '@udecode/plate-table';
+import { ELEMENT_TABLE, ELEMENT_TD } from '@udecode/plate-table';
 import { Point } from 'slate';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
@@ -251,7 +251,7 @@ export const EditorTable: FC<EditorTableProps> = ({
 
   useDndPreviewSelectors().previewText();
 
-  const editor = usePlateEditorRef();
+  const editor = useEditorRef();
   const element = useElement();
   const { color: defaultColor } = useEditorStylesContext();
   const readOnly = useIsEditorReadOnly();

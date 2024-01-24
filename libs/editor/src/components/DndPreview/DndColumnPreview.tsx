@@ -2,7 +2,7 @@ import { DragColumnItem } from '@decipad/editor-table';
 import {
   DataViewHeader,
   TableHeaderElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { ColumnDndPreview as UIColumnDndPreview } from '@decipad/ui';
 import { TNodeEntry, findNode } from '@udecode/plate-common';
@@ -45,7 +45,7 @@ export const DndColumnPreview = (props: {
 }) => {
   const { item } = props;
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const thEntry = useMemo(
     () =>

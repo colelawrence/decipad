@@ -1,7 +1,7 @@
 import {
   RootDocument,
   TabElement,
-  createTPlateEditor,
+  createMyPlateEditor,
 } from '@decipad/editor-types';
 import {
   RemoteComputer,
@@ -18,7 +18,7 @@ export const fullRootEditorToProgram = async (
   // eslint-disable-next-line no-underscore-dangle
   for (const _block of doc.children.slice(1)) {
     const block = _block as TabElement;
-    const tabEditor = createTPlateEditor();
+    const tabEditor = createMyPlateEditor();
     tabEditor.children = block.children;
     // eslint-disable-next-line no-await-in-loop
     const tabProgram = await editorToProgram(

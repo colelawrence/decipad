@@ -8,14 +8,19 @@ import {
   ELEMENT_DATA_VIEW_TR,
   ELEMENT_H1,
   H1Element,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { tryImport } from '@decipad/import';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { ComputerContextProvider } from '@decipad/react-contexts';
 import { getDefined, timeout } from '@decipad/utils';
 import { act, render } from '@testing-library/react';
-import { createPlateEditor, Plate, PlateEditor } from '@udecode/plate-common';
+import {
+  createPlateEditor,
+  Plate,
+  PlateContent,
+  PlateEditor,
+} from '@udecode/plate-common';
 import getPort from 'get-port';
 import { createServer, Server } from 'http';
 import path from 'path';
@@ -98,7 +103,10 @@ const WithProviders: FC<
     <DndProvider backend={HTML5Backend}>
       <ComputerContextProvider computer={computer}>
         <BrowserRouter>
-          <Plate editor={editor as any}>{children}</Plate>
+          <Plate editor={editor as any}>
+            <PlateContent />
+            {children}
+          </Plate>
         </BrowserRouter>
       </ComputerContextProvider>
     </DndProvider>
@@ -114,7 +122,7 @@ const WithDataViewHook: FC<WithDataViewHookProps> = ({
   element,
   onDataViewResultChange,
 }) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const results = useDataView({ editor, element });
   useEffect(() => {
     onDataViewResultChange(results);

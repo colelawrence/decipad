@@ -4,7 +4,7 @@ import {
   LiveConnectionElement,
   LiveDataSetElement,
   TableCellType,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import { Path } from 'slate';
@@ -19,7 +19,7 @@ export const useCoreLiveConnectionActions = ({
   path,
   element,
 }: UseCoreLiveConnectionActionsProps) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const onChangeColumnType = useCallback(
     (columnIndex: number, type?: TableCellType) => {

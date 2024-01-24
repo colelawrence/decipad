@@ -8,6 +8,7 @@ import {
   deleteText,
   insertText,
   Plate,
+  PlateContent,
   PlateEditor,
   PlateProps,
   select,
@@ -15,7 +16,7 @@ import {
 import { Title } from './Title';
 import { createHeadingPlugin } from '@udecode/plate-heading';
 
-let plateProps: PlateProps;
+let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
 beforeEach(() => {
   const plugins = createPlugins(
@@ -27,14 +28,17 @@ beforeEach(() => {
     }
   );
   plateProps = {
-    editableProps: { scrollSelectionIntoView: noop },
     initialValue: [{ type: ELEMENT_H1, children: [{ text: 'text' }] }],
     plugins,
   };
   editor = createPlateEditor({ plugins });
 });
 it('shows a placeholder only when empty', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />);
+  const { getByText } = render(
+    <Plate {...plateProps} editor={editor}>
+      <PlateContent scrollSelectionIntoView={noop} />
+    </Plate>
+  );
   const h1Element = getByText('text').closest('h1');
 
   insertText(editor, 'text2', {

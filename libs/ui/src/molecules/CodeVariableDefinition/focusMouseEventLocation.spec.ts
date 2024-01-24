@@ -1,6 +1,6 @@
 import * as plate from '@udecode/plate-common';
 import { TElement } from '@udecode/plate-common';
-import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
+import { createMyPlateEditor, MyEditor } from '@decipad/editor-types';
 import { MouseEvent } from 'react';
 import { focusMouseEventLocation } from './CodeVariableDefinition';
 
@@ -15,7 +15,7 @@ describe('focusMouseEventLocation', () => {
   let event: MouseEvent<HTMLSpanElement>;
 
   beforeEach(() => {
-    editor = createTPlateEditor();
+    editor = createMyPlateEditor();
     element = {} as any;
     event = {} as any;
   });

@@ -8,7 +8,7 @@ import {
   ELEMENT_DATA_VIEW_TH,
   PlateComponent,
   TableCellType,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
@@ -27,7 +27,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   overridePath,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const { dragSource, dragPreview } = useDragColumn(
     editor,
     element,

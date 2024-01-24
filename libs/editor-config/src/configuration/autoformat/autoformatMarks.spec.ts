@@ -1,18 +1,19 @@
 import {
-  createTAutoformatPlugin,
+  createMyAutoformatPlugin,
+  createMyPlateEditor,
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { createPlateEditor, select, TEditor } from '@udecode/plate-common';
+import { select, TEditor } from '@udecode/plate-common';
 import { autoformatMarks } from './autoformatMarks';
 
 const initialText = '__*t';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [
-      createTAutoformatPlugin({
+      createMyAutoformatPlugin({
         options: { rules: autoformatMarks },
       }),
     ],
@@ -41,8 +42,10 @@ it('does not format text in a forbidden block', () => {
 });
 
 it('can highlight a paragraph', () => {
-  editor = createPlateEditor({
-    plugins: [createTAutoformatPlugin({ options: { rules: autoformatMarks } })],
+  editor = createMyPlateEditor({
+    plugins: [
+      createMyAutoformatPlugin({ options: { rules: autoformatMarks } }),
+    ],
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '==h' }] }];
   select(editor, { path: [0, 0], offset: initialText.length });

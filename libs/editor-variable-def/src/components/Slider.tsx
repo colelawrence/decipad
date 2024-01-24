@@ -8,7 +8,7 @@ import {
   MyEditor,
   PlateComponent,
   SliderElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, mutateText } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -44,7 +44,7 @@ function getParentExpression(editor: MyEditor, path: Path): ExpressionElement {
 function useOnSliderChange(
   element: SliderElement
 ): [number, (newValue: number) => void, (toggleSync: boolean) => void] {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const path = findNodePath(editor, element);
   assert(path != null, 'path must always be defined');
 

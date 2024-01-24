@@ -2,7 +2,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   SmartRefElement,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
@@ -15,7 +15,7 @@ interface SourceResult {
 
 export const useUnnamedResults = () => {
   const computer = useComputer();
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   // Decilang codelines do not need to have a name defining them.
   // But we still want to add them.

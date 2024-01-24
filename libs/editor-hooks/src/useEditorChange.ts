@@ -9,7 +9,7 @@ import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
 import { EditorChangeContext } from '@decipad/react-contexts';
-import { MyEditor, MyValue, useTEditorRef } from '@decipad/editor-types';
+import { MyEditor, MyValue, useMyEditorRef } from '@decipad/editor-types';
 
 export interface UseEditorChangeOptions {
   debounceTimeMs?: number;
@@ -67,14 +67,14 @@ export function useEditorChange<T>(
   selector: (editor: MyEditor) => T,
   options?: UseEditorChangeOptions
 ): T {
-  return useExternalEditorChange<T>(useTEditorRef(), selector, options) as T;
+  return useExternalEditorChange<T>(useMyEditorRef(), selector, options) as T;
 }
 
 export function useEditorChangePromise<T>(
   selector: (editor: PlateEditor<MyValue>) => Promise<T>,
   { debounceTimeMs = 100 }: UseEditorChangeOptions = {}
 ): T | undefined {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const editorChanges = useContext(EditorChangeContext);
   const [state, setState] = useState<T | undefined>();
 

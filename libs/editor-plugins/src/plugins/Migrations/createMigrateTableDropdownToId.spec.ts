@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
@@ -10,7 +10,7 @@ import {
 import { normalizeEditor } from '@udecode/plate-common';
 import { createMigrateTableDropdownToId } from './createMigrateTableDropdownToId';
 
-const editor = createTPlateEditor({
+const editor = createMyPlateEditor({
   plugins: [createMigrateTableDropdownToId()],
 });
 

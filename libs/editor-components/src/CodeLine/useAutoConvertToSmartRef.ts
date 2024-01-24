@@ -1,5 +1,5 @@
 import { useWasSelected } from '@decipad/editor-hooks';
-import { MyElement, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, useMyEditorRef } from '@decipad/editor-types';
 import { convertCodeSmartRefs } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, isCollapsed } from '@udecode/plate-common';
@@ -11,7 +11,7 @@ type VarAndCol = [string, string?];
 // transform variable references into smart refs on blur
 // useOnBlurNormalize(editor, element);
 export const useAutoConvertToSmartRef = (element?: MyElement) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const computer = useComputer();
   const selected = useSelected();
 

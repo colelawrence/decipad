@@ -1,12 +1,12 @@
 import { ClientEventContextType } from '@decipad/client-events';
 import {
-  createTPlateEditor,
-  ELEMENT_PARAGRAPH,
+  createMyPlateEditor,
+  ELEMENT_CAPTION,
   ELEMENT_CODE_LINE,
+  ELEMENT_EXPRESSION,
+  ELEMENT_PARAGRAPH,
   ELEMENT_VARIABLE_DEF,
   VariableDefinitionElement,
-  ELEMENT_CAPTION,
-  ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
 import { TEditor } from '@udecode/plate-common';
@@ -23,7 +23,7 @@ const mockEvents: ClientEventContextType = jest.fn((event) => {
 });
 
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createUserEventPlugin(mockEvents)],
   });
   mockClientEvent = null;

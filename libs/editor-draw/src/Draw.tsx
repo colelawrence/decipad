@@ -3,7 +3,7 @@ import {
   DrawElements,
   ELEMENT_DRAW,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -20,7 +20,7 @@ import { useApplyUserChanges } from './useApplyUserChanges';
 export const Draw: PlateComponent = ({ element, attributes, className }) => {
   assertElementType(element, ELEMENT_DRAW);
 
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const readOnly = useIsEditorReadOnly();
   const [isInteracting, setIsInteracting] = useState(false);
   const elementRef = useRef(element);

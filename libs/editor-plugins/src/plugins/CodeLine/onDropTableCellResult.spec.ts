@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable import/no-extraneous-dependencies */
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   MyEditor,
@@ -25,7 +25,7 @@ describe('onDropTableCellResult', () => {
   let result: any;
 
   beforeEach(() => {
-    editor = createTPlateEditor();
+    editor = createMyPlateEditor();
 
     testEvent = {
       preventDefault: () => {},

@@ -1,4 +1,4 @@
-import { createTPluginFactory, MyGenericEditor } from '@decipad/editor-types';
+import { createMyPluginFactory, MyGenericEditor } from '@decipad/editor-types';
 import { withOverrides } from './withOverrides';
 import { createNormalizerPlugin } from '../../pluginFactories/normalizerPlugin';
 import { normalizeElementIdPlugin } from './normalizeElementIdPlugin';
@@ -10,7 +10,7 @@ export const createNormalizeElementIdPlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >() =>
-  createTPluginFactory<object, TV, TE>({
+  createMyPluginFactory<object, TV, TE>({
     key: pluginKey,
     plugins: [
       {

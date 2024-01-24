@@ -1,4 +1,4 @@
-import { createTPlateEditor } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import { select } from '@udecode/plate-common';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
 import { createLinkPlugin } from '@udecode/plate-link';
@@ -20,7 +20,7 @@ it.each([
   // Just before an inline element
   ['end', false, { path: [1, 1], offset: lastChar }],
 ])('detects edges', (edge, expected, location) => {
-  const editor = createTPlateEditor({
+  const editor = createMyPlateEditor({
     plugins: [createLinkPlugin()],
   });
   editor.children = [

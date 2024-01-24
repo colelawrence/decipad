@@ -1,6 +1,6 @@
-import { createStore } from '@udecode/plate-common';
+import { createZustandStore } from '@udecode/plate-common';
 
-export const dndPreviewStore = createStore('dndPreview')({
+export const dndPreviewStore = createZustandStore('dndPreview')({
   previewText: '',
   draggingId: '' as string,
 });

@@ -3,7 +3,7 @@ import {
   ELEMENT_TH,
   PlateComponent,
   TableCellType,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { TableColumnHeader } from '@decipad/ui';
 import {
@@ -26,7 +26,7 @@ export const TableHeaderCell: PlateComponent = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_TH);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
 
   const errorResult = useComputer().getBlockIdResult$.useWithSelectorDebounced(
     errorDebounceMs,

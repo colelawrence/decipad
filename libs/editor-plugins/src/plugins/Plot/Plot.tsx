@@ -3,7 +3,7 @@ import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_PLOT,
   PlateComponent,
-  useTEditorRef,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
@@ -16,7 +16,7 @@ type PlotParamsProps = PlotBlockProps['plotParams'];
 
 const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const readOnly = useIsEditorReadOnly();
   const plot = usePlot(element);
   const path = useNodePath(element);

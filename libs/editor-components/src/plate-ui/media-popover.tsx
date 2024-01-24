@@ -1,7 +1,7 @@
 import {
-  isCollapsed,
+  isSelectionExpanded,
+  useEditorSelector,
   useElement,
-  usePlateEditorState,
   useRemoveNodeButton,
 } from '@udecode/plate-common';
 import { useSelected } from 'slate-react';
@@ -26,9 +26,12 @@ export interface MediaPopoverProps {
 export const MediaPopover = ({ pluginKey, children }: MediaPopoverProps) => {
   const readOnly = useIsEditorReadOnly();
   const selected = useSelected();
-  const editor = usePlateEditorState();
+  const selectionCollapsed = useEditorSelector(
+    (editor) => !isSelectionExpanded(editor),
+    []
+  );
 
-  const isOpen = !readOnly && selected && isCollapsed(editor.selection);
+  const isOpen = !readOnly && selected && selectionCollapsed;
   const isEditing = useFloatingMediaSelectors().isEditing();
 
   useEffect(() => {

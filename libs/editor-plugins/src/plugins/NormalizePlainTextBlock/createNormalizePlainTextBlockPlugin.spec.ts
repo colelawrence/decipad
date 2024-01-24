@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  createMyPlateEditor,
   ELEMENT_H1,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
@@ -11,7 +11,7 @@ import { createNormalizePlainTextBlockPlugin } from './createNormalizePlainTextB
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createTPlateEditor({
+  editor = createMyPlateEditor({
     plugins: [createNormalizePlainTextBlockPlugin()],
   });
 });

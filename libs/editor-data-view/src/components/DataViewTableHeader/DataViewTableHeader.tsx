@@ -1,5 +1,5 @@
 import { Result } from '@decipad/remote-computer';
-import { AnyElement, useTEditorRef } from '@decipad/editor-types';
+import { AnyElement, useMyEditorRef } from '@decipad/editor-types';
 import {
   CodeResult,
   DataViewTableHeader as DataViewTableHeaderUI,
@@ -44,7 +44,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   aggregationType,
   replicaCount,
 }) => {
-  const editor = useTEditorRef();
+  const editor = useMyEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
     useCallback((): void => {
       const { selection } = editor;

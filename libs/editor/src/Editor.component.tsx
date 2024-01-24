@@ -10,10 +10,10 @@ import {
   EditorReadOnlyContext,
   useComputer,
 } from '@decipad/react-contexts';
-import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
+import { useCanUseDom, useWindowListener } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import {
   ReactNode,
@@ -168,11 +168,11 @@ export const Editor = (props: EditorProps) => {
                     disableCorePlugins={{
                       history: true,
                     }}
-                    editableProps={{
-                      onCopy: (e) => editorOnCopy(e, editor),
-                      onPaste: (e) => editorOnPaste(e, editor, computer),
-                    }}
                   >
+                    <PlateContent
+                      onCopy={(e) => editorOnCopy(e, editor)}
+                      onPaste={(e) => editorOnPaste(e, editor, computer)}
+                    />
                     <InsidePlate {...props} containerRef={containerRef} />
                     <UploadFile notebookId={notebookId} />
                     <Integrations workspaceId={workspaceId} />

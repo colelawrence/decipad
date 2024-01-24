@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createPlateEditor,
   type CreatePlateEditorOptions,
   createPluginFactory,
+  createPlugins,
   getTEditor,
   type NoInfer,
   type PlatePlugin,
   type PluginOptions,
   TEditor,
   useEditorRef,
-  usePlateEditorRef,
-  usePlateEditorState,
-  usePlateSelectors,
   Value,
 } from '@udecode/plate-common';
 import {
@@ -19,12 +18,7 @@ import {
 } from '@udecode/plate-autoformat';
 import type { MyValue, NotebookValue } from './value';
 import type { MyEditor, MyGenericEditor, RootEditor } from './nodes';
-import type {
-  MyOverrideByKey,
-  MyPlatePlugin,
-  RootOverrideByKey,
-  RootPlatePlugin,
-} from './plate';
+import type { MyOverrideByKey, MyPlatePlugin } from './plate';
 
 /**
  * Plate store, Slate context
@@ -37,30 +31,30 @@ export const getMyEditor = <
   editor: TE
 ) => getTEditor<TV, TE>(editor);
 
-export const useTEditorRef = () => useEditorRef<MyValue, MyEditor>();
-
-export const useTPlateEditorRef = (id?: string) =>
-  usePlateEditorRef<MyValue, MyEditor>(id);
-
-export const useTPlateEditorState = (id?: string) =>
-  usePlateEditorState<MyValue, MyEditor>(id);
-
-export const useTPlateSelectors = (id?: string) =>
-  usePlateSelectors<MyValue, MyEditor>(id);
+export const useMyEditorRef = (id?: string) =>
+  useEditorRef<MyValue, MyEditor>(id);
 
 /**
  * Utils
  */
 
-export const createTPlateEditor = (
-  options: CreatePlateEditorOptions<MyValue, MyEditor> = {}
-) => createPlateEditor<MyValue, MyEditor>(options) as MyEditor;
+export const createMyPlateEditor = (
+  options: Omit<CreatePlateEditorOptions<MyValue, MyEditor>, 'plugins'> & {
+    plugins?: MyPlatePlugin[];
+  } = {}
+) => createPlateEditor<MyValue, MyEditor>(options as any) as MyEditor;
 
-export const createTPlateRootEditor = (
+export const createMyPlugins = (
+  plugins: MyPlatePlugin[],
+  options?: Parameters<typeof createPlugins>[1]
+) =>
+  createPlugins<MyValue, MyEditor>(plugins as any, options) as MyPlatePlugin[];
+
+export const createMyPlateRootEditor = (
   options: CreatePlateEditorOptions<NotebookValue, RootEditor> = {}
-) => createPlateEditor<NotebookValue, RootEditor>(options) as MyEditor;
+) => createPlateEditor<NotebookValue, RootEditor>(options) as RootEditor;
 
-export const createTPluginFactory = <
+export const createMyPluginFactory = <
   P = PluginOptions,
   V extends Value = MyValue,
   E extends MyGenericEditor<V> = MyGenericEditor<V>
@@ -72,7 +66,7 @@ export const createTPluginFactory = <
  * My plugins
  */
 
-export const createTAutoformatPlugin = (
+export const createMyAutoformatPlugin = (
   override?: Partial<MyPlatePlugin<AutoformatPlugin<MyValue, MyEditor>>>,
   overrideByKey?: MyOverrideByKey
 ) =>
@@ -80,16 +74,4 @@ export const createTAutoformatPlugin = (
     AutoformatPlugin<MyValue, MyEditor>,
     MyValue,
     MyEditor
-  >(override, overrideByKey);
-
-export const createTRootAutoformatPlugin = (
-  override?: Partial<
-    RootPlatePlugin<AutoformatPlugin<NotebookValue, RootEditor>>
-  >,
-  overrideByKey?: RootOverrideByKey
-) =>
-  createAutoformatPlugin<
-    AutoformatPlugin<NotebookValue, RootEditor>,
-    NotebookValue,
-    RootEditor
   >(override, overrideByKey);
