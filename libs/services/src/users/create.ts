@@ -42,8 +42,10 @@ async function createInitialWorkspace(
   const notebooks: Array<PadRecord> = [];
   /* eslint-disable no-await-in-loop */
 
+  const createdAt = Math.floor(new Date().getTime()) / 1000; // for database
+
   await Promise.all(
-    initialWorkspaceSpec.notebooks.map(async (notebook) => {
+    initialWorkspaceSpec.notebooks.map(async (notebook, i) => {
       const pad = await createPad(
         workspace.id,
         {
@@ -51,26 +53,14 @@ async function createInitialWorkspace(
           icon: notebook.icon,
           status: notebook.status,
         },
-        user
+        user,
+        undefined,
+        createdAt + i
       );
       await createContent(pad.id, notebook.content.children as MyElement[]);
       notebooks.push(pad);
     })
   );
-
-  let createdAt = new Date().getTime();
-
-  //
-  // Sort by name, and assign a different createdAt for each.
-  // That way we have a consistent order of notebooks in the frontend,
-  // as they are arranged by creation time.
-  //
-
-  notebooks.sort((a, b) => (a.name > b.name ? 1 : -1));
-  for (const notebook of notebooks) {
-    notebook.createdAt = createdAt;
-    createdAt += 1000;
-  }
 
   const data = await tables();
 

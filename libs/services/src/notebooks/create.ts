@@ -13,13 +13,14 @@ export async function create(
   workspaceId: ID | undefined,
   pad: PadInput,
   user?: TableRecordIdentifier,
-  padId?: string
+  padId?: string,
+  createdAt?: number
 ): Promise<PadRecord> {
   const newPad = {
     ...pad,
     id: padId ?? nanoid(),
     workspace_id: workspaceId,
-    createdAt: timestamp(),
+    createdAt: createdAt ?? timestamp(),
   };
 
   const data = await tables();

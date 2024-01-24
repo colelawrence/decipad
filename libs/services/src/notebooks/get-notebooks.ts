@@ -5,7 +5,7 @@ import { byDesc } from '@decipad/utils';
 const outputPad = (pad: PadRecord): PadRecord => {
   return {
     ...pad,
-    createdAt: Number(pad.createdAt) * 1000,
+    createdAt: Number(pad.createdAt),
   };
 };
 
