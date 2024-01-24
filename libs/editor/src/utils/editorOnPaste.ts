@@ -4,7 +4,6 @@ import {
   ELEMENT_CALLOUT,
   TopLevelValue,
   MyNode,
-  AnyElement,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
@@ -19,8 +18,9 @@ export const editorOnPaste = (
   computer: RemoteComputer
 ) => {
   if (!editor.selection) return;
-  if (editor.selection.focus.path[0] !== editor.selection.anchor.path[0])
+  if (editor.selection.focus.path[0] !== editor.selection.anchor.path[0]) {
     return;
+  }
 
   const selectedNode = getNode<TopLevelValue>(editor, [
     editor.selection.anchor.path[0],
@@ -38,12 +38,6 @@ export const editorOnPaste = (
     const data = e.clipboardData.getData('application/x-slate-fragment');
     const decodedData = JSON.parse(decodeURIComponent(window.atob(data)));
 
-    const dataIds = getIds(decodedData);
-    const editorIds = getIds(editor.children);
-
-    // only use special behaviour if pasting will cause duplicates
-    if (!editorIds.some((ele) => dataIds.includes(ele))) return;
-
     e.preventDefault();
     e.stopPropagation();
     insertFragment(
@@ -54,22 +48,4 @@ export const editorOnPaste = (
       }
     );
   }
-};
-
-const getIds = (nodes: MyNode[]): string[] => {
-  const workingSet = [...nodes];
-  const ids: string[] = [];
-
-  while (workingSet.length > 0) {
-    const node = workingSet.shift()! as AnyElement;
-
-    if (node.id) {
-      ids.push(node.id);
-    }
-    if (node.children) {
-      workingSet.push(...node.children);
-    }
-  }
-
-  return ids;
 };
