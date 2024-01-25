@@ -29,6 +29,7 @@ import {
   Leaf,
   Number,
   Text,
+  BulletList,
 } from '../../icons';
 import { MenuList, UnitMenuItem } from '../../molecules';
 import { UnitsAction } from '../../molecules/UnitMenuItem/UnitMenuItem';
@@ -41,6 +42,7 @@ import {
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',
@@ -204,7 +206,16 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             Text
           </MenuItem>
-
+          {isFlagEnabled('TABLE_CATEGORY') && (
+            <MenuItem
+              key="category"
+              icon={<BulletList />}
+              onSelect={() => onChangeColumnType({ kind: 'category' })}
+              selected={type.kind === 'category'}
+            >
+              Category
+            </MenuItem>
+          )}
           {!isFirst && dropdownNames.length > 0 && (
             <MenuList
               key="dropdown-tables"
@@ -213,7 +224,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                   icon={<AddToWorkspace />}
                   selected={type.kind === 'date'}
                 >
-                  <div css={{ minWidth: '116px' }}>Categories</div>
+                  <div css={{ minWidth: '116px' }}>From Dropdown</div>
                 </TriggerMenuItem>
               }
               open={currentOpen === 'dropdowns'}

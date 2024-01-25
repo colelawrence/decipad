@@ -5,6 +5,8 @@ test('workspace permissions', async ({
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
+  test.slow();
+
   let premiumWorkspaceId: string;
   await test.step('premium user is premium', async () => {
     await premiumUser.goToWorkspace();

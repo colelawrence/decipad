@@ -279,13 +279,13 @@ test('dropdown widget', async ({ testUser }) => {
     await createTable(page);
     await openColTypeMenu(page, 2);
     await expect(
-      page.getByRole('menuitem').getByText('Categories')
+      page.getByRole('menuitem').getByText('From Dropdown')
     ).toBeVisible();
   });
 
   await test.step('You can open dropdown in the cell', async () => {
-    await page.getByRole('menuitem').getByText('Categories').click();
-    await page.getByRole('menuitem').getByText('Dropdown').click();
+    await page.getByRole('menuitem').getByText('From Dropdown').click();
+    await page.getByText('Dropdown').nth(2).click();
 
     await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
     await clickCell(page, 1, 2);

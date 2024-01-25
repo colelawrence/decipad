@@ -152,6 +152,8 @@ export async function createSliderBelow(
   await page.keyboard.type(identifier);
 
   await page.click('div [data-testid="input-widget-name"] >> nth=-1');
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
   await keyPress(page, 'ArrowDown');
   // erase 100$, then focus goes to title, we come back down
   await keyPress(page, 'End');

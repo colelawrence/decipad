@@ -829,4 +829,310 @@ describe('Table', () => {
       ]
     `);
   });
+
+  it('define category values only if column type is category', async () => {
+    const node: TableElement = {
+      id: 'table1',
+      type: ELEMENT_TABLE,
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Table',
+                },
+              ],
+              id: 'varname',
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+            },
+          ],
+          id: 'tablecpation',
+          type: ELEMENT_TABLE_CAPTION,
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Column1',
+                },
+              ],
+              id: 'th1',
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'category',
+              },
+              categoryValues: [
+                {
+                  id: 'categoryValue1',
+                  value: '1',
+                },
+                {
+                  id: 'categoryValue2',
+                  value: '2',
+                },
+                {
+                  id: 'categoryValue3',
+                  value: '3',
+                },
+              ],
+            },
+            {
+              categoryValues: [
+                {
+                  id: 'categoryValue4',
+                  value: 'a',
+                },
+                {
+                  id: 'categoryValue5',
+                  value: 'b',
+                },
+                {
+                  id: 'categoryValue6',
+                  value: 'c',
+                },
+              ],
+              children: [
+                {
+                  text: 'Column2',
+                },
+              ],
+              id: 'th2',
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'string',
+              },
+            },
+          ],
+          id: 'tr1',
+          type: ELEMENT_TR,
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'categoryValue1',
+                },
+              ],
+              id: 'td1',
+              type: ELEMENT_TD,
+            },
+            {
+              children: [
+                {
+                  text: 'categoryValue4',
+                },
+              ],
+              id: 'td2',
+              type: ELEMENT_TD,
+            },
+          ],
+          id: 'tr2',
+          type: ELEMENT_TR,
+        },
+      ],
+    };
+    const computer = getRemoteComputer();
+    expect(
+      (await getParsedBlockFromElement(editor, computer, node)).map((ex) => ({
+        blockId: ex.id,
+        column: ex.block?.args[0],
+        errors: ex.type === 'identified-error' && ex.error,
+      }))
+    ).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "blockId": "table1",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "Table",
+                  1,
+                ],
+                "type": "tabledef",
+              },
+            ],
+            "type": "table",
+          },
+          "errors": false,
+        },
+        Object {
+          "blockId": "th1",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "Table",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "Column1",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "exprRef_categoryValue1",
+                        ],
+                        "type": "ref",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              0,
+            ],
+            "type": "table-column-assign",
+          },
+          "errors": false,
+        },
+        Object {
+          "blockId": "th2",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "Table",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "Column2",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "string",
+                          "categoryValue4",
+                        ],
+                        "type": "literal",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              1,
+            ],
+            "type": "table-column-assign",
+          },
+          "errors": false,
+        },
+        Object {
+          "blockId": "categoryValue1",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "exprRef_categoryValue1",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  "string",
+                  "1",
+                ],
+                "end": Object {
+                  "char": 2,
+                  "column": 3,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "literal",
+              },
+            ],
+            "type": "assign",
+          },
+          "errors": false,
+        },
+        Object {
+          "blockId": "categoryValue2",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "exprRef_categoryValue2",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  "string",
+                  "2",
+                ],
+                "end": Object {
+                  "char": 2,
+                  "column": 3,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "literal",
+              },
+            ],
+            "type": "assign",
+          },
+          "errors": false,
+        },
+        Object {
+          "blockId": "categoryValue3",
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "exprRef_categoryValue3",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  "string",
+                  "3",
+                ],
+                "end": Object {
+                  "char": 2,
+                  "column": 3,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "literal",
+              },
+            ],
+            "type": "assign",
+          },
+          "errors": false,
+        },
+      ]
+    `);
+  });
 });

@@ -25,7 +25,7 @@ describe('usePathMutatorCallback', () => {
     const mutateElement = usePathMutatorCallback(
       editor,
       findNodePath(editor, element as MyElement),
-      'url',
+      'url' as any,
       'test',
       sideEffects
     ) as any;

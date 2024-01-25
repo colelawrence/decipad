@@ -99,13 +99,13 @@ const seriesColumnToColumn = async ({
   };
 };
 
-const dropdownColumnToColumn = ({
+const dropdownOrCategoryColumnToColumn = ({
   th,
   columnIndex,
   dataRows,
 }: HeaderToColumnProps): ColumnParseReturn => {
-  if (th.cellType.kind !== 'dropdown') {
-    throw new Error('Dropdown column should have dropdown type');
+  if (th.cellType.kind !== 'dropdown' && th.cellType.kind !== 'category') {
+    throw new Error('Dropdown column should have dropdown or category type');
   }
 
   const errors: IdentifiedError[] = [];
@@ -190,11 +190,18 @@ export const headerToColumn = (
 ): PromiseOrType<ColumnParseReturn> => {
   const { th, dataRows } = props;
   const { cellType } = th;
-  return cellType.kind === 'table-formula'
-    ? tableFormulaColumnToColumn(props)
-    : cellType.kind === 'series' && dataRows.length > 0
-    ? seriesColumnToColumn(props)
-    : cellType.kind === 'dropdown'
-    ? dropdownColumnToColumn(props)
-    : dataColumnToColumn(props);
+
+  if (cellType.kind === 'table-formula') {
+    return tableFormulaColumnToColumn(props);
+  }
+
+  if (cellType.kind === 'series' && dataRows.length > 0) {
+    return seriesColumnToColumn(props);
+  }
+
+  if (cellType.kind === 'dropdown' || cellType.kind === 'category') {
+    return dropdownOrCategoryColumnToColumn(props);
+  }
+
+  return dataColumnToColumn(props);
 };

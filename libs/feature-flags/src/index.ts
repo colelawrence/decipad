@@ -27,6 +27,7 @@ export const availableFlags = [
   'ENABLE_SUBMIT_FORM',
   // Enable buy more AI credits
   'AI_BUY_MORE_CREDITS',
+  'TABLE_CATEGORY',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

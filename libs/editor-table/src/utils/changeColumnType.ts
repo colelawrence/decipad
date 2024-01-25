@@ -19,7 +19,7 @@ import { formatResultPreview } from '@decipad/format';
 import {
   getNode,
   hasNode,
-  insertText,
+  replaceNodeChildren,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
@@ -66,7 +66,7 @@ export const changeColumnType = (
           }
         );
 
-        if (cellType?.kind === 'dropdown') {
+        if (cellType?.kind === 'dropdown' || cellType?.kind === 'category') {
           let counter = 2;
           let entry = getNodeEntrySafe(editor, [...path, counter, columnIndex]);
           while (entry) {
@@ -75,29 +75,43 @@ export const changeColumnType = (
             if (!entry) continue;
             assertElementType(entry[0], ELEMENT_TD);
 
-            insertText(editor, '', {
-              at: [...path, counter - 1, columnIndex, 0],
+            replaceNodeChildren(editor, {
+              at: entry[1],
+              nodes: { text: '' },
+              removeOptions: { voids: true },
             });
           }
         }
 
-        if (node.cellType.kind === 'dropdown' && computer) {
+        if (
+          (node.cellType.kind === 'dropdown' ||
+            node.cellType.kind === 'category') &&
+          computer
+        ) {
           let counter = 2;
           let entry = getNodeEntrySafe(editor, [...path, counter, columnIndex]);
           while (entry) {
             entry = getNodeEntrySafe(editor, [...path, counter, columnIndex]);
+
             counter += 1;
             if (!entry) continue;
+
             assertElementType(entry[0], ELEMENT_TD);
 
-            const result = computer.getVarResult$.get(
+            const nodePath = entry[1];
+
+            const result = computer.getBlockIdResult$.get(
               entry[0].children[0].text
             )?.result;
             if (!result) continue;
 
             const textResult = formatResultPreview(result);
-            insertText(editor, textResult, {
-              at: [...path, counter - 1, columnIndex, 0],
+            replaceNodeChildren(editor, {
+              at: nodePath,
+              nodes: {
+                text: result.type.kind === 'string' ? textResult : '',
+              },
+              removeOptions: { voids: true },
             });
           }
         }

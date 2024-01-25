@@ -890,6 +890,9 @@ export class Notebook {
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.type(identifier);
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.tableDelay);
+
     await this.page.click('div [data-testid="input-widget-name"] >> nth=-1');
     await this.page.keyboard.press('ArrowDown');
     // erase 100$, then focus goes to title, we come back down

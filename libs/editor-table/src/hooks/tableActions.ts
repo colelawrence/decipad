@@ -34,9 +34,9 @@ import {
   getNodeChildren,
   getNodeString,
   hasNode,
-  insertText,
   moveNodes,
   removeNodes,
+  replaceNodeChildren,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
@@ -208,8 +208,12 @@ export const useTableActions = (
       withPath(editor, element, (path) => {
         const columnHeaderPath = [...path, 1, columnIndex];
         if (hasNode(editor, columnHeaderPath)) {
-          insertText(editor, newColumnName, {
+          replaceNodeChildren(editor, {
             at: path,
+            nodes: {
+              text: newColumnName,
+            },
+            removeOptions: { voids: true },
           });
         }
       });

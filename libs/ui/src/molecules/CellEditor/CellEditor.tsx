@@ -41,40 +41,23 @@ export const CellEditor = ({
     [activePlugins]
   );
 
-  const cellComponent = useMemo(() => {
-    // Remount component when cell type changes (since hooks may change)
-    const key = element ? `${element.id}-${type?.kind}` : type?.kind;
+  // Remount component when cell type changes (since hooks may change)
+  const key = element ? `${element.id}-${type?.kind}` : type?.kind;
 
-    const props: CellProps = {
-      isTableFrozen,
-      element,
-      path,
-      cellType: type,
-      plugins: activePlugins,
-      value,
-      eventTarget,
-      onChange: onValueChange,
-      onConvertToFormula,
-      onSelectNextCell,
-      onEditingChange,
-    };
-
-    const Component = CustomComponent ?? CellEditorDefault;
-    return <Component key={key} {...props} />;
-  }, [
-    element,
-    type,
+  const props: CellProps = {
     isTableFrozen,
+    element,
     path,
-    activePlugins,
+    cellType: type,
+    plugins: activePlugins,
     value,
     eventTarget,
-    onValueChange,
+    onChange: onValueChange,
     onConvertToFormula,
     onSelectNextCell,
-    CustomComponent,
     onEditingChange,
-  ]);
+  };
 
-  return cellComponent;
+  const Component = CustomComponent ?? CellEditorDefault;
+  return <Component key={key} {...props} />;
 };

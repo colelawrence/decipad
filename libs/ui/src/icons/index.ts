@@ -33,6 +33,7 @@ export { Brush } from './Brush/Brush';
 export { Buildings } from './Buildings';
 export { BuildingStore } from './BuildingStore/BuildingStore';
 export { Bullet } from './Bullet/Bullet';
+export { BulletList } from './BulletList';
 export { Calculations } from './Calculations/Calculations';
 export { Calendar } from './Calendar/Calendar';
 export { Callout } from './Callout/Callout';

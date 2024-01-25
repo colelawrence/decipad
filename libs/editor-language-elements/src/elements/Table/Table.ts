@@ -1,14 +1,18 @@
 import { getNodeString } from '@udecode/plate-common';
-import { ELEMENT_TABLE } from '@decipad/editor-types';
+import { ELEMENT_TABLE, TableHeaderElement } from '@decipad/editor-types';
 import {
   Program,
   AST,
   statementToIdentifiedBlock,
+  getExprRef,
+  RemoteComputer,
 } from '@decipad/remote-computer';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../../types';
 import { headerToColumn } from './headerToColumn';
+import { parseElementAsVariableAssignment } from '../../utils/parseElementAsVariableAssignment';
+import { inferType } from '@decipad/parse';
 
 export const Table: InteractiveLanguageElement = {
   type: ELEMENT_TABLE,
@@ -26,6 +30,8 @@ export const Table: InteractiveLanguageElement = {
       } as AST.Table);
 
       const columnAssigns: Program = [];
+      const categoriesAssigns: Program = [];
+      const categoriesAssignsPromises: Array<Promise<Program>> = [];
 
       for (const [columnIndex, th] of headerRow.children.entries()) {
         const { columnName, errors, elementId, expression } =
@@ -57,9 +63,51 @@ export const Table: InteractiveLanguageElement = {
         } else {
           columnAssigns.push(...errors);
         }
+        if (th.cellType.kind === 'category') {
+          categoriesAssignsPromises.push(parseCategoryOptions(computer, th));
+        }
       }
+      categoriesAssigns.push(
+        ...(await Promise.all(categoriesAssignsPromises)).flat()
+      );
 
-      return [tableItself, ...columnAssigns];
+      return [tableItself, ...columnAssigns, ...categoriesAssigns];
     }
   ),
 };
+
+async function parseCategoryOptions(
+  computer: RemoteComputer,
+  element: TableHeaderElement
+) {
+  const dropdownOptions = await Promise.all(
+    element.categoryValues?.map(async (option) => {
+      let dropdownExpression: string | AST.Expression;
+      const dropdownType = await inferType(computer, option.value, {
+        type: {
+          kind: 'string',
+        },
+      });
+      if (
+        dropdownType.type.kind === 'anything' ||
+        dropdownType.type.kind === 'nothing'
+      ) {
+        dropdownExpression = {
+          type: 'noop',
+          args: [],
+        };
+      } else {
+        dropdownExpression = dropdownType.coerced!;
+      }
+      return parseElementAsVariableAssignment(
+        option.id,
+        getExprRef(option.id),
+        dropdownExpression,
+        true, // isArtificial
+        element.id // origin block id
+      );
+    }) ?? []
+  );
+
+  return dropdownOptions.flat();
+}

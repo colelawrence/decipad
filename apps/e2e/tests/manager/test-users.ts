@@ -47,6 +47,7 @@ export class User {
       await this.page.goto('/');
     }
     await this.page.waitForURL(/\/w\/(.+)/);
+    await this.page.getByTestId('new-notebook').waitFor();
     const workspaceID = this.page.url().match(/\/w\/(.+)/);
     if (workspaceID) {
       await this.workspace.updateDefaultWorkspaceID(workspaceID[1].toString());

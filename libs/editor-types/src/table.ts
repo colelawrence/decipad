@@ -36,6 +36,10 @@ export type TableDropdownType = Readonly<{
   type: 'string' | 'number';
 }>;
 
+export type TableCategoryType = Readonly<{
+  kind: 'category';
+}>;
+
 export type SimpleTableCellType =
   | SerializedTypes.Number
   | SerializedTypes.String
@@ -46,6 +50,7 @@ export type SimpleTableCellType =
 export type TableCellType =
   | SimpleTableCellType
   | TableDropdownType
+  | TableCategoryType
   | Readonly<{ kind: 'table-formula' }>
   | Readonly<{ kind: 'series'; seriesType: SeriesType }>
   | Readonly<{ kind: 'constant'; constant: Constant }>;
@@ -93,6 +98,7 @@ export interface TableHeaderElement extends BaseElement {
   aggregation?: string;
   width?: number;
   children: [Text];
+  categoryValues?: Array<{ id: string; value: string }>;
 }
 
 export interface TableHeaderRowElement extends BaseElement {

@@ -1,4 +1,18 @@
 {
   "extends": ["../../libs/eslint-config-decipad/editor"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-restricted-imports": [
+      "warn",
+      {
+        "paths": [
+          {
+            "name": "@udecode/plate-common",
+            "importNames": ["insertText"],
+            "message": "Use `replaceNodeChildren` when inserting text in tables. (this only applies to cells, use eslint ignore if you're sure)."
+          }
+        ]
+      }
+    ]
+  }
 }
