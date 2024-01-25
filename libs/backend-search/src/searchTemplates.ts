@@ -9,6 +9,7 @@ import { createVectorEmbeddings } from './createVectorEmbedding';
 import { indexNames } from './config';
 import { thirdParty } from '@decipad/backend-config';
 import { SearchHit } from './types';
+import { messageContentToString } from './utils/messageContentToString';
 
 export interface TemplateSearchResult {
   notebook: PadRecord;
@@ -25,14 +26,14 @@ const expandSearch = async (search: string): Promise<string> => {
     modelName: 'gpt-3.5-turbo-16k',
   });
 
-  const result = await chat.predictMessages([
+  const result = await chat.invoke([
     new SystemMessage(
       'You use your judgement to create a sensible set of paragraphs (maximum 2 short paragraphs) describing the model and calculations necessary to fulfill the user prompt.'
     ),
     new HumanMessage(search),
   ]);
 
-  return result.content;
+  return messageContentToString(result.content);
 };
 
 export const searchTemplates = async (

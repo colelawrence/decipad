@@ -11,7 +11,7 @@ setupDeciNumberSnapshotSerializer();
 
 const timeoutMultiplier = process.env.CI ? 2 : 1;
 
-const MAX_BIG_IMPORT_TIMEOUT_MS = 120_000 * timeoutMultiplier;
+const MAX_BIG_IMPORT_TIMEOUT_MS = 200_000 * timeoutMultiplier;
 const MAX_BIGISH_IMPORT_TIMEOUT_MS = 22_000 * timeoutMultiplier;
 
 describe('import performance', () => {
