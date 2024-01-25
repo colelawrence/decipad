@@ -231,7 +231,7 @@
     "caniuse-lite": "1.0.30001414",
     "chalk": "4.1.2",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
+    "clsx": "^2.1.0",
     "copy-to-clipboard": "3.3.2",
     "core-js": "3.34.0",
     "cross-fetch": "^4.0.0",
