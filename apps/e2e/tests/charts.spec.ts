@@ -60,8 +60,13 @@ test('Charts', async ({ testUser: { page } }) => {
   });
 
   await test.step('updates chart caption', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
     await page.getByPlaceholder('Chart caption').dblclick();
-    await page.keyboard.type('I like this caption');
+    await page.getByPlaceholder('Chart caption').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay);
+    await page.getByPlaceholder('Chart caption').fill('I like this caption');
     await page.isVisible("text='I like this caption'");
   });
 
