@@ -301,7 +301,7 @@
     "lodash.unzip": "^3.4.0",
     "lodash.zip": "^4.2.0",
     "lru-cache": "^10.1.0",
-    "lucide-react": "0.294.0",
+    "lucide-react": "0.315.0",
     "luxon": "3.4.0",
     "md5": "^2.3.0",
     "mdast": "^3.0.0",

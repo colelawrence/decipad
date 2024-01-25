@@ -26143,10 +26143,10 @@ ltgt@~2.2.0:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha512-AI2r85+4MquTw9ZYqabu4nMwy9Oftlfa/e/52t9IjtfG+mGBbTNdAoZ3RQKLHR6r0wQnwZnPIEh/Ya6XTWAKNA==
 
-lucide-react@0.294.0:
-  version "0.294.0"
-  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.294.0.tgz#dc406e1e7e2f722cf93218fe5b31cf3c95778817"
-  integrity sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==
+lucide-react@0.315.0:
+  version "0.315.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.315.0.tgz#fe3b2d1a83fd4da0b0b661608fb6d61cbde2a924"
+  integrity sha512-HHPhBRuubJLTERwI3czCgHCrYEtQSuUnniBwR/YHH4rNZXeqtOxyEX05lxpyTxlDr/ugKE+MM9/pWy+iju7xpw==
 
 luxon@3.4.0:
   version "3.4.0"
