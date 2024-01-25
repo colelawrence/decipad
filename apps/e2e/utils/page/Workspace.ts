@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { expect, ElementHandle, Page } from '@playwright/test';
 import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';

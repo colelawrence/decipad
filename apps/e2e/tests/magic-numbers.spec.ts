@@ -178,6 +178,7 @@ test('Navigating with magic numbers', async ({ testUser }) => {
     const magic = page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
+    // eslint-disable-next-line playwright/no-wait-for-selector
     await page.waitForSelector('span[title="35"] >> visible=false');
   });
 });

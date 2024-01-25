@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { type Locator, type Page, expect, test } from '@playwright/test';
 import { cleanText, Timeouts } from '../../utils/src';
 import { ControlPlus } from '../../utils/page/Editor';

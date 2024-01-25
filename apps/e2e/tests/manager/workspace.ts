@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import {
   type Locator,
   type Page,

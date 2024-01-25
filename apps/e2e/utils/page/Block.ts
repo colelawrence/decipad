@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { expect, Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';

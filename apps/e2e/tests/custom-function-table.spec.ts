@@ -48,6 +48,7 @@ test.describe('Custom function Table', () => {
 
   test('Creates custom formula', async () => {
     await createCalculationBlockBelow(page, 'add5(number) = number + 5');
+    // eslint-disable-next-line playwright/no-wait-for-selector
     await page.waitForSelector(':text("ƒ")');
   });
 

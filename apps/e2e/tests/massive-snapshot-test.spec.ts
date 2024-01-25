@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { BrowserContext, Page, expect, test } from './manager/decipad-tests';
 import stringify from 'json-stringify-safe';
 import notebookSource from '../__fixtures__/001-notebook.json';

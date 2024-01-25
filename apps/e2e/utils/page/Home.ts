@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { app } from '@decipad/backend-config';
 import { Page } from '@playwright/test';
 

@@ -20232,10 +20232,10 @@ eslint-plugin-jsx-a11y@^6.5.1:
     object.fromentries "^2.0.6"
     semver "^6.3.0"
 
-eslint-plugin-playwright@0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.20.0.tgz#8b92cf77ab01807f8aa3d4429fdbd9dba7bb9311"
-  integrity sha512-JWTSwUyPPipSOm6AK8z78bQXtKRCykvhSGUewcmZuxstSZ5oGsykW2JaRXJQ2IIfzKJToCBeKD2ISc8Li8qVEQ==
+eslint-plugin-playwright@0.22.1:
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.22.1.tgz#fb4451771e262312a778bfee222d662b61d6d0f9"
+  integrity sha512-xUQ9mJH+CjifLG6vMowl3r49G/8JvW4G10IqHjc1WO44fffdhLZF/i4Def+U3y6LqUEBp0JAMnWUhEck7ksqrw==
   dependencies:
     globals "^13.23.0"
 
