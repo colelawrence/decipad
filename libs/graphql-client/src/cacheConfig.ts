@@ -275,7 +275,7 @@ export const graphCacheConfig: GraphCacheConfig = {
               throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
             }
 
-            data.getPadById.isPublic = args.isPublic;
+            data.getPadById.isPublic = args.publishState !== 'PRIVATE';
             return data;
           }
         );

@@ -15,7 +15,6 @@ import {
   GetNotebookByIdQuery,
   useCreateOrUpdateNotebookSnapshotMutation,
   useGetNotebookByIdQuery,
-  useSetNotebookPublicMutation,
   useUpdateNotebookIconMutation,
   useAttachFileToNotebookMutation,
   useGetCreateAttachmentFormMutation,
@@ -24,6 +23,7 @@ import {
   useUpdatePadPermissionMutation,
   PermissionType,
   useCreateNotebookSnapshotMutation,
+  useSetNotebookPublishStateMutation,
 } from '@decipad/graphql-client';
 import EditorIcon from '../EditorIcon';
 import { TColorStatus } from '@decipad/ui';
@@ -151,7 +151,8 @@ export const useNotebookStateAndActions = ({
 
   // ------- remote api -------
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
-  const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
+  const [, remoteUpdateNotebookPublishState] =
+    useSetNotebookPublishStateMutation();
   const [, shareNotebookWithEmail] = useSharePadWithEmailMutation();
   const [, updatePadPermission] = useUpdatePadPermissionMutation();
   const [, unsharePadWithUser] = useUnsharePadWithUserMutation();
@@ -278,12 +279,12 @@ export const useNotebookStateAndActions = ({
 
   const setNotebookPublic = useCallback(
     async (newIsPublic: boolean) => {
-      await remoteUpdateNotebookIsPublic({
+      await remoteUpdateNotebookPublishState({
         id: notebookId,
-        isPublic: newIsPublic,
+        publishState: newIsPublic ? 'PUBLIC' : 'PRIVATE',
       });
     },
-    [notebookId, remoteUpdateNotebookIsPublic]
+    [notebookId, remoteUpdateNotebookPublishState]
   );
 
   const [isPublishing, setIsPublishing] = useState(false);

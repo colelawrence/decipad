@@ -139,6 +139,42 @@ process.on('unhandledRejection', (err) => {
         },
       ],
     },
+    {
+      name: 'feature',
+      type: 1,
+      application_id: process.env.DISCORD_APP_ID,
+      description: 'manage featured notebooks on decipad',
+      options: [
+        {
+          name: 'add',
+          description: 'adds a notebook to the list of featured notebooks',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description:
+                'The notebook URL you want to add to the featured list',
+              required: true,
+              type: 3,
+            },
+          ],
+        },
+        {
+          name: 'remove',
+          description: 'removes a notebook to the list of featured notebooks',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description:
+                'The notebook URL you want to remove to the featured list',
+              required: true,
+              type: 3,
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   // For authorization, you can use either your bot token

@@ -9,3 +9,4 @@ export * from './exportNotebookWithAttachments';
 export * from './importNotebookContents';
 export * from './importNotebook';
 export * from './duplicateNotebookAttachments';
+export * from './feature';

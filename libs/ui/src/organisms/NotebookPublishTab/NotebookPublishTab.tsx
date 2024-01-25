@@ -110,8 +110,7 @@ interface NotebookPublishTabProps {
   readonly setShareMenuOpen: (open: boolean) => void;
   readonly isPublishing: boolean;
   readonly setIsPublishing: (isPublishing: boolean) => void;
-  readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
-  readonly onUnpublish: NotebookMetaActionsReturn['onUnpublishNotebook'];
+  readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
 }
 
 export const NotebookPublishTab = ({
@@ -124,8 +123,7 @@ export const NotebookPublishTab = ({
   setShareMenuOpen,
   isPublishing,
   setIsPublishing,
-  onPublish,
-  onUnpublish,
+  onUpdatePublish,
 }: NotebookPublishTabProps) => {
   const clientEvent = useContext(ClientEventsContext);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -138,12 +136,14 @@ export const NotebookPublishTab = ({
       setToggleState(newIsPublished);
       setIsPublishing(true);
       if (newIsPublished) {
-        onPublish(notebookId).then(() => setIsPublishing(false));
+        onUpdatePublish(notebookId, 'PUBLIC').then(() =>
+          setIsPublishing(false)
+        );
         return;
       }
-      onUnpublish(notebookId).then(() => setIsPublishing(false));
+      onUpdatePublish(notebookId, 'PRIVATE').then(() => setIsPublishing(false));
     },
-    [notebookId, onPublish, onUnpublish, setIsPublishing]
+    [notebookId, onUpdatePublish, setIsPublishing]
   );
   return (
     <div css={innerPopUpStyles}>
@@ -196,7 +196,7 @@ export const NotebookPublishTab = ({
             <Button
               size="extraSlim"
               type="tertiaryAlt"
-              onClick={() => onPublish(notebookId)}
+              onClick={() => onUpdatePublish(notebookId, 'PUBLIC')}
               disabled={isPublishing}
               testId="publish-changes"
             >

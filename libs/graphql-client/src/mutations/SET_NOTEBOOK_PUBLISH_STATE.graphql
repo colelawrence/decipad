@@ -1,0 +1,3 @@
+mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!) {
+  setPadPublic(id: $id, publishState: $publishState)
+}

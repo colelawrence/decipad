@@ -13,9 +13,8 @@ const args: NotebookSharingPopUpProps = {
   onChange: noop as any,
   onInvite: noop as any,
   onRemove: noop as any,
-  onPublish: noop as any,
+  onUpdatePublish: noop as any,
   onRestore: noop as any,
-  onUnpublish: noop as any,
   hasUnpublishedChanges: false,
   isPublished: false,
 };

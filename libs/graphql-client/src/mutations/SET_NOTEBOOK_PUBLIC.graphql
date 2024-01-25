@@ -1,3 +1,0 @@
-mutation setNotebookPublic($id: ID!, $isPublic: Boolean!) {
-  setPadPublic(id: $id, isPublic: $isPublic)
-}

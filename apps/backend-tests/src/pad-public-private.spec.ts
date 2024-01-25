@@ -1,7 +1,14 @@
+/* eslint-disable camelcase */
 /* eslint-env jest */
 
 import { Workspace, Pad } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { Publish_State } from '@decipad/graphqlserver-types';
+
+// Helper function so we get auto complete.
+function getPublishState(x: Publish_State): Publish_State {
+  return x;
+}
 
 test('public and private pads', (ctx) => {
   const { test: it } = ctx;
@@ -76,7 +83,9 @@ test('public and private pads', (ctx) => {
       await client.mutate({
         mutation: ctx.gql`
           mutation {
-            setPadPublic(id: "${pad.id}", isPublic: true)
+            setPadPublic(id: "${pad.id}", publishState: ${getPublishState(
+          'PUBLIC'
+        )})
           }
       `,
       })
@@ -141,7 +150,9 @@ test('public and private pads', (ctx) => {
       await client.mutate({
         mutation: ctx.gql`
           mutation {
-            setPadPublic(id: "${pad.id}", isPublic: false)
+            setPadPublic(id: "${pad.id}", publishState: ${getPublishState(
+          'PRIVATE'
+        )})
           }
       `,
       })

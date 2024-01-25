@@ -394,7 +394,7 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
-  isPublic: Scalars['Boolean']['input'];
+  publishState: Publish_State;
 };
 
 
@@ -551,6 +551,11 @@ export type NewResourceQuotaLimit = {
   newQuotaLimit: Scalars['Int']['output'];
 };
 
+export type Publish_State =
+  | 'GLOBAL_PUBLIC'
+  | 'PRIVATE'
+  | 'PUBLIC';
+
 export type Pad = {
   __typename?: 'Pad';
   access: ResourceAccess;
@@ -562,6 +567,7 @@ export type Pad = {
   icon?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   initialState?: Maybe<Scalars['String']['output']>;
+  isGlobalPublic?: Maybe<Scalars['Boolean']['output']>;
   isPublic?: Maybe<Scalars['Boolean']['output']>;
   isTemplate?: Maybe<Scalars['Boolean']['output']>;
   myPermissionType?: Maybe<PermissionType>;
@@ -1251,13 +1257,13 @@ export type RenameWorkspaceMutationVariables = Exact<{
 
 export type RenameWorkspaceMutation = { __typename?: 'Mutation', updateWorkspace: { __typename?: 'Workspace', id: string, name: string } };
 
-export type SetNotebookPublicMutationVariables = Exact<{
+export type SetNotebookPublishStateMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  isPublic: Scalars['Boolean']['input'];
+  publishState: Publish_State;
 }>;
 
 
-export type SetNotebookPublicMutation = { __typename?: 'Mutation', setPadPublic: boolean };
+export type SetNotebookPublishStateMutation = { __typename?: 'Mutation', setPadPublic: boolean };
 
 export type SetUsernameMutationVariables = Exact<{
   props: UsernameInput;
@@ -2032,14 +2038,14 @@ export const RenameWorkspaceDocument = gql`
 export function useRenameWorkspaceMutation() {
   return Urql.useMutation<RenameWorkspaceMutation, RenameWorkspaceMutationVariables>(RenameWorkspaceDocument);
 };
-export const SetNotebookPublicDocument = gql`
-    mutation setNotebookPublic($id: ID!, $isPublic: Boolean!) {
-  setPadPublic(id: $id, isPublic: $isPublic)
+export const SetNotebookPublishStateDocument = gql`
+    mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!) {
+  setPadPublic(id: $id, publishState: $publishState)
 }
     `;
 
-export function useSetNotebookPublicMutation() {
-  return Urql.useMutation<SetNotebookPublicMutation, SetNotebookPublicMutationVariables>(SetNotebookPublicDocument);
+export function useSetNotebookPublishStateMutation() {
+  return Urql.useMutation<SetNotebookPublishStateMutation, SetNotebookPublishStateMutationVariables>(SetNotebookPublishStateDocument);
 };
 export const SetUsernameDocument = gql`
     mutation SetUsername($props: UsernameInput!) {
@@ -2632,6 +2638,7 @@ export type GraphCacheResolvers = {
     icon?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['ID'] | string>,
     initialState?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
+    isGlobalPublic?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     isPublic?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     isTemplate?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     myPermissionType?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, PermissionType | string>,
@@ -3098,6 +3105,7 @@ export type GraphCacheUpdaters = {
     icon?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     initialState?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    isGlobalPublic?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     isPublic?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     isTemplate?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     myPermissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,

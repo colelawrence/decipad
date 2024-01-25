@@ -28,11 +28,10 @@ const props: ComponentProps<typeof NotebookTopbar> = {
     onMoveToSection: noop,
     onDeleteNotebook: noop,
     onMoveToWorkspace: noop,
-    onPublishNotebook: noop,
+    onUpdatePublishState: noop,
     onDownloadNotebook: noop,
     onDuplicateNotebook: noop as any,
     onUnarchiveNotebook: noop,
-    onUnpublishNotebook: noop,
     onDownloadNotebookHistory: noop,
   },
   notebookAccessActions: {

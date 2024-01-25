@@ -158,6 +158,27 @@ export type TemplatesCommandData = {
   options: TemplatesApplicationCommandDataOption[];
 };
 
+// feature
+
+export type FeatureAddCommandDataOption = {
+  name: 'add';
+  options: [{ name: 'url'; value: string }];
+};
+
+export type FeatureRemoveCommandDataOption = {
+  name: 'remove';
+  options: [{ name: 'url'; value: string }];
+};
+
+export type FeatureApplicationCommandDataOption =
+  | FeatureAddCommandDataOption
+  | FeatureRemoveCommandDataOption;
+
+export type FeatureCommandData = {
+  name: 'feature';
+  options: FeatureApplicationCommandDataOption[];
+};
+
 // ----------
 
 export type ApplicationCommandDataOption =
@@ -173,7 +194,8 @@ export type ApplicationCommandDataOptions = ApplicationCommandDataOption[];
 export type ApplicationCommandData =
   | AllowlistCommandData
   | SuperadminsCommandData
-  | TemplatesCommandData;
+  | TemplatesCommandData
+  | FeatureCommandData;
 
 export type Command = APIBaseInteraction<
   InteractionType.ApplicationCommand,

@@ -16,11 +16,10 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
     onMoveToSection: noop,
     onDeleteNotebook: noop,
     onMoveToWorkspace: noop,
-    onPublishNotebook: noop as any,
+    onUpdatePublishState: noop as any,
     onDownloadNotebook: noop,
     onDuplicateNotebook: noop as any,
     onUnarchiveNotebook: noop,
-    onUnpublishNotebook: noop as any,
     onDownloadNotebookHistory: noop as any,
   },
   notebookAccessActions: {

@@ -393,7 +393,7 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
-  isPublic: Scalars['Boolean']['input'];
+  publishState: Publish_State;
 };
 
 
@@ -550,6 +550,11 @@ export type NewResourceQuotaLimit = {
   newQuotaLimit: Scalars['Int']['output'];
 };
 
+export type Publish_State =
+  | 'PRIVATE'
+  | 'PUBLIC'
+  | 'PUBLICLY_HIGHLIGHTED';
+
 export type Pad = {
   __typename?: 'Pad';
   access: ResourceAccess;
@@ -571,6 +576,7 @@ export type Pad = {
   snapshots: Array<PadSnapshot>;
   status?: Maybe<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
+  userAllowsPublicHighlighting?: Maybe<Scalars['Boolean']['output']>;
   workspace?: Maybe<Workspace>;
   workspaceId?: Maybe<Scalars['ID']['output']>;
 };
@@ -662,6 +668,7 @@ export type Query = {
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
   padsSharedWithMe: PagedPadResult;
+  publiclyHighlightedPads: PagedPadResult;
   searchTemplates: PagedPadResult;
   sections: Array<Section>;
   self?: Maybe<User>;
@@ -725,6 +732,11 @@ export type QueryPadsByTagArgs = {
 
 
 export type QueryPadsSharedWithMeArgs = {
+  page: PageInput;
+};
+
+
+export type QueryPubliclyHighlightedPadsArgs = {
   page: PageInput;
 };
 
@@ -1167,6 +1179,7 @@ export type ResolversTypes = {
   LogInput: LogInput;
   Mutation: ResolverTypeWrapper<{}>;
   NewResourceQuotaLimit: ResolverTypeWrapper<NewResourceQuotaLimit>;
+  PUBLISH_STATE: Publish_State;
   Pad: ResolverTypeWrapper<Pad>;
   PadChanges: ResolverTypeWrapper<PadChanges>;
   PadConnectionParams: ResolverTypeWrapper<PadConnectionParams>;
@@ -1403,7 +1416,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   removeUserFromRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveUserFromRoleArgs, 'roleId' | 'userId'>>;
   removeWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveWorkspaceArgs, 'id'>>;
   resendRegistrationMagicLinkEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResendRegistrationMagicLinkEmailArgs, 'email'>>;
-  setPadPublic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetPadPublicArgs, 'id' | 'isPublic'>>;
+  setPadPublic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetPadPublicArgs, 'id' | 'publishState'>>;
   setUsername?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetUsernameArgs, 'props'>>;
   shareExternalDataSourceWithEmail?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationShareExternalDataSourceWithEmailArgs, 'email' | 'id' | 'permissionType'>>;
   shareExternalDataSourceWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationShareExternalDataSourceWithRoleArgs, 'id' | 'permissionType' | 'roleId'>>;
@@ -1454,6 +1467,7 @@ export type PadResolvers<ContextType = GraphqlContext, ParentType extends Resolv
   snapshots?: Resolver<Array<ResolversTypes['PadSnapshot']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  userAllowsPublicHighlighting?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   workspaceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1527,6 +1541,7 @@ export type QueryResolvers<ContextType = GraphqlContext, ParentType extends Reso
   pads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsArgs, 'page' | 'workspaceId'>>;
   padsByTag?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsByTagArgs, 'page' | 'tag' | 'workspaceId'>>;
   padsSharedWithMe?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsSharedWithMeArgs, 'page'>>;
+  publiclyHighlightedPads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPubliclyHighlightedPadsArgs, 'page'>>;
   searchTemplates?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QuerySearchTemplatesArgs, 'page' | 'query'>>;
   sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<QuerySectionsArgs, 'workspaceId'>>;
   self?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;

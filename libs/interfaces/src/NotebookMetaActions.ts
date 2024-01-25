@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+import { Publish_State } from '@decipad/graphql-client';
+
 export interface NotebookMetaActionsReturn {
   onDeleteNotebook: (notebookId: string, showToast?: true) => void;
   onUnarchiveNotebook: (notebookId: string, showToast?: true) => void;
@@ -16,6 +19,8 @@ export interface NotebookMetaActionsReturn {
     workspaceId?: string
   ) => Promise<boolean>;
 
-  onPublishNotebook: (notebookId: string) => Promise<void>;
-  onUnpublishNotebook: (notebookId: string) => Promise<void>;
+  onUpdatePublishState: (
+    notebookId: string,
+    publishState: Publish_State
+  ) => Promise<void>;
 }

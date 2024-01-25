@@ -34,7 +34,13 @@ type Pad {
   workspace: Workspace
 
   createdAt: DateTime!
+
   isPublic: Boolean
+
+  # Has the user published to the internet?
+  # And allow us to feature this notebook on our website.
+  userAllowsPublicHighlighting: Boolean
+
   icon: String
   status: String
   archived: Boolean
@@ -83,12 +89,21 @@ input CreateOrUpdateSnapshotInput {
   forceSearchIndexUpdate: Boolean
 }
 
+enum PUBLISH_STATE {
+  PRIVATE
+  # Anyone with a link can access the notebook.
+  PUBLIC
+  # Anyone with a link, but also featured on our website.
+  PUBLICLY_HIGHLIGHTED
+}
+
 extend type Query {
   getPadById(id: ID!, snapshotName: String): Pad
   pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
   padsSharedWithMe(page: PageInput!): PagedPadResult!
   featuredPad: Pad
   searchTemplates(query: String!, page: PageInput!): PagedPadResult!
+  publiclyHighlightedPads(page: PageInput!): PagedPadResult!
 }
 
 extend type Mutation {
@@ -99,7 +114,7 @@ extend type Mutation {
   importPad(workspaceId: ID!, source: String!): Pad!
   movePad(id: ID!, workspaceId: ID!): Pad!
 
-  setPadPublic(id: ID!, isPublic: Boolean!): Boolean!
+  setPadPublic(id: ID!, publishState: PUBLISH_STATE!): Boolean!
 
   sharePadWithRole(
     id: ID!

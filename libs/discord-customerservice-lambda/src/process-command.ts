@@ -37,6 +37,9 @@ async function parseAndReplyToCommand(command: Command): Promise<string> {
     case 'templates': {
       return commands.templates(commandData.options);
     }
+    case 'feature': {
+      return commands.feature(commandData.options);
+    }
     default: {
       throw notImplemented(
         `command not recognized: ${(commandData as Command['data'])?.name}`

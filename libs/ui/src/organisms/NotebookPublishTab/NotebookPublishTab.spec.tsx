@@ -26,8 +26,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 
@@ -53,8 +53,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 
@@ -80,8 +80,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isPublished: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 
@@ -106,8 +106,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 
@@ -132,8 +132,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 
@@ -158,8 +158,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       isPublishing: false,
       setIsPublishing: () => noop,
-      onPublish: () => noop as any,
-      onUnpublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
+
       notebookId: 'id',
     };
 

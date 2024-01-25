@@ -6,7 +6,7 @@ import {
   useDeleteNotebookMutation,
   useDuplicateNotebookMutation,
   useMoveNotebookMutation,
-  useSetNotebookPublicMutation,
+  useSetNotebookPublishStateMutation,
   useUnarchiveNotebookMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
@@ -70,8 +70,8 @@ export function useNotebookMetaActions(
     useCreateOrUpdateNotebookSnapshotMutation()[1],
     'Unable to publish notebook'
   );
-  const remoteUpdateNotebookIsPublic = useMutationResultHandler(
-    useSetNotebookPublicMutation()[1],
+  const remoteUpdateNotebookPublishState = useMutationResultHandler(
+    useSetNotebookPublishStateMutation()[1],
     'Unable to change public status of notebook'
   );
 
@@ -205,13 +205,20 @@ export function useNotebookMetaActions(
     [duplicateNotebook, nav, toast]
   );
 
-  const onPublishNotebook = useCallback<
-    NotebookMetaActionsReturn['onPublishNotebook']
+  const onUpdatePublishState = useCallback<
+    NotebookMetaActionsReturn['onUpdatePublishState']
   >(
-    async (notebookId) => {
+    async (notebookId, publishState) => {
+      if (publishState === 'PRIVATE') {
+        await remoteUpdateNotebookPublishState({
+          id: notebookId,
+          publishState,
+        });
+        return;
+      }
+
       // Let other parts of the UI know that we have published a new version
       hasPublished.next(undefined);
-
       const localState = await getLocalNotebookUpdates(notebookId);
 
       let checksumLocal: string | undefined;
@@ -230,18 +237,12 @@ export function useNotebookMetaActions(
           localVersionHash: checksumLocal,
         },
       });
-      await remoteUpdateNotebookIsPublic({ id: notebookId, isPublic: true });
+      await remoteUpdateNotebookPublishState({
+        id: notebookId,
+        publishState,
+      });
     },
-    [createOrUpdateSnapshot, hasPublished, remoteUpdateNotebookIsPublic]
-  );
-
-  const onUnpublishNotebook = useCallback<
-    NotebookMetaActionsReturn['onUnpublishNotebook']
-  >(
-    async (notebookId) => {
-      await remoteUpdateNotebookIsPublic({ id: notebookId, isPublic: false });
-    },
-    [remoteUpdateNotebookIsPublic]
+    [createOrUpdateSnapshot, hasPublished, remoteUpdateNotebookPublishState]
   );
 
   return {
@@ -253,7 +254,6 @@ export function useNotebookMetaActions(
     onMoveToWorkspace,
     onChangeStatus,
     onDuplicateNotebook,
-    onPublishNotebook,
-    onUnpublishNotebook,
+    onUpdatePublishState,
   };
 }

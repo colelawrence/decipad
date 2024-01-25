@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { badRequest, unauthorized } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
-import { PadRecord } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import { DynamoDbQuery, PadRecord } from '@decipad/backendtypes';
+import tables, { paginate } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import {
   getNotebooksSharedWith,
@@ -100,6 +100,23 @@ const resolvers: Resolvers = {
           .slice(0, userResultSize)
           .map((r) => r.notebook) as Array<Pad>,
       };
+    },
+
+    async publiclyHighlightedPads(_, { page }) {
+      // TODO: Move into helper function
+
+      const data = await tables();
+      const PUBLICLY_HIGHLIGHTED = 'highlighted';
+
+      const query: DynamoDbQuery = {
+        IndexName: 'bySnapshotName',
+        KeyConditionExpression: 'snapshotName = :snapshotName',
+        ExpressionAttributeValues: {
+          ':snapshotName': PUBLICLY_HIGHLIGHTED,
+        },
+      };
+
+      return paginate(data.docsyncsnapshots, query, page);
     },
   },
 

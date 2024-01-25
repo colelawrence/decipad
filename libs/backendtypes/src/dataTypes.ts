@@ -368,8 +368,12 @@ export type PadAccessRecord = {
 export interface PadRecord extends TableRecordBase {
   name: string;
   workspace_id?: ID;
+
   isPublic?: boolean;
   isPublicWritable?: boolean;
+
+  userAllowsPublicHighlighting?: boolean;
+
   icon?: string;
   createdAt: number;
   section_id?: string;

@@ -36,9 +36,8 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { getByRole, queryByTestId } = render(
@@ -75,9 +74,8 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       hasUnpublishedChanges: true,
       isPublished: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { queryByTestId } = render(
@@ -112,9 +110,8 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { queryByTestId } = render(
@@ -149,9 +146,8 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { queryByTestId } = render(
@@ -185,9 +181,8 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: false,
       isAdmin: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { getByRole, queryByTestId } = render(
@@ -222,9 +217,8 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      onPublish: () => noop as any,
+      onUpdatePublish: () => noop as any,
       onRestore: () => noop,
-      onUnpublish: () => noop as any,
     };
 
     const { getByRole, queryByTestId } = render(

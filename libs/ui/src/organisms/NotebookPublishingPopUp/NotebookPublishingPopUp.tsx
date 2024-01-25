@@ -72,8 +72,7 @@ export type NotebookSharingPopUpProps = Pick<
   readonly hasUnpublishedChanges: boolean;
   readonly workspaceId: string;
 
-  readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
-  readonly onUnpublish: NotebookMetaActionsReturn['onUnpublishNotebook'];
+  readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
 };
 
 type TabStates = 'Collaborate' | 'Publish' | 'Embed';
@@ -99,8 +98,7 @@ export const NotebookPublishingPopUp = ({
 
   isPublished,
   notebookId,
-  onPublish,
-  onUnpublish,
+  onUpdatePublish,
 
   onInvite,
   onRemove,
@@ -219,8 +217,7 @@ export const NotebookPublishingPopUp = ({
                   currentSnapshot={currentSnapshot}
                   isPublishing={isPublishing}
                   setIsPublishing={setIsPublishing}
-                  onPublish={onPublish}
-                  onUnpublish={onUnpublish}
+                  onUpdatePublish={onUpdatePublish}
                   setShareMenuOpen={setShareMenuOpen}
                 />
               </div>
@@ -264,8 +261,7 @@ export const NotebookPublishingPopUp = ({
                 currentSnapshot={currentSnapshot}
                 isPublishing={isPublishing}
                 setIsPublishing={setIsPublishing}
-                onPublish={onPublish}
-                onUnpublish={onUnpublish}
+                onUpdatePublish={onUpdatePublish}
                 setShareMenuOpen={setShareMenuOpen}
               />
             </div>
