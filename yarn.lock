@@ -15783,10 +15783,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1542.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1542.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1542.0.tgz#c8940b5d746b31bd592277905c07adbda8336359"
-  integrity sha512-GcDlp9/2fRo7I6LxW1wAMVHf6G4b4S4vsFDhWMhK6Ycx3EhNmpJVEtQn5b46O90ChgD6ydQwBGEoi00W5Km0Lw==
+aws-sdk@2.1543.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1543.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1543.0.tgz#38f6e3131dcdfcfdc4736e29e5c216c37d4dc38d"
+  integrity sha512-sC8VwfdlauX7AYYm6Ed4SkONjt7cLr63AdkSL0MS+lwoy1fJwVRb2Kwylv+an1uAdQavRltWnEg2LVo2jzRQuA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -19410,20 +19410,20 @@ dotenv@10.0.0, dotenv@^10.0.0, dotenv@~10.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
-dotenv@16.3.0:
-  version "16.3.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.0.tgz#1c61ae0a7b6f7b7e2285d50016ebab048f12ec6d"
-  integrity sha512-tHB+hmf8MRCkT3VVivGiG8kq9HiGTmQ3FzOKgztfpJQH1IWuZTOvKSJmHNnQPowecAmkCJhLrxdPhOr06LLqIQ==
-
-dotenv@^16.0.0, dotenv@^16.3.1, dotenv@~16.3.1:
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
-  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
+dotenv@16.4.1, dotenv@^16.0.0, dotenv@^16.3.1, dotenv@^16.4.1:
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.1.tgz#1d9931f1d3e5d2959350d1250efab299561f7f11"
+  integrity sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==
 
 dotenv@^8.0.0:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
   integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
+
+dotenv@~16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 dset@^3.1.1, dset@^3.1.2:
   version "3.1.2"
