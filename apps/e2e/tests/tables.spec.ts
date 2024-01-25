@@ -294,6 +294,14 @@ test('Basic Table', async ({ testUser }) => {
     // row 4 with 1% is now row 5
     expect(await getFromTable(testUser.page, 5, 1)).toBe('1%');
   });
+
+  await test.step("deleting table doesn't delete block after", async () => {
+    await testUser.page.getByTestId('paragraph-content').click();
+    await testUser.page.getByTestId('paragraph-content').dblclick();
+    await testUser.page.keyboard.type('Hello, World');
+    await testUser.notebook.deleteBlock(0);
+    await expect(testUser.page.getByText('Hello, World')).toBeVisible();
+  });
 });
 
 test('tests table date pickers', async ({ testUser }) => {

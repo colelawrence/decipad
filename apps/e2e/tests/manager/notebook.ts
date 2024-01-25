@@ -1371,6 +1371,6 @@ export class Notebook {
 
   async deleteBlock(index: number) {
     await this.page.getByTestId('drag-handle').nth(index).click();
-    await this.page.getByRole('menuitem', { name: 'Delete Delete' }).click();
+    await this.page.getByRole('menuitem', { name: 'Delete' }).click();
   }
 }
