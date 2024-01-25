@@ -57,6 +57,7 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
       const allPlans: SubscriptionPlan[] = subscriptionPlans.data.map((p) => {
         // eslint-disable-next-line camelcase
         const { id, metadata, unit_amount, currency } = p;
+
         return {
           id,
           currency,
@@ -65,11 +66,11 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
           paymentLink: metadata.paymentLink,
           // eslint-disable-next-line camelcase
           price: unit_amount ?? 0,
-          seats: Number(metadata.seats),
-          credits: Number(metadata.credits),
-          queries: Number(metadata.queries),
+          seats: Number(metadata.seats) || 0,
+          credits: Number(metadata.credits) || 0,
+          queries: Number(metadata.queries) || 0,
           description: metadata.description,
-          storage: Number(metadata.storage),
+          storage: Number(metadata.storage) || 0,
           isDefault: metadata.isDefault === 'true',
         };
       });
