@@ -236,7 +236,7 @@
     "core-js": "3.35.1",
     "cross-fetch": "^4.0.0",
     "csv-parse": "5.5.0",
-    "date-fns": "2.30.0",
+    "date-fns": "3.3.1",
     "deepmerge": "^4.3.1",
     "discord-api-types": "0.37.11",
     "docusaurus-plugin-segment": "1.0.4",
