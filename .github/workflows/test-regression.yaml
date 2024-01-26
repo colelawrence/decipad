@@ -48,7 +48,7 @@ jobs:
           DECI_VERBOSE: false
         run: ./scripts/e2e-regression.sh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure() || cancelled()
         with:
           name: playwright-report
