@@ -31,7 +31,7 @@ jobs:
           cache: yarn
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -44,7 +44,7 @@ jobs:
 
       - name: Cache NX things
         id: node-modules-nx-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules/.cache
