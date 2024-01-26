@@ -3,8 +3,51 @@ import {
   componentCssVars,
   cssVar,
   p13Medium,
+  smallScreenQuery,
   tinyPhone,
 } from '../../primitives';
+import { deciOverflowXStyles } from '../../styles/scrollbars';
+import { css } from '@emotion/react';
+import { closeButtonStyles } from '../../styles/buttons';
+
+const genericTopbarStyles = css({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  rowGap: '8px',
+  width: '100%',
+  height: '100%',
+
+  [smallScreenQuery]: {
+    padding: 0,
+
+    '& > div': {
+      width: 'auto',
+      minWidth: '100%',
+    },
+  },
+});
+
+export const DefaultTopbarWrapper = styled.div(
+  deciOverflowXStyles,
+  genericTopbarStyles,
+  {
+    padding: '16px 0',
+  }
+);
+
+export const EmbedTopbarWrapper = styled.div(deciOverflowXStyles, {
+  padding: '0',
+});
+
+export const InnerStyles = styled.div({
+  width: '100%',
+  height: '32px',
+  gap: '8px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
 
 export const IconWrap = styled.div({
   width: '32px',
@@ -48,6 +91,12 @@ export const LeftContainer = styled.div({
   height: '32px',
   display: 'flex',
   gap: '8px',
+});
+
+export const RightContainer = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5em',
 });
 
 export const ActionButtons = styled.div({
@@ -152,4 +201,69 @@ export const GPTNotification = styled.div(p13Medium, {
     height: 56,
     bottom: '-56px',
   },
+});
+
+const hideForSmallScreenStyles = css({
+  [smallScreenQuery]: {
+    display: 'none',
+  },
+});
+
+export const HiddenFromSmallScreens = styled.div(hideForSmallScreenStyles);
+
+export const TemplateWrapper = styled.div(hideForSmallScreenStyles, {
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryAltDefaultText'),
+  display: 'flex',
+  gap: '12px',
+  height: '32px',
+  ':hover': {
+    backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+    color: componentCssVars('ButtonTertiaryAltHoverText'),
+  },
+  borderRadius: 6,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '8px',
+});
+
+export const TemplatesText = styled.span({
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+  gap: '8px',
+  alignItems: 'center',
+  userSelect: 'none',
+  color: cssVar('textHeavy'),
+
+  svg: {
+    display: 'grid',
+    width: '16px',
+    height: '16px',
+  },
+});
+
+export const AuthorsWrapper = styled.div(p13Medium, {
+  color: cssVar('textSubdued'),
+  display: 'flex',
+});
+
+export const AuthorsTrigger = styled.span({
+  cursor: 'pointer',
+  width: 16,
+  height: 16,
+  ':hover': {
+    ...closeButtonStyles,
+  },
+});
+
+export const SpanTinyPhoneHide = styled.span({
+  alignSelf: 'flex-end',
+  [tinyPhone]: {
+    display: 'none',
+  },
+});
+
+export const SidebarToggleTrigger = styled.div({
+  width: '20px',
+  height: '20px',
 });

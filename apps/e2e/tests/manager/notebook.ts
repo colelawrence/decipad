@@ -523,6 +523,7 @@ export class Notebook {
    * ```
    */
   async updateNotebookTitle(title: string) {
+    await expect(this.notebookTitle).toBeVisible();
     // make sure notebook is editable in 3s
     await this.notebookTitle.click({ timeout: 3000 });
     await ControlPlus(this.page, 'A');
@@ -530,9 +531,9 @@ export class Notebook {
     await this.notebookTitle.fill(title);
     await expect(this.notebookTitle).toHaveText(title);
     await expect(async () => {
-      await expect(
-        await this.page.getByText(title.substring(0, 20)).count()
-      ).toEqual(2);
+      expect(await this.page.getByText(title.substring(0, 20)).count()).toEqual(
+        2
+      );
     }).toPass();
   }
 

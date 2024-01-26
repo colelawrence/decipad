@@ -33,12 +33,10 @@ export interface NotebookOptionsProps {
   readonly workspaceId: string;
   readonly canDelete?: boolean;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
-  readonly onDuplicate: NotebookMetaActionsType['onDuplicateNotebook'];
-  readonly onExport: NotebookMetaActionsType['onDownloadNotebook'];
-  readonly onExportBackups: NotebookMetaActionsType['onDownloadNotebookHistory'];
-  readonly onUnarchive: NotebookMetaActionsType['onUnarchiveNotebook'];
-  readonly onDelete: NotebookMetaActionsType['onDeleteNotebook'];
-  readonly onMoveWorkspace: NotebookMetaActionsType['onMoveToWorkspace'];
+  readonly actions: NotebookMetaActionsType;
+
+  // Custom onDuplicate for redirecting purposes.
+  readonly onDuplicate: (workspaceId?: string) => void;
   readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
 
   /* Optionals */
@@ -49,12 +47,6 @@ export interface NotebookOptionsProps {
 }
 
 export const NotebookOptions: FC<NotebookOptionsProps> = ({
-  onDuplicate,
-  onExport,
-  onExportBackups,
-  onUnarchive,
-  onDelete,
-  onMoveWorkspace,
   permissionType,
   trigger,
   isArchived,
@@ -63,6 +55,8 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   creationDate,
   notebookStatus,
   canDelete = true,
+  actions,
+  onDuplicate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -97,7 +91,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 <MenuItem
                   key={workspace.id}
                   onSelect={() => {
-                    onDuplicate(id, false, workspace.id);
+                    onDuplicate(workspace.id);
                     setIsOpen(false);
                   }}
                 >
@@ -109,7 +103,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<Copy />}
               onSelect={() => {
-                onDuplicate(id, false, workspaces[0].id);
+                onDuplicate();
                 setIsOpen(false);
               }}
             >
@@ -130,7 +124,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 key={workspace.id}
                 icon={<AddToWorkspace />}
                 onSelect={() => {
-                  onMoveWorkspace(id, workspace.id);
+                  actions.onMoveToWorkspace(id, workspace.id);
                   setIsOpen(false);
                 }}
               >
@@ -144,7 +138,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<Download />}
               onSelect={() => {
-                onExport(id);
+                actions.onDownloadNotebook(id);
                 setIsOpen(false);
               }}
             >
@@ -153,7 +147,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<GitBranch />}
               onSelect={() => {
-                onExportBackups(id);
+                actions.onDownloadNotebookHistory(id);
                 setIsOpen(false);
               }}
             >
@@ -165,7 +159,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
           <MenuItem
             icon={<FolderOpen />}
             onSelect={() => {
-              onUnarchive(id);
+              actions.onUnarchiveNotebook(id);
               setIsOpen(false);
             }}
           >
@@ -177,7 +171,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
           <MenuItem
             icon={isArchived ? <Trash /> : <Archive />}
             onSelect={() => {
-              onDelete(id, true);
+              actions.onDeleteNotebook(id, true);
               setIsOpen(false);
             }}
           >

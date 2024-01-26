@@ -2,14 +2,12 @@
 import { UserIconKey } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, memo, useCallback, useEffect } from 'react';
 import { XYCoord, useDrag as useCustomDrag, useDragLayer } from 'react-dnd';
 import * as icons from '../../icons';
 import { Ellipsis } from '../../icons';
 import { NotebookIcon, NotebookStatus } from '../../molecules';
-import { NotebookStatusProps } from '../../molecules/NotebookStatus/NotebookStatus';
 import { cssVar, p14Medium, shortAnimationDuration } from '../../primitives';
 import { notebookList } from '../../styles';
 import { mainIconButtonStyles } from '../../styles/buttons';
@@ -113,11 +111,6 @@ export type NotebookListItemProps = Pick<
     readonly id: string;
     readonly name: string;
     readonly section?: string;
-    readonly onMoveToSection: (padId: string, sectionId: string) => void;
-    readonly onChangeStatus: (
-      notebookId: string,
-      status: NotebookStatusProps['status']
-    ) => void;
     readonly icon: UserIconKey;
     readonly iconColor: AvailableSwatchColor;
     readonly workspaceId: string;
@@ -145,17 +138,11 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
     isArchived,
     section,
     workspaces,
-    onDuplicate,
-    onMoveToSection,
-    onDelete,
-    onExport,
-    onExportBackups,
-    onUnarchive,
-    onMoveWorkspace,
-    onChangeStatus = noop,
+    actions,
     icon = 'Deci',
     iconColor = 'Catskill',
     workspaceId,
+    onDuplicate,
   }) {
     const href = notebooks({}).notebook({ notebook: { id, name } }).$;
     const [{ isDragging }, drag, preview] = useCustomDrag(
@@ -165,7 +152,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
         end: (item, monitor) => {
           const dropResult = monitor.getDropResult<DropResult>();
           if (item && dropResult) {
-            onMoveToSection(item.id, dropResult.id);
+            actions.onMoveToSection(item.id, dropResult.id);
           }
         },
         collect: (monitor) => ({
@@ -173,7 +160,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
           handlerId: monitor.getHandlerId(),
         }),
       }),
-      [id, name, icon, iconColor, onMoveToSection]
+      [id, name, icon, iconColor, actions.onMoveToSection]
     );
 
     useEffect(() => {
@@ -188,9 +175,9 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
       ComponentProps<typeof NotebookStatus>['onChangeStatus']
     >(
       (s) => {
-        onChangeStatus(id, s);
+        actions.onChangeStatus(id, s);
       },
-      [id, onChangeStatus]
+      [actions, id]
     );
 
     return (
@@ -217,6 +204,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
             />
             <NotebookOptions
               permissionType={permissionType}
+              onDuplicate={onDuplicate}
               trigger={
                 <div css={mainIconWrapper}>
                   <Ellipsis />
@@ -226,12 +214,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               notebookId={id}
               creationDate={creationDate}
               isArchived={isArchived}
-              onMoveWorkspace={onMoveWorkspace}
-              onDuplicate={onDuplicate}
-              onExport={onExport}
-              onExportBackups={onExportBackups}
-              onUnarchive={onUnarchive}
-              onDelete={onDelete}
+              actions={actions}
               workspaceId={workspaceId}
             />
           </Anchor>

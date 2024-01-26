@@ -3,8 +3,9 @@ import { ComponentProps } from 'react';
 import { AvailableColorStatus, TColorStatus } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
-import { noop } from '@decipad/utils';
 import { UserIconKey } from '@decipad/editor-types';
+
+const asyncNoop = async () => null as any;
 
 const args: ComponentProps<typeof NotebookListItem> = {
   permissionType: null,
@@ -14,18 +15,21 @@ const args: ComponentProps<typeof NotebookListItem> = {
   status: 'To Do' as TColorStatus,
   isPublic: true,
   id: '123',
-  onDelete: noop,
-  onMoveToSection: noop,
-  onDuplicate: noop as any,
-  onChangeStatus: noop,
-  onExport: noop,
-  onUnarchive: noop,
-  onExportBackups: noop,
-  onMoveWorkspace: noop,
+  actions: {
+    onDeleteNotebook: asyncNoop,
+    onUnarchiveNotebook: asyncNoop,
+    onDownloadNotebook: asyncNoop,
+    onDownloadNotebookHistory: asyncNoop,
+    onMoveToSection: asyncNoop,
+    onMoveToWorkspace: asyncNoop,
+    onChangeStatus: asyncNoop,
+    onDuplicateNotebook: asyncNoop,
+  },
   notebookId: '123',
   isArchived: false,
   workspaces: [],
   workspaceId: '456',
+  onDuplicate: () => {},
 };
 
 export default {

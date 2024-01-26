@@ -2,8 +2,8 @@ import { LoginPage, VerifyEmail } from '@decipad/ui';
 import { signIn } from 'next-auth/react';
 import { FC, useState } from 'react';
 import { loadWorkspaces } from '../../App';
-import { loadEditor } from '../../notebooks/notebook/Notebook';
 import { useSearchParams } from 'react-router-dom';
+import { Loaders } from '../../notebooks/notebook/LoadComponents';
 
 type Page =
   | {
@@ -42,7 +42,7 @@ export const Login: FC = () => {
               if (resp && resp.ok) {
                 // Aggressively pre-load stuff for user
                 loadWorkspaces();
-                loadEditor();
+                Loaders.loadEditor();
               }
             } catch (error) {
               console.error('Failed to log in', error);

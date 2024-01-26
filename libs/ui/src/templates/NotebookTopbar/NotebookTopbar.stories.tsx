@@ -1,45 +1,143 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
-import { noop } from '@decipad/utils';
+import { NotebookOptions, NotebookPublishingPopUp } from '../../organisms';
+import {
+  AIModeSwitch,
+  NotebookPath,
+  NotebookStatusDropdown,
+} from '../../molecules';
+import { Caret } from '../../icons';
+import { UndoButtons } from './UndoButtons';
 
-const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
-  permissionType: null,
-  sidebarOpen: true,
-  isNewNotebook: true,
-  onClearAll: noop,
+const notebookId = 'notebookId';
+const notebookName = 'my notebook';
+const workspaceId = 'workspace id';
+
+// We can't import MenuItemButton from 'styles' without crashing storybook.
+// pretty weird.
+
+const args: ComponentProps<typeof NotebookTopbar> = {
+  NotebookOptions: (
+    <NotebookOptions
+      notebookId={notebookId}
+      canDelete={false}
+      permissionType="ADMIN"
+      isArchived={false}
+      workspaces={[]}
+      onDuplicate={() => {}}
+      trigger={
+        <div
+          // eslint-disable-next-line decipad/css-prop-named-variable
+          css={{
+            cursor: 'pointer',
+            userSelect: 'none',
+            'div em': {
+              cursor: 'pointer',
+              userSelect: 'none',
+            },
+          }}
+        >
+          <NotebookPath concatName notebookName={notebookName} />
+          <Caret variant="down" />
+        </div>
+      }
+      notebookStatus={
+        <NotebookStatusDropdown status="done" onChangeStatus={() => {}} />
+      }
+      actions={{
+        onChangeStatus: () => {},
+        onMoveToSection: () => {},
+        onDeleteNotebook: () => {},
+        onMoveToWorkspace: () => {},
+        onDownloadNotebook: () => {},
+        onDuplicateNotebook: async () => true,
+        onUnarchiveNotebook: () => {},
+        onDownloadNotebookHistory: () => {},
+      }}
+      creationDate={new Date()}
+      workspaceId={workspaceId}
+    />
+  ),
+  UndoButtons: (
+    <UndoButtons
+      canUndo={true}
+      canRedo={true}
+      isEmbed={false}
+      onRedo={() => {}}
+      onUndo={() => {}}
+      onRevertChanges={() => {}}
+    />
+  ),
+  AiModeSwitch: <AIModeSwitch value={false} onChange={() => {}} />,
+  NotebookPublishing: (
+    <NotebookPublishingPopUp
+      notebookName={notebookName}
+      workspaceId={workspaceId}
+      hasPaywall={false}
+      invitedUsers={[]}
+      nrOfTeamMembers={1}
+      manageTeamURL="abc"
+      teamName="Decipad"
+      isAdmin={true}
+      snapshots={[]}
+      notebookId={notebookId}
+      isPublished={false}
+      hasUnpublishedChanges={false}
+      onUpdatePublish={async () => {}}
+      onInvite={async () => {}}
+      onChange={async () => {}}
+      onRemove={async () => {}}
+    />
+  ),
+  access: {
+    isAuthenticated: true,
+    isSharedNotebook: false,
+    hasWorkspaceAccess: true,
+    permissionType: 'ADMIN',
+    isGPTGenerated: false,
+  },
+  actions: {
+    onBack: () => {},
+    onGalleryClick: () => {},
+    onToggleSidebar: () => {},
+    onTryDecipadClick: () => {},
+    onClaimNotebook: () => {},
+    onDuplicateNotebook: () => {},
+    isSidebarOpen: false,
+  },
+  authors: {
+    adminName: 'Me',
+    invitedUsers: [],
+    isWriter: true,
+  },
   isEmbed: false,
-  toggleSidebar: noop,
-  notebookMeta: undefined,
-  notebookMetaActions: {
-    onChangeStatus: noop,
-    onMoveToSection: noop,
-    onDeleteNotebook: noop,
-    onMoveToWorkspace: noop,
-    onUpdatePublishState: noop as any,
-    onDownloadNotebook: noop,
-    onDuplicateNotebook: noop as any,
-    onUnarchiveNotebook: noop,
-    onDownloadNotebookHistory: noop as any,
-  },
-  notebookAccessActions: {
-    onChangeAccess: noop as any,
-    onRemoveAccess: noop as any,
-    onInviteByEmail: noop as any,
-  },
-  userWorkspaces: [],
-  hasUnpublishedChanges: false,
-  toggleAIMode: noop,
-  aiMode: false,
-  UndoButtons: undefined,
-  isGPTGenerated: false,
-  onClaimNotebook: noop,
+  status: 'done',
 };
+
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Writer: StoryFn<typeof args> = (props) => (
   <NotebookTopbar {...props} />
+);
+
+export const GPTGenerated: StoryFn<typeof args> = (props) => (
+  <NotebookTopbar
+    {...props}
+    access={{ ...props.access, isGPTGenerated: true }}
+  />
+);
+
+export const Embed: StoryFn<typeof args> = (props) => (
+  <NotebookTopbar {...props} isEmbed={true} />
+);
+
+export const Reader: StoryFn<typeof args> = (props) => (
+  <NotebookTopbar
+    {...props}
+    access={{ ...props.access, permissionType: 'READ' }}
+  />
 );

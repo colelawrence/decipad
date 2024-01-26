@@ -6,28 +6,34 @@ import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookListItem } from './NotebookListItem';
-import { noop } from '@decipad/utils';
+import { AvailableSwatchColor, TColorStatus } from '../../utils';
+import { UserIconKey } from '@decipad/editor-types';
+
+const asyncNoop = async () => null as any;
 
 const props: ComponentProps<typeof NotebookListItem> = {
   permissionType: null,
-  id: 'my-notebook',
-  name: 'My Notebook',
-  icon: 'Rocket',
-  status: 'draft',
-  iconColor: 'Catskill',
-  isPublic: false,
-  onDelete: noop,
-  onMoveToSection: noop,
-  onDuplicate: noop as any,
-  onChangeStatus: noop,
-  onExport: noop,
-  onUnarchive: noop,
-  onExportBackups: noop,
-  onMoveWorkspace: noop,
-  workspaces: [],
+  iconColor: 'Malibu' as AvailableSwatchColor,
+  icon: 'Rocket' as UserIconKey,
+  name: 'Getting started with Decipad',
+  status: 'To Do' as TColorStatus,
+  isPublic: true,
+  id: '123',
+  actions: {
+    onDeleteNotebook: asyncNoop,
+    onUnarchiveNotebook: asyncNoop,
+    onDownloadNotebook: asyncNoop,
+    onDownloadNotebookHistory: asyncNoop,
+    onMoveToSection: asyncNoop,
+    onMoveToWorkspace: asyncNoop,
+    onChangeStatus: asyncNoop,
+    onDuplicateNotebook: asyncNoop,
+  },
   notebookId: '123',
   isArchived: false,
+  workspaces: [],
   workspaceId: '456',
+  onDuplicate: () => {},
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (

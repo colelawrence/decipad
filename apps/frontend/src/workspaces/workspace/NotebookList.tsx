@@ -78,16 +78,12 @@ export const NotebookList: FC<NotebookListProps> = ({
               icon={icon}
               iconColor={iconColor}
               workspaces={workspaces}
-              onChangeStatus={actions.onChangeStatus}
-              onDelete={actions.onDeleteNotebook}
-              onExport={actions.onDownloadNotebook}
-              onExportBackups={actions.onDownloadNotebookHistory}
-              onMoveToSection={actions.onMoveToSection}
-              onMoveWorkspace={actions.onMoveToWorkspace}
-              onUnarchive={actions.onUnarchiveNotebook}
-              onDuplicate={actions.onDuplicateNotebook}
+              actions={actions}
               notebookId={n.id}
               workspaceId={workspaceId}
+              onDuplicate={(workspace?: string) => {
+                actions.onDuplicateNotebook(n.id, false, workspace);
+              }}
             />
           </li>
         );

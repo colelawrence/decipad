@@ -287,7 +287,7 @@ export class AiAssistant {
     const aiSwitch = this.page.getByTestId('ai-switch');
     const isAiSwitchChecked = await aiSwitch.getAttribute('aria-checked');
 
-    if (isAiSwitchChecked) {
+    if (!isAiSwitchChecked) {
       return;
     }
 
