@@ -75,7 +75,8 @@ export const TableCell: PlateComponent = ({
   }, [editor, path]);
 
   const selectNextCellCallback = useCallback(
-    () => selectNextCell(editor, path),
+    (edge?: 'before' | 'after' | 'top' | 'left' | 'right' | 'bottom') =>
+      selectNextCell(editor, path, edge),
     [editor, path]
   );
 

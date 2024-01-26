@@ -14,7 +14,9 @@ export interface CellEditorProps extends HTMLAttributes<HTMLTableCellElement> {
   eventTarget?: EventTarget;
   onValueChange?: (value: string) => void;
   onConvertToFormula?: () => void;
-  onSelectNextCell?: () => void;
+  onSelectNextCell?: (
+    edge?: 'before' | 'after' | 'top' | 'left' | 'bottom' | 'right'
+  ) => void;
   path: Path;
   element?: AnyElement;
   onEditingChange?: (editing: boolean) => void;

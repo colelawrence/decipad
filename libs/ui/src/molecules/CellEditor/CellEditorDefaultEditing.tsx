@@ -15,7 +15,6 @@ import {
   focusEditor,
   getEndPoint,
   getBlockAbove,
-  select,
 } from '@udecode/plate-common';
 import { ELEMENT_TD } from '@decipad/editor-types';
 
@@ -38,55 +37,31 @@ export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
     });
     if (!cellEntry) return;
 
-    const path = cellEntry[1];
+    /**
+     * Note: onConfirm must be called before setting the selection to ensure
+     * that the selection is set correctly.
+     */
 
     switch (event.key) {
       case 'Tab': {
         onConfirm();
-        if (event.shiftKey) {
-          if (path[2] === 0) break;
-          const newPath = [...path];
-          newPath[2] = path[2] - 1;
-          select(editor, newPath);
-          break;
-        }
         event.preventDefault();
-        onSelectNextCell?.();
+        onSelectNextCell?.(event.shiftKey ? 'before' : 'after');
         break;
       }
       case 'Enter': {
         onConfirm();
-
-        const newPath = [...path];
-        if (event.shiftKey) {
-          if (path[1] < 3) break;
-          newPath[1] = path[1] - 1;
-          select(editor, newPath);
-          break;
-        }
-
-        newPath[1] = path[1] + 1;
-        try {
-          select(editor, newPath);
-        } catch (e) {
-          // swallow the error as it means we're on the last row
-        }
+        onSelectNextCell?.(event.shiftKey ? 'top' : 'bottom');
         break;
       }
       case 'ArrowUp': {
-        const newPath = [...path];
-        newPath[1] = path[1] - 1;
-        select(editor, newPath);
+        onConfirm();
+        onSelectNextCell?.('top');
         break;
       }
       case 'ArrowDown': {
-        const newPath = [...path];
-        newPath[1] = path[1] + 1;
-        try {
-          select(editor, newPath);
-        } catch (e) {
-          // swallow the error as it means we're on the last row
-        }
+        onConfirm();
+        onSelectNextCell?.('bottom');
         break;
       }
       case 'Escape': {

@@ -268,9 +268,23 @@ test.describe('Table Selection', () => {
   test('selects using tab while editing', async () => {
     await deleteTable(page);
     await createTable(page);
-    await doubleClickCell(page, 1, 1);
+    await doubleClickCell(page, 2, 1);
     await page.keyboard.press('Tab');
-    expect(await isCellSelected(page, 1, 2)).toBe(true);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 2, 2)).toBe(true);
+  });
+
+  test('selects using shift + tab while editing', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 2, 1);
+    await page.keyboard.down('Shift');
+    await page.keyboard.press('Tab');
+    await page.keyboard.up('Shift');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 2, 0)).toBe(true);
   });
 
   test('selects using tab while not editing', async () => {
@@ -278,6 +292,60 @@ test.describe('Table Selection', () => {
     await createTable(page);
     await clickCell(page, 1, 1);
     await page.keyboard.press('Tab');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
     expect(await isCellSelected(page, 1, 2)).toBe(true);
+  });
+
+  test('selects using enter while editing', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 2, 1);
+    await page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 3, 1)).toBe(true);
+  });
+
+  test('selects using shift + enter while editing', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 2, 1);
+    await page.keyboard.down('Shift');
+    await page.keyboard.press('Enter');
+    await page.keyboard.up('Shift');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 1, 1)).toBe(true);
+  });
+
+  test('selects using arrow up while editing', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 2, 1);
+    await page.keyboard.press('ArrowUp');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 1, 1)).toBe(true);
+  });
+
+  test('selects using arrow down while editing', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 2, 1);
+    await page.keyboard.press('ArrowDown');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 3, 1)).toBe(true);
+  });
+
+  test('selects using arrow down while editing on the last row', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await doubleClickCell(page, 3, 1);
+    await page.keyboard.press('ArrowDown');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    expect(await isCellSelected(page, 3, 1)).toBe(true);
   });
 });

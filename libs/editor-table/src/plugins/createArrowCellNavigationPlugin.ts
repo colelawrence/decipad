@@ -2,25 +2,7 @@ import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
 import { ELEMENT_TD, MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import { getBlockAbove, getNode, TElement, Value } from '@udecode/plate-common';
-import { Path } from 'slate';
-
-type Edge = 'top' | 'left' | 'bottom' | 'right';
-
-const nextPath = (path: Path, edge: Edge): Path => {
-  const vector: [number, number] = (() => {
-    if (edge === 'top') return [-1, 0];
-    if (edge === 'left') return [0, -1];
-    if (edge === 'bottom') return [1, 0];
-    if (edge === 'right') return [0, 1];
-    return [0, 0];
-  })();
-
-  return [
-    ...path.slice(0, path.length - 2),
-    path[path.length - 2] + vector[0],
-    path[path.length - 1] + vector[1],
-  ];
-};
+import { nextCellPath } from '../utils/nextCellPath';
 
 const withoutCurrentKeyboardEvent = <
   TV extends Value = MyValue,
@@ -46,7 +28,7 @@ export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({
      */
     if (!event.shiftKey) return false;
 
-    const edges: Record<string, Edge> = {
+    const edges: Record<string, 'top' | 'left' | 'bottom' | 'right'> = {
       ArrowLeft: 'left',
       ArrowRight: 'right',
       ArrowUp: 'top',
@@ -67,7 +49,7 @@ export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({
     event.stopPropagation();
 
     // Make sure the new focus will be in a cell
-    const focusPath = nextPath(cellEntry[1], edge);
+    const focusPath = nextCellPath(cellEntry[1], edge);
     const focusNode = getNode<TElement>(editor, focusPath);
     if (focusNode?.type !== ELEMENT_TD) return false;
 

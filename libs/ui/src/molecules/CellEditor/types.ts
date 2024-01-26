@@ -51,7 +51,9 @@ export interface CellProps {
   eventTarget?: EventTarget;
   onChange?: (value: string) => void;
   onConvertToFormula?: () => void;
-  onSelectNextCell?: () => void;
+  onSelectNextCell?: (
+    edge?: 'before' | 'after' | 'top' | 'left' | 'bottom' | 'right'
+  ) => void;
   onEditingChange?: (editing: boolean) => void;
 }
 
