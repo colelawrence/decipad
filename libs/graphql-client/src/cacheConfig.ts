@@ -11,8 +11,8 @@ import {
   GetNotebookByIdQuery,
   GetNotebookMetaDocument,
   GetNotebookMetaQuery,
-  GetWorkspacesDocument,
-  GetWorkspacesQuery,
+  GetWorkspacesWithNotebooksDocument,
+  GetWorkspacesWithNotebooksQuery,
   GraphCacheConfig,
   Pad,
   Section,
@@ -26,8 +26,8 @@ import * as schema from './schema.generated.json';
 const PUBLISHED_SNAPSHOT = 'Published 1';
 
 const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
-  cache.updateQuery<GetWorkspacesQuery>(
-    { query: GetWorkspacesDocument },
+  cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
+    { query: GetWorkspacesWithNotebooksDocument },
     (data) => {
       data?.workspaces
         .find(({ id }) => notebook.workspace?.id === id)
@@ -42,8 +42,8 @@ const addSectionToItsWorkspace = (
   section: Section,
   workspaceId: string
 ) => {
-  cache.updateQuery<GetWorkspacesQuery>(
-    { query: GetWorkspacesDocument },
+  cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
+    { query: GetWorkspacesWithNotebooksDocument },
     (data) => {
       data?.workspaces
         .find(({ id }) => workspaceId === id)
@@ -136,8 +136,8 @@ export const graphCacheConfig: GraphCacheConfig = {
   updates: {
     Mutation: {
       createWorkspace: (result, _args, cache) => {
-        cache.updateQuery<GetWorkspacesQuery>(
-          { query: GetWorkspacesDocument },
+        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
+          { query: GetWorkspacesWithNotebooksDocument },
           (data) => {
             data?.workspaces.push(result.createWorkspace as Workspace);
             return data;
@@ -235,9 +235,9 @@ export const graphCacheConfig: GraphCacheConfig = {
           }
         );
 
-        cache.updateQuery<GetWorkspacesQuery>(
+        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
           {
-            query: GetWorkspacesDocument,
+            query: GetWorkspacesWithNotebooksDocument,
           },
           (data) => {
             if (!data) return data;
@@ -281,9 +281,9 @@ export const graphCacheConfig: GraphCacheConfig = {
         );
       },
       removePad: (_result, args, cache) => {
-        cache.updateQuery<GetWorkspacesQuery>(
+        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
           {
-            query: GetWorkspacesDocument,
+            query: GetWorkspacesWithNotebooksDocument,
           },
           (data) => {
             if (!data) return data;
@@ -303,9 +303,9 @@ export const graphCacheConfig: GraphCacheConfig = {
         );
       },
       movePad: (_result, args, cache) => {
-        cache.updateQuery<GetWorkspacesQuery>(
+        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
           {
-            query: GetWorkspacesDocument,
+            query: GetWorkspacesWithNotebooksDocument,
             variables: {
               id: args.id,
             },

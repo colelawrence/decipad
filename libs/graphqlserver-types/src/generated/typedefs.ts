@@ -246,7 +246,8 @@ type Pad {
 
   isPublic: Boolean
 
-  # Is the notebook showcased in our website?
+  # Has the user published to the internet?
+  # And allow us to feature this notebook on our website.
   userAllowsPublicHighlighting: Boolean
 
   icon: String

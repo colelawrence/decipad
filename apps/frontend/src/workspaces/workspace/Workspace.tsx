@@ -5,7 +5,7 @@ import {
   useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
   useGetSubscriptionsPlansQuery,
-  useGetWorkspacesQuery,
+  useGetWorkspacesWithNotebooksQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
@@ -74,7 +74,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const { data: session } = useSession();
   const toast = useToast();
 
-  const [result] = useGetWorkspacesQuery();
+  const [result] = useGetWorkspacesWithNotebooksQuery();
 
   const createNotebook = useMutationResultHandler(
     useCreateNotebookMutation()[1],

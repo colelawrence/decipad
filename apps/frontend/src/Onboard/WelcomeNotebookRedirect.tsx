@@ -1,6 +1,6 @@
 /* eslint-disable prefer-template */
 import { FC } from 'react';
-import { useGetWorkspacesQuery } from '@decipad/graphql-client';
+import { useGetWorkspacesWithNotebooksQuery } from '@decipad/graphql-client';
 import { Navigate } from 'react-router-dom';
 import { notebooks, workspaces } from '@decipad/routing';
 import { LoadingLogo } from '@decipad/ui';
@@ -8,7 +8,7 @@ import { LoadingLogo } from '@decipad/ui';
 const INITIAL_TITLE = 'Welcome to Decipad!';
 
 export const WelcomeNotebookRedirect: FC = () => {
-  const [result] = useGetWorkspacesQuery({
+  const [result] = useGetWorkspacesWithNotebooksQuery({
     requestPolicy: 'cache-first',
   });
 

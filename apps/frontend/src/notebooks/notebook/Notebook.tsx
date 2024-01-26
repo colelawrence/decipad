@@ -10,7 +10,7 @@ import {
   useClaimNotebookMutation,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
-  useGetWorkspacesQuery,
+  useGetWorkspacesWithoutNotebooksQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
@@ -379,8 +379,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const actions = useNotebookMetaActions();
   const accessActions = useNotebookAccessActions();
 
-  const [result] = useGetWorkspacesQuery();
-  const { data: workspaceData } = result;
+  const [{ data: workspaceData }] = useGetWorkspacesWithoutNotebooksQuery();
   const [isNotebookCreated, setIsNotebookCreated] = useState(
     searchParams.get('openAiPanel') === 'true'
   );

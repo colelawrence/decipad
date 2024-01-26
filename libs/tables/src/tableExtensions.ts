@@ -32,6 +32,7 @@ export function observe(dataTables: DataTables, tableName: keyof DataTables) {
 
   let putCache: ReturnType<typeof putReplacer>;
   let deleteCache: ReturnType<typeof deleteReplacer>;
+  let getCache: ConcreteDataTable['get'];
 
   Object.assign(table, {
     [OBSERVED]: true,
@@ -46,6 +47,16 @@ export function observe(dataTables: DataTables, tableName: keyof DataTables) {
         deleteCache = deleteReplacer(table, tableName, table.delete);
       }
       return deleteCache;
+    },
+    get get() {
+      if (!getCache) {
+        const originalGet = table.get;
+        getCache = async (...args) => {
+          debug('tables.%s.get(%j)', tableName, args);
+          return originalGet.apply(table, args);
+        };
+      }
+      return getCache;
     },
   });
 }

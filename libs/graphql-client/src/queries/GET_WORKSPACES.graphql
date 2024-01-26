@@ -93,7 +93,37 @@ fragment DashboardWorkspace on Workspace {
   }
 }
 
-query GetWorkspaces {
+fragment ShallowWorkspace on Workspace {
+  id
+  name
+  isPremium
+  plan
+  workspaceSubscription {
+    ...WorkspaceSubscriptionWithData
+  }
+  workspaceExecutedQuery {
+    ...WorkspaceExecutedQueryData
+  }
+  membersCount
+  sections {
+    ...WorkspaceSection
+  }
+  ...WorkspaceMembers
+  resourceUsages {
+    id
+    resourceType
+    consumption
+    quotaLimit
+  }
+}
+
+query GetWorkspacesWithoutNotebooks {
+  workspaces {
+    ...ShallowWorkspace
+  }
+}
+
+query GetWorkspacesWithNotebooks {
   workspaces {
     ...DashboardWorkspace
   }
