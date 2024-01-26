@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: buildjet/setup-node@v3
+        uses: buildjet/setup-node@v4
         with:
           node-version: 18.x
           cache: yarn
