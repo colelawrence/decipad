@@ -31,7 +31,7 @@ export const server = async (
   // Will throw without API-key
   // We might want to change this in the future if we want to allow others
   // to edit notebooks.
-  if (event.headers.authorization !== `Bearer ${gptKey}`) {
+  if (gptKey.length > 0 && event.headers.authorization !== `Bearer ${gptKey}`) {
     throw unauthorized('API_KEY wrong');
   }
 

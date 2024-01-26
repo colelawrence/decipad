@@ -79,7 +79,7 @@ const defaultEnvValues = {
   WORKSPACE_FREE_PLAN: 'free',
   WORKSPACE_PRO_PLAN: 'pro',
   WORKSPACE_FREE_PLAN_NAME: 'Free plan',
-  OPENAI_DECIPAD_GPT_BEARER_KEY: 'hello',
+  OPENAI_DECIPAD_GPT_BEARER_KEY: '',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;
