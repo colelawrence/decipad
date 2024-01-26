@@ -226,6 +226,7 @@ export class Workspace {
    * @param {string} [workspace=''] name of the workspace to copy the notepad to
    */
   async duplicatePad(index = 0, workspace = '') {
+    const padstart = await this.getPadList();
     await this.page.click(this.ellipsisSelector(index));
     await this.page.getByText('Duplicate').click();
     // accounts with multiple workspaces have an extra menu to select where to copy
@@ -238,6 +239,10 @@ export class Workspace {
         selectDuplicateWorkspace.click(),
       ]);
     }
+    await expect(async () => {
+      const padsnow = await this.getPadList();
+      expect(padsnow).toHaveLength(padstart.length + 1);
+    }).toPass();
   }
 
   /**
