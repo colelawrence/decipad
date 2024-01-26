@@ -13,7 +13,10 @@ import tables from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import { isAuthorized, loadUser, requireUser } from '../authorization';
-import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
+import {
+  cancelSubscriptionFromWorkspaceId,
+  getWorkspaceSubscription,
+} from '../workspaceSubscriptions/subscription.helpers';
 import { getWorkspaceMembersCount } from './workspace.helpers';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
@@ -28,6 +31,7 @@ import { WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import { plans } from '@decipad/backend-config';
+import Boom from '@hapi/boom';
 
 const workspaces = resource('workspace');
 
@@ -46,6 +50,16 @@ function WorkspaceRecordToWorkspace(
     // secrets: [],
     // sections: [],
   } as unknown as Workspace;
+}
+
+function isLocalOrDev(): boolean {
+  const url = process.env.DECI_APP_URL_BASE;
+  return (
+    url == null ||
+    url.startsWith('http://localhost') ||
+    url.startsWith('http://127.0.0.1') ||
+    url.startsWith('https://dev.decipad.com')
+  );
 }
 
 const getWorkspaceById: NonNullable<
@@ -101,7 +115,7 @@ const resolvers: Resolvers = {
       )
         .filter((w): w is Workspace => w != null)
         .map((w) => {
-          if (w.name.includes('@n1n.co')) {
+          if (isLocalOrDev() && w.name.includes('@n1n.co')) {
             w.isPremium = true;
             w.plan = plans().pro;
           }
@@ -119,6 +133,11 @@ const resolvers: Resolvers = {
 
   Mutation: {
     async shareWorkspaceWithEmail(parent, args, context) {
+      const sub = await getWorkspaceSubscription(args.id);
+      if (sub == null) {
+        throw Boom.unauthorized('Cannot share in a free workspace');
+      }
+
       return WorkspaceRecordToWorkspace(
         await withSubscriptionSideEffects(workspaceResource.shareWithEmail)(
           parent,
