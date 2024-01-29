@@ -1,6 +1,7 @@
 import { Page, expect, test } from '../manager/decipad-tests';
 import { Notebook } from '../manager/notebook';
 import { Workspace } from '../manager/workspace';
+import { AiAssistant } from '../manager/ai-assistant';
 import { Timeouts } from '../../utils/src';
 
 export async function deleteAllWorkspaceNotebooks(
@@ -33,6 +34,7 @@ test.describe('production regression checks', () => {
   let page: Page;
   let notebook: Notebook;
   let workspace: Workspace;
+  let assistant: AiAssistant;
 
   const currentDate = new Date().getTime();
   const notebookTitle =
@@ -42,6 +44,7 @@ test.describe('production regression checks', () => {
     page = await browser.newPage();
     notebook = new Notebook(page);
     workspace = new Workspace(page);
+    assistant = new AiAssistant(page);
     await test.step('create new notebook for the test', async () => {
       // go to production
       await page.goto('https://app.decipad.com');
@@ -55,6 +58,7 @@ test.describe('production regression checks', () => {
       await page.goto('https://app.decipad.com');
 
       await workspace.clickNewPadButton();
+      await assistant.closePannel();
       await notebook.updateNotebookTitle(notebookTitle);
     });
   });
