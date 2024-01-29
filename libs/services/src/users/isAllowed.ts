@@ -3,15 +3,12 @@ import { once } from '@decipad/utils';
 import { forbidden, notAcceptable } from '@hapi/boom';
 
 const protectedUrlBases = once(
-  () =>
-    new Set([
-      'https://dev.decipad.com',
-      'https://staging.decipad.com',
-      'https://5021.staging.decipad.com',
-    ])
+  () => new Set(['https://dev.decipad.com', 'https://staging.decipad.com'])
 );
 
-const allowedDomains = once(() => new Set(['decipad.com', 'n1n.co']));
+const allowedDomains = once(
+  () => new Set(['decipad.com', 'n1n.co', 'inbox.testmail.app'])
+);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function isAllowedToLogIn(email?: string): Promise<boolean> {
