@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
-import { thirdParty, app, limits } from '@decipad/backend-config';
+import { thirdParty, app } from '@decipad/backend-config';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
@@ -14,7 +14,6 @@ import tables, {
   COMPLETION_TOKENS_USED,
   PROMPT_TOKENS_USED,
   getResources,
-  isPremiumWorkspace,
   updateWorkspaceAndUserResourceUsage,
 } from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
@@ -27,8 +26,7 @@ import {
 } from './constants';
 import { resource } from '@decipad/backend-resources';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-
-const GPT_MODEL = 'gpt-4-1106-preview';
+import { GPT_MODEL, hasWorkspaceUsedAllCredits } from './limit';
 
 const isDevOrStaging =
   app().urlBase.includes('staging.decipad.com') ||
@@ -96,45 +94,20 @@ export const engageAssistant = async ({
     throw Boom.badRequest('Workspace has no name');
   }
 
-  const [promptTokens, completionTokens] = await getResources([
-    {
-      resource: 'openai',
-      subType: GPT_MODEL,
-      field: PROMPT_TOKENS_USED,
-      consumer: 'workspaces',
-      consumerId: workspaceId ?? '',
-    },
-    {
-      resource: 'openai',
-      subType: GPT_MODEL,
-      field: COMPLETION_TOKENS_USED,
-      consumer: 'workspaces',
-      consumerId: workspaceId ?? '',
-    },
-  ]);
-
-  const isPremium = await isPremiumWorkspace(workspaceId);
-  const internalEmail = isInternalEmail(user.email);
   const isN1NEmail = user.email && getEmailDomain(user.email) === 'n1n.co';
+  const internalEmail = isInternalEmail(user.email);
 
-  const workspaceTotalTokensUsed =
-    (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
-
-  const limit = limits().openAiTokensLimit[isPremium ? 'pro' : 'free'];
+  const hasReachedLimit = await hasWorkspaceUsedAllCredits(workspaceId);
 
   //
   // Lets not have limits for dev/staging with n1n.co workspace names.
   // Let's also not limit "internal" emails. Look at `isInternalEmail`.
   //
   if (isDevOrStaging) {
-    if (
-      isTesting(workspaceName) &&
-      !isN1NEmail &&
-      workspaceTotalTokensUsed > limit
-    ) {
+    if (isTesting(workspaceName) && !isN1NEmail && hasReachedLimit) {
       throw Boom.tooManyRequests("You've exceeded AI quota");
     }
-  } else if (!internalEmail && workspaceTotalTokensUsed > limit) {
+  } else if (!internalEmail && hasReachedLimit) {
     throw Boom.tooManyRequests("You've exceeded AI quota");
   }
 
