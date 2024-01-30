@@ -311,3 +311,7 @@ libs/live-connect/**/*.bundle.js
 # Vite
 apps/frontend/vite.config.d.ts
 apps/frontend/vite.config.js
+
+# Nx
+
+.nx
