@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Button } from '../../atoms';
+import { Button } from '../../shared';
 import {
   banner,
   cssVar,

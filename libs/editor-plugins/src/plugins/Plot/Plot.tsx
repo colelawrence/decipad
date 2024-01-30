@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { PlotBlock } from '@decipad/ui/src/organisms/PlotBlock/PlotBlock';
+import { PlotBlock } from '@decipad/ui';
 import { ComponentProps, useMemo } from 'react';
 import { usePlot } from './utils/usePlot';
 

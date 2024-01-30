@@ -1,0 +1,23 @@
+import { UNKNOWN_ASSTRING } from '@decipad/number';
+import { css } from '@emotion/react';
+import { FC } from 'react';
+import { CodeResultProps } from '../../../types';
+import { Tooltip } from '../../../shared';
+
+const numberResultStyles = css({
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  display: 'inline',
+  verticalAlign: 'baseline',
+  lineHeight: 1.2,
+});
+
+export const AnyResult: FC<CodeResultProps<'anything'>> = () => {
+  const trigger = (
+    <span data-highlight-changes css={numberResultStyles}>
+      {UNKNOWN_ASSTRING}
+    </span>
+  );
+
+  return <Tooltip trigger={trigger}>Unknown value</Tooltip>;
+};

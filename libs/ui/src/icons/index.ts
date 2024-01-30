@@ -239,3 +239,4 @@ export { Warning } from './Warning/Warning';
 export { Wheat } from './Wheat';
 export { World } from './World/World';
 export { Zap } from './Zap/Zap';
+export { Sidebar } from './Sidebar/Sidebar';

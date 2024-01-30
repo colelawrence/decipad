@@ -1,6 +1,6 @@
 import { ELEMENT_PLOT, MyEditor, PlotElement } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
+import { MarkType } from '@decipad/ui';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';

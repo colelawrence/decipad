@@ -25,6 +25,7 @@ import {
   TableButton,
   IntegrationBlock as UIIntegrationBlock,
   icons,
+  MarkType,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
@@ -35,7 +36,6 @@ import {
   getParentNode,
 } from '@udecode/plate-common';
 import { Hide, Show } from 'libs/ui/src/icons';
-import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';

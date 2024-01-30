@@ -9,9 +9,8 @@ import {
   useState,
 } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, InputField } from '../../atoms';
-import { AuthContent, SignUpConditionsContent } from '../../molecules';
-import { LoginBox } from '../../organisms/LoginBox/LoginBox';
+import { Button, InputField } from '../../shared';
+import { AuthContent, SignUpConditionsContent, LoginBox } from '../../modules';
 import { InvitationMessage } from './InvitationMessage.private';
 
 const formStyle = css({

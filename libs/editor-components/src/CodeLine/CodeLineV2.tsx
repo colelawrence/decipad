@@ -33,6 +33,8 @@ import {
   ParagraphFormulaEditor,
   StructuredInputUnits,
   Tooltip,
+  focusMouseEventLocation,
+  shouldResetContentEditable,
 } from '@decipad/ui';
 import {
   findNodePath,
@@ -53,10 +55,6 @@ import {
 } from 'react';
 import { useSelected } from 'slate-react';
 import { css } from '@emotion/react';
-import {
-  focusMouseEventLocation,
-  shouldResetContentEditable,
-} from '@decipad/ui/src/molecules/CodeVariableDefinition/CodeVariableDefinition';
 import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 import { CodeLineTeleport } from './CodeLineTeleport';

@@ -13,14 +13,13 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { EditableTableCaption, Tooltip } from '@decipad/ui';
+import { EditableTableCaption, Tooltip, MarkType } from '@decipad/ui';
 import {
   findNodePath,
   getNodeChild,
   getNodeString,
   isElement,
 } from '@udecode/plate-common';
-import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { useCallback } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableColumnCount } from '../../hooks';

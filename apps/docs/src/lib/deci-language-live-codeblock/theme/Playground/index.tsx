@@ -19,7 +19,7 @@ import {
 } from '@decipad/remote-computer';
 import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
-import { CodeResult } from '@decipad/ui/src/organisms/CodeResult/CodeResult';
+import { CodeResult } from '@decipad/ui';
 import maxBy from 'lodash.maxby';
 import styles from './styles.module.css';
 

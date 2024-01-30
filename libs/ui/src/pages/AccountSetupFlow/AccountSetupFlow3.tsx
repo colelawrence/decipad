@@ -7,7 +7,7 @@ import isEmpty from 'lodash.isempty';
 import md5 from 'md5';
 import { FormEvent, useCallback } from 'react';
 import Gravatar from 'react-gravatar';
-import { Button, TextareaField } from '../../atoms';
+import { Button, TextareaField } from '../../shared';
 import { Date, Loading, Sheet } from '../../icons';
 import {
   cssVar,
@@ -20,7 +20,7 @@ import {
   purple300,
   smallShadow,
 } from '../../primitives';
-import { AccountSetup } from '../../templates';
+import { AccountSetup } from '../../shared/templates';
 import modelDark from './model3_dark.png';
 import model3Light from './model3_light.png';
 import { backgroundStyles } from './styles';

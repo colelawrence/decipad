@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Button } from '../../atoms';
-import { AuthContent, SignUpConditionsContent } from '../../molecules';
-import { LoginBox } from '../../organisms';
+import { Button } from '../../shared';
+import { AuthContent, SignUpConditionsContent, LoginBox } from '../../modules';
 
 const buttonWrapperStyles = css({
   width: '100%',

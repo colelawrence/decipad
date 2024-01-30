@@ -28,6 +28,88 @@
       "rules": {
         "import/no-extraneous-dependencies": ["off"]
       }
+    },
+    {
+      "files": "src/shared/**/*.tsx",
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "../../../modules",
+                "message": "Importing from `modules` is not allowed inside `shared` UI"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/atoms/**/*.tsx", "src/shared/atoms/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "../../molecules",
+                "message": "Importing from '../molecules' is not allowed in 'atoms' components."
+              },
+              {
+                "name": "../../organisms",
+                "message": "Importing from '../organisms' is not allowed in 'atoms' components."
+              },
+              {
+                "name": "../../templates",
+                "message": "Importing from '../templates' is not allowed in 'atoms' components."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/shared/molecules/**/*.tsx",
+        "src/shared/molecules/**/*.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "../../organisms",
+                "message": "Importing from '../organisms' is not allowed in 'atoms' components."
+              },
+              {
+                "name": "../../templates",
+                "message": "Importing from '../templates' is not allowed in 'atoms' components."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/shared/organisms/**/*.tsx",
+        "src/shared/organisms/**/*.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "../../templates",
+                "message": "Importing from '../templates' is not allowed in 'atoms' components."
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

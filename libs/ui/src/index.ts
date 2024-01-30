@@ -3,17 +3,17 @@
 // But in some cases, like when using Slate to render a component tree, direct access is needed.
 import * as allIcons from './icons';
 
-export * from './atoms';
 export * from './hooks';
-export * from './molecules';
-export * from './organisms';
+
 export * from './pages';
 export { FigCaption } from './utils/resizing';
 export * from './primitives';
-export * from './templates';
+export * from './shared';
+export * from './modules';
 export * from './utils';
 export * from './utils/useEventNoEffect';
 export * from './images';
 export * from './styles';
+export * from './global-styles';
 
 export const icons = allIcons;

@@ -28,10 +28,10 @@ import {
   IntegrationBlock as UIIntegrationBlock,
   icons,
   UpgradePlanWarningTooltip,
+  MarkType,
 } from '@decipad/ui';
 import { getPreviousNode, setNodes } from '@udecode/plate-common';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
-import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import {
   ComponentProps,
   ReactNode,

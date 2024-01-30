@@ -11,10 +11,9 @@ import {
   useComputer,
 } from '@decipad/react-contexts';
 import { useCanUseDom, useWindowListener } from '@decipad/react-utils';
-import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
+import { EditorPlaceholder, LoadingFilter, EditorLayout } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import { EditorLayout } from 'libs/ui/src/atoms';
 import {
   ReactNode,
   RefObject,
