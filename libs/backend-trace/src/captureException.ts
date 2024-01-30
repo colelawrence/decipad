@@ -56,14 +56,9 @@ export const initTrace = (options: TraceOptions = {}): boolean => {
 
 export const captureException = async (err: Error): Promise<Boom> => {
   initTrace();
-  const error = boomify(err);
+  const error = boomify(err as Error);
   if (error.isServer) {
-    // eslint-disable-next-line no-console
-    console.log('capturing exception', error.message);
     SentryAWSLambda.captureException(error);
-  } else {
-    // eslint-disable-next-line no-console
-    console.log('NOT capturing exception', err);
   }
   await SentryAWSLambda.flush();
   return error;
