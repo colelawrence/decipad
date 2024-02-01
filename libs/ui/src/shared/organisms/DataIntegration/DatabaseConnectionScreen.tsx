@@ -374,6 +374,7 @@ function NewDataConnection({
                           backgroundColor: cssVar('borderSubdued'),
                           borderRadius: '8px 0px 0px 8px',
                         }}
+                        data-testid="connection-protocol"
                       >
                         {protocol ?? placeholderList.mysql}
                         <div css={{ width: '16px' }}>

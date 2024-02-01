@@ -233,3 +233,137 @@ test('Checks the ability to change the unit of a response', async ({
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.liveBlockDelay);
 });
+
+test('Check sql integrations is working correctly', async ({ testUser }) => {
+  let notebookURL: string;
+
+  await test.step('create integration', async () => {
+    await testUser.notebook.addBlock('open-integration');
+    notebookURL = testUser.page.url();
+    await testUser.page.getByTestId('select-integration:SQL').click();
+    await testUser.page.getByText('Data Connections').click();
+    await testUser.page.getByText('Connection Management').click();
+    await testUser.page
+      .getByRole('button', { name: 'Add a New Connection' })
+      .waitFor();
+    await testUser.page
+      .getByRole('button', { name: 'Add a New Connection' })
+      .click();
+    await testUser.page
+      .getByPlaceholder('SQL #')
+      .fill('Planet Scale Intergration');
+    await testUser.page
+      .getByPlaceholder('mysql://user:password@host.')
+      .fill(process.env.TEST_DATABASE!);
+
+    await testUser.page
+      .getByRole('button', { name: 'Test Connection' })
+      .click();
+    await expect(testUser.page.getByText('Connection Worked')).toBeVisible();
+    await testUser.page.getByTestId('add-conn-button').click();
+  });
+
+  await test.step('write query', async () => {
+    await testUser.page.goto(notebookURL);
+    await testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.addBlock('open-integration');
+    await testUser.page.getByTestId('select-integration:SQL').click();
+    await testUser.page.getByText('Data Connections').click();
+    await testUser.page.getByText('Planet Scale Intergration').first().click();
+    await testUser.page.getByTestId('code-mirror').click();
+
+    /**
+     * Avoid querying tables in the database so that flakes aren't caused by inadvertently changing the stored data.
+     * Instead, ensure that the SQL is executed correctly, thus indicating that the connection is working.
+     */
+    await testUser.page.getByRole('textbox').fill(`
+      SELECT
+        number,
+        text
+      FROM (
+        SELECT 1 AS number, 'one' AS text
+        UNION
+        SELECT 2 AS number, 'two' AS text
+        UNION
+        SELECT 3 AS number, 'three' AS text
+        UNION
+        SELECT 4 AS number, 'four' AS text
+        UNION
+        SELECT 5 AS number, 'five' AS text
+        UNION
+        SELECT 6 AS number, 'six' AS text
+        UNION
+        SELECT 7 AS number, 'seven' AS text
+        UNION
+        SELECT 8 AS number, 'eight' AS text
+        UNION
+        SELECT 9 AS number, 'nine' AS text
+        UNION
+        SELECT 10 AS number, 'ten' AS text
+        UNION
+        SELECT 11 AS number, 'eleven' AS text
+        UNION
+        SELECT 12 AS number, 'twelve' AS text
+        UNION
+        SELECT 13 AS number, 'thirteen' AS text
+        UNION
+        SELECT 14 AS number, 'fourteen' AS text
+        UNION
+        SELECT 15 AS number, 'fifteen' AS text
+      ) AS subquery;`);
+    await testUser.page.getByRole('button', { name: 'Play Run' }).click();
+    await testUser.page.getByRole('tab', { name: 'Preview' }).click();
+  });
+
+  await test.step('check table data', async () => {
+    await Promise.all([
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^1$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^one$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^10$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^ten$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^11$/ })
+      ).toBeHidden(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^eleven$/ })
+      ).toBeHidden(),
+      expect(
+        testUser.page.getByText('15 rows, previewing rows 1 to 10')
+      ).toBeVisible(),
+    ]);
+
+    testUser.page.getByRole('button', { name: 'Go to page' }).nth(1).click();
+
+    await Promise.all([
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^1$/ })
+      ).toBeHidden(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^one$/ })
+      ).toBeHidden(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^11$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^eleven$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^15$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^fifteen$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.getByText('15 rows, previewing rows 11 to 15')
+      ).toBeVisible(),
+    ]);
+  });
+});

@@ -71,6 +71,7 @@ jobs:
           VITE_STRIPE_API_KEY: '${{secrets.DEV_STRIPE_API_KEY}}'
           DECI_VERBOSE: true
           PERCY_PARALLEL_TOTAL: 2
+          TEST_DATABASE: '${{secrets.TEST_DATABASE}}'
         run: ./scripts/e2e.sh ${{ matrix.shard }} ${{ strategy.job-total }}
 
       - name: Upload Blob Report to GitHub Actions Artifacts

@@ -2,7 +2,7 @@ name: 🔬 Run Production Regression Tests
 
 on:
   workflow_run:
-    workflows: ["Deploy Prod"]
+    workflows: ['Deploy Prod']
     types:
       - completed
 
@@ -29,7 +29,6 @@ jobs:
 
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
-
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
