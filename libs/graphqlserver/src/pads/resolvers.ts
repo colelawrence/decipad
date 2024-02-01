@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { badRequest, unauthorized } from '@hapi/boom';
+import { badRequest, unauthorized, internal } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
 import { DynamoDbQuery, PadRecord } from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
@@ -176,7 +176,19 @@ const resolvers: Resolvers = {
 
       await claimNotebook(context.user.id, notebookId);
 
-      return true;
+      // We refetch the notebook to get an updated version
+      // After our changes in `claimNotebook`.
+      const modifiedPad = await padResource.getById(
+        _,
+        { id: toClaimNotebook.id },
+        context
+      );
+
+      if (modifiedPad == null) {
+        throw internal('Could not get notebook');
+      }
+
+      return modifiedPad;
     },
   },
 

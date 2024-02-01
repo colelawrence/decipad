@@ -96,7 +96,13 @@ const getWorkspaceIndexAndPadIndex = (
 // This is likely a misunderstaing of Urql cache on my part, but
 // until I figure it out we need to have this as a key.
 //
-const getPadId = (pad: Pad) => `${pad.id}-section-${pad.sectionId}`;
+function getPadId(pad: Pad) {
+  if (pad.sectionId == null) {
+    return pad.id;
+  }
+
+  return `${pad.id}-section-${pad.sectionId}`;
+}
 
 export const graphCacheConfig: GraphCacheConfig = {
   schema: schema as GraphCacheConfig['schema'],

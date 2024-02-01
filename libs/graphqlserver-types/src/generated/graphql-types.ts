@@ -152,7 +152,7 @@ export type Mutation = {
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
-  claimNotebook: Scalars['Boolean']['output'];
+  claimNotebook?: Maybe<Pad>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
   createLogs?: Maybe<Scalars['Boolean']['output']>;
   createOrUpdateSnapshot: Scalars['Boolean']['output'];
@@ -1386,7 +1386,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
   addTagToPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>>;
   attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
-  claimNotebook?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
+  claimNotebook?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
   createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
   createLogs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateLogsArgs, 'input'>>;
   createOrUpdateSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>>;

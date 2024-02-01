@@ -1,3 +1,6 @@
 mutation ClaimNotebook($notebookId: ID!) {
-  claimNotebook(notebookId: $notebookId)
+  claimNotebook(notebookId: $notebookId) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
 }

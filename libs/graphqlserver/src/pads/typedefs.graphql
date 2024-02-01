@@ -153,7 +153,7 @@ extend type Mutation {
 
   createSnapshot(notebookId: ID!): Boolean!
 
-  claimNotebook(notebookId: ID!): Boolean!
+  claimNotebook(notebookId: ID!): Pad
 }
 
 extend type Subscription {

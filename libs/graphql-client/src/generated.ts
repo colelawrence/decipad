@@ -153,7 +153,7 @@ export type Mutation = {
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
-  claimNotebook: Scalars['Boolean']['output'];
+  claimNotebook?: Maybe<Pad>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
   createLogs?: Maybe<Scalars['Boolean']['output']>;
   createOrUpdateSnapshot: Scalars['Boolean']['output'];
@@ -1106,7 +1106,7 @@ export type ClaimNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook: boolean };
+export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, initialState?: string | null, sectionId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: string | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', credits?: number | null, queries?: number | null, storage?: number | null, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, section?: { __typename?: 'Section', id: string, name: string } | null } | null };
 
 export type CreateExternalDataSourceMutationVariables = Exact<{
   dataSource: ExternalDataSourceCreateInput;
@@ -1844,9 +1844,13 @@ export function useChangeWorkspaceAccessLevelMutation() {
 };
 export const ClaimNotebookDocument = gql`
     mutation ClaimNotebook($notebookId: ID!) {
-  claimNotebook(notebookId: $notebookId)
+  claimNotebook(notebookId: $notebookId) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
 }
-    `;
+    ${EditorNotebookFragmentDoc}
+${WorkspaceNotebookFragmentDoc}`;
 
 export function useClaimNotebookMutation() {
   return Urql.useMutation<ClaimNotebookMutation, ClaimNotebookMutationVariables>(ClaimNotebookDocument);
@@ -2940,7 +2944,7 @@ export type GraphCacheOptimisticUpdaters = {
   addSectionToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAddSectionToWorkspaceArgs, Maybe<WithTypename<Section>>>,
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
-  claimNotebook?: GraphCacheOptimisticMutationResolver<MutationClaimNotebookArgs, Scalars['Boolean']>,
+  claimNotebook?: GraphCacheOptimisticMutationResolver<MutationClaimNotebookArgs, Maybe<WithTypename<Pad>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   createLogs?: GraphCacheOptimisticMutationResolver<MutationCreateLogsArgs, Maybe<Scalars['Boolean']>>,
   createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, Scalars['Boolean']>,
@@ -3026,7 +3030,7 @@ export type GraphCacheUpdaters = {
     addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
-    claimNotebook?: GraphCacheUpdateResolver<{ claimNotebook: Scalars['Boolean'] }, MutationClaimNotebookArgs>,
+    claimNotebook?: GraphCacheUpdateResolver<{ claimNotebook: Maybe<WithTypename<Pad>> }, MutationClaimNotebookArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
     createLogs?: GraphCacheUpdateResolver<{ createLogs: Maybe<Scalars['Boolean']> }, MutationCreateLogsArgs>,
     createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: Scalars['Boolean'] }, MutationCreateOrUpdateSnapshotArgs>,
