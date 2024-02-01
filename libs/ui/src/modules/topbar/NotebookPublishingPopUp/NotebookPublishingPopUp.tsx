@@ -2,24 +2,19 @@
 
 import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
-import * as Popover from '@radix-ui/react-popover';
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useCallback, useState } from 'react';
-import {
-  Button,
-  Dot,
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from '../../../shared';
+import { ComponentProps, FC, useState } from 'react';
 import { cssVar, smallScreenQuery, smallShadow } from '../../../primitives';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 import {
   NotebookMetaDataFragment,
   UserAccessMetaFragment,
 } from '@decipad/graphql-client';
 import { useActiveTabId } from '@decipad/editor-hooks';
-import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import {
+  NotebookMetaActionsReturn,
+  UnpublishedChangesType,
+} from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
@@ -29,16 +24,16 @@ import { isFlagEnabled } from '@decipad/feature-flags';
  * The parent div styles, this handles the position of the pop up relative to the button.
  */
 const popUpStyles = css({
-  width: '310px',
   padding: '16px',
+  height: 'fit-content',
+  borderRadius: '16px',
+  width: '100%',
+
   [smallScreenQuery]: {
     width: '250px',
   },
 
   backgroundColor: cssVar('backgroundMain'),
-  border: '1px solid',
-  borderColor: cssVar('borderDefault'),
-  borderRadius: '8px',
   boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
 });
 
@@ -62,24 +57,28 @@ const groupStyles = css({
 export type NotebookSharingPopUpProps = Pick<
   ComponentProps<typeof NotebookCollaborateTab>,
   'onInvite' | 'onRemove' | 'onChange'
-> & {
-  readonly snapshots: NotebookMetaDataFragment['snapshots'];
-  readonly hasPaywall?: boolean;
-  readonly invitedUsers?: UserAccessMetaFragment[] | null;
-  readonly nrOfTeamMembers?: number | null;
-  readonly manageTeamURL?: string;
-  readonly teamName?: string;
-  readonly isAdmin?: boolean;
-  readonly onRestore?: () => void;
+> &
+  Pick<
+    ComponentProps<typeof NotebookPublishTab>,
+    'publishingState' | 'isPremium'
+  > & {
+    readonly snapshots: NotebookMetaDataFragment['snapshots'];
+    readonly hasPaywall?: boolean;
+    readonly invitedUsers?: UserAccessMetaFragment[] | null;
+    readonly nrOfTeamMembers?: number | null;
+    readonly manageTeamURL?: string;
+    readonly teamName?: string;
+    readonly isAdmin?: boolean;
+    readonly onRestore?: () => void;
 
-  readonly notebookId: string;
-  readonly notebookName: string;
-  readonly isPublished: boolean;
-  readonly hasUnpublishedChanges: boolean;
-  readonly workspaceId: string;
+    readonly notebookId: string;
+    readonly notebookName: string;
+    readonly hasUnpublishedChanges: UnpublishedChangesType;
+    readonly workspaceId: string;
 
-  readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
-};
+    readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
+    readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+  };
 
 type TabStates = 'Collaborate' | 'Publish' | 'Embed';
 
@@ -92,7 +91,7 @@ const SNAPSHOT_NAME = 'Published 1';
  */
 export const NotebookPublishingPopUp = ({
   snapshots,
-  hasUnpublishedChanges = false,
+  hasUnpublishedChanges,
   hasPaywall,
   invitedUsers,
   teamName,
@@ -102,7 +101,10 @@ export const NotebookPublishingPopUp = ({
   isAdmin = false,
   notebookName,
 
-  isPublished,
+  onPublish,
+
+  isPremium,
+  publishingState,
   notebookId,
   onUpdatePublish,
 
@@ -117,18 +119,6 @@ export const NotebookPublishingPopUp = ({
   const selectTab = (tab: TabStates) => {
     setSelectedTab(tab);
   };
-
-  const onToggleShareMenu = useCallback(
-    (open: boolean) => {
-      if (open) {
-        setSelectedTab(hasUnpublishedChanges ? 'Publish' : 'Collaborate');
-      }
-      setShareMenuOpen(open);
-    },
-    [hasUnpublishedChanges]
-  );
-
-  const [shareMenuOpen, setShareMenuOpen] = useState(false);
 
   const activeTabId = useActiveTabId();
 
@@ -150,16 +140,14 @@ export const NotebookPublishingPopUp = ({
 
   const embedLink = `${link}?embed=true`;
 
-  const toggleMenuOpen = useCallback(() => {
-    setShareMenuOpen(!shareMenuOpen);
-  }, [shareMenuOpen]);
-
   const currentSnapshot = snapshots.find(
     (ss) => ss.snapshotName === SNAPSHOT_NAME
   );
 
-  const popoverDiv = (
-    <div css={popUpStyles}>
+  const isPublished = publishingState !== 'PRIVATE';
+
+  return (
+    <div css={popUpStyles} data-testid="publishing-sidebar">
       <div css={innerPopUpStyles}>
         {isAdmin && (
           <TabsRoot defaultValue={selectedTab}>
@@ -215,16 +203,17 @@ export const NotebookPublishingPopUp = ({
             <TabsContent name="Publish">
               <div css={groupStyles} className="notebook-publish-tab">
                 <NotebookPublishTab
+                  isPremium={isPremium}
                   notebookId={notebookId}
                   isAdmin={isAdmin}
-                  isPublished={isPublished}
+                  publishingState={publishingState}
                   link={link}
                   hasUnpublishedChanges={hasUnpublishedChanges}
                   currentSnapshot={currentSnapshot}
                   isPublishing={isPublishing}
                   setIsPublishing={setIsPublishing}
                   onUpdatePublish={onUpdatePublish}
-                  setShareMenuOpen={setShareMenuOpen}
+                  onPublish={onPublish}
                 />
               </div>
             </TabsContent>
@@ -234,7 +223,6 @@ export const NotebookPublishingPopUp = ({
                   isAdmin={isAdmin}
                   isPublished={isPublished}
                   embedLink={embedLink}
-                  setShareMenuOpen={setShareMenuOpen}
                 />
               </div>
             </TabsContent>
@@ -261,58 +249,20 @@ export const NotebookPublishingPopUp = ({
               <NotebookPublishTab
                 notebookId={notebookId}
                 isAdmin={isAdmin}
-                isPublished={isPublished}
+                publishingState={publishingState}
                 link={link}
+                isPremium={isPremium}
                 hasUnpublishedChanges={hasUnpublishedChanges}
                 currentSnapshot={currentSnapshot}
                 isPublishing={isPublishing}
                 setIsPublishing={setIsPublishing}
                 onUpdatePublish={onUpdatePublish}
-                setShareMenuOpen={setShareMenuOpen}
+                onPublish={onPublish}
               />
             </div>
           </>
         )}
       </div>
     </div>
-  );
-
-  return (
-    <Popover.Root
-      defaultOpen
-      open={shareMenuOpen}
-      onOpenChange={onToggleShareMenu}
-    >
-      <Popover.Trigger asChild>
-        {isPublished && hasUnpublishedChanges && !isPublishing && isAdmin ? (
-          <Button
-            type="primaryBrand"
-            onClick={toggleMenuOpen}
-            testId="publish-button"
-          >
-            <span
-              css={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-              data-testId="publish-notification"
-            >
-              <Dot size={8} noBorder position="relative" />
-              Share
-            </span>
-          </Button>
-        ) : (
-          <Button
-            type="primaryBrand"
-            onClick={toggleMenuOpen}
-            testId="publish-button"
-          >
-            Share
-          </Button>
-        )}
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content style={{ zIndex: '100' }} sideOffset={15}>
-          {popoverDiv}
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
   );
 };

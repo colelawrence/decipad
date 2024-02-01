@@ -6,6 +6,7 @@ import {
 import { noop } from '@decipad/utils';
 
 const args: NotebookSharingPopUpProps = {
+  onPublish: async () => {},
   snapshots: [],
   workspaceId: 'workspace id',
   notebookId: 'notebook id',
@@ -15,8 +16,9 @@ const args: NotebookSharingPopUpProps = {
   onRemove: noop as any,
   onUpdatePublish: noop as any,
   onRestore: noop as any,
-  hasUnpublishedChanges: false,
-  isPublished: false,
+  hasUnpublishedChanges: 'unpublished-changes',
+  isPremium: false,
+  publishingState: 'PRIVATE',
 };
 
 export default {
@@ -37,14 +39,7 @@ export const Unpublished: StoryFn<typeof args> = (props) => (
 export const Published: StoryFn<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
-Published.args = {
-  isPublished: true,
-};
 
 export const Republish: StoryFn<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
-Republish.args = {
-  hasUnpublishedChanges: true,
-  isPublished: true,
-};

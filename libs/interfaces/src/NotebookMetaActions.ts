@@ -23,4 +23,12 @@ export interface NotebookMetaActionsReturn {
     notebookId: string,
     publishState: Publish_State
   ) => Promise<void>;
+
+  /**
+   * Actually publish a snapshot to the backend.
+   *
+   * This means updating/creating a "snapshot" of the notebook,
+   * that users will see when visiting.
+   */
+  onPublishNotebook: (notebookId: string) => Promise<void>;
 }

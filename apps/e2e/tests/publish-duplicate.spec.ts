@@ -107,7 +107,7 @@ test('publish notebook, check logged out reader + logged in duplication', async 
   await test.step('re-publish notebook', async () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUserPage.waitForTimeout(Timeouts.syncDelay);
-    await testUserPage.getByRole('button').getByText('Share').click();
+
     await testUserPage.getByTestId('publish-changes').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUserPage.waitForTimeout(Timeouts.syncDelay);
@@ -163,8 +163,10 @@ test('duplicating only the published changes', async ({
   });
 
   await test.step('add paragraph but dont publish (and checks the unpublished notification)', async () => {
+    await testUserNotebook.focusOnBody(-1);
+
     await testUserPage.keyboard.type(unpublishedParagraph);
-    await expect(testUserNotebook.notebookParagraph.nth(2)).toHaveText(
+    await expect(testUserNotebook.notebookParagraph.nth(-2)).toHaveText(
       unpublishedParagraph
     );
     await expect(testUserNotebook.republishNotification).toBeVisible();

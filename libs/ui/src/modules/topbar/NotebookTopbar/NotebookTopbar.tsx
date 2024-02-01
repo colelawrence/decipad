@@ -259,7 +259,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           <Help />
           <SidebarToggle {...actions} />
           <NotebookAuthors {...authors} />
-          {NotebookPublishing}
+          <Styled.HideSmallScreen>{NotebookPublishing}</Styled.HideSmallScreen>
         </Styled.RightContainer>
       </Styled.InnerStyles>
     </Styled.DefaultTopbarWrapper>

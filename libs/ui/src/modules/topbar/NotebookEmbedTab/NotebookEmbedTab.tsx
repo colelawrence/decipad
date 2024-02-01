@@ -85,14 +85,12 @@ interface NotebookEmbedTabProps {
   readonly isAdmin: boolean;
   readonly isPublished: boolean;
   readonly embedLink: string;
-  readonly setShareMenuOpen: (open: boolean) => void;
 }
 
 export const NotebookEmbedTab = ({
   isAdmin,
   isPublished,
   embedLink,
-  setShareMenuOpen,
 }: NotebookEmbedTabProps) => {
   const clientEvent = useContext(ClientEventsContext);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -157,7 +155,6 @@ export const NotebookEmbedTab = ({
                         setCopiedPublicStatusVisible(true);
                         setTimeout(() => {
                           setCopiedPublicStatusVisible(false);
-                          setShareMenuOpen(false);
                         }, 1000);
                         // Analytics
                         clientEvent({

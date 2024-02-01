@@ -20,13 +20,8 @@ import {
   useMutationResultHandler,
 } from '../utils';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
-import { useNotebookMetaData } from '@decipad/react-contexts';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
-import * as Y from 'yjs';
-import { toSlateDoc } from '@decipad/slate-yjs';
-import { canonicalize } from 'json-canonicalize';
-import md5 from 'md5';
 
 const SNAPSHOT_NAME = 'Published 1';
 
@@ -40,7 +35,6 @@ export function useNotebookMetaActions(
 ): NotebookMetaActionsReturn {
   const nav = useNavigate();
   const toast = useToast();
-  const [hasPublished] = useNotebookMetaData((s) => [s.hasPublished]);
 
   const deleteNotebook = useMutationResultHandler(
     useUpdateNotebookArchiveMutation()[1],
@@ -205,44 +199,36 @@ export function useNotebookMetaActions(
     [duplicateNotebook, nav, toast]
   );
 
-  const onUpdatePublishState = useCallback<
-    NotebookMetaActionsReturn['onUpdatePublishState']
+  const onPublishNotebook = useCallback<
+    NotebookMetaActionsReturn['onPublishNotebook']
   >(
-    async (notebookId, publishState) => {
-      if (publishState === 'PRIVATE') {
-        await remoteUpdateNotebookPublishState({
-          id: notebookId,
-          publishState,
-        });
-        return;
-      }
-
-      // Let other parts of the UI know that we have published a new version
-      hasPublished.next(undefined);
+    async (notebookId) => {
       const localState = await getLocalNotebookUpdates(notebookId);
 
-      let checksumLocal: string | undefined;
-      if (localState) {
-        const doc = new Y.Doc();
-        Y.applyUpdate(doc, localState);
-        const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
-        checksumLocal = md5(canonicalizedObj);
-      }
+      const base64State =
+        localState && Buffer.from(localState).toString('base64');
 
       await createOrUpdateSnapshot({
         params: {
           notebookId,
           snapshotName: SNAPSHOT_NAME,
-          remoteState: localState && Buffer.from(localState).toString('base64'),
-          localVersionHash: checksumLocal,
+          remoteState: base64State,
         },
       });
+    },
+    [createOrUpdateSnapshot]
+  );
+
+  const onUpdatePublishState = useCallback<
+    NotebookMetaActionsReturn['onUpdatePublishState']
+  >(
+    async (notebookId, publishState) => {
       await remoteUpdateNotebookPublishState({
         id: notebookId,
         publishState,
       });
     },
-    [createOrUpdateSnapshot, hasPublished, remoteUpdateNotebookPublishState]
+    [remoteUpdateNotebookPublishState]
   );
 
   return {
@@ -255,5 +241,6 @@ export function useNotebookMetaActions(
     onChangeStatus,
     onDuplicateNotebook,
     onUpdatePublishState,
+    onPublishNotebook,
   };
 }

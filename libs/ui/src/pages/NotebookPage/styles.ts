@@ -6,6 +6,7 @@ import {
   tabletScreenQuery,
 } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
+import { SidebarComponent } from '@decipad/react-contexts';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
@@ -75,19 +76,20 @@ export const MainWrapper = styled.main<{ isEmbed: boolean; hasTabs: boolean }>(
 
 type ArticleWrapperProps = {
   isEmbed: boolean;
-  isSidebarOpen: boolean;
-  isAssistantOpen: boolean;
+};
+
+const ComponentWidths: Record<SidebarComponent, string> = {
+  'default-sidebar': SIDEBAR_WIDTH,
+  publishing: SIDEBAR_WIDTH,
+  ai: ASSISTANT_WIDTH,
+  closed: '0px',
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   position: 'relative',
   backgroundColor: cssVar('backgroundHeavy'),
   height: '100%',
-  width: props.isSidebarOpen
-    ? `calc(100% - ${SIDEBAR_WIDTH})`
-    : props.isAssistantOpen
-    ? `calc(100% - ${ASSISTANT_WIDTH})`
-    : '100%',
+  width: '100%',
   borderRadius: '16px',
   display: 'flex',
   flexDirection: 'column',
@@ -116,25 +118,18 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
 });
 
 interface AsideWrapperProps {
-  readonly isSidebarOpen: boolean;
-  readonly isAssistantOpen: boolean;
+  readonly sidebarComponent: SidebarComponent;
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   position: 'relative',
-  marginRight: '-24px',
   display: 'flex',
   justifyContent: 'flex-end',
   overflowY: 'auto',
   flexShrink: 0,
-  flexBasis: props.isSidebarOpen
-    ? SIDEBAR_WIDTH
-    : props.isAssistantOpen
-    ? ASSISTANT_WIDTH
-    : '0px',
-  height: '100%',
-  paddingBottom: 12,
-  borderRadius: '16px 0px 0px 16px',
+  width: ComponentWidths[props.sidebarComponent],
+  height: 'calc(100% - 12px)',
+  borderRadius: '16px',
   zIndex: 40,
 
   [smallScreenQuery]: {
@@ -143,7 +138,10 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   [tabletScreenQuery]: {
     position: 'fixed',
     // this is an offset to account for the header and bottom margin
-    height: 'calc(100vh - 80px)',
+    height:
+      props.sidebarComponent === 'publishing'
+        ? 'fit-content'
+        : 'calc(100vh - 80px)',
     border: `solid 1px ${cssVar('borderDefault')}`,
     borderRight: 'none',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,

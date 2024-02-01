@@ -294,7 +294,6 @@ input CreateOrUpdateSnapshotInput {
   notebookId: ID!
   snapshotName: String!
   remoteState: String
-  localVersionHash: String # For caching use on the frontend
   forceSearchIndexUpdate: Boolean
 }
 
@@ -323,7 +322,8 @@ extend type Mutation {
   importPad(workspaceId: ID!, source: String!): Pad!
   movePad(id: ID!, workspaceId: ID!): Pad!
 
-  setPadPublic(id: ID!, publishState: PUBLISH_STATE!): Boolean!
+  # State mostly used for caching on the frontend.
+  setPadPublic(id: ID!, publishState: PUBLISH_STATE!, state: String): Boolean!
 
   sharePadWithRole(
     id: ID!

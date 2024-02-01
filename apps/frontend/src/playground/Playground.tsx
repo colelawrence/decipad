@@ -45,9 +45,9 @@ const Playground: React.FC = () => {
         </div>
       }
       sidebar={null}
-      assistant={null}
-      isEmbed={false}
       tabs={null}
+      isEmbed={false}
+      isReadOnly={false}
     />
   );
 };

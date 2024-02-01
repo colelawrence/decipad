@@ -16,7 +16,6 @@ import {
   EditorPlaceholder,
   NotebookPage,
   TopbarPlaceholder,
-  AssistantChatPlaceholder,
   AddCreditsModal,
 } from '@decipad/ui';
 import { FC, Suspense, createContext, useState } from 'react';
@@ -24,7 +23,7 @@ import { Subject } from 'rxjs';
 import { ErrorPage, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { Topbar, Tabs, Sidebar, Editor, AssistantChat } from './LoadComponents';
+import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
 
 /**
  * Entire Application Wrapper.
@@ -56,6 +55,11 @@ export const Notebook: FC = () => {
     return getNotebookError(error);
   }
 
+  const props = {
+    notebookId,
+    docsync,
+  };
+
   return (
     <EditorChangeContextProvider changeSubject={changeSubject}>
       <DocsyncEditorProvider.Provider value={docsync} key={notebookId}>
@@ -75,10 +79,14 @@ export const Notebook: FC = () => {
               }
               topbar={
                 <Suspense fallback={<TopbarPlaceholder />}>
-                  <Topbar notebookId={notebookId} docsync={docsync} />
+                  <Topbar {...props} />
                 </Suspense>
               }
-              sidebar={<Sidebar docsync={docsync} />}
+              sidebar={
+                <Suspense>
+                  <Sidebar {...props} />
+                </Suspense>
+              }
               tabs={
                 !isEmbed && docsync && isFlagEnabled('TABS') ? (
                   <Tabs
@@ -88,24 +96,16 @@ export const Notebook: FC = () => {
                   />
                 ) : null
               }
-              assistant={
-                isFlagEnabled('AI_ASSISTANT_CHAT') ? (
-                  <Suspense fallback={<AssistantChatPlaceholder />}>
-                    <AssistantChat notebookId={notebookId} docsync={docsync} />
-                  </Suspense>
-                ) : null
-              }
               isEmbed={isEmbed}
+              isReadOnly={docsync?.isReadOnly}
             />
-            {
-              <Suspense>
-                {isBuyCreditsModalOpen && (
-                  <AddCreditsModal
-                    closeAction={() => setIsBuyCreditsModalOpen(false)}
-                  />
-                )}
-              </Suspense>
-            }
+            <Suspense>
+              {isBuyCreditsModalOpen && (
+                <AddCreditsModal
+                  closeAction={() => setIsBuyCreditsModalOpen(false)}
+                />
+              )}
+            </Suspense>
           </ComputerContextProvider>
         </ControllerProvider.Provider>
       </DocsyncEditorProvider.Provider>

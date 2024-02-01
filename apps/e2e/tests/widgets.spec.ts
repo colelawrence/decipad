@@ -149,7 +149,11 @@ test.describe('date widget read mode', () => {
     await page.getByTestId('publish-tab').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay);
-    await page.locator('[aria-roledescription="enable publishing"]').click();
+
+    await page.getByTestId('publish-dropdown').click();
+    await page.getByTestId('publish-public').click();
+    await page.getByTestId('publish-changes').click();
+
     await page.getByTestId('copy-published-link').click();
     sharedPageLocation = (
       (await page.evaluate('navigator.clipboard.readText()')) as string

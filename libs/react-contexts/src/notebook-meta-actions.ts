@@ -1,6 +1,5 @@
 import { persist } from 'zustand/middleware';
 import { create } from 'zustand';
-import { Subject } from 'rxjs';
 import { isE2E } from '@decipad/utils';
 
 export interface NotebookMetaActionsType {
@@ -24,43 +23,48 @@ export interface NotebookMetaActionsType {
 
 export type SelectedTab = 'variable' | 'block';
 
+export type SidebarComponent = 'closed' | SidebarComponentsWithoutClosed;
+
+export type SidebarComponentsWithoutClosed =
+  | 'default-sidebar'
+  | 'ai'
+  | 'publishing';
+
 export interface NotebookMetaDataType {
-  readonly sidebarOpen: boolean;
-  readonly toggleSidebar: () => void;
+  readonly sidebarComponent: SidebarComponent;
+  readonly toggleSidebar: (component: SidebarComponent) => void;
+
+  readonly isSidebarOpen: () => boolean;
+
   readonly sidebarTab: SelectedTab;
   readonly setSidebarTab: (tab: SelectedTab) => void;
-  readonly aiMode: boolean;
-  readonly toggleAIMode: () => void;
 
   // Should the user be able to alter their notebook?
   // Used for preventing errored notebooks from being editable.
   readonly canEdit: boolean;
   readonly setCanEdit: (state: boolean) => void;
-
-  // More technical stuff
-  readonly hasPublished: Subject<undefined>;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
   persist(
     (set, get) => {
       return {
-        hasPublished: new Subject(),
         sidebarTab: 'block',
-        sidebarOpen: isE2E(),
-        aiMode: false,
 
-        toggleAIMode() {
-          if (get().canEdit) {
-            set(({ aiMode }) => ({ aiMode: !aiMode, sidebarOpen: false }));
-          }
+        sidebarComponent: isE2E() ? 'closed' : 'default-sidebar',
+
+        isSidebarOpen() {
+          const { sidebarComponent } = get();
+          return sidebarComponent !== 'closed';
         },
 
-        toggleSidebar() {
-          set(({ sidebarOpen }) => ({
-            sidebarOpen: !sidebarOpen,
-            aiMode: false,
-          }));
+        toggleSidebar(sidebarComponent) {
+          const { sidebarComponent: currentComponent } = get();
+          if (sidebarComponent === currentComponent) {
+            set(() => ({ sidebarComponent: 'closed' }));
+          } else {
+            set(() => ({ sidebarComponent }));
+          }
         },
 
         setSidebarTab(sidebarTab: SelectedTab) {
@@ -69,8 +73,8 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
 
         canEdit: true,
         setCanEdit(canEdit) {
-          if (!canEdit && get().aiMode) {
-            get().toggleAIMode();
+          if (!canEdit && get().sidebarComponent === 'ai') {
+            get().toggleSidebar('ai');
           }
           set(() => ({ canEdit }));
         },
@@ -81,12 +85,10 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
       partialize(state) {
         return Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) =>
-              !['hasPublished', 'aiMode', 'canEdit', 'setCanEdit'].includes(key)
+            ([key]) => !['hasPublished', 'canEdit', 'setCanEdit'].includes(key)
           )
         );
       },
-      skipHydration: true,
     }
   )
 );

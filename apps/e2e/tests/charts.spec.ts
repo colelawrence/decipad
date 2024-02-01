@@ -166,8 +166,12 @@ test.describe('Loading and snapshot of notebook with charts', () => {
 
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Share' }).click();
+
     await page.getByTestId('publish-tab').click();
-    await page.locator('[aria-roledescription="enable publishing"]').click();
+    await page.getByTestId('publish-dropdown').click();
+    await page.getByTestId('publish-public').click();
+    await page.getByTestId('publish-changes').click();
+
     await page.getByTestId('copy-published-link').waitFor();
   });
 

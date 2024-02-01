@@ -34,6 +34,7 @@ export class Notebook {
   readonly duplicateNotebook: Locator;
   readonly topRightDuplicateNotebook: Locator;
   readonly republishNotification: Locator;
+  readonly publishingSidebar: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -62,6 +63,7 @@ export class Notebook {
       name: 'Folder Open Unarchive',
     });
     this.republishNotification = page.getByTestId('publish-notification');
+    this.publishingSidebar = page.getByTestId('publishing-sidebar');
   }
 
   /**
@@ -1075,15 +1077,14 @@ export class Notebook {
    * ```
    */
   async publishNotebook(notebookTitle?: string) {
-    await this.page.getByRole('button', { name: 'Share' }).click();
+    await this.openPublishingSidebar();
+
     await this.page.getByTestId('publish-tab').click();
-    await this.page
-      .locator('[aria-roledescription="enable publishing"]')
-      .click();
-    await this.page.getByTestId('copy-published-link').waitFor();
-    await expect(
-      this.page.getByText('Anyone with link can view')
-    ).toBeVisible();
+
+    await this.page.getByTestId('publish-dropdown').click();
+    await this.page.getByTestId('publish-public').click();
+    await this.page.getByTestId('publish-changes').click();
+
     await this.page.getByTestId('copy-published-link').click();
     const clipboardText = (
       (await this.page.evaluate('navigator.clipboard.readText()')) as string
@@ -1319,17 +1320,40 @@ export class Notebook {
    * ```
    */
   async inviteUser(email: string, role: 'reader' | 'collaborator') {
-    await this.page.getByRole('button', { name: 'Share' }).click();
+    if (!(await this.publishingSidebar.isVisible())) {
+      await this.page.getByRole('button', { name: 'Share' }).click();
+    }
+
     await this.page.getByPlaceholder('Enter email address').fill(email);
 
+    await this.page.keyboard.press('Tab');
+    await this.page.keyboard.press('Enter');
+
     if (role === 'reader') {
-      await this.page.keyboard.press('Tab');
-      await this.page.keyboard.press('Enter');
       await this.page.getByTestId('notebook-reader').click();
+    } else {
+      await this.page.getByTestId('notebook-collaborator').click();
     }
 
     await this.page.getByTestId('send-invitation').click();
     await this.focusOnBody();
+  }
+
+  /**
+   * Opens the publishing sidebar
+   *
+   * Or it doesn't do anything if the publishing sidebar is already opened.
+   *
+   */
+  public async openPublishingSidebar(): Promise<void> {
+    if (await this.isPublishingSidebarOpen()) {
+      return;
+    }
+    await this.page.getByRole('button', { name: 'Share ' }).click();
+  }
+
+  public async isPublishingSidebarOpen(): Promise<boolean> {
+    return this.publishingSidebar.isVisible();
   }
 
   /**
@@ -1343,7 +1367,9 @@ export class Notebook {
    */
   async createEmbed(notebookTitle?: string) {
     await this.publishNotebook(notebookTitle);
-    await this.page.getByRole('button', { name: 'Share' }).click();
+
+    await this.openPublishingSidebar();
+
     await this.page.getByTestId('embed-tab').click();
     await this.page.getByTestId('copy-published-link').click();
     const clipboardText = (

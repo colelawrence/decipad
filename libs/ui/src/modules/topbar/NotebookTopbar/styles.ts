@@ -267,3 +267,9 @@ export const SidebarToggleTrigger = styled.div({
   width: '20px',
   height: '20px',
 });
+
+export const HideSmallScreen = styled.div({
+  [smallScreenQuery]: {
+    display: 'none',
+  },
+});

@@ -64,7 +64,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     triggerElement(false)
   ) : (
     <MenuList
-      portal={false}
+      portal
       root
       dropdown
       align="end"

@@ -43,7 +43,6 @@ export type CreateAttachmentForm = {
 
 export type CreateOrUpdateSnapshotInput = {
   forceSearchIndexUpdate?: InputMaybe<Scalars['Boolean']['input']>;
-  localVersionHash?: InputMaybe<Scalars['String']['input']>;
   notebookId: Scalars['ID']['input'];
   remoteState?: InputMaybe<Scalars['String']['input']>;
   snapshotName: Scalars['String']['input'];
@@ -394,6 +393,7 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
   publishState: Publish_State;
+  state?: InputMaybe<Scalars['String']['input']>;
 };
 
 

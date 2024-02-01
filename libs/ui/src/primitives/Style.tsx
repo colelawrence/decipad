@@ -526,6 +526,11 @@ export interface ComponentCssVariables {
   AIAssistantHighlightTextColor: string;
   AIAssistantCodeBackgroundColor: string;
   // ----------- End AI Assistant -------------
+  //
+  // ---------- Premium Indicators ------------
+  RequiresPremium: string;
+  RequiresPremiumText: string;
+  // -------- End Premium Indicators ----------
 }
 
 /**
@@ -642,6 +647,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantHighlightColor: brand500.hex,
       AIAssistantHighlightTextColor: brand700.hex,
       AIAssistantCodeBackgroundColor: teal900.hex,
+
+      RequiresPremium: brand500.hex,
+      RequiresPremiumText: blackWhiteBlack.hex,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -751,6 +759,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantHighlightColor: purple300.hex,
       AIAssistantHighlightTextColor: purple500.hex,
       AIAssistantCodeBackgroundColor: teal900.hex,
+
+      RequiresPremium: purple300.hex,
+      RequiresPremiumText: blackWhiteBlack.hex,
     },
   } as const;
 

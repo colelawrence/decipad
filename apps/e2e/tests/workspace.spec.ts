@@ -361,6 +361,7 @@ test('reader and collaborator permissions', async ({
   await test.step('collaborator checks', async () => {
     await anotherRandomFreeUser.page.goto(notebook);
     await anotherRandomFreeUser.notebook.waitForEditorToLoad();
+
     await expect(
       anotherRandomFreeUser.page.getByText('You are in reading mode')
     ).toBeHidden();

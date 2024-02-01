@@ -129,6 +129,14 @@ export const graphCacheConfig: GraphCacheConfig = {
       return data.count?.toString() ?? null;
     },
   },
+  optimistic: {
+    setPadPublic() {
+      return {
+        input: true,
+        output: true,
+      };
+    },
+  },
   resolvers: {
     PadSnapshot: {
       createdAt: (parent) => {
@@ -176,19 +184,26 @@ export const graphCacheConfig: GraphCacheConfig = {
             },
           },
           (data) => {
-            if (!data?.getPadById || !args.localVersionHash) return data;
+            if (!data?.getPadById) return data;
 
             const publishedSnapshot = data.getPadById.snapshots.find(
               (s) => s.snapshotName === PUBLISHED_SNAPSHOT
             );
+
+            //
+            // Update the published snapshot to reflect the latest state.
+            // Useful for telling the user if they have unpublished changes.
+            //
             if (!publishedSnapshot) {
               data.getPadById.snapshots.push({
                 __typename: 'PadSnapshot',
                 snapshotName: PUBLISHED_SNAPSHOT,
-                version: args.localVersionHash,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
+                data: args.remoteState,
               });
+            } else {
+              publishedSnapshot.data = args.remoteState;
             }
 
             return data;
@@ -281,8 +296,29 @@ export const graphCacheConfig: GraphCacheConfig = {
               throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
             }
 
-            data.getPadById.isPublic = args.publishState !== 'PRIVATE';
-            return data;
+            if (args.state) {
+              data.getPadById.initialState = args.state;
+            }
+
+            if (args.publishState === 'PUBLICLY_HIGHLIGHTED') {
+              data.getPadById.isPublic = true;
+              data.getPadById.userAllowsPublicHighlighting = true;
+              return data;
+            }
+
+            if (args.publishState === 'PUBLIC') {
+              data.getPadById.isPublic = true;
+              data.getPadById.userAllowsPublicHighlighting = false;
+              return data;
+            }
+
+            if (args.publishState === 'PRIVATE') {
+              data.getPadById.isPublic = false;
+              data.getPadById.userAllowsPublicHighlighting = false;
+              return data;
+            }
+
+            throw new Error('Should never reach this');
           }
         );
       },

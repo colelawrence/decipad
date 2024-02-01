@@ -44,7 +44,6 @@ export type CreateAttachmentForm = {
 
 export type CreateOrUpdateSnapshotInput = {
   forceSearchIndexUpdate?: InputMaybe<Scalars['Boolean']['input']>;
-  localVersionHash?: InputMaybe<Scalars['String']['input']>;
   notebookId: Scalars['ID']['input'];
   remoteState?: InputMaybe<Scalars['String']['input']>;
   snapshotName: Scalars['String']['input'];
@@ -395,6 +394,7 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
   publishState: Publish_State;
+  state?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1266,6 +1266,7 @@ export type RenameWorkspaceMutation = { __typename?: 'Mutation', updateWorkspace
 export type SetNotebookPublishStateMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   publishState: Publish_State;
+  state?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1461,7 +1462,7 @@ export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __type
 
 export type UserAccessMetaFragment = { __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null };
 
-export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: string | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } };
+export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: string | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null, data?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } };
 
 export type NotebookWorkspacesDataFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -1470,7 +1471,7 @@ export type GetNotebookMetaQueryVariables = Exact<{
 }>;
 
 
-export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: string | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
+export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: string | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null, data?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
 
 export type GetNotionQueryVariables = Exact<{
   url: Scalars['String']['input'];
@@ -1636,6 +1637,7 @@ export const NotebookMetaDataFragmentDoc = gql`
   status
   myPermissionType
   isPublic
+  userAllowsPublicHighlighting
   createdAt
   initialState
   gist
@@ -1664,6 +1666,7 @@ export const NotebookMetaDataFragmentDoc = gql`
     createdAt
     updatedAt
     version
+    data
   }
   archived
   access {
@@ -2084,8 +2087,8 @@ export function useRenameWorkspaceMutation() {
   return Urql.useMutation<RenameWorkspaceMutation, RenameWorkspaceMutationVariables>(RenameWorkspaceDocument);
 };
 export const SetNotebookPublishStateDocument = gql`
-    mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!) {
-  setPadPublic(id: $id, publishState: $publishState)
+    mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!, $state: String) {
+  setPadPublic(id: $id, publishState: $publishState, state: $state)
 }
     `;
 

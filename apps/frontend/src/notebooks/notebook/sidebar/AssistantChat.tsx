@@ -1,43 +1,30 @@
-import { DocSyncEditor } from '@decipad/docsync';
 import { FC, useEffect } from 'react';
 import { EditorAssistantChat } from '@decipad/editor-ai-assistant';
-import { useNotebookStateAndActions } from './hooks';
-import { useActiveEditor } from '@decipad/editor-hooks';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
-import { useAiUsage, useNotebookMetaData } from '@decipad/react-contexts';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
+import { useAiUsage } from '@decipad/react-contexts';
+import { useNotebookStateAndActions } from '../hooks';
+import { SidebarComponentProps } from './types';
 
-export interface AssistantChatProps {
-  readonly notebookId: string;
-  readonly docsync: DocSyncEditor | undefined;
-}
-
-const AssistantChat: FC<AssistantChatProps> = ({ notebookId, docsync }) => {
+const AssistantChat: FC<SidebarComponentProps> = ({
+  notebookId,
+  docsync,
+  editor,
+}) => {
   const actions = useNotebookStateAndActions({
     notebookId,
     docsync,
   });
 
-  const editor = useActiveEditor(docsync);
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+
   const {
     updateUsage,
     promptTokensUsed,
     completionTokensUsed,
     tokensQuotaLimit,
   } = useAiUsage();
-
-  const isReadOnly =
-    meta.data?.getPadById?.myPermissionType === 'READ' ||
-    meta.data?.getPadById?.myPermissionType == null;
-
-  const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
-
-  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(_embed);
 
   const quotaLimitFromPlan =
     actions.notebook?.workspace?.workspaceSubscription?.credits ?? 0;
@@ -70,18 +57,14 @@ const AssistantChat: FC<AssistantChatProps> = ({ notebookId, docsync }) => {
     quotaLimitFromPlan,
   ]);
 
-  if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
-    return (
-      <EditorAssistantChat
-        notebookId={notebookId}
-        workspaceId={actions.notebook?.workspace?.id ?? ''}
-        editor={editor}
-        limitPerPlan={quotaLimitFromPlan}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <EditorAssistantChat
+      notebookId={notebookId}
+      workspaceId={actions.notebook?.workspace?.id ?? ''}
+      editor={editor}
+      limitPerPlan={quotaLimitFromPlan}
+    />
+  );
 };
 
 export default AssistantChat;

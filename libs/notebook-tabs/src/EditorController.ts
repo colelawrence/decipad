@@ -229,8 +229,8 @@ export class EditorController implements RootEditorController {
           id: subEditor.id,
           children: subEditor.children,
           name: subEditor.tabName,
-          icon: subEditor.icon,
-          isHidden: subEditor.isHidden,
+          ...(subEditor.icon != null && { icon: subEditor.icon }),
+          ...(subEditor.isHidden != null && { isHidden: subEditor.isHidden }),
         })
       ),
     ];

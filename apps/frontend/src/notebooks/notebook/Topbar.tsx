@@ -1,20 +1,25 @@
+/* eslint-disable camelcase */
 import { DocSyncEditor } from '@decipad/docsync';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
+import { useNotebookMetaActions } from '../../hooks';
 import {
   useClaimNotebookMutation,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
-import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
+import { notebooks, useRouteParams } from '@decipad/routing';
 import { useNotebookMetaData } from '@decipad/react-contexts';
-import { useBackActions, useEditorUndoState } from './hooks';
-import { debounce, interval } from 'rxjs';
+import {
+  useBackActions,
+  useEditorUndoState,
+  useHasUnpublishedChanges,
+} from './hooks';
 import {
   AIModeSwitch,
+  Button,
+  Dot,
   NotebookOptions,
   NotebookPath,
-  NotebookPublishingPopUp,
   NotebookStatusDropdown,
   NotebookTopbar,
   TColorStatus,
@@ -25,12 +30,8 @@ import {
 import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
 import { Caret } from 'libs/ui/src/icons';
-import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { useSession } from 'next-auth/react';
 import { ClientEventsContext } from '@decipad/client-events';
-
-const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
-const SNAPSHOT_NAME = 'Published 1';
 
 export interface TopbarProps {
   readonly notebookId: string;
@@ -55,7 +56,6 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
   const [searchParams] = useSearchParams();
 
   const actions = useNotebookMetaActions();
-  const accessActions = useNotebookAccessActions();
 
   const [isNotebookCreated, setIsNotebookCreated] = useState(
     searchParams.get('openAiPanel') === 'true'
@@ -63,25 +63,20 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
   const isNotebookCreatedRef = useRef(false);
 
   const sidebarData = useNotebookMetaData((state) => ({
-    sidebarOpen: state.sidebarOpen,
+    isSidebarOpen: state.isSidebarOpen,
     toggleSidebar: state.toggleSidebar,
-    hasPublished: state.hasPublished,
-  }));
-
-  const aiModeData = useNotebookMetaData((state) => ({
-    aiMode: state.aiMode,
-    toggleAiMode: state.toggleAIMode,
+    component: state.sidebarComponent,
   }));
 
   useEffect(() => {
     if (isNotebookCreated && !isNotebookCreatedRef.current) {
       setIsNotebookCreated(false);
-      if (!aiModeData.aiMode) {
-        aiModeData.toggleAiMode();
+      if (sidebarData.component !== 'ai') {
+        sidebarData.toggleSidebar('ai');
       }
       isNotebookCreatedRef.current = true;
     }
-  }, [isNotebookCreated, aiModeData]);
+  }, [isNotebookCreated, sidebarData]);
 
   const [canUndo, canRedo] = useEditorUndoState(docsync);
 
@@ -89,123 +84,24 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     variables: { id: notebookId },
   });
 
-  const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
+  const hasUnpublishedChanges = useHasUnpublishedChanges({
+    notebookId,
+    docsync,
+  });
 
-  const permission = meta.data?.getPadById?.myPermissionType;
+  const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
   const [, claimNotebook] = useClaimNotebookMutation();
 
-  /**
-   * Edge case. We default to a closed sidebar,
-   * so that in read mode we don't get any jumps on the sidebar.
-   *
-   * This is only a problem IF its the users first time writing on the platform
-   * Where we must toggle their sidebar open by default
-   */
-  useEffect(() => {
-    switch (permission) {
-      case 'ADMIN':
-      case 'WRITE': {
-        const { name } = useNotebookMetaData.persist.getOptions();
-        if (!name) return;
-        const hasStorage = localStorage.getItem(name) != null;
-        if (!hasStorage) {
-          sidebarData.toggleSidebar();
-        }
-        break;
-      }
-      default: {
-        if (sidebarData.sidebarOpen) {
-          sidebarData.toggleSidebar();
-        }
-      }
-    }
-
-    if (!useNotebookMetaData.persist.hasHydrated()) {
-      useNotebookMetaData.persist.rehydrate();
-    }
-  }, [permission, sidebarData]);
-
-  const [snapshotVersion, setSnapshotVersion] = useState<string | undefined>(
-    undefined
-  );
-  useEffect(() => {
-    setSnapshotVersion((version) => {
-      if (version) return;
-      return (
-        meta.data?.getPadById?.snapshots.find(
-          (s) => s.snapshotName === SNAPSHOT_NAME
-        )?.version ?? undefined
-      );
-    });
-  }, [meta.data?.getPadById?.snapshots]);
-
-  useEffect(() => {
-    const sub = sidebarData.hasPublished.subscribe(() => {
-      setHasUnpublishedChanges(false);
-      setSnapshotVersion(docsync?.getVersionChecksum());
-    });
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [docsync, sidebarData.hasPublished]);
-
-  const [hasUnpublishedChanges, setHasUnpublishedChanges] = useState(false);
-
   const clientEvent = useContext(ClientEventsContext);
-
-  useEffect(() => {
-    if (!meta.data?.getPadById?.isPublic || !docsync || !snapshotVersion)
-      return;
-    if (!docsync.isLoadedLocally || !docsync.isLoadedRemotely) return;
-
-    setHasUnpublishedChanges(!docsync.equals(snapshotVersion));
-  }, [docsync, snapshotVersion, meta.data?.getPadById?.isPublic]);
-
-  useEffect(() => {
-    const debouncedSub = docsync?.events.pipe(
-      debounce(() => interval(DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS))
-    );
-
-    const sub = debouncedSub?.subscribe(() => {
-      if (
-        meta.data?.getPadById?.isPublic &&
-        !(snapshotVersion && docsync?.equals(snapshotVersion))
-      ) {
-        setHasUnpublishedChanges(true);
-      }
-    });
-
-    return () => {
-      sub?.unsubscribe();
-    };
-  }, [
-    docsync,
-    docsync?.events,
-    snapshotVersion,
-    meta.data?.getPadById?.isPublic,
-  ]);
 
   const data = meta.data?.getPadById;
   const userWorkspaces = meta.data?.workspaces ?? [];
 
   const { status: sessionStatus } = useSession();
-
-  const { canInvite } = useStripeCollaborationRules(
-    data?.access.users,
-    data?.workspace?.access?.users ?? []
-  );
-
-  const manageTeamURL = data?.workspace
-    ? workspaces({})
-        .workspace({
-          workspaceId: data.workspace.id,
-        })
-        .members({}).$
-    : workspaces({}).$;
 
   const onBack = useBackActions({
     workspace: data?.workspace,
@@ -218,9 +114,6 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
   }
 
   const notebookName = data?.name ?? 'My Notebook';
-
-  const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
-  const hasPaywall = !canInvite && !isPremiumWorkspace;
 
   return (
     <NotebookTopbar
@@ -263,29 +156,29 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
       }
       AiModeSwitch={
         <AIModeSwitch
-          value={aiModeData.aiMode}
-          onChange={aiModeData.toggleAiMode}
+          value={sidebarData.component === 'ai'}
+          onChange={() => sidebarData.toggleSidebar('ai')}
         />
       }
       NotebookPublishing={
-        <NotebookPublishingPopUp
-          notebookName={notebookName}
-          workspaceId={data?.workspace?.id ?? ''}
-          hasPaywall={hasPaywall}
-          invitedUsers={data?.access.users}
-          nrOfTeamMembers={data?.workspace?.membersCount}
-          manageTeamURL={manageTeamURL}
-          teamName={data?.workspace?.name ?? ''}
-          isAdmin={data?.myPermissionType === 'ADMIN'}
-          snapshots={data?.snapshots ?? []}
-          notebookId={notebookId}
-          isPublished={Boolean(data?.isPublic)}
-          hasUnpublishedChanges={hasUnpublishedChanges}
-          onUpdatePublish={actions.onUpdatePublishState}
-          onInvite={accessActions.onInviteByEmail}
-          onChange={accessActions.onChangeAccess}
-          onRemove={accessActions.onRemoveAccess}
-        />
+        <Button
+          type="primaryBrand"
+          onClick={() => sidebarData.toggleSidebar('publishing')}
+          testId="publish-button"
+        >
+          {hasUnpublishedChanges !== 'up-to-date' &&
+          data?.myPermissionType === 'ADMIN' ? (
+            <span
+              css={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              data-testId="publish-notification"
+            >
+              <Dot size={8} noBorder position="relative" />
+              Share
+            </span>
+          ) : (
+            'Share'
+          )}
+        </Button>
       }
       access={{
         isAuthenticated: sessionStatus === 'authenticated',
@@ -302,7 +195,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
             action: 'notebook templates clicked',
           });
         },
-        onToggleSidebar: sidebarData.toggleSidebar,
+        onToggleSidebar: () => sidebarData.toggleSidebar('default-sidebar'),
         onTryDecipadClick: () => {
           clientEvent({
             type: 'action',
@@ -315,7 +208,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
         onDuplicateNotebook: () =>
           actions.onDuplicateNotebook(notebookId, true),
 
-        isSidebarOpen: sidebarData.sidebarOpen,
+        isSidebarOpen: sidebarData.component !== 'closed',
       }}
       authors={{
         adminName: data?.access.users.find((u) => u.permission === 'ADMIN')
