@@ -4,7 +4,6 @@ const path = require('path');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { ProvidePlugin, optimize } = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const serviceWorkerConfig = require('./service-worker.config');
 
@@ -23,7 +22,7 @@ const shouldIncludePlugin = (plugin) => {
 };
 
 module.exports =
-  ({ configureSentry, configureServiceWorker } = {}) =>
+  ({ configureServiceWorker } = {}) =>
   (config) => {
     // Remove guard against importing modules outside of \`src\`.
     // Needed for workspace projects.
@@ -106,18 +105,6 @@ module.exports =
       'react/jsx-dev-runtime.js': 'react/jsx-dev-runtime',
     };
 
-    if (configureSentry && process.env.NODE_ENV === 'production') {
-      if (process.env.SENTRY_DSN) {
-        config.plugins.push(
-          sentryWebpackPlugin({
-            release: process.env.GIT_COMMIT_HASH,
-            dsn: process.env.SENTRY_DSN,
-            include: '../../dist/apps/frontend',
-          })
-        );
-      }
-      // add service worker plugin
-    }
     if (configureServiceWorker) {
       config.plugins.push(serviceWorkerConfig());
     }

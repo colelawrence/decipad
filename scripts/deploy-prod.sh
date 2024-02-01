@@ -25,6 +25,9 @@ echo "Building frontend..."
 yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
+# Removes the sourcemaps/built individual JS files
+rm -r dist/apps/frontend/src
+
 echo "Building notebook open API manifest..."
 DECI_DOMAIN="$DECI_APP_URL_BASE" nx build backend-notebook
 

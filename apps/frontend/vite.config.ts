@@ -1,6 +1,7 @@
 import { UserConfig, defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -28,6 +29,15 @@ export default defineConfig({
       plugins: [['@swc/plugin-emotion', {}]],
     }),
     tsconfigPaths(),
+    sentryVitePlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      release: {
+        name: process.env.GIT_COMMIT_HASH,
+        dist: process.env.GIT_COMMIT_HASH,
+      },
+    }),
   ],
   build: {
     rollupOptions: {
@@ -36,6 +46,7 @@ export default defineConfig({
         '../../libs/live-connect/src/notebook.bundle.js',
       ],
     },
+    sourcemap: true,
     outDir: '../../dist/apps/frontend',
   },
   define: {
