@@ -10,9 +10,6 @@ const defaultEnvValues = {
   DECI_APP_URL_BASE: 'http://localhost:3000',
   DECI_PORT: '3000',
 
-  DECI_SES_ACCESS_KEY_ID: 'noneofyourbusiness',
-  DECI_SES_SECRET_ACCESS_KEY: 'noneofyourbusiness',
-
   DECI_S3_ENDPOINT: 'localhost:4568',
   DECI_S3_ACCESS_KEY_ID: 'S3RVER',
   DECI_S3_SECRET_ACCESS_KEY: 'S3RVER',
@@ -80,6 +77,7 @@ const defaultEnvValues = {
   WORKSPACE_PRO_PLAN: 'pro',
   WORKSPACE_FREE_PLAN_NAME: 'Free plan',
   OPENAI_DECIPAD_GPT_BEARER_KEY: '',
+  SENDGRID_API_KEY: '',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

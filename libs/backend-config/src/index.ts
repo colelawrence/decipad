@@ -1,6 +1,5 @@
 import { Buffer } from 'buffer';
 import { S3ClientConfig } from '@aws-sdk/client-s3';
-import { SESClientConfig } from '@aws-sdk/client-ses';
 import { defaultEnv, SupportedEnvKey } from './default';
 
 export { defaultEnv };
@@ -74,10 +73,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_S3_THIRD_PARTIES_BUCKET);
     case 'DECI_S3_SECRET_ACCESS_KEY':
       return valueOrDefault(name, process.env.DECI_S3_SECRET_ACCESS_KEY);
-    case 'DECI_SES_ACCESS_KEY_ID':
-      return valueOrDefault(name, process.env.DECI_SES_ACCESS_KEY_ID);
-    case 'DECI_SES_SECRET_ACCESS_KEY':
-      return valueOrDefault(name, process.env.DECI_SES_SECRET_ACCESS_KEY);
     case 'DECI_TEST_USER_SECRET':
       return valueOrDefault(name, process.env.DECI_TEST_USER_SECRET);
     case 'DISCORD_APP_ID':
@@ -136,6 +131,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.WORKSPACE_FREE_PLAN_NAME);
     case 'OPENAI_DECIPAD_GPT_BEARER_KEY':
       return valueOrDefault(name, process.env.OPENAI_DECIPAD_GPT_BEARER_KEY);
+    case 'SENDGRID_API_KEY':
+      return valueOrDefault(name, process.env.SENDGRID_API_KEY);
   }
 }
 
@@ -249,22 +246,13 @@ export function limits() {
 
 export interface EmailConfig {
   senderEmailAddress: string;
-  ses: SESClientConfig;
+  apiKey: string;
 }
 
 export function email(): EmailConfig {
-  const credentials = {
-    accessKeyId: env('DECI_SES_ACCESS_KEY_ID'),
-    secretAccessKey: env('DECI_SES_SECRET_ACCESS_KEY'),
-  };
   return {
-    ses: {
-      ...(credentials.accessKeyId && credentials.secretAccessKey
-        ? { credentials }
-        : {}),
-      region: env('AWS_REGION'),
-    },
     senderEmailAddress: env('DECI_FROM_EMAIL_ADDRESS'),
+    apiKey: env('SENDGRID_API_KEY'),
   };
 }
 

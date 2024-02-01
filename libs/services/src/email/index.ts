@@ -1,22 +1,16 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import sgMail from '@sendgrid/mail';
 import { email as emailConfig } from '@decipad/backend-config';
 import { debug } from './debug';
 
-const { ses: sesConfig, senderEmailAddress } = emailConfig();
+const { apiKey, senderEmailAddress } = emailConfig();
+sgMail.setApiKey(apiKey);
 
 type SendEmailParams = {
   to: string;
   body: string;
   subject: string;
 };
-
-const serviceOptions = {
-  ...sesConfig,
-  apiVersion: '2019-09-27',
-};
-
-const service = new SESClient(serviceOptions);
 
 export async function sendEmail({
   to,
@@ -25,25 +19,16 @@ export async function sendEmail({
 }: SendEmailParams): Promise<void> {
   debug('will send email', { to, body, subject });
   const params = {
-    Message: {
-      Body: {
-        Html: {
-          Data: body,
-          Charset: 'UTF-8',
-        },
-      },
-      Subject: {
-        Data: subject,
-        Charset: 'UTF-8',
-      },
-    },
-    Destination: {
-      ToAddresses: [to],
-    },
-    Source: senderEmailAddress,
-    ReplyToAddresses: [senderEmailAddress],
+    html: body,
+    subject,
+    to,
+    from: senderEmailAddress,
   };
   debug('send email params', params);
-  const result = await service.send(new SendEmailCommand(params));
+  const [result] = await sgMail.send(params);
+  if (result.statusCode >= 300) {
+    throw new Error(`Error sending email: ${result.body}`);
+  }
+
   debug('send email result', result);
 }
