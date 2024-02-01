@@ -3,13 +3,7 @@ import { type SerializedType } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode, useEffect, useRef } from 'react';
 import { CodeError } from '../CodeError/CodeError';
-import {
-  Opacity,
-  cssVar,
-  display,
-  p24Medium,
-  smallScreenQuery,
-} from '../../../primitives';
+import { Opacity, cssVar, display, p24Medium } from '../../../primitives';
 
 const baseWrapperStyles = css({
   width: '100%',
@@ -52,11 +46,7 @@ const placeholderStyles = css({
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
-
-    [smallScreenQuery]: p24Medium,
   },
-
-  [smallScreenQuery]: p24Medium,
 });
 
 const lineStyles = css({
