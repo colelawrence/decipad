@@ -15985,7 +15985,7 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1548.0:
+aws-sdk@2.1548.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
   version "2.1548.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1548.0.tgz#f888f266b0675e5021f48704df7a56de9856caa1"
   integrity sha512-kmo3FvO7xKuB7WfLKm6ABuecZeUTFtfwrbrGjWMiCC/yNwP1S3oSm/j/Yy7LO8sQfukWSOXpnPfMk5yhhqq3UQ==
@@ -16016,22 +16016,6 @@ aws-sdk@2.880.0:
     uuid "3.3.2"
     xml2js "0.4.19"
 
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1545.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1545.0.tgz#8678ae8117a426d4a6602408e7f47f176356d7ca"
-  integrity sha512-iDUv6ksG7lTA0l/HlOgYdO6vfYFA1D2/JzAEXSdgKY0C901WgJqBtfs2CncOkCgDe2CjmlMuqciBzAfxCIiKFA==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.6.2"
-
 aws4@^1.11.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.12.0.tgz#ce1c9d143389679e253b314241ea9aa5cec980d3"
@@ -16058,16 +16042,7 @@ axios@^0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.0.0, axios@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.1.tgz#76550d644bf0a2d469a01f9244db6753208397d7"
-  integrity sha512-vfBmhDpKafglh0EldBEbVuoe7DyAavGSLWhuSm5ZSEKQnHhBf0xAAwybbNH1IkrJNGnS/VG4I5yxig1pCEXE4g==
-  dependencies:
-    follow-redirects "^1.15.0"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
-
-axios@^1.6.0:
+axios@^1.0.0, axios@^1.6.0, axios@^1.6.1:
   version "1.6.7"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.7.tgz#7b48c2e27c96f9c68a2f8f31e2ab19f59b06b0a7"
   integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
@@ -18753,7 +18728,7 @@ dataloader@^2.2.2:
   resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-2.2.2.tgz#216dc509b5abe39d43a9b9d97e6e5e473dfbe3e0"
   integrity sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==
 
-date-fns@3.3.1:
+date-fns@3.3.1, date-fns@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.3.1.tgz#7581daca0892d139736697717a168afbb908cfed"
   integrity sha512-y8e109LYGgoQDveiEBD3DYXKba1jWf5BA8YU1FL5Tvm0BTdEfy54WLCwnuYWZNnzzvALy/QQ4Hov+Q9RVRv+Zw==
@@ -31017,14 +30992,14 @@ react-copy-to-clipboard@5.1.0:
     copy-to-clipboard "^3.3.1"
     prop-types "^15.8.1"
 
-react-datepicker@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-5.1.0.tgz#1ef7f1a75f8330bcec55aed72c0919c949674ed9"
-  integrity sha512-elwEnHpd9dQ4U/u7f2vsFdK1CchrOkPPR6rRDQWIzOgqM+Dty43c0tK/IPumrcPSMpRcyDu1okHmbs5m3xlz7w==
+react-datepicker@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-6.0.0.tgz#d06d6a7f160daa2c5453030a7d0b6462d14a7ab8"
+  integrity sha512-MJrBY6PeZw+hj1PUapqJC0PGpP1tyLY/+MvZhO2MuSNaGqfgtHDeLBtMWkutkmqf/MSlMErY0QCwWjWId7bKQQ==
   dependencies:
     "@floating-ui/react" "^0.26.2"
     classnames "^2.2.6"
-    date-fns "^2.30.0"
+    date-fns "^3.3.1"
     prop-types "^15.7.2"
     react-onclickoutside "^6.13.0"
 
