@@ -13,7 +13,7 @@ import {
 import { useActiveTabId } from '@decipad/editor-hooks';
 import {
   NotebookMetaActionsReturn,
-  UnpublishedChangesType,
+  PublishedVersionState,
 } from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
@@ -73,7 +73,7 @@ export type NotebookSharingPopUpProps = Pick<
 
     readonly notebookId: string;
     readonly notebookName: string;
-    readonly hasUnpublishedChanges: UnpublishedChangesType;
+    readonly publishedVersionState: PublishedVersionState;
     readonly workspaceId: string;
 
     readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
@@ -91,7 +91,7 @@ const SNAPSHOT_NAME = 'Published 1';
  */
 export const NotebookPublishingPopUp = ({
   snapshots,
-  hasUnpublishedChanges,
+  publishedVersionState,
   hasPaywall,
   invitedUsers,
   teamName,
@@ -113,8 +113,6 @@ export const NotebookPublishingPopUp = ({
   onChange,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [selectedTab, setSelectedTab] = useState<TabStates>('Collaborate');
-
-  const [isPublishing, setIsPublishing] = useState(false);
 
   const selectTab = (tab: TabStates) => {
     setSelectedTab(tab);
@@ -208,10 +206,8 @@ export const NotebookPublishingPopUp = ({
                   isAdmin={isAdmin}
                   publishingState={publishingState}
                   link={link}
-                  hasUnpublishedChanges={hasUnpublishedChanges}
+                  publishedVersionState={publishedVersionState}
                   currentSnapshot={currentSnapshot}
-                  isPublishing={isPublishing}
-                  setIsPublishing={setIsPublishing}
                   onUpdatePublish={onUpdatePublish}
                   onPublish={onPublish}
                 />
@@ -252,10 +248,8 @@ export const NotebookPublishingPopUp = ({
                 publishingState={publishingState}
                 link={link}
                 isPremium={isPremium}
-                hasUnpublishedChanges={hasUnpublishedChanges}
+                publishedVersionState={publishedVersionState}
                 currentSnapshot={currentSnapshot}
-                isPublishing={isPublishing}
-                setIsPublishing={setIsPublishing}
                 onUpdatePublish={onUpdatePublish}
                 onPublish={onPublish}
               />

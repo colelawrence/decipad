@@ -16,7 +16,7 @@ const args: NotebookSharingPopUpProps = {
   onRemove: noop as any,
   onUpdatePublish: noop as any,
   onRestore: noop as any,
-  hasUnpublishedChanges: 'unpublished-changes',
+  publishedVersionState: 'unpublished-changes',
   isPremium: false,
   publishingState: 'PRIVATE',
 };

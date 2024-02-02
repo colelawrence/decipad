@@ -13,7 +13,7 @@ import {
   useNotebookAccessActions,
   useNotebookMetaActions,
 } from '../../../hooks';
-import { useHasUnpublishedChanges } from '../hooks';
+import { usePublishedVersionState } from '../hooks';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -38,7 +38,7 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
     variables: { id: notebookId },
   });
 
-  const hasUnpublishedChanges = useHasUnpublishedChanges({
+  const publishedVersionState = usePublishedVersionState({
     notebookId,
     docsync,
   });
@@ -84,7 +84,7 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       snapshots={data?.snapshots ?? []}
       notebookId={notebookId}
       publishingState={publishingState}
-      hasUnpublishedChanges={hasUnpublishedChanges}
+      publishedVersionState={publishedVersionState}
       onUpdatePublish={actions.onUpdatePublishState}
       onPublish={actions.onPublishNotebook}
       onInvite={accessActions.onInviteByEmail}

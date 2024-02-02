@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   useCreateOrUpdateNotebookSnapshotMutation,
@@ -199,10 +199,19 @@ export function useNotebookMetaActions(
     [duplicateNotebook, nav, toast]
   );
 
+  /**
+   * Prevents the user from calling this function multiple times,
+   * before the mutation returns.
+   */
+  const isPublishingMutex = useRef(false);
+
   const onPublishNotebook = useCallback<
     NotebookMetaActionsReturn['onPublishNotebook']
   >(
     async (notebookId) => {
+      if (isPublishingMutex.current) return;
+      isPublishingMutex.current = true;
+
       const localState = await getLocalNotebookUpdates(notebookId);
 
       const base64State =
@@ -215,6 +224,8 @@ export function useNotebookMetaActions(
           remoteState: base64State,
         },
       });
+
+      isPublishingMutex.current = false;
     },
     [createOrUpdateSnapshot]
   );

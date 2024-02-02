@@ -1,6 +1,6 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
-import { UnpublishedChangesType } from '@decipad/interfaces';
+import { PublishedVersionState } from '@decipad/interfaces';
 import { dequal } from '@decipad/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { concat, debounce, filter, interval, take } from 'rxjs';
@@ -19,17 +19,13 @@ export interface Props {
  * - Return that boolean value
  *
  * @note it uses `useGetNotebookMetaQuery`. So be careful where you use it.
- *
- * @returns types note
- * 'not-published' = first time publishing, not yet clicked the button.
- * 'unpublished-changes' = published, but changes were made.
  */
-export function useHasUnpublishedChanges({
+export function usePublishedVersionState({
   notebookId,
   docsync,
-}: Props): UnpublishedChangesType {
+}: Props): PublishedVersionState {
   const [hasUnpublishedChanges, setHasUnpublishedChanges] =
-    useState<UnpublishedChangesType>('up-to-date');
+    useState<PublishedVersionState>(undefined);
 
   //
   // Used in components where `useGetNotebookMetaQuery` is already used
@@ -100,7 +96,7 @@ export function useHasUnpublishedChanges({
       // We are published, but dont yet have a snapshot.
       // This means its the first time the user is publishing.
       if (publishedSnapshot == null) {
-        setHasUnpublishedChanges('not-published');
+        setHasUnpublishedChanges('first-time-publish');
         return;
       }
 

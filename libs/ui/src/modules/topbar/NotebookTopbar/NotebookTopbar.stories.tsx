@@ -82,7 +82,7 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       isAdmin={true}
       snapshots={[]}
       notebookId={notebookId}
-      hasUnpublishedChanges="up-to-date"
+      publishedVersionState="up-to-date"
       onUpdatePublish={async () => {}}
       onInvite={async () => {}}
       onChange={async () => {}}

@@ -28,6 +28,7 @@ export const availableFlags = [
   // Enable buy more AI credits
   'AI_BUY_MORE_CREDITS',
   'TABLE_CATEGORY',
+  'NEW_PAYMENTS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

@@ -12,7 +12,7 @@ import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
   useBackActions,
   useEditorUndoState,
-  useHasUnpublishedChanges,
+  usePublishedVersionState,
 } from './hooks';
 import {
   AIModeSwitch,
@@ -84,10 +84,12 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     variables: { id: notebookId },
   });
 
-  const hasUnpublishedChanges = useHasUnpublishedChanges({
+  const publishedVersionState = usePublishedVersionState({
     notebookId,
     docsync,
   });
+  const needsUpdate =
+    publishedVersionState != null && publishedVersionState !== 'up-to-date';
 
   const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 
@@ -166,8 +168,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           onClick={() => sidebarData.toggleSidebar('publishing')}
           testId="publish-button"
         >
-          {hasUnpublishedChanges !== 'up-to-date' &&
-          data?.myPermissionType === 'ADMIN' ? (
+          {needsUpdate && data?.myPermissionType === 'ADMIN' ? (
             <span
               css={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               data-testId="publish-notification"
