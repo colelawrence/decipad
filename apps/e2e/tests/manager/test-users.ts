@@ -1,5 +1,11 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { type Locator, type Page, Browser, expect } from '@playwright/test';
+import {
+  type Locator,
+  type Page,
+  Browser,
+  expect,
+  BrowserContext,
+} from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';
@@ -25,13 +31,15 @@ export function genericTestEmail(): string {
 
 export class User {
   page: Page;
+  context: BrowserContext;
   email: string;
   newNotebook: Locator;
   public notebook: Notebook;
   public workspace: Workspace;
   public aiAssistant: AiAssistant;
 
-  constructor(page: Page) {
+  constructor(context: BrowserContext, page: Page) {
+    this.context = context;
     this.page = page;
     this.email = 'generic-test-user@decipad.com';
     this.notebook = new Notebook(this.page);
@@ -139,7 +147,7 @@ export class User {
 
   async new(browser: Browser, email: string = randomEmail()) {
     const context = await browser.newContext();
-    const userPage = new User(await context.newPage());
+    const userPage = new User(context, await context.newPage());
     await userPage.setupWithEmail(email);
     return userPage;
   }
@@ -229,5 +237,25 @@ export class User {
         }
       }
     }, values);
+  }
+
+  /**
+   * Signout the current user and sign in with a new user.
+   */
+  async testWithNewUser(email = randomEmail()) {
+    await this.context.clearCookies();
+    const loginUrl = `${app().urlBase}/api/auth/${
+      auth().testUserSecret
+    }?email=${encodeURIComponent(email)}`;
+    await this.page.goto(loginUrl);
+    await this.page.waitForURL(/\/w\//);
+    this.email = email;
+  }
+
+  /**
+   * Signout the current user but don't sign back in.s
+   */
+  async testWithoutUser() {
+    await this.context.clearCookies();
   }
 }

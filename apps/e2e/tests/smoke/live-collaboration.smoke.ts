@@ -281,7 +281,7 @@ smoketest(
         const context = await browser.newContext({
           storageState: STORAGE_STATE,
         });
-        const userPage = new User(await context.newPage());
+        const userPage = new User(context, await context.newPage());
         await userPage.page.goto(notebookURL);
         await userPage.notebook.checkNotebookTitle(notebookTitle);
         notebookJsonUserARevisited = await userPage.notebook.download();
