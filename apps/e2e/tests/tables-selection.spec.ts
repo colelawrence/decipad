@@ -249,7 +249,9 @@ test.describe('Table Selection', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.typing);
 
-    expect(await getFromTable(page, 2, 1)).toBe('Initial value');
+    await expect(async () => {
+      expect(await getFromTable(page, 2, 1)).toBe('Initial value');
+    }).toPass();
 
     await clickCell(page, 3, 2);
     await clickCell(page, 2, 1);
@@ -261,8 +263,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('Enter');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.typing);
-
-    expect(await getFromTable(page, 2, 1)).toBe('New value');
+    await expect(async () => {
+      expect(await getFromTable(page, 2, 1)).toBe('New value');
+    }).toPass();
   });
 
   test('selects using tab while editing', async () => {
@@ -272,7 +275,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('Tab');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 2, 2)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 2, 2)).toBe(true);
+    }).toPass();
   });
 
   test('selects using shift + tab while editing', async () => {
@@ -284,7 +289,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.up('Shift');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 2, 0)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 2, 0)).toBe(true);
+    }).toPass();
   });
 
   test('selects using tab while not editing', async () => {
@@ -294,7 +301,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('Tab');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 1, 2)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 1, 2)).toBe(true);
+    }).toPass();
   });
 
   test('selects using enter while editing', async () => {
@@ -304,7 +313,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('Enter');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 3, 1)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 3, 1)).toBe(true);
+    }).toPass();
   });
 
   test('selects using shift + enter while editing', async () => {
@@ -316,7 +327,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.up('Shift');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 1, 1)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 1, 1)).toBe(true);
+    }).toPass();
   });
 
   test('selects using arrow up while editing', async () => {
@@ -326,7 +339,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('ArrowUp');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 1, 1)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 1, 1)).toBe(true);
+    }).toPass();
   });
 
   test('selects using arrow down while editing', async () => {
@@ -336,7 +351,9 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('ArrowDown');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 3, 1)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 3, 1)).toBe(true);
+    }).toPass();
   });
 
   test('selects using arrow down while editing on the last row', async () => {
@@ -346,6 +363,8 @@ test.describe('Table Selection', () => {
     await page.keyboard.press('ArrowDown');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
-    expect(await isCellSelected(page, 3, 1)).toBe(true);
+    await expect(async () => {
+      expect(await isCellSelected(page, 3, 1)).toBe(true);
+    }).toPass();
   });
 });
