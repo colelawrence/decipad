@@ -11,6 +11,7 @@ import {
   DatePicker,
   Divider,
   Dropdown,
+  EmailSlash,
   FormulaSlash,
   Heading1,
   Heading2,
@@ -144,8 +145,7 @@ const submitFormItems = (paint: boolean) => {
       command: 'submit-form',
       title: 'Submit form',
       description: 'Make document submittable to readers',
-      // TODO change
-      icon: paintIcon(<FormulaSlash />, color),
+      icon: paintIcon(<EmailSlash />, color),
       enabled: true,
       extraSearchTerms: [
         'submit',

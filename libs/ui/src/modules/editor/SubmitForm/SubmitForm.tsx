@@ -29,7 +29,7 @@ import { css } from '@emotion/react';
 import { Close, Email, Send, Spinner } from '../../../icons';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { brand200, cssVar, white } from '../../../primitives';
-import { useToast } from '@decipad/toast';
+import { ToastContextType, useToast } from '@decipad/toast';
 import { wrapperStyles } from '../VariableEditor/VariableEditor';
 import { swatchesThemed } from '../../../utils';
 import { TElement } from '@udecode/plate-common';
@@ -144,15 +144,15 @@ const Form = ({
   onSubmit,
   formStatus,
   resetForm,
+  toast,
 }: {
   email: string;
   setEmail: (e: string) => void;
   onSubmit: () => void;
   formStatus: FormStatus;
   resetForm: () => void;
+  toast: ToastContextType;
 }) => {
-  const toast = useToast();
-
   const { color } = useEditorStylesContext();
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
@@ -221,17 +221,13 @@ const Form = ({
   );
 };
 
-type SubmitFormProps = PlateComponent<{
-  onDrop?: any;
-}>;
-
 type FormStatus =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'success' }
   | { status: 'error'; error: string };
 
-export const SubmitForm: SubmitFormProps = ({ ...props }) => {
+export const SubmitForm: PlateComponent<{}> = ({ ...props }) => {
   const element = props.element as TElement;
   const [email, setEmail] = useState('');
   const {
@@ -259,10 +255,11 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
   const secret = element?.endpointUrlSecretName as string;
   const computer = useComputer();
 
+  const toast = useToast();
+
   const handleSubmit = useCallback(async () => {
-    // We don't show submit UI unless secret is present, so this should never happen.
     if (!secret) {
-      console.error('Form submitted when no secret is present.');
+      toast.error('No secret selected');
       return;
     }
 
@@ -297,7 +294,7 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
       return;
     }
     setFormStatus({ status: 'success' });
-  }, [email, secret, computer, proxyUrl]);
+  }, [email, secret, computer, proxyUrl, toast]);
 
   const resetForm = useCallback(() => {
     setFormStatus({ status: 'idle' });
@@ -317,13 +314,14 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
           workspaceId={workspaceId as string}
         />
       )}
-      {(element?.endpointUrlSecretName as string) && (
+      {(secret || !isReadOnly) && (
         <Form
           email={email}
           formStatus={formStatus}
           setEmail={setEmail}
           onSubmit={handleSubmit}
           resetForm={resetForm}
+          toast={toast}
         />
       )}
     </div>

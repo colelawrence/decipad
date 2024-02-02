@@ -19,7 +19,7 @@ export type ToastType = {
   open: boolean;
 };
 
-type ToastContextType = {
+export type ToastContextType = {
   (
     content: ToastType['content'],
     status: ToastType['status'],
