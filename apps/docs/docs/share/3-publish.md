@@ -1,33 +1,38 @@
-# Publish Notebooks
-
 import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
 
-<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/publishvideo.mov" playbackSpeed={2} />
+# Publish Notebooks
 
-## Make Your Notebooks Public
+Easily share your notebook models by publishing them. Anyone with the link can duplicate your notebook to make a copy for themselves.
 
-1.  Open the notebook you want to publish.
-2.  Click on the `Share` button located in the top right-hand corner of the screen and select `Publish`.
-3.  To make the notebook public, toggle the `Publish Online` switch to the `on` position. This will generate a link that you can share with anyone who wants to access the notebook.
-4.  To publish any new changes to an already published notebook, click the `Share with new changes` button.
-5.  To make the notebook private again, toggle the `Publish Online` switch to the `off` position.
+<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/publishvideo2.mov" playbackSpeed={2} />
+
+#### To publish a notebook:
+
+1. Click `Share` in the top right corner of your Notebook and choose `Publish`.
+2. Switch the status from `Not Published` to `Published` and confirm by clicking `Publish`.
+   You will get a shareable link for your notebook.
+3. To publish new updates, use the `Publish with new changes` button.
+4. To make the notebook private again, select `Not Published` from the dropdown.
 
 ## Hide Blocks from Readers
 
-When you publish your notebook, you can choose to hide specific blocks from readers. This will hide the block for collaborators with the "Reader" role, the pulished view, and when the document is embedded.
+Ensure your content is presented exactly as you intend by hiding specific blocks from readers. These are apllied to the published view, embedded notebooks and collaborators with the "Reader" role.
 
-<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/hidereader.mov" playbackSpeed={2} />
+<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/hidereader2.mov" playbackSpeed={2} />
 
-#### Here's how you can hide a block from a reader:
+#### To hide a block from a reader:
 
-1.  Hover over the block you want to hide.
-2.  Click the `⸬` button that appears on the left of the block.
-3.  Select `Hide from reader` from the options.
-    - The block will fade, and a hidden icon will appear on the left of the block.
+1. Hover over the block you want to hide.
+2. Click the `⸬` option's button on its left.
+3. Choose `Hide from reader`. The block will fade, and a hidden icon will appear on the left.
+4. To reveal a block. Click the `⸬` option's button on its left and choose `Show to reader`.
 
-#### To show a hidden block to the reader again, follow these steps:
+## Hide Tabs from Readers
 
-1.  Hover over the block you want to show.
-2.  Click the `⸬` button that appears on the left of the block.
-3.  Select `Show to reader` from the options.
-    - The hidden icon will disappear, and the block will be visible to the reader.
+Customize the reader's experience by hiding specific tabs when publishing your notebook. Tabs become invisible in the published view and for collaborators with the "Reader" role.
+
+#### To hide a tab:
+
+1. Click the `▼` button of the tab option you wish to hide.
+2. Choose `Hide from reader`. The tab icon will fade, indicating it's hidden in the published view.
+3. To reveal the tab to readers, click the `▼` button next to the tab and select `Show to reader`.
