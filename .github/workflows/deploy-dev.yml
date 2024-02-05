@@ -136,7 +136,7 @@ jobs:
       - name: Notify
         uses: decipad/discord-webhook@v5
         with:
-          title: Deploy Dev "${{ needs.deploy.result == 'success' && '💚' || needs.deploy.result == 'cancelled' &&  '🗑️' || '🔴'}}
+          title: Deploy Dev ${{ needs.deploy.result == 'success' && '💚' || needs.deploy.result == 'cancelled' &&  '🗑️' || '🔴'}}
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
           description: ${{github.event.head_commit.message}}
