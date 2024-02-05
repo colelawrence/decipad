@@ -22,6 +22,7 @@ fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
 }
 
 fragment WorkspaceSubscriptionData on WorkspaceSubscription {
+  id
   credits
   queries
   storage

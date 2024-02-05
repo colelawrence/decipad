@@ -54,6 +54,7 @@ fragment WorkspaceMembers on Workspace {
 }
 
 fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
+  id
   paymentStatus
   credits
   queries
