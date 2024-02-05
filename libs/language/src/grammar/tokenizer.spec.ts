@@ -167,3 +167,25 @@ it('can find `-` after the regex hack', () => {
     `"minus(-) ws( ) number(1)"`
   );
 });
+
+describe('Variable delimiter', () => {
+  it('can be used with others', () => {
+    expect(testTokenizer('`my var`')).toMatchInlineSnapshot(
+      `"delimitedIdentifier(my var)"`
+    );
+  });
+
+  it('tokenizes together with assign', () => {
+    expect(testTokenizer('c = `a b`')).toMatchInlineSnapshot(
+      `"identifier(c) ws( ) equalSign(=) ws( ) delimitedIdentifier(a b)"`
+    );
+  });
+
+  it('works with either side', () => {
+    expect(
+      testTokenizer('var name with spaces = `a b c` * 5')
+    ).toMatchInlineSnapshot(
+      `"identifier(var) ws( ) identifier(name) ws( ) identifier(with) ws( ) identifier(spaces) ws( ) equalSign(=) ws( ) delimitedIdentifier(a b c) ws( ) times(*) ws( ) number(5)"`
+    );
+  });
+});

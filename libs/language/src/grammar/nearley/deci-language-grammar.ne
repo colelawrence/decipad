@@ -92,7 +92,7 @@ genericIdentifier -> %identifier                        {%
                                                         }
                                                         %}
 
-ref          -> %identifier                             {%
+ref          -> %identifier                            {%
                                                         (d, _l, reject) => {
                                                           const name = d[0].value
                                                           if (reservedWords.has(name)) {
@@ -103,6 +103,16 @@ ref          -> %identifier                             {%
                                                         }
                                                         %}
 
+ref -> %delimitedIdentifier                             {%
+                                                        (d, _l, reject) => {
+                                                          const name = d[0].value
+                                                          if (reservedWords.has(name)) {
+                                                            return reject
+                                                          } else {
+                                                            return addLoc({ type: 'ref', args: [ name ] }, d[0])
+                                                          }
+                                                        }
+                                                        %}
 
 ###############
 ### Aliases ###

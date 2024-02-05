@@ -78,6 +78,11 @@ export const tokenRules = {
     comma: ',',
     equalSign: '=',
 
+    delimitedIdentifier: {
+      match: regexHack('`.+`'),
+      value: (splitUp: string) => splitUp.slice(1, splitUp.length - 1),
+    },
+
     andSign: '&&',
     orSign: '||',
 

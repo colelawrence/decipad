@@ -392,16 +392,47 @@ let ParserRules = [
   },
   {
     name: 'assignTarget',
-    symbols: ['identifier'],
+    symbols: ['identifier', 'nullableIdentifier'],
     postprocess: (d) => {
+      function parseThing(obj, name) {
+        if (obj.length === 0) {
+          return name;
+        }
+        const whitespace = obj[0][0].text;
+        const n = obj[1].name;
+        obj = obj.slice(2);
+
+        return parseThing(obj[0], name + whitespace + n);
+      }
+
+      let extra = '';
+      if (d.length > 1) {
+        extra = parseThing(d[1], '');
+      }
+
+      extra = d[0].name + extra;
+
       return addLoc(
         {
           type: 'def',
-          args: [d[0].name],
+          args: [extra],
         },
         d[0]
       );
     },
+  },
+  { name: 'nullableIdentifier', symbols: [] },
+  { name: 'nullableIdentifier$ebnf$1', symbols: [/[\s]/] },
+  {
+    name: 'nullableIdentifier$ebnf$1',
+    symbols: ['nullableIdentifier$ebnf$1', /[\s]/],
+    postprocess: function arrpush(d) {
+      return d[0].concat([d[1]]);
+    },
+  },
+  {
+    name: 'nullableIdentifier',
+    symbols: ['nullableIdentifier$ebnf$1', 'identifier', 'nullableIdentifier'],
   },
   {
     name: 'columnAssign',
@@ -2517,6 +2548,22 @@ let ParserRules = [
     name: 'ref',
     symbols: [
       tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
+    postprocess: (d, _l, reject) => {
+      const name = d[0].value;
+      if (reservedWords.has(name)) {
+        return reject;
+      } else {
+        return addLoc({ type: 'ref', args: [name] }, d[0]);
+      }
+    },
+  },
+  {
+    name: 'ref',
+    symbols: [
+      tokenizer.has('delimitedIdentifier')
+        ? { type: 'delimitedIdentifier' }
+        : delimitedIdentifier,
     ],
     postprocess: (d, _l, reject) => {
       const name = d[0].value;
