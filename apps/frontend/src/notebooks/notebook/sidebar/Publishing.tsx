@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
-import { FC } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { SidebarComponentProps } from './types';
 import { NotebookPublishingPopUp } from '@decipad/ui';
 import {
@@ -14,6 +15,10 @@ import {
   useNotebookMetaActions,
 } from '../../../hooks';
 import { usePublishedVersionState } from '../hooks';
+import {
+  NotebookMetaActionsReturn,
+  PublishedVersionState,
+} from '@decipad/interfaces';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -33,17 +38,90 @@ function getPublishingState(
   return 'PRIVATE';
 }
 
+interface PublishLocalActionsReturn {
+  readonly localPublishState: Publish_State | undefined;
+  readonly setLocalPublishState: (state: Publish_State | undefined) => void;
+
+  readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
+  readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+}
+
+//
+// Locally we need to hold on before sending backend requests.
+// - When the user uses the dropdown to select "public",
+// they must hit the "Publish" button before we actually set anything on the backend.
+//
+// - So we need a little local state.
+//
+// @note uses 'useGetNotebookMetaQuery'.
+//
+function usePublishLocalActions(notebookId: string): PublishLocalActionsReturn {
+  const [meta] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
+
+  const publishingState = getPublishingState(meta.data?.getPadById);
+
+  const actions = useNotebookMetaActions();
+
+  const [localPublishState, setLocalPublishState] = useState<
+    Publish_State | undefined
+  >(undefined);
+
+  const onUpdatePublish = useCallback<
+    NotebookMetaActionsReturn['onUpdatePublishState']
+  >(
+    async (id, state) => {
+      if (publishingState === 'PRIVATE' && state !== 'PRIVATE') {
+        // special logic.
+        // We only want to update the backend AFTER the user clicks
+        // "Publish" green button, so we need some frontend controls.
+
+        setLocalPublishState(state);
+        return;
+      }
+
+      return actions.onUpdatePublishState(id, state);
+    },
+    [actions, publishingState]
+  );
+
+  const onPublish = useCallback<NotebookMetaActionsReturn['onPublishNotebook']>(
+    async (id) => {
+      if (localPublishState != null) {
+        await actions.onUpdatePublishState(id, localPublishState);
+        setLocalPublishState(undefined);
+      }
+
+      return actions.onPublishNotebook(id);
+    },
+    [actions, localPublishState]
+  );
+
+  return {
+    localPublishState,
+    setLocalPublishState,
+    onUpdatePublish,
+    onPublish,
+  };
+}
+
 const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
 
-  const publishedVersionState = usePublishedVersionState({
+  const localPublish = usePublishLocalActions(notebookId);
+  const _publishedVersionState = usePublishedVersionState({
     notebookId,
     docsync,
   });
 
-  const actions = useNotebookMetaActions();
+  const publishedVersionState: PublishedVersionState =
+    localPublish.localPublishState != null
+      ? 'first-time-publish'
+      : _publishedVersionState;
+
   const accessActions = useNotebookAccessActions();
 
   const data = meta.data?.getPadById;
@@ -68,7 +146,9 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
   const notebookName = data?.name ?? 'My Notebook';
   const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
   const hasPaywall = !canInvite && !isPremiumWorkspace;
-  const publishingState = getPublishingState(data);
+
+  const publishingState =
+    localPublish.localPublishState ?? getPublishingState(data);
 
   return (
     <NotebookPublishingPopUp
@@ -85,8 +165,8 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       notebookId={notebookId}
       publishingState={publishingState}
       publishedVersionState={publishedVersionState}
-      onUpdatePublish={actions.onUpdatePublishState}
-      onPublish={actions.onPublishNotebook}
+      onUpdatePublish={localPublish.onUpdatePublish}
+      onPublish={localPublish.onPublish}
       onInvite={accessActions.onInviteByEmail}
       onChange={accessActions.onChangeAccess}
       onRemove={accessActions.onRemoveAccess}

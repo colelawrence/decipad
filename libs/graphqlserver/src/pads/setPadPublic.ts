@@ -3,8 +3,34 @@ import { track } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import { MutationResolvers } from '@decipad/graphqlserver-types';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 const notebooks = resource('notebook');
+
+async function unpublishSnapshots(padId: string): Promise<void> {
+  const data = await tables();
+
+  const publishedVersions = (
+    await data.docsyncsnapshots.query({
+      IndexName: 'byDocsyncIdAndSnapshotName',
+      KeyConditionExpression:
+        'docsync_id = :docsync_id AND snapshotName = :name',
+      ExpressionAttributeValues: {
+        ':docsync_id': padId,
+        ':name': PublishedVersionName.Published,
+      },
+    })
+  ).Items;
+
+  await Promise.all(
+    publishedVersions.map((snapshot) =>
+      data.docsyncsnapshots.put({
+        ...snapshot,
+        snapshotName: PublishedVersionName.Unpublished,
+      })
+    )
+  );
+}
 
 export const setPadPublic: MutationResolvers['setPadPublic'] = async (
   _,
@@ -29,6 +55,10 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
   pad.userAllowsPublicHighlighting = userAllowsPublicHighlighting;
 
   await data.pads.put(pad);
+
+  if (publishState === 'PRIVATE') {
+    await unpublishSnapshots(pad.id);
+  }
 
   const event = isPublic ? 'notebook published' : 'notebook unpublished';
   await track(

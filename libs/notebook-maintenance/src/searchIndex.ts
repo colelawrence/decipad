@@ -3,8 +3,9 @@ import { indexNotebook } from '@decipad/backend-search';
 import { getStoredSnapshot } from '@decipad/services/notebooks';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import { getRemoteComputer } from '@decipad/remote-computer';
+import { PublishedVersionName } from '@decipad/interfaces';
 
-const SNAPSHOT_NAME = 'Published 1';
+const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 export const maybeUpdateSearchIndex = async (
   notebookId: string

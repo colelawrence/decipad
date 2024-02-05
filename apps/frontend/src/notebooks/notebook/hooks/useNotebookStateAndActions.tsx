@@ -32,7 +32,10 @@ import {
   parseIconColorFromIdentifier,
 } from 'apps/frontend/src/utils';
 import { useExternalDataSources } from './useExternalDataSources';
-import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import {
+  ExternalDataSourcesContextValue,
+  PublishedVersionName,
+} from '@decipad/interfaces';
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
@@ -103,7 +106,7 @@ interface UseNotebookStateAndActionsResult {
   onCreateSnapshot: () => void;
 }
 
-const SNAPSHOT_NAME = 'Published 1';
+const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 export const useNotebookStateAndActions = ({
   notebookId,

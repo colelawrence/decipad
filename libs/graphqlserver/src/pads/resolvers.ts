@@ -41,6 +41,7 @@ import {
   Workspace,
 } from '@decipad/graphqlserver-types';
 import { claimNotebook } from './claimNotebook';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
 
@@ -291,7 +292,7 @@ const resolvers: Resolvers = {
       const snapshotName =
         (permissionType == null || permissionType === 'READ') &&
         !context.snapshotName
-          ? 'Published 1'
+          ? PublishedVersionName.Published
           : context.snapshotName;
       const initialState = await getNotebookInitialState(pad.id, snapshotName);
       if (initialState.length >= MAX_INITIAL_STATE_PAYLOAD_SIZE) {

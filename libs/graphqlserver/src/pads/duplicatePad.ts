@@ -19,9 +19,10 @@ import { getNodeString } from '@udecode/plate-common';
 import { MutationResolvers } from '@decipad/graphqlserver-types';
 import { padResource } from './padResource';
 import { plans } from '@decipad/backend-config';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 const notebooks = resource('notebook');
-const PUBLISHED_SNAPSHOT_NAME = 'Published 1';
+const PUBLISHED_SNAPSHOT_NAME = PublishedVersionName.Published;
 
 /**
  * Returns the document content and title

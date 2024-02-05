@@ -13,6 +13,7 @@ import {
 import { useActiveTabId } from '@decipad/editor-hooks';
 import {
   NotebookMetaActionsReturn,
+  PublishedVersionName,
   PublishedVersionState,
 } from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
@@ -82,7 +83,7 @@ export type NotebookSharingPopUpProps = Pick<
 
 type TabStates = 'Collaborate' | 'Publish' | 'Embed';
 
-const SNAPSHOT_NAME = 'Published 1';
+const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 /**
  * A component that handles the rendering of the notebook sharing pop up and the toggle logic.

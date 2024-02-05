@@ -22,8 +22,9 @@ import {
   WorkspaceNotebookFragment,
 } from './generated';
 import * as schema from './schema.generated.json';
+import { PublishedVersionName } from './PublishedStates';
 
-const PUBLISHED_SNAPSHOT = 'Published 1';
+const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 
 const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
   cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
@@ -315,6 +316,13 @@ export const graphCacheConfig: GraphCacheConfig = {
             if (args.publishState === 'PRIVATE') {
               data.getPadById.isPublic = false;
               data.getPadById.userAllowsPublicHighlighting = false;
+
+              const snapshots = data.getPadById.snapshots.map((s) => ({
+                ...s,
+                snapshotName: PublishedVersionName.Unpublished,
+              }));
+              data.getPadById.snapshots = snapshots;
+
               return data;
             }
 

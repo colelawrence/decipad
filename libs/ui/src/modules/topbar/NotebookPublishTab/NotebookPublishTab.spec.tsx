@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import fetch from 'jest-fetch-mock';
 import { ComponentProps } from 'react';
 import { NotebookPublishTab } from './NotebookPublishTab';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 describe('NotebookPublishingPopUp organism', () => {
   beforeAll(() => {
@@ -18,7 +19,7 @@ describe('NotebookPublishingPopUp organism', () => {
       currentSnapshot: {
         createdAt: '2022-12-17T03:24:00',
         updatedAt: '2022-12-17T03:34:00',
-        snapshotName: 'Published 1',
+        snapshotName: PublishedVersionName.Published,
       },
       link: 'https://decipad.com/notebook/nbid',
       publishedVersionState: 'unpublished-changes',
@@ -43,7 +44,7 @@ describe('NotebookPublishingPopUp organism', () => {
       currentSnapshot: {
         createdAt: '2022-12-17T03:24:00',
         updatedAt: '2022-12-17T03:34:00',
-        snapshotName: 'Published 1',
+        snapshotName: PublishedVersionName.Published,
       },
       link: 'https://decipad.com/notebook/nbid',
       publishedVersionState: 'unpublished-changes',
@@ -68,7 +69,7 @@ describe('NotebookPublishingPopUp organism', () => {
       currentSnapshot: {
         createdAt: '2022-12-17T03:24:00',
         updatedAt: '2022-12-17T03:34:00',
-        snapshotName: 'Published 1',
+        snapshotName: PublishedVersionName.Published,
       },
       link: 'https://decipad.com/notebook/nbid',
       isAdmin: true,
@@ -93,7 +94,7 @@ describe('NotebookPublishingPopUp organism', () => {
       currentSnapshot: {
         createdAt: '2022-12-17T03:24:00',
         updatedAt: '2022-12-17T03:34:00',
-        snapshotName: 'Published 1',
+        snapshotName: PublishedVersionName.Published,
       },
       link: 'https://decipad.com/notebook/nbid',
       publishedVersionState: 'unpublished-changes',

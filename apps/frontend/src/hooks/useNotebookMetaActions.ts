@@ -19,11 +19,14 @@ import {
   exportNotebookBackups,
   useMutationResultHandler,
 } from '../utils';
-import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import {
+  NotebookMetaActionsReturn,
+  PublishedVersionName,
+} from '@decipad/interfaces';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
 
-const SNAPSHOT_NAME = 'Published 1';
+const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 /**
  * Hook that provides actions to edit meta information about the notebook.

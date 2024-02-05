@@ -1,6 +1,9 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
-import { PublishedVersionState } from '@decipad/interfaces';
+import {
+  PublishedVersionName,
+  PublishedVersionState,
+} from '@decipad/interfaces';
 import { dequal } from '@decipad/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { concat, debounce, filter, interval, take } from 'rxjs';
@@ -36,7 +39,7 @@ export function usePublishedVersionState({
   });
 
   const publishedSnapshot = meta.data?.getPadById?.snapshots.find(
-    (s) => s.snapshotName === 'Published 1'
+    (s) => s.snapshotName === PublishedVersionName.Published
   );
 
   //

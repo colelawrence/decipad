@@ -50,7 +50,7 @@ test('searchTemplates', async (ctx) => {
     await gqlService.mutate({
       mutation: ctx.gql`
         mutation {
-          createOrUpdateSnapshot(notebookId: "${newNotebookId}", snapshotName: "Published 1", forceSearchIndexUpdate: true)
+          createOrUpdateSnapshot(notebookId: "${newNotebookId}", snapshotName: PublishedVersionName.Published, forceSearchIndexUpdate: true)
         }
       `,
     });

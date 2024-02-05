@@ -14,8 +14,9 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { debug } from '../debug';
+import { PublishedVersionName } from '@decipad/interfaces';
 
-const SNAPSHOT_NAME = 'Published 1';
+const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 export const injectNotebookTemplate: CustomAction<
   Parameters<ServerSideNotebookApi['injectNotebookTemplate']>[0],

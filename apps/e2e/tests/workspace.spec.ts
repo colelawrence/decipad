@@ -1,5 +1,5 @@
 import { expect, test, Page } from './manager/decipad-tests';
-import { snapshot } from '../utils/src';
+import { Timeouts, snapshot } from '../utils/src';
 
 test('Section creation', async ({ randomFreeUser }) => {
   const { page, workspace } = randomFreeUser;
@@ -154,6 +154,9 @@ test('Dashboard operations', async ({
       page.waitForNavigation({ url: '/n/*' }),
     ]);
 
+    // Waits for docsync to send updates through.
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.syncDelay);
     await page.goBack();
   });
 
