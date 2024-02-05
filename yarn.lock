@@ -8774,6 +8774,11 @@
     "@sentry/types" "7.99.0"
     "@sentry/utils" "7.99.0"
 
+"@sentry/babel-plugin-component-annotate@2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-2.13.0.tgz#fd07852f8dbbade257e46c188685cdfd2d2c4769"
+  integrity sha512-NOKin57L0ZePOHsnbRJpaWxdDnPS+SQUBJDyBYfcIrS74EPXFoFhFADYwGGI5hEKYL7/L0H3a4sIB5iJci3+fQ==
+
 "@sentry/browser@7.99.0":
   version "7.99.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.99.0.tgz#3e78beb490d141c988038ea902689a1e9171c6cf"
@@ -8787,14 +8792,14 @@
     "@sentry/types" "7.99.0"
     "@sentry/utils" "7.99.0"
 
-"@sentry/bundler-plugin-core@2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.11.0.tgz#6a4532e8703c3bdfc5ef09960de0e3e8082dfe91"
-  integrity sha512-IceEPd3RNVyyaxoI92JFnTMsOk/vYCuClV7c/bVBCZZD6dZLercs+abpO6gxbzu758LOjbAmwwIIKtsTKhD0kg==
+"@sentry/bundler-plugin-core@2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.13.0.tgz#dd5c15765b95d8744f4e79146806ae30c83e6af5"
+  integrity sha512-KCq5JL/bW/bvY+0LIB4kgtDcg/5cyHzJjuDKOorcMV4OmKD2BG5xCG518gIARfPlELxWpURO4LYz9ZKkkPs/hw==
   dependencies:
     "@babel/core" "7.18.5"
+    "@sentry/babel-plugin-component-annotate" "2.13.0"
     "@sentry/cli" "^2.22.3"
-    "@sentry/component-annotate-plugin" "2.11.0"
     "@sentry/node" "^7.60.0"
     "@sentry/utils" "^7.60.0"
     dotenv "^16.3.1"
@@ -8856,11 +8861,6 @@
     "@sentry/cli-linux-x64" "2.27.0"
     "@sentry/cli-win32-i686" "2.27.0"
     "@sentry/cli-win32-x64" "2.27.0"
-
-"@sentry/component-annotate-plugin@2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/component-annotate-plugin/-/component-annotate-plugin-2.11.0.tgz#2af074b21b93414a51c284951070380d3a06e405"
-  integrity sha512-2Nf9e05HcvGT9b/8OFaBC90I1d3P6hOu1265T6u3WASxJNvKf3kF44kpt0nZAEVNFcgbyPiPyJ/gmOR/ZIG91A==
 
 "@sentry/core@7.99.0":
   version "7.99.0"
@@ -8942,12 +8942,12 @@
   dependencies:
     "@sentry/types" "7.99.0"
 
-"@sentry/vite-plugin@^2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/vite-plugin/-/vite-plugin-2.11.0.tgz#9baa23c387091c5bacccf1764fba51f489bf3e88"
-  integrity sha512-FsRMIYMyuffDP9eAEupcd9g/W02eLVEB/oldRvf1ekJzY1GsaaATnF6wgzGBkbhmp6TImMtHJgVJHm1twLrhWw==
+"@sentry/vite-plugin@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@sentry/vite-plugin/-/vite-plugin-2.13.0.tgz#ed4429d69f6805d9a390eba53e7cefac68588e2e"
+  integrity sha512-T6vxrBeqrtGgyOuuHufKTe3FBa1lFNW5i0JsESKapsIbGNIdAbHfQVQaYp7eDaLa9OaOwYB7jGhSDykfYpCvJQ==
   dependencies:
-    "@sentry/bundler-plugin-core" "2.11.0"
+    "@sentry/bundler-plugin-core" "2.13.0"
     unplugin "1.0.1"
 
 "@sideway/address@^4.1.4":
