@@ -54,7 +54,6 @@ const languageDocs = [
   'docs/integrations/01-basics.md',
   'docs/integrations/11-code.md',
   'docs/integrations/21-SQL.md',
-  'docs/integrations/91-import-tables.md',
 
   'docs/quick-start/charts.md',
   'docs/quick-start/data-types.md',
