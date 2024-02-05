@@ -1063,7 +1063,9 @@ export class Notebook {
    * ```
    */
   async waitForEditorToLoad() {
-    await this.notebookTitle.waitFor({ state: 'visible' });
+    await expect(async () => {
+      await expect(this.notebookTitle).toBeVisible();
+    }).toPass();
     await this.notebookTitle.click();
   }
 

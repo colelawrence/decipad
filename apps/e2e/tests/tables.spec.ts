@@ -663,12 +663,20 @@ test('Starts editing cell on enter', async ({ testUser }) => {
   await test.step('edit cell', async () => {
     await writeInTable(testUser.page, 'before', 1);
     await clickCell(testUser.page, 1);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
     await testUser.page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
     await testUser.page.keyboard.type(' after');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
     await testUser.page.keyboard.press('Enter');
   });
 
   await test.step('check that cell is edited', async () => {
-    expect(await getFromTable(testUser.page, 1)).toBe('before after');
+    await expect(async () => {
+      expect(await getFromTable(testUser.page, 1)).toBe('before after');
+    }).toPass();
   });
 });
