@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
             https://app.decipad.com/n/Spotify-Price-Increase%3AWRnGDJFV2WMCtxboy6B57
