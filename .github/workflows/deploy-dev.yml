@@ -132,10 +132,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - deploy
-    if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
       - name: Notify
         uses: decipad/discord-webhook@v5
         with:
+          title: Deploy Dev "${{ needs.deploy.result == 'success' && '💚' || needs.deploy.result == 'cancelled' &&  '🗑️' || '🔴'}}
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          description: ${{github.event.head_commit.message}}
+          include-details: true
