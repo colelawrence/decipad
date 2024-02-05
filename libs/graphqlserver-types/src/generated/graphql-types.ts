@@ -943,6 +943,7 @@ export type SubscriptionPlan = {
   key: Scalars['String']['output'];
   paymentLink?: Maybe<Scalars['String']['output']>;
   price?: Maybe<Scalars['Int']['output']>;
+  pricePerSeat?: Maybe<Scalars['Int']['output']>;
   queries?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   storage?: Maybe<Scalars['Int']['output']>;
@@ -1701,6 +1702,7 @@ export type SubscriptionPlanResolvers<ContextType = GraphqlContext, ParentType e
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   price?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  pricePerSeat?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;

@@ -82,7 +82,9 @@ export const updateExtraAiAllowance = async (
 
   // TODO: refactor this when we'll have multiple prices
   const product = (
-    await stripe.prices.list({ product: extraCreditsProdId })
+    await stripe.prices.list({
+      product: extraCreditsProdId,
+    })
   ).data.find((p) => p.metadata.isDefault === 'true');
   const credits = product?.metadata?.credits;
 

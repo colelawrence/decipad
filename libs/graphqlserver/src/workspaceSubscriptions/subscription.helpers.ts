@@ -45,8 +45,11 @@ export const getWorkspaceSubscription = async (
   const subsPlans = (
     await stripe.prices.list({
       product: subscriptionsProdId,
+      active: true,
+      type: 'recurring',
     })
   ).data;
+
   const proPlan = subsPlans.find((plan) => plan.metadata.isDefault === 'true');
 
   if (!workspaceSubs.credits && isProPlan) {

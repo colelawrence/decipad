@@ -27,15 +27,15 @@ export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // TODO: maybe get rid of this completely, and rely purely on graphql.
 
   const updateUsage = useCallback<AiUsageActions['updateUsage']>((usage) => {
-    if (usage.promptTokensUsed) {
+    if (typeof usage.promptTokensUsed !== 'undefined') {
       setPromptTokensUsed(usage.promptTokensUsed);
     }
 
-    if (usage.completionTokensUsed) {
+    if (typeof usage.completionTokensUsed !== 'undefined') {
       setCompletionTokensUsed(usage.completionTokensUsed);
     }
 
-    if (usage.tokensQuotaLimit != null) {
+    if (typeof usage.tokensQuotaLimit != 'undefined') {
       setQuotaLimit(usage.tokensQuotaLimit);
     }
   }, []);

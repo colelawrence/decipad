@@ -50,11 +50,20 @@ export const getPlansForCredits: QueryResolvers['getCreditsPlans'] =
 export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
   async () => {
     try {
-      const subscriptionPlans = await stripe.prices.list({
+      const subscriptionPlansAndData = await stripe.prices.list({
         product: subscriptionsProdId,
+        active: true,
       });
 
-      const allPlans: SubscriptionPlan[] = subscriptionPlans.data.map((p) => {
+      const subscriptionPlans = (subscriptionPlansAndData.data || []).filter(
+        (s) => s.type === 'recurring'
+      );
+
+      const pricesPerSeat = (subscriptionPlansAndData.data || []).filter(
+        (s) => s.type === 'one_time'
+      );
+
+      const allPlans: SubscriptionPlan[] = subscriptionPlans.map((p) => {
         // eslint-disable-next-line camelcase
         const { id, metadata, unit_amount, currency } = p;
 
@@ -72,6 +81,9 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
           description: metadata.description,
           storage: Number(metadata.storage) || 0,
           isDefault: metadata.isDefault === 'true',
+          pricePerSeat:
+            pricesPerSeat.find((price) => price.metadata?.key === metadata.key)
+              ?.unit_amount ?? 0,
         };
       });
 

@@ -12,5 +12,6 @@ query GetSubscriptionsPlans {
     id
     key
     isDefault
+    pricePerSeat
   }
 }
