@@ -479,6 +479,14 @@
   resolved "https://registry.yarnpkg.com/@architect/asap/-/asap-6.0.3.tgz#1d3bb8fd555cb7aac473fcff33aaba3c60b46a20"
   integrity sha512-LxqrtZl141Ao+DH+1Wy8Xvks5Uay/BMoPYa9b47B5Ag4s4PItl33asXI53ueiS2aQDUq01y4C7lfT1KQ4oJGzA==
 
+"@architect/asap@~7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@architect/asap/-/asap-7.0.4.tgz#33b5d6c011b883860935531d37d11cbe6d6f7aa9"
+  integrity sha512-ScQcgkR8hpXj65sNwUefTLrUcF4t+7paVNboc5fGDOh2Qw6dmsw0xv8g+C7uXjL7n4wrhJB+fJkOx1r7tNyzxg==
+  dependencies:
+    "@aws-lite/client" "~0.16.1"
+    "@aws-lite/s3" "^0.1.17"
+
 "@architect/create@4.2.4", "@architect/create@~4.2.3":
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/@architect/create/-/create-4.2.4.tgz#b207269a3ee46dada9f9b6822c69af065150a99d"
@@ -536,18 +544,6 @@
     zip-dir "~2.0.0"
     zipit "~2.0.0"
 
-"@architect/destroy@3.0.12":
-  version "3.0.12"
-  resolved "https://registry.yarnpkg.com/@architect/destroy/-/destroy-3.0.12.tgz#db8b3a8dd70bb100a19f5a72d3bcada08da96765"
-  integrity sha512-Hot8avN77ijd38zVaLupVCB1EcsS7WNJMdnY4ds69yx6BDe54Olqur0z57kbkCabZoJ3cbqZGrYyth3cPIzY3Q==
-  dependencies:
-    "@architect/inventory" "~3.5.0"
-    "@architect/utils" "~3.1.7"
-    aws-sdk "^2.1363.0"
-    minimist "~1.2.8"
-    run-parallel "~1.2.0"
-    run-waterfall "~1.1.7"
-
 "@architect/destroy@3.0.13":
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/@architect/destroy/-/destroy-3.0.13.tgz#5ed9e44f0e66f7ee496a42712238830e4fe9562b"
@@ -556,6 +552,22 @@
     "@architect/inventory" "~3.6.0"
     "@architect/utils" "~3.1.9"
     aws-sdk "^2.1363.0"
+    minimist "~1.2.8"
+    run-parallel "~1.2.0"
+    run-waterfall "~1.1.7"
+
+"@architect/destroy@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@architect/destroy/-/destroy-4.0.1.tgz#1cd891fe22a641993f973558e38cb82630305969"
+  integrity sha512-VQyGQhK+3OFl/uY7gOKm5mHNpQSKIATD93fhKeUlzBgVYuOLwNf901VkaH2hrqOdUUK/SkFM27K+lm2HhTZQPQ==
+  dependencies:
+    "@architect/inventory" "~4.0.2"
+    "@architect/utils" "~4.0.1"
+    "@aws-lite/client" "^0.16.1"
+    "@aws-lite/cloudformation" "^0.0.3"
+    "@aws-lite/cloudwatch-logs" "^0.0.3"
+    "@aws-lite/s3" "^0.1.17"
+    "@aws-lite/ssm" "^0.2.2"
     minimist "~1.2.8"
     run-parallel "~1.2.0"
     run-waterfall "~1.1.7"
@@ -651,16 +663,6 @@
     "@architect/parser" "~5.0.0"
     "@architect/utils" "~3.0.2"
 
-"@architect/inventory@~3.5.0":
-  version "3.5.7"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.5.7.tgz#245ff4a6b1da601132d45e0b4fd734e086a9e47d"
-  integrity sha512-7YvDRRsu1zMeXGihusSRCg4llhu5gj95SGJ040prP8midii3hgEIsI2+1MOjq23Ts1mzDKC1lmIDkwRBriqmMA==
-  dependencies:
-    "@architect/asap" "~6.0.0"
-    "@architect/parser" "~6.0.2"
-    "@architect/utils" "~3.1.7"
-    lambda-runtimes "~1.1.4"
-
 "@architect/inventory@~3.6.0", "@architect/inventory@~3.6.1", "@architect/inventory@~3.6.2", "@architect/inventory@~3.6.3":
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.6.3.tgz#df7239b429c27f8322577c7e9dbc083e5af7f74e"
@@ -670,6 +672,18 @@
     "@architect/parser" "~6.0.3"
     "@architect/utils" "~3.1.9"
     lambda-runtimes "~1.1.6"
+
+"@architect/inventory@~4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-4.0.2.tgz#91dac473a278c493ac0c953da18c461f284ff90a"
+  integrity sha512-SGD5YyZCGnjh0c5jRs6IXDhonrLoMU3YSc7RyAxBjzgfin9NbXyn0f9Wx7YGPvVPGgwLp1FfqrgfWgqjveXn8Q==
+  dependencies:
+    "@architect/asap" "~7.0.4"
+    "@architect/parser" "~6.0.3"
+    "@architect/utils" "~4.0.1"
+    "@aws-lite/client" "^0.16.1"
+    "@aws-lite/ssm" "^0.2.2"
+    lambda-runtimes "~2.0.1"
 
 "@architect/logs@4.1.0":
   version "4.1.0"
@@ -762,6 +776,20 @@
   dependencies:
     chalk "4.1.2"
     glob "~10.2.2"
+    path-sort "~0.1.0"
+    restore-cursor "3.1.0"
+    run-series "~1.1.9"
+    run-waterfall "~1.1.7"
+    sha "~3.0.0"
+
+"@architect/utils@~4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@architect/utils/-/utils-4.0.1.tgz#4ad18c12e0d0b191de384d6052bb639ebd942f63"
+  integrity sha512-L69JzRC5oRoXhJ02ux5x09oz9dnaixlY9WNG9LYBs1/2X3WA8IfChVZ6EPWPt29ROWdCgHkndSsPoGHOdHW/MA==
+  dependencies:
+    "@aws-lite/client" "^0.16.1"
+    chalk "4.1.2"
+    glob "~10.3.10"
     path-sort "~0.1.0"
     restore-cursor "3.1.0"
     run-series "~1.1.9"
@@ -881,6 +909,34 @@
     "@aws-sdk/types" "^3.222.0"
     "@aws-sdk/util-utf8-browser" "^3.0.0"
     tslib "^1.11.1"
+
+"@aws-lite/client@^0.16.1", "@aws-lite/client@~0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@aws-lite/client/-/client-0.16.1.tgz#46d2f0ec3cf37ab602ef1ca773b2ec67c8a42dbe"
+  integrity sha512-PSaVPCnuBOo82JdpsmNqB20BAPmX1brGf7gl6Ugbt+7DebCAh9hP5jdCwMjBzWTRRcM8XkSfq454DPjhRT0kew==
+  dependencies:
+    aws4 "^1.12.0"
+    ini "^4.1.1"
+
+"@aws-lite/cloudformation@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@aws-lite/cloudformation/-/cloudformation-0.0.3.tgz#38965943bf883fc2a8da2be13a9d545891f6a5ee"
+  integrity sha512-LaaISGH/DQoaumfaNAmMl4ePm72aolk3kImX26jJ8K9oEmLmxK1O1ZHN6ik74tZ6wf97ROkKnIv1HeZhFqhLbg==
+
+"@aws-lite/cloudwatch-logs@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@aws-lite/cloudwatch-logs/-/cloudwatch-logs-0.0.3.tgz#c69dc17a9f07e510c82ab3d542a4749bd0fb7e3d"
+  integrity sha512-mIOyVeMHEwylAjZ92IaIjU2Ep3IhM5lFl4C+PiK35flG+NJoTHrVr6bildQJ5NToZy6fdi1/0dprU63P5HVPEA==
+
+"@aws-lite/s3@^0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@aws-lite/s3/-/s3-0.1.17.tgz#8291d86b71afdbdf843a35111864b99b9b8ef6ec"
+  integrity sha512-6f5bDNgF0pjUPwNpqN5OMi/DrHGsUTwk48o9bva2nL59m1FeGc4U+Fb1qHRHuVSl8LWqr1QtMD0VzQsljP+iJQ==
+
+"@aws-lite/ssm@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@aws-lite/ssm/-/ssm-0.2.2.tgz#2e27c4d71cba4cbe5bf4edcb350349aab40dfa78"
+  integrity sha512-lKTLiqC6GGzYmJHHAhtWh6sIf4HheRYsN7u3708v6+OdrMnHz4DJ4OMK8djMbtWSu/QDAceSPPxEdOFhIfp6QA==
 
 "@aws-sdk/client-apigatewaymanagementapi@^3.316.0", "@aws-sdk/client-apigatewaymanagementapi@^3.319.0":
   version "3.465.0"
@@ -16061,7 +16117,7 @@ aws-sdk@2.880.0:
     uuid "3.3.2"
     xml2js "0.4.19"
 
-aws4@^1.11.0:
+aws4@^1.11.0, aws4@^1.12.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.12.0.tgz#ce1c9d143389679e253b314241ea9aa5cec980d3"
   integrity sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==
@@ -23299,6 +23355,11 @@ ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
+ini@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-4.1.1.tgz#d95b3d843b1e906e56d6747d5447904ff50ce7a1"
+  integrity sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==
+
 inline-style-parser@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/inline-style-parser/-/inline-style-parser-0.1.1.tgz#ec8a3b429274e9c0a1f1c4ffa9453a7fef72cea1"
@@ -25800,6 +25861,11 @@ lambda-runtimes@~1.1.4, lambda-runtimes@~1.1.5, lambda-runtimes@~1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-1.1.6.tgz#783bbf1547287cca215a9edeb4154684a1a34e6d"
   integrity sha512-nMYTto/eIzj/5XnPosp2f/3DjyGh+lSz5orxnHx6mBGgCDJCbxTgG/qKGxA8haODiOyg3v4+xONsFRSXAkQTfg==
+
+lambda-runtimes@~2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-2.0.1.tgz#0e41df08ec58884d18933c6f1d936bc56d40456d"
+  integrity sha512-tGKWIhG90kvagFG4m0MWUZHKllj4OchvsSbXnXS7VsrwEsJPr2ZIG7MMfQ6pHtqRPAyx1z8YSzJCQMJZYcVYRw==
 
 langchain@^0.1.3:
   version "0.1.3"

@@ -85,7 +85,7 @@
     "@apollo/server": "4.10.0",
     "@architect/architect": "10.16.2",
     "@architect/asap": "6.0.2",
-    "@architect/destroy": "3.0.12",
+    "@architect/destroy": "4.0.1",
     "@architect/functions": "7.0.0",
     "@aws-sdk/client-cloudformation": "^3.507.0",
     "@aws-sdk/client-dynamodb": "^3.507.0",
