@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { badRequest, unauthorized, internal } from '@hapi/boom';
+import { badRequest, unauthorized, internal, notFound } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
 import { DynamoDbQuery, PadRecord } from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
@@ -55,7 +55,11 @@ const resolvers: Resolvers = {
         context.snapshotName = params.snapshotName;
       }
 
-      return padResource.getById(_, params, context);
+      const pad = await padResource.getById(_, params, context);
+      if (pad && pad.banned) {
+        throw notFound();
+      }
+      return pad;
     },
 
     async pads(_, { page, workspaceId }, context) {

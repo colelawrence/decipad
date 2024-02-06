@@ -560,6 +560,7 @@ export type Pad = {
   access: ResourceAccess;
   archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
+  banned?: Maybe<Scalars['Boolean']['output']>;
   createdAt: Scalars['DateTime']['output'];
   document: Scalars['String']['output'];
   gist?: Maybe<Gist>;
@@ -1452,6 +1453,7 @@ export type PadResolvers<ContextType = GraphqlContext, ParentType extends Resolv
   access?: Resolver<ResolversTypes['ResourceAccess'], ParentType, ContextType>;
   archived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
+  banned?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gist?: Resolver<Maybe<ResolversTypes['Gist']>, ParentType, ContextType>;

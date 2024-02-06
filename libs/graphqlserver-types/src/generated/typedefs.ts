@@ -267,6 +267,8 @@ type Pad {
   snapshots: [PadSnapshot!]!
   document: String!
   isTemplate: Boolean
+
+  banned: Boolean
 }
 
 type PagedPadResult {

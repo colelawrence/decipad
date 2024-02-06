@@ -1,6 +1,6 @@
 {
   "extends": ["../../libs/eslint-config-decipad"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "src/generated/*"],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "parserOptions": {

@@ -179,6 +179,98 @@ export type FeatureCommandData = {
   options: FeatureApplicationCommandDataOption[];
 };
 
+// ban
+
+export type BanBanAddApplicationCommandDataOption = {
+  name: 'ban';
+  options: [
+    {
+      name: 'email';
+      value: string;
+    },
+    {
+      name: 'reason';
+      value: string;
+    }
+  ];
+};
+
+export type BanUnbanAddApplicationCommandDataOption = {
+  name: 'unban';
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
+};
+
+export type BanIsBannedRemoveApplicationCommandDataOption = {
+  name: 'isbanned';
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
+};
+
+export type BanApplicationCommandDataOption =
+  | BanBanAddApplicationCommandDataOption
+  | BanUnbanAddApplicationCommandDataOption
+  | BanIsBannedRemoveApplicationCommandDataOption;
+
+export type BanCommandData = {
+  name: 'ban';
+  options: BanApplicationCommandDataOption[];
+};
+
+// notebooks
+
+export type NotebooksBanAddApplicationCommandDataOption = {
+  name: 'ban';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    },
+    {
+      name: 'reason';
+      value: string;
+    }
+  ];
+};
+
+export type NotebooksUnbanAddApplicationCommandDataOption = {
+  name: 'unban';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
+export type NotebooksIsBannedRemoveApplicationCommandDataOption = {
+  name: 'isbanned';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
+export type NotebooksApplicationCommandDataOption =
+  | NotebooksBanAddApplicationCommandDataOption
+  | NotebooksUnbanAddApplicationCommandDataOption
+  | NotebooksIsBannedRemoveApplicationCommandDataOption;
+
+export type NotebooksCommandData = {
+  name: 'notebooks';
+  options: NotebooksApplicationCommandDataOption[];
+};
+
 // ----------
 
 export type ApplicationCommandDataOption =
@@ -195,7 +287,9 @@ export type ApplicationCommandData =
   | AllowlistCommandData
   | SuperadminsCommandData
   | TemplatesCommandData
-  | FeatureCommandData;
+  | FeatureCommandData
+  | BanCommandData
+  | NotebooksCommandData;
 
 export type Command = APIBaseInteraction<
   InteractionType.ApplicationCommand,

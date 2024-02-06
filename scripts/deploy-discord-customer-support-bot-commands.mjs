@@ -175,6 +175,114 @@ process.on('unhandledRejection', (err) => {
         },
       ],
     },
+    {
+      name: 'ban',
+      type: 1,
+      application_id: process.env.DISCORD_APP_ID,
+      description: 'ban and unban users from using Decipad',
+      options: [
+        {
+          name: 'ban',
+          description: 'bans a user',
+          type: 1,
+          options: [
+            {
+              name: 'email',
+              description: 'The email of the user to ban',
+              required: true,
+              type: 3, // string
+            },
+            {
+              name: 'reason',
+              description: 'The reason for the ban',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'unban',
+          description: 'unbans a user',
+          type: 1,
+          options: [
+            {
+              name: 'email',
+              description:
+                'The email address of the user to unban from Decipad',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'isbanned',
+          description:
+            'know if a given user is banned or not from using Decipad',
+          type: 1,
+          options: [
+            {
+              name: 'email',
+              description: 'The email address of the user',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'notebooks',
+      type: 1,
+      application_id: process.env.DISCORD_APP_ID,
+      description: 'manage notebooks',
+      options: [
+        {
+          name: 'ban',
+          description: 'bans a notebook',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description: 'The url of the notebook to ban',
+              required: true,
+              type: 3, // string
+            },
+            {
+              name: 'reason',
+              description: 'The reason for the ban',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'unban',
+          description: 'unbans a notebook',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description: 'The url of the notebook to ban',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'isbanned',
+          description: 'know if a given notebook is banned',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description: 'The url of the notebook',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   // For authorization, you can use either your bot token

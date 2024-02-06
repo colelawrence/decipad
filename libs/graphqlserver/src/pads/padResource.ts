@@ -44,6 +44,7 @@ export const padResource = Resource<
     sectionId: d.section_id,
     gist: d.gist === 'ai' ? 'AI' : undefined,
     userAllowsPublicHighlighting: Boolean(d.userAllowsPublicHighlighting),
+    banned: Boolean(d.banned),
   }),
   isPublic: (d) => Boolean(d.isPublic),
 

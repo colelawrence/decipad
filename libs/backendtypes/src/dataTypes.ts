@@ -23,6 +23,7 @@ export type User = {
   first_login?: number;
   hideChecklist?: boolean;
   onboarded?: boolean;
+  banned?: number;
 };
 
 export interface UserInput {
@@ -115,6 +116,7 @@ export type Pad = {
   icon?: string;
   tags?: string[];
   attachments?: Attachment[];
+  banned?: number;
 };
 
 export type Section = {
@@ -315,6 +317,10 @@ export interface UserRecord extends TableRecordBase {
   onboarded?: boolean;
   description?: string;
   id: string;
+  banned?: number;
+  bannedReason?: string;
+  bannedBy?: string;
+  bannedWhen?: number | Date;
 }
 
 export interface UserKeyRecord extends TableRecordBase {
@@ -382,6 +388,11 @@ export interface PadRecord extends TableRecordBase {
   isTemplate?: number;
 
   gist?: 'ai';
+
+  banned?: number;
+  bannedReason?: string;
+  bannedBy?: string;
+  bannedWhen?: number | Date;
 }
 
 export interface SectionRecord extends TableRecordBase {

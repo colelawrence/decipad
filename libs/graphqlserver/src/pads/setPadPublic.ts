@@ -42,10 +42,17 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
     recordId: id,
     minimumPermissionType: 'ADMIN',
   });
+  if (user?.banned) {
+    throw new UserInputError('User is banned');
+  }
   const data = await tables();
   const pad = await data.pads.get({ id });
   if (!pad) {
     throw new UserInputError('No such pad');
+  }
+
+  if (pad.banned) {
+    throw new UserInputError('Pad is banned');
   }
 
   const isPublic = publishState !== 'PRIVATE';

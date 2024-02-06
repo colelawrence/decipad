@@ -25,7 +25,10 @@ async function verifyAuth(command: Command): Promise<string> {
 }
 
 async function parseAndReplyToCommand(command: Command): Promise<string> {
-  await verifyAuth(command);
+  const actorUserId = await verifyAuth(command);
+  const context = {
+    actorUserId,
+  };
   const commandData = getDefined(command.data, 'no command data');
   switch (commandData.name) {
     case 'allowlist': {
@@ -39,6 +42,12 @@ async function parseAndReplyToCommand(command: Command): Promise<string> {
     }
     case 'feature': {
       return commands.feature(commandData.options);
+    }
+    case 'ban': {
+      return commands.ban(commandData.options, context);
+    }
+    case 'notebooks': {
+      return commands.notebooks(commandData.options, context);
     }
     default: {
       throw notImplemented(

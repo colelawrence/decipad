@@ -35,6 +35,13 @@ export async function signInEmail(
     existingUser = await data.users.get({ id: userKey.user_id });
   }
   if (existingUser) {
+    if (existingUser.banned) {
+      await track(event, {
+        event: 'banned user tried logging in',
+        properties: { email },
+      });
+      return false;
+    }
     const userInput: Partial<UserInput> = {
       email: account.userId,
     };

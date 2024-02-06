@@ -85,7 +85,7 @@ export default function templates(
   options: TemplatesApplicationCommandDataOption[]
 ): Promise<string> {
   if (options.length !== 1) {
-    throw Boom.notAcceptable('superadmins command should only have one option');
+    throw Boom.notAcceptable('ban command should only have one option');
   }
   const option = options[0];
   switch (option.name) {

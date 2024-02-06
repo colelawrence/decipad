@@ -3,6 +3,8 @@ import notebook from './notebook';
 import superadmins from './superadmins';
 import templates from './templates';
 import feature from './feature';
+import ban from './ban';
+import notebooks from './notebooks';
 
 export default {
   allowlist,
@@ -10,4 +12,6 @@ export default {
   superadmins,
   templates,
   feature,
+  ban,
+  notebooks,
 };
