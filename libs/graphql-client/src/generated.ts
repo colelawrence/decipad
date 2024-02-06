@@ -561,6 +561,7 @@ export type Pad = {
   access: ResourceAccess;
   archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
+  banned?: Maybe<Scalars['Boolean']['output']>;
   createdAt: Scalars['DateTime']['output'];
   document: Scalars['String']['output'];
   gist?: Maybe<Gist>;
@@ -2696,6 +2697,7 @@ export type GraphCacheResolvers = {
     access?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<ResourceAccess> | string>,
     archived?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     attachments?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<Attachment> | string>>,
+    banned?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     createdAt?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['DateTime'] | string>,
     document?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     gist?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Gist | string>,
@@ -3165,6 +3167,7 @@ export type GraphCacheUpdaters = {
     access?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     archived?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     attachments?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    banned?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     document?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     gist?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
