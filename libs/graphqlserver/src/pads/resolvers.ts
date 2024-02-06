@@ -201,11 +201,12 @@ const resolvers: Resolvers = {
         params,
         context
       );
+
       const workspaceRes = getDefined(notebook.parentResourceUriFromRecord)(
         parent as PadRecord
       );
       const workspacePermission =
-        workspaceRes && (await isAuthorized(workspaceRes, context, 'WRITE'));
+        workspaceRes && (await isAuthorized(workspaceRes, context, 'READ'));
 
       const maxPermission = maximumPermissionIn(
         [notebookPermission, workspacePermission].filter(

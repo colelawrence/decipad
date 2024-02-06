@@ -75,6 +75,28 @@ const SidebarToggle: FC<TopbarActions> = ({
   </Styled.HiddenFromSmallScreens>
 );
 
+const ReadOnlyWriting: FC = () => {
+  return (
+    <Styled.AuthorsWrapper>
+      <Tooltip
+        side="bottom"
+        hoverOnly
+        trigger={
+          <Styled.ReadOnlyWritingTrigger>
+            <Show />
+            <span>You have view-only access</span>
+          </Styled.ReadOnlyWritingTrigger>
+        }
+      >
+        <Styled.ReadOnlyWritingWrapper>
+          <p>Ask to edit</p>
+          <p>Request permission to edit from workspace admin.</p>
+        </Styled.ReadOnlyWritingWrapper>
+      </Tooltip>
+    </Styled.AuthorsWrapper>
+  );
+};
+
 const WritingAuthors: FC<Authors> = ({ adminName }) => {
   const text = adminName ?? 'an admin';
 
@@ -182,7 +204,15 @@ const GPTClaim: FC<AccessInfo & TopbarActions> = ({
   );
 };
 
-const ReaderTopbar: FC<TopbarGenericProps> = ({ actions, access, authors }) => {
+/**
+ * A user who has no access to the notebook
+ * but the notebook is public.
+ */
+const NoAccessReaderTopbar: FC<TopbarGenericProps> = ({
+  actions,
+  access,
+  authors,
+}) => {
   return (
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
@@ -202,6 +232,38 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({ actions, access, authors }) => {
           <WritingAuthors {...authors} />
           <NotebookAuthors {...authors} />
           <TryOrDuplicate {...actions} {...access} />
+        </Styled.RightContainer>
+      </Styled.InnerStyles>
+    </Styled.DefaultTopbarWrapper>
+  );
+};
+
+const ReaderTopbar: FC<TopbarGenericProps> = ({
+  access,
+  actions,
+  status,
+  authors,
+  NotebookOptions,
+  UndoButtons,
+}) => {
+  return (
+    <Styled.DefaultTopbarWrapper>
+      <Styled.InnerStyles>
+        <Styled.LeftContainer>
+          <BackButton {...access} {...actions} />
+          <Styled.TitleContainer>
+            {NotebookOptions}
+            <Styled.Status data-testid="notebook-status">
+              {status}
+            </Styled.Status>
+          </Styled.TitleContainer>
+          {UndoButtons}
+        </Styled.LeftContainer>
+
+        <Styled.RightContainer>
+          <ReadOnlyWriting />
+          <NotebookAuthors {...authors} />
+          <Help />
         </Styled.RightContainer>
       </Styled.InnerStyles>
     </Styled.DefaultTopbarWrapper>
@@ -305,8 +367,12 @@ export const NotebookTopbar: FC<TopbarGenericProps> = (props) => {
   switch (props.access.permissionType) {
     case undefined:
     case null:
-    case 'READ':
-      return <ReaderTopbar {...props} />;
+    case 'READ': {
+      if (props.access.hasWorkspaceAccess) {
+        return <ReaderTopbar {...props} />;
+      }
+      return <NoAccessReaderTopbar {...props} />;
+    }
     case 'WRITE':
     case 'ADMIN':
       return <WriterTopbar {...props} />;

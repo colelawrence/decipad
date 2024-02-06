@@ -29,6 +29,7 @@ export const availableFlags = [
   'AI_BUY_MORE_CREDITS',
   'TABLE_CATEGORY',
   'NEW_PAYMENTS',
+  'WORKSPACE_READERS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

@@ -138,6 +138,13 @@ const resolvers: Resolvers = {
         throw Boom.unauthorized('Cannot share in a free workspace');
       }
 
+      if (args.permissionType === 'READ') {
+        // Readers do not count towards workspace seats.
+        return WorkspaceRecordToWorkspace(
+          await workspaceResource.shareWithEmail(parent, args, context)
+        );
+      }
+
       return WorkspaceRecordToWorkspace(
         await withSubscriptionSideEffects(workspaceResource.shareWithEmail)(
           parent,

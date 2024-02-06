@@ -129,7 +129,10 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           trigger={
             <MenuItemButton data-testId="notebook-actions">
               <NotebookPath concatName notebookName={notebookName} />
-              <Caret variant="down" />
+              {data?.myPermissionType === 'WRITE' ||
+                (data?.myPermissionType === 'ADMIN' && (
+                  <Caret variant="down" />
+                ))}
             </MenuItemButton>
           }
           notebookStatus={

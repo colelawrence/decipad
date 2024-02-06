@@ -59,6 +59,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   onDuplicate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const disableActions = permissionType == null || permissionType === 'READ';
 
   return (
     <div css={menuActionsStyles}>
@@ -69,7 +70,10 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         side="bottom"
         sideOffset={10}
         open={isOpen}
-        onChangeOpen={setIsOpen}
+        onChangeOpen={(o) => {
+          if (disableActions) return;
+          setIsOpen(o);
+        }}
         trigger={trigger}
       >
         {permissionType === 'READ' && (

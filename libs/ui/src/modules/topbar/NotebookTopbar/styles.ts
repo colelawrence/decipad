@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import {
   componentCssVars,
   cssVar,
+  p12Bold,
+  p12Regular,
   p13Medium,
   smallScreenQuery,
   tinyPhone,
@@ -271,5 +273,35 @@ export const SidebarToggleTrigger = styled.div({
 export const HideSmallScreen = styled.div({
   [smallScreenQuery]: {
     display: 'none',
+  },
+});
+
+export const ReadOnlyWritingTrigger = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  svg: {
+    width: '20px',
+    height: '20px',
+  },
+  [smallScreenQuery]: {
+    display: 'none',
+  },
+});
+
+export const ReadOnlyWritingWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '128px',
+  p: {
+    textAlign: 'center',
+  },
+  'p:first-of-type': {
+    ...p12Bold,
+    color: componentCssVars('TooltipText'),
+  },
+  'p:last-of-type': {
+    ...p12Regular,
+    color: componentCssVars('TooltipText'),
   },
 });

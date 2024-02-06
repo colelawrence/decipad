@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { noop } from '@decipad/utils';
 import { TextAndIconButton, MenuItem } from '../../../shared/atoms';
 import {
@@ -13,6 +13,7 @@ import {
 import { Caret } from '../../../icons/Caret/Caret';
 import { MenuList } from '../../../shared/molecules';
 import { PermissionType } from '../../../types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -21,7 +22,7 @@ type CollabAccessDropdownProps = {
   currentPermission: PermissionType;
   disabled?: boolean;
   onRemove?: () => void;
-  onChange?: (newPermission: PermissionType) => void;
+  onChange: (newPermission: PermissionType) => void;
 };
 
 const dropDownItemStyles = css({
@@ -50,13 +51,6 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
   onChange,
 }) => {
   const permissionLabel = HumanReadablePermission[currentPermission];
-  const onAdminSelected = useCallback(() => {
-    onChange?.('ADMIN');
-  }, [onChange]);
-
-  const onCollaboratorSelected = useCallback(() => {
-    onChange?.('WRITE');
-  }, [onChange]);
 
   if (disabled) {
     return <span css={labelStyle}>{permissionLabel}</span>;
@@ -77,7 +71,7 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
   return (
     <MenuList root dropdown align="end" sideOffset={4} trigger={trigger}>
       <MenuItem
-        onSelect={onAdminSelected}
+        onSelect={() => onChange('ADMIN')}
         selected={currentPermission === 'ADMIN'}
       >
         <p css={p14Medium}>Workspace admin</p>
@@ -86,12 +80,23 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
         </p>
       </MenuItem>
       <MenuItem
-        onSelect={onCollaboratorSelected}
+        onSelect={() => onChange('WRITE')}
         selected={currentPermission === 'WRITE'}
       >
         <p css={p14Medium}>Workspace member</p>
         <p css={dropDownItemStyles}>Can edit any notebook in this workspace</p>
       </MenuItem>
+      {isFlagEnabled('WORKSPACE_READERS') && (
+        <MenuItem
+          onSelect={() => onChange('READ')}
+          selected={currentPermission === 'READ'}
+        >
+          <p css={p14Medium}>Workspace reader</p>
+          <p css={dropDownItemStyles}>
+            Can read any notebook in this workspace
+          </p>
+        </MenuItem>
+      )}
 
       {onRemove && (
         <MenuItem onSelect={onRemove}>
