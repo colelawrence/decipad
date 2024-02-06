@@ -19,6 +19,7 @@ export * from './editor-user-interactions';
 export * from './execution';
 export * from './file-upload-store';
 export * from './results';
+export * from './tab-editor';
 export * from './theme';
 export * from './notebook-meta-actions';
 export * from './editor-controller';

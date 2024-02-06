@@ -6,20 +6,20 @@ import {
 import { ControllerProvider } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { insertNodes } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouteParams } from 'typesafe-routes/react-router';
 
 // eslint-disable-next-line no-underscore-dangle
 function _useTabs(
   controller: MinimalRootEditorWithEventsAndTabs | undefined
 ): Array<TabElement> {
-  const [, setRender] = useState(0);
+  const [renderKey, setRenderKey] = useState(0);
 
   useEffect(() => {
     if (!controller) return;
     const sub = controller.events.subscribe((v) => {
       if (v.type !== 'new-tab' && v.type !== 'remove-tab') return;
-      setRender((r) => r + 1);
+      setRenderKey((r) => r + 1);
     });
 
     return () => {
@@ -27,7 +27,12 @@ function _useTabs(
     };
   }, [controller]);
 
-  return (controller?.children.slice(1) as Array<TabElement>) ?? [];
+  // useMemo is necessary here since Array.slice breaks equality
+  return useMemo(
+    () => (controller?.children.slice(1) as Array<TabElement>) ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [controller, renderKey]
+  );
 }
 
 /**

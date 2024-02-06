@@ -2,7 +2,12 @@ import { ComponentProps, FC, useMemo, useEffect } from 'react';
 import { Editor } from './Editor.component';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
-import { EditorIdContext, useNotebookMetaData } from '@decipad/react-contexts';
+import {
+  EditorIdContext,
+  TabEditorContext,
+  TabEditorContextValue,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
 import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
@@ -56,6 +61,13 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
     return tabs.at(0);
   }, [tabId, tabs]);
 
+  const tabEditorContextValue: TabEditorContextValue = useMemo(
+    () => ({
+      tabIndex: tab ? tabs.findIndex((t) => t.id === tab.id) : -1,
+    }),
+    [tab, tabs]
+  );
+
   if (!tab) {
     if (showRecovery) {
       if (readOnly) {
@@ -72,25 +84,26 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
 
   return (
     <EditorIdContext.Provider value={notebookId}>
-      <Editor
-        key={tab.id}
-        notebookId={notebookId}
-        workspaceId={workspaceId}
-        readOnly={readOnly}
-        loaded={loaded}
-        editor={subEditor}
-        tabIndex={tabs.findIndex((t) => t.id === tab.id)}
-        titleEditor={
-          <TitleEditor
-            tab={tab.id}
-            editor={titleEditor}
-            initialValue={titleEditor.children}
-            readOnly={readOnly}
-            onUndo={controller.undo}
-            onRedo={controller.redo}
-          />
-        }
-      />
+      <TabEditorContext.Provider value={tabEditorContextValue}>
+        <Editor
+          key={tab.id}
+          notebookId={notebookId}
+          workspaceId={workspaceId}
+          readOnly={readOnly}
+          loaded={loaded}
+          editor={subEditor}
+          titleEditor={
+            <TitleEditor
+              tab={tab.id}
+              editor={titleEditor}
+              initialValue={titleEditor.children}
+              readOnly={readOnly}
+              onUndo={controller.undo}
+              onRedo={controller.redo}
+            />
+          }
+        />
+      </TabEditorContext.Provider>
     </EditorIdContext.Provider>
   );
 };

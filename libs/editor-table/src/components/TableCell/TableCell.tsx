@@ -12,12 +12,18 @@ import { useCellType, useCellAnchor, useCellSelected } from '../../hooks';
 import { useMemoPath } from '@decipad/react-utils';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
 import { setCellText } from '../../utils/setCellText';
-import { useEditorTableContext } from '@decipad/react-contexts';
+import {
+  cursorsForTab,
+  cursorStore,
+  useEditorTableContext,
+  useTabEditorContext,
+} from '@decipad/react-contexts';
 import { TableData, CellEditor } from '@decipad/ui';
 import { changeColumnType } from '../../utils/changeColumnType';
 import { last } from '@decipad/utils';
 import { useFocused } from 'slate-react';
 import { selectNextCell } from '../../utils/selectNextCell';
+import { Path } from 'slate';
 
 declare global {
   interface Window {
@@ -63,6 +69,16 @@ export const TableCell: PlateComponent = ({
   const [editing, setEditing] = useState(false); // Controlled by CellEditor
   const [cellEventTarget] = useState<EventTarget>(() => new EventTarget());
 
+  const { tabIndex } = useTabEditorContext();
+
+  const cursor = cursorStore.useStore(
+    ({ userCursors }) =>
+      cursorsForTab(userCursors, tabIndex).find((c) =>
+        Path.isAncestor(path, c.selection.anchor.path)
+      ),
+    (a, b) => a?.key === b?.key
+  );
+
   const setValue = useCallback(
     (newValue: string) => setCellText(editor, path, newValue),
     [editor, path]
@@ -107,6 +123,7 @@ export const TableCell: PlateComponent = ({
       attributes={attributes}
       anchor={anchor}
       selected={selected}
+      cursor={cursor}
       editing={editing}
       onDoubleClick={(event) => {
         const cellEvent = new MouseEvent(event.type, event.nativeEvent);

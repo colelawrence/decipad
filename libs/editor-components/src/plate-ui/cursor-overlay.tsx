@@ -1,15 +1,10 @@
-import { createZustandStore } from '@udecode/plate-common';
 import {
-  CursorData,
   CursorOverlay as CursorOverlayPrimitive,
   CursorOverlayProps,
   CursorProps,
 } from '@udecode/plate-cursor';
+import { CursorData as DecipadCursorData } from '@decipad/react-contexts';
 import { cn } from '@decipad/ui';
-
-export const dynamicCursorStore = createZustandStore('cursor')({
-  cursors: {},
-});
 
 export function Cursor({
   data,
@@ -18,12 +13,12 @@ export function Cursor({
   disableCaret,
   disableSelection,
   classNames,
-}: CursorProps<CursorData>) {
+}: CursorProps<DecipadCursorData>) {
   if (!data) {
     return null;
   }
 
-  const { style, selectionStyle = style } = data;
+  const { style } = data;
 
   return (
     <>
@@ -36,7 +31,7 @@ export function Cursor({
               classNames?.selectionRect
             )}
             style={{
-              ...selectionStyle,
+              ...style,
               ...position,
             }}
           />
@@ -54,16 +49,15 @@ export function Cursor({
   );
 }
 
-export function CursorOverlay({ cursors, ...props }: CursorOverlayProps) {
-  const dynamicCursors = dynamicCursorStore.use.cursors();
-
-  const allCursors = { ...cursors, ...dynamicCursors };
-
+export function CursorOverlay({
+  cursors,
+  ...props
+}: CursorOverlayProps<DecipadCursorData>) {
   return (
     <CursorOverlayPrimitive
       {...props}
-      cursors={allCursors}
-      onRenderCursor={Cursor}
+      cursors={cursors}
+      onRenderCursor={Cursor as any}
     />
   );
 }

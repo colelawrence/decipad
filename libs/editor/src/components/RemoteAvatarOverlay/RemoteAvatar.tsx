@@ -4,28 +4,20 @@ import {
   isPotentiallyWideElement,
   isTopLevelBlock,
 } from '@decipad/editor-utils';
-import { OpaqueColor, RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
+import { UserCursorState } from '@decipad/react-contexts';
+import { RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
 import {
   getNodeEntries,
   hasNode,
   isElement,
   toDOMNode,
 } from '@udecode/plate-common';
-import { Session } from 'next-auth';
 import { FC, RefObject } from 'react';
-import { Range } from 'slate';
 
 const MIN_VERTICAL_DISPLACEMENT = 50;
 
 interface RemoteAvatarProps {
-  cursor: {
-    data: Session & {
-      style: {
-        _backgroundColor: OpaqueColor;
-      };
-    };
-    selection: Range;
-  };
+  cursor: UserCursorState;
   containerRef: RefObject<HTMLElement>;
 }
 
@@ -66,8 +58,9 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
     !isElement(block) || !isPotentiallyWideElement(block);
 
   const collabName = user?.name || user?.email;
+  const { color } = cursor.data;
   return (
-    (collabName && (
+    (collabName && color && (
       <UIRemoteAvatar
         name={collabName}
         image={user.image ?? undefined}
@@ -77,7 +70,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
             : y - containerVerticalDisplacement + MIN_VERTICAL_DISPLACEMENT
         }
         left={width}
-        cursorColor={cursor.data.style?._backgroundColor}
+        cursorColor={color}
       />
     )) ||
     null

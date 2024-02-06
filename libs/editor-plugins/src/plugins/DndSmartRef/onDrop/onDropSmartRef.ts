@@ -36,7 +36,7 @@ export const onDropSmartRef =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

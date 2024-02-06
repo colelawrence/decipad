@@ -8,6 +8,11 @@ import { useMemo } from 'react';
 import { Path } from 'slate';
 
 export const useCellAnchor = () => {
+  /**
+   * TODO: Subscribing to the selection causes all cells to rerender when the
+   * selection changes. After upgrading Plate to >= 28.0.0, useEditorSelector
+   * will become available and should be used instead.
+   */
   const editor = useEditorRef();
   const selection = useEditorSelection();
   const element = useElement();

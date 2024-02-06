@@ -6,6 +6,7 @@ export * from './backendUrl';
 export * from './bigint';
 export * from './byDesc';
 export * from './chunks';
+export * from './color';
 export * from './containsNumber';
 export * from './date';
 export * from './deepequal';

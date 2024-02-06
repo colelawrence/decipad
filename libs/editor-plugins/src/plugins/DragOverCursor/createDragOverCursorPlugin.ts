@@ -12,30 +12,28 @@ export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
       const range = findEventRange(editor, event);
       if (!range) return;
 
-      cursorStore.set.cursors({
-        drag: {
-          key: 'drag',
-          data: {
-            style: {
-              backgroundColor: componentCssVars('DroplineColor'),
-              width: 2,
-            },
+      cursorStore.set.dragCursor({
+        key: 'drag',
+        data: {
+          style: {
+            backgroundColor: componentCssVars('DroplineColor'),
+            width: 2,
           },
-          selection: range,
         },
+        selection: range,
       });
     },
     onDragExit: () => () => {
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
     },
     onDragLeave: () => () => {
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
     },
     onDragEnd: () => () => {
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
     },
     onDrop: () => () => {
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
     },
   },
 });

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Meta, StoryFn } from '@storybook/react';
 import * as colors from './color';
-import { OpaqueColor } from './color';
+import { OpaqueColor } from '@decipad/utils';
 
 type ColorId = Exclude<
   keyof typeof import('./color'),

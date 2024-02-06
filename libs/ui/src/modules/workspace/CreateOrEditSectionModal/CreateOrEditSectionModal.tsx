@@ -3,6 +3,7 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { useSafeState } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { useState } from 'react';
+import { OpaqueColor } from '@decipad/utils';
 import {
   Button,
   ColorPicker,
@@ -10,7 +11,7 @@ import {
   ClosableModal,
 } from '../../../shared';
 
-import { OpaqueColor, p13Regular } from '../../../primitives';
+import { p13Regular } from '../../../primitives';
 import {
   AvailableSwatchColor,
   swatchNames,

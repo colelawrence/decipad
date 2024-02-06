@@ -1,11 +1,9 @@
-import { BaseSelection } from 'slate';
 import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
 import {
   TCursorEditor as GTCursorEditor,
   TYjsEditor as GTYjsEditor,
 } from '@decipad/slate-yjs';
 import {
-  OpaqueColor,
   blue400,
   brand400,
   orange400,
@@ -14,24 +12,14 @@ import {
   teal400,
   yellow500,
 } from '@decipad/ui';
+import { OpaqueColor } from '@decipad/utils';
 import debounce from 'lodash.debounce';
-import { cursorStore } from '@decipad/react-contexts';
+import { cursorStore, UserCursorState } from '@decipad/react-contexts';
 import { MinimalRootEditor } from '@decipad/editor-types';
+import { Session } from 'next-auth';
 
 type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
 type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
-
-type CursorData = {
-  key: number;
-  selection: NonNullable<BaseSelection>;
-  data: {
-    style: {
-      _backgroundColor: OpaqueColor;
-      backgroundColor: string;
-      width: number;
-    };
-  };
-};
 
 const colors = [
   orange400,
@@ -53,7 +41,7 @@ const DEBOUNCE_MS = 1000;
 function getCursorData(
   data: Map<number, { [key: string]: any }>,
   currentClientId: number
-): Array<CursorData> {
+): Array<UserCursorState> {
   const clientIds: Record<string, boolean> = {};
 
   return Array.from(data)
@@ -77,9 +65,9 @@ function getCursorData(
           focus,
         },
         data: {
-          ...jsonify(awareness),
+          ...(jsonify(awareness) as Session),
+          color,
           style: {
-            _backgroundColor: color,
             backgroundColor: color.rgb,
             width: 3,
           },
@@ -99,7 +87,7 @@ export function CursorAwarenessSchedule(editor: TCursorEditor & TYjsEditor) {
           editor.sharedType.doc?.clientID ?? 0
         );
 
-        cursorStore.set.cursors(newCursorData);
+        cursorStore.set.userCursors(newCursorData);
       }, DEBOUNCE_MS)
     );
   }, RETRY_INTERVAL_MS);

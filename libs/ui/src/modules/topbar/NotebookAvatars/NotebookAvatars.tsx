@@ -2,15 +2,10 @@
 import { cursorStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { OpaqueColor } from '@decipad/utils';
 import { Avatar, Tooltip } from '../../../shared/atoms';
-import {
-  OpaqueColor,
-  componentCssVars,
-  p12Regular,
-  p13Medium,
-} from '../../../primitives';
+import { componentCssVars, p12Regular, p13Medium } from '../../../primitives';
 import { PermissionType } from '../../../types';
-import { Cursor } from './NotebookAvatars.types';
 import { sortAvatars } from './sortAvatars';
 import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
@@ -73,22 +68,20 @@ export const NotebookAvatars = ({
   const users = sortAvatars(invitedUsers || []);
   const firstThree = users.slice(0, showHowMany);
   const showPlus = users.length > showHowMany;
-  const cursors = cursorStore.use.cursors();
+  const cursors = cursorStore.use.userCursors();
 
   const backgroundColorFor = Object.entries(cursors)
     .filter(([cursorName]) => cursorName !== 'drag')
     .map(([, cursor]) => cursor)
-    .reduce((previous: EmailLookup, current) => {
-      const cursor = current as Cursor;
+    .reduce((previous: EmailLookup, cursor) => {
       const {
-        data: { user, style },
+        data: { user, color },
       } = cursor;
-      const { _backgroundColor } = style;
-      if (user) {
+      if (user && color) {
         const { email } = user;
         if (email && email !== '') {
           // eslint-disable-next-line no-param-reassign
-          previous[email] = _backgroundColor;
+          previous[email] = color;
         }
       }
 

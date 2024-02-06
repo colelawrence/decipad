@@ -11,7 +11,6 @@ import {
   grey200,
   grey500,
   grey600,
-  OpaqueColor,
   opaqueColorToHex,
   orange100,
   orange200,
@@ -30,6 +29,7 @@ import {
   yellow700,
   yellow800,
 } from '../primitives';
+import { OpaqueColor } from '@decipad/utils';
 
 export type AvailableSwatchColor =
   | 'Catskill'

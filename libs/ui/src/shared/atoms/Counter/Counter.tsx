@@ -4,12 +4,12 @@ import { css } from '@emotion/react';
 import {
   black,
   normalOpacity,
-  OpaqueColor,
   strongOpacity,
   transparency,
   weakOpacity,
   white,
 } from '../../../primitives';
+import { OpaqueColor } from '@decipad/utils';
 
 const counterWrapperStyles = (
   color: string | OpaqueColor | undefined,

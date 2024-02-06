@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
+import { noop, OpaqueColor } from '@decipad/utils';
 import { css, SerializedStyles } from '@emotion/react';
 import { FC, ReactNode, useState } from 'react';
 import { useDrop } from 'react-dnd';
@@ -8,7 +8,6 @@ import { Ellipsis } from '../../../icons';
 import {
   cssVar,
   normalOpacity,
-  OpaqueColor,
   p14Regular,
   transparency,
   weakOpacity,

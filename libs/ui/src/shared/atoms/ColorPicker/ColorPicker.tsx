@@ -6,10 +6,10 @@ import {
   cssVar,
   normalOpacity,
   offBlack,
-  OpaqueColor,
   transparency,
   weakOpacity,
 } from '../../../primitives';
+import { OpaqueColor } from '@decipad/utils';
 
 const styles = css({
   width: '27px', // 3px of border

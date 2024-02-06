@@ -41,7 +41,6 @@ export interface EditorProps {
   readOnly: boolean;
   editor?: MyEditor;
   children?: ReactNode;
-  tabIndex: number;
   titleEditor: JSX.Element;
 }
 
@@ -59,19 +58,17 @@ Scrubber.setScrubber((key, value) => {
 
 const InsidePlate = ({
   containerRef,
-  tabIndex,
   children,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
-  tabIndex: number;
 }) => (
   <>
     <Tooltip />
     <ErrorBoundary fallback={<></>}>
-      <CursorOverlay containerRef={containerRef} tabIndex={tabIndex} />
+      <CursorOverlay containerRef={containerRef} />
     </ErrorBoundary>
     <ErrorBoundary fallback={<></>}>
-      <RemoteAvatarOverlay containerRef={containerRef} tabIndex={tabIndex} />
+      <RemoteAvatarOverlay containerRef={containerRef} />
     </ErrorBoundary>
     <ErrorBoundary fallback={<></>}>
       <DndPreview />

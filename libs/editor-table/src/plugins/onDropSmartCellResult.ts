@@ -37,7 +37,7 @@ export const onDropSmartCellResult =
       // eslint-disable-next-line no-param-reassign
       editor.isDragging = undefined;
 
-      cursorStore.set.reset();
+      cursorStore.set.resetDragCursor();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

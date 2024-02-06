@@ -3,13 +3,13 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import Gravatar from 'react-gravatar';
 import {
-  OpaqueColor,
   cssVar,
   grey200,
   p12Medium,
   shortAnimationDuration,
   transparency,
 } from '../../../primitives';
+import { OpaqueColor } from '@decipad/utils';
 import { avatarColor } from '../../../utils';
 
 const containerStyles = (variant: boolean) =>

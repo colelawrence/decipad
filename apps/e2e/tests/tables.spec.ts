@@ -48,11 +48,6 @@ const getTableCellRenderCount = (page: Page) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   page.evaluate(() => (window as any).tableCellRenderCount);
 
-const wait = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-
 const STOP_RENDERING_POLL_INTERVAL = 5000;
 const STOP_RENDERING_MAX_POLL_COUNT = 6;
 
@@ -60,7 +55,8 @@ const waitUntilStopRendering = async (page: Page): Promise<number> => {
   let previousRenderCount = await getTableCellRenderCount(page);
 
   for (let i = 0; i < STOP_RENDERING_MAX_POLL_COUNT; i += 1) {
-    await wait(STOP_RENDERING_POLL_INTERVAL);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(STOP_RENDERING_POLL_INTERVAL);
     const renderCount = await getTableCellRenderCount(page);
     if (renderCount === previousRenderCount) return renderCount;
     previousRenderCount = renderCount;

@@ -4,11 +4,11 @@ import { ReactNode } from 'react';
 import {
   black,
   cssVar,
-  OpaqueColor,
   orange500,
   transparency,
   weakOpacity,
 } from '../../../primitives';
+import { OpaqueColor } from '@decipad/utils';
 
 const styles = (
   color: OpaqueColor,

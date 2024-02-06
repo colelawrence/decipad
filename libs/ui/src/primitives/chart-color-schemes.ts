@@ -57,7 +57,6 @@ import {
   yellow900,
   orange200,
   yellow200,
-  OpaqueColor,
   purple100,
   purple50,
   grey100,
@@ -75,6 +74,7 @@ import {
   teal200,
   teal300,
 } from './color';
+import { OpaqueColor } from '@decipad/utils';
 
 type ColorScheme = {
   name: string;

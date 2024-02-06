@@ -10,6 +10,7 @@ import {
   tdBaseStyles,
   tdHorizontalPadding,
 } from '../../../styles/table';
+import { CursorState } from '@decipad/react-contexts';
 import { tableRowCounter } from '../../../utils';
 import { useMergedRef } from '../../../hooks';
 
@@ -62,9 +63,15 @@ const selectedStyles = ({ isFormulaResult }: { isFormulaResult: boolean }) =>
       : componentCssVars('TableSelectionBackgroundColor'),
   });
 
-const tdAnchorStyles = css({
-  boxShadow: `0 0 0 2px ${componentCssVars('TableFocusColor')} inset`,
-});
+const ringStyles = (color?: string) =>
+  css({
+    boxShadow: color && `0 0 0 2px ${color} inset`,
+  });
+
+const tdAnchorStyles = ringStyles(componentCssVars('TableFocusColor'));
+
+const cursorStyles = (cursorState: CursorState) =>
+  ringStyles(cursorState.data.color?.rgb);
 
 const editingStyles = css({
   filter: componentCssVars('TableEditingShadowFilter'),
@@ -87,6 +94,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLTableCellElement> {
   showPlaceholder?: boolean;
   selected?: boolean;
   anchor?: boolean;
+  cursor?: CursorState;
   editing?: boolean;
   rowSpan?: number;
 }
@@ -101,6 +109,7 @@ export const TableData = forwardRef(
       showPlaceholder = true,
       selected,
       anchor,
+      cursor,
       editing,
       rowSpan,
       children,
@@ -123,6 +132,7 @@ export const TableData = forwardRef(
           showPlaceholder && tdPlaceholderStyles,
           isFormulaResult && formulaResultStyles,
           selected && selectedStyles({ isFormulaResult }),
+          cursor && cursorStyles(cursor),
           anchor && tdAnchorStyles,
           editing && editingStyles,
           !isUserContent && nonEditableStyles,

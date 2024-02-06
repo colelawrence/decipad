@@ -29,12 +29,12 @@ import {
 } from '../../../icons';
 
 import {
-  OpaqueColor,
   cssVar,
   hexToOpaqueColor,
   opaqueColorToHex,
   smallScreenQuery,
 } from '../../../primitives';
+import { OpaqueColor } from '@decipad/utils';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 import { CreateOrEditSectionModal } from '../CreateOrEditSectionModal/CreateOrEditSectionModal';
 import {
