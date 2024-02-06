@@ -9,7 +9,6 @@ import {
 } from '../../../primitives';
 import { Magic, Trash } from '../../../icons';
 import { Button, Tooltip } from '../../../shared';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCallback } from 'react';
 import { useAiCreditsStore } from '@decipad/react-contexts';
 
@@ -151,15 +150,13 @@ const Credits: React.FC<{
           <label>
             <span>{Math.max(0, creditsLeft)}</span>
           </label>
-          {isFlagEnabled('AI_BUY_MORE_CREDITS') && (
-            <Button
-              type="secondary"
-              styles={addMoreCreditsButton}
-              onClick={() => setIsBuyCreditsModalOpen(true)}
-            >
-              Buy more
-            </Button>
-          )}
+          <Button
+            type="secondary"
+            styles={addMoreCreditsButton}
+            onClick={() => setIsBuyCreditsModalOpen(true)}
+          >
+            Buy more
+          </Button>
         </div>
       }
       side="bottom"
@@ -217,9 +214,7 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
         </Tooltip>
       </div>
       <div css={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
-          <Credits creditsUsed={creditsUsed} creditsQuota={creditsQuotaLimit} />
-        )}
+        <Credits creditsUsed={creditsUsed} creditsQuota={creditsQuotaLimit} />
         <Tooltip
           trigger={
             <button

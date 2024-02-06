@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { docs } from '@decipad/routing';
 import { FC } from 'react';
 import {
@@ -314,7 +313,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
             </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
-          {isFlagEnabled('AI_ASSISTANT_CHAT') && AiModeSwitch}
+          {AiModeSwitch}
         </Styled.LeftContainer>
         <Styled.RightContainer>
           <Templates {...actions} />

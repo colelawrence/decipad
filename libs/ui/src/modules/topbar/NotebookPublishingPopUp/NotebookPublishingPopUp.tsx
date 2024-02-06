@@ -19,7 +19,6 @@ import {
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -124,16 +123,10 @@ export const NotebookPublishingPopUp = ({
   const link = isServerSideRendering()
     ? ''
     : new URL(
-        notebooks({}).notebook(
-          isFlagEnabled('TABS')
-            ? {
-                notebook: { id: notebookId, name: notebookName },
-                tab: activeTabId,
-              }
-            : {
-                notebook: { id: notebookId, name: notebookName },
-              }
-        ).$,
+        notebooks({}).notebook({
+          notebook: { id: notebookId, name: notebookName },
+          tab: activeTabId,
+        }).$,
         window.location.origin
       ).toString();
 

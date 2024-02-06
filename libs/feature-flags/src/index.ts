@@ -18,16 +18,7 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
-  // Tabs (bottom bar).
-  'TABS',
-  // Enable AI assistant
-  'AI_ASSISTANT_CHAT',
-  // Enable UI tokens usage
-  'RESOURCE_USAGE_COUNT',
   'ENABLE_SUBMIT_FORM',
-  // Enable buy more AI credits
-  'AI_BUY_MORE_CREDITS',
-  'TABLE_CATEGORY',
   'NEW_PAYMENTS',
   'WORKSPACE_READERS',
 ] as const;
@@ -76,12 +67,8 @@ export const getQueryStringOverrides = (): Flags => {
 
 // Overrides will always have the highest priority
 let overrides: Flags = {
-  TABS: true,
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
-  RESOURCE_USAGE_COUNT: true,
-  AI_ASSISTANT_CHAT: true,
-  AI_BUY_MORE_CREDITS: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

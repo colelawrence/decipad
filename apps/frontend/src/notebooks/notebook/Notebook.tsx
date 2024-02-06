@@ -22,7 +22,6 @@ import { FC, Suspense, createContext, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
 
 /**
@@ -88,7 +87,7 @@ export const Notebook: FC = () => {
                 </Suspense>
               }
               tabs={
-                !isEmbed && docsync && isFlagEnabled('TABS') ? (
+                !isEmbed && docsync ? (
                   <Tabs
                     notebookId={notebookId}
                     controller={docsync}

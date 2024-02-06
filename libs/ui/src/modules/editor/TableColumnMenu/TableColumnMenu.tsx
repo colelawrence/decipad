@@ -41,7 +41,6 @@ import {
 } from '../../../utils';
 import { getFormulaType } from '../../../utils/table';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',
@@ -205,16 +204,15 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             Text
           </MenuItem>
-          {isFlagEnabled('TABLE_CATEGORY') && (
-            <MenuItem
-              key="category"
-              icon={<BulletList />}
-              onSelect={() => onChangeColumnType({ kind: 'category' })}
-              selected={type.kind === 'category'}
-            >
-              Category
-            </MenuItem>
-          )}
+
+          <MenuItem
+            key="category"
+            icon={<BulletList />}
+            onSelect={() => onChangeColumnType({ kind: 'category' })}
+            selected={type.kind === 'category'}
+          >
+            Category
+          </MenuItem>
           {!isFirst && dropdownNames.length > 0 && (
             <MenuList
               key="dropdown-tables"

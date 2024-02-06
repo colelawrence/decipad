@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useAiUsage } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -47,26 +46,25 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   );
   const creditsLeft = Math.max(0, limit - creditsUsed);
 
-  const credits = isFlagEnabled('RESOURCE_USAGE_COUNT') &&
-    isFlagEnabled('AI_BUY_MORE_CREDITS') && (
-      <>
-        {' '}
-        •{' '}
-        <span>
-          <CreditsLabel>Credits</CreditsLabel>
-          <CreditsLeft noCreditsLeft={creditsLeft === 0}>
-            {creditsLeft}
-          </CreditsLeft>
-          <Button
-            type="secondary"
-            styles={addMoreCreditsButton}
-            onClick={() => creditsHref && navigate(creditsHref)}
-          >
-            Buy more
-          </Button>
-        </span>
-      </>
-    );
+  const credits = (
+    <>
+      {' '}
+      •{' '}
+      <span>
+        <CreditsLabel>Credits</CreditsLabel>
+        <CreditsLeft noCreditsLeft={creditsLeft === 0}>
+          {creditsLeft}
+        </CreditsLeft>
+        <Button
+          type="secondary"
+          styles={addMoreCreditsButton}
+          onClick={() => creditsHref && navigate(creditsHref)}
+        >
+          Buy more
+        </Button>
+      </span>
+    </>
+  );
 
   return (
     <Container>
