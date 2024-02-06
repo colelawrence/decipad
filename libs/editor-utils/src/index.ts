@@ -15,7 +15,6 @@ export * from './forceDownload';
 export * from './generateHash';
 export * from './getAboveNodeSafe';
 export * from './getCodeLineSource';
-export * from './getEmptyImage';
 export * from './getMagicNumberPath';
 export * from './getNodeEntrySafe';
 export * from './getNotebook';

@@ -5,7 +5,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { useDragNode } from '@udecode/plate-dnd';
-import { getEmptyImage } from '@decipad/editor-utils';
+import { getEmptyImage } from '@decipad/ui';
 import { useContext, useMemo } from 'react';
 import {
   TableDndContext,
