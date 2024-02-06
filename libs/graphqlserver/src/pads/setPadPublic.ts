@@ -54,6 +54,11 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
   pad.isPublic = isPublic;
   pad.userAllowsPublicHighlighting = userAllowsPublicHighlighting;
 
+  if (isPublic) {
+    // eslint-disable-next-line no-console
+    console.log('publishing pad', pad.id, 'user', user);
+  }
+
   await data.pads.put(pad);
 
   if (publishState === 'PRIVATE') {

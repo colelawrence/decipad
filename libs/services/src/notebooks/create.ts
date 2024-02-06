@@ -16,6 +16,8 @@ export async function create(
   padId?: string,
   createdAt?: number
 ): Promise<PadRecord> {
+  // eslint-disable-next-line no-console
+  console.log('create pad', user, padId);
   const newPad = {
     ...pad,
     id: padId ?? nanoid(),
