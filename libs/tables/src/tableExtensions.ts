@@ -115,7 +115,6 @@ export function deleteReplacer<T extends ConcreteRecord>(
     args: TableRecordIdentifier,
     noEvents = false
   ) {
-    const recordBeforeDelete = !noEvents ?? (await table.get({ id: args.id }));
     await method.call(table, args);
 
     if (!noEvents) {
@@ -125,7 +124,7 @@ export function deleteReplacer<T extends ConcreteRecord>(
           table: tableName,
           action: 'delete',
           args,
-          recordBeforeDelete,
+          recordBeforeDelete: await table.get({ id: args.id }),
         },
       });
     }
