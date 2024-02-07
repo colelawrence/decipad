@@ -89,7 +89,7 @@
     "@architect/functions": "7.0.0",
     "@aws-sdk/client-cloudformation": "^3.507.0",
     "@aws-sdk/client-dynamodb": "^3.507.0",
-    "@aws-sdk/client-opensearch": "^3.507.0",
+    "@aws-sdk/client-opensearch": "^3.508.0",
     "@aws-sdk/client-s3": "^3.507.0",
     "@aws-sdk/client-ses": "^3.507.0",
     "@aws-sdk/client-ssm": "^3.507.0",

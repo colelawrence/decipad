@@ -1127,10 +1127,10 @@
     tslib "^2.5.0"
     uuid "^8.3.2"
 
-"@aws-sdk/client-opensearch@^3.507.0":
-  version "3.507.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-opensearch/-/client-opensearch-3.507.0.tgz#6986ffafa17f873b509b6857dd480d47414f024a"
-  integrity sha512-UTpvLYP7anjJoDoskCT0nnrOehxPR7d3dtGhcr8fdqro8zRJEw2dqVPEH+vrO56VMhLv1+eg4PJJLTSbrcUhuA==
+"@aws-sdk/client-opensearch@^3.508.0":
+  version "3.508.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-opensearch/-/client-opensearch-3.508.0.tgz#c5397e274eeb9162bb1af9b7ace19f57aed58194"
+  integrity sha512-mjWj6pU8gBp03tIb/4i7bt5MLY3NB1naEWxYJR9UlZMJM3Odn+qNHWNHDYxKmHIqqcsNrNR6pK7G3XjI/Hmq2w==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
