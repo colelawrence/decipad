@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -68,8 +68,20 @@ export const TableCell: PlateComponent = ({
   const value = getNodeString(element);
   const [editing, setEditing] = useState(false); // Controlled by CellEditor
   const [cellEventTarget] = useState<EventTarget>(() => new EventTarget());
-
   const { tabIndex } = useTabEditorContext();
+
+  /**
+   * Parts of the cell editor must be re-mounted when the cell type changes.
+   * This is unavoidable in some cases, as the new plugins may use different
+   * hooks and render different higher-order components above the cell editor.
+   * To prevent interrupting the user while editing, we defer changing the cell
+   * type until the user has finished editing the cell.
+   */
+  const deferredCellTypeRef = useRef(cellType);
+  if (!editing && deferredCellTypeRef.current !== cellType) {
+    deferredCellTypeRef.current = cellType;
+  }
+  const { current: deferredCellType } = deferredCellTypeRef;
 
   const cursor = cursorStore.useStore(
     ({ userCursors }) =>
@@ -134,7 +146,7 @@ export const TableCell: PlateComponent = ({
       <div contentEditable={false}>
         <CellEditor
           isTableFrozen={tableFrozen}
-          type={cellType}
+          type={deferredCellType}
           value={value}
           eventTarget={cellEventTarget}
           onValueChange={setValue}
