@@ -19,6 +19,22 @@ test('notebook actions topbar @notebook', async ({ testUser }) => {
     await notebook.unarchive();
   });
 
+  await test.step('check notebook creation date', async () => {
+    await notebook.notebookActions.click();
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.toLocaleString('default', { month: 'short' });
+    const year = currentDate.getFullYear();
+    const formattedDate = `Created: ${day} ${month} ${year}`;
+
+    // checks menu has the notebook creation date
+    await expect(notebook.page.getByText(formattedDate)).toBeVisible();
+
+    // checks the menu closed by pressing esc
+    await notebook.page.keyboard.press('Escape');
+    await expect(notebook.page.getByText(formattedDate)).toBeHidden();
+  });
+
   await test.step('can download notebook', async () => {
     await notebook.notebookActions.click();
     const download = page.locator('[role="menuitem"]:has-text("Download")');

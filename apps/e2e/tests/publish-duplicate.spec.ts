@@ -377,6 +377,26 @@ test('duplicate in workspace with multiple workspaces', async ({
     expect(page.url()).toMatch(/\/w\/[^/]+/);
   });
 
+  await test.step('check new notebook date', async () => {
+    await randomFreeUser.workspace.ellipsisSelector(0);
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.toLocaleString('default', { month: 'short' });
+    const year = currentDate.getFullYear();
+    const formattedDate = `Created: ${day} ${month} ${year}`;
+
+    // checks menu has the notebook creation date
+    await expect(async () => {
+      expect(notebook.page.getByText(formattedDate)).toBeTruthy();
+    }).toPass();
+
+    // checks the menu closed by pressing esc
+    await expect(async () => {
+      await notebook.page.keyboard.press('Escape');
+      await expect(notebook.page.getByText(formattedDate)).toBeHidden();
+    }).toPass();
+  });
+
   await test.step('duplicate notebook to same workspace', async () => {
     await duplicatePad(page, 0, NewWorkspaceName);
     await expect(page.getByText('Copy of')).toBeVisible();
