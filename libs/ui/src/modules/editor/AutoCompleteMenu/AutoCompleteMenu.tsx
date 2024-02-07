@@ -3,7 +3,7 @@ import { ClientEventsContext } from '@decipad/client-events';
 import type { SmartRefDecoration } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
-import { type ItemBlockId, matchItemBlocks, once } from '@decipad/utils';
+import { type ItemBlockId, matchItemBlocks, once, noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 import {
@@ -27,6 +27,7 @@ import { AutoCompleteMenuGroup } from '../AutoCompleteMenuGroup/AutoCompleteMenu
 import { cssVar, mediumShadow, p12Medium } from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 import { groupIdentifiers } from './groupIdentifiers';
+import { useCancelingEvent } from '../../../utils';
 
 export type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
@@ -100,13 +101,8 @@ export const AutoCompleteMenu = ({
 }: AutoCompleteMenuProps): ReturnType<FC> => {
   const clientEvent = useContext(ClientEventsContext);
 
-  const handleMouseDown: MouseEventHandler<HTMLSpanElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    },
-    []
-  );
+  const handleMouseDown: MouseEventHandler<HTMLSpanElement> =
+    useCancelingEvent(noop);
   const handleClientEvent = useCallback(() => {
     clientEvent({
       type: 'action',

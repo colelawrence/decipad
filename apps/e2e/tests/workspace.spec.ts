@@ -151,7 +151,7 @@ test('Dashboard operations', async ({
   await test.step('creates a new pad and navigates to pad detail', async () => {
     await Promise.all([
       workspace.clickNewPadButton(),
-      page.waitForNavigation({ url: '/n/*' }),
+      page.waitForURL('/n/**'),
     ]);
 
     // Waits for docsync to send updates through.

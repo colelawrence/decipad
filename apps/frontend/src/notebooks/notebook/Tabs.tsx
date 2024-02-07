@@ -1,11 +1,7 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
-import { notebooks } from '@decipad/routing';
-import { FC } from 'react';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { useNotebookStateAndActions } from './hooks';
-import { useTabs } from '@decipad/editor-hooks';
-import { useNavigate } from 'react-router-dom';
+import { type FC } from 'react';
+import { useNotebookStateAndActions, useTabNavigate } from './hooks';
 import { NotebookTabs } from '@decipad/ui';
 
 export interface TabsProps {
@@ -15,16 +11,12 @@ export interface TabsProps {
 }
 
 const Tabs: FC<TabsProps> = ({ notebookId, docsync, controller }) => {
-  const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
-
   const { isReadOnly } = useNotebookStateAndActions({
     notebookId,
     docsync,
   });
 
-  const tabs = useTabs(isReadOnly);
-  const nav = useNavigate();
-
+  const { navigateToTab, tabs, tab, embed } = useTabNavigate(isReadOnly);
   const defaultTabId = tabs.at(0)?.id;
 
   if (tabs.length === 1 && isReadOnly) {
@@ -42,13 +34,11 @@ const Tabs: FC<TabsProps> = ({ notebookId, docsync, controller }) => {
       isEmbed={Boolean(embed)}
       isReadOnly={isReadOnly}
       activeTabId={tab ?? defaultTabId}
-      onClick={(id) => {
-        nav(notebooks({}).notebook({ notebook, tab: id, embed }).$);
-      }}
+      onClick={navigateToTab}
       onCreateTab={() => {
-        const id = controller.insertTab();
-        nav(`${notebooks({}).notebook({ notebook, embed }).$}/${id}`);
-        return id;
+        const newTabId = controller.insertTab();
+        navigateToTab(newTabId);
+        return newTabId;
       }}
       onRenameTab={controller.renameTab.bind(controller)}
       onDeleteTab={(id) => {
@@ -64,13 +54,9 @@ const Tabs: FC<TabsProps> = ({ notebookId, docsync, controller }) => {
         // We must navigate elsewhere
         const newSelectedTabIndex = tabs.at(tabIndex - 1) ?? tabs.at(0);
 
-        nav(
-          notebooks({}).notebook({
-            notebook,
-            tab: newSelectedTabIndex?.id,
-            embed,
-          }).$
-        );
+        if (newSelectedTabIndex?.id) {
+          navigateToTab(newSelectedTabIndex.id);
+        }
       }}
       onMoveTab={(id, index) => {
         const tabIndex = tabs.findIndex((t) => t.id === id);

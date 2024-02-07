@@ -521,10 +521,11 @@ export async function pastePlainTextIntoCell(
 }
 
 export async function downloadTableCSV(page: Page, tableName?: string) {
-  const downloadPromise = page.waitForEvent('download');
   await getTableOrPage(page, tableName).getByTestId('drag-handle').click();
-  await page.getByText('Download as CSV').first().click();
-  const download = await downloadPromise;
+  const [, download] = await Promise.all([
+    page.getByText('Download as CSV').first().click(),
+    page.waitForEvent('download'),
+  ]);
   await download.saveAs(download.suggestedFilename());
   return page.evaluate(async (url) => {
     const res = await fetch(url);

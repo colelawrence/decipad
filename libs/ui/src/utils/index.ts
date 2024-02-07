@@ -15,3 +15,4 @@ export * from './swatches';
 export * from './table';
 export * from './user-icons';
 export * from './viewport';
+export * from './useCancelingEvent';

@@ -263,6 +263,7 @@ test('dropdown widget', async ({ testUser }) => {
 
   await test.step('refresh notebook and see it still can edit', async () => {
     await page.reload();
+    await page.locator('[id="ai-mode"]').click();
     await page.getByText('55%').click();
     await page.getByTestId('dropdown-option').getByText('55%').hover();
     await page
@@ -315,6 +316,7 @@ test('dropdown widget', async ({ testUser }) => {
       .hover();
 
     await page
+      .getByRole('dialog')
       .getByRole('complementary')
       .locator('div')
       .filter({ hasText: 'Edit' })

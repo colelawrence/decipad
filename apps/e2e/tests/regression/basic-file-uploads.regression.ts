@@ -65,6 +65,8 @@ test.describe('production regression checks', () => {
 
   test.afterEach(async () => {
     await test.step('remove notebook from the test', async () => {
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await page.waitForTimeout(Timeouts.redirectDelay);
       await page.getByTestId('go-to-workspace').click();
 
       // restored an empty workspace for the next test

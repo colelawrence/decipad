@@ -1,8 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, MouseEvent, ReactNode, useCallback } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 import { cssVar } from '../../../primitives';
+import { useCancelingEvent } from '../../../utils';
 
 interface DataViewTableHeaderProps {
   children?: ReactNode;
@@ -43,21 +44,15 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   rotate,
   isFirstLevelHeader,
 }) => {
-  const onMouseOver = useCallback(
-    (ev: MouseEvent) => {
-      ev.stopPropagation();
-      ev.preventDefault();
+  const onMouseOver = useCancelingEvent(
+    useCallback(() => {
       onHover(true);
-    },
-    [onHover]
+    }, [onHover])
   );
-  const onMouseOut = useCallback(
-    (ev: MouseEvent) => {
-      ev.stopPropagation();
-      ev.preventDefault();
+  const onMouseOut = useCancelingEvent(
+    useCallback(() => {
       onHover(false);
-    },
-    [onHover]
+    }, [onHover])
   );
   return (
     <th

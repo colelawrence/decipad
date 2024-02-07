@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { once } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { MouseEvent, forwardRef, useCallback, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip, MenuList } from '../../../shared';
 import { DownArrow, DragHandle, Trash, UpArrow } from '../../../icons/index';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../../../primitives';
 import { editorLayout } from '../../../styles';
 import { normalDragHandleStyles } from '../../../styles/table';
+import { useCancelingEvent } from '../../../utils';
 
 export interface TableCellControlsProps {
   readonly onSelect?: () => void;
@@ -44,16 +45,13 @@ export const TableCellControls = forwardRef<
 >(({ readOnly, onSelect, onRemove, onAddRowAbove, onAddRowBelow }, ref) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
-  const handleMenuClick = useCallback(
-    (ev: MouseEvent) => {
+  const handleMenuClick = useCancelingEvent(
+    useCallback(() => {
       if (onSelect) {
         onSelect();
       }
       setMenuIsOpen(!menuIsOpen);
-      ev.stopPropagation();
-      ev.preventDefault();
-    },
-    [menuIsOpen, onSelect]
+    }, [menuIsOpen, onSelect])
   );
 
   const menuButton = (

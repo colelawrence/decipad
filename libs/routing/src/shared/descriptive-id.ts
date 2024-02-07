@@ -1,3 +1,4 @@
+import slug from 'slug';
 import { Parser } from 'typesafe-routes';
 
 export interface DescriptiveId {
@@ -13,15 +14,17 @@ export const descriptiveIdParser: Parser<DescriptiveId> = {
         `Id must not include separator character ":", but received the following id that does: ${id}`
       );
     }
-    return (name ? `${name.replace(/\W+/g, '-')}:` : '') + id;
+    return `${slug(name ?? '', { lower: false })}:${id}`;
   },
-  parse: (pathSegment) => {
-    // Encoding seems to be done for us, but not decoding, not sure why.
-    const [id] = decodeURIComponent(pathSegment).split(':').slice(-1);
+  parse: (_pathSegment) => {
+    let pathSegment = decodeURIComponent(_pathSegment);
+    if (!pathSegment.includes(':')) {
+      pathSegment = `:${pathSegment}`;
+    }
+    const [name, id] = pathSegment.split(':');
     return {
       id,
-      // There is probably no use case for retrieving the pretty name back from the URL.
-      name: undefined,
+      name,
     };
   },
 };

@@ -7,12 +7,23 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { starterNotebook } from './initialNotebook';
 import { MyValue } from '@decipad/editor-types';
 
-export async function initNewDocument(docId: string): Promise<void> {
+export interface InitDocumentResult {
+  id: string;
+  tabId: string;
+  name: string;
+}
+
+export async function initNewDocument(
+  docId: string
+): Promise<InitDocumentResult> {
   const doc = new YDoc();
   const persistence = new IndexeddbPersistence(docId, doc);
   const x = doc.getArray<SyncElement>();
 
   await persistence.whenSynced;
+
+  const firstTabId = nanoid();
+  const name = 'Welcome to Decipad!';
 
   applySlateOps(
     x,
@@ -23,7 +34,7 @@ export async function initNewDocument(docId: string): Promise<void> {
         node: {
           type: 'title',
           id: nanoid(),
-          children: [{ text: 'Welcome to Decipad!' }],
+          children: [{ text: name }],
         },
       },
       {
@@ -31,7 +42,7 @@ export async function initNewDocument(docId: string): Promise<void> {
         path: [1],
         node: {
           type: 'tab',
-          id: nanoid(),
+          id: firstTabId,
           children: getTabContent(),
           name: 'New Tab',
         },
@@ -42,6 +53,8 @@ export async function initNewDocument(docId: string): Promise<void> {
 
   await persistence.flush();
   doc.destroy();
+
+  return { id: docId, tabId: firstTabId, name };
 }
 
 function getTabContent(): MyValue {

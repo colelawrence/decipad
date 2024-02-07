@@ -1,6 +1,6 @@
 import { MyEditor } from '@decipad/editor-types';
-import { EditorBlock, EditorTitle } from '@decipad/ui';
-import { FC, KeyboardEvent, useMemo } from 'react';
+import { EditorBlock, EditorTitle, useCancelingEvent } from '@decipad/ui';
+import { FC, KeyboardEvent, useMemo, type ClipboardEvent } from 'react';
 import { BaseEditor, BaseText, Descendant, Text } from 'slate';
 import { Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
 
@@ -31,14 +31,11 @@ export const TitleEditor: FC<TitleEditorProps> = ({
       <Editable
         readOnly={readOnly}
         onKeyDown={onKeyDown}
-        onPaste={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
+        onPaste={useCancelingEvent((e: ClipboardEvent) => {
           const data = e.clipboardData.getData('text/plain');
           if (data.length === 0) return;
           editor.insertText(data.replaceAll('\n', ''));
-        }}
+        })}
         renderElement={(props) => {
           const leaf = getLeaf(props);
           return (

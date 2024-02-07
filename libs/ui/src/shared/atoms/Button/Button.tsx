@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css, CSSObject, SerializedStyles } from '@emotion/react';
-import { forwardRef, MouseEvent, ReactNode, useCallback } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import {
   cssVar,
   grey700,
@@ -16,7 +16,7 @@ import {
   yellow500,
   componentCssVars,
 } from '../../../primitives';
-import { Anchor } from '../../../utils';
+import { Anchor, useCancelingEvent } from '../../../utils';
 
 const styles = css(p13Bold, {
   flexGrow: 1,
@@ -235,14 +235,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const onButtonClick = useCallback(
-      (ev: MouseEvent) => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        onClick();
-      },
-      [onClick]
-    );
+    const onButtonClick = useCancelingEvent(onClick);
 
     return href ? (
       <Anchor

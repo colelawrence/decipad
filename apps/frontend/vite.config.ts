@@ -21,14 +21,16 @@ const serverOptions: UserConfig['server'] = {
   },
 };
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react({
-      jsxImportSource: '@emotion/react',
-      plugins: [['@swc/plugin-emotion', {}]],
-    }),
-    tsconfigPaths(),
+const plugins = [
+  react({
+    jsxImportSource: '@emotion/react',
+    plugins: [['@swc/plugin-emotion', {}]],
+  }),
+  tsconfigPaths(),
+];
+
+if (process.env.SENTRY_AUTH_TOKEN) {
+  plugins.push(
     sentryVitePlugin({
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,
@@ -37,8 +39,13 @@ export default defineConfig({
         name: process.env.GIT_COMMIT_HASH,
         dist: process.env.GIT_COMMIT_HASH,
       },
-    }),
-  ],
+    })
+  );
+}
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins,
   build: {
     rollupOptions: {
       external: [

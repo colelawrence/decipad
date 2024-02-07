@@ -1,7 +1,7 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { ImportElementSource } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { FC, FormEvent, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useWorkspaceExternalData } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ import {
   TabsRoot,
   TabsTrigger,
 } from '../../molecules';
+import { useCancelingEvent } from '../../../utils';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -217,9 +218,7 @@ function NewDataConnection({
   }
 
   // Function would get recreated too many times with `useCallback`
-  function onSubmitConnection(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    e.stopPropagation();
+  const onSubmitConnection = useCancelingEvent(() => {
     if (!connMethod) return;
 
     if (name.length === 0) {
@@ -285,7 +284,7 @@ function NewDataConnection({
         toast('Error creating connection', 'error');
       }
     });
-  }
+  });
 
   return (
     <form

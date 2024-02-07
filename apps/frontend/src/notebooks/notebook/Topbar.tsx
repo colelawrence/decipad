@@ -115,7 +115,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     return <TopbarPlaceholder />;
   }
 
-  const notebookName = data?.name ?? 'My Notebook';
+  const notebookName = data?.name ?? 'Untitled';
 
   return (
     <NotebookTopbar

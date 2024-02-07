@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Calendar, Formula, Number, TableSmall, Text } from '../../../icons';
 import { cssVar, p12Medium } from '../../../primitives';
+import { useCancelingEvent } from '../../../utils';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -140,11 +141,7 @@ export const AutoCompleteMenuItem = ({
       <button
         role="menuitem"
         css={styles}
-        onMouseDown={(event) => {
-          onExecute();
-          event.stopPropagation();
-          event.preventDefault();
-        }}
+        onMouseDown={useCancelingEvent(onExecute)}
         ref={itemRef}
       >
         <span css={iconStyles}>{getAutocompleteIconFor(type)}</span>

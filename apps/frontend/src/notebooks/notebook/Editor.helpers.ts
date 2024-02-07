@@ -3,9 +3,9 @@ import {
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { useCallback, useEffect } from 'react';
+import { useTabNavigate } from './hooks';
 
 export function useSetWorkspaceQuota(
   workspace: EditorNotebookFragment['workspace']
@@ -26,6 +26,7 @@ export function useSetWorkspaceQuota(
 
 export function useNotebookTitleChange(notebookId: string) {
   const [, renameNotebook] = useRenameNotebookMutation();
+  const { changeNotebookTitle } = useTabNavigate(false);
   return useCallback(
     (newName?: string) => {
       if (newName != null && !isServerSideRendering()) {
@@ -34,15 +35,10 @@ export function useNotebookTitleChange(notebookId: string) {
           id: notebookId,
           name: nameTrimmed,
         });
-        window.history.replaceState(
-          {},
-          nameTrimmed,
-          notebooks({}).notebook({
-            notebook: { id: notebookId, name: nameTrimmed },
-          }).$
-        );
+
+        changeNotebookTitle(nameTrimmed);
       }
     },
-    [notebookId, renameNotebook]
+    [changeNotebookTitle, notebookId, renameNotebook]
   );
 }

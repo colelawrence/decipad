@@ -1,3 +1,4 @@
+import { Timeouts } from '../utils/src/timeout';
 import { expect, test } from './manager/decipad-tests';
 
 test('page title is the same as notebook @browser @notebook', async ({
@@ -19,6 +20,8 @@ test('page title is the same as notebook @browser @notebook', async ({
   });
 
   await test.step('check page title persists after going to workspace and back', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
     await page.getByTestId('go-to-workspace').click();
     await page.getByText(notebookTitle).first().click();
     await notebook.waitForEditorToLoad();

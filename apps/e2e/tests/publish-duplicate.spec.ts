@@ -245,6 +245,8 @@ test('duplicate in workspace with single workspace', async ({
     await page.getByTestId('notebook-title').click();
     await expect(page.getByText('this is the third paragraph')).toBeVisible();
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
     await page.getByTestId('go-to-workspace').click();
   });
 
@@ -369,6 +371,8 @@ test('duplicate in workspace with multiple workspaces', async ({
   await test.step('new notebook', async () => {
     await randomFreeUser.newNotebook.click();
     await notebook.waitForEditorToLoad();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
     await page.getByTestId('go-to-workspace').click();
     expect(page.url()).toMatch(/\/w\/[^/]+/);
   });
@@ -405,6 +409,8 @@ test('duplicate inside notebook with single workspace', async ({
     currentDate.toString() + Math.round(Math.random() * 10000);
   await randomFreeUserNotebook.updateNotebookTitle(notebookTitle);
   await randomFreeUserNotebook.duplicate();
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await randomFreeUserPage.waitForTimeout(Timeouts.redirectDelay);
   await randomFreeUserPage.getByTestId('go-to-workspace').click();
   await expect(
     randomFreeUserPage.getByText(`Copy of ${notebookTitle}`)
@@ -425,6 +431,8 @@ test('duplicate inside notebook with multiple workspaces', async ({
 
   await test.step('create new workspace', async () => {
     notebookUrl = randomFreeUserPage.url();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await randomFreeUserPage.waitForTimeout(Timeouts.redirectDelay);
     await randomFreeUserPage.getByTestId('go-to-workspace').click();
     await randomFreeUserPage.getByTestId('workspace-selector-button').click();
     await randomFreeUserPage.getByTestId('create-workspace-button').click();

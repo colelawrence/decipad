@@ -3,12 +3,13 @@ import { descriptiveIdParser } from './shared/descriptive-id';
 import { SECRET_URL_PARAM } from './shared/secret';
 
 const notebook = route(
-  `/:notebook/:tab?&:${SECRET_URL_PARAM}?&:embed?`,
+  `/:notebook/:tab?&:${SECRET_URL_PARAM}?&:embed?&:openAiPanel?`,
   {
     notebook: descriptiveIdParser,
     tab: stringParser,
     [SECRET_URL_PARAM]: stringParser,
     embed: booleanParser,
+    openAiPanel: booleanParser,
   },
   {}
 );

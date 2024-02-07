@@ -1,6 +1,11 @@
 module.exports = {
   extends: ['../../libs/eslint-config-decipad/react'],
-  ignorePatterns: ['!**/*', '.eslintrc.js', '*.generated.json'],
+  ignorePatterns: [
+    '!**/*',
+    '.eslintrc.js',
+    '*.generated.json',
+    'vite.config.d.ts',
+  ],
   rules: {
     'import/no-extraneous-dependencies': [
       // currently broken for @decipad/* dependencies

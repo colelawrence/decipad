@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useCallback, useRef } from 'react';
 import { cssVar, p12Regular, p14Medium } from '../../../primitives';
 import { soonStyles } from '../../../styles/menu';
+import { useCancelingEvent } from '../../../utils';
 
 const inlineMenuStyles = css({
   display: 'grid',
@@ -90,11 +91,9 @@ export const InlineMenuItem = ({
       role="menuitem"
       data-testid={testId}
       css={inlineMenuStyles}
-      onMouseDown={(event) => {
+      onMouseDown={useCancelingEvent(() => {
         enabled && onExecute();
-        event.stopPropagation();
-        event.preventDefault();
-      }}
+      })}
       data-focused={focused}
       ref={itemRef}
     >

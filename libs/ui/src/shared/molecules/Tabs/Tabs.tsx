@@ -1,9 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { cssVar, p13Medium } from '../../../primitives';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { Tooltip } from '../../atoms';
+import { useCancelingEvent } from '../../../utils';
 
 const tabsListStyles = (fullWidth: boolean) =>
   css({
@@ -114,7 +115,7 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
       value={name}
       disabled={disabled}
       data-state={selected ? 'active' : undefined}
-      onClick={onClick}
+      onClick={useCancelingEvent(onClick)}
       css={tabsTriggerStyles(!!selected)}
     >
       {children || (

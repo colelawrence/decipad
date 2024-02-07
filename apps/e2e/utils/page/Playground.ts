@@ -10,9 +10,7 @@ export async function navigateToPlayground(page: Page) {
   if (!isOnPlayground(page as Page)) {
     await page.goto('/playground');
     if (!isOnPlayground(page as Page)) {
-      await page.waitForNavigation({
-        url: isOnPlayground,
-      });
+      await page.waitForURL(isOnPlayground);
     }
   }
 }

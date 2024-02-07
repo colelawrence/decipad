@@ -1,13 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import styled from '@emotion/styled';
 import {
-  FC,
+  type FC,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type MouseEvent,
+  type MouseEventHandler,
 } from 'react';
 import { cssVar, p13Bold, p13Medium } from '../../../primitives';
 import { IconPopover, MenuList } from '../../molecules';
@@ -34,6 +36,7 @@ import { UserIconKey } from '@decipad/editor-types';
 
 import { noop } from '@decipad/utils';
 import { ClientEventsContext } from '@decipad/client-events';
+import { useCancelingEvent } from '../../../utils';
 
 type UITab = {
   id: string;
@@ -257,14 +260,16 @@ export const NotebookTabs: FC<TabsProps> = ({
     [onRenameTab, toast, inputContent]
   );
 
-  const handleAddTab = useCallback(() => {
-    clientEvent({
-      type: 'action',
-      action: 'create new tab',
-    });
-    const id = onCreateTab();
-    setEditableTabId(id);
-  }, [onCreateTab, clientEvent]);
+  const handleAddTab = useCancelingEvent(
+    useCallback(() => {
+      clientEvent({
+        type: 'action',
+        action: 'create new tab',
+      });
+      const id = onCreateTab();
+      setEditableTabId(id);
+    }, [onCreateTab, clientEvent])
+  );
 
   const handleKeyPress = useCallback(
     (id: string) => (event: React.KeyboardEvent) => {
@@ -401,23 +406,23 @@ const Tab: FC<TabProps> = ({
 
   const Icon = icons[icon];
 
-  const handleClickRename = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      event.stopPropagation();
-      event.preventDefault();
-
-      switch (event.detail) {
-        case 1:
-          onClick();
-          break;
-        // Double click
-        case 2:
-          onRename();
-          break;
-      }
-    },
-    [onClick, onRename]
-  );
+  const handleClickRename: MouseEventHandler<HTMLButtonElement> =
+    useCancelingEvent<MouseEvent<HTMLButtonElement>>(
+      useCallback(
+        (event: MouseEvent<HTMLButtonElement>): void => {
+          switch (event.detail) {
+            case 1:
+              onClick();
+              break;
+            // Double click
+            case 2:
+              onRename();
+              break;
+          }
+        },
+        [onClick, onRename]
+      )
+    );
 
   const handleOpenIconPopover = useCallback(() => {
     // This is needed to make sure the popover opens after the click event

@@ -17,6 +17,11 @@ export async function sendEmail({
   body,
   subject,
 }: SendEmailParams): Promise<void> {
+  if (!apiKey) {
+    // eslint-disable-next-line no-console
+    console.log('skipping email send because no api key');
+    return;
+  }
   debug('will send email', { to, body, subject });
   const params = {
     html: body,
