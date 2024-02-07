@@ -46,6 +46,27 @@ export const createInitialSearchIndexes = async (
 
   await creatingIndex(() =>
     store.indices.create({
+      index: indexNames.notebookTemplatesTextOnly,
+      body: {
+        mappings: {
+          properties: {
+            title: {
+              type: 'text',
+            },
+            summary: {
+              type: 'text',
+            },
+            body: {
+              type: 'text',
+            },
+          },
+        },
+      },
+    })
+  );
+
+  await creatingIndex(() =>
+    store.indices.create({
       index: indexNames.languageDocs,
       body: {
         settings: {

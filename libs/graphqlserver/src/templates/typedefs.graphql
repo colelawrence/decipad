@@ -1,0 +1,25 @@
+type TemplateSearchResultNotebook {
+  id: ID!
+  name: String!
+  icon: String
+}
+
+type TemplateSearchResult {
+  notebook: TemplateSearchResultNotebook!
+  summary: String
+}
+
+type PagedTemplateSearchResult {
+  items: [TemplateSearchResult!]!
+  count: Int!
+  hasNextPage: Boolean!
+  cursor: String
+}
+
+extend type Query {
+  searchTemplates(
+    prompt: String!
+    faster: Boolean
+    page: PageInput!
+  ): PagedTemplateSearchResult!
+}

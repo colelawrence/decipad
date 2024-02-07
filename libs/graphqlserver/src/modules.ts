@@ -20,6 +20,7 @@ import workspaceExecutedQueries from './workspaceExecutedQueries';
 import resourceUsage from './resource-usage';
 import notion from './notion';
 import pricing from './pricing';
+import templates from './templates';
 
 type GraphqlModule = {
   resolvers: unknown;
@@ -45,6 +46,7 @@ const modules: GraphqlModule[] = [
   resourceUsage,
   notion,
   pricing,
+  templates,
 ];
 
 if (process.env.NODE_ENV !== 'production') {

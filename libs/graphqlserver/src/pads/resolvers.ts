@@ -10,7 +10,6 @@ import {
 } from '@decipad/services/notebooks';
 import { resource } from '@decipad/backend-resources';
 import { toSlateDoc } from '@decipad/slate-yjs';
-import { searchTemplates } from '@decipad/backend-search';
 import { getNotebookInitialState } from '@decipad/backend-notebook-content';
 import {
   isAuthenticatedAndAuthorized,
@@ -82,29 +81,6 @@ const resolvers: Resolvers = {
         user: requireUser(context) as User,
         page,
       })) as PagedPadResult;
-    },
-
-    async searchTemplates(_, { query, page }, context) {
-      requireUser(context);
-
-      const { maxItems, cursor: cursorString = '0' } = page;
-      const cursor = parseInt(cursorString as string, 10);
-      const results = await searchTemplates(query, {
-        startIndex: cursor,
-        maxResults: maxItems + 1,
-      });
-
-      const userResultSize =
-        results.length > maxItems ? maxItems : results.length;
-
-      return {
-        cursor: String(cursor + results.length),
-        hasNextPage: userResultSize < results.length,
-        count: userResultSize,
-        items: results
-          .slice(0, userResultSize)
-          .map((r) => r.notebook) as Array<Pad>,
-      };
     },
 
     async publiclyHighlightedPads(_, { page }) {

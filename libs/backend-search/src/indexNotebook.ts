@@ -24,6 +24,16 @@ export const indexNotebook = async (
         summary,
       },
     });
+
+    await store.index({
+      id: notebook.id,
+      index: indexNames.notebookTemplatesTextOnly,
+      body: {
+        title: notebook.name,
+        summary,
+        body: content,
+      },
+    });
   } catch (err) {
     debug('Error indexing document %j', err);
     throw err;

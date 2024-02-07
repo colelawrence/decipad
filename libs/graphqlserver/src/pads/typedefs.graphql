@@ -103,7 +103,6 @@ extend type Query {
   pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
   padsSharedWithMe(page: PageInput!): PagedPadResult!
   featuredPad: Pad
-  searchTemplates(query: String!, page: PageInput!): PagedPadResult!
   publiclyHighlightedPads(page: PageInput!): PagedPadResult!
 }
 

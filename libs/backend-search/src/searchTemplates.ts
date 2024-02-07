@@ -36,14 +36,14 @@ const expandSearch = async (search: string): Promise<string> => {
   return messageContentToString(result.content);
 };
 
-export const searchTemplates = async (
+const semanticSearchTemplates = async (
   prompt: string,
   { startIndex = 0, maxResults = 10, k = 2 } = {}
 ): Promise<TemplateSearchResults> => {
-  debug('searchTemplates: with prompt "%s"', prompt);
+  debug('semanticSearchTemplates: with prompt "%s"', prompt);
 
   const searchTerms = await expandSearch(prompt);
-  debug('searchTemplates: expanded prompt to "%s"', searchTerms);
+  debug('semanticSearchTemplates: expanded prompt to "%s"', searchTerms);
 
   const [vectorEmbeddings] = await createVectorEmbeddings(searchTerms);
 
@@ -65,7 +65,10 @@ export const searchTemplates = async (
     },
   });
 
-  debug('searchTemplates: search results "%j"', searchResults.body.hits);
+  debug(
+    'semanticSearchTemplates: search results "%j"',
+    searchResults.body.hits
+  );
 
   const hits = searchResults.body.hits.hits as Array<SearchHit>;
   const notebookIds = hits.map((r: SearchHit) => r._id);
@@ -77,4 +80,59 @@ export const searchTemplates = async (
     notebook: n,
     summary: notebookById[n.id]._source.summary,
   }));
+};
+
+const textOnlySearchTemplates = async (
+  prompt: string,
+  { startIndex = 0, maxResults = 10 } = {}
+): Promise<TemplateSearchResults> => {
+  debug('textOnlySearchTemplates: with prompt "%s"', prompt);
+
+  const searchClient = await searchStore();
+  const searchResults = await searchClient.search({
+    index: indexNames.notebookTemplates,
+    body: {
+      from: startIndex,
+      size: maxResults,
+      query: {
+        multi_match: {
+          query: prompt,
+          fields: ['title', 'summary', 'body'],
+        },
+      },
+    },
+  });
+
+  debug(
+    'textOnlySearchTemplates: search results "%j"',
+    searchResults.body.hits
+  );
+
+  const hits = searchResults.body.hits.hits as Array<SearchHit>;
+  const notebookIds = hits.map((r: SearchHit) => r._id);
+  const notebookById = Object.fromEntries(hits.map((hit) => [hit._id, hit]));
+
+  const data = await tables();
+  const notebooks = await data.pads.batchGet(notebookIds);
+  return notebooks.map((n) => ({
+    notebook: n,
+    summary: notebookById[n.id]._source.summary,
+  }));
+};
+
+export const searchTemplates = async (
+  prompt: string,
+  { faster = false, startIndex = 0, maxResults = 10, k = 2 } = {}
+): Promise<TemplateSearchResults> => {
+  if (faster) {
+    return textOnlySearchTemplates(prompt, {
+      startIndex,
+      maxResults,
+    });
+  }
+  return semanticSearchTemplates(prompt, {
+    startIndex,
+    maxResults,
+    k,
+  });
 };

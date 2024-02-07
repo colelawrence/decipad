@@ -637,6 +637,14 @@ export type PagedResult = {
   items: Array<Pageable>;
 };
 
+export type PagedTemplateSearchResult = {
+  __typename?: 'PagedTemplateSearchResult';
+  count: Scalars['Int']['output'];
+  cursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  items: Array<TemplateSearchResult>;
+};
+
 export type Permission = {
   __typename?: 'Permission';
   canComment: Scalars['Boolean']['output'];
@@ -670,7 +678,7 @@ export type Query = {
   padsByTag: PagedPadResult;
   padsSharedWithMe: PagedPadResult;
   publiclyHighlightedPads: PagedPadResult;
-  searchTemplates: PagedPadResult;
+  searchTemplates: PagedTemplateSearchResult;
   sections: Array<Section>;
   self?: Maybe<User>;
   selfFulfilledGoals: Array<Scalars['String']['output']>;
@@ -743,8 +751,9 @@ export type QueryPubliclyHighlightedPadsArgs = {
 
 
 export type QuerySearchTemplatesArgs = {
+  faster?: InputMaybe<Scalars['Boolean']['input']>;
   page: PageInput;
-  query: Scalars['String']['input'];
+  prompt: Scalars['String']['input'];
 };
 
 
@@ -973,6 +982,19 @@ export type TagRecord = {
   workspaceId: Scalars['ID']['output'];
 };
 
+export type TemplateSearchResult = {
+  __typename?: 'TemplateSearchResult';
+  notebook: TemplateSearchResultNotebook;
+  summary?: Maybe<Scalars['String']['output']>;
+};
+
+export type TemplateSearchResultNotebook = {
+  __typename?: 'TemplateSearchResultNotebook';
+  icon?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type UnshareWithRoleInput = {
   __typename?: 'UnshareWithRoleInput';
   id: Scalars['ID']['output'];
@@ -1191,6 +1213,7 @@ export type ResolversTypes = {
   Pageable: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Pageable']>;
   PagedPadResult: ResolverTypeWrapper<PagedPadResult>;
   PagedResult: ResolverTypeWrapper<Omit<PagedResult, 'items'> & { items: Array<ResolversTypes['Pageable']> }>;
+  PagedTemplateSearchResult: ResolverTypeWrapper<PagedTemplateSearchResult>;
   Permission: ResolverTypeWrapper<Permission>;
   PermissionType: PermissionType;
   Query: ResolverTypeWrapper<{}>;
@@ -1222,6 +1245,8 @@ export type ResolversTypes = {
   SubscriptionStatus: SubscriptionStatus;
   TagChanges: ResolverTypeWrapper<TagChanges>;
   TagRecord: ResolverTypeWrapper<TagRecord>;
+  TemplateSearchResult: ResolverTypeWrapper<TemplateSearchResult>;
+  TemplateSearchResultNotebook: ResolverTypeWrapper<TemplateSearchResultNotebook>;
   UnshareWithRoleInput: ResolverTypeWrapper<UnshareWithRoleInput>;
   UnshareWithUserInput: ResolverTypeWrapper<UnshareWithUserInput>;
   User: ResolverTypeWrapper<User>;
@@ -1266,6 +1291,7 @@ export type ResolversParentTypes = {
   Pageable: ResolversUnionTypes<ResolversParentTypes>['Pageable'];
   PagedPadResult: PagedPadResult;
   PagedResult: Omit<PagedResult, 'items'> & { items: Array<ResolversParentTypes['Pageable']> };
+  PagedTemplateSearchResult: PagedTemplateSearchResult;
   Permission: Permission;
   Query: {};
   ResourceAccess: ResourceAccess;
@@ -1294,6 +1320,8 @@ export type ResolversParentTypes = {
   SubscriptionPlan: SubscriptionPlan;
   TagChanges: TagChanges;
   TagRecord: TagRecord;
+  TemplateSearchResult: TemplateSearchResult;
+  TemplateSearchResultNotebook: TemplateSearchResultNotebook;
   UnshareWithRoleInput: UnshareWithRoleInput;
   UnshareWithUserInput: UnshareWithUserInput;
   User: User;
@@ -1518,6 +1546,14 @@ export type PagedResultResolvers<ContextType = GraphqlContext, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PagedTemplateSearchResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PagedTemplateSearchResult'] = ResolversParentTypes['PagedTemplateSearchResult']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['TemplateSearchResult']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PermissionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Permission'] = ResolversParentTypes['Permission']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -1545,7 +1581,7 @@ export type QueryResolvers<ContextType = GraphqlContext, ParentType extends Reso
   padsByTag?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsByTagArgs, 'page' | 'tag' | 'workspaceId'>>;
   padsSharedWithMe?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsSharedWithMeArgs, 'page'>>;
   publiclyHighlightedPads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPubliclyHighlightedPadsArgs, 'page'>>;
-  searchTemplates?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QuerySearchTemplatesArgs, 'page' | 'query'>>;
+  searchTemplates?: Resolver<ResolversTypes['PagedTemplateSearchResult'], ParentType, ContextType, RequireFields<QuerySearchTemplatesArgs, 'page' | 'prompt'>>;
   sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<QuerySectionsArgs, 'workspaceId'>>;
   self?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   selfFulfilledGoals?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1724,6 +1760,19 @@ export type TagRecordResolvers<ContextType = GraphqlContext, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TemplateSearchResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TemplateSearchResult'] = ResolversParentTypes['TemplateSearchResult']> = {
+  notebook?: Resolver<ResolversTypes['TemplateSearchResultNotebook'], ParentType, ContextType>;
+  summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TemplateSearchResultNotebookResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TemplateSearchResultNotebook'] = ResolversParentTypes['TemplateSearchResultNotebook']> = {
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UnshareWithRoleInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['UnshareWithRoleInput'] = ResolversParentTypes['UnshareWithRoleInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   roleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -1833,6 +1882,7 @@ export type Resolvers<ContextType = GraphqlContext> = {
   Pageable?: PageableResolvers<ContextType>;
   PagedPadResult?: PagedPadResultResolvers<ContextType>;
   PagedResult?: PagedResultResolvers<ContextType>;
+  PagedTemplateSearchResult?: PagedTemplateSearchResultResolvers<ContextType>;
   Permission?: PermissionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ResourceAccess?: ResourceAccessResolvers<ContextType>;
@@ -1857,6 +1907,8 @@ export type Resolvers<ContextType = GraphqlContext> = {
   SubscriptionPlan?: SubscriptionPlanResolvers<ContextType>;
   TagChanges?: TagChangesResolvers<ContextType>;
   TagRecord?: TagRecordResolvers<ContextType>;
+  TemplateSearchResult?: TemplateSearchResultResolvers<ContextType>;
+  TemplateSearchResultNotebook?: TemplateSearchResultNotebookResolvers<ContextType>;
   UnshareWithRoleInput?: UnshareWithRoleInputResolvers<ContextType>;
   UnshareWithUserInput?: UnshareWithUserInputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

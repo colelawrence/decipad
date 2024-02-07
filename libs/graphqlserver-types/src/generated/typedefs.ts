@@ -312,7 +312,6 @@ extend type Query {
   pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
   padsSharedWithMe(page: PageInput!): PagedPadResult!
   featuredPad: Pad
-  searchTemplates(query: String!, page: PageInput!): PagedPadResult!
   publiclyHighlightedPads(page: PageInput!): PagedPadResult!
 }
 
@@ -655,6 +654,31 @@ extend type Pad {
 
 extend type Subscription {
   tagsChanged(workspaceId: ID!): TagChanges!
+}
+type TemplateSearchResultNotebook {
+  id: ID!
+  name: String!
+  icon: String
+}
+
+type TemplateSearchResult {
+  notebook: TemplateSearchResultNotebook!
+  summary: String
+}
+
+type PagedTemplateSearchResult {
+  items: [TemplateSearchResult!]!
+  count: Int!
+  hasNextPage: Boolean!
+  cursor: String
+}
+
+extend type Query {
+  searchTemplates(
+    prompt: String!
+    faster: Boolean
+    page: PageInput!
+  ): PagedTemplateSearchResult!
 }
 input UserInput {
   name: String
