@@ -5,7 +5,14 @@ import { FC, useCallback } from 'react';
 import { MenuList } from '../../../shared/molecules';
 import { MenuItem, TextAndIconButton } from '../../../shared/atoms';
 import { Caret } from '../../../icons/Caret/Caret';
-import { p12Medium, p14Medium, red500 } from '../../../primitives';
+import {
+  cssVar,
+  p12Medium,
+  p12Regular,
+  p13Medium,
+  p14Medium,
+  red500,
+} from '../../../primitives';
 import { PermissionType } from '../../../types';
 
 type CollabAccessDropdownProps = {
@@ -76,7 +83,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         selected={currentPermission === 'READ'}
         testid="notebook-reader"
       >
-        <p css={p14Medium}>Notebook reader</p>
+        <p css={p13Medium}>Notebook reader</p>
         <p css={dropDownItemStyles}>
           Can read and interact only with this notebook
         </p>
@@ -86,7 +93,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         selected={currentPermission === 'WRITE'}
         testid="notebook-collaborator"
       >
-        <p css={p14Medium}>Notebook collaborator</p>
+        <p css={p13Medium}>Notebook collaborator</p>
         <p css={dropDownItemStyles}>Can edit only this notebook</p>
       </MenuItem>
 
@@ -99,7 +106,8 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   );
 };
 
-const dropDownItemStyles = css({
+const dropDownItemStyles = css(p12Regular, {
+  color: cssVar('textSubdued'),
   marginTop: '6px',
   maxWidth: '224px',
 });

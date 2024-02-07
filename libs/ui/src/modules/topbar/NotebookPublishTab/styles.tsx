@@ -3,8 +3,9 @@ import { css } from '@emotion/react';
 import {
   componentCssVars,
   cssVar,
+  p12Regular,
+  p13Medium,
   p13Regular,
-  p14Bold,
   p14Medium,
   p14Regular,
   p8Medium,
@@ -102,10 +103,11 @@ export const padLinkTextStyles = css(p13Regular, {
   padding: '0px 6px',
 });
 
-export const triggerStyles = css(p14Bold, {
+export const triggerStyles = css(p13Medium, {
   display: 'flex',
   justifyContent: 'space-between',
   borderRadius: '6px',
+  height: '32px',
   border: `1px solid ${cssVar('borderSubdued')}`,
   padding: '8px',
   svg: { width: '16px', height: '16px' },
@@ -119,14 +121,14 @@ export const triggerTitleIconStyles = css({
 export const publishModeWrapper = css({
   backgroundColor: cssVar('backgroundMain'),
   border: `1px solid ${cssVar('borderSubdued')}`,
-  marginTop: '8px',
+  marginTop: '4px',
   width: 'calc(320px - 32px)',
   borderRadius: '8px',
   display: 'flex',
   overflow: 'hidden',
   flexDirection: 'column',
   padding: '6px',
-  gap: '6px',
+  gap: '2px',
   zIndex: 10000,
   svg: {
     width: '24px',
@@ -137,7 +139,7 @@ export const publishModeWrapper = css({
 export const publishMode = css({
   display: 'flex',
   gap: '12px',
-  padding: '12px',
+  padding: '6px',
   cursor: 'pointer',
   borderRadius: '6px',
 
@@ -152,10 +154,10 @@ export const publishMode = css({
   '& > div': {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '6px',
   },
   p: {
-    ...p14Bold,
+    ...p13Medium,
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
@@ -165,7 +167,9 @@ export const publishMode = css({
     },
   },
   span: {
-    ...p13Regular,
+    ...p12Regular,
+    lineHeight: '16px',
+    fontWeight: 400,
     color: cssVar('textSubdued'),
   },
 });

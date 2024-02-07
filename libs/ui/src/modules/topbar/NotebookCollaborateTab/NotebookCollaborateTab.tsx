@@ -38,20 +38,19 @@ const invitationButtonContentStyles = css({
 
 const inputContainerStyles = css({
   position: 'relative',
+  height: '32px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  borderRadius: '6px',
+
+  'div:first-of-type': {
+    height: '100%',
+  },
 
   input: {
-    paddingRight: '112px',
+    border: 0,
   },
-});
-
-const inputAccessPickerStyles = css({
-  position: 'absolute',
-  right: '2px',
-  bottom: 0,
-  top: 0,
-  marginTop: 'auto',
-  marginBottom: 'auto',
-  height: 'fit-content',
 });
 
 const invitationFormStyles = css({
@@ -59,8 +58,8 @@ const invitationFormStyles = css({
   display: 'flex',
   flexDirection: 'column',
   input: {
-    paddingTop: '7px',
-    paddingBottom: '7px',
+    paddingTop: '5px',
+    paddingBottom: '5px',
     fontSize: '13px',
     lineHeight: '100%',
     width: '100%',
@@ -175,10 +174,7 @@ export const NotebookCollaborateTab = ({
               disabled={disabled}
             />
 
-            <span
-              css={inputAccessPickerStyles}
-              data-testid="select-share-permission"
-            >
+            <span data-testid="select-share-permission">
               <CollabAccessDropdown
                 isInvitationPicker
                 currentPermission={permission}
