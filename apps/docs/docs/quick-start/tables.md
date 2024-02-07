@@ -11,72 +11,67 @@ Tables help you organize data, making it easier to read and understand. You can 
   <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9?sid=90c61f2e-95f0-426c-8fb1-920a3adc5c20?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
 </div>
 
-## Create a Table
+## Creating a Table
 
-**To create a new table**, go to your notebook, click the `+` button next to an empty line and select `Table` from the menu, or you can open the block menu by typing `/` on an empty paragraph, select `Table` using the `arrow keys`, and press `enter`.
+To create a new table, go to your notebook, click the `+` button next to an empty line, select `Table` from the menu.
 
-1.  **Add Formulas to a Table**:
+1. **Adding Formulas to a Table**:
 
-    - You can add formulas to a table by clicking on any cell and starting with the equals sign (`=`).
-    - Alternatively, you can add formulas to a column by clicking on the column `▼` and selecting `Formula`.
+   - Formulas let you add calculated columns to your table.
+   - To add formulas to a table, press the equals sign (`=`) in any cell. A new formula bar will show up where you can type your formula.
+   - Alternatively, add formulas to a column by clicking on the `▼` column menu and selecting `Formula`.
+   - To hide the formulas, click the `ƒ` button at the top of the table. To show them click `ƒ` again.
+   - [Learn more about Formulas →](/docs/quick-start/formulas)
 
-2.  **Add Quick Calculation Insights**:
+2. **Adding Quick Calculation Insights**:
 
-    - Click the `Calculate` button at the end of your table to perform quick calculations.
-    - Select the desired calculation based on the data type in the column (e.g., sum, count).
-    - The available calculations depend on the type of data in your table.
+   - Summary rows let you add quick calculated insights to any column.
+   - To add a summary row, click the `Calculate` button at the end of your table.
+   - Select the desired calculation based on the column's data type (e.g., sum, count).
+   - You can reuse these calculations across your notebook with drag and drop:
+     - [Learn more about Inline Results →](/docs/quick-start/inline-results)
+     - [Learn more about Formulas →](/docs/quick-start/formulas)
 
-    You can easily drag and drop these calculations results:
+3. **Adding Units to Table Values**:
 
-    - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-results)
-    - Into your formulas to reuse them. [Learn more about Formulas →](/docs/quick-start/formulas)
+   - Add units to table values to add context.
+   - For example, enter `$10` or `5oz` for currency or a measurement, Decipad will understand what you mean.
+   - Alternatively, go to the `▼` column menu and add your custom unit to the whole column directly.
 
-3.  **Add Units to Table Values**:
+4. **Updating Table and Column Names**:
 
-    - To add units to table values, include them as text in the respective cell.
-    - For example, you can enter `$10` or `5oz` to indicate a currency or measurement.
-    - Alternatively, you can format a column to display units by clicking on the column `▼` and adding your custom unit.
+   - Update the default table name by replacing it in the top left corner.
+   - Update column names by clicking on the existing name and selecting a new one.
 
-4.  **Add Units to Columns**:
+5. **Adding and Deleting Columns and Rows**:
 
-    - Click the down triangle button on a column, select `Change type`, and enter a new unit in the `create custom` field.
+   - Add new columns by clicking the `+` button on the right side.
+   - Delete a column by clicking the upside-down triangle button on the column and selecting `Delete column`.
+   - Add new rows by clicking the `+ Add row` button at the end.
+   - Delete or insert rows by hovering over a row, clicking the `⸬` button, and selecting the desired action.
 
-5.  **Update Table and Column Names**:
+6. **Rearranging Table Columns and Rows**:
 
-    - After creating a table, you can update its default name by replacing it in the top left corner of the table.
-    - To update column names, click on the existing name and select a new one.
+   - Rearrange columns and rows by dragging and dropping within the table.
+   - To move a row, click and hold the `⸬` button on the left side and drag it to a new position.
+   - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
 
-6.  **Add and Delete Columns and Rows**:
+7. **Updating Column Data Types**:
 
-    - Add new columns by clicking the `+` button on the right side of the table.
-    - Delete a column by clicking the upside-down triangle button on the column and selecting `Delete column`.
-    - Add new rows by clicking the `+ Add row` button at the end of the table.
-    - Delete rows or insert new ones by hovering over a row, clicking the `⸬` button, and selecting the desired action.
+   - Hover over the column header, click the drop-down triangle button, and choose a new column type from the list.
 
-7.  **Rearrange Table Columns and Rows**:
+8. **Adding Column Series**:
 
-    - You can rearrange table columns and rows by dragging and dropping them within the same table.
-    - To move a row, click and hold the `⸬` button on the left side of the row and drag it to a new position.
-    - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
+   - Create a column series by selecting `Series`, then `Date` in the column's `Change type` menu. Specify the starting point, and subsequent dates will be calculated automatically.
 
-To **delete a column**, click the **`⸬`** button on a column and select `Delete column`.
+9. **Adding Column Categories**:
 
-8.  **Update Column Data Types**:
+   - Create a column category by selecting `Categories` from the `▼` column menu. This adds a dropdown to your column, allowing easy reuse of values with a picker.
 
-    - Hover over the column header, click the drop-down triangle button on a column, and choose a new column type from the list.
-
-9.  **Add Column Series**:
-
-    - Create a column series by selecting `Series` and then `Date` in the column's `Change type` menu. Specify the starting point, and subsequent dates will be calculated automatically.
-
-10. **Hide Table Formulas**:
-
-    - Click the `Hide formulas` button on top of the table to hide table formulas. Click the `Show formulas` button to display them again.
-
-11. **Customizing Table Appearance**:
+10. **Customizing Table Appearance**:
 
     - Change the color and icon of your table by clicking the grid icon next to the table name.
-    - Select a new color and icon from the menu to give your table a unique personality.
+    - Select a new color and icon from the menu to give your table a unique appearance.
 
 ## Referencing Columns
 
