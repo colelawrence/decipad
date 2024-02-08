@@ -53,7 +53,7 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
       <span>
         <CreditsLabel>Credits</CreditsLabel>
         <CreditsLeft noCreditsLeft={creditsLeft === 0}>
-          {creditsLeft}
+          {isNaN(creditsLeft) ? '∞' : creditsLeft}
         </CreditsLeft>
         <Button
           type="secondary"
@@ -101,8 +101,8 @@ const addMoreCreditsButton = css({
 });
 
 const Container = styled.div({
-  padding: '14px 16px 64px 42px',
-  backgroundColor: cssVar('backgroundSubdued'),
+  padding: '16px 16px 64px 44px',
+
   borderBottom: `1px solid ${cssVar('borderSubdued')}`,
 });
 

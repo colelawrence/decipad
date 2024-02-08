@@ -32,7 +32,7 @@ export { ListItemContent } from './ListItemContent/ListItemContent';
 
 export { MenuItem } from './MenuItem/MenuItem';
 export { MenuSeparator } from './MenuSeparator/MenuSeparator';
-export { NavigationItem } from '../../modules/workspace/NavigationItem/NavigationItem';
+
 export { NotebookIconButton } from './NotebookIconButton/NotebookIconButton';
 
 export { Overlay } from './Overlay/Overlay';

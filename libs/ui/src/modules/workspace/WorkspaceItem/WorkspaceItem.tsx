@@ -1,116 +1,64 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { FC, useCallback } from 'react';
-import { Avatar, NavigationItem } from '../../../shared/atoms';
+import { FC, useCallback, useMemo } from 'react';
+import { Avatar, Tooltip } from '../../../shared/atoms';
+
+import * as Styled from './styles';
+import pluralize from 'pluralize';
 import { Check } from '../../../icons';
-import { cssVar, p12Regular, p14Medium } from '../../../primitives';
-
-const maxWidth = '256px';
-const pencilSize = '24px';
-const avatarSize = '28px';
-const padding = '8px';
-
-const gridStyles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  gap: '12px',
-
-  width: '228px',
-  maxWidth,
-  marginTop: '-4px',
-  marginBottom: '-4px',
-});
-
-const styles = css({
-  flex: 1,
-  padding: `${padding} 0`,
-
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-
-  maxWidth: `calc(${maxWidth} - ${pencilSize} - (${padding} * 2))`,
-});
-
-const avatarStyles = css({
-  height: avatarSize,
-  width: avatarSize,
-});
-
-const checkmarkStyles = css({
-  alignSelf: 'center',
-  height: '14px',
-  width: '14px',
-});
 
 export interface WorkspaceItemProps {
   readonly id: string;
   readonly name: string;
-  readonly imageHash?: string;
-  readonly isActive?: boolean;
-  readonly membersCount?: number | null;
-  readonly onWorkspaceNavigate?: (id: string) => void;
+  readonly isActive: boolean;
+  readonly isPremium: boolean;
+  readonly membersCount: number;
+  readonly plan?: string | null;
+  readonly onSelect: (id: string) => void;
 }
 
 export const WorkspaceItem = ({
   id,
   name,
-  imageHash,
+  isPremium,
   isActive,
+  plan,
   membersCount,
-  onWorkspaceNavigate = noop,
+  onSelect = noop,
 }: WorkspaceItemProps): ReturnType<FC> => {
-  const workspacePath = workspaces({}).workspace({ workspaceId: id });
   const handleNavigate = useCallback(() => {
-    onWorkspaceNavigate(id);
-  }, [id, onWorkspaceNavigate]);
+    onSelect(id);
+  }, [id, onSelect]);
+
+  // Show tooltip on truncated name
+  const isLongName = useMemo(() => name.length > 20, [name]);
 
   return (
-    <NavigationItem
-      href={workspacePath.$}
-      onLinkClick={handleNavigate}
-      icon={
-        <Avatar name={name} imageHash={imageHash} useSecondLetter={false} />
-      }
-      iconStyles={avatarStyles}
-    >
-      <div css={gridStyles}>
-        <span css={styles}>
-          <strong
-            css={css(
-              p14Medium,
-
-              {
-                textAlign: 'left',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }
-            )}
-            data-testid="workspace-picker"
+    <Styled.ItemButton isSelected={isActive} onClick={handleNavigate}>
+      <Styled.Avatar>
+        <Avatar roundedSquare useSecondLetter={false} name={name} />
+      </Styled.Avatar>
+      <Styled.Profile>
+        {isLongName ? (
+          <Tooltip
+            trigger={
+              <Styled.Name data-testid="workspace-picker">{name}</Styled.Name>
+            }
           >
             {name}
-          </strong>
-          <span
-            css={css(p12Regular, {
-              textAlign: 'left',
-              color: cssVar('textSubdued'),
-            })}
-          >
-            {membersCount === 1
-              ? 'Private workspace'
-              : `${membersCount} members`}
-          </span>
-        </span>
-
-        {isActive && (
-          <span css={checkmarkStyles}>
-            <Check />
-          </span>
+          </Tooltip>
+        ) : (
+          <Styled.Name data-testid="workspace-picker">{name}</Styled.Name>
         )}
-      </div>
-    </NavigationItem>
+        <Styled.Description>
+          {membersCount === 1
+            ? 'Private'
+            : `${membersCount} ${pluralize('member', membersCount)}`}
+          {plan && <Styled.Badge isPremium={isPremium}>{plan}</Styled.Badge>}
+        </Styled.Description>
+      </Styled.Profile>
+
+      <Styled.Icon>{isActive && <Check />}</Styled.Icon>
+    </Styled.ItemButton>
   );
 };

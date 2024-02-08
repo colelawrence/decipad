@@ -1,15 +1,16 @@
 import { expect, test } from './manager/decipad-tests';
 
 test('Data connections', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, workspace } = testUser;
   await test.step('Can see data connections button', async () => {
     await page.goto('/');
-    const dataConnections = page.locator('text="Data Connections"');
+    await workspace.openWorkspaceSettingsSection();
+    const dataConnections = page.locator('text="Data connections"');
     await expect(dataConnections).toBeVisible();
   });
 
   await test.step('Can click data connections and view modal', async () => {
-    const dataConnections = page.locator('text="Data Connections"');
+    const dataConnections = page.locator('text="Data connections"');
     await dataConnections.click();
 
     const apiSecrets = page.locator('text="API Secrets"');

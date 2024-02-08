@@ -48,6 +48,7 @@ test('workspace permissions', async ({
 
   await test.step('standard member checks', async () => {
     await anotherRandomFreeUser.goToWorkspace(premiumWorkspaceId);
+    await anotherRandomFreeUser.workspace.openWorkspaceSettingsSection();
     await expect(
       anotherRandomFreeUser.page.getByTestId('manage-workspace-members')
     ).toBeVisible();

@@ -31,11 +31,10 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
               discordUrl="http://discord.gg/decipad"
               docsUrl={docs({}).$}
               releaseUrl={docs({}).page({ name: 'releases' }).$}
-              variant="workspace"
             />
           </div>
         )}
-        <Button href={membersHref} type="secondary">
+        <Button href={membersHref} type="tertiaryAlt">
           <TextWithIcon>
             <Users />
             <span>Invite team</span>
@@ -83,7 +82,7 @@ const SearchBarRestyle = styled.div({
     display: 'flex',
   },
   input: {
-    backgroundColor: cssVar('backgroundSubdued'),
+    backgroundColor: cssVar('backgroundMain'),
   },
 });
 

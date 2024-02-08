@@ -77,4 +77,6 @@ export const theme: CssVariables = {
   stateNeutralIconOutline: dark600.hex,
 
   editorWidth: '100vw',
+
+  focusOutline: teal700.hex,
 };

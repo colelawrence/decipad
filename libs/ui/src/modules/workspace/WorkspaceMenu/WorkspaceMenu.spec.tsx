@@ -7,16 +7,27 @@ import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { WorkspaceMenu } from './WorkspaceMenu';
+import { noop } from '@decipad/utils';
 
 const props: ComponentProps<typeof WorkspaceMenu> = {
-  Heading: 'h1',
-  activeWorkspace: {
-    id: '42',
-    name: 'Active Workspace',
-    membersCount: 1,
-    sections: [],
-  },
-  allWorkspaces: [],
+  workspaces: [
+    {
+      id: '42',
+      membersCount: 2,
+      name: 'Some Workspace',
+      isSelected: true,
+      sections: [],
+    },
+    {
+      id: '1337',
+      membersCount: 2,
+      name: 'Some Other Workspace',
+      isSelected: false,
+      sections: [],
+    },
+  ],
+  onCreateWorkspace: noop,
+  onSelectWorkspace: noop,
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (
@@ -28,15 +39,6 @@ const WithContexts: FC<PropsWithChildren> = ({ children }) => (
     </BrowserRouter>
   </DndProvider>
 );
-
-it('renders a heading at given level', () => {
-  const { getByRole } = render(
-    <WithContexts>
-      <WorkspaceMenu {...props} Heading="h1" />
-    </WithContexts>
-  );
-  expect(getByRole('heading').tagName).toBe('H1');
-});
 
 it('renders a button to create a workspace', async () => {
   const handleCreateWorkspace = jest.fn();
@@ -50,54 +52,13 @@ it('renders a button to create a workspace', async () => {
   expect(handleCreateWorkspace).toHaveBeenCalled();
 });
 
-it('links to the active workspace', () => {
-  const activeWorkspace = {
-    ...props.activeWorkspace,
-    id: '42',
-    name: 'Some Workspace',
-  };
-  const allWorkspaces = [activeWorkspace];
+it('renders the workspaces', () => {
+  const { getByText } = render(
+    <WithContexts>
+      <WorkspaceMenu {...props} />
+    </WithContexts>
+  );
 
-  const { getByText } = render(
-    <WithContexts>
-      <WorkspaceMenu
-        Heading="h1"
-        allWorkspaces={allWorkspaces}
-        activeWorkspace={activeWorkspace}
-      />
-    </WithContexts>
-  );
-  expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
-    'href',
-    expect.stringContaining('42')
-  );
-});
-it('links to the other workspaces', () => {
-  const { getByText } = render(
-    <WithContexts>
-      <WorkspaceMenu
-        {...props}
-        allWorkspaces={[
-          {
-            id: '42',
-            membersCount: 2,
-            name: 'Some Workspace',
-          },
-          {
-            id: '1337',
-            membersCount: 2,
-            name: 'Other Workspace',
-          },
-        ]}
-      />
-    </WithContexts>
-  );
-  expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
-    'href',
-    expect.stringContaining('42')
-  );
-  expect(getByText('Other Workspace').closest('a')).toHaveAttribute(
-    'href',
-    expect.stringContaining('1337')
-  );
+  expect(getByText('Some Workspace')).toBeVisible();
+  expect(getByText('Some Other Workspace')).toBeVisible();
 });

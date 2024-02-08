@@ -95,6 +95,30 @@ export function transparencyHex(hexColor: string, opacity: Opacity): string {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
+export function darkenHex(hex: string, amount: number): string {
+  if (hex.length !== 7) {
+    throw new Error(
+      `Hex color doesn't contain 7 chracters (1 for #, 6 for digits), got: ${hex}`
+    );
+  }
+
+  const clamped = Math.max(0, Math.min(1, amount));
+
+  let r = parseInt(hex.slice(1, 3), 16);
+  let g = parseInt(hex.slice(3, 5), 16);
+  let b = parseInt(hex.slice(5, 7), 16);
+
+  r = Math.round(r * (1 - clamped));
+  g = Math.round(g * (1 - clamped));
+  b = Math.round(b * (1 - clamped));
+
+  const rHex = r.toString(16).padStart(2, '0');
+  const gHex = g.toString(16).padStart(2, '0');
+  const bHex = b.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`;
+}
+
 //
 // gray
 //

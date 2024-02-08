@@ -1,42 +1,35 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css, SerializedStyles } from '@emotion/react';
-import { Children, FC, ReactNode } from 'react';
+import React, { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-import { WorkspaceItem } from '../WorkspaceItem/WorkspaceItem';
-import { NavigationItem } from '../NavigationItem/NavigationItem';
-import { WorkspaceItemCreate } from '../WorkspaceItemCreate/WorkspaceItemCreate';
 
-const styles = css({
-  display: 'grid',
-  rowGap: '2px',
-});
+import * as Styled from './styles';
 
 interface NavigationListProps {
   readonly children: ReactNode;
-  readonly wrapperStyles?: SerializedStyles;
+  readonly level?: number;
 }
 
 export const NavigationList = ({
   children,
-  wrapperStyles,
+  level = 0,
 }: NavigationListProps): ReturnType<FC> => {
   return (
-    <ul css={[styles, wrapperStyles]}>
+    <Styled.List level={level}>
       {Children.map(children, (child) => {
         if (child == null) {
           return null;
         }
-        if (
-          isElement(child) &&
-          (child.type === NavigationItem ||
-            child.type === WorkspaceItem ||
-            child.type === WorkspaceItemCreate)
-        ) {
-          return <li data-testid="navigation-list-item">{child}</li>;
+        if (isElement(child)) {
+          const itemWithLevel = React.cloneElement(child, { level });
+
+          return (
+            <Styled.Item data-testid="navigation-list-item">
+              {itemWithLevel}
+            </Styled.Item>
+          );
         }
-        console.error('Received child that is not a navigation item', child);
-        throw new Error('Expected all children to be navigation items');
+        return child;
       })}
-    </ul>
+    </Styled.List>
   );
 };

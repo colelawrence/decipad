@@ -14,13 +14,10 @@ export const Normal: StoryFn = () => (
     onDeleteSection={noop}
     onUpdateSection={() => new Promise(noop)}
     onCreateSection={() => new Promise(noop)}
-    Heading="h1"
-    activeWorkspace={{
-      name: 'Active Workspace',
-      id: '42',
-      membersCount: 1,
-      sections: [],
-    }}
-    allWorkspaces={[]}
+    onCreateWorkspace={() => new Promise(noop)}
+    onNavigateWorkspace={noop}
+    onShowFeedback={noop}
+    onLogout={noop}
+    workspaces={[]}
   />
 );

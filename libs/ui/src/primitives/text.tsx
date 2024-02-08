@@ -103,10 +103,17 @@ export const p10Regular: TypographyStyles = {
   fontSize: `${10 / usualRemPxs}rem`,
   lineHeight: `${12 / usualRemPxs}rem`,
 };
+
 export const p10Medium: TypographyStyles = {
   ...p10Regular,
   fontWeight: 500,
 };
+
+export const p10Bold: TypographyStyles = {
+  ...p10Regular,
+  fontWeight: 700,
+};
+
 export const p12Regular: TypographyStyles = {
   ...pDefault,
 

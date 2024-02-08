@@ -139,7 +139,6 @@ export const deciTabsOverflowXStyles = css(
 export const deciOverflowYStyles = css(
   {
     overflowY: 'auto',
-    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
   },
   noTrackScrollbarStyles
@@ -148,7 +147,6 @@ export const deciOverflowYStyles = css(
 export const deciOverflowXStyles = css(
   {
     overflowX: 'auto',
-    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
   },
   noTrackScrollbarStyles
@@ -157,7 +155,6 @@ export const deciOverflowXStyles = css(
 export const deciOverflowStyles = css(
   {
     overflow: 'auto',
-    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
   },
   noTrackScrollbarStyles

@@ -10,6 +10,7 @@ type ColorId = Exclude<
   | 'hexToOpaqueColor'
   | 'opaqueColorToHex'
   | 'transparencyHex'
+  | 'darkenHex'
 >;
 
 const wrapperStyle = {

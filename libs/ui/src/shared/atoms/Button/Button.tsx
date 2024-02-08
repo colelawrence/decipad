@@ -6,7 +6,6 @@ import {
   cssVar,
   grey700,
   orange800,
-  p13Bold,
   red800,
   transparency,
   yellow100,
@@ -15,6 +14,7 @@ import {
   yellow400,
   yellow500,
   componentCssVars,
+  p13Bold,
 } from '../../../primitives';
 import { Anchor, useCancelingEvent } from '../../../utils';
 

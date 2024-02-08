@@ -139,11 +139,44 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
 
   const [subscriptionPlans] = useGetSubscriptionsPlansQuery();
 
-  const currentSubscriptionPlan = useMemo(() => {
-    const plans = subscriptionPlans.data?.getSubscriptionsPlans ?? [];
+  const getWorkspacePlan = useCallback(
+    (workspacePlan: string | undefined | null) => {
+      const plans = subscriptionPlans.data?.getSubscriptionsPlans ?? [];
 
-    return plans.find((p) => p?.key === currentWorkspace?.plan);
-  }, [currentWorkspace?.plan, subscriptionPlans.data?.getSubscriptionsPlans]);
+      return plans.find((p) => p?.key === workspacePlan);
+    },
+    [subscriptionPlans.data?.getSubscriptionsPlans]
+  );
+
+  const currentSubscriptionPlan = useMemo(() => {
+    return getWorkspacePlan(currentWorkspace?.plan);
+  }, [currentWorkspace, getWorkspacePlan]);
+
+  const workspacesMeta = useMemo(
+    () =>
+      allWorkspaces.map((w) => {
+        const plan = getWorkspacePlan(w.plan);
+        return {
+          id: w.id,
+          name: w.name,
+          membersCount: w.membersCount ?? 1,
+          isPremium: !!w.isPremium,
+          isSelected: w.id === workspaceId,
+          plan: plan && {
+            key: plan.key,
+            title: plan.title,
+            description: plan.description,
+          },
+          href: w.href,
+          sections: w.sections.map((s) => ({
+            id: s.id,
+            name: s.name,
+            color: s.color,
+          })),
+        };
+      }),
+    [allWorkspaces, workspaceId, getWorkspacePlan]
+  );
 
   const {
     updateUsage,
@@ -263,36 +296,34 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
       suspenseFallback={<DashboardSidebarPlaceholder />}
     >
       <DashboardSidebar
-        showFeedback={showFeedback}
-        Heading="h1"
-        name={session?.user?.name || 'Me'}
-        email={session.user?.email || 'me@example.com'}
-        onLogout={signoutCallback}
-        activeWorkspace={currentWorkspace}
-        allWorkspaces={allWorkspaces}
+        name={session?.user?.name}
+        email={session.user?.email}
+        workspaces={workspacesMeta}
         onCreateWorkspace={() =>
           navigate(currentWorkspaceRoute.createNew({}).$)
         }
-        onClickWorkspace={(id) => {
+        onNavigateWorkspace={(id) => {
           navigate(workspaces({}).workspace({ workspaceId: id }).$);
         }}
         onCreateSection={createSection}
         onUpdateSection={editSection}
-        onDeleteSection={(sId: string) => {
+        onDeleteSection={(id: string) => {
           deleteSection({
             workspaceId,
-            sectionId: sId,
+            sectionId: id,
           })
             .then((res) => {
               if (res) {
-                toast('Section removed', 'success');
+                toast.success('Deleted folder');
               }
             })
             .catch((err) => {
-              console.error('Failed to remove section. Error:', err);
-              toast('Failed to remove section.', 'error');
+              console.error('Failed to remove folder. Error:', err);
+              toast.error('Failed to remove folder.');
             });
         }}
+        onShowFeedback={showFeedback}
+        onLogout={signoutCallback}
       />
     </Frame>
   );
@@ -303,37 +334,33 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           path="/"
           element={
             <LazyRoute title={currentWorkspace.name}>
-              <Dashboard
-                sidebar={sidebarWrapper}
-                topbar={null}
-                notebookList={
-                  <>
-                    <WorkspaceHero
-                      name={currentWorkspace.name}
-                      isPremium={!!currentWorkspace.isPremium}
-                      planName={currentSubscriptionPlan?.title ?? ''}
-                      creditsPlan={currentSubscriptionPlan?.credits ?? 0}
-                      membersCount={currentWorkspace.membersCount ?? 1}
-                      onCreateNotebook={handleCreateNotebook}
-                      membersHref={currentWorkspaceRoute.members({}).$}
-                      creditsHref={currentWorkspaceRoute.addcredits({}).$}
-                    />
-                    <NotebookList
-                      pageType={pageInfo}
-                      notebooks={currentWorkspace.pads.items}
-                      sharedNotebooks={workspaceData.padsSharedWithMe.items}
-                      workspaces={allWorkspaces}
-                      onImport={(source) =>
-                        importNotebook({
-                          workspaceId: currentWorkspace.id,
-                          source,
-                        })
-                      }
-                      workspaceId={currentWorkspace.id}
-                    />
-                  </>
-                }
-              />
+              <Dashboard SidebarComponent={sidebarWrapper} MetaComponent={null}>
+                <>
+                  <WorkspaceHero
+                    name={currentWorkspace.name}
+                    isPremium={!!currentWorkspace.isPremium}
+                    planName={currentSubscriptionPlan?.title ?? ''}
+                    creditsPlan={currentSubscriptionPlan?.credits ?? 0}
+                    membersCount={currentWorkspace.membersCount ?? 1}
+                    onCreateNotebook={handleCreateNotebook}
+                    membersHref={currentWorkspaceRoute.members({}).$}
+                    creditsHref={currentWorkspaceRoute.addcredits({}).$}
+                  />
+                  <NotebookList
+                    pageType={pageInfo}
+                    notebooks={currentWorkspace.pads.items}
+                    sharedNotebooks={workspaceData.padsSharedWithMe.items}
+                    workspaces={allWorkspaces}
+                    onImport={(source) =>
+                      importNotebook({
+                        workspaceId: currentWorkspace.id,
+                        source,
+                      })
+                    }
+                    workspaceId={currentWorkspace.id}
+                  />
+                </>
+              </Dashboard>
               <Outlet />
             </LazyRoute>
           }

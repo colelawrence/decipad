@@ -189,14 +189,12 @@ interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
   readonly releaseUrl?: string;
-  readonly variant?: 'workspace' | 'notebook';
 }
 
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
   releaseUrl,
-  variant = 'notebook',
 }: HelpMenuProps) => {
   const clientEvent = useContext(ClientEventsContext);
   const [open, setOpen] = useState(false);
@@ -224,7 +222,7 @@ export const HelpMenu = ({
       trigger={
         <div>
           <SegmentButtons
-            variant={variant === 'workspace' ? 'lighter' : 'darker'}
+            variant="darker"
             buttons={[
               {
                 children: (

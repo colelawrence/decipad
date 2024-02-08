@@ -1,7 +1,8 @@
 import { noop } from '@decipad/utils';
 import { Meta, StoryFn } from '@storybook/react';
-import { NavigationItem } from '../../../shared/atoms';
+
 import { NavigationList } from './NavigationList';
+import { NavigationItem } from '../NavigationItem/NavigationItem';
 
 export default {
   title: 'Molecules / UI / Navigation List',

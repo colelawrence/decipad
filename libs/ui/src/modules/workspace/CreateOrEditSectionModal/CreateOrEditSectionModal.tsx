@@ -46,7 +46,7 @@ export const CreateOrEditSectionModal = ({
       <ClosableModal
         {...props}
         Heading="h1"
-        title={`${term} section`}
+        title={`${term} folder`}
         closeAction={onClose}
       >
         <form
@@ -64,14 +64,14 @@ export const CreateOrEditSectionModal = ({
         >
           {op === 'create' && (
             <p css={css(p13Regular, { maxWidth: 350 })}>
-              Sections are how you can organize your documents within a
+              Folders are how you can organize your documents within a
               workspace. For instance, you can create a <em>personal</em> and a{' '}
-              <em>work</em> section in your default workspace.
+              <em>work</em> folder in your default workspace.
             </p>
           )}
           <InputField
             required
-            placeholder="My section"
+            placeholder="My folder"
             value={name}
             onChange={setName}
           />
@@ -102,7 +102,7 @@ export const CreateOrEditSectionModal = ({
             })}
           </div>
           <Button type="secondary" submit disabled={!name || isSubmitting}>
-            {term} Section
+            {term} Folder
           </Button>
         </form>
       </ClosableModal>

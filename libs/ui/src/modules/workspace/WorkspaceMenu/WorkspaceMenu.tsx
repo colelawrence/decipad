@@ -1,77 +1,48 @@
-import { css } from '@emotion/react';
-import { ComponentProps, FC } from 'react';
+import { FC } from 'react';
 
 import { noop } from '@decipad/utils';
-import { NavigationList } from '../../../shared';
 import { WorkspaceItem } from '../WorkspaceItem/WorkspaceItem';
-import { WorkspaceItemCreate } from '../WorkspaceItemCreate/WorkspaceItemCreate';
-import { cssVar, p14Medium } from '../../../primitives';
-import { card } from '../../../styles';
-import { deciOverflowYStyles } from '../../../styles/scrollbars';
-import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
-const styles = css(
-  card.styles,
-  {
-    maxHeight: '50vh',
-    padding: '16px',
+import * as Styled from './styles';
 
-    display: 'grid',
-    rowGap: '8px',
-
-    border: 0,
-  },
-  deciOverflowYStyles
-);
-
-const headerStyles = css({
-  paddingTop: '4px',
-  display: 'grid',
-  gridTemplateColumns: 'auto 16px',
-  alignItems: 'center',
-});
-
-const headingStyles = css(p14Medium, {
-  color: cssVar('textDisabled'),
-  marginLeft: '8px',
-});
+import { Button } from 'libs/ui/src/shared';
+import { WorkspaceMeta } from 'libs/ui/src/types';
 
 interface WorkspaceMenuProps {
-  readonly Heading: 'h1';
-
-  readonly activeWorkspace: ComponentProps<typeof WorkspaceItem> & {
-    sections: Section[];
-  };
-  readonly allWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
-  readonly onCreateWorkspace?: () => void;
-  readonly onClickWorkspace?: (id: string) => void;
-  readonly onWorkspaceNavigate?: (id: string) => void;
+  readonly workspaces: WorkspaceMeta[];
+  readonly onCreateWorkspace: () => void;
+  readonly onSelectWorkspace: (id: string) => void;
 }
 
 export const WorkspaceMenu = ({
-  Heading,
-  activeWorkspace,
-  allWorkspaces,
+  workspaces,
   onCreateWorkspace = noop,
-  onWorkspaceNavigate = noop,
+  onSelectWorkspace = noop,
 }: WorkspaceMenuProps): ReturnType<FC> => {
   return (
-    <nav css={styles}>
-      <div css={headerStyles}>
-        <Heading css={headingStyles}>Workspaces</Heading>
-      </div>
-      <NavigationList>
-        {allWorkspaces.map((workspace) => (
+    <Styled.MenuWrapper>
+      <Styled.MenuNav>
+        <Styled.MenuHeader>Workspaces</Styled.MenuHeader>
+        {workspaces.map((workspace) => (
           <WorkspaceItem
             key={workspace.id}
-            onWorkspaceNavigate={onWorkspaceNavigate}
-            {...workspace}
-            isActive={workspace.id === activeWorkspace.id}
+            onSelect={onSelectWorkspace}
+            name={workspace.name}
+            id={workspace.id}
+            membersCount={workspace.membersCount ?? 1}
+            isPremium={!!workspace.isPremium}
+            isActive={workspace.isSelected}
+            plan={workspace?.plan?.title}
           />
         ))}
-
-        <WorkspaceItemCreate key="create-new" onClick={onCreateWorkspace} />
-      </NavigationList>
-    </nav>
+      </Styled.MenuNav>
+      <Button
+        type="tertiaryAlt"
+        testId="create-workspace-button"
+        onClick={onCreateWorkspace}
+      >
+        Create workspace
+      </Button>
+    </Styled.MenuWrapper>
   );
 };

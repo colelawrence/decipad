@@ -1,19 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { CreateSectionMutation } from '@decipad/graphql-client';
-import { useActiveElement, useStripeLinks } from '@decipad/react-utils';
+import { useStripeLinks } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
-import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import {
-  Divider,
-  Dot,
-  ExternalHrefIcon,
-  MenuItem,
-  NavigationItem,
-  NavigationList,
-} from '../../../shared';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { MenuItem, MenuList } from '../../../shared';
 import {
   Archive,
   Chat,
@@ -26,16 +18,13 @@ import {
   Sparkles,
   Users,
   DeciBoxes,
+  Ellipsis,
+  Folder,
+  ArrowDiagonalTopRight,
 } from '../../../icons';
 
-import {
-  cssVar,
-  hexToOpaqueColor,
-  opaqueColorToHex,
-  smallScreenQuery,
-} from '../../../primitives';
+import { hexToOpaqueColor, opaqueColorToHex } from '../../../primitives';
 import { OpaqueColor } from '@decipad/utils';
-import { deciOverflowYStyles } from '../../../styles/scrollbars';
 import { CreateOrEditSectionModal } from '../CreateOrEditSectionModal/CreateOrEditSectionModal';
 import {
   AvailableSwatchColor,
@@ -44,39 +33,16 @@ import {
   hexBaseSwatches,
   swatchNames,
 } from '../../../utils';
-import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
 
-const workspaceNavContainerStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '2px',
-});
-
-const itemTextStyles = css({
-  padding: '8px 0',
-});
-const hrStyles = css({
-  padding: '12px 0',
-  textOverflow: 'ellipsis',
-  transform: 'translateX(-15px)',
-  width: 'calc(100% + 30px)',
-  hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderSubdued')}`,
-  },
-});
-export interface Section {
-  id: string;
-  color: string;
-  name: string;
-}
-
-interface SectionRecord {
-  name: string;
-  color: string;
-  workspaceId: string;
-}
+import { SectionItem } from '../SectionItem/SectionItem';
+import * as Styled from './styles';
+import { NavigationList } from '../NavigationList/NavigationList';
+import { NavigationItem } from '../NavigationItem/NavigationItem';
+import { Section, SectionRecord, WorkspaceMeta } from 'libs/ui/src/types';
 
 interface WorkspaceNavigationProps {
+  readonly activeWorkspace: WorkspaceMeta;
+  readonly showAdminSettings: boolean;
   readonly onDeleteSection: (sectionId: string) => void;
   readonly onCreateSection: (
     record: SectionRecord
@@ -84,39 +50,15 @@ interface WorkspaceNavigationProps {
   readonly onUpdateSection: (
     record: SectionRecord & { sectionId: string }
   ) => Promise<any>;
-  readonly activeWorkspace: {
-    id: string;
-    sections: Section[];
-    isPremium?: boolean | null;
-  };
-  readonly showFeedback?: () => void;
-  readonly enableSettingsAndMembers?: boolean;
+  readonly onShowFeedback: () => void;
 }
-
-const NavSpacer = () => (
-  <div
-    css={{
-      flex: 1,
-      [smallScreenQuery]: {
-        flex: 0,
-        minHeight: '24px',
-      },
-    }}
-  />
-);
-const NavDivider = () => (
-  <div role="presentation" css={hrStyles}>
-    <Divider />
-  </div>
-);
-
 export const WorkspaceNavigation = ({
   activeWorkspace,
   onDeleteSection,
   onCreateSection,
   onUpdateSection,
-  enableSettingsAndMembers = false,
-  showFeedback,
+  showAdminSettings = false,
+  onShowFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
   const activeWorkspaceRoute = workspaces({}).workspace({
     workspaceId: activeWorkspace.id,
@@ -125,13 +67,6 @@ export const WorkspaceNavigation = ({
   const { sections } = activeWorkspace;
 
   const navigate = useNavigate();
-  const { '*': maybeWorkspaceFolder } = useParams();
-  const isArchivePage = maybeWorkspaceFolder === 'archived';
-  const isSharedPage = maybeWorkspaceFolder === 'shared';
-
-  const isHomePage = !isArchivePage && !isSharedPage;
-
-  const sectionsEnabled = !isArchivePage;
 
   const [sectionStore, setSectionStore] = useState({
     name: 'My Section',
@@ -141,332 +76,282 @@ export const WorkspaceNavigation = ({
 
   const [openMenu, setOpenMenu] = useState(false);
   const [openRenameMenu, setOpenRenameMenu] = useState(false);
-  const ref = useActiveElement(() => {
-    setOpenMenu(false);
-  });
 
   const location = useLocation();
   const clientEvent = useContext(ClientEventsContext);
 
-  const { customerPortalLink, paymentLink } = useStripeLinks(activeWorkspace);
+  const { customerPortalLink } = useStripeLinks(activeWorkspace);
 
   return (
-    <nav css={workspaceNavContainerStyles}>
-      {enableSettingsAndMembers && (
-        <>
-          <NavigationList key={'workspace-nav-SM'}>
-            <NavigationItem
-              href={activeWorkspaceRoute.members({}).$}
-              isActive={isSharedPage}
-              icon={<Users />}
-            >
-              <span data-testid="manage-workspace-members" css={itemTextStyles}>
-                Manage members
-              </span>
-            </NavigationItem>
-          </NavigationList>
-
-          {paymentLink && (
-            <NavigationList key={'workspace-nav-PR'}>
+    <Styled.Container>
+      <NavigationList>
+        {!activeWorkspace.isPremium && (
+          <NavigationItem
+            href={activeWorkspaceRoute.members({}).$}
+            key="workspace-upgrade-pro"
+          >
+            <Styled.ItemWrapper data-testid="workspace_upgrade_pro">
+              <Styled.IconWrapper>
+                <DeciBoxes />
+              </Styled.IconWrapper>
+              <Styled.TextWrapper>Upgrade to Pro</Styled.TextWrapper>
+            </Styled.ItemWrapper>
+          </NavigationItem>
+        )}
+        {showAdminSettings && (
+          <NavigationItem
+            key="settings-and-members"
+            items={[
               <NavigationItem
-                icon={<DeciBoxes />}
                 href={activeWorkspaceRoute.members({}).$}
+                key="manage-workspace-members"
               >
-                <span css={itemTextStyles} data-testid="workspace_upgrade_pro">
-                  Upgrade to Pro
-                </span>
-              </NavigationItem>
-            </NavigationList>
-          )}
-
-          {customerPortalLink && (
-            <NavigationList key={'workspace-nav-CP'}>
-              <NavigationItem icon={<DollarCircle />} href={customerPortalLink}>
-                <span css={itemTextStyles}>Billing settings</span>
-              </NavigationItem>
-            </NavigationList>
-          )}
-
-          <NavigationList key={'workspace-nav-ST'}>
-            <NavigationItem
-              href={activeWorkspaceRoute.edit({}).$}
-              isActive={isSharedPage}
-              icon={<Gear />}
-            >
-              <span css={itemTextStyles}>Workspace settings</span>
-            </NavigationItem>
-          </NavigationList>
-
-          {
-            <NavigationList key={'workspace-nav-DC'}>
+                <Styled.ItemWrapper data-testid="manage-workspace-members">
+                  <Styled.IconWrapper>
+                    <Users />
+                  </Styled.IconWrapper>
+                  <Styled.TextWrapper>Manage members</Styled.TextWrapper>
+                </Styled.ItemWrapper>
+              </NavigationItem>,
+              activeWorkspace.isPremium && customerPortalLink && (
+                <NavigationItem
+                  href={customerPortalLink}
+                  key="billing-settings"
+                >
+                  <Styled.ItemWrapper data-testid="billing-settings">
+                    <Styled.IconWrapper>
+                      <DollarCircle />
+                    </Styled.IconWrapper>
+                    <Styled.TextWrapper>Billing settings</Styled.TextWrapper>
+                  </Styled.ItemWrapper>
+                </NavigationItem>
+              ),
               <NavigationItem
-                key={'folder-0'}
-                href={activeWorkspaceRoute.connections({}).codeSecrets({}).$}
-                isActive={isSharedPage}
-                icon={<Key />}
+                href={activeWorkspaceRoute.edit({}).$}
+                key="workspace-settings"
               >
-                <span css={itemTextStyles}>Data Connections</span>
-              </NavigationItem>
-            </NavigationList>
-          }
+                <Styled.ItemWrapper>
+                  <Styled.IconWrapper>
+                    <Gear />
+                  </Styled.IconWrapper>
+                  <Styled.TextWrapper>Workspace settings</Styled.TextWrapper>
+                </Styled.ItemWrapper>
+              </NavigationItem>,
+              <NavigationItem
+                href={activeWorkspaceRoute.connections({}).codeSecrets({}).$}
+                key="data-connections"
+              >
+                <Styled.ItemWrapper>
+                  <Styled.IconWrapper>
+                    <Key />
+                  </Styled.IconWrapper>
+                  <Styled.TextWrapper>Data connections</Styled.TextWrapper>
+                </Styled.ItemWrapper>
+              </NavigationItem>,
+            ]}
+          >
+            <Styled.ItemWrapper data-testid="settings-and-members">
+              <Styled.IconWrapper>
+                <Gear />
+              </Styled.IconWrapper>
+              <Styled.TextWrapper>Settings and members</Styled.TextWrapper>
+            </Styled.ItemWrapper>
+          </NavigationItem>
+        )}
 
-          <NavDivider />
-        </>
-      )}
-
-      <NavigationList key={'workspace-nav-0'}>
         <NavigationItem
-          key={'folder-0'}
           href={activeWorkspaceRoute.$}
-          isActive={isHomePage}
-          icon={<Home />}
-        >
-          <span
-            css={[itemTextStyles, isHomePage && { color: cssVar('textTitle') }]}
-            data-testid="my-notebooks-button"
-          >
-            My Notebooks
-          </span>
-        </NavigationItem>
-      </NavigationList>
-      {sectionsEnabled
-        ? [
-            <NavigationList
-              wrapperStyles={
-                // see why below
-                css([
-                  { paddingTop: 6 },
-                  sections.length > 5 && {
-                    overflow: 'hidden',
-
-                    height: '185px', // about five items
-                  },
-                  deciOverflowYStyles,
-                ])
-              }
-              key={'sections-list'}
+          key="notebooks"
+          items={[
+            sections.map((section) => {
+              const selected =
+                location.pathname ===
+                activeWorkspaceRoute.section({
+                  sectionId: section.id,
+                }).$;
+              return (
+                <SectionItem
+                  href={
+                    activeWorkspaceRoute.section({
+                      sectionId: section.id,
+                    }).$
+                  }
+                  dndInfo={{
+                    target: DNDItemTypes.ICON,
+                    id: section.id,
+                  }}
+                  isActive={selected}
+                  color={
+                    hexToOpaqueColor(section.color) ||
+                    colorSwatches.Catskill.base
+                  }
+                  key={`section-item-${section.id}`}
+                  MenuComponent={
+                    selected ? (
+                      <MenuList
+                        root
+                        dropdown
+                        align="start"
+                        side="bottom"
+                        trigger={
+                          <Styled.IconWrapper as="button" color={section.color}>
+                            <Ellipsis />
+                          </Styled.IconWrapper>
+                        }
+                      >
+                        <MenuItem
+                          key={`menu-item-rename-${section.id}`}
+                          onSelect={() => {
+                            const updateStore = {
+                              name: section.name,
+                              id: section.id,
+                              color: 'Malibu' as AvailableSwatchColor,
+                            };
+                            const colorName = hexBaseSwatches[section.color];
+                            if (swatchNames.includes(colorName))
+                              updateStore.color = colorName;
+                            setSectionStore(updateStore);
+                            setOpenRenameMenu(!openRenameMenu);
+                          }}
+                        >
+                          <div css={{ minWidth: '132px' }}>Edit</div>
+                        </MenuItem>
+                        <MenuItem
+                          key={`menu-item-delete-${section.id}`}
+                          onSelect={() => onDeleteSection(section.id)}
+                        >
+                          <div css={{ minWidth: '132px' }}>Delete</div>
+                        </MenuItem>
+                      </MenuList>
+                    ) : undefined
+                  }
+                >
+                  <Styled.ItemWrapper>
+                    <Styled.IconWrapper color={section.color}>
+                      <Folder />
+                    </Styled.IconWrapper>
+                    <Styled.TextWrapper>{section.name}</Styled.TextWrapper>
+                  </Styled.ItemWrapper>
+                </SectionItem>
+              );
+            }),
+            <NavigationItem
+              onClick={() => setOpenMenu(!openMenu)}
+              isActive={openMenu}
+              key="new-folder"
             >
-              {sections.map((section) => {
-                const selected =
-                  location.pathname ===
-                  activeWorkspaceRoute.section({
-                    sectionId: section.id,
-                  }).$;
-                return (
-                  <NavigationItem
-                    key={`section-${section.id}`}
-                    dndInfo={{ target: DNDItemTypes.ICON, id: section.id }}
-                    href={
-                      selected
-                        ? activeWorkspaceRoute.$
-                        : activeWorkspaceRoute.section({
-                            sectionId: section.id,
-                          }).$
-                    }
-                    iconStyles={css({ width: 12, height: 12 })}
-                    wrapperStyles={css({
-                      'div[aria-label="lefty"]': { paddingLeft: 16 },
-                    })}
-                    isActive={selected}
-                    icon={
-                      selected ? (
-                        <Dot
-                          color={
-                            hexToOpaqueColor(section.color) ||
-                            colorSwatches.Catskill.base
-                          }
-                          size={12}
-                          variant
-                          square
-                          drunkMode
-                        />
-                      ) : (
-                        <Dot
-                          color={
-                            hexToOpaqueColor(section.color) ||
-                            colorSwatches.Catskill.base
-                          }
-                          size={12}
-                          variant
-                          square
-                        />
-                      )
-                    }
-                    backgroundColor={
-                      hexToOpaqueColor(section.color) ||
-                      colorSwatches.Catskill.base
-                    }
-                    menuItems={[
-                      <MenuItem
-                        key={`menu-item-rename-${section.id}`}
-                        onSelect={() => {
-                          const updateStore = {
-                            name: section.name,
-                            id: section.id,
-                            color: 'Malibu' as AvailableSwatchColor,
-                          };
-                          const colorName = hexBaseSwatches[section.color];
-                          if (swatchNames.includes(colorName))
-                            updateStore.color = colorName;
-                          setSectionStore(updateStore);
-                          setOpenRenameMenu(!openRenameMenu);
-                        }}
-                      >
-                        <div css={{ minWidth: '132px' }}>Edit</div>
-                      </MenuItem>,
-                      <MenuItem
-                        key={`menu-item-delete-${section.id}`}
-                        onSelect={() => onDeleteSection(section.id)}
-                      >
-                        <div css={{ minWidth: '132px' }}>Delete</div>
-                      </MenuItem>,
-                    ]}
-                  >
-                    <span css={itemTextStyles}>{section.name}</span>
-                  </NavigationItem>
-                );
-              })}
-            </NavigationList>,
-            <div role="presentation" key="sections-part-0">
-              <span ref={ref}>
-                <NavigationList key={'sections-new'}>
-                  <NavigationItem
-                    key={'section-new'}
-                    wrapperStyles={css({
-                      'div[aria-label="lefty"]': { paddingLeft: 16 },
-                      'button div': {
-                        color: cssVar('textDisabled'),
-                      },
-                      'button div span svg path': {
-                        stroke: cssVar('textDisabled'),
-                      },
-                    })}
-                    iconStyles={css({ width: 12, height: 12 })}
-                    onClick={() => setOpenMenu(!openMenu)}
-                    icon={<Plus />}
-                  >
-                    <span css={itemTextStyles} data-testid="new-section-button">
-                      New Section
-                    </span>
-                  </NavigationItem>
-                </NavigationList>
-                {openMenu && (
-                  <CreateOrEditSectionModal
-                    onClose={() => setOpenMenu(!openMenu)}
-                    onSubmit={(sectionName: string, color: OpaqueColor) => {
-                      onCreateSection({
-                        workspaceId: activeWorkspace.id,
-                        name: sectionName,
-                        color: opaqueColorToHex(color),
-                      })
-                        .then((res) => {
-                          if (res) {
-                            if (res.addSectionToWorkspace?.id) {
-                              navigate(
-                                activeWorkspaceRoute.section({
-                                  sectionId: res.addSectionToWorkspace.id,
-                                }).$
-                              );
-                            }
-                          } else {
-                            console.error('Failed to create section.', res);
-                          }
-                        })
-                        .catch((err) => {
-                          console.error(
-                            'Failed to create section. Error:',
-                            err
-                          );
-                        });
-                    }}
-                  />
-                )}
-              </span>
-            </div>,
-          ]
-        : null}
-
-      <NavigationList key={'workspace-nav-01'}>
-        <NavigationItem
-          key={'archive-3'}
-          icon={<Archive />}
-          href={activeWorkspaceRoute.archived({}).$}
-          isActive={isArchivePage}
+              <Styled.ItemWrapper data-testid="new-section-button" isButton>
+                <Styled.IconWrapper>
+                  <Plus />
+                </Styled.IconWrapper>
+                <Styled.TextWrapper>New folder</Styled.TextWrapper>
+              </Styled.ItemWrapper>
+            </NavigationItem>,
+          ]}
         >
-          <span
-            css={[
-              itemTextStyles,
-              isArchivePage && { color: cssVar('textTitle') },
-            ]}
-          >
-            Archived
-          </span>
+          <Styled.ItemWrapper data-testid="my-notebooks">
+            <Styled.IconWrapper>
+              <Home />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>My notebooks</Styled.TextWrapper>
+          </Styled.ItemWrapper>
         </NavigationItem>
-      </NavigationList>
 
-      <NavSpacer />
-
-      <NavDivider />
-
-      <NavigationList key={'workspace-nav-S'}>
         <NavigationItem
-          key={'folder-0'}
           href={activeWorkspaceRoute.shared({}).$}
-          isActive={isSharedPage}
-          icon={<Users />}
+          key="shared-with-me"
         >
-          <span
-            css={[
-              itemTextStyles,
-              isSharedPage && { color: cssVar('textTitle') },
-            ]}
-          >
-            Shared with me
-          </span>
+          <Styled.ItemWrapper>
+            <Styled.IconWrapper>
+              <Users />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>Shared with me</Styled.TextWrapper>
+          </Styled.ItemWrapper>
+        </NavigationItem>
+        <NavigationItem
+          href={activeWorkspaceRoute.archived({}).$}
+          key="archieved"
+        >
+          <Styled.ItemWrapper data-testid="my-archive">
+            <Styled.IconWrapper>
+              <Archive />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>Archived</Styled.TextWrapper>
+          </Styled.ItemWrapper>
         </NavigationItem>
       </NavigationList>
-
-      <div key="div-empty-grid-spaces" role="presentation" />
-      <NavigationList key={'navigation-footer-0'}>
+      <NavigationList>
         <NavigationItem
           href={'http://www.decipad.com/templates'}
-          key={'navfoot-docs-0'}
-          icon={<Sparkles />}
+          key="templates"
         >
-          <span css={itemTextStyles}>
-            Templates <ExternalHrefIcon />
-          </span>
+          <Styled.ItemWrapper>
+            <Styled.IconWrapper>
+              <Sparkles />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>
+              Templates <ArrowDiagonalTopRight />
+            </Styled.TextWrapper>
+          </Styled.ItemWrapper>
         </NavigationItem>
-      </NavigationList>
 
-      <NavDivider />
-
-      <NavigationList key={'settings-0'}>
-        <NavigationItem
-          href={docs({}).$}
-          key={'navfoot-docs-0'}
-          icon={<Docs />}
-        >
-          <span css={itemTextStyles}>
-            Docs & Examples <ExternalHrefIcon />
-          </span>
+        <NavigationItem href={docs({}).$} key="docs-and-examples">
+          <Styled.ItemWrapper>
+            <Styled.IconWrapper>
+              <Docs />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>
+              Docs & Examples <ArrowDiagonalTopRight />
+            </Styled.TextWrapper>
+          </Styled.ItemWrapper>
         </NavigationItem>
         <NavigationItem
-          key={'navfoot-feedback-1'}
-          icon={<Chat />}
+          key={'feedback'}
           onClick={() => {
             clientEvent({
               type: 'action',
               action: 'send feedback',
             });
-            showFeedback?.();
+            onShowFeedback();
           }}
         >
-          <span css={itemTextStyles}>Feedback</span>
+          <Styled.ItemWrapper>
+            <Styled.IconWrapper>
+              <Chat />
+            </Styled.IconWrapper>
+            <Styled.TextWrapper>Feedback</Styled.TextWrapper>
+          </Styled.ItemWrapper>
         </NavigationItem>
       </NavigationList>
-      <NavDivider />
-      <WorkspaceAccount />
+
+      {openMenu && (
+        <CreateOrEditSectionModal
+          onClose={() => setOpenMenu(!openMenu)}
+          onSubmit={(sectionName: string, color: OpaqueColor) => {
+            onCreateSection({
+              workspaceId: activeWorkspace.id,
+              name: sectionName,
+              color: opaqueColorToHex(color),
+            })
+              .then((res) => {
+                if (res) {
+                  if (res.addSectionToWorkspace?.id) {
+                    navigate(
+                      activeWorkspaceRoute.section({
+                        sectionId: res.addSectionToWorkspace.id,
+                      }).$
+                    );
+                  }
+                } else {
+                  console.error('Failed to create folder.', res);
+                }
+              })
+              .catch((err) => {
+                console.error('Failed to create folder. Error:', err);
+              });
+          }}
+        />
+      )}
 
       {openRenameMenu && (
         <div key="div-section-modal" role="presentation">
@@ -490,16 +375,16 @@ export const WorkspaceNavigation = ({
                       }).$
                     );
                   } else {
-                    console.error('Failed to rename section.', res);
+                    console.error('Failed to rename folder.', res);
                   }
                 })
                 .catch((err) => {
-                  console.error('Failed to rename section. Error:', err);
+                  console.error('Failed to rename folder. Error:', err);
                 });
             }}
           />
         </div>
       )}
-    </nav>
+    </Styled.Container>
   );
 };

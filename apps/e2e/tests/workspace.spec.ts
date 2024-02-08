@@ -22,7 +22,7 @@ test('workspace sections', async ({ randomFreeUser }) => {
 
     // Navigating back to My Notebooks
     await expect(async () => {
-      await page.getByTestId('my-notebooks-button').click();
+      await page.getByTestId('my-notebooks').click();
       await expect(page.getByText('No documents to list')).toBeHidden();
     }).toPass();
   });
@@ -54,7 +54,7 @@ test('workspace sections', async ({ randomFreeUser }) => {
 
     // check standard view showcases notebook labels
     await expect(async () => {
-      await page.getByTestId('my-notebooks-button').click();
+      await page.getByTestId('my-notebooks').click();
       await workspace.checkLabel('Drag and Drop Test');
     }).toPass();
   });
@@ -297,6 +297,7 @@ test('workspace permissions', async ({
 
   await test.step('standard member checks', async () => {
     await anotherRandomFreeUser.goToWorkspace(premiumWorkspaceId);
+    await anotherRandomFreeUser.workspace.openWorkspaceSettingsSection();
     await expect(
       anotherRandomFreeUser.page.getByTestId('manage-workspace-members')
     ).toBeVisible();

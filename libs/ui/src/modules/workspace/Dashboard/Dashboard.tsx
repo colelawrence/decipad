@@ -1,74 +1,73 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, smallScreenQuery, smallestDesktop } from '../../../primitives';
+import { cssVar, smallScreenQuery } from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 
-const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
 const styles = css({
   // Do not scroll as a whole. The notebook list will scroll individually.
   height: 0,
   minHeight: '100%',
-
   position: 'relative',
   display: 'grid',
-  gridTemplate: `
-    "sidebar      " max-content
-    "topbar       " max-content
-    "notebook-list" minmax(200px, auto)
-    /1fr
+  padding: 16,
+  gap: 16,
+  gridTemplateColumns: '256px auto',
+  gridTemplateRows: 'auto',
+  gridTemplateAreas: `
+    'sidebar main'
+    'sidebar main'
   `,
-  [crossBarsQuery]: {
-    gridTemplate: `
-      "sidebar topbar       " auto
-      "sidebar notebook-list" 1fr
-      /347px   1fr
-    `,
-  },
+  backgroundColor: cssVar('backgroundDefault'),
 
   [smallScreenQuery]: {
-    header: {
-      display: 'none',
-    },
-  },
-
-  '> *': {
-    display: 'grid',
-  },
-});
-const sidebarStyles = css({
-  [crossBarsQuery]: {
-    borderRight: `1px solid ${cssVar('borderSubdued')}`,
+    padding: 0,
+    gap: 0,
+    gridTemplateColumns: 'auto',
+    gridTemplateRows: 'auto auto',
+    gridTemplateAreas: `
+      'main main'
+      'main main'
+    `,
   },
 });
 
-const listStyles = css(
+const mainStyles = css(
   {
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+    backgroundColor: cssVar('backgroundMain'),
+    borderRadius: 16,
   },
   deciOverflowYStyles
 );
 
+const sidebarStyles = css({
+  [smallScreenQuery]: {
+    position: 'fixed',
+    left: 16,
+    top: 16,
+  },
+});
+
 interface DashboardProps {
-  readonly sidebar: ReactNode;
-  readonly topbar: ReactNode;
-  readonly notebookList: ReactNode;
+  readonly SidebarComponent: ReactNode;
+  // We'll need this in future, but right now we pass null
+  readonly MetaComponent: ReactNode;
+  readonly children: ReactNode | ReactNode[];
 }
 
 export const Dashboard = ({
-  sidebar,
-  topbar,
-  notebookList,
+  SidebarComponent,
+  children,
 }: DashboardProps): ReturnType<FC> => {
   return (
-    <div css={styles} data-testid="dashboard">
-      <main css={[{ gridArea: 'notebook-list' }, listStyles]}>
-        {notebookList}
-      </main>
-      <header css={{ gridArea: 'topbar' }}>{topbar}</header>
-      <aside css={[{ gridArea: 'sidebar' }, sidebarStyles]}>{sidebar}</aside>
+    <div css={styles} data-testid="dashboard" vaul-drawer-wrapper="">
+      <nav css={[{ gridArea: 'sidebar' }, sidebarStyles]}>
+        {SidebarComponent}
+      </nav>
+      <main css={[{ gridArea: 'main' }, mainStyles]}>{children}</main>
     </div>
   );
 };

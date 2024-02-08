@@ -16,7 +16,7 @@ export { LiveQueryQuery } from './LiveQueryQuery/LiveQueryQuery';
 export { MenuList } from './MenuList/MenuList';
 export { Modal, modalDialogStyles } from './Modal/Modal';
 export { ModalForm } from './ModalForm/ModalForm';
-export { NavigationList } from '../../modules/workspace/NavigationList/NavigationList';
+
 export { NotebookIcon } from './NotebookIcon/NotebookIcon';
 export { PositiveIntegerInput } from './PositiveIntegerInput/PositiveIntegerInput';
 export { PlaygroundTopBar } from './PlaygroundTopBar/PlaygroundTopBar';

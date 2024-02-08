@@ -25,6 +25,10 @@ export class Workspace {
   baseWorkspaceID: string;
   readonly notebookLabel: Locator;
   readonly modalCloseButton: Locator;
+  readonly folderSection: Locator;
+  readonly newFolderButton: Locator;
+  readonly settingsSection: Locator;
+  readonly manageMembersButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -36,6 +40,12 @@ export class Workspace {
     this.baseWorkspaceID = '';
     this.notebookLabel = page.getByTestId('notebook-section-tag');
     this.modalCloseButton = page.getByTestId('closable-modal');
+    this.folderSection = this.page.getByTestId('my-notebooks');
+    this.newFolderButton = this.page.getByTestId('new-section-button');
+    this.manageMembersButton = this.page.getByTestId(
+      'manage-workspace-members'
+    );
+    this.settingsSection = this.page.getByTestId('settings-and-members');
   }
 
   /**
@@ -112,10 +122,11 @@ export class Workspace {
       create: true,
     }
   ) {
+    await this.openFolderSection();
     await this.page
       .getByTestId('new-section-button')
       .click({ timeout: LONG_TIMEOUT });
-    await this.page.getByPlaceholder('My section').fill(name);
+    await this.page.getByPlaceholder('My folder').fill(name);
     if (options.colourIndex && options.colourIndex > 1) {
       await this.page
         .getByTestId('color-section-button')
@@ -123,7 +134,7 @@ export class Workspace {
         .click();
     }
     if (options.create === false) return;
-    await this.page.getByRole('button', { name: 'Create Section' }).click();
+    await this.page.getByRole('button', { name: 'Create Folder' }).click();
     await expect(this.page.getByText(name)).toBeVisible();
   }
 
@@ -153,6 +164,7 @@ export class Workspace {
    * ```
    */
   async moveNotebookToSection(notebookName: string, sectionName: string) {
+    await this.openFolderSection();
     await this.page
       .getByTestId('notebook-list-item')
       .getByText(notebookName)
@@ -163,14 +175,38 @@ export class Workspace {
   }
 
   /**
+   * Open Folder Section
+   * */
+  async openFolderSection() {
+    // open folder sections if they are closed
+    if (await this.newFolderButton.isHidden()) {
+      await this.folderSection.click();
+    }
+  }
+
+  /**
+   * Open Folder Section
+   * */
+  async openWorkspaceSettingsSection() {
+    if (await this.manageMembersButton.isHidden()) {
+      await this.settingsSection.click();
+    }
+  }
+
+  /**
    * Change the active section in workspace
    * @param {string} sectionName - Name of the section to be selected
    */
   async selectSection(sectionName: string) {
+    await this.openFolderSection();
+    await expect(
+      this.page.getByTestId('navigation-list-item').getByText(sectionName)
+    ).toBeVisible();
     await this.page
       .getByTestId('navigation-list-item')
       .getByText(sectionName)
-      .click();
+      // eslint-disable-next-line playwright/no-force-option
+      .click({ force: true });
   }
 
   /**
@@ -258,7 +294,7 @@ export class Workspace {
    * Open archive tab in workspace
    */
   async openArchive() {
-    await this.page.click('aside nav > ul > li a span:has-text("Archived")');
+    await this.page.getByTestId('my-archive').click();
   }
 
   /**
@@ -318,6 +354,8 @@ export class Workspace {
    * @param role - role of user to add
    */
   async addWorkspaceMember(email: string, role: 'Admin' | 'Member' = 'Member') {
+    // open settings section if they are closed
+    await this.openWorkspaceSettingsSection();
     await this.page.getByTestId('manage-workspace-members').click();
     await this.page.locator('input[type="email"]').fill(email);
 

@@ -28,40 +28,6 @@ const overlayStyles = css({
   display: 'grid',
 });
 
-const animationsDialog = css({
-  '@keyframes fadeIn': {
-    from: {
-      opacity: 0,
-      transform: 'scale(0.95)',
-    },
-
-    to: {
-      opacity: 1,
-      transform: 'scale(1)',
-    },
-  },
-
-  animationName: 'fadeIn',
-  animationDuration: '150ms',
-  animationTimingFunction: 'ease-in-out',
-  animationFillMode: 'both',
-});
-
-const animationsOverlay = css({
-  '@keyframes fadeIn': {
-    from: {
-      opacity: 0,
-    },
-    to: {
-      opacity: 1,
-    },
-  },
-
-  animationName: 'fadeIn',
-  animationDuration: '0.3s',
-  animationFillMode: 'both',
-});
-
 export const modalDialogStyles = css(
   {
     gridArea: '1 / 1',
@@ -92,8 +58,8 @@ export const Modal = ({
   testId,
   ...props
 }: ModalProps): ReturnType<React.FC> => {
-  const animatedDialog = css(animationsDialog, modalDialogStyles);
-  const animatedOverlay = css(animationsOverlay, overlayStyles);
+  const animatedDialog = css(modalDialogStyles);
+  const animatedOverlay = css(overlayStyles);
 
   return (
     <div css={pageCoverStyles} data-testid={testId}>

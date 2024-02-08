@@ -3,11 +3,15 @@ import { ComponentProps } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { WorkspaceItem } from './WorkspaceItem';
+import { noop } from '@decipad/utils';
 
 const props: ComponentProps<typeof WorkspaceItem> = {
   id: '42',
   name: 'Some Workspace',
   membersCount: 2,
+  isActive: true,
+  isPremium: false,
+  onSelect: noop,
 };
 
 it('shows the workspace name', () => {
@@ -25,7 +29,7 @@ it('shows a workspace private if there is less than two members', () => {
       <WorkspaceItem {...props} membersCount={1} />
     </DndProvider>
   );
-  expect(screen.getByText(`Private workspace`)).toBeVisible();
+  expect(screen.getByText(`Private`)).toBeVisible();
 });
 
 it.each([

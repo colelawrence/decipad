@@ -4,8 +4,9 @@ import { mockConsoleError } from '@decipad/testutils';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';
 import { FC, PropsWithChildren } from 'react';
-import { NavigationItem } from '../../../shared/atoms';
+
 import { NavigationList } from './NavigationList';
+import { NavigationItem } from '../NavigationItem/NavigationItem';
 
 const WithProviders: FC<PropsWithChildren> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>{children}</DndProvider>
@@ -38,31 +39,4 @@ it('renders each child as a list item', () => {
   expect(
     screen.getAllByRole('listitem').map(({ textContent }) => textContent)
   ).toEqual(['Item 1', 'Item 2']);
-});
-
-it.each([
-  ['text', 'asdf'],
-  ['fragment', <>asdf</>],
-  ['<li>', <li />],
-])('does not allow %s children', (_, children) => {
-  expect(() =>
-    render(
-      <WithProviders>
-        <NavigationList>{children}</NavigationList>
-      </WithProviders>
-    )
-  ).toThrow(/child/i);
-});
-it.each([
-  ['undefined', undefined],
-  ['null', null],
-  ['boolean', false],
-])('allows %s children', (_, children) => {
-  expect(() =>
-    render(
-      <WithProviders>
-        <NavigationList>{children}</NavigationList>
-      </WithProviders>
-    )
-  ).not.toThrow();
 });

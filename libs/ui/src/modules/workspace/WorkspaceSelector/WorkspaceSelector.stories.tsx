@@ -6,9 +6,20 @@ export default {
   component: WorkspaceSelector,
 } as Meta;
 
-export const Normal: StoryFn = () => (
+export const Free: StoryFn = () => (
   <WorkspaceSelector
-    activeWorkspace={{ name: 'Active Workspace', id: '42', membersCount: 1 }}
-    allWorkspaces={[{ id: '0', name: 'Other Workspace', membersCount: 2 }]}
+    name="Free Workspace"
+    membersCount={1}
+    isPremium={false}
+    MenuComponent={null}
+  />
+);
+
+export const Premium: StoryFn = () => (
+  <WorkspaceSelector
+    name="Premium Workspace"
+    membersCount={5}
+    isPremium={true}
+    MenuComponent={null}
   />
 );

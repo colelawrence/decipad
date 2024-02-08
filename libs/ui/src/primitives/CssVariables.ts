@@ -53,5 +53,7 @@ export interface CssVariables {
   readonly stateNeutralIconBackground: Property.Color;
   readonly stateNeutralIconOutline: Property.Color;
 
+  readonly focusOutline: Property.Color;
+
   readonly editorWidth: string;
 }

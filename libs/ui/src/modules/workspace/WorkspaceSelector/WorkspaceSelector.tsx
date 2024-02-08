@@ -1,106 +1,77 @@
-/* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { ComponentProps, FC } from 'react';
-import { IconButton, Tooltip } from '../../../shared';
-import { Create } from '../../../icons';
-import { WorkspaceItem } from '../WorkspaceItem/WorkspaceItem';
-import { smallScreenQuery } from '../../../primitives';
-import { WorkspaceButtonSelector } from './WorkspaceSelectorButton';
+import { pluralize } from '@decipad/language-utils';
+import { FC, ReactNode, useMemo, useState } from 'react';
+import { Avatar, Tooltip } from '../../../shared/atoms';
+import { Caret } from '../../../icons';
+import * as Popover from '@radix-ui/react-popover';
+import * as Styled from './styles';
 
-interface WorkspaceSelectorProps {
-  readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
-  readonly allWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
-  readonly onCreateWorkspace?: () => void;
-  readonly onClickWorkspace?: (id: string) => void;
-}
-
-export const WorkspaceSelector = ({
-  activeWorkspace,
-  allWorkspaces,
-  onCreateWorkspace = noop,
-  onClickWorkspace = noop,
-}: WorkspaceSelectorProps): ReturnType<FC> => {
-  return (
-    <div css={workspaceSelectorStyles}>
-      <div
-        css={{
-          margin: '20px 10.5px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          [smallScreenQuery]: {
-            flexDirection: 'row',
-            margin: '10.5px 20px',
-            width: '100%',
-          },
-        }}
-      >
-        {allWorkspaces.map((thisWorkspace, i) => (
-          <div key={i} css={workspaceAvatars}>
-            <Tooltip
-              side="right"
-              variant="small"
-              hoverOnly
-              trigger={
-                <WorkspaceButtonSelector
-                  activeWorkspace={activeWorkspace}
-                  thisWorkspace={thisWorkspace}
-                  onClickWorkspace={onClickWorkspace}
-                ></WorkspaceButtonSelector>
-              }
-            >
-              {thisWorkspace.name}
-            </Tooltip>
-          </div>
-        ))}
-        <Tooltip
-          side="right"
-          variant="small"
-          trigger={
-            <div
-              css={createWorkspaceButton}
-              data-testid="create-workspace-button"
-            >
-              <IconButton roundedSquare onClick={onCreateWorkspace}>
-                <Create />
-              </IconButton>
-            </div>
-          }
-        >
-          Create a new workspace
-        </Tooltip>
-      </div>
-    </div>
-  );
+type WorkspaceSelectorProps = {
+  readonly name: string;
+  readonly membersCount: number;
+  readonly isPremium: boolean;
+  readonly MenuComponent: ReactNode;
+  readonly plan?: string | null;
 };
 
-const workspaceSelectorStyles = css({
-  width: '55px',
-  overflowX: 'hidden',
-  display: 'inline-flex',
-  flexShrink: 0,
-  flexDirection: 'column',
-  [smallScreenQuery]: {
-    width: '100%',
-    flexDirection: 'row',
-    height: '55px',
-  },
-});
+export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
+  name,
+  membersCount,
+  isPremium,
+  plan,
+  MenuComponent,
+}): ReturnType<FC> => {
+  const [open, setOpen] = useState(false);
 
-const workspaceAvatars = css({
-  cursor: 'pointer',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+  // Show tooltip on truncated name
+  const isLongName = useMemo(() => name.length > 20, [name]);
 
-const createWorkspaceButton = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  '& button': {
-    width: '32px',
-    height: '32px',
-  },
-});
+  return (
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Popover.Trigger asChild>
+        <Styled.SelectorButton
+          isSelected={open}
+          animate={open ? { scale: 0.95 } : { scale: 1 }}
+          data-testid="workspace-selector-button"
+        >
+          <Styled.Avatar>
+            <Avatar roundedSquare useSecondLetter={false} name={name} />
+          </Styled.Avatar>
+          <Styled.Profile>
+            {isLongName ? (
+              <Tooltip trigger={<Styled.Name>{name}</Styled.Name>}>
+                {name}
+              </Tooltip>
+            ) : (
+              <Styled.Name>{name}</Styled.Name>
+            )}
+            <Styled.Description>
+              {membersCount === 1
+                ? 'Private'
+                : `${membersCount} ${pluralize('member', membersCount)}`}
+              {plan && (
+                <Styled.Badge isPremium={isPremium}>{plan}</Styled.Badge>
+              )}
+            </Styled.Description>
+          </Styled.Profile>
+
+          <Styled.ToggleButton>
+            {open ? <Caret variant="up" /> : <Caret variant="down" />}
+          </Styled.ToggleButton>
+        </Styled.SelectorButton>
+      </Popover.Trigger>
+      <Popover.Portal>
+        {open && (
+          <Popover.Content sideOffset={8} forceMount asChild>
+            <Styled.MenuWrapper
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 0, opacity: 0 }}
+            >
+              {MenuComponent}
+            </Styled.MenuWrapper>
+          </Popover.Content>
+        )}
+      </Popover.Portal>
+    </Popover.Root>
+  );
+};
