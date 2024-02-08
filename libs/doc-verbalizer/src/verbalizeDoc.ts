@@ -8,6 +8,7 @@ import {
   ELEMENT_TAB,
   RootDocument,
   TabElement,
+  ElementKind,
 } from '../../editor-types/src';
 import { getVerbalizer, getVarnameToId } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
@@ -99,12 +100,27 @@ export const verbalizeElement = (
 
 export const verbalizeDoc = (
   doc: RootDocument,
-  computer: RemoteComputer
+  computer: RemoteComputer,
+  filterElementTypes?: Set<ElementKind>
 ): DocumentVerbalization => {
-  return {
+  const verbalizedObject = {
     document: doc,
     verbalized: doc.children.flatMap((child) =>
       verbalizeElement(child, computer, new Set())
+    ),
+  };
+
+  if (filterElementTypes == null) {
+    return verbalizedObject;
+  }
+
+  filterElementTypes.add('columns');
+  filterElementTypes.add('tab');
+
+  return {
+    ...verbalizedObject,
+    verbalized: verbalizedObject.verbalized.filter((el) =>
+      filterElementTypes.has(el.element.type)
     ),
   };
 };

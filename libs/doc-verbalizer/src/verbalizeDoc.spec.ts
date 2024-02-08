@@ -4,7 +4,7 @@ import textOnly from './__fixtures__/text-only.json';
 import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
 import mostComponents from './__fixtures__/most-components.json';
-import { RootDocument } from '@decipad/editor-types';
+import { ElementKind, RootDocument } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('verbalizeDoc', () => {
@@ -407,4 +407,46 @@ describe('verbalizeDoc', () => {
       ]
     `);
   });
+});
+
+it('can filter elements paragraph elements', () => {
+  const doc = uiComponents as RootDocument;
+
+  const elementType = new Set<ElementKind>(['p', 'tab', 'columns']);
+
+  const { verbalized } = verbalizeDoc(doc, getRemoteComputer(), elementType);
+
+  expect(
+    verbalized.filter((el) => !elementType.has(el.element.type))
+  ).toHaveLength(0);
+
+  expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
+    [
+      "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+      "It looks like I could make a profit and some side income based on my assumptions below. Feedback welcome!",
+    ]
+  `);
+});
+
+it('can filter for code lines', () => {
+  const doc = someCode as RootDocument;
+
+  const elementType = new Set<ElementKind>(['code_line_v2']);
+
+  const { verbalized } = verbalizeDoc(doc, getRemoteComputer(), elementType);
+
+  expect(
+    verbalized.filter((el) => !elementType.has(el.element.type))
+  ).toHaveLength(0);
+
+  expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
+    [
+      "\`\`\`deci
+    VarName1 = 3 / 4
+    \`\`\`",
+      "\`\`\`deci
+    VarName2 = cos(PI)
+    \`\`\`",
+    ]
+  `);
 });
