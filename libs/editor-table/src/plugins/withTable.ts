@@ -11,11 +11,7 @@ import {
   TableHeaderRowElement,
 } from '@decipad/editor-types';
 import { isElement, someNode, TDescendant, Value } from '@udecode/plate-common';
-import {
-  withDeleteTable,
-  withGetFragmentTable,
-  withSelectionTable,
-} from '@udecode/plate-table';
+import { withDeleteTable, withGetFragmentTable } from '@udecode/plate-table';
 import { createTableCaption } from '../utils/createTableCaption';
 import { withInsertFragmentTable } from './withInsertFragmentTable';
 import { withInsertTextTable } from './withInsertTextTable';
@@ -35,7 +31,6 @@ export const withTable =
     editor = withInsertTextTable<TV>(editor);
     editor = withGetFragmentTable<TV>(editor);
     editor = withInsertFragmentTable<TV>(editor, plugin);
-    editor = withSelectionTable<TV>(editor);
 
     const myEditor = getMyEditor(editor);
     const { insertFragment } = myEditor;
