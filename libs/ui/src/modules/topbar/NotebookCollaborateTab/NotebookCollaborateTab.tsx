@@ -1,9 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { FC, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, InputField } from '../../../shared';
 import { Check, Loading } from '../../../icons';
 import { CollabAccessDropdown } from '../CollabAccessDropdown/CollabAccessDropdown';
@@ -12,6 +10,9 @@ import { cssVar, p14Medium, p14Regular } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { NotebookAccessActionsReturn } from '@decipad/interfaces';
 import { UserAccessMetaFragment } from '@decipad/graphql-client';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { workspaces } from '@decipad/routing';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * The styles for the content rendered without the need for the toggle to be activated. This is also the parent of the toggle component.
@@ -93,12 +94,12 @@ interface NotebookCollaborateTabProps {
  */
 export const NotebookCollaborateTab = ({
   hasPaywall,
+  workspaceId,
   usersWithAccess,
   teamName,
   nrOfTeamMembers = 0,
   manageTeamURL,
   isAdmin,
-  workspaceId,
   notebookId,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
@@ -109,6 +110,7 @@ export const NotebookCollaborateTab = ({
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [permission, setPermission] = useState<PermissionType>('WRITE');
+
   const navigate = useNavigate();
 
   const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
@@ -147,6 +149,34 @@ export const NotebookCollaborateTab = ({
 
   const disabled = hasPaywall || !isAdmin;
 
+  if (hasPaywall && isFlagEnabled('NEW_PAYMENTS')) {
+    return (
+      <div css={innerPopUpStyles}>
+        <div css={titleStyles}>
+          <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
+            {isAdmin
+              ? 'Invite people to collaborate'
+              : 'Invitees of this notebook'}
+          </p>
+          <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
+            To invite users to the notebook you must have a team or enterprise
+            plan.
+          </p>
+        </div>
+
+        <CollabMembersRights
+          usersWithAccess={usersWithAccess}
+          teamName={teamName}
+          manageTeamURL={manageTeamURL}
+          nrOfTeamMembers={nrOfTeamMembers}
+          onRemoveCollaborator={handleRemoveCollaborator}
+          onChangePermission={handleChangePermission}
+          disabled={!isAdmin}
+        />
+      </div>
+    );
+  }
+
   return (
     <div css={innerPopUpStyles}>
       <div css={titleStyles}>
@@ -171,7 +201,6 @@ export const NotebookCollaborateTab = ({
               value={email}
               onChange={setEmail}
               onEnter={handleAddCollaborator}
-              disabled={disabled}
             />
 
             <span data-testid="select-share-permission">
@@ -182,7 +211,6 @@ export const NotebookCollaborateTab = ({
               />
             </span>
           </div>
-
           {hasPaywall ? (
             <Button
               size="extraSlim"

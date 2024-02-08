@@ -1,4 +1,5 @@
 import { env } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 /* istanbul ignore file */
 type WorkspaceTrait = {
@@ -32,6 +33,13 @@ export const useStripeCollaborationRules = (
   const teamExcludingAdmins = usersFromTeam.filter(
     (member) => member.permission !== 'ADMIN'
   );
+
+  if (isFlagEnabled('NEW_PAYMENTS')) {
+    return {
+      canInvite: true,
+      canRemove: true,
+    };
+  }
 
   if (teamExcludingAdmins.length > 0) {
     return {

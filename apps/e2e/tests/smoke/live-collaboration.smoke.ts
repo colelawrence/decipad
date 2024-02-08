@@ -16,6 +16,14 @@ smoketest(
     let notebookJsonUserB = '';
     let notebookJsonUserARevisited = '';
 
+    await smoketest.step('create team workspace', async () => {
+      await userA.goToWorkspace();
+      // New naming of workspace to test stuff.
+      // We need this because free/pro users cannot invite users to notebook.
+      const url = await userA.workspace.newWorkspace('smoke test @n1n.co team');
+      await userA.page.goto(url);
+    });
+
     await smoketest.step(
       'create notebook and invite [userB] to collaborate',
       async () => {

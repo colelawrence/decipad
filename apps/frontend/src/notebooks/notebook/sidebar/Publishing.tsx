@@ -8,7 +8,6 @@ import {
   Publish_State,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
-import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { workspaces } from '@decipad/routing';
 import {
   useNotebookAccessActions,
@@ -19,6 +18,8 @@ import {
   NotebookMetaActionsReturn,
   PublishedVersionState,
 } from '@decipad/interfaces';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { useStripeCollaborationRules } from '@decipad/react-utils';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -145,7 +146,10 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
 
   const notebookName = data?.name ?? 'My Notebook';
   const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
-  const hasPaywall = !canInvite && !isPremiumWorkspace;
+
+  const allowInviting = isFlagEnabled('NEW_PAYMENTS')
+    ? data?.workspace?.plan === 'team' || data?.workspace?.plan === 'enterprise'
+    : data?.workspace?.isPremium || canInvite;
 
   const publishingState =
     localPublish.localPublishState ?? getPublishingState(data);
@@ -155,7 +159,7 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       isPremium={isPremiumWorkspace}
       notebookName={notebookName}
       workspaceId={data?.workspace?.id ?? ''}
-      hasPaywall={hasPaywall}
+      hasPaywall={!allowInviting}
       invitedUsers={data?.access.users}
       nrOfTeamMembers={data?.workspace?.membersCount}
       manageTeamURL={manageTeamURL}

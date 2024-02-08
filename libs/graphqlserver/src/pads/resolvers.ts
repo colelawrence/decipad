@@ -30,7 +30,7 @@ import { movePad } from './movePad';
 import { padResource } from './padResource';
 import { maximumPermissionIn } from 'libs/services/src/authorization/maximum-permission';
 import { notebook } from 'libs/backend-resources/src/resources';
-import {
+import type {
   Pad,
   PagedPadResult,
   PermissionType,
@@ -41,8 +41,11 @@ import {
 } from '@decipad/graphqlserver-types';
 import { claimNotebook } from './claimNotebook';
 import { PublishedVersionName } from '@decipad/interfaces';
+import { subscriptions } from '@decipad/services';
 
 const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
+
+const NEW_PAYMENTS = false;
 
 const workspaces = resource('workspace');
 
@@ -129,7 +132,18 @@ const resolvers: Resolvers = {
     unsharePadWithRole: padResource.unshareWithRole,
     sharePadWithUser: padResource.shareWithUser,
     unsharePadWithUser: padResource.unshareWithUser,
-    sharePadWithEmail: padResource.shareWithEmail,
+    sharePadWithEmail: async (parent, args, context) => {
+      if (
+        !(await subscriptions.isTeamOrEnterpriseWs(args.id)) &&
+        NEW_PAYMENTS
+      ) {
+        throw new Error(
+          "You cannot share notebook if you aren't on team or enterprise plan"
+        );
+      }
+
+      return padResource.shareWithEmail(parent, args, context);
+    },
     sharePadWithSecret: padResource.shareWithSecret,
     // TODO: uncomment?
     // Not being used by frontend, maybe we deprecate secrets.

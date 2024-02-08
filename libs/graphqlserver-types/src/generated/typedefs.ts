@@ -729,42 +729,6 @@ extend type Mutation {
 extend type Workspace {
   workspaceExecutedQuery: WorkspaceExecutedQuery
 }
-enum SubscriptionStatus {
-  active
-  canceled
-  unpaid
-  trialing
-  incomplete
-  incomplete_expired
-  past_due
-  paused
-}
-
-enum SubscriptionPaymentStatus {
-  paid
-  unpaid
-  no_payment_required
-}
-
-type WorkspaceSubscription {
-  id: String!
-  paymentStatus: SubscriptionPaymentStatus!
-  paymentLink: String!
-  status: SubscriptionStatus
-  workspace: Workspace
-  seats: Int
-  credits: Int
-  queries: Int
-  storage: Int
-}
-
-extend type Mutation {
-  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
-}
-
-extend type Workspace {
-  workspaceSubscription: WorkspaceSubscription
-}
 input WorkspaceInput {
   name: String!
 }
@@ -788,7 +752,7 @@ type Workspace {
   access: WorkspaceAccess
   secrets: [Secret!]!
   membersCount: Int
-  plan: String
+  plan: SubscriptionPlansNames
 }
 
 type WorkspacesChanges {
@@ -817,5 +781,51 @@ extend type Mutation {
 
 extend type Subscription {
   workspacesChanged: WorkspacesChanges!
+}
+enum SubscriptionStatus {
+  active
+  canceled
+  unpaid
+  trialing
+  incomplete
+  incomplete_expired
+  past_due
+  paused
+}
+
+enum SubscriptionPlansNames {
+  free
+  # Pro and personal are basically the same
+  # Only that pro is legacy
+  pro
+  personal
+  team
+  enterprise
+}
+
+enum SubscriptionPaymentStatus {
+  paid
+  unpaid
+  no_payment_required
+}
+
+type WorkspaceSubscription {
+  id: String!
+  paymentStatus: SubscriptionPaymentStatus!
+  paymentLink: String!
+  status: SubscriptionStatus
+  workspace: Workspace
+  seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
+}
+
+extend type Mutation {
+  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
+}
+
+extend type Workspace {
+  workspaceSubscription: WorkspaceSubscription
 }
 `;

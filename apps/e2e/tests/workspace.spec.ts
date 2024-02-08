@@ -248,7 +248,7 @@ test('workspace permissions', async ({
   await test.step('premium user is premium', async () => {
     await premiumUser.goToWorkspace();
     premiumWorkspaceId = (
-      await premiumUser.workspace.newWorkspace('Premium Workspace@n1n.co')
+      await premiumUser.workspace.newWorkspace('Premium Workspace@n1n.co team')
     )
       .split('/')
       .at(-1)!;
@@ -286,13 +286,6 @@ test('workspace permissions', async ({
     await randomFreeUser.notebook.checkNotebookTitle('Test Notepad');
     await randomFreeUser.notebook.updateNotebookTitle('Standard member update');
     await randomFreeUser.notebook.checkNotebookTitle('Standard member update');
-
-    await randomFreeUser.page.getByTestId('publish-button').click();
-    await expect(
-      randomFreeUser.page.getByText(
-        'Request access to have more sharing options'
-      )
-    ).toBeVisible();
   });
 
   await test.step('standard member checks', async () => {
@@ -333,7 +326,10 @@ test('reader and collaborator permissions', async ({
   let notebook: string;
 
   await test.step('invite reader and collaborator to notebook', async () => {
-    await premiumUser.createAndNavNewNotebook();
+    await premiumUser.goToWorkspace();
+    await premiumUser.workspace.newWorkspace('@n1n team');
+
+    await premiumUser.newNotebook.click();
     await premiumUser.notebook.inviteUser(randomFreeUser.email, 'reader');
     await premiumUser.notebook.inviteUser(
       anotherRandomFreeUser.email,
@@ -362,30 +358,32 @@ test('reader and collaborator permissions', async ({
     ).toBeFalsy();
   });
 
-  await test.step('collaborator checks', async () => {
-    await anotherRandomFreeUser.page.goto(notebook);
-    await anotherRandomFreeUser.notebook.waitForEditorToLoad();
-
-    await expect(
-      anotherRandomFreeUser.page.getByText('You are in reading mode')
-    ).toBeHidden();
-
-    await anotherRandomFreeUser.page.getByTestId('publish-button').click();
-    await expect(
-      anotherRandomFreeUser.page.getByText(
-        'Request access to have more sharing options'
-      )
-    ).toBeVisible();
-    await anotherRandomFreeUser.notebook.focusOnBody();
-    await anotherRandomFreeUser.notebook.addParagraph('I am editing');
-    await expect(
-      anotherRandomFreeUser.page.getByText('I am editing')
-    ).toBeVisible();
-    await anotherRandomFreeUser.notebook.updateNotebookTitle(
-      'edited by collaborator'
-    );
-    await anotherRandomFreeUser.notebook.checkNotebookTitle(
-      'edited by collaborator'
-    );
-  });
+  // Requirements are different, random free user shouldn't be
+  // able to invite to notebooks
+  // await test.step('collaborator checks', async () => {
+  //   await anotherRandomFreeUser.page.goto(notebook);
+  //   await anotherRandomFreeUser.notebook.waitForEditorToLoad();
+  //
+  //   await expect(
+  //     anotherRandomFreeUser.page.getByText('You are in reading mode')
+  //   ).toBeHidden();
+  //
+  //   await anotherRandomFreeUser.page.getByTestId('publish-button').click();
+  //   await expect(
+  //     anotherRandomFreeUser.page.getByText(
+  //       'Request access to have more sharing options'
+  //     )
+  //   ).toBeVisible();
+  //   await anotherRandomFreeUser.notebook.focusOnBody();
+  //   await anotherRandomFreeUser.notebook.addParagraph('I am editing');
+  //   await expect(
+  //     anotherRandomFreeUser.page.getByText('I am editing')
+  //   ).toBeVisible();
+  //   await anotherRandomFreeUser.notebook.updateNotebookTitle(
+  //     'edited by collaborator'
+  //   );
+  //   await anotherRandomFreeUser.notebook.checkNotebookTitle(
+  //     'edited by collaborator'
+  //   );
+  // });
 });

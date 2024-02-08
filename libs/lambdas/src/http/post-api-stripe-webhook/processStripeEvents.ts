@@ -4,20 +4,23 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { timestamp, tables } from '@decipad/tables';
-import { limits, plans } from '@decipad/backend-config';
+import { limits } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import { z } from 'zod';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
-const updateQueryExecutionTable = async (workspaceId: string, plan: string) => {
+const updateQueryExecutionTable = async (
+  workspaceId: string,
+  plan: SubscriptionPlansNames
+) => {
   const data = await tables();
   const queryExecutionRecord = await data.workspacexecutedqueries.get({
     id: workspaceId,
   });
 
-  const limitsPerPlan = (limits().maxCredits as { [key: string]: number })[
-    plan
-  ];
+  const limitsPerPlan = limits().maxCredits[plan === 'free' ? 'free' : 'pro'];
 
   if (queryExecutionRecord) {
     await data.workspacexecutedqueries.put({
@@ -43,6 +46,16 @@ const resetQueryCount = async (workspaceId: string) => {
   }
 };
 
+const validatePlanName = z.union([
+  z.literal<SubscriptionPlansNames>('free'),
+  z.literal<SubscriptionPlansNames>('personal'),
+  z.literal<SubscriptionPlansNames>('team'),
+  z.literal<SubscriptionPlansNames>('enterprise'),
+
+  // Legacy plans.
+  z.literal('pro'),
+]);
+
 export const processSessionComplete = async (
   req: APIGatewayProxyEventV2,
   event: Stripe.Event
@@ -57,11 +70,21 @@ export const processSessionComplete = async (
   } = event.data.object as Stripe.Checkout.Session;
 
   const data = await tables();
-  let plan = plans().free;
+  let plan: z.infer<typeof validatePlanName> = 'free';
+
+  const parsedKey = validatePlanName.safeParse(metadata?.key);
+  if (!parsedKey.success) {
+    throw Boom.badRequest(
+      'Stripe plan does not match enum. VERY SERIOUS. ASK MARTA OR JOHN'
+    );
+  }
+
+  const stripePlan = parsedKey.data;
 
   if (payment_status === 'paid') {
-    plan = metadata?.key ?? plans().pro;
+    plan = stripePlan ?? 'pro';
   }
+
   const paymentLink =
     typeof payment_link === 'string' ? payment_link : payment_link?.id || '';
   const subscriptionId =
@@ -135,7 +158,6 @@ export const processSubscriptionDeleted = async (
 ) => {
   const { id, status } = event.data.object as Stripe.Subscription;
   const data = await tables();
-  const freePlan = plans().free;
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id,
@@ -159,9 +181,9 @@ export const processSubscriptionDeleted = async (
     await data.workspaces.put({
       ...workspace,
       isPremium: false,
-      plan: freePlan,
+      plan: 'free',
     });
-    updateQueryExecutionTable(workspace.id, freePlan);
+    updateQueryExecutionTable(workspace.id, 'free');
 
     await track(req, {
       event: 'Stripe subscription immediately cancelled',
@@ -187,7 +209,7 @@ export const processSubscriptionUpdated = async (
     .object as Stripe.Subscription;
   const data = await tables();
   let isPremium = false;
-  let plan = plans().free;
+  let plan: SubscriptionPlansNames = 'free';
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id,
@@ -209,7 +231,7 @@ export const processSubscriptionUpdated = async (
 
   if (VALID_SUBSCRIPTION_STATES.includes(status)) {
     isPremium = true;
-    plan = workspace.plan ?? plans().pro;
+    plan = workspace.plan ?? 'pro';
   }
 
   if (cancel_at_period_end) {

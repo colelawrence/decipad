@@ -19,6 +19,8 @@ test.describe('Make sure collaboration works', () => {
       { page: page1, context: context1 },
       {
         createAndNavigateToNewPad: true,
+        // Needs `team` in the name to be allowed to invite to notebook.
+        workspaceName: '@n1n.co team',
       }
     );
   });

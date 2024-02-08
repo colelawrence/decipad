@@ -1,29 +1,33 @@
 import { Page } from '@playwright/test';
 import stringify from 'json-stringify-safe';
 
-export const createWorkspace = async (p: Page): Promise<string> => {
-  const resp = await (
-    await p.request.post('/graphql', {
-      data: stringify({
-        query:
-          'mutation CreateWorkspace($name: String!) {\n' +
-          '  createWorkspace(workspace: {name: $name}) {\n' +
-          '    id\n' +
-          '  }\n' +
-          '}',
-        variables: {
-          name: 'Test Workspace',
-        },
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+export const createWorkspace = async (
+  p: Page,
+  workspaceName?: string
+): Promise<string> => {
+  const resp = await p.request.post('/graphql', {
+    data: stringify({
+      query:
+        'mutation CreateWorkspace($name: String!) {\n' +
+        '  createWorkspace(workspace: {name: $name}) {\n' +
+        '    id\n' +
+        '  }\n' +
+        '}',
+      variables: {
+        name: workspaceName ?? 'Test Workspace',
       },
-    })
-  ).json();
-  if (resp.errors?.length) {
-    throw new Error(resp.errors[0].message);
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const jsonResp = await resp.json();
+
+  if (jsonResp.errors?.length) {
+    throw new Error(jsonResp.errors[0].message);
   }
-  return resp.data.createWorkspace.id;
+  return jsonResp.data.createWorkspace.id;
 };
 
 export const getWorkspaces = async (p: Page): Promise<{ name: string }[]> => {

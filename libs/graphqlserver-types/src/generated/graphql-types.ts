@@ -960,6 +960,13 @@ export type SubscriptionPlan = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
+export type SubscriptionPlansNames =
+  | 'enterprise'
+  | 'free'
+  | 'personal'
+  | 'pro'
+  | 'team';
+
 export type SubscriptionStatus =
   | 'active'
   | 'canceled'
@@ -1053,7 +1060,7 @@ export type Workspace = {
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String']['output'];
   pads: PagedPadResult;
-  plan?: Maybe<Scalars['String']['output']>;
+  plan?: Maybe<SubscriptionPlansNames>;
   resourceUsages?: Maybe<Array<Maybe<ResourceUsage>>>;
   roles?: Maybe<Array<Role>>;
   secrets: Array<Secret>;
@@ -1242,6 +1249,7 @@ export type ResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionPaymentStatus: SubscriptionPaymentStatus;
   SubscriptionPlan: ResolverTypeWrapper<SubscriptionPlan>;
+  SubscriptionPlansNames: SubscriptionPlansNames;
   SubscriptionStatus: SubscriptionStatus;
   TagChanges: ResolverTypeWrapper<TagChanges>;
   TagRecord: ResolverTypeWrapper<TagRecord>;
@@ -1818,7 +1826,7 @@ export type WorkspaceResolvers<ContextType = GraphqlContext, ParentType extends 
   myPermissionType?: Resolver<Maybe<ResolversTypes['PermissionType']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<WorkspacePadsArgs, 'page'>>;
-  plan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  plan?: Resolver<Maybe<ResolversTypes['SubscriptionPlansNames']>, ParentType, ContextType>;
   resourceUsages?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>, ParentType, ContextType>;
   roles?: Resolver<Maybe<Array<ResolversTypes['Role']>>, ParentType, ContextType>;
   secrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType>;

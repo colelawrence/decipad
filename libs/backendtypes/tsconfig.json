@@ -3,6 +3,7 @@
   "include": ["src"],
   "references": [
     { "path": "../../libs/interfaces" },
-    { "path": "../../libs/utils" }
+    { "path": "../../libs/utils" },
+    { "path": "../../libs/graphqlserver-types" }
   ]
 }

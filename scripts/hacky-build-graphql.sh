@@ -8,6 +8,9 @@ import { gql } from "apollo-server-lambda";
 
 export default gql`' >> ./libs/graphqlserver-types/src/generated/typedefs.ts
 
+# Replace any graphql comments by JS comments
+sed -i 's/#/\/\//' ./libs/graphqlserver-types/src/generated/typedefs.ts
+
 for file in ./libs/graphqlserver/src/**/*.graphql; do
   cat $file >> ./libs/graphqlserver-types/src/generated/typedefs.ts
 done

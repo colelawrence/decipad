@@ -9,6 +9,16 @@ enum SubscriptionStatus {
   paused
 }
 
+enum SubscriptionPlansNames {
+  free
+  # Pro and personal are basically the same
+  # Only that pro is legacy
+  pro
+  personal
+  team
+  enterprise
+}
+
 enum SubscriptionPaymentStatus {
   paid
   unpaid

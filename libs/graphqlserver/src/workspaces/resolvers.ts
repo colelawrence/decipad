@@ -30,7 +30,6 @@ import {
 import { WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
-import { plans } from '@decipad/backend-config';
 import Boom from '@hapi/boom';
 
 const workspaces = resource('workspace');
@@ -117,12 +116,19 @@ const resolvers: Resolvers = {
         .map((w) => {
           if (isLocalOrDev() && w.name.includes('@n1n.co')) {
             w.isPremium = true;
-            w.plan = plans().pro;
+
+            if (w.name.includes('team')) {
+              w.plan = 'team';
+            } else if (w.name.includes('enterprise')) {
+              w.plan = 'enterprise';
+            } else {
+              w.plan = 'personal';
+            }
           }
 
           // small hack to handle existing workspaces
-          if (!w.plan) {
-            w.plan = w.isPremium ? plans().pro : plans().free;
+          if (!w.plan && w.isPremium) {
+            w.plan = 'pro';
           }
           return w;
         });

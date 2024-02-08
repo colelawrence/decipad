@@ -2,6 +2,7 @@ import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { OBSERVED } from './constants';
+import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { ArcTable } from '@architect/functions/types/tables';
 import type { DynamoDB } from 'aws-sdk';
 
@@ -406,7 +407,7 @@ export interface WorkspaceRecord extends TableRecordBase {
   name: string;
   isPublic?: boolean;
   isPremium?: boolean;
-  plan?: string;
+  plan?: SubscriptionPlansNames;
 }
 
 export interface TagRecord extends TableRecordBase {

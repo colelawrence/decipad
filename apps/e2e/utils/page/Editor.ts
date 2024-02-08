@@ -17,6 +17,7 @@ interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
   featureFlags?: Partial<Record<Flag, boolean>>;
   randomUser?: boolean;
+  workspaceName?: string;
 }
 
 export const editorLocator = (): string => {
@@ -67,6 +68,7 @@ export async function setUp(
     createAndNavigateToNewPad = true,
     featureFlags,
     randomUser = false,
+    workspaceName,
   } = options;
 
   const newUser = randomUser
@@ -83,7 +85,7 @@ export async function setUp(
   }
 
   if (createAndNavigateToNewPad) {
-    const workspaceId = await createWorkspace(page);
+    const workspaceId = await createWorkspace(page, workspaceName);
     const notebookId = await importNotebook(
       workspaceId,
       Buffer.from(stringify(emptyNotebook), 'utf-8').toString('base64'),
