@@ -127,8 +127,8 @@ const resolvers: Resolvers = {
           }
 
           // small hack to handle existing workspaces
-          if (!w.plan && w.isPremium) {
-            w.plan = 'pro';
+          if (!w.plan) {
+            w.plan = w.isPremium ? 'pro' : 'free';
           }
           return w;
         });
