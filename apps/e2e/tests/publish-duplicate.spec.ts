@@ -490,11 +490,21 @@ test('check collaborator duplicate single workspace', async ({
   test.slow();
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
     randomFreeUser;
-  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const {
+    page: testUserPage,
+    notebook: testUserNotebook,
+    workspace: testUserWorkspace,
+  } = testUser;
   const currentDate = new Date().getTime();
   const notebookTitle =
     currentDate.toString() + Math.round(Math.random() * 10000);
   let notebookURL = '';
+
+  await test.step('create team workspace, so you can invite collaborators', async () => {
+    await testUserPage.goto('/');
+    await testUserWorkspace.newWorkspace('@n1n team');
+    await testUserWorkspace.clickNewPadButton();
+  });
 
   await test.step('create notebook', async () => {
     await testUserNotebook.updateNotebookTitle(notebookTitle);
@@ -531,13 +541,23 @@ test('check collaborator duplicate mulpliple workspaces', async ({
     notebook: randomFreeUserNotebook,
     workspace: randomFreeUserWorkspace,
   } = anotherTestUser;
-  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const {
+    page: testUserPage,
+    notebook: testUserNotebook,
+    workspace: testUserWorkspace,
+  } = testUser;
   const currentDate = new Date().getTime();
   const notebookTitle =
     currentDate.toString() + Math.round(Math.random() * 10000);
   let notebookURL = '';
   let newWorkspaceURL = '';
   const NewWorkspaceName = `New workspace${Math.round(Math.random() * 10000)}`;
+
+  await test.step('create team workspace, so you can invite collaborators', async () => {
+    await testUserPage.goto('/');
+    await testUserWorkspace.newWorkspace('@n1n team');
+    await testUserWorkspace.clickNewPadButton();
+  });
 
   await test.step('create notebook and invite [randomFreeUser] to collaborate', async () => {
     await testUserNotebook.updateNotebookTitle(notebookTitle);

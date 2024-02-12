@@ -82,6 +82,7 @@ function usePublishLocalActions(notebookId: string): PublishLocalActionsReturn {
         return;
       }
 
+      setLocalPublishState(state);
       return actions.onUpdatePublishState(id, state);
     },
     [actions, publishingState]
