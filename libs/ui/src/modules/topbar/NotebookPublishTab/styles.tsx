@@ -138,8 +138,9 @@ export const publishModeWrapper = css({
 
 export const publishMode = css({
   display: 'flex',
+  alignItems: 'center',
   gap: '12px',
-  padding: '6px',
+  padding: '8px 12px 8px 8px',
   cursor: 'pointer',
   borderRadius: '6px',
 
@@ -155,6 +156,7 @@ export const publishMode = css({
     display: 'flex',
     flexDirection: 'column',
     gap: '6px',
+    flex: 1,
   },
   p: {
     ...p13Medium,
@@ -171,6 +173,10 @@ export const publishMode = css({
     lineHeight: '16px',
     fontWeight: 400,
     color: cssVar('textSubdued'),
+  },
+  svg: {
+    width: '16px',
+    height: '16px',
   },
 });
 
