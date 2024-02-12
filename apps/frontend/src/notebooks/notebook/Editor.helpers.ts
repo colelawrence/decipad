@@ -24,13 +24,21 @@ export function useSetWorkspaceQuota(
   }, [workspace, setCurrentWorkspaceInfo]);
 }
 
-export function useNotebookTitleChange(notebookId: string) {
+export function useNotebookTitleChange(
+  notebookId: string,
+  notebookTitle?: string
+) {
   const [, renameNotebook] = useRenameNotebookMutation();
   const { changeNotebookTitle } = useTabNavigate(false);
   return useCallback(
     (newName?: string) => {
       if (newName != null && !isServerSideRendering()) {
         const nameTrimmed = newName.trim();
+
+        if (notebookTitle?.trim() === nameTrimmed) {
+          return;
+        }
+
         renameNotebook({
           id: notebookId,
           name: nameTrimmed,
@@ -39,6 +47,6 @@ export function useNotebookTitleChange(notebookId: string) {
         changeNotebookTitle(nameTrimmed);
       }
     },
-    [changeNotebookTitle, notebookId, renameNotebook]
+    [changeNotebookTitle, notebookId, notebookTitle, renameNotebook]
   );
 }

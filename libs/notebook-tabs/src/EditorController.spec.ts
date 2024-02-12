@@ -1353,3 +1353,33 @@ describe('With sub-editor plugins', () => {
     ]);
   });
 });
+
+describe('Get title', () => {
+  it('returns undefined when no title is loaded', () => {
+    const controller = new EditorController('id', []);
+    expect(controller.getTitle()).toBeUndefined();
+  });
+
+  it('returns default title after normalization', () => {
+    const controller = new EditorController('id', []);
+
+    controller.forceNormalize();
+
+    expect(controller.getTitle()).toBe('Welcome to Decipad!');
+  });
+
+  it('returns the correct title when one is present', () => {
+    const controller = new EditorController('id', []);
+
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+    });
+
+    expect(controller.getTitle()).toBe('my title');
+  });
+});

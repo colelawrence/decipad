@@ -219,6 +219,19 @@ export class EditorController implements RootEditorController {
     return this.titleEditor;
   }
 
+  public getTitle(): string | undefined {
+    if (this.titleEditor.children.length === 0) {
+      return undefined;
+    }
+
+    const title = this.titleEditor.children[0];
+    if (!IsTitle(title)) {
+      return undefined;
+    }
+
+    return title.children[0].text;
+  }
+
   // TEditor methods
   public get children(): NotebookValue {
     return [

@@ -41,7 +41,10 @@ const AppEditor: FC<EditorProps> = ({
   }, [actions.error, setError]);
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
-  const onNotebookTitleChange = useNotebookTitleChange(notebookId);
+  const onNotebookTitleChange = useNotebookTitleChange(
+    notebookId,
+    actions.notebook?.name
+  );
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-labels */
 import {
   createDocSyncEditor,
   DocSyncEditor,
@@ -13,7 +14,6 @@ import { EnhancedPromise, NotebookState } from './state';
 import { isNewNotebook } from './isNewNotebook';
 import { CursorAwarenessSchedule } from './cursors';
 import debounce from 'lodash.debounce';
-import { getNodeString } from '@udecode/plate-common';
 import * as idb from 'lib0/indexeddb';
 
 const LOAD_TIMEOUT_MS = 5000;
@@ -94,20 +94,37 @@ export const createNotebookStore = (onDestroy: () => void) =>
         COMPUTER_DEBOUNCE
       );
 
-      const changeTitle = debounce((title: string) => {
-        onChangeTitle(title);
-      }, 1000);
+      const changeTitleNoDebounce = (title: string) => {
+        const { destroyed } = get();
+        if (!destroyed) {
+          onChangeTitle(title);
+        }
+      };
+
+      const changeTitle = debounce(changeTitleNoDebounce, 1000);
 
       const { onChange } = controller;
 
-      let oldTitle: string = '';
+      let oldTitle: string | undefined;
       controller.onChange = () => {
-        const title = getNodeString(controller.children[0]);
+        onChange();
+
+        const title = controller.getTitle();
+
+        if (title == null) {
+          return;
+        }
+
+        if (oldTitle == null) {
+          oldTitle = title;
+          changeTitleNoDebounce(title);
+          return;
+        }
+
         if (title !== oldTitle) {
           oldTitle = title;
           changeTitle(oldTitle);
         }
-        onChange();
       };
 
       const newNotebook =
