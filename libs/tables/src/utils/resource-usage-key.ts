@@ -1,11 +1,12 @@
-import { ResourceConsumer, ResourceUsageTypes } from '@decipad/backendtypes';
+import { ResourceConsumer } from '@decipad/backendtypes';
+import { ResourceTypes } from '@decipad/graphqlserver-types';
 
 export type ResourceKeyParams = {
   consumer: ResourceConsumer;
   consumerId: string;
-  resource: ResourceUsageTypes;
+  resource: ResourceTypes;
   subType: string;
-  field: string;
+  field?: string;
 };
 
 // /resource_type/sub_type/field_name/[users/workspaces]/id
@@ -16,5 +17,5 @@ export function getResourceUsageKey({
   consumer,
   consumerId,
 }: ResourceKeyParams): string {
-  return `${resource}/${subType}/${field}/${consumer}/${consumerId}`;
+  return `${resource}/${subType}/${field ?? 'null'}/${consumer}/${consumerId}`;
 }

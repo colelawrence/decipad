@@ -762,7 +762,11 @@ export interface ResourceUsageRecord extends TableRecordBase {
 }
 
 export type ResourceConsumer = 'users' | 'workspaces';
-export type ResourceUsageTypes = 'openai';
+
+export const StorageSubtypes = {
+  IMAGES: 'images',
+  FILES: 'files',
+} as const;
 
 export type AllowListRecord = TableRecordBase;
 

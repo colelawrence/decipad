@@ -1,6 +1,11 @@
+enum ResourceTypes {
+  openai
+  storage
+}
+
 type ResourceUsage {
   id: ID!
-  resourceType: String! # openai
+  resourceType: ResourceTypes!
   consumption: Int!
   quotaLimit: Int!
 }

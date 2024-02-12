@@ -5,7 +5,7 @@ import {
   getCreateAttachmentForm as getForm,
   getSize,
 } from '@decipad/services/blobs/attachments';
-import tables, { allPages } from '@decipad/tables';
+import tables, { allPages, upsertStorageUsage } from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
@@ -13,6 +13,7 @@ import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 import { Attachment, Pad, Resolvers, User } from '@decipad/graphqlserver-types';
 import { FileAttachmentRecord } from '@decipad/backendtypes';
+import Boom from '@hapi/boom';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
@@ -85,12 +86,27 @@ const resolvers: Resolvers = {
       const parsedResource = parseResourceUri(attachment.resource_uri);
       expectEqual(parsedResource.type, 'pads');
 
+      const filesize = await getSize(attachment.filename);
+
       const newFileAttachment = {
         ...attachment,
-        filesize: await getSize(attachment.filename),
+        filesize,
       };
       await data.fileattachments.create(newFileAttachment);
       await data.futurefileattachments.delete({ id: handle });
+
+      const pad = await data.pads.get({ id: parsedResource.id });
+      const workspaceId = pad?.workspace_id;
+
+      if (workspaceId == null) {
+        throw Boom.forbidden(
+          'Pad doesnt not have a workspace, cannot attach files'
+        );
+      }
+
+      // hardcoding 'files' for now because I don't have a good
+      // way of determining the correct file type.
+      await upsertStorageUsage('files', workspaceId, filesize);
 
       return {
         id: newFileAttachment.id,

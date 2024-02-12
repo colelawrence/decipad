@@ -773,12 +773,16 @@ export type ResourceAccess = {
   users: Array<UserAccess>;
 };
 
+export type ResourceTypes =
+  | 'openai'
+  | 'storage';
+
 export type ResourceUsage = {
   __typename?: 'ResourceUsage';
   consumption: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   quotaLimit: Scalars['Int']['output'];
-  resourceType: Scalars['String']['output'];
+  resourceType: ResourceTypes;
 };
 
 export type Role = {
@@ -1225,6 +1229,7 @@ export type ResolversTypes = {
   PermissionType: PermissionType;
   Query: ResolverTypeWrapper<{}>;
   ResourceAccess: ResolverTypeWrapper<ResourceAccess>;
+  ResourceTypes: ResourceTypes;
   ResourceUsage: ResolverTypeWrapper<ResourceUsage>;
   Role: ResolverTypeWrapper<Role>;
   RoleAccess: ResolverTypeWrapper<RoleAccess>;
@@ -1609,7 +1614,7 @@ export type ResourceUsageResolvers<ContextType = GraphqlContext, ParentType exte
   consumption?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   quotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  resourceType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  resourceType?: Resolver<ResolversTypes['ResourceTypes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

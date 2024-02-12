@@ -1,4 +1,8 @@
-import { getAiUsage, updateExtraAiAllowance } from './queries.helpers';
+import {
+  getAiUsage,
+  getStorageUsage,
+  updateExtraAiAllowance,
+} from './queries.helpers';
 import { Resolvers } from '@decipad/graphqlserver-types';
 
 const resolvers: Resolvers = {
@@ -32,7 +36,12 @@ const resolvers: Resolvers = {
   },
   Workspace: {
     async resourceUsages(workspace) {
-      return getAiUsage('workspaces', workspace.id);
+      const usages = await Promise.all([
+        getAiUsage('workspaces', workspace.id),
+        getStorageUsage(workspace.id),
+      ]);
+
+      return usages.flat();
     },
   },
 };

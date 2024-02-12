@@ -1,4 +1,4 @@
-import { ResourceUsageRecord } from '@decipad/backendtypes';
+import { ResourceUsageRecord, StorageSubtypes } from '@decipad/backendtypes';
 import tables, {
   ResourceKeyParams,
   getResourceUsageKey,
@@ -10,6 +10,8 @@ export const COMPLETION_TOKENS_USED = 'completionTokensUsed';
 
 const CONSUMPTION = 'consumption';
 const QUOTA_LIMIT = 'quotaLimit';
+
+type ValuesFromRecord<T> = T extends Record<string, infer R> ? R : never;
 
 type UpdateAiProps = {
   consumerType: 'users' | 'workspaces';
@@ -85,6 +87,7 @@ export async function insertOrUpdateUsage({
     consumer: consumerType,
     consumerId,
   });
+
   const completionTokensUsedExists = await resourceusages.get({
     id: completionCompositeKey,
   });
@@ -111,6 +114,51 @@ export async function insertOrUpdateUsage({
       ...(quotaLimit && { [QUOTA_LIMIT]: quotaLimit }),
     });
   }
+}
+
+/**
+ * Internal function that managed inserting or updating,
+ * onto resourceusage table.
+ */
+async function insertOrUpdateForReal(
+  keyParams: ResourceKeyParams,
+  consumption: number
+): Promise<void> {
+  const data = await tables();
+  const id = getResourceUsageKey(keyParams);
+  const resource = await data.resourceusages.get({ id });
+
+  if (resource == null) {
+    await data.resourceusages.put({
+      id,
+      consumption,
+    });
+    return;
+  }
+
+  incrementResource(data.resourceusages, id, CONSUMPTION, consumption);
+}
+
+/**
+ * Outward facing function to upsert (update/insert) storage usage.
+ * Updates the storage usage for the workspace, dependant on fileType.
+ *
+ * Using the `resourceusage` DB table.
+ */
+export async function upsertStorageUsage(
+  type: ValuesFromRecord<typeof StorageSubtypes>,
+  workspaceId: string,
+  usage: number
+): Promise<void> {
+  return insertOrUpdateForReal(
+    {
+      consumer: 'workspaces',
+      consumerId: workspaceId,
+      resource: 'storage',
+      subType: type,
+    },
+    usage
+  );
 }
 
 export async function updateWorkspaceAndUserResourceUsage({

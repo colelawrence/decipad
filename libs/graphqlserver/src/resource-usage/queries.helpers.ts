@@ -1,9 +1,10 @@
 import { thirdParty, limits } from '@decipad/backend-config';
-import type {
-  ResourceUsageRecord,
-  ResourceUsageTypes,
-  User,
+import {
+  StorageSubtypes,
+  type ResourceUsageRecord,
+  type User,
 } from '@decipad/backendtypes';
+import { ResourceTypes } from '@decipad/graphqlserver-types';
 import tables, {
   type ResourceKeyParams,
   getResourceUsageKey,
@@ -17,9 +18,9 @@ const GPT_MODEL = 'gpt-4-1106-preview';
 const PROMPT_TOKENS_USED = 'promptTokensUsed';
 const COMPLETION_TOKENS_USED = 'completionTokensUsed';
 
-export type FrontendAiUsageRecord = ResourceUsageRecord & {
+export type FrontendResourceUsageRecord = ResourceUsageRecord & {
   quotaLimit: number;
-  resourceType: ResourceUsageTypes;
+  resourceType: ResourceTypes;
 };
 
 async function getResources(
@@ -33,7 +34,7 @@ async function getResources(
 export const getAiUsage = async (
   consumer: 'users' | 'workspaces',
   consumerId: string
-): Promise<Array<FrontendAiUsageRecord>> => {
+): Promise<Array<FrontendResourceUsageRecord>> => {
   const tokensUsed: Array<ResourceUsageRecord | undefined> = await getResources(
     [
       {
@@ -66,6 +67,34 @@ export const getAiUsage = async (
       ...t,
       quotaLimit: t.quotaLimit ?? maxCreditsPerWs,
       resourceType: 'openai',
+    }));
+};
+
+export const getStorageUsage = async (
+  workspaceId: string
+): Promise<Array<FrontendResourceUsageRecord>> => {
+  const storage = await getResources([
+    {
+      resource: 'storage',
+      subType: StorageSubtypes.FILES,
+      consumer: 'workspaces',
+      consumerId: workspaceId,
+    },
+    {
+      resource: 'storage',
+      subType: StorageSubtypes.IMAGES,
+      consumer: 'workspaces',
+      consumerId: workspaceId,
+    },
+  ]);
+
+  // probably sort this out later
+  return storage
+    .filter((t): t is ResourceUsageRecord => t != null)
+    .map((t) => ({
+      ...t,
+      quotaLimit: t.quotaLimit ?? 0,
+      resourceType: 'storage',
     }));
 };
 

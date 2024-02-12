@@ -428,9 +428,14 @@ extend type Mutation {
   createUserViaMagicLink(email: String!): User!
   resendRegistrationMagicLinkEmail(email: String!): Boolean
 }
+enum ResourceTypes {
+  openai
+  storage
+}
+
 type ResourceUsage {
   id: ID!
-  resourceType: String! # openai
+  resourceType: ResourceTypes!
   consumption: Int!
   quotaLimit: Int!
 }
