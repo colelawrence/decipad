@@ -56,11 +56,11 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
       });
 
       const subscriptionPlans = (subscriptionPlansAndData.data || []).filter(
-        (s) => s.type === 'recurring'
+        (s) => s.metadata.type === 'plan'
       );
 
       const pricesPerSeat = (subscriptionPlansAndData.data || []).filter(
-        (s) => s.type === 'one_time'
+        (s) => s.metadata.type === 'seat'
       );
 
       const allPlans: SubscriptionPlan[] = subscriptionPlans.map((p) => {
