@@ -155,7 +155,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       await page
         .getByTestId('upload-link-input')
         .fill(
-          'https://www.loom.com/embed/e18301fb8aa748eca8f7be0ce38c9e6a?sid=726a1216-91e3-4c61-9f55-8190c2ffa632'
+          'https://www.loom.com/embed/fdd9cc32f4b2494ca4e4e4420795d2e0?sid=e1964b86-c0a2-424c-8b12-df108627ecd2'
         );
       await page.getByTestId('link-button').click();
       // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -165,7 +165,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
           .frameLocator('iframe[title="decipad-embed"]')
           .nth(0)
           .getByRole('link', {
-            name: 'Introduction to DesiPad 101 👋',
+            name: 'Loom video for E2E',
           })
           .first()
       ).toBeVisible();
