@@ -18,7 +18,6 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
-  'ENABLE_SUBMIT_FORM',
   'NEW_PAYMENTS',
   'WORKSPACE_READERS',
 ] as const;

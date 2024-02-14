@@ -30,7 +30,6 @@ import {
   Value,
 } from '../../../icons';
 import { InlineMenu } from '../InlineMenu/InlineMenu';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 type Theme = 'Ocean' | 'Mint' | 'Orange' | 'Wine' | 'Daffodil';
 
@@ -358,7 +357,7 @@ const groups = (paint: boolean) => [
   mostFrequentlyUsedGroup(paint),
   modelGroup(paint),
   integrationsGroups(paint),
-  ...(isFlagEnabled('ENABLE_SUBMIT_FORM') ? [submitGroup(paint)] : []),
+  submitGroup(paint),
   widgetGroup(paint),
   visualisationGroup(paint),
   writingGroup(paint),

@@ -27,7 +27,6 @@ import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { Close, Email, Send, Spinner } from '../../../icons';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { brand200, cssVar, white } from '../../../primitives';
 import { ToastContextType, useToast } from '@decipad/toast';
 import { wrapperStyles } from '../VariableEditor/VariableEditor';
@@ -301,9 +300,6 @@ export const SubmitForm: PlateComponent<{}> = ({ ...props }) => {
     setEmail('');
   }, [setFormStatus, setEmail]);
 
-  if (!isFlagEnabled('ENABLE_SUBMIT_FORM')) {
-    return null;
-  }
   return (
     <div contentEditable={false}>
       {secrets !== undefined && !isReadOnly && (
