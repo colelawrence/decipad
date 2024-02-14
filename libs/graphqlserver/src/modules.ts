@@ -1,5 +1,4 @@
 import attachments from './attachments';
-import auth from './auth';
 import base from './base';
 import date from './date';
 import externalData from './external-data';
@@ -51,7 +50,6 @@ const modules: GraphqlModule[] = [
 
 if (process.env.NODE_ENV !== 'production') {
   modules.push(hello);
-  modules.push(auth); // fake auth
 }
 
 export default modules;
