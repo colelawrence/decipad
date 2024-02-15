@@ -5,7 +5,7 @@ import {
   getCreateAttachmentForm as getForm,
   getSize,
 } from '@decipad/services/blobs/attachments';
-import tables, { allPages, upsertStorageUsage } from '@decipad/tables';
+import tables, { allPages } from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
@@ -14,8 +14,12 @@ import parseResourceUri from '../utils/resource/parse-uri';
 import { Attachment, Pad, Resolvers, User } from '@decipad/graphqlserver-types';
 import { FileAttachmentRecord } from '@decipad/backendtypes';
 import Boom from '@hapi/boom';
+import { resourceusage, subscriptions } from '@decipad/services';
+import { limits } from '@decipad/backend-config';
+import { getDefined } from '@decipad/utils';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
+const MEGABYTE = 1_000_000;
 
 const notebooks = resource('notebook');
 
@@ -68,6 +72,7 @@ const resolvers: Resolvers = {
       const user = requireUser(context);
 
       const data = await tables();
+
       const attachment = await data.futurefileattachments.get({ id: handle });
       if (!attachment) {
         throw new UserInputError('No such attachment was found');
@@ -88,13 +93,6 @@ const resolvers: Resolvers = {
 
       const filesize = await getSize(attachment.filename);
 
-      const newFileAttachment = {
-        ...attachment,
-        filesize,
-      };
-      await data.fileattachments.create(newFileAttachment);
-      await data.futurefileattachments.delete({ id: handle });
-
       const pad = await data.pads.get({ id: parsedResource.id });
       const workspaceId = pad?.workspace_id;
 
@@ -104,9 +102,46 @@ const resolvers: Resolvers = {
         );
       }
 
-      // hardcoding 'files' for now because I don't have a good
-      // way of determining the correct file type.
-      await upsertStorageUsage('files', workspaceId, filesize);
+      const wsPlan = await subscriptions.getWsSubscription(workspaceId);
+      const isPremium = await subscriptions.isPremiumWorkspace(workspaceId);
+
+      const storageMegabytesUsed = await resourceusage.getStorageUsage(
+        workspaceId
+      );
+
+      //
+      // Some legacy stuff. Our old `pro` plans didnt have `workspacesubscriptions`,
+      // and used a `isPremium` flag.
+      //
+      // TODO: Remove this check when `pro` gets phased out.
+      //
+      const limit =
+        wsPlan == null
+          ? limits().storage[isPremium ? 'pro' : 'free']
+          : getDefined(
+              wsPlan.storage,
+              'Subscription should always have storage set'
+            );
+
+      const filesizeMegabytes = filesize / MEGABYTE;
+
+      if (storageMegabytesUsed + filesizeMegabytes > limit) {
+        throw Boom.tooManyRequests("You've exceeded your quota limit");
+      }
+
+      const newFileAttachment = {
+        ...attachment,
+        filesize,
+      };
+
+      await data.fileattachments.create(newFileAttachment);
+      await data.futurefileattachments.delete({ id: handle });
+
+      await resourceusage.upsertStorage(
+        workspaceId,
+        'files',
+        filesizeMegabytes
+      );
 
       return {
         id: newFileAttachment.id,

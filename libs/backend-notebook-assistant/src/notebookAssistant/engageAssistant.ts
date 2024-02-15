@@ -2,6 +2,7 @@ import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty, app } from '@decipad/backend-config';
 import { exportNotebookContent } from '@decipad/services/notebooks';
+import { resourceusage } from '@decipad/services';
 import { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import {
@@ -10,12 +11,7 @@ import {
 } from 'openai/resources';
 import { track } from '@decipad/backend-analytics';
 import { User } from '@decipad/backendtypes';
-import tables, {
-  COMPLETION_TOKENS_USED,
-  PROMPT_TOKENS_USED,
-  getResources,
-  updateWorkspaceAndUserResourceUsage,
-} from '@decipad/tables';
+import tables from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
@@ -26,7 +22,6 @@ import {
 } from './constants';
 import { resource } from '@decipad/backend-resources';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { GPT_MODEL, hasWorkspaceUsedAllCredits } from './limit';
 
 const isDevOrStaging =
   app().urlBase.includes('staging.decipad.com') ||
@@ -97,7 +92,10 @@ export const engageAssistant = async ({
   const isN1NEmail = user.email && getEmailDomain(user.email) === 'n1n.co';
   const internalEmail = isInternalEmail(user.email);
 
-  const hasReachedLimit = await hasWorkspaceUsedAllCredits(workspaceId);
+  const hasReachedLimit = await resourceusage.hasReachedLimit(
+    'openai',
+    workspaceId
+  );
 
   //
   // Lets not have limits for dev/staging with n1n.co workspace names.
@@ -161,14 +159,10 @@ export const engageAssistant = async ({
       max_tokens: 100,
     });
 
-    await updateWorkspaceAndUserResourceUsage({
+    await resourceusage.updateWorkspaceAndUserAi({
       userId: user.id,
       workspaceId,
-      aiModel: GPT_MODEL,
-      tokensUsed: {
-        promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
-        completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
-      },
+      usage: modeCompletion.usage,
     });
 
     track(event, {
@@ -230,14 +224,10 @@ export const engageAssistant = async ({
       max_tokens: 1200,
     });
 
-    await updateWorkspaceAndUserResourceUsage({
+    await resourceusage.updateWorkspaceAndUserAi({
       userId: user.id,
       workspaceId,
-      aiModel: GPT_MODEL,
-      tokensUsed: {
-        promptTokensUsed: completion.usage?.prompt_tokens ?? 0,
-        completionTokensUsed: completion.usage?.completion_tokens ?? 0,
-      },
+      usage: completion.usage,
     });
 
     track(event, {
@@ -267,14 +257,10 @@ export const engageAssistant = async ({
       stop: `\`\`\`\n`,
     });
 
-    await updateWorkspaceAndUserResourceUsage({
+    await resourceusage.updateWorkspaceAndUserAi({
       userId: user.id,
       workspaceId,
-      aiModel: GPT_MODEL,
-      tokensUsed: {
-        promptTokensUsed: completion.usage?.prompt_tokens ?? 0,
-        completionTokensUsed: completion.usage?.completion_tokens ?? 0,
-      },
+      usage: completion.usage,
     });
 
     track(event, {
@@ -310,14 +296,10 @@ export const engageAssistant = async ({
       max_tokens: 800,
     });
 
-    await updateWorkspaceAndUserResourceUsage({
+    await resourceusage.updateWorkspaceAndUserAi({
       userId: user.id,
       workspaceId,
-      aiModel: GPT_MODEL,
-      tokensUsed: {
-        promptTokensUsed: completion.usage?.prompt_tokens ?? 0,
-        completionTokensUsed: completion.usage?.completion_tokens ?? 0,
-      },
+      usage: completion.usage,
     });
 
     track(event, {
@@ -332,29 +314,17 @@ export const engageAssistant = async ({
     message = completion.choices[0].message;
   }
 
-  const [newPrompt, newCompletion] = await getResources([
-    {
-      resource: 'openai',
-      subType: GPT_MODEL,
-      field: PROMPT_TOKENS_USED,
-      consumer: 'workspaces',
-      consumerId: workspaceId ?? '',
-    },
-    {
-      resource: 'openai',
-      subType: GPT_MODEL,
-      field: COMPLETION_TOKENS_USED,
-      consumer: 'workspaces',
-      consumerId: workspaceId ?? '',
-    },
-  ]);
+  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
+    'workspaces',
+    workspaceId
+  );
 
   return {
     mode,
     message,
     usage: {
-      promptTokensUsed: newPrompt?.consumption ?? 0,
-      completionTokensUsed: newCompletion?.consumption ?? 0,
+      promptTokensUsed: newPrompt,
+      completionTokensUsed: newCompletion,
     },
   };
 };

@@ -758,15 +758,38 @@ export interface ResourceUsageRecord extends TableRecordBase {
   // /openai/gpt-4-1106/users
   id: ID;
   consumption: number;
-  quotaLimit?: number;
+
+  // Applicable for `extra credit` plans, where you need to know how
+  // much you can go up to.
+  originalAmount?: number;
 }
 
-export type ResourceConsumer = 'users' | 'workspaces';
+// =================    RESOURCE USAGE    =================
 
-export const StorageSubtypes = {
-  IMAGES: 'images',
-  FILES: 'files',
-} as const;
+export type ResourceConsumer = 'users' | 'workspaces';
+export type StorageSubtypes = 'images' | 'files';
+export type AiSubtypes = 'gpt-4-1106-preview';
+export type AiFields = 'promptTokensUsed' | 'completionTokensUsed';
+
+export type ResourceTypes = 'openai' | 'storage';
+
+type AiExtraCreditsKeyWithoutID = `openai/extra-credits/null/workspaces`;
+
+export type AiResourceUsageKeyWithoutID =
+  | `openai/${AiSubtypes}/${AiFields}/${ResourceConsumer}`
+  | AiExtraCreditsKeyWithoutID;
+
+export type AiResourceUsageKey = `${AiResourceUsageKeyWithoutID}/${string}`;
+
+export type StorageResourceUsageKeyWithoutID =
+  `storage/${StorageSubtypes}/null/${ResourceConsumer}`;
+
+export type StorageResourceUsageKey =
+  `${StorageResourceUsageKeyWithoutID}/${string}`;
+
+export type ResourceUsageKeys = AiResourceUsageKey | StorageResourceUsageKey;
+
+// =============== END RESOURCE USAGE =====================
 
 export type AllowListRecord = TableRecordBase;
 
@@ -823,9 +846,3 @@ export interface CreateAttachmentFormResult {
   fileType: string;
   fields: Record<string, string>;
 }
-
-export type TokensUsedProps = {
-  promptTokensUsed: number;
-  completionTokensUsed: number;
-  quotaLimit?: number;
-};

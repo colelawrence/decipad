@@ -10,6 +10,7 @@ import {
 
 type AiUsageActions = AiUsage & {
   updateUsage: (usage: Partial<AiUsage>) => void;
+  increaseQuotaLimit: (quotaLimit: number) => void;
 };
 
 const AiUsageContext = createContext<AiUsageActions>({
@@ -17,6 +18,7 @@ const AiUsageContext = createContext<AiUsageActions>({
   completionTokensUsed: 0,
   tokensQuotaLimit: 0,
   updateUsage: () => {},
+  increaseQuotaLimit: () => {},
 });
 
 export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -27,18 +29,25 @@ export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // TODO: maybe get rid of this completely, and rely purely on graphql.
 
   const updateUsage = useCallback<AiUsageActions['updateUsage']>((usage) => {
-    if (typeof usage.promptTokensUsed !== 'undefined') {
+    if (usage.promptTokensUsed != null) {
       setPromptTokensUsed(usage.promptTokensUsed);
     }
 
-    if (typeof usage.completionTokensUsed !== 'undefined') {
+    if (usage.completionTokensUsed != null) {
       setCompletionTokensUsed(usage.completionTokensUsed);
     }
 
-    if (typeof usage.tokensQuotaLimit != 'undefined') {
+    if (usage.tokensQuotaLimit != null) {
       setQuotaLimit(usage.tokensQuotaLimit);
     }
   }, []);
+
+  const increaseQuotaLimit = useCallback<AiUsageActions['increaseQuotaLimit']>(
+    (limit) => {
+      setQuotaLimit((l) => l + limit);
+    },
+    []
+  );
 
   return (
     <AiUsageContext.Provider
@@ -47,6 +56,7 @@ export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
         completionTokensUsed,
         tokensQuotaLimit: quotaLimit,
         updateUsage,
+        increaseQuotaLimit,
       }}
     >
       {children}

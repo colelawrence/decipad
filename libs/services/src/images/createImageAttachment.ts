@@ -13,8 +13,10 @@ export const createImageAttachment = async (
 ): Promise<FileAttachmentRecord> => {
   const buffer = await resize(Buffer.from(upload.body, 'base64'));
   const attachmentId = nanoid();
+
   const fileName = 'image.png';
   const filePath = attachmentFilePath(padId, fileName, attachmentId);
+
   const fileType = 'image/png';
   await save(filePath, buffer, fileType);
 

@@ -3,7 +3,7 @@ import { DataTable, TableRecordBase } from '@decipad/backendtypes';
 /**
  * Increments the `value` field by `increment`.
  */
-export async function incrementResource<T extends TableRecordBase>(
+export async function incrementTableField<T extends TableRecordBase>(
   table: DataTable<T>,
   id: string,
   value: string,

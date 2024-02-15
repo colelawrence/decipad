@@ -781,7 +781,7 @@ export type ResourceUsage = {
   __typename?: 'ResourceUsage';
   consumption: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
-  quotaLimit: Scalars['Int']['output'];
+  originalAmount?: Maybe<Scalars['Int']['output']>;
   resourceType: ResourceTypes;
 };
 
@@ -1613,7 +1613,7 @@ export type ResourceAccessResolvers<ContextType = GraphqlContext, ParentType ext
 export type ResourceUsageResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ResourceUsage'] = ResolversParentTypes['ResourceUsage']> = {
   consumption?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  quotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  originalAmount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   resourceType?: Resolver<ResolversTypes['ResourceTypes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

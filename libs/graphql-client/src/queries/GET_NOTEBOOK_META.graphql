@@ -36,7 +36,6 @@ fragment NotebookMetaData on Pad {
       id
       resourceType
       consumption
-      quotaLimit
     }
   }
   snapshots {

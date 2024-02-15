@@ -233,6 +233,12 @@ export function limits() {
     free: Number(env('DECI_MAX_CREDITS_FREE')),
     pro: Number(env('DECI_MAX_CREDITS_PRO')),
   };
+
+  const maxStorage = {
+    free: 10,
+    pro: 50,
+  };
+
   const TOKENS_TO_CREDITS = Number(env('DECI_TOKENS_TO_CREDITS'));
   return {
     maxCredits,
@@ -241,6 +247,7 @@ export function limits() {
       pro: maxCredits.pro * TOKENS_TO_CREDITS,
     },
     tokensToCredits: TOKENS_TO_CREDITS,
+    storage: maxStorage,
   };
 }
 

@@ -90,7 +90,7 @@ fragment DashboardWorkspace on Workspace {
     id
     resourceType
     consumption
-    quotaLimit
+    originalAmount
   }
 }
 
@@ -114,7 +114,6 @@ fragment ShallowWorkspace on Workspace {
     id
     resourceType
     consumption
-    quotaLimit
   }
 }
 

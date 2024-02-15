@@ -22,6 +22,12 @@
     },
     {
       "path": "../../libs/graphqlserver-types"
+    },
+    {
+      "path": "../../libs/services"
+    },
+    {
+      "path": "../../libs/backend-notebook-content"
     }
   ]
 }

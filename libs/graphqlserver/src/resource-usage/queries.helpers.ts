@@ -1,101 +1,56 @@
-import { thirdParty, limits } from '@decipad/backend-config';
+import { thirdParty } from '@decipad/backend-config';
 import {
-  StorageSubtypes,
   type ResourceUsageRecord,
   type User,
+  type ResourceConsumer,
 } from '@decipad/backendtypes';
 import { ResourceTypes } from '@decipad/graphqlserver-types';
-import tables, {
-  type ResourceKeyParams,
-  getResourceUsageKey,
-  updateWorkspaceAndUserResourceUsage,
-} from '@decipad/tables';
+import { resourceusage } from '@decipad/services';
 import Stripe from 'stripe';
 
-// TODO: Add to a more generic place.
-const GPT_MODEL = 'gpt-4-1106-preview';
-
-const PROMPT_TOKENS_USED = 'promptTokensUsed';
-const COMPLETION_TOKENS_USED = 'completionTokensUsed';
-
 export type FrontendResourceUsageRecord = ResourceUsageRecord & {
-  quotaLimit: number;
   resourceType: ResourceTypes;
 };
 
-async function getResources(
-  keys: Array<ResourceKeyParams>
-): Promise<Array<ResourceUsageRecord | undefined>> {
-  const { resourceusages } = await tables();
-  const ids = keys.map(getResourceUsageKey);
-  return resourceusages.batchGet(ids);
-}
+//
+// TODO: Frontend doesnt need raw UsageRecords, nor does it need individual tokens.
+//
 
 export const getAiUsage = async (
-  consumer: 'users' | 'workspaces',
+  consumer: ResourceConsumer,
   consumerId: string
 ): Promise<Array<FrontendResourceUsageRecord>> => {
-  const tokensUsed: Array<ResourceUsageRecord | undefined> = await getResources(
-    [
-      {
-        resource: 'openai',
-        subType: GPT_MODEL,
-        field: PROMPT_TOKENS_USED,
-        consumer,
-        consumerId,
-      },
-      {
-        resource: 'openai',
-        subType: GPT_MODEL,
-        field: COMPLETION_TOKENS_USED,
-        consumer,
-        consumerId,
-      },
-    ]
-  );
+  const records = await Promise.all([
+    resourceusage.getUsageRecord(
+      `openai/gpt-4-1106-preview/promptTokensUsed/${consumer}`,
+      consumerId
+    ),
+    resourceusage.getUsageRecord(
+      `openai/gpt-4-1106-preview/completionTokensUsed/${consumer}`,
+      consumerId
+    ),
+    resourceusage.getUsageRecord(
+      'openai/extra-credits/null/workspaces',
+      consumerId
+    ),
+  ]);
 
-  const { workspaces } = await tables();
-  const workspace = await workspaces.get({ id: consumerId });
-  const { maxCredits } = limits();
-  const maxCreditsPerWs = workspace?.isPremium
-    ? maxCredits.pro
-    : maxCredits.free;
-
-  return tokensUsed
-    .filter((t): t is ResourceUsageRecord => t != null)
-    .map((t) => ({
-      ...t,
-      quotaLimit: t.quotaLimit ?? maxCreditsPerWs,
-      resourceType: 'openai',
-    }));
+  return records
+    .filter((r): r is ResourceUsageRecord => r != null)
+    .map((r) => ({ ...r, resourceType: 'openai' }));
 };
 
 export const getStorageUsage = async (
   workspaceId: string
 ): Promise<Array<FrontendResourceUsageRecord>> => {
-  const storage = await getResources([
-    {
-      resource: 'storage',
-      subType: StorageSubtypes.FILES,
-      consumer: 'workspaces',
-      consumerId: workspaceId,
-    },
-    {
-      resource: 'storage',
-      subType: StorageSubtypes.IMAGES,
-      consumer: 'workspaces',
-      consumerId: workspaceId,
-    },
+  const records = await Promise.all([
+    resourceusage.getUsageRecord('storage/files/null/workspaces', workspaceId),
+    resourceusage.getUsageRecord('storage/images/null/workspaces', workspaceId),
   ]);
 
-  // probably sort this out later
-  return storage
-    .filter((t): t is ResourceUsageRecord => t != null)
-    .map((t) => ({
-      ...t,
-      quotaLimit: t.quotaLimit ?? 0,
-      resourceType: 'storage',
-    }));
+  return records
+    .filter((r): r is ResourceUsageRecord => r != null)
+    .map((r) => ({ ...r, resourceType: 'storage' }));
 };
 
 export const updateExtraAiAllowance = async (
@@ -104,6 +59,12 @@ export const updateExtraAiAllowance = async (
   paymentMethodId: string,
   user: User
 ) => {
+  if (consumer === 'users') {
+    throw new Error('Not implemented: we only do this on workspace level');
+  }
+
+  const workspaceId = consumerId;
+
   const { secretKey, extraCreditsProdId, apiVersion } = thirdParty().stripe;
   const stripe = new Stripe(secretKey, {
     apiVersion,
@@ -115,7 +76,13 @@ export const updateExtraAiAllowance = async (
       product: extraCreditsProdId,
     })
   ).data.find((p) => p.metadata.isDefault === 'true');
-  const credits = product?.metadata?.credits;
+  const credits = Number(product?.metadata?.credits ?? 0);
+
+  if (Number.isNaN(credits)) {
+    throw new Error(
+      'Stripe error: Credits is NaN. VERY SERIOUS, CALL MARTA OR JOHN'
+    );
+  }
 
   await stripe.paymentIntents.create({
     /* eslint-disable camelcase */
@@ -134,82 +101,9 @@ export const updateExtraAiAllowance = async (
     },
   });
 
-  const { workspaces, workspacesubscriptions } = await tables();
-  const workspace = await workspaces.get({ id: consumerId });
-  const workspaceSubscription = await workspacesubscriptions.get({
-    id: consumerId,
-  });
-  const { maxCredits } = limits();
-  let quotaLimit = 0;
-
-  if (workspaceSubscription?.queries) {
-    quotaLimit = workspaceSubscription?.queries;
-  } else {
-    quotaLimit = workspace?.isPremium ? maxCredits.pro : maxCredits.free;
-  }
-
-  const tokensUsed: Array<ResourceUsageRecord | undefined> = await getResources(
-    [
-      {
-        resource: 'openai',
-        subType: GPT_MODEL,
-        field: PROMPT_TOKENS_USED,
-        consumer,
-        consumerId,
-      },
-      {
-        resource: 'openai',
-        subType: GPT_MODEL,
-        field: COMPLETION_TOKENS_USED,
-        consumer,
-        consumerId,
-      },
-    ]
-  );
-
-  if (tokensUsed.length === 0) {
-    await updateWorkspaceAndUserResourceUsage({
-      userId: user.id,
-      workspaceId: consumerId,
-      aiModel: 'gpt-4-1106-preview',
-      tokensUsed: {
-        completionTokensUsed: 0,
-        promptTokensUsed: 0,
-      },
-      quotaLimit: quotaLimit + Number(credits),
-    });
-
-    return {
-      newQuotaLimit: quotaLimit + Number(credits),
-    };
-  }
-
-  let newCredits = 0;
-
-  await Promise.all(
-    tokensUsed
-      .filter((t): t is ResourceUsageRecord => t != null)
-      .map(async (usage) => {
-        newCredits = usage.quotaLimit
-          ? usage.quotaLimit + Number(credits)
-          : quotaLimit + Number(credits);
-
-        await updateWorkspaceAndUserResourceUsage({
-          userId: user.id,
-          workspaceId: consumerId,
-          aiModel: 'gpt-4-1106-preview',
-          tokensUsed: {
-            completionTokensUsed: 0,
-            promptTokensUsed: 0,
-          },
-          quotaLimit: usage.quotaLimit
-            ? usage.quotaLimit + Number(credits)
-            : quotaLimit + Number(credits),
-        });
-      })
-  );
+  await resourceusage.insertExtraAi(workspaceId, credits);
 
   return {
-    newQuotaLimit: newCredits,
+    newQuotaLimit: credits,
   };
 };

@@ -437,7 +437,7 @@ type ResourceUsage {
   id: ID!
   resourceType: ResourceTypes!
   consumption: Int!
-  quotaLimit: Int!
+  originalAmount: Int
 }
 
 type NewResourceQuotaLimit {

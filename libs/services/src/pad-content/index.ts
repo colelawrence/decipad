@@ -2,7 +2,7 @@ import type { SharedType } from '@decipad/slate-yjs';
 import type { MyValue } from '@decipad/editor-types';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
-import { toSharedTypeSingular } from 'libs/slate-yjs/src/utils';
+import { toSharedTypeSingular } from '@decipad/slate-yjs';
 import { EElement, Value } from '@udecode/plate-common';
 
 const createPadContent = async <V extends Value = MyValue>(

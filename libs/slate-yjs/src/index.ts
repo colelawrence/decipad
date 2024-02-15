@@ -7,7 +7,12 @@ import {
   withYjs,
   type TYjsEditor,
 } from './plugin';
-import { toSharedType, toSlateDoc, toSyncElement } from './utils';
+import {
+  toSharedType,
+  toSharedTypeSingular,
+  toSlateDoc,
+  toSyncElement,
+} from './utils';
 
 export {
   TCursorEditor,
@@ -19,6 +24,7 @@ export {
   toSharedType,
   toSlateDoc,
   toSyncElement,
+  toSharedTypeSingular,
   translateYjsEvent,
   applyYjsEvents,
   applySlateOps,

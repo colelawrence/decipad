@@ -42,6 +42,7 @@ import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
 import { initNewDocument } from '@decipad/docsync';
+import { getDefined } from '@decipad/utils';
 
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
@@ -192,6 +193,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     let quotaLimit = currentWorkspace?.workspaceSubscription?.credits || 0;
     let pTokens = 0;
     let cTokens = 0;
+
     (currentWorkspace?.resourceUsages || [])
       .filter((u) => u?.resourceType === 'openai')
       .forEach((u) => {
@@ -203,8 +205,11 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           cTokens = u.consumption;
         }
 
-        if (u?.quotaLimit) {
-          quotaLimit = u.quotaLimit;
+        if (u?.id.includes('extra-credits')) {
+          quotaLimit += getDefined(
+            u.originalAmount,
+            'extra credit records always have `originalAmount`'
+          );
         }
       });
 

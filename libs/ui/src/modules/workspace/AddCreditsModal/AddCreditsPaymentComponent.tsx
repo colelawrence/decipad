@@ -39,7 +39,7 @@ export const AddCreditsPaymentComponent: React.FC<
     [resourceId, UpdateResourceQuotaLimit]
   );
 
-  const { updateUsage } = useAiUsage();
+  const { increaseQuotaLimit } = useAiUsage();
   const [loading, setLoadingState] = useState(false);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -95,7 +95,7 @@ export const AddCreditsPaymentComponent: React.FC<
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
             0;
-          updateUsage({ tokensQuotaLimit: newLimit });
+          increaseQuotaLimit(newLimit);
           setLoadingState(false);
           closeAction();
         }

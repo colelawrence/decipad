@@ -3,11 +3,12 @@
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
-import { timestamp, tables } from '@decipad/tables';
+import { tables } from '@decipad/tables';
 import { limits } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { z } from 'zod';
+import { resourceusage } from '@decipad/services';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
@@ -26,22 +27,6 @@ const updateQueryExecutionTable = async (
     await data.workspacexecutedqueries.put({
       ...queryExecutionRecord,
       quotaLimit: limitsPerPlan ?? limits().maxCredits.free,
-    });
-  }
-};
-
-const resetQueryCount = async (workspaceId: string) => {
-  const data = await tables();
-
-  const queryExecutionRecord = await data.workspacexecutedqueries.get({
-    id: workspaceId,
-  });
-
-  if (queryExecutionRecord) {
-    await data.workspacexecutedqueries.put({
-      ...queryExecutionRecord,
-      query_reset_date: timestamp(),
-      queryCount: 0,
     });
   }
 };
@@ -258,6 +243,11 @@ export const processSubscriptionUpdated = async (
   };
 };
 
+/**
+ * Called when Stripe creates an invoice (which means the user has payed their subscription).
+ *
+ * Handle any resets here.
+ */
 export const processInvoiceCreated = async (event: Stripe.Event) => {
   const { subscription } = event.data.object as Stripe.Invoice;
   const data = await tables();
@@ -270,10 +260,12 @@ export const processInvoiceCreated = async (event: Stripe.Event) => {
     });
 
     if (workspaceSubscription) {
-      await resetQueryCount(workspaceSubscription?.workspace_id);
+      await resourceusage.resetQueryCount(workspaceSubscription.workspace_id);
+      // TODO: Enable this in QuotaLimit PR
+      // await resourceusage.resetAiUsage(workspaceSubscription.workspace_id);
       return {
         statusCode: 200,
-        body: `webhook succeeded! Workspace query count reset: ${workspaceSubscription?.workspace_id}`,
+        body: `webhook succeeded! Workspace query count reset: ${workspaceSubscription.workspace_id}`,
       };
     }
 

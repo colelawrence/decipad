@@ -38,7 +38,9 @@ const AssistantChat: FC<SidebarComponentProps> = ({
       aiUsage.find((u) => u?.id.includes('prompt'))?.consumption ?? 0;
     const completionTokens =
       aiUsage.find((u) => u?.id.includes('completion'))?.consumption ?? 0;
-    const tokensLimit = aiUsage[0]?.quotaLimit ?? quotaLimitFromPlan;
+
+    // TODO: fix
+    const tokensLimit = quotaLimitFromPlan;
 
     // we only want to update the usage with the DB values when the user refreshes the page
     if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {
