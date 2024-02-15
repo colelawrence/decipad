@@ -244,17 +244,6 @@ export function openColTypeMenu(page: Page, col: number, tableName?: string) {
     .click();
 }
 
-export async function openColMenu(page: Page, col: number, tableName?: string) {
-  const table = getTableOrPage(page, tableName);
-  const columnHeader = table
-    .locator(`${tableRowLocator(0)}`)
-    .getByTestId('table-header')
-    .nth(col);
-
-  await columnHeader.hover();
-  await columnHeader.getByTestId('table-add-remove-column-button').click();
-}
-
 export function hideTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
     .getByTestId('segment-button-trigger-table')
@@ -319,7 +308,7 @@ export async function removeColumn(
   col: number,
   tableName?: string
 ) {
-  await openColMenu(page, col, tableName);
+  await openColTypeMenu(page, col, tableName);
   await page.getByText('Remove column').click();
 }
 
@@ -330,18 +319,19 @@ export async function addColumnUnit(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
+  await page.getByText('Custom Unit').click();
   await page.getByPlaceholder('add custom unit').click();
   await page.keyboard.type(unit);
   await keyPress(page, 'Enter');
 }
 
 export async function addColRight(page: Page, col: number, tableName?: string) {
-  await openColMenu(page, col, tableName);
+  await openColTypeMenu(page, col, tableName);
   await page.getByText('Add column right').click();
 }
 
 export async function addColLeft(page: Page, col: number, tableName?: string) {
-  await openColMenu(page, col, tableName);
+  await openColTypeMenu(page, col, tableName);
   await page.getByText('Add column left').click();
 }
 
@@ -349,8 +339,9 @@ export async function updateDataType(
   page: Page,
   col: number,
   tableName?: string,
-  dataType = 'Text',
-  subOption: string | undefined = undefined
+  dataType?: string,
+  subOption: string | undefined = undefined,
+  subSubOption: string | undefined = undefined
 ) {
   await openColTypeMenu(page, col, tableName);
   await page.getByRole('menuitem', { name: dataType }).click();
@@ -359,6 +350,13 @@ export async function updateDataType(
       .locator(`div [data-side="right"] >> text='${subOption}'`)
       .last()
       .click();
+
+    if (subSubOption) {
+      await page
+        .locator(`div [data-side="right"] >> text='${subSubOption}'`)
+        .last()
+        .click();
+    }
   }
 }
 

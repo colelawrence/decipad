@@ -114,6 +114,10 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
             type={type}
             isForImportedColumn={isForImportedColumn}
             dropdownNames={dropdownNames}
+            onRemoveColumn={onRemoveColumn}
+            onPopulateColumn={onPopulateColumn}
+            onAddColLeft={onAddColLeft}
+            onAddColRight={onAddColRight}
           />
         )
       }

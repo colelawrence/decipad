@@ -1,10 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
-import {
-  useCurrentWorkspaceStore,
-  useEditorTableContext,
-} from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
@@ -15,7 +11,6 @@ import {
   useContext,
   useRef,
   useState,
-  useMemo,
   MouseEvent as ReactMouseEvent,
   useEffect,
 } from 'react';
@@ -25,22 +20,13 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { useMergedRef } from '../../../hooks';
-import {
-  AlignArrowLeft,
-  AlignArrowRight,
-  Delete,
-  DragHandle as DragHandleIcon,
-  Sparkles,
-  Text,
-  Warning,
-} from '../../../icons';
+import { DragHandle as DragHandleIcon, Text, Warning } from '../../../icons';
 import { p13Medium, useThemeColor } from '../../../primitives';
 import { table } from '../../../styles';
 import { tdMinWidth } from '../../../styles/table';
 import { TableStyleContext, getStringType, getTypeIcon } from '../../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
-import { Tooltip, UpgradePlanWarningTooltip } from '../../../shared';
-import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
+import { Tooltip } from '../../../shared';
 
 interface DropSourceAndTargetProps {
   readonly draggingOver: boolean;
@@ -126,39 +112,23 @@ export const TableHeader = ({
   draggable = false,
   draggingOver = false,
   isLiveResult = false,
-  onAddColLeft,
-  onAddColRight,
-  onRemoveColumn,
-  onPopulateColumn,
   dragSource,
   dropTarget,
   dropDirection,
   onSelectColumn,
-  isFirst,
   error,
 }: TableHeaderProps): ReturnType<FC> => {
   const [tempWidth, setTempWidth] = useState<number | undefined>(undefined);
   const [open, onChangeOpen] = useState(false);
-  const {
-    workspaceInfo: { queryCount, quotaLimit, id },
-    isQuotaLimitBeingReached,
-  } = useCurrentWorkspaceStore();
 
   const toggleOpen = useCallback(() => {
     onChangeOpen(!open);
   }, [open]);
 
-  const shouldDisableAI = useMemo(() => {
-    return !!quotaLimit && !!queryCount && queryCount >= quotaLimit;
-  }, [quotaLimit, queryCount]);
-
   const Icon = getTypeIcon(type);
   const { color } = useContext(TableStyleContext);
 
   const themeColor = useThemeColor(color || 'Catskill', true);
-
-  const editorTableContext = useEditorTableContext();
-  const { length } = editorTableContext.cellTypes;
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
   const sizeRef = useRef<HTMLDivElement>(null);
@@ -205,44 +175,6 @@ export const TableHeader = ({
     setTempWidth(undefined);
   }, [width]);
 
-  const columOptionItems = [
-    {
-      label: 'Populate column',
-      onClick: onPopulateColumn,
-      icon: <Sparkles disabled={shouldDisableAI} />,
-      isNew: true,
-      disabled: shouldDisableAI,
-      tooltipContent: isQuotaLimitBeingReached ? (
-        <UpgradePlanWarningTooltip
-          workspaceId={id}
-          quotaLimit={quotaLimit}
-          maxQueryExecution={shouldDisableAI}
-          showQueryQuotaLimit={isQuotaLimitBeingReached}
-          featureCustomText="Unlock this feature"
-          showUpgradeProButton={false}
-        ></UpgradePlanWarningTooltip>
-      ) : null,
-    },
-    {
-      label: 'Add column left',
-      onClick: onAddColLeft,
-      icon: <AlignArrowLeft disabled={isFirst} />,
-      disabled: isFirst,
-    },
-    {
-      label: 'Add column right',
-      onClick: onAddColRight,
-      icon: <AlignArrowRight disabled={isFirst} />,
-      disabled: isFirst,
-    },
-    {
-      label: 'Remove column',
-      onClick: onRemoveColumn,
-      icon: <Delete disabled={length === 1} />,
-      disabled: length === 1,
-    },
-  ];
-
   const showDragMenuToTheLeft = draggable && dragSource && isEditable;
 
   const hasErrors = error && error !== 'Expected expression';
@@ -262,22 +194,12 @@ export const TableHeader = ({
   });
 
   const leftSide = showDragMenuToTheLeft ? (
-    <DropdownMenu
-      items={columOptionItems}
-      testId="table-add-remove-column-button"
-      styles={css(iconTypeStyles)}
-      className="table-drag-handle"
-      open={open}
-      onChangeOpen={onChangeOpen}
-      trigger={
-        <DropSourceAndTarget
-          ref={dragSource}
-          draggingOver={draggingOver}
-          onSelectColumn={onSelectColumn}
-          toggleOpen={toggleOpen}
-          icon={chosenIcon}
-        />
-      }
+    <DropSourceAndTarget
+      ref={dragSource}
+      draggingOver={draggingOver}
+      onSelectColumn={onSelectColumn}
+      toggleOpen={toggleOpen}
+      icon={chosenIcon}
     />
   ) : (
     chosenIcon
@@ -399,12 +321,6 @@ const headerWrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
 });
-
-const iconTypeStyles = {
-  display: 'inline-block',
-  width: '16px',
-  height: '16px',
-};
 
 const childrenWrapperStyles = css({
   overflow: 'hidden',

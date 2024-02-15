@@ -46,11 +46,11 @@ test('Creating a basic model', async ({ testUser }) => {
     await addColumn(page);
 
     await renameColumn(page, 0, 'Index');
-    await updateDataType(page, 0, undefined, 'Sequence', 'Number');
+    await updateDataType(page, 0, undefined, 'Numbers', 'Number Sequence');
     await writeInTable(page, '1', 1, 0);
 
     await renameColumn(page, 1, 'Year');
-    await updateDataType(page, 1, undefined, 'Sequence', 'Date');
+    await updateDataType(page, 1, undefined, 'Date', 'Date Sequence');
     await writeInTable(page, '2023', 1, 1);
 
     await renameColumn(page, 2, 'TotalInvested');

@@ -74,7 +74,8 @@ let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
 const expandableCols: [string, string][] = [
-  ['Currency', 'EUR'],
+  ['Numbers', 'Currency'],
+  ['Numbers', 'Number Sequence'],
   ['Date', 'Year'],
 ];
 
@@ -99,47 +100,3 @@ it.each(expandableCols)(
     });
   }
 );
-
-// Cannot do this in the test above because there would be 2 elements with the
-// text content 'Date', so it's cleaner to duplicate the text.
-it('Expands the series menu without any other menu opening', async () => {
-  const { getAllByText, queryByText, getByText } = render(
-    <TableColumnMenu
-      trigger={<button>trigger</button>}
-      type={getNumberType()}
-      open
-    />
-  );
-  await userEvent.click(getByText('Sequence'));
-  getAllByText('Date').forEach((el) => expect(el).toBeVisible());
-  expect(getAllByText('Date')).toHaveLength(2);
-  expandableCols.forEach(([, columnContent]) => {
-    expect(queryByText(columnContent)).not.toBeInTheDocument();
-  });
-});
-
-it('Successfully changes column type upon click', async () => {
-  const mockOnChangeColumnType = jest.fn((type) => type);
-
-  const { queryAllByRole } = render(
-    <TableColumnMenu
-      trigger={<button>trigger</button>}
-      type={getNumberType()}
-      open
-      onChangeColumnType={mockOnChangeColumnType}
-    />
-  );
-
-  const menuItems = queryAllByRole('menuitem');
-  const menuItem = menuItems.find((element) =>
-    element?.textContent?.includes('Text')
-  ) as HTMLElement;
-
-  expect(mockOnChangeColumnType).not.toHaveBeenCalled();
-
-  await userEvent.click(menuItem, {
-    pointerEventsCheck: 0,
-  });
-
-  expect(mockOnChangeColumnType).toHaveBeenCalled();
-});

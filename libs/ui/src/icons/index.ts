@@ -156,6 +156,7 @@ export { NestIndicator } from './NestIndicator/NestIndicator';
 export { Newspaper } from './Newspaper';
 export { Notion } from './Notion';
 export { Number } from './Number/Number';
+export { NumberedList } from './NumberedList';
 export { OpenAI } from './OpenAI/OpenAI';
 export { Package } from './Package/Package';
 export { Paperclip } from './Paperclip/Paperclip';
