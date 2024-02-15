@@ -3,7 +3,6 @@
 
 import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
-// import { parse as parseCookie } from 'simple-cookie';
 import { User } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
