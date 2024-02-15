@@ -272,45 +272,9 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
     await testUser.page.getByText('Planet Scale Intergration').first().click();
     await testUser.page.getByTestId('code-mirror').click();
 
-    /**
-     * Avoid querying tables in the database so that flakes aren't caused by inadvertently changing the stored data.
-     * Instead, ensure that the SQL is executed correctly, thus indicating that the connection is working.
-     */
-    await testUser.page.getByRole('textbox').fill(`
-      SELECT
-        number,
-        text
-      FROM (
-        SELECT 1 AS number, 'one' AS text
-        UNION
-        SELECT 2 AS number, 'two' AS text
-        UNION
-        SELECT 3 AS number, 'three' AS text
-        UNION
-        SELECT 4 AS number, 'four' AS text
-        UNION
-        SELECT 5 AS number, 'five' AS text
-        UNION
-        SELECT 6 AS number, 'six' AS text
-        UNION
-        SELECT 7 AS number, 'seven' AS text
-        UNION
-        SELECT 8 AS number, 'eight' AS text
-        UNION
-        SELECT 9 AS number, 'nine' AS text
-        UNION
-        SELECT 10 AS number, 'ten' AS text
-        UNION
-        SELECT 11 AS number, 'eleven' AS text
-        UNION
-        SELECT 12 AS number, 'twelve' AS text
-        UNION
-        SELECT 13 AS number, 'thirteen' AS text
-        UNION
-        SELECT 14 AS number, 'fourteen' AS text
-        UNION
-        SELECT 15 AS number, 'fifteen' AS text
-      ) AS subquery;`);
+    await testUser.page
+      .getByRole('textbox')
+      .fill('select text, number from e2e_test_data_table;');
     await testUser.page.getByRole('button', { name: 'Play Run' }).click();
     await testUser.page.getByRole('tab', { name: 'Preview' }).click();
   });
