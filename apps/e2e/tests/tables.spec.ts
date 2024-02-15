@@ -670,9 +670,44 @@ test('Starts editing cell on enter', async ({ testUser }) => {
     await testUser.page.keyboard.press('Enter');
   });
 
+  await test.step('keyboard navigation', async () => {
+    await testUser.page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
+    await testUser.page.keyboard.type('1,2');
+    await testUser.page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
+    await testUser.page.keyboard.press('ArrowRight');
+  });
+
+  await test.step('use Shift Enter to move to the box above', async () => {
+    await testUser.page.keyboard.press('Enter');
+    await testUser.page.keyboard.type('2,3');
+    await testUser.page.keyboard.press('Shift+Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
+  });
+
+  await test.step('use the up arrow key during edit mode', async () => {
+    await testUser.page.keyboard.press('Enter');
+    await testUser.page.keyboard.type('2,2');
+    await testUser.page.keyboard.press('ArrowUp');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUser.page.waitForTimeout(Timeouts.tableDelay);
+    await testUser.page.keyboard.type('2,1', { delay: 10 });
+    await testUser.page.keyboard.press('Enter');
+  });
+
   await test.step('check that cell is edited', async () => {
-    await expect(async () => {
-      expect(await getFromTable(testUser.page, 1)).toBe('before after');
-    }).toPass();
+    const res = await Promise.all([
+      getFromTable(testUser.page, 1, 0, 'Table'),
+      getFromTable(testUser.page, 2, 0, 'Table'),
+      getFromTable(testUser.page, 1, 1, 'Table'),
+      getFromTable(testUser.page, 2, 1, 'Table'),
+      getFromTable(testUser.page, 3, 1, 'Table'),
+    ]);
+
+    expect(res).toStrictEqual(['before after', '1,2', '2,1', '2,2', '2,3']);
   });
 });
