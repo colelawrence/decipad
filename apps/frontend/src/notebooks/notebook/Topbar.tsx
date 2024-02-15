@@ -38,14 +38,19 @@ export interface TopbarProps {
   readonly docsync: DocSyncEditor | undefined;
 }
 
-export const MenuItemButton = styled.div(p13Medium, {
-  cursor: 'pointer',
-  userSelect: 'none',
-  'div em': {
+export const MenuItemButton = styled.div<{ isReadOnly?: boolean }>(
+  p13Medium,
+  (props) => ({
     cursor: 'pointer',
     userSelect: 'none',
-  },
-});
+    ...(!props.isReadOnly && {
+      'div em': {
+        cursor: 'pointer',
+        userSelect: 'none',
+      },
+    }),
+  })
+);
 
 /**
  * Entire Topbar Wrapper.
@@ -116,7 +121,10 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     return <TopbarPlaceholder />;
   }
 
+  const isReadOnly = Boolean(docsync?.isReadOnly);
   const notebookName = data?.name ?? 'Untitled';
+  const showTrigger =
+    data?.myPermissionType === 'WRITE' || data?.myPermissionType === 'ADMIN';
 
   return (
     <NotebookTopbar
@@ -128,12 +136,12 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           isArchived={Boolean(data?.archived)}
           workspaces={userWorkspaces}
           trigger={
-            <MenuItemButton data-testId="notebook-actions">
+            <MenuItemButton
+              data-testId="notebook-actions"
+              isReadOnly={isReadOnly}
+            >
               <NotebookPath concatName notebookName={notebookName} />
-              {data?.myPermissionType === 'WRITE' ||
-                (data?.myPermissionType === 'ADMIN' && (
-                  <Caret variant="down" />
-                ))}
+              {showTrigger && <Caret variant="down" />}
             </MenuItemButton>
           }
           notebookStatus={
