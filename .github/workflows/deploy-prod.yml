@@ -134,5 +134,6 @@ jobs:
           title: "Deploy Prod ${{ needs.deploy.result == 'failure' && '🔴' || '💚'}}"
           github-token: ${{ secrets.github_token }}
           avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
-          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          discord-webhook: ${{ secrets.DISCORD_PRODUCT_WEBHOOK }}
+          description: ${{github.event.release.body}}
           include-details: false
