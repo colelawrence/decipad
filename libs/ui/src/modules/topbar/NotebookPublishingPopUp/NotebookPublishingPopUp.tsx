@@ -3,7 +3,7 @@
 import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useState } from 'react';
+import { ComponentProps, FC } from 'react';
 import { cssVar, smallScreenQuery, smallShadow } from '../../../primitives';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 import {
@@ -19,6 +19,7 @@ import {
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
+import { SidebarPublishingTab } from '@decipad/react-contexts';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -78,9 +79,10 @@ export type NotebookSharingPopUpProps = Pick<
 
     readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
     readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
-  };
 
-type TabStates = 'Collaborate' | 'Publish' | 'Embed';
+    readonly selectedTab: SidebarPublishingTab;
+    readonly onChangeSelectedTab: (tab: SidebarPublishingTab) => void;
+  };
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
 
@@ -111,13 +113,10 @@ export const NotebookPublishingPopUp = ({
   onInvite,
   onRemove,
   onChange,
+
+  selectedTab,
+  onChangeSelectedTab,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
-  const [selectedTab, setSelectedTab] = useState<TabStates>('Collaborate');
-
-  const selectTab = (tab: TabStates) => {
-    setSelectedTab(tab);
-  };
-
   const activeTabId = useActiveTabId();
 
   const link = isServerSideRendering()
@@ -146,36 +145,36 @@ export const NotebookPublishingPopUp = ({
             <TabsList fullWidth>
               <TabsTrigger
                 testId="collaborate-tab"
-                name="Collaborate"
+                name="collaborators"
                 trigger={{
                   label: 'Collaborate',
-                  onClick: () => selectTab('Collaborate'),
+                  onClick: () => onChangeSelectedTab('collaborators'),
                   disabled: false,
-                  selected: selectedTab === 'Collaborate',
+                  selected: selectedTab === 'collaborators',
                 }}
               />
               <TabsTrigger
                 testId="publish-tab"
-                name="Publish"
+                name="publishing"
                 trigger={{
                   label: 'Publish',
-                  onClick: () => selectTab('Publish'),
+                  onClick: () => onChangeSelectedTab('publishing'),
                   disabled: false,
-                  selected: selectedTab === 'Publish',
+                  selected: selectedTab === 'publishing',
                 }}
               />
               <TabsTrigger
                 testId="embed-tab"
-                name="Embed"
+                name="embed"
                 trigger={{
                   label: 'Embed',
-                  onClick: () => selectTab('Embed'),
+                  onClick: () => onChangeSelectedTab('embed'),
                   disabled: false,
-                  selected: selectedTab === 'Embed',
+                  selected: selectedTab === 'embed',
                 }}
               />
             </TabsList>
-            <TabsContent name="Collaborate">
+            <TabsContent name="collaborators">
               <div css={groupStyles} className="notebook-collaborate-tab">
                 <NotebookCollaborateTab
                   hasPaywall={hasPaywall}
@@ -192,7 +191,7 @@ export const NotebookPublishingPopUp = ({
                 />
               </div>
             </TabsContent>
-            <TabsContent name="Publish">
+            <TabsContent name="publishing">
               <div css={groupStyles} className="notebook-publish-tab">
                 <NotebookPublishTab
                   isPremium={isPremium}
@@ -207,7 +206,7 @@ export const NotebookPublishingPopUp = ({
                 />
               </div>
             </TabsContent>
-            <TabsContent name="Embed">
+            <TabsContent name="embed">
               <div css={groupStyles} className="notebook-embed-tab">
                 <NotebookEmbedTab
                   isAdmin={isAdmin}

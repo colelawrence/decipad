@@ -30,6 +30,8 @@ export type SidebarComponentsWithoutClosed =
   | 'ai'
   | 'publishing';
 
+export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
+
 export interface NotebookMetaDataType {
   readonly sidebarComponent: SidebarComponent;
   readonly toggleSidebar: (component: SidebarComponent) => void;
@@ -43,6 +45,9 @@ export interface NotebookMetaDataType {
   // Used for preventing errored notebooks from being editable.
   readonly canEdit: boolean;
   readonly setCanEdit: (state: boolean) => void;
+
+  readonly publishingTab: SidebarPublishingTab;
+  readonly setPublishingTab: (tab: SidebarPublishingTab) => void;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
@@ -67,7 +72,7 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
           }
         },
 
-        setSidebarTab(sidebarTab: SelectedTab) {
+        setSidebarTab(sidebarTab) {
           set(() => ({ sidebarTab }));
         },
 
@@ -77,6 +82,11 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
             get().toggleSidebar('ai');
           }
           set(() => ({ canEdit }));
+        },
+
+        publishingTab: 'collaborators',
+        setPublishingTab(publishingTab) {
+          set(() => ({ publishingTab }));
         },
       };
     },

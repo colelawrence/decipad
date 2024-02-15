@@ -19,6 +19,8 @@ const args: NotebookSharingPopUpProps = {
   publishedVersionState: 'unpublished-changes',
   isPremium: false,
   publishingState: 'PRIVATE',
+  selectedTab: 'publishing',
+  onChangeSelectedTab: () => {},
 };
 
 export default {

@@ -66,6 +66,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     isSidebarOpen: state.isSidebarOpen,
     toggleSidebar: state.toggleSidebar,
     component: state.sidebarComponent,
+    setPublishingTab: state.setPublishingTab,
   }));
 
   useEffect(() => {
@@ -168,7 +169,12 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
       NotebookPublishing={
         <Button
           type="primaryBrand"
-          onClick={() => sidebarData.toggleSidebar('publishing')}
+          onClick={() => {
+            sidebarData.toggleSidebar('publishing');
+            if (needsUpdate) {
+              sidebarData.setPublishingTab('publishing');
+            }
+          }}
           testId="publish-button"
         >
           {needsUpdate && data?.myPermissionType === 'ADMIN' ? (

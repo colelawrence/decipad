@@ -90,6 +90,8 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       onPublish={async () => {}}
       publishingState={'PRIVATE'}
       isPremium={false}
+      selectedTab="publishing"
+      onChangeSelectedTab={() => {}}
     />
   ),
   access: {

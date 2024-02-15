@@ -20,6 +20,7 @@ import {
 } from '@decipad/interfaces';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -125,6 +126,10 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       : _publishedVersionState;
 
   const accessActions = useNotebookAccessActions();
+  const [selectedTab, onChangeSelectedTab] = useNotebookMetaData((s) => [
+    s.publishingTab,
+    s.setPublishingTab,
+  ]);
 
   const data = meta.data?.getPadById;
 
@@ -175,6 +180,8 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       onInvite={accessActions.onInviteByEmail}
       onChange={accessActions.onChangeAccess}
       onRemove={accessActions.onRemoveAccess}
+      selectedTab={selectedTab}
+      onChangeSelectedTab={onChangeSelectedTab}
     />
   );
 };
