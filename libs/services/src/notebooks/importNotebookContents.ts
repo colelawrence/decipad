@@ -1,7 +1,8 @@
 import { PadRecord, User } from '@decipad/backendtypes';
 import { Document, MyValue } from '@decipad/editor-types';
 import Boom from '@hapi/boom';
-import { Element as SlateElement } from 'slate';
+import { TNode } from '@udecode/plate-common';
+import { Node, Element as SlateElement } from 'slate';
 import { create as createContent } from '../pad-content';
 import { applyReplaceList } from './applyReplaceList';
 import { create as createPad } from './create';
@@ -14,6 +15,16 @@ export interface ImportNotebookContentProps {
   padId?: string;
   replaceList?: Record<string, string>;
 }
+
+const findInvalidNodes = (node: TNode, invalidNodes: TNode[] = []) => {
+  if (!Node.isNode(node)) {
+    invalidNodes.push(node);
+  }
+
+  if (Array.isArray(node.children)) {
+    node.children.forEach((child) => findInvalidNodes(child, invalidNodes));
+  }
+};
 
 export const importNotebookContent = async ({
   workspaceId,
@@ -28,15 +39,24 @@ export const importNotebookContent = async ({
     try {
       const root = JSON.parse(source) as Document;
       if (!root.children.every(SlateElement.isElement)) {
+        const invalidNodes: TNode[] = [];
+        root.children.forEach((child) => findInvalidNodes(child, invalidNodes));
+
+        const problematicChildren = invalidNodes.map(
+          (node) => node.id || JSON.stringify(node)
+        );
+        // eslint-disable-next-line no-console
         throw Boom.badData(
-          'Cannot import notebook because one of its blocks is not a valid Slate Element'
+          `Invalid slate nodes with id: ${JSON.stringify(
+            problematicChildren,
+            null,
+            2
+          )}`
         );
       }
       doc = root.children as MyValue;
     } catch (err) {
-      throw Boom.notAcceptable(
-        `Error parsing import content: ${(err as Error).message}`
-      );
+      throw Boom.notAcceptable(`Import error: ${(err as Error).message}`);
     }
   } else {
     doc = source.children;
