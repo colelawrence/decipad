@@ -96,20 +96,54 @@ export const findSubscriptionByWorkspaceId = async (
 export const updateStripeIfNeeded = async (
   event: APIGatewayProxyEventV2,
   subs: WorkspaceSubscription,
-  newQuantity: number
+  newQuantity: number,
+  workspaceId: string
 ) => {
+  const data = await tables();
   const subscription = await stripe.subscriptions.retrieve(subs.id);
+  const workspace = await data.workspaces.get({ id: workspaceId });
+  const workspacePlan = workspace?.plan || 'pro';
 
   if (subscription.items.data.length === 0) {
     throw new Error('Subscription has no items');
   }
+  const planSubsInfo = subscription.items.data.find(
+    (item) => item.metadata.type === 'plan'
+  );
+  const previousQuantity = planSubsInfo?.quantity || 0;
 
-  const subscriptionItemID = subscription.items.data[0].id;
-  const previousQuantity = subscription.items.data[0].quantity;
+  // if there are no seats, then the current plan is PRO
+  if (!subs.seats && workspace?.isPremium) {
+    const subscriptionItemID = planSubsInfo?.id || '';
 
-  await stripe.subscriptionItems.update(subscriptionItemID, {
-    quantity: newQuantity,
-  });
+    await stripe.subscriptionItems.update(subscriptionItemID, {
+      quantity: newQuantity,
+    });
+  } else if (subs.seats) {
+    if (newQuantity < subs.seats) {
+      // nothing to do
+      return;
+    }
+
+    const pricePerSeatItemResponse = await stripe.prices.search({
+      query: `metadata["key"]:"${workspacePlan}" AND metadata["type"]:"seat"`,
+    });
+
+    if (pricePerSeatItemResponse.data.length !== 1) {
+      throw new Error(
+        `Price per seat for plan ${workspacePlan} does not exist or has multiple items`
+      );
+    }
+    const pricePerSeat = pricePerSeatItemResponse.data[0];
+    const nrOfAdditionalSeats = newQuantity - subs.seats;
+    const subscriptionItemId =
+      subscription.items.data.find((si) => si.price.id === pricePerSeat.id)
+        ?.id || '';
+
+    await stripe.subscriptionItems.update(subscriptionItemId, {
+      quantity: nrOfAdditionalSeats,
+    });
+  }
 
   await track(event, {
     event: 'update Stripe subscription seats',
@@ -117,8 +151,8 @@ export const updateStripeIfNeeded = async (
       stripeSubscriptionId: subscription.id,
       previousQuantity: previousQuantity?.toString(),
       newQuantity: newQuantity.toString(),
-      // TODO
-      // billingEmail: subs.email,
+      workspaceId,
+      plan: workspacePlan,
     },
   });
 };

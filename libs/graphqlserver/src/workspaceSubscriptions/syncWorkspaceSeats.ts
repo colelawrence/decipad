@@ -11,6 +11,6 @@ export const syncWorkspaceSeats: NonNullable<
   const sub = await findSubscriptionByWorkspaceId(workspaceId);
   const newQuantity = await getWorkspaceMembersCount(workspaceId);
 
-  await updateStripeIfNeeded(ctx.event, sub, newQuantity);
+  await updateStripeIfNeeded(ctx.event, sub, newQuantity, workspaceId);
   return sub;
 };
