@@ -23,10 +23,20 @@ export const UndoButtons: React.FC<UndoButtonsProps> = ({
 }) => (
   <Styled.ActionButtons>
     <div>
-      <button type="button" onClick={onUndo} disabled={!canUndo}>
+      <button
+        data-testid="undo-button"
+        type="button"
+        onClick={onUndo}
+        disabled={!canUndo}
+      >
         <CurvedArrow direction="left" active={canUndo} />
       </button>
-      <button type="button" onClick={onRedo} disabled={!canRedo}>
+      <button
+        data-testid="redo-button"
+        type="button"
+        onClick={onRedo}
+        disabled={!canRedo}
+      >
         <CurvedArrow direction="right" active={canRedo} />
       </button>
     </div>

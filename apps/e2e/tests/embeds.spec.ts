@@ -3,6 +3,7 @@ import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.
 import { waitForEditorToLoad } from 'apps/e2e/utils/page/Editor';
 
 test('Embeds', async ({ testUser, unregisteredUser }) => {
+  test.slow();
   let embedUrl: string;
   await test.step('load candle business notebook', async () => {
     testUser.importNotebook(startingACandleBusiness);
@@ -17,12 +18,13 @@ test('Embeds', async ({ testUser, unregisteredUser }) => {
     embedUrl = await testUser.notebook.createEmbed();
   });
 
-  await test.step('check embed', async () => {
+  await test.step('check clear changes button', async () => {
     // We need this to let the backend catch up, with its latest version.
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await unregisteredUser.page.waitForTimeout(5000);
 
     await unregisteredUser.page.goto(embedUrl);
+    await unregisteredUser.notebook.waitForEditorToLoad();
     await unregisteredUser.page.getByTestId('widget-input').nth(0).click();
     for (let i = 0; i < 7; i++) {
       await unregisteredUser.page.keyboard.press('ArrowLeft');
@@ -42,5 +44,48 @@ test('Embeds', async ({ testUser, unregisteredUser }) => {
     expect(slider1Text).toBe('1200 unit');
     expect(slider2Text).toBe('45%');
     expect(slider3Text).toContain('25$');
+  });
+
+  await test.step('change values', async () => {
+    await unregisteredUser.page.getByTestId('widget-input').nth(0).click();
+    for (let i = 0; i < 7; i++) {
+      await unregisteredUser.page.keyboard.press('ArrowLeft');
+    }
+    await unregisteredUser.page.keyboard.press('Backspace');
+    await unregisteredUser.page.keyboard.type('1');
+    await unregisteredUser.notebook.updateSlider(1, '40%');
+    await unregisteredUser.notebook.updateSlider(2, '20$ / unit');
+  });
+
+  await test.step('check undo', async () => {
+    const undoButton = unregisteredUser.page.getByTestId('undo-button');
+
+    while (!(await undoButton.isDisabled())) {
+      await undoButton.click();
+    }
+    const [slider1Text, slider2Text, slider3Text] = await Promise.all([
+      unregisteredUser.page.getByTestId('widget-input').nth(0).textContent(),
+      unregisteredUser.page.getByTestId('widget-input').nth(1).textContent(),
+      unregisteredUser.page.getByTestId('widget-input').nth(2).textContent(),
+    ]);
+    expect(slider1Text).toBe('1200 unit');
+    expect(slider2Text).toBe('45%');
+    expect(slider3Text).toContain('25$');
+  });
+
+  await test.step('check undo', async () => {
+    const redoButton = unregisteredUser.page.getByTestId('redo-button');
+
+    while (!(await redoButton.isDisabled())) {
+      await redoButton.click();
+    }
+    const [slider1Text, slider2Text, slider3Text] = await Promise.all([
+      unregisteredUser.page.getByTestId('widget-input').nth(0).textContent(),
+      unregisteredUser.page.getByTestId('widget-input').nth(1).textContent(),
+      unregisteredUser.page.getByTestId('widget-input').nth(2).textContent(),
+    ]);
+    expect(slider1Text).toBe('1100 unit');
+    expect(slider2Text).toBe('40%');
+    expect(slider3Text).toContain('20$');
   });
 });
