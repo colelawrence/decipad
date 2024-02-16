@@ -126,6 +126,19 @@ test('publish notebook, check logged out reader + logged in duplication', async 
       0
     );
   });
+
+  await test.step('create new table then republish', async () => {
+    await testUser.notebook.createTab('Published Tab');
+    await testUser.page.getByTestId('publish-changes').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUserPage.waitForTimeout(Timeouts.syncDelay);
+  });
+
+  await test.step('[unregisteredUser] see the new tab', async () => {
+    await unregisteredUserPage.goto(sharedPageLocation!);
+    await unregisteredUserNotebook.waitForEditorToLoad();
+    await expect(unregisteredUserPage.getByText('Published Tab')).toBeVisible();
+  });
 });
 
 test('duplicating only the published changes', async ({

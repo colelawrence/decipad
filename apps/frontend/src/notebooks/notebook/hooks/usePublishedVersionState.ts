@@ -6,7 +6,7 @@ import {
 } from '@decipad/interfaces';
 import { dequal } from '@decipad/utils';
 import { useEffect, useMemo, useState } from 'react';
-import { concat, debounce, filter, interval, take } from 'rxjs';
+import { concat, debounce, interval, take } from 'rxjs';
 import { Doc, applyUpdate } from 'yjs';
 
 export interface Props {
@@ -80,10 +80,7 @@ export function usePublishedVersionState({
     //
     const anyChangeDelayedSub = concat(
       docsync.events.pipe(take(1)),
-      docsync.events.pipe(
-        debounce(() => interval(1000)),
-        filter((e) => e.type === 'any-change')
-      )
+      docsync.events.pipe(debounce(() => interval(1000)))
     );
 
     const s = anyChangeDelayedSub.subscribe(() => {
