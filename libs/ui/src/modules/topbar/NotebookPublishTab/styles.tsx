@@ -10,6 +10,7 @@ import {
   p14Regular,
   p8Medium,
 } from '../../../primitives';
+import { Link } from '../../../shared';
 import { FC } from 'react';
 import { Publish_State } from '@decipad/graphql-client';
 import {
@@ -199,7 +200,6 @@ export const publishNewChangesStyles = css({
 
 const publishWritingP = css(p14Medium, { color: cssVar('textHeavy') });
 const publishWritingP2 = css(p14Regular, { color: cssVar('textSubdued') });
-const publishWritingSpan = css(p14Medium, { paddingLeft: '4px' });
 
 // ==============================================
 // Types
@@ -238,8 +238,13 @@ export const PublishingWriting: FC = () => (
         <div css={titleStyles}>
           <p css={publishWritingP}>Publish Online</p>
           <p css={publishWritingP2}>
-            Create a public URL and manage some settings to share your work.
-            <span css={publishWritingSpan}>Check our docs</span>
+            Create a public URL and manage some settings to share your work.{' '}
+            <Link
+              color="plain"
+              href="https://app.decipad.com/docs/share/embeds"
+            >
+              Check out docs
+            </Link>
           </p>
         </div>
       </div>
