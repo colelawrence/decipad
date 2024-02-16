@@ -40,8 +40,13 @@ const textStyles = css(p14Medium, {
 });
 
 const iconWrapper = css({
+  display: 'flex',
+  backgroundColor: cssVar('backgroundDefault'),
+  padding: '4px',
   alignItems: 'center',
   gap: '4px',
+  position: 'absolute',
+  right: '16px',
 });
 
 const iconStyles = css({
@@ -55,6 +60,13 @@ const itemIconStyles = css({
   height: '16px',
   display: 'grid',
   borderRadius: '6px',
+});
+
+const nameWrapper = css({
+  display: 'flex',
+  gap: '4px',
+  maxWidth: '100%',
+  alignItems: 'center',
 });
 
 export type SelectItemTypes = 'column';
@@ -156,35 +168,28 @@ export const SelectItem: FC<SelectItemProps> = ({
       aria-roledescription="dropdownOption"
       data-testid="dropdown-option"
     >
-      <div
-        css={{
-          display: 'flex',
-          gap: '4px',
-          maxWidth: '100%',
-          alignItems: 'center',
-        }}
-      >
+      <div css={nameWrapper}>
         {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
         <span css={textStyles}>{item.itemName ?? item.item}</span>
+        {isEditAllowed && (
+          <aside css={iconWrapper}>
+            <div
+              css={iconStyles}
+              onClick={onEdit}
+              aria-roledescription="dropdown-edit"
+            >
+              <Edit />
+            </div>
+            <div
+              css={iconStyles}
+              onClick={onRemove}
+              aria-roledescription="dropdown-delete"
+            >
+              <Trash />
+            </div>
+          </aside>
+        )}
       </div>
-      {isEditAllowed && (
-        <aside css={[iconWrapper]}>
-          <div
-            css={iconStyles}
-            onClick={onEdit}
-            aria-roledescription="dropdown-edit"
-          >
-            <Edit />
-          </div>
-          <div
-            css={iconStyles}
-            onClick={onRemove}
-            aria-roledescription="dropdown-delete"
-          >
-            <Trash />
-          </div>
-        </aside>
-      )}
     </div>
   );
 };
