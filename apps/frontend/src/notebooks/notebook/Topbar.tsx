@@ -95,7 +95,10 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     docsync,
   });
   const needsUpdate =
-    publishedVersionState != null && publishedVersionState !== 'up-to-date';
+    publishedVersionState != null &&
+    publishedVersionState !== 'up-to-date' &&
+    (meta.data?.getPadById?.isPublic ||
+      meta.data?.getPadById?.userAllowsPublicHighlighting);
 
   const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 
