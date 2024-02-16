@@ -342,21 +342,11 @@ test('dropdown widget', async ({ testUser }) => {
     await writeInTable(page, 'Three', 3, 0);
 
     await page.locator('[aria-roledescription="dropdown-open"]').click();
-
-    const [option1, option2, option3] = await Promise.all([
-      page
-        .locator('[aria-roledescription="dropdownOption"] >> nth=0')
-        .innerText(),
-      page
-        .locator('[aria-roledescription="dropdownOption"] >> nth=1')
-        .innerText(),
-      page
-        .locator('[aria-roledescription="dropdownOption"] >> nth=2')
-        .innerText(),
+    expect(await notebook.getDropdownOptions()).toEqual([
+      'Table.Column1',
+      'Table.Column2',
+      'Table.Column3',
     ]);
-    expect(option1).toBe('Table.Column1');
-    expect(option2).toBe('Table.Column2');
-    expect(option3).toBe('Table.Column3');
 
     await page
       .locator('[aria-roledescription="dropdownOption"] >> nth=0')
@@ -382,11 +372,7 @@ test('dropdown widget', async ({ testUser }) => {
       .locator('[aria-roledescription="dropdownOption"] >> nth=1')
       .click();
 
-    const dropDownText = await page
-      .locator('[aria-roledescription="dropdown-open"]')
-      .innerText();
-
-    expect(dropDownText).toBe('One');
+    await expect(page.getByTestId('dropdown-display')).toHaveText(/One/);
   });
 
   await test.step('Get CSV for table', async () => {

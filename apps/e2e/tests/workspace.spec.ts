@@ -358,32 +358,34 @@ test('reader and collaborator permissions', async ({
     ).toBeFalsy();
   });
 
+  /*
   // Requirements are different, random free user shouldn't be
   // able to invite to notebooks
-  // await test.step('collaborator checks', async () => {
-  //   await anotherRandomFreeUser.page.goto(notebook);
-  //   await anotherRandomFreeUser.notebook.waitForEditorToLoad();
-  //
-  //   await expect(
-  //     anotherRandomFreeUser.page.getByText('You are in reading mode')
-  //   ).toBeHidden();
-  //
-  //   await anotherRandomFreeUser.page.getByTestId('publish-button').click();
-  //   await expect(
-  //     anotherRandomFreeUser.page.getByText(
-  //       'Request access to have more sharing options'
-  //     )
-  //   ).toBeVisible();
-  //   await anotherRandomFreeUser.notebook.focusOnBody();
-  //   await anotherRandomFreeUser.notebook.addParagraph('I am editing');
-  //   await expect(
-  //     anotherRandomFreeUser.page.getByText('I am editing')
-  //   ).toBeVisible();
-  //   await anotherRandomFreeUser.notebook.updateNotebookTitle(
-  //     'edited by collaborator'
-  //   );
-  //   await anotherRandomFreeUser.notebook.checkNotebookTitle(
-  //     'edited by collaborator'
-  //   );
-  // });
+  await test.step('collaborator checks', async () => {
+    await anotherRandomFreeUser.page.goto(notebook);
+    await anotherRandomFreeUser.notebook.waitForEditorToLoad();
+
+    await expect(
+      anotherRandomFreeUser.page.getByText('You are in reading mode')
+    ).toBeHidden();
+
+    await anotherRandomFreeUser.page.getByTestId('publish-button').click();
+    await expect(
+      anotherRandomFreeUser.page.getByText(
+        'Request access to have more sharing options'
+      )
+    ).toBeVisible();
+    await anotherRandomFreeUser.notebook.focusOnBody();
+    await anotherRandomFreeUser.notebook.addParagraph('I am editing');
+    await expect(
+      anotherRandomFreeUser.page.getByText('I am editing')
+    ).toBeVisible();
+    await anotherRandomFreeUser.notebook.updateNotebookTitle(
+      'edited by collaborator'
+    );
+    await anotherRandomFreeUser.notebook.checkNotebookTitle(
+      'edited by collaborator'
+    );
+  });
+  */
 });
