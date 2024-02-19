@@ -101,25 +101,35 @@ export const updateStripeIfNeeded = async (
 ) => {
   const data = await tables();
   const subscription = await stripe.subscriptions.retrieve(subs.id);
+
   const workspace = await data.workspaces.get({ id: workspaceId });
   const workspacePlan = workspace?.plan || 'pro';
+  let previousQuantity;
 
   if (subscription.items.data.length === 0) {
     throw new Error('Subscription has no items');
   }
-  const planSubsInfo = subscription.items.data.find(
-    (item) => item.metadata.type === 'plan'
-  );
-  const previousQuantity = planSubsInfo?.quantity || 0;
 
-  // if there are no seats, then the current plan is PRO
-  if (!subs.seats && workspace?.isPremium) {
+  if (workspacePlan === 'pro' && workspace?.isPremium) {
+    const planSubsInfo = subscription.items.data[0];
+    previousQuantity = planSubsInfo?.quantity || 0;
     const subscriptionItemID = planSubsInfo?.id || '';
 
     await stripe.subscriptionItems.update(subscriptionItemID, {
       quantity: newQuantity,
     });
-  } else if (subs.seats) {
+
+    await track(event, {
+      event: 'update Stripe subscription seats',
+      properties: {
+        stripeSubscriptionId: subscription.id,
+        previousQuantity: previousQuantity?.toString(),
+        newQuantity: newQuantity.toString(),
+        workspaceId,
+        plan: workspacePlan,
+      },
+    });
+  } else if (subs.seats && workspace?.isPremium) {
     if (newQuantity < subs.seats) {
       // nothing to do
       return;
@@ -134,27 +144,39 @@ export const updateStripeIfNeeded = async (
         `Price per seat for plan ${workspacePlan} does not exist or has multiple items`
       );
     }
+
     const pricePerSeat = pricePerSeatItemResponse.data[0];
+
     const nrOfAdditionalSeats = newQuantity - subs.seats;
-    const subscriptionItemId =
-      subscription.items.data.find((si) => si.price.id === pricePerSeat.id)
-        ?.id || '';
+    const subscriptionItemId = subscription.items.data.find(
+      (si) => si.price.id === pricePerSeat.id
+    )?.id;
 
-    await stripe.subscriptionItems.update(subscriptionItemId, {
-      quantity: nrOfAdditionalSeats,
-    });
+    if (!subscriptionItemId) {
+      await stripe.subscriptionItems.create({
+        subscription: subs.id,
+        price: pricePerSeat.id,
+        quantity: nrOfAdditionalSeats,
+      });
+    } else {
+      await stripe.subscriptionItems.update(subscriptionItemId, {
+        quantity: nrOfAdditionalSeats,
+      });
+    }
+
+    if (nrOfAdditionalSeats > 0) {
+      await track(event, {
+        event: 'update Stripe subscription seats',
+        properties: {
+          stripeSubscriptionId: subscription.id,
+          previousQuantity: (nrOfAdditionalSeats - 1).toString(),
+          newQuantity: nrOfAdditionalSeats.toString(),
+          workspaceId,
+          plan: workspacePlan,
+        },
+      });
+    }
   }
-
-  await track(event, {
-    event: 'update Stripe subscription seats',
-    properties: {
-      stripeSubscriptionId: subscription.id,
-      previousQuantity: previousQuantity?.toString(),
-      newQuantity: newQuantity.toString(),
-      workspaceId,
-      plan: workspacePlan,
-    },
-  });
 };
 
 export const cancelStripeSubscription = async (subscriptionId: ID) => {
