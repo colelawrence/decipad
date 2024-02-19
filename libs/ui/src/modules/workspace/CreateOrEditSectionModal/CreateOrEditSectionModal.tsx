@@ -4,12 +4,7 @@ import { useSafeState } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { OpaqueColor } from '@decipad/utils';
-import {
-  Button,
-  ColorPicker,
-  InputField,
-  ClosableModal,
-} from '../../../shared';
+import { Button, ColorPicker, InputField, Modal } from '../../../shared';
 
 import { p13Regular } from '../../../primitives';
 import {
@@ -19,20 +14,22 @@ import {
 } from '../../../utils';
 
 type CreateSectionModalProps = {
-  readonly onClose: () => void;
   readonly onSubmit: (name: string, color: OpaqueColor) => void | Promise<void>;
   readonly op?: 'create' | 'edit';
   readonly placeholderName?: string;
   readonly placeholderColor?: string;
+
+  readonly open: boolean;
+  readonly onOpenChange: (open: boolean) => void;
 };
 
 export const CreateOrEditSectionModal = ({
-  onClose,
+  open,
+  onOpenChange,
   onSubmit,
   op = 'create',
   placeholderName,
   placeholderColor = 'Catskill' as AvailableSwatchColor,
-  ...props
 }: CreateSectionModalProps): ReturnType<React.FC> => {
   const [name, setName] = useState(placeholderName || '');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
@@ -42,70 +39,63 @@ export const CreateOrEditSectionModal = ({
   const baseSwatches = swatchesThemed(darkTheme);
 
   return (
-    <div css={{ zIndex: 999, position: 'absolute' }}>
-      <ClosableModal
-        {...props}
-        Heading="h1"
-        title={`${term} folder`}
-        closeAction={onClose}
+    <Modal open={open} onOpenChange={onOpenChange} title={`${term} folder`}>
+      <form
+        css={{ display: 'grid', rowGap: '12px' }}
+        onSubmit={async (event) => {
+          event.preventDefault();
+          setIsSubmitting(true);
+          try {
+            await onSubmit(name, baseSwatches[color as AvailableSwatchColor]);
+          } finally {
+            setIsSubmitting(false);
+            onOpenChange(false);
+          }
+        }}
       >
-        <form
-          css={{ display: 'grid', rowGap: '12px' }}
-          onSubmit={async (event) => {
-            event.preventDefault();
-            setIsSubmitting(true);
-            try {
-              await onSubmit(name, baseSwatches[color as AvailableSwatchColor]);
-            } finally {
-              setIsSubmitting(false);
-              onClose();
-            }
+        {op === 'create' && (
+          <p css={css(p13Regular, { maxWidth: 350 })}>
+            Folders are how you can organize your documents within a workspace.
+            For instance, you can create a <em>personal</em> and a <em>work</em>{' '}
+            folder in your default workspace.
+          </p>
+        )}
+        <InputField
+          required
+          placeholder="My folder"
+          value={name}
+          onChange={setName}
+        />
+        <div
+          css={{
+            display: 'inline-flex',
+            flexDirection: 'row',
+            gap: 5,
+            flexWrap: 'nowrap',
           }}
         >
-          {op === 'create' && (
-            <p css={css(p13Regular, { maxWidth: 350 })}>
-              Folders are how you can organize your documents within a
-              workspace. For instance, you can create a <em>personal</em> and a{' '}
-              <em>work</em> folder in your default workspace.
-            </p>
-          )}
-          <InputField
-            required
-            placeholder="My folder"
-            value={name}
-            onChange={setName}
-          />
-          <div
-            css={{
-              display: 'inline-flex',
-              flexDirection: 'row',
-              gap: 5,
-              flexWrap: 'nowrap',
-            }}
-          >
-            {swatchNames.map((key) => {
-              return (
-                <div
-                  key={key}
-                  aria-label={key}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    setColor(key);
-                  }}
-                >
-                  <ColorPicker
-                    color={baseSwatches[key]}
-                    selected={key === color}
-                  />
-                </div>
-              );
-            })}
-          </div>
-          <Button type="secondary" submit disabled={!name || isSubmitting}>
-            {term} Folder
-          </Button>
-        </form>
-      </ClosableModal>
-    </div>
+          {swatchNames.map((key) => {
+            return (
+              <div
+                key={key}
+                aria-label={key}
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  setColor(key);
+                }}
+              >
+                <ColorPicker
+                  color={baseSwatches[key]}
+                  selected={key === color}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <Button type="secondary" submit disabled={!name || isSubmitting}>
+          {term} Folder
+        </Button>
+      </form>
+    </Modal>
   );
 };

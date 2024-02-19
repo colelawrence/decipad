@@ -57,6 +57,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
 
     await test.step('Importing image via link', async () => {
+      await notebook.selectLastParagraph();
       await notebook.openImageUploader();
       await page.getByTestId('link-file-tab').click();
       await page

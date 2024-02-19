@@ -12,3 +12,7 @@ export default {
 } as Meta;
 
 export const Normal: StoryFn<typeof args> = (props) => <Modal {...props} />;
+
+export const NormalWithTitle: StoryFn<typeof args> = (props) => (
+  <Modal title="Modal Title" {...props} />
+);

@@ -2,21 +2,16 @@
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, useCallback, useState } from 'react';
-import {
-  Button,
-  InputField,
-  ClosableModal,
-  ClosableModalHeader,
-} from '../../../shared';
+import { useCallback, useState } from 'react';
+import { Button, InputField, Modal } from '../../../shared';
 
 type CreateWorkspaceModalProps = {
-  readonly closeHref: string;
+  readonly onClose: () => void;
   readonly onCreate?: (name: string) => void | Promise<void>;
-} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
+};
 
 export const CreateWorkspaceModal = ({
-  closeHref,
+  onClose,
   onCreate = noop,
   ...props
 }: CreateWorkspaceModalProps): ReturnType<React.FC> => {
@@ -37,10 +32,11 @@ export const CreateWorkspaceModal = ({
   );
 
   return (
-    <ClosableModal
+    <Modal
       {...props}
       title="Create New Workspace"
-      closeAction={closeHref}
+      onClose={onClose}
+      defaultOpen={true}
     >
       <form css={formWrapperStyle} onSubmit={handleSubmit}>
         <InputField
@@ -60,12 +56,12 @@ export const CreateWorkspaceModal = ({
           >
             Create Workspace
           </Button>
-          <Button type="secondary" href={closeHref}>
+          <Button type="secondary" onClick={onClose}>
             Cancel
           </Button>
         </div>
       </form>
-    </ClosableModal>
+    </Modal>
   );
 };
 

@@ -6,8 +6,9 @@ import { CreateOrEditSectionModal } from './CreateOrEditSectionModal';
 import { renderWithRouter } from '../../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof CreateOrEditSectionModal> = {
-  onClose: noop,
   onSubmit: noop,
+  open: true,
+  onOpenChange: noop,
 };
 
 it('cannot create a folder in its initial state', () => {

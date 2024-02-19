@@ -384,8 +384,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             element={
               <LazyRoute>
                 <CreateWorkspaceModal
-                  Heading="h2"
-                  closeHref={currentWorkspaceRoute.$}
+                  onClose={() => navigate(currentWorkspaceRoute.$)}
                   onCreate={async (workspaceName) => {
                     const data = await createWorkspace({ name: workspaceName });
                     if (data) {
@@ -405,13 +404,12 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             element={
               <LazyRoute>
                 <EditWorkspaceModal
-                  Heading="h1"
                   name={currentWorkspace.name}
                   allowDelete={
                     workspaceData?.workspaces &&
                     workspaceData?.workspaces?.length > 1
                   }
-                  closeHref={currentWorkspaceRoute.$}
+                  onClose={() => navigate(currentWorkspaceRoute.$)}
                   membersHref={currentWorkspaceRoute.members({}).$}
                   onRename={async (newName) => {
                     const success = await renameWorkspace({
@@ -441,8 +439,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             element={
               <LazyRoute>
                 <EditMembersModal
-                  Heading="h1"
-                  closeHref={currentWorkspaceRoute.$}
+                  onClose={() => navigate(currentWorkspaceRoute.$)}
                   currentWorkspace={currentWorkspace}
                 />
               </LazyRoute>
@@ -453,8 +450,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             element={
               <LazyRoute>
                 <EditDataConnectionsModal
-                  Heading="h1"
-                  closeHref={currentWorkspaceRoute.$}
+                  onClose={() => navigate(currentWorkspaceRoute.$)}
                   currentWorkspace={currentWorkspace}
                 />
               </LazyRoute>

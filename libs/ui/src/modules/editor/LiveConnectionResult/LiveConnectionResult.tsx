@@ -9,13 +9,11 @@ import type {
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import {
-  ImportTableFirstRowControls,
-  DatabaseConnection,
-} from '../../../shared';
+import { ImportTableFirstRowControls } from '../../../shared';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { code } from '../../../primitives';
 import { isDatabaseConnection } from '../../../utils/isDatabaseConnection';
+import { DatabaseConnection } from '../DatabaseConnection/DatabaseConnection';
 
 interface LiveConnectionResultProps {
   result: Result.Result;

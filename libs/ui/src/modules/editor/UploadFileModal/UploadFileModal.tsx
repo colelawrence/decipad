@@ -10,7 +10,6 @@ import {
   TabsList,
   TabsRoot,
   TabsTrigger,
-  modalDialogStyles,
 } from '../../../shared';
 import { Close } from '../../../icons';
 import {
@@ -259,7 +258,6 @@ const wrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '32px',
   gap: '12px',
 });
 
@@ -325,4 +323,4 @@ const uploadingButtonPlaceholderStyles = ({ progress }: { progress: number }) =>
     },
   });
 
-const allWrapperStyles = [wrapperStyles, modalDialogStyles];
+const allWrapperStyles = [wrapperStyles];

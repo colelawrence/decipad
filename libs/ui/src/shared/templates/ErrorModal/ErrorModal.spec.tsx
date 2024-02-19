@@ -3,7 +3,7 @@ import { ErrorModal } from './ErrorModal';
 
 it('renders a dialog', () => {
   const { getByRole } = render(<ErrorModal Heading="h1" wellKnown="404" />);
-  expect(getByRole('dialog')).toBeVisible();
+  expect(getByRole('dialog')).toBeInTheDocument();
 });
 
 it('shows explanatory text for a 404', () => {

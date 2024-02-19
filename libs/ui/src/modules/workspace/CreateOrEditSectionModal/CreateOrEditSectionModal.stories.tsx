@@ -8,5 +8,5 @@ export default {
 } as Meta;
 
 export const Normal: StoryFn = () => (
-  <CreateOrEditSectionModal onClose={noop} onSubmit={noop} />
+  <CreateOrEditSectionModal open={true} onOpenChange={noop} onSubmit={noop} />
 );

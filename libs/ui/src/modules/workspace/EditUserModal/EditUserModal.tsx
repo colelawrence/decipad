@@ -9,7 +9,7 @@ import { useCallback } from 'react';
 
 import { componentCssVars, p13Regular } from '../../../primitives';
 import { inputLabel } from '../../../primitives/text';
-import { Button, Link, ColorThemeSwitch, ClosableModal } from '../../../shared';
+import { Button, Link, ColorThemeSwitch, Modal } from '../../../shared';
 
 import {
   AccountSettingsForm,
@@ -66,10 +66,11 @@ export const EditUserModal: React.FC = () => {
   }
 
   return (
-    <ClosableModal
-      Heading="h2"
+    <Modal
       title="Account settings"
-      closeAction={closeModal}
+      onClose={closeModal}
+      size="sm"
+      defaultOpen={true}
     >
       <form css={{ display: 'grid', rowGap: '24px' }} onSubmit={handleSubmit}>
         <AccountSettingsForm currentUser={currentUser} />
@@ -126,7 +127,7 @@ export const EditUserModal: React.FC = () => {
           </Link>
         </div>
       </form>
-    </ClosableModal>
+    </Modal>
   );
 };
 

@@ -6,8 +6,7 @@ import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 import { renderWithRouter } from '../../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof CreateWorkspaceModal> = {
-  Heading: 'h1',
-  closeHref: '',
+  onClose: jest.fn(),
 };
 
 it('cannot create a workspace in its initial state', () => {

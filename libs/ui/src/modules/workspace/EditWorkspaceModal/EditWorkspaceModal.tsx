@@ -2,11 +2,11 @@
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import React, { ComponentProps, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, InputField } from '../../../shared/atoms';
 import { People } from '../../../icons';
-import { ClosableModalHeader } from '../../../shared/molecules';
-import { ClosableModal } from '../../../shared/organisms';
+
+import { Modal } from '../../../shared';
 import { p13Medium, p13Regular } from '../../../primitives';
 
 type EditWorkspaceModalProps = {
@@ -14,22 +14,19 @@ type EditWorkspaceModalProps = {
 
   readonly allowDelete?: boolean;
 
-  readonly closeHref: string;
+  readonly onClose: () => void;
   readonly membersHref: string;
   readonly onRename?: (newName: string) => void | Promise<void>;
   readonly onDelete?: () => void | Promise<void>;
-} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
+};
 
 export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
   name,
-
   allowDelete,
-
-  closeHref,
+  onClose,
   membersHref,
   onRename = noop,
   onDelete = noop,
-
   ...props
 }) => {
   const [newName, setNewName] = useState(name);
@@ -64,10 +61,11 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
   );
 
   return (
-    <ClosableModal
+    <Modal
       {...props}
       title="Workspace settings"
-      closeAction={closeHref}
+      onClose={onClose}
+      defaultOpen={true}
     >
       <div css={modalStyles}>
         <form css={formStyles} onSubmit={renameWorkspace}>
@@ -121,7 +119,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
           </form>
         )}
       </div>
-    </ClosableModal>
+    </Modal>
   );
 };
 

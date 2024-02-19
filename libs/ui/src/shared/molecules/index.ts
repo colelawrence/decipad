@@ -1,7 +1,7 @@
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 
 export { BetaBadge } from './BetaBadge/BetaBadge';
-export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
+
 export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
 export { Dialog } from './Dialog/Dialog';
@@ -14,7 +14,7 @@ export { LabeledSelect } from '../../modules/editor/LabeledSelect/LabeledSelect'
 export { LiveConnectionPath } from './LiveConnectionPath/LiveConnectionPath';
 export { LiveQueryQuery } from './LiveQueryQuery/LiveQueryQuery';
 export { MenuList } from './MenuList/MenuList';
-export { Modal, modalDialogStyles } from './Modal/Modal';
+export { Modal } from './Modal/Modal';
 export { ModalForm } from './ModalForm/ModalForm';
 
 export { NotebookIcon } from './NotebookIcon/NotebookIcon';

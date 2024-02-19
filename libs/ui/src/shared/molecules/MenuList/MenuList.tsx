@@ -52,15 +52,13 @@ export interface RootMenuListProps {
   readonly root: true;
   readonly trigger?: undefined;
   readonly dropdown?: false;
-
   readonly itemTrigger?: undefined;
 }
 
 export interface DropdownRootMenuListProps {
   readonly root: true;
   readonly trigger: ReactNode;
-  readonly dropdown: true;
-
+  readonly dropdown?: true;
   readonly itemTrigger?: undefined;
 }
 
@@ -68,7 +66,6 @@ export interface MenuItemMenuListProps {
   readonly root?: undefined;
   readonly trigger?: undefined;
   readonly dropdown?: undefined;
-
   readonly itemTrigger: ReactNode;
 }
 
@@ -80,6 +77,7 @@ type MenuListProps = (
   readonly children: ReactNode;
   readonly open?: boolean;
   readonly portal?: boolean;
+  readonly modal?: boolean;
   readonly onChangeOpen?: (newOpen: boolean) => void;
   readonly align?: 'center' | 'end' | 'start';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
@@ -139,7 +137,7 @@ export const MenuList: FC<MenuListProps> = ({
 
   open,
   onChangeOpen,
-
+  modal,
   dropdown = !root,
   portal = true,
   align = 'start',
@@ -196,7 +194,7 @@ export const MenuList: FC<MenuListProps> = ({
       <DropdownMenuTopElement
         open={open}
         onOpenChange={onChangeOpen}
-        modal={dropdown}
+        modal={modal ?? dropdown}
       >
         <div css={triggerStyles} ref={triggerRef}>
           {triggerNode}

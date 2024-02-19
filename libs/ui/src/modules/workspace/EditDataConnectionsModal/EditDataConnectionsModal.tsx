@@ -1,30 +1,18 @@
-import { ComponentProps } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import { workspaces } from '@decipad/routing';
 
-import {
-  ClosableModalHeader,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-  ClosableModal,
-} from '../../../shared';
+import { TabsList, TabsRoot, TabsTrigger, Modal } from '../../../shared';
 
 type EditDataConnectionsModalProps = {
-  readonly closeHref: string;
+  readonly onClose: () => void;
   readonly currentWorkspace: DashboardWorkspaceFragment;
-} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
+};
 
 export const EditDataConnectionsModal: React.FC<
   EditDataConnectionsModalProps
-> = ({
-  closeHref,
-  currentWorkspace,
-
-  ...modalProps
-}) => {
+> = ({ onClose, currentWorkspace }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -35,10 +23,11 @@ export const EditDataConnectionsModal: React.FC<
     .connections({});
 
   return (
-    <ClosableModal
-      {...modalProps}
+    <Modal
       title="Data Connections"
-      closeAction={closeHref}
+      size="xl"
+      onClose={onClose}
+      defaultOpen={true}
     >
       <div css={modalWrapper}>
         <TabsRoot css={fullWidth}>
@@ -66,7 +55,7 @@ export const EditDataConnectionsModal: React.FC<
 
         <Outlet />
       </div>
-    </ClosableModal>
+    </Modal>
   );
 };
 
@@ -74,7 +63,7 @@ const modalWrapper = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '740px',
+  width: '100%',
   height: '580px',
   gap: '20px',
 });

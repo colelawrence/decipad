@@ -35,7 +35,6 @@ export { MenuSeparator } from './MenuSeparator/MenuSeparator';
 
 export { NotebookIconButton } from './NotebookIconButton/NotebookIconButton';
 
-export { Overlay } from './Overlay/Overlay';
 export { RemoteAvatarOverlay } from './RemoteAvatarOverlay/RemoteAvatarOverlay';
 export { SegmentButtons } from './SegmentButtons/SegmentButtons';
 export { SidebarIcon } from './SidebarIcon';

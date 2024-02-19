@@ -191,6 +191,7 @@ export const WorkspaceNavigation = ({
                       <MenuList
                         root
                         dropdown
+                        modal={false}
                         align="start"
                         side="bottom"
                         trigger={
@@ -324,67 +325,63 @@ export const WorkspaceNavigation = ({
         </NavigationItem>
       </NavigationList>
 
-      {openMenu && (
-        <CreateOrEditSectionModal
-          onClose={() => setOpenMenu(!openMenu)}
-          onSubmit={(sectionName: string, color: OpaqueColor) => {
-            onCreateSection({
-              workspaceId: activeWorkspace.id,
-              name: sectionName,
-              color: opaqueColorToHex(color),
-            })
-              .then((res) => {
-                if (res) {
-                  if (res.addSectionToWorkspace?.id) {
-                    navigate(
-                      activeWorkspaceRoute.section({
-                        sectionId: res.addSectionToWorkspace.id,
-                      }).$
-                    );
-                  }
-                } else {
-                  console.error('Failed to create folder.', res);
+      <CreateOrEditSectionModal
+        open={openMenu}
+        onOpenChange={setOpenMenu}
+        onSubmit={(sectionName: string, color: OpaqueColor) => {
+          onCreateSection({
+            workspaceId: activeWorkspace.id,
+            name: sectionName,
+            color: opaqueColorToHex(color),
+          })
+            .then((res) => {
+              if (res) {
+                if (res.addSectionToWorkspace?.id) {
+                  navigate(
+                    activeWorkspaceRoute.section({
+                      sectionId: res.addSectionToWorkspace.id,
+                    }).$
+                  );
                 }
-              })
-              .catch((err) => {
-                console.error('Failed to create folder. Error:', err);
-              });
-          }}
-        />
-      )}
+              } else {
+                console.error('Failed to create folder.', res);
+              }
+            })
+            .catch((err) => {
+              console.error('Failed to create folder. Error:', err);
+            });
+        }}
+      />
 
-      {openRenameMenu && (
-        <div key="div-section-modal" role="presentation">
-          <CreateOrEditSectionModal
-            onClose={() => setOpenRenameMenu(!openRenameMenu)}
-            op="edit"
-            placeholderName={sectionStore.name}
-            placeholderColor={sectionStore.color}
-            onSubmit={(sectionName: string, color: OpaqueColor) => {
-              onUpdateSection({
-                workspaceId: activeWorkspace.id,
-                name: sectionName,
-                sectionId: sectionStore.id,
-                color: opaqueColorToHex(color),
-              })
-                .then((res) => {
-                  if (res.data) {
-                    navigate(
-                      activeWorkspaceRoute.section({
-                        sectionId: sectionStore.id,
-                      }).$
-                    );
-                  } else {
-                    console.error('Failed to rename folder.', res);
-                  }
-                })
-                .catch((err) => {
-                  console.error('Failed to rename folder. Error:', err);
-                });
-            }}
-          />
-        </div>
-      )}
+      <CreateOrEditSectionModal
+        open={openRenameMenu}
+        onOpenChange={setOpenRenameMenu}
+        op="edit"
+        placeholderName={sectionStore.name}
+        placeholderColor={sectionStore.color}
+        onSubmit={(sectionName: string, color: OpaqueColor) => {
+          onUpdateSection({
+            workspaceId: activeWorkspace.id,
+            name: sectionName,
+            sectionId: sectionStore.id,
+            color: opaqueColorToHex(color),
+          })
+            .then((res) => {
+              if (res.data) {
+                navigate(
+                  activeWorkspaceRoute.section({
+                    sectionId: sectionStore.id,
+                  }).$
+                );
+              } else {
+                console.error('Failed to rename folder.', res);
+              }
+            })
+            .catch((err) => {
+              console.error('Failed to rename folder. Error:', err);
+            });
+        }}
+      />
     </Styled.Container>
   );
 };

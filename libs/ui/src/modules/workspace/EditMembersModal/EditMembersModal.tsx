@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   DashboardWorkspaceFragment,
   UserAccessMetaFragment,
@@ -6,20 +6,18 @@ import {
 import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
 import { useStripeLinks } from '@decipad/react-utils';
-import { ClosableModal, ClosableModalHeader } from '../../../shared';
-import { EditMembersPaywall } from './EditMembersPaywall.private';
+import { Modal, PaywallModal } from '../../../shared';
+
 import { WorkspaceMembers } from '../WorkspaceMembers/WorkspaceMembers';
 
 type EditWorkspaceModalProps = {
-  readonly closeHref: string;
+  readonly onClose: () => void;
   readonly currentWorkspace: DashboardWorkspaceFragment;
-} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
+};
 
 export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
-  closeHref,
+  onClose,
   currentWorkspace,
-
-  ...modalProps
 }) => {
   const { data: session } = useSession();
   const user = session?.user as User;
@@ -45,22 +43,16 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
   );
 
   if (paymentLink) {
-    return (
-      <EditMembersPaywall closeHref={closeHref} paymentHref={paymentLink} />
-    );
+    return <PaywallModal onClose={onClose} paymentHref={paymentLink} />;
   }
 
   return (
-    <ClosableModal
-      {...modalProps}
-      title="Workspace members"
-      closeAction={closeHref}
-    >
+    <Modal title="Workspace members" onClose={onClose} defaultOpen={true}>
       <WorkspaceMembers
         currentUserId={currentUserId}
         workspaceMembers={members}
         workspaceId={currentWorkspace.id}
       />
-    </ClosableModal>
+    </Modal>
   );
 };

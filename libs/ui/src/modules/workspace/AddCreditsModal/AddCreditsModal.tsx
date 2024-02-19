@@ -6,7 +6,7 @@ import { notebooks, useRouteParams } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { ClosableModal } from '../../../shared';
+import { Modal } from '../../../shared';
 import { cssVar, p14Regular, p18Medium } from '../../../primitives';
 import { AddCreditsPaymentComponent } from './AddCreditsPaymentComponent';
 import { env } from '@decipad/utils';
@@ -47,10 +47,10 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
   const defaultPlan = creditsPlanData?.plans.filter((p) => p.isDefault);
 
   return (
-    <ClosableModal
+    <Modal
       title={creditsPlanData?.title ?? ''}
-      Heading="h2"
-      closeAction={closeAction}
+      defaultOpen={true}
+      onClose={closeAction}
     >
       {(defaultPlan || []).map((plan) => {
         const price = Intl.NumberFormat('en-US', {
@@ -86,7 +86,7 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
           </>
         );
       })}
-    </ClosableModal>
+    </Modal>
   );
 };
 

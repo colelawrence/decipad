@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { css } from '@emotion/react';
-import { ClosableModal, Button } from '../../../shared';
+import { Modal, Button } from '../../../shared';
 
 type PaymentSubscriptionStatusModalProps = {
   readonly paymentSubscriptionStatus: string;
@@ -22,25 +22,20 @@ export const PaymentSubscriptionStatusModal: React.FC<
         closeButton: 'Close',
       };
 
-  const [isClosed, closeModal] = useState(false);
-
-  if (isClosed) {
-    return null;
-  }
+  const [open, setOpen] = useState(true);
 
   return (
-    <ClosableModal
+    <Modal
       title={modalData.title}
-      Heading="h1"
+      open={open}
+      onOpenChange={setOpen}
+      defaultOpen={true}
       testId="subscription_status_modal"
-      closeAction={() => {
-        closeModal(true);
-      }}
     >
       <p>{modalData.text}</p>
 
       <div css={buttonWrapperStyles}>
-        <Button type="primary" onClick={() => closeModal(true)}>
+        <Button type="primary" onClick={() => setOpen(false)}>
           {modalData.closeButton}
         </Button>
         {isSuccess && (
@@ -49,7 +44,7 @@ export const PaymentSubscriptionStatusModal: React.FC<
           </Button>
         )}
       </div>
-    </ClosableModal>
+    </Modal>
   );
 };
 

@@ -20,7 +20,7 @@ export const ErrorModal = ({
   Heading,
 }: ErrorModalProps): ReturnType<React.FC> => {
   return (
-    <Modal>
+    <Modal defaultOpen={true}>
       <div css={{ display: 'grid', rowGap: '24px' }}>
         <main css={{ display: 'grid', rowGap: '8px' }}>
           <Heading css={headingStyles}>Something went wrong</Heading>

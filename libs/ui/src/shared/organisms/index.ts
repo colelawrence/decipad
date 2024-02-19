@@ -1,6 +1,5 @@
-export { ClosableModal } from './ClosableModal/ClosableModal';
 export * from './DataIntegration';
-export { DatabaseConnection } from '../../modules/editor/DatabaseConnection/DatabaseConnection';
+
 export { DropdownMenu } from './DropdownMenu/DropdownMenu';
 export * from './CodeEditor/CodeEditor';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';

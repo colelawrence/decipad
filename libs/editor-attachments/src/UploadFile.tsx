@@ -7,7 +7,7 @@ import {
 } from '@decipad/graphql-client';
 import { useComputer, useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { Dialog, UploadFileModal } from '@decipad/ui';
+import { Modal, UploadFileModal } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { getStartPoint } from '@udecode/plate-common';
 import axios, { AxiosError } from 'axios';
@@ -222,17 +222,19 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
 
   return (
     <>
-      {dialogOpen && (
-        <Dialog open={dialogOpen} setOpen={setDialogOpen}>
-          <UploadFileModal
-            fileType={fileType}
-            onCancel={resetStore}
-            onUpload={uploadFile}
-            uploading={uploading}
-            uploadProgress={uploadProgress}
-          />
-        </Dialog>
-      )}
+      <Modal
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onClose={resetStore}
+      >
+        <UploadFileModal
+          fileType={fileType}
+          onCancel={resetStore}
+          onUpload={uploadFile}
+          uploading={uploading}
+          uploadProgress={uploadProgress}
+        />
+      </Modal>
     </>
   );
 };

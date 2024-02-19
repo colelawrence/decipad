@@ -1,25 +1,27 @@
 import styled from '@emotion/styled';
-import { ClosableModal, Button } from '../../../shared';
-import { cssVar, p14Medium, p14Regular } from '../../../primitives';
 
-type EditMembersPaywallProps = {
-  closeHref: string;
+import { cssVar, p14Medium, p14Regular } from '../../../primitives';
+import { Modal } from '../../molecules';
+import { ComponentProps } from 'react';
+import { Button } from '../../atoms';
+
+type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   paymentHref: string;
 };
 
-export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
-  closeHref,
+export const PaywallModal: React.FC<PaywallModalProps> = ({
+  onClose,
   paymentHref,
 }) => {
   return (
-    <ClosableModal
+    <Modal
       title="Upgrade to Pro"
-      paragraph="$15 per seat per month"
-      Heading="h3"
-      closeAction={closeHref}
+      defaultOpen={true}
+      onClose={onClose}
       testId="upgrade-pro-modal"
     >
       <ModalContent>
+        <Subtitle>$15 per seat per month</Subtitle>
         <Section>
           <SectionHeading>Modeling Features</SectionHeading>
           <List>
@@ -58,12 +60,12 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           >
             Upgrade to Pro
           </Button>
-          <Button type="secondary" href={closeHref}>
+          <Button type="secondary" onClick={onClose}>
             Maybe Later
           </Button>
         </ButtonContainer>
       </ModalContent>
-    </ClosableModal>
+    </Modal>
   );
 };
 
@@ -75,6 +77,11 @@ const ModalContent = styled.div({
   width: '100%',
   position: 'relative',
   overflow: 'hidden',
+});
+
+export const Subtitle = styled.h3(p14Medium, {
+  color: cssVar('textSubdued'),
+  marginBottom: '24px',
 });
 
 const Section = styled.div({

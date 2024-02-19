@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { EditWorkspaceModal } from './EditWorkspaceModal';
 import { renderWithRouter } from '../../../test-utils/renderWithRouter';
+import { noop } from '@decipad/utils';
 
 const props: ComponentProps<typeof EditWorkspaceModal> = {
   name: 'Workspace',
-  Heading: 'h1',
-  closeHref: '',
+  onClose: noop,
   membersHref: '',
 };
 
@@ -46,16 +46,20 @@ it('emits a rename event when typing a new workspace name and submitting', async
 });
 
 describe('with allowDelete', () => {
-  it('shows a delete button', () => {
-    const { getByText, queryByText, rerender } = renderWithRouter(
+  it('doesnt show a delete button', () => {
+    const { queryByText } = renderWithRouter(
       <EditWorkspaceModal {...props} allowDelete={false} />
     );
     expect(
       queryByText(/delete/i, { selector: 'button' })
     ).not.toBeInTheDocument();
+  });
 
-    rerender(<EditWorkspaceModal {...props} allowDelete />);
-    expect(getByText(/delete/i, { selector: 'button' })).toBeVisible();
+  it('shows a delete button', () => {
+    const { getByText } = renderWithRouter(
+      <EditWorkspaceModal {...props} allowDelete />
+    );
+    expect(getByText(/delete/i, { selector: 'button' })).toBeInTheDocument();
   });
 
   it('cannot delete without typing the confirmation prompt', () => {
