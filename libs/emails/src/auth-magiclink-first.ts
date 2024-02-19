@@ -731,7 +731,6 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
   
                                       <!-- ### BEGIN CONTENT ### -->
                                       <!--{{ content }}-->
-  
                                       <h1>Verify your Email</h1>
                                       <p>
                                         Welcome to Decipad! We're excited to have
