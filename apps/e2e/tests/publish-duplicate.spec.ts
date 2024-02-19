@@ -382,7 +382,7 @@ test('duplicate in workspace with multiple workspaces', async ({
   });
 
   await test.step('new notebook', async () => {
-    await randomFreeUser.newNotebook.click();
+    await randomFreeUser.workspace.newNotebook.click();
     await notebook.waitForEditorToLoad();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
@@ -515,7 +515,7 @@ test('check collaborator duplicate single workspace', async ({
 
   await test.step('create team workspace, so you can invite collaborators', async () => {
     await testUserPage.goto('/');
-    await testUserWorkspace.newWorkspace('@n1n team');
+    await testUserWorkspace.newWorkspaceWithPlan('team');
     await testUserWorkspace.clickNewPadButton();
   });
 
@@ -568,7 +568,7 @@ test('check collaborator duplicate mulpliple workspaces', async ({
 
   await test.step('create team workspace, so you can invite collaborators', async () => {
     await testUserPage.goto('/');
-    await testUserWorkspace.newWorkspace('@n1n team');
+    await testUserWorkspace.newWorkspaceWithPlan('team');
     await testUserWorkspace.clickNewPadButton();
   });
 

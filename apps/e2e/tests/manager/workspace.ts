@@ -29,6 +29,7 @@ export class Workspace {
   readonly newFolderButton: Locator;
   readonly settingsSection: Locator;
   readonly manageMembersButton: Locator;
+  readonly newNotebook: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -42,6 +43,7 @@ export class Workspace {
     this.modalCloseButton = page.getByTestId('closable-modal');
     this.folderSection = this.page.getByTestId('my-notebooks');
     this.newFolderButton = this.page.getByTestId('new-section-button');
+    this.newNotebook = this.page.getByTestId('new-notebook');
     this.manageMembersButton = this.page.getByTestId(
       'manage-workspace-members'
     );
@@ -65,6 +67,29 @@ export class Workspace {
     await this.page.getByRole('button', { name: 'Create Workspace' }).click();
     await expect(this.workspaceHeroName).toHaveText(`Welcome to${name}`);
     return this.page.url();
+  }
+
+  async createNewNotebook() {
+    await this.newNotebook.waitFor();
+    await this.newNotebook.click();
+  }
+
+  /**
+   * Create a new workspace with the specified plan type.
+   *
+   * @param {string} type - The type of plan for the workspace ('free', 'pro', 'personal', 'team', or 'enterprise').
+   * @returns {string} The URL of the newly created workspace.
+   *
+   * @example
+   * ```js
+   * const newWorkspaceURL = workspace.newWorkspaceWithPlan('pro');
+   * ```
+   */
+  async newWorkspaceWithPlan(
+    type: 'free' | 'pro' | 'personal' | 'team' | 'enterprise' = 'free'
+  ) {
+    const workspaceURL = await this.newWorkspace(`@n1n ${type}`);
+    return workspaceURL;
   }
 
   /**

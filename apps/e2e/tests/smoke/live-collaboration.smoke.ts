@@ -18,16 +18,13 @@ smoketest(
 
     await smoketest.step('create team workspace', async () => {
       await userA.goToWorkspace();
-      // New naming of workspace to test stuff.
-      // We need this because free/pro users cannot invite users to notebook.
-      const url = await userA.workspace.newWorkspace('smoke test @n1n.co team');
-      await userA.page.goto(url);
+      await userA.workspace.newWorkspaceWithPlan('team');
     });
 
     await smoketest.step(
       'create notebook and invite [userB] to collaborate',
       async () => {
-        await userA.createAndNavNewNotebook();
+        await userA.createNewNotebook();
         await userANotebook.updateNotebookTitle(notebookTitle);
         notebookURL = userAPage.url();
         await userANotebook.inviteUser(userB.email, 'collaborator');
@@ -38,6 +35,7 @@ smoketest(
       '[userB] create new workspace to duplicate shared notebook',
       async () => {
         await userBPage.goto(notebookURL);
+        await userB.aiAssistant.closePannel();
         await userBNotebook.checkNotebookTitle(notebookTitle);
         notebookJsonUserB = await userBNotebook.download();
       }

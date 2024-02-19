@@ -32,4 +32,7 @@ setup('Login user and save state', async ({ context, page }) => {
     flags
   );
   await page.context().storageState({ path: STORAGE_STATE2 });
+
+  await page.close();
+  await context.close();
 });

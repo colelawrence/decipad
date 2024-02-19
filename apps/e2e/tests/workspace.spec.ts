@@ -327,9 +327,9 @@ test('reader and collaborator permissions', async ({
 
   await test.step('invite reader and collaborator to notebook', async () => {
     await premiumUser.goToWorkspace();
-    await premiumUser.workspace.newWorkspace('@n1n team');
+    await premiumUser.workspace.newWorkspaceWithPlan('team');
 
-    await premiumUser.newNotebook.click();
+    await premiumUser.workspace.newNotebook.click();
     await premiumUser.notebook.inviteUser(randomFreeUser.email, 'reader');
     await premiumUser.notebook.inviteUser(
       anotherRandomFreeUser.email,

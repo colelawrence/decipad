@@ -1,22 +1,10 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { expect, test } from './manager/decipad-tests';
 
 test.describe('Stripe integration', () => {
-  test.describe.configure({ mode: 'serial' });
+  test('testing Stripe Checkout integration', async ({ randomFreeUser }) => {
+    const { context, page } = randomFreeUser;
+    await randomFreeUser.goToWorkspace();
 
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-    await page.goto('/');
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('testing Stripe Checkout integration', async () => {
     const currentRoute = page.url();
 
     await context.route('**/*', (route) => {

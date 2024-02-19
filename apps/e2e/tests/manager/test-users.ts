@@ -1,11 +1,5 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import {
-  type Locator,
-  type Page,
-  Browser,
-  expect,
-  BrowserContext,
-} from '@playwright/test';
+import { type Page, Browser, expect, BrowserContext } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';
@@ -33,7 +27,6 @@ export class User {
   page: Page;
   context: BrowserContext;
   email: string;
-  newNotebook: Locator;
   public notebook: Notebook;
   public workspace: Workspace;
   public aiAssistant: AiAssistant;
@@ -43,7 +36,6 @@ export class User {
     this.page = page;
     this.email = 'generic-test-user@decipad.com';
     this.notebook = new Notebook(this.page);
-    this.newNotebook = this.page.getByTestId('new-notebook');
     this.workspace = new Workspace(this.page);
     this.aiAssistant = new AiAssistant(this.page);
   }
@@ -94,10 +86,13 @@ export class User {
   // todo: move this to workspace pom
   async createAndNavNewNotebook(workspaceId?: string) {
     await this.goToWorkspace(workspaceId);
-    await this.newNotebook.waitFor();
-    await this.newNotebook.click();
+    await this.createNewNotebook();
+  }
+
+  async createNewNotebook() {
+    await this.workspace.createNewNotebook();
     await this.aiAssistant.closePannel();
-    await this.page.waitForSelector('[data-slate-editor] h1');
+    await this.notebook.waitForEditorToLoad();
   }
 
   async navigateToNotebook(notebookId: string) {
