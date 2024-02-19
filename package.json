@@ -394,7 +394,7 @@
     "workbox-webpack-plugin": "7.0.0",
     "y-protocols": "1.0.5",
     "yaml": "^2.3.3",
-    "yjs": "13.6.2",
+    "yjs": "13.6.12",
     "zod": "^3.22.4",
     "zod-openapi": "^2.13.0",
     "zustand": "4.5.0"
