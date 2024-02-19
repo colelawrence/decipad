@@ -112,6 +112,7 @@ export function useNotebookMetaActions(
       try {
         await exportNotebook(notebookId)();
       } catch (err) {
+        console.error(err);
         captureException(err);
         toast.error('Error downloading notebook');
       }

@@ -42,6 +42,7 @@ export const useExternalDataSources = (
           dataSource: dataSource as ExternalDataSourceCreateInput,
         });
         if (results.error) {
+          console.error(results.error);
           captureException(results.error);
         }
         return getDefined(
