@@ -15,7 +15,6 @@ import {
   insertCodeLineBelow,
   insertDividerBelow,
   insertStructuredCodeLineBelow,
-  setSelection,
 } from '@decipad/editor-utils';
 import {
   useConnectionStore,
@@ -26,7 +25,7 @@ import {
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Location, Path, Range } from 'slate';
+import { Location, Path } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -47,7 +46,6 @@ export interface ExecuteProps {
   deleteBlock?: boolean;
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
-  select?: boolean;
 }
 
 export const execute = ({
@@ -56,7 +54,6 @@ export const execute = ({
   path,
   getAvailableIdentifier,
   deleteFragment,
-  select = false,
   deleteBlock = true,
 }: ExecuteProps): void => {
   const { changeOpen } = useConnectionStore.getState();
@@ -64,7 +61,6 @@ export const execute = ({
 
   // eslint-disable-next-line complexity
   withoutNormalizing(editor, () => {
-    setSelection(editor, null as unknown as Range);
     switch (command) {
       case 'structured-input':
         insertStructuredCodeLineBelow({
@@ -168,34 +164,12 @@ export const execute = ({
         break;
     }
 
-    let newElementPath: Path;
     if (deleteBlock) {
       if (deleteFragment) {
-        newElementPath = [path[0] + 1];
         deleteText(editor, { at: deleteFragment });
       } else {
-        newElementPath = path;
         removeNodes(editor, { at: path });
       }
-    } else {
-      newElementPath = path;
-    }
-
-    if (select) {
-      if (
-        command === 'structured-input' ||
-        command === 'structured-code-line'
-      ) {
-        newElementPath = [...newElementPath, 1];
-      }
-      const newSelectionPoint = {
-        path: newElementPath,
-        offset: 0,
-      };
-      setSelection(editor, {
-        anchor: newSelectionPoint,
-        focus: newSelectionPoint,
-      });
     }
   });
 };

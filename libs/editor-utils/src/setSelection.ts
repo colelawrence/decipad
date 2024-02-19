@@ -1,9 +1,10 @@
-import { BaseRange, Selection } from 'slate';
+import { Selection } from 'slate';
 import {
   TEditor,
   Value,
   // eslint-disable-next-line no-restricted-imports
   setSelection as plateSetSelection,
+  deselect,
 } from '@udecode/plate-common';
 import { hasPoint } from './hasPoint';
 
@@ -32,7 +33,9 @@ export const setSelection = <
   editor: TE,
   sel: Partial<Selection>
 ): void => {
-  if (isValidSelection(editor, sel)) {
-    plateSetSelection(editor, sel as BaseRange);
+  if (sel === null) {
+    deselect(editor);
+  } else if (isValidSelection(editor, sel)) {
+    plateSetSelection(editor, sel);
   }
 };

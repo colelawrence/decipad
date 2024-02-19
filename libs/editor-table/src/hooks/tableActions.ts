@@ -53,7 +53,6 @@ import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
 export interface TableActions {
-  onDelete: () => void;
   onChangeColumnName: (columnIndex: number, newColumnName: string) => void;
   onChangeColumnType: (
     columnIndex: number,
@@ -194,15 +193,6 @@ export const useTableActions = (
   editor: MyEditor,
   element: TableElement | null | undefined
 ): TableActions => {
-  const onDelete = useCallback(() => {
-    withPath(editor, element, (path) => {
-      withoutNormalizing(editor, () => {
-        setSelection(editor, null);
-        removeNodes(editor, { at: path });
-      });
-    });
-  }, [editor, element]);
-
   const onChangeColumnName = useCallback(
     (columnIndex: number, newColumnName: string) => {
       withPath(editor, element, (path) => {
@@ -234,7 +224,10 @@ export const useTableActions = (
   const onSetHideFormulas = useCallback(
     (newHideFormulas: boolean) => {
       withoutNormalizing(editor, () => {
-        setSelection(editor, null);
+        if (newHideFormulas) {
+          // Remove selection from invisible formula input
+          setSelection(editor, null);
+        }
         onSetHideFormulasMutator(newHideFormulas);
       });
     },
@@ -244,7 +237,6 @@ export const useTableActions = (
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType?: TableCellType) => {
       withoutNormalizing(editor, () => {
-        setSelection(editor, null);
         onSetHideFormulas(false);
         if (path) {
           changeColumnType(editor, path, cellType, columnIndex, computer);
@@ -262,7 +254,6 @@ export const useTableActions = (
       const columnHeaderPath = [...path, 1, columnIndex];
       if (hasNode(editor, columnHeaderPath)) {
         withoutNormalizing(editor, () => {
-          setSelection(editor, null);
           setNodes<TableHeaderElement>(
             editor,
             { aggregation },
@@ -281,7 +272,6 @@ export const useTableActions = (
       return;
     }
     withoutNormalizing(editor, () => {
-      setSelection(editor, null);
       addColumn(editor, {
         tablePath: path,
       });
@@ -355,7 +345,6 @@ export const useTableActions = (
 
       if (columnIndex >= 0) {
         withoutNormalizing(editor, () => {
-          setSelection(editor, null);
           const children = Array.from(getNodeChildren(editor, path));
           children.forEach(([, childPath], childIndex) => {
             if (childIndex === 0) {
@@ -384,7 +373,6 @@ export const useTableActions = (
         return;
       }
       withoutNormalizing(editor, () => {
-        setSelection(editor, null);
         addRow(editor, path, {
           at: [...path, below ? rowNumber + 1 : rowNumber],
         });
@@ -398,7 +386,6 @@ export const useTableActions = (
       return;
     }
     withoutNormalizing(editor, () => {
-      setSelection(editor, null);
       addRow(editor, path);
     });
   }, [editor, path]);
@@ -417,7 +404,6 @@ export const useTableActions = (
       const rowIndex = rows.findIndex((row) => row.id === id);
       const rowPath = [...path, rowIndex];
       if (hasNode(editor, rowPath)) {
-        setSelection(editor, null);
         withoutNormalizing(editor, () => {
           removeNodes(editor, { at: rowPath });
         });
@@ -617,7 +603,6 @@ export const useTableActions = (
   }, [computer, element, toast]);
 
   return {
-    onDelete,
     onChangeColumnName,
     onChangeColumnType,
     onChangeColumnAggregation,
