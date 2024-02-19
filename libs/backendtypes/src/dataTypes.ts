@@ -650,6 +650,7 @@ export interface EnhancedDataTables {
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;
   resourceusages: EnhancedDataTable<ResourceUsageRecord>;
+  resourceusagehistory: EnhancedDataTable<ResourceUsageHistoryRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -753,6 +754,19 @@ export interface ResourceUsageRecord extends TableRecordBase {
   // Applicable for `extra credit` plans, where you need to know how
   // much you can go up to.
   originalAmount?: number;
+}
+
+export interface ResourceUsageHistoryRecord extends TableRecordBase {
+  // /workspace/{id}
+  resource_uri: string;
+
+  // same as `ResourceUsageRecord` key
+  resourceusage_id: string;
+
+  createdAt: number;
+  consumption: number;
+
+  timePeriod: 'month';
 }
 
 // =================    RESOURCE USAGE    =================

@@ -7,12 +7,14 @@ import {
   StorageSubtypes,
   AiFields,
   ResourceConsumer,
+  ResourceUsageHistoryRecord,
 } from '@decipad/backendtypes';
 import tables, { incrementTableField, timestamp } from '@decipad/tables';
 import * as subscriptions from '../subscriptions';
 import { ResourceTypes } from '@decipad/graphqlserver-types';
 import { getDefined } from '@decipad/utils';
 import type { CompletionUsage } from 'openai/resources';
+import { nanoid } from 'nanoid';
 
 const CONSUMPTION = 'consumption';
 const ORIGINAL_AMOUNT = 'originalAmount';
@@ -36,6 +38,10 @@ function getKey(
   consumerId: string
 ): ResourceUsageKeys {
   return `${key}/${consumerId}`;
+}
+
+function getResourceUri(workspaceId: string): `/workspace/${string}` {
+  return `/workspace/${workspaceId}`;
 }
 
 /**
@@ -232,7 +238,7 @@ export async function upsertAi(
 
   const data = await tables();
 
-  incrementTableField(
+  await incrementTableField(
     data.resourceusages,
     getKey('openai/extra-credits/null/workspaces', workspaceId),
     CONSUMPTION,
@@ -445,17 +451,31 @@ export async function getUsageRecord(
   return data.resourceusages.get({ id: keyWithId });
 }
 
+/**
+ * Retrieves a workspace's previous usage records.
+ *
+ * @returns Map<Timestamp of last usage -> Usage Record>
+ */
+export async function getPreviousAiUsageRecord(
+  workspaceId: string
+): Promise<Array<ResourceUsageHistoryRecord>> {
+  const data = await tables();
+
+  return (
+    await data.resourceusagehistory.query({
+      IndexName: 'byResource',
+      KeyConditionExpression: 'resource_uri = :resource_uri',
+      ExpressionAttributeValues: {
+        ':resource_uri': getResourceUri(workspaceId),
+      },
+    })
+  ).Items;
+}
+
 // ============================================================
 // Resetting methods
 //
-// TODO: Post payments
-//
-// Currently, we just take the existing records in usage tables,
-// and reset the count down to 0, but this means we have no past
-// records from the user.
-//
-// We should have `completed` field in `resourceusage` where we
-// `archive` the record.
+// Be very careful when using these.
 // ============================================================
 
 export async function resetQueryCount(workspaceId: string): Promise<void> {
@@ -470,6 +490,72 @@ export async function resetQueryCount(workspaceId: string): Promise<void> {
       ...queryExecutionRecord,
       query_reset_date: timestamp(),
       queryCount: 0,
+    });
+  }
+}
+
+/**
+ * Resets AI usage for a workspace.
+ *
+ * It does this by taking the resource usage down to 0. (Subtracting current usage).
+ * And then adding a record to `resourceusagehistory`, which is a read only table.
+ */
+export async function resetAiUsage(workspaceId: string): Promise<void> {
+  const data = await tables();
+
+  // gots to change the primary key as well
+  const [prompt, completion] = await Promise.all([
+    data.resourceusages.get({
+      id: getKey(
+        'openai/gpt-4-1106-preview/promptTokensUsed/workspaces',
+        workspaceId
+      ),
+    }),
+    data.resourceusages.get({
+      id: getKey(
+        'openai/gpt-4-1106-preview/completionTokensUsed/workspaces',
+        workspaceId
+      ),
+    }),
+  ]);
+
+  if (prompt != null) {
+    await incrementTableField(
+      data.resourceusages,
+      prompt.id,
+      CONSUMPTION,
+      -prompt.consumption
+    );
+    await data.resourceusagehistory.put({
+      id: nanoid(),
+      createdAt: timestamp(),
+
+      resource_uri: getResourceUri(workspaceId),
+      resourceusage_id: prompt.id,
+
+      consumption: prompt.consumption,
+
+      timePeriod: 'month',
+    });
+  }
+
+  if (completion != null) {
+    await incrementTableField(
+      data.resourceusages,
+      completion.id,
+      CONSUMPTION,
+      -completion.consumption
+    );
+    await data.resourceusagehistory.put({
+      id: nanoid(),
+      createdAt: timestamp(),
+
+      resource_uri: getResourceUri(workspaceId),
+      resourceusage_id: completion.id,
+
+      consumption: completion.consumption,
+
+      timePeriod: 'month',
     });
   }
 }

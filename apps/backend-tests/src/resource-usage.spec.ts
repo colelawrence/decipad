@@ -10,6 +10,7 @@ jest.retryTimes(1);
 test('AI Usage', (ctx) => {
   let workspace: Workspace;
   let secondWorkspace: Workspace;
+  let thirdWorkspace: Workspace;
 
   beforeAll(async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
@@ -43,27 +44,40 @@ test('AI Usage', (ctx) => {
 
     expect(secondWorkspace).toMatchObject({ name: 'Workspace 2' });
 
-    expect(workspace.id).not.toBe(secondWorkspace.id);
+    thirdWorkspace = (
+      await client.mutate({
+        mutation: ctx.gql`
+          mutation {
+            createWorkspace(workspace: { name: "Workspace 3" }) {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.createWorkspace;
+
+    expect(thirdWorkspace).toMatchObject({ name: 'Workspace 3' });
   });
 
-  it.skip('returns an empty record for user with no usage', async () => {
+  it('returns an empty record for user with no usage', async () => {
     await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(0);
   });
 
-  it.skip('returns 0 remaining credits if no extra credits were purchased', async () => {
+  it('returns 0 remaining credits if no extra credits were purchased', async () => {
     await expect(
       resourceusage.getRemainingExtraCredits(workspace.id)
     ).resolves.toBe(0);
   });
 
-  it.skip('returns correct limits for workspace', async () => {
+  it('returns correct limits for workspace', async () => {
     await expect(resourceusage.getLimit(workspace.id)).resolves.toMatchObject({
       openai: 50,
       storage: 10,
     });
   });
 
-  it.skip('returns correct usage after inserting', async () => {
+  it('returns correct usage after inserting', async () => {
     await resourceusage.updateWorkspaceAndUserAi({
       workspaceId: workspace.id,
       usage: {
@@ -78,7 +92,7 @@ test('AI Usage', (ctx) => {
     );
   });
 
-  it.skip(`allows the user to go over their limit,
+  it(`allows the user to go over their limit,
     to avoid errors such as: 49.9 / 50 used,
     but user being unable to use the last 0.1`, async () => {
     // This is exageratted, but technically possible.
@@ -96,13 +110,13 @@ test('AI Usage', (ctx) => {
     ).resolves.toBeTruthy();
   });
 
-  it.skip('returns 0 for extra AI credits, if user has purchased none', async () => {
+  it('returns 0 for extra AI credits, if user has purchased none', async () => {
     await expect(
       resourceusage.getRemainingExtraCredits(workspace.id)
     ).resolves.toBe(0);
   });
 
-  it.skip('allows user to spend more credits if they buy credits', async () => {
+  it('allows user to spend more credits if they buy credits', async () => {
     await resourceusage.insertExtraAi(workspace.id, 50);
 
     await expect(
@@ -126,7 +140,7 @@ test('AI Usage', (ctx) => {
     ).resolves.toBe(50);
   });
 
-  it.skip('Allows user to spend their extra credits', async () => {
+  it('Allows user to spend their extra credits', async () => {
     await resourceusage.upsertAi(
       workspace.id,
       'promptTokensUsed',
@@ -139,7 +153,7 @@ test('AI Usage', (ctx) => {
     await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(75);
   });
 
-  it.skip('Edge case: Can buy multiple extra AI credits', async () => {
+  it('Edge case: Can buy multiple extra AI credits', async () => {
     await resourceusage.insertExtraAi(secondWorkspace.id, 50);
     await resourceusage.insertExtraAi(secondWorkspace.id, 25);
 
@@ -153,7 +167,7 @@ test('AI Usage', (ctx) => {
     await expect(resourceusage.getAiUsage(secondWorkspace.id)).resolves.toBe(0);
   });
 
-  it.skip('Edge case: Can spend multiple AI credits', async () => {
+  it('Edge case: Can spend multiple AI credits', async () => {
     await resourceusage.upsertAi(
       secondWorkspace.id,
       'promptTokensUsed',
@@ -182,5 +196,84 @@ test('AI Usage', (ctx) => {
     await expect(
       resourceusage.getRemainingExtraCredits(secondWorkspace.id)
     ).resolves.toBe(0);
+  });
+
+  it('Resets usage', async () => {
+    await resourceusage.upsertAi(
+      thirdWorkspace.id,
+      'promptTokensUsed',
+      60 * limits().tokensToCredits
+    );
+
+    await expect(
+      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
+    ).resolves.toBeTruthy();
+
+    await resourceusage.resetAiUsage(thirdWorkspace.id);
+
+    await expect(resourceusage.getAiUsage(thirdWorkspace.id)).resolves.toBe(0);
+    await expect(
+      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
+    ).resolves.toBeFalsy();
+
+    await expect(
+      resourceusage.getPreviousAiUsageRecord(thirdWorkspace.id)
+    ).resolves.toMatchObject([
+      {
+        createdAt: expect.any(Number),
+        id: expect.any(String),
+        resourceusage_id: expect.any(String),
+        consumption: 120000,
+        resource_uri: `/workspace/${thirdWorkspace.id}`,
+        timePeriod: 'month',
+      },
+    ]);
+  });
+
+  it('Can reset multiple times', async () => {
+    await resourceusage.upsertAi(
+      thirdWorkspace.id,
+      'completionTokensUsed',
+      70 * limits().tokensToCredits
+    );
+
+    await expect(
+      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
+    ).resolves.toBeTruthy();
+    await resourceusage.resetAiUsage(thirdWorkspace.id);
+    await expect(
+      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
+    ).resolves.toBeFalsy();
+
+    await expect(
+      resourceusage.getPreviousAiUsageRecord(thirdWorkspace.id)
+    ).resolves.toMatchObject(
+      expect.arrayContaining([
+        {
+          createdAt: expect.any(Number),
+          id: expect.any(String),
+          resourceusage_id: expect.any(String),
+          consumption: 140000,
+          resource_uri: `/workspace/${thirdWorkspace.id}`,
+          timePeriod: 'month',
+        },
+        {
+          createdAt: expect.any(Number),
+          id: expect.any(String),
+          resourceusage_id: expect.any(String),
+          consumption: 0,
+          resource_uri: `/workspace/${thirdWorkspace.id}`,
+          timePeriod: 'month',
+        },
+        {
+          createdAt: expect.any(Number),
+          id: expect.any(String),
+          resourceusage_id: expect.any(String),
+          consumption: 120000,
+          resource_uri: `/workspace/${thirdWorkspace.id}`,
+          timePeriod: 'month',
+        },
+      ])
+    );
   });
 });

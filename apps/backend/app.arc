@@ -286,6 +286,9 @@ resourceusages
   id *String
   consumption Number
 
+resourceusagehistory
+  id *String
+
 @tables-indexes
 workspacesubscriptions
   workspace_id *String
@@ -448,6 +451,10 @@ docsyncsnapshots
 secrets
   workspace_id *String
   name byWorkspace
+
+resourceusagehistory
+  resource_uri *String
+  name byResource
 
 @queues
 sendemail

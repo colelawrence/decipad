@@ -261,8 +261,8 @@ export const processInvoiceCreated = async (event: Stripe.Event) => {
 
     if (workspaceSubscription) {
       await resourceusage.resetQueryCount(workspaceSubscription.workspace_id);
-      // TODO: Enable this in QuotaLimit PR
-      // await resourceusage.resetAiUsage(workspaceSubscription.workspace_id);
+      await resourceusage.resetAiUsage(workspaceSubscription.workspace_id);
+
       return {
         statusCode: 200,
         body: `webhook succeeded! Workspace query count reset: ${workspaceSubscription.workspace_id}`,
