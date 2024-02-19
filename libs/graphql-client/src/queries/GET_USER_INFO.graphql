@@ -4,9 +4,7 @@ query User {
     name
     username
     description
-    hideChecklist
     onboarded
     image
   }
-  selfFulfilledGoals
 }

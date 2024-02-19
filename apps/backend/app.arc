@@ -266,11 +266,6 @@ allowlist
 superadminusers
   id *String
 
-usergoals
-  id *String # /user/:id/goal/#tag
-  user_id String
-  fulfilledAt Number
-
 logs
   resource *String
   seq **String
@@ -440,10 +435,6 @@ externaldatasources
 externaldatasourcekeys
   resource_uri *String
   name byResource
-
-usergoals
-  user_id *String
-  name byUserId
 
 docsyncsnapshots
   docsync_id *String

@@ -534,14 +534,6 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   dataSourceName?: string;
 }
 
-// User goals
-export interface UserGoalRecord extends TableRecordBase {
-  id: string;
-  user_id: ID;
-  goalName: string;
-  fulfilledAt: number;
-}
-
 export interface SecretRecord extends TableRecordBase {
   name: string;
   workspace_id: ID;
@@ -654,7 +646,6 @@ export interface EnhancedDataTables {
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
-  usergoals: DataTable<UserGoalRecord>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;

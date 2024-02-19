@@ -163,13 +163,11 @@ export type Mutation = {
   createWorkspace: Workspace;
   doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
-  fulfilGoal: Scalars['Boolean']['output'];
   getCreateAttachmentForm: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
-  pretendUser?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
   removePad?: Maybe<Scalars['Boolean']['output']>;
@@ -291,11 +289,6 @@ export type MutationDuplicatePadArgs = {
 };
 
 
-export type MutationFulfilGoalArgs = {
-  props: GoalFulfilmentInput;
-};
-
-
 export type MutationGetCreateAttachmentFormArgs = {
   fileName: Scalars['String']['input'];
   fileType: Scalars['String']['input'];
@@ -324,11 +317,6 @@ export type MutationInviteUserToRoleArgs = {
 export type MutationMovePadArgs = {
   id: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
-};
-
-
-export type MutationPretendUserArgs = {
-  userId: Scalars['ID']['input'];
 };
 
 
@@ -681,7 +669,6 @@ export type Query = {
   searchTemplates: PagedTemplateSearchResult;
   sections: Array<Section>;
   self?: Maybe<User>;
-  selfFulfilledGoals: Array<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
@@ -1024,7 +1011,6 @@ export type User = {
   description?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   emailValidatedAt?: Maybe<Scalars['DateTime']['output']>;
-  hideChecklist?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -1043,7 +1029,6 @@ export type UserAccess = {
 
 export type UserInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  hideChecklist?: InputMaybe<Scalars['Boolean']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   onboarded?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1441,13 +1426,11 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   createWorkspace?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationCreateWorkspaceArgs, 'workspace'>>;
   doNothing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   duplicatePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationDuplicatePadArgs, 'id' | 'targetWorkspace'>>;
-  fulfilGoal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationFulfilGoalArgs, 'props'>>;
   getCreateAttachmentForm?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormArgs, 'fileName' | 'fileType' | 'padId'>>;
   importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
   incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
-  pretendUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationPretendUserArgs, 'userId'>>;
   removeAttachmentFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>>;
   removeExternalDataSource?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>>;
   removePad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemovePadArgs, 'id'>>;
@@ -1597,7 +1580,6 @@ export type QueryResolvers<ContextType = GraphqlContext, ParentType extends Reso
   searchTemplates?: Resolver<ResolversTypes['PagedTemplateSearchResult'], ParentType, ContextType, RequireFields<QuerySearchTemplatesArgs, 'page' | 'prompt'>>;
   sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<QuerySectionsArgs, 'workspaceId'>>;
   self?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  selfFulfilledGoals?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryTagsArgs, 'workspaceId'>>;
   version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   workspaces?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
@@ -1803,7 +1785,6 @@ export type UserResolvers<ContextType = GraphqlContext, ParentType extends Resol
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   emailValidatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  hideChecklist?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

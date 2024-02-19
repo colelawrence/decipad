@@ -6,7 +6,6 @@ const enhancedTables: Set<keyof DataTables> = new Set([
   'docsyncupdates',
   'users',
   'userkeys',
-  'usergoals',
   'userbackups',
   'permissions',
   'workspaces',

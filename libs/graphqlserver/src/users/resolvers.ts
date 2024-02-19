@@ -2,7 +2,7 @@ import { identify, track } from '@decipad/backend-analytics';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { AuthenticationError, UserInputError } from 'apollo-server-lambda';
-import { loadUser, requireUser } from '../authorization';
+import { requireUser } from '../authorization';
 import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
 import { Resolvers, User } from '@decipad/graphqlserver-types';
 
@@ -12,22 +12,6 @@ const resolvers: Resolvers = {
   Query: {
     self(_, _args, context) {
       return context.user as User;
-    },
-    async selfFulfilledGoals(_, _args, context) {
-      const user = loadUser(context);
-      if (!user) {
-        return [];
-      }
-      const data = await tables();
-      const result = await data.usergoals.query({
-        IndexName: 'byUserId',
-        KeyConditionExpression: 'user_id = :user_id',
-        ExpressionAttributeValues: {
-          ':user_id': user.id,
-        },
-      });
-
-      return result.Items.map((goal) => goal.goalName);
     },
   },
 
@@ -59,26 +43,6 @@ const resolvers: Resolvers = {
         email: self.email,
       });
       return self as User;
-    },
-
-    async fulfilGoal(_, { props }, context) {
-      const user = requireUser(context);
-
-      const data = await tables();
-
-      const goalId = `/users/${user.id}/goals/${props.goalName}`;
-
-      const fulfilled = await data.usergoals.get({ id: goalId });
-      if (!fulfilled) {
-        await data.usergoals.create({
-          id: goalId,
-          user_id: user.id,
-          goalName: props.goalName,
-          fulfilledAt: timestamp(),
-        });
-        return false;
-      }
-      return true;
     },
 
     async setUsername(_, { props }, context) {

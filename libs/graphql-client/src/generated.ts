@@ -164,13 +164,11 @@ export type Mutation = {
   createWorkspace: Workspace;
   doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
-  fulfilGoal: Scalars['Boolean']['output'];
   getCreateAttachmentForm: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
-  pretendUser?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
   removePad?: Maybe<Scalars['Boolean']['output']>;
@@ -292,11 +290,6 @@ export type MutationDuplicatePadArgs = {
 };
 
 
-export type MutationFulfilGoalArgs = {
-  props: GoalFulfilmentInput;
-};
-
-
 export type MutationGetCreateAttachmentFormArgs = {
   fileName: Scalars['String']['input'];
   fileType: Scalars['String']['input'];
@@ -325,11 +318,6 @@ export type MutationInviteUserToRoleArgs = {
 export type MutationMovePadArgs = {
   id: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
-};
-
-
-export type MutationPretendUserArgs = {
-  userId: Scalars['ID']['input'];
 };
 
 
@@ -682,7 +670,6 @@ export type Query = {
   searchTemplates: PagedTemplateSearchResult;
   sections: Array<Section>;
   self?: Maybe<User>;
-  selfFulfilledGoals: Array<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
@@ -1025,7 +1012,6 @@ export type User = {
   description?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   emailValidatedAt?: Maybe<Scalars['DateTime']['output']>;
-  hideChecklist?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -1044,7 +1030,6 @@ export type UserAccess = {
 
 export type UserInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  hideChecklist?: InputMaybe<Scalars['Boolean']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   onboarded?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1250,13 +1235,6 @@ export type DuplicateNotebookMutationVariables = Exact<{
 
 export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, initialState?: string | null, sectionId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits?: number | null, queries?: number | null, storage?: number | null, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
-export type FulfilGoalMutationVariables = Exact<{
-  props: GoalFulfilmentInput;
-}>;
-
-
-export type FulfilGoalMutation = { __typename?: 'Mutation', fulfilGoal: boolean };
-
 export type GetCreateAttachmentFormMutationVariables = Exact<{
   notebookId: Scalars['ID']['input'];
   fileName: Scalars['String']['input'];
@@ -1447,7 +1425,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, onboarded?: boolean | null } };
 
 export type IncrementQueryCountMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1524,7 +1502,7 @@ export type GetSubscriptionsPlansQuery = { __typename?: 'Query', getSubscription
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', id: string, name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null, image?: string | null } | null };
+export type UserQuery = { __typename?: 'Query', self?: { __typename?: 'User', id: string, name: string, username?: string | null, description?: string | null, onboarded?: boolean | null, image?: string | null } | null };
 
 export type WorkspaceNotebookFragment = { __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt: any, archived?: boolean | null, isPublic?: boolean | null, sectionId?: string | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null };
 
@@ -2042,15 +2020,6 @@ ${WorkspaceNotebookFragmentDoc}`;
 export function useDuplicateNotebookMutation() {
   return Urql.useMutation<DuplicateNotebookMutation, DuplicateNotebookMutationVariables>(DuplicateNotebookDocument);
 };
-export const FulfilGoalDocument = gql`
-    mutation FulfilGoal($props: GoalFulfilmentInput!) {
-  fulfilGoal(props: $props)
-}
-    `;
-
-export function useFulfilGoalMutation() {
-  return Urql.useMutation<FulfilGoalMutation, FulfilGoalMutationVariables>(FulfilGoalDocument);
-};
 export const GetCreateAttachmentFormDocument = gql`
     mutation GetCreateAttachmentForm($notebookId: ID!, $fileName: String!, $fileType: String!) {
   getCreateAttachmentForm(
@@ -2377,7 +2346,6 @@ export const UpdateUserDocument = gql`
   updateSelf(props: $props) {
     name
     description
-    hideChecklist
     onboarded
   }
 }
@@ -2515,11 +2483,9 @@ export const UserDocument = gql`
     name
     username
     description
-    hideChecklist
     onboarded
     image
   }
-  selfFulfilledGoals
 }
     `;
 
@@ -2662,7 +2628,6 @@ export type GraphCacheResolvers = {
     searchTemplates?: GraphCacheResolver<WithTypename<Query>, QuerySearchTemplatesArgs, WithTypename<PagedTemplateSearchResult> | string>,
     sections?: GraphCacheResolver<WithTypename<Query>, QuerySectionsArgs, Array<WithTypename<Section> | string>>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
-    selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
     version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
@@ -2936,7 +2901,6 @@ export type GraphCacheResolvers = {
     description?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     email?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     emailValidatedAt?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['DateTime'] | string>,
-    hideChecklist?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
     id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,
     image?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
@@ -3015,13 +2979,11 @@ export type GraphCacheOptimisticUpdaters = {
   createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
-  fulfilGoal?: GraphCacheOptimisticMutationResolver<MutationFulfilGoalArgs, Scalars['Boolean']>,
   getCreateAttachmentForm?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm>>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
   incrementQueryCount?: GraphCacheOptimisticMutationResolver<MutationIncrementQueryCountArgs, WithTypename<WorkspaceExecutedQuery>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
   movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
-  pretendUser?: GraphCacheOptimisticMutationResolver<MutationPretendUserArgs, Maybe<Scalars['Boolean']>>,
   removeAttachmentFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromPadArgs, Maybe<Scalars['Boolean']>>,
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
   removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
@@ -3079,7 +3041,6 @@ export type GraphCacheUpdaters = {
     searchTemplates?: GraphCacheUpdateResolver<{ searchTemplates: WithTypename<PagedTemplateSearchResult> }, QuerySearchTemplatesArgs>,
     sections?: GraphCacheUpdateResolver<{ sections: Array<WithTypename<Section>> }, QuerySectionsArgs>,
     self?: GraphCacheUpdateResolver<{ self: Maybe<WithTypename<User>> }, Record<string, never>>,
-    selfFulfilledGoals?: GraphCacheUpdateResolver<{ selfFulfilledGoals: Array<Scalars['String']> }, Record<string, never>>,
     tags?: GraphCacheUpdateResolver<{ tags: Array<Scalars['String']> }, QueryTagsArgs>,
     version?: GraphCacheUpdateResolver<{ version: Maybe<Scalars['String']> }, Record<string, never>>,
     workspaces?: GraphCacheUpdateResolver<{ workspaces: Array<WithTypename<Workspace>> }, Record<string, never>>
@@ -3101,13 +3062,11 @@ export type GraphCacheUpdaters = {
     createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
-    fulfilGoal?: GraphCacheUpdateResolver<{ fulfilGoal: Scalars['Boolean'] }, MutationFulfilGoalArgs>,
     getCreateAttachmentForm?: GraphCacheUpdateResolver<{ getCreateAttachmentForm: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
     incrementQueryCount?: GraphCacheUpdateResolver<{ incrementQueryCount: WithTypename<WorkspaceExecutedQuery> }, MutationIncrementQueryCountArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
     movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,
-    pretendUser?: GraphCacheUpdateResolver<{ pretendUser: Maybe<Scalars['Boolean']> }, MutationPretendUserArgs>,
     removeAttachmentFromPad?: GraphCacheUpdateResolver<{ removeAttachmentFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveAttachmentFromPadArgs>,
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
     removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
@@ -3421,7 +3380,6 @@ export type GraphCacheUpdaters = {
     description?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     email?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     emailValidatedAt?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
-    hideChecklist?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     image?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     name?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,

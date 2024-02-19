@@ -45,9 +45,6 @@ extend type Mutation {
 extend type Pad {
   attachments: [Attachment!]!
 }
-extend type Mutation {
-  pretendUser(userId: ID!): Boolean
-}
 type Query {
   version: String
 }
@@ -163,7 +160,6 @@ type User {
   email: String
   image: String
   createdAt: DateTime
-  hideChecklist: Boolean
   onboarded: Boolean
   emailValidatedAt: DateTime
 }
@@ -688,7 +684,6 @@ extend type Query {
 input UserInput {
   name: String
   description: String
-  hideChecklist: Boolean
   onboarded: Boolean
   image: String
 }
@@ -711,12 +706,10 @@ input UsernameInput {
 
 extend type Query {
   self: User
-  selfFulfilledGoals: [String!]!
 }
 
 extend type Mutation {
   updateSelf(props: UserInput!): User!
-  fulfilGoal(props: GoalFulfilmentInput!): Boolean! ## returns false if already fulfilled
   setUsername(props: UsernameInput!): Boolean! ## returns false if another user with that name already exists
 }
 type WorkspaceExecutedQuery {
