@@ -12,7 +12,7 @@ export const CollapsibleContainer = styled.div({
 });
 
 export const activeItemStyles = css({
-  backgroundColor: cssVar('backgroundHeavy'),
+  backgroundColor: cssVar('backgroundHeavier'),
   color: cssVar('textHeavy'),
 });
 
@@ -27,12 +27,12 @@ export const baseItemStyles = css({
   transition: `all 50ms ${easingTiming.easeIn}`,
 
   '&:hover, &:focus': {
-    backgroundColor: cssVar('backgroundHeavy'),
+    backgroundColor: cssVar('backgroundHeavier'),
     transition: `all 150ms ${easingTiming.easeOut}`,
   },
 
   '&:active': {
-    backgroundColor: cssVar('backgroundHeavy'),
+    backgroundColor: cssVar('backgroundHeavier'),
     color: cssVar('textHeavy'),
     transform: 'scale(0.98)',
 

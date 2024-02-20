@@ -27,11 +27,11 @@ export const SelectorButton = styled(motion.button)<SelectorButtonProps>(
 
       '&:hover, &:focus': {
         '& > span:last-child': {
-          backgroundColor: cssVar('backgroundHeavy'),
+          backgroundColor: cssVar('backgroundHeavier'),
         },
       },
       '&:active': {
-        backgroundColor: cssVar('backgroundHeavy'),
+        backgroundColor: cssVar('backgroundHeavier'),
       },
 
       '&:focus-visible': {
@@ -39,7 +39,7 @@ export const SelectorButton = styled(motion.button)<SelectorButtonProps>(
       },
     },
     props.isSelected && {
-      backgroundColor: cssVar('backgroundHeavy'),
+      backgroundColor: cssVar('backgroundHeavier'),
     },
   ]
 );
