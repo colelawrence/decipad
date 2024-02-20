@@ -1385,8 +1385,8 @@ export class Notebook {
     return clipboardText;
   }
 
-  async updateSlider(index: number, value: string) {
-    const sliderInput = this.page.getByTestId('widget-input').nth(index);
+  async updateSlider(name: string, value: string) {
+    const sliderInput = this.getSliderLocator(name);
     await sliderInput.waitFor({ state: 'visible' });
 
     // Selection sometimes isn't selected fully by a single click.
@@ -1401,5 +1401,35 @@ export class Notebook {
   async deleteBlock(index: number) {
     await this.page.getByTestId('drag-handle').nth(index).click();
     await this.page.getByRole('menuitem', { name: 'Delete' }).click();
+  }
+
+  /**
+   * Return the locator to a slider with a specific name
+   *
+   * **Usage**
+   *
+   * ```js
+      let SliderValue = notebook.getSliderLocator('SliderName').getByTestId('widget-input');
+   * ```
+   */
+  getSliderLocator(name: string) {
+    return this.page
+      .getByTestId('widget-editor')
+      .filter({ hasText: new RegExp(name) });
+  }
+
+  /**
+   * Return the locator to a value of a slider with a specific name
+   *
+   * **Usage**
+   *
+   * ```js
+   * await expect(
+      notebook.getSliderValueLocator('PriceUnit')
+    ).toContainText('20$');
+   * ```
+   */
+  getSliderValueLocator(name: string) {
+    return this.getSliderLocator(name).getByTestId('widget-input');
   }
 }

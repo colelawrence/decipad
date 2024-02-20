@@ -112,12 +112,15 @@ test('Make sure our js code templates work', async ({ testUser }) => {
 });
 
 test('More JS codeblock checks', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
 
   let generatedVarName: string;
 
   await test.step('Create a variable', async () => {
-    await page.getByTestId('paragraph-content').last().click();
+    await notebook.waitForEditorToLoad();
+    await notebook.focusOnBody();
+    await notebook.selectLastParagraph();
+    await page.keyboard.press('Enter');
     await page.keyboard.press('=');
 
     await page

@@ -19,7 +19,6 @@ import {
 import {
   setUp,
   focusOnBody,
-  goToPlayground,
   keyPress,
   waitForEditorToLoad,
   waitForNotebookToLoad,
@@ -28,22 +27,10 @@ import {
 
 import { Timeouts } from '../utils/src';
 
-test.describe('toggle Widget', () => {
-  test.describe.configure({ mode: 'serial' });
+test('toggle Widget', async ({ testUser }) => {
+  const { page } = testUser;
 
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('can create a toggle', async () => {
+  await test.step('can create a toggle', async () => {
     await focusOnBody(page);
     await createToggleBelow(page, 'Input2');
     await page.keyboard.press('ArrowRight');
@@ -56,14 +43,14 @@ test.describe('toggle Widget', () => {
     ).toBeVisible();
   });
 
-  test('can turn on toggle', async () => {
+  await test.step('can turn on toggle', async () => {
     const widgetEditor = page.getByTestId('widget-editor');
     await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).toBeChecked();
     await expect(page.getByText('true', { exact: true }).first()).toBeVisible();
   });
 
-  test('can turn off toggle', async () => {
+  await test.step('can turn off toggle', async () => {
     const widgetEditor = page.getByTestId('widget-editor');
     await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
@@ -73,37 +60,22 @@ test.describe('toggle Widget', () => {
   });
 });
 
-test.describe('Date Widget', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Date Widget', async ({ testUser }) => {
+  const { page } = testUser;
+  await keyPress(page, 'ArrowDown');
+  await createDateBelow(page, 'Input3');
 
-  let page: Page;
+  await page.getByTestId('widget-input').click();
+  await page.getByText('Today').click();
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
+  const today = new Date();
 
-  test.afterAll(async () => {
-    await page.close();
-  });
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
 
-  test('Date Widget', async () => {
-    await keyPress(page, 'ArrowDown');
-    await createDateBelow(page, 'Input3');
-
-    await page.getByTestId('widget-input').click();
-    await page.getByText('Today').click();
-
-    const today = new Date();
-
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-
-    await expect(page.getByTestId('widget-input')).toContainText(formattedDate);
-  });
+  await expect(page.getByTestId('widget-input')).toContainText(formattedDate);
 });
 
 test.describe('date widget read mode', () => {
@@ -178,30 +150,13 @@ test.describe('date widget read mode', () => {
   });
 });
 
-test.describe('slider Widget', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Slider Widget', async () => {
-    await keyPress(page, 'ArrowDown');
-    await createSliderBelow(page, 'Input3', '$5 per hotdog');
-    await page.getByRole('slider').click();
-    await keyPress(page, 'ArrowRight');
-    await expect(page.getByTestId('widget-input')).toContainText(
-      '$6 per hotdog'
-    );
-  });
+test('slider Widget', async ({ testUser }) => {
+  const { page } = testUser;
+  await keyPress(page, 'ArrowDown');
+  await createSliderBelow(page, 'Input3', '$5 per hotdog');
+  await page.getByRole('slider').click();
+  await keyPress(page, 'ArrowRight');
+  await expect(page.getByTestId('widget-input')).toContainText('$6 per hotdog');
 });
 
 test('dropdown widget', async ({ testUser }) => {
@@ -383,27 +338,14 @@ test('dropdown widget', async ({ testUser }) => {
   });
 });
 
-test.describe('result widget', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates an empty result widget', async () => {
+test('result widget', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('creates an empty result widget', async () => {
     await createResultBelow(page);
     await expect(page.getByText('Result')).toHaveCount(1);
   });
 
-  test('shows the available calculations', async () => {
+  await test.step('shows the available calculations', async () => {
     await focusOnBody(page);
     await createCalculationBlockBelow(page, 'Hello = 5 + 1');
     await createCalculationBlockBelow(page, 'World = 5 + 3');
@@ -418,7 +360,7 @@ test.describe('result widget', () => {
     ).toBeVisible();
   });
 
-  test('shows the result of a calculation', async () => {
+  await test.step('shows the result of a calculation', async () => {
     await page
       .locator('[aria-roledescription="dropdownOption"]')
       .getByText('Hello')
@@ -429,7 +371,7 @@ test.describe('result widget', () => {
     ).toBeVisible();
   });
 
-  test('updates the result when calculation changes', async () => {
+  await test.step('updates the result when calculation changes', async () => {
     await page.getByText('Hello = 5 + 1').click();
     await ControlPlus(page, 'a');
     await page.keyboard.press('ArrowRight');
@@ -440,7 +382,7 @@ test.describe('result widget', () => {
     ).toBeVisible();
   });
 
-  test('doesnt show tables nor formulas on widget dropdown', async () => {
+  await test.step('doesnt show tables nor formulas on widget dropdown', async () => {
     await createCalculationBlockBelow(page, 'table = { hello = [1, 2, 3] }');
     await createCalculationBlockBelow(page, 'f(x) = x + 10');
 

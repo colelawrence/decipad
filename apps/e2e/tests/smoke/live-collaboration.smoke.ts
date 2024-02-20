@@ -35,8 +35,9 @@ smoketest(
       '[userB] create new workspace to duplicate shared notebook',
       async () => {
         await userBPage.goto(notebookURL);
-        await userB.aiAssistant.closePannel();
         await userBNotebook.checkNotebookTitle(notebookTitle);
+        await userBNotebook.waitForEditorToLoad();
+        await userB.aiAssistant.closePannel();
         notebookJsonUserB = await userBNotebook.download();
       }
     );
