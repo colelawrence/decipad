@@ -241,7 +241,7 @@ export const PublishingWriting: FC = () => (
             Create a public URL and manage some settings to share your work.{' '}
             <Link
               color="plain"
-              href="https://app.decipad.com/docs/share/embeds"
+              href="https://app.decipad.com/docs/share/publish"
             >
               Check out docs
             </Link>
