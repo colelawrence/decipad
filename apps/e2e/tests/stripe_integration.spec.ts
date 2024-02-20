@@ -1,4 +1,5 @@
 import { expect, test } from './manager/decipad-tests';
+import { snapshot } from '../utils/src';
 
 test.describe('Stripe integration', () => {
   test('testing Stripe Checkout integration', async ({ randomFreeUser }) => {
@@ -24,6 +25,7 @@ test.describe('Stripe integration', () => {
 
     // click on Upgrade to Pro in the workspace dashboard
     await page.click('[data-testid="workspace_upgrade_pro"]');
+    await snapshot(page, 'Upgrade modal');
     // click on Upgrade to pro button in the modal
     await page.click('[data-testid="paywall_upgrade_pro"]');
     // redirect the user back to Deci
