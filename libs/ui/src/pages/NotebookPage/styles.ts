@@ -87,6 +87,9 @@ const ComponentWidths: Record<SidebarComponent, string> = {
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   position: 'relative',
+  minWidth: '0px',
+  // min-width: 0 is very important
+  // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
   backgroundColor: cssVar('backgroundHeavy'),
   height: '100%',
   width: '100%',
