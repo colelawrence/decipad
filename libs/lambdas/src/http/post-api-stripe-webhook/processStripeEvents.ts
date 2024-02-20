@@ -8,9 +8,40 @@ import { limits } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { z } from 'zod';
-import { resourceusage } from '@decipad/services';
+import { resourceusage, workspaces } from '@decipad/services';
+import { WorkspaceRecord } from '../../types';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
+
+async function createWorkspace(
+  client_reference_id: string
+): Promise<WorkspaceRecord> {
+  const data = await tables();
+
+  //
+  // client_reference_id could be 2 things:
+  // - workspaceID
+  // - userID
+  //
+  // First, we check if it is a workspace ID, if so we simply create a subscription
+  // and link it to that workspace.
+  //
+  // If its a userID, we create a workspace and insert the user into the workspace as an admin.
+  // And then add the subscription to this brain new workspace.
+  //
+
+  const workspace = await data.workspaces.get({ id: client_reference_id });
+  if (workspace != null) {
+    return workspace;
+  }
+
+  const user = await data.users.get({ id: client_reference_id });
+  if (user == null) {
+    throw Boom.badRequest('User is not valid');
+  }
+
+  return workspaces.create({ name: `${user.name}'s Workspace` }, user);
+}
 
 const updateQueryExecutionTable = async (
   workspaceId: string,
@@ -87,11 +118,7 @@ export const processSessionComplete = async (
     throw Boom.badRequest('Webhook Error: subscription does not exist');
   }
 
-  const workspace = await data.workspaces.get({ id: client_reference_id });
-
-  if (!workspace) {
-    throw Boom.badRequest('Webhook Error: workspace does not exist');
-  }
+  const workspace = await createWorkspace(client_reference_id);
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id: subscriptionId,

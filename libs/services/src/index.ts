@@ -5,6 +5,7 @@ import * as users from './users';
 import * as utils from './utils';
 import * as subscriptions from './subscriptions';
 import * as resourceusage from './resource-usage';
+import * as workspaces from './workspaces';
 
 export {
   users,
@@ -14,4 +15,5 @@ export {
   utils,
   subscriptions,
   resourceusage,
+  workspaces,
 };
