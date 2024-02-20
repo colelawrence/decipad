@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Wait for the backend
-sleep 12
+sleep_duration="${SLEEP_TIME:=12}"
+echo Sleeping for "$sleep_duration"... waiting for backend.
+sleep "$sleep_duration"
 
 export DISABLE_ESLINT_PLUGIN=true
 export TSC_COMPILE_ON_ERROR=true
