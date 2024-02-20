@@ -271,7 +271,7 @@
     "immer": "10.0.2",
     "is-hotkey": "0.2.0",
     "is-promise": "^4.0.0",
-    "is-stream": "^3.0.0",
+    "is-stream": "^4.0.1",
     "isomorphic-fetch": "3.0.0",
     "jest-diff": "^29.7.0",
     "jq.node": "3.0.0",
