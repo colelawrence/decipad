@@ -28,7 +28,7 @@ const ModalContent: FC<ModalContentProps> = ({
     </Dialog.Overlay>
     <Dialog.Content asChild role="dialog" data-testid={testId}>
       <Styled.ModalWrapper size={size}>
-        <Styled.ModalContent
+        <Styled.ModalContainer
           initial={{ y: 120, opacity: 0, scale: 0.9 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: -40, opacity: 0, scale: 0.9 }}
@@ -46,8 +46,8 @@ const ModalContent: FC<ModalContentProps> = ({
               </Dialog.Close>
             </Styled.ModalHeader>
           )}
-          {children}
-        </Styled.ModalContent>
+          <Styled.ModalContent>{children}</Styled.ModalContent>
+        </Styled.ModalContainer>
       </Styled.ModalWrapper>
     </Dialog.Content>
   </Dialog.Portal>
