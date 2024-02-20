@@ -3,9 +3,9 @@ import {
   cssVar,
   darkenHex,
   easingTiming,
-  p15Medium,
+  p14Medium,
   transparencyHex,
-} from 'libs/ui/src/primitives';
+} from '../../../primitives';
 
 export const Container = styled.div({
   width: '100%',
@@ -79,7 +79,7 @@ export const IconWrapper = styled.div<IconWrapperProps>((props) => [
   },
 ]);
 
-export const TextWrapper = styled.span(p15Medium, {
+export const TextWrapper = styled.span(p14Medium, {
   lineHeight: 1,
   display: 'flex',
   alignItems: 'center',
