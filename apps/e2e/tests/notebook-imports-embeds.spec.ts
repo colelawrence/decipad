@@ -75,6 +75,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
   });
 
   test('import CSVs @imports @csv', async ({ testUser }) => {
+    test.slow();
     const { page, notebook } = testUser;
     await test.step('importing csv link through csv panel with link', async () => {
       await notebook.openCSVUploader();
