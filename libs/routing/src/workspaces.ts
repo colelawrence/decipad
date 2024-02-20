@@ -9,6 +9,7 @@ const shared = route('/shared', {}, {});
 const codeSecrets = route('/code-secrets', {}, {});
 const sqlConnections = route('/sql-connections', {}, {});
 const addcredits = route('/add-credits', {}, {});
+const upgrade = route('/upgrade', {}, {});
 
 export const connections = route(
   '/connections',
@@ -33,6 +34,7 @@ const workspace = route(
     shared,
     section,
     addcredits,
+    upgrade,
   }
 );
 

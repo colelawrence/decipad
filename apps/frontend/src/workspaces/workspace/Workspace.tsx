@@ -24,6 +24,7 @@ import {
   EditWorkspaceModal,
   LoadingLogo,
   PaymentSubscriptionStatusModal,
+  PaywallModal,
   WorkspaceHero,
 } from '@decipad/ui';
 import { useIntercom } from '@decipad/react-utils';
@@ -37,7 +38,7 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { ErrorPage, Frame, LazyRoute } from '../../meta';
+import { ErrorPage, Frame, LazyRoute, RequirePaidPlanRoute } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
@@ -437,12 +438,14 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           <Route
             path={currentWorkspaceRoute.members.template}
             element={
-              <LazyRoute>
-                <EditMembersModal
-                  onClose={() => navigate(currentWorkspaceRoute.$)}
-                  currentWorkspace={currentWorkspace}
-                />
-              </LazyRoute>
+              <RequirePaidPlanRoute isPaidPlan={!!currentWorkspace.isPremium}>
+                <LazyRoute>
+                  <EditMembersModal
+                    onClose={() => navigate(currentWorkspaceRoute.$)}
+                    currentWorkspace={currentWorkspace}
+                  />
+                </LazyRoute>
+              </RequirePaidPlanRoute>
             }
           />
           <Route
@@ -456,6 +459,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
               </LazyRoute>
             }
           />
+
           <Route
             path={currentWorkspaceRoute.addcredits.template}
             element={
@@ -464,6 +468,18 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                   closeAction={() => navigate(currentWorkspaceRoute.$)}
                   resourceId={currentWorkspace.id}
                 ></AddCreditsModal>
+              </LazyRoute>
+            }
+          />
+          <Route
+            path={currentWorkspaceRoute.upgrade.template}
+            element={
+              <LazyRoute>
+                <PaywallModal
+                  onClose={() => navigate(currentWorkspaceRoute.$)}
+                  workspaceId={currentWorkspace.id}
+                  currentPlan={currentWorkspace.plan}
+                />
               </LazyRoute>
             }
           />

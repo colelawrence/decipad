@@ -529,6 +529,7 @@ export interface ComponentCssVariables {
   //
   // ---------- Premium Indicators ------------
   RequiresPremium: string;
+  RequiresPremiumBorder: string;
   RequiresPremiumText: string;
   // -------- End Premium Indicators ----------
 }
@@ -649,6 +650,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantCodeBackgroundColor: teal900.hex,
 
       RequiresPremium: brand500.hex,
+      RequiresPremiumBorder: brand600.hex,
       RequiresPremiumText: blackWhiteBlack.hex,
     },
     Dark: {
@@ -761,6 +763,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantCodeBackgroundColor: teal900.hex,
 
       RequiresPremium: purple300.hex,
+      RequiresPremiumBorder: purple500.hex,
       RequiresPremiumText: blackWhiteBlack.hex,
     },
   } as const;

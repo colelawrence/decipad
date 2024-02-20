@@ -1,114 +1,113 @@
-import styled from '@emotion/styled';
-
-import { cssVar, p14Medium, p14Regular } from '../../../primitives';
 import { Modal } from '../../molecules';
-import { ComponentProps } from 'react';
-import { Button } from '../../atoms';
+import { ComponentProps, useCallback, useMemo, useState } from 'react';
+import { Button, Link } from '../../atoms';
+import { useStripePlans } from '@decipad/react-utils';
+import { Maybe } from '@decipad/graphql-client';
+import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import * as Styled from './styles';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
-  paymentHref: string;
+  workspaceId: string;
+  currentPlan?: Maybe<string>;
 };
+
+const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
+  ? 'personal'
+  : 'pro';
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   onClose,
-  paymentHref,
+  workspaceId,
+  currentPlan,
 }) => {
+  const plans = useStripePlans(workspaceId);
+
+  const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
+
+  const formatPrice = useCallback((price: number, currency: string = 'usd') => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+    }).format(price / 100);
+  }, []);
+
+  const paymentLink = useMemo(() => {
+    return plans.find((plan) => plan?.key === selectedPlan)?.paymentLink;
+  }, [plans, selectedPlan]);
+
   return (
-    <Modal
-      title="Upgrade to Pro"
-      defaultOpen={true}
-      onClose={onClose}
-      testId="upgrade-pro-modal"
-    >
-      <ModalContent>
-        <Subtitle>$15 per seat per month</Subtitle>
-        <Section>
-          <SectionHeading>Modeling Features</SectionHeading>
-          <List>
-            <li>Natural language formulas</li>
-            <li>Tables & Pivot Tables</li>
-            <li>Widgets, Charts and Data Visualizations</li>
-            <li>Unit Conversions</li>
-            <li>Dimensions</li>
-          </List>
-        </Section>
-
-        <Section>
-          <SectionHeading>Data Integrations</SectionHeading>
-          <List>
-            <li>CSV Uploads: up to 10k cells</li>
-            <li>Media Uploads: up to 5MB</li>
-            <li>Live Connections: 500 queries / month</li>
-          </List>
-        </Section>
-
-        <Section>
-          <SectionHeading>Collaboration</SectionHeading>
-          <List>
-            <li>Everything in Starter</li>
-            <li>Shared Workspace: Unlimited seats</li>
-            <li>Guest Collaborators: 10x per notebook</li>
-          </List>
-        </Section>
-
-        <ButtonContainer>
-          <Button
-            type="primaryBrand"
-            href={paymentHref}
-            sameTab={true} // change this to false if you want to work on payments locally
-            testId="paywall_upgrade_pro"
-          >
-            Upgrade to Pro
-          </Button>
+    <Modal defaultOpen={true} onClose={onClose}>
+      <Styled.PaywallContainer>
+        <Styled.PaywallTitle>Choose plan</Styled.PaywallTitle>
+        <ToggleGroup.Root
+          type="single"
+          orientation="vertical"
+          value={selectedPlan}
+          onValueChange={(value: string) => {
+            if (value) setSelectedPlan(value);
+          }}
+          asChild
+        >
+          <Styled.PlanContainer>
+            {plans.map((plan) =>
+              plan ? (
+                <ToggleGroup.Item
+                  key={plan?.id}
+                  value={plan?.key}
+                  disabled={plan.key === currentPlan}
+                  asChild
+                >
+                  <Styled.PlanItem>
+                    <Styled.PlanTitle>
+                      <Styled.PlanRadio />
+                      {plan.title}
+                      {plan.key === currentPlan && (
+                        <Styled.PlanBadge>CURRENT PLAN</Styled.PlanBadge>
+                      )}
+                    </Styled.PlanTitle>
+                    <Styled.PlanPrice>
+                      {formatPrice(plan.price, plan.currency ?? 'usd')}
+                      <Styled.PlanPriceSuffix>/mo</Styled.PlanPriceSuffix>
+                    </Styled.PlanPrice>
+                    <Styled.PlanDescription>
+                      {plan.description}
+                    </Styled.PlanDescription>
+                  </Styled.PlanItem>
+                </ToggleGroup.Item>
+              ) : null
+            )}
+          </Styled.PlanContainer>
+        </ToggleGroup.Root>
+        <Styled.PaywallText>
+          You can compare all the details on our{' '}
+          <Link color="plain" href="https://www.decipad.com/pricing">
+            pricing page
+          </Link>
+          .
+        </Styled.PaywallText>
+        <Styled.ButtonContainer>
+          {paymentLink ? (
+            <Button
+              type="primaryBrand"
+              disabled={!paymentLink}
+              href={paymentLink}
+              sameTab={true} // change this to false if you want to work on payments locally
+              testId="paywall_upgrade_pro"
+            >
+              Continue to billing
+            </Button>
+          ) : (
+            <Button type="primaryBrand" disabled>
+              Pick a plan
+            </Button>
+          )}
           <Button type="secondary" onClick={onClose}>
-            Maybe Later
+            Cancel
           </Button>
-        </ButtonContainer>
-      </ModalContent>
+        </Styled.ButtonContainer>
+      </Styled.PaywallContainer>
     </Modal>
   );
 };
-
-const ModalContent = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  minWidth: '400px',
-  width: '100%',
-  position: 'relative',
-  overflow: 'hidden',
-});
-
-export const Subtitle = styled.h3(p14Medium, {
-  color: cssVar('textSubdued'),
-  marginBottom: '24px',
-});
-
-const Section = styled.div({
-  display: 'flex',
-  flex: 1,
-  flexDirection: 'column',
-  padding: '16px',
-  width: '100%',
-  borderRadius: '12px',
-  marginBottom: '8px',
-  gap: '4px',
-  backgroundColor: cssVar('backgroundDefault'),
-});
-
-const SectionHeading = styled.h4(p14Medium, {
-  color: cssVar('textHeavy'),
-});
-
-const ButtonContainer = styled.div({
-  display: 'flex',
-  marginTop: '16px',
-  gap: '8px',
-});
-
-const List = styled.ul(p14Regular, {
-  alignSelf: 'flex-start',
-  color: cssVar('textSubdued'),
-  listStyle: 'inside',
-  paddingLeft: '8px',
-});

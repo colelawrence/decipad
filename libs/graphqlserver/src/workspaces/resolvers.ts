@@ -53,11 +53,14 @@ function WorkspaceRecordToWorkspace(
 
 function isLocalOrDev(): boolean {
   const url = process.env.DECI_APP_URL_BASE;
+  const stagingRegex = /^https:\/\/\d{4}\.staging\.decipad\.com/;
+
   return (
     url == null ||
     url.startsWith('http://localhost') ||
     url.startsWith('http://127.0.0.1') ||
-    url.startsWith('https://dev.decipad.com')
+    url.startsWith('https://dev.decipad.com') ||
+    stagingRegex.test(url)
   );
 }
 
@@ -170,9 +173,23 @@ const resolvers: Resolvers = {
     },
     async createWorkspace(_, { workspace }, context) {
       const user = requireUser(context);
-      return WorkspaceRecordToWorkspace(
+      const newWorkspace = await WorkspaceRecordToWorkspace(
         await createWorkspace2(workspace, user)
       );
+
+      if (isLocalOrDev() && newWorkspace.name.includes('@n1n.co')) {
+        newWorkspace.isPremium = true;
+
+        if (newWorkspace.name.includes('team')) {
+          newWorkspace.plan = 'team';
+        } else if (newWorkspace.name.includes('enterprise')) {
+          newWorkspace.plan = 'enterprise';
+        } else {
+          newWorkspace.plan = 'personal';
+        }
+      }
+
+      return newWorkspace;
     },
 
     async updateWorkspace(_, { id, workspace }, context) {

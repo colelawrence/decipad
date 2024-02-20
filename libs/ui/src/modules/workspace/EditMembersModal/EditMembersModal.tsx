@@ -5,8 +5,7 @@ import {
 } from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
-import { useStripeLinks } from '@decipad/react-utils';
-import { Modal, PaywallModal } from '../../../shared';
+import { Modal } from '../../../shared';
 
 import { WorkspaceMembers } from '../WorkspaceMembers/WorkspaceMembers';
 
@@ -22,7 +21,6 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
   const { data: session } = useSession();
   const user = session?.user as User;
   const currentUserId = user?.id;
-  const { paymentLink } = useStripeLinks(currentWorkspace);
 
   const members = useMemo(
     (): Array<UserAccessMetaFragment> => [
@@ -41,10 +39,6 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
     ],
     [currentWorkspace, currentUserId, user]
   );
-
-  if (paymentLink) {
-    return <PaywallModal onClose={onClose} paymentHref={paymentLink} />;
-  }
 
   return (
     <Modal title="Workspace members" onClose={onClose} defaultOpen={true}>

@@ -1,5 +1,7 @@
 import { env } from '@decipad/utils';
+import { useGetSubscriptionsPlansQuery } from '@decipad/graphql-client';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useMemo } from 'react';
 
 /* istanbul ignore file */
 type WorkspaceTrait = {
@@ -16,6 +18,9 @@ const MAX_NOTEBOOK_COLLABORATORS = 3;
 const STRIPE_PAYMENT_LINK = env.VITE_STRIPE_PAYMENT_LINK;
 const STRIPE_CUSTOMER_PORTAL_LINK = env.VITE_STRIPE_CUSTOMER_PORTAL_LINK;
 
+/**
+ * @deprecated This hook deprecated in favor of useStripePlans
+ */
 export const useStripeLinks = (workspace: WorkspaceTrait) => {
   const paymentLink = `${STRIPE_PAYMENT_LINK}?client_reference_id=${workspace.id}`;
   return {
@@ -24,6 +29,52 @@ export const useStripeLinks = (workspace: WorkspaceTrait) => {
       ? STRIPE_CUSTOMER_PORTAL_LINK
       : undefined,
   };
+};
+
+export const useStripePlans = (refId: string) => {
+  const [subscriptionPlans] = useGetSubscriptionsPlansQuery();
+
+  const plans = useMemo(() => {
+    return subscriptionPlans.data?.getSubscriptionsPlans ?? [];
+  }, [subscriptionPlans]);
+
+  // return only free + correct plan based on feature flag
+  const availablePlans = useMemo(
+    () =>
+      plans.filter((plan) => {
+        return (
+          (isFlagEnabled('NEW_PAYMENTS')
+            ? !plan?.isDefault
+            : plan?.isDefault) || plan?.key === 'free'
+        );
+      }),
+    [plans]
+  );
+
+  const linkedPlans = useMemo(() => {
+    return availablePlans.map((plan) => {
+      if (plan) {
+        return {
+          ...plan,
+          price: plan.price ?? 0,
+          // special case for free plan (should I put this here?)
+          description:
+            plan.description ??
+            'Decipad for personal data modeling needs, free forever!',
+          paymentLink: plan.paymentLink
+            ? `${plan.paymentLink}?client_reference_id=${refId}`
+            : null,
+        };
+      }
+      return null;
+    });
+  }, [availablePlans, refId]);
+
+  const sortedPlans = useMemo(() => {
+    return linkedPlans.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0));
+  }, [linkedPlans]);
+
+  return sortedPlans;
 };
 
 export const useStripeCollaborationRules = (

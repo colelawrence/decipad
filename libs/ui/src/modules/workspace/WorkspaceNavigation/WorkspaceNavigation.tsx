@@ -87,7 +87,7 @@ export const WorkspaceNavigation = ({
       <NavigationList>
         {!activeWorkspace.isPremium && (
           <NavigationItem
-            href={activeWorkspaceRoute.members({}).$}
+            href={activeWorkspaceRoute.upgrade({}).$}
             key="workspace-upgrade-pro"
           >
             <Styled.ItemWrapper data-testid="workspace_upgrade_pro">

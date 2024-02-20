@@ -12,7 +12,7 @@ export const PaymentSubscriptionStatusModal: React.FC<
   const isSuccess = paymentSubscriptionStatus === 'paid';
   const modalData = isSuccess
     ? {
-        title: "You've been upgraded to Decipad Pro!",
+        title: 'Your workspace has been upgraded!',
         text: 'Invite new members to workspace and build larger notebooks together!',
         closeButton: 'Explore',
       }
