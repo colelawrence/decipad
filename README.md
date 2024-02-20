@@ -272,6 +272,10 @@ If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
 
+## Software Stack
+
+![Software Architecture](docs/software_architecture.png)
+
 ## Further resources
 
 - [Development cycle](docs/DEVELOPMENT.md)
