@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { AiUsage } from '@decipad/interfaces';
+import { Message } from '@decipad/react-contexts';
+import { Payload } from '@hapi/boom';
+import stringify from 'json-stringify-safe';
 import type {
   ChatCompletionMessage,
   ChatCompletionMessageParam,
 } from 'openai/resources';
-import { AiUsage } from '@decipad/interfaces';
-import { Message } from '@decipad/react-contexts';
-import { mapChatHistoryToGPTChat } from './helpers';
-import { connect } from './connect';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
-import stringify from 'json-stringify-safe';
-import { Payload } from '@hapi/boom';
+import { connect } from './connect';
+import { mapChatHistoryToGPTChat } from './helpers';
 
 export interface RemoteAgentParams {
   notebookId: string;
@@ -146,7 +146,10 @@ export const useRemoteAgent = ({
             if (error.message === 'Aborted') {
               reject(new DOMException('Aborted', 'AbortError'));
             }
-            if (error.message === `You've exceeded AI quota`) {
+            if (
+              error.message === `You've exceeded AI quota` ||
+              error.statusCode === 402
+            ) {
               reject(new DOMException('Quota exceeded', 'QuotaExceededError'));
             }
             reject(new Error((response as Payload).message));

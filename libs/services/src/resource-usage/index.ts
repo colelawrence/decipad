@@ -1,20 +1,21 @@
 import { limits } from '@decipad/backend-config';
 import {
-  ResourceUsageRecord,
-  AiResourceUsageKeyWithoutID,
-  StorageResourceUsageKeyWithoutID,
-  ResourceUsageKeys,
-  StorageSubtypes,
   AiFields,
+  AiResourceUsageKeyWithoutID,
   ResourceConsumer,
   ResourceUsageHistoryRecord,
+  ResourceUsageKeys,
+  ResourceUsageRecord,
+  StorageResourceUsageKeyWithoutID,
+  StorageSubtypes,
 } from '@decipad/backendtypes';
-import tables, { incrementTableField, timestamp } from '@decipad/tables';
-import * as subscriptions from '../subscriptions';
 import { ResourceTypes } from '@decipad/graphqlserver-types';
+import tables, { incrementTableField, timestamp } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import type { CompletionUsage } from 'openai/resources';
+import { paymentRequired } from '@hapi/boom';
 import { nanoid } from 'nanoid';
+import type { CompletionUsage } from 'openai/resources';
+import * as subscriptions from '../subscriptions';
 
 const CONSUMPTION = 'consumption';
 const ORIGINAL_AMOUNT = 'originalAmount';
@@ -229,10 +230,8 @@ export async function upsertAi(
   const extraAi = await getExtraAiRecord(workspaceId);
 
   if (extraAi == null) {
-    throw new Error(
-      `No extra credits present and subscription exceeded.
-       Cannot upsert usage.
-       Did you forget to check if user had enough using 'hasReachedLimit'?`
+    throw paymentRequired(
+      `No extra credits present and subscription exceeded.`
     );
   }
 

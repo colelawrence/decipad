@@ -12,6 +12,7 @@ import { useCallback, useContext, useRef } from 'react';
 
 import { nanoid } from 'nanoid';
 
+import { useActiveEditor } from '@decipad/editor-hooks';
 import {
   Action,
   GenericSummaryResult,
@@ -21,9 +22,8 @@ import {
 } from '@decipad/notebook-open-api';
 import { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from '@decipad/utils';
-import { useRemoteAgent } from './useRemoteAgent';
-import { useActiveEditor } from '@decipad/editor-hooks';
 import { objectToHumanReadableString } from './helpers';
+import { useRemoteAgent } from './useRemoteAgent';
 
 type AgentParams = {
   notebookId: string;
@@ -162,7 +162,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                 const newEvent = {
                   id: nanoid(),
                   content: `Error: ${(err as Error).message}`,
-                  uiContent: 'Unknown error occurred',
+                  uiContent: `${(err as Error).message}`,
                   function_call: functionCall,
                   result: JSON.stringify(err),
                 };
@@ -291,7 +291,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           handleAddMessage({
             type: 'event',
             id: nanoid(),
-            content: "Sorry, you've ran out of AI credits.",
+            content: 'No credits left. Buy more to continue',
             timestamp: Date.now(),
             replyTo: userMessage.id,
             status: 'ui-only-error',
@@ -305,7 +305,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
             handleAddMessage({
               type: 'event',
               id: nanoid(),
-              content: `AI generation run cancelled by user.`,
+              content: `Cancelled by user.`,
               timestamp: Date.now(),
               replyTo: userMessage.id,
               status: 'error',

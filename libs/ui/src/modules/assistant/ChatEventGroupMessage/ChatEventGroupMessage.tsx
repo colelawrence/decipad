@@ -1,11 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { css } from '@emotion/react';
-import { cssVar, p12Bold, p13Medium, p13Regular } from '../../../primitives';
 import { MessageStatus, SingleEvent } from '@decipad/react-contexts';
-import { Caret, Check, Spinner, Warning } from '../../../icons';
-import { useLayoutEffect, useState } from 'react';
+import { css } from '@emotion/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLayoutEffect, useState } from 'react';
+import { Caret, Check, Spinner, Warning } from '../../../icons';
+import { cssVar, p12Bold, p13Medium, p13Regular } from '../../../primitives';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -202,7 +202,7 @@ const getEventMeta = (status: MessageStatus) => {
   switch (status) {
     case 'success':
       return {
-        label: 'Finished processing',
+        label: 'Finished',
         icon: <Check />,
       };
     case 'pending':

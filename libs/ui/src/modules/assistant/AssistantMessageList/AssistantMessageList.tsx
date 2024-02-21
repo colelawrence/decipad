@@ -4,24 +4,24 @@ import { css } from '@emotion/react';
 import { LayoutGroup, motion } from 'framer-motion';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 
+import { MyValue } from '@decipad/editor-types';
+import { User } from '@decipad/interfaces';
 import {
   AssistantMessage,
   Message,
   UserMessage,
 } from '@decipad/react-contexts';
-import { useCallback, useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import { User } from '@decipad/interfaces';
-import { EElementOrText } from '@udecode/plate-common';
-import { MyValue } from '@decipad/editor-types';
-import { nanoid } from 'nanoid';
 import { noop } from '@decipad/utils';
+import { EElementOrText } from '@udecode/plate-common';
+import { nanoid } from 'nanoid';
+import { useSession } from 'next-auth/react';
+import { useCallback, useEffect, useRef } from 'react';
 import { cssVar } from '../../../primitives';
 import { ChatAssistantMessage } from '../ChatAssistantMessage/ChatAssistantMessage';
-import { ChatUserMessage } from '../ChatUserMessage/ChatUserMessage';
-import { ChatIntegrationMessage } from '../ChatIntegrationMessage/ChatIntegrationMessage';
 import { ChatEventGroupMessage } from '../ChatEventGroupMessage/ChatEventGroupMessage';
 import { ChatEventMessage } from '../ChatEventMessage/ChatEventMessage';
+import { ChatIntegrationMessage } from '../ChatIntegrationMessage/ChatIntegrationMessage';
+import { ChatUserMessage } from '../ChatUserMessage/ChatUserMessage';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -75,8 +75,10 @@ const DEFAULT_GREETING_MESSAGE: AssistantMessage = {
   content:
     'Hey there! Keep in mind that this **experimental** version can make mistakes. Please, provide feedback to help us improve.',
   suggestions: [
-    'What is Decipad AI Assistant?',
-    'I want to build a model in Decipad.',
+    'Get data from an Airtable base',
+    'Build a business model',
+    'Analyze data',
+    'Build me a pricing calculator',
   ],
   timestamp: Date.now(),
   replyTo: null,

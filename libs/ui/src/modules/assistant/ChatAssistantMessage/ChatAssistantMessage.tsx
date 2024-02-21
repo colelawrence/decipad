@@ -11,20 +11,20 @@ import {
 import {
   componentCssVars,
   cssVar,
-  p12Medium,
   p13Medium,
+  p14Medium,
   p14Regular,
 } from '../../../primitives';
 
+import { ClientEventsContext } from '@decipad/client-events';
 import { AssistantMessage } from '@decipad/react-contexts';
-import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import copyToClipboard from 'copy-to-clipboard';
+import { useCallback, useContext, useState } from 'react';
 import { Tooltip } from '../../../shared';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
-import { useCallback, useContext, useState } from 'react';
-import { noop } from '@decipad/utils';
-import { ClientEventsContext } from '@decipad/client-events';
+import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -70,7 +70,7 @@ const suggestionContainerStyles = css({
   gap: 4,
 });
 
-const suggestionStyles = css(p12Medium, {
+const suggestionStyles = css(p14Medium, {
   border: `1px solid ${cssVar('borderDefault')}`,
   color: componentCssVars('AIAssistantHighlightTextColor'),
   padding: '6px 8px',

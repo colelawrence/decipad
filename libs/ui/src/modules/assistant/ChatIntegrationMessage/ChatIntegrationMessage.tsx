@@ -1,16 +1,16 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { Fragment, useCallback, useContext, useState } from 'react';
-import copyToClipboard from 'copy-to-clipboard';
-import { css } from '@emotion/react';
-import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
-import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
-import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
-import { nanoid } from 'nanoid';
-import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
-import { EElementOrText } from '@udecode/plate-common';
-import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { useWorker } from '@decipad/editor-hooks';
+import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
+import { useWorkspaceSecrets } from '@decipad/graphql-client';
+import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
+import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
+import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { EElementOrText } from '@udecode/plate-common';
+import copyToClipboard from 'copy-to-clipboard';
+import { nanoid } from 'nanoid';
+import { Fragment, useCallback, useContext, useState } from 'react';
 import { Chevron, Code, DeciAI, Duplicate } from '../../../icons';
 import {
   componentCssVars,
@@ -19,15 +19,15 @@ import {
   p14Regular,
 } from '../../../primitives';
 
-import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
-import { Button, InputField, Tooltip, CodeEditor } from '../../../shared';
 import {
   columnTypeCoercionsToRec,
   importFromUnknownJson,
 } from '@decipad/import';
+import { useToast } from '@decipad/toast';
+import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
+import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { ResultPreview } from './ResultPreview';
 import { SecretInput } from './SecretInput';
-import { useToast } from '@decipad/toast';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -45,6 +45,7 @@ const avatarStyles = css({
   flexShrink: 0,
   borderRadius: '50%',
   backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+  color: componentCssVars('AIAssistantTextColor'),
 
   '& svg': {
     width: 16,
@@ -93,18 +94,18 @@ const buttonStyles = css(p13Medium, {
 
 const codeContainerStyles = css({
   // HACK
-  maxWidth: '528px',
+  maxWidth: '520px',
+  background: cssVar('backgroundAccent'),
+  padding: 6,
+  borderRadius: 12,
 });
 
 const codeHeaderStyles = css({
   display: 'flex',
-  padding: '4px 2px 4px 4px',
   justifyContent: 'space-between',
   alignItems: 'center',
   alignSelf: 'stretch',
   height: 20,
-  borderRadius: 4,
-  background: cssVar('backgroundAccent'),
   svg: {
     height: '100%',
     marginRight: 4,
@@ -383,18 +384,14 @@ const Integration = ({
       <div css={buttonContainerStyles}>
         <Button
           type="primary"
-          size="extraExtraSlim"
+          size="normal"
           onClick={() => {
             runCode();
           }}
         >
           Run
         </Button>
-        <Button
-          type="primary"
-          size="extraExtraSlim"
-          onClick={insertIntegration}
-        >
+        <Button type="secondary" size="normal" onClick={insertIntegration}>
           Insert
         </Button>
       </div>
