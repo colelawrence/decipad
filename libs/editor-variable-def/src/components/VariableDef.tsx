@@ -125,8 +125,12 @@ export const VariableDef: PlateComponent = ({
       if (textPath) {
         mutateText(editor, textPath)(value?.toString() ?? '');
       }
+
+      if (element.variant === 'date') {
+        editor.deselect();
+      }
     },
-    [editor, secondChild]
+    [editor, element.variant, secondChild]
   );
 
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);

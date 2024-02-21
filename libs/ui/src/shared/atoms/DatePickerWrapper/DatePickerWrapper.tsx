@@ -67,6 +67,7 @@ export const DatePickerWrapper = ({
           dateFormat={dateFormat || 'yyyy-MM-dd'}
           selected={dateValue}
           onChange={setDateValue}
+          onSelect={setDateValue}
           customInput={customInput ?? <></>}
           showTimeSelect={showTimeSelect}
           showMonthYearPicker={showMonthYearPicker}
