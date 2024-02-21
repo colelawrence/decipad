@@ -86,10 +86,12 @@ export const MediaEmbedElement: Component = withHOC(
                   minWidth: isTweet ? 300 : 100,
                 }}
               >
-                <ResizeHandle
-                  options={{ direction: 'left' }}
-                  className={mediaResizeHandleVariants({ direction: 'left' })}
-                />
+                {!readOnly && (
+                  <ResizeHandle
+                    options={{ direction: 'left' }}
+                    className={mediaResizeHandleVariants({ direction: 'left' })}
+                  />
+                )}
 
                 {isVideo ? (
                   isYoutube ? (
@@ -140,10 +142,14 @@ export const MediaEmbedElement: Component = withHOC(
                   </div>
                 )}
 
-                <ResizeHandle
-                  options={{ direction: 'right' }}
-                  className={mediaResizeHandleVariants({ direction: 'right' })}
-                />
+                {!readOnly && (
+                  <ResizeHandle
+                    options={{ direction: 'right' }}
+                    className={mediaResizeHandleVariants({
+                      direction: 'right',
+                    })}
+                  />
+                )}
               </Resizable>
 
               <Caption readOnly={readOnly} align={align} style={{ width }}>

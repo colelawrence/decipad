@@ -68,6 +68,7 @@ const AppEditor: FC<EditorProps> = ({
           color={actions.iconColor}
           onChangeIcon={actions.updateIcon}
           onChangeColor={actions.updateIconColor}
+          readOnly={actions.isReadOnly}
         />
       )}
       <NotebookEditor

@@ -111,10 +111,12 @@ export const ImageElement: ImageComponent = withHOC(
                   minWidth: 200,
                 }}
               >
-                <ResizeHandle
-                  options={{ direction: 'left' }}
-                  className={mediaResizeHandleVariants({ direction: 'left' })}
-                />
+                {!readOnly && (
+                  <ResizeHandle
+                    options={{ direction: 'left' }}
+                    className={mediaResizeHandleVariants({ direction: 'left' })}
+                  />
+                )}
 
                 <ImagePrimitive
                   className={cn(
@@ -129,10 +131,14 @@ export const ImageElement: ImageComponent = withHOC(
                   }}
                 />
 
-                <ResizeHandle
-                  options={{ direction: 'right' }}
-                  className={mediaResizeHandleVariants({ direction: 'right' })}
-                />
+                {!readOnly && (
+                  <ResizeHandle
+                    options={{ direction: 'right' }}
+                    className={mediaResizeHandleVariants({
+                      direction: 'right',
+                    })}
+                  />
+                )}
               </Resizable>
 
               <Caption readOnly={readOnly} align={align} style={{ width }}>
