@@ -72,7 +72,7 @@ export const handler = handle(async (event) => {
   const prompt = createPrompt(schemaString, requestBody.prompt);
 
   const completion = await openai.completions.create({
-    model: 'text-davinci-003',
+    model: 'gpt-3.5-turbo-instruct',
     prompt,
     temperature: 0,
     max_tokens: 150,
