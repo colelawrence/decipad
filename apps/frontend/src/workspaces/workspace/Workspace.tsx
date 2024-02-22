@@ -44,6 +44,7 @@ import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
 import { initNewDocument } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
@@ -305,9 +306,16 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         name={session?.user?.name}
         email={session.user?.email}
         workspaces={workspacesMeta}
-        onCreateWorkspace={() =>
-          navigate(currentWorkspaceRoute.createNew({}).$)
-        }
+        onCreateWorkspace={() => {
+          if (isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
+            navigate(currentWorkspaceRoute.createNew({}).$);
+            return;
+          }
+
+          navigate(
+            currentWorkspaceRoute.upgrade({ newWorkspace: 'newWorkspace' }).$
+          );
+        }}
         onNavigateWorkspace={(id) => {
           navigate(workspaces({}).workspace({ workspaceId: id }).$);
         }}
@@ -478,6 +486,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                 <PaywallModal
                   onClose={() => navigate(currentWorkspaceRoute.$)}
                   workspaceId={currentWorkspace.id}
+                  userId={getDefined(session?.user?.id)}
                   currentPlan={currentWorkspace.plan}
                 />
               </LazyRoute>

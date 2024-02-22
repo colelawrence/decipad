@@ -9,7 +9,13 @@ const shared = route('/shared', {}, {});
 const codeSecrets = route('/code-secrets', {}, {});
 const sqlConnections = route('/sql-connections', {}, {});
 const addcredits = route('/add-credits', {}, {});
-const upgrade = route('/upgrade', {}, {});
+const upgrade = route(
+  '/upgrade/:newWorkspace?',
+  {
+    newWorkspace: stringParser,
+  },
+  {}
+);
 
 export const connections = route(
   '/connections',

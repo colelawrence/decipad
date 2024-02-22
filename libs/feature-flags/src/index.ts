@@ -20,6 +20,11 @@ export const availableFlags = [
   'COUNT_TABLE_CELL_RENDERS',
   'NEW_PAYMENTS',
   'WORKSPACE_READERS',
+
+  // Allow create workspaces
+  // This will not be enabled in production but must remain a feature flag
+  // because we need it easily test stuff by creating workspaces.
+  'ALLOW_CREATE_NEW_WORKSPACE',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

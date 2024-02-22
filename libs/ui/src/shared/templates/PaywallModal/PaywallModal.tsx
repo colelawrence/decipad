@@ -6,9 +6,12 @@ import { Maybe } from '@decipad/graphql-client';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import * as Styled from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { workspaces } from '@decipad/routing';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
+  userId: string;
   currentPlan?: Maybe<string>;
 };
 
@@ -19,9 +22,16 @@ const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   onClose,
   workspaceId,
+  userId,
   currentPlan,
 }) => {
-  const plans = useStripePlans(workspaceId);
+  const params = useRouteParams(
+    workspaces({}).workspace({ workspaceId }).upgrade
+  );
+
+  const shouldCreateNewWorkspace = params.newWorkspace === 'newWorkspace';
+
+  const plans = useStripePlans(shouldCreateNewWorkspace ? userId : workspaceId);
 
   const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
 
