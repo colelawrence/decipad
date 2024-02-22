@@ -16096,10 +16096,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1561.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1561.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1561.0.tgz#cfe24c92818f9f4bd4a91a0f45aca26c8688faf6"
-  integrity sha512-YbYQOyvy9mfEGRI4JDZjw6J0zW6bjyV7H3WMWeq69qETvZlkq8koy5CTPMCjnL8i7boDjyW9FuhQzICBbeNgLg==
+aws-sdk@2.1563.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1563.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1563.0.tgz#9f19e97111616117cd320f7aaffbe7e309d5632d"
+  integrity sha512-CuxRmrAqsTQnVeiLjiKP+3+UfzBW32TmHT2VS+7qcebvgVDaLZ4s3l0aMmusUwCciRCWOcT+20US/Pic0l9WaA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -26561,10 +26561,10 @@ ltgt@~2.2.0:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha512-AI2r85+4MquTw9ZYqabu4nMwy9Oftlfa/e/52t9IjtfG+mGBbTNdAoZ3RQKLHR6r0wQnwZnPIEh/Ya6XTWAKNA==
 
-lucide-react@0.335.0:
-  version "0.335.0"
-  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.335.0.tgz#034a374d653082971de3f1b93f899b68c92e00fd"
-  integrity sha512-FNmIG4JLdvpK86ZFJjrT0SnFEa95KhsiNokVicA5mWEf1oe+ujP2C/bTr0PVQzr/wzvZpzgxaOySq0O79q2oMA==
+lucide-react@0.336.0:
+  version "0.336.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.336.0.tgz#bbb09598e9c451564c5d428ea6f201ec902885d2"
+  integrity sha512-e06J4Qrdrk3BP/hf3MnkW3LnymdthfyEtVbdEg0xPQ/olTEKfOfTv03DYmdRm1+XpaNQdCpiHT7Vi6regbxDCQ==
 
 luxon@3.4.0:
   version "3.4.0"
