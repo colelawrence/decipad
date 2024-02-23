@@ -14372,10 +14372,10 @@
   dependencies:
     react-textarea-autosize "^8.5.2"
 
-"@udecode/plate-code-block@30.5.3":
-  version "30.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-30.5.3.tgz#c4368a422a4f84b2a1cc5b6b3e1c0d402fd2ee83"
-  integrity sha512-zZRwUbj46wbi9uwiNbM8aDHzD1gIcgBehmhM9hJXBRgI46dQTII6GZgdDczihYaooulL7QkTeXCkNDcco0f4sw==
+"@udecode/plate-code-block@30.7.0":
+  version "30.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-30.7.0.tgz#348522bdd2de7eb10d36d3c23e5791abd5a76bb3"
+  integrity sha512-/wodH5+SH9eALLIiUAkcwRE2EO4eIBIe5bIoCYMToe3dwaDF4MVHwBU5jZLzi6cy9osar396CQfPmW1j63MJLQ==
   dependencies:
     prismjs "^1.29.0"
 
@@ -14556,14 +14556,14 @@
     "@udecode/plate-table" "30.5.3"
     validator "^13.9.0"
 
-"@udecode/plate-serializer-md@30.5.3":
-  version "30.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-30.5.3.tgz#f2de6a333c55be3d6bc84662ac1f5eb788c6d45c"
-  integrity sha512-6WJY/i9lINitLs9+9A+FJh8pLF3FGRSAtYFiSX+92IK8pjnU2XLBvFDb8OVQ4eL3JMUc6qitDwEiTP0h+eVDeQ==
+"@udecode/plate-serializer-md@30.7.0":
+  version "30.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-30.7.0.tgz#b95ec2f42a9e92adc0f95a1fee34cebbe3eb032f"
+  integrity sha512-xylin+NgSIHnqhGxdieKxWSxhXLCQ9bF1R1ciStdo54aLJup5IrwVUq3hQLgTZ/FORIYNoW7udXlylsdQ6JQkg==
   dependencies:
     "@udecode/plate-basic-marks" "30.5.3"
     "@udecode/plate-block-quote" "30.5.3"
-    "@udecode/plate-code-block" "30.5.3"
+    "@udecode/plate-code-block" "30.7.0"
     "@udecode/plate-heading" "30.5.3"
     "@udecode/plate-horizontal-rule" "30.5.3"
     "@udecode/plate-link" "30.5.3"
