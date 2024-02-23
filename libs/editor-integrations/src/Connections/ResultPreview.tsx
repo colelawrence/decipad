@@ -212,4 +212,7 @@ const maxWidthParaStyles = css({
     overflow: 'initial',
     whiteSpace: 'normal',
   },
+  div: {
+    maxWidth: '100%',
+  },
 });

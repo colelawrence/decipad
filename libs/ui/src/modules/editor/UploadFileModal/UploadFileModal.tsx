@@ -17,6 +17,7 @@ import {
   cssVar,
   p12Medium,
   p13Bold,
+  p14Medium,
   p15Medium,
 } from '../../../primitives';
 import { closeButtonStyles } from '../../../styles/buttons';
@@ -199,8 +200,8 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
             )}
           </div>
         </TabsContent>
+        {description && <span css={p12Medium}>{description}</span>}
       </div>
-      <span css={p12Medium}>{description}</span>
     </TabsRoot>
   );
 };
@@ -224,7 +225,7 @@ const iconStyles = css({
   },
 });
 
-const inputStyles = css({
+const inputStyles = css(p14Medium, {
   background: cssVar('backgroundMain'),
   borderRadius: '6px',
   padding: '6px 12px',

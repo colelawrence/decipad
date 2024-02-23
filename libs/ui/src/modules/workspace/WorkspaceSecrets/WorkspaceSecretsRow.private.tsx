@@ -78,7 +78,6 @@ const rowStyles = css({
 const secretRowStyles = css(rowStyles, {
   padding: '4px 8px',
   borderRadius: '6px',
-  margin: '0 -8px',
 
   ':hover': {
     backgroundColor: cssVar('backgroundDefault'),
