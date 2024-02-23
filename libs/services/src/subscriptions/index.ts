@@ -1,6 +1,14 @@
-import { WorkspaceSubscriptionRecord } from '@decipad/backendtypes';
+/* eslint-disable camelcase */
+import {
+  WorkspaceRecord,
+  WorkspaceSubscriptionRecord,
+} from '@decipad/backendtypes';
 import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
+import Boom from '@hapi/boom';
+import { type Stripe } from 'stripe';
+import { z } from 'zod';
+import { create } from '../workspaces/create';
 
 const PLANS: Record<SubscriptionPlansNames, number> = {
   free: 0,
@@ -8,6 +16,53 @@ const PLANS: Record<SubscriptionPlansNames, number> = {
   personal: 1,
   team: 2,
   enterprise: 3,
+};
+
+async function createWorkspace(
+  client_reference_id: string
+): Promise<WorkspaceRecord> {
+  const data = await tables();
+
+  //
+  // client_reference_id could be 2 things:
+  // - workspaceID
+  // - userID
+  //
+  // First, we check if it is a workspace ID, if so we simply create a subscription
+  // and link it to that workspace.
+  //
+  // If its a userID, we create a workspace and insert the user into the workspace as an admin.
+  // And then add the subscription to this brain new workspace.
+  //
+
+  const workspace = await data.workspaces.get({ id: client_reference_id });
+  if (workspace != null) {
+    return workspace;
+  }
+
+  const user = await data.users.get({ id: client_reference_id });
+  if (user == null) {
+    throw Boom.badRequest('User is not valid');
+  }
+
+  return create({ name: `${user.name}'s Workspace` }, user);
+}
+
+export const updateQueryExecutionTable = async (
+  workspaceId: string,
+  quotaLimit: number
+) => {
+  const data = await tables();
+  const queryExecutionRecord = await data.workspacexecutedqueries.get({
+    id: workspaceId,
+  });
+
+  if (queryExecutionRecord) {
+    await data.workspacexecutedqueries.put({
+      ...queryExecutionRecord,
+      quotaLimit,
+    });
+  }
 };
 
 export async function getWsPlan(
@@ -101,4 +156,126 @@ export async function isPremiumWorkspace(
   const ws = await data.workspaces.get({ id: workspaceId });
 
   return Boolean(ws?.isPremium);
+}
+
+const planValidator = z.union([
+  z.literal<SubscriptionPlansNames>('free'),
+  z.literal<SubscriptionPlansNames>('personal'),
+  z.literal<SubscriptionPlansNames>('team'),
+  z.literal<SubscriptionPlansNames>('enterprise'),
+
+  // Legacy plans.
+  z.literal('pro'),
+]);
+
+const nonNegativeString = z.preprocess(
+  (val) => Number(val),
+  z.number().nonnegative()
+);
+
+const metadataValidator = z.object({
+  key: planValidator,
+
+  credits: nonNegativeString,
+  seats: nonNegativeString,
+  storage: nonNegativeString,
+  queries: nonNegativeString,
+});
+
+type StripeOptions = {
+  metadata: unknown;
+} & Pick<
+  Stripe.Checkout.Session,
+  | 'client_reference_id'
+  | 'payment_status'
+  | 'payment_link'
+  | 'customer_details'
+  | 'subscription'
+>;
+
+/**
+ * Used for testing.
+ */
+export function getMetadata(
+  metadata: z.infer<typeof metadataValidator>
+): z.infer<typeof metadataValidator> {
+  return metadata;
+}
+
+export async function createWorkspaceSubscription({
+  subscription,
+  client_reference_id,
+  payment_link,
+  payment_status,
+  customer_details,
+  metadata,
+}: StripeOptions): Promise<{ subscriptionId: string; workspaceId: string }> {
+  const validateMetadata = metadataValidator.safeParse(metadata);
+  if (!validateMetadata.success) {
+    throw Boom.badRequest(
+      'Webhook error: Metadata Object is invalid. Subscription not created.'
+    );
+  }
+
+  const validMetadata = validateMetadata.data;
+
+  let plan: z.infer<typeof planValidator> = 'free';
+  if (payment_status === 'paid') {
+    plan = validMetadata.key ?? 'pro';
+  }
+
+  if (client_reference_id == null) {
+    throw Boom.badRequest('Webhook error: client_reference_id cannot be null');
+  }
+
+  const email = customer_details?.email;
+  if (email == null) {
+    throw Boom.badRequest('Webhook error: customer email was invalid');
+  }
+
+  const paymentLink =
+    typeof payment_link === 'string' ? payment_link : payment_link?.id;
+  if (paymentLink == null) {
+    throw Boom.badRequest('Webhook error: Payment link cannot be null');
+  }
+
+  const subscriptionId =
+    typeof subscription === 'string' ? subscription : subscription?.id;
+  if (subscriptionId == null) {
+    throw Boom.badRequest('Webhook error: SubscriptionID cannot be null');
+  }
+
+  const workspace = await createWorkspace(client_reference_id);
+
+  const data = await tables();
+  const wsSubscription = await data.workspacesubscriptions.get({
+    id: subscriptionId,
+  });
+
+  if (wsSubscription) {
+    throw Boom.conflict('Webhook error: subscription already exists');
+  }
+
+  await data.workspacesubscriptions.put({
+    id: subscriptionId,
+    workspace_id: workspace.id,
+    clientReferenceId: client_reference_id,
+    paymentStatus: payment_status,
+    credits: validMetadata.credits,
+    queries: validMetadata.queries,
+    seats: validMetadata.seats,
+    storage: validMetadata.storage,
+    paymentLink,
+    email,
+  });
+
+  await data.workspaces.put({
+    ...workspace,
+    isPremium: payment_status === 'paid',
+    plan,
+  });
+
+  await updateQueryExecutionTable(workspace.id, validMetadata.queries);
+
+  return { workspaceId: workspace.id, subscriptionId };
 }

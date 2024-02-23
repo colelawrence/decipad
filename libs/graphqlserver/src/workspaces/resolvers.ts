@@ -2,7 +2,11 @@
 /* eslint-disable no-param-reassign */
 import { resource } from '@decipad/backend-resources';
 import { maximumPermissionType } from '@decipad/graphqlresource';
-import { pads } from '@decipad/services';
+import {
+  pads,
+  permissions as servicePermissions,
+  subscriptions,
+} from '@decipad/services';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,
@@ -31,8 +35,11 @@ import { WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
+import { app } from '@decipad/backend-config';
 
 const workspaces = resource('workspace');
+
+const isUnitTesting = !!Number(process.env.JEST_WORKER_ID);
 
 function WorkspaceRecordToWorkspace(
   workspaceRecord: WorkspaceRecord
@@ -173,7 +180,39 @@ const resolvers: Resolvers = {
     },
     async createWorkspace(_, { workspace }, context) {
       const user = requireUser(context);
-      const newWorkspace = await WorkspaceRecordToWorkspace(
+
+      const resources = await servicePermissions.queryAccessibleResources({
+        userId: user.id,
+        resourceType: 'workspaces',
+        parentResourceUri: null,
+      });
+
+      //
+      // Let's check if the user has access to a workspace WITHOUT a subscription.
+      // A workspace without subscription = a free workspace.
+      //
+      // And a free workspace can only have 1 member, meaning this workspace must
+      // be the users own workspace.
+      //
+
+      const workspaceSubscriptions = await Promise.all(
+        resources.map((r) => subscriptions.getWsSubscription(r.id))
+      );
+
+      const hasFreeWorkspace = workspaceSubscriptions.some(
+        (w) => w === undefined
+      );
+
+      if (
+        hasFreeWorkspace &&
+        (app().environment === 'production' || isUnitTesting)
+      ) {
+        throw Boom.forbidden(
+          'User already has a free workspace. Cannot create another'
+        );
+      }
+
+      const newWorkspace = WorkspaceRecordToWorkspace(
         await createWorkspace2(workspace, user)
       );
 

@@ -4,73 +4,12 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { tables } from '@decipad/tables';
-import { limits } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
-import { z } from 'zod';
-import { resourceusage, workspaces } from '@decipad/services';
-import { WorkspaceRecord } from '../../types';
+import { resourceusage, subscriptions } from '@decipad/services';
+import { limits } from '@decipad/backend-config';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
-
-async function createWorkspace(
-  client_reference_id: string
-): Promise<WorkspaceRecord> {
-  const data = await tables();
-
-  //
-  // client_reference_id could be 2 things:
-  // - workspaceID
-  // - userID
-  //
-  // First, we check if it is a workspace ID, if so we simply create a subscription
-  // and link it to that workspace.
-  //
-  // If its a userID, we create a workspace and insert the user into the workspace as an admin.
-  // And then add the subscription to this brain new workspace.
-  //
-
-  const workspace = await data.workspaces.get({ id: client_reference_id });
-  if (workspace != null) {
-    return workspace;
-  }
-
-  const user = await data.users.get({ id: client_reference_id });
-  if (user == null) {
-    throw Boom.badRequest('User is not valid');
-  }
-
-  return workspaces.create({ name: `${user.name}'s Workspace` }, user);
-}
-
-const updateQueryExecutionTable = async (
-  workspaceId: string,
-  plan: SubscriptionPlansNames
-) => {
-  const data = await tables();
-  const queryExecutionRecord = await data.workspacexecutedqueries.get({
-    id: workspaceId,
-  });
-
-  const limitsPerPlan = limits().maxCredits[plan === 'free' ? 'free' : 'pro'];
-
-  if (queryExecutionRecord) {
-    await data.workspacexecutedqueries.put({
-      ...queryExecutionRecord,
-      quotaLimit: limitsPerPlan ?? limits().maxCredits.free,
-    });
-  }
-};
-
-const validatePlanName = z.union([
-  z.literal<SubscriptionPlansNames>('free'),
-  z.literal<SubscriptionPlansNames>('personal'),
-  z.literal<SubscriptionPlansNames>('team'),
-  z.literal<SubscriptionPlansNames>('enterprise'),
-
-  // Legacy plans.
-  z.literal('pro'),
-]);
 
 export const processSessionComplete = async (
   req: APIGatewayProxyEventV2,
@@ -85,75 +24,21 @@ export const processSessionComplete = async (
     metadata,
   } = event.data.object as Stripe.Checkout.Session;
 
-  const data = await tables();
-  let plan: z.infer<typeof validatePlanName> = 'free';
-
-  const parsedKey = validatePlanName.safeParse(metadata?.key);
-  if (!parsedKey.success) {
-    throw Boom.badRequest(
-      'Stripe plan does not match enum. VERY SERIOUS. ASK MARTA OR JOHN'
-    );
-  }
-
-  const stripePlan = parsedKey.data;
-
-  if (payment_status === 'paid') {
-    plan = stripePlan ?? 'pro';
-  }
-
-  const paymentLink =
-    typeof payment_link === 'string' ? payment_link : payment_link?.id || '';
-  const subscriptionId =
-    typeof subscription === 'string' ? subscription : subscription?.id ?? '';
-  const credits = Number(metadata?.credits) || 0;
-  const seats = Number(metadata?.seats) || 0;
-  const storage = Number(metadata?.storage) || 0;
-  const queries = Number(metadata?.queries) || 0;
-
-  if (!client_reference_id) {
-    throw Boom.badRequest('Webhook Error: invalid client reference');
-  }
-
-  if (!subscriptionId) {
-    throw Boom.badRequest('Webhook Error: subscription does not exist');
-  }
-
-  const workspace = await createWorkspace(client_reference_id);
-
-  const wsSubscription = await data.workspacesubscriptions.get({
-    id: subscriptionId,
-  });
-
-  if (wsSubscription) {
-    throw Boom.conflict('Webhook error: subscription already exists');
-  }
-
-  // update Stripe subscription
-  await data.workspacesubscriptions.put({
-    id: subscriptionId,
-    workspace_id: workspace.id,
-    clientReferenceId: client_reference_id,
-    paymentLink,
-    paymentStatus: payment_status,
-    email: customer_details?.email || '',
-    credits,
-    queries,
-    seats,
-    storage,
-  });
-
-  await data.workspaces.put({
-    ...workspace,
-    isPremium: payment_status === 'paid',
-    plan,
-  });
-  updateQueryExecutionTable(workspace.id, plan);
+  const { subscriptionId, workspaceId } =
+    await subscriptions.createWorkspaceSubscription({
+      subscription,
+      client_reference_id,
+      payment_link,
+      payment_status,
+      customer_details,
+      metadata,
+    });
 
   await track(req, {
     event: 'Stripe subscription created',
     properties: {
       id: subscriptionId,
-      workspaceId: workspace.id,
+      workspaceId,
       billingEmail: customer_details?.email || '',
     },
   });
@@ -195,7 +80,10 @@ export const processSubscriptionDeleted = async (
       isPremium: false,
       plan: 'free',
     });
-    updateQueryExecutionTable(workspace.id, 'free');
+    subscriptions.updateQueryExecutionTable(
+      workspace.id,
+      limits().maxCredits.free
+    );
 
     await track(req, {
       event: 'Stripe subscription immediately cancelled',
@@ -262,7 +150,10 @@ export const processSubscriptionUpdated = async (
     isPremium,
     plan,
   });
-  updateQueryExecutionTable(workspace.id, plan);
+  subscriptions.updateQueryExecutionTable(
+    workspace.id,
+    wsSubscription.queries ?? limits().maxCredits.pro
+  );
 
   return {
     statusCode: 200,

@@ -136,11 +136,34 @@ function env(name: SupportedEnvKey): string {
   }
 }
 
+function getEnvironment(base: string): 'localhost' | 'staging' | 'production' {
+  if (base.includes('localhost')) {
+    return 'localhost';
+  }
+
+  if (
+    base.includes('staging.decipad.com') ||
+    base.includes('dev.decipad.com')
+  ) {
+    return 'staging';
+  }
+
+  if (base.includes('app.decipad.com')) {
+    return 'production';
+  }
+
+  throw new Error('Could always match the described URL bases');
+}
+
 export function app() {
   const urlBase = env('DECI_APP_URL_BASE');
+
+  const environment = getEnvironment(urlBase);
+
   return {
     urlBase,
     apiPathBase: `/api`,
+    environment,
     limits: {
       maxAttachmentSize: Number(env('DECI_MAX_ATTACHMENT_SIZE')),
       maxAttachmentUploadTokenExpirationSeconds: Number(

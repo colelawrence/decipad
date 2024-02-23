@@ -1,62 +1,37 @@
 /* eslint-disable jest/no-disabled-tests */
 import { limits } from '@decipad/backend-config';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { Workspace } from '@decipad/graphqlserver-types';
 import * as resourceusage from '../../../libs/services/src/resource-usage';
+import { create } from '../../../libs/services/src/workspaces/create';
+import { getDefined } from '@decipad/utils';
+import { WorkspaceRecord } from '@decipad/backendtypes';
 
 // Otherwise debugging becomes very strange.
 jest.retryTimes(1);
 
 test('AI Usage', (ctx) => {
-  let workspace: Workspace;
-  let secondWorkspace: Workspace;
-  let thirdWorkspace: Workspace;
+  let workspace: WorkspaceRecord;
+  let secondWorkspace: WorkspaceRecord;
+  let thirdWorkspace: WorkspaceRecord;
 
   beforeAll(async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    workspace = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            createWorkspace(workspace: { name: "Workspace 1" }) {
-              id
-              name
-            }
-          }
-        `,
-      })
-    ).data.createWorkspace;
+    const user = await ctx.auth();
+
+    workspace = await create({ name: 'Workspace 1' }, getDefined(user.user));
 
     expect(workspace).toMatchObject({ name: 'Workspace 1' });
 
-    secondWorkspace = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            createWorkspace(workspace: { name: "Workspace 2" }) {
-              id
-              name
-            }
-          }
-        `,
-      })
-    ).data.createWorkspace;
+    secondWorkspace = await create(
+      { name: 'Workspace 2' },
+      getDefined(user.user)
+    );
 
     expect(secondWorkspace).toMatchObject({ name: 'Workspace 2' });
 
-    thirdWorkspace = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            createWorkspace(workspace: { name: "Workspace 3" }) {
-              id
-              name
-            }
-          }
-        `,
-      })
-    ).data.createWorkspace;
-
+    thirdWorkspace = await create(
+      { name: 'Workspace 3' },
+      getDefined(user.user)
+    );
     expect(thirdWorkspace).toMatchObject({ name: 'Workspace 3' });
   });
 
