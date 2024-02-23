@@ -123,3 +123,14 @@ export const ButtonContainer = styled.div({
   display: 'flex',
   gap: 8,
 });
+
+export const FakePlanItem = styled.div({
+  width: '100%',
+  padding: 16,
+  borderRadius: 12,
+  backgroundColor: cssVar('backgroundDefault'),
+  border: `1px solid transparent`,
+  // to compensate the 8px gap from the plan container
+  marginTop: '-8px',
+  gap: '2px',
+});

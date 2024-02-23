@@ -470,10 +470,6 @@ sync-after-connect
 docsyncsnapshots-changes
 chat-agent-message
 
-
-@scheduled
-reset-querycount cron(0 0 1 * ? *)
-
 @search
 availabilityZoneCount 1
 instanceCount 1
