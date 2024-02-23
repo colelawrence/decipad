@@ -58,9 +58,7 @@ export const useStripePlans = (refId: string) => {
           ...plan,
           price: plan.price ?? 0,
           // special case for free plan (should I put this here?)
-          description:
-            plan.description ??
-            'Decipad for personal data modeling needs, free forever!',
+          description: plan.description ?? '',
           paymentLink: plan.paymentLink
             ? `${plan.paymentLink}?client_reference_id=${refId}`
             : null,

@@ -16,6 +16,7 @@ import {
   EditorTableContextValue,
   EditorTableResultContext,
   useComputer,
+  useCurrentWorkspaceStore,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import { AvailableSwatchColor, EditorTable } from '@decipad/ui';
@@ -81,6 +82,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+
   return (
     <DraggableBlock
       element={element}
@@ -92,6 +95,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
       key={blockId}
       isDownloadable
       onDownload={onDownload}
+      needsUpgrade={!workspaceInfo.isPremium}
     >
       <EditorTableContext.Provider value={contextValue}>
         <EditorTableResultContext.Provider

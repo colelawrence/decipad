@@ -228,7 +228,7 @@ export interface NotebookPublishTabProps {
 // ==============================================
 
 export const RequiresUpgrade: FC = () => (
-  <div css={requiresUpgradeStyles}>Requires Upgrade</div>
+  <div css={requiresUpgradeStyles}>Upgrade Now</div>
 );
 
 export const PublishingWriting: FC = () => (

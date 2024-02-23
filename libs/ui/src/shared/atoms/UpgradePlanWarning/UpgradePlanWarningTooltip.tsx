@@ -60,7 +60,7 @@ export const UpgradePlanWarningTooltip = ({
             sameTab={true} // change this to false if you want to work on payments locally
             testId="integration_upgrade_pro"
           >
-            Upgrade to Pro
+            Upgrade workspace
           </Button>
         </div>
       )}

@@ -430,6 +430,14 @@ const resolvers: Resolvers = {
       return undefined;
     },
 
+    async isPremium(workspace) {
+      if (isLocalOrDev() && workspace.name.includes('@n1n.co')) {
+        return true;
+      }
+
+      return !!workspace.isPremium;
+    },
+
     async pads(workspace, { page }) {
       const pagedDbPads = await pads.getWorkspaceNotebooks({
         workspaceId: workspace.id,

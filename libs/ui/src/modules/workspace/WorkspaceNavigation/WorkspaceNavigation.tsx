@@ -94,7 +94,7 @@ export const WorkspaceNavigation = ({
               <Styled.IconWrapper>
                 <DeciBoxes />
               </Styled.IconWrapper>
-              <Styled.TextWrapper>Upgrade to Pro</Styled.TextWrapper>
+              <Styled.TextWrapper>Upgrade workspace</Styled.TextWrapper>
             </Styled.ItemWrapper>
           </NavigationItem>
         )}

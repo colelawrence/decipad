@@ -159,9 +159,14 @@ test('slider Widget', async ({ testUser }) => {
   await expect(page.getByTestId('widget-input')).toContainText('$6 per hotdog');
 });
 
-test('dropdown widget', async ({ testUser }) => {
-  const { page, notebook } = testUser;
+test('dropdown widget', async ({ randomFreeUser }) => {
+  const { page, notebook, workspace } = randomFreeUser;
   await test.step('creates an empty dropdown widget', async () => {
+    await workspace.newWorkspaceWithPlan('team');
+    await workspace.createNewNotebook();
+    await randomFreeUser.aiAssistant.closePannel();
+    await notebook.waitForEditorToLoad();
+    await notebook.focusOnBody();
     await createDropdownBelow(page, 'Dropdown');
     expect(await page.getByText('Dropdown').count()).toBe(1);
   });

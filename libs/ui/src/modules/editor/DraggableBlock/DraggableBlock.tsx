@@ -102,6 +102,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   // Downloadable
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
+  readonly needsUpgrade?: boolean;
 }
 // eslint-disable-next-line complexity
 export const DraggableBlock = ({
@@ -144,6 +145,7 @@ export const DraggableBlock = ({
 
   isDownloadable,
   onDownload,
+  needsUpgrade = false,
 
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
@@ -243,6 +245,7 @@ export const DraggableBlock = ({
               aiPanel={aiPanel}
               isDownloadable={isDownloadable}
               onDownload={onDownload}
+              needsUpgrade={needsUpgrade}
             >
               {!isMultipleSelection &&
                 turnInto != null &&

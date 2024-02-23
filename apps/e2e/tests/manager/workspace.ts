@@ -88,7 +88,7 @@ export class Workspace {
   async newWorkspaceWithPlan(
     type: 'free' | 'pro' | 'personal' | 'team' | 'enterprise' = 'free'
   ) {
-    const workspaceURL = await this.newWorkspace(`@n1n ${type}`);
+    const workspaceURL = await this.newWorkspace(`@n1n.co ${type}`);
     return workspaceURL;
   }
 

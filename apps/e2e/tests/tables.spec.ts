@@ -552,95 +552,96 @@ test('Make sure deleting decimals does not break parsing', async ({
   });
 });
 
-test('Paste table from Wikipedia', async ({ testUser }) => {
+test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
+  const { page, notebook, workspace } = randomFreeUser;
   await test.step('set clipboard', async () => {
     const textTable = fs.readFileSync(
       path.join(__dirname, '../__fixtures__/clipboard/table1.txt'),
       'utf-8'
     );
 
-    await testUser.writeToClipboard({
+    await randomFreeUser.writeToClipboard({
       'text/html': textTable,
     });
   });
 
   await test.step('paste table', async () => {
-    await testUser.notebook.focusOnBody();
-    await testUser.page.keyboard.press('Control+v');
+    await workspace.newWorkspaceWithPlan('team');
+    await workspace.createNewNotebook();
+    await randomFreeUser.aiAssistant.closePannel();
+    await notebook.waitForEditorToLoad();
+    await notebook.focusOnBody();
+    await page.keyboard.press('Control+v');
   });
 
   await test.step("check that table's data is correct", async () => {
-    expect(await getFromTable(testUser.page, 0, 0, 'Table')).toBe('Index');
-    expect(await getFromTable(testUser.page, 0, 1, 'Table')).toBe('Driver');
-    expect(await getFromTable(testUser.page, 0, 2, 'Table')).toBe('Age');
-    expect(await getFromTable(testUser.page, 0, 3, 'Table')).toBe('Year');
+    expect(await getFromTable(page, 0, 0, 'Table')).toBe('Index');
+    expect(await getFromTable(page, 0, 1, 'Table')).toBe('Driver');
+    expect(await getFromTable(page, 0, 2, 'Table')).toBe('Age');
+    expect(await getFromTable(page, 0, 3, 'Table')).toBe('Year');
 
-    expect(await getFromTable(testUser.page, 2, 0, 'Table')).toBe('2');
-    expect(await getFromTable(testUser.page, 2, 1, 'Table')).toBe(
-      'Lewis Hamilton'
-    );
-    expect(await getFromTable(testUser.page, 2, 2, 'Table')).toBe(
-      '23 years, 300 days'
-    );
-    expect(await getFromTable(testUser.page, 2, 3, 'Table')).toBe('2008');
+    expect(await getFromTable(page, 2, 0, 'Table')).toBe('2');
+    expect(await getFromTable(page, 2, 1, 'Table')).toBe('Lewis Hamilton');
+    expect(await getFromTable(page, 2, 2, 'Table')).toBe('23 years, 300 days');
+    expect(await getFromTable(page, 2, 3, 'Table')).toBe('2008');
   });
 
   await test.step('make changes in preparation for data view', async () => {
-    await addColumn(testUser.page, 'Table');
-    await renameColumn(testUser.page, 4, 'Checkbox', 'Table');
-    await updateDataType(testUser.page, 0, 'Table', 'Number', 'Number');
-    await updateDataType(testUser.page, 3, 'Table', 'Date', 'Year');
-    await updateDataType(testUser.page, 4, 'Table', 'Checkbox');
-    await testUser.page
+    await addColumn(page, 'Table');
+    await renameColumn(page, 4, 'Checkbox', 'Table');
+    await updateDataType(page, 0, 'Table', 'Number', 'Number');
+    await updateDataType(page, 3, 'Table', 'Date', 'Year');
+    await updateDataType(page, 4, 'Table', 'Checkbox');
+    await page
       .getByRole('row', { name: 'Drag Handle 2 Lewis Hamilton' })
       .getByRole('checkbox')
       .click();
   });
 
   await test.step('create data view and display data from table', async () => {
-    await testUser.notebook.addDataView();
-    await testUser.page.getByTestId('data-view-source').click();
-    await testUser.page.keyboard.press('ArrowDown');
-    await testUser.page.keyboard.press('Enter');
+    await notebook.addDataView();
+    await page.getByTestId('data-view-source').click();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
 
-    await testUser.page.getByTestId('add-data-view-column-button').click();
-    await testUser.page.getByRole('menuitem', { name: 'Index' }).click();
-    await testUser.page.getByTestId('add-data-view-column-button').click();
-    await testUser.page.getByRole('menuitem', { name: 'Driver' }).click();
-    await testUser.page.getByTestId('add-data-view-column-button').click();
-    await testUser.page.getByRole('menuitem', { name: 'Year' }).click();
-    await testUser.page.getByTestId('add-data-view-column-button').click();
-    await testUser.page.getByRole('menuitem', { name: 'Checkbox' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Index' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Driver' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Year' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Checkbox' }).click();
 
-    await testUser.page.getByTestId('data-view-options-menu-Driver').click();
-    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
-    await testUser.page.getByRole('menuitem', { name: 'Count Values' }).click();
+    await page.getByTestId('data-view-options-menu-Driver').click();
+    await page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await page.getByRole('menuitem', { name: 'Count Values' }).click();
 
-    await testUser.page.getByTestId('data-view-options-menu-Year').click();
-    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
-    await testUser.page.getByRole('menuitem', { name: 'Time span' }).click();
+    await page.getByTestId('data-view-options-menu-Year').click();
+    await page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await page.getByRole('menuitem', { name: 'Time span' }).click();
 
-    await testUser.page.getByTestId('data-view-options-menu-Checkbox').click();
-    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
-    await testUser.page.getByRole('menuitem', { name: 'Count true' }).click();
+    await page.getByTestId('data-view-options-menu-Checkbox').click();
+    await page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await page.getByRole('menuitem', { name: 'Count true' }).click();
   });
 
   await test.step('check data view values are correct', async () => {
     await Promise.all([
       expect(
-        testUser.page
+        page
           .locator('output')
           .filter({ hasText: 'Count values:' })
           .getByTestId('number-result:3')
       ).toBeVisible(),
       expect(
-        testUser.page
+        page
           .locator('output')
           .filter({ hasText: 'Time span:' })
           .getByTestId('number-result:5 years')
       ).toBeVisible(),
       expect(
-        testUser.page
+        page
           .locator('output')
           .filter({ hasText: 'Count true:' })
           .getByTestId('number-result:1')
@@ -649,7 +650,7 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
   });
 
   await test.step("download csv and check it's correct", async () => {
-    const csvData = await downloadTableCSV(testUser.page, 'Table');
+    const csvData = await downloadTableCSV(page, 'Table');
     expect(csvData).toBe(
       'Index,Driver,Age,Year,Checkbox\n1,"Sebastian Vettel","23 years, 134 days",2010,false\n2,"Lewis Hamilton","23 years, 300 days",2008,true\n3,"Fernando Alonso","24 years, 59 days",2005,false'
     );

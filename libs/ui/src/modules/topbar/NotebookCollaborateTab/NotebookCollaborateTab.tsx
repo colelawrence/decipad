@@ -229,7 +229,7 @@ export const NotebookCollaborateTab = ({
                 }
               }}
             >
-              Upgrade to Pro to invite more people
+              Upgrade to invite more people
             </Button>
           ) : (
             <Button

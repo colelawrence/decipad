@@ -22,7 +22,12 @@ import {
   Switch,
 } from '../../../icons';
 import * as icons from '../../../icons';
-import { componentCssVars, cssVar, p12Medium } from '../../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Medium,
+  p12Regular,
+} from '../../../primitives';
 import { editorLayout } from '../../../styles';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { hideOnPrint } from '../../../styles/editor-layout';
@@ -101,6 +106,7 @@ interface BlockDragHandleProps {
   };
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
+  readonly needsUpgrade?: boolean;
 }
 
 export const BlockDragHandle = ({
@@ -123,6 +129,7 @@ export const BlockDragHandle = ({
   aiPanel,
   isDownloadable = false,
   onDownload = noop,
+  needsUpgrade = false,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -172,6 +179,8 @@ export const BlockDragHandle = ({
       <Plus />
     </button>
   );
+
+  const downloadMenuItem = <p>Download as CSV</p>;
 
   const aiButton = aiPanel ? (
     <MenuItem icon={<Sparkles />} onSelect={aiPanel.toggle} isNew>
@@ -229,8 +238,22 @@ export const BlockDragHandle = ({
             </MenuList>
           )}
           {isDownloadable && (
-            <MenuItem icon={<icons.Download />} onSelect={onDownload}>
-              Download as CSV
+            <MenuItem
+              icon={<icons.Download />}
+              onSelect={onDownload}
+              disabled={needsUpgrade}
+            >
+              {!needsUpgrade && downloadMenuItem}
+              {needsUpgrade && (
+                <Tooltip trigger={downloadMenuItem} side="right">
+                  <div css={{ width: '140px' }}>
+                    <p css={toolTipTitle}>Unlock CSV downloads</p>
+                    <p css={tooltipContent}>
+                      Upgrade your plan to unlock all the features
+                    </p>
+                  </div>
+                </Tooltip>
+              )}
             </MenuItem>
           )}
           {children}
@@ -274,6 +297,16 @@ export const BlockDragHandle = ({
     </div>
   );
 };
+
+const toolTipTitle = css(p12Medium, {
+  textAlign: 'center',
+  color: componentCssVars('TooltipText'),
+});
+const tooltipContent = css(p12Regular, {
+  marginTop: '6px',
+  color: componentCssVars('TooltipTextSecondary'),
+  textAlign: 'center',
+});
 
 const EyeLabel = () => (
   <div css={eyeLabelStyles} contentEditable={false}>

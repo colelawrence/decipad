@@ -23,10 +23,10 @@ test.describe('Stripe integration', () => {
       }
     });
 
-    // click on Upgrade to Pro in the workspace dashboard
+    // click on Upgrade workspace in the workspace dashboard
     await page.click('[data-testid="workspace_upgrade_pro"]');
     await snapshot(page, 'Upgrade modal');
-    // click on Upgrade to pro button in the modal
+    // click on Upgrade workspace button in the modal
     await page.click('[data-testid="paywall_upgrade_pro"]');
     // redirect the user back to Deci
     await page.click('#redirect_button');

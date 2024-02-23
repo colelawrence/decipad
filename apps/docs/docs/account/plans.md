@@ -32,8 +32,8 @@ Invite your team to collaborate, expand data imports and schedule query executio
 
 You can upgrade or downgrade your workspace plan at any time. Follow these steps to upgrade from a the Starter plan to the Pro plan:
 
-1.  Click the "Upgrade to Pro" button in the sidebar of your workspace to see what is included.
-2.  Click the "Upgrade to Pro" button inside the new modal and you will be redirected our payments portal.
+1.  Click the "Upgrade workspace" button in the sidebar of your workspace to see what is included.
+2.  Click the "Upgrade workspace" button inside the new modal and you will be redirected our payments portal.
 3.  Enter your email (we recommend using the same email you used to log in to Decipad).
 4.  Provide your card information, including card name and country/region.
 5.  Review and agree to Decipad's Terms of Service and Privacy Policy.

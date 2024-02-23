@@ -7,6 +7,7 @@ export type WorkspaceInfo = {
   isPremium: boolean;
   quotaLimit?: number;
   queryCount?: number;
+  plan?: string;
 };
 
 interface CurrentWorkspaceStore {
@@ -23,6 +24,7 @@ export const useCurrentWorkspaceStore = create<CurrentWorkspaceStore>(
       isPremium: false,
       quotaLimit: 0,
       queryCount: 0,
+      plan: 'free',
     },
     isQuotaLimitBeingReached: false,
     nrQueriesLeft: 0,

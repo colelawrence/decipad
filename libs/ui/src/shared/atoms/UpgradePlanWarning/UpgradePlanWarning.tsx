@@ -26,7 +26,7 @@ export const UpgradePlanWarning = ({
             <p css={p14Medium}>
               You have used all of your {quotaLimit} credits.
             </p>
-            <p css={p13Regular}>Upgrade to Pro to bypass this limitation.</p>
+            <p css={p13Regular}>Upgrade workspace to bypass this limitation.</p>
           </>
         )}
         {showQueryQuotaLimit && (
@@ -34,7 +34,7 @@ export const UpgradePlanWarning = ({
             <p css={p14Medium}>
               You are about to reach the limit of {quotaLimit} credits.{<br />}
             </p>
-            <p css={p13Regular}>Upgrade to Pro to bypass this limitation.</p>
+            <p css={p13Regular}>Upgrade workspace to bypass this limitation.</p>
           </>
         )}
       </div>
@@ -57,7 +57,7 @@ export const UpgradePlanWarning = ({
           sameTab={true} // change this to false if you want to work on payments locally
           testId="integration_upgrade_pro"
         >
-          Upgrade to Pro
+          Upgrade workspace
         </Button>
       </div>
     </div>
