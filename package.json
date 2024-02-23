@@ -418,7 +418,7 @@
     "@emotion/jest": "11.11.0",
     "@graphql-codegen/introspection": "4.0.0",
     "@graphql-codegen/typescript": "4.0.0",
-    "@graphql-codegen/typescript-operations": "4.1.2",
+    "@graphql-codegen/typescript-operations": "4.2.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@graphql-codegen/typescript-urql": "4.0.0",
     "@graphql-codegen/typescript-urql-graphcache": "3.1.0",
