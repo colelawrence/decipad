@@ -680,7 +680,7 @@ test('Starts editing cell on enter', async ({ testUser }) => {
     await testUser.page.keyboard.press('Enter');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.tableDelay);
-    await testUser.page.keyboard.type('1,2');
+    await testUser.page.keyboard.type('1,2', { delay: 100 });
     await testUser.page.keyboard.press('Enter');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.tableDelay);
@@ -689,7 +689,7 @@ test('Starts editing cell on enter', async ({ testUser }) => {
 
   await test.step('use Shift Enter to move to the box above', async () => {
     await testUser.page.keyboard.press('Enter');
-    await testUser.page.keyboard.type('2,3');
+    await testUser.page.keyboard.type('2,3', { delay: 100 });
     await testUser.page.keyboard.press('Shift+Enter');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.tableDelay);
@@ -697,11 +697,11 @@ test('Starts editing cell on enter', async ({ testUser }) => {
 
   await test.step('use the up arrow key during edit mode', async () => {
     await testUser.page.keyboard.press('Enter');
-    await testUser.page.keyboard.type('2,2');
+    await testUser.page.keyboard.type('2,2', { delay: 100 });
     await testUser.page.keyboard.press('ArrowUp');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.tableDelay);
-    await testUser.page.keyboard.type('2,1', { delay: 10 });
+    await testUser.page.keyboard.type('2,1', { delay: 100 });
     await testUser.page.keyboard.press('Enter');
   });
 
@@ -714,6 +714,6 @@ test('Starts editing cell on enter', async ({ testUser }) => {
       getFromTable(testUser.page, 3, 1, 'Table'),
     ]);
 
-    expect(res).toStrictEqual(['before after', '1,2', '2,1', '2,2', '2,3']);
+    expect(res).toStrictEqual(['before after', '1.2', '2.1', '2.2', '2.3']);
   });
 });

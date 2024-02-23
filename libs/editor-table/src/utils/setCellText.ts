@@ -1,11 +1,12 @@
+import { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import {
-  replaceNodeChildren,
   Value,
+  replaceNodeChildren,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { Path } from 'slate';
-import { setSelection } from '@decipad/editor-utils';
+import { coerceInputToNumber } from './coerceInputToNumber';
 
 export const setCellText = <
   TV extends Value = MyValue,
@@ -17,10 +18,11 @@ export const setCellText = <
 ) => {
   withoutNormalizing(editor, () => {
     const { selection } = editor;
+    const newCellValue = coerceInputToNumber(text);
 
     replaceNodeChildren(editor, {
       at: path,
-      nodes: { text } as any,
+      nodes: { text: newCellValue } as any,
       removeOptions: {
         voids: true,
       },
