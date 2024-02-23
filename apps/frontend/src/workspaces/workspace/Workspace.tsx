@@ -38,7 +38,14 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { ErrorPage, Frame, LazyRoute, RequirePaidPlanRoute } from '../../meta';
+import {
+  ErrorPage,
+  Frame,
+  LazyRoute,
+  RequireFreePlanSlotRoute,
+  RequirePaidPlanRoute,
+  RequireUpgradablePlanRoute,
+} from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
@@ -181,6 +188,11 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     [allWorkspaces, workspaceId, getWorkspacePlan]
   );
 
+  const hasFreeWorkspaceSlot = useMemo(
+    () => workspacesMeta.filter((w) => !w.isPremium).length < 1,
+    [workspacesMeta]
+  );
+
   const {
     updateUsage,
     promptTokensUsed,
@@ -307,6 +319,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         name={session?.user?.name}
         email={session.user?.email}
         workspaces={workspacesMeta}
+        hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
         onCreateWorkspace={() => {
           if (isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
             navigate(currentWorkspaceRoute.createNew({}).$);
@@ -392,21 +405,27 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           <Route
             path={currentWorkspaceRoute.createNew.template}
             element={
-              <LazyRoute>
-                <CreateWorkspaceModal
-                  onClose={() => navigate(currentWorkspaceRoute.$)}
-                  onCreate={async (workspaceName) => {
-                    const data = await createWorkspace({ name: workspaceName });
-                    if (data) {
-                      navigate(
-                        workspaces({}).workspace({
-                          workspaceId: data.createWorkspace.id,
-                        }).$
-                      );
-                    }
-                  }}
-                />
-              </LazyRoute>
+              <RequireFreePlanSlotRoute
+                hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
+              >
+                <LazyRoute>
+                  <CreateWorkspaceModal
+                    onClose={() => navigate(currentWorkspaceRoute.$)}
+                    onCreate={async (workspaceName) => {
+                      const data = await createWorkspace({
+                        name: workspaceName,
+                      });
+                      if (data) {
+                        navigate(
+                          workspaces({}).workspace({
+                            workspaceId: data.createWorkspace.id,
+                          }).$
+                        );
+                      }
+                    }}
+                  />
+                </LazyRoute>
+              </RequireFreePlanSlotRoute>
             }
           />
           <Route
@@ -483,14 +502,19 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           <Route
             path={currentWorkspaceRoute.upgrade.template}
             element={
-              <LazyRoute>
-                <PaywallModal
-                  onClose={() => navigate(currentWorkspaceRoute.$)}
-                  workspaceId={currentWorkspace.id}
-                  userId={getDefined(session?.user?.id)}
-                  currentPlan={currentWorkspace.plan}
-                />
-              </LazyRoute>
+              <RequireUpgradablePlanRoute
+                isPaidPlan={!!currentWorkspace.isPremium}
+              >
+                <LazyRoute>
+                  <PaywallModal
+                    onClose={() => navigate(currentWorkspaceRoute.$)}
+                    workspaceId={currentWorkspace.id}
+                    hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
+                    userId={getDefined(session?.user?.id)}
+                    currentPlan={getDefined(currentWorkspace.plan)}
+                  />
+                </LazyRoute>
+              </RequireUpgradablePlanRoute>
             }
           />
         </Route>

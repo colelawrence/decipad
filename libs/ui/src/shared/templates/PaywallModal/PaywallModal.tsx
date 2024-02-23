@@ -2,7 +2,6 @@ import { Modal } from '../../molecules';
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Button, Link } from '../../atoms';
 import { useStripePlans } from '@decipad/react-utils';
-import { Maybe } from '@decipad/graphql-client';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import * as Styled from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -12,7 +11,8 @@ import { workspaces } from '@decipad/routing';
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
   userId: string;
-  currentPlan?: Maybe<string>;
+  hasFreeWorkspaceSlot: boolean;
+  currentPlan?: string;
 };
 
 const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
@@ -23,15 +23,22 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   onClose,
   workspaceId,
   userId,
+  hasFreeWorkspaceSlot,
   currentPlan,
 }) => {
   const params = useRouteParams(
     workspaces({}).workspace({ workspaceId }).upgrade
   );
 
-  const shouldCreateNewWorkspace = params.newWorkspace === 'newWorkspace';
+  const isCreatingNewWorkspace = !!params.newWorkspace;
 
-  const plans = useStripePlans(shouldCreateNewWorkspace ? userId : workspaceId);
+  const hideFreePlan = !hasFreeWorkspaceSlot && isCreatingNewWorkspace;
+
+  const plans = useStripePlans(isCreatingNewWorkspace ? userId : workspaceId);
+
+  const filteredPlans = useMemo(() => {
+    return hideFreePlan ? plans.filter((plan) => plan?.key !== 'free') : plans;
+  }, [hideFreePlan, plans]);
 
   const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
 
@@ -47,6 +54,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     return plans.find((plan) => plan?.key === selectedPlan)?.paymentLink;
   }, [plans, selectedPlan]);
 
+  const canProceed = useMemo(() => {
+    if (isCreatingNewWorkspace) {
+      return selectedPlan !== undefined;
+    }
+    return (
+      paymentLink && selectedPlan !== currentPlan && selectedPlan !== undefined
+    );
+  }, [paymentLink, selectedPlan, currentPlan, isCreatingNewWorkspace]);
+
   return (
     <Modal defaultOpen={true} onClose={onClose}>
       <Styled.PaywallContainer>
@@ -61,21 +77,29 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           asChild
         >
           <Styled.PlanContainer>
-            {plans.map((plan) =>
+            {filteredPlans.map((plan) =>
               plan ? (
                 <ToggleGroup.Item
                   key={plan?.id}
                   value={plan?.key}
-                  disabled={plan.key === currentPlan}
+                  disabled={!isCreatingNewWorkspace && plan.key === currentPlan}
                   asChild
+                  data-testid={`paywall_plan_item_${plan?.key}`}
                 >
                   <Styled.PlanItem>
                     <Styled.PlanTitle>
                       <Styled.PlanRadio />
                       {plan.title}
-                      {plan.key === currentPlan && (
+                      {!isCreatingNewWorkspace && plan.key === currentPlan && (
                         <Styled.PlanBadge>CURRENT PLAN</Styled.PlanBadge>
                       )}
+                      {isCreatingNewWorkspace &&
+                        hasFreeWorkspaceSlot &&
+                        plan.key === 'free' && (
+                          <Styled.PlanBadge>
+                            1 FREE WORKSPACE AVAILABLE
+                          </Styled.PlanBadge>
+                        )}
                     </Styled.PlanTitle>
                     <Styled.PlanPrice>
                       {formatPrice(plan.price, plan.currency ?? 'usd')}
@@ -101,7 +125,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           {paymentLink ? (
             <Button
               type="primaryBrand"
-              disabled={!paymentLink}
+              disabled={!canProceed}
               href={paymentLink}
               sameTab={true} // change this to false if you want to work on payments locally
               testId="paywall_upgrade_pro"
@@ -109,8 +133,14 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               Continue to billing
             </Button>
           ) : (
-            <Button type="primaryBrand" disabled>
-              Pick a plan
+            // if there's no payment link, we assume it is a free plan
+            <Button
+              type="primaryBrand"
+              disabled={!canProceed}
+              testId="paywall_create_workspace"
+              href={workspaces({}).workspace({ workspaceId }).createNew({}).$}
+            >
+              Create free workspace
             </Button>
           )}
           <Button type="secondary" onClick={onClose}>

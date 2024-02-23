@@ -9,6 +9,7 @@ export default {
 
 export const Normal: StoryFn = () => (
   <WorkspaceMenu
+    hasFreeWorkspaceSlot={true}
     workspaces={[
       {
         id: '42',

@@ -5,4 +5,8 @@ export { Providers } from './providers';
 export { RequireSession } from './authentication';
 export { RouteEvents } from './RouteEvents';
 export { initSentry } from './sentry';
-export { RequirePaidPlanRoute } from './RequirePaidPlanRoute';
+export {
+  RequirePaidPlanRoute,
+  RequireUpgradablePlanRoute,
+  RequireFreePlanSlotRoute,
+} from './ProtectedRoute';

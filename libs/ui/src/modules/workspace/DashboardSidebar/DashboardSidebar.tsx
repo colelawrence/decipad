@@ -25,6 +25,7 @@ type DashboardSidebarProps = {
   readonly name: string | undefined;
   readonly email: string | undefined;
   readonly workspaces: WorkspaceMeta[];
+  readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onNavigateWorkspace: (id: string) => void;
   readonly onDeleteSection: (sectionId: string) => void;
@@ -41,7 +42,12 @@ type DashboardSidebarProps = {
 export const DashboardSidebar = ({
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const { workspaces, onNavigateWorkspace, onCreateWorkspace } = props;
+  const {
+    workspaces,
+    hasFreeWorkspaceSlot,
+    onNavigateWorkspace,
+    onCreateWorkspace,
+  } = props;
 
   const activeWorkspace = useMemo(
     () => workspaces.find((workspace) => workspace.isSelected) ?? workspaces[0],
@@ -110,6 +116,7 @@ export const DashboardSidebar = ({
               <Styled.SidebarWrapper>
                 <WorkspaceMenu
                   workspaces={workspaces}
+                  hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
                   onCreateWorkspace={withCloseDrawer(onCreateWorkspace)}
                   onSelectWorkspace={withCloseDrawer(handleSelectWorkspace)}
                 />
@@ -140,6 +147,7 @@ export const DashboardSidebar = ({
         MenuComponent={
           <WorkspaceMenu
             workspaces={workspaces}
+            hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
             onCreateWorkspace={onCreateWorkspace}
             onSelectWorkspace={handleSelectWorkspace}
           />

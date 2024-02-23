@@ -11,6 +11,7 @@ export const Normal: StoryFn = () => (
   <DashboardSidebar
     name="John Doe"
     email="john.doe@example.com"
+    hasFreeWorkspaceSlot={true}
     onDeleteSection={noop}
     onUpdateSection={() => new Promise(noop)}
     onCreateSection={() => new Promise(noop)}

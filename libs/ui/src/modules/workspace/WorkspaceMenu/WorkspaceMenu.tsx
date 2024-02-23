@@ -7,15 +7,18 @@ import * as Styled from './styles';
 
 import { Button } from 'libs/ui/src/shared';
 import { WorkspaceMeta } from 'libs/ui/src/types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 interface WorkspaceMenuProps {
   readonly workspaces: WorkspaceMeta[];
+  readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onSelectWorkspace: (id: string) => void;
 }
 
 export const WorkspaceMenu = ({
   workspaces,
+  hasFreeWorkspaceSlot,
   onCreateWorkspace = noop,
   onSelectWorkspace = noop,
 }: WorkspaceMenuProps): ReturnType<FC> => {
@@ -41,7 +44,9 @@ export const WorkspaceMenu = ({
         testId="create-workspace-button"
         onClick={onCreateWorkspace}
       >
-        Create workspace
+        {hasFreeWorkspaceSlot || isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
+          ? 'Create a new workspace'
+          : 'Create an upgraded workspace'}
       </Button>
     </Styled.MenuWrapper>
   );
