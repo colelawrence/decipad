@@ -1,12 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { Result } from '@decipad/remote-computer';
 import { useDelayedValue } from '@decipad/react-utils';
+import type { Result } from '@decipad/remote-computer';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 
 import { grey400 } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { CodeResultProps } from '../../../types';
+import { CodeError } from '../CodeError/CodeError';
 import { useResultInfo } from '../CodeLine/CodeLine';
+import { StructuredInputLines } from '../StructuredInputLines/StructuredInputLines';
 import { TableButton } from '../TableButton/TableButton';
 import {
   canGrabStyles,
@@ -17,8 +19,6 @@ import {
   inlineStyles,
   variableNameContainerStyles,
 } from './styles';
-import { CodeError } from '../CodeError/CodeError';
-import { StructuredInputLines } from '../StructuredInputLines/StructuredInputLines';
 
 interface CodeLineStructuredProps {
   readonly highlight?: boolean;
@@ -100,7 +100,7 @@ export const CodeLineStructured = ({
         <code
           data-testid="codeline-code"
           contentEditable={!readOnly}
-          css={codeContainerStyles}
+          css={[codeContainerStyles, { lineHeight: 1.8 }]}
         >
           {!inline && (
             <div
@@ -144,8 +144,10 @@ export const CodeLineStructured = ({
           >
             {inline}
           </div>
-          {codeChild}
-          {unitPicker}
+          <div css={{ padding: '7px 0 5px 0' }}>
+            {codeChild}
+            {unitPicker}
+          </div>
         </code>
       </div>
       {showResult && <div css={showResult}>{expanded}</div>}
