@@ -321,14 +321,17 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         workspaces={workspacesMeta}
         hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
         onCreateWorkspace={() => {
-          if (isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
-            navigate(currentWorkspaceRoute.createNew({}).$);
+          if (
+            isFlagEnabled('NEW_PAYMENTS') &&
+            !isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
+          ) {
+            navigate(
+              currentWorkspaceRoute.upgrade({ newWorkspace: 'newWorkspace' }).$
+            );
             return;
           }
 
-          navigate(
-            currentWorkspaceRoute.upgrade({ newWorkspace: 'newWorkspace' }).$
-          );
+          navigate(currentWorkspaceRoute.createNew({}).$);
         }}
         onNavigateWorkspace={(id) => {
           navigate(workspaces({}).workspace({ workspaceId: id }).$);

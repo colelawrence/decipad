@@ -44,9 +44,11 @@ export const WorkspaceMenu = ({
         testId="create-workspace-button"
         onClick={onCreateWorkspace}
       >
-        {hasFreeWorkspaceSlot || isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
-          ? 'Create a new workspace'
-          : 'Create an upgraded workspace'}
+        {isFlagEnabled('NEW_PAYMENTS')
+          ? hasFreeWorkspaceSlot || isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
+            ? 'Create a new workspace'
+            : 'Create an upgraded workspace'
+          : 'Create a new workspace'}
       </Button>
     </Styled.MenuWrapper>
   );
