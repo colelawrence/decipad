@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { test, expect } from './manager/decipad-tests';
 import { BrowserContext, Page } from '@playwright/test';
 import {

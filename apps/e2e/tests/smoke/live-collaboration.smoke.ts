@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-standalone-expect */
 import { expect, test as smoketest } from '../manager/decipad-tests';
 import { STORAGE_STATE } from '../../playwright.config';
 import { User } from '../manager/test-users';

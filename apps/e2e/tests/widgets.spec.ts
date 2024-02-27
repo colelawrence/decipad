@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
 import {
   clickCell,

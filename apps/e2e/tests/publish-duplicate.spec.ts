@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { expect, test } from './manager/decipad-tests';
 import { keyPress, editorLocator } from '../utils/page/Editor';
 import { Timeouts, getWorkspaces } from '../utils/src';

@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import {

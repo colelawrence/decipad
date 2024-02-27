@@ -1,35 +1,14 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { focusOnBody, setUp } from '../utils/page/Editor';
+import { test, expect } from './manager/decipad-tests';
+import { focusOnBody } from '../utils/page/Editor';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
-test.describe('Data Views', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates table', async () => {
+test('Data Views', async ({ testUser: { page } }) => {
+  await test.step('creates table', async () => {
     await focusOnBody(page);
     await createTable(page);
   });
 
-  test('fills table', async () => {
+  await test.step('fills table', async () => {
     // first column
     await writeInTable(page, 'Imports', 1, 0);
     expect(await getFromTable(page, 1, 0)).toBe('Imports');
@@ -47,7 +26,7 @@ test.describe('Data Views', () => {
     expect(await getFromTable(page, 3, 1)).toBe('9.32%');
   });
 
-  test('creates a data view', async () => {
+  await test.step('creates a data view', async () => {
     await page.getByText('Pivot view').click();
 
     await page.evaluate(() =>

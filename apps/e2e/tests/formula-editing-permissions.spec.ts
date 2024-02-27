@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import notebookSource from '../__fixtures__/004-testing-edit-permissions.json';
 import {

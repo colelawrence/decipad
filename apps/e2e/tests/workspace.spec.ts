@@ -1,3 +1,6 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
+/* eslint-disable playwright/no-conditional-expect */
 import { expect, test, Page } from './manager/decipad-tests';
 import { Timeouts, snapshot } from '../utils/src';
 

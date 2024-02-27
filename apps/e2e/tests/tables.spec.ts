@@ -32,6 +32,7 @@ import {
   changeColumnDay,
   doubleClickCell,
   downloadTableCSV,
+  addColumnUnit,
 } from '../utils/page/Table';
 
 import notebookSource from '../__fixtures__/006-notebook-formula-tables.json';
@@ -716,4 +717,17 @@ test('Starts editing cell on enter', async ({ testUser }) => {
 
     expect(res).toStrictEqual(['before after', '1.2', '2.1', '2.2', '2.3']);
   });
+});
+
+test('Table Custom Units', async ({ testUser: { page } }) => {
+  await focusOnBody(page);
+  await createTable(page);
+  await addColumnUnit(page, 1, 'bananas');
+  // second column
+  await writeInTable(page, '1', 1, 1);
+  await writeInTable(page, '2', 2, 1);
+  await writeInTable(page, '3', 3, 1);
+  expect(await getFromTable(page, 1, 1)).toBe('1 bananas');
+  expect(await getFromTable(page, 2, 1)).toBe('2 bananas');
+  expect(await getFromTable(page, 3, 1)).toBe('3 bananas');
 });

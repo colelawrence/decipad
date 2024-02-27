@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { createCodeLineV2Below } from '../utils/page/Block';
 import { focusOnBody, keyPress, setUp } from '../utils/page/Editor';

@@ -1,3 +1,5 @@
+/* eslint-disable playwright/valid-describe-callback */
+/* eslint-disable playwright/valid-title */
 import { BrowserContext, Page, test } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
