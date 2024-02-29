@@ -100,7 +100,7 @@
     "@babel/runtime": "7.24.0",
     "@chakra-ui/css-reset": "2.3.0",
     "@codemirror/lang-javascript": "^6.2.0",
-    "@codemirror/lang-sql": "^6.5.2",
+    "@codemirror/lang-sql": "^6.6.0",
     "@decipad/safejs": "^1.0.2",
     "@emotion/babel-preset-css-prop": "11.11.0",
     "@emotion/cache": "11.11.0",
