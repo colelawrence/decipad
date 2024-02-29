@@ -8,6 +8,7 @@ import {
   useAiUsage,
   useComputer,
 } from '@decipad/react-contexts';
+import * as Sentry from '@sentry/react';
 import { useCallback, useContext, useRef } from 'react';
 
 import { nanoid } from 'nanoid';
@@ -285,6 +286,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           }
         }
       } catch (err) {
+        console.error(err);
+
         // We show a different error message if the user has ran out of AI credits
         if (err instanceof DOMException && err.name === 'QuotaExceededError') {
           handleDeleteMessage(eventMessage.id);
@@ -322,12 +325,15 @@ export const useAgent = ({ notebookId }: AgentParams) => {
         } else {
           handleDeleteMessage(eventMessage.id);
         }
+        Sentry.captureException(err, {
+          level: 'error',
+        });
         handleAddMessage({
           type: 'event',
           id: nanoid(),
           content: `Error: ${(err as Error).message}`,
           uiContent:
-            "Sorry, but there was an error. You can retry, hopefully it won't happen again.",
+            'We encountered an error on our end. Please feel free to retry, or use the chat icon to submit an error to our dev team.',
           timestamp: Date.now(),
           replyTo: userMessage.id,
           status: 'error',
