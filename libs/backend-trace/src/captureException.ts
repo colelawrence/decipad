@@ -1,9 +1,9 @@
 import { AWSLambda as SentryAWSLambda, Integrations } from '@sentry/serverless';
 import '@sentry/tracing';
-import { ExtraErrorData } from '@sentry/integrations';
 import { Boom, boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
 import meta from '@decipad/meta';
+import { extraErrorDataIntegration } from '@sentry/integrations';
 
 export type TraceOptions = Partial<{
   tracesSampleRate: number;
@@ -23,7 +23,7 @@ const sentryInitOptions: SentryOptions = {
   enableTracing: true,
   integrations: [
     new Integrations.Apollo(),
-    new ExtraErrorData(),
+    extraErrorDataIntegration(),
     new Integrations.Console(),
     new Integrations.Http(),
     new Integrations.Context(),
@@ -55,11 +55,19 @@ export const initTrace = (options: TraceOptions = {}): boolean => {
 };
 
 export const captureException = async (err: Error): Promise<Boom> => {
-  initTrace();
   const error = boomify(err as Error);
-  if (error.isServer) {
-    SentryAWSLambda.captureException(error);
+  if (initTrace()) {
+    if (error.isServer) {
+      SentryAWSLambda.captureException(error);
+    }
+    // eslint-disable-next-line no-await-in-loop
+    if (!(await SentryAWSLambda.flush())) {
+      // eslint-disable-next-line no-console
+      console.warn('Failed to flush sentry event', error);
+    }
+  } else if (error.isServer) {
+    // eslint-disable-next-line no-console
+    console.error('Error caught without sentry initialized', error);
   }
-  await SentryAWSLambda.flush();
   return error;
 };

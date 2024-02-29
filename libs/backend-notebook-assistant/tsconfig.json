@@ -16,6 +16,7 @@
     { "path": "../services" },
     { "path": "../fnqueue" },
     { "path": "../backend-resources" },
-    { "path": "../notebook-open-api" }
+    { "path": "../notebook-open-api" },
+    { "path": "../backend-trace" }
   ]
 }

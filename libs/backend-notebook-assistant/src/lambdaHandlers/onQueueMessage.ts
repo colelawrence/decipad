@@ -7,6 +7,7 @@ import { resourceFromRoomName } from './roomName';
 import { engageAssistant } from '../notebookAssistant/engageAssistant';
 import { boomify, badRequest } from '@hapi/boom';
 import { tryWSSend } from '@decipad/backend-utils';
+import { captureException } from '@decipad/backend-trace';
 
 export interface ChatAgentMessage {
   connectionId: string;
@@ -56,10 +57,11 @@ export const onQueueMessage = async (
     await tryWSSend(connectionId, response);
   } catch (err) {
     const bErr = boomify(err as Error);
+    await tryWSSend(connectionId, bErr.output.payload);
     if (bErr.isBoom) {
       // eslint-disable-next-line no-console
       console.error(bErr);
+      await captureException(bErr);
     }
-    await tryWSSend(connectionId, bErr.output.payload);
   }
 };
