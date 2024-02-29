@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    timeout-minutes: 60
+    timeout-minutes: 90
     runs-on: ubuntu-latest
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'
@@ -121,13 +121,13 @@ jobs:
           yarn deploy:pr
           scripts/push-sam.sh
 
-      - name: Update AI indexes
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: eu-west-2
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: yarn update_ai_indexes DecipadBackendStaging${{ github.event.pull_request.number }}
+      # - name: Update AI indexes
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: eu-west-2
+      #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      #   run: yarn update_ai_indexes DecipadBackendStaging${{ github.event.pull_request.number }}
 
   #### Notify
 

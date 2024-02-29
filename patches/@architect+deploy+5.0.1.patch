@@ -1,3 +1,18 @@
+diff --git a/node_modules/@architect/deploy/src/sam/01-deploy/index.js b/node_modules/@architect/deploy/src/sam/01-deploy/index.js
+index 0bbfde2..274a2bd 100644
+--- a/node_modules/@architect/deploy/src/sam/01-deploy/index.js
++++ b/node_modules/@architect/deploy/src/sam/01-deploy/index.js
+@@ -63,8 +63,8 @@ module.exports = function deploy (params, callback) {
+ 
+   let checks = 0
+   let start = Date.now()
+-  let tenMins = 1000 * 60 * 10
+-  let timeout = start + tenMins
++  let ninetyMins = 1000 * 60 * 90
++  let timeout = start + ninetyMins
+   function checkStatus () {
+     if (fast) {
+       update.status('Deploying in fast mode! Please refer to the CloudFormation console for deployment status')
 diff --git a/node_modules/@architect/deploy/src/sam/index.js b/node_modules/@architect/deploy/src/sam/index.js
 index 7abedfd..3e9ef91 100644
 --- a/node_modules/@architect/deploy/src/sam/index.js
