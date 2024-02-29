@@ -2,7 +2,7 @@
 /* eslint-disable playwright/valid-title */
 import { expect, test } from './manager/decipad-tests';
 import { keyPress, editorLocator } from '../utils/page/Editor';
-import { Timeouts, getWorkspaces } from '../utils/src';
+import { Timeouts, getWorkspaces, timeout } from '../utils/src';
 
 import {
   duplicatePad,
@@ -11,7 +11,6 @@ import {
   getPadList,
   navigateToWorkspacePage,
 } from '../utils/page/Workspace';
-import { timeout } from '@decipad/utils';
 
 const someText = 'Some text to show in the editor';
 const moreText = 'Should work even with some delay';

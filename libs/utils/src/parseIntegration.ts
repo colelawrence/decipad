@@ -1,5 +1,5 @@
-import unified from 'unified';
-import visit from 'unist-util-visit';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 import type { Root, Code } from 'mdast';
 import remarkParse from 'remark-parse';
 import { parser } from '@lezer/javascript';
@@ -162,7 +162,7 @@ export const parseIntegration = async (
   const root = unified().use(remarkParse).parse(str) as Root;
 
   const codeblocks: Code[] = [];
-  visit(root as Parameters<typeof visit>[0], 'code', (code) => {
+  visit<Code, 'code'>(root as Parameters<typeof visit>[0], 'code', (code) => {
     if (code.type === 'code') {
       codeblocks.push(code as Code);
     }

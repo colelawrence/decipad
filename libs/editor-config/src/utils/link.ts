@@ -1,6 +1,6 @@
-import unified from 'unified';
+import { unified } from 'unified';
 import type { Link, Root } from 'mdast';
-import visit from 'unist-util-visit';
+import { visit, CONTINUE, EXIT } from 'unist-util-visit';
 import remarkParse from 'remark-parse';
 
 interface TrailingLink {
@@ -21,7 +21,7 @@ export const getTrailingLink = (
   const root = unified()
     .use(remarkParse)
     .parse(textPotentiallyEndingWithLink) as Root;
-  visit<Link>(root, 'link', (link) => {
+  visit<Link | Root, 'link'>(root, 'link', (link) => {
     // All nodes come from the parser (not programmatically added) and thus have a position
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     const startOffset = link.position!.start.offset!;
@@ -30,7 +30,7 @@ export const getTrailingLink = (
 
     if (endOffset !== textPotentiallyEndingWithLink.length) {
       // Not a link that ends
-      return visit.CONTINUE;
+      return CONTINUE;
     }
 
     const textStartOffset = link.children[0]?.position?.start.offset ?? 1;
@@ -44,7 +44,7 @@ export const getTrailingLink = (
         textEndOffset
       ),
     };
-    return visit.EXIT;
+    return EXIT;
   });
 
   return result;

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Image, Root } from 'mdast';
 import remarkParse from 'remark-parse';
-import unified from 'unified';
-import visit from 'unist-util-visit';
+import { unified } from 'unified';
+import { visit, CONTINUE, EXIT } from 'unist-util-visit';
 
 interface TrailingImage {
   readonly startOffset: number;
@@ -18,24 +18,31 @@ export const getTrailingImage = (
   const root = unified()
     .use(remarkParse)
     .parse(textPotentiallyEndingWithImage) as Root;
-  visit<Image>(root as Parameters<typeof visit>[0], 'image', (image) => {
-    if (image.type !== 'image') {
-      return visit.CONTINUE;
-    }
-    const startOffset = image.position!.start.offset!;
-    const endOffset = image.position!.end.offset!;
+  visit<Image, 'image'>(
+    root as Parameters<typeof visit>[0],
+    'image',
+    (image) => {
+      if (image.type !== 'image') {
+        return CONTINUE;
+      }
+      const startOffset = image.position!.start.offset!;
+      const endOffset = image.position!.end.offset!;
 
-    if (endOffset !== textPotentiallyEndingWithImage.length) {
-      return visit.CONTINUE;
-    }
+      if (
+        image.type !== 'image' ||
+        endOffset !== textPotentiallyEndingWithImage.length
+      ) {
+        return CONTINUE;
+      }
 
-    result = {
-      startOffset,
-      url: image.url,
-      alt: image.alt || undefined,
-    };
-    return visit.EXIT;
-  });
+      result = {
+        startOffset,
+        url: image.url,
+        alt: image.alt || undefined,
+      };
+      return EXIT;
+    }
+  );
 
   return result;
 };
