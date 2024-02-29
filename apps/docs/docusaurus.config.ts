@@ -1,6 +1,3 @@
-const lightCodeTheme = require('prism-react-renderer/themes/github').default;
-const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
-
 const plugins = [
   [
     './plugins/blog-plugin.js',
@@ -77,7 +74,7 @@ const config = {
     [
       '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
@@ -95,16 +92,16 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      }),
+      },
     ],
   ],
 
-  themes: ['./src/lib/deci-language-live-codeblock'],
+  themes: ['./src/lib/decipad-live-codeblock'],
 
   plugins,
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
+    {
       colorMode: {
         defaultMode: 'light',
         disableSwitch: true,
@@ -217,12 +214,8 @@ const config = {
           },
         ],
       },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
       algolia: algoliaConfig(),
-    }),
+    },
 };
 
 // eslint-disable-next-line no-console

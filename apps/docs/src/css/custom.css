@@ -210,7 +210,6 @@ hr {
   border-radius: 6px;
 }
 
-
 .menu__list-item.new > .menu__link:after {
   content: 'new';
   background-color: rgb(193, 250, 107);
@@ -571,4 +570,8 @@ table th:nth-of-type(3) {
 
 table th:nth-of-type(4) {
   width: 35%;
+}
+
+img {
+  height: 100%;
 }

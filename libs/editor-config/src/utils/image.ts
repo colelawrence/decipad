@@ -18,7 +18,10 @@ export const getTrailingImage = (
   const root = unified()
     .use(remarkParse)
     .parse(textPotentiallyEndingWithImage) as Root;
-  visit<Image>(root, 'image', (image) => {
+  visit<Image>(root as Parameters<typeof visit>[0], 'image', (image) => {
+    if (image.type !== 'image') {
+      return visit.CONTINUE;
+    }
     const startOffset = image.position!.start.offset!;
     const endOffset = image.position!.end.offset!;
 

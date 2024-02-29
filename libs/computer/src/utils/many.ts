@@ -178,6 +178,7 @@ export const hasBracketError = (
 };
 
 export const identifiedErrorToMessage = (error: IdentifiedError): string => {
+  console.error(error.error);
   switch (error.errorKind) {
     case 'parse-error': {
       return error.error.message;

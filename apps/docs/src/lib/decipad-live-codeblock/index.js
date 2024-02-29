@@ -1,11 +1,15 @@
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-function theme() {
+export default function theme() {
   return {
-    name: 'docusaurus-theme-live-codeblock',
+    name: 'decipad-live-codeblock',
 
     getThemePath() {
+      return path.resolve(__dirname, './theme');
+    },
+
+    getTypeScriptThemePath() {
       return path.resolve(__dirname, './theme');
     },
 
@@ -26,10 +30,7 @@ function theme() {
             },
           ],
         },
-        mergeStrategy: { 'module.rules': 'prepend' },
       };
     },
   };
 }
-
-module.exports = theme;

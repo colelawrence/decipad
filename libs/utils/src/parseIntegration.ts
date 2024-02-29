@@ -6,7 +6,7 @@ import { parser } from '@lezer/javascript';
 
 export const addEnvVars = (js: string, envVars: Map<string, string>) => {
   const processString = `const process = {
-  env: { 
+  env: {
 ${Array.from(envVars)
   .map(([key, value]) => `    ${key}: "{{{secrets.${value}}}}"`)
   .join(',\n')}
@@ -162,8 +162,10 @@ export const parseIntegration = async (
   const root = unified().use(remarkParse).parse(str) as Root;
 
   const codeblocks: Code[] = [];
-  visit<Code>(root, 'code', (code) => {
-    codeblocks.push(code);
+  visit(root as Parameters<typeof visit>[0], 'code', (code) => {
+    if (code.type === 'code') {
+      codeblocks.push(code as Code);
+    }
   });
 
   if (codeblocks.length !== 1) {

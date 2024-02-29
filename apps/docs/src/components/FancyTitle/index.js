@@ -50,22 +50,25 @@ export const Hammer = (
 
 export const FancyTitle = ({ children, icon }) => {
   return (
-    <span
-      style={{
-        display: 'flex',
-        float: 'left',
-      }}
-    >
-      <div
+    <>
+      <span
         style={{
-          marginTop: '2px',
-          marginRight: '3px',
-          color: '#eee',
+          display: 'flex',
+          float: 'left',
         }}
       >
-        {icon}
-      </div>
-      {children}
-    </span>
+        <div
+          style={{
+            marginTop: '2px',
+            marginRight: '3px',
+            color: '#eee',
+          }}
+        >
+          {icon}
+        </div>
+        {children}
+      </span>
+      <br />
+    </>
   );
 };

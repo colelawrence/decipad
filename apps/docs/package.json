@@ -1,20 +1,31 @@
 {
-  "name": "website",
+  "name": "my-website",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids"
+    "build": "docusaurus build"
   },
   "dependencies": {
-    "@docusaurus/module-type-aliases": "^2.4.1",
-    "@tsconfig/docusaurus": "^2.0.0"
+    "@docusaurus/core": "3.1.1",
+    "@docusaurus/preset-classic": "3.1.1",
+    "@mdx-js/react": "^3.0.0",
+    "prism-react-renderer": "^2.3.0",
+    "@docusaurus/plugin-client-redirects": "3.1.1",
+    "@docusaurus/utils-validation": "3.1.1",
+    "@docusaurus/theme-common": "3.1.1",
+    "docusaurus-plugin-segment": "1.0.4",
+    "@sindresorhus/is": "6.1.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "3.1.1",
+    "@docusaurus/tsconfig": "3.1.1",
+    "@docusaurus/types": "3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0"
+  },
+  "resolutions": {
+    "@sindresorhus/is": "6.1.0"
   }
 }

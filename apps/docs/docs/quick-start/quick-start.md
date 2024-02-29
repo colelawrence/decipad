@@ -27,7 +27,7 @@ Card,
 } from '@site/src/components/GalleryCards';
 
 <GridContainer>
-  <Card title="Templates" notebook="/docs/gallery" description="Notebooks to get you started." />
+  <Card title="Templates" notebook="https://www.decipad.com/templates" description="Notebooks to get you started." />
 
   <Card title="Videos" notebook="/docs/videos" description="Watch quick videos on all things Decipad." />
 

@@ -43,8 +43,8 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node apps/docs/snapshots.mjs",
-        "cwd": "."
+        "command": "node snapshots.mjs",
+        "cwd": "apps/docs"
       }
     }
   },

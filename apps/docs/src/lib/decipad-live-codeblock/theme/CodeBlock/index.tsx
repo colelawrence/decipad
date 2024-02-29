@@ -11,7 +11,9 @@ interface LiveAndChildrenProps {
   children: ReactNode;
 }
 
-function withLiveEditor<P extends LiveAndChildrenProps>(Component: FC<P>) {
+function withLiveEditor<P extends LiveAndChildrenProps>(
+  Component: typeof CodeBlock
+) {
   const WrappedComponent: FC<P> = (props) => {
     if (props.live) {
       const { children } = props;

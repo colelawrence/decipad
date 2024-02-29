@@ -34,7 +34,7 @@ const runCode = (sources) => {
     [
       '-r',
       pathJoin(docsDir, '../../node_modules/esbuild-runner/register'),
-      pathJoin(docsDir, '../../apps/docs/utils/evaluate-docs-examples.ts'),
+      pathJoin(docsDir, './utils/evaluate-docs-examples.ts'),
     ],
     {
       input: stringify(Object.fromEntries(sources.entries())),

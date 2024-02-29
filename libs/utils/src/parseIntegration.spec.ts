@@ -61,7 +61,7 @@ describe('addEnvVars', () => {
     );
     expect(res).toMatchInlineSnapshot(`
       "const process = {
-        env: { 
+        env: {
           AIRTABLE_API_KEY: \\"{{{secrets.airtableApiKey}}}\\",
           TEST_VAR: \\"{{{secrets.testVar}}}\\"
         }

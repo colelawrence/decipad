@@ -4,17 +4,17 @@
 import './pollute-global';
 import { useState, useEffect, FC } from 'react';
 import Editor from 'react-simple-code-editor';
-import Highlight, { Prism } from 'prism-react-renderer';
+import { Highlight, Prism, PrismTheme } from 'prism-react-renderer';
 import { identity } from '@decipad/utils';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
 import { usePrismTheme } from '@docusaurus/theme-common';
 import {
-  Result,
+  type Result,
   createProgramFromMultipleStatements,
-  IdentifiedResult,
-  IdentifiedError,
+  type IdentifiedResult,
+  type IdentifiedError,
   identifiedErrorToMessage,
 } from '@decipad/remote-computer';
 import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
@@ -150,6 +150,34 @@ interface EditorWithHeaderAndResultsProps {
   transformCode?: (s: string) => string;
 }
 
+interface HighlightCodeProps {
+  theme: PrismTheme;
+}
+
+const highlightCode =
+  ({ theme }: HighlightCodeProps) =>
+  (code: string) => {
+    return Highlight({
+      prism: Prism,
+      code,
+      theme,
+      language: 'markup',
+      children: ({ tokens, getLineProps, getTokenProps }) => (
+        <>
+          {tokens.map((line, i) => (
+            // eslint-disable-next-line react/jsx-key
+            <div {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                // eslint-disable-next-line react/jsx-key
+                <span {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          ))}
+        </>
+      ),
+    });
+  };
+
 const EditorWithHeaderAndResults: FC<EditorWithHeaderAndResultsProps> = ({
   code,
   transformCode = identity,
@@ -157,29 +185,13 @@ const EditorWithHeaderAndResults: FC<EditorWithHeaderAndResultsProps> = ({
   const [codeValue, setCodeValue] = useState(code);
   const prismTheme = usePrismTheme();
 
-  const highlightCode = (c: string) => (
-    <Highlight Prism={Prism} code={c} theme={prismTheme} language="markup">
-      {({ tokens, getLineProps, getTokenProps }) =>
-        tokens.map((line, i) => (
-          // eslint-disable-next-line react/jsx-key
-          <div {...getLineProps({ line, key: i })}>
-            {line.map((token, key) => (
-              // eslint-disable-next-line react/jsx-key
-              <span {...getTokenProps({ token, key })} />
-            ))}
-          </div>
-        ))
-      }
-    </Highlight>
-  );
-
   return (
     <>
       <div className={styles.playgroundEditor}>
         <Editor
           value={codeValue}
           onValueChange={(c) => setCodeValue(transformCode(c))}
-          highlight={highlightCode}
+          highlight={highlightCode({ theme: prismTheme })}
         />
       </div>
       <ResultWithHeader code={codeValue} />
