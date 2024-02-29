@@ -1,48 +1,41 @@
-import { css } from '@emotion/react';
-import { ComponentProps, FC, ReactNode, useMemo } from 'react';
-import {
-  AreaChartSlash,
-  BarChartSlash,
-  Blockquote,
-  CSV,
-  Calculations,
-  Callout,
-  DataView,
-  DatePicker,
-  Divider,
-  Dropdown,
-  EmailSlash,
-  FormulaSlash,
-  Heading1,
-  Heading2,
-  Image,
-  ImportTable,
-  Input,
-  Integrations,
-  LineChartSlash,
-  PieChartSlash,
-  Result,
-  ScatterPlotSlash,
-  Sketch,
-  Slider,
-  TableSlash,
-  Toggle,
-  Value,
-} from '../../../icons';
+import { ComponentProps, FC, useMemo } from 'react';
+
 import { InlineMenu } from '../InlineMenu/InlineMenu';
+import {
+  CommandAdvancedFormula,
+  CommandArea,
+  CommandBar,
+  CommandCallout,
+  CommandCsv,
+  CommandDataMapping,
+  CommandDataView,
+  CommandDate,
+  CommandDivider,
+  CommandDropdown,
+  CommandFormula,
+  CommandH1,
+  CommandH2,
+  CommandImage,
+  CommandInput,
+  CommandIntegrations,
+  CommandLine,
+  CommandNumber,
+  CommandPie,
+  CommandPlot,
+  CommandQuote,
+  CommandResult,
+  CommandSketch,
+  CommandSlider,
+  CommandSubmit,
+  CommandTable,
+  CommandToggle,
+} from '../../../icons/command-icons';
 
-type Theme = 'Ocean' | 'Mint' | 'Orange' | 'Wine' | 'Daffodil';
-
-const paintIcon = (icon: ReactNode, theme?: Theme): ReactNode => {
-  const groupIcon = theme ? css({}) : {};
-  return <span css={groupIcon}>{icon}</span>;
-};
-
-const integrationCmd = (paint?: Theme) => ({
+const integrationCmd = {
   command: 'open-integration',
   title: 'Integrations',
   description: 'Connect to existing data',
-  icon: paintIcon(<Integrations />, paint),
+  icon: <CommandIntegrations />,
   enabled: true,
   extraSearchTerms: [
     'data',
@@ -61,22 +54,22 @@ const integrationCmd = (paint?: Theme) => ({
     'javascript',
     'code',
   ],
-});
+};
 
-const sliderCmd = (paint?: Theme) => ({
+const sliderCmd = {
   command: 'slider',
   title: 'Slider',
   description: 'Define a slider others can update',
-  icon: paintIcon(<Slider />, paint),
+  icon: <CommandSlider />,
   enabled: true,
   extraSearchTerms: ['input', 'slider'],
-});
+};
 
-const pivotCmd = (paint?: Theme) => ({
+const pivotCmd = {
   command: 'data-view',
   title: 'Data view',
   description: 'Pivot table data',
-  icon: paintIcon(<DataView />, paint),
+  icon: <CommandDataView />,
   enabled: true,
   extraSearchTerms: [
     'group',
@@ -88,89 +81,83 @@ const pivotCmd = (paint?: Theme) => ({
     'filter',
     'analytic',
   ],
-});
+};
 
-const structuredCmd = (paint?: Theme) => ({
+const structuredCmd = {
   command: 'structured-input',
   title: 'Number Input',
   description: 'Create a number',
-  icon: paintIcon(<Value />, paint),
+  icon: <CommandNumber />,
   enabled: true,
   extraSearchTerms: ['number', 'input'],
-});
+};
 
-const tableCmd = (paint?: Theme) => ({
+const tableCmd = {
   command: 'table',
   title: 'Table',
   description: 'Create a table to input data',
-  icon: paintIcon(<TableSlash />, paint),
+  icon: <CommandTable />,
   enabled: true,
   extraSearchTerms: [],
-});
-
-const dataItems = (paint: boolean) => {
-  const color = paint ? 'Orange' : undefined;
-  return [
-    structuredCmd(color),
-    {
-      command: 'structured-code-line',
-      title: 'Formula',
-      description: 'Create a calculation',
-      icon: paintIcon(<FormulaSlash />, color),
-      enabled: true,
-      extraSearchTerms: ['formula', 'calculation'],
-    },
-    tableCmd(color),
-    {
-      command: 'calculation-block',
-      title: 'Advanced formula',
-      description: 'Combine formulas',
-      icon: paintIcon(<Calculations />, color),
-      enabled: true,
-      extraSearchTerms: ['decipad', 'calculation', 'language', 'formula'],
-    },
-  ];
 };
 
-const modelGroup = (paint: boolean) => ({
+const dataItems = [
+  structuredCmd,
+  {
+    command: 'structured-code-line',
+    title: 'Formula',
+    description: 'Create a calculation',
+    icon: <CommandFormula />,
+    enabled: true,
+    extraSearchTerms: ['formula', 'calculation'],
+  },
+  tableCmd,
+  {
+    command: 'calculation-block',
+    title: 'Advanced formula',
+    description: 'Combine formulas',
+    icon: <CommandAdvancedFormula />,
+    enabled: true,
+    extraSearchTerms: ['decipad', 'calculation', 'language', 'formula'],
+  },
+];
+
+const modelGroup = {
   title: 'Model',
-  items: dataItems(paint),
-});
-
-const submitFormItems = (paint: boolean) => {
-  const color = paint ? 'Orange' : undefined;
-  return [
-    {
-      command: 'submit-form',
-      title: 'Submit form',
-      description: 'Make document submittable to readers',
-      icon: paintIcon(<EmailSlash />, color),
-      enabled: true,
-      extraSearchTerms: [
-        'submit',
-        'zappier',
-        'form',
-        'submission',
-        'integration',
-      ],
-    },
-  ];
+  items: dataItems,
 };
 
-const submitGroup = (paint: boolean) => ({
-  title: 'Submit form',
-  items: submitFormItems(paint),
-});
+const submitFormItems = [
+  {
+    command: 'submit-form',
+    title: 'Submit form',
+    description: 'Make document submittable to readers',
+    icon: <CommandSubmit />,
+    enabled: true,
+    extraSearchTerms: [
+      'submit',
+      'zappier',
+      'form',
+      'submission',
+      'integration',
+    ],
+  },
+];
 
-const integrationsGroups = (paint: boolean) => ({
+const submitGroup = {
+  title: 'Submit form',
+  items: submitFormItems,
+};
+
+const integrationsGroups = {
   title: 'Integrations',
   items: [
-    integrationCmd(paint ? 'Daffodil' : undefined),
+    integrationCmd,
     {
       command: 'upload-csv',
       title: 'CSV',
       description: 'Upload an CSV file',
-      icon: paintIcon(<CSV />, paint ? 'Daffodil' : undefined),
+      icon: <CommandCsv />,
       enabled: true,
       extraSearchTerms: ['upload', 'csv', 'data', 'excel'],
     },
@@ -178,33 +165,27 @@ const integrationsGroups = (paint: boolean) => ({
       command: 'upload-embed',
       title: 'Embed',
       description: 'Embed content from a website',
-      icon: paintIcon(<ImportTable />, paint ? 'Daffodil' : undefined),
+      icon: <CommandDataMapping />,
       enabled: true,
       extraSearchTerms: ['import', 'embed'],
     },
   ],
-});
+};
 
-const mostFrequentlyUsedGroup = (paint: boolean) => ({
+const mostFrequentlyUsedGroup = {
   title: 'Most used',
-  items: [
-    sliderCmd(paint ? 'Mint' : undefined),
-    structuredCmd(paint ? 'Orange' : undefined),
-    tableCmd(paint ? 'Orange' : undefined),
-    integrationCmd(paint ? 'Daffodil' : undefined),
-    pivotCmd(paint ? 'Wine' : undefined),
-  ],
-});
+  items: [sliderCmd, structuredCmd, tableCmd, integrationCmd, pivotCmd],
+};
 
-const visualisationGroup = (paint: boolean) => ({
+const visualisationGroup = {
   title: 'Visualizations',
   items: [
-    pivotCmd(paint ? 'Wine' : undefined),
+    pivotCmd,
     {
       command: 'pie-chart',
       title: 'Pie Chart',
       description: 'Visualize data on a pie chart',
-      icon: paintIcon(<PieChartSlash />, paint ? 'Wine' : undefined),
+      icon: <CommandPie />,
       enabled: true,
       extraSearchTerms: ['chart', 'visualisation', 'plot'],
     },
@@ -212,7 +193,7 @@ const visualisationGroup = (paint: boolean) => ({
       command: 'line-chart',
       title: 'Line Chart',
       description: 'Visualise data on a line chart',
-      icon: paintIcon(<LineChartSlash />, paint ? 'Wine' : undefined),
+      icon: <CommandLine />,
       enabled: true,
       extraSearchTerms: ['chart', 'visualisation', 'plot', 'line plot'],
     },
@@ -220,7 +201,7 @@ const visualisationGroup = (paint: boolean) => ({
       command: 'bar-chart',
       title: 'Bar Chart',
       description: 'Visualise dta on a bar chart',
-      icon: paintIcon(<BarChartSlash />, paint ? 'Wine' : undefined),
+      icon: <CommandBar />,
       enabled: true,
       extraSearchTerms: ['chart', 'visualisation', 'plot', 'bar plot'],
     },
@@ -228,7 +209,7 @@ const visualisationGroup = (paint: boolean) => ({
       command: 'area-chart',
       title: 'Area Chart',
       description: 'Visualize data on an area chart',
-      icon: paintIcon(<AreaChartSlash />, paint ? 'Wine' : undefined),
+      icon: <CommandArea />,
       enabled: true,
       extraSearchTerms: ['chart', 'visualisation', 'plot', 'area plot'],
     },
@@ -236,30 +217,30 @@ const visualisationGroup = (paint: boolean) => ({
       command: 'scatter-plot',
       title: 'Scatter Plot',
       description: 'Visualise data on a scatter plot',
-      icon: paintIcon(<ScatterPlotSlash />, paint ? 'Wine' : undefined),
+      icon: <CommandPlot />,
       enabled: true,
       extraSearchTerms: ['point plot', 'chart', 'visualisation', 'plot'],
     },
   ],
-});
+};
 
-const widgetGroup = (paint: boolean) => ({
+const widgetGroup = {
   title: 'Widgets',
   items: [
     {
       command: 'input',
       title: 'Input',
       description: 'Define values others can update',
-      icon: paintIcon(<Input />, paint ? 'Mint' : undefined),
+      icon: <CommandInput />,
       enabled: true,
       extraSearchTerms: ['input'],
     },
-    sliderCmd(paint ? 'Mint' : undefined),
+    sliderCmd,
     {
       command: 'dropdown',
       title: 'Dropdown',
       description: 'Define pre-selected options',
-      icon: paintIcon(<Dropdown />, paint ? 'Mint' : undefined),
+      icon: <CommandDropdown />,
       enabled: true,
       extraSearchTerms: ['dropdown', 'list', 'select', 'options'],
     },
@@ -267,7 +248,7 @@ const widgetGroup = (paint: boolean) => ({
       command: 'datepicker',
       title: 'Date',
       description: 'Define a data picker',
-      icon: paintIcon(<DatePicker />, paint ? 'Mint' : undefined),
+      icon: <CommandDate />,
       enabled: true,
       extraSearchTerms: ['input', 'date', 'calendar', 'pick'],
     },
@@ -275,7 +256,7 @@ const widgetGroup = (paint: boolean) => ({
       command: 'toggle',
       title: 'Toggle',
       description: 'Define a switcher for booleans',
-      icon: paintIcon(<Toggle />, paint ? 'Mint' : undefined),
+      icon: <CommandToggle />,
       enabled: true,
       extraSearchTerms: ['switch', 'toggle', 'boolean'],
     },
@@ -283,21 +264,21 @@ const widgetGroup = (paint: boolean) => ({
       command: 'display',
       title: 'Result',
       description: 'Highlight a result',
-      icon: paintIcon(<Result />, paint ? 'Mint' : undefined),
+      icon: <CommandResult />,
       enabled: true,
       extraSearchTerms: ['display', 'result', 'show'],
     },
   ],
-});
+};
 
-const writingGroup = (paint: boolean) => ({
+const writingGroup = {
   title: 'Writing',
   items: [
     {
       command: 'heading1',
       title: 'Heading',
       description: 'Main text heading',
-      icon: paintIcon(<Heading1 />, paint ? 'Ocean' : undefined),
+      icon: <CommandH1 />,
       enabled: true,
       extraSearchTerms: ['h1', '#'],
     },
@@ -305,7 +286,7 @@ const writingGroup = (paint: boolean) => ({
       command: 'heading2',
       title: 'Sub-heading',
       description: 'Secondary text heading',
-      icon: paintIcon(<Heading2 />, paint ? 'Ocean' : undefined),
+      icon: <CommandH2 />,
       enabled: true,
       extraSearchTerms: ['h2', '##'],
     },
@@ -313,7 +294,7 @@ const writingGroup = (paint: boolean) => ({
       command: 'upload-image',
       title: 'Image',
       description: 'Upload an image',
-      icon: paintIcon(<Image />, paint ? 'Ocean' : undefined),
+      icon: <CommandImage />,
       enabled: true,
       extraSearchTerms: ['upload', 'image', 'media'],
     },
@@ -321,7 +302,7 @@ const writingGroup = (paint: boolean) => ({
       command: 'callout',
       title: 'Callout',
       description: 'Grabs the readers attention',
-      icon: paintIcon(<Callout />, paint ? 'Ocean' : undefined),
+      icon: <CommandCallout />,
       enabled: true,
       extraSearchTerms: ['highlight', 'hero'],
     },
@@ -329,7 +310,7 @@ const writingGroup = (paint: boolean) => ({
       command: 'blockquote',
       title: 'Quote',
       description: 'Quote something, or someone.',
-      icon: paintIcon(<Blockquote />, paint ? 'Ocean' : undefined),
+      icon: <CommandQuote />,
       enabled: true,
       extraSearchTerms: ['>', 'quote', 'blockquote'],
     },
@@ -337,30 +318,30 @@ const writingGroup = (paint: boolean) => ({
       command: 'divider',
       title: 'Divider',
       description: 'A separator between your text',
-      icon: paintIcon(<Divider />, paint ? 'Ocean' : undefined),
+      icon: <CommandDivider />,
       enabled: true,
       extraSearchTerms: ['hr', 'divider', '-'],
     },
     {
       command: 'sketch',
       title: 'Sketch',
-      icon: paintIcon(<Sketch />, paint ? 'Ocean' : undefined),
+      icon: <CommandSketch />,
       description: 'Express yourself with a drawing',
       enabled: true,
       extraSearchTerms: ['draw', 'paint'],
     },
   ],
-});
+};
 
 // add a group for more frequent ones?
-const groups = (paint: boolean) => [
-  mostFrequentlyUsedGroup(paint),
-  modelGroup(paint),
-  integrationsGroups(paint),
-  submitGroup(paint),
-  widgetGroup(paint),
-  visualisationGroup(paint),
-  writingGroup(paint),
+const groups = [
+  mostFrequentlyUsedGroup,
+  modelGroup,
+  integrationsGroups,
+  submitGroup,
+  widgetGroup,
+  visualisationGroup,
+  writingGroup,
 ];
 
 type SlashCommandsMenuProps = Pick<
@@ -372,6 +353,6 @@ type SlashCommandsMenuProps = Pick<
 
 export const SlashCommandsMenu: FC<SlashCommandsMenuProps> = (props) => {
   // It's a function because feature flags can change for each test.
-  const menuGroups = useMemo(() => groups(false), []);
+  const menuGroups = useMemo(() => groups, []);
   return <InlineMenu {...props} groups={menuGroups} />;
 };

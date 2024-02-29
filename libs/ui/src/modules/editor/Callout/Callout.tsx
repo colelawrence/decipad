@@ -3,7 +3,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { IconPopover } from '../../../shared';
 import { cssVar, useThemeColor } from '../../../primitives';
 import { blockAlignment } from '../../../styles';
@@ -52,7 +52,7 @@ export const Callout = ({
   saveIcon = noop,
   saveColor = noop,
 }: CalloutProps): ReturnType<FC> => {
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
   const themeColor = useThemeColor(color);
 
   return (

@@ -102,7 +102,7 @@ export class Notebook {
       await expect(
         this.notebookIconButton.locator('title'),
         "Initial Notebook Icon isn't the Decipad Logo"
-      ).toHaveText('Decipad Logo');
+      ).toHaveText('Deci');
       const initialColor = await this.notebookIconButton.evaluate((el) => {
         return getComputedStyle(el).backgroundColor;
       });

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { cssVar, mediumShadow, useThemeColor } from '../../../primitives';
 import { AvailableSwatchColor } from '../../../utils';
 import { UserIconKey } from '@decipad/editor-types';
@@ -15,7 +15,7 @@ export const NotebookIcon = ({
   icon,
   color = 'Catskill',
 }: NotebookIconProps): ReturnType<FC> => {
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
   const theme = useThemeColor(color);
 
   return (
@@ -23,6 +23,7 @@ export const NotebookIcon = ({
       css={[
         notebookIconStyles,
         {
+          color: color !== 'Catskill' ? theme.Text.Default : undefined,
           backgroundColor:
             color !== 'Catskill'
               ? theme.Background.Default
@@ -30,7 +31,7 @@ export const NotebookIcon = ({
         },
       ]}
     >
-      <Icon />
+      <Icon title={icon} />
     </div>
   );
 };

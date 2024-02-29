@@ -1,0 +1,31 @@
+import type { SVGProps } from 'react';
+
+interface SVGRProps {
+  title?: string;
+  titleId?: string;
+}
+export const Sparkles = ({
+  title,
+  titleId,
+  ...props
+}: SVGProps<SVGSVGElement> & SVGRProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      role="img"
+      aria-labelledby={titleId}
+      {...props}
+    >
+      {title ? <title id={titleId}>{title}</title> : null}
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15 4.75C15 7.511 13.511 10 10.75 10c2.761 0 4.25 2.489 4.25 5.25 0-2.761 1.489-5.25 4.25-5.25C16.489 10 15 7.511 15 4.75M8 12.75C8 14.407 6.407 16 4.75 16 6.407 16 8 17.593 8 19.25 8 17.593 9.593 16 11.25 16 9.593 16 8 14.407 8 12.75"
+      />
+    </svg>
+  );
+};

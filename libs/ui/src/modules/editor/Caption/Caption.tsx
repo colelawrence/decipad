@@ -2,7 +2,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 
 import {
   display,
@@ -78,16 +78,16 @@ export const Caption: FC<CaptionProps> = ({
   empty = false,
   children,
   color = 'Catskill',
-  icon = 'Frame',
+  icon = 'Pencil',
   onChangeColor = noop,
   onChangeIcon = noop,
 }) => {
-  const Icon = icons[icon] ?? Empty;
+  const Icon = userIcons[icon] ?? Empty;
   return (
     <div css={nameWrapperStyles}>
       {useIsEditorReadOnly() ? (
         <span contentEditable={false} css={iconWrapperStyles}>
-          <Icon />
+          <Icon title={icon} />
         </span>
       ) : (
         <IconPopover
@@ -96,7 +96,7 @@ export const Caption: FC<CaptionProps> = ({
           color={color}
           trigger={
             <button contentEditable={false} css={iconWrapperStyles}>
-              <Icon />
+              <Icon title={icon} />
             </button>
           }
         />

@@ -6,7 +6,7 @@ import {
   TextAndIconButton,
   IconPopover,
 } from '../../../shared';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { markTypes } from '../PlotParams/PlotParams';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 import {
@@ -24,6 +24,7 @@ import {
 } from '../../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
+import { Formula, Hide, Show, TableRows } from 'libs/ui/src/icons';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -143,7 +144,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     hideAddDataViewButton,
   } = useContext(TableStyleContext);
 
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
   const childArray = Children.toArray(children);
   const [caption, ...tableFormulaEditors] = childArray;
 
@@ -172,13 +173,13 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             ]}
           >
             {readOnly ? (
-              <Icon />
+              <Icon title={icon} />
             ) : (
               <IconPopover
                 color={color as AvailableSwatchColor}
                 trigger={
                   <button>
-                    <Icon />
+                    <Icon title={icon} />
                   </button>
                 }
                 onChangeIcon={setIcon}
@@ -216,7 +217,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               iconPosition="left"
               onClick={() => onAddDataViewButtonPress()}
             >
-              <icons.TableRows />
+              <TableRows />
             </TextAndIconButton>
           )}
           {hideAddDataViewButton ||
@@ -237,7 +238,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                   iconSize="table"
                   buttons={[
                     {
-                      children: <icons.Formula />,
+                      children: <Formula />,
                       tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
                       onClick: () =>
                         tableFormulaEditors.length !== 0
@@ -246,7 +247,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                       testId: 'formula',
                     },
                     {
-                      children: isCollapsed ? <icons.Show /> : <icons.Hide />,
+                      children: isCollapsed ? <Show /> : <Hide />,
                       tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
                       onClick: () => setCollapsed(!isCollapsed),
                       testId: 'table',

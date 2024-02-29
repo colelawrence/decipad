@@ -27,7 +27,7 @@ import {
   Switch,
   Trash,
 } from '../../../icons';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { useToast } from '@decipad/toast';
@@ -338,7 +338,7 @@ export const NotebookTabs: FC<TabsProps> = ({
                 key={id}
                 id={id}
                 name={name}
-                icon={icon ?? 'Receipt'}
+                icon={icon ?? 'FileText'}
                 isReadOnly={isReadOnly}
                 isHidden={isHidden ?? false}
                 isActive={id === activeTabId}
@@ -389,7 +389,7 @@ const Tab: FC<TabProps> = ({
   isActive,
   isReadOnly,
   name,
-  icon,
+  icon = 'FileText',
   id,
   canHideDelete,
   canMove,
@@ -404,7 +404,7 @@ const Tab: FC<TabProps> = ({
   const [open, setOpen] = useState(false);
   const iconRef = useRef<HTMLDivElement>(null);
 
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
 
   const handleClickRename: MouseEventHandler<HTMLButtonElement> =
     useCancelingEvent<MouseEvent<HTMLButtonElement>>(
@@ -443,7 +443,7 @@ const Tab: FC<TabProps> = ({
       <TabContent>
         {isReadOnly ? (
           <TabIcon data-testid="tab-icon">
-            <Icon />
+            <Icon title={icon} />
           </TabIcon>
         ) : isHidden ? (
           <TabIcon data-testid="tab-hidden">
@@ -455,7 +455,7 @@ const Tab: FC<TabProps> = ({
             color="Catskill"
             trigger={
               <TabIcon data-testid="tab-icon" ref={iconRef}>
-                <Icon />
+                <Icon title={icon} />
               </TabIcon>
             }
             onChangeIcon={onChangeIcon}

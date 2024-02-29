@@ -44,6 +44,9 @@ export const NotebookIconButton: FC<IconButtonProps> = ({
           backgroundColor: isDefaultBackground
             ? cssVar('backgroundSubdued')
             : color ?? cssVar('themeBackgroundSubdued'),
+          color: isDefaultBackground
+            ? cssVar('textDefault')
+            : cssVar('themeTextDefault'),
           ':hover, :focus': {
             backgroundColor: isDefaultBackground
               ? cssVar('backgroundHeavy')

@@ -1,0 +1,51 @@
+import type { SVGProps } from 'react';
+
+interface SVGRProps {
+  title?: string;
+  titleId?: string;
+}
+export const CommandDateLight = ({
+  title,
+  titleId,
+  ...props
+}: SVGProps<SVGSVGElement> & SVGRProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 40 40"
+      role="img"
+      aria-labelledby={titleId}
+      {...props}
+    >
+      {title ? <title id={titleId}>{title}</title> : null}
+      <rect width={40} height={40} fill="#ECF0F6" rx={8} />
+      <path
+        fill="#fff"
+        stroke="#4D5664"
+        strokeWidth={1.3}
+        d="M15.85 10.5v1.85h-1.7V10.5a.85.85 0 0 1 1.7 0ZM25.85 10.5v1.85h-1.7V10.5a.85.85 0 0 1 1.7 0Z"
+      />
+      <rect
+        width={17.7}
+        height={17.7}
+        x={11.15}
+        y={11.65}
+        fill="#fff"
+        stroke="#4D5664"
+        strokeWidth={1.3}
+        rx={3.35}
+      />
+      <path
+        fill="#ECF0F6"
+        stroke="#4D5664"
+        strokeWidth={1.3}
+        d="M14.5 11.65h11c1.85 0 3.35 1.5 3.35 3.35v1.35h-17.7V15c0-1.85 1.5-3.35 3.35-3.35Z"
+      />
+      <path
+        fill="#AAB1BD"
+        d="M16.03 25v-.645l1.737-1.68c.166-.165.305-.312.416-.44.11-.128.194-.253.249-.373a.911.911 0 0 0 .083-.386.72.72 0 0 0-.107-.4.711.711 0 0 0-.296-.26.966.966 0 0 0-.428-.091.89.89 0 0 0-.433.101.702.702 0 0 0-.288.282.895.895 0 0 0-.1.436H16c0-.313.073-.585.218-.817a1.46 1.46 0 0 1 .598-.537c.256-.127.55-.19.88-.19.336 0 .63.062.885.186.254.123.451.293.592.508.141.215.212.46.212.737 0 .184-.036.366-.107.544a2.307 2.307 0 0 1-.38.592c-.178.217-.43.48-.754.788l-.863.865v.033h2.18V25h-3.432M20.106 24.085v-.71l2.124-3.308h.602v1.012h-.367l-1.43 2.233v.038H24v.735h-3.894m2.388.915v-1.132l.01-.318v-3.483h.856V25h-.866"
+      />
+    </svg>
+  );
+};

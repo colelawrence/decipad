@@ -12,6 +12,7 @@ import {
 } from '../../../shared';
 import {
   Delete,
+  Download,
   DragHandle,
   Duplicate,
   Hide,
@@ -21,7 +22,7 @@ import {
   Sparkles,
   Switch,
 } from '../../../icons';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import {
   componentCssVars,
   cssVar,
@@ -223,7 +224,7 @@ export const BlockDragHandle = ({
               }
             >
               {tabs.map((t, i) => {
-                const TabIcon = icons[t.icon || 'Receipt'];
+                const TabIcon = userIcons[t.icon || 'FileText'];
                 return (
                   <MenuItem
                     key={t.id}
@@ -239,7 +240,7 @@ export const BlockDragHandle = ({
           )}
           {isDownloadable && (
             <MenuItem
-              icon={<icons.Download />}
+              icon={<Download />}
               onSelect={onDownload}
               disabled={needsUpgrade}
             >

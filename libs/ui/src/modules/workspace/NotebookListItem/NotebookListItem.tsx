@@ -5,7 +5,7 @@ import { notebooks } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, memo, useCallback, useEffect } from 'react';
 import { XYCoord, useDrag as useCustomDrag, useDragLayer } from 'react-dnd';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { Ellipsis } from '../../../icons';
 import { NotebookIcon } from '../../../shared';
 import { NotebookStatus } from '../../topbar/NotebookStatus/NotebookStatus';
@@ -42,7 +42,7 @@ function CustomDragLayer() {
 
   const renderItem = () => {
     const color = baseSwatches[item.color as AvailableSwatchColor];
-    const Icon = icons[item.icon as UserIconKey];
+    const Icon = userIcons[item.icon as UserIconKey];
 
     switch (itemType) {
       case DNDItemTypes.ICON:
@@ -68,7 +68,7 @@ function CustomDragLayer() {
                 justifyContent: 'center',
               }}
             >
-              <Icon />
+              <Icon title={item.icon} />
             </span>
             <span
               css={{

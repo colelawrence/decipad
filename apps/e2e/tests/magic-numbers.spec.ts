@@ -100,7 +100,7 @@ test('Testing magic numbers', async ({ testUser }) => {
       page.getByTestId('editor-sidebar').getByText('Number Input')
     ).toBeHidden();
     await expect(
-      page.getByTestId('editor-sidebar').getByText('Slider').nth(2)
+      page.getByTestId('editor-sidebar').getByText('Slider').nth(1)
     ).toBeVisible();
 
     for (let i = 0; i < 6; i++) {

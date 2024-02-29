@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { IconPopover } from '../../../shared';
 import {
   cssVar,
@@ -53,7 +53,7 @@ export const EditorIcon = ({
   color,
   ...props
 }: EditorIconProps): ReturnType<FC> => {
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
 
   const isDefaultColor = color === 'Catskill';
 
@@ -63,6 +63,9 @@ export const EditorIcon = ({
       css={[
         iconWrapperStyles,
         {
+          color: isDefaultColor
+            ? cssVar('textDefault')
+            : cssVar('themeTextDefault'),
           backgroundColor: isDefaultColor
             ? cssVar('backgroundDefault')
             : cssVar('themeBackgroundSubdued'),
@@ -71,7 +74,7 @@ export const EditorIcon = ({
       ]}
     >
       <div css={iconStyles}>
-        <Icon />
+        <Icon title={icon} />
       </div>
     </button>
   );

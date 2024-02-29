@@ -9,6 +9,6 @@ describe('Caption Molecule', () => {
 
   it('renders a default icon', () => {
     render(<Caption>children</Caption>);
-    expect(screen.getByTitle(/frame/i)).toBeInTheDocument();
+    expect(screen.getByTitle(/pencil/i)).toBeInTheDocument();
   });
 });

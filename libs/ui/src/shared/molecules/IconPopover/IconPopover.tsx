@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
 import { FC, useState } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { Close } from '../../../icons';
 import { cssVar, p13Medium, useThemeColor } from '../../../primitives';
 import { closeButtonStyles } from '../../../styles/buttons';
@@ -115,7 +115,7 @@ export const IconPopover = ({
           )}
           <div css={iconsWrapper}>
             {userIconKeys.map((choice) => {
-              const Icon = icons[choice];
+              const Icon = userIcons[choice];
               return (
                 <Popover.Close
                   key={choice}
@@ -129,7 +129,7 @@ export const IconPopover = ({
                     }}
                     color={themeColor.Background.Subdued}
                   >
-                    <Icon />
+                    <Icon title={choice} />
                   </NotebookIconButton>
                 </Popover.Close>
               );

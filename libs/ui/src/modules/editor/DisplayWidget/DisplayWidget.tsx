@@ -8,7 +8,7 @@ import type {
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { Caret } from '../../../icons';
-import * as icons from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { cssVar, p14Regular, p24Medium } from '../../../primitives';
 import { ResultFormatting } from '../../../types';
 import { UserIconKey } from '@decipad/editor-types';
@@ -105,7 +105,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   onExecute = noop,
   allResults,
 }) => {
-  const Icon = icons[icon];
+  const Icon = userIcons[icon];
 
   const fullVarName = (
     <p
@@ -124,14 +124,14 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       <div css={wrapperStyles}>
         {useIsEditorReadOnly() ? (
           <span css={iconWrapperStyles}>
-            <Icon />
+            <Icon title={icon} />
           </span>
         ) : (
           <IconPopover
             color={color}
             trigger={
               <div css={iconWrapperStyles}>
-                <Icon />
+                <Icon title={icon} />
               </div>
             }
             onChangeIcon={saveIcon}
