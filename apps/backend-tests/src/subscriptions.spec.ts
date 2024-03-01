@@ -5,6 +5,7 @@ import {
   createWorkspaceSubscription,
 } from '../../../libs/services/src/subscriptions';
 import { queryAccessibleResources } from '../../../libs/services/src/permissions';
+import { justCreateUser } from '../../../libs/services/src/users/justCreateUser';
 import { getDefined } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 
@@ -13,7 +14,13 @@ test('Subscription edges', (ctx) => {
   let workspaceId = '';
 
   beforeAll(async () => {
-    const user = await ctx.auth();
+    const testUser = await justCreateUser({
+      name: 'test user',
+      email: 'test@email.com',
+    });
+    userId = testUser.id;
+
+    const user = await ctx.auth(userId);
     userId = getDefined(user.user?.id);
 
     const client = ctx.graphql.withAuth(user);
@@ -45,7 +52,7 @@ test('Subscription edges', (ctx) => {
   });
 
   it('cannot create another free workspace', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
+    const client = ctx.graphql.withAuth(await ctx.auth(userId));
 
     await expect(
       client.mutate({
@@ -78,7 +85,7 @@ test('Subscription edges', (ctx) => {
       }),
     });
 
-    const client = ctx.graphql.withAuth(await ctx.auth());
+    const client = ctx.graphql.withAuth(await ctx.auth(userId));
 
     const workspace = (
       await client.mutate({

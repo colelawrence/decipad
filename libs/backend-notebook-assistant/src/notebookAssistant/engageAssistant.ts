@@ -22,6 +22,7 @@ import {
 } from './constants';
 import { resource } from '@decipad/backend-resources';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { getEmailDomain, isInternalEmail } from '@decipad/utils';
 
 const isDevOrStaging =
   app().urlBase.includes('staging.decipad.com') ||
@@ -30,18 +31,6 @@ const isDevOrStaging =
 
 function isTesting(workspaceName: string) {
   return workspaceName.includes('testing-ai-limits');
-}
-
-function getEmailDomain(email: string): string | undefined {
-  return email.split('@').at(-1);
-}
-
-function isInternalEmail(email: string | null | undefined): boolean {
-  if (email == null) return false;
-  const domain = getEmailDomain(email);
-  if (!domain) return false;
-
-  return domain === 'decipad.com' || domain === 'n1n.co';
 }
 
 const notebooks = resource('notebook');

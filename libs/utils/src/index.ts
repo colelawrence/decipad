@@ -43,3 +43,4 @@ export * from './varnamify';
 export * from './zip';
 export * from './isE2E';
 export * from './env';
+export * from './email';

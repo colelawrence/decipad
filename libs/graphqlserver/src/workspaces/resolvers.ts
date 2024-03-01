@@ -14,7 +14,7 @@ import {
 import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
 import tables from '@decipad/tables';
-import { byDesc } from '@decipad/utils';
+import { byDesc, isInternalEmail } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import { isAuthorized, loadUser, requireUser } from '../authorization';
 import {
@@ -35,11 +35,9 @@ import { WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
-import { app } from '@decipad/backend-config';
+import { maybeThrowForbidden } from './helpers';
 
 const workspaces = resource('workspace');
-
-const isUnitTesting = !!Number(process.env.JEST_WORKER_ID);
 
 function WorkspaceRecordToWorkspace(
   workspaceRecord: WorkspaceRecord
@@ -203,14 +201,9 @@ const resolvers: Resolvers = {
         (w) => w === undefined
       );
 
-      if (
-        hasFreeWorkspace &&
-        (app().environment === 'production' || isUnitTesting)
-      ) {
-        throw Boom.forbidden(
-          'User already has a free workspace. Cannot create another'
-        );
-      }
+      const isInternal = isInternalEmail(user.email);
+
+      maybeThrowForbidden({ isInternal, hasFreeWorkspace });
 
       const newWorkspace = WorkspaceRecordToWorkspace(
         await createWorkspace2(workspace, user)

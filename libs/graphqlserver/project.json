@@ -17,6 +17,13 @@
         "command": "yarn tsc -b libs/graphqlserver"
       }
     },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/graphqlserver"],
+      "options": {
+        "jestConfig": "libs/graphqlserver/jest.config.js"
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
