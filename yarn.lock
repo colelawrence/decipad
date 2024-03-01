@@ -16108,10 +16108,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1568.0:
-  version "2.1568.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1568.0.tgz#b137e7c2196c9013f31ba36028fed8d104482568"
-  integrity sha512-ECGJlhn4tnvC+MwNxGDGbhKEOwqLtmtEb3VK5s0z8pcU60Uv1b8+wRPKjqM/eJ+J4N5CL92Y5aq5xAdTquBZRQ==
+aws-sdk@2.1569.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1569.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1569.0.tgz#b7568698ae4172be543536cfb9399361ac9955d0"
+  integrity sha512-9puKjesHKOjAYPqFurW/9nv3qhQ+STu3bVa5PN158SCeZPE6NsxZIWnHLglJvKU7N8UXJo1aJHmKDUGrsS7rXw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -16138,22 +16138,6 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
-
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1564.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1564.0.tgz#f42dc035ade7d8cb90df0f553453b27ebcc6f332"
-  integrity sha512-597Ugza41QCTknjv2VDeUMBFHvHVdg/h9qydDwnX+2kK/EcdE+Vjopcz2+lhHBlbqLi9yUbT4yc1nfo8T+f53w==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.6.2"
 
 aws4@^1.11.0, aws4@^1.12.0:
   version "1.12.0"
@@ -39035,10 +39019,10 @@ zipit@~2.0.0:
     insync "2.1.1"
     yazl "2.5.1"
 
-zod-openapi@^2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.13.0.tgz#b5f192bd64c64372a044151c9f426b9b152e11ec"
-  integrity sha512-BHkYeCQkMQaQb264oeeLm9zjmKIvAtDNv/IOPIIiso3s5/YGOSRm6CzEbqDn286W6zA4UYeUd8M/dpWld3/ZVg==
+zod-openapi@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.14.0.tgz#9c87f3821d226f2d1fec3ecd0c16fe952f279ee9"
+  integrity sha512-TywDpZKfbNSMspWtT152DaO+/cK0xqK/bv7Kt4ZMHhzEZS1rCFYxxFwDZdQd4Nrq5g4kX/R1SKI+FkYg4QkBlw==
 
 zod-to-json-schema@3.20.3:
   version "3.20.3"
