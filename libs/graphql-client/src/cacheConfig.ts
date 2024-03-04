@@ -201,10 +201,11 @@ export const graphCacheConfig: GraphCacheConfig = {
                 snapshotName: PUBLISHED_SNAPSHOT,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
-                data: args.remoteState,
+                version: args.remoteVersion,
               });
             } else {
-              publishedSnapshot.data = args.remoteState;
+              publishedSnapshot.updatedAt = new Date().getTime();
+              publishedSnapshot.version = args.remoteVersion;
             }
 
             return data;
@@ -295,10 +296,6 @@ export const graphCacheConfig: GraphCacheConfig = {
           (data) => {
             if (!data?.getPadById) {
               throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
-            }
-
-            if (args.state) {
-              data.getPadById.initialState = args.state;
             }
 
             if (args.publishState === 'PUBLICLY_HIGHLIGHTED') {

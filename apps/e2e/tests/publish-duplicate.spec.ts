@@ -3,6 +3,7 @@
 import { expect, test } from './manager/decipad-tests';
 import { keyPress, editorLocator } from '../utils/page/Editor';
 import { Timeouts, getWorkspaces, timeout } from '../utils/src';
+import oldNotebookJson from '../__fixtures__/011-old-notebook-json.json';
 
 import {
   duplicatePad,
@@ -666,5 +667,88 @@ test('reader can load notebook with link to deleted tab @tabs', async ({
     ]);
     await unregisteredUserPage.reload();
     await unregisteredUserNotebook.checkNotebookTitle(notebookName);
+  });
+});
+
+test('checks big notebooks dont have issues publishing', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+  await testUser.importNotebook(oldNotebookJson);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
+  await notebook.publishNotebook();
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.computerDelay);
+  await expect(
+    page.getByTestId('publish-changes'),
+    'Publish changes button is visible after publishing notebook for the first time and no edits'
+  ).toBeHidden();
+  await expect(
+    notebook.republishNotification,
+    'Publish changes notification is visible after publishing notebook for the first time and no edits'
+  ).toBeHidden();
+  await page.reload();
+  await notebook.waitForEditorToLoad();
+  await expect(
+    page.getByTestId('publish-changes'),
+    'Publish changes button is visible after publishing notebook for the first time and no edits'
+  ).toBeHidden();
+  await expect(
+    notebook.republishNotification,
+    'Publish changes notification is visible after publishing notebook for the first time and no edits'
+  ).toBeHidden();
+});
+
+test('checks big notebooks dont get stuck with publish changes notification', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+
+  await test.step('publish notebook with old style json', async () => {
+    await testUser.importNotebook(oldNotebookJson);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
+    await notebook.publishNotebook();
+  });
+
+  await test.step('add a new tab and publish changes', async () => {
+    await notebook.createTab();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
+    await expect(
+      page.getByTestId('publish-changes'),
+      'Publish changes button isnt visible after edits'
+    ).toBeVisible();
+    await expect(
+      notebook.republishNotification,
+      'Publish changes notification isnt visible after edits'
+    ).toBeVisible();
+
+    await page.getByTestId('publish-changes').click();
+
+    await expect(
+      page.getByTestId('publish-changes'),
+      'Publish changes button is visible after publishing notebook for the first time and no edits'
+    ).toBeHidden();
+    await expect(
+      notebook.republishNotification,
+      'Publish changes notification is visible after publishing notebook for the first time and no edits'
+    ).toBeHidden();
+  });
+
+  await test.step('check publish changes notification doesnt persist after refresh', async () => {
+    await page.reload();
+    await notebook.waitForEditorToLoad();
+
+    await expect(
+      page.getByTestId('publish-changes'),
+      'Publish changes button is visible after publishing notebook for the first time and no edits'
+    ).toBeHidden();
+    await expect(
+      notebook.republishNotification,
+      'Publish changes notification is visible after publishing notebook for the first time and no edits'
+    ).toBeHidden();
   });
 });

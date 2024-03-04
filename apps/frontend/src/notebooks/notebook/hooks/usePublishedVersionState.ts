@@ -4,10 +4,10 @@ import {
   PublishedVersionName,
   PublishedVersionState,
 } from '@decipad/interfaces';
-import { dequal } from '@decipad/utils';
+import { canonicalize } from 'json-canonicalize';
+import md5 from 'md5';
 import { useEffect, useMemo, useState } from 'react';
 import { concat, debounce, interval, take } from 'rxjs';
-import { Doc, applyUpdate } from 'yjs';
 
 export interface Props {
   readonly notebookId: string;
@@ -38,31 +38,29 @@ export function usePublishedVersionState({
     variables: { id: notebookId },
   });
 
-  const publishedSnapshot = meta.data?.getPadById?.snapshots.find(
-    (s) => s.snapshotName === PublishedVersionName.Published
+  const publishedSnapshot = useMemo(
+    () =>
+      meta.data?.getPadById?.snapshots.find(
+        (s) => s.snapshotName === PublishedVersionName.Published
+      ),
+    [meta.data?.getPadById?.snapshots]
   );
 
-  //
-  // Get the snapshot data for the published version of the notebook.
-  // And turn it into an array for us to check equality later on.
-  //
-  const publishedState: any[] | undefined = useMemo(() => {
+  const publishedStateHash: string | undefined = useMemo(() => {
     if (!meta.data?.getPadById?.isPublic) {
       return undefined;
     }
 
-    if (docsync == null || publishedSnapshot?.data == null) {
-      return [];
+    if (docsync == null) {
+      return undefined;
     }
 
-    const doc = new Doc();
-    applyUpdate(doc, Buffer.from(publishedSnapshot.data, 'base64'));
-
-    return doc.getArray().toJSON();
-  }, [docsync, meta.data?.getPadById?.isPublic, publishedSnapshot?.data]);
+    return publishedSnapshot?.version ?? undefined;
+  }, [docsync, meta.data?.getPadById?.isPublic, publishedSnapshot?.version]);
 
   useEffect(() => {
     if (docsync == null) {
+      setHasUnpublishedChanges('up-to-date');
       return;
     }
 
@@ -80,15 +78,11 @@ export function usePublishedVersionState({
     //
     const anyChangeDelayedSub = concat(
       docsync.events.pipe(take(1)),
-      docsync.events.pipe(debounce(() => interval(1000)))
+      docsync.events.pipe(debounce(() => interval(1500)))
     );
 
     const s = anyChangeDelayedSub.subscribe(() => {
-      if (publishedState == null) {
-        return;
-      }
-
-      if (dequal(docsync.children, publishedState)) {
+      if (publishedStateHash == null) {
         setHasUnpublishedChanges('up-to-date');
         return;
       }
@@ -97,6 +91,12 @@ export function usePublishedVersionState({
       // This means its the first time the user is publishing.
       if (publishedSnapshot == null) {
         setHasUnpublishedChanges('first-time-publish');
+        return;
+      }
+
+      const version = md5(canonicalize(docsync.children));
+      if (version === publishedStateHash) {
+        setHasUnpublishedChanges('up-to-date');
         return;
       }
 
@@ -109,7 +109,7 @@ export function usePublishedVersionState({
     return () => {
       s.unsubscribe();
     };
-  }, [docsync, publishedSnapshot, publishedState]);
+  }, [docsync, publishedSnapshot, publishedStateHash]);
 
   return hasUnpublishedChanges;
 }

@@ -292,6 +292,7 @@ input CreateOrUpdateSnapshotInput {
   notebookId: ID!
   snapshotName: String!
   remoteState: String
+  remoteVersion: String
   forceSearchIndexUpdate: Boolean
 }
 
@@ -319,8 +320,7 @@ extend type Mutation {
   importPad(workspaceId: ID!, source: String!): Pad!
   movePad(id: ID!, workspaceId: ID!): Pad!
 
-  # State mostly used for caching on the frontend.
-  setPadPublic(id: ID!, publishState: PUBLISH_STATE!, state: String): Boolean!
+  setPadPublic(id: ID!, publishState: PUBLISH_STATE!): Boolean!
 
   sharePadWithRole(
     id: ID!
@@ -727,52 +727,6 @@ extend type Mutation {
 extend type Workspace {
   workspaceExecutedQuery: WorkspaceExecutedQuery
 }
-enum SubscriptionStatus {
-  active
-  canceled
-  unpaid
-  trialing
-  incomplete
-  incomplete_expired
-  past_due
-  paused
-}
-
-enum SubscriptionPlansNames {
-  free
-  # Pro and personal are basically the same
-  # Only that pro is legacy
-  pro
-  personal
-  team
-  enterprise
-}
-
-enum SubscriptionPaymentStatus {
-  paid
-  unpaid
-  no_payment_required
-}
-
-type WorkspaceSubscription {
-  id: String!
-  paymentStatus: SubscriptionPaymentStatus!
-  paymentLink: String!
-  status: SubscriptionStatus
-  workspace: Workspace
-  seats: Int
-  credits: Int
-  queries: Int
-  storage: Int
-}
-
-extend type Mutation {
-  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
-}
-
-extend type Workspace {
-  workspaceSubscription: WorkspaceSubscription
-}
 input WorkspaceInput {
   name: String!
 }
@@ -825,5 +779,51 @@ extend type Mutation {
 
 extend type Subscription {
   workspacesChanged: WorkspacesChanges!
+}
+enum SubscriptionStatus {
+  active
+  canceled
+  unpaid
+  trialing
+  incomplete
+  incomplete_expired
+  past_due
+  paused
+}
+
+enum SubscriptionPlansNames {
+  free
+  # Pro and personal are basically the same
+  # Only that pro is legacy
+  pro
+  personal
+  team
+  enterprise
+}
+
+enum SubscriptionPaymentStatus {
+  paid
+  unpaid
+  no_payment_required
+}
+
+type WorkspaceSubscription {
+  id: String!
+  paymentStatus: SubscriptionPaymentStatus!
+  paymentLink: String!
+  status: SubscriptionStatus
+  workspace: Workspace
+  seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
+}
+
+extend type Mutation {
+  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
+}
+
+extend type Workspace {
+  workspaceSubscription: WorkspaceSubscription
 }
 `;

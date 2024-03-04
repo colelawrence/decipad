@@ -25,6 +25,10 @@ import {
 } from '@decipad/interfaces';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
+import md5 from 'md5';
+import { canonicalize } from 'json-canonicalize';
+import { Doc, applyUpdate } from 'yjs';
+import { toSlateDoc } from '@decipad/slate-yjs';
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
 
@@ -218,14 +222,22 @@ export function useNotebookMetaActions(
 
       const localState = await getLocalNotebookUpdates(notebookId);
 
-      const base64State =
-        localState && Buffer.from(localState).toString('base64');
+      const base64State = localState && Buffer.from(localState);
+
+      let version: string | undefined;
+
+      if (base64State) {
+        const doc = new Doc();
+        applyUpdate(doc, base64State);
+        version = md5(canonicalize(toSlateDoc(doc.getArray())));
+      }
 
       await createOrUpdateSnapshot({
         params: {
           notebookId,
           snapshotName: SNAPSHOT_NAME,
-          remoteState: base64State,
+          remoteState: base64State?.toString('base64'),
+          remoteVersion: version,
         },
       });
 

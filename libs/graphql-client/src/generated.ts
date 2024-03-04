@@ -46,6 +46,7 @@ export type CreateOrUpdateSnapshotInput = {
   forceSearchIndexUpdate?: InputMaybe<Scalars['Boolean']['input']>;
   notebookId: Scalars['ID']['input'];
   remoteState?: InputMaybe<Scalars['String']['input']>;
+  remoteVersion?: InputMaybe<Scalars['String']['input']>;
   snapshotName: Scalars['String']['input'];
 };
 
@@ -382,7 +383,6 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
   publishState: Publish_State;
-  state?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1279,7 +1279,6 @@ export type RenameWorkspaceMutation = { __typename?: 'Mutation', updateWorkspace
 export type SetNotebookPublishStateMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   publishState: Publish_State;
-  state?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2091,8 +2090,8 @@ export function useRenameWorkspaceMutation() {
   return Urql.useMutation<RenameWorkspaceMutation, RenameWorkspaceMutationVariables>(RenameWorkspaceDocument);
 };
 export const SetNotebookPublishStateDocument = gql`
-    mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!, $state: String) {
-  setPadPublic(id: $id, publishState: $publishState, state: $state)
+    mutation setNotebookPublishState($id: ID!, $publishState: PUBLISH_STATE!) {
+  setPadPublic(id: $id, publishState: $publishState)
 }
     `;
 
