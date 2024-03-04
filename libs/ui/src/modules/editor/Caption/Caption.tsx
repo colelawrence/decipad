@@ -72,8 +72,6 @@ const placeholderStyles = css(
   }
 );
 
-const Empty: FC = () => <></>;
-
 export const Caption: FC<CaptionProps> = ({
   empty = false,
   children,
@@ -82,7 +80,7 @@ export const Caption: FC<CaptionProps> = ({
   onChangeColor = noop,
   onChangeIcon = noop,
 }) => {
-  const Icon = userIcons[icon] ?? Empty;
+  const Icon = userIcons[icon] ?? userIcons.Pencil;
   return (
     <div css={nameWrapperStyles}>
       {useIsEditorReadOnly() ? (
