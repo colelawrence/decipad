@@ -18,6 +18,7 @@ import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';
 
 interface UseLiveConnectionCoreProps {
+  notebookId: string;
   element: LiveConnectionElement | LiveDataSetElement;
   deleted: boolean;
 }
@@ -33,6 +34,7 @@ interface UseLiveConnectionCoreResult {
 }
 
 export const useLiveConnectionCore = ({
+  notebookId,
   element,
   deleted,
 }: UseLiveConnectionCoreProps): UseLiveConnectionCoreResult => {
@@ -44,6 +46,7 @@ export const useLiveConnectionCore = ({
       element,
     });
   const liveConnectionResult = useLiveConnection(computer, {
+    notebookId,
     blockId: element.id,
     variableName: getNodeString(element.children[0]),
     url: element.url,

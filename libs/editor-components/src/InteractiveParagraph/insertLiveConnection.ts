@@ -1,4 +1,3 @@
-import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -17,6 +16,7 @@ import {
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -51,19 +51,36 @@ const justInsertLiveConnection = async ({
   fileName,
 }: InsertLiveConnectionProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
+    if (!url.includes('#')) {
+      throw new Error('The URL is not a valid Decipad reference link');
+    }
+
     const { docId } = getURLComponents(url);
-    const { hasAccess, exists, isPublic } = await getNotebook(docId);
-    const error = !exists
-      ? 'Notebook does not exist'
-      : !hasAccess
-      ? "You don't have access to this notebook"
-      : !isPublic
-      ? 'You can only create live connections to public notebooks'
-      : undefined;
+    const notebookProps = await getNotebook(docId);
+
+    const getErrorMessage = ({
+      exists,
+      hasAccess,
+      isPublic = false,
+    }: {
+      exists: boolean;
+      hasAccess: boolean;
+      isPublic?: boolean;
+    }) => {
+      if (!exists) return 'Notebook does not exist';
+      if (!hasAccess) return "You don't have access to this notebook";
+      if (!isPublic)
+        return 'You can only create live connections to public notebooks';
+      return null;
+    };
+
+    const error = getErrorMessage(notebookProps);
+
     if (error) {
       throw new Error(error);
     }
   }
+
   const { selection } = editor;
   if ((selection == null && !path) || url == null) {
     return;

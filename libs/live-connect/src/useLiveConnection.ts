@@ -1,4 +1,4 @@
-import { useCallback, useEffect, Context } from 'react';
+import { useCallback, useEffect, Context, useState } from 'react';
 import {
   astNode,
   buildType,
@@ -35,6 +35,7 @@ export interface LiveConnectionResult {
 }
 
 export interface LiveConnectionProps {
+  notebookId: string;
   blockId: string;
   variableName: string;
   url: string;
@@ -52,9 +53,12 @@ export interface LiveConnectionProps {
   liveQuery?: LiveQueryElement;
 }
 
+const WAIT_TIMEOUT_MS = 7000;
+
 export const useLiveConnection = (
   computer: RemoteComputer,
   {
+    notebookId,
     blockId,
     variableName,
     url,
@@ -73,6 +77,20 @@ export const useLiveConnection = (
   }: LiveConnectionProps
 ): LiveConnectionResult => {
   const [jsonPath] = useDebounce(_jsonPath, 2000);
+
+  // timeout
+  const [timedout, setTimedout] = useState(false);
+  useEffect(() => {
+    if (source === 'decipad') {
+      const timeout = setTimeout(() => {
+        setTimedout(true);
+      }, WAIT_TIMEOUT_MS);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+    return undefined;
+  }, [source]);
 
   const {
     error,
@@ -130,12 +148,14 @@ export const useLiveConnection = (
   }, [blockId, computer, deleted, variableName]);
 
   const clearCacheAndRetry = useCallback(() => {
+    setTimedout(false);
     clearCache();
     retry();
   }, [clearCache, retry]);
 
   // Authentication
   const { authenticate } = useLiveConnectionAuth({
+    notebookId,
     provider: source,
     externalId: url,
     context: externalDataSourceContext,
@@ -143,7 +163,11 @@ export const useLiveConnection = (
   });
 
   return {
-    error,
+    error:
+      error ??
+      (timedout && liveConnectionResult?.loading
+        ? new Error('No result')
+        : undefined),
     result: {
       ...result,
       ...liveConnectionResult,

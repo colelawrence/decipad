@@ -6,7 +6,10 @@ import { useNotebookStateAndActions } from './hooks';
 import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
-import { EditorStylesContext } from '@decipad/react-contexts';
+import {
+  EditorStylesContext,
+  ExternalDataSourcesContextProvider,
+} from '@decipad/react-contexts';
 import { EditorIcon, GlobalThemeStyles } from '@decipad/ui';
 
 export interface EditorProps {
@@ -60,32 +63,34 @@ const AppEditor: FC<EditorProps> = ({
   }, [pageTitle]);
 
   return (
-    <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
-      <GlobalThemeStyles color={actions.iconColor} />
-      {!isEmbed && (
-        <EditorIcon
-          icon={actions.icon ?? 'Deci'}
-          color={actions.iconColor}
-          onChangeIcon={actions.updateIcon}
-          onChangeColor={actions.updateIconColor}
+    <ExternalDataSourcesContextProvider provider={actions.externalData}>
+      <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
+        <GlobalThemeStyles color={actions.iconColor} />
+        {!isEmbed && (
+          <EditorIcon
+            icon={actions.icon ?? 'Deci'}
+            color={actions.iconColor}
+            onChangeIcon={actions.updateIcon}
+            onChangeColor={actions.updateIconColor}
+            readOnly={actions.isReadOnly}
+          />
+        )}
+        <NotebookEditor
+          secret={undefined}
+          notebookId={notebookId}
+          onNotebookTitleChange={onNotebookTitleChange}
+          onDocsync={setDocsync}
+          onComputer={setComputer}
+          notebookMetaLoaded={actions.notebook != null}
+          workspaceId={actions.notebook?.workspace?.id ?? ''}
           readOnly={actions.isReadOnly}
+          connectionParams={actions.connectionParams}
+          initialState={actions.initialState}
+          getAttachmentForm={actions.getAttachmentForm}
+          onAttached={actions.onAttached}
         />
-      )}
-      <NotebookEditor
-        secret={undefined}
-        notebookId={notebookId}
-        onNotebookTitleChange={onNotebookTitleChange}
-        onDocsync={setDocsync}
-        onComputer={setComputer}
-        notebookMetaLoaded={actions.notebook != null}
-        workspaceId={actions.notebook?.workspace?.id ?? ''}
-        readOnly={actions.isReadOnly}
-        connectionParams={actions.connectionParams}
-        initialState={actions.initialState}
-        getAttachmentForm={actions.getAttachmentForm}
-        onAttached={actions.onAttached}
-      />
-    </EditorStylesContext.Provider>
+      </EditorStylesContext.Provider>
+    </ExternalDataSourcesContextProvider>
   );
 };
 

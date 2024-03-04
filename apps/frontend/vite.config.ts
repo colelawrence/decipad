@@ -47,12 +47,6 @@ if (process.env.SENTRY_AUTH_TOKEN) {
 export default defineConfig({
   plugins,
   build: {
-    rollupOptions: {
-      external: [
-        '../../libs/live-connect/src/LiveConnect.worker.bundle.js',
-        '../../libs/live-connect/src/notebook.bundle.js',
-      ],
-    },
     sourcemap: true,
     outDir: '../../dist/apps/frontend',
   },
@@ -62,4 +56,7 @@ export default defineConfig({
   },
   server: serverOptions,
   preview: serverOptions,
+  worker: {
+    plugins: () => [tsconfigPaths()],
+  },
 });

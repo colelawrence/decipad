@@ -1,10 +1,8 @@
 import {
   insertDataViewBelow,
-  insertLiveQueryBelow,
   insertPlotBelow,
 } from '@decipad/editor-components';
 
-import { getExprRef } from '@decipad/remote-computer';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,
@@ -15,17 +13,16 @@ import {
   PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { assertElementType } from '@decipad/editor-utils';
 import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
-import { useComputer } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
+import { getExprRef } from '@decipad/remote-computer';
+import { useToast } from '@decipad/toast';
 import {
   ImportTableFirstRowControls,
-  TableButton,
+  MarkType,
   IntegrationBlock as UIIntegrationBlock,
   icons,
-  MarkType,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
@@ -40,18 +37,11 @@ import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
-import { useToast } from '@decipad/toast';
 
 const captionWrapperStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: '8px',
-});
-
-const tableButtonWrapperStyles = css({
-  marginBottom: '8px',
-  marginTop: '-5px',
-  marginLeft: '-5px',
 });
 
 type IntegrationButtons = Pick<
@@ -128,19 +118,6 @@ export const LiveConnectionVarName: PlateComponent = ({
     parentElem.url,
     toast,
   ]);
-
-  const computer = useComputer();
-
-  const onCreateQueryPress = useCallback(() => {
-    if (parent) {
-      insertLiveQueryBelow(
-        editor,
-        parentPath,
-        computer.getAvailableIdentifier.bind(computer),
-        parentElem.id
-      );
-    }
-  }, [computer, editor, parent, parentElem.id, parentPath]);
 
   const onAddDataViewButtonPress = useCallback(() => {
     if (!parent) {
@@ -260,17 +237,6 @@ export const LiveConnectionVarName: PlateComponent = ({
         }
         onChangeColumnType={onChangeColumnType}
       />
-
-      {isFlagEnabled('LIVE_QUERY') &&
-        parent &&
-        isDatabaseConnection(parentElem) && (
-          <div css={tableButtonWrapperStyles}>
-            <TableButton
-              onClick={onCreateQueryPress}
-              captions={['Create query']}
-            />
-          </div>
-        )}
     </div>
   );
 };

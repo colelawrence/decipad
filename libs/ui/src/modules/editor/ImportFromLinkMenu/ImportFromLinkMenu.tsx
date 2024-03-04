@@ -63,14 +63,18 @@ const groups = (
               enabled: true,
               extraSearchTerms: ['connect', 'live'],
             },
-            {
-              command: 'import-all',
-              title: `Paste from ${sourceName}`,
-              description: `Make a copy from ${sourceName} and edit in Decipad. Edits are allowed.`,
-              icon: <ImportTable />,
-              enabled: true,
-              extraSearchTerms: ['import', 'google', 'sheets'],
-            },
+            ...(source !== 'decipad'
+              ? [
+                  {
+                    command: 'import-all',
+                    title: `Paste from ${sourceName}`,
+                    description: `Make a copy from ${sourceName} and edit in Decipad. Edits are allowed.`,
+                    icon: <ImportTable />,
+                    enabled: true,
+                    extraSearchTerms: ['import', 'google', 'sheets'],
+                  },
+                ]
+              : []),
             isFlagEnabled('SHEETS_ISLANDS') &&
               source === 'gsheets' && {
                 command: 'connect-islands',

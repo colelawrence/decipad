@@ -1,15 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { TabElement } from '@decipad/editor-types';
 import type { BlockDependents } from '@decipad/remote-computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
-import {
-  MenuItem,
-  Tooltip,
-  TriggerMenuItem,
-  DeleteWithDepsMenuItem,
-  MenuList,
-} from '../../../shared';
 import {
   Delete,
   Download,
@@ -29,10 +23,16 @@ import {
   p12Medium,
   p12Regular,
 } from '../../../primitives';
+import {
+  DeleteWithDepsMenuItem,
+  MenuItem,
+  MenuList,
+  Tooltip,
+  TriggerMenuItem,
+} from '../../../shared';
 import { editorLayout } from '../../../styles';
-import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { hideOnPrint } from '../../../styles/editor-layout';
-import { TabElement } from '@decipad/editor-types';
+import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 
 const gridStyles = once(() =>
   css({
@@ -214,7 +214,18 @@ export const BlockDragHandle = ({
           </MenuItem>
           {onCopyHref && !isMultipleSelection && (
             <MenuItem icon={<Link />} onSelect={onCopyHref}>
-              Copy reference
+              <Tooltip trigger={<span>Copy reference link</span>} side="right">
+                <div css={{ width: '180px' }}>
+                  <p css={[toolTipTitle, { textAlign: 'left' }]}>
+                    Re-use Across Documents
+                  </p>
+                  <p css={[tooltipContent, { textAlign: 'left' }]}>
+                    Share across different documents by generating a reference
+                    link. Please note, for this feature to work, the original
+                    document must be set to 'Public'.
+                  </p>
+                </div>
+              </Tooltip>
             </MenuItem>
           )}
           {onMoveToTab && tabs.length > 0 && (

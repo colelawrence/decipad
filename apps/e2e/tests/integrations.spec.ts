@@ -5,6 +5,7 @@ import {
   Timeouts,
   snapshot,
 } from '../utils/src';
+import { ControlPlus } from '../utils/page/Editor';
 
 import { createWithSlashCommand } from '../utils/page/Block';
 
@@ -332,5 +333,110 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
         testUser.page.getByText('15 rows, previewing rows 11 to 15')
       ).toBeVisible(),
     ]);
+  });
+});
+
+test('Checks copy link to block integrations', async ({ testUser }) => {
+  const { page, notebook, workspace } = testUser;
+  const SourceName = 'Source';
+  const SourceValue = '$400';
+  let SourceNotebookURL: string;
+  let IntegrationNotebookURL: string;
+
+  await test.step('create source variable and get its url reference', async () => {
+    SourceNotebookURL = await notebook.publishNotebook();
+    await notebook.focusOnBody();
+    await notebook.addFormula(SourceName, SourceValue);
+    await notebook.copyBlockReference(0);
+  });
+
+  await test.step('checks can add reference to formula in another notebook', async () => {
+    await page.getByTestId('go-to-workspace').click();
+    await workspace.createNewNotebook();
+    await testUser.aiAssistant.closePannel();
+    await notebook.waitForEditorToLoad();
+    IntegrationNotebookURL = page.url();
+    await notebook.selectLastParagraph();
+    await ControlPlus(testUser.page, 'V');
+    await page.getByText('Decipad notebook Integration').click();
+    await expect(async () => {
+      await expect(
+        page.getByTestId('live-code').getByTestId('loading-animation').first()
+      ).toBeHidden();
+    }).toPass({
+      timeout: 1000,
+    });
+    await page
+      .getByTestId('integration-block')
+      .filter({ hasText: /Variable/ })
+      .getByTestId('segment-button-trigger')
+      .click();
+    await expect(page.getByText(SourceValue)).toBeVisible();
+  });
+
+  await test.step('checks we can update original reference and it propagates', async () => {
+    await page.goto(SourceNotebookURL);
+    await notebook.waitForEditorToLoad();
+
+    await notebook.focusOnBody();
+    await page
+      .getByTestId('code-line-expression')
+      .getByText(SourceValue)
+      .dblclick();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+    await page.keyboard.press('Delete');
+    await page.keyboard.type('500');
+    await notebook.publishNotebookChanges();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.syncDelay);
+    await page.goto(IntegrationNotebookURL);
+    await testUser.aiAssistant.closePannel();
+    await notebook.waitForEditorToLoad();
+
+    await notebook.focusOnBody();
+    await expect(async () => {
+      await expect(
+        page.getByTestId('live-code').getByTestId('loading-animation').first()
+      ).toBeHidden();
+    }).toPass({
+      timeout: 1000,
+    });
+    await page
+      .getByTestId('integration-block')
+      .filter({ hasText: /Variable/ })
+      .getByTestId('segment-button-trigger')
+      .click();
+    await expect(page.getByText('$500')).toBeVisible();
+  });
+
+  await test.step('checks connection doesnt have retry error after notebook refresh', async () => {
+    await page.reload();
+    await testUser.aiAssistant.closePannel();
+    await notebook.waitForEditorToLoad();
+    await expect(async () => {
+      await expect(
+        page.getByTestId('live-code').getByTestId('loading-animation').first()
+      ).toBeHidden();
+    }).toPass({
+      timeout: 1000,
+    });
+    await notebook.focusOnBody();
+    await page
+      .getByTestId('integration-block')
+      .filter({ hasText: /Variable/ })
+      .getByTestId('segment-button-trigger')
+      .click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.maxSelectorWaitTime);
+
+    await expect(
+      page.getByTestId('code-line-warning'),
+      'Live connection setup with a retry error'
+    ).toBeHidden();
+    await expect(
+      page.getByText('Retry'),
+      'Live connection setup with a retry error'
+    ).toBeHidden();
   });
 });

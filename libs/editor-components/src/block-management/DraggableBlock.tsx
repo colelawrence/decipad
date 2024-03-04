@@ -1,8 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
 import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
 import {
-  alwaysWritableElementTypes,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_PARAGRAPH,
@@ -10,6 +8,7 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
+  alwaysWritableElementTypes,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -23,9 +22,10 @@ import {
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
+import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
 import {
-  DraggableBlock as UIDraggableBlock,
   EditorBlock,
+  DraggableBlock as UIDraggableBlock,
   useMergedRef,
 } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
@@ -40,12 +40,13 @@ import {
   insertText,
   select,
 } from '@udecode/plate-common';
+import { blockSelectionSelectors } from '@udecode/plate-selection';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
 import {
   ComponentProps,
-  forwardRef,
   ReactNode,
+  forwardRef,
   useCallback,
   useContext,
   useEffect,
@@ -55,8 +56,7 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
-import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
-import { blockSelectionSelectors } from '@udecode/plate-selection';
+import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
 import { useBlockActions } from './hooks';
 
 type DraggableBlockProps = {
@@ -242,8 +242,19 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const onCopyHref = useCallback(() => {
       const url = new URL(window.location.toString());
-      url.hash = element.id;
-      copyToClipboard(url.toString());
+
+      let { pathname } = url;
+      const hash = element.id;
+
+      const pathSegments = pathname.split('/');
+      if (pathSegments.length > 2) {
+        pathSegments.splice(-1, 1);
+        pathname = pathSegments.join('/');
+      }
+
+      const newUrl = `${url.origin}${pathname}#${hash}`;
+      copyToClipboard(newUrl);
+
       event({
         type: 'action',
         action: 'copy block href',
@@ -290,7 +301,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         tabs={tabs}
         onAdd={onAdd}
         onPlus={onPlus}
-        onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
+        onCopyHref={onCopyHref}
         showLine={showLine}
         isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}

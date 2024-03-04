@@ -5,13 +5,13 @@ import {
   ExternalDataSource,
   ExternalDataSourcesContextValue,
 } from '@decipad/interfaces';
-import { getDefined } from '@decipad/utils';
 import {
   ExternalDataSourceCreateInput,
   useCreateExternalDataSourceMutation,
   useGetExternalDataSourcesQuery,
 } from '@decipad/graphql-client';
 import { isExpectableServerSideError } from '../../../utils/isExpectableServerSideError';
+import { getDefined } from '@decipad/utils';
 
 export const useExternalDataSources = (
   notebookId: string
@@ -39,8 +39,12 @@ export const useExternalDataSources = (
     createExternalDataSource: useCallback(
       async (dataSource) => {
         const results = await createExternalDataSource({
-          dataSource: dataSource as ExternalDataSourceCreateInput,
+          dataSource: {
+            ...dataSource,
+            padId: notebookId,
+          } as ExternalDataSourceCreateInput,
         });
+
         if (results.error) {
           console.error(results.error);
           captureException(results.error);
@@ -49,7 +53,7 @@ export const useExternalDataSources = (
           results.data?.createExternalDataSource
         ) as ExternalDataSource;
       },
-      [createExternalDataSource]
+      [createExternalDataSource, notebookId]
     ),
   };
 };

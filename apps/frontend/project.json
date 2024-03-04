@@ -14,14 +14,21 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node build-worker.mjs && yarn vite build --mode production",
+        "command": "node build-live-connect-worker.mjs && yarn vite build --mode production",
+        "cwd": "apps/frontend"
+      }
+    },
+    "build-live-connect-worker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node build-live-connect-worker.mjs",
         "cwd": "apps/frontend"
       }
     },
     "preview": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node build-worker.mjs && yarn vite build --mode development && vite preview",
+        "command": "node build-live-connect-worker.mjs && yarn vite build --mode development && vite preview",
         "cwd": "apps/frontend"
       }
     },

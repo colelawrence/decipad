@@ -11,6 +11,7 @@ import {
   dark700,
   dark800,
   offBlack,
+  offWhite,
   red600,
   red700,
   red800,
@@ -67,7 +68,7 @@ export const theme: CssVariables = {
   stateWarningIconOutline: yellow800.hex,
 
   stateOkBackground: brand700.hex,
-  stateOkText: offBlack.hex,
+  stateOkText: offWhite.hex,
   stateOkIconBackground: brand600.hex,
   stateOkIconOutline: brand800.hex,
 

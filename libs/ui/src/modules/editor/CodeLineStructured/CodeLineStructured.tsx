@@ -144,7 +144,10 @@ export const CodeLineStructured = ({
           >
             {inline}
           </div>
-          <div css={{ padding: '7px 0 5px 0' }}>
+          <div
+            css={{ padding: '7px 0 5px 0' }}
+            data-testid="code-line-expression"
+          >
             {codeChild}
             {unitPicker}
           </div>

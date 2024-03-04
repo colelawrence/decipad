@@ -209,11 +209,15 @@ function NewDataConnection({
         if (res.status === 200) {
           setPingStatus('Connection Worked');
         } else {
+          res.json().then((body) => {
+            setErrorMessage(body.message);
+          });
           setPingStatus('Connection Failed');
         }
       })
       .catch((err) => {
         console.error(err);
+        setErrorMessage(err.message);
         setPingStatus('Connection Failed');
       });
   }

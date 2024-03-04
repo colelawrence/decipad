@@ -26,12 +26,9 @@ const createRPCWorker = async (): Promise<StartWorkerResult> => {
     },
     receiver: {
       readMessages: (cb) => {
-        const listener = (ev: MessageEvent) => {
-          cb(ev);
-        };
-        worker.addEventListener('message', listener);
+        worker.addEventListener('message', cb);
 
-        return () => worker.removeEventListener('message', listener);
+        return () => worker.removeEventListener('message', cb);
       },
     },
     serviceId: 'live-connect',

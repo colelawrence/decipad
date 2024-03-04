@@ -32,7 +32,8 @@ export const startNotebook: StartNotebook = (
   onError
 ) => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
-  const editor = new EditorController(docId);
+  // eslint-disable-next-line no-new
+  new EditorController(docId);
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
     editor: new EditorController(docId, []),
@@ -68,7 +69,11 @@ export const startNotebook: StartNotebook = (
   } = liveConnections(observeExternal);
 
   const getValue = debounce(async () => {
-    const program = await editorToProgram(editor, editor.children, computer);
+    const program = await editorToProgram(
+      syncEditor,
+      syncEditor.children.filter(Boolean),
+      computer
+    );
     computer.pushCompute({
       program,
     });
@@ -98,13 +103,14 @@ export const startNotebook: StartNotebook = (
   };
 
   syncEditor.onLoaded(getValue);
-  const { onChange } = syncEditor;
+  const onChange = syncEditor.onChange.bind(syncEditor);
   syncEditor.onChange = () => {
     (async () => {
       updateLiveConnections(syncEditor.children);
     })();
 
-    onChange.bind(syncEditor)();
+    getValue();
+    onChange();
   };
 
   return computer;

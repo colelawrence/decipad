@@ -8,6 +8,7 @@ import { assertElementMultipleType } from '@decipad/editor-utils';
 import { LiveError } from '@decipad/ui';
 import { FC } from 'react';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
+import { useNotebookId } from '@decipad/react-contexts';
 
 export interface LiveConnectionCoreProps {
   element: LiveConnectionElement | LiveDataSetElement;
@@ -23,7 +24,10 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
     ELEMENT_LIVE_DATASET,
   ]);
 
+  const notebookId = useNotebookId();
+
   const { error, authenticate, clearCacheAndRetry } = useLiveConnectionCore({
+    notebookId,
     element,
     deleted,
   });

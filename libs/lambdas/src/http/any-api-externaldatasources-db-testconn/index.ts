@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
-import Boom from '@hapi/boom';
 import { pingDatabase } from '@decipad/backend-external-db';
+import Boom from '@hapi/boom';
 import handle from '../handle';
 
 export const handler = handle(async (event) => {
@@ -14,8 +14,13 @@ export const handler = handle(async (event) => {
   }
 
   const res = await pingDatabase(body);
+
+  if (!res.ok) {
+    throw Boom.badData(res.error);
+  }
+
   return {
-    statusCode: res.ok ? 200 : 400,
+    statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
     },

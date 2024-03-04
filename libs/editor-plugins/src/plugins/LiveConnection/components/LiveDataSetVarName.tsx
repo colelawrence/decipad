@@ -7,36 +7,28 @@ import {
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   LiveDataSetElement,
   PlateComponent,
-  useMyEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
 import { useConnectionStore } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveDataSetParams,
-  TableButton,
   Tooltip,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { getNodeString, setNodes } from '@udecode/plate-common';
+import { getNodeString } from '@udecode/plate-common';
 import pluralize from 'pluralize';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { map } from 'rxjs';
-import LiveDataSetCaption from './LiveDataSetCaption';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';
+import LiveDataSetCaption from './LiveDataSetCaption';
 
 const captionWrapperStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: '8px',
-});
-
-const tableButtonWrapperStyles = css({
-  marginBottom: '8px',
-  marginTop: '-5px',
-  marginLeft: 'auto',
 });
 
 export const LiveDataSetVarName: PlateComponent = ({
@@ -47,7 +39,6 @@ export const LiveDataSetVarName: PlateComponent = ({
   assertElementType(element, ELEMENT_LIVE_DATASET_VARIABLE_NAME);
 
   const { changeOpen } = useConnectionStore();
-  const editor = useMyEditorRef();
   // refactor to useeditorselector
   const parent = useParentNodeEntry<LiveDataSetElement>(element);
   if (parent) {
@@ -82,17 +73,6 @@ export const LiveDataSetVarName: PlateComponent = ({
   // ensure var name is unique
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
-  const onShowDataPress = useCallback(() => {
-    if (parent) {
-      const [elem, path] = parent;
-      setNodes(
-        editor,
-        { hideLiveQueryResults: !elem.hideLiveQueryResults },
-        { at: path }
-      );
-    }
-  }, [parent, editor]);
-
   const onOptionsPress = useCallback(() => {
     changeOpen(true);
   }, [changeOpen]);
@@ -126,18 +106,6 @@ export const LiveDataSetVarName: PlateComponent = ({
         <LiveDataSetCaption source={sourceName} />
       </div>
 
-      {isFlagEnabled('LIVE_QUERY') &&
-        parent &&
-        isDatabaseConnection(parent[0]) && (
-          <div css={tableButtonWrapperStyles}>
-            <TableButton
-              isInState={!parent?.[0].hideLiveQueryResults}
-              isToggleButton
-              onClick={onShowDataPress}
-              captions={['Hide Data', 'Show Data']}
-            />
-          </div>
-        )}
       {isFlagEnabled('LIVE_CONN_OPTIONS') && (
         <div contentEditable={false}>
           <LiveDataSetParams onClick={onOptionsPress} />

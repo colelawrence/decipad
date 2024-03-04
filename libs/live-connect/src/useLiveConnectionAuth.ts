@@ -10,6 +10,7 @@ import type {
 import { PromiseOrType } from '@decipad/utils';
 
 interface UseLiveConnectionAuthProps {
+  notebookId: string;
   provider?: ImportElementSource;
   externalId: string;
   beforeAuthenticate: (source: ExternalDataSource) => PromiseOrType<void>;

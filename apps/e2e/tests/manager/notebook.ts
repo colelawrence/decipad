@@ -1100,6 +1100,34 @@ export class Notebook {
   }
 
   /**
+   * Publish notebook changes
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.publishNotebookChanges();
+   * ```
+   */
+  async publishNotebookChanges() {
+    await this.openPublishingSidebar();
+    await expect(
+      this.republishNotification,
+      "Publish changes notification insn't visible"
+    ).toBeVisible();
+    await this.page.getByTestId('publish-changes').click();
+    await expect(
+      this.page.getByTestId('publish-changes'),
+      "Publish changes button didn't go away after publishing changes"
+    ).toBeHidden();
+    await expect(
+      this.republishNotification,
+      "Publish changes notification didn't go away after publishing changes"
+    ).toBeHidden();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.computerDelay);
+  }
+
+  /**
    * Click on pragraph to focus on notebook body.
    *
    * **Usage**
@@ -1401,6 +1429,17 @@ export class Notebook {
   async deleteBlock(index: number) {
     await this.page.getByTestId('drag-handle').nth(index).click();
     await this.page.getByRole('menuitem', { name: 'Delete' }).click();
+  }
+
+  async copyBlockReference(index: number) {
+    await this.page.getByTestId('drag-handle').nth(index).click();
+    await this.page
+      .getByRole('menuitem', { name: 'copy reference link' })
+      .click();
+    const clipboardText = (
+      (await this.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+    return clipboardText;
   }
 
   /**

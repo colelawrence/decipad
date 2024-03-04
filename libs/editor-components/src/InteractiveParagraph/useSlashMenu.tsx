@@ -1,11 +1,11 @@
 import { useNodePath, useSelection } from '@decipad/editor-hooks';
 import { ParagraphElement, useMyEditorRef } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import { useWindowListener } from '@decipad/react-utils';
 import { dequal } from '@decipad/utils';
 import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate-common';
-import { setSelection } from '@decipad/editor-utils';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { BaseRange, Location, Path, Range } from 'slate';
+import { Location, Path } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 
 interface UseSlashCommandMenuResult {
@@ -42,10 +42,7 @@ export const useSlashMenu = (
     }
   }, [selected]);
 
-  const { search, isInline, deleteFragment } = findSlashCommand(
-    text,
-    selection
-  );
+  const { search, isInline } = findSlashCommand(text);
   const showSlashCommands =
     selected && focused && !slashMenuSuppressed && search != null;
 
@@ -92,47 +89,18 @@ export const useSlashMenu = (
     showSlashCommands,
     menuRef,
     elementPath: elementPath ?? undefined,
-    deleteFragment,
     search,
   };
 };
 
-const findSlashCommand = (text: string, selection: BaseRange | null) => {
-  const inline = findInlineSlashCommand(text, selection);
+const findSlashCommand = (text: string) => {
   const standalone = findStandaloneSlashCommand(text);
 
   return {
-    isInline: inline != null,
-    search: inline?.command ?? standalone,
-    deleteFragment: inline?.selection,
+    isInline: false,
+    search: standalone,
   };
 };
 
 const findStandaloneSlashCommand = (text: string): string | undefined =>
   /^\/([a-z- ]*)$/i.exec(text)?.[1];
-
-const findInlineSlashCommand = (
-  text: string,
-  selection: BaseRange | null
-): { command: string; selection: Range } | undefined => {
-  if (!selection) return;
-  if (!isCollapsed(selection)) return;
-  if (text.startsWith('/')) return;
-
-  const { offset } = selection.anchor;
-  const leftSegment = text.slice(0, offset);
-  const slashCommand = leftSegment.split('/').slice(1).at(-1);
-
-  if (slashCommand == null) return;
-  if (slashCommand.match(/\s/)) return;
-
-  const cmdSelection: Range = {
-    anchor: {
-      offset: offset - slashCommand.length - 1,
-      path: selection.anchor.path,
-    },
-    focus: { offset, path: selection.anchor.path },
-  };
-
-  return { command: slashCommand, selection: cmdSelection };
-};

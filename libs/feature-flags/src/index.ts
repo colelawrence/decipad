@@ -9,7 +9,6 @@ export const availableFlags = [
   'ALTERNATE_ROTATION_DATA_VIEW',
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
-  'LIVE_QUERY',
   'SHEETS_ISLANDS',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',

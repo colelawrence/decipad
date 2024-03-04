@@ -104,7 +104,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   useEffect(() => {
     return () => {
       const { pathname } = window.location;
-      const match = pathname.match(/^\/n\/.*%3A(.*)$/);
+      const match = pathname.match(/^\/n\/.*%3A(.*)/);
       if (!match || match[1] !== notebookId) {
         destroy(); // destroy the editor on unmount
       }
