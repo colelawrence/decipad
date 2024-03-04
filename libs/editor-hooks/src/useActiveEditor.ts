@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   MyEditor,
   MinimalRootEditorWithEventsAndTabs,
@@ -17,9 +17,18 @@ export function useActiveEditor(
 ): MyEditor | undefined {
   const { tab } = useRouteParams(notebooks({}).notebook);
 
-  if (!controller) return undefined;
+  const [editor, setEditor] = useState<MyEditor | undefined>(undefined);
 
-  return controller.getTabEditor(tab);
+  useEffect(() => {
+    if (!controller) {
+      setEditor(undefined);
+      return;
+    }
+
+    setEditor(controller.getTabEditor(tab));
+  }, [controller, tab]);
+
+  return editor;
 }
 
 export function useEditorController():
