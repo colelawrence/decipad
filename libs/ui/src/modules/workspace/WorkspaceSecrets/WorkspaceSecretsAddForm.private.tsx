@@ -1,15 +1,19 @@
-import React, { FormEvent, useCallback, useState } from 'react';
-import { css } from '@emotion/react';
 import { SecretInput } from '@decipad/graphql-client';
-import { Button, InputField } from '../../../shared';
-import { cssVar, p13Medium } from '../../../primitives';
+import { css } from '@emotion/react';
+import React, { FormEvent, useCallback, useState } from 'react';
 import { Check, Loading } from '../../../icons';
+import { cssVar, p13Medium } from '../../../primitives';
+import { Button, InputField } from '../../../shared';
 
 type AddFormProps = {
   onAdd: (secret: SecretInput) => Promise<void>;
+  webhook: boolean;
 };
 
-export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
+export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({
+  onAdd,
+  webhook,
+}) => {
   const [name, setName] = useState('');
   const [secret, setSecret] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,13 +47,15 @@ export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
 
   return (
     <div css={formContainerStyles}>
-      <div css={tableHeadStyles}>Add a new secret</div>
+      <div css={tableHeadStyles}>
+        {webhook ? 'Configure Webhooks' : 'Manage API Secrets'}
+      </div>
       <form css={secretFormStyles} onSubmit={handleAddSecret}>
         <InputField
           required
           size="full"
           testId="input-secret-name"
-          placeholder="Name of secret"
+          placeholder="Name"
           value={name}
           onChange={setName}
         />
@@ -58,7 +64,7 @@ export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
           required
           size="full"
           testId="input-secret-value"
-          placeholder="Value"
+          placeholder={webhook ? 'https://' : 'Value'}
           value={secret}
           onChange={setSecret}
         />

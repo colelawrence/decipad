@@ -1,15 +1,16 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { ImportElementSource } from '@decipad/editor-types';
+import { useWorkspaceExternalData } from '@decipad/graphql-client';
+import { workspaces } from '@decipad/routing';
+import { useToast } from '@decipad/toast';
+import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
-import { useWorkspaceExternalData } from '@decipad/graphql-client';
-import { useToast } from '@decipad/toast';
 import { useNavigate } from 'react-router-dom';
-import { workspaces } from '@decipad/routing';
-import { BackendUrl } from '@decipad/utils';
 import { MessageBlock } from '.';
 import { Caret, Edit, Loading, Trash, Warning } from '../../../icons';
 import { cssVar, p13Bold, p14Medium, p16Bold } from '../../../primitives';
+import { useCancelingEvent } from '../../../utils';
 import { Button, MenuItem } from '../../atoms';
 import {
   MenuList,
@@ -18,7 +19,6 @@ import {
   TabsRoot,
   TabsTrigger,
 } from '../../molecules';
-import { useCancelingEvent } from '../../../utils';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -66,9 +66,10 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
     <div css={mainWrapperStyles}>
       <div>
         <p css={p14Medium}>
-          SQL Connections defined here are available to anyone in the workspace
-          for use in Code Integrations, without the actual credentials being
-          exposed.
+          Configure SQL connections to enable seamless database interactions
+          within your workspace. Once defined, these connections are accessible
+          to all workspace members to use. This setup ensures that the actual
+          database credentials remain secure and undisclosed.
         </p>
       </div>
       <div>

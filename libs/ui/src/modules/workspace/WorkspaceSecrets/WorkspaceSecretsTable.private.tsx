@@ -16,8 +16,7 @@ export const WorkspaceSecretsTable = ({ secrets, onRemove }: TableProps) => {
   return (
     <div css={tableStyles}>
       <div css={rowStyles}>
-        <div css={tableHeadStyles}>Existing secrets</div>
-        <div css={tableHeadStyles}>Options</div>
+        <div css={tableHeadStyles}>Saved webhooks & secrets</div>
       </div>
 
       {secrets.map((secret) => (

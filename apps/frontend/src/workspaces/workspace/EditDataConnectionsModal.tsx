@@ -32,6 +32,12 @@ const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
           element={<WorkspaceSecrets workspaceId={props.currentWorkspace.id} />}
         />
         <Route
+          path={currentWorkspaceRoute.connections({}).webhooks.template}
+          element={
+            <WorkspaceSecrets webhook workspaceId={props.currentWorkspace.id} />
+          }
+        />
+        <Route
           path={currentWorkspaceRoute.connections({}).sqlConnections.template}
           element={
             <DatabaseConnectionScreen workspaceId={props.currentWorkspace.id} />

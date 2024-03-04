@@ -1,9 +1,9 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
-import { css } from '@emotion/react';
 import { workspaces } from '@decipad/routing';
+import { css } from '@emotion/react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { TabsList, TabsRoot, TabsTrigger, Modal } from '../../../shared';
+import { Modal, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 
 type EditDataConnectionsModalProps = {
   readonly onClose: () => void;
@@ -24,7 +24,7 @@ export const EditDataConnectionsModal: React.FC<
 
   return (
     <Modal
-      title="Data Connections"
+      title="Integration Settings"
       size="xl"
       onClose={onClose}
       defaultOpen={true}
@@ -42,9 +42,18 @@ export const EditDataConnectionsModal: React.FC<
               }}
             />
             <TabsTrigger
+              name="webhooks"
+              trigger={{
+                label: 'Webhooks',
+                onClick: () => navigate(connections.webhooks({}).$),
+                disabled: false,
+                selected: pathname === connections.webhooks({}).$,
+              }}
+            />
+            <TabsTrigger
               name="connections"
               trigger={{
-                label: 'SQL Connections',
+                label: 'SQL',
                 onClick: () => navigate(connections.sqlConnections({}).$),
                 disabled: false,
                 selected: pathname === connections.sqlConnections({}).$,

@@ -100,7 +100,7 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
       'the submit form shows error message when used without webhook selected'
     ).toBeVisible();
 
-    await testUser.page.getByRole('button', { name: '+' }).click();
+    await testUser.page.getByTestId('add-webhook').click();
 
     await testUser.page.getByTestId('input-secret-name').fill(webhookName);
     await testUser.page

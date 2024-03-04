@@ -7,20 +7,23 @@ import { WorkspaceSecretsTable } from './WorkspaceSecretsTable.private';
 
 export type WorkspaceSecretsProps = {
   workspaceId: string;
+  webhook?: boolean;
 };
 
 export const WorkspaceSecrets: React.FC<WorkspaceSecretsProps> = ({
   workspaceId,
+  webhook = false,
 }) => {
   const { secrets, add, remove } = useWorkspaceSecrets(workspaceId);
 
+  const description = webhook
+    ? 'Configure webhooks to receive real-time data updates from external services. Set up endpoints to capture and process incoming data efficiently.'
+    : 'Securely store and manage access credentials for your integrations. API secrets ensure that your connections to external services are secure.';
+
   return (
     <div css={fullWidth}>
-      <p css={paraSecretStyles}>
-        You can define secrets to so that you can access services securely from
-        your integrations.
-      </p>{' '}
-      <WorkspaceSecretsAddForm onAdd={add} />
+      <p css={paraSecretStyles}>{description}</p>{' '}
+      <WorkspaceSecretsAddForm webhook={webhook} onAdd={add} />
       <WorkspaceSecretsTable secrets={secrets} onRemove={remove} />
     </div>
   );

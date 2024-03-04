@@ -244,8 +244,8 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
     await testUser.notebook.addBlock('open-integration');
     notebookURL = testUser.page.url();
     await testUser.page.getByTestId('select-integration:SQL').click();
-    await testUser.page.getByText('Data Connections').click();
-    await testUser.page.getByText('Connection Management').click();
+    await testUser.page.getByText('Add SQL Connection').click();
+    await testUser.page.getByRole('menuitem', { name: /SQL/ }).click();
     await testUser.page
       .getByRole('button', { name: 'Add a New Connection' })
       .waitFor();
@@ -271,7 +271,7 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
     await testUser.notebook.waitForEditorToLoad();
     await testUser.notebook.addBlock('open-integration');
     await testUser.page.getByTestId('select-integration:SQL').click();
-    await testUser.page.getByText('Data Connections').click();
+    await testUser.page.getByText('Add SQL Connection').click();
     await testUser.page.getByText('Planet Scale Intergration').first().click();
     await testUser.page.getByTestId('code-mirror').click();
 

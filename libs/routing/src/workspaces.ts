@@ -7,6 +7,7 @@ const archived = route('/archived', {}, {});
 const shared = route('/shared', {}, {});
 
 const codeSecrets = route('/code-secrets', {}, {});
+const webhooks = route('/webhooks', {}, {});
 const sqlConnections = route('/sql-connections', {}, {});
 const addcredits = route('/add-credits', {}, {});
 const upgrade = route(
@@ -22,6 +23,7 @@ export const connections = route(
   {},
   {
     codeSecrets,
+    webhooks,
     sqlConnections,
   }
 );

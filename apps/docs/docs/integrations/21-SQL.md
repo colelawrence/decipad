@@ -13,7 +13,7 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
 ## Database Connections
 
-To create a SQL integration, you first need to set up a database connection on the workspace level. To do this, go to your workspace and select "Data Connections" from the sidebar menu. After configuring and saving your connection, it will the be available for querying in all notebooks in your workspace.
+To create a SQL integration, you first need to set up a database connection on the workspace level. To do this, go to your workspace and select "Integration Settings" from the sidebar menu. After configuring and saving your connection, it will the be available for querying in all notebooks in your workspace.
 
 ## Querying Data in a Notebook
 

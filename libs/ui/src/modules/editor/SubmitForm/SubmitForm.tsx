@@ -1,18 +1,11 @@
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   AvailableSwatchColor,
   PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { exportProgramByVarname } from '@decipad/import';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import {
-  Button,
-  IconButton,
-  InputField,
-  TextAndIconButton,
-  SelectInput,
-} from '../../../shared';
+import { exportProgramByVarname } from '@decipad/import';
 import {
   useComputer,
   useCurrentWorkspaceStore,
@@ -21,17 +14,24 @@ import {
   useNotebookId,
   useThemeFromStore,
 } from '@decipad/react-contexts';
-import { BackendUrl } from '@decipad/utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
-import { css } from '@emotion/react';
-import { Close, Email, Send, Spinner } from '../../../icons';
-import { brand200, cssVar, white } from '../../../primitives';
 import { ToastContextType, useToast } from '@decipad/toast';
-import { wrapperStyles } from '../VariableEditor/VariableEditor';
-import { swatchesThemed } from '../../../utils';
+import { BackendUrl } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { TElement } from '@udecode/plate-common';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Close, Create, Email, Send, Spinner } from '../../../icons';
+import { brand200, cssVar, p13Medium, white } from '../../../primitives';
+import {
+  IconButton,
+  InputField,
+  SelectInput,
+  TextAndIconButton,
+  Tooltip,
+} from '../../../shared';
+import { swatchesThemed } from '../../../utils';
+import { wrapperStyles } from '../VariableEditor/VariableEditor';
 
 const configContainerStyles = css({
   display: 'grid',
@@ -62,28 +62,55 @@ const Config = ({
 
   const onNavigateToSecrets = useCallback(() => {
     setTimeout(() => {
-      navigate(workspaces({}).workspace({ workspaceId }).connections({}).$, {
-        replace: true,
-      });
+      navigate(
+        workspaces({}).workspace({ workspaceId }).connections({}).webhooks({})
+          .$,
+        {
+          replace: true,
+        }
+      );
     }, 0);
   }, [navigate, workspaceId]);
 
   return (
     <div css={configContainerStyles}>
       <SelectInput labelText="" value={targetUrl} setValue={setTargetUrl}>
-        <option value="">Choose a Target URL</option>
+        <option value="">Select Webhook</option>
         {secrets.map((s) => (
           <option key={s.id} value={s.name}>
             {s.name}
           </option>
         ))}
       </SelectInput>
-      <Button type="secondary" onClick={onNavigateToSecrets}>
-        +
-      </Button>
+      <Tooltip
+        trigger={
+          <button
+            css={buttonStyles}
+            onClick={onNavigateToSecrets}
+            data-testid="add-webhook"
+          >
+            <span css={iconWrapperStyles}>
+              <Create />
+            </span>
+          </button>
+        }
+      >
+        Configure new webhook
+        <br /> This will take you to our dashboard
+      </Tooltip>
     </div>
   );
 };
+
+const buttonStyles = css(p13Medium, {
+  cursor: 'pointer',
+  display: 'flex',
+  gap: '6px',
+  padding: '7px',
+  borderRadius: '6px',
+  backgroundColor: cssVar('backgroundDefault'),
+  border: `1px solid ${cssVar('backgroundHeavy')}`,
+});
 
 const baseFormContainerStyles = css({
   maxWidth: '100%',
@@ -117,6 +144,11 @@ const formContainerErrorStyles = css({
       color: cssVar('stateDangerBackground'),
     },
   },
+});
+
+const iconWrapperStyles = css({
+  height: '16px',
+  width: '16px',
 });
 
 const documentGuestSuccessStyles = css({

@@ -23,7 +23,7 @@ Effortlessly capture leads and their scenarios from your notebook using Decipad'
 
 3. **Get Your Submission URL (Webhook)**: Before sharing your notebook, configure the Submit Form Block with a Webhook URL where the notebook data will be sent. [See an example setup using Zapier to send data to a Google Sheet below](/advanced/forms/#example-integration-with-zapier-and-google-sheets).
 
-4. **Add Webhook to Secret**: Click the plus `+` button on your "Submit Form Block" to open the "Data Connections" panel. Create a new secret and paste the Webhook URL into the provided field.
+4. **Add Webhook**: Click the plus `+` button on your "Submit Form Block" to open the "Integration Settings" panel. Create a new secret and paste the Webhook URL into the provided field.
 
 5. **Connect Your Submit Form Block**: Return to your notebook and configure the submit button by selecting the connection you've just established using the "Select Your Target URL" picker.
 

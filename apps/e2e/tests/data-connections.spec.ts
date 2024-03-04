@@ -14,7 +14,7 @@ test('Data connections', async ({ testUser }) => {
     await dataConnections.click();
 
     const apiSecrets = page.locator('text="API Secrets"');
-    const sqlConnections = page.locator('text="SQL Connections"');
+    const sqlConnections = page.locator('text="SQL"');
 
     await expect(apiSecrets).toBeVisible();
     await expect(sqlConnections).toBeVisible();
@@ -47,7 +47,7 @@ test('Data connections', async ({ testUser }) => {
   });
 
   await test.step('Can view SQL Connections', async () => {
-    const sqlConnectionButton = page.locator('text="SQL Connections"');
+    const sqlConnectionButton = page.locator('text="SQL"');
     await sqlConnectionButton.click();
 
     const addConnButton = page.locator('text="Add a New Connection"');

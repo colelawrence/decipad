@@ -1,13 +1,13 @@
 import { useWorkspaceExternalData } from '@decipad/graphql-client';
-import { css } from '@emotion/react';
-import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
+import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
-import { Divider, MenuItem } from '../../atoms';
-import { MenuList } from '../../molecules';
+import { useNavigate } from 'react-router-dom';
 import { ArrowDiagonalTopRight, Caret } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
 import { editorLayout } from '../../../styles';
+import { Divider, MenuItem } from '../../atoms';
+import { MenuList } from '../../molecules';
 
 interface ConnectionMenuProps {
   workspaceId: string;
@@ -53,7 +53,7 @@ export const ConnectionsMenu: FC<ConnectionMenuProps> = ({
               {/* Without text the icon has no line height, and so floats
                             upwards, hence the non-breaking space */}
               {'\uFEFF'}
-              {selectedDataSource ?? 'Data Connections'}
+              {selectedDataSource ?? 'Add SQL Connection'}
             </span>
             <span css={iconStyles} data-testid="insert-data-connections-button">
               <Caret variant="down" />
@@ -87,7 +87,7 @@ export const ConnectionsMenu: FC<ConnectionMenuProps> = ({
           icon={<ArrowDiagonalTopRight />}
           onSelect={onNavigateToConnections}
         >
-          <span>Connection Management</span>
+          <span>SQL</span>
         </MenuItem>
       </MenuList>
     </div>
