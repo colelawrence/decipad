@@ -37,10 +37,12 @@ import {
 import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
+import { RemoteComputer } from '@decipad/remote-computer';
 
 export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
 export interface ExecuteProps {
   editor: MyEditor;
+  computer: RemoteComputer;
   path: Path;
   deleteFragment?: Location;
   deleteBlock?: boolean;
@@ -50,6 +52,7 @@ export interface ExecuteProps {
 
 export const execute = ({
   command,
+  computer,
   editor,
   path,
   getAvailableIdentifier,
@@ -103,7 +106,7 @@ export const execute = ({
         insertTableBelow(editor, path, getAvailableIdentifier);
         break;
       case 'data-view':
-        insertDataViewBelow(editor, path);
+        insertDataViewBelow(editor, path, computer);
         break;
       case 'open-integration':
         changeOpen(true);

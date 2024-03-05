@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { cssVar, p12Medium } from '../../../primitives';
 import { Label } from '../../atoms/Label/Label';
 
@@ -8,14 +8,12 @@ const selectFontStyles = css(p12Medium, {
   color: cssVar('textDefault'),
 });
 
-const hoveredStyles = css({
-  backgroundColor: cssVar('backgroundHeavy'),
-});
-
 const selectStyles = css({
-  backgroundColor: cssVar('backgroundSubdued'),
+  backgroundColor: 'transparent',
   fontWeight: 'bold',
-  ':hover': { ...hoveredStyles },
+  maxWidth: 200,
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
 });
 
 interface SelectInputProps {
@@ -31,13 +29,11 @@ export const SelectInput = ({
   value,
   setValue,
 }: SelectInputProps): ReturnType<FC> => {
-  const [hovered, setHovered] = useState(false);
   return (
     <Label
-      onHover={setHovered}
       renderContent={(id) => (
         <select
-          css={[selectFontStyles, selectStyles, hovered && hoveredStyles]}
+          css={[selectFontStyles, selectStyles]}
           id={id}
           onChange={(ev) => {
             setValue(ev.target.value);

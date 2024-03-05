@@ -1,4 +1,6 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import {
   componentCssVars,
   cssVar,
@@ -8,9 +10,8 @@ import {
   smallScreenQuery,
   tinyPhone,
 } from '../../../primitives';
-import { deciOverflowXStyles } from '../../../styles/scrollbars';
-import { css } from '@emotion/react';
 import { closeButtonStyles } from '../../../styles/buttons';
+import { deciOverflowXStyles } from '../../../styles/scrollbars';
 
 const genericTopbarStyles = css({
   display: 'flex',
@@ -33,6 +34,7 @@ const genericTopbarStyles = css({
 export const DefaultTopbarWrapper = styled.div(
   deciOverflowXStyles,
   genericTopbarStyles,
+  hideOnPrint,
   {
     padding: '16px 0',
   }

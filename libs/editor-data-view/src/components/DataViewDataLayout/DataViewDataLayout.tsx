@@ -7,8 +7,12 @@ import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
 import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
+import { usePushDataViewToComputer } from '../../hooks/usePushDataViewToComputer';
+import { DataViewElement } from '@decipad/editor-types';
+import { getNodeString } from '@udecode/plate-common';
 
 export interface DataViewLayoutProps {
+  element: DataViewElement;
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
@@ -29,6 +33,7 @@ const paginationWrapperStyles = css({
 });
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
+  element,
   tableName,
   columns,
   aggregationTypes,
@@ -99,6 +104,17 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     [groups]
   );
 
+  const dataViewName = getNodeString(element.children[0].children[0]);
+
+  usePushDataViewToComputer({
+    element,
+    groups,
+    dataViewName,
+    tableName,
+    aggregationTypes,
+    roundings,
+  });
+
   return (
     <>
       {table.map((row, index) => {
@@ -113,14 +129,14 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
             rotate={rotate}
           >
             {rotate && headers[index]}
-            {row.map((element, elementIndex) => (
+            {row.map((cell, cellIndex) => (
               <DataViewDataGroupElement
-                key={`${table.indexOf(row)}-${index}-${elementIndex}}`}
+                key={`${table.indexOf(row)}-${index}-${cellIndex}}`}
                 index={index}
                 tableName={tableName}
-                element={element}
+                element={cell}
                 roundings={roundings}
-                aggregationType={aggregationTypes[element.columnIndex]}
+                aggregationType={aggregationTypes[cell.columnIndex]}
                 Header={DataViewTableHeader}
                 SmartCell={SmartCell}
                 isFullWidthRow={row.length === maxCols}

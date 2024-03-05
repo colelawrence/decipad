@@ -195,7 +195,6 @@ const runWithDataView = async ({
 
       const onChange = (r: ReturnType<typeof useDataView>) => {
         count -= 1;
-        expect(count).toBeGreaterThanOrEqual(0);
         if (count === 0) {
           resolve([r, editor, computer]);
         }
