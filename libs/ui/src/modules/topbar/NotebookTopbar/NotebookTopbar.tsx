@@ -342,11 +342,10 @@ const AiGeneratedTopbar: FC<TopbarGenericProps> = ({ access, actions }) => {
             notebookName="Decipad — smart document"
             href="https://decipad.com"
           />
-
-          <GeneratedByAi />
         </Styled.LeftContainer>
 
         <Styled.RightContainer>
+          <GeneratedByAi />
           <GPTClaim {...access} {...actions} />
         </Styled.RightContainer>
       </Styled.InnerStyles>
