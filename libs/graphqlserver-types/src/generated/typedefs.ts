@@ -433,7 +433,7 @@ type ResourceUsage {
   id: ID!
   resourceType: ResourceTypes!
   consumption: Float!
-  originalAmount: Float!
+  originalAmount: Float
 }
 
 type NewResourceQuotaLimit {
