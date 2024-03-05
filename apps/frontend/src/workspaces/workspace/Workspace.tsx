@@ -514,7 +514,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                     workspaceId={currentWorkspace.id}
                     hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
                     userId={getDefined(session?.user?.id)}
-                    currentPlan={getDefined(currentWorkspace.plan)}
+                    currentPlan={currentWorkspace.plan ?? undefined}
                   />
                 </LazyRoute>
               </RequireUpgradablePlanRoute>
