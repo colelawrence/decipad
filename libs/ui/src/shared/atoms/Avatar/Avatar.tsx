@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useCallback, useMemo } from 'react';
 import Gravatar from 'react-gravatar';
 import {
   cssVar,
@@ -102,8 +102,21 @@ export const Avatar = ({
   imageHash,
 }: AvatarProps): ReturnType<FC> => {
   const selectedWord = name || DEFAULT_WORD;
-  const firstLetter = selectedWord?.[0]?.toUpperCase();
-  const secondLetter = selectedWord?.[1]?.toLocaleLowerCase() || '';
+
+  const getDisplayName = useCallback((input: string, count: 1 | 2): string => {
+    const regex =
+      count === 1
+        ? /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|.{1})/u
+        : /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|.{1,2})/u;
+    const match = input.match(regex);
+
+    return match ? match[0].toLocaleUpperCase() : '';
+  }, []);
+
+  const displayName = useMemo(() => {
+    return getDisplayName(selectedWord, useSecondLetter ? 2 : 1);
+  }, [selectedWord, useSecondLetter, getDisplayName]);
+
   const color = avatarColor(name);
 
   return (
@@ -146,11 +159,7 @@ export const Avatar = ({
               })}
             />
             <text x="50%" y="50%" css={[p12Medium, initialTextStyles]}>
-              {gravatarBackdrop === 'blank' && firstLetter}
-              {gravatarBackdrop === 'blank' &&
-                useSecondLetter &&
-                secondLetter !== '@' &&
-                secondLetter}
+              {gravatarBackdrop === 'blank' && displayName}
             </text>
           </svg>
         </div>
