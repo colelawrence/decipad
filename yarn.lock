@@ -14534,17 +14534,17 @@
     "@viselect/vanilla" "3.2.5"
     copy-to-clipboard "^3.3.3"
 
-"@udecode/plate-serializer-docx@30.5.3":
-  version "30.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-30.5.3.tgz#a16eb3cee04e7be754a0670165f7906053b14bf5"
-  integrity sha512-qCmyPHK1nk82WW5a0v8KdkxOoQnuhyRz0s77+SnhgisO7qutOSx+16PFb/USRYZOqmf4QMP8kemmJYHZA+h3WQ==
+"@udecode/plate-serializer-docx@30.9.1":
+  version "30.9.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-30.9.1.tgz#57e58b20f01359c45874a8e61e4819e56f5c76c0"
+  integrity sha512-cQs1rZQmPq9Ke7LOGE11skU0+cTCrjzoBxRlmualiIPVprlQsZThfSDAnIIqWzlCQ71o+opHIOHc9cwWjJfWiQ==
   dependencies:
     "@udecode/plate-heading" "30.5.3"
     "@udecode/plate-indent" "30.5.3"
     "@udecode/plate-indent-list" "30.5.3"
     "@udecode/plate-media" "30.5.3"
     "@udecode/plate-paragraph" "30.5.3"
-    "@udecode/plate-table" "30.5.3"
+    "@udecode/plate-table" "30.9.1"
     validator "^13.9.0"
 
 "@udecode/plate-serializer-md@30.7.0":
@@ -14564,10 +14564,10 @@
     remark-parse "^9.0.0"
     unified "^9.2.2"
 
-"@udecode/plate-table@30.5.3":
-  version "30.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-30.5.3.tgz#cbcdc186b2de60acd3ceaaa6295ec39da5515494"
-  integrity sha512-5FEfm48xG67luwAQzsCCMtZxRt15bnOQE27OPmZXI6UP+qPQZMB4+j+8cEhy/BlWYZMqDQJhTCo8QRbbyPce4w==
+"@udecode/plate-table@30.9.1":
+  version "30.9.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-30.9.1.tgz#17bd876b751f282479b6da616331bb8f80ca072a"
+  integrity sha512-uEnF3tUCd3WlY2a0AKufbrC9Nl+PNzZK8T7xuoAVJjlADxvURZ9pIJxYC1qLqH8yGrnf3ST2bv4xSZge9dszmw==
   dependencies:
     "@udecode/plate-resizable" "30.5.3"
     lodash "^4.17.21"
