@@ -6,6 +6,7 @@ import { track } from '@decipad/backend-analytics';
 import { GraphQLError } from 'graphql';
 import { limits } from '@decipad/backend-config';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import Boom from '@hapi/boom';
 
 export const getWorkspaceExecutedQuery = async (
   workspaceId: string
@@ -60,7 +61,7 @@ export const incrementQueryCount = async (
         isPremium: !!workspace.isPremium,
       },
     });
-    throw new GraphQLError(
+    throw Boom.tooManyRequests(
       `Query execution limit of ${maxCreditsPerPlan}/month exceeded.`,
       {
         extensions: {
