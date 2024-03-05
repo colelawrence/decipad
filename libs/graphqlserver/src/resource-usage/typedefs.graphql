@@ -6,12 +6,12 @@ enum ResourceTypes {
 type ResourceUsage {
   id: ID!
   resourceType: ResourceTypes!
-  consumption: Int!
-  originalAmount: Int
+  consumption: Float!
+  originalAmount: Float!
 }
 
 type NewResourceQuotaLimit {
-  newQuotaLimit: Int!
+  newQuotaLimit: Float!
 }
 
 extend type Mutation {
