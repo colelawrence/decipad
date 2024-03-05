@@ -5,11 +5,11 @@ import {
 import { notebooks, useRouteParams } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import { Modal } from '../../../shared';
 import { cssVar, p14Regular, p18Medium } from '../../../primitives';
 import { AddCreditsPaymentComponent } from './AddCreditsPaymentComponent';
 import { env } from '@decipad/utils';
+import { useMemo } from 'react';
 
 type AddCreditsModalProps = {
   closeAction: () => void;
@@ -36,11 +36,44 @@ const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
   );
 };
 
+interface StripeDialogueProps {
+  resourceId?: string;
+  closeAction: () => void;
+  planCredits?: number;
+}
+
+const StripeDialogue = ({
+  resourceId,
+  closeAction,
+  planCredits = 0,
+}: StripeDialogueProps) => {
+  const stripePromise = useMemo(async () => {
+    const { loadStripe } = await import('@stripe/stripe-js');
+    return loadStripe(env.VITE_STRIPE_API_KEY);
+  }, []);
+  return (
+    <Elements stripe={stripePromise}>
+      {resourceId && (
+        <AddCreditsPaymentComponent
+          resourceId={resourceId}
+          closeAction={closeAction}
+          credits={planCredits}
+        />
+      )}
+      {!resourceId && (
+        <WrapperAddCreditsModal
+          closeAction={closeAction}
+          credits={planCredits}
+        />
+      )}
+    </Elements>
+  );
+};
+
 export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
   closeAction,
   resourceId,
 }) => {
-  const stripePromise = loadStripe(env.VITE_STRIPE_API_KEY);
   const [creditsPlans] = useGetCreditsPlansQuery();
 
   const creditsPlanData = creditsPlans.data?.getCreditsPlans;
@@ -67,21 +100,11 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
               <p css={p14Regular}>{plan?.description}</p>
             </ModalWrapper>
             <StripeWrapper>
-              <Elements stripe={stripePromise}>
-                {resourceId && (
-                  <AddCreditsPaymentComponent
-                    resourceId={resourceId}
-                    closeAction={closeAction}
-                    credits={plan?.credits ?? 0}
-                  />
-                )}
-                {!resourceId && (
-                  <WrapperAddCreditsModal
-                    closeAction={closeAction}
-                    credits={plan?.credits ?? 0}
-                  />
-                )}
-              </Elements>
+              <StripeDialogue
+                resourceId={resourceId}
+                closeAction={closeAction}
+                planCredits={plan?.credits}
+              ></StripeDialogue>
             </StripeWrapper>
           </>
         );
