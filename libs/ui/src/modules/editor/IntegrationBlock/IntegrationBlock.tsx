@@ -1,20 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SimpleTableCellType } from '@decipad/editor-types';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { type Result } from '@decipad/remote-computer';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
-import { cssVar, p12Medium } from '../../../primitives';
 import { SegmentButtons, TextAndIconButton } from '../../../shared';
+import { LiveCode } from '../LiveCode/LiveCode';
+import { CodeResult } from '../CodeResult/CodeResult';
+import { MarkType } from '../PlotParams/PlotParams';
+import { cssVar, p12Medium } from '../../../primitives';
 import {
   hideOnPrint,
   integrationBlockStyles,
 } from '../../../styles/editor-layout';
-import { Height } from '../../../styles/spacings';
-import { CodeResult } from '../CodeResult/CodeResult';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
-import { LiveCode } from '../LiveCode/LiveCode';
-import { MarkType } from '../PlotParams/PlotParams';
 
 type IntegrationButton =
   | {
@@ -141,5 +140,4 @@ const controlStyles = css(p12Medium, hideOnPrint, {
   cursor: 'pointer',
   gap: '6px',
   color: cssVar('textDefault'),
-  height: Height.Bubble,
 });

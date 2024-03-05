@@ -131,12 +131,11 @@ export const LiveConnectionVarName: PlateComponent = ({
       insertDataViewBelow(
         editor,
         parentPath,
-        computer,
         tableElement.id,
         getNodeString(getNodeChild(element, 0))
       )
     );
-  }, [computer, editor, element, parent, parentPath, path]);
+  }, [editor, element, parent, parentPath, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {

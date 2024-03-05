@@ -188,15 +188,9 @@ export const IntegrationBlock: PlateComponent = ({
   const onAddDataViewButtonPress = useCallback(() => {
     return (
       path &&
-      insertDataViewBelow(
-        editor,
-        path,
-        computer,
-        element.id,
-        getExprRef(element.id)
-      )
+      insertDataViewBelow(editor, path, element.id, getExprRef(element.id))
     );
-  }, [computer, editor, element.id, path]);
+  }, [editor, element, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {

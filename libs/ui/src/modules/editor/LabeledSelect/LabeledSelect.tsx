@@ -1,18 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { justStopPropagation } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ChangeEvent, useCallback } from 'react';
-import { cssVar, p12Medium } from '../../../primitives';
+import { justStopPropagation } from '@decipad/react-utils';
 import { Label } from '../../../shared';
 import { VoidBlock } from '../VoidBlock/VoidBlock';
+import { cssVar, p12Medium } from '../../../primitives';
 
 const selectFontStyles = css(p12Medium);
 
 const selectStyles = css({
   backgroundColor: cssVar('backgroundDefault'),
-  maxWidth: 200,
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
 });
 
 interface LabeledSelectProps<T extends string> {

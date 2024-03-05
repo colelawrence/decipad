@@ -124,12 +124,8 @@ export const useDataView = ({
     }
   }, [availableColumns, setDataColumns]);
 
-  const variableNames = useSourceTableNames().filter(
-    (name) => name.blockId !== element.id
-  );
-
   return {
-    variableNames,
+    variableNames: useSourceTableNames(),
     tableName,
     onDelete,
     onInsertColumn,

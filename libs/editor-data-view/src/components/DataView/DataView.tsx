@@ -19,7 +19,6 @@ import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';
 import { DataViewData } from '../DataViewData';
-import { getNodeString } from '@udecode/plate-common';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -68,10 +67,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const isEmpty = useMemo(() => {
-    return getNodeString(element.children[0]).length === 0;
-  }, [element.children]);
-
   const rotate = element.rotate ?? false;
   const headers = useMemo((): ReactNode[] => {
     // optimization: these headers are only used on rotated data views
@@ -103,7 +98,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         onChangeVariableName={onVariableNameChange}
         onChangeIcon={saveIcon}
         onChangeColor={saveColor}
-        empty={isEmpty}
         icon={(element.icon ?? 'TableSmall') as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}
         onRotated={saveRotated}
@@ -113,7 +107,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         data={
           sortedColumns && tableName ? (
             <DataViewData
-              element={element}
               tableName={tableName}
               columns={sortedColumns}
               aggregationTypes={selectedAggregationTypes}

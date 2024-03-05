@@ -12,7 +12,7 @@ import {
   teal400,
   yellow500,
 } from '@decipad/ui';
-import { OpaqueColor, dequal } from '@decipad/utils';
+import { OpaqueColor } from '@decipad/utils';
 import debounce from 'lodash.debounce';
 import { cursorStore, UserCursorState } from '@decipad/react-contexts';
 import { MinimalRootEditor } from '@decipad/editor-types';
@@ -87,9 +87,7 @@ export function CursorAwarenessSchedule(editor: TCursorEditor & TYjsEditor) {
           editor.sharedType.doc?.clientID ?? 0
         );
 
-        if (!dequal(cursorStore.get.userCursors(), newCursorData)) {
-          cursorStore.set.userCursors(newCursorData);
-        }
+        cursorStore.set.userCursors(newCursorData);
       }, DEBOUNCE_MS)
     );
   }, RETRY_INTERVAL_MS);

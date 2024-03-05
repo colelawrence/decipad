@@ -40,6 +40,6 @@ export const textify = (result: Result.Result): string => {
     case 'string':
       return stringify(result.value);
     default:
-      return `<${result.type.kind}>`;
+      throw new Error(`cannot textify ${result.type.kind}`);
   }
 };

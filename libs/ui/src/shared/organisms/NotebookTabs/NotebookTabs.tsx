@@ -1,19 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { UserIconKey } from '@decipad/editor-types';
-import { useToast } from '@decipad/toast';
 import styled from '@emotion/styled';
-import * as TabsPrimitive from '@radix-ui/react-tabs';
 import {
+  type FC,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-  type FC,
   type MouseEvent,
   type MouseEventHandler,
 } from 'react';
+import { cssVar, p13Bold, p13Medium } from '../../../primitives';
+import { IconPopover, MenuList } from '../../molecules';
 import {
   AlignArrowLeftAlt,
   AlignArrowRightAlt,
@@ -28,15 +27,15 @@ import {
   Switch,
   Trash,
 } from '../../../icons';
-import { cssVar, p13Bold, p13Medium } from '../../../primitives';
 import * as userIcons from '../../../icons/user-icons';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { useToast } from '@decipad/toast';
 import { deciTabsOverflowXStyles } from '../../../styles/scrollbars';
-import { IconPopover, MenuList } from '../../molecules';
+import { UserIconKey } from '@decipad/editor-types';
 
-import { ClientEventsContext } from '@decipad/client-events';
 import { noop } from '@decipad/utils';
-import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
+import { ClientEventsContext } from '@decipad/client-events';
 import { useCancelingEvent } from '../../../utils';
 
 type UITab = {
@@ -599,8 +598,7 @@ const TabsScrollWrapper = styled.div(
     overflow: 'hidden',
     width: '100%',
   },
-  deciTabsOverflowXStyles,
-  hideOnPrint
+  deciTabsOverflowXStyles
 );
 
 const TabsContainer = styled(TabsPrimitive.List)({

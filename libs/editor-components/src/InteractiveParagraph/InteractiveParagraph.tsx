@@ -55,7 +55,6 @@ export const InteractiveParagraph =
                 elementPath &&
                   execute({
                     editor,
-                    computer,
                     path: elementPath.slice(0, 1),
                     deleteFragment,
                     command: command as SlashCommand,

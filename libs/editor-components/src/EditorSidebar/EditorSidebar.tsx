@@ -56,7 +56,6 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
       if (elementPath) {
         execute({
           editor,
-          computer,
           path: elementPath.slice(0, 1),
           command: command as SlashCommand,
           deleteBlock: false,

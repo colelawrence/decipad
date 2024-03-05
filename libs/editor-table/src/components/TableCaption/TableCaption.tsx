@@ -1,3 +1,4 @@
+import { getExprRef } from '@decipad/remote-computer';
 import {
   insertDataViewBelow,
   insertPlotBelow,
@@ -11,9 +12,8 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { getExprRef } from '@decipad/remote-computer';
-import { EditableTableCaption, MarkType, Tooltip } from '@decipad/ui';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { EditableTableCaption, Tooltip, MarkType } from '@decipad/ui';
 import {
   findNodePath,
   getNodeChild,
@@ -30,7 +30,6 @@ export const TableCaption: PlateComponent = ({
   children,
 }) => {
   const readOnly = useIsEditorReadOnly();
-  const computer = useComputer();
 
   assertElementType(element, ELEMENT_TABLE_CAPTION);
   const columnCount = useTableColumnCount(element);
@@ -65,12 +64,11 @@ export const TableCaption: PlateComponent = ({
       insertDataViewBelow(
         editor,
         parentPath,
-        computer,
         tableElement.id,
         getNodeString(getNodeChild(element, 0))
       )
     );
-  }, [computer, editor, element, parent, path]);
+  }, [editor, element, parent, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {

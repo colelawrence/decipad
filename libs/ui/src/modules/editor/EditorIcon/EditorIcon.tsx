@@ -1,7 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { UserIconKey } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { FC } from 'react';
 import * as userIcons from '../../../icons/user-icons';
 import { IconPopover } from '../../../shared';
@@ -10,11 +8,11 @@ import {
   p14Regular,
   shortAnimationDuration,
 } from '../../../primitives';
-
 import { editorLayout } from '../../../styles';
 import { AvailableSwatchColor } from '../../../utils';
+import { UserIconKey } from '@decipad/editor-types';
 
-const blockStyles = css(hideOnPrint, {
+const blockStyles = css({
   display: 'grid',
   gridTemplateRows: '32px',
   gridTemplateColumns: `min(100%, ${editorLayout.slimBlockWidth}px)`,

@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { AutocompleteName } from '@decipad/remote-computer';
 import { FC } from 'react';
-import { SelectInput } from '../../../shared/molecules/SelectInput/SelectInput';
 import { hideOnPrint } from '../../../styles/editor-layout';
+import { SelectInput } from '../../../shared/molecules/SelectInput/SelectInput';
 
 interface VariableNameProps {
   label?: string;
@@ -27,7 +27,7 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
         setValue={onChangeVariableName}
       >
         <option key="empty" value={''}>
-          Source...
+          Choose...
         </option>
         {variableNames.map((varName) => (
           <option key={varName.blockId} value={varName.blockId}>

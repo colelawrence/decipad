@@ -15,6 +15,10 @@ interface TableRowProps {
 
 const dataViewRowStyles = css({
   borderBottom: `1px solid ${cssVar('borderSubdued')}`,
+
+  '&:last-of-type': {
+    borderBottomColor: cssVar('textDefault'),
+  },
 });
 
 const dataViewRowGlobalStyles = css({

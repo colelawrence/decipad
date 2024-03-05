@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { UserIconKey } from '@decipad/editor-types';
 import {
   useDndPreviewSelectors,
   useEditorStylesContext,
@@ -7,30 +6,31 @@ import {
 } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import {
-  PlateEditor,
-  TElement,
-  findNodePath,
-  focusEditor,
-  getAboveNode,
-  setSelection,
-  toSlateNode,
-  useEditorRef,
-  useElement,
-} from '@udecode/plate-common';
-import { ELEMENT_TABLE, ELEMENT_TD } from '@udecode/plate-table';
 import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { Point } from 'slate';
+import { Table, TableWidth } from '../Table/Table';
 import { Create } from '../../../icons';
-import { cssVar, smallScreenQuery } from '../../../primitives';
 import { AddTableRowButton } from '../../../shared';
+import { cssVar, smallScreenQuery } from '../../../primitives';
 import { editorLayout, scrollbars } from '../../../styles';
 import { slimBlockWidth } from '../../../styles/editor-layout';
 import { tableControlWidth } from '../../../styles/table';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
-import { Table, TableWidth } from '../Table/Table';
+import { UserIconKey } from '@decipad/editor-types';
+import {
+  findNodePath,
+  focusEditor,
+  getAboveNode,
+  PlateEditor,
+  setSelection,
+  TElement,
+  toSlateNode,
+  useEditorRef,
+  useElement,
+} from '@udecode/plate-common';
+import { ELEMENT_TABLE, ELEMENT_TD } from '@udecode/plate-table';
+import { Point } from 'slate';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = cssVar('editorWidth');
@@ -50,7 +50,7 @@ const wrapperStyles = css({
   margin: '0',
 });
 
-export const tableCaptionWrapperStyles = css({
+const tableCaptionWrapperStyles = css({
   width: '100%',
   minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
@@ -59,6 +59,7 @@ export const tableCaptionWrapperStyles = css({
     maxWidth: cssVar('editorWidth'),
     minWidth: '0',
   },
+  marginBottom: '8px',
 });
 
 const tableWrapperTransformStyles = css({

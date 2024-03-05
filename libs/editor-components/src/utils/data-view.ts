@@ -10,10 +10,8 @@ import { TEditor } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { RemoteComputer } from '@decipad/remote-computer';
 
 const getInitialDataViewElement = (
-  computer: RemoteComputer,
   blockId?: string,
   varName?: string
 ): DataViewElement => {
@@ -31,11 +29,7 @@ const getInitialDataViewElement = (
             id: nanoid(),
             type: ELEMENT_DATA_VIEW_NAME,
             children: [
-              {
-                text: computer?.getAvailableIdentifier(
-                  varName ? `${varName}Data` : 'DataView'
-                ),
-              },
+              { text: `Data view${varName ? ` for ${varName}` : ''}` },
             ],
           },
         ],
@@ -52,12 +46,9 @@ const getInitialDataViewElement = (
 export const insertDataViewBelow = (
   editor: TEditor,
   path: Path,
-  computer: RemoteComputer,
   blockId?: string,
   varName?: string
 ): void => {
-  const dataView = cloneDeep(
-    getInitialDataViewElement(computer, blockId, varName)
-  );
+  const dataView = cloneDeep(getInitialDataViewElement(blockId, varName));
   insertNodes(editor, [dataView], { at: requirePathBelowBlock(editor, path) });
 };
