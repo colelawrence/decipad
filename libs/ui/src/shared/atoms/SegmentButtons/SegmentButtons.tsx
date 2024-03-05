@@ -1,10 +1,10 @@
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { FC, ReactNode } from 'react';
 import { componentCssVars, cssVar } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
-import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 
 interface SegmentButton {
   readonly children: ReactNode;
@@ -101,7 +101,6 @@ const WrapperDiv = styled.div<{
       border: `1px solid ${cssVar('borderDefault')}`,
     }),
 
-    height: '100%',
     backgroundColor:
       props.variant === 'transparent'
         ? 'inherit'
@@ -155,7 +154,6 @@ const FigureButton = styled.figure<{
     backgroundColor: componentCssVars('ButtonTertiaryAltDisabledBackground'),
     color: componentCssVars('ButtonTertiaryAltDisabledText'),
   },
-
   ':not(:disabled)': {
     ':hover, :focus': {
       backgroundColor:

@@ -11,6 +11,7 @@ import {
   ElementKind,
   SlashCommand,
 } from '@decipad/editor-types';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { createCodeBlockPlugin } from '@udecode/plate-code-block';
 import { execute } from './slashCommands';
 
@@ -39,6 +40,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
 
     execute({
       editor,
+      computer: getRemoteComputer(),
       path: [0],
       command,
       getAvailableIdentifier,

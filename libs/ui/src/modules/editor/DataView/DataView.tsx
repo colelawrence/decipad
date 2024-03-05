@@ -1,36 +1,24 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { AutocompleteName } from '@decipad/remote-computer';
+import { UserIconKey } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import type { AutocompleteName } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { Invisible, SegmentButtons } from 'libs/ui/src/shared';
 import { Children, FC, ReactNode } from 'react';
-import { Invisible, SegmentButtons, Spinner } from '../../../shared';
-import { Move, Transpose } from '../../../icons';
+import { Move, Spinner, Transpose } from '../../../icons';
 import { p14Regular, smallScreenQuery } from '../../../primitives';
-import { Height, editorLayout, scrollbars } from '../../../styles';
+import { IconPopover, TableToolbar } from '../../../shared/molecules';
+import * as userIcons from '../../../icons/user-icons';
+import { editorLayout, scrollbars } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
-import { UserIconKey } from '@decipad/editor-types';
+import { tableCaptionWrapperStyles } from '../EditorTable/EditorTable';
 import { VariableNameSelector } from '../VariableNameSelector/VariableNameSelector';
 
 const dataViewWrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
-});
-
-const dataViewControlsStyles = css({
-  alignItems: 'center',
-  display: 'flex',
-  justifyContent: 'space-between',
-  gap: '9px',
-  lineBreak: 'unset',
-});
-
-const buttonRowStyles = css({
-  height: Height.ActionButtons,
-  display: 'flex',
-  flexDirection: 'row',
-  gap: '4px',
 });
 
 const gutterWidth = '60px';
@@ -94,6 +82,7 @@ interface DataViewProps {
   readonly variableName: string;
   readonly icon: UserIconKey;
   readonly color?: AvailableSwatchColor;
+  readonly empty?: boolean;
   readonly onChangeVariableName?: (varName: string) => void;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
@@ -110,6 +99,8 @@ export const DataView: FC<DataViewProps> = ({
   variableName,
   icon,
   color,
+  empty,
+
   onChangeVariableName = noop,
   onChangeIcon = noop,
   onChangeColor = noop,
@@ -122,6 +113,7 @@ export const DataView: FC<DataViewProps> = ({
 }): ReturnType<FC> => {
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   const readOnly = useIsEditorReadOnly();
+  const Icon = userIcons[icon];
 
   return (
     <TableStyleContext.Provider
@@ -135,50 +127,72 @@ export const DataView: FC<DataViewProps> = ({
     >
       <div
         className={'block-table'}
-        css={dataViewWrapperStyles}
+        css={[dataViewWrapperStyles, tableCaptionWrapperStyles]}
         aria-roledescription="data view"
       >
-        <div
-          css={[dataViewControlsStyles, !readOnly && { marginBottom: '8px' }]}
-        >
-          <div css={{ display: 'none' }}>{caption}</div>
-          {!readOnly && (
-            <VariableNameSelector
-              label=""
-              variableNames={availableVariableNames}
-              selectedVariableName={variableName}
-              onChangeVariableName={onChangeVariableName}
-              testId="data-view-source"
+        <TableToolbar
+          isForWideTable={false}
+          readOnly={readOnly}
+          emptyLabel="Data view name..."
+          empty={empty}
+          actions={
+            <>
+              {!readOnly && (
+                <VariableNameSelector
+                  label=""
+                  variableNames={availableVariableNames}
+                  selectedVariableName={variableName}
+                  onChangeVariableName={onChangeVariableName}
+                  testId="data-view-source"
+                />
+              )}
+              {!readOnly && (
+                <>
+                  {isFlagEnabled('ROTATED_DATA_VIEW') &&
+                    isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
+                      <SegmentButtons
+                        border
+                        variant="default"
+                        iconSize="integrations"
+                        padding="skinny"
+                        buttons={[
+                          {
+                            children: <Transpose />,
+                            tooltip: `Flip`,
+                            onClick: () => onRotated(!rotate),
+                            testId: 'formula',
+                          },
+                          {
+                            children: <Move />,
+                            tooltip: `Drilldown`,
+                            onClick: () =>
+                              onChangeAlternateRotation(!alternateRotation),
+                            testId: 'table',
+                          },
+                        ]}
+                      />
+                    )}
+                </>
+              )}
+            </>
+          }
+          iconPopover={
+            <IconPopover
+              color={color as AvailableSwatchColor}
+              trigger={
+                <button>
+                  <Icon />
+                </button>
+              }
+              onChangeIcon={onChangeIcon}
+              onChangeColor={onChangeColor}
             />
-          )}
-          {!readOnly && (
-            <div css={buttonRowStyles}>
-              {isFlagEnabled('ROTATED_DATA_VIEW') &&
-                isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
-                  <SegmentButtons
-                    border
-                    variant="default"
-                    iconSize="table"
-                    buttons={[
-                      {
-                        children: <Transpose />,
-                        tooltip: `Flip`,
-                        onClick: () => onRotated(!rotate),
-                        testId: 'formula',
-                      },
-                      {
-                        children: <Move />,
-                        tooltip: `Drilldown`,
-                        onClick: () =>
-                          onChangeAlternateRotation(!alternateRotation),
-                        testId: 'table',
-                      },
-                    ]}
-                  />
-                )}
-            </div>
-          )}
-        </div>
+          }
+          icon={icon}
+          color={color}
+          caption={caption}
+        />
+
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
           <div css={tableScroll}>

@@ -1,29 +1,18 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
-import {
-  SegmentButtons,
-  TextAndIconButton,
-  IconPopover,
-} from '../../../shared';
 import * as userIcons from '../../../icons/user-icons';
-import { markTypes } from '../PlotParams/PlotParams';
-import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 import {
-  cssVar,
-  display,
-  p14Regular,
-  placeholderOpacity,
-  getThemeColor,
-} from '../../../primitives';
-import { Height, codeBlock } from '../../../styles';
-import {
-  hideOnPrint,
-  slimBlockWidth,
-  wideBlockWidth,
-} from '../../../styles/editor-layout';
+  IconPopover,
+  SegmentButtons,
+  TableToolbar,
+  TextAndIconButton,
+} from '../../../shared';
+import { slimBlockWidth, wideBlockWidth } from '../../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
+import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
+import { markTypes } from '../PlotParams/PlotParams';
 import { Formula, Hide, Show, TableRows } from 'libs/ui/src/icons';
 
 const tableCaptionWideStyles = css({
@@ -32,68 +21,6 @@ const tableCaptionWideStyles = css({
 
 const tableCaptionSlimStyles = css({
   maxWidth: `${slimBlockWidth}px`,
-});
-
-const tableCaptionInnerStyles = css({
-  alignItems: 'center',
-  display: 'flex',
-  justifyContent: 'space-between',
-  gap: '9px',
-  lineBreak: 'unset',
-});
-
-const tableVarStyles = css(codeBlock.structuredVariableStyles, {
-  height: '100%',
-  padding: '0px 8px',
-  borderRadius: '6px',
-  display: 'flex',
-  alignItems: 'center',
-  overflowWrap: 'anywhere',
-  maxWidth: '174px',
-  wordBreak: 'break-word',
-  whiteSpace: 'normal',
-  '@media print': {
-    background: 'unset',
-  },
-});
-
-const tableTitleWrapperStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '8px',
-});
-
-const tableIconSizeStyles = css({
-  flexShrink: 0,
-  display: 'grid',
-  width: 16,
-  height: 16,
-});
-
-const buttonRowStyles = css({
-  height: Height.ActionButtons,
-  display: 'flex',
-  flexDirection: 'row',
-  gap: '6px',
-  alignItems: 'center',
-});
-
-const placeholderStyles = css({
-  cursor: 'text',
-  display: 'flex',
-  '&::before': {
-    ...display,
-    ...p14Regular,
-    pointerEvents: 'none',
-    content: 'attr(aria-placeholder)',
-    opacity: placeholderOpacity,
-  },
-  lineHeight: '24px',
-});
-
-const wrapperStyle = css({
-  display: 'flex',
-  height: '100%',
 });
 
 const toggleFormulaStyles = (
@@ -145,133 +72,101 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   } = useContext(TableStyleContext);
 
   const Icon = userIcons[icon];
-  const childArray = Children.toArray(children);
-  const [caption, ...tableFormulaEditors] = childArray;
+  const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
-  return (
-    <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
-      <div css={[tableCaptionInnerStyles, tableCaptionSlimStyles]}>
-        <div
-          css={[
-            tableTitleWrapperStyles,
-            tableVarStyles,
-            {
-              backgroundColor: color
-                ? getThemeColor(color).Background.Subdued
-                : cssVar('themeBackgroundSubdued'),
-              mixBlendMode: 'luminosity',
-            },
-          ]}
+  const actions = (
+    <>
+      {hideAddDataViewButton || readOnly ? null : (
+        <TextAndIconButton
+          text="Pivot view"
+          iconPosition="left"
+          onClick={() => onAddDataViewButtonPress()}
         >
-          <div
-            contentEditable={false}
-            css={[
-              tableIconSizeStyles,
-              {
-                mixBlendMode: 'luminosity',
-              },
-            ]}
-          >
-            {readOnly ? (
-              <Icon title={icon} />
-            ) : (
-              <IconPopover
-                color={color as AvailableSwatchColor}
-                trigger={
-                  <button>
-                    <Icon title={icon} />
-                  </button>
-                }
-                onChangeIcon={setIcon}
-                onChangeColor={setColor}
-              />
-            )}
-          </div>
-          <div
-            role="textbox"
-            aria-roledescription="table name"
-            css={[
-              placeholderStyles,
-              empty && {
-                ':after': {
-                  content: '"Name your table"',
+          <TableRows />
+        </TextAndIconButton>
+      )}
+      {hideAddDataViewButton ||
+      readOnly ||
+      !onAddChartViewButtonPress ? null : (
+        <CreateChartMenu
+          onAddChartViewButtonPress={onAddChartViewButtonPress}
+        />
+      )}
+      <>
+        {showToggleCollapsedButton &&
+          setCollapsed &&
+          !hideAddDataViewButton &&
+          setHideFormulas && (
+            <SegmentButtons
+              border
+              variant="default"
+              iconSize="integrations"
+              padding="skinny"
+              buttons={[
+                {
+                  children: <Formula />,
+                  tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
+                  onClick: () =>
+                    tableFormulaEditors.length !== 0
+                      ? setHideFormulas(!hideFormulas)
+                      : null,
+                  testId: 'formula',
                 },
-              },
-              {
-                color: color
-                  ? getThemeColor(color).Text.Default
-                  : cssVar('themeTextDefault'),
-              },
-            ]}
-            spellCheck={false}
-            contentEditable={!readOnly}
-            data-testid={'table-name-input'}
-          >
-            {caption}
-          </div>
-        </div>
-        <div css={[buttonRowStyles, hideOnPrint]} contentEditable={false}>
-          {hideAddDataViewButton || readOnly ? null : (
-            <TextAndIconButton
-              text="Pivot view"
-              iconPosition="left"
-              onClick={() => onAddDataViewButtonPress()}
-            >
-              <TableRows />
-            </TextAndIconButton>
-          )}
-          {hideAddDataViewButton ||
-          readOnly ||
-          !onAddChartViewButtonPress ? null : (
-            <CreateChartMenu
-              onAddChartViewButtonPress={onAddChartViewButtonPress}
+                {
+                  children: isCollapsed ? <Show /> : <Hide />,
+                  tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
+                  onClick: () => setCollapsed(!isCollapsed),
+                  testId: 'table',
+                },
+              ]}
             />
           )}
-          <div css={wrapperStyle}>
-            {showToggleCollapsedButton &&
-              setCollapsed &&
-              !hideAddDataViewButton &&
-              setHideFormulas && (
-                <SegmentButtons
-                  border
-                  variant="default"
-                  iconSize="table"
-                  buttons={[
-                    {
-                      children: <Formula />,
-                      tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
-                      onClick: () =>
-                        tableFormulaEditors.length !== 0
-                          ? setHideFormulas(!hideFormulas)
-                          : null,
-                      testId: 'formula',
-                    },
-                    {
-                      children: isCollapsed ? <Show /> : <Hide />,
-                      tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
-                      onClick: () => setCollapsed(!isCollapsed),
-                      testId: 'table',
-                    },
-                  ]}
-                />
-              )}
-          </div>
-        </div>
-      </div>
+      </>
+    </>
+  );
+
+  return (
+    <>
+      <TableToolbar
+        actions={actions}
+        isForWideTable={isForWideTable}
+        readOnly={readOnly}
+        icon={icon}
+        color={color}
+        caption={caption}
+        empty={empty}
+        emptyLabel={'Table name...'}
+        iconPopover={
+          <IconPopover
+            color={color as AvailableSwatchColor}
+            trigger={
+              <button>
+                <Icon />
+              </button>
+            }
+            onChangeIcon={setIcon}
+            onChangeColor={setColor}
+          />
+        }
+      />
 
       <div
-        css={toggleFormulaStyles(
-          !!hideFormulas,
-          !!isCollapsed,
-          tableFormulaEditors.length
-        )}
+        css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}
       >
-        {tableFormulaEditors.length > 0 && (
-          <FormulasDrawer readOnly={readOnly}>
-            {tableFormulaEditors}
-          </FormulasDrawer>
-        )}
+        <div
+          css={toggleFormulaStyles(
+            !!hideFormulas,
+            !!isCollapsed,
+            tableFormulaEditors.length
+          )}
+        >
+          {tableFormulaEditors.length > 0 && (
+            <FormulasDrawer readOnly={readOnly}>
+              {tableFormulaEditors}
+            </FormulasDrawer>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

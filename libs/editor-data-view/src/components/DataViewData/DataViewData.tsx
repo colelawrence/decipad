@@ -1,8 +1,10 @@
 import { FC, ReactNode } from 'react';
 import { DataViewDataAlternatedRotationLayout, DataViewDataLayout } from '..';
 import { AggregationKind, Column } from '../../types';
+import { DataViewElement } from '@decipad/editor-types';
 
 interface DataViewDataProps {
+  element: DataViewElement;
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;

@@ -37,6 +37,7 @@ import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
+import { useComputer } from '@decipad/react-contexts';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -119,6 +120,8 @@ export const LiveConnectionVarName: PlateComponent = ({
     toast,
   ]);
 
+  const computer = useComputer();
+
   const onAddDataViewButtonPress = useCallback(() => {
     if (!parent) {
       return;
@@ -131,11 +134,12 @@ export const LiveConnectionVarName: PlateComponent = ({
       insertDataViewBelow(
         editor,
         parentPath,
+        computer,
         tableElement.id,
         getNodeString(getNodeChild(element, 0))
       )
     );
-  }, [editor, element, parent, parentPath, path]);
+  }, [computer, editor, element, parent, parentPath, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {

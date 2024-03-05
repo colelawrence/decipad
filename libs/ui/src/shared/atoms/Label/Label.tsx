@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
-import { css } from '@emotion/react';
-import { noop } from '@decipad/utils';
-import { codeBlock } from '../../../styles';
 import { cssVar } from '../../../primitives';
+import { codeBlock } from '../../../styles';
 
 // If we get further types of labels,
 // consider pulling up the bubble styles into some Bubble Label molecule
@@ -14,7 +14,6 @@ const labelContainerStyles = css({
   display: 'flex',
   flexWrap: 'nowrap',
   gap: '4px',
-  height: '1.75rem',
 });
 
 const hoveredBubbleStyles = css({
