@@ -58,6 +58,8 @@ fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
   paymentStatus
   credits
   queries
+  seats
+  storage
 }
 
 fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {

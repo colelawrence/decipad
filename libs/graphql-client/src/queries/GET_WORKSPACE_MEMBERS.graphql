@@ -1,6 +1,0 @@
-query GetWorkspaceMembers($workspaceId: ID!) {
-  getWorkspaceById(id: $workspaceId) {
-    id
-    ...WorkspaceMembers
-  }
-}

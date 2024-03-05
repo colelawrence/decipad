@@ -1,7 +1,7 @@
-import { UserAccess, useGetWorkspaceMembersQuery } from '..';
+import { UserAccess, useGetWorkspaceByIdQuery } from '..';
 
 export const useWorkspaceMembers = (workspaceId: string) => {
-  const { data: currentWorkspace } = useGetWorkspaceMembersQuery({
+  const { data: currentWorkspace } = useGetWorkspaceByIdQuery({
     variables: { workspaceId },
   })[0];
 

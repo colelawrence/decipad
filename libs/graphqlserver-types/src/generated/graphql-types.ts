@@ -535,7 +535,7 @@ export type MutationUpdateWorkspaceArgs = {
 
 export type NewResourceQuotaLimit = {
   __typename?: 'NewResourceQuotaLimit';
-  newQuotaLimit: Scalars['Int']['output'];
+  newQuotaLimit: Scalars['Float']['output'];
 };
 
 export type Publish_State =
@@ -766,9 +766,9 @@ export type ResourceTypes =
 
 export type ResourceUsage = {
   __typename?: 'ResourceUsage';
-  consumption: Scalars['Int']['output'];
+  consumption: Scalars['Float']['output'];
   id: Scalars['ID']['output'];
-  originalAmount?: Maybe<Scalars['Int']['output']>;
+  originalAmount?: Maybe<Scalars['Float']['output']>;
   resourceType: ResourceTypes;
 };
 
@@ -1190,6 +1190,7 @@ export type ResolversTypes = {
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ResolverTypeWrapper<ExternalKey>;
   ExternalProvider: ExternalProvider;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Gist: Gist;
   GoalFulfilmentInput: GoalFulfilmentInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -1272,6 +1273,7 @@ export type ResolversParentTypes = {
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ExternalKey;
+  Float: Scalars['Float']['output'];
   GoalFulfilmentInput: GoalFulfilmentInput;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -1469,7 +1471,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
 };
 
 export type NewResourceQuotaLimitResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['NewResourceQuotaLimit'] = ResolversParentTypes['NewResourceQuotaLimit']> = {
-  newQuotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  newQuotaLimit?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1593,9 +1595,9 @@ export type ResourceAccessResolvers<ContextType = GraphqlContext, ParentType ext
 };
 
 export type ResourceUsageResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ResourceUsage'] = ResolversParentTypes['ResourceUsage']> = {
-  consumption?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  consumption?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  originalAmount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  originalAmount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   resourceType?: Resolver<ResolversTypes['ResourceTypes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

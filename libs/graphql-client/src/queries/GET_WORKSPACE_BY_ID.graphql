@@ -1,0 +1,20 @@
+query GetWorkspaceById($workspaceId: ID!) {
+  getWorkspaceById(id: $workspaceId) {
+    id
+    plan
+    isPremium
+    workspaceSubscription {
+      ...WorkspaceSubscriptionWithData
+    }
+    workspaceExecutedQuery {
+      ...WorkspaceExecutedQueryData
+    }
+    resourceUsages {
+      id
+      resourceType
+      consumption
+      originalAmount
+    }
+    ...WorkspaceMembers
+  }
+}
