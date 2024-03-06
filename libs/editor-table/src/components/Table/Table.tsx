@@ -42,6 +42,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     onChangeColumnAggregation,
     onSetCollapsed,
     onSetHideFormulas,
+    onSetHideCellFormulas,
     onSaveColor,
     onSaveIcon,
     onDownload,
@@ -109,6 +110,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               onSetCollapsed={onSetCollapsed}
               hideFormulas={element.hideFormulas}
               onSetHideFormulas={onSetHideFormulas}
+              hideCellFormulas={element.hideCellFormulas}
+              onSetHideCellFormulas={onSetHideCellFormulas}
               icon={(element.icon ?? 'TableSmall') as UserIconKey}
               color={(element.color ?? defaultColor) as AvailableSwatchColor}
               isCollapsed={element.isCollapsed}

@@ -148,6 +148,7 @@ interface EditorTableProps {
   readonly color: AvailableSwatchColor;
   readonly isCollapsed?: boolean;
   readonly hideFormulas?: boolean;
+  readonly hideCellFormulas?: boolean;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
 
@@ -161,6 +162,7 @@ interface EditorTableProps {
   readonly showAllRows?: boolean;
   readonly onSetCollapsed?: (collapsed: boolean) => void;
   readonly onSetHideFormulas?: (isHidden: boolean) => void;
+  readonly onSetHideCellFormulas?: (isHidden: boolean) => void;
 
   readonly smartRow?: ReactNode;
 }
@@ -232,12 +234,14 @@ export const EditorTable: FC<EditorTableProps> = ({
   color,
   isCollapsed,
   hideFormulas,
+  hideCellFormulas,
   tableWidth,
   isSelectingCell,
   onChangeIcon = noop,
   onChangeColor = noop,
   onSetCollapsed = noop,
   onSetHideFormulas = noop,
+  onSetHideCellFormulas = noop,
   smartRow,
   previewMode,
 }: EditorTableProps): ReturnType<FC> => {
@@ -256,10 +260,12 @@ export const EditorTable: FC<EditorTableProps> = ({
       color: color ?? defaultColor,
       isCollapsed,
       hideFormulas,
+      hideCellFormulas,
       setIcon: onChangeIcon,
       setColor: onChangeColor,
       setCollapsed: onSetCollapsed,
       setHideFormulas: onSetHideFormulas,
+      setHideCellFormulas: onSetHideCellFormulas,
     }),
     [
       color,
@@ -267,10 +273,12 @@ export const EditorTable: FC<EditorTableProps> = ({
       icon,
       isCollapsed,
       hideFormulas,
+      hideCellFormulas,
       onChangeColor,
       onChangeIcon,
       onSetCollapsed,
       onSetHideFormulas,
+      onSetHideCellFormulas,
     ]
   );
 

@@ -8,7 +8,6 @@ import {
   RemoteComputer,
 } from '@decipad/remote-computer';
 import { assertElementType } from '@decipad/editor-utils';
-import { weakMapMemoizeInteractiveElementOutput } from '../../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../../types';
 import { headerToColumn } from './headerToColumn';
 import { parseElementAsVariableAssignment } from '../../utils/parseElementAsVariableAssignment';
@@ -16,64 +15,66 @@ import { inferType } from '@decipad/parse';
 
 export const Table: InteractiveLanguageElement = {
   type: ELEMENT_TABLE,
-  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor, computer, table): Promise<Program> => {
-      assertElementType(table, ELEMENT_TABLE);
+  getParsedBlockFromElement: async (
+    _editor,
+    computer,
+    table
+  ): Promise<Program> => {
+    assertElementType(table, ELEMENT_TABLE);
 
-      const [caption, headerRow, ...dataRows] = table.children;
-      const tableName = getNodeString(caption.children[0]);
-      const rowCount = dataRows.length;
+    const [caption, headerRow, ...dataRows] = table.children;
+    const tableName = getNodeString(caption.children[0]);
+    const rowCount = dataRows.length;
 
-      const tableItself = statementToIdentifiedBlock(table.id, {
-        type: 'table',
-        args: [{ type: 'tabledef', args: [tableName, rowCount] }],
-      } as AST.Table);
+    const tableItself = statementToIdentifiedBlock(table.id, {
+      type: 'table',
+      args: [{ type: 'tabledef', args: [tableName, rowCount] }],
+    } as AST.Table);
 
-      const columnAssigns: Program = [];
-      const categoriesAssigns: Program = [];
-      const categoriesAssignsPromises: Array<Promise<Program>> = [];
+    const columnAssigns: Program = [];
+    const categoriesAssigns: Program = [];
+    const categoriesAssignsPromises: Array<Promise<Program>> = [];
 
-      for (const [columnIndex, th] of headerRow.children.entries()) {
-        const { columnName, errors, elementId, expression } =
-          // eslint-disable-next-line no-await-in-loop
-          await headerToColumn({
-            computer,
-            th,
+    for (const [columnIndex, th] of headerRow.children.entries()) {
+      const { columnName, errors, elementId, expression } =
+        // eslint-disable-next-line no-await-in-loop
+        await headerToColumn({
+          computer,
+          th,
+          columnIndex,
+          tableName,
+          table,
+          dataRows,
+        });
+
+      if (expression) {
+        const columnAssign: AST.TableColumnAssign = {
+          type: 'table-column-assign',
+          args: [
+            { type: 'tablepartialdef', args: [tableName] },
+            { type: 'coldef', args: [columnName] },
+            expression,
             columnIndex,
-            tableName,
-            table,
-            dataRows,
-          });
+          ],
+        };
 
-        if (expression) {
-          const columnAssign: AST.TableColumnAssign = {
-            type: 'table-column-assign',
-            args: [
-              { type: 'tablepartialdef', args: [tableName] },
-              { type: 'coldef', args: [columnName] },
-              expression,
-              columnIndex,
-            ],
-          };
-
-          columnAssigns.push(
-            statementToIdentifiedBlock(elementId, columnAssign),
-            ...errors
-          );
-        } else {
-          columnAssigns.push(...errors);
-        }
-        if (th.cellType.kind === 'category') {
-          categoriesAssignsPromises.push(parseCategoryOptions(computer, th));
-        }
+        columnAssigns.push(
+          statementToIdentifiedBlock(elementId, columnAssign),
+          ...errors
+        );
+      } else {
+        columnAssigns.push(...errors);
       }
-      categoriesAssigns.push(
-        ...(await Promise.all(categoriesAssignsPromises)).flat()
-      );
-
-      return [tableItself, ...columnAssigns, ...categoriesAssigns];
+      if (th.cellType.kind === 'category') {
+        categoriesAssignsPromises.push(parseCategoryOptions(computer, th));
+      }
     }
-  ),
+    categoriesAssigns.push(
+      ...(await Promise.all(categoriesAssignsPromises)).flat()
+    );
+
+    return [tableItself, ...columnAssigns, ...categoriesAssigns];
+  },
 };
 
 async function parseCategoryOptions(

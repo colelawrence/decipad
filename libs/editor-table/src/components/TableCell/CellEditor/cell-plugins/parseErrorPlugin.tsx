@@ -2,7 +2,7 @@ import type { CellValueType } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 
 import type { CellPlugin } from '../types';
-import { SyntaxErrorHighlight } from '../../SyntaxErrorHighlight/SyntaxErrorHighlight';
+import { SyntaxErrorHighlight } from '@decipad/ui';
 
 const EXCLUDE_CELL_KINDS: CellValueType['kind'][] = ['anything', 'string'];
 
@@ -14,7 +14,7 @@ export const parseErrorPlugin: CellPlugin = {
 
     const parseError = computer.getBlockIdResult$.useWithSelector(
       (elm) => elm?.error,
-      element?.id
+      element.id
     );
 
     const parseErrorMessage =

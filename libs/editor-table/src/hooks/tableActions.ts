@@ -60,6 +60,7 @@ export interface TableActions {
   ) => void;
   onSetCollapsed: (collapsed: boolean) => void;
   onSetHideFormulas: (isHidden: boolean) => void;
+  onSetHideCellFormulas: (isHidden: boolean) => void;
   onChangeColumnAggregation: (
     columnIndex: number,
     newColumnAggregation: string | undefined
@@ -212,8 +213,8 @@ export const useTableActions = (
   );
 
   const computer = useComputer();
-
   const path = useNodePath(element ?? undefined);
+
   const onSetHideFormulasMutator = usePathMutatorCallback(
     editor,
     path,
@@ -232,6 +233,13 @@ export const useTableActions = (
       });
     },
     [editor, onSetHideFormulasMutator]
+  );
+
+  const onSetHideCellFormulas = usePathMutatorCallback(
+    editor,
+    path,
+    'hideCellFormulas',
+    'tableActions'
   );
 
   const onChangeColumnType = useCallback(
@@ -300,7 +308,6 @@ export const useTableActions = (
     [editor, path]
   );
 
-  // here is the crash i think
   const mutateIsCollapsed = usePathMutatorCallback(
     editor,
     path,
@@ -616,6 +623,7 @@ export const useTableActions = (
     onMoveColumn,
     onSetCollapsed,
     onSetHideFormulas,
+    onSetHideCellFormulas,
     onSaveIcon,
     onSaveColor,
     onDownload,

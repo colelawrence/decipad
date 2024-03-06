@@ -6,7 +6,7 @@ import { componentCssVars, cssVar } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
 
-interface SegmentButton {
+export interface SegmentButton {
   readonly children: ReactNode;
   readonly onClick: (event: React.MouseEvent<HTMLElement>) => void;
   readonly tooltip?: string | ReactNode;
@@ -16,7 +16,7 @@ interface SegmentButton {
   readonly selected?: boolean;
 }
 
-type SegmentButtonsProps = {
+export type SegmentButtonsProps = {
   readonly buttons: SegmentButton[];
   readonly variant?: 'transparent' | 'darker' | 'default' | 'lighter';
   readonly border?: boolean;

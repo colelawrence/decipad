@@ -47,6 +47,7 @@ export {
   simpleValueToString,
   materializeResult,
   tokenRules,
+  walkAst,
   type AutocompleteName,
   type BracketError,
   type Constant,

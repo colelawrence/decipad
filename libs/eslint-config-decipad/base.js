@@ -62,6 +62,7 @@ module.exports = {
     'no-cond-assign': ['error', 'except-parens'],
     'no-continue': 'off',
     'no-case-declarations': 'off',
+    'no-void': 'off',
 
     '@typescript-eslint/no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
     'unused-imports/no-unused-imports': 'error',

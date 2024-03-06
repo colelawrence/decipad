@@ -12,60 +12,61 @@ import { getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType, parseCell } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
-import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 export const VariableDef: InteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
-  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor, computer, element): Promise<Program> => {
-      assertElementType(element, ELEMENT_VARIABLE_DEF);
+  getParsedBlockFromElement: async (
+    _editor,
+    computer,
+    element
+  ): Promise<Program> => {
+    assertElementType(element, ELEMENT_VARIABLE_DEF);
 
-      if (element.children.length < 2) {
-        return [];
-      }
-
-      const { id, children } = element;
-      const variableName = getNodeString(children[0]);
-      let expression: string | AST.Expression = getNodeString(children[1]);
-      const isSmartSelection = !!children[1].smartSelection;
-
-      if (
-        element.variant === 'expression' ||
-        element.variant === 'date' ||
-        element.variant === 'toggle' ||
-        (element.variant === 'dropdown' && !isSmartSelection)
-      ) {
-        const { type, coerced } = await inferType(computer, expression, {
-          type: element.coerceToType,
-        });
-        if (type.kind === 'anything' || type.kind === 'nothing') {
-          expression = {
-            type: 'noop',
-            args: [],
-          };
-        } else {
-          expression = coerced || '';
-        }
-        if (element.variant === 'dropdown') {
-          const dropdownVariable = parseElementAsVariableAssignment(
-            id,
-            variableName,
-            expression
-          );
-          const dropdownOptions = await parseDropdownOptions(computer, element);
-          return [...dropdownVariable, ...dropdownOptions.flat()];
-        }
-      }
-
-      if (element.variant === 'dropdown' && isSmartSelection) {
-        return parseDropdown(computer, element);
-      }
-
-      return parseElementAsVariableAssignment(id, variableName, expression);
+    if (element.children.length < 2) {
+      return [];
     }
-  ),
+
+    const { id, children } = element;
+    const variableName = getNodeString(children[0]);
+    let expression: string | AST.Expression = getNodeString(children[1]);
+    const isSmartSelection = !!children[1].smartSelection;
+
+    if (
+      element.variant === 'expression' ||
+      element.variant === 'date' ||
+      element.variant === 'toggle' ||
+      (element.variant === 'dropdown' && !isSmartSelection)
+    ) {
+      const { type, coerced } = await inferType(computer, expression, {
+        type: element.coerceToType,
+      });
+      if (type.kind === 'anything' || type.kind === 'nothing') {
+        expression = {
+          type: 'noop',
+          args: [],
+        };
+      } else {
+        expression = coerced || '';
+      }
+      if (element.variant === 'dropdown') {
+        const dropdownVariable = parseElementAsVariableAssignment(
+          id,
+          variableName,
+          expression
+        );
+        const dropdownOptions = await parseDropdownOptions(computer, element);
+        return [...dropdownVariable, ...dropdownOptions.flat()];
+      }
+    }
+
+    if (element.variant === 'dropdown' && isSmartSelection) {
+      return parseDropdown(computer, element);
+    }
+
+    return parseElementAsVariableAssignment(id, variableName, expression);
+  },
 };
 
 /**

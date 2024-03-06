@@ -1,4 +1,4 @@
-import { DatePickerWrapper } from '../../../../shared';
+import { DatePickerWrapper } from '@decipad/ui';
 import { Time } from '@decipad/remote-computer';
 import type { CellPlugin } from '../types';
 import { matchCellKind } from '../matchCellKind';

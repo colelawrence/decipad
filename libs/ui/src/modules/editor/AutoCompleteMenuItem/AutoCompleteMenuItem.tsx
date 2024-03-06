@@ -1,8 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { SerializedType } from '@decipad/language-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Calendar, Formula, Number, TableSmall, Text } from '../../../icons';
 import { cssVar, p12Medium } from '../../../primitives';
 import { useCancelingEvent } from '../../../utils';
@@ -52,13 +53,7 @@ const identifierStyles = css(p12Medium, {
   overflow: 'hidden',
 });
 
-export type ACItemType =
-  | 'number'
-  | 'string'
-  | 'date'
-  | 'table'
-  | 'column'
-  | 'function';
+export type ACItemType = SerializedType['kind'];
 
 interface AutoCompleteMenuItemProps {
   readonly kind: string;
@@ -78,7 +73,7 @@ interface AutoCompleteMenuItemProps {
 }
 
 const getAutocompleteIconFor = (type: ACItemType) => {
-  const icons = {
+  const icons: Partial<Record<ACItemType, ReactNode>> = {
     number: <Number />,
     string: <Text />,
     date: <Calendar />,

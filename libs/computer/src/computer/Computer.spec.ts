@@ -303,8 +303,7 @@ describe('uses previous value', () => {
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  computer.pushCompute({ program: testProgram });
-  await timeout(0); // give time to compute
+  await computer.pushCompute({ program: testProgram });
   expect(computer.results.getValue().blockResults).not.toEqual({});
 
   computer.reset();
@@ -351,10 +350,9 @@ it('can pass on injected data', async () => {
 });
 
 it('can accept program bits', async () => {
-  computer.pushCompute({
+  await computer.pushCompute({
     program: makeTestProgram('Var1'),
   });
-  await timeout(0); // give time to compute
 
   expect(
     computer.getBlockIdResult('block-0')?.result?.value
@@ -396,6 +394,82 @@ it('can accept program bits', async () => {
     computer.getBlockIdResult('block-0')?.result?.value
     // undefined again
   ).toMatchInlineSnapshot(`Symbol(unknown)`);
+});
+
+describe('It can resolve promise on `pushCompute`', () => {
+  it('resolves', async () => {
+    await expect(
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id',
+            block: parseBlockOrThrow('Var1 = 5', 'id'),
+          },
+        ],
+      })
+    ).resolves.toBeDefined();
+  });
+
+  it('can resolve various `pushCompute` calls', async () => {
+    await expect(
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id2',
+            block: parseBlockOrThrow('Var1 = 5', 'id1'),
+          },
+        ],
+      })
+    ).resolves.toBeDefined();
+
+    await expect(
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id2',
+            block: parseBlockOrThrow('Var2 = 10', 'id2'),
+          },
+        ],
+      })
+    ).resolves.toBeDefined();
+  });
+
+  it('can resolve for the same program, if not waited', async () => {
+    const all = await Promise.all([
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id2',
+            block: parseBlockOrThrow('Var2 = 10', 'id2'),
+          },
+        ],
+      }),
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id2',
+            block: parseBlockOrThrow('Var2 = 10', 'id2'),
+          },
+        ],
+      }),
+      computer.pushCompute({
+        program: [
+          {
+            type: 'identified-block',
+            id: 'id2',
+            block: parseBlockOrThrow('Var2 = 10', 'id2'),
+          },
+        ],
+      }),
+    ]);
+
+    expect(all).toBeDefined();
+  });
 });
 
 describe('tooling data', () => {
@@ -509,11 +583,9 @@ it('regression: can describe partially good tables', async () => {
 });
 
 it('getBlockIdResult$', async () => {
-  computer.pushCompute({
+  await computer.pushCompute({
     program: getIdentifiedBlocks('123'),
   });
-
-  await timeout(200);
 
   const x = await firstValueFrom(
     computer.getBlockIdResult$
@@ -525,7 +597,7 @@ it('getBlockIdResult$', async () => {
 });
 
 it('getFunctionDefinition$', async () => {
-  computer.pushCompute({
+  await computer.pushCompute({
     program: getIdentifiedBlocks('f(x) = 2'),
   });
 
@@ -717,10 +789,9 @@ it('can list tables and columns', async () => {
 });
 
 it('can get a result by var', async () => {
-  computer.pushCompute({
+  await computer.pushCompute({
     program: getIdentifiedBlocks('Foo = 420'),
   });
-  await timeout(0);
 
   expect(computer.getVarResult$.get('Foo')?.id).toMatchInlineSnapshot(
     `"block-0"`

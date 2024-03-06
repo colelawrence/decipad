@@ -1,9 +1,11 @@
 import { createPluginFactory } from '@udecode/plate-common';
 import { DECORATE_AUTO_COMPLETE_MENU } from '../../constants';
 import { AutoCompleteMenu } from './AutoCompleteMenu';
+import { AutoCompletePlugin } from './types';
 
-export const createAutoCompleteMenuPlugin = createPluginFactory({
-  key: DECORATE_AUTO_COMPLETE_MENU,
-  isLeaf: true,
-  component: AutoCompleteMenu,
-});
+export const createAutoCompleteMenuPlugin =
+  createPluginFactory<AutoCompletePlugin>({
+    key: DECORATE_AUTO_COMPLETE_MENU,
+    isLeaf: true,
+    component: AutoCompleteMenu,
+  });

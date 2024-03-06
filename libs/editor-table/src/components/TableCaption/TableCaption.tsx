@@ -103,7 +103,6 @@ export const TableCaption: PlateComponent = ({
         empty={getNodeString(element.children[0]).length === 0}
         onAddDataViewButtonPress={onAddDataViewButtonPress}
         onAddChartViewButtonPress={onAddChartViewButtonPress}
-        showToggleCollapsedButton={!!parent}
       >
         {children}
       </EditableTableCaption>

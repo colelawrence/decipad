@@ -8,7 +8,6 @@ export * from './SmartRow/SmartRow';
 export * from './EditorTable/EditorTable';
 export * from './EditableTableCaption/EditableTableCaption';
 export * from './TableData/TableData';
-export * from './CellEditor/CellEditor';
 export * from './CodeLine/CodeLine';
 export * from './TableHeaderRow/TableHeaderRow';
 export * from './Caption/Caption';

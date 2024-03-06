@@ -115,6 +115,7 @@ export interface TableElement extends BaseElement {
   icon?: string;
   isCollapsed?: boolean;
   hideFormulas?: boolean;
+  hideCellFormulas?: boolean;
 }
 
 // legacy

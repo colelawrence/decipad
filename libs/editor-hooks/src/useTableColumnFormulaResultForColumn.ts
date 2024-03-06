@@ -12,7 +12,7 @@ import { all } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
 
 export function useTableColumnFormulaResultForCell(
-  element: TableCellElement | TableHeaderElement
+  element: TableCellElement | TableHeaderElement | undefined
 ): Result.Result | undefined {
   const editor = useMyEditorRef();
   const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);

@@ -103,20 +103,20 @@ interface TableStyleContextValue {
   readonly color?: AvailableSwatchColor;
   readonly isCollapsed?: boolean;
   readonly hideFormulas?: boolean;
+  readonly hideCellFormulas?: boolean;
 
   readonly setIcon: (newIcon: UserIconKey) => void;
   readonly setColor: (newColor: AvailableSwatchColor) => void;
   readonly setCollapsed?: (collapsed: boolean) => void;
   readonly setHideFormulas?: (isHidden: boolean) => void;
-
-  readonly hideAddDataViewButton?: boolean;
+  readonly setHideCellFormulas?: (isHidden: boolean) => void;
 }
 export const TableStyleContext = createContext<TableStyleContextValue>({
   icon: 'TableSmall',
   color: undefined,
-  hideAddDataViewButton: false,
   isCollapsed: false,
   hideFormulas: false,
+  hideCellFormulas: false,
   setIcon: () => {
     throw new Error('No way to change the icon provided');
   },
@@ -128,5 +128,8 @@ export const TableStyleContext = createContext<TableStyleContextValue>({
   },
   setHideFormulas: () => {
     throw new Error('No way to set hide formulas');
+  },
+  setHideCellFormulas: () => {
+    throw new Error('No way to set hide cell formulas');
   },
 });

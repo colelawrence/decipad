@@ -1,11 +1,13 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
-import { DropdownMenu, SelectItems } from '../../../shared';
-import { CodeResult } from '../CodeResult/CodeResult';
+import {
+  DropdownMenu,
+  SelectItems,
+  CodeResult,
+  icons as Icons,
+} from '@decipad/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDropdownConsumer } from '@decipad/editor-hooks';
-import { Caret } from '../../../icons';
 import { focusEditor, useEditorRef } from '@udecode/plate-common';
 
 export const CellEditorDropdown = (cellProps: CellProps) => {
@@ -68,7 +70,7 @@ export const CellEditorDropdown = (cellProps: CellProps) => {
             />
           )}
           <div css={{ width: 16, height: 16, marginLeft: 'auto' }}>
-            <Caret variant={open ? 'up' : 'down'} />
+            <Icons.Caret variant={open ? 'up' : 'down'} />
           </div>
         </div>
       </DropdownMenu>

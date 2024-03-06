@@ -1,20 +1,47 @@
 import { N } from '@decipad/number';
 import { TableCellType } from '@decipad/editor-types';
-import { getRemoteComputer, prettyPrintAST } from '@decipad/remote-computer';
+import {
+  getRemoteComputer,
+  prettyPrintAST,
+  RemoteComputer,
+  parseBlockOrThrow,
+} from '@decipad/remote-computer';
 import { getDefined } from '@decipad/utils';
 import { getExpression, parseCell } from './parseCell';
 
 type NoValidateTest = [string, TableCellType];
 
-const testParseCell = async (type: TableCellType, text: string) =>
+const testParseCell = async (
+  type: TableCellType,
+  text: string,
+  computer: RemoteComputer = getRemoteComputer()
+) =>
   prettyPrintAST(
-    getExpression(getDefined(await parseCell(getRemoteComputer(), type, text)))
+    getExpression(getDefined(await parseCell(computer, type, text)))
   );
+
+it('can parse cells with exprRefs', async () => {
+  const computer = getRemoteComputer();
+  await computer.pushCompute({
+    program: [
+      {
+        type: 'identified-block',
+        id: '1',
+        block: parseBlockOrThrow('MyVarName = 5', '1'),
+      },
+    ],
+  });
+
+  expect(
+    await testParseCell({ kind: 'number', unit: null }, 'exprRef_1', computer)
+  ).toMatchInlineSnapshot(`"(ref exprRef_1)"`);
+});
 
 it('turns cells into AST nodes', async () => {
   expect(
     await testParseCell({ kind: 'number', unit: null }, '123')
   ).toMatchInlineSnapshot(`"123"`);
+
   expect(
     await testParseCell(
       {
@@ -64,20 +91,25 @@ it('turns cells into AST nodes', async () => {
       '123'
     )
   ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref m) (ref s)))"`);
+
   expect(await testParseCell({ kind: 'string' }, '123')).toMatchInlineSnapshot(
     `"\\"123\\""`
   );
+
   expect(
     await testParseCell({ kind: 'date', date: 'year' }, '2021')
   ).toMatchInlineSnapshot(`"(date year 2021)"`);
+
   expect(
     await testParseCell({ kind: 'date', date: 'day' }, '2021-12-13')
   ).toMatchInlineSnapshot(`"(date year 2021 month 12 day 13)"`);
+
   expect(
     await testParseCell({ kind: 'date', date: 'minute' }, '2021-12-13 10:30')
   ).toMatchInlineSnapshot(
     `"(date year 2021 month 12 day 13 hour 10 minute 30)"`
   );
+
   expect(
     await testParseCell({ kind: 'number', unit: null }, '30%')
   ).toMatchInlineSnapshot(`"30%"`);
@@ -103,6 +135,7 @@ it.each([
   ['3a', { kind: 'number', unit: null }],
   ['99999', { kind: 'date', date: 'year' }],
   ['aaaa', { kind: 'date', date: 'year' }],
+  ['$100,000', { kind: 'number', unit: null }],
 ] as NoValidateTest[])('%s is not a valid %s', async (format, type) => {
   expect(await parseCell(getRemoteComputer(), type, format)).toBeInstanceOf(
     Error

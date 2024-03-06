@@ -1,13 +1,15 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
 import { useState, useEffect, useCallback, FC } from 'react';
-import { DropdownMenu, SelectItems } from '../../../shared';
-import { CodeResult } from '../CodeResult/CodeResult';
+import {
+  DropdownMenu,
+  SelectItems,
+  CodeResult,
+  icons as Icons,
+} from '@decipad/ui';
 
 import { getNode, setNodes } from '@udecode/plate-common';
 import { useMyEditorRef, TableHeaderElement } from '@decipad/editor-types';
-import { Caret } from '../../../icons';
 import { nanoid } from 'nanoid';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
@@ -125,7 +127,7 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
             <CodeResult value={result.result.value} type={result.result.type} />
           )}
           <div css={caretStyles}>
-            <Caret variant={open ? 'up' : 'down'} />
+            <Icons.Caret variant={open ? 'up' : 'down'} />
           </div>
         </div>
       </DropdownMenu>

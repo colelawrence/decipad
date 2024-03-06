@@ -178,7 +178,21 @@ export const inferExpression = wrap(
         const erroredCell = [firstCellType, ...restCellTypes].find(
           (cell) => cell.errorCause != null
         );
-        if (erroredCell != null) return erroredCell;
+
+        if (erroredCell != null) {
+          if (erroredCell.errorCause?.spec.errType === 'expected-but-got') {
+            // Show a more useful error message for inconsistent cell types
+            const [expected, got] = erroredCell.errorCause.spec.expectedButGot;
+            return t.impossible(
+              InferError.columnContainsInconsistentType(
+                expected as Type,
+                got as Type
+              )
+            );
+          }
+
+          return erroredCell;
+        }
 
         for (const restCell of restCellTypes) {
           if (

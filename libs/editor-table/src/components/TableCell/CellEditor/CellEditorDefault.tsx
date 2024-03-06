@@ -25,8 +25,6 @@ export const CellEditorDefault = (cellProps: CellProps) => {
     onConvertToFormula,
   } = cellProps;
 
-  const readOnlyComponent = <CellEditorDefaultReadOnly {...cellProps} />;
-
   const editor = useMyEditorRef();
   const focused = useSelected();
   const editable = useIsCellEditable(cellProps);
@@ -130,6 +128,6 @@ export const CellEditorDefault = (cellProps: CellProps) => {
       onCancel={cancelEdit}
     />
   ) : (
-    readOnlyComponent
+    <CellEditorDefaultReadOnly {...cellProps} />
   );
 };

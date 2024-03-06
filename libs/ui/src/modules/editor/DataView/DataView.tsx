@@ -122,7 +122,6 @@ export const DataView: FC<DataViewProps> = ({
         color: color as AvailableSwatchColor,
         setIcon: onChangeIcon,
         setColor: onChangeColor,
-        hideAddDataViewButton: true,
       }}
     >
       <div

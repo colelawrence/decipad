@@ -61,6 +61,10 @@ export interface ComputeRequest {
   program: Program;
 }
 
+export type ComputeRequestWithResults = ComputeRequest & {
+  results: (res: NotebookResults) => unknown;
+};
+
 export interface ComputerProgram {
   asSequence: Program;
   asBlockIdMap: Map<string, ProgramBlock>;

@@ -58,6 +58,7 @@ export const useColumnsInferredTypes = (
           columnsData.map((columnData, columnIndex) =>
             inferColumn(computer, columnData, {
               userType: headerCells[columnIndex]?.cellType,
+              doNotInferBoolean: true,
             })
           )
         );

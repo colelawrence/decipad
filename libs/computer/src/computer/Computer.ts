@@ -50,6 +50,7 @@ import type {
   BlockResult,
   ComputeRequest,
   ComputeRequestWithExternalData,
+  ComputeRequestWithResults,
   ComputerProgram,
   IdentifiedError,
   IdentifiedResult,
@@ -78,6 +79,7 @@ import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import { statementToML } from '../mathML/statementToML';
+import omit from 'lodash.omit';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -102,7 +104,7 @@ export class Computer {
   public latestBlockDependents = new Map<string, string[]>();
 
   // streams
-  private readonly computeRequests = new Subject<ComputeRequest>();
+  private readonly computeRequests = new Subject<ComputeRequestWithResults>();
   private readonly extraProgramBlocks = new BehaviorSubject<
     Map<string, ProgramBlock[]>
   >(new Map());
@@ -115,12 +117,26 @@ export class Computer {
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
     if (initialProgram) {
-      this.pushCompute({ program: initialProgram });
+      void this.pushCompute({ program: initialProgram });
     }
   }
 
-  public pushCompute(req: ComputeRequest): void {
-    this.computeRequests.next(req);
+  /**
+   * Push the entire program (all blocks), to the computer.
+   *
+   * @returns a promise to notify you when we are done
+   * processing these results. Often you don't need to await this.
+   * But it's useful.
+   *
+   * @see `BlockProcessor.ts`.
+   */
+  public async pushCompute(req: ComputeRequest): Promise<NotebookResults> {
+    return new Promise<NotebookResults>((resolve) => {
+      this.computeRequests.next({
+        ...req,
+        results: resolve,
+      });
+    });
   }
 
   public pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): void {
@@ -149,13 +165,38 @@ export class Computer {
     this.computeRequests
       .pipe(
         combineLatestWith(this.externalData, this.extraProgramBlocks),
-        map(([{ program, ...computeReq }, externalData, extraBlocks]) => ({
-          ...computeReq,
-          program: [...program, ...[...extraBlocks.values()].flat()],
-          externalData: [...externalData.values()].flat(),
-        })),
+        map(
+          ([
+            { program, results, ...computeReq },
+            externalData,
+            extraBlocks,
+          ]) => ({
+            ...computeReq,
+            program: [...program, ...[...extraBlocks.values()].flat()],
+            externalData: [...externalData.values()].flat(),
+            results,
+          })
+        ),
         // Make sure the new request is actually different
-        distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
+        distinctUntilChanged((prevReq, req) => {
+          const isSameAsLast = dequal(
+            omit(prevReq, ['results']),
+            omit(req, ['results'])
+          );
+
+          //
+          // Side-Effect
+          //
+          // If the current program is the same as the last one,
+          // we must still resolve the promise.
+          // Otherwise it will never resolve.
+          //
+          if (isSameAsLast) {
+            req.results(this.results.getValue());
+          }
+
+          return isSameAsLast;
+        }),
         // Compute me some computes!
         dropWhileComputing(
           async (req) => {
@@ -163,14 +204,21 @@ export class Computer {
             const result = await this.computeRequest(req);
             const fullRequestElapsedTimeMs = Date.now() - start;
             this.stats.pushComputerRequestStat({ fullRequestElapsedTimeMs });
-            return result;
+            return { ...result, results: req.results };
           },
           (pendingCount) => this.flushedSubject.next(pendingCount === 0)
         ),
         switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
-      .subscribe((results) => this.resultStreams.pushResults(results));
+      .subscribe(({ results, ...rest }) => {
+        // Typescript cant figure out `blockResults` cannot be null.
+        // see `switchMap` above.
+        const notebookResults = getDefined(rest) as NotebookResults;
+
+        this.resultStreams.pushResults(notebookResults);
+        results(notebookResults);
+      });
   }
 
   getVarBlockId(varName: string) {

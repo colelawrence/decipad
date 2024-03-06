@@ -44,6 +44,7 @@ import {
 } from '../utils/src';
 import fs from 'fs';
 import path from 'path';
+import { createCalculationBlockBelow } from '../utils/page/Block';
 
 const getTableCellRenderCount = (page: Page) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -730,4 +731,33 @@ test('Table Custom Units', async ({ testUser: { page } }) => {
   expect(await getFromTable(page, 1, 1)).toBe('1 bananas');
   expect(await getFromTable(page, 2, 1)).toBe('2 bananas');
   expect(await getFromTable(page, 3, 1)).toBe('3 bananas');
+});
+
+test('Variables in Table', async ({ testUser: { page } }) => {
+  await focusOnBody(page);
+
+  await createCalculationBlockBelow(page, 'Hello = 3 + 6');
+  await createCalculationBlockBelow(page, 'World = 2 + 1');
+
+  await createTable(page);
+
+  await doubleClickCell(page, 1, 0);
+  await page.keyboard.type('He');
+  await page.getByTestId('autocomplete-item:Hello').click();
+
+  await doubleClickCell(page, 2, 0);
+  await page.keyboard.type('Wo');
+  await page.getByTestId('autocomplete-item:World').click();
+
+  await clickCell(page, 1, 1);
+  await page.keyboard.press('=');
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
+
+  await page.keyboard.type('Col');
+  await page.getByTestId('autocomplete-item:Column1').click();
+
+  expect(await getFromTable(page, 1, 1)).toBe('9');
+  expect(await getFromTable(page, 2, 1)).toBe('3');
 });

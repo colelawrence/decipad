@@ -8,6 +8,7 @@ import { unitPlugin } from './unitPlugin';
 import { parseErrorPlugin } from './parseErrorPlugin';
 import { dropdownPlugin } from './dropdownPlugin';
 import { categoryPlugin } from './categoryPlugin';
+import { computedValuePlugin } from './computedValuePlugin';
 
 export const cellPlugins: CellPlugin[] = [
   numberPlugin,
@@ -19,4 +20,5 @@ export const cellPlugins: CellPlugin[] = [
   unitPlugin,
   parseErrorPlugin,
   categoryPlugin,
+  computedValuePlugin,
 ];

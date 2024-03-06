@@ -157,12 +157,15 @@ const dataColumnToColumn = async ({
 
   const columnType =
     !th.cellType || th.cellType.kind === 'anything'
-      ? await inferColumn(computer, cellTexts, { userType: th.cellType })
+      ? await inferColumn(computer, cellTexts, {
+          userType: th.cellType,
+        })
       : th.cellType;
 
   const items = await Promise.all(
     cellTexts.map(async (text, index) => {
       let parsed = await parseCell(computer, columnType, text);
+
       if (parsed instanceof Error) {
         errors.push(
           simpleArtifficialError(cellIds[index], parsed.message, th.id)

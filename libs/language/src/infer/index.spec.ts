@@ -194,7 +194,10 @@ describe('columns', () => {
 
     const mixedCol = col(l(1), l('hi'));
     expect(await inferExpression(nilRealm, mixedCol)).toMatchObject({
-      errorCause: InferError.expectedButGot(t.number(), t.string()),
+      errorCause: InferError.columnContainsInconsistentType(
+        t.number(),
+        t.string()
+      ),
     });
 
     const emptyCol = col();

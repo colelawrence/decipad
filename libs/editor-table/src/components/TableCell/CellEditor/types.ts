@@ -1,9 +1,9 @@
 import type { Path } from 'slate';
-import type { CellValueType, AnyElement } from '@decipad/editor-types';
+import type { CellValueType, TableCellElement } from '@decipad/editor-types';
 
 export type CellPlugin = {
   // Determine whether the plugin is active
-  query: (cellType?: CellValueType) => boolean;
+  query: (cellType?: CellValueType, cellValue?: string) => boolean;
 
   // Use a custom component to render the cell (defaults to modal editor)
   customCell?: React.ComponentType<CellProps>;
@@ -43,11 +43,12 @@ export type PipeableCellPluginOptions =
 
 export interface CellProps {
   isTableFrozen: boolean;
-  element?: AnyElement;
+  element: TableCellElement;
   path: Path;
   cellType?: CellValueType;
   plugins: CellPlugin[];
   value: string;
+  renderComputedValue: boolean;
   eventTarget?: EventTarget;
   onChange?: (value: string) => void;
   onConvertToFormula?: () => void;

@@ -119,7 +119,7 @@ export interface RemoteComputer {
   // --------------- push --------------//
   pushExternalDataUpdate(key: string, values: [string, Result.Result][]): void;
   pushExternalDataDelete(key: string): void;
-  pushCompute(req: ComputeRequest): void;
+  pushCompute(req: ComputeRequest): Promise<NotebookResults>;
   pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): void;
   pushExtraProgramBlocksDelete(id: string): void;
 

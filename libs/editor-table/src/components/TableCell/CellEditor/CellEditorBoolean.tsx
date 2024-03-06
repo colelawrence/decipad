@@ -1,6 +1,6 @@
 import isHotkey from 'is-hotkey';
 import { useCallback } from 'react';
-import { Toggle } from '../../../shared';
+import { Toggle } from '@decipad/ui';
 import type { CellProps } from './types';
 import { useCellDOMEvents } from './useCellDOMEvents';
 import { useIsCellEditable } from './useIsCellEditable';

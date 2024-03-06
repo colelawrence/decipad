@@ -2,43 +2,48 @@ import {
   AutocompleteName,
   getBuiltinsForAutocomplete,
 } from '@decipad/remote-computer';
-import { PlateComponent, useMyEditorRef } from '@decipad/editor-types';
+import {
+  DECORATE_AUTO_COMPLETE_MENU,
+  PlateComponent,
+  useMyEditorRef,
+} from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import {
   ACItemType,
   AutoCompleteMenu as UIAutoCompleteMenu,
+  AutoCompleteMenuMode,
+  Identifier,
 } from '@decipad/ui';
 import sortBy from 'lodash/sortBy';
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useMemo, useRef, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 import { useTableCaption } from './useTableCaption';
+import { getPluginOptions } from '@udecode/plate-common';
+import { AutoCompletePlugin } from './types';
 
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));
 
 const autoCompleteDebounceMs = 500;
 
-const selectNames = (
-  names: AutocompleteName[]
-): ComponentProps<typeof UIAutoCompleteMenu>['identifiers'] => {
-  return [...localNamesFirst(names), ...getBuiltinsForAutocomplete()].flatMap(
-    (n) => ({
-      kind: n.kind,
-      identifier: n.name,
-      inTable: n.inTable,
-      type: n.type.kind as ACItemType,
-      blockId: n.blockId,
-      columnId: n.columnId,
-      explanation: n.explanation,
-      syntax: n.syntax,
-      example: n.example,
-      formulaGroup: n.formulaGroup,
-    })
-  );
-};
+const nameToIdentifier = (name: AutocompleteName): Identifier => ({
+  kind: name.kind,
+  identifier: name.name,
+  inTable: name.inTable,
+  type: name.type.kind,
+  blockId: name.blockId,
+  columnId: name.columnId,
+  explanation: name.explanation,
+  syntax: name.syntax,
+  example: name.example,
+  formulaGroup: name.formulaGroup,
+});
+
+const builtInIdentifiers: Identifier[] =
+  getBuiltinsForAutocomplete().map(nameToIdentifier);
 
 export type MenuItem = Parameters<
   NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
@@ -46,19 +51,31 @@ export type MenuItem = Parameters<
 
 export const AutoCompleteMenu: PlateComponent<{
   leaf: AutocompleteDecorationProps;
-}> = ({ attributes, children, leaf: { variableInfo } }) => {
+}> = (props) => {
+  const {
+    attributes,
+    children,
+    leaf: { variableInfo },
+  } = props;
+
   const word = variableInfo.variableName;
 
   const selected = useSelected();
   const focused = useFocused();
   const editor = useMyEditorRef();
 
+  const { mode } = getPluginOptions<AutoCompletePlugin>(
+    editor as any,
+    DECORATE_AUTO_COMPLETE_MENU
+  );
+
   const [menuSuppressed, setMenuSuppressed] = useState(false);
+  const menuOpenRef = useRef(false);
   const showAutoComplete = selected && focused && word && !menuSuppressed;
 
   const onGlobalKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (showAutoComplete && !event.shiftKey) {
+      if (showAutoComplete && menuOpenRef.current && !event.shiftKey) {
         switch (event.key) {
           case 'Escape':
             setMenuSuppressed(true);
@@ -85,9 +102,11 @@ export const AutoCompleteMenu: PlateComponent<{
     return (
       <span {...attributes}>
         <AutoCompleteWrapper
+          mode={mode}
           search={word}
           blockId={variableInfo?.blockId ?? ''}
           onExecuteItem={onExecuteItem}
+          openRef={menuOpenRef}
         />
         {children}
       </span>
@@ -97,20 +116,39 @@ export const AutoCompleteMenu: PlateComponent<{
   return <span {...attributes}>{children}</span>;
 };
 
+const autoCompleteTypes: Partial<Record<AutoCompleteMenuMode, ACItemType[]>> = {
+  tableCell: ['number', 'string', 'date', 'boolean'],
+};
+
 /** Subscribes to getNamesDefined$ only when necessary */
 const AutoCompleteWrapper = ({
   blockId,
-  search,
-  onExecuteItem,
+  mode,
+  ...props
 }: { blockId: string } & Omit<
   ComponentProps<typeof UIAutoCompleteMenu>,
   'identifiers'
 >) => {
   const identifiers = useComputer().getNamesDefined$.useWithSelectorDebounced(
     autoCompleteDebounceMs,
-    selectNames,
+    (names) => localNamesFirst(names).map(nameToIdentifier),
     blockId
   );
+
+  const identifiersWithBuiltIns = useMemo(() => {
+    // Disable built-ins in 'tableCell' mode
+    if (mode === 'tableCell') return identifiers;
+    return [...identifiers, ...builtInIdentifiers];
+  }, [identifiers, mode]);
+
+  const filteredIdentifiers = useMemo(() => {
+    const allowedTypes = mode && autoCompleteTypes[mode];
+    if (!allowedTypes) return identifiersWithBuiltIns;
+    return identifiersWithBuiltIns.filter((id) =>
+      allowedTypes.includes(id.type)
+    );
+  }, [identifiersWithBuiltIns, mode]);
+
   const isInTable = useTableCaption();
 
   if (!identifiers.length) {
@@ -119,10 +157,10 @@ const AutoCompleteWrapper = ({
 
   return (
     <UIAutoCompleteMenu
+      mode={mode}
       isInTable={isInTable}
-      search={search}
-      identifiers={identifiers}
-      onExecuteItem={onExecuteItem}
+      identifiers={filteredIdentifiers}
+      {...props}
     />
   );
 };

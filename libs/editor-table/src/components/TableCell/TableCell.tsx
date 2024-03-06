@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import {
   ELEMENT_TD,
-  ELEMENT_TH,
   PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -18,7 +17,8 @@ import {
   useEditorTableContext,
   useTabEditorContext,
 } from '@decipad/react-contexts';
-import { TableData, CellEditor } from '@decipad/ui';
+import { TableData, TableStyleContext } from '@decipad/ui';
+import { CellEditor } from './CellEditor/CellEditor';
 import { changeColumnType } from '../../utils/changeColumnType';
 import { last } from '@decipad/utils';
 import { useFocused } from 'slate-react';
@@ -42,10 +42,7 @@ export const TableCell: PlateComponent = ({
   children,
   element,
 }) => {
-  if (
-    !isElementOfType(element, ELEMENT_TH) &&
-    !isElementOfType(element, ELEMENT_TD)
-  ) {
+  if (!isElementOfType(element, ELEMENT_TD)) {
     throw new Error(
       `TableCell is meant to render table cells, not ${element?.type}`
     );
@@ -63,6 +60,7 @@ export const TableCell: PlateComponent = ({
   const selected = useCellSelected();
   const focused = useFocused();
   const { tableFrozen } = useEditorTableContext();
+  const { hideCellFormulas } = useContext(TableStyleContext);
   const cellType = useCellType(element);
   const path = useMemoPath(findNodePath(editor, element)!);
   const value = getNodeString(element);
@@ -148,6 +146,7 @@ export const TableCell: PlateComponent = ({
           isTableFrozen={tableFrozen}
           type={deferredCellType}
           value={value}
+          renderComputedValue={hideCellFormulas}
           eventTarget={cellEventTarget}
           onValueChange={setValue}
           onConvertToFormula={convertToFormula}

@@ -16,10 +16,11 @@ import { parseCell } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate-common';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
-import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
-const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
-  async (_editor, computer, e: CodeLineV2Element): Promise<Program> => {
+const tryParseAsNumber: InteractiveLanguageElement['getParsedBlockFromElement'] =
+  async (_editor, computer, e): Promise<Program> => {
+    assertElementType(e, ELEMENT_CODE_LINE_V2);
+
     const [vname, sourcetext] = e.children;
     const source = getNodeString(sourcetext);
 
@@ -45,9 +46,11 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
     }
 
     return [];
-  }
-);
+  };
 
+/**
+ * @returns object with program and interpretedAs, so its easier to unit test.
+ */
 export const parseStructuredCodeLine = async (
   editor: MinimalRootEditor | MyEditor,
   computer: RemoteComputer,
@@ -97,17 +100,11 @@ export const parseStructuredCodeLine = async (
 
 export const CodeLineV2: InteractiveLanguageElement = {
   type: ELEMENT_CODE_LINE_V2,
-  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (editor, computer, e) => {
-      assertElementType(e, ELEMENT_CODE_LINE_V2);
+  getParsedBlockFromElement: async (editor, computer, e) => {
+    assertElementType(e, ELEMENT_CODE_LINE_V2);
 
-      const { programChunk } = await parseStructuredCodeLine(
-        editor,
-        computer,
-        e
-      );
+    const { programChunk } = await parseStructuredCodeLine(editor, computer, e);
 
-      return programChunk;
-    }
-  ),
+    return programChunk;
+  },
 };

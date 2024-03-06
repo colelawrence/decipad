@@ -48,7 +48,7 @@ Lists cannot contain different types of elements. Here are some examples of non-
 
 ```deci live
 [true, "that"]
-==> This operation requires a boolean and a string was entered.
+==> Column cannot contain both boolean and string
 ```
 
 Units on lists must be consistent:

@@ -13,7 +13,8 @@ import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 import { markTypes } from '../PlotParams/PlotParams';
-import { Formula, Hide, Show, TableRows } from 'libs/ui/src/icons';
+import { Formula, Hide, Show, Source, TableRows } from 'libs/ui/src/icons';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -41,7 +42,6 @@ type EditableTableCaptionProps = PropsWithChildren<{
   empty?: boolean;
   readOnly?: boolean;
   formulaEditor?: boolean;
-  showToggleCollapsedButton?: boolean;
 }>;
 
 export const shouldShowFormulaDrawer = (
@@ -57,18 +57,18 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   onAddDataViewButtonPress,
   onAddChartViewButtonPress,
   children,
-  showToggleCollapsedButton = false,
 }) => {
   const {
     color,
     icon,
     isCollapsed,
     hideFormulas = true,
+    hideCellFormulas,
     setIcon,
     setColor,
     setCollapsed,
     setHideFormulas,
-    hideAddDataViewButton,
+    setHideCellFormulas,
   } = useContext(TableStyleContext);
 
   const Icon = userIcons[icon];
@@ -76,7 +76,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
 
   const actions = (
     <>
-      {hideAddDataViewButton || readOnly ? null : (
+      {!readOnly && (
         <TextAndIconButton
           text="Pivot view"
           iconPosition="left"
@@ -85,42 +85,49 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           <TableRows />
         </TextAndIconButton>
       )}
-      {hideAddDataViewButton ||
-      readOnly ||
-      !onAddChartViewButtonPress ? null : (
+      {!readOnly && onAddChartViewButtonPress && (
         <CreateChartMenu
           onAddChartViewButtonPress={onAddChartViewButtonPress}
         />
       )}
       <>
-        {showToggleCollapsedButton &&
-          setCollapsed &&
-          !hideAddDataViewButton &&
-          setHideFormulas && (
-            <SegmentButtons
-              border
-              variant="default"
-              iconSize="integrations"
-              padding="skinny"
-              buttons={[
-                {
-                  children: <Formula />,
-                  tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
-                  onClick: () =>
-                    tableFormulaEditors.length !== 0
-                      ? setHideFormulas(!hideFormulas)
-                      : null,
-                  testId: 'formula',
-                },
-                {
-                  children: isCollapsed ? <Show /> : <Hide />,
-                  tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
-                  onClick: () => setCollapsed(!isCollapsed),
-                  testId: 'table',
-                },
-              ]}
-            />
-          )}
+        {setCollapsed && setHideFormulas && setHideCellFormulas && (
+          <SegmentButtons
+            border
+            variant="default"
+            iconSize="integrations"
+            padding="skinny"
+            buttons={[
+              ...(isFlagEnabled('VARIABLES_IN_TABLES')
+                ? [
+                    {
+                      children: <Source />,
+                      tooltip: `${
+                        hideCellFormulas ? 'Show' : 'Hide'
+                      } cell formulas`,
+                      onClick: () => setHideCellFormulas(!hideCellFormulas),
+                      testId: 'cell-formula',
+                    },
+                  ]
+                : []),
+              {
+                children: <Formula />,
+                tooltip: `${hideFormulas ? 'Show' : 'Hide'} column formulas`,
+                onClick: () =>
+                  tableFormulaEditors.length !== 0
+                    ? setHideFormulas(!hideFormulas)
+                    : null,
+                testId: 'formula',
+              },
+              {
+                children: isCollapsed ? <Show /> : <Hide />,
+                tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
+                onClick: () => setCollapsed(!isCollapsed),
+                testId: 'table',
+              },
+            ]}
+          />
+        )}
       </>
     </>
   );

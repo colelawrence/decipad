@@ -47,7 +47,10 @@ export class BlockProcessor {
     this.Computing = undefined;
     this.Next = undefined;
 
-    this.MaybeCompute = debounce(this.PushCompute, debounceEditorChangesMs);
+    this.MaybeCompute = debounce(
+      this.PushCompute.bind(this),
+      debounceEditorChangesMs
+    );
 
     const { apply, onChange } = rootEditor;
 
@@ -62,13 +65,35 @@ export class BlockProcessor {
     };
 
     rootEditor.onChange = () => {
-      if (this.isFirst) {
-        this.SetAllBlocksDirty();
-        this.isFirst = false;
-      }
       onChange.bind(rootEditor)();
       this.MaybeCompute();
     };
+  }
+
+  public async DoublePass() {
+    this.SetAllBlocksDirty();
+
+    let wholeProgram = await editorToProgram(
+      this.rootEditor,
+      this.DirtyBlocksSet.values() as Iterable<AnyElement>,
+      this.Computer
+    );
+
+    await this.Computer.pushCompute({ program: wholeProgram });
+
+    wholeProgram = await editorToProgram(
+      this.rootEditor,
+      this.DirtyBlocksSet.values() as Iterable<AnyElement>,
+      this.Computer
+    );
+
+    await this.Computer.pushCompute({ program: wholeProgram });
+
+    for (const update of wholeProgram) {
+      this.ProgramCache.set(update.id, update);
+    }
+
+    this.DirtyBlocksSet.clear();
   }
 
   public SetAllBlocksDirty() {
@@ -81,6 +106,12 @@ export class BlockProcessor {
   }
 
   private async Compute() {
+    if (this.isFirst) {
+      this.isFirst = false;
+      await this.DoublePass();
+      return;
+    }
+
     this.RemoveDirtyBlocks();
 
     const wholeProgram = await editorToProgram(
@@ -93,11 +124,11 @@ export class BlockProcessor {
       this.ProgramCache.set(update.id, update);
     }
 
-    this.Computer.pushCompute({
+    await this.Computer.pushCompute({
       program: Array.from(this.ProgramCache.values()),
     });
 
-    this.DirtyBlocksSet = new Map();
+    this.DirtyBlocksSet.clear();
   }
 
   /**
@@ -109,7 +140,7 @@ export class BlockProcessor {
    */
   private PushCompute() {
     if (this.Computing != null) {
-      this.Next = this.PushCompute;
+      this.Next = this.PushCompute.bind(this);
       return;
     }
 

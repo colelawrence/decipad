@@ -201,6 +201,7 @@ export { Sketch } from './Sketch/Sketch';
 export { Slash } from './Slash/Slash';
 export { Slider } from './Slider/Slider';
 export { SolarPanel } from './SolarPanel';
+export { Source } from './Source/Source';
 export { Spades } from './Spades';
 export { Sparkles } from './Sparkles/Sparkles';
 export { Speaker } from './Speaker';

@@ -22,6 +22,8 @@ import {
   CodeLineV2ElementCode,
   TableColumnFormulaElement,
   MyValue,
+  ELEMENT_PARAGRAPH,
+  ParagraphElement,
 } from '@decipad/editor-types';
 import { BasePoint, Path, Range } from 'slate';
 import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
@@ -94,6 +96,7 @@ export const decorateCode = <
     | typeof ELEMENT_CODE_LINE
     | typeof ELEMENT_TABLE_COLUMN_FORMULA
     | typeof ELEMENT_CODE_LINE_V2_CODE
+    | typeof ELEMENT_PARAGRAPH
 ): MyDecorate<object, TV, TE> =>
   filterDecorate<object, TV, TE>(
     memoizeDecorateWithSelection<object, TV, TE>((editor) => {
@@ -177,7 +180,8 @@ export const decorateCode = <
         const node = _node as
           | CodeLineElement
           | TableColumnFormulaElement
-          | CodeLineV2ElementCode;
+          | CodeLineV2ElementCode
+          | ParagraphElement;
         const entry = _entry as ENodeEntry<TV>;
 
         const nodeId = getRootNodeId<TV, TE>(editor as TE, entry);

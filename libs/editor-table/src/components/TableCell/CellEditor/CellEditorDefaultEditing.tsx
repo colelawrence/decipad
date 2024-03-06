@@ -1,22 +1,37 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { useEffect, useState, useMemo } from 'react';
 import type { CellTextEditingProps } from './types';
 import { usePipedCellPluginOption } from './usePipedCellPluginOption';
-import { tdHorizontalPadding, tdVerticalPadding } from '../../../styles/table';
-import { withHistory } from 'slate-history';
-import { Editable, Slate, withReact } from 'slate-react';
-import { createEditor } from 'slate';
+import { table as tableStyles } from '@decipad/ui';
 import isHotkey from 'is-hotkey';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
   toDOMNode,
   useEditorRef,
-  focusEditor,
   getEndPoint,
   getBlockAbove,
+  Plate,
+  PlateContent,
+  createPlateEditor,
+  PlatePlugin,
+  getRange,
+  select,
 } from '@udecode/plate-common';
-import { ELEMENT_TD } from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH, ELEMENT_TD } from '@decipad/editor-types';
+import { decorateCode } from '@decipad/editor-utils';
+import { RemoteComputer } from '@decipad/remote-computer';
+import { useComputer } from '@decipad/react-contexts';
+import {
+  createAutoCompleteMenuPlugin,
+  createSmartRefPlugin,
+} from '@decipad/editor-plugins';
+import {
+  CellInputValue,
+  deserializeCellText,
+  serializeCellText,
+} from './serializeCellText';
+import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
   const { cellProps, value, onChange, onConfirm, onCancel } = props;
@@ -106,7 +121,7 @@ export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
 
   const cellInput = useRenderAboveTextEditor(
     <CellInput
-      initialValue={value}
+      initialText={value}
       textAlign={textAlign}
       onChange={(newValue) => onChange(newValue)}
       onKeyDown={handleKeyDown}
@@ -116,7 +131,13 @@ export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
 
   return (
     <>
-      <ValueContentSize aria-hidden>{value}</ValueContentSize>
+      <ValueContentSize aria-hidden>
+        <CellEditorDefaultReadOnly
+          {...cellProps}
+          value={value}
+          renderComputedValue={false}
+        />
+      </ValueContentSize>
       {cellInput}
     </>
   );
@@ -128,18 +149,11 @@ const ValueContentSize = styled.div`
 `;
 
 interface CellInputProps {
-  initialValue: string;
+  initialText: string;
   textAlign?: React.CSSProperties['textAlign'];
   onChange?: (value: string) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
 }
-
-type CellInputValue = [
-  {
-    type: 'p';
-    children: [{ text: string }];
-  }
-];
 
 const cellInputStyles = css({
   cursor: 'text',
@@ -148,45 +162,86 @@ const cellInputStyles = css({
   top: 0,
   left: 0,
   width: '100%',
-  '&, & [data-slate-editor], & [data-slate-node=element]': {
+  height: '100%',
+  '& [data-slate-editor]': {
+    width: '100%',
     height: '100%',
+    display: 'table',
   },
-  '& [data-slate-node=element]': {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+  '& [data-slate-editor] > [data-slate-node="element"]': {
+    height: '100%',
+    display: 'table-cell',
+    verticalAlign: 'middle',
   },
-  paddingTop: tdVerticalPadding,
-  paddingBottom: tdVerticalPadding,
+  paddingTop: tableStyles.tdVerticalPadding,
+  paddingBottom: tableStyles.tdVerticalPadding,
   /**
    * --td-placeholder-width ensures that the content of the cell input does not
    * overlap with the placeholder.
    */
-  paddingLeft: `var(--td-placeholder-width, ${tdHorizontalPadding}px)`,
-  paddingRight: tdHorizontalPadding,
+  paddingLeft: `var(--td-placeholder-width, ${tableStyles.tdHorizontalPadding}px)`,
+  paddingRight: tableStyles.tdHorizontalPadding,
+});
+
+export const createCellEditorInputPlugin = (
+  computer: RemoteComputer
+): PlatePlugin => ({
+  key: 'cell-editor-input',
+  decorate: decorateCode(computer, ELEMENT_PARAGRAPH),
+  withOverrides: (editor) => {
+    const { insertText, insertTextData } = editor;
+
+    // Prevent inserting text containing line breaks
+    // eslint-disable-next-line no-param-reassign
+    editor.insertText = (text) => {
+      insertText(text.replace(/\n+/g, ' '));
+    };
+
+    // Prevent pasting Slate fragments
+    // eslint-disable-next-line no-param-reassign
+    editor.insertData = insertTextData;
+
+    return editor;
+  },
 });
 
 const CellInput = ({
-  initialValue,
+  initialText,
   textAlign,
   onChange,
   onKeyDown,
 }: CellInputProps) => {
-  const [editor] = useState(() => withHistory(withReact(createEditor())));
+  const computer = useComputer();
 
-  const initialSlateValue: CellInputValue = useMemo(
-    () => [
-      {
-        type: 'p',
-        children: [{ text: initialValue }],
-      },
-    ],
-    [initialValue]
-  );
+  const [editor] = useState(() => {
+    const plugins = [createCellEditorInputPlugin(computer)];
 
+    if (isFlagEnabled('VARIABLES_IN_TABLES')) {
+      plugins.push(
+        createAutoCompleteMenuPlugin({
+          options: {
+            mode: 'tableCell',
+          },
+        })
+      );
+
+      plugins.push(createSmartRefPlugin());
+    }
+
+    return createPlateEditor<CellInputValue>({
+      plugins,
+    });
+  });
+
+  // Serialize the value to a string
   const handleChange = (value: CellInputValue) => {
-    onChange?.(value[0].children[0].text);
+    onChange?.(serializeCellText(value));
   };
+
+  const initialValue: CellInputValue = useMemo(
+    () => deserializeCellText(computer, initialText),
+    [initialText, computer]
+  );
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (isHotkey('mod+a', event)) {
@@ -198,11 +253,19 @@ const CellInput = ({
     onKeyDown?.(event);
   };
 
-  // Auto-focus end of input
+  /**
+   * Auto-focus end of input.
+   * The reason we set the selection and focus manually, rather than using
+   * Plate's `focusEditorEdge`, is because recent versions of slate-react use a
+   * 10ms timeout before focusing the editor in cases where operations are
+   * pending. Since setting the selection counts as a pending operation, this
+   * can result in the first 10ms of keystrokes being lost.
+   */
   useEffect(() => {
-    focusEditor(editor as any, getEndPoint(editor as any, []));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const selection = getRange(editor, getEndPoint(editor, []));
+    select(editor, selection);
+    toDOMNode(editor, editor)?.focus();
+  }, [editor]);
 
   return (
     <div
@@ -210,13 +273,14 @@ const CellInput = ({
       onKeyDown={(event) => event.stopPropagation()}
       css={[cellInputStyles, { textAlign }]}
     >
-      <Slate
+      <Plate
         editor={editor}
-        initialValue={initialSlateValue}
-        onChange={handleChange as any}
+        initialValue={initialValue}
+        normalizeInitialValue
+        onChange={handleChange}
       >
-        <Editable onKeyDown={handleKeyDown} />
-      </Slate>
+        <PlateContent onKeyDown={handleKeyDown} />
+      </Plate>
     </div>
   );
 };
