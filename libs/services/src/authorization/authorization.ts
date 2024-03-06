@@ -23,6 +23,8 @@ export type IsAuthorizedParams = {
   minimumPermissionType: PermissionType;
   resource?: string;
   resources?: string[];
+
+  ignorePadPublic?: boolean;
 };
 
 export const isAuthorized = async ({
@@ -31,6 +33,7 @@ export const isAuthorized = async ({
   user,
   secret,
   minimumPermissionType,
+  ignorePadPublic,
 }: IsAuthorizedParams): Promise<PermissionType | null> => {
   const resources = (
     typeof _resource === 'string' ? [_resource, ..._resources] : _resources
@@ -77,20 +80,22 @@ export const isAuthorized = async ({
       ).flat(1)
     : [];
 
-  for (const resource of resources) {
-    const { id, type } = parseResourceUri(resource);
-    if (
-      !userPermissions.length &&
-      !secretPermissions.length &&
-      type === 'pads'
-    ) {
-      // eslint-disable-next-line no-await-in-loop
-      const pad = await data.pads.get({ id });
-      if (pad?.isPublic && minimumPermissionType === 'READ') {
-        return 'READ';
-      }
-      if (pad?.isPublicWritable) {
-        return 'WRITE';
+  if (!ignorePadPublic) {
+    for (const resource of resources) {
+      const { id, type } = parseResourceUri(resource);
+      if (
+        !userPermissions.length &&
+        !secretPermissions.length &&
+        type === 'pads'
+      ) {
+        // eslint-disable-next-line no-await-in-loop
+        const pad = await data.pads.get({ id });
+        if (pad?.isPublic && minimumPermissionType === 'READ') {
+          return 'READ';
+        }
+        if (pad?.isPublicWritable) {
+          return 'WRITE';
+        }
       }
     }
   }

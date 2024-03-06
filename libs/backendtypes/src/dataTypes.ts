@@ -390,6 +390,11 @@ export interface PadRecord extends TableRecordBase {
 
   gist?: 'ai';
 
+  // Pad specific permissions
+
+  // Can a user with no read/write duplicate the notebook.
+  canPublicDuplicate?: boolean;
+
   banned?: number;
   bannedReason?: string;
   bannedBy?: string;

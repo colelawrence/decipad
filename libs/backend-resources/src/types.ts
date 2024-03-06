@@ -26,6 +26,7 @@ export type BackendResource = {
     recordId?: string;
     resourceIds?: string[];
     minimumPermissionType: PermissionType;
+    ignorePadPublic?: boolean;
   }) => Promise<AuthorizedResult>;
   getResourceIds: (recordId: string) => Promise<string[]>;
 };

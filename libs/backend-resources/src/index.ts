@@ -88,6 +88,7 @@ export const resource = <TData extends ConcreteRecord>(
       recordId,
       resourceIds: _resourceIds = [],
       minimumPermissionType,
+      ignorePadPublic,
     }) {
       const resourceIds = [..._resourceIds];
       if (recordId) {
@@ -103,7 +104,8 @@ export const resource = <TData extends ConcreteRecord>(
       const { user, permissionType } = await isAuthorizedGraphql(
         resourceIds,
         context,
-        minimumPermissionType
+        minimumPermissionType,
+        ignorePadPublic
       );
       if (!permissionType) {
         throw new ForbiddenError('Forbidden');

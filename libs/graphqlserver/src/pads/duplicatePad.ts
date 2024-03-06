@@ -6,6 +6,7 @@ import {
   duplicateNotebookAttachments,
   snapshot,
   getStoredSnapshot,
+  canPublicDuplicatePad,
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
@@ -16,7 +17,10 @@ import { ELEMENT_TITLE, RootDocument } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import Boom from '@hapi/boom';
 import { getNodeString } from '@udecode/plate-common';
-import { MutationResolvers } from '@decipad/graphqlserver-types';
+import {
+  GraphqlContext,
+  MutationResolvers,
+} from '@decipad/graphqlserver-types';
 import { padResource } from './padResource';
 import { PublishedVersionName } from '@decipad/interfaces';
 
@@ -91,6 +95,28 @@ async function getNotebookContent(
   return [publishedDoc.doc, getNodeString(publishedDoc.doc.children[0])];
 }
 
+/**
+ * Helper function, checks if user has `READ` permission on notebook
+ * or if the notebook is public and can be duplicated
+ */
+async function canUserDuplicate(
+  padId: string,
+  context: GraphqlContext
+): Promise<boolean> {
+  try {
+    await notebooks.expectAuthorizedForGraphql({
+      context,
+      recordId: padId,
+      minimumPermissionType: 'READ',
+      ignorePadPublic: true,
+    });
+
+    return true;
+  } catch (e) {
+    return canPublicDuplicatePad(padId);
+  }
+}
+
 export const duplicatePad: MutationResolvers['duplicatePad'] = async (
   _,
   { id, document: _document, targetWorkspace },
@@ -163,11 +189,12 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
   if (!workspaceId) {
     throw new ForbiddenError('Could not authenticate.');
   }
-  await notebooks.expectAuthorizedForGraphql({
-    context,
-    recordId: id,
-    minimumPermissionType: 'READ',
-  });
+
+  const isUserAllowedToDuplicate = await canUserDuplicate(id, context);
+
+  if (!isUserAllowedToDuplicate) {
+    throw Boom.forbidden('You cannot duplicate this pad');
+  }
 
   const [doc, name] = await getNotebookContent(user.id, id);
 

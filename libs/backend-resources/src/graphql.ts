@@ -25,7 +25,8 @@ export function loadSecret(context: Context): string | undefined {
 export async function isAuthorizedGraphql(
   resources: string[],
   context: Context,
-  minimumPermissionType: PermissionType = 'READ'
+  minimumPermissionType: PermissionType = 'READ',
+  ignorePadPublic = false
 ): Promise<{
   user?: User;
   permissionType?: PermissionType;
@@ -39,6 +40,7 @@ export async function isAuthorizedGraphql(
         user,
         secret,
         minimumPermissionType,
+        ignorePadPublic,
       })) ?? undefined,
     user,
   };

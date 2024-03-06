@@ -10,3 +10,4 @@ export * from './importNotebookContents';
 export * from './importNotebook';
 export * from './duplicateNotebookAttachments';
 export * from './feature';
+export * from './permissions';
