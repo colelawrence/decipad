@@ -4,6 +4,9 @@ import {
   ELEMENT_CALLOUT,
   TopLevelValue,
   MyNode,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  MyElement,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
@@ -22,18 +25,26 @@ export const editorOnPaste = (
     return;
   }
 
-  const selectedNode = getNode<TopLevelValue>(editor, [
+  const topLevelNode = getNode<TopLevelValue>(editor, [
     editor.selection.anchor.path[0],
   ]);
+  const secondLevelNode = getNode<MyElement>(editor, [
+    editor.selection.anchor.path[0],
+    editor.selection.anchor.path[1],
+  ]);
 
-  if (selectedNode && selectedNode.type === ELEMENT_CALLOUT) {
+  if (
+    topLevelNode?.type === ELEMENT_CALLOUT ||
+    (topLevelNode?.type === ELEMENT_CODE_LINE_V2 &&
+      secondLevelNode?.type === ELEMENT_CODE_LINE_V2_CODE)
+  ) {
     const clipboard = e.clipboardData.getData('text/plain');
     editor.insertText(clipboard, { at: editor.selection.anchor });
     e.preventDefault();
+    e.stopPropagation();
     return;
   }
 
-  // deduplicate ids when pasting slate components
   if (e.clipboardData.types.includes('application/x-slate-fragment')) {
     const data = e.clipboardData.getData('application/x-slate-fragment');
     const decodedData = JSON.parse(decodeURIComponent(window.atob(data)));

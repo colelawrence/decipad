@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import { expect, Page, test } from './manager/decipad-tests';
 import { getClearText, snapshot, Timeouts } from '../utils/src';
-import { keyPress } from '../utils/page/Editor';
+import { ControlPlus, keyPress } from '../utils/page/Editor';
 import { getResult } from '../utils/page/Block';
 
 test.describe('structured input and calculations @calculation-blocks', () => {
@@ -306,6 +306,22 @@ test.describe('structured input and calculations @calculation-blocks', () => {
           .getByTestId('codeline-code')
           .last()
           .getByTestId('number-result:50 apples')
+      ).toBeVisible();
+    });
+
+    await test.step('paste into formula', async () => {
+      await notebook.addFormula('CopyFromMe', '3000');
+      await page.keyboard.press('Tab');
+      await ControlPlus(testUser.page, 'C');
+      await notebook.addFormula('PasteIntoMe', '');
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Backspace');
+      await ControlPlus(page, 'V');
+      await expect(
+        page
+          .getByTestId('codeline-code')
+          .last()
+          .getByTestId('number-result:3,000')
       ).toBeVisible();
     });
   });
