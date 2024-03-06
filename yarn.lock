@@ -1117,10 +1117,10 @@
     "@smithy/util-utf8" "^2.1.1"
     tslib "^2.5.0"
 
-"@aws-sdk/client-dynamodb@^3.316.0", "@aws-sdk/client-dynamodb@^3.319.0", "@aws-sdk/client-dynamodb@^3.525.0":
-  version "3.525.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.525.0.tgz#f0a3ab227cde2f44c8d40492c4bee147c8cd88ce"
-  integrity sha512-leL9TP4W8pjzNFf2/yqyphpEvBxVScXu8OB6fKdONiya6TNuR8tU+fcrcacNQvKs3hok7jKdfa8PaQpZ/bv3Ug==
+"@aws-sdk/client-dynamodb@^3.316.0", "@aws-sdk/client-dynamodb@^3.319.0", "@aws-sdk/client-dynamodb@^3.528.0":
+  version "3.528.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.528.0.tgz#648179d6e02a28fa0abb428b8cf0aa701583d1fa"
+  integrity sha512-qqgw2NM4m+WgZ5owLe7+ThtCpjnRxTA19ojFcxcrnKksXngwNqcWof6/OXhGkumeN73IdS08upiw4904ZbjZlQ==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
@@ -2113,12 +2113,12 @@
     mnemonist "0.38.3"
     tslib "^2.5.0"
 
-"@aws-sdk/lib-dynamodb@^3.316.0", "@aws-sdk/lib-dynamodb@^3.319.0", "@aws-sdk/lib-dynamodb@^3.525.0":
-  version "3.525.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.525.0.tgz#bae8354d20937091153d8e1c4180108b176732d5"
-  integrity sha512-ED1YDzon/aAdXy4eUwFApXABxI+QM6THY5BSNrsGBQPxvYjMNQ2PGKMwbFPuMbNjZi48c6YpQyIF2cD7cEXG/A==
+"@aws-sdk/lib-dynamodb@^3.316.0", "@aws-sdk/lib-dynamodb@^3.319.0", "@aws-sdk/lib-dynamodb@^3.528.0":
+  version "3.528.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.528.0.tgz#7a61ba3003483155f95d82e8502ace30f7117a48"
+  integrity sha512-BGyST10K2jRE8m+EuW8SVIMjsDd5/KkNhCv8Qm8dUsgSwSWSOokG0B0adOJBg5702X5j6N5mNi47Qd6mEViySA==
   dependencies:
-    "@aws-sdk/util-dynamodb" "3.525.0"
+    "@aws-sdk/util-dynamodb" "3.528.0"
     "@smithy/smithy-client" "^2.4.2"
     "@smithy/types" "^2.10.1"
     tslib "^2.5.0"
@@ -2565,10 +2565,10 @@
   dependencies:
     tslib "^2.5.0"
 
-"@aws-sdk/util-dynamodb@3.525.0":
-  version "3.525.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.525.0.tgz#53638c142c7ed0063dacfb47522701894d5cc089"
-  integrity sha512-2PXpWcMfD65d34y4Dd2OGpLmUYW6vegaITUOk95QwZOwMBUPJRrQB6AyGMf1z39Ej7utj7yJSqQKgqyw2i2U+A==
+"@aws-sdk/util-dynamodb@3.528.0":
+  version "3.528.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.528.0.tgz#e1b28ef9486168037ea5d5e83dad4ecfaa69fede"
+  integrity sha512-RSSFtTWqJOeZHDtaSXd51LIP3Xu0mDPYc1Eu+LJXEC2GHWYDdjoeAMpIJvETBg13bBWkRgHatujT8tLFxCx1ug==
   dependencies:
     tslib "^2.5.0"
 
