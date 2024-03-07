@@ -18,6 +18,7 @@ import {
   PublishedVersionState,
 } from '@decipad/interfaces';
 import { format } from 'date-fns';
+import styled from '@emotion/styled';
 
 export const innerPopUpStyles = css({
   display: 'flex',
@@ -201,6 +202,29 @@ export const publishNewChangesStyles = css({
 const publishWritingP = css(p14Medium, { color: cssVar('textHeavy') });
 const publishWritingP2 = css(p14Regular, { color: cssVar('textSubdued') });
 
+export const BasicGap = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+});
+
+/**
+ * The reason I need this, is because the `Toggle` in publish controls.
+ * Needs to have `position: relative`, to make the sliding circle on the inside work.
+ *
+ * However, this interferes with the sibliing `Popover`, which only has `z-index: auto`,
+ * So we must force Radix to be a little more interesting
+ *
+ * We use `!important` because Radix sets the styles as inline styles on the HTML element,
+ * Without `!important` we get overriden
+ *
+ */
+export const HackyButNeededZIndexStyles = css({
+  '> [data-radix-popper-content-wrapper]': {
+    zIndex: '10 !important',
+  },
+});
+
 // ==============================================
 // Types
 // ==============================================
@@ -212,6 +236,7 @@ export interface NotebookPublishTabProps {
   readonly isPremium: boolean;
   readonly publishedVersionState: PublishedVersionState;
   readonly link: string;
+  readonly allowDuplicate: boolean;
   readonly currentSnapshot:
     | {
         createdAt?: string;
@@ -221,6 +246,7 @@ export interface NotebookPublishTabProps {
     | undefined;
   readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
   readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+  readonly onUpdateAllowDuplicate: NotebookMetaActionsReturn['onUpdateAllowDuplicate'];
 }
 
 // ==============================================
@@ -277,3 +303,19 @@ export const PublishedDate: FC<{
     </p>
   );
 };
+
+export const Text = styled.span(p13Regular);
+
+export const PublishingControlsWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+export const PublishingControlsItem = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  height: '18px',
+  alignItems: 'center',
+  paddingTop: '6px',
+  paddingBottom: '6px',
+});

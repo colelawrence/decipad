@@ -1099,6 +1099,19 @@ export class Notebook {
     return clipboardText;
   }
 
+  async publishPrivateURL(): Promise<void> {
+    await this.openPublishingSidebar();
+
+    await this.page.getByTestId('publish-tab').click();
+
+    await this.page.getByTestId('publish-dropdown').click();
+    await this.page.getByTestId('publish-private-url').click();
+    await this.page.getByTestId('publish-changes').click();
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.syncDelay);
+  }
+
   /**
    * Publish notebook changes
    *

@@ -153,10 +153,15 @@ const TryOrDuplicate: FC<TopbarActions & AccessInfo> = ({
   isAuthenticated,
   onTryDecipadClick,
   onDuplicateNotebook,
+  isDuplicateAllowed,
 }) => {
   const href = `/?redirectAfterLogin=${encodeURIComponent(
     window.location.pathname
   )}`;
+
+  if (isAuthenticated && !isDuplicateAllowed) {
+    return null;
+  }
 
   if (isAuthenticated) {
     return (

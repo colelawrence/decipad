@@ -21,6 +21,8 @@ const args: NotebookSharingPopUpProps = {
   publishingState: 'PRIVATE',
   selectedTab: 'publishing',
   onChangeSelectedTab: () => {},
+  allowDuplicate: true,
+  onUpdateAllowDuplicate: async () => {},
 };
 
 export default {

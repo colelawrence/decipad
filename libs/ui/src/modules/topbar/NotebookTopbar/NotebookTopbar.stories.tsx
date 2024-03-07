@@ -92,6 +92,8 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       isPremium={false}
       selectedTab="publishing"
       onChangeSelectedTab={() => {}}
+      allowDuplicate={false}
+      onUpdateAllowDuplicate={async () => {}}
     />
   ),
   access: {
@@ -100,6 +102,7 @@ const args: ComponentProps<typeof NotebookTopbar> = {
     hasWorkspaceAccess: true,
     permissionType: 'ADMIN',
     isGPTGenerated: false,
+    isDuplicateAllowed: true,
   },
   actions: {
     onBack: () => {},

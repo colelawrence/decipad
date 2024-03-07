@@ -29,6 +29,8 @@ describe('NotebookPublishingPopUp organism', () => {
       onUpdatePublish: () => noop as any,
 
       notebookId: 'id',
+      allowDuplicate: true,
+      onUpdateAllowDuplicate: async () => {},
     };
 
     const { queryByTestId } = render(
@@ -54,6 +56,9 @@ describe('NotebookPublishingPopUp organism', () => {
       onUpdatePublish: () => noop as any,
 
       notebookId: 'id',
+
+      allowDuplicate: true,
+      onUpdateAllowDuplicate: async () => {},
     };
 
     const { queryByTestId } = render(
@@ -79,6 +84,8 @@ describe('NotebookPublishingPopUp organism', () => {
       onUpdatePublish: () => noop as any,
 
       notebookId: 'id',
+      allowDuplicate: true,
+      onUpdateAllowDuplicate: async () => {},
     };
 
     const { queryByTestId } = render(
@@ -104,6 +111,9 @@ describe('NotebookPublishingPopUp organism', () => {
       onUpdatePublish: () => noop as any,
 
       notebookId: 'id',
+
+      allowDuplicate: true,
+      onUpdateAllowDuplicate: async () => {},
     };
 
     const { queryByTestId } = render(

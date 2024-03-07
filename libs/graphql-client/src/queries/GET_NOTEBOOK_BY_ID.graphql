@@ -39,6 +39,7 @@ fragment EditorNotebook on Pad {
   createdAt
   archived
   gist
+  canPublicDuplicate
   workspace {
     id
     name

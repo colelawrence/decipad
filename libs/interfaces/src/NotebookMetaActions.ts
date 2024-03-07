@@ -31,4 +31,9 @@ export interface NotebookMetaActionsReturn {
    * that users will see when visiting.
    */
   onPublishNotebook: (notebookId: string) => Promise<void>;
+
+  onUpdateAllowDuplicate: (
+    notebookId: string,
+    allowDuplicate: boolean
+  ) => Promise<void>;
 }

@@ -19,6 +19,7 @@ fragment NotebookMetaData on Pad {
   createdAt
   initialState
   gist
+  canPublicDuplicate
   workspace {
     id
     name

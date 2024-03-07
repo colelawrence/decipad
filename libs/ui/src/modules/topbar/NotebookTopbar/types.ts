@@ -12,6 +12,8 @@ export interface Authors {
 export interface AccessInfo {
   readonly isAuthenticated: boolean;
   readonly isSharedNotebook: boolean;
+  readonly isDuplicateAllowed: boolean;
+
   readonly hasWorkspaceAccess: boolean;
   readonly permissionType?: PermissionType;
 

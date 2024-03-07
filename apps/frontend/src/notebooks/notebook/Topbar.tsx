@@ -207,6 +207,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
         hasWorkspaceAccess: data?.workspace?.myPermissionType != null,
         permissionType: data?.myPermissionType ?? undefined,
         isGPTGenerated,
+        isDuplicateAllowed: data?.canPublicDuplicate ?? true,
       }}
       actions={{
         onBack,

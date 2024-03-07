@@ -76,9 +76,11 @@ export type NotebookSharingPopUpProps = Pick<
     readonly notebookName: string;
     readonly publishedVersionState: PublishedVersionState;
     readonly workspaceId: string;
+    readonly allowDuplicate: boolean;
 
     readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
     readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+    readonly onUpdateAllowDuplicate: NotebookMetaActionsReturn['onUpdateAllowDuplicate'];
 
     readonly selectedTab: SidebarPublishingTab;
     readonly onChangeSelectedTab: (tab: SidebarPublishingTab) => void;
@@ -102,6 +104,7 @@ export const NotebookPublishingPopUp = ({
   workspaceId,
   isAdmin = false,
   notebookName,
+  allowDuplicate,
 
   onPublish,
 
@@ -116,6 +119,7 @@ export const NotebookPublishingPopUp = ({
 
   selectedTab,
   onChangeSelectedTab,
+  onUpdateAllowDuplicate,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const activeTabId = useActiveTabId();
 
@@ -203,6 +207,8 @@ export const NotebookPublishingPopUp = ({
                   currentSnapshot={currentSnapshot}
                   onUpdatePublish={onUpdatePublish}
                   onPublish={onPublish}
+                  allowDuplicate={allowDuplicate}
+                  onUpdateAllowDuplicate={onUpdateAllowDuplicate}
                 />
               </div>
             </TabsContent>
@@ -245,6 +251,8 @@ export const NotebookPublishingPopUp = ({
                 currentSnapshot={currentSnapshot}
                 onUpdatePublish={onUpdatePublish}
                 onPublish={onPublish}
+                allowDuplicate={allowDuplicate}
+                onUpdateAllowDuplicate={onUpdateAllowDuplicate}
               />
             </div>
           </>

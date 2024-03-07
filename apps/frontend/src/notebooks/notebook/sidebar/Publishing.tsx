@@ -40,6 +40,11 @@ function getPublishingState(
   return 'PRIVATE';
 }
 
+interface PublicLocalActionsProps {
+  readonly onUpdatePublishState: NotebookMetaActionsReturn['onUpdatePublishState'];
+  readonly onPublishNotebook: NotebookMetaActionsReturn['onPublishNotebook'];
+}
+
 interface PublishLocalActionsReturn {
   readonly localPublishState: Publish_State | undefined;
   readonly setLocalPublishState: (state: Publish_State | undefined) => void;
@@ -57,14 +62,15 @@ interface PublishLocalActionsReturn {
 //
 // @note uses 'useGetNotebookMetaQuery'.
 //
-function usePublishLocalActions(notebookId: string): PublishLocalActionsReturn {
+function usePublishLocalActions(
+  notebookId: string,
+  { onPublishNotebook, onUpdatePublishState }: PublicLocalActionsProps
+): PublishLocalActionsReturn {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
 
   const publishingState = getPublishingState(meta.data?.getPadById);
-
-  const actions = useNotebookMetaActions();
 
   const [localPublishState, setLocalPublishState] = useState<
     Publish_State | undefined
@@ -84,21 +90,21 @@ function usePublishLocalActions(notebookId: string): PublishLocalActionsReturn {
       }
 
       setLocalPublishState(state);
-      return actions.onUpdatePublishState(id, state);
+      return onUpdatePublishState(id, state);
     },
-    [actions, publishingState]
+    [onUpdatePublishState, publishingState]
   );
 
   const onPublish = useCallback<NotebookMetaActionsReturn['onPublishNotebook']>(
     async (id) => {
       if (localPublishState != null) {
-        await actions.onUpdatePublishState(id, localPublishState);
+        await onUpdatePublishState(id, localPublishState);
         setLocalPublishState(undefined);
       }
 
-      return actions.onPublishNotebook(id);
+      return onPublishNotebook(id);
     },
-    [actions, localPublishState]
+    [localPublishState, onPublishNotebook, onUpdatePublishState]
   );
 
   return {
@@ -114,7 +120,11 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
     variables: { id: notebookId },
   });
 
-  const localPublish = usePublishLocalActions(notebookId);
+  const actions = useNotebookMetaActions();
+  const localPublish = usePublishLocalActions(notebookId, {
+    onUpdatePublishState: actions.onUpdatePublishState,
+    onPublishNotebook: actions.onPublishNotebook,
+  });
   const _publishedVersionState = usePublishedVersionState({
     notebookId,
     docsync,
@@ -181,7 +191,9 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       onChange={accessActions.onChangeAccess}
       onRemove={accessActions.onRemoveAccess}
       selectedTab={selectedTab}
+      allowDuplicate={data?.canPublicDuplicate ?? true}
       onChangeSelectedTab={onChangeSelectedTab}
+      onUpdateAllowDuplicate={actions.onUpdateAllowDuplicate}
     />
   );
 };

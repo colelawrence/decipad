@@ -6,6 +6,7 @@ input PadInput {
   section_id: String
   tags: [String!]
   isTemplate: Boolean
+  canPublicDuplicate: Boolean
 }
 
 type SecretAccess {
@@ -52,6 +53,8 @@ type Pad {
   # Gist | Is this notebook a gist, meaning the doesnt belong to anyone.
   # And can be claimed by any user.
   gist: Gist
+
+  canPublicDuplicate: Boolean
 
   padConnectionParams: PadConnectionParams!
   initialState: String

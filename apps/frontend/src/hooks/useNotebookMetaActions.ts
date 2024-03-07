@@ -8,6 +8,7 @@ import {
   useMoveNotebookMutation,
   useSetNotebookPublishStateMutation,
   useUnarchiveNotebookMutation,
+  useUpdateNotebookAllowDuplicateMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
   useUpdateSectionAddNotebookMutation,
@@ -74,6 +75,10 @@ export function useNotebookMetaActions(
   const remoteUpdateNotebookPublishState = useMutationResultHandler(
     useSetNotebookPublishStateMutation()[1],
     'Unable to change public status of notebook'
+  );
+  const updateAllowDuplicate = useMutationResultHandler(
+    useUpdateNotebookAllowDuplicateMutation()[1],
+    'Unable to change allow duplicate permission'
   );
 
   const duplicateNotebook = useDuplicateNotebookMutation()[1];
@@ -258,6 +263,15 @@ export function useNotebookMetaActions(
     [remoteUpdateNotebookPublishState]
   );
 
+  const onUpdateAllowDuplicate = useCallback<
+    NotebookMetaActionsReturn['onUpdateAllowDuplicate']
+  >(
+    async (notebookId, allowDuplicate) => {
+      await updateAllowDuplicate({ id: notebookId, allowDuplicate });
+    },
+    [updateAllowDuplicate]
+  );
+
   return {
     onDeleteNotebook,
     onUnarchiveNotebook,
@@ -269,5 +283,6 @@ export function useNotebookMetaActions(
     onDuplicateNotebook,
     onUpdatePublishState,
     onPublishNotebook,
+    onUpdateAllowDuplicate,
   };
 }

@@ -137,6 +137,27 @@ export const graphCacheConfig: GraphCacheConfig = {
         output: true,
       };
     },
+    updatePad(args) {
+      //
+      // Very ugly,
+      // The reason we do this is because args.pad can include nulls.
+      // but `updatePad` cannot accept nulls, but only undefineds.
+      //
+      // Hence the weird null chaining to undefined.
+      //
+
+      return {
+        __typename: 'Pad',
+        canPublicDuplicate: args.pad.canPublicDuplicate ?? undefined,
+        name: args.pad.name ?? undefined,
+        icon: args.pad.icon ?? undefined,
+        tags: args.pad.tags ?? undefined,
+        status: args.pad.status ?? undefined,
+        archived: args.pad.archived ?? undefined,
+        isTemplate: args.pad.isTemplate ?? undefined,
+        section_id: args.pad.section_id ?? undefined,
+      };
+    },
   },
   resolvers: {
     PadSnapshot: {

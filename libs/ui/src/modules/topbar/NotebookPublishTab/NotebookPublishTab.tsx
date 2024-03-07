@@ -10,6 +10,7 @@ import { Publish_State } from '@decipad/graphql-client';
 import * as Popover from '@radix-ui/react-popover';
 import * as S from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { PublishControls } from './PublishControls';
 
 const PublishingTextMap: Record<Publish_State, string> = {
   PUBLICLY_HIGHLIGHTED: 'Public on the web',
@@ -38,6 +39,8 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
   isPremium,
   onUpdatePublish,
   onPublish,
+  onUpdateAllowDuplicate,
+  allowDuplicate,
 }) => {
   const isPublished = publishingState !== 'PRIVATE';
   const disablePubliclyHighlighted =
@@ -53,170 +56,183 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
     <div css={S.innerPopUpStyles}>
       {isAdmin && (
         <>
-          <S.PublishingWriting />
-          <Popover.Root open={open} onOpenChange={setOpen}>
-            <Popover.Trigger>
-              <div css={S.triggerStyles} data-testid="publish-dropdown">
-                <div css={S.triggerTitleIconStyles}>
-                  {PublishingIconMap[publishingState]}
-                  {PublishingTextMap[publishingState]}
-                </div>
-                {isAdmin && <Caret variant="down" />}
-              </div>
-            </Popover.Trigger>
-            <Popover.Content>
-              <div css={S.publishModeWrapper}>
-                <div
-                  css={S.publishMode}
-                  aria-selected={publishingState === 'PRIVATE'}
-                  onClick={() => {
-                    setOpen(false);
-                    onUpdatePublish(notebookId, 'PRIVATE');
-                  }}
-                >
-                  <div>
-                    <p>
-                      {PublishingIconMap.PRIVATE}
-                      {PublishingTextMap.PRIVATE}
-                    </p>
-                    <span>
-                      This notebook is only accessible to collaborators and
-                      workspace members.
-                    </span>
+          <S.BasicGap>
+            <S.PublishingWriting />
+          </S.BasicGap>
+          <S.BasicGap css={S.HackyButNeededZIndexStyles}>
+            <Popover.Root open={open} onOpenChange={setOpen}>
+              <Popover.Trigger>
+                <div css={S.triggerStyles} data-testid="publish-dropdown">
+                  <div css={S.triggerTitleIconStyles}>
+                    {PublishingIconMap[publishingState]}
+                    {PublishingTextMap[publishingState]}
                   </div>
-                  {publishingState === 'PRIVATE' && <Check />}
+                  {isAdmin && <Caret variant="down" />}
                 </div>
-
-                {isFlagEnabled('NEW_PAYMENTS') && (
+              </Popover.Trigger>
+              <Popover.Content>
+                <div css={S.publishModeWrapper}>
                   <div
                     css={S.publishMode}
-                    aria-selected={publishingState === 'PUBLICLY_HIGHLIGHTED'}
+                    aria-selected={publishingState === 'PRIVATE'}
                     onClick={() => {
                       setOpen(false);
-                      onUpdatePublish(notebookId, 'PUBLICLY_HIGHLIGHTED');
+                      onUpdatePublish(notebookId, 'PRIVATE');
                     }}
-                    data-testid="publish-public"
                   >
                     <div>
                       <p>
-                        {PublishingIconMap.PUBLICLY_HIGHLIGHTED}
-                        {PublishingTextMap.PUBLICLY_HIGHLIGHTED}
+                        {PublishingIconMap.PRIVATE}
+                        {PublishingTextMap.PRIVATE}
                       </p>
                       <span>
-                        Anyone can view this notebook. It will show up in search
-                        engines, on your profile and in the notebook gallery on
-                        our website.
+                        This notebook is only accessible to collaborators and
+                        workspace members.
                       </span>
                     </div>
-                    {publishingState === 'PUBLICLY_HIGHLIGHTED' && <Check />}
+                    {publishingState === 'PRIVATE' && <Check />}
                   </div>
-                )}
 
-                <div
-                  css={S.publishMode}
-                  aria-selected={publishingState === 'PUBLIC'}
-                  aria-disabled={disablePubliclyHighlighted}
-                  onClick={() => {
-                    if (disablePubliclyHighlighted) return;
-                    setOpen(false);
-                    onUpdatePublish(notebookId, 'PUBLIC');
-                  }}
-                >
-                  <div>
-                    <p>
-                      {PublishingIconMap.PUBLIC}
-                      {PublishingTextMap.PUBLIC}
-                      {disablePubliclyHighlighted && <S.RequiresUpgrade />}
-                    </p>
-                    <span>
-                      {isFlagEnabled('NEW_PAYMENTS')
-                        ? `Only people you share the link with can view this
+                  {isFlagEnabled('NEW_PAYMENTS') && (
+                    <div
+                      css={S.publishMode}
+                      aria-selected={publishingState === 'PUBLICLY_HIGHLIGHTED'}
+                      onClick={() => {
+                        setOpen(false);
+                        onUpdatePublish(notebookId, 'PUBLICLY_HIGHLIGHTED');
+                      }}
+                      data-testid="publish-public"
+                    >
+                      <div>
+                        <p>
+                          {PublishingIconMap.PUBLICLY_HIGHLIGHTED}
+                          {PublishingTextMap.PUBLICLY_HIGHLIGHTED}
+                        </p>
+                        <span>
+                          Anyone can view this notebook. It will show up in
+                          search engines, on your profile and in the notebook
+                          gallery on our website.
+                        </span>
+                      </div>
+                      {publishingState === 'PUBLICLY_HIGHLIGHTED' && <Check />}
+                    </div>
+                  )}
+
+                  <div
+                    css={S.publishMode}
+                    aria-selected={publishingState === 'PUBLIC'}
+                    aria-disabled={disablePubliclyHighlighted}
+                    data-testid="publish-private-url"
+                    onClick={() => {
+                      if (disablePubliclyHighlighted) return;
+                      setOpen(false);
+                      onUpdatePublish(notebookId, 'PUBLIC');
+                    }}
+                  >
+                    <div>
+                      <p>
+                        {PublishingIconMap.PUBLIC}
+                        {PublishingTextMap.PUBLIC}
+                        {disablePubliclyHighlighted && <S.RequiresUpgrade />}
+                      </p>
+                      <span>
+                        {isFlagEnabled('NEW_PAYMENTS')
+                          ? `Only people you share the link with can view this
                       document. It will not show up in search engines or on your
                       profile, or in the notebook gallery on our website.`
-                        : 'Make your notebook accessable by a URL'}
-                    </span>
+                          : 'Make your notebook accessable by a URL'}
+                      </span>
+                    </div>
+                    {publishingState === 'PUBLIC' && <Check />}
                   </div>
-                  {publishingState === 'PUBLIC' && <Check />}
                 </div>
-              </div>
-            </Popover.Content>
-          </Popover.Root>
+              </Popover.Content>
+            </Popover.Root>
+            <PublishControls
+              notebookId={notebookId}
+              publishedStatus={publishingState}
+              allowDuplicate={allowDuplicate}
+              onChangeAllowDuplicate={onUpdateAllowDuplicate}
+            />
+          </S.BasicGap>
         </>
       )}
-      <S.PublishedDate
-        currentSnapshot={currentSnapshot}
-        publishedVersionState={publishedVersionState}
-      />
-      {isAdmin && isPublished && publishedVersionState !== 'up-to-date' && (
-        <div css={S.groupStyles}>
-          <div css={S.horizontalGroupStyles}>
-            <Button
-              size="extraSlim"
-              type={
-                publishedVersionState === 'first-time-publish'
-                  ? 'primaryBrand'
-                  : 'tertiaryAlt'
-              }
-              onClick={() => onPublish(notebookId)}
-              testId="publish-changes"
-            >
-              <span css={S.publishNewChangesStyles}>
-                {publishedVersionState === 'unpublished-changes' && !open && (
-                  <Dot noBorder size={8} position="relative" />
-                )}
-                {publishedVersionState === 'first-time-publish'
-                  ? 'Publish'
-                  : 'Publish with new changes'}
-              </span>
-            </Button>
-          </div>
-        </div>
-      )}
-      {isPublished && publishedVersionState !== 'first-time-publish' && (
-        <div css={S.groupStyles}>
-          <div css={S.clipboardWrapperStyles}>
-            <div css={S.copyButtonStyles}>
-              <Tooltip
-                variant="small"
-                open={copiedPublicStatusVisible}
-                usePortal={false}
-                trigger={
-                  <div>
-                    <CopyToClipboard
-                      text={link}
-                      options={{ format: 'text/plain' }}
-                      onCopy={() => {
-                        setCopiedPublicStatusVisible(true);
-                        setTimeout(() => {
-                          setCopiedPublicStatusVisible(false);
-                        }, 1000);
-                        // Analytics
-                        clientEvent({
-                          type: 'action',
-                          action: 'notebook share link copied',
-                        });
-                      }}
-                    >
-                      <button
-                        aria-roledescription="copy url to clipboard"
-                        data-testid="copy-published-link"
-                        css={S.copyInnerButtonStyles}
-                      >
-                        <Link />
-                        <span>Copy</span>
-                      </button>
-                    </CopyToClipboard>
-                  </div>
+      <S.BasicGap>
+        <S.PublishedDate
+          currentSnapshot={currentSnapshot}
+          publishedVersionState={publishedVersionState}
+        />
+        {isAdmin && isPublished && publishedVersionState !== 'up-to-date' && (
+          <div css={S.groupStyles}>
+            <div css={S.horizontalGroupStyles}>
+              <Button
+                size="extraSlim"
+                type={
+                  publishedVersionState === 'first-time-publish'
+                    ? 'primaryBrand'
+                    : 'tertiaryAlt'
                 }
+                onClick={() => onPublish(notebookId)}
+                testId="publish-changes"
               >
-                <p>Copied!</p>
-              </Tooltip>
+                <span css={S.publishNewChangesStyles}>
+                  {publishedVersionState === 'unpublished-changes' && !open && (
+                    <Dot noBorder size={8} position="relative" />
+                  )}
+                  {publishedVersionState === 'first-time-publish'
+                    ? 'Publish'
+                    : 'Publish with new changes'}
+                </span>
+              </Button>
             </div>
-
-            <p css={S.padLinkTextStyles}>{link.replace(/https?:\/\//, '')}</p>
           </div>
-        </div>
-      )}
+        )}
+        {isPublished && publishedVersionState !== 'first-time-publish' && (
+          <div css={S.groupStyles}>
+            <div css={S.clipboardWrapperStyles}>
+              <div css={S.copyButtonStyles}>
+                <Tooltip
+                  variant="small"
+                  open={copiedPublicStatusVisible}
+                  usePortal={false}
+                  trigger={
+                    <div>
+                      <CopyToClipboard
+                        text={link}
+                        options={{ format: 'text/plain' }}
+                        onCopy={() => {
+                          setCopiedPublicStatusVisible(true);
+                          setTimeout(() => {
+                            setCopiedPublicStatusVisible(false);
+                          }, 1000);
+                          // Analytics
+                          clientEvent({
+                            type: 'action',
+                            action: 'notebook share link copied',
+                          });
+                        }}
+                      >
+                        <button
+                          aria-roledescription="copy url to clipboard"
+                          data-testid="copy-published-link"
+                          css={S.copyInnerButtonStyles}
+                        >
+                          <Link />
+                          <span>Copy</span>
+                        </button>
+                      </CopyToClipboard>
+                    </div>
+                  }
+                >
+                  <p>Copied!</p>
+                </Tooltip>
+              </div>
+
+              <p css={S.padLinkTextStyles}>{link.replace(/https?:\/\//, '')}</p>
+            </div>
+          </div>
+        )}
+      </S.BasicGap>
     </div>
   );
 };

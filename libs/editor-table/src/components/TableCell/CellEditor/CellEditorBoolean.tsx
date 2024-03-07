@@ -29,7 +29,7 @@ export const CellEditorBoolean = (cellProps: CellProps) => {
     <Toggle
       active={value === 'true'}
       onChange={(newValue) => onChange?.(newValue ? 'true' : 'false')}
-      parentType="table"
+      variant="checkbox"
       disabled={!editable}
     />
   );

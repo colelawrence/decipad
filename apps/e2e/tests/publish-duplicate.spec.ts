@@ -752,3 +752,46 @@ test('checks big notebooks dont get stuck with publish changes notification', as
     ).toBeHidden();
   });
 });
+
+test('Premium Feature - Allow duplicate, prevent users from duplicating', async ({
+  testUser,
+  anotherTestUser,
+}) => {
+  let notebookLink: string | undefined;
+
+  await test.step('Create and publish notebook', async () => {
+    await testUser.goToWorkspace();
+    await testUser.workspace.newWorkspace('@n1n.co team');
+
+    await testUser.createNewNotebook();
+    await testUser.notebook.publishPrivateURL();
+
+    notebookLink = testUser.page.url();
+
+    await expect(
+      testUser.page.locator('text="Allow readers to duplicate"')
+    ).toBeVisible();
+  });
+
+  await test.step('Logged in user cannot duplicate', async () => {
+    await anotherTestUser.page.goto(notebookLink!);
+    await expect(anotherTestUser.notebook.duplicateNotebook).toBeHidden();
+  });
+
+  await test.step('Original user can go back and allow duplication', async () => {
+    await testUser.page.locator('text="Allow readers to duplicate"').click();
+  });
+
+  await test.step('Logged in user can now duplicate', async () => {
+    await anotherTestUser.page.reload();
+    await expect(
+      anotherTestUser.notebook.topRightDuplicateNotebook
+    ).toBeVisible();
+
+    await anotherTestUser.notebook.topRightDuplicateNotebook.click();
+
+    await expect(
+      anotherTestUser.notebook.page.getByRole('button', { name: 'Share ' })
+    ).toBeVisible();
+  });
+});

@@ -1,0 +1,6 @@
+mutation UpdateNotebookAllowDuplicate($id: ID!, $allowDuplicate: Boolean!) {
+  updatePad(id: $id, pad: { canPublicDuplicate: $allowDuplicate }) {
+    id
+    canPublicDuplicate
+  }
+}
