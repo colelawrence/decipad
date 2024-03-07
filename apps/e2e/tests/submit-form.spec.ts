@@ -152,7 +152,7 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
 
   await test.step('update slider and check form sends new value', async () => {
     await testUser.notebook.updateSlider(sliderName, newSliderValue);
-    await testUser.page.getByRole('button', { name: 'Close' }).click();
+    await testUser.page.getByTestId('close-submit-form').click();
     await testUser.page.getByPlaceholder('Email').fill(weebookEmail);
     await testUser.page.getByRole('button', { name: 'Send Submit' }).click();
 

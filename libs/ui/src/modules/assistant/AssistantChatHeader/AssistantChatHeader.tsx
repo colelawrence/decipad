@@ -7,10 +7,13 @@ import {
   p12Medium,
   p13Medium,
 } from '../../../primitives';
-import { Magic, Trash } from '../../../icons';
+import { Close, Magic } from '../../../icons';
 import { Button, Tooltip } from '../../../shared';
 import { useCallback } from 'react';
-import { useAiCreditsStore } from '@decipad/react-contexts';
+import {
+  useAiCreditsStore,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 
 export const wrapperStyles = css({
   display: 'flex',
@@ -72,7 +75,8 @@ const tagStyles = css(p13Medium, {
 
 export const buttonStyles = css(p13Medium, {
   height: 32,
-  width: 32,
+  minWidth: 32,
+  padding: 8,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -82,8 +86,12 @@ export const buttonStyles = css(p13Medium, {
   cursor: 'pointer',
 
   '& > svg': {
-    width: 18,
-    height: 18,
+    width: 16,
+    height: 16,
+
+    '& > path': {
+      stroke: cssVar('textSubdued'),
+    },
   },
 
   '&:hover': {
@@ -113,6 +121,7 @@ const creditsStyles = (noCreditsLeft: boolean) =>
   css(tagStyles, {
     display: 'flex',
     alignItems: 'center',
+    margin: 0,
     gap: '4px',
     label: {
       ...p12Bold,
@@ -184,6 +193,15 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   onStop,
   isGenerating,
 }) => {
+  const toggleSidebar = useNotebookMetaData((state) => state.toggleSidebar);
+
+  const closeAssistant = useCallback(() => {
+    toggleSidebar('default-sidebar');
+    if (isGenerating) {
+      onStop();
+    }
+  }, [isGenerating, toggleSidebar, onStop]);
+
   const handleStop = useCallback(() => {
     onClear();
     if (isGenerating) {
@@ -213,23 +231,18 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
           </p>
         </Tooltip>
       </div>
-      <div css={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div css={{ display: 'flex', gap: 4, alignItems: 'center' }}>
         <Credits creditsUsed={creditsUsed} creditsQuota={creditsQuotaLimit} />
-        <Tooltip
-          trigger={
-            <button
-              css={buttonStyles}
-              onClick={handleStop}
-              data-testid="ai-chat-clear"
-            >
-              <Trash />
-            </button>
-          }
-          side="bottom"
-          variant="small"
+        <button
+          css={buttonStyles}
+          onClick={handleStop}
+          data-testid="ai-chat-clear"
         >
-          <span>Clear all chat history</span>
-        </Tooltip>
+          Clear chat
+        </button>
+        <button css={buttonStyles} onClick={closeAssistant}>
+          <Close />
+        </button>
       </div>
     </div>
   );

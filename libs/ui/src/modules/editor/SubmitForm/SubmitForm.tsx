@@ -205,7 +205,11 @@ const Form = ({
         <div css={documentGuestSuccessStyles}>
           <div>All done!</div>
           {
-            <IconButton transparent={true} onClick={resetForm}>
+            <IconButton
+              testId="close-submit-form"
+              transparent={true}
+              onClick={resetForm}
+            >
               <Close />
             </IconButton>
           }
