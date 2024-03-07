@@ -121,7 +121,6 @@ export const deciTabsScrollbarStyles = css({
 export const deciInsideNotebookOverflowXStyles = css(
   {
     overflowX: 'auto',
-    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
   },
   insideNotebookScrollbarStyles
