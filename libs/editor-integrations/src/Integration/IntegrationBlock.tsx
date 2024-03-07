@@ -1,4 +1,3 @@
-import { getExprRef } from '@decipad/remote-computer';
 import {
   DraggableBlock,
   insertDataViewBelow,
@@ -23,12 +22,13 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
+import { getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
-  IntegrationBlock as UIIntegrationBlock,
-  icons,
-  UpgradePlanWarningTooltip,
   MarkType,
+  IntegrationBlock as UIIntegrationBlock,
+  UpgradePlanWarningTooltip,
+  icons,
 } from '@decipad/ui';
 import { getPreviousNode, setNodes } from '@udecode/plate-common';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
@@ -36,16 +36,16 @@ import {
   ComponentProps,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
-  useEffect,
 } from 'react';
 import { Subject } from 'rxjs';
-import { CodeIntegration } from './CodeIntegration';
-import { SQLIntegration } from './SQLIntegration';
-import { NotionIntegration } from './NotionIntegration';
 import { ContextActions, IntegrationBlockContext } from '../hooks';
+import { CodeIntegration } from './CodeIntegration';
+import { NotionIntegration } from './NotionIntegration';
+import { SQLIntegration } from './SQLIntegration';
 
 function getIntegrationComponent(
   id: string,
@@ -214,12 +214,12 @@ export const IntegrationBlock: PlateComponent = ({
     resultType?.kind === 'materialized-table';
   const editButton = {
     type: 'button' as 'button',
-    text: 'Edit',
+    text: 'Edit source',
     onClick: () => {
       observable.current.next('show-source');
       removeFocusFromAllBecauseSlate();
     },
-    icon: <icons.Frame />,
+    icon: <icons.Source />,
   };
   const { actionButtons }: IntegrationButtons = {
     actionButtons: canBePlotted
