@@ -44,7 +44,6 @@ import {
   translatePathUp,
 } from './TranslatePaths';
 import { IsTab, IsTitle } from './utils';
-import { ElementObserver } from './ElementObserver';
 import { createTitleEditor, TitleEditor } from './TitleEditor';
 import { BaseEditor, isNormalizing, Path, setNormalizing } from 'slate';
 import { RootEditorController } from './types';
@@ -86,7 +85,6 @@ export class OutOfSyncError extends Error {
 export class EditorController implements RootEditorController {
   public id: string;
   public events: RootEditorController['events'];
-  public elementObserver;
 
   private titleEditor: TitleEditor;
   private tabEditors: Array<MyTabEditor> = [];
@@ -104,7 +102,6 @@ export class EditorController implements RootEditorController {
     this.editorPlugins = editorPlugins;
     this.events = new Subject();
     this.titleEditor = this.createTitleEditor();
-    this.elementObserver = new ElementObserver();
     this.mirrorEditor = this.createMirrorEditor();
   }
 
@@ -792,8 +789,6 @@ export class EditorController implements RootEditorController {
       translatedOp.IS_LOCAL = true;
       this.apply(translatedOp);
     };
-
-    this.elementObserver.OverrideApply(editor);
 
     editor.tabName = tabName;
     editor.icon = tabIcon;

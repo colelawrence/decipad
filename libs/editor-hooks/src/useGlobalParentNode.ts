@@ -75,3 +75,13 @@ export const useGlobalParentNodeEntry = (
   }
   return undefined;
 };
+
+export const useGlobalFindNode = () => {
+  const controller = useEditorController();
+  if (controller == null) {
+    return undefined;
+  }
+
+  return (selector: Parameters<typeof findGlobalNode>[1]) =>
+    findGlobalNode(controller.children, selector);
+};

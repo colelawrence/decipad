@@ -1,35 +1,61 @@
 import {
-  TableHeaderElement,
+  ColumnMenuDropdown,
   ELEMENT_VARIABLE_DEF,
+  TableHeaderElement,
+  VariableDropdownElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { useCallback, useEffect, useMemo } from 'react';
-import { usePathMutatorCallback, useElements } from '@decipad/editor-hooks';
+import { useEffect, useMemo } from 'react';
+import {
+  useGlobalFindNode,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type { Path } from 'slate';
+import { useCategoriesNames } from '@decipad/react-contexts';
+import { TNode, getNodeString } from '@udecode/plate-common';
+import { assertElementType } from '@decipad/editor-utils';
+
+function FilterForDropdowns(
+  el: TNode | undefined
+): el is VariableDropdownElement {
+  if (el == null) {
+    return false;
+  }
+
+  if (el.type !== ELEMENT_VARIABLE_DEF) {
+    return false;
+  }
+
+  assertElementType(el, ELEMENT_VARIABLE_DEF);
+
+  return el.variant === 'dropdown';
+}
 
 export const useTableHeaderCellDropdownNames = (
   element: TableHeaderElement,
   path?: Path
-) => {
+): Array<ColumnMenuDropdown> => {
   const editor = useMyEditorRef();
 
-  const dropdownElements = useElements(
-    ELEMENT_VARIABLE_DEF,
-    useCallback((el) => el.variant === 'dropdown', [])
-  );
+  const categories = useCategoriesNames();
+  const globalFindNode = useGlobalFindNode();
 
-  const dropdownNames = useMemo(
-    () =>
-      dropdownElements.map((el) => ({
-        id: el.id,
-        value: el.children[0].children[0].text,
-        type:
-          el.coerceToType?.kind === 'string'
-            ? ('string' as const)
-            : ('number' as const),
-      })),
-    [dropdownElements]
-  );
+  const dropdownNames: Array<ColumnMenuDropdown> = useMemo(() => {
+    if (globalFindNode == null) {
+      return [];
+    }
+
+    return categories
+      .map((c) => globalFindNode((el) => el.id === c))
+      .filter(FilterForDropdowns)
+      .map(
+        (el): ColumnMenuDropdown => ({
+          id: el.id,
+          value: getNodeString(el.children[0]),
+          type: (el.children[1].variant as 'string' | 'number') ?? 'string',
+        })
+      );
+  }, [categories, globalFindNode]);
 
   const mutateDropdownType = usePathMutatorCallback(
     editor,
@@ -37,14 +63,16 @@ export const useTableHeaderCellDropdownNames = (
     'cellType',
     'useTableHeaderCellDropdownNames'
   );
+
   useEffect(() => {
     if (element?.cellType?.kind === 'dropdown') {
-      const selectedDropdown = dropdownNames.find((d) => {
+      const selectedDropdown = dropdownNames.find((dropdown) => {
         if (element.cellType.kind === 'dropdown') {
-          return element.cellType.id === d.id;
+          return element.cellType.id === dropdown.id;
         }
         return undefined;
       });
+
       if (
         selectedDropdown?.type !== element.cellType.type &&
         selectedDropdown

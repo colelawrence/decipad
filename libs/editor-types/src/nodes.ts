@@ -17,12 +17,11 @@ import {
 } from '@udecode/plate-common';
 import type { RefObject } from 'react';
 import type { UndoManager } from 'yjs';
-import type { Observable, Subject } from 'rxjs';
+import type { Subject } from 'rxjs';
 import { BaseEditor, Path } from 'slate';
 import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
-import type { ElementKind, NotebookValue, UserIconKey } from '.';
-import { ElementObserver } from './element-observer';
+import type { NotebookValue, UserIconKey } from '.';
 import { ReactEditor } from 'slate-react';
 
 /**
@@ -44,18 +43,6 @@ export type UndoEditor = {
 export interface EditorObserverMessage<T extends MyElement = MyElement> {
   opType: TOperation['type'];
   element: T;
-}
-
-export interface ObserverElements {
-  elementObserverPool?: Map<
-    ElementKind,
-    { observer: Observable<EditorObserverMessage>; subscribers: number }
-  >;
-  specificElementObserverPool?: Map<
-    string,
-    { observer: Observable<EditorObserverMessage>; subscribers: number }
-  >;
-  changeObserver$?: Subject<EditorObserverMessage>;
 }
 
 export type MyGenericEditor<TV extends Value> = PlateEditor<TV> & {
@@ -86,10 +73,6 @@ export type MinimalRootEditor = Pick<
 > & {
   getNode: (path: Path) => TNode | null;
 };
-
-interface WithElementObserver {
-  elementObserver: ElementObserver;
-}
 
 interface WithTitleEditor {
   getTitleEditor: () => BaseEditor & ReactEditor;
@@ -144,7 +127,6 @@ export interface WithUndo {
 }
 
 export type MinimalRootEditorWithEventsAndObserver = MinimalRootEditor &
-  WithElementObserver &
   WithEvents;
 
 export type MinimalRootEditorWithEventsAndTabs =

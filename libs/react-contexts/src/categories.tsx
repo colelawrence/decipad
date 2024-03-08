@@ -49,3 +49,9 @@ export const useCategories = (blockId?: string): CategoryValues => {
   if (!blockId) return [];
   return ctx.store.get(blockId) ?? [];
 };
+
+export const useCategoriesNames = (): Array<string> => {
+  const ctx = useContext(CategoriesContext);
+
+  return useMemo(() => Array.from(ctx.store.keys()), [ctx.store]);
+};

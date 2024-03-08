@@ -1,7 +1,6 @@
 import type { EElement, ENode, TEditor } from '@udecode/plate-common';
 import { MyEditor, NotebookValue, UserIconKey } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
-import { ElementObserver } from './ElementObserver';
 import { BaseEditor, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -35,7 +34,6 @@ export type ObservableRootEditorEvent =
 
 export interface ObservableRootEditor {
   events: Subject<ObservableRootEditorEvent>;
-  elementObserver: ElementObserver;
 }
 
 interface TabSelectable {
