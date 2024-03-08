@@ -16,6 +16,7 @@ import {
   GetWorkspaceByIdQueryVariables,
   GetStripeCheckoutSessionInfoDocument,
 } from '@decipad/graphql-client';
+import { useToast } from '@decipad/toast';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
@@ -89,6 +90,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     }
   };
 
+  const toast = useToast();
+
   const onConfirmPayment = (paymentStatus: string) => {
     const aiCreditsPlan = Number(selectPlanInfo?.credits) || 0;
     if (paymentStatus === 'success') {
@@ -112,9 +115,11 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
             if ((tokensQuotaLimit || 0) < aiCreditsPlan) {
               increaseQuotaLimit(aiCreditsPlan);
             }
+            toast.success(
+              `Workspace upgraded to ${selectPlanInfo?.title} plan`
+            );
           });
       }, 2000);
-      setCurrentStage('confirm-payment');
 
       if (analytics) {
         analytics.track('Purchase', {
@@ -186,7 +191,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   }
 
   return (
-    <Modal defaultOpen={true} onClose={onClose} title={paywallTitle}>
+    <Modal
+      defaultOpen={true}
+      onClose={onClose}
+      title={paywallTitle}
+      stickyToTopProps={{
+        top: '15%',
+        transform: 'translate(-50%, 0)',
+      }}
+    >
       <Styled.PaywallContainer>{modalContent}</Styled.PaywallContainer>
     </Modal>
   );

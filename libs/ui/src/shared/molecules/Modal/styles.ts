@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { cssVar, offBlack, p14Medium, transparency } from '../../../primitives';
 import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
+import React from 'react';
 
 export const ModalOverlay = styled(motion.div)({
   backgroundColor: transparency(offBlack, 0.4).rgba,
@@ -19,17 +20,18 @@ export const sizes = {
 
 type ModalWrapperProps = {
   size: keyof typeof sizes;
+  stickyToTopProps?: React.CSSProperties;
 };
 
 export const ModalWrapper = styled(motion.div)<ModalWrapperProps>((props) => [
   {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: props.stickyToTopProps?.alignItems ?? 'center',
     position: 'fixed',
-    top: '50%',
+    top: props.stickyToTopProps?.top ?? '50%',
     left: '50%',
-    transform: 'translate(-50%, -50%)',
+    transform: props.stickyToTopProps?.transform ?? 'translate(-50%, -50%)',
     width: '90vw',
     maxWidth: sizes[props.size],
     maxHeight: '80vh',

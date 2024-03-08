@@ -9,6 +9,7 @@ type ModalContentProps = {
   readonly children?: ReactNode | ReactNode[];
   readonly title?: string;
   readonly testId?: string;
+  readonly stickyToTopProps?: React.CSSProperties;
   readonly size?: keyof typeof Styled.sizes;
 };
 
@@ -16,6 +17,7 @@ const ModalContent: FC<ModalContentProps> = ({
   children,
   testId,
   title,
+  stickyToTopProps = {},
   size = 'md',
 }): ReturnType<FC> => (
   <Dialog.Portal forceMount>
@@ -27,7 +29,7 @@ const ModalContent: FC<ModalContentProps> = ({
       />
     </Dialog.Overlay>
     <Dialog.Content asChild role="dialog" data-testid={testId}>
-      <Styled.ModalWrapper size={size}>
+      <Styled.ModalWrapper size={size} stickyToTopProps={stickyToTopProps}>
         <Styled.ModalContainer
           initial={{ y: 120, opacity: 0, scale: 0.9 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -67,6 +69,7 @@ const UncontrolledModal = ({
   title,
   defaultOpen,
   size = 'md',
+  stickyToTopProps = {},
   modal = true,
   onClose,
 }: UncontrolledModalProps): ReturnType<React.FC> => {
@@ -86,7 +89,12 @@ const UncontrolledModal = ({
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange} modal={modal}>
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       {isOpen && (
-        <ModalContent title={title} testId={testId} size={size}>
+        <ModalContent
+          title={title}
+          testId={testId}
+          size={size}
+          stickyToTopProps={stickyToTopProps}
+        >
           {children}
         </ModalContent>
       )}
@@ -96,6 +104,7 @@ const UncontrolledModal = ({
 
 type ControlledModalProps = UncontrolledModalProps & {
   readonly open: boolean;
+  readonly stickyToTopProps?: any;
   readonly onOpenChange: (open: boolean) => void;
 };
 
@@ -104,6 +113,7 @@ const ControlledModal = ({
   testId,
   trigger,
   title,
+  stickyToTopProps = {},
   size = 'md',
   modal = true,
   open,
@@ -130,7 +140,12 @@ const ControlledModal = ({
     >
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       {open && (
-        <ModalContent title={title} testId={testId} size={size}>
+        <ModalContent
+          title={title}
+          testId={testId}
+          size={size}
+          stickyToTopProps={stickyToTopProps}
+        >
           {children}
         </ModalContent>
       )}
