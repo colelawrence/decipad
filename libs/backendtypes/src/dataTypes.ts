@@ -227,6 +227,7 @@ export type ExternalDataSourceProvider =
   | 'redshift'
   | 'mariadb';
 
+/* Pricing */
 export interface CreditsPricePlan {
   id: ID;
   name?: string;
@@ -259,6 +260,11 @@ export interface SubscriptionPlan {
   isDefault?: boolean;
   storage?: number;
   pricePerSeat?: number;
+}
+
+export interface CheckoutSessionInfo {
+  id: string;
+  clientSecret: string;
 }
 
 /* Pagination */
@@ -547,7 +553,7 @@ export interface SecretRecord extends TableRecordBase {
 export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   workspace_id: ID;
   clientReferenceId: string;
-  paymentLink: string;
+  paymentLink?: string;
   paymentStatus: string;
   email: string;
   credits?: number;

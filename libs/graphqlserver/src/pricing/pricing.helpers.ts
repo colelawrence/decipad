@@ -1,6 +1,7 @@
 import { limits, plans, thirdParty } from '@decipad/backend-config';
-import { SubscriptionPlan } from '@decipad/backendtypes';
+import { CheckoutSessionInfo, SubscriptionPlan } from '@decipad/backendtypes';
 import { QueryResolvers } from '@decipad/graphqlserver-types';
+import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import Stripe from 'stripe';
 
@@ -22,17 +23,29 @@ export const getPlansForCredits: QueryResolvers['getCreditsPlans'] =
       const filteredPlans = creditsPlans.data.map((p) => {
         // eslint-disable-next-line camelcase
         const { id, metadata, unit_amount, currency } = p;
+        const {
+          credits,
+          isDefault,
+          promotionTag,
+          pricePerSeat,
+          storage,
+          queries,
+          description,
+        } = metadata;
         return {
           id,
           title: metadata.title,
-          description: metadata.description,
+          description,
           // eslint-disable-next-line camelcase
           price: unit_amount ?? 0,
           currency,
-          credits: Number(metadata.credits),
-          isDefault: metadata.isDefault === 'true',
+          credits: Number(credits),
+          isDefault: isDefault === 'true',
           // not used yet
-          promotionTag: metadata.promotionTag,
+          promotionTag,
+          pricePerSeat,
+          storage: Number(storage),
+          queries: Number(queries),
         };
       });
 
@@ -66,24 +79,34 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
       const allPlans: SubscriptionPlan[] = subscriptionPlans.map((p) => {
         // eslint-disable-next-line camelcase
         const { id, metadata, unit_amount, currency } = p;
-
+        const {
+          seats,
+          credits,
+          queries,
+          description,
+          storage,
+          isDefault,
+          key,
+          title,
+        } = metadata;
         return {
           id,
           currency,
-          title: metadata.title,
-          key: metadata.key,
-          paymentLink: metadata.paymentLink,
+          title,
+          key,
           // eslint-disable-next-line camelcase
           price: unit_amount ?? 0,
-          seats: Number(metadata.seats) || 0,
-          credits: Number(metadata.credits) || 0,
-          queries: Number(metadata.queries) || 0,
-          description: metadata.description,
-          storage: Number(metadata.storage) || 0,
-          isDefault: metadata.isDefault === 'true',
+          seats: Number(seats) || 0,
+          credits: Number(credits) || 0,
+          queries: Number(queries) || 0,
+          description,
+          storage: Number(storage) || 0,
+          isDefault: isDefault === 'true',
           pricePerSeat:
-            pricesPerSeat.find((price) => price.metadata?.key === metadata.key)
+            pricesPerSeat.find((price) => price.metadata?.key === key)
               ?.unit_amount ?? 0,
+          // field to be deprecated soon
+          paymentLink: undefined,
         };
       });
 
@@ -103,4 +126,62 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
     } catch (err) {
       throw Boom.badImplementation('Error on Stripe configuration: ', err);
     }
+  };
+
+export const getStripeCheckoutSession: QueryResolvers['getStripeCheckoutSessionInfo'] =
+  async (_, { priceId, workspaceId }, ctx) => {
+    const { email, name } = ctx.user ?? {};
+    const priceObject = await stripe.prices.retrieve(priceId);
+    let customer: Stripe.Customer;
+
+    if (!priceId) {
+      throw Boom.badRequest('priceId cannot be null or undefined');
+    }
+
+    if (!priceObject) {
+      throw Boom.notFound(
+        `Price ${priceId} not found. Please check your config or Stripe dashboard`
+      );
+    }
+    const { metadata } = priceObject;
+
+    const customerListPerEmail = (
+      await stripe.customers.list({ email: getDefined(email) })
+    ).data;
+
+    // if the customer doesn't exist, we create one
+    if (customerListPerEmail.length === 0) {
+      // If the logged in user doesn't have an email, then something is wrong
+      customer = await stripe.customers.create({
+        email: getDefined(email),
+        name,
+      });
+    } else {
+      // if there is more than one customer with the same email,
+      // we retrieve the most recent one - check https://docs.stripe.com/api/customers/list
+      const [firstCustomer] = customerListPerEmail;
+      customer = firstCustomer;
+    }
+
+    const checkoutSession: Stripe.Checkout.Session =
+      await stripe.checkout.sessions.create({
+        customer: customer.id,
+        redirect_on_completion: 'never',
+        mode: 'subscription',
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        ui_mode: 'embedded',
+        metadata,
+        client_reference_id: workspaceId,
+        allow_promotion_codes: true,
+      });
+
+    return {
+      id: checkoutSession.id,
+      clientSecret: checkoutSession.client_secret,
+    } as CheckoutSessionInfo;
   };

@@ -20,10 +20,6 @@ const Playground = lazyLoad(loadPlayground);
 
 const createRedirectToWorkspacesUrl = (searchParams: URLSearchParams) => {
   const searchParamsEntries = Array.from(searchParams.entries());
-  const isRedirectFromStripe = !!searchParams.get('fromStripe');
-  if (isRedirectFromStripe) {
-    searchParamsEntries.push(['fromStripe', 'true']);
-  }
   const searchParamsString = searchParamsEntries
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join('&');

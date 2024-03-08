@@ -75,7 +75,6 @@ test('Subscription edges', (ctx) => {
       client_reference_id: workspaceId,
       customer_details: { email: 'email@n1n.co' } as any,
       payment_status: 'paid',
-      payment_link: 'payment_link',
       metadata: getMetadata({
         key: 'personal',
         credits: 10,

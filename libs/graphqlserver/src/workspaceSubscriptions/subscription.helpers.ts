@@ -33,7 +33,6 @@ export const getWorkspaceSubscription = async (
     return {
       id: 'free',
       paymentStatus: 'unpaid',
-      paymentLink: '',
       queries: limits().maxCredits.free,
       credits: limits().maxCredits.free,
     };

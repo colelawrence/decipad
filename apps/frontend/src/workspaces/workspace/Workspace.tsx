@@ -23,7 +23,6 @@ import {
   EditUserModal,
   EditWorkspaceModal,
   LoadingLogo,
-  PaymentSubscriptionStatusModal,
   PaywallModal,
   WorkspaceHero,
 } from '@decipad/ui';
@@ -53,11 +52,7 @@ import { initNewDocument } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 
-type WorkspaceProps = {
-  readonly isRedirectFromStripe?: boolean;
-};
-
-const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
+const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
   const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
@@ -269,11 +264,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
 
     return sectionId ? 'section' : 'workspace';
   }, [isArchivePage, isSharedPage, sectionId]);
-
-  const paymentStatus = useMemo(
-    () => currentWorkspace?.workspaceSubscription?.paymentStatus,
-    [currentWorkspace?.workspaceSubscription?.paymentStatus]
-  );
 
   if (fetching) {
     return <LoadingLogo />;
@@ -513,7 +503,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                     onClose={() => navigate(currentWorkspaceRoute.$)}
                     workspaceId={currentWorkspace.id}
                     hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
-                    userId={getDefined(session?.user?.id)}
                     currentPlan={currentWorkspace.plan ?? undefined}
                   />
                 </LazyRoute>
@@ -526,14 +515,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
       <LazyRoute>
         <EditUserModal />
       </LazyRoute>
-      {isRedirectFromStripe && (
-        <LazyRoute>
-          <PaymentSubscriptionStatusModal
-            paymentSubscriptionStatus={paymentStatus || ''}
-            templatesHref={'https://www.decipad.com/templates'}
-          />
-        </LazyRoute>
-      )}
     </>
   );
 };

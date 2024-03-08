@@ -387,7 +387,6 @@ verificationrequests
 workspaceroles
   workspace_id *String
   name byWorkspaceId
-  payment_link String
 
 
 subscriptions

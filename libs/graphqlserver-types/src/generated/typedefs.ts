@@ -419,9 +419,18 @@ type SubscriptionPlan {
   pricePerSeat: Int
 }
 
+type CheckoutSessionInfo {
+  clientSecret: String
+  id: ID
+}
+
 extend type Query {
   getCreditsPlans: CreditsPlan
   getSubscriptionsPlans: [SubscriptionPlan]
+  getStripeCheckoutSessionInfo(
+    priceId: ID!
+    workspaceId: ID!
+  ): CheckoutSessionInfo
 }
 extend type Mutation {
   createUserViaMagicLink(email: String!): User!
@@ -760,7 +769,6 @@ enum SubscriptionPaymentStatus {
 type WorkspaceSubscription {
   id: String!
   paymentStatus: SubscriptionPaymentStatus!
-  paymentLink: String!
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int

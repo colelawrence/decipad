@@ -28,7 +28,6 @@ enum SubscriptionPaymentStatus {
 type WorkspaceSubscription {
   id: String!
   paymentStatus: SubscriptionPaymentStatus!
-  paymentLink: String!
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int

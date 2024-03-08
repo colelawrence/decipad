@@ -34,6 +34,12 @@ export type Attachment = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+export type CheckoutSessionInfo = {
+  __typename?: 'CheckoutSessionInfo';
+  clientSecret?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+};
+
 export type CreateAttachmentForm = {
   __typename?: 'CreateAttachmentForm';
   fields: Array<KeyValue>;
@@ -660,6 +666,7 @@ export type Query = {
   getExternalDataSourcesWorkspace: PagedResult;
   getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
+  getStripeCheckoutSessionInfo?: Maybe<CheckoutSessionInfo>;
   getSubscriptionsPlans?: Maybe<Array<Maybe<SubscriptionPlan>>>;
   getWorkspaceById?: Maybe<Workspace>;
   getWorkspaceSecrets: Array<Secret>;
@@ -703,6 +710,12 @@ export type QueryGetNotionArgs = {
 export type QueryGetPadByIdArgs = {
   id: Scalars['ID']['input'];
   snapshotName?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetStripeCheckoutSessionInfoArgs = {
+  priceId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -1089,7 +1102,6 @@ export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
   credits?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
-  paymentLink: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
   queries?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
@@ -1182,6 +1194,7 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
 export type ResolversTypes = {
   Attachment: ResolverTypeWrapper<Attachment>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CheckoutSessionInfo: ResolverTypeWrapper<CheckoutSessionInfo>;
   CreateAttachmentForm: ResolverTypeWrapper<CreateAttachmentForm>;
   CreateOrUpdateSnapshotInput: CreateOrUpdateSnapshotInput;
   CreditPricePlan: ResolverTypeWrapper<CreditPricePlan>;
@@ -1266,6 +1279,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Attachment: Attachment;
   Boolean: Scalars['Boolean']['output'];
+  CheckoutSessionInfo: CheckoutSessionInfo;
   CreateAttachmentForm: CreateAttachmentForm;
   CreateOrUpdateSnapshotInput: CreateOrUpdateSnapshotInput;
   CreditPricePlan: CreditPricePlan;
@@ -1349,6 +1363,12 @@ export type AttachmentResolvers<ContextType = GraphqlContext, ParentType extends
   uploadedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CheckoutSessionInfoResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CheckoutSessionInfo'] = ResolversParentTypes['CheckoutSessionInfo']> = {
+  clientSecret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1574,6 +1594,7 @@ export type QueryResolvers<ContextType = GraphqlContext, ParentType extends Reso
   getExternalDataSourcesWorkspace?: Resolver<ResolversTypes['PagedResult'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'page' | 'workspaceId'>>;
   getNotion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryGetNotionArgs, 'notebookId' | 'url'>>;
   getPadById?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<QueryGetPadByIdArgs, 'id'>>;
+  getStripeCheckoutSessionInfo?: Resolver<Maybe<ResolversTypes['CheckoutSessionInfo']>, ParentType, ContextType, RequireFields<QueryGetStripeCheckoutSessionInfoArgs, 'priceId' | 'workspaceId'>>;
   getSubscriptionsPlans?: Resolver<Maybe<Array<Maybe<ResolversTypes['SubscriptionPlan']>>>, ParentType, ContextType>;
   getWorkspaceById?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceByIdArgs, 'id'>>;
   getWorkspaceSecrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceSecretsArgs, 'workspaceId'>>;
@@ -1846,7 +1867,6 @@ export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, Parent
 export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
   credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  paymentLink?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
   queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1865,6 +1885,7 @@ export type WorkspacesChangesResolvers<ContextType = GraphqlContext, ParentType 
 
 export type Resolvers<ContextType = GraphqlContext> = {
   Attachment?: AttachmentResolvers<ContextType>;
+  CheckoutSessionInfo?: CheckoutSessionInfoResolvers<ContextType>;
   CreateAttachmentForm?: CreateAttachmentFormResolvers<ContextType>;
   CreditPricePlan?: CreditPricePlanResolvers<ContextType>;
   CreditsPlan?: CreditsPlanResolvers<ContextType>;

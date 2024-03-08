@@ -17,7 +17,6 @@ echo "VITE_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-}" >> apps/frontend/.env.pro
 echo "VITE_ANALYTICS_WRITE_KEY=${VITE_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
 echo "VITE_GOOGLE_SHEETS_KEY=${VITE_GOOGLE_SHEETS_KEY:-}" >> apps/frontend/.env.production
 echo "INTERCOM_SECRET_ID"=${INTERCOM_SECRET_ID:-} >> apps/frontend/.env.production
-echo "VITE_STRIPE_PAYMENT_LINK"=${VITE_STRIPE_PAYMENT_LINK:-} >> apps/frontend/.env.production
 echo "VITE_STRIPE_CUSTOMER_PORTAL_LINK"=${VITE_STRIPE_CUSTOMER_PORTAL_LINK:-} >> apps/frontend/.env.production
 echo "VITE_STRIPE_API_KEY"=${VITE_STRIPE_API_KEY:-} >> apps/frontend/.env.production
 echo "VITE_DECI_APP_URL_BASE"=${DECI_APP_URL_BASE:-} >> apps/frontend/.env.production

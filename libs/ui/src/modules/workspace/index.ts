@@ -6,7 +6,6 @@ export * from './DashboardSidebarPlaceholder/DashboardSidebarPlaceholder';
 export * from './EditMembersModal/EditMembersModal';
 export * from './EditUserModal/EditUserModal';
 export * from './EditWorkspaceModal/EditWorkspaceModal';
-export * from './PaymentSubscriptionStatusModal/PaymentSubscriptionStatusModal';
 export * from './WorkspaceHero/WorkspaceHero';
 export * from './NotebookList/UINotebookList';
 export * from './NotebookListItem/NotebookListItem';

@@ -118,7 +118,6 @@ test('workspaces', (ctx) => {
           },
           mode: 'subscription',
           payment_intent: null,
-          payment_link: 'foo.bar',
           payment_method_collection: 'always',
           payment_method_configuration_details: {
             id: 'pmc_1NI6ldB0kCiHMJmLs8LIhAeB',

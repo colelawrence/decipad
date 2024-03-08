@@ -17,7 +17,6 @@ export const processSessionComplete = async (
 ) => {
   const {
     client_reference_id,
-    payment_link,
     payment_status,
     customer_details,
     subscription,
@@ -28,7 +27,6 @@ export const processSessionComplete = async (
     await subscriptions.createWorkspaceSubscription({
       subscription,
       client_reference_id,
-      payment_link,
       payment_status,
       customer_details,
       metadata,

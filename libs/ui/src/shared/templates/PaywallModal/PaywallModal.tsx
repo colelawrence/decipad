@@ -1,18 +1,27 @@
 import { Modal } from '../../molecules';
-import { ComponentProps, useCallback, useMemo, useState } from 'react';
-import { Button, Link } from '../../atoms';
+import { ComponentProps, useMemo, useState } from 'react';
 import { useStripePlans } from '@decipad/react-utils';
-import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import * as Styled from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { workspaces } from '@decipad/routing';
+import { getAnalytics } from '@decipad/client-events';
+import { useAiUsage } from '@decipad/react-contexts';
+import { SubscriptionPlansList } from './SubscriptionPlansList';
+import { SubscriptionPayment } from './SubscriptionPayment';
+import { useClient } from 'urql';
+import {
+  GetWorkspaceByIdDocument,
+  GetWorkspaceByIdQuery,
+  GetWorkspaceByIdQueryVariables,
+  GetStripeCheckoutSessionInfoDocument,
+} from '@decipad/graphql-client';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
-  userId: string;
   hasFreeWorkspaceSlot: boolean;
   currentPlan?: string;
+  onClose: () => void;
 };
 
 const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
@@ -22,19 +31,22 @@ const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   onClose,
   workspaceId,
-  userId,
   hasFreeWorkspaceSlot,
   currentPlan,
 }) => {
   const params = useRouteParams(
     workspaces({}).workspace({ workspaceId }).upgrade
   );
-
   const isCreatingNewWorkspace = !!params.newWorkspace;
 
   const hideFreePlan = !hasFreeWorkspaceSlot && isCreatingNewWorkspace;
+  let modalContent: JSX.Element;
+  let paywallTitle: string;
 
-  const plans = useStripePlans(isCreatingNewWorkspace ? userId : workspaceId);
+  const plans = useStripePlans();
+
+  const analytics = getAnalytics();
+  const { tokensQuotaLimit, increaseQuotaLimit } = useAiUsage();
 
   const filteredPlans = useMemo(() => {
     return hideFreePlan ? plans.filter((plan) => plan?.key !== 'free') : plans;
@@ -42,124 +54,140 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
 
-  const formatPrice = useCallback((price: number, currency: string = 'usd') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 0,
-    }).format(price / 100);
-  }, []);
-
-  const paymentLink = useMemo(() => {
-    return plans.find((plan) => plan?.key === selectedPlan)?.paymentLink;
-  }, [plans, selectedPlan]);
+  const client = useClient();
 
   const canProceed = useMemo(() => {
     if (isCreatingNewWorkspace) {
       return selectedPlan !== undefined;
     }
-    return (
-      paymentLink && selectedPlan !== currentPlan && selectedPlan !== undefined
-    );
-  }, [paymentLink, selectedPlan, currentPlan, isCreatingNewWorkspace]);
+    return selectedPlan !== currentPlan && selectedPlan !== undefined;
+  }, [selectedPlan, currentPlan, isCreatingNewWorkspace]);
+
+  const [currentStage, setCurrentStage] = useState('choose-plan');
+  const [clientSecret, setClientSecret] = useState('');
+
+  const selectPlanInfo = useMemo(() => {
+    return plans.find((p) => p?.key === selectedPlan);
+  }, [selectedPlan, plans]);
+
+  const fetchBillingInfo = async (pId: string, wId: string) => {
+    try {
+      await client
+        .query(GetStripeCheckoutSessionInfoDocument, {
+          priceId: pId,
+          workspaceId: wId,
+        })
+        .toPromise()
+        .then((result) => {
+          setClientSecret(
+            result.data?.getStripeCheckoutSessionInfo?.clientSecret || ''
+          );
+          setCurrentStage('make-payment');
+        });
+    } catch (error) {
+      console.error('Error fetching billing info:', error);
+    }
+  };
+
+  const onConfirmPayment = (paymentStatus: string) => {
+    const aiCreditsPlan = Number(selectPlanInfo?.credits) || 0;
+    if (paymentStatus === 'success') {
+      /*
+       * When a Stripe subscription is completed, 2 events are sent to Decipad: one to the FE where this function is executed
+       * and another one to our webhook (where all the logic is applied to the workspace and store all the info in our databases).
+       * Because they happens concurrently, when this function is executed, we don't know if the webhook has finished to execute
+       * all the operations (such as, marking the current workspace as premium). This way, we need this function to run after the
+       * webhook finishes its operations. The only way so far is to set a 2s delay to retrieve the updated information of the workspace
+       * // TODO: ask @pgte for a better solution
+       */
+      setTimeout(() => {
+        client
+          .query<GetWorkspaceByIdQuery, GetWorkspaceByIdQueryVariables>(
+            GetWorkspaceByIdDocument,
+            { workspaceId },
+            { requestPolicy: 'network-only' }
+          )
+          .toPromise()
+          .then(() => {
+            if ((tokensQuotaLimit || 0) < aiCreditsPlan) {
+              increaseQuotaLimit(aiCreditsPlan);
+            }
+          });
+      }, 2000);
+      setCurrentStage('confirm-payment');
+
+      if (analytics) {
+        analytics.track('Purchase', {
+          category: 'Subscription',
+          subCategory: 'Plan',
+          resource: {
+            type: 'workspace',
+            id: workspaceId,
+          },
+          plan: selectPlanInfo?.title,
+        });
+      }
+    } else if (analytics) {
+      analytics.track('Purchase', {
+        category: 'Subscription',
+        subCategory: 'Plan',
+        resource: {
+          type: 'workspace',
+          id: workspaceId,
+        },
+        plan: selectPlanInfo?.title,
+        error: {
+          code: 'Stripe checkout error',
+          message: `Check error message on Stripe dashboard for plan: ${selectPlanInfo?.key}`,
+        },
+      });
+    }
+  };
+
+  switch (currentStage) {
+    case 'choose-plan': {
+      modalContent = (
+        <SubscriptionPlansList
+          plans={filteredPlans}
+          isCreatingNewWorkspace={isCreatingNewWorkspace}
+          hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
+          setSelectedPlan={setSelectedPlan}
+          selectedPlan={selectedPlan}
+          currentPlan={currentPlan}
+          handleBillingButton={() => {
+            if (selectPlanInfo?.id) {
+              fetchBillingInfo(selectPlanInfo?.id, workspaceId);
+            }
+          }}
+          handleBackButton={onClose}
+          canProceed={canProceed}
+          workspaceId={workspaceId}
+        />
+      );
+      paywallTitle = 'Choose a plan';
+      break;
+    }
+    case 'make-payment': {
+      modalContent = selectPlanInfo ? (
+        <SubscriptionPayment
+          handlePaymentButton={onConfirmPayment}
+          clientSecret={clientSecret}
+        />
+      ) : (
+        <></>
+      );
+      paywallTitle = `Upgrade to ${selectPlanInfo?.title}`;
+      break;
+    }
+    default: {
+      modalContent = <></>;
+      paywallTitle = '';
+    }
+  }
 
   return (
-    <Modal defaultOpen={true} onClose={onClose}>
-      <Styled.PaywallContainer>
-        <Styled.PaywallTitle>Choose plan</Styled.PaywallTitle>
-        <ToggleGroup.Root
-          type="single"
-          orientation="vertical"
-          value={selectedPlan}
-          onValueChange={(value: string) => {
-            if (value) setSelectedPlan(value);
-          }}
-          asChild
-        >
-          <Styled.PlanContainer>
-            {filteredPlans.map((plan) =>
-              plan ? (
-                <ToggleGroup.Item
-                  key={plan?.id}
-                  value={plan?.key}
-                  disabled={!isCreatingNewWorkspace && plan.key === currentPlan}
-                  asChild
-                  data-testid={`paywall_plan_item_${plan?.key}`}
-                >
-                  <Styled.PlanItem>
-                    <Styled.PlanTitle>
-                      <Styled.PlanRadio />
-                      {plan.title}
-                      {!isCreatingNewWorkspace && plan.key === currentPlan && (
-                        <Styled.PlanBadge>CURRENT PLAN</Styled.PlanBadge>
-                      )}
-                      {isCreatingNewWorkspace &&
-                        hasFreeWorkspaceSlot &&
-                        plan.key === 'free' && (
-                          <Styled.PlanBadge>
-                            1 FREE WORKSPACE AVAILABLE
-                          </Styled.PlanBadge>
-                        )}
-                    </Styled.PlanTitle>
-                    <Styled.PlanPrice>
-                      {formatPrice(plan.price, plan.currency ?? 'usd')}
-                      <Styled.PlanPriceSuffix>/mo</Styled.PlanPriceSuffix>
-                    </Styled.PlanPrice>
-                    <Styled.PlanDescription>
-                      {plan.description}
-                    </Styled.PlanDescription>
-                  </Styled.PlanItem>
-                </ToggleGroup.Item>
-              ) : null
-            )}
-          </Styled.PlanContainer>
-        </ToggleGroup.Root>
-        {isFlagEnabled('NEW_PAYMENTS') && (
-          <Styled.FakePlanItem>
-            <Styled.PlanTitle>{'Enterprise'}</Styled.PlanTitle>
-            <Styled.PlanDescription>
-              <p>Need more credits? More control? More everything? </p>
-              <Link href="mailto:info@decipad.com" color="plain">
-                Get in touch
-              </Link>{' '}
-              and we'll figure it out!
-            </Styled.PlanDescription>
-          </Styled.FakePlanItem>
-        )}
-        <Styled.PaywallText>
-          You can compare all the details on our{' '}
-          <Link color="plain" href="https://www.decipad.com/pricing">
-            pricing page
-          </Link>
-          .
-        </Styled.PaywallText>
-        <Styled.ButtonContainer>
-          {paymentLink ? (
-            <Button
-              type="primaryBrand"
-              disabled={!canProceed}
-              href={paymentLink}
-              sameTab={true} // change this to false if you want to work on payments locally
-              testId="paywall_upgrade_pro"
-            >
-              Continue to billing
-            </Button>
-          ) : (
-            // if there's no payment link, we assume it is a free plan
-            <Button
-              type="primaryBrand"
-              disabled={!canProceed}
-              testId="paywall_create_workspace"
-              href={workspaces({}).workspace({ workspaceId }).createNew({}).$}
-            >
-              Create free workspace
-            </Button>
-          )}
-          <Button type="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-        </Styled.ButtonContainer>
-      </Styled.PaywallContainer>
+    <Modal defaultOpen={true} onClose={onClose} title={paywallTitle}>
+      <Styled.PaywallContainer>{modalContent}</Styled.PaywallContainer>
     </Modal>
   );
 };

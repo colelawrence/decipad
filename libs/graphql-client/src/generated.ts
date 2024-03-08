@@ -35,6 +35,12 @@ export type Attachment = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+export type CheckoutSessionInfo = {
+  __typename?: 'CheckoutSessionInfo';
+  clientSecret?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+};
+
 export type CreateAttachmentForm = {
   __typename?: 'CreateAttachmentForm';
   fields: Array<KeyValue>;
@@ -661,6 +667,7 @@ export type Query = {
   getExternalDataSourcesWorkspace: PagedResult;
   getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
+  getStripeCheckoutSessionInfo?: Maybe<CheckoutSessionInfo>;
   getSubscriptionsPlans?: Maybe<Array<Maybe<SubscriptionPlan>>>;
   getWorkspaceById?: Maybe<Workspace>;
   getWorkspaceSecrets: Array<Secret>;
@@ -704,6 +711,12 @@ export type QueryGetNotionArgs = {
 export type QueryGetPadByIdArgs = {
   id: Scalars['ID']['input'];
   snapshotName?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetStripeCheckoutSessionInfoArgs = {
+  priceId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -1090,7 +1103,6 @@ export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
   credits?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
-  paymentLink: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
   queries?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
@@ -1502,6 +1514,14 @@ export type GetNotionQueryVariables = Exact<{
 
 
 export type GetNotionQuery = { __typename?: 'Query', getNotion: string };
+
+export type GetStripeCheckoutSessionInfoQueryVariables = Exact<{
+  priceId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetStripeCheckoutSessionInfoQuery = { __typename?: 'Query', getStripeCheckoutSessionInfo?: { __typename?: 'CheckoutSessionInfo', id?: string | null, clientSecret?: string | null } | null };
 
 export type GetSubscriptionsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2478,6 +2498,18 @@ export const GetNotionDocument = gql`
 export function useGetNotionQuery(options: Omit<Urql.UseQueryArgs<GetNotionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetNotionQuery, GetNotionQueryVariables>({ query: GetNotionDocument, ...options });
 };
+export const GetStripeCheckoutSessionInfoDocument = gql`
+    query getStripeCheckoutSessionInfo($priceId: ID!, $workspaceId: ID!) {
+  getStripeCheckoutSessionInfo(priceId: $priceId, workspaceId: $workspaceId) {
+    id
+    clientSecret
+  }
+}
+    `;
+
+export function useGetStripeCheckoutSessionInfoQuery(options: Omit<Urql.UseQueryArgs<GetStripeCheckoutSessionInfoQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetStripeCheckoutSessionInfoQuery, GetStripeCheckoutSessionInfoQueryVariables>({ query: GetStripeCheckoutSessionInfoDocument, ...options });
+};
 export const GetSubscriptionsPlansDocument = gql`
     query GetSubscriptionsPlans {
   getSubscriptionsPlans {
@@ -2600,6 +2632,7 @@ export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __type
 
 export type GraphCacheKeysConfig = {
   Attachment?: (data: WithTypename<Attachment>) => null | string,
+  CheckoutSessionInfo?: (data: WithTypename<CheckoutSessionInfo>) => null | string,
   CreateAttachmentForm?: (data: WithTypename<CreateAttachmentForm>) => null | string,
   CreditPricePlan?: (data: WithTypename<CreditPricePlan>) => null | string,
   CreditsPlan?: (data: WithTypename<CreditsPlan>) => null | string,
@@ -2658,6 +2691,7 @@ export type GraphCacheResolvers = {
     getExternalDataSourcesWorkspace?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesWorkspaceArgs, WithTypename<PagedResult> | string>,
     getNotion?: GraphCacheResolver<WithTypename<Query>, QueryGetNotionArgs, Scalars['String'] | string>,
     getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
+    getStripeCheckoutSessionInfo?: GraphCacheResolver<WithTypename<Query>, QueryGetStripeCheckoutSessionInfoArgs, WithTypename<CheckoutSessionInfo> | string>,
     getSubscriptionsPlans?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<SubscriptionPlan> | string>>,
     getWorkspaceById?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceByIdArgs, WithTypename<Workspace> | string>,
     getWorkspaceSecrets?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceSecretsArgs, Array<WithTypename<Secret> | string>>,
@@ -2684,6 +2718,10 @@ export type GraphCacheResolvers = {
     uploadedBy?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<User> | string>,
     url?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
     userId?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>
+  },
+  CheckoutSessionInfo?: {
+    clientSecret?: GraphCacheResolver<WithTypename<CheckoutSessionInfo>, Record<string, never>, Scalars['String'] | string>,
+    id?: GraphCacheResolver<WithTypename<CheckoutSessionInfo>, Record<string, never>, Scalars['ID'] | string>
   },
   CreateAttachmentForm?: {
     fields?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Array<WithTypename<KeyValue> | string>>,
@@ -2989,7 +3027,6 @@ export type GraphCacheResolvers = {
   WorkspaceSubscription?: {
     credits?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['Int'] | string>,
     id?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
-    paymentLink?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     paymentStatus?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, SubscriptionPaymentStatus | string>,
     queries?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['Int'] | string>,
     seats?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['Int'] | string>,
@@ -3072,6 +3109,7 @@ export type GraphCacheUpdaters = {
     getExternalDataSourcesWorkspace?: GraphCacheUpdateResolver<{ getExternalDataSourcesWorkspace: WithTypename<PagedResult> }, QueryGetExternalDataSourcesWorkspaceArgs>,
     getNotion?: GraphCacheUpdateResolver<{ getNotion: Scalars['String'] }, QueryGetNotionArgs>,
     getPadById?: GraphCacheUpdateResolver<{ getPadById: Maybe<WithTypename<Pad>> }, QueryGetPadByIdArgs>,
+    getStripeCheckoutSessionInfo?: GraphCacheUpdateResolver<{ getStripeCheckoutSessionInfo: Maybe<WithTypename<CheckoutSessionInfo>> }, QueryGetStripeCheckoutSessionInfoArgs>,
     getSubscriptionsPlans?: GraphCacheUpdateResolver<{ getSubscriptionsPlans: Maybe<Array<WithTypename<SubscriptionPlan>>> }, Record<string, never>>,
     getWorkspaceById?: GraphCacheUpdateResolver<{ getWorkspaceById: Maybe<WithTypename<Workspace>> }, QueryGetWorkspaceByIdArgs>,
     getWorkspaceSecrets?: GraphCacheUpdateResolver<{ getWorkspaceSecrets: Array<WithTypename<Secret>> }, QueryGetWorkspaceSecretsArgs>,
@@ -3164,6 +3202,10 @@ export type GraphCacheUpdaters = {
     uploadedBy?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     url?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     userId?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>
+  },
+  CheckoutSessionInfo?: {
+    clientSecret?: GraphCacheUpdateResolver<Maybe<WithTypename<CheckoutSessionInfo>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<CheckoutSessionInfo>>, Record<string, never>>
   },
   CreateAttachmentForm?: {
     fields?: GraphCacheUpdateResolver<Maybe<WithTypename<CreateAttachmentForm>>, Record<string, never>>,
@@ -3469,7 +3511,6 @@ export type GraphCacheUpdaters = {
   WorkspaceSubscription?: {
     credits?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
-    paymentLink?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     paymentStatus?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     queries?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
     seats?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,

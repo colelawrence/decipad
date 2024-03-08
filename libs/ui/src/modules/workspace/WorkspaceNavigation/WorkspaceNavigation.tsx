@@ -1,9 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { CreateSectionMutation } from '@decipad/graphql-client';
-import { useStripeLinks } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MenuItem, MenuList } from '../../../shared';
 import {
@@ -39,6 +38,7 @@ import * as Styled from './styles';
 import { NavigationList } from '../NavigationList/NavigationList';
 import { NavigationItem } from '../NavigationItem/NavigationItem';
 import { Section, SectionRecord, WorkspaceMeta } from 'libs/ui/src/types';
+import { env } from 'process';
 
 interface WorkspaceNavigationProps {
   readonly activeWorkspace: WorkspaceMeta;
@@ -80,7 +80,13 @@ export const WorkspaceNavigation = ({
   const location = useLocation();
   const clientEvent = useContext(ClientEventsContext);
 
-  const { customerPortalLink } = useStripeLinks(activeWorkspace);
+  const customerPortalLink = useMemo(
+    () =>
+      activeWorkspace.isPremium
+        ? env.VITE_STRIPE_CUSTOMER_PORTAL_LINK
+        : undefined,
+    [activeWorkspace?.isPremium]
+  );
 
   return (
     <Styled.Container>
@@ -113,7 +119,7 @@ export const WorkspaceNavigation = ({
                   <Styled.TextWrapper>Manage members</Styled.TextWrapper>
                 </Styled.ItemWrapper>
               </NavigationItem>,
-              activeWorkspace.isPremium && customerPortalLink && (
+              customerPortalLink && (
                 <NavigationItem
                   href={customerPortalLink}
                   key="billing-settings"

@@ -107,8 +107,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID);
     case 'STRIPE_SUBSCRIPTIONS_PRODUCT_ID':
       return valueOrDefault(name, process.env.STRIPE_SUBSCRIPTIONS_PRODUCT_ID);
-    case 'VITE_STRIPE_PAYMENT_LINK':
-      return valueOrDefault(name, process.env.VITE_STRIPE_PAYMENT_LINK);
     case 'VITE_STRIPE_CUSTOMER_PORTAL_LINK':
       return valueOrDefault(name, process.env.VITE_STRIPE_CUSTOMER_PORTAL_LINK);
     case 'NOTION_TOKEN':

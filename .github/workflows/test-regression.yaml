@@ -40,7 +40,6 @@ jobs:
       - name: Run e2e Regression Tests
         env:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
-          VITE_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           VITE_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           TESTMAIL_APIKEY: '${{secrets.TESTMAIL_APIKEY}}'
           TESTMAIL_NAMESPACE: '${{secrets.TESTMAIL_NAMESPACE}}'

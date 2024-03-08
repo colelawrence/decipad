@@ -32,7 +32,16 @@ type SubscriptionPlan {
   pricePerSeat: Int
 }
 
+type CheckoutSessionInfo {
+  clientSecret: String
+  id: ID
+}
+
 extend type Query {
   getCreditsPlans: CreditsPlan
   getSubscriptionsPlans: [SubscriptionPlan]
+  getStripeCheckoutSessionInfo(
+    priceId: ID!
+    workspaceId: ID!
+  ): CheckoutSessionInfo
 }

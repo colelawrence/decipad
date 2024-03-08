@@ -3,9 +3,12 @@ import {
   componentCssVars,
   cssVar,
   p10Medium,
+  p12Regular,
   p13Medium,
+  p13Regular,
   p14Bold,
   p14Medium,
+  p14Regular,
   p16Medium,
 } from 'libs/ui/src/primitives';
 
@@ -120,8 +123,27 @@ export const PlanDescription = styled.span(p13Medium, {
 });
 
 export const ButtonContainer = styled.div({
-  display: 'flex',
+  display: 'inline-flex',
   gap: 8,
+});
+
+export const SelectedPlanContainer = styled.div(p13Regular, {
+  backgroundColor: cssVar('backgroundDefault'),
+  padding: '16px 0 16px 16px',
+  borderRadius: '12px',
+});
+
+export const Label = styled.span(p13Medium, {
+  color: cssVar('stateOkText'),
+});
+
+export const PlanDetailsPayment = styled.div({
+  display: 'grid',
+  gridTemplateColumns: 'auto 120px',
+  gridTemplateRows: 'auto auto',
+  gap: '10px',
+  maxHeight: '104px',
+  overflow: 'auto',
 });
 
 export const FakePlanItem = styled.div({
@@ -133,4 +155,28 @@ export const FakePlanItem = styled.div({
   // to compensate the 8px gap from the plan container
   marginTop: '-8px',
   gap: '2px',
+});
+
+export const PaymentMethodTitle = styled.p(p16Medium, {
+  color: cssVar('stateOkText'),
+  paddingTop: '24px',
+  marginBottom: '16px',
+});
+
+export const PaymentFormWrapper = styled.div({
+  overflow: 'auto',
+  paddingRight: '6px',
+  width: '100%',
+});
+
+export const PlanConfirmationDetails = styled.div(p12Regular, {
+  display: 'grid',
+  gridTemplateColumns: 'auto 120px',
+  gridTemplateRows: 'auto auto',
+  gap: '12px',
+  marginBottom: '54px',
+});
+
+export const PlanConfirmationDescription = styled.p(p14Regular, {
+  color: cssVar('textSubdued'),
 });

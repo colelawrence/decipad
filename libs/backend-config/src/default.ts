@@ -60,7 +60,6 @@ const defaultEnvValues = {
     'sk_test_51J3IJaB0kCiHMJmL1UViJeQBjwEvCoDKBEtN2xLyCpjEKB6s6FF3PGcwNC4G5xCZSCtqbOgneM9vORbwrrRh29t200ySTx8I57',
   STRIPE_EXTRA_CREDITS_PRODUCT_ID: 'prod_PBHKc0MuyDLPro',
   STRIPE_SUBSCRIPTIONS_PRODUCT_ID: 'prod_O4FJUMlNRyvMtC',
-  VITE_STRIPE_PAYMENT_LINK: 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000',
   VITE_STRIPE_CUSTOMER_PORTAL_LINK:
     'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
 

@@ -1,5 +1,4 @@
 export interface SubscriptionPlan {
-  paymentLink?: string | null;
   credits?: number | null;
   queries?: number | null;
   seats?: number | null;

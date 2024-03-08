@@ -175,7 +175,6 @@ const nonNegativeString = z.preprocess(
 
 const metadataValidator = z.object({
   key: planValidator,
-
   credits: nonNegativeString,
   seats: nonNegativeString,
   storage: nonNegativeString,
@@ -186,11 +185,7 @@ type StripeOptions = {
   metadata: unknown;
 } & Pick<
   Stripe.Checkout.Session,
-  | 'client_reference_id'
-  | 'payment_status'
-  | 'payment_link'
-  | 'customer_details'
-  | 'subscription'
+  'client_reference_id' | 'payment_status' | 'customer_details' | 'subscription'
 >;
 
 /**
@@ -205,12 +200,12 @@ export function getMetadata(
 export async function createWorkspaceSubscription({
   subscription,
   client_reference_id,
-  payment_link,
   payment_status,
   customer_details,
   metadata,
 }: StripeOptions): Promise<{ subscriptionId: string; workspaceId: string }> {
   const validateMetadata = metadataValidator.safeParse(metadata);
+
   if (!validateMetadata.success) {
     throw Boom.badRequest(
       'Webhook error: Metadata Object is invalid. Subscription not created.'
@@ -231,12 +226,6 @@ export async function createWorkspaceSubscription({
   const email = customer_details?.email;
   if (email == null) {
     throw Boom.badRequest('Webhook error: customer email was invalid');
-  }
-
-  const paymentLink =
-    typeof payment_link === 'string' ? payment_link : payment_link?.id;
-  if (paymentLink == null) {
-    throw Boom.badRequest('Webhook error: Payment link cannot be null');
   }
 
   const subscriptionId =
@@ -265,7 +254,6 @@ export async function createWorkspaceSubscription({
     queries: validMetadata.queries,
     seats: validMetadata.seats,
     storage: validMetadata.storage,
-    paymentLink,
     email,
   });
 
