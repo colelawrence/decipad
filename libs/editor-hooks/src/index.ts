@@ -1,5 +1,6 @@
 export * from './useElementAbove';
 export * from './useEnsureValidVariableName';
+export * from './useGlobalParentNode';
 export * from './useMaterializedColumnResult';
 export * from './useMaterializedColumnResultValue';
 export * from './useNodePath';

@@ -1456,6 +1456,21 @@ export class Notebook {
   }
 
   /**
+   * Return the locator to a dropdown with a specific name
+   *
+   * **Usage**
+   *
+   * ```js
+      let Dropdown = notebook.getDropdownLocator('SliderName')
+   * ```
+   */
+  getDropdownLocator(name: string) {
+    return this.page
+      .getByTestId('widget-editor')
+      .filter({ hasText: new RegExp(name) });
+  }
+
+  /**
    * Return the locator to a slider with a specific name
    *
    * **Usage**

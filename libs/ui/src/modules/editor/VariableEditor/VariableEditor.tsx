@@ -7,7 +7,14 @@ import type {
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
+import {
+  Children,
+  ComponentProps,
+  FC,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from 'react';
 import { useSelected } from 'slate-react';
 import { VariableEditorMenu } from '../VariableEditorMenu/VariableEditorMenu';
 import { Ellipsis, Virus } from '../../../icons';
@@ -188,7 +195,7 @@ export const VariableEditor = ({
 
   const resultType = lineResult?.result?.type;
 
-  const editor = (() => {
+  const editor = useCallback(() => {
     if (variant === 'display' || childrenArray.length === 0) {
       return null;
     }
@@ -227,7 +234,7 @@ export const VariableEditor = ({
     }
 
     return wrappedChildren;
-  })();
+  }, [childrenArray, onChangeValue, selected, type, value, variant])();
 
   return (
     <div

@@ -1,4 +1,10 @@
-import { ComponentProps, FC, useMemo, useEffect } from 'react';
+import {
+  ComponentProps,
+  FC,
+  useMemo,
+  useEffect,
+  PropsWithChildren,
+} from 'react';
 import { Editor } from './Editor.component';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
@@ -38,13 +44,9 @@ type TabEditorComponentProps = Omit<
  * and then render them instead of doing this here.
  */
 
-export const TabEditorComponent: FC<TabEditorComponentProps> = ({
-  controller,
-  readOnly,
-  notebookId,
-  workspaceId,
-  loaded,
-}) => {
+export const TabEditorComponent: FC<
+  PropsWithChildren<TabEditorComponentProps>
+> = ({ children, controller, readOnly, notebookId, workspaceId, loaded }) => {
   const { tab: tabId } = useRouteParams(notebooks({}).notebook);
   const tabs = useTabs(readOnly);
 
@@ -102,6 +104,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
               onRedo={controller.redo}
             />
           }
+          children={children}
         />
       </TabEditorContext.Provider>
     </EditorIdContext.Provider>

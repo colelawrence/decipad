@@ -1,9 +1,14 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { ColumnDesc, materializeColumnDesc } from '@decipad/remote-computer';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useNodePath,
+  useGlobalParentNode,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import { DropdownElement, useMyEditorRef } from '@decipad/editor-types';
 import { formatResultPreview } from '@decipad/format';
 import {
+  CategoriesContext,
   EditorChangeContext,
   useComputer,
   useIsEditorReadOnly,
@@ -11,7 +16,7 @@ import {
 import { useResolved } from '@decipad/react-utils';
 import { icons, SelectItems } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
-import { insertText, nanoid } from '@udecode/plate-common';
+import { insertText, isElement, nanoid } from '@udecode/plate-common';
 import { MaterializedColumnDesc } from 'libs/computer/src/types';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -34,6 +39,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
+  const parent = useGlobalParentNode(element);
 
   const preSelectedOptionText = element.children[0].text;
   const preSelectedBlockId = element.options.find(
@@ -252,6 +258,18 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         : []),
     ];
   }, [element.selectedColumn, materializedColumns]);
+
+  // sync options to context
+  const categories = useContext(CategoriesContext);
+  useEffect(() => {
+    const newOptions = element.options;
+    if (
+      isElement(parent) &&
+      !dequal(categories.store.get(parent.id), newOptions)
+    ) {
+      categories.set(parent.id, newOptions);
+    }
+  }, [categories, element.id, element.options, parent]);
 
   return {
     dropdownOpen,

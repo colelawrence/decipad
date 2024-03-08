@@ -12,7 +12,7 @@ import { ExternalDataSource } from '@decipad/interfaces';
 
 interface UseCoreLiveConnectionActionsProps {
   path?: Path;
-  element: LiveConnectionElement | LiveDataSetElement;
+  element?: LiveConnectionElement | LiveDataSetElement;
 }
 
 export const useCoreLiveConnectionActions = ({
@@ -28,7 +28,7 @@ export const useCoreLiveConnectionActions = ({
           editor,
           {
             columnTypeCoercions: {
-              ...element.columnTypeCoercions,
+              ...element?.columnTypeCoercions,
               [columnIndex]: type,
             },
           },
@@ -36,7 +36,7 @@ export const useCoreLiveConnectionActions = ({
         );
       }
     },
-    [editor, element.columnTypeCoercions, path]
+    [editor, element?.columnTypeCoercions, path]
   );
 
   const setIsFirstRowHeader = usePathMutatorCallback(

@@ -343,6 +343,34 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       'Column1,Column2,Column3\n"One","","500%"\n"Two","",""\n"Three","",""'
     );
   });
+
+  await test.step('Move dropdown into a new tab', async () => {
+    await notebook.createTab('Another Tab');
+    await notebook.selectTab('New Tab');
+    await notebook.moveToTab(0, 'Another Tab');
+    await notebook.selectTab('nother Tab');
+    await expect(notebook.getDropdownLocator('Dropdown')).toBeVisible();
+    await notebook.selectTab('New Tab');
+    await expect(notebook.getDropdownLocator('Dropdown')).toBeHidden();
+  });
+
+  await test.step('check table dropdown is still linked to the dropdown that was moved', async () => {
+    await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
+    await clickCell(page, 2, 2);
+    const dropdownOptions = page.locator(
+      '[aria-roledescription="dropdownOption"]'
+    );
+    expect(
+      await dropdownOptions.count(),
+      "Dropdown on table isn't showing all options"
+    ).toBe(2);
+    await page
+      .locator('[aria-roledescription="dropdownOption"]')
+      .getByText('75%')
+      .click();
+    await expect(dropdownOptions).toBeHidden();
+    expect(await getFromTable(page, 2, 2)).toBe('75%');
+  });
 });
 
 test('result widget', async ({ testUser }) => {

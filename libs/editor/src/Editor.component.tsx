@@ -6,6 +6,7 @@ import {
 import { Integrations } from '@decipad/editor-integrations';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
+  CategoriesContextProvider,
   EditorBlockParentRefProvider,
   EditorReadOnlyContext,
   useComputer,
@@ -15,6 +16,8 @@ import { EditorPlaceholder, LoadingFilter, EditorLayout } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import {
+  FC,
+  PropsWithChildren,
   ReactNode,
   RefObject,
   useCallback,
@@ -77,8 +80,8 @@ const InsidePlate = ({
   </>
 );
 
-export const Editor = (props: EditorProps) => {
-  const { editor, readOnly, workspaceId, notebookId } = props;
+export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
+  const { editor, readOnly, workspaceId, notebookId, children } = props;
 
   //
   // It's important we don't run this in a useEffect.
@@ -146,37 +149,43 @@ export const Editor = (props: EditorProps) => {
     >
       <LoadingFilter loading={isWritingLocked}>
         <EditorBlockParentRefProvider onRefChange={onRefChange}>
-          <EditorLayout>
-            {props.titleEditor}
-            <div ref={containerRef}>
-              <BlockLengthSynchronizationProvider editor={editor}>
-                <TeleportEditor editor={editor}>
-                  <Plate<MyValue>
-                    key={key}
-                    editor={editor}
-                    onChange={onChange}
-                    readOnly={
-                      // Only respect write locks here and not the readOnly prop.
-                      // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                      // The rest are controlled via EditorReadOnlyContext.
-                      isWritingLocked
-                    }
-                    disableCorePlugins={{
-                      history: true,
-                    }}
-                  >
-                    <PlateContent
-                      onCopy={(e) => editorOnCopy(e, editor)}
-                      onPaste={(e) => editorOnPaste(e, editor, computer)}
-                    />
-                    <InsidePlate {...props} containerRef={containerRef} />
-                    <UploadFile notebookId={notebookId} />
-                    <Integrations workspaceId={workspaceId} />
-                  </Plate>
-                </TeleportEditor>
-              </BlockLengthSynchronizationProvider>
-            </div>
-          </EditorLayout>
+          <CategoriesContextProvider>
+            <EditorLayout>
+              {props.titleEditor}
+              <div ref={containerRef}>
+                <BlockLengthSynchronizationProvider editor={editor}>
+                  <TeleportEditor editor={editor}>
+                    <Plate<MyValue>
+                      key={key}
+                      editor={editor}
+                      onChange={onChange}
+                      readOnly={
+                        // Only respect write locks here and not the readOnly prop.
+                        // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                        // The rest are controlled via EditorReadOnlyContext.
+                        isWritingLocked
+                      }
+                      disableCorePlugins={{
+                        history: true,
+                      }}
+                    >
+                      <PlateContent
+                        onCopy={(e) => editorOnCopy(e, editor)}
+                        onPaste={(e) => editorOnPaste(e, editor, computer)}
+                      />
+                      <InsidePlate
+                        {...props}
+                        containerRef={containerRef}
+                        children={children}
+                      />
+                      <UploadFile notebookId={notebookId} />
+                      <Integrations workspaceId={workspaceId} />
+                    </Plate>
+                  </TeleportEditor>
+                </BlockLengthSynchronizationProvider>
+              </div>
+            </EditorLayout>
+          </CategoriesContextProvider>
         </EditorBlockParentRefProvider>
       </LoadingFilter>
     </EditorReadOnlyContext.Provider>

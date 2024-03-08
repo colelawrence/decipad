@@ -1,5 +1,5 @@
 import { AnyElement, MyElement } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate-common';
+import { TElement, isElement } from '@udecode/plate-common';
 import { Node } from 'slate';
 
 export function assertElementType<Type extends AnyElement['type']>(
@@ -7,7 +7,11 @@ export function assertElementType<Type extends AnyElement['type']>(
   type: Type
 ): asserts node is Extract<MyElement, { type: Type }> {
   if (!isElement(node) || node.type !== type) {
-    throw new Error(`Expected element type to be ${type}`);
+    throw new Error(
+      `Expected element type to be ${type} and is ${
+        (node as TElement | undefined)?.type
+      }`
+    );
   }
 }
 

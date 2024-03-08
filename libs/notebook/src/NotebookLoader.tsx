@@ -13,6 +13,9 @@ import { useNotebookWarning } from './useNotebookWarning';
 import type { NotebookProps } from './types';
 import { useLocalBackupNotice } from './useLocalBackupNotice';
 import { TabEditorComponent } from '@decipad/editor';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { notebooks } from '@decipad/routing';
+import { OutsideTabHiddenLanguageElements } from './OutsideTabHiddenLanguageElements';
 
 type NotebookLoaderProps = Omit<
   NotebookProps,
@@ -143,6 +146,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     throw lastValueFrom(computer.results);
   }
 
+  const { tab: tabId } = useRouteParams(notebooks({}).notebook);
+
   if (editor) {
     return (
       <ComputerContextProvider computer={computer}>
@@ -157,7 +162,9 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
               loaded={loaded}
               controller={readOrSuspendEditor.read()}
               readOnly={readOnly}
-            />
+            >
+              <OutsideTabHiddenLanguageElements editor={editor} tabId={tabId} />
+            </TabEditorComponent>
           </div>
         </Suspense>
       </ComputerContextProvider>

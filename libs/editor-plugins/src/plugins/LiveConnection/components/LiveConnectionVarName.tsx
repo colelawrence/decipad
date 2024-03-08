@@ -3,7 +3,10 @@ import {
   insertPlotBelow,
 } from '@decipad/editor-components';
 
-import { usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useGlobalParentNodeEntry,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -26,15 +29,12 @@ import {
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
-  TNodeEntry,
   findNodePath,
   getNodeChild,
   getNodeString,
-  getParentNode,
 } from '@udecode/plate-common';
 import { Hide, Show } from 'libs/ui/src/icons';
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
-import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
 import { useComputer } from '@decipad/react-contexts';
@@ -58,22 +58,19 @@ export const LiveConnectionVarName: PlateComponent = ({
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
   const editor: MyEditor = useMyEditorRef();
   const path = findNodePath(editor, element);
-  const parent: TNodeEntry<LiveConnectionElement> | undefined =
-    path && getParentNode(editor, path);
-  const parentElem = parent?.[0] as LiveConnectionElement;
-  const parentPath = parent?.[1] as Path;
-  if (!parentElem || !parentPath) {
-    throw new Error('Issue with finding parent. Contact support.');
-  }
-  if (parent) {
+  const parentEntry = useGlobalParentNodeEntry(element);
+  const parentElem = parentEntry?.[0];
+  const parentPath = parentEntry?.[1];
+
+  if (parentElem) {
     assertElementType(parentElem, ELEMENT_LIVE_CONNECTION);
   }
   const setIsFirstRowHeader = usePathMutatorCallback<
     LiveConnectionElement,
     'isFirstRowHeaderRow'
-  >(editor, parentPath, 'isFirstRowHeaderRow', 'LiveConnectionVarName');
+  >(editor, parentEntry?.[1], 'isFirstRowHeaderRow', 'LiveConnectionVarName');
 
-  const isFirstRowHeaderRow = parent?.[0].isFirstRowHeaderRow;
+  const isFirstRowHeaderRow = parentElem?.isFirstRowHeaderRow;
 
   const toggleFirstRowIsHeader = useCallback(() => {
     setIsFirstRowHeader(!isFirstRowHeaderRow);
@@ -84,15 +81,15 @@ export const LiveConnectionVarName: PlateComponent = ({
   const toast = useToast();
 
   const { sourceName, url, returnRange } = useMemo(() => {
-    const source = parentElem.source ?? '';
-    const parentUrl = parentElem.url;
+    const source = parentElem?.source ?? '';
+    const parentUrl = parentElem?.url;
 
     let sourceParams: SourceUrlParseResponse | undefined;
     try {
       sourceParams =
         (source &&
           parentUrl != null &&
-          !parentElem.externalDataSourceId &&
+          !parentElem?.externalDataSourceId &&
           parseSourceUrl(source, parentUrl)) ||
         (parentUrl != null && { userUrl: parentUrl }) ||
         undefined;
@@ -114,20 +111,18 @@ export const LiveConnectionVarName: PlateComponent = ({
       returnRange: subsheetName && subsheetName !== '0' ? formattedRange : '',
     };
   }, [
-    parentElem.externalDataSourceId,
-    parentElem.source,
-    parentElem.url,
+    parentElem?.externalDataSourceId,
+    parentElem?.source,
+    parentElem?.url,
     toast,
   ]);
 
   const computer = useComputer();
 
   const onAddDataViewButtonPress = useCallback(() => {
-    if (!parent) {
+    if (!parentElem || !parentPath) {
       return;
     }
-
-    const [tableElement] = parent;
 
     return (
       path &&
@@ -135,31 +130,24 @@ export const LiveConnectionVarName: PlateComponent = ({
         editor,
         parentPath,
         computer,
-        tableElement.id,
+        parentElem.id,
         getNodeString(getNodeChild(element, 0))
       )
     );
-  }, [computer, editor, element, parent, parentPath, path]);
+  }, [computer, editor, element, parentElem, parentPath, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {
-      if (!parent) {
+      if (!parentElem || !parentPath) {
         return;
       }
 
-      const [tableElement] = parent;
-
       return (
         path &&
-        insertPlotBelow(
-          editor,
-          parentPath,
-          markType,
-          getExprRef(tableElement.id)
-        )
+        insertPlotBelow(editor, parentPath, markType, getExprRef(parentElem.id))
       );
     },
-    [editor, parent, parentPath, path]
+    [editor, parentElem, parentPath, path]
   );
 
   const {
