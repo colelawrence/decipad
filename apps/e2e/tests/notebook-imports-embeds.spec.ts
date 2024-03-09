@@ -107,7 +107,7 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
 
   await test.step('delete csvs', async () => {
     await expect(async () => {
-      await page.locator(`[data-testid="drag-handle"] >> nth=0`).click();
+      await page.locator(`[data-testid="drag-handle"] >> nth=1`).click();
       await page.getByRole('menuitem', { name: /Delete/ }).click();
       await expect(page.getByTestId('integration-block')).toBeHidden();
     }, "Wasn't able to delete all CSV tables").toPass();

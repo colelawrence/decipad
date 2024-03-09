@@ -14,7 +14,12 @@ import {
   TabElement,
 } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { PlateEditor, getPlugin, isElement } from '@udecode/plate-common';
+import {
+  Plate,
+  PlateEditor,
+  getPlugin,
+  isElement,
+} from '@udecode/plate-common';
 import { ErrorBoundary } from '@sentry/react';
 
 export interface OutsideTabHiddenLanguageElementsProps {
@@ -76,7 +81,9 @@ const TabElements: FC<{ tab: TabElement; editor: MyEditor }> = ({
     <>
       {tab.children.map((element) => (
         <ErrorBoundary>
-          <TabElementWrapper editor={editor} element={element} />
+          <Plate editor={editor as unknown as PlateEditor}>
+            <TabElementWrapper editor={editor} element={element} />
+          </Plate>
         </ErrorBoundary>
       ))}
     </>
@@ -96,7 +103,11 @@ export const OutsideTabHiddenLanguageElements: FC<
     <div css={outsideTabContainerStyles}>
       {otherTabs.map((tab) =>
         tab.type === ELEMENT_TAB ? (
-          <TabElements editor={editor.getTabEditor(tabId)} tab={tab} />
+          <TabElements
+            key={tabId}
+            editor={editor.getTabEditor(tabId)}
+            tab={tab}
+          />
         ) : null
       )}
     </div>
