@@ -1,6 +1,6 @@
 interface LocationMocks {
   mockGetLocation: jest.MockedFunction<() => URL>;
-  mockSetLocation: jest.MockedFunction<(newLocation: string) => void>;
+  mockSetLocation: jest.MockedFunction<(_newLocation: string) => void>;
   mockAssign: jest.MockedFunction<typeof globalThis.location.assign>;
   mockReload: jest.MockedFunction<typeof globalThis.location.reload>;
 }

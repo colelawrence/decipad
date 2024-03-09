@@ -11,7 +11,7 @@ import { hideOnPrint } from '../../../styles/editor-layout';
 import { Plot } from '../../../icons';
 
 type CreateChartMenuProps = PropsWithChildren<{
-  onAddChartViewButtonPress: (type: typeof markTypes[number]) => void;
+  onAddChartViewButtonPress: (_type: typeof markTypes[number]) => void;
 }>;
 
 export const CreateChartMenu: FC<CreateChartMenuProps> = ({

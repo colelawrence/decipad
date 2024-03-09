@@ -40,7 +40,7 @@ const normalizeNode = (editor: TEditor, entry: NodeEntry): boolean => {
 // 2) Plugins
 //
 export const normalizeCurried =
-  (editor: TEditor, plugins: Array<(entry: MyNodeEntry) => boolean>) =>
+  (editor: TEditor, plugins: Array<(_entry: MyNodeEntry) => boolean>) =>
   (): void => {
     if (!Editor.isNormalizing(editor as BaseEditor)) {
       return;

@@ -106,6 +106,7 @@ const continueInferFunctionCall = async (
 const guardFunctionCallInfer = (
   realm: Realm,
   expr: AST.FunctionCall
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<Type> => {
   const fName = getIdentifierString(expr.args[0]);
   const { inferContext: ctx } = realm;

@@ -37,7 +37,7 @@ const toggleFormulaStyles = (
 
 type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: () => void;
-  onAddChartViewButtonPress?: (type: typeof markTypes[number]) => void;
+  onAddChartViewButtonPress?: (_type: typeof markTypes[number]) => void;
   isForWideTable?: boolean;
   empty?: boolean;
   readOnly?: boolean;

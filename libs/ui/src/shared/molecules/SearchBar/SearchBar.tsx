@@ -21,9 +21,9 @@ export const useSearchBarStore = create<{
   search: string;
   status: string[];
   visibility: string;
-  setSearch: (search: string) => void;
-  setStatus: (status: string[]) => void;
-  setVisibility: (visibility: string) => void;
+  setSearch: (_search: string) => void;
+  setStatus: (_status: string[]) => void;
+  setVisibility: (_visibility: string) => void;
 }>((set) => ({
   search: '',
   status: [],

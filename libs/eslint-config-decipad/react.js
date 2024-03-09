@@ -20,6 +20,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-useless-constructor': 'off',
 
     'react/jsx-pascal-case': 'off',
 

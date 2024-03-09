@@ -15,6 +15,7 @@ export const decilang = <RetType extends AST.Statement = AST.Statement>(
   strings: TemplateStringsArray,
   ...interpolations: (AST.Node | { name: string })[]
 ): RetType => {
+  // eslint-disable-next-line no-restricted-globals
   const idsToInterpolations = new Map<string, AST.Node | { name: string }>();
 
   const codeWithIds = strings

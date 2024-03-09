@@ -1,5 +1,6 @@
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
+  AnyElement,
   AvailableSwatchColor,
   PlateComponent,
   useMyEditorRef,
@@ -18,7 +19,6 @@ import { workspaces } from '@decipad/routing';
 import { ToastContextType, useToast } from '@decipad/toast';
 import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { TElement } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Close, Create, Email, Send, Spinner } from '../../../icons';
@@ -263,7 +263,7 @@ type FormStatus =
   | { status: 'error'; error: string };
 
 export const SubmitForm: PlateComponent<{}> = ({ ...props }) => {
-  const element = props.element as TElement;
+  const element = props.element as AnyElement;
   const [email, setEmail] = useState('');
   const {
     workspaceInfo: { id: workspaceId },

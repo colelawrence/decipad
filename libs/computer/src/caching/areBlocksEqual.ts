@@ -9,6 +9,7 @@ const areArgsEqual = (a: Arg, b: Arg) => {
     return b == null;
   }
   const typeOfA = typeof a;
+  // eslint-disable-next-line valid-typeof
   if (typeOfA !== typeof b) {
     return false;
   }
