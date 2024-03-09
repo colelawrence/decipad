@@ -4,7 +4,6 @@ import { noop } from '@decipad/utils';
 import { ComponentProps, FC } from 'react';
 import { CodeError } from '../CodeError/CodeError';
 import { TextAndIconButton } from '../../../shared/atoms/TextAndIconButton/TextAndIconButton';
-import { Tooltip } from '../../../shared/atoms/Tooltip/Tooltip';
 import { Refresh } from '../../../icons';
 import { GoogleConnectButton } from '../GoogleConnectButton/GoogleConnectButton';
 
@@ -91,7 +90,7 @@ export const LiveError: FC<LiveErrorProps> = ({
         color: 'red',
       } as IconInfo);
 
-  const button = isPermissionError(error) ? (
+  return isPermissionError(error) ? (
     <GoogleConnectButton onClick={action} />
   ) : (
     <TextAndIconButton
@@ -104,14 +103,5 @@ export const LiveError: FC<LiveErrorProps> = ({
     >
       {icon}
     </TextAndIconButton>
-  );
-
-  return isFailedAuth ? (
-    <Tooltip hoverOnly trigger={button}>
-      Sorry, we can't access your private document right now. We are waiting for
-      google to approve our app.
-    </Tooltip>
-  ) : (
-    button
   );
 };

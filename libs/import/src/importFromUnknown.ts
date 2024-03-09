@@ -36,11 +36,21 @@ const importFromUnknownResponse = async (
   let rawResult: ImportResult['rawResult'] | undefined;
   let result: Result.Result;
   if (contentType?.startsWith('application/json')) {
+    if (options.provider && options.provider !== 'json') {
+      throw new TypeError(
+        `expected provider to be 'json' when content type is application/json, but got ${options.provider}`
+      );
+    }
     rawResult = sanitizeRawResult(await resp.json()) as
       | ImportResult['rawResult']
       | undefined;
     result = importFromUnknownJson(rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
+    if (options.provider && options.provider !== 'csv') {
+      throw new TypeError(
+        `expected provider to be 'csv' when content type is text/csv, but got ${options.provider}`
+      );
+    }
     rawResult = await resp.text();
     result = (await importFromCsv(
       computer,
@@ -48,13 +58,9 @@ const importFromUnknownResponse = async (
       options
     )) as Result.Result;
   } else {
-    rawResult = await resp.text();
-    result = {
-      type: {
-        kind: 'string',
-      },
-      value: rawResult,
-    };
+    throw new TypeError(
+      `provider ${options.provider} is not supported for content type ${contentType}`
+    );
   }
 
   return [

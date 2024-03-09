@@ -22,6 +22,7 @@ export interface ImportOptions {
   maxCellCount?: number;
   jsonPath?: string;
   delimiter?: string;
+  provider?: ImportElementSource;
 }
 
 const internalTryImport = (
@@ -36,11 +37,10 @@ const internalTryImport = (
         return decipad.import(params.url);
     }
   }
-  return importFromUnknown(
-    params.computer,
-    params.proxy ?? params.url,
-    options
-  );
+  return importFromUnknown(params.computer, params.proxy ?? params.url, {
+    ...options,
+    provider: params.provider,
+  });
 };
 
 export const tryImport = async (
