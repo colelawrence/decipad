@@ -1,15 +1,18 @@
 import { noop } from '@decipad/utils';
 import { SerializedStyles, css } from '@emotion/react';
-import { FC, useState } from 'react';
 import { nanoid } from 'nanoid';
-import { cssVar, p14Regular } from '../../../primitives';
+import { FC, useEffect, useRef, useState } from 'react';
+import { cssVar, p13Medium } from '../../../primitives';
 import { inputLabel } from '../../../primitives/text';
 
-const inputStyles = css(p14Regular, {
+const textAreaInputStyles = css(p13Medium, {
   padding: '12px',
   backgroundColor: cssVar('backgroundMain'),
   border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
+  '::placeholder': {
+    color: cssVar('textSubdued'),
+  },
 });
 
 export type TextareaFieldProps = {
@@ -43,6 +46,16 @@ export const TextareaField = ({
   onKeyDown = noop,
   styles,
 }: TextareaFieldProps): ReturnType<FC> => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && textareaRef.current) {
+      setTimeout(() => {
+        textareaRef?.current?.focus();
+      }, 100);
+    }
+  }, [autoFocus]);
+
   const containerStyles = css([
     css({
       display: 'flex',
@@ -61,7 +74,8 @@ export const TextareaField = ({
 
   const inputEl = (
     <textarea
-      css={inputStyles}
+      css={textAreaInputStyles}
+      ref={textareaRef}
       autoFocus={autoFocus}
       onChange={(event) => onChange(event.currentTarget.value)}
       placeholder={placeholder}

@@ -920,8 +920,9 @@ export class Notebook {
   async openImageUploader() {
     this.addBlock('upload-image');
     await expect(async () => {
-      await expect(this.page.getByText('Insert image')).toBeVisible();
+      await expect(this.page.getByText('Add an image')).toBeVisible();
     }, `Embed Image modal didn't open`).toPass();
+    await this.page.getByTestId('upload-file-tab').click();
   }
 
   /**

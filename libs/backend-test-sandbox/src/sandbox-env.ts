@@ -1,10 +1,10 @@
+import { fromEnv, fromIni } from '@aws-sdk/credential-providers';
 import { config as configDotEnv, parse as parseDotEnv } from 'dotenv';
-import stringify from 'json-stringify-safe';
 import { readFileSync } from 'fs';
+import stringify from 'json-stringify-safe';
 import { nanoid } from 'nanoid';
-import { fromIni, fromEnv } from '@aws-sdk/credential-providers';
-import { Config } from './config';
 import baseUrl from './base-url';
+import { Config } from './config';
 import getPorts from './get-ports';
 
 configDotEnv();
@@ -104,6 +104,9 @@ export async function createSandboxEnv(
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
     JWT_SECRET: process.env.JWT_SECRET || nanoid(),
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    GIPHY_API_KEY: process.env.GIPHY_API_KEY,
+    UNSPLASH_API_KEY: process.env.UNSPLASH_API_KEY,
+    REPLICATE_API_KEY: process.env.REPLICATE_API_KEY,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_EXTRA_CREDITS_PRODUCT_ID:

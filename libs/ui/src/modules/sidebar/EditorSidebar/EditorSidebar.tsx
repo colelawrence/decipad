@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Children, FC } from 'react';
+import { SearchFieldWithDropdown } from 'libs/ui/src/shared/molecules';
+import { Children, FC, useState } from 'react';
+import { FileText, Formula, Plus, Search } from '../../../icons';
 import {
-  InputField,
   SidebarIcon,
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
 } from '../../../shared';
-import { FileText, Formula, Plus, Search } from '../../../icons';
 import {
   sidebarColumnStyles,
   sidebarContentStyles,
-  sidebarSearchBoxStyles,
-  sidebarSearchIconStyles,
   sidebarWrapperStyles,
 } from './styles';
 import { EditorSidebarProps, SelectedTab } from './types';
@@ -48,14 +46,23 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
   children,
   search,
   setSearch,
-  sidebarTab,
-  setSidebarTab,
 }) => {
   const [variable, block] = Children.toArray(children);
+  const [activeTab, setActiveTab] = useState<SelectedTab>('block');
 
   return (
     <div css={sidebarColumnStyles} data-testid="editor-sidebar">
-      <TabsRoot css={[sidebarWrapperStyles]} defaultValue={sidebarTab}>
+      <TabsRoot
+        styles={sidebarWrapperStyles}
+        defaultValue={activeTab}
+        onValueChange={(newValue: string) => {
+          if (AVAILABLE_TABS.includes(newValue as SelectedTab)) {
+            setActiveTab(newValue as SelectedTab);
+          } else {
+            console.warn('Invalid tab value:', newValue);
+          }
+        }}
+      >
         <div css={sidebarContentStyles}>
           <TabsList fullWidth>
             {AVAILABLE_TABS.map((tab) => {
@@ -73,32 +80,25 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
                     label,
                     children: tabChildren,
                     tooltip,
-                    onClick: () => setSidebarTab(tab),
                     disabled: false,
-                    selected: sidebarTab === tab,
                   }}
                 />
               );
             })}
           </TabsList>
 
-          <div css={sidebarSearchBoxStyles}>
-            <div css={sidebarSearchIconStyles}>
-              <Search />
-            </div>
-            <InputField
-              value={search}
-              onChange={(newValue) => {
-                setSearch(newValue.toLocaleLowerCase());
-              }}
-              size="small"
-              placeholder={
-                sidebarTab === 'variable'
-                  ? 'Search for variables...'
-                  : 'Search for blocks...'
-              }
-            ></InputField>
-          </div>
+          <SearchFieldWithDropdown
+            searchTerm={search}
+            onSearchChange={(newValue) => {
+              setSearch(newValue.toLocaleLowerCase());
+            }}
+            placeholder={
+              activeTab === 'variable'
+                ? 'Search for variables...'
+                : 'Search for blocks...'
+            }
+            icon={<Search />}
+          />
 
           <div
             css={[

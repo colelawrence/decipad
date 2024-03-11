@@ -1,22 +1,22 @@
-import { Modal } from '../../molecules';
-import { ComponentProps, useMemo, useState } from 'react';
-import { useStripePlans } from '@decipad/react-utils';
-import * as Styled from './styles';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { workspaces } from '@decipad/routing';
 import { getAnalytics } from '@decipad/client-events';
-import { useAiUsage } from '@decipad/react-contexts';
-import { SubscriptionPlansList } from './SubscriptionPlansList';
-import { SubscriptionPayment } from './SubscriptionPayment';
-import { useClient } from 'urql';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
+  GetStripeCheckoutSessionInfoDocument,
   GetWorkspaceByIdDocument,
   GetWorkspaceByIdQuery,
   GetWorkspaceByIdQueryVariables,
-  GetStripeCheckoutSessionInfoDocument,
 } from '@decipad/graphql-client';
+import { useAiUsage } from '@decipad/react-contexts';
+import { useStripePlans } from '@decipad/react-utils';
+import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
+import { ComponentProps, useMemo, useState } from 'react';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { useClient } from 'urql';
+import { Modal } from '../../molecules';
+import { SubscriptionPayment } from './SubscriptionPayment';
+import { SubscriptionPlansList } from './SubscriptionPlansList';
+import * as Styled from './styles';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;

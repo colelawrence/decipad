@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
 import { S3ClientConfig } from '@aws-sdk/client-s3';
+import { Buffer } from 'buffer';
 import { defaultEnv, SupportedEnvKey } from './default';
 
 export { defaultEnv };
@@ -89,6 +89,12 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.JWT_SECRET);
     case 'OPENAI_API_KEY':
       return valueOrDefault(name, process.env.OPENAI_API_KEY);
+    case 'GIPHY_API_KEY':
+      return valueOrDefault(name, process.env.GIPHY_API_KEY);
+    case 'UNSPLASH_API_KEY':
+      return valueOrDefault(name, process.env.UNSPLASH_API_KEY);
+    case 'REPLICATE_API_KEY':
+      return valueOrDefault(name, process.env.REPLICATE_API_KEY);
     case 'NEXTAUTH_URL':
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
     case 'VITE_ANALYTICS_WRITE_KEY':
@@ -299,6 +305,15 @@ export function thirdParty() {
     openai: {
       apiKey: env('OPENAI_API_KEY'),
       decipadGptBearerKey: env('OPENAI_DECIPAD_GPT_BEARER_KEY'),
+    },
+    giphy: {
+      apiKey: env('GIPHY_API_KEY'),
+    },
+    replicate: {
+      apiKey: env('REPLICATE_API_KEY'),
+    },
+    unsplash: {
+      apiKey: env('UNSPLASH_API_KEY'),
     },
     stripe: {
       apiVersion: '2023-08-16' as const,

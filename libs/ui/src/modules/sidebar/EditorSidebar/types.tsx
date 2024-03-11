@@ -6,8 +6,6 @@ export interface EditorSidebarProps {
   readonly children: ReactNode;
   readonly search: string;
   readonly setSearch: any;
-  readonly sidebarTab: SelectedTab;
-  readonly setSidebarTab: any;
   readonly sidebarOpen: boolean;
 }
 

@@ -36,6 +36,7 @@
         "libs/backend-code-assistant/src/index.ts"
       ],
       "@decipad/backend-config": ["libs/backend-config/src/index.ts"],
+      "@decipad/shared-config": ["libs/shared-config/src/index.ts"],
       "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"],
       "@decipad/backend-notebook-assistant": [

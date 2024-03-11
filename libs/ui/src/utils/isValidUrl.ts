@@ -1,15 +1,9 @@
-export const isValidURL = (str: string | null) => {
-  if (!str) return false;
-
-  const pattern = new RegExp(
-    '^(https?:\\/\\/)?' +
-      '((([a-zA-Z\\d]([a-zA-Z\\d-]{0,61}[a-zA-Z\\d])?)\\.)+[a-zA-Z]{2,}|' +
-      '((\\d{1,3}\\.){3}\\d{1,3}))' +
-      '(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*' +
-      '(\\?[;&a-z\\d%_.~+=-]*)?' +
-      '(\\#[-a-z\\d_]*)?$',
-    'i'
-  );
-
-  return pattern.test(str);
+export const isValidURL = (urlString: string): boolean => {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(urlString);
+    return true;
+  } catch (e) {
+    return false;
+  }
 };

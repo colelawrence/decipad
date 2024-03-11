@@ -1,25 +1,25 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
+import { useActiveTabId } from '@decipad/editor-hooks';
+import {
+  NotebookMetaDataFragment,
+  UserAccessMetaFragment,
+} from '@decipad/graphql-client';
+import {
+  NotebookMetaActionsReturn,
+  PublishedVersionName,
+  PublishedVersionState,
+} from '@decipad/interfaces';
+import { SidebarPublishingTab } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { cssVar, smallScreenQuery, smallShadow } from '../../../primitives';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
-import {
-  NotebookMetaDataFragment,
-  UserAccessMetaFragment,
-} from '@decipad/graphql-client';
-import { useActiveTabId } from '@decipad/editor-hooks';
-import {
-  NotebookMetaActionsReturn,
-  PublishedVersionName,
-  PublishedVersionState,
-} from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
-import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
-import { SidebarPublishingTab } from '@decipad/react-contexts';
+import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -145,16 +145,23 @@ export const NotebookPublishingPopUp = ({
     <div css={popUpStyles} data-testid="publishing-sidebar">
       <div css={innerPopUpStyles}>
         {isAdmin && (
-          <TabsRoot defaultValue={selectedTab}>
+          <TabsRoot
+            defaultValue={selectedTab}
+            onValueChange={(newValue) => {
+              if (['collaborators', 'publishing', 'embed'].includes(newValue)) {
+                onChangeSelectedTab(newValue as SidebarPublishingTab);
+              } else {
+                console.warn(`invalid tab ${newValue}`);
+              }
+            }}
+          >
             <TabsList fullWidth>
               <TabsTrigger
                 testId="collaborate-tab"
                 name="collaborators"
                 trigger={{
                   label: 'Collaborate',
-                  onClick: () => onChangeSelectedTab('collaborators'),
                   disabled: false,
-                  selected: selectedTab === 'collaborators',
                 }}
               />
               <TabsTrigger
@@ -162,9 +169,7 @@ export const NotebookPublishingPopUp = ({
                 name="publishing"
                 trigger={{
                   label: 'Publish',
-                  onClick: () => onChangeSelectedTab('publishing'),
                   disabled: false,
-                  selected: selectedTab === 'publishing',
                 }}
               />
               <TabsTrigger
@@ -172,9 +177,7 @@ export const NotebookPublishingPopUp = ({
                 name="embed"
                 trigger={{
                   label: 'Embed',
-                  onClick: () => onChangeSelectedTab('embed'),
                   disabled: false,
-                  selected: selectedTab === 'embed',
                 }}
               />
             </TabsList>

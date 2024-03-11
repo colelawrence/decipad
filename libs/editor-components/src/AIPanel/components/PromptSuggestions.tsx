@@ -1,6 +1,5 @@
-import { cssVar } from '@decipad/ui';
-import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { JellyBeans } from 'libs/ui/src/shared/atoms';
+import { ReactNode, useCallback } from 'react';
 
 export type PromptSuggestion = {
   icon?: ReactNode;
@@ -14,50 +13,26 @@ type PromptSuggestionsProps = {
   disabled: boolean;
 };
 
-const buttonCss = css({
-  display: 'flex',
-  gridGap: 5.5,
-  background: cssVar('backgroundDefault'),
-  padding: '6px 12px 6px 9px',
-  borderRadius: 6,
-  fontSize: 12,
-  '&:hover': {
-    background: cssVar('backgroundHeavy'),
-  },
-  svg: {
-    width: 13,
-    height: 13,
-  },
-});
-
-const containerCss = css({
-  display: 'flex',
-  alignItems: 'start',
-  gridGap: 8,
-  marginBottom: 8,
-  button: {},
-});
-
 export const PromptSuggestions = ({
   prompts,
   runPrompt,
   disabled,
 }: PromptSuggestionsProps) => {
+  const beanOnClick = useCallback(
+    (prompt: string) => {
+      runPrompt(prompt);
+    },
+    [runPrompt]
+  );
+
   return (
-    <div css={containerCss} contentEditable={false}>
-      {prompts.map(({ icon, name, prompt }) => {
-        return (
-          <button
-            css={buttonCss}
-            disabled={disabled}
-            onClick={() => runPrompt(prompt)}
-            type="button"
-          >
-            {icon || null}
-            {name}
-          </button>
-        );
-      })}
-    </div>
+    <JellyBeans
+      beans={prompts.map(({ icon, name, prompt }) => ({
+        icon,
+        text: name,
+        disabled,
+        onClick: () => beanOnClick(prompt),
+      }))}
+    />
   );
 };

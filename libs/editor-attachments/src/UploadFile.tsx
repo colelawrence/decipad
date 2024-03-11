@@ -15,7 +15,10 @@ import { FC, useCallback } from 'react';
 import { Path } from 'slate';
 import { attachGenericFile } from './attachGeneric';
 
-export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
+export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
+  notebookId,
+  workspaceId,
+}) => {
   const computer = useComputer();
   const {
     dialogOpen,
@@ -92,6 +95,8 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
           return;
         }
         const url = response.data;
+        setUploading(false);
+        setUploadProgress(0);
         insertByUrl(url, file.name);
       } catch (err) {
         console.error(err);
@@ -101,9 +106,9 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
             message += ': File not accepted';
           }
         }
-        toast(message, 'warning');
-      } finally {
         setUploading(false);
+        setUploadProgress(0);
+        toast(message, 'warning');
       }
     },
     [
@@ -226,9 +231,15 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onClose={resetStore}
+        size={'md'}
+        stickyToTopProps={{
+          top: '15%',
+          transform: 'translate(-50%, 0)',
+        }}
       >
         <UploadFileModal
-          fileType={fileType}
+          workspaceId={workspaceId}
+          fileType={fileType || 'data'}
           onCancel={resetStore}
           onUpload={uploadFile}
           uploading={uploading}

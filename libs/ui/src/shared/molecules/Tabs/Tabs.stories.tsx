@@ -14,18 +14,14 @@ export const Normal: StoryFn = () => (
         name="code"
         trigger={{
           label: 'Code',
-          onClick: () => {},
           disabled: false,
-          selected: true,
         }}
       />
       <TabsTrigger
         name="preview"
         trigger={{
           label: 'Preview',
-          onClick: () => {},
           disabled: false,
-          selected: false,
         }}
       />
     </TabsList>
@@ -46,9 +42,7 @@ export const WithIcons: StoryFn = () => (
         trigger={{
           label: 'Code',
           icon: <Code />,
-          onClick: () => {},
           disabled: false,
-          selected: true,
         }}
       />
       <TabsTrigger
@@ -56,9 +50,7 @@ export const WithIcons: StoryFn = () => (
         trigger={{
           label: 'Preview',
           icon: <Show />,
-          onClick: () => {},
           disabled: false,
-          selected: false,
         }}
       />
     </TabsList>

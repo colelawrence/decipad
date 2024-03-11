@@ -1,8 +1,7 @@
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 
-export { BetaBadge } from './BetaBadge/BetaBadge';
-
 export { LabeledSelect } from '../../modules/editor/LabeledSelect/LabeledSelect';
+export { BetaBadge } from './BetaBadge/BetaBadge';
 export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
 export { Dialog } from './Dialog/Dialog';
@@ -24,6 +23,7 @@ export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/Potential
 export { Progress } from './Progress/Progress';
 export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';
 export { SearchBar, useSearchBarStore } from './SearchBar/SearchBar';
+export { SearchFieldWithDropdown } from './SearchFieldWithDropdown/SearchFieldWithDropdown';
 export { Select } from './Select/Select';
 export { SelectInput } from './SelectInput/SelectInput';
 export * from './SelectItem/SelectItem';

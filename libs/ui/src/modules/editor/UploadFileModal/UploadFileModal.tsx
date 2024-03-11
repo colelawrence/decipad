@@ -1,81 +1,45 @@
-/* eslint decipad/css-prop-named-variable: 0 */
-import { FileType, MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
+import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
-import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
+import {
+  Close,
+  Giphy,
+  Link as LinkIcon,
+  Replicate,
+  Unsplash,
+} from 'libs/ui/src/icons';
+import SearchForm from 'libs/ui/src/shared/organisms/ImageSearch/SearchForm';
+import { ChangeEvent, FC, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { p12Medium, p14Regular } from '../../../primitives';
 import {
   Button,
-  Link,
+  ImageSearch,
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
 } from '../../../shared';
-import { Close } from '../../../icons';
-import {
-  componentCssVars,
-  cssVar,
-  p12Medium,
-  p13Bold,
-  p14Medium,
-  p15Medium,
-} from '../../../primitives';
 import { closeButtonStyles } from '../../../styles/buttons';
 import { isValidURL } from '../../../utils';
-
-interface UploadFileModalProps {
-  fileType?: FileType;
-  onCancel: () => void;
-  onUpload: (file: any, uploadType: string) => void;
-  uploading: boolean;
-  uploadProgress?: number;
-}
-
-interface FileCfg {
-  title: string;
-  description?: ReactNode;
-  maxSize: number;
-  accept?: string;
-}
-
-const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
-  switch (fileType) {
-    case 'image':
-      return {
-        title: 'Insert image',
-        maxSize: MAX_UPLOAD_FILE_SIZE.image,
-        accept: 'image/jpeg, image/png, image/gif',
-      };
-    case 'media':
-      return {
-        title: 'Insert video',
-        maxSize: MAX_UPLOAD_FILE_SIZE.media,
-        accept: 'video/*',
-      };
-    case 'embed':
-      return {
-        title: 'Embed URL',
-        maxSize: MAX_UPLOAD_FILE_SIZE.embed,
-        description: (
-          <>
-            Embeds are experimental. Check out{' '}
-            <Link href="https://app.decipad.com/docs/quick-start/embed-on-decipad">
-              the docs
-            </Link>{' '}
-            if you run into issues.
-          </>
-        ),
-      };
-    case 'data':
-      return {
-        title: 'Upload a data file',
-        maxSize: MAX_UPLOAD_FILE_SIZE.data,
-        accept: '.csv, application/vnd.apache.arrow',
-      };
-    default:
-      return { title: 'Upload a file', maxSize: 5_000_000 };
-  }
-};
+import DragArea from './DragArea';
+import { SelectedFile } from './SelectedFile';
+import { getConfigForFileType, giphyBeans, unsplashBeans } from './fileConfigs';
+import {
+  allWrapperStyles,
+  gap,
+  hiddenElement,
+  iconContainerStyle,
+  iconStyles,
+  imageOverSizeStyles,
+  importFileActionStyles,
+  importFileWrapperStyles,
+  tabWrapStyles,
+  titleWrapperStyles,
+  uploadTitleStyles,
+  wrapperForImageGallery,
+} from './styles';
+import { UploadFileModalProps } from './types';
 
 export const UploadFileModal: FC<UploadFileModalProps> = ({
   fileType,
@@ -83,59 +47,117 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   onUpload,
   uploading,
   uploadProgress,
+  workspaceId,
 }) => {
-  const { title, maxSize, accept, description } =
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const { title, maxSize, accept, description, addons, acceptHuman } =
     getConfigForFileType(fileType);
-  const MAX_LABEL = `${maxSize / 1_000_000}MB`;
+  const { giphy, unsplash, replicate } = addons;
+  const navigate = useNavigate();
+
+  const processFile = (file?: File) => {
+    if (!file) {
+      toast('Please upload one file at a time', 'warning');
+      return;
+    }
+    setSelectedFile(file);
+    setFileError(null);
+    if (file.size > maxSize) {
+      const limit = Math.round(maxSize / 1_000_000);
+      toast(
+        <div>
+          <span>
+            Your {fileType} is over {limit}MB.
+          </span>
+          <span>&nbsp;</span>
+          <span
+            css={imageOverSizeStyles}
+            onClick={() => {
+              if (workspaceId) {
+                navigate(
+                  workspaces({})
+                    .workspace({
+                      workspaceId,
+                    })
+                    .members({}).$,
+                  { replace: true }
+                );
+              }
+            }}
+          >
+            Upgrade to increase limits
+          </span>
+        </div>,
+        'error'
+      );
+      setFileError(`Upload failed: File size over ${limit}MB`);
+      return;
+    }
+
+    const fileTypeAllowed = (accept || '').split(', ').includes(file.type);
+    if (!fileTypeAllowed) {
+      setFileError(`Upload failed: File type not allowed ${file.type}`);
+      return;
+    }
+
+    onUpload(file, 'upload');
+  };
 
   const uploadEnabled = fileType !== 'embed';
 
-  const [activeTab, setActiveTab] = useState(uploadEnabled ? 'upload' : 'link');
   const [fileName, setFileName] = useState('');
   const toast = useToast();
 
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const files = evt?.target?.files;
     const uploadFile = files && files[0];
-    if (uploadFile) {
-      const { size } = uploadFile;
-      if (size > maxSize) {
-        toast(`Upload failed: File size over ${MAX_LABEL}`, 'warning');
-        return;
-      }
+    processFile(uploadFile || undefined);
+  };
 
-      onUpload(uploadFile, 'upload');
-    } else {
-      // no file selected
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    setFileError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
+  const insertFromPreview = (url: string) => {
+    onUpload(url, 'link');
+  };
+
   return (
-    <TabsRoot css={allWrapperStyles} defaultValue={activeTab}>
+    <TabsRoot
+      styles={allWrapperStyles}
+      defaultValue={uploadEnabled ? 'upload' : 'link'}
+    >
       <div css={titleWrapperStyles}>
-        <div css={titleStyles}>{title}</div>
+        <div css={uploadTitleStyles}>{title}</div>
         <div css={iconStyles}>
           <div css={closeButtonStyles} role="button" onClick={onCancel}>
             <Close />
           </div>
         </div>
       </div>
+      <div css={p14Regular}>
+        {description && <span css={p12Medium}>{description}</span>}
+      </div>
       {uploadEnabled && (
-        <div css={tabWrapStyles} defaultValue={activeTab}>
+        <div css={tabWrapStyles}>
           <TabsList>
             <TabsTrigger
               name="upload"
               testId="upload-file-tab"
               trigger={{
                 label: 'Upload',
-                onClick: () => setActiveTab('upload'),
                 disabled: false,
-                selected: activeTab === 'upload',
               }}
             />
 
@@ -144,33 +166,80 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               testId="link-file-tab"
               trigger={{
                 label: 'Link',
-                onClick: () => setActiveTab('link'),
                 disabled: false,
-                selected: activeTab === 'link',
               }}
             />
+            {replicate && (
+              <TabsTrigger
+                name="replicate"
+                testId="replicate-tab"
+                trigger={{
+                  label: 'Replicate',
+                  icon: (
+                    <div css={iconContainerStyle}>
+                      <Replicate />
+                    </div>
+                  ),
+                  disabled: false,
+                }}
+              />
+            )}
+            {giphy && (
+              <TabsTrigger
+                name="giphy"
+                testId="giphy-tab"
+                trigger={{
+                  label: 'Giphy',
+                  icon: (
+                    <div css={iconContainerStyle}>
+                      <Giphy />
+                    </div>
+                  ),
+                  disabled: false,
+                }}
+              />
+            )}
+
+            {unsplash && (
+              <TabsTrigger
+                name="unsplash"
+                testId="unsplash-tab"
+                trigger={{
+                  label: 'Unsplash',
+                  icon: (
+                    <div css={iconContainerStyle}>
+                      <Unsplash />
+                    </div>
+                  ),
+                  disabled: false,
+                }}
+              />
+            )}
           </TabsList>
         </div>
       )}
       <div css={importFileWrapperStyles}>
-        <TabsContent name="link">
-          <div css={importFileActionStyles}>
-            <input
-              data-testid="upload-link-input"
-              css={inputStyles}
-              value={fileName}
-              onChange={(e) => setFileName(e.target.value)}
+        <TabsContent name="replicate">
+          <div css={wrapperForImageGallery}>
+            <ImageSearch
+              workspaceId={workspaceId}
+              insertFromPreview={insertFromPreview}
+              apiSource="replicate"
+              apiKey={process.env.REPLICATE_API_KEY}
             />
-            <Button
-              key="link-button"
-              testId="link-button"
-              type="primary"
-              onClick={() => onUpload(fileName, 'link')}
-              disabled={!isValidURL(fileName)}
-            >
-              Insert
-            </Button>
           </div>
+        </TabsContent>
+        <TabsContent name="link">
+          <SearchForm
+            data-testid="upload-link-input"
+            searchTerm={fileName}
+            icon={<LinkIcon />}
+            label={`Insert ${fileType}`}
+            placeholder={`Paste the ${fileType} link here`}
+            onSearchChange={(newSearch) => setFileName(newSearch)}
+            onSearchSubmit={() => onUpload(fileName, 'link')}
+            disabled={!isValidURL(fileName)}
+          />
         </TabsContent>
         <TabsContent name="upload">
           <div css={importFileActionStyles}>
@@ -181,147 +250,54 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               ref={fileInputRef}
               css={hiddenElement}
             />
-
-            {!(uploading && uploadProgress) ? (
-              <Button
-                key="upload-button"
-                type="primary"
-                disabled={uploading}
-                onClick={handleButtonClick}
-              >
-                Choose file
-              </Button>
-            ) : (
-              <div
-                css={uploadingButtonPlaceholderStyles({
-                  progress: uploadProgress,
-                })}
+            <DragArea
+              processFile={processFile}
+              acceptHuman={acceptHuman}
+              fileType={fileType}
+              maxSize={maxSize}
+              uploadProgress={uploadProgress}
+            />
+            {selectedFile && (
+              <SelectedFile
+                selectedFile={selectedFile}
+                fileError={fileError}
+                removeSelectedFile={removeSelectedFile}
               />
             )}
+            <Button
+              styles={css({ marginTop: 24 - gap })}
+              key="upload-button"
+              type="primary"
+              disabled={uploading}
+              onClick={handleButtonClick}
+            >
+              Choose file
+            </Button>
           </div>
         </TabsContent>
-        {description && <span css={p12Medium}>{description}</span>}
+        <TabsContent name="giphy">
+          <div css={wrapperForImageGallery}>
+            <ImageSearch
+              workspaceId={workspaceId}
+              insertFromPreview={insertFromPreview}
+              apiSource="giphy"
+              beans={giphyBeans}
+              apiKey={process.env.GIPHY_API_KEY}
+            />
+          </div>
+        </TabsContent>
+        <TabsContent name="unsplash">
+          <div css={wrapperForImageGallery}>
+            <ImageSearch
+              workspaceId={workspaceId}
+              insertFromPreview={insertFromPreview}
+              apiSource="unsplash"
+              apiKey={process.env.UNSPLASH_API_KEY}
+              beans={unsplashBeans}
+            />
+          </div>
+        </TabsContent>
       </div>
     </TabsRoot>
   );
 };
-
-const hiddenElement = css({
-  display: 'none',
-});
-
-const iconStyles = css({
-  marginLeft: 'auto',
-
-  height: '30px',
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'end',
-
-  div: {
-    width: '16px',
-    height: '16px',
-  },
-});
-
-const inputStyles = css(p14Medium, {
-  background: cssVar('backgroundMain'),
-  borderRadius: '6px',
-  padding: '6px 12px',
-  border: `1px solid ${cssVar('borderSubdued')}`,
-
-  width: '100%',
-});
-
-const importFileActionStyles = css({
-  display: 'flex',
-  gap: '8px',
-
-  button: {
-    flex: '0 0 120px',
-  },
-});
-
-const importFileWrapperStyles = css({
-  width: '100%',
-
-  backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: '6px',
-
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-  padding: '12px',
-});
-
-const wrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '12px',
-});
-
-const titleStyles = css(p15Medium, {
-  lineHeight: '30px',
-  paddingLeft: '5px',
-  paddingRight: '15px',
-  width: '100%',
-});
-
-const titleWrapperStyles = css({
-  color: cssVar('textHeavy'),
-  height: '30px',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'end',
-});
-
-const tabWrapStyles = css({
-  width: '100%',
-});
-
-const uploadingButtonPlaceholderStyles = ({ progress }: { progress: number }) =>
-  css(p13Bold, {
-    position: 'relative',
-    flex: '0 0 120px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '8px 24px',
-    borderRadius: '6px',
-    backgroundColor: cssVar('backgroundHeavier'),
-    color: componentCssVars('ButtonPrimaryDefaultText'),
-
-    '&::before': {
-      zIndex: 0,
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: '6px',
-      backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
-      width: `${progress}%`,
-      height: '100%',
-    },
-
-    '@keyframes loading': {
-      '0%': { content: '"Uploading"' },
-      '25%': { content: '"Uploading."' },
-      '50%': { content: '"Uploading.."' },
-      '75%': { content: '"Uploading..."' },
-    },
-
-    '&::after': {
-      zIndex: 1,
-      overflow: 'hidden',
-      display: 'inline-block',
-      verticalAlign: 'bottom',
-      animation: 'loading steps(1,end) 1s infinite',
-      content: '"Uploading"',
-      width: '100%',
-    },
-  });
-
-const allWrapperStyles = [wrapperStyles];

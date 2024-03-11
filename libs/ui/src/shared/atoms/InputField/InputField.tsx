@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useId } from 'react';
+import { FC, ReactNode, useEffect, useId, useRef } from 'react';
 import { cssVar, p13Medium, p14Regular } from '../../../primitives';
 import { inputLabel } from '../../../primitives/text';
 
@@ -64,6 +64,7 @@ export type InputFieldProps = {
   readonly type?: FieldType;
   readonly required?: boolean;
   readonly autoFocus?: boolean;
+  readonly autocomplete?: 'off' | 'on';
   readonly disabled?: boolean;
   readonly size?: 'small' | 'regular' | 'full';
 
@@ -87,6 +88,7 @@ export const InputField = ({
   required = false,
   autoFocus = false,
   disabled = false,
+  autocomplete = 'on',
   size,
 
   testId,
@@ -103,6 +105,16 @@ export const InputField = ({
   onChange = noop,
   onEnter = noop,
 }: InputFieldProps): ReturnType<FC> => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      setTimeout(() => {
+        inputRef?.current?.focus();
+      }, 100);
+    }
+  }, [autoFocus]);
+
   const id = `input-${useId()}`;
   const labelEl = label && (
     <label htmlFor={id} css={labelStyles}>
@@ -115,9 +127,11 @@ export const InputField = ({
   const inputEl = (
     <input
       id={id}
+      ref={inputRef}
       data-testid={testId}
       autoFocus={autoFocus}
       disabled={disabled}
+      autoComplete={autocomplete}
       css={[
         {
           color: cssVar('textDefault'),

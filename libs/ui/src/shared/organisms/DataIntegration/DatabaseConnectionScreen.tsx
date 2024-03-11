@@ -156,6 +156,8 @@ interface NewDataConnectionProps {
   resetInitialValues: () => void;
 }
 
+type ConnType = 'full-url' | 'manual';
+
 function NewDataConnection({
   workspaceId,
   onExit,
@@ -172,9 +174,7 @@ function NewDataConnection({
   const [password, setPassword] = useState('');
   const [port, setPort] = useState('');
 
-  const [connMethod, setConnMethod] = useState<'full-url' | 'manual'>(
-    'full-url'
-  );
+  const [connMethod, setConnMethod] = useState<ConnType>('full-url');
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
@@ -317,24 +317,30 @@ function NewDataConnection({
           />
         </div>
 
-        <TabsRoot css={{ width: '100%' }} defaultValue="full-url">
+        <TabsRoot
+          styles={css({ width: '100%' })}
+          defaultValue={connMethod}
+          onValueChange={(newValue: string) => {
+            if (['full-url', 'manual'].includes(newValue as ConnType)) {
+              setConnMethod(newValue as ConnType);
+            } else {
+              console.warn('Invalid tab value:', newValue);
+            }
+          }}
+        >
           <TabsList>
             <TabsTrigger
               name="full-url"
               trigger={{
-                label: 'Use a full SQL URL',
-                onClick: () => setConnMethod('full-url'),
+                label: 'SQL URL',
                 disabled: false,
-                selected: connMethod === 'full-url',
               }}
             />
             <TabsTrigger
               name="manual"
               trigger={{
-                label: 'Manual Connection',
-                onClick: () => setConnMethod('manual'),
+                label: 'Advanced Configuration',
                 disabled: false,
-                selected: connMethod === 'manual',
               }}
             />
           </TabsList>
@@ -360,7 +366,7 @@ function NewDataConnection({
             <div css={tabsContentStyles}>
               <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
                 <label css={labelStyles} htmlFor="manual-conn-url">
-                  Manual Connection
+                  Advanced Configuration
                 </label>
                 <div css={{ display: 'flex' }}>
                   <MenuList

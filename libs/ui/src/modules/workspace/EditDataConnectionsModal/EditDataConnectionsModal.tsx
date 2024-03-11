@@ -1,7 +1,7 @@
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Modal, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 
@@ -13,7 +13,6 @@ type EditDataConnectionsModalProps = {
 export const EditDataConnectionsModal: React.FC<
   EditDataConnectionsModalProps
 > = ({ onClose, currentWorkspace }) => {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const connections = workspaces({})
@@ -30,33 +29,46 @@ export const EditDataConnectionsModal: React.FC<
       defaultOpen={true}
     >
       <div css={modalWrapper}>
-        <TabsRoot css={fullWidth}>
+        <TabsRoot
+          styles={fullWidth}
+          defaultValue={'secrets'}
+          onValueChange={(newTab: string) => {
+            switch (newTab) {
+              case 'secrets':
+                navigate(connections.codeSecrets({}).$);
+                break;
+              case 'webhooks':
+                navigate(connections.webhooks({}).$);
+                break;
+              case 'connections':
+                navigate(connections.sqlConnections({}).$);
+                break;
+              default:
+                console.warn('This tab is not available');
+                break;
+            }
+          }}
+        >
           <TabsList>
             <TabsTrigger
               name="secrets"
               trigger={{
                 label: 'API Secrets',
-                onClick: () => navigate(connections.codeSecrets({}).$),
                 disabled: false,
-                selected: pathname === connections.codeSecrets({}).$,
               }}
             />
             <TabsTrigger
               name="webhooks"
               trigger={{
                 label: 'Webhooks',
-                onClick: () => navigate(connections.webhooks({}).$),
                 disabled: false,
-                selected: pathname === connections.webhooks({}).$,
               }}
             />
             <TabsTrigger
               name="connections"
               trigger={{
                 label: 'SQL',
-                onClick: () => navigate(connections.sqlConnections({}).$),
                 disabled: false,
-                selected: pathname === connections.sqlConnections({}).$,
               }}
             />
           </TabsList>
@@ -73,7 +85,7 @@ const modalWrapper = css({
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  height: '580px',
+  height: '480px',
   gap: '20px',
 });
 

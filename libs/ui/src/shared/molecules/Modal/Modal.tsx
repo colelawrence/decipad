@@ -2,8 +2,8 @@
 import { FC, ReactNode, useCallback, useState } from 'react';
 
 import * as Dialog from '@radix-ui/react-dialog';
-import * as Styled from './styles';
 import { Close } from 'libs/ui/src/icons';
+import * as Styled from './styles';
 
 type ModalContentProps = {
   readonly children?: ReactNode | ReactNode[];
@@ -48,7 +48,7 @@ const ModalContent: FC<ModalContentProps> = ({
               </Dialog.Close>
             </Styled.ModalHeader>
           )}
-          <Styled.ModalContent>{children}</Styled.ModalContent>
+          <Styled.ModalContent size={size}>{children}</Styled.ModalContent>
         </Styled.ModalContainer>
       </Styled.ModalWrapper>
     </Dialog.Content>
@@ -69,6 +69,7 @@ const UncontrolledModal = ({
   title,
   defaultOpen,
   size = 'md',
+
   stickyToTopProps = {},
   modal = true,
   onClose,
@@ -116,6 +117,7 @@ const ControlledModal = ({
   stickyToTopProps = {},
   size = 'md',
   modal = true,
+
   open,
   onOpenChange,
   defaultOpen,

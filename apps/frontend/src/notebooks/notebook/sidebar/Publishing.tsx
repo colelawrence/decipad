@@ -1,26 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
-import { FC, useCallback, useState } from 'react';
-import { SidebarComponentProps } from './types';
-import { NotebookPublishingPopUp } from '@decipad/ui';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   NotebookMetaDataFragment,
   Publish_State,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
+import {
+  NotebookMetaActionsReturn,
+  PublishedVersionState,
+} from '@decipad/interfaces';
+import { useNotebookMetaData } from '@decipad/react-contexts';
+import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { workspaces } from '@decipad/routing';
+import { NotebookPublishingPopUp } from '@decipad/ui';
+import { FC, useCallback, useState } from 'react';
 import {
   useNotebookAccessActions,
   useNotebookMetaActions,
 } from '../../../hooks';
 import { usePublishedVersionState } from '../hooks';
-import {
-  NotebookMetaActionsReturn,
-  PublishedVersionState,
-} from '@decipad/interfaces';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { useStripeCollaborationRules } from '@decipad/react-utils';
-import { useNotebookMetaData } from '@decipad/react-contexts';
+import { SidebarComponentProps } from './types';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null

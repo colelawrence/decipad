@@ -12,7 +12,7 @@ import {
   useComputer,
 } from '@decipad/react-contexts';
 import { useCanUseDom, useWindowListener } from '@decipad/react-utils';
-import { EditorPlaceholder, LoadingFilter, EditorLayout } from '@decipad/ui';
+import { EditorLayout, EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import {
@@ -26,16 +26,16 @@ import {
   useRef,
   useState,
 } from 'react';
+import { BaseEditor, Scrubber, Editor as SlateEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
-import { useWriteLock } from './utils/useWriteLock';
-import { BaseEditor, Scrubber, Editor as SlateEditor } from 'slate';
 import { editorOnCopy } from './utils/editorOnCopy';
 import { editorOnPaste } from './utils/editorOnPaste';
+import { useWriteLock } from './utils/useWriteLock';
 
 export interface EditorProps {
   notebookId: string;
@@ -178,7 +178,10 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
                         containerRef={containerRef}
                         children={children}
                       />
-                      <UploadFile notebookId={notebookId} />
+                      <UploadFile
+                        workspaceId={workspaceId || ''}
+                        notebookId={notebookId}
+                      />
                       <Integrations workspaceId={workspaceId} />
                     </Plate>
                   </TeleportEditor>

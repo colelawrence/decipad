@@ -23,7 +23,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
 import { Close, Play, Sparkles } from '../../../icons';
 import {
   cssVar,
@@ -34,6 +33,7 @@ import {
   smallestMobile,
 } from '../../../primitives';
 import { closeButtonStyles } from '../../../styles/buttons';
+import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
 import { TabsList, TabsRoot, TabsTrigger } from '../../molecules';
 
 type Stages = 'pick-integration' | 'connect' | 'map';
@@ -164,24 +164,29 @@ export const WrapperIntegrationModalDialog: FC<
   });
 
   const tabs = (
-    <TabsRoot>
+    <TabsRoot
+      defaultValue={tabStage}
+      onValueChange={(newValue) => {
+        if (['pick-integration', 'connect', 'map'].includes(newValue)) {
+          onTabClick(newValue as Stages);
+        } else {
+          console.warn(`invalid tab ${newValue}`);
+        }
+      }}
+    >
       <TabsList>
         <TabsTrigger
           name="connect"
           trigger={{
             label: 'Code',
-            onClick: () => onTabClick('connect'),
             disabled: false,
-            selected: tabStage === 'connect',
           }}
         />
         <TabsTrigger
           name="map"
           trigger={{
             label: 'Preview',
-            onClick: () => onTabClick('map'),
             disabled: false,
-            selected: tabStage === 'map',
           }}
         />
       </TabsList>

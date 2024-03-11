@@ -60,11 +60,11 @@ test('import images @imports @images', async ({ testUser }) => {
     await notebook.openImageUploader();
     await page.getByTestId('link-file-tab').click();
     await page
-      .getByTestId('upload-link-input')
+      .getByPlaceholder('Paste the image link here')
       .fill(
         'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png'
       );
-    await page.getByTestId('link-button').click();
+    await page.getByRole('button', { name: 'Insert image' }).click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(
@@ -125,11 +125,11 @@ test('embed on deipad @embeds', async ({ testUser }) => {
   await test.step('embed from loom', async () => {
     await notebook.openEmbedUploader();
     await page
-      .getByTestId('upload-link-input')
+      .getByPlaceholder('Paste the embed link here')
       .fill(
         'https://www.loom.com/embed/fdd9cc32f4b2494ca4e4e4420795d2e0?sid=e1964b86-c0a2-424c-8b12-df108627ecd2'
       );
-    await page.getByTestId('link-button').click();
+    await page.getByRole('button', { name: 'insert embed' }).click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(
@@ -145,11 +145,11 @@ test('embed on deipad @embeds', async ({ testUser }) => {
   await test.step('embed from google slides', async () => {
     await notebook.openEmbedUploader();
     await page
-      .getByTestId('upload-link-input')
+      .getByPlaceholder('Paste the embed link here')
       .fill(
         'https://docs.google.com/presentation/d/e/2PACX-1vR4fKEEmGwjs7JUioJup8U4ERoV7xkVc2NEJdhNlAfIQRo-uShVPz2EERzEef8K5vAoqr4TBgTO8dMC/embed?start=false&loop=false&delayms=3000'
       );
-    await page.getByTestId('link-button').click();
+    await page.getByRole('button', { name: 'insert embed' }).click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(
@@ -163,9 +163,9 @@ test('embed on deipad @embeds', async ({ testUser }) => {
   await test.step('embed from pitch', async () => {
     await notebook.openEmbedUploader();
     await page
-      .getByTestId('upload-link-input')
+      .getByPlaceholder('Paste the embed link here')
       .fill('https://pitch.com/embed/d32f33f3-1ac8-4d44-aee6-672899febcf9');
-    await page.getByTestId('link-button').click();
+    await page.getByRole('button', { name: 'insert embed' }).click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(async () => {
@@ -189,11 +189,11 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await notebook.openCSVUploader();
     await page.getByTestId('link-file-tab').click();
     await page
-      .getByTestId('upload-link-input')
+      .getByPlaceholder('Paste the data link here')
       .fill(
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv'
       );
-    await page.getByTestId('link-button').click();
+    await page.getByRole('button', { name: 'insert data' }).click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(async () => {

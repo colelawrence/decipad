@@ -9,18 +9,14 @@ it('renders table data', () => {
           name="table"
           trigger={{
             label: 'Table',
-            onClick: () => {},
             disabled: false,
-            selected: true,
           }}
         />
         <TabsTrigger
           name="chart"
           trigger={{
             label: 'Chart',
-            onClick: () => {},
             disabled: false,
-            selected: false,
           }}
         />
       </TabsList>
@@ -45,9 +41,7 @@ it('renders chart data', () => {
           name="table"
           trigger={{
             label: 'Table',
-            onClick: () => {},
             disabled: false,
-            selected: true,
           }}
         />
         <TabsTrigger
@@ -55,9 +49,7 @@ it('renders chart data', () => {
           name="chart"
           trigger={{
             label: 'Chart',
-            onClick: () => {},
             disabled: false,
-            selected: false,
           }}
         />
       </TabsList>

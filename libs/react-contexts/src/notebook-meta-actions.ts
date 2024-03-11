@@ -1,6 +1,6 @@
-import { persist } from 'zustand/middleware';
-import { create } from 'zustand';
 import { isE2E } from '@decipad/utils';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface NotebookMetaActionsType {
   readonly onDeleteNotebook: (notebookId: string, showToast?: true) => void;
@@ -38,9 +38,6 @@ export interface NotebookMetaDataType {
 
   readonly isSidebarOpen: () => boolean;
 
-  readonly sidebarTab: SelectedTab;
-  readonly setSidebarTab: (tab: SelectedTab) => void;
-
   // Should the user be able to alter their notebook?
   // Used for preventing errored notebooks from being editable.
   readonly canEdit: boolean;
@@ -70,10 +67,6 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
           } else {
             set(() => ({ sidebarComponent }));
           }
-        },
-
-        setSidebarTab(sidebarTab) {
-          set(() => ({ sidebarTab }));
         },
 
         canEdit: true,

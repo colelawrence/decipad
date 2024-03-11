@@ -24,6 +24,9 @@
       "path": "../../libs/backend-config"
     },
     {
+      "path": "../../libs/shared-config"
+    },
+    {
       "path": "../../libs/lambdas"
     },
     {

@@ -57,6 +57,11 @@ any /api/ai/generate-fetch-js
 any /api/ai/complete-column
 post /api/ai/feedback
 
+# Image endpoints
+any /api/image/generate
+any /api/image/gif
+any /api/image/stock
+
 # Server-side rendering
 # get /n/:notebookid
 

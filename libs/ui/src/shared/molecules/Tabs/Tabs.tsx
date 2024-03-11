@@ -1,22 +1,27 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
-import { type FC, type ReactNode } from 'react';
-import { cssVar, p13Medium } from '../../../primitives';
+import { SerializedStyles, css } from '@emotion/react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type FC,
+  type ReactNode,
+} from 'react';
+import { cssVar, p13Medium } from '../../../primitives';
 import { Tooltip } from '../../atoms';
-import { useCancelingEvent } from '../../../utils';
 
 const tabsListStyles = (fullWidth: boolean) =>
   css({
-    width: fullWidth ? '100%' : 'max-content',
+    width: fullWidth ? '100%' : 'auto',
     padding: '2px',
     height: 'fit-content',
     backgroundColor: cssVar('backgroundMain'),
     border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: 8,
     gap: 2,
-    display: 'grid',
-    gridAutoColumns: 'minmax(0, 1fr)',
+    display: 'flex',
   });
 
 const tabsTriggerStyles = (isSelected: boolean) =>
@@ -27,10 +32,11 @@ const tabsTriggerStyles = (isSelected: boolean) =>
       display: 'flex',
       justifyContent: 'center',
       flex: 1,
-      flexDirection: 'column',
+      flexDirection: 'row',
+      gap: 4,
       alignItems: 'center',
       minHeight: '28px',
-      padding: '2px 24px',
+      padding: '2px 12px',
       backgroundColor: cssVar('backgroundMain'),
       color: cssVar('textSubdued'),
 
@@ -47,6 +53,9 @@ const tabsTriggerStyles = (isSelected: boolean) =>
         backgroundColor: cssVar('backgroundHeavy'),
         color: cssVar('textDefault'),
       },
+    },
+    !isSelected && {
+      color: cssVar('iconColorDefault'),
     }
   );
 
@@ -69,7 +78,47 @@ const tabsContentStyles = css({
   width: '100%',
 });
 
-export const TabsRoot = TabsPrimitive.Root;
+const ActiveTabContext = createContext({
+  activeTab: '',
+  setActiveTab: (_: string) => {},
+});
+
+type TabsRootProps = {
+  children: ReactNode;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  styles?: SerializedStyles | SerializedStyles[];
+};
+
+export const TabsRoot = ({
+  children,
+  styles,
+  defaultValue = '',
+  onValueChange,
+}: TabsRootProps) => {
+  const [value, setValue] = useState(defaultValue);
+  const valueObj = { activeTab: value, setActiveTab: setValue };
+
+  const setValueForAll = useCallback(
+    (val: string) => {
+      onValueChange?.(val);
+      setValue(val);
+    },
+    [onValueChange]
+  );
+
+  return (
+    <ActiveTabContext.Provider value={valueObj}>
+      <TabsPrimitive.Root
+        css={styles}
+        value={value}
+        onValueChange={setValueForAll}
+      >
+        {children}
+      </TabsPrimitive.Root>
+    </ActiveTabContext.Provider>
+  );
+};
 
 type TabsListProps = {
   readonly fullWidth?: boolean;
@@ -91,8 +140,6 @@ type Trigger = {
   readonly icon?: ReactNode;
   readonly children?: ReactNode;
   readonly disabled?: boolean;
-  readonly selected?: boolean;
-  readonly onClick?: () => void;
 };
 
 type TabsTriggerProps = {
@@ -106,16 +153,16 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
   trigger,
   testId,
 }) => {
-  const { children, icon, label, disabled, selected, tooltip, onClick } =
-    trigger;
+  const { children, icon, label, disabled, tooltip } = trigger;
+  const { activeTab } = useContext(ActiveTabContext);
+  const selected = name === activeTab;
+
   return (
     <TabsPrimitive.Trigger
       data-testid={testId}
       key={name}
       value={name}
       disabled={disabled}
-      data-state={selected ? 'active' : undefined}
-      onClick={useCancelingEvent(onClick)}
       css={tabsTriggerStyles(!!selected)}
     >
       {children || (

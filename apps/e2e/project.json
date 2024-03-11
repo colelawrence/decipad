@@ -32,5 +32,10 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["frontend", "backend", "backend-config"]
+  "implicitDependencies": [
+    "frontend",
+    "backend",
+    "backend-config",
+    "shared-config"
+  ]
 }

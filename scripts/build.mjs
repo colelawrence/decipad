@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import stringify from 'json-stringify-safe';
-import { globby } from 'globby';
-import esbuild from 'esbuild';
-import { join, dirname } from 'path';
 import { exec, spawn } from 'child_process';
-import { promisify } from 'util';
+import esbuild from 'esbuild';
+import { globby } from 'globby';
+import stringify from 'json-stringify-safe';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,6 +42,9 @@ const envVarNames = [
   'ARC_STATIC_SPA',
   'INTERCOM_SECRET_ID',
   'OPENAI_API_KEY',
+  'GIPHY_API_KEY',
+  'UNSPLASH_API_KEY',
+  'REPLICATE_API_KEY',
   'OPENAI_DECIPAD_GPT_BEARER_KEY',
   'STRIPE_API_KEY',
   'STRIPE_WEBHOOK_SECRET',

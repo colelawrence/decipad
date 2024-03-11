@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import { cssVar, offBlack, p14Medium, transparency } from '../../../primitives';
-import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 import React from 'react';
+import { cssVar, offBlack, p14Medium, transparency } from '../../../primitives';
 
 export const ModalOverlay = styled(motion.div)({
   backgroundColor: transparency(offBlack, 0.4).rgba,
@@ -55,12 +54,11 @@ export const ModalContainer = styled(motion.div)({
   '&:focus': { outline: 'none' },
 });
 
-export const ModalContent = styled(motion.div)(
+export const ModalContent = styled(motion.div)<ModalWrapperProps>(() => [
   {
     height: '100%',
   },
-  deciOverflowYStyles
-);
+]);
 
 export const ModalHeader = styled.div({
   display: 'flex',

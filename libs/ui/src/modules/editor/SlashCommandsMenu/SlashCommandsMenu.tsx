@@ -1,6 +1,5 @@
 import { ComponentProps, FC, useMemo } from 'react';
 
-import { InlineMenu } from '../InlineMenu/InlineMenu';
 import {
   CommandAdvancedFormula,
   CommandArea,
@@ -30,6 +29,7 @@ import {
   CommandTable,
   CommandToggle,
 } from '../../../icons/command-icons';
+import { InlineMenu } from '../InlineMenu/InlineMenu';
 
 const integrationCmd = {
   command: 'open-integration',
@@ -43,7 +43,6 @@ const integrationCmd = {
     'external',
     'sql',
     'web',
-    'csv',
     'google sheets',
     'gsheets',
     'js',
@@ -51,6 +50,7 @@ const integrationCmd = {
     'sheets',
     'integrations',
     'js',
+    'notion',
     'javascript',
     'code',
   ],
@@ -296,7 +296,7 @@ const writingGroup = {
       description: 'Upload an image',
       icon: <CommandImage />,
       enabled: true,
-      extraSearchTerms: ['upload', 'image', 'media'],
+      extraSearchTerms: ['upload', 'image', 'media', 'jpg', 'gif', 'png'],
     },
     {
       command: 'callout',
