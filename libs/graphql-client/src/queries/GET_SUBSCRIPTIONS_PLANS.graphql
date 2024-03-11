@@ -1,17 +1,21 @@
+fragment SubPlans on SubscriptionPlan {
+  paymentLink
+  credits
+  queries
+  seats
+  storage
+  description
+  price
+  currency
+  title
+  id
+  key
+  isDefault
+  pricePerSeat
+}
+
 query GetSubscriptionsPlans {
   getSubscriptionsPlans {
-    paymentLink
-    credits
-    queries
-    seats
-    storage
-    description
-    price
-    currency
-    title
-    id
-    key
-    isDefault
-    pricePerSeat
+    ...SubPlans
   }
 }

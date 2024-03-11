@@ -44,6 +44,10 @@ function WorkspaceRecordToWorkspace(
 ): Workspace {
   return {
     ...workspaceRecord,
+    createdAt:
+      workspaceRecord.createdAt == null
+        ? undefined
+        : workspaceRecord.createdAt * 1000,
     /* These fields are gathered by sub-resolvers */
     // membersCount: 0,
     // pads: {

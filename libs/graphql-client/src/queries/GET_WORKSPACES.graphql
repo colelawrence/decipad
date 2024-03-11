@@ -72,6 +72,7 @@ fragment DashboardWorkspace on Workspace {
   name
   isPremium
   plan
+  createdAt
   pads(page: { maxItems: 10000 }) {
     items {
       ...WorkspaceNotebook
@@ -101,6 +102,7 @@ fragment ShallowWorkspace on Workspace {
   name
   isPremium
   plan
+  createdAt
   workspaceSubscription {
     ...WorkspaceSubscriptionWithData
   }

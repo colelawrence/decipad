@@ -48,6 +48,22 @@ async function createWorkspace(
   return create({ name: `${user.name}'s Workspace` }, user);
 }
 
+async function getWorkspaceSubscription(
+  workspaceId: string
+): Promise<Array<WorkspaceSubscriptionRecord>> {
+  const data = await tables();
+
+  return data.workspacesubscriptions
+    .query({
+      IndexName: 'byWorkspace',
+      KeyConditionExpression: 'workspace_id = :workspace_id',
+      ExpressionAttributeValues: {
+        ':workspace_id': workspaceId,
+      },
+    })
+    .then((c) => c.Items);
+}
+
 export const updateQueryExecutionTable = async (
   workspaceId: string,
   quotaLimit: number
@@ -236,14 +252,16 @@ export async function createWorkspaceSubscription({
 
   const workspace = await createWorkspace(client_reference_id);
 
-  const data = await tables();
-  const wsSubscription = await data.workspacesubscriptions.get({
-    id: subscriptionId,
-  });
-
-  if (wsSubscription) {
-    throw Boom.conflict('Webhook error: subscription already exists');
+  const workspaceSub = await getWorkspaceSubscription(workspace.id);
+  if (workspaceSub.length !== 0) {
+    throw Boom.conflict(`
+      Webhook error: Workspace already has subscription.
+        - This means the user has PAID for the subscription.
+        - And we failed!
+    `);
   }
+
+  const data = await tables();
 
   await data.workspacesubscriptions.put({
     id: subscriptionId,

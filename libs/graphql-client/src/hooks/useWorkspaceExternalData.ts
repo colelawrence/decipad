@@ -47,7 +47,7 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
 
   const remove = useCallback(async (externalDataId: string | number) => {
     const res = await deleteExternalData({
-      id: externalDataId,
+      id: externalDataId as string,
     });
     refetch({ requestPolicy: 'network-only' });
     return !!res?.removeExternalDataSource;
@@ -59,7 +59,7 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
       externalDataInput: ExternalDataSourceUpdateInput
     ) => {
       const res = await updateExternalData({
-        id: externalDataId,
+        id: externalDataId as string,
         dataSource: externalDataInput,
       });
       refetch({ requestPolicy: 'network-only' });

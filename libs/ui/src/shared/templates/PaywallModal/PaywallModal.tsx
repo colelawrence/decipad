@@ -1,22 +1,17 @@
-import { getAnalytics } from '@decipad/client-events';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import {
-  GetStripeCheckoutSessionInfoDocument,
-  GetWorkspaceByIdDocument,
-  GetWorkspaceByIdQuery,
-  GetWorkspaceByIdQueryVariables,
-} from '@decipad/graphql-client';
-import { useAiUsage } from '@decipad/react-contexts';
-import { useStripePlans } from '@decipad/react-utils';
-import { workspaces } from '@decipad/routing';
-import { useToast } from '@decipad/toast';
-import { ComponentProps, useMemo, useState } from 'react';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { useClient } from 'urql';
 import { Modal } from '../../molecules';
-import { SubscriptionPayment } from './SubscriptionPayment';
-import { SubscriptionPlansList } from './SubscriptionPlansList';
+import { ComponentProps, useMemo, useState } from 'react';
+import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { workspaces } from '@decipad/routing';
+import { SubscriptionPlansList } from './SubscriptionPlansList';
+import { SubscriptionPayment } from './SubscriptionPayment';
+import { useClient } from 'urql';
+import { GetStripeCheckoutSessionInfoDocument } from '@decipad/graphql-client';
+import { getDefined } from '@decipad/utils';
+import { useUserId } from './useUserId';
+import { useOnConfirmPayment } from './helpers';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
@@ -46,9 +41,6 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const plans = useStripePlans();
 
-  const analytics = getAnalytics();
-  const { tokensQuotaLimit, increaseQuotaLimit } = useAiUsage();
-
   const filteredPlans = useMemo(() => {
     return hideFreePlan ? plans.filter((plan) => plan?.key !== 'free') : plans;
   }, [hideFreePlan, plans]);
@@ -56,6 +48,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
 
   const client = useClient();
+
+  const userId = useUserId();
 
   const canProceed = useMemo(() => {
     if (isCreatingNewWorkspace) {
@@ -68,15 +62,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const [clientSecret, setClientSecret] = useState('');
 
   const selectPlanInfo = useMemo(() => {
-    return plans.find((p) => p?.key === selectedPlan);
+    return getDefined(plans.find((p) => p?.key === selectedPlan));
   }, [selectedPlan, plans]);
 
-  const fetchBillingInfo = async (pId: string, wId: string) => {
+  const fetchBillingInfo = async (pId: string, resourceId: string) => {
     try {
       await client
         .query(GetStripeCheckoutSessionInfoDocument, {
           priceId: pId,
-          workspaceId: wId,
+          workspaceId: resourceId,
         })
         .toPromise()
         .then((result) => {
@@ -90,64 +84,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     }
   };
 
-  const toast = useToast();
-
-  const onConfirmPayment = (paymentStatus: string) => {
-    const aiCreditsPlan = Number(selectPlanInfo?.credits) || 0;
-    if (paymentStatus === 'success') {
-      /*
-       * When a Stripe subscription is completed, 2 events are sent to Decipad: one to the FE where this function is executed
-       * and another one to our webhook (where all the logic is applied to the workspace and store all the info in our databases).
-       * Because they happens concurrently, when this function is executed, we don't know if the webhook has finished to execute
-       * all the operations (such as, marking the current workspace as premium). This way, we need this function to run after the
-       * webhook finishes its operations. The only way so far is to set a 2s delay to retrieve the updated information of the workspace
-       * // TODO: ask @pgte for a better solution
-       */
-      setTimeout(() => {
-        client
-          .query<GetWorkspaceByIdQuery, GetWorkspaceByIdQueryVariables>(
-            GetWorkspaceByIdDocument,
-            { workspaceId },
-            { requestPolicy: 'network-only' }
-          )
-          .toPromise()
-          .then(() => {
-            if ((tokensQuotaLimit || 0) < aiCreditsPlan) {
-              increaseQuotaLimit(aiCreditsPlan);
-            }
-            toast.success(
-              `Workspace upgraded to ${selectPlanInfo?.title} plan`
-            );
-          });
-      }, 2000);
-
-      if (analytics) {
-        analytics.track('Purchase', {
-          category: 'Subscription',
-          subCategory: 'Plan',
-          resource: {
-            type: 'workspace',
-            id: workspaceId,
-          },
-          plan: selectPlanInfo?.title,
-        });
-      }
-    } else if (analytics) {
-      analytics.track('Purchase', {
-        category: 'Subscription',
-        subCategory: 'Plan',
-        resource: {
-          type: 'workspace',
-          id: workspaceId,
-        },
-        plan: selectPlanInfo?.title,
-        error: {
-          code: 'Stripe checkout error',
-          message: `Check error message on Stripe dashboard for plan: ${selectPlanInfo?.key}`,
-        },
-      });
-    }
-  };
+  const onConfirmPayment = useOnConfirmPayment({
+    workspaceId,
+    selectedPlanInfo: selectPlanInfo,
+  });
 
   switch (currentStage) {
     case 'choose-plan': {
@@ -161,7 +101,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           currentPlan={currentPlan}
           handleBillingButton={() => {
             if (selectPlanInfo?.id) {
-              fetchBillingInfo(selectPlanInfo?.id, workspaceId);
+              fetchBillingInfo(
+                selectPlanInfo?.id,
+                isCreatingNewWorkspace ? userId : workspaceId
+              );
             }
           }}
           handleBackButton={onClose}
