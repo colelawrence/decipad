@@ -43,6 +43,7 @@ jobs:
           VITE_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           TESTMAIL_APIKEY: '${{secrets.TESTMAIL_APIKEY}}'
           TESTMAIL_NAMESPACE: '${{secrets.TESTMAIL_NAMESPACE}}'
+          USER_AGENT_KEY: '${{secrets.USER_AGENT_KEY}}'
           DECI_VERBOSE: false
         run: ./scripts/e2e-regression.sh
 

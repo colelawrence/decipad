@@ -29,11 +29,21 @@ export async function deleteAllWorkspaceNotebooks(
   }).toPass();
 }
 
-test('save storage state for reuse', async ({ page }) => {
+test('save storage state for reuse', async ({ browser }) => {
   // Randomly generating the tag...
   const TAG = 'regression-testing'; // Date.now().toString(36).substr(2, 12);
-
   const email = `q71nx.${TAG}@inbox.testmail.app`;
+
+  // get staging user agent string
+  const userAgent = process.env.USER_AGENT_KEY;
+
+  // Create a new browser context with the custom user agent
+  const context = await browser.newContext({
+    userAgent,
+  });
+
+  // Use the custom context to create a new page
+  const page = await context.newPage();
 
   await page.goto('https://app.decipad.com');
   await page.getByPlaceholder('Enter your email').fill(email);

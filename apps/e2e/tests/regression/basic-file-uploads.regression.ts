@@ -41,7 +41,17 @@ test.describe('production regression checks', () => {
     currentDate.toString() + Math.round(Math.random() * 10000);
 
   test.beforeEach(async ({ browser }) => {
-    page = await browser.newPage();
+    // get staging user agent string
+    const userAgent = process.env.USER_AGENT_KEY;
+
+    // Create a new browser context with the custom user agent
+    const context = await browser.newContext({
+      userAgent,
+    });
+
+    // Use the custom context to create a new page
+    page = await context.newPage();
+
     notebook = new Notebook(page);
     workspace = new Workspace(page);
     assistant = new AiAssistant(page);
