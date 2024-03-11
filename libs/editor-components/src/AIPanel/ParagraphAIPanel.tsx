@@ -1,43 +1,54 @@
-import { useState, FC, useCallback, useEffect } from 'react';
-import { CheckboxSelected, Edit } from 'libs/ui/src/icons';
 import { getAnalytics } from '@decipad/client-events';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { MyEditor, useMyEditorRef } from '@decipad/editor-types';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
-import { p13Regular, UpgradePlanWarning } from '@decipad/ui';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { getNodeString } from '@udecode/plate-common';
+import { blockSelectionStore } from '@udecode/plate-selection';
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
-  AIPanelSuggestion,
-  AIPanelForm,
-  AIPanelTitle,
   AIPanelContainer,
+  AIPanelForm,
+  AIPanelSuggestion,
+  AIPanelTitle,
 } from './components';
-import { useRdFetch } from './hooks';
 import {
+  AiParaOp,
   PromptSuggestion,
   PromptSuggestions,
 } from './components/PromptSuggestions';
+import { useRdFetch } from './hooks';
 
-type ParagraphAIPanelProps = {
-  paragraph: string;
-  updateParagraph: (s: string) => void;
-  toggle: () => void;
+const getTextFromSelectParagraphs = (
+  editor: MyEditor,
+  originalPara: string
+) => {
+  if (editor.selection != null) {
+    return originalPara;
+  }
+  const allBlockIds = blockSelectionStore.get.selectedIds() as Set<string>;
+  const matchingChildren = editor.children.filter((child) => {
+    return allBlockIds.has(child.id);
+  });
+  const childText = matchingChildren
+    .map((child) => getNodeString(child))
+    .join('\n\n');
+  return childText;
 };
 
-const promptSuggestions: PromptSuggestion[] = [
-  { icon: <Edit />, name: 'Simplify', prompt: 'to be simpler' },
-  {
-    icon: <CheckboxSelected />,
-    name: 'Fix any mistakes',
-    prompt: 'with any mistakes fixed',
-  },
-];
+export type ParagraphAIPanelProps = {
+  paragraph: string;
+  updateParagraph: (s: string, op?: AiParaOp) => void;
+  toggle: () => void;
+};
 
 export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   paragraph,
   updateParagraph,
   toggle,
 }) => {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState<PromptSuggestion>(DefaultPrompt);
   const [rd, fetch] = useRdFetch('rewrite-paragraph');
 
   const {
@@ -62,6 +73,8 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
     }
   }, [quotaLimit, queryCount, nrQueriesLeft]);
 
+  const editor = useMyEditorRef();
+
   const handleSubmit = async () => {
     const analytics = getAnalytics();
     if (analytics) {
@@ -75,7 +88,10 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
     );
 
     if (newExecutedQueryData) {
-      fetch({ prompt, paragraph });
+      fetch({
+        prompt: prompt.prompt,
+        paragraph: getTextFromSelectParagraphs(editor, paragraph),
+      });
       setCurrentWorkspaceInfo({
         ...workspaceInfo,
         queryCount: newExecutedQueryData.queryCount,
@@ -88,12 +104,12 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
 
   return (
     <AIPanelContainer toggle={toggle}>
-      <AIPanelTitle>Rewrite paragraph with AI</AIPanelTitle>
+      <AIPanelTitle>Write with AI</AIPanelTitle>
       <PromptSuggestions
         prompts={promptSuggestions}
         disabled={rd.status === 'loading' || maxQueryExecution}
-        runPrompt={(prmpt) => {
-          setPrompt(prmpt);
+        runPrompt={(props) => {
+          setPrompt(props);
           handleSubmit();
         }}
       />
@@ -106,6 +122,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
       />
       <AIPanelSuggestion
         completionRd={rd}
+        prompt={prompt}
         makeUseOfSuggestion={updateParagraph}
         regenerate={handleSubmit}
       />
@@ -121,11 +138,12 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
             />
           </div>
         )}
-      {isQuotaLimitBeingReached && (
-        <p css={queriesLeftStyles}>
-          {nrQueriesLeft} of {quotaLimit} credits left
-        </p>
-      )}
+
+      <p css={queriesLeftStyles} contentEditable={false}>
+        {nrQueriesLeft && quotaLimit
+          ? `${nrQueriesLeft} of ${quotaLimit} credits left`
+          : ''}
+      </p>
     </AIPanelContainer>
   );
 };
@@ -133,8 +151,53 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
 const queriesLeftStyles = css(p13Regular, {
   marginTop: '10px',
   paddingLeft: '5px',
+  cursor: 'default',
 });
 
 const upgradePlanWarningWrapper = css({
   marginTop: '10px',
 });
+
+const DefaultPrompt: PromptSuggestion = {
+  name: 'Improve writting',
+  prompt: 'improve the writing',
+  primary: 'below',
+};
+const promptSuggestions: PromptSuggestion[] = [
+  DefaultPrompt,
+  {
+    name: 'Fix mistakes',
+    prompt: 'with any spelling or grammar mistakes fixed',
+    primary: 'replace',
+  },
+  {
+    name: 'Shorter',
+    prompt: 'Make the text shorter',
+    primary: 'replace',
+  },
+  {
+    name: 'Longer',
+    prompt: 'Make the text longer',
+    primary: 'replace',
+  },
+  {
+    name: 'Simplify',
+    prompt: 'simplify the language',
+    primary: 'replace',
+  },
+  {
+    name: 'Summarize',
+    prompt: 'summarize the text',
+    primary: 'below',
+  },
+  {
+    name: 'Explain',
+    prompt: 'explain what is written',
+    primary: 'below',
+  },
+  {
+    name: 'Find action items',
+    prompt: 'find all action items and make a list of who needs to do what',
+    primary: 'below',
+  },
+];

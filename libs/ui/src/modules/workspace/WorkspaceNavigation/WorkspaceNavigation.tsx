@@ -4,27 +4,26 @@ import { CreateSectionMutation } from '@decipad/graphql-client';
 import { docs, workspaces } from '@decipad/routing';
 import { FC, useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MenuItem, MenuList } from '../../../shared';
 import {
   Archive,
+  ArrowDiagonalTopRight,
   Chat,
+  DeciBoxes,
   Docs,
   DollarCircle,
+  Ellipsis,
+  Folder,
   Gear,
   Home,
   Key,
+  Magic,
   Plus,
-  Sparkles,
   Users,
-  DeciBoxes,
-  Ellipsis,
-  Folder,
-  ArrowDiagonalTopRight,
 } from '../../../icons';
+import { MenuItem, MenuList } from '../../../shared';
 
-import { hexToOpaqueColor, opaqueColorToHex } from '../../../primitives';
 import { OpaqueColor } from '@decipad/utils';
-import { CreateOrEditSectionModal } from '../CreateOrEditSectionModal/CreateOrEditSectionModal';
+import { hexToOpaqueColor, opaqueColorToHex } from '../../../primitives';
 import {
   AvailableSwatchColor,
   DNDItemTypes,
@@ -32,12 +31,13 @@ import {
   hexBaseSwatches,
   swatchNames,
 } from '../../../utils';
+import { CreateOrEditSectionModal } from '../CreateOrEditSectionModal/CreateOrEditSectionModal';
 
+import { Section, SectionRecord, WorkspaceMeta } from 'libs/ui/src/types';
+import { NavigationItem } from '../NavigationItem/NavigationItem';
+import { NavigationList } from '../NavigationList/NavigationList';
 import { SectionItem } from '../SectionItem/SectionItem';
 import * as Styled from './styles';
-import { NavigationList } from '../NavigationList/NavigationList';
-import { NavigationItem } from '../NavigationItem/NavigationItem';
-import { Section, SectionRecord, WorkspaceMeta } from 'libs/ui/src/types';
 import { env } from 'process';
 
 interface WorkspaceNavigationProps {
@@ -294,7 +294,7 @@ export const WorkspaceNavigation = ({
         >
           <Styled.ItemWrapper>
             <Styled.IconWrapper>
-              <Sparkles />
+              <Magic />
             </Styled.IconWrapper>
             <Styled.TextWrapper>
               Templates <ArrowDiagonalTopRight />

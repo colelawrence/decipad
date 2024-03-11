@@ -8,6 +8,7 @@ import {
 import { css } from '@emotion/react';
 import { Send } from 'libs/ui/src/icons';
 import { RemoteDataStatus } from '../hooks';
+import { PromptSuggestion } from './PromptSuggestions';
 
 // Used for submit button css too
 const spinnerCss = css({
@@ -53,8 +54,8 @@ const formCss = css({
 type AIPanelFormProps = {
   placeholder?: string;
   handleSubmit: () => void;
-  prompt: string;
-  setPrompt: (s: string) => void;
+  prompt: PromptSuggestion;
+  setPrompt: (s: PromptSuggestion) => void;
   status: RemoteDataStatus;
   disableSubmitButton?: boolean;
 };
@@ -80,8 +81,12 @@ export const AIPanelForm = ({
         <InputField
           type="text"
           placeholder={placeholder}
-          value={prompt}
-          onChange={(s) => setPrompt(s)}
+          value={prompt.prompt}
+          onChange={(s) => {
+            const copyPrompt = { ...prompt };
+            copyPrompt.prompt = s;
+            setPrompt(copyPrompt);
+          }}
           autoFocus
         />
         {status === 'loading' ? (
@@ -95,7 +100,7 @@ export const AIPanelForm = ({
             onClick={() => {
               handleSubmit();
             }}
-            disabled={prompt.length === 0 || disableSubmitButton}
+            disabled={prompt.prompt.length === 0 || disableSubmitButton}
           >
             <Send />
           </Button>

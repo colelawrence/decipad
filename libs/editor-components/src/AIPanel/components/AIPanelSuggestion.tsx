@@ -1,7 +1,10 @@
-import type { FC } from 'react';
 import { Button, ErrorMessage, cssVar, p16Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { Refresh } from 'libs/ui/src/icons';
+import type { FC } from 'react';
+import { ParagraphAIPanelProps } from '../ParagraphAIPanel';
 import { RemoteData } from '../hooks';
+import { PromptSuggestion } from './PromptSuggestions';
 
 const completionCss = css(p16Regular, {
   background: cssVar('backgroundDefault'),
@@ -15,41 +18,88 @@ const buttonContainerCss = css({
   gridGap: 8,
   button: {
     flex: 'none',
-    color: cssVar('textDefault'),
-    background: cssVar('backgroundDefault'),
-    radius: 4,
   },
 });
 
 type AIPanelSuggestionProps = {
   completionRd: RemoteData<{ completion: string }>;
-  makeUseOfSuggestion: (s: string) => void;
+  makeUseOfSuggestion: ParagraphAIPanelProps['updateParagraph'];
   regenerate?: () => void;
+  prompt: PromptSuggestion;
 };
 
 export const AIPanelSuggestion: FC<AIPanelSuggestionProps> = ({
   completionRd,
   makeUseOfSuggestion,
   regenerate,
+  prompt,
 }) => {
+  const getBtns = (completion: string) => {
+    switch (prompt.primary) {
+      case 'replace':
+        return (
+          <>
+            <Button
+              onClick={() => {
+                makeUseOfSuggestion(completion, 'replace');
+              }}
+              size="extraExtraSlim"
+              type="primary"
+            >
+              Replace paragraph
+            </Button>
+            <Button
+              onClick={() => {
+                makeUseOfSuggestion(completion, 'below');
+              }}
+              size="extraExtraSlim"
+              type="secondary"
+            >
+              Insert below
+            </Button>
+          </>
+        );
+      default:
+        return (
+          <>
+            <Button
+              onClick={() => {
+                makeUseOfSuggestion(completion, 'below');
+              }}
+              size="extraExtraSlim"
+              type="primary"
+            >
+              Insert below
+            </Button>
+            <Button
+              onClick={() => {
+                makeUseOfSuggestion(completion, 'replace');
+              }}
+              size="extraExtraSlim"
+              type="secondary"
+            >
+              Replace paragraph
+            </Button>
+          </>
+        );
+    }
+  };
+
   switch (completionRd.status) {
     case 'success': {
       return (
         <div contentEditable={false}>
           <div css={completionCss}>{completionRd.result.completion}</div>
           <div css={buttonContainerCss}>
-            <Button
-              onClick={() => {
-                makeUseOfSuggestion(completionRd.result.completion);
-              }}
-              size="extraExtraSlim"
-            >
-              Insert
-            </Button>
+            {getBtns(completionRd.result.completion)}
             {regenerate && (
-              <Button size="extraExtraSlim" onClick={regenerate}>
-                Regenerate
-              </Button>
+              <div
+                css={{ svg: { width: 16, height: 16 }, button: { padding: 4 } }}
+              >
+                <Button size="extraExtraSlim" onClick={regenerate}>
+                  <Refresh />
+                </Button>
+              </div>
             )}
           </div>
         </div>

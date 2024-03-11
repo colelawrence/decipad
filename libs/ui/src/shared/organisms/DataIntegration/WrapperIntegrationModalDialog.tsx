@@ -23,7 +23,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Close, Play, Sparkles } from '../../../icons';
+import { Close, Magic, Play } from '../../../icons';
 import {
   cssVar,
   mobileQuery,
@@ -214,7 +214,7 @@ export const WrapperIntegrationModalDialog: FC<
             <>
               {showAiButton && (
                 <TextAndIconButton
-                  text="AI assistance"
+                  text="AI"
                   size="normal"
                   iconPosition="left"
                   color="transparent-green"
@@ -222,7 +222,7 @@ export const WrapperIntegrationModalDialog: FC<
                     codeStore.toggleShowAi();
                   }}
                 >
-                  <Sparkles />
+                  <Magic />
                 </TextAndIconButton>
               )}
             </>

@@ -11,9 +11,9 @@ import {
   Duplicate,
   Hide,
   Link,
+  Magic,
   Plus,
   Show,
-  Sparkles,
   Switch,
 } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
@@ -184,8 +184,8 @@ export const BlockDragHandle = ({
   const downloadMenuItem = <p>Download as CSV</p>;
 
   const aiButton = aiPanel ? (
-    <MenuItem icon={<Sparkles />} onSelect={aiPanel.toggle} isNew>
-      AI assistance
+    <MenuItem icon={<Magic />} onSelect={aiPanel.toggle} isNew>
+      AI
     </MenuItem>
   ) : null;
 

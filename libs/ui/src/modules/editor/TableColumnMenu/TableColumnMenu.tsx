@@ -12,6 +12,7 @@ import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { Unit, UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { cssVar, p12Medium } from 'libs/ui/src/primitives';
 import {
   ComponentProps,
   ReactNode,
@@ -19,24 +20,23 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
 import {
   AddToWorkspace,
-  All,
-  Calendar,
-  CheckboxSelected,
-  DollarCircle,
-  Formula,
-  Number,
-  Text,
-  BulletList,
   AlignArrowLeft,
   AlignArrowRight,
+  All,
+  BulletList,
+  Calendar,
+  CheckboxSelected,
   Delete,
-  Sparkles,
+  DollarCircle,
+  Formula,
+  Magic,
+  Number,
   NumberedList,
+  Text,
 } from '../../../icons';
-import { UnitMenuItem, UnitsAction } from '../UnitMenuItem/UnitMenuItem';
+import { MenuItem, MenuList, TriggerMenuItem } from '../../../shared';
 import {
   getBooleanType,
   getDateType,
@@ -45,8 +45,8 @@ import {
   getStringType,
 } from '../../../utils';
 import { getFormulaType } from '../../../utils/table';
+import { UnitMenuItem, UnitsAction } from '../UnitMenuItem/UnitMenuItem';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
-import { p12Medium, cssVar } from 'libs/ui/src/primitives';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',
@@ -374,7 +374,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           <h3 css={dividerLabel}>Column Actions</h3>
           <MenuItem
             key="populate-column"
-            icon={<Sparkles />}
+            icon={<Magic />}
             onSelect={onPopulateColumn}
             disabled={shouldDisableAI}
           >

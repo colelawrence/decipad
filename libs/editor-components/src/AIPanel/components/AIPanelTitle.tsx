@@ -1,7 +1,7 @@
-import type { FC } from 'react';
 import { componentCssVars, p13Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { Sparkles } from 'libs/ui/src/icons';
+import { Magic } from 'libs/ui/src/icons';
+import type { FC } from 'react';
 
 const containerCss = css(p13Medium, {
   display: 'flex',
@@ -29,7 +29,7 @@ export const AIPanelTitle: FC<AIPanelTitleProps> = ({ children }) => {
   return (
     <div css={containerCss} contentEditable={false}>
       <div css={sparklesSquareCss}>
-        <Sparkles />
+        <Magic />
       </div>
       {children}
     </div>

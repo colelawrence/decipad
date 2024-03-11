@@ -1,16 +1,17 @@
-import { useState, FC, useCallback, useEffect } from 'react';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { getAnalytics } from '@decipad/client-events';
-import { p13Regular, UpgradePlanWarning } from '@decipad/ui';
+import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { useRdFetch } from './hooks';
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
-  AIPanelSuggestion,
-  AIPanelForm,
-  AIPanelTitle,
   AIPanelContainer,
+  AIPanelForm,
+  AIPanelSuggestion,
+  AIPanelTitle,
 } from './components';
+import { PromptSuggestion } from './components/PromptSuggestions';
+import { useRdFetch } from './hooks';
 
 type LiveQueryAIPanelProps = {
   id: string;
@@ -18,12 +19,26 @@ type LiveQueryAIPanelProps = {
   toggle: () => void;
 };
 
+//
+// todo: this file is not in use
+//
+// if it was to be in use we would need to alter  AIPanelSuggestion and AIPanelForm
+// as the buttons cater to paragraph rewriting
+//
+const makePrompt = (myText: string): PromptSuggestion => {
+  return {
+    name: 'SQL',
+    prompt: myText,
+    primary: 'replace',
+  };
+};
+
 export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
   id,
   updateQueryText,
   toggle,
 }) => {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState(makePrompt('SELECT * FROM fishes'));
   const [rd, fetch] = useRdFetch(`generate-sql`);
   const {
     workspaceInfo,
@@ -48,9 +63,10 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
   }, [workspaceInfo.id, updateQueryExecCount]);
 
   const handleSubmit = useCallback(async () => {
+    const promptText = prompt.prompt;
     const analytics = getAnalytics();
     if (analytics) {
-      analytics.track('submit AI live query', { prompt });
+      analytics.track('submit AI live query', { promptText });
     }
     const result = await updateQueryExecutionCount();
     const newExecutedQueryData = result.data?.incrementQueryCount;
@@ -60,7 +76,7 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
     );
 
     if (newExecutedQueryData) {
-      fetch({ externalDataSourceId: id, prompt });
+      fetch({ externalDataSourceId: id, prompt: promptText });
       setCurrentWorkspaceInfo({
         ...workspaceInfo,
         queryCount: newExecutedQueryData.queryCount,
@@ -101,6 +117,7 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
       <AIPanelSuggestion
         completionRd={rd}
         makeUseOfSuggestion={makeUseOfSuggestion}
+        prompt={prompt}
       />
       {(maxQueryExecution || isQuotaLimitBeingReached) &&
         workspaceInfo.id &&

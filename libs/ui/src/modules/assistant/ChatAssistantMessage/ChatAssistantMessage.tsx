@@ -12,7 +12,6 @@ import {
   componentCssVars,
   cssVar,
   p13Medium,
-  p14Medium,
   p14Regular,
 } from '../../../primitives';
 
@@ -22,7 +21,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import copyToClipboard from 'copy-to-clipboard';
 import { useCallback, useContext, useState } from 'react';
-import { Tooltip } from '../../../shared';
+import { JellyBeans, Tooltip } from '../../../shared';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 
@@ -60,30 +59,6 @@ const contentStyles = css(p14Regular, {
   display: 'grid',
   gap: 4,
   gridTemplateRows: 'auto max-content',
-});
-
-const suggestionContainerStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  padding: '0px 6px 4px',
-  gap: 4,
-});
-
-const suggestionStyles = css(p14Medium, {
-  border: `1px solid ${cssVar('borderDefault')}`,
-  color: componentCssVars('AIAssistantHighlightTextColor'),
-  padding: '6px 8px',
-  borderRadius: 8,
-  cursor: 'pointer',
-
-  '&:hover': {
-    backgroundColor: cssVar('backgroundDefault'),
-  },
-
-  '&:active': {
-    backgroundColor: cssVar('backgroundHeavy'),
-  },
 });
 
 const buttonContainerStyles = css({
@@ -188,17 +163,14 @@ export const ChatAssistantMessage: React.FC<Props> = ({
       <div css={contentStyles}>
         <ChatMarkdownRenderer content={content} />
         {isCurrentReply && suggestions && suggestions.length > 0 && (
-          <div css={suggestionContainerStyles}>
-            {suggestions.map((s) => (
-              <div
-                key={s}
-                css={suggestionStyles}
-                onClick={() => handleUseSuggestions(s)}
-              >
-                {s}
-              </div>
-            ))}
-          </div>
+          <JellyBeans
+            beans={suggestions.map((text) => {
+              return {
+                text,
+                onClick: () => handleUseSuggestions(text),
+              };
+            })}
+          />
         )}
         {isCurrentReply && !isGenerating && (
           <div css={buttonContainerStyles}>

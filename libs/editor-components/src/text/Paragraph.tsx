@@ -1,32 +1,36 @@
-import {
-  COLUMN_KINDS,
-  MyEditor,
-  MyElement,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
-import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
+import { getAnalytics } from '@decipad/client-events';
 import {
   useEditorChange,
   useNodePath,
   useNodeText,
 } from '@decipad/editor-hooks';
+import {
+  COLUMN_KINDS,
+  ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyElement,
+  ParagraphElement,
+  PlateComponent,
+  useMyEditorRef,
+} from '@decipad/editor-types';
+import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
+import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
 import {
   findNodePath,
+  insertNodes,
   insertText,
   isElementEmpty,
   isSelectionExpanded,
 } from '@udecode/plate-common';
-import { Range } from 'slate';
+import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { getAnalytics } from '@decipad/client-events';
+import { ParagraphAIPanel } from '../AIPanel';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
-import { ParagraphAIPanel } from '../AIPanel';
 
 const analytics = getAnalytics();
 
@@ -105,8 +109,25 @@ export const Paragraph: PlateComponent = ({
         <ParagraphAIPanel
           paragraph={paragraph || ''}
           toggle={toggleAiPanel}
-          updateParagraph={(s) => {
-            insertText(editor, s, { at: findNodePath(editor, element) });
+          updateParagraph={(s, op = 'replace') => {
+            if (op === 'replace') {
+              insertText(editor, s, { at: findNodePath(editor, element) });
+            } else {
+              insertNodes(
+                editor,
+                [
+                  {
+                    type: ELEMENT_PARAGRAPH,
+                    id: nanoid(),
+                    children: [{ text: s }],
+                  } satisfies ParagraphElement,
+                ],
+                {
+                  at: [(path?.[0] ?? 0) + 1],
+                }
+              );
+            }
+
             toggleAiPanel();
           }}
         />

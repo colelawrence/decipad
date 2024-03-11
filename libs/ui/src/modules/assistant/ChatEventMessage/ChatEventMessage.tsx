@@ -1,13 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { css } from '@emotion/react';
-import { cssVar, p13Medium } from '../../../primitives';
 import { EventMessage, MessageStatus } from '@decipad/react-contexts';
-import { Feedback, Refresh, Sparkles, Spinner, Warning } from '../../../icons';
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { useCallback, useState } from 'react';
+import { Feedback, Magic, Refresh, Spinner, Warning } from '../../../icons';
+import { cssVar, p13Medium } from '../../../primitives';
 import { Tooltip } from '../../../shared';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
-import { useCallback, useState } from 'react';
-import { noop } from '@decipad/utils';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -102,7 +102,7 @@ const messageMeta = (status: MessageStatus) => {
       };
     case 'success':
       return {
-        icon: <Sparkles />,
+        icon: <Magic />,
       };
     default:
       return {

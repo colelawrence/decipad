@@ -5,12 +5,13 @@ import { closeButtonStyles } from 'libs/ui/src/styles/buttons';
 import type { FC } from 'react';
 import { ReactNode } from 'react';
 
-const containerCss = css({
+const aiContainerParaStyles = css({
   border: `solid 1px ${cssVar('borderDefault')}`,
   padding: 16,
   borderRadius: 10,
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, weakOpacity).rgba}`,
   marginTop: 10,
+  backgroundColor: cssVar('backgroundMain'),
 });
 
 const additionalCloseButtonStyles = css({
@@ -28,7 +29,7 @@ export const AIPanelContainer: FC<AIPanelContainerProps> = ({
   toggle,
 }) => {
   return (
-    <div css={containerCss}>
+    <div css={aiContainerParaStyles}>
       <button
         onClick={toggle}
         css={[closeButtonStyles, additionalCloseButtonStyles]}
