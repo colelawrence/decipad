@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import {
   componentCssVars,
   cssVar,
+  grey100,
   p10Medium,
   p12Regular,
   p13Medium,
@@ -11,6 +12,7 @@ import {
   p14Regular,
   p16Medium,
 } from 'libs/ui/src/primitives';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 
 export const PaywallContainer = styled.div({
   width: '100%',
@@ -163,11 +165,17 @@ export const PaymentMethodTitle = styled.p(p16Medium, {
   marginBottom: '16px',
 });
 
-export const PaymentFormWrapper = styled.div({
-  overflow: 'auto',
-  paddingRight: '6px',
-  width: '100%',
-});
+export const PaymentFormWrapper = styled.div(
+  {
+    padding: 12,
+    borderRadius: 12,
+    width: '100%',
+    maxHeight: 'min(60vh, 640px)',
+    // we need hardcoded color to match stripe checkout page in dark mode
+    backgroundColor: grey100.hex,
+  },
+  deciOverflowYStyles
+);
 
 export const PlanConfirmationDetails = styled.div(p12Regular, {
   display: 'grid',

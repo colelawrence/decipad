@@ -34,7 +34,7 @@ const galleryStyle = css`
 const tabsContentScrollStyles = css(
   {
     width: 'calc(100% + 8px)',
-    height: 400,
+    height: 'min(40vh, 400px)',
     overflowY: 'auto',
     overflowX: 'hidden',
   },

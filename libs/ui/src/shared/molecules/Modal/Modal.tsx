@@ -48,7 +48,7 @@ const ModalContent: FC<ModalContentProps> = ({
               </Dialog.Close>
             </Styled.ModalHeader>
           )}
-          <Styled.ModalContent size={size}>{children}</Styled.ModalContent>
+          <Styled.ModalContent>{children}</Styled.ModalContent>
         </Styled.ModalContainer>
       </Styled.ModalWrapper>
     </Dialog.Content>
