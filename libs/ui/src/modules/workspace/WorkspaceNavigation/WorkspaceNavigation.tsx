@@ -22,7 +22,7 @@ import {
 } from '../../../icons';
 import { MenuItem, MenuList } from '../../../shared';
 
-import { OpaqueColor } from '@decipad/utils';
+import { OpaqueColor, env } from '@decipad/utils';
 import { hexToOpaqueColor, opaqueColorToHex } from '../../../primitives';
 import {
   AvailableSwatchColor,
@@ -38,7 +38,6 @@ import { NavigationItem } from '../NavigationItem/NavigationItem';
 import { NavigationList } from '../NavigationList/NavigationList';
 import { SectionItem } from '../SectionItem/SectionItem';
 import * as Styled from './styles';
-import { env } from 'process';
 
 interface WorkspaceNavigationProps {
   readonly activeWorkspace: WorkspaceMeta;
