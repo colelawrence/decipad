@@ -1,65 +1,60 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { BrowserContext, Page, test } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-import { setUp } from '../utils/page/Editor';
-import {
-  checkForErrorsStep,
-  createWorkspace,
-  importNotebook,
-  navigateToNotebookPageStep,
-} from '../utils/src';
+import { expect, test } from './manager/decipad-tests';
 
 const matcher = process.env.SELECT_NOTEBOOK || '';
 
-const files = fs.readdirSync(
-  path.join(__dirname, '..', '__fixtures__', 'gallery')
-);
+const filesPath = path.join(__dirname, '..', '__fixtures__', 'gallery');
+const files = fs.readdirSync(filesPath);
 const jsonFiles = files
   .filter((file) => file.endsWith('.json'))
   .filter((file) => file.includes(matcher));
 
 for (const file of jsonFiles) {
-  test.describe(`Check gallery template: ${file}`, () => {
-    test.describe.configure({ mode: 'serial' });
+  test(`Check gallery template: ${file}`, async ({ randomFreeUser }) => {
+    const { page } = randomFreeUser;
+    await randomFreeUser.goToWorkspace();
 
-    let workspaceId: string;
-    let page: Page;
-    let context: BrowserContext;
-    test.beforeAll(async ({ browser }) => {
-      page = await browser.newPage();
-      context = page.context();
+    await test.step(`Load template`, async () => {
+      const filePath = path.join(filesPath, file);
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      const source = JSON.parse(fileContent);
 
-      await setUp(
-        { page, context },
-        {
-          createAndNavigateToNewPad: false,
-        }
+      await randomFreeUser.importNotebook(source);
+      await expect(randomFreeUser.notebook.notebookTitle).toContainText(
+        '[Template]'
       );
-      workspaceId = await createWorkspace(page);
     });
 
-    test.afterAll(async () => {
-      await page.close();
-    });
+    await test.step(`Check errors`, async () => {
+      await expect(async () => {
+        // check for errors in calculations
+        await expect(
+          page.getByTestId('code-line-warning'),
+          `calculation errors visible`
+        ).toBeHidden();
 
-    test('check notebook', async () => {
-      const filePath = path.join(
-        __dirname,
-        '..',
-        '__fixtures__',
-        'gallery',
-        file
-      );
-      const fileContent = await fs.promises.readFile(filePath, 'utf8');
-      const notebookId = await importNotebook(
-        workspaceId,
-        Buffer.from(fileContent, 'utf-8').toString('base64'),
-        page
-      );
-      await navigateToNotebookPageStep(page, notebookId, file);
-      await checkForErrorsStep(page, notebookId, file);
+        // check for error blocks
+        await expect(
+          page.getByTestId('error-block'),
+          `broken blocks visible`
+        ).toBeHidden();
+
+        // check for results that didn't load or magic errors, the code base uses loading-results & loading-animation
+        await expect(
+          page.getByTestId('loading-results'),
+          `loading blocks visible`
+        ).toBeHidden();
+
+        // check if integrations get stuck loading, the code base uses loading-results & loading-animation
+        await expect(
+          page.getByTestId('loading-animation'),
+          `loading blocks visible`
+        ).toBeHidden();
+      }).toPass({
+        intervals: [4_000],
+        timeout: 20_000,
+      });
     });
   });
 }

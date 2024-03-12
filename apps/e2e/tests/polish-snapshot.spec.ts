@@ -5,6 +5,7 @@ import { Timeouts, snapshot } from '../utils/src';
 test('Use case: building a candle business', async ({ testUser }) => {
   const { page } = testUser;
   await testUser.importNotebook(polish);
+  await testUser.notebook.waitForEditorToLoad();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
   await page.getByTestId('unit-picker-button').click();

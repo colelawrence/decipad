@@ -675,6 +675,7 @@ test('checks big notebooks dont have issues publishing', async ({
 }) => {
   const { page, notebook } = testUser;
   await testUser.importNotebook(oldNotebookJson);
+  await testUser.notebook.waitForEditorToLoad();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
   await notebook.publishNotebook();
@@ -707,6 +708,7 @@ test('checks big notebooks dont get stuck with publish changes notification', as
 
   await test.step('publish notebook with old style json', async () => {
     await testUser.importNotebook(oldNotebookJson);
+    await testUser.notebook.waitForEditorToLoad();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
     await notebook.publishNotebook();

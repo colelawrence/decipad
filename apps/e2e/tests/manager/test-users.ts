@@ -127,7 +127,6 @@ export class User {
     }
     const notebookId = resp.data.importPad.id;
     await this.navigateToNotebook(notebookId);
-    await this.notebook.waitForEditorToLoad();
     return notebookId;
   }
 

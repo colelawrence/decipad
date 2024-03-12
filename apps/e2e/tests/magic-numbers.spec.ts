@@ -14,6 +14,7 @@ import {
 test('Testing magic numbers', async ({ testUser }) => {
   const { page } = testUser;
   await testUser.importNotebook(notebookSource);
+  await testUser.notebook.waitForEditorToLoad();
 
   await test.step('Checking if the "currently displayed elsewhere" text is shown', async () => {
     // Clicking Letter.Name
@@ -52,7 +53,11 @@ test('Testing magic numbers', async ({ testUser }) => {
   });
 
   await test.step('Testing unit change', async () => {
-    await page.getByTestId('code-result:2042').click();
+    await page.keyboard.press('Escape');
+    await page
+      .getByTestId('number-result:34 minutes 2 seconds')
+      .first()
+      .click();
     await page
       .getByTestId('code-line-float')
       .getByTestId('unit-picker-button')
@@ -60,7 +65,7 @@ test('Testing magic numbers', async ({ testUser }) => {
     await page.getByText('Currency').click();
     await page.getByText('CAD').click();
     await expect(
-      page.getByTestId('code-result:2042').getByText('$2,042')
+      page.getByTestId('number-result:$2,042').getByText('$2,042')
     ).toBeVisible();
   });
 

@@ -4,11 +4,11 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 
-import type {
-  MyElement,
-  NotebookValue,
-  TabElement,
-  AnyElement,
+import {
+  type MyElement,
+  type NotebookValue,
+  type AnyElement,
+  ELEMENT_TAB,
 } from '@decipad/editor-types';
 import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
@@ -70,7 +70,24 @@ export class BlockProcessor {
     };
   }
 
+  /**
+   * In some situations, we will end up parsing blocks that are references,
+   * but references to blocks that aren't defined yet.
+   *
+   * By parsing the first time around twice, we define all the values first.
+   * And then we the reference errors disappear because everything is nice a
+   * and defined already.
+   */
   public async DoublePass() {
+    //
+    // Start by re-setting the DirtyBlockSets
+    //
+    // At this point some editor changes could have happened already,
+    // such as any normalizations. We don't want that to mess with our
+    // first passes.
+    //
+
+    this.DirtyBlocksSet.clear();
     this.SetAllBlocksDirty();
 
     let wholeProgram = await editorToProgram(
@@ -98,7 +115,11 @@ export class BlockProcessor {
 
   public SetAllBlocksDirty() {
     for (const _tab of this.rootEditor.children.slice(1)) {
-      const tab = _tab as TabElement;
+      const tab = _tab as AnyElement;
+      if (tab.type !== ELEMENT_TAB) {
+        continue;
+      }
+
       for (const block of tab.children) {
         this.DirtyBlocksSet.set(block.id, block);
       }

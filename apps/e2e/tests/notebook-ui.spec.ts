@@ -50,6 +50,7 @@ test('notebook actions topbar @notebook', async ({ testUser }) => {
 test('notebook icon @notebook', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await testUser.importNotebook(notebookSource);
+  await testUser.notebook.waitForEditorToLoad();
   await notebook.checkNotebookTitle('Number Catalog Test');
   await notebook.checkDefaultIcon();
 
@@ -121,6 +122,7 @@ test('sidebar in publish views @sidebar', async ({
 test('number catalog snapshot @sidebar', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await testUser.importNotebook(notebookSource);
+  await testUser.notebook.waitForEditorToLoad();
   await notebook.checkNotebookTitle('Number Catalog Test');
   await notebook.openNumberCatalog();
 

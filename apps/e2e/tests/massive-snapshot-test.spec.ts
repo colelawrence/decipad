@@ -24,6 +24,7 @@ test('Loading and snapshot of big notebook darkmode', async ({ testUser }) => {
       notebookSource,
       testUser.workspace.baseWorkspaceID
     );
+    testUser.notebook.waitForEditorToLoad();
   });
 
   await test.step('navigates to notebook and loads it', async () => {
@@ -70,6 +71,7 @@ test('Loading and snapshot of big notebook', async ({
       notebookSource,
       testUser.workspace.baseWorkspaceID
     );
+    testUser.notebook.waitForEditorToLoad();
   });
 
   await test.step('navigates to notebook and loads it', async () => {
