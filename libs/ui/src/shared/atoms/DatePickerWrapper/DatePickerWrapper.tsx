@@ -61,7 +61,10 @@ export const DatePickerWrapper = ({
    */
   return (
     <>
-      <div css={{ position: customInput ? undefined : 'absolute' }}>
+      <div
+        css={{ position: customInput ? undefined : 'absolute' }}
+        data-tesid="date-picker"
+      >
         <DatePicker
           open={open}
           dateFormat={dateFormat || 'yyyy-MM-dd'}

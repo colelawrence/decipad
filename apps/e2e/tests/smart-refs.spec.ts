@@ -1,6 +1,5 @@
 import { expect, test } from './manager/decipad-tests';
 import { createCalculationBlockBelow } from '../utils/page/Block';
-import { keyPress } from '../utils/page/Editor';
 import { createTable } from '../utils/page/Table';
 import { cleanText } from '../utils/src';
 
@@ -71,13 +70,13 @@ test('Deleting SmartRefs', async ({ testUser }) => {
       1
     );
 
-    await keyPress(page, 'Backspace'); // space
-    await keyPress(page, 'Backspace'); // select smart ref
+    await page.keyboard.press('Backspace'); // space
+    await page.keyboard.press('Backspace'); // select smart ref
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       1
     );
 
-    await keyPress(page, 'Backspace'); // delete smart ref
+    await page.keyboard.press('Backspace'); // delete smart ref
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       0
     );
@@ -85,23 +84,23 @@ test('Deleting SmartRefs', async ({ testUser }) => {
 
   await test.step('selects, then deletes smart ref on Delete', async () => {
     await createCalculationBlockBelow(page, 'var2 = 10');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await createCalculationBlockBelow(page, 'var2 ');
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       1
     );
 
-    await keyPress(page, 'ArrowUp');
-    await keyPress(page, 'ArrowRight'); // we're now at the start of the line
-    await keyPress(page, 'Delete'); // select smart ref
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowRight'); // we're now at the start of the line
+    await page.keyboard.press('Delete'); // select smart ref
 
     await expect(
       page.locator('span[data-slate-node="element"]'),
       'smart ref was deleted'
     ).toHaveCount(1);
 
-    await keyPress(page, 'Backspace');
-    await keyPress(page, 'Backspace');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.press('Backspace');
 
     await expect(
       page.locator('span[data-slate-node="element"]'),

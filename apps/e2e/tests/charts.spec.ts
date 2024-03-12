@@ -1,30 +1,12 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { test, expect } from './manager/decipad-tests';
-import { BrowserContext, Page } from '@playwright/test';
-import {
-  focusOnBody,
-  setUp,
-  editorTitleLocator,
-  navigateToNotebook,
-  waitForEditorToLoad,
-  waitForNotebookToLoad,
-} from '../utils/page/Editor';
+import { test, expect, Page } from './manager/decipad-tests';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
-import {
-  snapshot,
-  Timeouts,
-  createWorkspace,
-  importNotebook,
-  withTestUser,
-} from '../utils/src';
+import { snapshot, Timeouts } from '../utils/src';
 
-import stringify from 'json-stringify-safe';
 import notebookSource from '../__fixtures__/002-notebook-charts.json';
 
-test('Charts', async ({ testUser: { page } }) => {
+test('Charts', async ({ testUser: { page, notebook } }) => {
   await test.step('creates table', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createTable(page);
   });
 
@@ -120,103 +102,49 @@ test('Charts', async ({ testUser: { page } }) => {
   });
 });
 
-test.describe('Loading and snapshot of notebook with charts', () => {
-  test.describe.configure({ mode: 'serial' });
+test('check notebook with charts', async ({
+  testUser,
+  anotherTestUser,
+  unregisteredUser,
+}) => {
+  test.slow();
+  const notebookId = await testUser.importNotebook(notebookSource);
 
-  let publishedNotebookPage: Page;
-  let notebookId: string;
-  let workspaceId: string;
-  let page: Page;
-  let context: BrowserContext;
-  let incognito: BrowserContext;
-  let randomUser: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-    incognito = await browser.newContext();
-    randomUser = await browser.newContext();
-    incognito.clearCookies();
-
-    await setUp({ page, context });
-    workspaceId = await createWorkspace(page);
-    notebookId = await importNotebook(
-      workspaceId,
-      Buffer.from(stringify(notebookSource), 'utf-8').toString('base64'),
-      page
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('navigates to notebook and loads it', async () => {
-    await navigateToNotebook(page, notebookId);
-    // some time for the notebook to render
-    await waitForEditorToLoad(page);
-    await expect(page.locator(editorTitleLocator())).toHaveText(
+  await test.step('navigates to notebook and loads it', async () => {
+    await testUser.importNotebook(notebookSource);
+    await testUser.navigateToNotebook(notebookId);
+    await testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.checkNotebookTitle(
       'Testing Visual Regression Charts'
     );
 
-    await page.getByText('Start Test Here').waitFor();
-
-    await page.isVisible('[data-testid="chart-styles"]');
+    await testUser.page.getByText('Start Test Here').waitFor();
+    await testUser.page.isVisible('[data-testid="chart-styles"]');
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-    await snapshot(page as Page, 'Notebook: Charts');
+    await testUser.page.waitForTimeout(Timeouts.chartsDelay);
+    await snapshot(testUser.page as Page, 'Notebook: Charts');
+    await testUser.notebook.publishNotebook();
   });
 
-  test('click publish button and extract text', async () => {
-    await page.getByRole('button', { name: 'Share' }).click();
-
-    await page.getByTestId('publish-tab').click();
-    await page.getByTestId('publish-dropdown').click();
-    await page.getByTestId('publish-public').click();
-    await page.getByTestId('publish-changes').click();
-
-    await page.getByTestId('copy-published-link').waitFor();
+  await test.step('a random user can duplicate', async () => {
+    await anotherTestUser.navigateToNotebook(notebookId);
+    await anotherTestUser.page.getByText('Duplicate notebook').click();
+    await anotherTestUser.notebook.waitForEditorToLoad();
+    await anotherTestUser.notebook.checkNotebookTitle(
+      'Copy of Testing Visual Regression Charts'
+    );
   });
 
-  // eslint-disable-next-line playwright/no-skipped-test
-  test('navigates to published notebook link', async () => {
-    await page.getByTestId('copy-published-link').waitFor();
-
-    publishedNotebookPage = await randomUser.newPage();
-    await withTestUser({ context: randomUser, page: publishedNotebookPage });
-
-    await navigateToNotebook(publishedNotebookPage, notebookId);
-
-    await waitForNotebookToLoad(publishedNotebookPage);
-    // make sure screenshot is captured
-    expect(publishedNotebookPage).toBeDefined();
-  });
-
-  // eslint-disable-next-line playwright/no-skipped-test
-  test('a random user can duplicate', async () => {
-    await publishedNotebookPage.getByText('Duplicate notebook').click();
-
-    await waitForNotebookToLoad(publishedNotebookPage);
-    await publishedNotebookPage
-      .getByText('Testing Visual Regression Charts')
-      .waitFor();
-  });
-
-  // TODO: ENG-1891 fix this test
-  // eslint-disable-next-line playwright/no-skipped-test
-  test('navigates to published notebook link incognito', async () => {
-    publishedNotebookPage = (await incognito.newPage()) as Page;
-
-    await navigateToNotebook(publishedNotebookPage, notebookId);
-    await waitForNotebookToLoad(publishedNotebookPage);
-    // make sure screenshot is captured
-    expect(publishedNotebookPage).toBeDefined();
+  await test.step('logged out user can check out charts', async () => {
+    await unregisteredUser.navigateToNotebook(notebookId);
+    await unregisteredUser.notebook.waitForEditorToLoad();
 
     // wait for charts to load before snapshot
-    await page.isVisible('[data-testid="chart-styles"]');
+    await unregisteredUser.page.isVisible('[data-testid="chart-styles"]');
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
+    await unregisteredUser.page.waitForTimeout(Timeouts.chartsDelay);
     await snapshot(
-      publishedNotebookPage,
+      unregisteredUser.page,
       'Notebook: Charts Published mode (incognito)',
       {
         mobile: true,

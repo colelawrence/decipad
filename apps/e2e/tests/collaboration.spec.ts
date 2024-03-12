@@ -1,100 +1,125 @@
-import { BrowserContext, Page, expect, test } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
-import { withTestUser } from '../utils/src';
+import { expect, test } from './manager/decipad-tests';
 
-test.describe('Make sure collaboration works', () => {
-  let page1: Page;
-  let context1: BrowserContext;
-  let context2: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    test.setTimeout(120_000);
-    [context1, context2] = await Promise.all([
-      browser.newContext(),
-      browser.newContext(),
-    ]);
+let teamWorkspaceURL: string;
+test.beforeAll(async ({ testUser }) => {
+  await testUser.goToWorkspace();
+  await testUser.workspace.newWorkspaceWithPlan('team');
+  teamWorkspaceURL = testUser.page.url();
+});
 
-    page1 = await context1.newPage();
+test('check notebooks stay private for other logged in users', async ({
+  anotherTestUser,
+  testUser,
+}) => {
+  await testUser.page.goto(teamWorkspaceURL);
+  await testUser.workspace.createNewNotebook();
+  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.waitForEditorToLoad();
+  const notebookURL = testUser.page.url();
 
-    await setUp(
-      { page: page1, context: context1 },
-      {
-        createAndNavigateToNewPad: true,
-        // Needs `team` in the name to be allowed to invite to notebook.
-        workspaceName: '@n1n.co team',
-      }
-    );
+  await test.step('Check user cannot access notebook they do not have permission to', async () => {
+    await anotherTestUser.page.goto(notebookURL);
+    await expect(
+      anotherTestUser.page.getByText(
+        "You don't have permissions to access this page"
+      )
+    ).toBeVisible();
+    await anotherTestUser.page.close();
   });
+});
 
-  test.afterEach(async () => {
-    page1.close();
-  });
+test('check inviting readers stay in reading mode', async ({
+  testUser,
+  anotherTestUser,
+}) => {
+  await testUser.page.goto(teamWorkspaceURL);
+  await testUser.workspace.createNewNotebook();
+  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.waitForEditorToLoad();
+  const notebookURL = testUser.page.url();
 
-  test('Check user cannot access notebook they do not have permission to', async () => {
-    context2.clearCookies();
-    const page2 = await context2.newPage();
-    await page2.goto(page1.url());
-
-    const element = page2.getByText(
-      "You don't have permissions to access this page"
-    );
-    page2.close();
-    expect(!!element).toBeTruthy();
-  });
-
-  test('Invite another user to notepad with readonly', async () => {
-    context2.clearCookies();
-    const page2 = await context2.newPage();
-    const testUser2 = await withTestUser({ context: context2, page: page2 });
-    await page1.getByTestId('publish-button').click();
-    await page1.getByPlaceholder('Enter email address').fill(testUser2.email);
-    await page1.keyboard.press('Tab');
-    await page1.keyboard.press('Enter');
-    await page1
+  await test.step('Invite another user to notepad with readonly', async () => {
+    await testUser.notebook.openPublishingSidebar();
+    await testUser.page
+      .getByPlaceholder('Enter email address')
+      .fill(anotherTestUser.email);
+    await testUser.page.keyboard.press('Tab');
+    await testUser.page.keyboard.press('Enter');
+    await testUser.page
       .getByText('Notebook readerCan read and interact only with this notebook')
       .click();
-    await page1.getByTestId('send-invitation').click();
+    await testUser.page.getByTestId('send-invitation').click();
 
     // check test user two has read permissions only
-    await page2.goto(page1.url());
-    const readOnlyElement = page2.getByText('You are in reading mode');
-    const titleElementPage1 = page1.getByTestId('editor-title');
-    const titleElementPage2 = page2.getByTestId('editor-title');
+    await anotherTestUser.page.goto(notebookURL);
+    await expect(
+      anotherTestUser.page.getByText('You are in reading mode')
+    ).toBeVisible();
+
+    const titleElementPage1 = testUser.page.getByTestId('editor-title');
+    const titleElementPage2 = anotherTestUser.page.getByTestId('editor-title');
     const page1Text = await titleElementPage1.textContent();
     const page2Text = await titleElementPage2.textContent();
-    const title2IsEditable = await titleElementPage2.evaluate(
-      (e: HTMLElement) => e.isContentEditable
-    );
-    page2.close();
-
-    expect(!!readOnlyElement).toBeTruthy();
     expect(page1Text).toEqual(page2Text);
-    expect(title2IsEditable).toBeFalsy();
+
+    expect(
+      await anotherTestUser.page
+        .getByTestId('editor-title')
+        .evaluate((e: HTMLElement) => e.isContentEditable)
+    ).toBeFalsy();
+  });
+});
+
+test('check invited collaborators can edit notebook', async ({
+  testUser,
+  anotherTestUser,
+}) => {
+  await testUser.page.goto(teamWorkspaceURL);
+  await testUser.workspace.createNewNotebook();
+  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.waitForEditorToLoad();
+  const notebookURL = testUser.page.url();
+
+  await test.step('Invite another user to notepad as contributor', async () => {
+    await testUser.notebook.openPublishingSidebar();
+    await testUser.page
+      .getByPlaceholder('Enter email address')
+      .fill(anotherTestUser.email);
+    await testUser.page.getByPlaceholder('Enter email address').focus();
+    await testUser.page.getByTestId('send-invitation').click();
+
+    await anotherTestUser.page.goto(notebookURL);
+    await anotherTestUser.aiAssistant.closePannel();
+    await anotherTestUser.notebook.waitForEditorToLoad();
+
+    expect(
+      await anotherTestUser.page
+        .getByTestId('editor-title')
+        .evaluate((e: HTMLElement) => e.isContentEditable)
+    ).toBeTruthy();
   });
 
-  test('Invite another user to notepad as contributor', async () => {
-    context2.clearCookies();
-    const page2 = await context2.newPage();
-    const testUser2 = await withTestUser({ context: context2, page: page2 });
-    await page1.getByTestId('publish-button').click();
-    await page1.getByPlaceholder('Enter email address').fill(testUser2.email);
-    await page1.getByPlaceholder('Enter email address').focus();
-    await page1.getByTestId('send-invitation').click();
+  await test.step('check author can see contributor changes', async () => {
+    await anotherTestUser.notebook.focusOnBody();
+    await anotherTestUser.notebook.addParagraph(
+      'Hello, World!, Sent from contributor!'
+    );
 
-    await page2.goto(page1.url());
-    const titleElementPage1 = page1.getByTestId('editor-title');
-    const titleElementPage2 = page2.getByTestId('editor-title');
+    await expect(
+      testUser.page.getByText('Hello, World!, Sent from contributor!')
+    ).toBeVisible();
+
+    const titleElementPage1 = testUser.page.getByTestId('editor-title');
+    const titleElementPage2 = anotherTestUser.page.getByTestId('editor-title');
     const page1Text = await titleElementPage1.textContent();
     const page2Text = await titleElementPage2.textContent();
-    const title2Editable = await titleElementPage2.evaluate(
-      (e: HTMLElement) => e.isContentEditable
-    );
-    await titleElementPage2.focus();
-    await page2.keyboard.press('ArrowDown');
-    await page2.keyboard.insertText('Hello, World! Sent from user 2!');
-    const user2Text = page1.getByText('Hello, World!, Sent from user 2!');
 
     expect(page1Text).toEqual(page2Text);
-    expect(title2Editable).toBeTruthy();
-    expect(!!user2Text).toBeTruthy();
+
+    expect(
+      await anotherTestUser.page
+        .getByTestId('editor-title')
+        .evaluate((e: HTMLElement) => e.isContentEditable)
+    ).toBeTruthy();
   });
 });

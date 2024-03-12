@@ -1,7 +1,4 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { BrowserContext, Page, expect, test } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
+import { expect, test } from './manager/decipad-tests';
 import {
   addColumn,
   clickCell,
@@ -10,32 +7,11 @@ import {
   writeInTable,
 } from '../utils/page/Table';
 import { createCodeLineV2Below } from '../utils/page/Block';
-import { Timeouts, createWorkspace } from '../utils/src';
+import { Timeouts } from '../utils/src';
 
-test.describe('Make sure auto-complete works', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-
-    await createWorkspace(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Creates a table and creates a formula', async () => {
+test('Make sure auto-complete works', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('Creates a table and creates a formula', async () => {
     // Creates a table and fills it
     await createTable(page);
 
@@ -55,7 +31,7 @@ test.describe('Make sure auto-complete works', () => {
     await createCodeLineV2Below(page, 'Revenue', '100');
   });
 
-  test('Checks if the revenue variable is linked properly', async () => {
+  await test.step('Checks if the revenue variable is linked properly', async () => {
     await createCodeLineV2Below(page, 'Another', '');
     await page.getByTestId('codeline-code').last().fill('Revenue');
     await page
@@ -67,7 +43,7 @@ test.describe('Make sure auto-complete works', () => {
     ).toBeVisible();
   });
 
-  test('Enter table formula and checks for proper output', async () => {
+  await test.step('Enter table formula and checks for proper output', async () => {
     await clickCell(page, 1, 2);
     await page.keyboard.press('=');
     await page.getByTestId('code-line').last().fill('Revenue');
@@ -88,7 +64,7 @@ test.describe('Make sure auto-complete works', () => {
     ).toBeVisible();
   });
 
-  test('New table with revenueNew', async () => {
+  await test.step('New table with revenueNew', async () => {
     // Creates a new formula for RevenueNew
     await createCodeLineV2Below(page, 'RevenueNew', '100');
 
@@ -108,7 +84,7 @@ test.describe('Make sure auto-complete works', () => {
     await writeInTable(page, '3', 3, 1, 'Table2');
   });
 
-  test('Tests formulas with RevenueNew table', async () => {
+  await test.step('Tests formulas with RevenueNew table', async () => {
     // Checks sum()
     await clickCell(page, 1, 2, 'Table2');
     await page.keyboard.press('=');

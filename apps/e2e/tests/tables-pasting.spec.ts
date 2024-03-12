@@ -1,7 +1,4 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { focusOnBody, setUp } from '../utils/page/Editor';
+import { expect, test } from './manager/decipad-tests';
 import {
   createTable,
   getFromTable,
@@ -11,34 +8,14 @@ import {
   pastePlainTextIntoCell,
 } from '../utils/page/Table';
 
-test.describe('Table Pasting', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates table', async () => {
-    await focusOnBody(page);
+test('Table Pasting', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await test.step('creates table', async () => {
+    await notebook.focusOnBody();
     await createTable(page);
   });
 
-  test('pastes tabular data starting from header cell', async () => {
+  await test.step('pastes tabular data starting from header cell', async () => {
     await pasteHtmlIntoCell(
       page,
       '<table>' +
@@ -55,7 +32,7 @@ test.describe('Table Pasting', () => {
     expect(await getFromTable(page, 1, 1)).toBe('two');
   });
 
-  test('pastes tabular data starting from data cell', async () => {
+  await test.step('pastes tabular data starting from data cell', async () => {
     await deleteTable(page);
     await createTable(page);
 
@@ -75,7 +52,7 @@ test.describe('Table Pasting', () => {
     expect(await getFromTable(page, 2, 1)).toBe('four');
   });
 
-  test('pastes tabular data into bottom-right corner of table', async () => {
+  await test.step('pastes tabular data into bottom-right corner of table', async () => {
     await deleteTable(page);
     await createTable(page);
 
@@ -95,7 +72,7 @@ test.describe('Table Pasting', () => {
     expect(await getFromTable(page, 4, 3)).toBe('four');
   });
 
-  test('pasting overwrites existing cells', async () => {
+  await test.step('pasting overwrites existing cells', async () => {
     await pasteHtmlIntoCell(
       page,
       '<table>' +
@@ -122,21 +99,21 @@ test.describe('Table Pasting', () => {
     expect(await getFromTable(page, 1, 1)).toBe('d2');
   });
 
-  test('pastes plain text into collapsed cell selection', async () => {
+  await test.step('pastes plain text into collapsed cell selection', async () => {
     await deleteTable(page);
     await createTable(page);
     await pastePlainTextIntoCell(page, 'Hello world', 2, 1);
     expect(await getFromTable(page, 2, 1)).toBe('Hello world');
   });
 
-  test('pastes html text into collapsed cell selection', async () => {
+  await test.step('pastes html text into collapsed cell selection', async () => {
     await deleteTable(page);
     await createTable(page);
     await pasteHtmlIntoCell(page, '<div>Hello world</div>', 2, 1);
     expect(await getFromTable(page, 2, 1)).toBe('Hello world');
   });
 
-  test('pastes plain text into expanded forward cell selection', async () => {
+  await test.step('pastes plain text into expanded forward cell selection', async () => {
     await deleteTable(page);
     await createTable(page);
 
@@ -150,7 +127,7 @@ test.describe('Table Pasting', () => {
     expect(await getFromTable(page, 2, 1)).toBe('Hello world');
   });
 
-  test('pastes plain text into expanded backward cell selection', async () => {
+  await test.step('pastes plain text into expanded backward cell selection', async () => {
     await deleteTable(page);
     await createTable(page);
 

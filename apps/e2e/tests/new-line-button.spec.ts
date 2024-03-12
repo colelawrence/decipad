@@ -1,44 +1,21 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { expect, test } from './manager/decipad-tests';
 import { createCodeLineV2Below } from '../utils/page/Block';
-import { focusOnBody, keyPress, setUp } from '../utils/page/Editor';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
-test.describe('Basic + button to insert new line', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates structured input', async () => {
-    await focusOnBody(page);
+test('Basic + button to insert new line', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await test.step('creates structured input', async () => {
+    await notebook.focusOnBody();
     const lineText = '1 + 1';
     await createCodeLineV2Below(page, 'MyVariable', lineText);
   });
 
-  test('creates table', async () => {
-    await keyPress(page, 'Enter');
+  await test.step('creates table', async () => {
+    await page.keyboard.press('Enter');
     await createTable(page);
   });
 
-  test('fills table', async () => {
+  await test.step('fills table', async () => {
     // first column
     await writeInTable(page, 'Imports', 1, 0);
     expect(await getFromTable(page, 1, 0)).toBe('Imports');
@@ -56,11 +33,11 @@ test.describe('Basic + button to insert new line', () => {
     expect(await getFromTable(page, 3, 1)).toBe('9.32%');
   });
 
-  test('add table row', async () => {
+  await test.step('add table row', async () => {
     await page.getByRole('button', { name: 'Add row' }).click();
   });
 
-  test('press + button after structured input', async () => {
+  await test.step('press + button after structured input', async () => {
     // first column
     await page
       .getByRole('button')
@@ -69,7 +46,7 @@ test.describe('Basic + button to insert new line', () => {
       .click();
   });
 
-  test('press + button after table', async () => {
+  await test.step('press + button after table', async () => {
     // first column
     await page
       .getByRole('button')

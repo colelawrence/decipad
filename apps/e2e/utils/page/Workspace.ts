@@ -67,10 +67,6 @@ function waitForDownload(page: Page): Promise<Buffer> {
   });
 }
 
-export async function clickNewPadButton(page: Page) {
-  await page.getByTestId('new-notebook').click();
-}
-
 export const ellipsisSelector = (n: number): string => {
   return `//main//li >> nth=${n} >> div[type=button] svg`;
 };

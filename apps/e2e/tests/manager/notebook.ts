@@ -780,8 +780,19 @@ export class Notebook {
    * await notebook.addDatePickerWidget();
    * ```
    */
-  async addDatePickerWidget() {
-    this.addBlock('datepicker');
+  async addDatePickerWidget(name?: string) {
+    await this.addBlock('datepicker');
+
+    if (name) {
+      await this.page
+        .locator('[data-testid="widget-caption"] >> text=/Input/')
+        .last()
+        .dblclick();
+
+      await this.page.keyboard.press('Backspace');
+
+      await this.page.keyboard.type(name);
+    }
   }
 
   /**

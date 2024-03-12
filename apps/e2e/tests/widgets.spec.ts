@@ -1,6 +1,6 @@
 /* eslint-disable playwright/valid-describe-callback */
 /* eslint-disable playwright/valid-title */
-import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import {
   clickCell,
   createTable,
@@ -12,28 +12,20 @@ import {
 import {
   createDropdownBelow,
   createToggleBelow,
-  createDateBelow,
   createSliderBelow,
   createCalculationBlockBelow,
   createResultBelow,
 } from '../utils/page/Block';
 
-import {
-  setUp,
-  focusOnBody,
-  keyPress,
-  waitForEditorToLoad,
-  waitForNotebookToLoad,
-  ControlPlus,
-} from '../utils/page/Editor';
+import { ControlPlus } from '../utils/page/Editor';
 
 import { Timeouts } from '../utils/src';
 
 test('toggle Widget', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
 
   await test.step('can create a toggle', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createToggleBelow(page, 'Input2');
     await page.keyboard.press('ArrowRight');
     await expect(page.getByText('Input2')).toBeVisible();
@@ -62,13 +54,11 @@ test('toggle Widget', async ({ testUser }) => {
   });
 });
 
-test('Date Widget', async ({ testUser }) => {
-  const { page } = testUser;
-  await keyPress(page, 'ArrowDown');
-  await createDateBelow(page, 'Input3');
-
-  await page.getByTestId('widget-input').click();
-  await page.getByText('Today').click();
+test('date widget + date widget read mode', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  let sharedPageLocation: string | null;
 
   const today = new Date();
 
@@ -77,87 +67,46 @@ test('Date Widget', async ({ testUser }) => {
   const day = String(today.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
 
-  await expect(page.getByTestId('widget-input')).toContainText(formattedDate);
-});
+  await test.step('publish notebook with date widget', async () => {
+    await testUser.notebook.addDatePickerWidget('Input3');
 
-test.describe('date widget read mode', () => {
-  test.describe.configure({ mode: 'serial' });
+    await testUser.page.getByTestId('widget-input').click();
+    await testUser.page.getByText('Today').click();
 
-  let sharedPageLocation: string | null;
-  let page: Page;
-  let context: BrowserContext;
-  let incognito: BrowserContext;
-  let incognitoPage: Page;
-  let formattedDate: string;
+    await expect(
+      testUser.page.getByTestId('date-picker'),
+      'data picker didnt close after selecting today'
+    ).toBeHidden();
+    await expect(
+      testUser.page.getByTestId('widget-input'),
+      'date widget doesnt display todays date after selecting today from the picker'
+    ).toContainText(formattedDate);
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp({ page, context });
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('adds date widget', async () => {
-    await createDateBelow(page, 'Input3');
-
-    await page.getByTestId('widget-input').click();
-    await page.getByText('Today').click();
-
-    const today = new Date();
-
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    formattedDate = `${year}-${month}-${day}`;
-
-    await expect(page.getByTestId('widget-input')).toContainText(formattedDate);
-  });
-
-  test('publish notebook', async () => {
-    await page.getByTestId('publish-button').click();
-    await page.getByTestId('publish-tab').click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-
-    await page.getByTestId('publish-dropdown').click();
-    await page.getByTestId('publish-public').click();
-    await page.getByTestId('publish-changes').click();
-
-    await page.getByTestId('copy-published-link').click();
-    sharedPageLocation = (
-      (await page.evaluate('navigator.clipboard.readText()')) as string
-    ).toString();
+    sharedPageLocation = await testUser.notebook.publishNotebook();
     expect(sharedPageLocation).toContain('Welcome-to-Decipad');
   });
 
-  test('[incognito] navigates to published notebook and updates date widget', async ({
-    browser,
-  }) => {
-    incognito = await browser.newContext();
-    incognitoPage = await incognito.newPage();
-    await incognitoPage.goto(sharedPageLocation!);
-    await waitForNotebookToLoad(incognitoPage);
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-    await incognitoPage.getByTestId('widget-input').click();
-    await incognitoPage.locator('text=Today').click();
-    await expect(incognitoPage.getByTestId('widget-input')).toContainText(
-      formattedDate
-    );
+  await test.step('[incognito] navigates to published notebook and updates date widget', async () => {
+    await unregisteredUser.page.goto(sharedPageLocation!);
+    await unregisteredUser.notebook.waitForEditorToLoad();
+    await unregisteredUser.page.getByTestId('widget-input').click();
+    await unregisteredUser.page.locator('text=Today').click();
+    await expect(
+      unregisteredUser.page.getByTestId('date-picker'),
+      'data picker didnt close after selecting today'
+    ).toBeHidden();
+    await expect(
+      unregisteredUser.page.getByTestId('widget-input'),
+      'date widget doesnt display todays date after selecting today from the picker'
+    ).toContainText(formattedDate);
   });
 });
 
 test('slider Widget', async ({ testUser }) => {
   const { page } = testUser;
-  await keyPress(page, 'ArrowDown');
   await createSliderBelow(page, 'Input3', '$5 per hotdog');
   await page.getByRole('slider').click();
-  await keyPress(page, 'ArrowRight');
+  await page.keyboard.press('ArrowRight');
   await expect(page.getByTestId('widget-input')).toContainText('$6 per hotdog');
 });
 
@@ -374,14 +323,14 @@ test('dropdown widget', async ({ randomFreeUser }) => {
 });
 
 test('result widget', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('creates an empty result widget', async () => {
     await createResultBelow(page);
     await expect(page.getByText('Result')).toHaveCount(1);
   });
 
   await test.step('shows the available calculations', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createCalculationBlockBelow(page, 'Hello = 5 + 1');
     await createCalculationBlockBelow(page, 'World = 5 + 3');
 

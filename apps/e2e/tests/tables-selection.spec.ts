@@ -1,7 +1,5 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { ControlPlus, focusOnBody, setUp } from '../utils/page/Editor';
+import { expect, test } from './manager/decipad-tests';
+import { ControlPlus } from '../utils/page/Editor';
 import {
   createTable,
   clickCell,
@@ -15,32 +13,13 @@ import {
 } from '../utils/page/Table';
 import { Timeouts } from '../utils/src';
 
-test.describe('Table Selection', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Table Selection', async ({ testUser }) => {
+  const { page, notebook } = testUser;
 
-  let page: Page;
-  let context: BrowserContext;
+  await notebook.focusOnBody();
+  await createTable(page);
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-
-    await focusOnBody(page);
-    await createTable(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('selects using arrow keys', async () => {
+  await test.step('selects using arrow keys', async () => {
     /**
      * +-+-+-+
      * | | | | 1
@@ -92,7 +71,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using shift + arrow keys', async () => {
+  await test.step('selects using shift + arrow keys', async () => {
     /**
      * +-+-+-+
      * | | | | 1
@@ -172,7 +151,7 @@ test.describe('Table Selection', () => {
     });
   });
 
-  test('selects with shift + click', async () => {
+  await test.step('selects with shift + click', async () => {
     /**
      * +-+-+-+
      * | | | | 1
@@ -211,7 +190,7 @@ test.describe('Table Selection', () => {
     });
   });
 
-  test('selects with click + drag', async () => {
+  await test.step('selects with click + drag', async () => {
     /**
      * +-+-+-+
      * | |A|.| 1
@@ -233,7 +212,7 @@ test.describe('Table Selection', () => {
     });
   });
 
-  test('selects all', async () => {
+  await test.step('selects all', async () => {
     await writeInTable(page, 'x', 1, 2);
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -280,7 +259,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('starts editing on type', async () => {
+  await test.step('starts editing on type', async () => {
     await writeInTable(page, 'Initial value', 2, 1);
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -319,7 +298,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using tab while editing', async () => {
+  await test.step('selects using tab while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -333,7 +312,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using shift + tab while editing', async () => {
+  await test.step('selects using shift + tab while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -349,7 +328,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using tab while not editing', async () => {
+  await test.step('selects using tab while not editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await clickCell(page, 1, 1);
@@ -361,7 +340,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using enter while editing', async () => {
+  await test.step('selects using enter while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -375,7 +354,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using shift + enter while editing', async () => {
+  await test.step('selects using shift + enter while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -391,7 +370,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using arrow up while editing', async () => {
+  await test.step('selects using arrow up while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -405,7 +384,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using arrow down while editing', async () => {
+  await test.step('selects using arrow down while editing', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 2, 1);
@@ -419,7 +398,7 @@ test.describe('Table Selection', () => {
     }).toPass();
   });
 
-  test('selects using arrow down while editing on the last row', async () => {
+  await test.step('selects using arrow down while editing on the last row', async () => {
     await deleteTable(page);
     await createTable(page);
     await doubleClickCell(page, 3, 1);
