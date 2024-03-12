@@ -13242,11 +13242,6 @@
   resolved "https://registry.yarnpkg.com/@types/boom/-/boom-7.3.2.tgz#6269480d11098c26cfbfca5059403902a530847a"
   integrity sha512-W8+6CANZz/BmgzATboKXvEDtO3SHSj86omcU/2pMCkUQhqhgucB8sgcmdRadXDEvXFRiRhME0rcyj1GIj3LC9w==
 
-"@types/clone@~2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@types/clone/-/clone-2.1.1.tgz#9b880d0ce9b1f209b5e0bd6d9caa38209db34024"
-  integrity sha512-BZIU34bSYye0j/BFcPraiDZ5ka6MJADjcDVELGf7glr9K+iE8NYVjFslJFVWzskSxkLLyCrSPScE82/UUoBSvg==
-
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@types/connect-history-api-fallback/-/connect-history-api-fallback-1.5.4.tgz#7de71645a103056b48ac3ce07b3520b819c1d5b3"
@@ -16353,10 +16348,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1574.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1574.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1574.0.tgz#8dd0df463c417410170da2b6164c63e0a3cd47f2"
-  integrity sha512-AC3VptGeggp7AFGj66PIt9GrnLyDBo7Owb5TmbGDe2OIvgeHH3nBD4S3wRZQ9u3Ea6iREnalXxQ2n5rflCeG9g==
+aws-sdk@2.1575.0:
+  version "2.1575.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1575.0.tgz#3ccf2d0192a26d61ffa008ffb036a23c38b1dce1"
+  integrity sha512-q33w5NN057CYOdcbxpKAgrb7CUSPrtPBxGGzgIo44y1Fi1iEXDawMYcahu5cwSfD6NFzvZkPz2a5Eo1Fu3Az8A==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -16383,6 +16378,22 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
+
+aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1574.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1574.0.tgz#8dd0df463c417410170da2b6164c63e0a3cd47f2"
+  integrity sha512-AC3VptGeggp7AFGj66PIt9GrnLyDBo7Owb5TmbGDe2OIvgeHH3nBD4S3wRZQ9u3Ea6iREnalXxQ2n5rflCeG9g==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.16.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    util "^0.12.4"
+    uuid "8.0.0"
+    xml2js "0.6.2"
 
 aws4@^1.11.0, aws4@^1.12.0:
   version "1.12.0"
@@ -17976,11 +17987,6 @@ clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==
-
-clone@~2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
-  integrity sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==
 
 clsx@2.0.0:
   version "2.0.0"
@@ -21616,7 +21622,7 @@ fast-decode-uri-component@^1.0.1:
   resolved "https://registry.yarnpkg.com/fast-decode-uri-component/-/fast-decode-uri-component-1.0.1.tgz#46f8b6c22b30ff7a81357d4f59abfae938202543"
   integrity sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==
 
-fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3, fast-deep-equal@~3.1.3:
+fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
@@ -21670,7 +21676,7 @@ fast-json-patch@^3.1.1:
   resolved "https://registry.yarnpkg.com/fast-json-patch/-/fast-json-patch-3.1.1.tgz#85064ea1b1ebf97a3f7ad01e23f9337e72c66947"
   integrity sha512-vf6IHUX2SBcA+5/+4883dsIjpBTqmfBjmYiWK1savxQmFk4JfBMLa7ynTYOs1Rolp/T1betJxHiGD3g1Mn8lUQ==
 
-fast-json-stable-stringify@^2.0.0, fast-json-stable-stringify@^2.1.0, fast-json-stable-stringify@~2.1.0:
+fast-json-stable-stringify@^2.0.0, fast-json-stable-stringify@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz#874bf69c6f404c2b5d99c481341399fd55892633"
   integrity sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==
@@ -36344,7 +36350,7 @@ tslib@^1.11.1, tslib@^1.13.0, tslib@^1.8.1, tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.4.1, tslib@^2.5.0, tslib@^2.6.0, tslib@~2.6.0:
+tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.4.1, tslib@^2.5.0, tslib@^2.6.0, tslib@~2.6.0, tslib@~2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
@@ -37606,17 +37612,13 @@ vega-label@~1.2.1:
     vega-scenegraph "^4.9.2"
     vega-util "^1.15.2"
 
-vega-lite@5.14.1:
-  version "5.14.1"
-  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.14.1.tgz#02177cb04af85c7011ab302a441d17e0bb6ac810"
-  integrity sha512-VFvi0QtUoLQqwfAXTGjo0Acw/OTjiK3zOrcO/HyksGnnNDBHWM1GTcFryiWZYoAi99ehvv7tI/q94O46+fGRSQ==
+vega-lite@5.17.0:
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.17.0.tgz#3aab2a441a5d80e51af025e0b4fc8eb097ec1056"
+  integrity sha512-PPm1HRdDFDdl2fga3cHm3lHjJV/xcB+Cn77xe7Av1yRLY1GMbPaJS42s+e7XHGmbeDee+H/KK9lUdQK28xs7nA==
   dependencies:
-    "@types/clone" "~2.1.1"
-    clone "~2.1.2"
-    fast-deep-equal "~3.1.3"
-    fast-json-stable-stringify "~2.1.0"
     json-stringify-pretty-compact "~3.0.0"
-    tslib "~2.5.0"
+    tslib "~2.6.2"
     vega-event-selector "~3.0.1"
     vega-expression "~5.1.0"
     vega-util "~1.17.2"

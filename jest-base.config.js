@@ -30,6 +30,7 @@ module.exports = {
 
   setupFilesAfterEnv: [
     require.resolve('./libs/testutils/src/serialize-big-int.js'),
+    require.resolve('./libs/testutils/src/structured-clone.js'),
     require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
     require.resolve('./libs/testutils/src/suppress-console-warnings.js'),
   ],
