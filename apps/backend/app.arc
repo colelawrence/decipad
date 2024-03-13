@@ -61,6 +61,7 @@ post /api/ai/feedback
 any /api/image/generate
 any /api/image/gif
 any /api/image/stock
+any /api/image/unsplash/tracking
 
 # Server-side rendering
 # get /n/:notebookid

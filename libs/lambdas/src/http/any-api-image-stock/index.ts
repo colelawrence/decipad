@@ -14,6 +14,9 @@ interface UnsplashImage {
   urls: {
     small: string;
   };
+  links: {
+    download_location: string;
+  };
   user: {
     name: string;
     links: {
@@ -21,7 +24,6 @@ interface UnsplashImage {
     };
   };
 }
-
 export const handler = handle(async (event) => {
   await expectAuthenticated(event);
 
@@ -58,7 +60,8 @@ export const handler = handle(async (event) => {
     images = response.data.results.map((img: UnsplashImage) => ({
       url: img.urls.small,
       user: img.user.name,
-      userProfile: img.user.links.html,
+      userProfile: `${img.user.links.html}?utm_source=decipad&utm_medium=referral`,
+      trackUrl: img.links.download_location,
     }));
   } catch (error) {
     throw Boom.internal('Error fetching images', error);

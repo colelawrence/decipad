@@ -1,6 +1,7 @@
 import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
+import axios from 'axios';
 import {
   Close,
   Giphy,
@@ -128,8 +129,12 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-
-  const insertFromPreview = (url: string) => {
+  const insertFromPreview = (url: string, trackerUrl?: string) => {
+    if (trackerUrl) {
+      axios.post(`/api/image/unsplash/tracking`, {
+        url: trackerUrl,
+      });
+    }
     onUpload(url, 'link');
   };
 

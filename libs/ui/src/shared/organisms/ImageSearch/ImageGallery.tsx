@@ -1,23 +1,25 @@
 import { css } from '@emotion/react';
+import { Giphy, Replicate, Unsplash } from 'libs/ui/src/icons';
 import { p12Regular, p13Medium, smallestDesktop } from 'libs/ui/src/primitives';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 import React from 'react';
 import { Link } from '../../atoms';
 import { ImageDisplay } from './ImageDisplay';
 import { PreloadedImageDisplay } from './PreloadedImageDisplay';
-import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 
 export type ImageUrlWithMetadata = {
   url: string;
   user: string;
   userProfile: string;
+  trackUrl: string;
 };
 
 export interface ImageGalleryProps {
   imageUrls?: string[] | ImageUrlWithMetadata[];
   loading: boolean;
   count: number;
-  apiSource: string;
-  insertFromPreview: (url: string, type: 'api' | 'ai') => void;
+  apiSource: 'replicate' | 'giphy' | 'unsplash';
+  insertFromPreview: (url: string, trackUrl?: string) => void;
 }
 
 const galleryStyle = css`
@@ -67,6 +69,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
             const src = hasMetadata ? item.url : item;
             const author = hasMetadata ? item.user : undefined;
             const authorUrl = hasMetadata ? item.userProfile : undefined;
+            const trackUrl = hasMetadata ? item.trackUrl : undefined;
             const alt = hasMetadata
               ? `Image from ${apiSource}`
               : `Image by ${author} on ${apiSource}`;
@@ -78,6 +81,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
                 author={author}
                 authorUrl={authorUrl}
                 alt={alt}
+                trackUrl={trackUrl}
               />
             );
           })
@@ -85,10 +89,22 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
     </div>
     {imageUrls && imageUrls.length > 0 && (
       <div css={poweredByStyles}>
-        Powered by <Link href={`https://${apiSource}.com`}>{apiSource}</Link>
+        Powered by{' '}
+        {apiSource === 'replicate' ? (
+          <Replicate />
+        ) : apiSource === 'giphy' ? (
+          <Giphy />
+        ) : (
+          <Unsplash />
+        )}
+        <Link href={`https://${apiSource}.com`}>{apiSource}</Link>
       </div>
     )}
   </div>
 );
 
-const poweredByStyles = css(p13Medium, { marginLeft: 6 });
+const poweredByStyles = css(
+  p13Medium,
+  { marginLeft: 6, display: 'flex', flexDirection: 'row', gap: 8 },
+  { svg: { width: 12, height: 12 } }
+);

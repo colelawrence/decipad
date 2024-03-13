@@ -11,7 +11,7 @@ import SearchForm from './SearchForm';
 type ApiSource = 'giphy' | 'unsplash' | 'replicate';
 
 type ImageSearchProps = {
-  insertFromPreview: (url: string, type: 'api' | 'ai') => void;
+  insertFromPreview: (url: string, trackerUrl?: string) => void;
   apiSource: ApiSource;
   apiKey?: string;
   beans?: string[];

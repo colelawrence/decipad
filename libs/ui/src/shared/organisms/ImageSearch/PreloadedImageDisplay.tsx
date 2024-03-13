@@ -14,6 +14,7 @@ export const PreloadedImageDisplay: FC<PreloadedImageDisplayProps> = ({
   alt,
   author,
   authorUrl,
+  trackUrl,
   insertFromPreview,
 }) => {
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
@@ -40,6 +41,7 @@ export const PreloadedImageDisplay: FC<PreloadedImageDisplayProps> = ({
         src={loadedSrc || undefined}
         alt={alt}
         insertFromPreview={insertFromPreview}
+        trackUrl={trackUrl}
         author={
           author && authorUrl ? (
             <div css={p13Medium}>

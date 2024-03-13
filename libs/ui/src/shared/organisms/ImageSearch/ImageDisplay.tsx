@@ -19,13 +19,15 @@ export type ImageDisplayProps = {
   src?: string;
   alt: string;
   author?: ReactNode;
-  insertFromPreview: (url: string, type: 'api' | 'ai') => void;
+  trackUrl?: string;
+  insertFromPreview: (url: string, trackerUrl?: string) => void;
 };
 
 export const ImageDisplay: React.FC<ImageDisplayProps> = ({
   src,
   alt,
   author,
+  trackUrl,
   insertFromPreview,
 }) => {
   const imageDisplayWrapperStyle = css({
@@ -42,17 +44,10 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
     },
   });
 
-  const imageStyle = css({
-    display: 'block',
-    width: '100%',
-    maxHeight: '100%',
-    objectFit: 'cover',
-  });
-
   return (
     <div
       css={imageDisplayWrapperStyle}
-      onClick={() => src && insertFromPreview(src, 'api')}
+      onClick={() => src && insertFromPreview(src, trackUrl)}
     >
       {src ? (
         <>
@@ -67,3 +62,10 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
 };
 
 const authorWrapStyle = css({ marginTop: 4 });
+
+const imageStyle = css({
+  display: 'block',
+  width: '100%',
+  maxHeight: '100%',
+  objectFit: 'cover',
+});
