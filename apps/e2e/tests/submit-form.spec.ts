@@ -79,57 +79,62 @@ async function stopServer(server: Server) {
   });
 }
 test('redirect to workspace if authenticated and can logout @forms', async ({
-  testUser,
+  randomFreeUser,
 }) => {
+  const { page, notebook, workspace } = randomFreeUser;
   const server = await startServer();
-  const notebookURL = testUser.page.url();
   const webhookName = 'localhostWebhook';
   const weebookEmail = 'simao@n1n.co';
   const sliderName = 'TestSlider';
   const originalSliderValue = '5';
   const newSliderValue = '6';
 
-  await test.step('adds submit form to a notebook', async () => {
-    await createSliderBelow(testUser.page, sliderName, originalSliderValue);
-    await testUser.notebook.addBlock('submit-form');
+  await workspace.newWorkspaceWithPlan('team');
+  await workspace.createNewNotebook();
+  await randomFreeUser.aiAssistant.closePannel();
+  await notebook.waitForEditorToLoad();
+  await notebook.focusOnBody();
+  const notebookURL = page.url();
 
-    await testUser.page.getByRole('button', { name: 'Send Submit' }).click();
+  await test.step('adds submit form to a notebook', async () => {
+    await createSliderBelow(page, sliderName, originalSliderValue);
+    await notebook.addBlock('submit-form');
+
+    await page.getByRole('button', { name: 'Send Submit' }).click();
 
     await expect(
-      testUser.page.getByText('No secret selected').first(),
+      page.getByText('No secret selected').first(),
       'the submit form shows error message when used without webhook selected'
     ).toBeVisible();
 
-    await testUser.page.getByTestId('add-webhook').click();
+    await page.getByTestId('add-webhook').click();
 
-    await testUser.page.getByTestId('input-secret-name').fill(webhookName);
-    await testUser.page
+    await page.getByTestId('input-secret-name').fill(webhookName);
+    await page
       .getByTestId('input-secret-value')
       .fill('http://localhost:4848/webhook');
-    await testUser.page.getByTestId('add-secret-button').click();
+    await page.getByTestId('add-secret-button').click();
 
-    const newSecret = testUser.page.getByText(webhookName);
+    const newSecret = page.getByText(webhookName);
     await expect(newSecret).toBeVisible();
 
-    await testUser.page.goto(notebookURL);
-    await testUser.notebook.waitForEditorToLoad();
+    await page.goto(notebookURL);
+    await notebook.waitForEditorToLoad();
 
-    await testUser.page
-      .getByLabel('', { exact: true })
-      .selectOption(webhookName);
+    await page.getByLabel('', { exact: true }).selectOption(webhookName);
   });
 
   await test.step('use submit form', async () => {
-    await testUser.page.getByRole('button', { name: 'Send Submit' }).click();
+    await page.getByRole('button', { name: 'Send Submit' }).click();
     await expect(
-      testUser.page.getByText('Email is required').first(),
+      page.getByText('Email is required').first(),
       'the submit form shows error message when no email is added to the form before submit'
     ).toBeVisible();
-    await testUser.page.getByPlaceholder('Email').fill(weebookEmail);
-    await testUser.page.getByRole('button', { name: 'Send Submit' }).click();
+    await page.getByPlaceholder('Email').fill(weebookEmail);
+    await page.getByRole('button', { name: 'Send Submit' }).click();
 
     await expect(
-      testUser.page.getByText('All done!'),
+      page.getByText('All done!'),
       'the submit form never displayed the success message'
     ).toBeVisible();
 
@@ -151,13 +156,13 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
   });
 
   await test.step('update slider and check form sends new value', async () => {
-    await testUser.notebook.updateSlider(sliderName, newSliderValue);
-    await testUser.page.getByTestId('close-submit-form').click();
-    await testUser.page.getByPlaceholder('Email').fill(weebookEmail);
-    await testUser.page.getByRole('button', { name: 'Send Submit' }).click();
+    await notebook.updateSlider(sliderName, newSliderValue);
+    await page.getByTestId('close-submit-form').click();
+    await page.getByPlaceholder('Email').fill(weebookEmail);
+    await page.getByRole('button', { name: 'Send Submit' }).click();
 
     await expect(
-      testUser.page.getByText('All done!'),
+      page.getByText('All done!'),
       'the submit form never displayed the success message'
     ).toBeVisible();
 

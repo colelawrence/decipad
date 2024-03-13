@@ -1,9 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
+import { Tooltip } from 'libs/ui/src/shared';
 import { FC, ReactNode, useCallback, useRef } from 'react';
-import { cssVar, p12Regular, p14Medium } from '../../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Medium,
+  p12Regular,
+  p14Medium,
+} from '../../../primitives';
 import { soonStyles } from '../../../styles/menu';
 import { useCancelingEvent } from '../../../utils';
 
@@ -48,12 +57,13 @@ interface InlineMenuItemProps {
   readonly enabled: boolean;
   readonly hidden?: boolean;
   /**
-   * Unfortunately, we canont use real browser focus for this menu since we need the editor to stay focused.
+   * Unfortunately, we cannot use real browser focus for this menu since we need the editor to stay focused.
    * Even a "switching focus back and forth on key presses" does not work well enough because Slate tends to lose selection state on blur.
    */
   readonly focused?: boolean;
   readonly onExecute?: () => void;
   readonly 'data-testid'?: string;
+  readonly restrictToPlans?: string[];
 }
 export const InlineMenuItem = ({
   icon,
@@ -61,6 +71,7 @@ export const InlineMenuItem = ({
   description,
   enabled,
   focused,
+  restrictToPlans,
   onExecute = noop,
   'data-testid': testId,
 }: InlineMenuItemProps): ReturnType<FC> => {
@@ -86,18 +97,33 @@ export const InlineMenuItem = ({
     });
   }
 
-  return (
+  const { workspacePlan } = useNotebookMetaData();
+
+  const isFeatureAvailableForCurrentPlan = !isFlagEnabled('NEW_PAYMENTS')
+    ? true
+    : !restrictToPlans ||
+      (workspacePlan &&
+        restrictToPlans &&
+        restrictToPlans.includes(workspacePlan));
+
+  const menuItem = (
     <button
       role="menuitem"
       data-testid={testId}
       css={inlineMenuStyles}
       onMouseDown={useCancelingEvent(() => {
-        enabled && onExecute();
+        enabled && isFeatureAvailableForCurrentPlan && onExecute();
       })}
       data-focused={focused}
       ref={itemRef}
     >
-      <span css={[iconStyles, !enabled && css({ opacity: '0.5' })]}>
+      <span
+        css={[
+          iconStyles,
+          (!enabled || !isFeatureAvailableForCurrentPlan) &&
+            css({ opacity: '0.5' }),
+        ]}
+      >
         {icon}
       </span>
       <div css={textStyles}>
@@ -109,4 +135,28 @@ export const InlineMenuItem = ({
       </div>
     </button>
   );
+
+  return isFeatureAvailableForCurrentPlan ? (
+    menuItem
+  ) : (
+    <Tooltip trigger={menuItem} side="right">
+      <div css={{ width: '140px' }}>
+        <p css={toolTipTitle}>Unlock submit form</p>
+        <p css={tooltipContent}>
+          Upgrade your current plan to {(restrictToPlans ?? []).join(', ')} to
+          use this feature
+        </p>
+      </div>
+    </Tooltip>
+  );
 };
+
+const toolTipTitle = css(p12Medium, {
+  textAlign: 'center',
+  color: componentCssVars('TooltipText'),
+});
+const tooltipContent = css(p12Regular, {
+  marginTop: '6px',
+  color: componentCssVars('TooltipTextSecondary'),
+  textAlign: 'center',
+});

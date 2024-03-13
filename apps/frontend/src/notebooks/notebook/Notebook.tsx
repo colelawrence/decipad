@@ -4,12 +4,16 @@ import {
   getRemoteComputer,
 } from '@decipad/remote-computer';
 import { DocSyncEditor } from '@decipad/docsync';
-import { useFinishOnboarding } from '@decipad/graphql-client';
+import {
+  useFinishOnboarding,
+  useGetNotebookMetaQuery,
+} from '@decipad/graphql-client';
 import {
   ComputerContextProvider,
   ControllerProvider,
   EditorChangeContextProvider,
   useAiCreditsStore,
+  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
@@ -18,7 +22,7 @@ import {
   TopbarPlaceholder,
   AddCreditsModal,
 } from '@decipad/ui';
-import { FC, Suspense, createContext, useState } from 'react';
+import { FC, Suspense, createContext, useState, useEffect } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -43,6 +47,20 @@ export const Notebook: FC = () => {
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
   const [computer, setComputer] = useState<RemoteComputer>(getRemoteComputer());
   const [error, setError] = useState<Error | undefined>(undefined);
+
+  const { setWorkspacePlan } = useNotebookMetaData();
+
+  const [{ data: notebookMetadaData }] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
+
+  useEffect(() => {
+    setWorkspacePlan(notebookMetadaData?.getPadById?.workspace?.plan || 'free');
+  }, [
+    notebookId,
+    notebookMetadaData?.getPadById?.workspace?.plan,
+    setWorkspacePlan,
+  ]);
 
   useAnimateMutations();
   useFinishOnboarding();

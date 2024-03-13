@@ -45,6 +45,9 @@ export interface NotebookMetaDataType {
 
   readonly publishingTab: SidebarPublishingTab;
   readonly setPublishingTab: (tab: SidebarPublishingTab) => void;
+
+  readonly workspacePlan: string;
+  readonly setWorkspacePlan: (workspacePlan: string) => void;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
@@ -80,6 +83,11 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         publishingTab: 'collaborators',
         setPublishingTab(publishingTab) {
           set(() => ({ publishingTab }));
+        },
+
+        workspacePlan: 'free',
+        setWorkspacePlan(workspacePlan) {
+          set(() => ({ workspacePlan }));
         },
       };
     },
