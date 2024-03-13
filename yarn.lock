@@ -1022,10 +1022,10 @@
     "@smithy/util-utf8" "^2.0.2"
     tslib "^2.5.0"
 
-"@aws-sdk/client-cloudformation@^3.529.1":
-  version "3.529.1"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.529.1.tgz#23d3f8aa19a775a0f3c259abd967c483c1c2cd94"
-  integrity sha512-yEY2dfLFASJEzNo7EGXnaS/R43psKk4xPVoCbprJSG1sYXzqDmMJmX0O/oQV3Nhkc49W+/hQVL/GdX14o3k/aQ==
+"@aws-sdk/client-cloudformation@^3.532.0":
+  version "3.532.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.532.0.tgz#f62bf11f5df0478cfd9b41fce6c033aa842b67b7"
+  integrity sha512-3y7jfZOLQ87+X0sCJ57jPczgHp4HOhKN5r0lUPfmHAwWEO3hjl67jFAxqVp6zQCq8Cmp13pAHXYaCdcVK4e/Pw==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
@@ -1409,10 +1409,10 @@
     fast-xml-parser "4.2.5"
     tslib "^2.5.0"
 
-"@aws-sdk/client-ssm@^3.316.0", "@aws-sdk/client-ssm@^3.319.0", "@aws-sdk/client-ssm@^3.529.1":
-  version "3.529.1"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-ssm/-/client-ssm-3.529.1.tgz#d24567ac2228bbf0e0a57079f00a4e5ec8f67709"
-  integrity sha512-5i3HmHrVgnivcCI652QayaYUn68caQxKcIUcMqCzZS3PxtYwaKAfCZsoYZ3MBIkuT9JXt3tMzAbyuRpwZMCTyw==
+"@aws-sdk/client-ssm@^3.316.0", "@aws-sdk/client-ssm@^3.319.0", "@aws-sdk/client-ssm@^3.532.0":
+  version "3.532.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-ssm/-/client-ssm-3.532.0.tgz#7eaf83a6aff966c1fce0b19874d315d477bf171a"
+  integrity sha512-rjwcWrK8r0Wv+lrfaER5GUh79RlLrVbqihjNlNQKfhG9tZBGlNZOGneYvlpbl5OTwXCmC3CJ41H6j6GX8ccqTQ==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
