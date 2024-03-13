@@ -67,6 +67,8 @@ const defaultEnvValues = {
     'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
 
   NOTION_TOKEN: 'secret_g0S3h99PyM20tZ6oxPonoQ66xwxxmUtNaaDTHVKFPFn',
+  NOTION_CLIENT_ID: '6d7f202b-804f-4610-948c-a57f8000bf27',
+  NOTION_CLIENT_SECRET: 'secret_hgiZeFldyqVUQTa5DECd0i79ghEdWzzsIMI180b4nXo',
 
   // Internal AI feedback
   DISCORD_FEEDBACK_CHANNEL_TOKEN:

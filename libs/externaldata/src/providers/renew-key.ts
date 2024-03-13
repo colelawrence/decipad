@@ -12,7 +12,9 @@ export async function renewKey(
   key: ExternalKeyRecord,
   provider: Provider
 ): Promise<ExternalKeyRecord | null> {
-  if (!key.refresh_token) {
+  const refreshToken = key.refresh_token;
+
+  if (refreshToken == null) {
     return null;
   }
 
@@ -33,10 +35,10 @@ export async function renewKey(
     grant_type: 'refresh_token',
     valid_for: 60 * 60, // 1 hour
   };
-  const { refreshToken, accessToken } = await new Promise<RenewResult>(
-    (resolve, reject) => {
+  const { refreshToken: newRefreshToken, accessToken } =
+    await new Promise<RenewResult>((resolve, reject) => {
       oauth2Client.getOAuthAccessToken(
-        key.refresh_token,
+        refreshToken,
         params,
         (err, aToken, rToken) => {
           if (err) {
@@ -48,8 +50,7 @@ export async function renewKey(
           }
         }
       );
-    }
-  );
+    });
 
   if (!accessToken) {
     return null;
@@ -58,7 +59,7 @@ export async function renewKey(
   const data = await tables();
   key.access_token = accessToken;
   if (refreshToken) {
-    key.refresh_token = refreshToken;
+    key.refresh_token = newRefreshToken;
   }
   await data.externaldatasourcekeys.put(key);
 

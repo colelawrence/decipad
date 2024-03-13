@@ -1,19 +1,11 @@
 import { ImportElementSource } from '@decipad/editor-types';
+import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 export interface ExternalDataSourceKey {
   lastError?: string | null;
   createdAt?: number;
   expiresAt?: number;
   lastUsedAt?: number;
-}
-
-export interface ExternalDataSource {
-  id: string;
-  padId: string;
-  provider: ImportElementSource;
-  dataUrl: string;
-  authUrl: string;
-  keys: ExternalDataSourceKey[];
 }
 
 export interface CreateExternalDataSourceParams {
@@ -24,8 +16,8 @@ export interface CreateExternalDataSourceParams {
 }
 
 export interface ExternalDataSourcesContextValue {
-  externalDataSources: ExternalDataSource[];
+  externalDataSources: ExternalDataSourceFragmentFragment[];
   createExternalDataSource: (
     params: CreateExternalDataSourceParams
-  ) => Promise<ExternalDataSource>;
+  ) => Promise<ExternalDataSourceFragmentFragment>;
 }

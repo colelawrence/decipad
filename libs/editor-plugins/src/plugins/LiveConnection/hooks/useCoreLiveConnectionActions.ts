@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import { Path } from 'slate';
-import { ExternalDataSource } from '@decipad/interfaces';
+import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 interface UseCoreLiveConnectionActionsProps {
   path?: Path;
@@ -47,7 +47,7 @@ export const useCoreLiveConnectionActions = ({
   );
 
   const beforeAuthenticate = useCallback(
-    (source: ExternalDataSource) => {
+    (source: ExternalDataSourceFragmentFragment) => {
       if (path) {
         setNodes(editor, { proxy: source.dataUrl }, { at: path });
       }

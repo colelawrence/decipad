@@ -1,6 +1,7 @@
 import { ExternalDataSource, Pad } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import getDefined from './utils/get-defined';
+import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
 
 test('external data sources', (ctx) => {
   const { test: it } = ctx;
@@ -11,8 +12,9 @@ test('external data sources', (ctx) => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
     const workspace = (
-      await client.mutate({
-        mutation: ctx.gql`
+      await ensureGraphqlResponseIsErrorFree(
+        client.mutate({
+          mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -20,14 +22,16 @@ test('external data sources', (ctx) => {
             }
           }
         `,
-      })
+        })
+      )
     ).data.createWorkspace;
 
     expect(workspace).toMatchObject({ name: 'Workspace 1' });
 
     pad = (
-      await client.mutate({
-        mutation: ctx.gql`
+      await ensureGraphqlResponseIsErrorFree(
+        client.mutate({
+          mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
@@ -38,7 +42,8 @@ test('external data sources', (ctx) => {
             }
           }
         `,
-      })
+        })
+      )
     ).data.createPad;
   });
 

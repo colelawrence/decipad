@@ -10,4 +10,4 @@ type PagedResult {
   cursor: String
 }
 
-union Pageable = SharedResource | ExternalDataSource
+union Pageable = SharedResource

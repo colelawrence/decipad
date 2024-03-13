@@ -217,6 +217,7 @@ export interface ExternalDataSource extends ExternalDataSourceCreateInput {
 export type ExternalDataSourceProvider =
   | 'decipad'
   | 'gsheets'
+  | 'notion'
   | 'csv'
   | 'json'
   | 'postgresql'
@@ -584,12 +585,22 @@ export interface SetUsernameInput {
 export interface ExternalKeyRecord extends TableRecordBase {
   resource_uri: string;
   access_token: string;
-  refresh_token: string;
+
+  /**
+   * Some OAuth providers don't issue refresh_tokens
+   * Because the access_token never expires
+   */
+  refresh_token?: string;
+
+  /**
+   * Optional, because some access_tokens don't expire
+   */
+  expiresAt?: number;
+
   token_type?: string;
   scope?: string;
   lastError?: string;
   createdAt: number;
-  expiresAt: number;
   lastUsedAt?: number;
   createdBy: ID;
   provider: ExternalDataSourceProvider;

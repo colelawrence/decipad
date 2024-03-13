@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useCallback } from 'react';
 import {
-  ExternalDataSource,
   ExternalDataSourceCreateInput,
   ExternalDataSourceUpdateInput,
   useCreateExternalDataSourceMutation,
@@ -16,8 +15,7 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
     variables: { workspaceId },
   });
 
-  const workspaceExternalData = data?.getExternalDataSourcesWorkspace
-    .items as ExternalDataSource[];
+  const workspaceExternalData = data?.getExternalDataSourcesWorkspace;
 
   const createExternalData = useMutationResultHandler(
     useCreateExternalDataSourceMutation()[1],
@@ -45,7 +43,7 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
     []
   );
 
-  const remove = useCallback(async (externalDataId: string | number) => {
+  const remove = useCallback(async (externalDataId: string) => {
     const res = await deleteExternalData({
       id: externalDataId as string,
     });
@@ -55,7 +53,7 @@ export const useWorkspaceExternalData = (workspaceId: string) => {
 
   const update = useCallback(
     async (
-      externalDataId: string | number,
+      externalDataId: string,
       externalDataInput: ExternalDataSourceUpdateInput
     ) => {
       const res = await updateExternalData({

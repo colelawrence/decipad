@@ -19,13 +19,11 @@ import {
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
 import { useCache, deserializeResult } from '@decipad/editor-utils';
-import {
-  ExternalDataSource,
-  ExternalDataSourcesContextValue,
-} from '@decipad/interfaces';
+import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
+import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 export interface LiveConnectionResult {
   error?: Error;
@@ -49,7 +47,9 @@ export interface LiveConnectionProps {
   jsonPath?: string;
   delimiter?: string;
   externalDataSourceContext: Context<ExternalDataSourcesContextValue>;
-  beforeAuthenticate: (source: ExternalDataSource) => PromiseOrType<void>;
+  beforeAuthenticate: (
+    source: ExternalDataSourceFragmentFragment
+  ) => PromiseOrType<void>;
   liveQuery?: LiveQueryElement;
 }
 

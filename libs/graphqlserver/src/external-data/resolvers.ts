@@ -1,90 +1,34 @@
-import { resource } from '@decipad/backend-resources';
-import { ExternalDataSourceRecord } from '@decipad/backendtypes';
-import { app } from '@decipad/backend-config';
-import Resource from '@decipad/graphqlresource';
-import tables, { paginate } from '@decipad/tables';
-import { nanoid } from 'nanoid';
+import tables from '@decipad/tables';
 import {
-  ExternalDataSource,
-  ExternalDataSourceCreateInput,
-  ExternalDataSourceUpdateInput,
-  ExternalProvider,
+  ExternalDataSourceOwnership,
   Resolvers,
 } from '@decipad/graphqlserver-types';
 import { getDefined } from '@decipad/utils';
-
-const isDatabaseSource = new Set<ExternalProvider>([
-  'postgresql',
-  'mysql',
-  'oracledb',
-  'cockroachdb',
-  'redshift',
-  'mariadb',
-]);
-
-function baseUrlFor(externalDataSource: ExternalDataSource): string {
-  const { urlBase, apiPathBase } = app();
-  return `${urlBase}${apiPathBase}/externaldatasources/${
-    isDatabaseSource.has(externalDataSource.provider) ? 'db/' : ''
-  }${externalDataSource.id}`;
-}
-
-function dataUrlFor(externalDataSource: ExternalDataSource): string {
-  return `${baseUrlFor(externalDataSource)}/data`;
-}
-
-function authUrlFor(externalDataSource: ExternalDataSource): string {
-  return `${baseUrlFor(externalDataSource)}/auth`;
-}
+import {
+  authUrlFor,
+  dataUrlFor,
+  externalDataResource,
+} from './externalDataResource';
+import { resource } from '@decipad/backend-resources';
+import Boom from '@hapi/boom';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
 
-const externalDataResource = Resource<
-  ExternalDataSourceRecord,
-  ExternalDataSource,
-  ExternalDataSourceCreateInput,
-  { dataSource: ExternalDataSourceUpdateInput }
->({
-  resourceTypeName: 'externaldatasources',
-  humanName: 'external data source',
-  dataTable: async () => (await tables()).externaldatasources,
-  toGraphql: (record) => {
-    return {
-      ...record,
-      // Sub resolvers will find these.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      access: {} as any,
-      keys: [],
-    } satisfies ExternalDataSource;
-  },
-  newRecordFrom: ({
-    name,
-    padId,
-    workspace_id: workspaceId,
-    provider,
-    externalId,
-    dataSourceName,
-  }) => {
-    const eds: ExternalDataSourceRecord = {
-      id: nanoid(),
-      name,
-      padId,
-      workspace_id: workspaceId,
-      provider: provider as ExternalDataSourceRecord['provider'],
-      externalId,
-      dataSourceName,
-    };
-    return eds;
-  },
-  updateRecordFrom: (record, { dataSource }) => {
-    return {
-      ...record,
-      ...dataSource,
-    };
-  },
-  skipPermissions: true,
-});
+function getExternalResourceKey(
+  owner: ExternalDataSourceOwnership,
+  ownerId: string
+): string {
+  if (owner === 'PAD') {
+    return `/pads/${ownerId}`;
+  }
+
+  if (owner === 'WORKSPACE') {
+    return `/workspaces/${ownerId}`;
+  }
+
+  throw new Error('Unreachable');
+}
 
 const resolvers: Resolvers = {
   Query: {
@@ -93,55 +37,64 @@ const resolvers: Resolvers = {
         await externalDataResource.getById(pad, input, context)
       );
     },
-    getExternalDataSources: async (_, { notebookId, page }, context) => {
+    getExternalDataSources: async (_, { notebookId }, context) => {
       await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: notebookId,
         minimumPermissionType: 'READ',
       });
       const data = await tables();
-      return paginate(
-        data.externaldatasources,
-        {
-          IndexName: 'byPadId',
-          KeyConditionExpression: 'padId = :padId',
-          ExpressionAttributeValues: {
-            ':padId': notebookId,
-          },
+
+      const { Items } = await data.externaldatasources.query({
+        IndexName: 'byPadId',
+        KeyConditionExpression: 'padId = :padId',
+        ExpressionAttributeValues: {
+          ':padId': notebookId,
         },
-        page,
-        { gqlType: 'ExternalDataSource' }
-      );
+      });
+
+      return Items.map(externalDataResource.toGraphql);
     },
-    getExternalDataSourcesWorkspace: async (
-      _,
-      { workspaceId, page },
-      context
-    ) => {
+    getExternalDataSourcesWorkspace: async (_, { workspaceId }, context) => {
       await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: workspaceId,
         minimumPermissionType: 'READ',
       });
+
       const data = await tables();
 
-      return paginate(
-        data.externaldatasources,
-        {
-          IndexName: 'byWorkspace',
-          KeyConditionExpression: 'workspace_id = :workspaceId',
-          ExpressionAttributeValues: {
-            ':workspaceId': workspaceId,
-          },
+      const { Items } = await data.externaldatasources.query({
+        IndexName: 'byWorkspace',
+        KeyConditionExpression: 'workspace_id = :workspace_id',
+        ExpressionAttributeValues: {
+          ':workspace_id': workspaceId,
         },
-        page,
-        { gqlType: 'ExternalDataSource' }
-      );
+      });
+
+      return Items.map(externalDataResource.toGraphql);
     },
   },
 
   Mutation: {
     async createExternalDataSource(_, { dataSource }, context) {
+      //
+      // Ideally, we would have a union type on the input.
+      //
+      // But Graphql doesnt support input unions :(
+      // @link https://github.com/graphql/graphql-spec/issues/488
+      //
+
+      if (dataSource.padId == null && dataSource.workspaceId == null) {
+        throw Boom.badRequest('padId OR workspaceId must be defined');
+      }
+
+      if (dataSource.padId != null && dataSource.workspaceId != null) {
+        throw Boom.badRequest(
+          'You must only provide a padId OR a workspaceID, not both'
+        );
+      }
+
       return externalDataResource.create(_, dataSource, context);
     },
     updateExternalDataSource: externalDataResource.update,
@@ -157,12 +110,17 @@ const resolvers: Resolvers = {
     access: externalDataResource.access,
     keys: async (externalDataSource) => {
       const data = await tables();
+      const externalDataResourceUri = getExternalResourceKey(
+        externalDataSource.owner,
+        externalDataSource.ownerId
+      );
+
       return (
         await data.externaldatasourcekeys.query({
           IndexName: 'byResource',
           KeyConditionExpression: 'resource_uri = :resource_uri',
           ExpressionAttributeValues: {
-            ':resource_uri': `/pads/${externalDataSource.padId}`,
+            ':resource_uri': externalDataResourceUri,
           },
         })
       ).Items;

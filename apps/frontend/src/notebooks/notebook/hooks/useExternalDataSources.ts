@@ -1,10 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useToast } from '@decipad/toast';
 import { captureException } from '@sentry/browser';
-import {
-  ExternalDataSource,
-  ExternalDataSourcesContextValue,
-} from '@decipad/interfaces';
+import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import {
   ExternalDataSourceCreateInput,
   useCreateExternalDataSourceMutation,
@@ -34,8 +31,7 @@ export const useExternalDataSources = (
   }, [externalDataSources.error, toast]);
 
   return {
-    externalDataSources: (externalDataSources.data?.getExternalDataSources
-      .items ?? []) as ExternalDataSource[],
+    externalDataSources: externalDataSources.data?.getExternalDataSources ?? [],
     createExternalDataSource: useCallback(
       async (dataSource) => {
         const results = await createExternalDataSource({
@@ -49,9 +45,7 @@ export const useExternalDataSources = (
           console.error(results.error);
           captureException(results.error);
         }
-        return getDefined(
-          results.data?.createExternalDataSource
-        ) as ExternalDataSource;
+        return getDefined(results.data?.createExternalDataSource);
       },
       [createExternalDataSource, notebookId]
     ),

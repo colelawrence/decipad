@@ -3,17 +3,17 @@ import type { Context } from 'react';
 import { useToast } from '@decipad/toast';
 import { useMyEditorRef } from '@decipad/editor-types';
 import type { ImportElementSource } from '@decipad/editor-types';
-import type {
-  ExternalDataSource,
-  ExternalDataSourcesContextValue,
-} from '@decipad/interfaces';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { PromiseOrType } from '@decipad/utils';
+import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 interface UseLiveConnectionAuthProps {
   notebookId: string;
   provider?: ImportElementSource;
   externalId: string;
-  beforeAuthenticate: (source: ExternalDataSource) => PromiseOrType<void>;
+  beforeAuthenticate: (
+    source: ExternalDataSourceFragmentFragment
+  ) => PromiseOrType<void>;
   context: Context<ExternalDataSourcesContextValue>;
 }
 
@@ -21,8 +21,8 @@ interface LiveConnectionAuthResult {
   authenticate: () => void;
 }
 
-const authUrl = (source: ExternalDataSource): URL => {
-  const url = new URL(source.authUrl);
+const authUrl = (source: ExternalDataSourceFragmentFragment): URL => {
+  const url = new URL(source.authUrl!);
   url.searchParams.set('redirect_uri', window.location.href);
   return url;
 };
@@ -43,7 +43,7 @@ export const useLiveConnectionAuth = ({
         return;
       }
       const sources = externalDataSources;
-      let source: ExternalDataSource | undefined = sources.find(
+      let source: ExternalDataSourceFragmentFragment | undefined = sources.find(
         (s) => s.provider === provider && s.keys.length > 0
       );
       if (!source) {

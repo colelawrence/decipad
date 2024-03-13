@@ -85,19 +85,23 @@ export type ExternalDataSource = {
   id: Scalars['ID']['output'];
   keys: Array<ExternalKey>;
   name: Scalars['String']['output'];
-  padId?: Maybe<Scalars['ID']['output']>;
+  owner: ExternalDataSourceOwnership;
+  ownerId: Scalars['String']['output'];
   provider: ExternalProvider;
-  workspace_id?: Maybe<Scalars['ID']['output']>;
 };
 
 export type ExternalDataSourceCreateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
   externalId: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  padId?: InputMaybe<Scalars['ID']['input']>;
+  padId?: InputMaybe<Scalars['String']['input']>;
   provider: ExternalProvider;
-  workspace_id?: InputMaybe<Scalars['ID']['input']>;
+  workspaceId?: InputMaybe<Scalars['String']['input']>;
 };
+
+export type ExternalDataSourceOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
 
 export type ExternalDataSourceUpdateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
@@ -615,7 +619,7 @@ export type PageInput = {
   maxItems: Scalars['Int']['input'];
 };
 
-export type Pageable = ExternalDataSource | SharedResource;
+export type Pageable = SharedResource;
 
 export type PagedPadResult = {
   __typename?: 'PagedPadResult';
@@ -662,8 +666,8 @@ export type Query = {
   featuredPad?: Maybe<Pad>;
   getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
-  getExternalDataSources: PagedResult;
-  getExternalDataSourcesWorkspace: PagedResult;
+  getExternalDataSources: Array<ExternalDataSource>;
+  getExternalDataSourcesWorkspace: Array<ExternalDataSource>;
   getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
   getStripeCheckoutSessionInfo?: Maybe<CheckoutSessionInfo>;
@@ -691,12 +695,10 @@ export type QueryGetExternalDataSourceArgs = {
 
 export type QueryGetExternalDataSourcesArgs = {
   notebookId: Scalars['ID']['input'];
-  page: PageInput;
 };
 
 
 export type QueryGetExternalDataSourcesWorkspaceArgs = {
-  page: PageInput;
   workspaceId: Scalars['ID']['input'];
 };
 
@@ -1186,7 +1188,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
-  Pageable: ( ExternalDataSource ) | ( SharedResource );
+  Pageable: ( SharedResource );
 };
 
 
@@ -1202,6 +1204,7 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ExternalDataSource: ResolverTypeWrapper<ExternalDataSource>;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
+  ExternalDataSourceOwnership: ExternalDataSourceOwnership;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ResolverTypeWrapper<ExternalKey>;
   ExternalProvider: ExternalProvider;
@@ -1412,9 +1415,9 @@ export type ExternalDataSourceResolvers<ContextType = GraphqlContext, ParentType
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   keys?: Resolver<Array<ResolversTypes['ExternalKey']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  padId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['ExternalDataSourceOwnership'], ParentType, ContextType>;
+  ownerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider?: Resolver<ResolversTypes['ExternalProvider'], ParentType, ContextType>;
-  workspace_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1548,7 +1551,7 @@ export type PadSnapshotResolvers<ContextType = GraphqlContext, ParentType extend
 };
 
 export type PageableResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Pageable'] = ResolversParentTypes['Pageable']> = {
-  __resolveType: TypeResolveFn<'ExternalDataSource' | 'SharedResource', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'SharedResource', ParentType, ContextType>;
 };
 
 export type PagedPadResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PagedPadResult'] = ResolversParentTypes['PagedPadResult']> = {
@@ -1590,8 +1593,8 @@ export type QueryResolvers<ContextType = GraphqlContext, ParentType extends Reso
   featuredPad?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType>;
   getCreditsPlans?: Resolver<Maybe<ResolversTypes['CreditsPlan']>, ParentType, ContextType>;
   getExternalDataSource?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourceArgs, 'id'>>;
-  getExternalDataSources?: Resolver<ResolversTypes['PagedResult'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesArgs, 'notebookId' | 'page'>>;
-  getExternalDataSourcesWorkspace?: Resolver<ResolversTypes['PagedResult'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'page' | 'workspaceId'>>;
+  getExternalDataSources?: Resolver<Array<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesArgs, 'notebookId'>>;
+  getExternalDataSourcesWorkspace?: Resolver<Array<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'workspaceId'>>;
   getNotion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryGetNotionArgs, 'notebookId' | 'url'>>;
   getPadById?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<QueryGetPadByIdArgs, 'id'>>;
   getStripeCheckoutSessionInfo?: Resolver<Maybe<ResolversTypes['CheckoutSessionInfo']>, ParentType, ContextType, RequireFields<QueryGetStripeCheckoutSessionInfoArgs, 'priceId' | 'workspaceId'>>;

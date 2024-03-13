@@ -234,18 +234,18 @@ export const graphCacheConfig: GraphCacheConfig = {
         );
       },
       createExternalDataSource: (_result, args, cache) => {
-        if (typeof args.dataSource.workspace_id !== 'string') return;
+        if (typeof args.dataSource.workspaceId !== 'string') return;
         cache.updateQuery<GetExternalDataSourcesWorkspaceQuery>(
           {
             query: GetExternalDataSourcesWorkspaceDocument,
             variables: {
-              workspaceId: args.dataSource.workspace_id,
+              workspaceId: args.dataSource.workspaceId,
             },
           },
           (data) => {
             if (!data?.getExternalDataSourcesWorkspace) return data;
 
-            data.getExternalDataSourcesWorkspace.items.push(
+            data.getExternalDataSourcesWorkspace.push(
               args.dataSource as ExternalDataSource
             );
 

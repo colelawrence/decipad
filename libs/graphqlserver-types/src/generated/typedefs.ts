@@ -82,11 +82,12 @@ type ExternalKey {
 
 input ExternalDataSourceCreateInput {
   name: String!
-  workspace_id: ID
-  padId: ID
   provider: ExternalProvider!
   externalId: String!
   dataSourceName: String
+
+  workspaceId: String
+  padId: String
 }
 
 input ExternalDataSourceUpdateInput {
@@ -95,27 +96,32 @@ input ExternalDataSourceUpdateInput {
   externalId: String
 }
 
+enum ExternalDataSourceOwnership {
+  PAD
+  WORKSPACE
+}
+
 type ExternalDataSource {
   id: ID!
   name: String!
   dataSourceName: String
-  workspace_id: ID
-  padId: ID
   provider: ExternalProvider!
   dataUrl: String
   authUrl: String
   externalId: String
+
   access: ResourceAccess!
   keys: [ExternalKey!]!
+
+  owner: ExternalDataSourceOwnership!
+  ownerId: String!
 }
 
 extend type Query {
   getExternalDataSource(id: ID!): ExternalDataSource!
-  getExternalDataSources(notebookId: ID!, page: PageInput!): PagedResult!
-  getExternalDataSourcesWorkspace(
-    workspaceId: ID!
-    page: PageInput!
-  ): PagedResult!
+
+  getExternalDataSources(notebookId: ID!): [ExternalDataSource!]!
+  getExternalDataSourcesWorkspace(workspaceId: ID!): [ExternalDataSource!]!
 }
 
 extend type Mutation {
@@ -384,7 +390,7 @@ type PagedResult {
   cursor: String
 }
 
-union Pageable = SharedResource | ExternalDataSource
+union Pageable = SharedResource
 type CreditPricePlan {
   id: ID!
   title: String
@@ -739,51 +745,6 @@ extend type Mutation {
 extend type Workspace {
   workspaceExecutedQuery: WorkspaceExecutedQuery
 }
-enum SubscriptionStatus {
-  active
-  canceled
-  unpaid
-  trialing
-  incomplete
-  incomplete_expired
-  past_due
-  paused
-}
-
-enum SubscriptionPlansNames {
-  free
-  # Pro and personal are basically the same
-  # Only that pro is legacy
-  pro
-  personal
-  team
-  enterprise
-}
-
-enum SubscriptionPaymentStatus {
-  paid
-  unpaid
-  no_payment_required
-}
-
-type WorkspaceSubscription {
-  id: String!
-  paymentStatus: SubscriptionPaymentStatus!
-  status: SubscriptionStatus
-  workspace: Workspace
-  seats: Int
-  credits: Int
-  queries: Int
-  storage: Int
-}
-
-extend type Mutation {
-  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
-}
-
-extend type Workspace {
-  workspaceSubscription: WorkspaceSubscription
-}
 input WorkspaceInput {
   name: String!
 }
@@ -836,5 +797,50 @@ extend type Mutation {
 
 extend type Subscription {
   workspacesChanged: WorkspacesChanges!
+}
+enum SubscriptionStatus {
+  active
+  canceled
+  unpaid
+  trialing
+  incomplete
+  incomplete_expired
+  past_due
+  paused
+}
+
+enum SubscriptionPlansNames {
+  free
+  # Pro and personal are basically the same
+  # Only that pro is legacy
+  pro
+  personal
+  team
+  enterprise
+}
+
+enum SubscriptionPaymentStatus {
+  paid
+  unpaid
+  no_payment_required
+}
+
+type WorkspaceSubscription {
+  id: String!
+  paymentStatus: SubscriptionPaymentStatus!
+  status: SubscriptionStatus
+  workspace: Workspace
+  seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
+}
+
+extend type Mutation {
+  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
+}
+
+extend type Workspace {
+  workspaceSubscription: WorkspaceSubscription
 }
 `;

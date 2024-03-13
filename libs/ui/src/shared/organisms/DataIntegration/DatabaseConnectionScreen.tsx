@@ -250,7 +250,7 @@ function NewDataConnection({
         : `${protocol}://${username}:${password}@${host}:${port}/${databaseName}`;
 
     if (initialValues) {
-      update(initialValues.id, {
+      update(initialValues.id as string, {
         dataSourceName: name,
         name: `data-source/${workspaceId}/${protocol}/${url}`,
         externalId: url,
@@ -273,7 +273,7 @@ function NewDataConnection({
     add({
       name: `data-source/${workspaceId}/${protocol}/${url}`,
       externalId: url,
-      workspace_id: workspaceId,
+      workspaceId,
       padId: undefined, // Resource belongs to the workspace, and not a specific notebook
       provider: 'postgresql',
       dataSourceName: name,

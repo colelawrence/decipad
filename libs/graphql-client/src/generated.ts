@@ -13,7 +13,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -86,19 +86,23 @@ export type ExternalDataSource = {
   id: Scalars['ID']['output'];
   keys: Array<ExternalKey>;
   name: Scalars['String']['output'];
-  padId?: Maybe<Scalars['ID']['output']>;
+  owner: ExternalDataSourceOwnership;
+  ownerId: Scalars['String']['output'];
   provider: ExternalProvider;
-  workspace_id?: Maybe<Scalars['ID']['output']>;
 };
 
 export type ExternalDataSourceCreateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
   externalId: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  padId?: InputMaybe<Scalars['ID']['input']>;
+  padId?: InputMaybe<Scalars['String']['input']>;
   provider: ExternalProvider;
-  workspace_id?: InputMaybe<Scalars['ID']['input']>;
+  workspaceId?: InputMaybe<Scalars['String']['input']>;
 };
+
+export type ExternalDataSourceOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
 
 export type ExternalDataSourceUpdateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
@@ -616,7 +620,7 @@ export type PageInput = {
   maxItems: Scalars['Int']['input'];
 };
 
-export type Pageable = ExternalDataSource | SharedResource;
+export type Pageable = SharedResource;
 
 export type PagedPadResult = {
   __typename?: 'PagedPadResult';
@@ -663,8 +667,8 @@ export type Query = {
   featuredPad?: Maybe<Pad>;
   getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
-  getExternalDataSources: PagedResult;
-  getExternalDataSourcesWorkspace: PagedResult;
+  getExternalDataSources: Array<ExternalDataSource>;
+  getExternalDataSourcesWorkspace: Array<ExternalDataSource>;
   getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
   getStripeCheckoutSessionInfo?: Maybe<CheckoutSessionInfo>;
@@ -692,12 +696,10 @@ export type QueryGetExternalDataSourceArgs = {
 
 export type QueryGetExternalDataSourcesArgs = {
   notebookId: Scalars['ID']['input'];
-  page: PageInput;
 };
 
 
 export type QueryGetExternalDataSourcesWorkspaceArgs = {
-  page: PageInput;
   workspaceId: Scalars['ID']['input'];
 };
 
@@ -1147,7 +1149,7 @@ export type CreateExternalDataSourceMutationVariables = Exact<{
 }>;
 
 
-export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
+export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
 
 export type CreateLogsMutationVariables = Exact<{
   resource: Scalars['String']['input'];
@@ -1460,21 +1462,21 @@ export type GetCreditsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCreditsPlansQuery = { __typename?: 'Query', getCreditsPlans?: { __typename?: 'CreditsPlan', id: string, title?: string | null, description?: string | null, plans: Array<{ __typename?: 'CreditPricePlan', id: string, title?: string | null, description?: string | null, price: number, credits: number, isDefault?: boolean | null, promotionTag?: string | null, currency: string }> } | null };
 
-export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> };
+export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> };
 
 export type GetExternalDataSourcesQueryVariables = Exact<{
   notebookId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
+export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> }> };
 
 export type GetExternalDataSourcesWorkspaceQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
+export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> }> };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -1583,8 +1585,8 @@ export const ExternalDataSourceFragmentFragmentDoc = gql`
   id
   dataSourceName
   name
-  workspace_id
-  padId
+  owner
+  ownerId
   provider
   dataUrl
   authUrl
@@ -2457,10 +2459,8 @@ export function useGetCreditsPlansQuery(options?: Omit<Urql.UseQueryArgs<GetCred
 };
 export const GetExternalDataSourcesDocument = gql`
     query GetExternalDataSources($notebookId: ID!) {
-  getExternalDataSources(notebookId: $notebookId, page: {maxItems: 10000}) {
-    items {
-      ...ExternalDataSourceFragment
-    }
+  getExternalDataSources(notebookId: $notebookId) {
+    ...ExternalDataSourceFragment
   }
 }
     ${ExternalDataSourceFragmentFragmentDoc}`;
@@ -2470,13 +2470,8 @@ export function useGetExternalDataSourcesQuery(options: Omit<Urql.UseQueryArgs<G
 };
 export const GetExternalDataSourcesWorkspaceDocument = gql`
     query GetExternalDataSourcesWorkspace($workspaceId: ID!) {
-  getExternalDataSourcesWorkspace(
-    workspaceId: $workspaceId
-    page: {maxItems: 10000}
-  ) {
-    items {
-      ...ExternalDataSourceFragment
-    }
+  getExternalDataSourcesWorkspace(workspaceId: $workspaceId) {
+    ...ExternalDataSourceFragment
   }
 }
     ${ExternalDataSourceFragmentFragmentDoc}`;
@@ -2696,8 +2691,8 @@ export type GraphCacheResolvers = {
     featuredPad?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<Pad> | string>,
     getCreditsPlans?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<CreditsPlan> | string>,
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
-    getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>,
-    getExternalDataSourcesWorkspace?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesWorkspaceArgs, WithTypename<PagedResult> | string>,
+    getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, Array<WithTypename<ExternalDataSource> | string>>,
+    getExternalDataSourcesWorkspace?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesWorkspaceArgs, Array<WithTypename<ExternalDataSource> | string>>,
     getNotion?: GraphCacheResolver<WithTypename<Query>, QueryGetNotionArgs, Scalars['String'] | string>,
     getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
     getStripeCheckoutSessionInfo?: GraphCacheResolver<WithTypename<Query>, QueryGetStripeCheckoutSessionInfoArgs, WithTypename<CheckoutSessionInfo> | string>,
@@ -2762,9 +2757,9 @@ export type GraphCacheResolvers = {
     id?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
     keys?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Array<WithTypename<ExternalKey> | string>>,
     name?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
-    padId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
-    provider?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalProvider | string>,
-    workspace_id?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>
+    owner?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalDataSourceOwnership | string>,
+    ownerId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
+    provider?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalProvider | string>
   },
   ExternalKey?: {
     createdAt?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['DateTime'] | string>,
@@ -3114,8 +3109,8 @@ export type GraphCacheUpdaters = {
     featuredPad?: GraphCacheUpdateResolver<{ featuredPad: Maybe<WithTypename<Pad>> }, Record<string, never>>,
     getCreditsPlans?: GraphCacheUpdateResolver<{ getCreditsPlans: Maybe<WithTypename<CreditsPlan>> }, Record<string, never>>,
     getExternalDataSource?: GraphCacheUpdateResolver<{ getExternalDataSource: WithTypename<ExternalDataSource> }, QueryGetExternalDataSourceArgs>,
-    getExternalDataSources?: GraphCacheUpdateResolver<{ getExternalDataSources: WithTypename<PagedResult> }, QueryGetExternalDataSourcesArgs>,
-    getExternalDataSourcesWorkspace?: GraphCacheUpdateResolver<{ getExternalDataSourcesWorkspace: WithTypename<PagedResult> }, QueryGetExternalDataSourcesWorkspaceArgs>,
+    getExternalDataSources?: GraphCacheUpdateResolver<{ getExternalDataSources: Array<WithTypename<ExternalDataSource>> }, QueryGetExternalDataSourcesArgs>,
+    getExternalDataSourcesWorkspace?: GraphCacheUpdateResolver<{ getExternalDataSourcesWorkspace: Array<WithTypename<ExternalDataSource>> }, QueryGetExternalDataSourcesWorkspaceArgs>,
     getNotion?: GraphCacheUpdateResolver<{ getNotion: Scalars['String'] }, QueryGetNotionArgs>,
     getPadById?: GraphCacheUpdateResolver<{ getPadById: Maybe<WithTypename<Pad>> }, QueryGetPadByIdArgs>,
     getStripeCheckoutSessionInfo?: GraphCacheUpdateResolver<{ getStripeCheckoutSessionInfo: Maybe<WithTypename<CheckoutSessionInfo>> }, QueryGetStripeCheckoutSessionInfoArgs>,
@@ -3246,9 +3241,9 @@ export type GraphCacheUpdaters = {
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
     keys?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
     name?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
-    padId?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
-    provider?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
-    workspace_id?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>
+    owner?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    ownerId?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    provider?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>
   },
   ExternalKey?: {
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>,

@@ -41,14 +41,18 @@ export const auth = async (
   }
 
   const authorizationUrl = new URL(provider.authorizationUrl);
+
   const getThirdPartyBaseUrlFromHeaders =
     provider.id === 'testdatasource' &&
     event.headers['x-use-third-party-test-server'];
+
   const basePath = getThirdPartyBaseUrlFromHeaders
     ? getDefined(event.headers['x-use-third-party-test-server'])
     : authorizationUrl.origin;
+
   const authorizePath = authorizationUrl.pathname;
   const accessTokenPath = new URL(provider.accessTokenUrl).pathname;
+
   const oauth2Client = new OAuth2(
     provider.clientId,
     provider.clientSecret,

@@ -23,11 +23,12 @@ type ExternalKey {
 
 input ExternalDataSourceCreateInput {
   name: String!
-  workspace_id: ID
-  padId: ID
   provider: ExternalProvider!
   externalId: String!
   dataSourceName: String
+
+  workspaceId: String
+  padId: String
 }
 
 input ExternalDataSourceUpdateInput {
@@ -36,27 +37,32 @@ input ExternalDataSourceUpdateInput {
   externalId: String
 }
 
+enum ExternalDataSourceOwnership {
+  PAD
+  WORKSPACE
+}
+
 type ExternalDataSource {
   id: ID!
   name: String!
   dataSourceName: String
-  workspace_id: ID
-  padId: ID
   provider: ExternalProvider!
   dataUrl: String
   authUrl: String
   externalId: String
+
   access: ResourceAccess!
   keys: [ExternalKey!]!
+
+  owner: ExternalDataSourceOwnership!
+  ownerId: String!
 }
 
 extend type Query {
   getExternalDataSource(id: ID!): ExternalDataSource!
-  getExternalDataSources(notebookId: ID!, page: PageInput!): PagedResult!
-  getExternalDataSourcesWorkspace(
-    workspaceId: ID!
-    page: PageInput!
-  ): PagedResult!
+
+  getExternalDataSources(notebookId: ID!): [ExternalDataSource!]!
+  getExternalDataSourcesWorkspace(workspaceId: ID!): [ExternalDataSource!]!
 }
 
 extend type Mutation {
