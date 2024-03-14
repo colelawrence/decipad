@@ -107,6 +107,7 @@ export const usePushDataViewToComputer = ({
             },
             definesTableColumn: [dataViewName, colName],
             isArtificial: true,
+            artificiallyDerivedFrom: blockId,
           });
 
           externalDatas.push([

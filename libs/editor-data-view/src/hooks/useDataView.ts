@@ -1,14 +1,8 @@
 import { AutocompleteName, SerializedType } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
-import {
-  DataViewElement,
-  ELEMENT_DATA_VIEW_TR,
-  MyEditor,
-} from '@decipad/editor-types';
-import { assertElementType, matchNodeType } from '@decipad/editor-utils';
+import { DataViewElement, MyEditor } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
-import { findNode, findNodePath } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Path } from 'slate';
 import { useDataViewActions } from '.';
@@ -65,38 +59,23 @@ export const useDataView = ({
       if (!availableColumns) {
         return;
       }
-      const dataViewPath = findNodePath(editor, element);
 
-      if (dataViewPath) {
-        const columnRowEntry = findNode(editor, {
-          at: dataViewPath,
-          match: matchNodeType(ELEMENT_DATA_VIEW_TR),
-        });
-        if (columnRowEntry) {
-          const [columnRow] = columnRowEntry;
-          assertElementType(columnRow, ELEMENT_DATA_VIEW_TR);
-          const columnHeaders = columnRow.children;
-          const order = columnHeaders
-            .map((dataViewColumn) =>
-              availableColumns.findIndex(
-                // label is used for newer data-views
-                (column) =>
-                  column.name === dataViewColumn.label ||
-                  column.blockId === dataViewColumn.name
-              )
-            )
-            .filter(greaterOrEqualToZero);
-          return order;
-        }
-      }
-      return undefined;
-    }, [availableColumns, editor, element]),
+      return element.children[1].children
+        .map((dataViewColumn) =>
+          availableColumns.findIndex(
+            // label is used for newer data-views
+            (column) =>
+              column.name === dataViewColumn.label ||
+              column.blockId === dataViewColumn.name
+          )
+        )
+        .filter(greaterOrEqualToZero);
+    }, [availableColumns, element.children]),
     {
       injectObservable: columnChanges$,
       debounceTimeMs: 500,
     }
   );
-
   const sortedColumns = useResolved(
     useMemo(
       () => columnOrder && sortColumns(availableColumns, columnOrder),
