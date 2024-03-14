@@ -27,7 +27,8 @@ export const useGlobalParentNode = (el: MyElement): MyNode | undefined => {
   if (controller) {
     return findGlobalNode(controller.children, (node) => {
       return (
-        isElement(node) && node.children.some((child) => child.id === el.id)
+        isElement(node) &&
+        node.children.some((child) => isElement(child) && child.id === el.id)
       );
     });
   }
@@ -69,7 +70,8 @@ export const useGlobalParentNodeEntry = (
   if (controller) {
     return findGlobalNodeEntry(controller.children, (node) => {
       return (
-        isElement(node) && node.children.some((child) => child.id === el.id)
+        isElement(node) &&
+        node.children.some((child) => isElement(child) && child.id === el.id)
       );
     });
   }
