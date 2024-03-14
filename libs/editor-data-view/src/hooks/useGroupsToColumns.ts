@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AggregationKind, Column, DataGroup } from '../types';
 import { groupsToColumns } from '../utils/groupsToColumns';
 import { RemoteComputer } from '@decipad/remote-computer';
+import { dequal } from '@decipad/utils';
 
 interface UseGroupsToColumnsOptions {
   computer: RemoteComputer;
@@ -30,7 +31,7 @@ export const useGroupsToColumns = ({
         aggregationTypes,
         roundings,
       });
-      if (!canceled) {
+      if (!canceled && !dequal(columns, newColumns)) {
         setColumns(newColumns);
       }
     })();
@@ -38,7 +39,7 @@ export const useGroupsToColumns = ({
     return () => {
       canceled = true;
     };
-  }, [aggregationTypes, computer, groups, roundings, tableName]);
+  }, [aggregationTypes, columns, computer, groups, roundings, tableName]);
 
   return columns;
 };
