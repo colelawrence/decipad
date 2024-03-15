@@ -19,6 +19,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { Path } from 'slate';
 import { useDataViewActions, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
+import { useDataViewContext } from '../DataViewContext';
 
 export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   attributes,
@@ -28,6 +29,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
   const editor = useMyEditorRef();
+  const { columns } = useDataViewContext();
   const { dragSource, dragPreview } = useDragColumn(
     editor,
     element,
@@ -97,6 +99,13 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     'DataViewColumnHeader'
   );
 
+  const onFilterChange = usePathMutatorCallback(
+    editor,
+    path,
+    'filter',
+    'DataViewColumnHeader'
+  );
+
   return (
     <UIDataViewColumnHeader
       name={columnName}
@@ -117,6 +126,10 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
       alignRight={isCellAlignRight(element.cellType)}
       ref={columnHeaderRef}
       rotate={dataView?.rotate ?? false}
+      columns={columns}
+      columnIndex={actualPath?.at(2)}
+      onFilterChange={onFilterChange}
+      selectedFilter={element.filter}
     >
       {children}
     </UIDataViewColumnHeader>

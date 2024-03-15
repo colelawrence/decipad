@@ -5,7 +5,9 @@ import { Divider, MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
 import { Aggregate, Caret, Cluster, Trash } from '../../../icons';
 import { cssVar } from '../../../primitives';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
-import { TableCellType } from '@decipad/editor-types';
+import { DataViewFilter, TableCellType } from '@decipad/editor-types';
+import { DataViewColumnMenuFilter } from './ColumnFilters/DataViewColumnMenuFilter';
+import { Column, SubMenu } from './common';
 
 interface Rounding {
   id: string;
@@ -22,6 +24,10 @@ export interface DataViewColumnMenuProps {
   onRoundingChange: (aggregation: string | undefined) => void;
   onDeleteColumn: () => void;
   columnName?: string;
+  columns: Column[] | undefined;
+  columnIndex: number | undefined;
+  onFilterChange: (filter: DataViewFilter | undefined) => void;
+  selectedFilter?: DataViewFilter;
 }
 
 export type Ref = HTMLTableCellElement;
@@ -32,8 +38,6 @@ const triggerStyles = css({
   width: '16px',
 });
 
-type SubMenu = 'aggregate' | 'round';
-
 export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
   availableAggregations,
   selectedAggregation,
@@ -43,6 +47,11 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
   onRoundingChange,
   onDeleteColumn,
   columnName,
+  columns,
+  columnIndex,
+  onFilterChange,
+  selectedFilter,
+  type,
 }) => {
   const [rootMenuListOpened, setRootMenuListOpened] = useState(false);
 
@@ -140,6 +149,17 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
           })}
         </MenuList>
       ) : null}
+
+      <DataViewColumnMenuFilter
+        subMenuOpened={subMenuOpened}
+        setSubMenuOpened={setSubMenuOpened}
+        onFilterChange={onFilterChange}
+        selectedFilter={selectedFilter}
+        type={type}
+        columns={columns}
+        columnIndex={columnIndex}
+      />
+
       <div role="presentation" css={hrStyles}>
         <Divider />
       </div>

@@ -1,6 +1,7 @@
 import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
 import {
   DataViewElement,
+  DataViewFilter,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
@@ -224,6 +225,7 @@ interface WithLayoutDataHookProps {
   onLayoutDataResultChange: (
     result: ReturnType<typeof useDataViewLayoutData>
   ) => void;
+  filters: Array<DataViewFilter | undefined>;
 }
 
 const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
@@ -234,6 +236,7 @@ const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
   expandedGroups,
   preventExpansion,
   onLayoutDataResultChange,
+  filters,
 }) => {
   const results = useDataViewLayoutData({
     tableName,
@@ -243,6 +246,7 @@ const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
     expandedGroups,
     preventExpansion,
     rotate: false,
+    filters,
   });
   useEffect(() => {
     onLayoutDataResultChange(results);
@@ -285,6 +289,7 @@ const runWithLayoutData = async ({
               resolve(r);
             }
           }}
+          filters={[]}
         ></WithLayoutDataHook>
       </WithProviders>
     );

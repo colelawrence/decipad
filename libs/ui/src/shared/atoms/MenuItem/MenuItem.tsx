@@ -51,7 +51,6 @@ export type MenuItemProps = {
     typeof RadixDropdownMenu.Item
   >['onPointerMove'];
   readonly onFocus?: ComponentProps<typeof RadixDropdownMenu.Item>['onFocus'];
-  readonly onSelect?: () => void;
   readonly selected?: boolean;
   readonly itemAlignment?: 'left' | 'right' | 'center';
   readonly testid?: string;
@@ -77,7 +76,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     (event: Event) => {
       event.stopPropagation();
       if (onSelect) {
-        onSelect();
+        onSelect(event);
       }
     },
     [onSelect]

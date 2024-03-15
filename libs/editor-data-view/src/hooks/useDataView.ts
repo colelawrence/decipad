@@ -1,6 +1,10 @@
 import { AutocompleteName, SerializedType } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
-import { DataViewElement, MyEditor } from '@decipad/editor-types';
+import {
+  DataViewElement,
+  DataViewFilter,
+  MyEditor,
+} from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -31,6 +35,7 @@ interface UseDataViewReturnType {
   sortedColumns: Column[] | undefined;
   selectedAggregationTypes: Array<AggregationKind | undefined>;
   selectedRoundings: Array<string | undefined>;
+  selectedFilters: Array<DataViewFilter | undefined>;
 }
 
 const greaterOrEqualToZero = (n: number): boolean => n >= 0;
@@ -97,6 +102,13 @@ export const useDataView = ({
     )
   );
 
+  const selectedFilters = useEditorChange(
+    useCallback(
+      () => element.children[1]?.children?.map((th) => th.filter),
+      [element.children]
+    )
+  );
+
   useEffect(() => {
     if (availableColumns) {
       setDataColumns(availableColumns);
@@ -118,5 +130,6 @@ export const useDataView = ({
     availableColumns,
     selectedAggregationTypes,
     selectedRoundings,
+    selectedFilters,
   };
 };

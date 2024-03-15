@@ -8,7 +8,7 @@ import { DataViewDataGroupElement } from '../DataViewDataGroup';
 import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
 import { usePushDataViewToComputer } from '../../hooks/usePushDataViewToComputer';
-import { DataViewElement } from '@decipad/editor-types';
+import { DataViewElement, DataViewFilter } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 
 export interface DataViewLayoutProps {
@@ -21,6 +21,7 @@ export interface DataViewLayoutProps {
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
+  filters: Array<DataViewFilter | undefined>;
 }
 
 const MAX_PAGE_SIZE = 60;
@@ -42,6 +43,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   onChangeExpandedGroups,
   rotate,
   headers,
+  filters,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData({
     tableName,
@@ -52,6 +54,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     includeTotal: true,
     preventExpansion: rotate,
     rotate,
+    filters,
   });
 
   const [page, setPage] = useState(1);

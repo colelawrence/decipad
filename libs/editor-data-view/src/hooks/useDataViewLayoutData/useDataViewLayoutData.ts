@@ -5,6 +5,7 @@ import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 import { useReplacingColumns } from './useReplacingColumns';
 import { Result } from '@decipad/remote-computer';
+import { DataViewFilter } from '@decipad/editor-types';
 
 interface UseDataViewLayoutDataProps {
   tableName: string;
@@ -15,6 +16,7 @@ interface UseDataViewLayoutDataProps {
   includeTotal?: boolean;
   preventExpansion: boolean;
   rotate: boolean;
+  filters: Array<DataViewFilter | undefined>;
 }
 
 export const useDataViewLayoutData = ({
@@ -26,11 +28,13 @@ export const useDataViewLayoutData = ({
   includeTotal = true,
   preventExpansion = false,
   rotate,
+  filters,
 }: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
   const columns = useReplacingColumns({
     tableName,
     columns: _columns,
     roundings,
+    filters,
   });
 
   return useResolved(

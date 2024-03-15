@@ -20,6 +20,7 @@ import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';
 import { DataViewData } from '../DataViewData';
 import { getNodeString } from '@udecode/plate-common';
+import { DataViewContextProvider } from '../DataViewContext';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -60,6 +61,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     selectedRoundings,
     onInsertColumn,
     availableColumns,
+    selectedFilters,
   } = useDataView({
     editor,
     element,
@@ -97,44 +99,47 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
       {...attributes}
     >
-      <UIDataView
-        availableVariableNames={variableNames}
-        variableName={element.varName || ''}
-        onChangeVariableName={onVariableNameChange}
-        onChangeIcon={saveIcon}
-        onChangeColor={saveColor}
-        empty={isEmpty}
-        icon={(element.icon ?? 'TableSmall') as UserIconKey}
-        color={(element.color ?? defaultColor) as AvailableSwatchColor}
-        onRotated={saveRotated}
-        rotate={rotate}
-        alternateRotation={element.alternateRotation ?? false}
-        onChangeAlternateRotation={saveAlternateRotation}
-        data={
-          sortedColumns && tableName ? (
-            <DataViewData
-              element={element}
-              tableName={tableName}
-              columns={sortedColumns}
-              aggregationTypes={selectedAggregationTypes}
-              roundings={selectedRoundings}
-              expandedGroups={element.expandedGroups}
-              onChangeExpandedGroups={saveExpandedGroups}
-              rotate={rotate}
-              headers={headers}
-              alternateRotation={element.alternateRotation ?? false}
+      <DataViewContextProvider columns={availableColumns}>
+        <UIDataView
+          availableVariableNames={variableNames}
+          variableName={element.varName || ''}
+          onChangeVariableName={onVariableNameChange}
+          onChangeIcon={saveIcon}
+          onChangeColor={saveColor}
+          empty={isEmpty}
+          icon={(element.icon ?? 'TableSmall') as UserIconKey}
+          color={(element.color ?? defaultColor) as AvailableSwatchColor}
+          onRotated={saveRotated}
+          rotate={rotate}
+          alternateRotation={element.alternateRotation ?? false}
+          onChangeAlternateRotation={saveAlternateRotation}
+          data={
+            sortedColumns && tableName ? (
+              <DataViewData
+                element={element}
+                tableName={tableName}
+                columns={sortedColumns}
+                aggregationTypes={selectedAggregationTypes}
+                roundings={selectedRoundings}
+                expandedGroups={element.expandedGroups}
+                onChangeExpandedGroups={saveExpandedGroups}
+                rotate={rotate}
+                headers={headers}
+                alternateRotation={element.alternateRotation ?? false}
+                filters={selectedFilters}
+              />
+            ) : null
+          }
+        >
+          {children}
+          <VoidBlock>
+            <DataViewMenu
+              availableColumns={availableColumns}
+              onInsertColumn={onInsertColumn}
             />
-          ) : null
-        }
-      >
-        {children}
-        <VoidBlock>
-          <DataViewMenu
-            availableColumns={availableColumns}
-            onInsertColumn={onInsertColumn}
-          />
-        </VoidBlock>
-      </UIDataView>
+          </VoidBlock>
+        </UIDataView>
+      </DataViewContextProvider>
     </DraggableBlock>
   );
 };

@@ -3934,6 +3934,10 @@ Object {
     "sum",
     "max",
   ],
+  "selectedFilters": Array [
+    undefined,
+    undefined,
+  ],
   "selectedRoundings": Array [
     undefined,
     undefined,

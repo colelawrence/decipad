@@ -24,6 +24,7 @@ export interface DataViewHeader extends BaseElement {
     | 'sum'
     | 'stddev';
   rounding?: string;
+  filter?: DataViewFilter;
   name: string;
   label: string;
   children: [EmptyText];
@@ -49,3 +50,37 @@ export interface DataViewElement extends BaseElement {
   color?: string;
   icon?: string;
 }
+
+// eq = equal
+// ne = not equal
+// bt = between
+
+export type DataViewStringOperation = 'in';
+export type DataViewNumberOperation = 'eq' | 'ne' | 'bt';
+export type DataViewDateOperation = 'eq' | 'ne' | 'bt';
+export type DataViewBooleanOperation = 'eq';
+export type DataViewFilter =
+  | {
+      operation: DataViewStringOperation;
+      // valueOrValues is not optional as empty array serves as undefined
+      valueOrValues: string[];
+    }
+  | {
+      operation: Exclude<DataViewNumberOperation, 'bt'>;
+      valueOrValues?: number;
+    }
+  | {
+      operation: Exclude<DataViewDateOperation, 'bt'>;
+      valueOrValues?: string;
+    }
+  | {
+      operation: 'bt';
+      // fixed length of 2 [from, to]
+      valueOrValues?:
+        | [number | undefined, number | undefined]
+        | [string | undefined, string | undefined];
+    }
+  | {
+      operation: DataViewBooleanOperation;
+      valueOrValues: boolean;
+    };

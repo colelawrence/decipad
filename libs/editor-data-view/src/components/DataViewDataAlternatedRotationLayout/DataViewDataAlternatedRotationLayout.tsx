@@ -3,6 +3,7 @@ import { Spinner } from '@decipad/ui';
 import { AggregationKind, Column } from '../../types';
 import { useDataViewLayoutData } from '../../hooks';
 import { NestedGroups } from './NestedGroups';
+import { DataViewFilter } from '@decipad/editor-types';
 
 export interface DataViewDataAlternatedRotationLayoutProps {
   tableName: string;
@@ -13,6 +14,7 @@ export interface DataViewDataAlternatedRotationLayoutProps {
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
+  filters: Array<DataViewFilter | undefined>;
 }
 
 export const DataViewDataAlternatedRotationLayout: FC<
@@ -25,6 +27,7 @@ export const DataViewDataAlternatedRotationLayout: FC<
   expandedGroups = [],
   onChangeExpandedGroups,
   rotate,
+  filters,
 }) => {
   const groups = useDataViewLayoutData({
     tableName,
@@ -35,6 +38,7 @@ export const DataViewDataAlternatedRotationLayout: FC<
     includeTotal: true,
     preventExpansion: rotate,
     rotate,
+    filters,
   });
 
   return (

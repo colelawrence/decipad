@@ -3,34 +3,40 @@ import { useEffect, useMemo, useState } from 'react';
 import { isColumn, materializeResult } from '@decipad/remote-computer';
 import { Column } from '../../types';
 import { concatMap } from 'rxjs';
+import { buildExpression } from './buildExpression';
+import { DataViewFilter } from '@decipad/editor-types';
 
 interface UserReplacingColumnsProps {
   tableName: string;
   columns: Column[];
   roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
 }
 
 export const useReplacingColumns = ({
   tableName,
   columns,
   roundings,
+  filters,
 }: UserReplacingColumnsProps): Column[] => {
   const computer = useComputer();
-
   const replacingColumnObservables = useMemo(
     () =>
       roundings.map((rounding, columnIndex) => {
-        if (!rounding) {
-          return undefined;
-        }
         const column = columns[columnIndex];
         if (!column) {
           return;
         }
-        const observeExpression = `round(${tableName}.${column.name}, ${rounding})`;
-        return computer.expressionResultFromText$(observeExpression);
+        const expression = buildExpression(
+          tableName,
+          column.name,
+          filters,
+          columns,
+          rounding
+        );
+        return computer.expressionResultFromText$(expression);
       }),
-    [columns, computer, roundings, tableName]
+    [columns, computer, filters, roundings, tableName]
   );
 
   const [replacingColumns, setReplacingColumns] = useState<Column[]>([]);

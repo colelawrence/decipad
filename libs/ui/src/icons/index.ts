@@ -113,6 +113,7 @@ export { Giphy } from './Giphy/Giphy';
 export { GitBranch } from './GitBranch/GitBranch';
 export { Globe } from './Globe/Globe';
 export { Google } from './Google/Google';
+export { Graph } from './Graph/Graph';
 export { Growth } from './Growth';
 export { Guitar } from './Guitar';
 export { Happy } from './Happy/Happy';
