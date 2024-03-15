@@ -14523,10 +14523,10 @@
   dependencies:
     juice "^8.1.0"
 
-"@udecode/plate-link@30.5.3":
-  version "30.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-30.5.3.tgz#16a77cbfefca39e65c0953082f53af45ff428d3c"
-  integrity sha512-5XspGcriDMJOf3hput6N2XA0AouXy5YBJYHu4PaEq25hJblFgiJwvm3JWA0jMsH2HO2iffKpfpMFfcGOjjnR+w==
+"@udecode/plate-link@30.9.2":
+  version "30.9.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-30.9.2.tgz#a779a80a1bb1ebc198d46e3deb007d53765217d8"
+  integrity sha512-pA+sYLoSvqFpjdhqeW9xjYcGfzgYgwywEsbA7qIKyhhtpWigKD7mtOHk0OefZFseNa/upYHRRT+spbXTXGHEpw==
   dependencies:
     "@udecode/plate-floating" "30.5.3"
     "@udecode/plate-normalizers" "30.5.3"
@@ -14601,17 +14601,17 @@
     "@udecode/plate-table" "30.9.1"
     validator "^13.9.0"
 
-"@udecode/plate-serializer-md@30.7.0":
-  version "30.7.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-30.7.0.tgz#b95ec2f42a9e92adc0f95a1fee34cebbe3eb032f"
-  integrity sha512-xylin+NgSIHnqhGxdieKxWSxhXLCQ9bF1R1ciStdo54aLJup5IrwVUq3hQLgTZ/FORIYNoW7udXlylsdQ6JQkg==
+"@udecode/plate-serializer-md@30.9.2":
+  version "30.9.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-30.9.2.tgz#5f44012b6525ac20c984204e8bed03bbc3c1870c"
+  integrity sha512-rtLB7G/fPrmCgy77OXtuyrB6nZu9JBCDs+eYaySXRafTpM2TLXNvkQ1lqwzetRG30z/fGl80VDgVRwWc30Ebcg==
   dependencies:
     "@udecode/plate-basic-marks" "30.5.3"
     "@udecode/plate-block-quote" "30.5.3"
     "@udecode/plate-code-block" "30.7.0"
     "@udecode/plate-heading" "30.5.3"
     "@udecode/plate-horizontal-rule" "30.5.3"
-    "@udecode/plate-link" "30.5.3"
+    "@udecode/plate-link" "30.9.2"
     "@udecode/plate-list" "30.5.3"
     "@udecode/plate-media" "30.5.3"
     "@udecode/plate-paragraph" "30.5.3"
