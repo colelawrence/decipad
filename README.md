@@ -272,6 +272,30 @@ If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
 
+## Debugging the back-end
+
+We use [debug](https://github.com/debug-js/debug#readme) on our back-end and some of our common libries.
+
+You can enable debug output by either selecting the specific modules you want to debug, or all (watch out for the firehouse of logs!):
+
+All:
+
+```bash
+DEBUG=@decipad/* yarn serve:all
+```
+
+Some:
+
+```bash
+DEBUG=@decipad/backend-search,@decipad/graphqlserver yarn serve:all
+```
+
+Some important back-end debug modules are:
+
+- `@decipad/graphqlserver`
+- `@decipad/tables`
+- `@decipad/backend-auth`
+
 ## Software Stack
 
 ![Software Architecture](docs/software_architecture.png)
