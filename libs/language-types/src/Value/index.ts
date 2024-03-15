@@ -15,6 +15,7 @@ export * from './Row';
 export * from './Scalar';
 export * from './String';
 export * from './Table';
+export * from './Function';
 export * from './Unknown';
 export * from './ValueGenerator';
 export * from './defaultValue';

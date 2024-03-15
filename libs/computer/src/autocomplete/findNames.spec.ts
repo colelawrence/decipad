@@ -81,7 +81,9 @@ it('finds names', async () => {
         "kind": "function",
         "name": "f",
         "type": Object {
-          "argCount": 1,
+          "argNames": Array [
+            "x",
+          ],
           "ast": null,
           "kind": "function",
           "name": "exprRef_block_4",

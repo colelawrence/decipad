@@ -308,7 +308,8 @@ export type Expression =
   | SelectDirective
   | MatrixRef
   | Match
-  | Tiered;
+  | Tiered
+  | FunctionDefinition;
 
 export type Statement =
   | FunctionDefinition

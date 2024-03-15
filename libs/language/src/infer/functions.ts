@@ -25,7 +25,11 @@ export function inferFunctionDefinition(
 
   ctx.functionDefinitions.set(fName, statement);
 
-  return t.functionPlaceholder(fName, args.args.length, ctx.stack.depth);
+  return t.functionPlaceholder(
+    fName,
+    args.args.map((a) => a.args[0]),
+    ctx.stack.depth
+  );
 }
 
 export const inferFunction = async (

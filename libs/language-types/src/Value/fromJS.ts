@@ -1,8 +1,9 @@
 import DeciNumber from '@decipad/number';
-import type { Value } from './Value';
+import { Value } from './Value';
 import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { Scalar } from './Scalar';
+import { FunctionValue } from './Function';
 
 type ValidFromJSArg =
   | string
@@ -11,6 +12,7 @@ type ValidFromJSArg =
   | bigint
   | Date
   | DeciNumber
+  | FunctionValue
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function;
 
@@ -35,6 +37,9 @@ export const fromJS = (thing: FromJSArg, defaultValue?: Value): Value => {
   }
   if (typeof thing === 'function') {
     return Column.fromGenerator(thing as ValueGeneratorFunction);
+  }
+  if (thing instanceof FunctionValue) {
+    return thing;
   }
   if (!Array.isArray(thing)) {
     return Scalar.fromValue(thing);

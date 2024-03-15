@@ -228,9 +228,16 @@ async function internalEvaluate(
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
-      realm.functions.set(funcName, node);
-      const value = Value.UnknownValue;
-      realm.stack.set(funcName, value, realm.statementId);
+      if (funcName) {
+        realm.functions.set(funcName, node);
+      }
+      const value = Value.FunctionValue.from(
+        getDefined(getDefined(node.inferredType).functionArgNames),
+        node.args[2]
+      );
+      if (funcName) {
+        realm.stack.set(funcName, value, realm.statementId);
+      }
       return value;
     }
     case 'directive': {

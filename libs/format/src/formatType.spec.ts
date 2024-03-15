@@ -19,7 +19,7 @@ it('type can be stringified', () => {
   expect(formatType(locale, serializeType(t.nothing()))).toEqual('nothing');
   expect(formatType(locale, serializeType(t.anything()))).toEqual('anything');
   expect(
-    formatType(locale, serializeType(t.functionPlaceholder('foo', 1)))
+    formatType(locale, serializeType(t.functionPlaceholder('foo', ['a'])))
   ).toEqual('<function>');
   expect(formatType(locale, serializeType(t.number([meter])))).toEqual(
     'meters'
@@ -82,7 +82,7 @@ it('can be stringified in basic form', () => {
   expect(
     Format.formatTypeToBasicString(
       locale,
-      serializeType(t.functionPlaceholder('fname', 2))
+      serializeType(t.functionPlaceholder('fname', ['a', 'b']))
     )
   ).toEqual('function');
   expect(

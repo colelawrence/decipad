@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
-import { Column as ColumnImpl } from '@decipad/column';
+import { Column as ColumnImpl, Comparable } from '@decipad/column';
+import { DataViewFilter } from '@decipad/editor-types';
 import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 import { useReplacingColumns } from './useReplacingColumns';
-import { Result } from '@decipad/remote-computer';
-import { DataViewFilter } from '@decipad/editor-types';
 
 interface UseDataViewLayoutDataProps {
   tableName: string;
@@ -43,9 +42,7 @@ export const useDataViewLayoutData = ({
         layoutPowerData({
           columns: columns.map((column) => ({
             ...column,
-            value: ColumnImpl.fromValues(
-              column.value as Result.OneMaterializedResult[]
-            ),
+            value: ColumnImpl.fromValues(column.value as Comparable[]),
           })),
           aggregationTypes,
           expandedGroups,

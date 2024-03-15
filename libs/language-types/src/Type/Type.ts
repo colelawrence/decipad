@@ -69,7 +69,7 @@ export class Type {
   // Functions are impossible types with functionness = true
   functionness = false;
   functionName: string | undefined;
-  functionArgCount: number | undefined;
+  functionArgNames: string[] | undefined;
   functionScopeDepth: number | undefined;
 
   // Set to true when the type is still pending inference
@@ -334,13 +334,13 @@ export const column = (
 
 export const functionPlaceholder = (
   name: string,
-  argCount: number | undefined,
+  argNames: string[] | undefined,
   scopeDepth = 0
 ) =>
   produce(new Type(), (fType) => {
     fType.functionness = true;
     fType.functionName = name;
-    fType.functionArgCount = argCount;
+    fType.functionArgNames = argNames;
     fType.functionScopeDepth = scopeDepth;
   });
 

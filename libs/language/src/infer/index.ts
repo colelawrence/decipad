@@ -272,6 +272,16 @@ export const inferExpression = wrap(
         return inferMatch(realm, expr);
       case 'tiered':
         return inferTiered(realm, expr);
+      case 'function-definition': {
+        const [fName] = expr.args;
+        const functionType = inferFunctionDefinition(ctx, expr);
+        ctx.stack.set(
+          getIdentifierString(fName),
+          functionType,
+          ctx.statementId
+        );
+        return functionType;
+      }
     }
   }
 );
@@ -309,16 +319,6 @@ const inferStatementInternal = wrap(
       }
       case 'categories': {
         return inferCategories(realm, statement);
-      }
-      case 'function-definition': {
-        const [fName] = statement.args;
-        const functionType = inferFunctionDefinition(ctx, statement);
-        ctx.stack.set(
-          getIdentifierString(fName),
-          functionType,
-          ctx.statementId
-        );
-        return functionType;
       }
       default: {
         return inferExpression(realm, statement);

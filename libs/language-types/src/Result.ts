@@ -1,5 +1,6 @@
 import DeciNumber from '@decipad/number';
 import { SerializedType, SerializedTypeKind } from './SerializedType';
+import { Value } from '.';
 
 export type ResultGenerator = (
   start?: number,
@@ -17,6 +18,7 @@ export type ResultRow = OneResult[];
 export type ResultTable = Array<ResultColumn>;
 export type ResultMaterializedTable = ResultMaterializedColumn[];
 export type ResultUnknown = symbol;
+export type ResultFunction = Value.FunctionValue;
 
 export type OneMaterializedResult =
   | ResultNumber
@@ -27,7 +29,8 @@ export type OneMaterializedResult =
   | ResultMaterializedColumn
   | ResultRow
   | ResultMaterializedTable
-  | ResultUnknown;
+  | ResultUnknown
+  | ResultFunction;
 
 export type OneResult =
   | ResultNumber
@@ -40,7 +43,8 @@ export type OneResult =
   | ResultRow
   | ResultTable
   | ResultMaterializedTable
-  | ResultUnknown;
+  | ResultUnknown
+  | ResultFunction;
 
 // Can be used as Result to represent the entire spectrum of possible result values and types or
 // Result<'number'> to represent a specific kind of result value and type.
@@ -66,7 +70,7 @@ export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
     : T extends 'row'
     ? ResultRow
     : T extends 'function'
-    ? ResultUnknown | null
+    ? ResultFunction
     : T extends 'type-error'
     ? ResultUnknown | null
     : T extends 'pending'

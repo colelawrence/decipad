@@ -121,10 +121,13 @@ it('can stringify a type', () => {
       "kind": "date",
     }
   `);
-  expect(serializeType(t.functionPlaceholder('fname', 2)))
+  expect(serializeType(t.functionPlaceholder('fname', ['a', 'b'])))
     .toMatchInlineSnapshot(`
     Object {
-      "argCount": 2,
+      "argNames": Array [
+        "a",
+        "b",
+      ],
       "ast": null,
       "kind": "function",
       "name": "fname",
@@ -227,7 +230,7 @@ it('can parse a type', () => {
   });
 
   expect(
-    deserializeType({ kind: 'function', name: 'fname', argCount: 2 })
+    deserializeType({ kind: 'function', name: 'fname', argNames: ['a', 'b'] })
   ).toMatchObject({
     functionness: true,
     functionName: 'fname',

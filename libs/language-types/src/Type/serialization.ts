@@ -85,7 +85,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
       return {
         kind: 'function',
         name: getDefined(type.functionName),
-        argCount: type.functionArgCount,
+        argNames: type.functionArgNames,
         ast: type.node,
       };
     }
@@ -158,7 +158,7 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'anything':
           return t.nothing();
         case 'function':
-          return t.functionPlaceholder(type.name, type.argCount);
+          return t.functionPlaceholder(type.name, type.argNames);
         case 'type-error':
           return t.impossible(new InferError(type.errorCause));
       }

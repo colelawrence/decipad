@@ -10,6 +10,7 @@ import {
   Time,
   Type,
   Unknown,
+  Value,
   serializeType,
 } from '@decipad/language-types';
 import { validateColumnResult } from './validateColumnResult';
@@ -135,7 +136,7 @@ const validate: Validate = <
       break;
     }
     case 'function': {
-      getTrue(value == null || value === Unknown, 'expected no value');
+      getTrue(value instanceof Value.FunctionValue, 'expected no value');
       break;
     }
   }

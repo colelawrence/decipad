@@ -71,7 +71,7 @@ export type Pending = { readonly kind: 'pending' } & Common; // Top type
 export type Function = {
   readonly kind: 'function';
   readonly name: string;
-  readonly argCount?: number;
+  readonly argNames?: string[];
   readonly ast?: AST.Node | null;
 } & Common;
 export type TypeError = {
