@@ -1,0 +1,3715 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Birthday Party Planning Proposal"
+        }
+      ],
+      "type": "title",
+      "id": "cEpyEdhvE8-W9MCeBm7N2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Company  & Client Information "
+            }
+          ],
+          "id": "ZvKd4dYCiJ2g5ySCj5G5H",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ClientName"
+                    }
+                  ],
+                  "id": "4nmNJiQeV9USH8JF4hjs_",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Jane Doe"
+                    }
+                  ],
+                  "id": "QqdmKiUBh73j44NIuOYYV",
+                  "type": "exp"
+                }
+              ],
+              "id": "7HJbD1f-LWaVL2_VL7eS1",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourCompanyName"
+                    }
+                  ],
+                  "id": "h1Wc5_bKLk11n7X3cvzQL",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Birthday Masters"
+                    }
+                  ],
+                  "id": "aarjyuLpHx8xpyXBdfW1h",
+                  "type": "exp"
+                }
+              ],
+              "id": "jIlUpHj6GPpQrCnM16rmd",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "cIUdJMMQdk-p_vC1sz2VA",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ProposalDate"
+                    }
+                  ],
+                  "id": "Naf42QtTWEBA1Gzk63jy8",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2024-02-13"
+                    }
+                  ],
+                  "id": "nBNiKKXZ00xLNr5VAG1bV",
+                  "type": "exp"
+                }
+              ],
+              "id": "I-bnz_QwA7ys_X21nD0vv",
+              "type": "def",
+              "variant": "date",
+              "coerceToType": {
+                "kind": "date",
+                "date": "day"
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourPhone"
+                    }
+                  ],
+                  "id": "_dzl9PeqHB1y3YODM9yAp",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "857-123-1234"
+                    }
+                  ],
+                  "id": "1wcaEO8VpoiJThku-us2K",
+                  "type": "exp"
+                }
+              ],
+              "id": "027MRpM1YVC6LqniYzodu",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "O8H_NyMwtDPv7is54MWjf",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourEmail"
+                    }
+                  ],
+                  "id": "oBORIO3-OczwjGL-RRZRe",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Eva@EventMasters.com"
+                    }
+                  ],
+                  "id": "2DXvyPtitN3tTFxQWzH7K",
+                  "type": "exp"
+                }
+              ],
+              "id": "6eLx8L8YiKLTyiC2_PN3b",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourWebsite"
+                    }
+                  ],
+                  "id": "zjyvKZtwd6j3DprsMyywB",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "EventMasters.com"
+                    }
+                  ],
+                  "id": "RSMrd8ocGeCeji1v5vYtI",
+                  "type": "exp"
+                }
+              ],
+              "id": "fJhl8WO--a4t5aT61FnKi",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "j6wo8xf1iS4FUy_tsjaNa",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourName"
+                    }
+                  ],
+                  "id": "dLLHUwdye1kMwM8UuIaSr",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Eva"
+                    }
+                  ],
+                  "id": "JD6hWRwI0d7z5fGbWumDs",
+                  "type": "exp"
+                }
+              ],
+              "id": "0OIbSFneK6xfOgZ5VL9iv",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "YourPosition"
+                    }
+                  ],
+                  "id": "NU3sYjCUtKt0R6iRsUiES",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Event Planner"
+                    }
+                  ],
+                  "id": "yf_xhmzPKJmVQ9hw__KEK",
+                  "type": "exp"
+                }
+              ],
+              "id": "xUrc2gMXj_f2dmACrqqsd",
+              "type": "def",
+              "variant": "expression",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "ujUC3fPTdjOFtrJY-AMu3",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "Wo4mgM0QVFbT0CO-mtHra"
+        },
+        {
+          "children": [
+            {
+              "text": "Season & Size Multipliers "
+            }
+          ],
+          "id": "WgqUwlNFTGveBB8CpcxPS",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "SeasonalMultiplier"
+                    }
+                  ],
+                  "id": "dN1MNHUFdQ5h3-Ju933xG",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "ElNgQj3fcvziKTX-IrzTY",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Season"
+                    }
+                  ],
+                  "id": "vQRHs130qkqCwwYFIrIoH",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Multiplier"
+                    }
+                  ],
+                  "id": "XQQJokxsqqjVfBSnIkAFE",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                }
+              ],
+              "id": "InLAZGyMttZZb1jk2vM22",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Fall"
+                    }
+                  ],
+                  "id": "iG4sr8OWV1iLrfn-kVm6p",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15 %"
+                    }
+                  ],
+                  "id": "s73jhZL6u55uSw-KuZl7v",
+                  "type": "td"
+                }
+              ],
+              "id": "IoSSgAe4j6gY4ffTZFaHS",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Winter"
+                    }
+                  ],
+                  "id": "_eJ7R2wa1L7DXrwrRASrN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "-10 %"
+                    }
+                  ],
+                  "id": "bqfF8v8kgZZclF2x-kR_K",
+                  "type": "td"
+                }
+              ],
+              "id": "13X88IFQV27o_9zJxkEYn",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Spring"
+                    }
+                  ],
+                  "id": "wroAQmMRUZfmzs_qPGDzo",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "35 %"
+                    }
+                  ],
+                  "id": "nslFvpE2Gt1ut67XcMR08",
+                  "type": "td"
+                }
+              ],
+              "id": "GE0M1rJFnY6WBDdvMlahe",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Summer"
+                    }
+                  ],
+                  "id": "hfwtfRRBJzawK2hTVgABx",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "50 % "
+                    }
+                  ],
+                  "id": "8scR7xJ60sdGeC_CRJSNG",
+                  "type": "td"
+                }
+              ],
+              "id": "cf3YFKca1_MNV4E2Lr-Sk",
+              "type": "tr"
+            }
+          ],
+          "id": "72nkzJ1EKgb_Rvbw1gIu3",
+          "type": "table",
+          "version": 2,
+          "isCollapsed": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "SizeMultiplier"
+                    }
+                  ],
+                  "id": "x2G9sV36OFuk753qiDy7f",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "yjo1T39L-kkZne_NFkkhm",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Guests"
+                    }
+                  ],
+                  "id": "aSeixwi0Pd_Qhqud_WYAC",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Multiplier"
+                    }
+                  ],
+                  "id": "DXXx70N-A-9mQKDMB4H6P",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                }
+              ],
+              "id": "8KSm9QgW3PzMmGHLgNnsC",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": " 0-100"
+                    }
+                  ],
+                  "id": "q5F8IZNTonj6_Z_jDADXA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "lvQ91xwfZyRzvWaz_fNcC",
+                  "type": "td"
+                }
+              ],
+              "id": "rWU8IA4kVNRe-8bcQjVqi",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "101-250"
+                    }
+                  ],
+                  "id": "cKxSn-FICt2aFp7UZPbGx",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15 %"
+                    }
+                  ],
+                  "id": "u2cWDqJUXPWpQuOh6UflJ",
+                  "type": "td"
+                }
+              ],
+              "id": "i-f_9Tvdz7Y9Qpn0xRN06",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "400+"
+                    }
+                  ],
+                  "id": "-abJe6Yu8D6YilSs6Zard",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "25 %"
+                    }
+                  ],
+                  "id": "wZcN0oYo5ftMOJAtQvQNn",
+                  "type": "td"
+                }
+              ],
+              "id": "0Q2x_DD7BmkXyB_KKOg5-",
+              "type": "tr"
+            }
+          ],
+          "id": "lxkdjFdhwhIqSx9GABb1K",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "EventMultiplier"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "65FSAmhygjbQu9y5SmtIs"
+            },
+            {
+              "children": [
+                {
+                  "text": "(lookup("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "uE5lXVXe--WxjxHfm8I_G",
+                  "type": "smart-ref",
+                  "blockId": "lxkdjFdhwhIqSx9GABb1K",
+                  "columnId": null,
+                  "lastSeenVariableName": "SizeMultiplier"
+                },
+                {
+                  "text": " ,"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "E-UC1p_P90HESeo6l9uMl",
+                  "type": "smart-ref",
+                  "blockId": "lxkdjFdhwhIqSx9GABb1K",
+                  "columnId": "aSeixwi0Pd_Qhqud_WYAC",
+                  "lastSeenVariableName": "SizeMultiplier.Guests"
+                },
+                {
+                  "text": " == "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ZVzpL_3_5q8OTPrfzFOID",
+                  "type": "smart-ref",
+                  "blockId": "vy4ykwQqFInNue2RVQ-pg",
+                  "columnId": null,
+                  "lastSeenVariableName": "Guests"
+                },
+                {
+                  "text": " ).Multiplier) +  (lookup("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "QQzLROf81p-2XW1eW1iE8",
+                  "type": "smart-ref",
+                  "blockId": "72nkzJ1EKgb_Rvbw1gIu3",
+                  "columnId": null,
+                  "lastSeenVariableName": "SeasonalMultiplier"
+                },
+                {
+                  "text": " ,"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "DcGWxfGFxciQGfB2tFEMq",
+                  "type": "smart-ref",
+                  "blockId": "72nkzJ1EKgb_Rvbw1gIu3",
+                  "columnId": "vQRHs130qkqCwwYFIrIoH",
+                  "lastSeenVariableName": "SeasonalMultiplier.Season"
+                },
+                {
+                  "text": " =="
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "OO4HrWIt-Q5PpWtx-Y0mk",
+                  "type": "smart-ref",
+                  "blockId": "bQBVOtteStgSw8tRxYcGn",
+                  "columnId": null,
+                  "lastSeenVariableName": "Season"
+                },
+                {
+                  "text": " ).Multiplier)"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "qA85VSiUc_v4zCxGMv6ZI"
+            }
+          ],
+          "id": "IkUh9ctG0cTinP46hNZ1J",
+          "type": "code_line_v2",
+          "showResult": true
+        },
+        {
+          "children": [
+            {
+              "text": "Services "
+            }
+          ],
+          "id": "wrYE7wN-Nt4WazllG569F",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Services"
+                    }
+                  ],
+                  "id": "5CMGhHW2XX_oAe87SvY9l",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "QtGHqlFP9XvCRHy9gUqHE",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Tier"
+                    }
+                  ],
+                  "id": "J66keeYdJFKbJc9loQFLw",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Service"
+                    }
+                  ],
+                  "id": "Mbk1m_CcyF_b_Eku9AFDO",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  },
+                  "width": 371
+                },
+                {
+                  "children": [
+                    {
+                      "text": "BasePrice"
+                    }
+                  ],
+                  "id": "9t_ZiLbMORSlXLZVCoAgm",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "unit": "usdollar",
+                        "baseSuperQuantity": "currency",
+                        "baseQuantity": "usdollar"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "id": "Y8akB8vwbH-tsXH3tV5JC",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "jJQwKKLzSOJE06O2JPVCH",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Theme Consultation & Color Scheme Selection"
+                    }
+                  ],
+                  "id": "MFeGPGQPPymiUZTJ_vZ8z",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "200"
+                    }
+                  ],
+                  "id": "tRxPnsITNeFFbDN8k_S1n",
+                  "type": "td"
+                }
+              ],
+              "id": "rcQhXIynhZpNXJF5_hqIs",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "NC9_TQCZDOJ-AwHoR5HfS",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "DJ & Music Entertainment Referrals"
+                    }
+                  ],
+                  "id": "8ZgoxY6Z6C-KyCENfg2sw",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "oNXxI-cMzlAGa2C3TMWKt",
+                  "type": "td"
+                }
+              ],
+              "id": "u1FC1NGkT3_1qNmYJznNk",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "QgYgmXixS5YDGVawrv9cB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Photography & Videography Referrals"
+                    }
+                  ],
+                  "id": "ZwXYQsqtxIfnUqMIASLSW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "MwuPS3mmpfNJy9S7t6yx_",
+                  "type": "td"
+                }
+              ],
+              "id": "YPqDGWBjf-wpDOzGgqX9i",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "2ibaRjMgaTCTmrpqF5oKo",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Venue Recommendations"
+                    }
+                  ],
+                  "id": "FwSnANobohvHr-GhLrB2t",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "250"
+                    }
+                  ],
+                  "id": "AygL80JUFtX7in7H4je7J",
+                  "type": "td"
+                }
+              ],
+              "id": "I5qfB1g4dWWgG_3jYMEKD",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "uyBChp7ZJfYf6doU8kWEI",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Party Decor & Styling"
+                    }
+                  ],
+                  "id": "AHtljB8zEKZchGHDOKUHb",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "200"
+                    }
+                  ],
+                  "id": "l1E0re69CMoGG0U66fcH6",
+                  "type": "td"
+                }
+              ],
+              "id": "mBmEmo6zmhZ_7dZU458fl",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "3BZUEsLpWK3I2n7pxtub6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Custom Cake Design Referrals"
+                    }
+                  ],
+                  "id": "GZknEBN-BrvW6KjOnaCCy",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "250"
+                    }
+                  ],
+                  "id": "TGiLel9AUpYG9kHQQ9Y3T",
+                  "type": "td"
+                }
+              ],
+              "id": "siw59Y58KxoXs_kuyaRmy",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "xTEWkzM6fmXDl1b9PsOHL",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Entertainment & Activities Referrals"
+                    }
+                  ],
+                  "id": "uTRXxrkfu2H-t4aJ-9Yfd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "eJ1U38khrNgzWieKrrJSh",
+                  "type": "td"
+                }
+              ],
+              "id": "sK4UL4tRmW1t7qjQQ0zlf",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Basic"
+                    }
+                  ],
+                  "id": "Z2oUdLB5E0Ot92K5Hpstt",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "On-the-Day Party Coordination"
+                    }
+                  ],
+                  "id": "DZ3eM7oM48Uf7GXt4He0s",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "500"
+                    }
+                  ],
+                  "id": "xVCPlW67rTABiwRoeV6zn",
+                  "type": "td"
+                }
+              ],
+              "id": "RcdRZZfS_S2upGg2hFMbJ",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "ddH3Xz3eiTG-LzR2AVGao",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Enhanced Theme Development & Decor Planning"
+                    }
+                  ],
+                  "id": "Z8Q9-b2ZDYg4J8Gtae7fH",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "ZGiVLfBymnYKeeneSHMXr",
+                  "type": "td"
+                }
+              ],
+              "id": "lpHsGYOJdBInqfNe8iW0q",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "2CcqDNyq6A5OuZASAe2Bs",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Comprehensive Vendor Referrals"
+                    }
+                  ],
+                  "id": "mIKxpj2lZJ6heRKsJiL_A",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "250"
+                    }
+                  ],
+                  "id": "7Gw1v3fhqh9CMFfvo6aqb",
+                  "type": "td"
+                }
+              ],
+              "id": "WmxH9gO6vszS8it2vC1ve",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "rm5yKQF6Oklj9xQ1m6NSd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Customized Party Timeline Creation"
+                    }
+                  ],
+                  "id": "jDDJd6reZQuhJb7gTDYDA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "200"
+                    }
+                  ],
+                  "id": "dQtD6aCzh3U5T8ovDqMOi",
+                  "type": "td"
+                }
+              ],
+              "id": "xMN5wf7nZqI3qzZiRUDu4",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "vXER7bxnfcG_QTyfgJmJw",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Full-Day Party Coordination"
+                    }
+                  ],
+                  "id": "XQTSGJfSusnNqo5eFYXOz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "600"
+                    }
+                  ],
+                  "id": "hbAkjdGFe3imOb1w3w6_T",
+                  "type": "td"
+                }
+              ],
+              "id": "PMCIg6bR-OVjgYWRjZSzt",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "5Bgkg48dSqubL1k90JV_5",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "DJ & Live Entertainment Booking Assistance"
+                    }
+                  ],
+                  "id": "ssq1JafLa1M5S9Iax-c8Y",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "350"
+                    }
+                  ],
+                  "id": "Opr4UaZ9UhWFoVkfLl-wh",
+                  "type": "td"
+                }
+              ],
+              "id": "EH0s5SameoY9sgXsSC5tv",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "qV5cCks9W9tJeWIHd7Upl",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Custom Photography & Videography Packages"
+                    }
+                  ],
+                  "id": "O-ZQ4xm--2KBa_D2pSjRj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "450"
+                    }
+                  ],
+                  "id": "qaAulyVvEb6COom0WOxnN",
+                  "type": "td"
+                }
+              ],
+              "id": "gNHW5B2sdNy9KnxMX1Rnc",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Standard"
+                    }
+                  ],
+                  "id": "EB4QNS7YP15f8FJCbvy6r",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Specialty Catering & Menu Planning"
+                    }
+                  ],
+                  "id": "LHzIRFwBymWbksxxVMBDQ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "xGQl8ivw9sXY38VHMtkE1",
+                  "type": "td"
+                }
+              ],
+              "id": "h8jf0YQ5n48eKziC5LI6y",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "l5KREyKVu1a8LZ-4qfkZc",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Exclusive Venue Scouting & Booking"
+                    }
+                  ],
+                  "id": "K4wjSX4O7jpsQo7gr4Vtu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "Bta1egEpUmNEn0Pl36chb",
+                  "type": "td"
+                }
+              ],
+              "id": "5nFXcJxCKtC2uQotSuJme",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "AIBXp0aDoEEabCiUZfv00",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Signature Decor & Theme Design"
+                    }
+                  ],
+                  "id": "MGvY0EGhm_Bu4awEJleRk",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "IQ8EKH6O3mZLtpcdnvqSC",
+                  "type": "td"
+                }
+              ],
+              "id": "sHsdMlNBLpuYPOricxpsb",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "WYULcr3cZil4dpUionHnF",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "A-list Entertainment & Performances"
+                    }
+                  ],
+                  "id": "RbrCUOz3RibPI0yANO0n3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "700"
+                    }
+                  ],
+                  "id": "BtJKCXRdpGNJN2fvqALZr",
+                  "type": "td"
+                }
+              ],
+              "id": "in0zNAS6T_pEkGFuY75Z0",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "E0uUp0LTTvwebQA_aaWLG",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Luxurious Floral Installations & Decor"
+                    }
+                  ],
+                  "id": "_ee4_alSkBgMntCW1x6Ex",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "jFdgIMgF16hc7L8ZaYfkg",
+                  "type": "td"
+                }
+              ],
+              "id": "GdUjhiRI_bxEsUsMS4cz7",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "Cix09OMIiIS_X4wR9jVa3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Personalized Event Design & Styling"
+                    }
+                  ],
+                  "id": "Q5jQ-SAVMZho4icCLzYmt",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "SDxVphiLnvP2o9ZeTjOJt",
+                  "type": "td"
+                }
+              ],
+              "id": "W_11jliVtS6NMA9h00hf8",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "EtWe7Vu-FJz8uU8slgqwV",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Access to Premium & Luxury Vendors"
+                    }
+                  ],
+                  "id": "Z4sBk9syy0aaKpxDCxRmN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "500"
+                    }
+                  ],
+                  "id": "g90PMm2kcXKVMMJM83qV7",
+                  "type": "td"
+                }
+              ],
+              "id": "pEHcemt2T4Q2qx3jNf20G",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "DzQxTL7ptG-A5c1RpY9ZL",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "High-End Photography & Cinematography"
+                    }
+                  ],
+                  "id": "_AVC0lc_ozy9KU60JTqOz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "600"
+                    }
+                  ],
+                  "id": "WC0Zp4vkbfg9uabazPsPv",
+                  "type": "td"
+                }
+              ],
+              "id": "OiEUpv5OvsyvTnJLABQHP",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "j_AeNVS2lrN0K12uQxcc_",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "On-the-Day Event Coordination"
+                    }
+                  ],
+                  "id": "YhXGtwHdkUbW4Q1R8CqGd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "700"
+                    }
+                  ],
+                  "id": "jFwMnWs1IHKfJUHIZ8irE",
+                  "type": "td"
+                }
+              ],
+              "id": "0qk-_ocLK-X23xjTfZ2wq",
+              "type": "tr"
+            }
+          ],
+          "hideFormulas": false,
+          "id": "UzxCPRUnxm6EaREtGyz0y",
+          "type": "table",
+          "version": 2,
+          "isCollapsed": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "AddOns"
+                    }
+                  ],
+                  "id": "Q_ycvdRNZnCseiZYTTin6",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "phO5hO0vYvk0QpgSFuY16",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "AddOnService"
+                    }
+                  ],
+                  "id": "LBrtyA3o3ephgit8GUpo0",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Description"
+                    }
+                  ],
+                  "id": "pBNEJDL68QZqA4wSvkE7v",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  },
+                  "width": 307
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Price"
+                    }
+                  ],
+                  "id": "jrwsqLhVamPzPB0NUafzE",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "unit": "usdollar",
+                        "baseSuperQuantity": "currency",
+                        "baseQuantity": "usdollar"
+                      }
+                    ]
+                  },
+                  "width": 109
+                }
+              ],
+              "id": "nLffo1RrkvjIyEP1R3Su4",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ustom Invitation Design"
+                    }
+                  ],
+                  "id": "oxhWnmtgkjifJ_NIZiOQr",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Design and production of personalized birthday invitations and stationery."
+                    }
+                  ],
+                  "id": "3Zwn8jQbqZ-n0UJgzMOJW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "ENSCxnukjqTXk4GBjqx04",
+                  "type": "td"
+                }
+              ],
+              "id": "lr-W506VSoLBCMof2Hntm",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Event Website Development"
+                    }
+                  ],
+                  "id": "mhHUI8wDT8Z5EOlS3Z3jD",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Creation of a custom event website for guest information, RSVPs, and updates."
+                    }
+                  ],
+                  "id": "E3HW0L7ylLR2yS3KGcvhY",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "sPJMaRsWK19i-raKP4Kwt",
+                  "type": "td"
+                }
+              ],
+              "id": "nLJcj4HJ3I1ieQBQP1k5b",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Specialty Lighting Setup"
+                    }
+                  ],
+                  "id": "S6DknBxpmguWbS4CNX5z1",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Advanced lighting arrangements to enhance the party ambiance, including LED lights and color themes."
+                    }
+                  ],
+                  "id": "p69lVsMRhyVf-CCCpBgWC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "pge-6tVJITypbS1Qwobbz",
+                  "type": "td"
+                }
+              ],
+              "id": "LnrHxOvATcYm8d4ZVodvk",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Photo Booth Rental"
+                    }
+                  ],
+                  "id": "4JfEk5UEdOoa5YdzOL6qs",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "A photo booth setup with fun props and customizable backgrounds for guest entertainment."
+                    }
+                  ],
+                  "id": "PyOscNN7jffZq8INCGTWT",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "rcVKZJihNvZYl8Qe8Z_yp",
+                  "type": "td"
+                }
+              ],
+              "id": "tgHDAfXU5pMAPLWLrv6CP",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Specialty Cake Design"
+                    }
+                  ],
+                  "id": "3RDxt9NqMHU_kFdkBw4Hq",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Custom cake design services for a unique birthday cake that matches the party theme."
+                    }
+                  ],
+                  "id": "Vt4QUfccvViuhUeE7DUQC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "70M2-L21DlYIBBFcSPEdx",
+                  "type": "td"
+                }
+              ],
+              "id": "x0G6M_mzIgIKJlyd-37Ee",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Entertainment & Activities Booking"
+                    }
+                  ],
+                  "id": "RVtFKShROWq9gz-BPX9_P",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Booking of entertainers or activities suitable for birthday parties, such as magicians, DJs, or games."
+                    }
+                  ],
+                  "id": "K28icAp2xwoH3pGIRlJHg",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "id": "lL4BV6G4ZnYW6IJ2dWXmR",
+                  "type": "td"
+                }
+              ],
+              "id": "1zfClGtK1iR_c3a0GJd59",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Choreographed Dance Performance"
+                    }
+                  ],
+                  "id": "KEBsq74XU4piiMWfKFHUf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Professional dance lessons and a choreographed performance to entertain guests."
+                    }
+                  ],
+                  "id": "wZb600tL_6nl0P69lf2e6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "200"
+                    }
+                  ],
+                  "id": "4tW5_ZsotJxB6bX83IaKQ",
+                  "type": "td"
+                }
+              ],
+              "id": "SdKVQRrprL0rMzQHVa0YV",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Custom Decor and Balloon Artistry"
+                    }
+                  ],
+                  "id": "__tiQqi4FlKFVMV05v_Pd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Customized decor services, including balloon sculptures and thematic decorations."
+                    }
+                  ],
+                  "id": "mbEsRZ7mlzC5Tk4k0XZTF",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "350"
+                    }
+                  ],
+                  "id": "aOozGFuJXZ0OYt4U8mxCS",
+                  "type": "td"
+                }
+              ],
+              "id": "5m18HySs4jhc_-JKNlLYW",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Party Favors Design"
+                    }
+                  ],
+                  "id": "k8olNXLNRStLi0qP0ztsN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Design and production of personalized party favors for guests to take home."
+                    }
+                  ],
+                  "id": "Tk3egULkLSbhYf8lPovrg",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "250"
+                    }
+                  ],
+                  "id": "9vaGozoXtRmjfKrbQPJLc",
+                  "type": "td"
+                }
+              ],
+              "id": "8gRbs3JA7k_n8HAvklhks",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Drone Photography"
+                    }
+                  ],
+                  "id": "LEFqqqcSEIObWoheD0S6W",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Aerial photography and videography to capture unique views of the birthday celebration."
+                    }
+                  ],
+                  "id": "40dZXag9Jm2oxmBfJ4vSp",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "500"
+                    }
+                  ],
+                  "id": "Cmkki0rwLptnwsm2mQk6C",
+                  "type": "td"
+                }
+              ],
+              "id": "Z7nEa9RKYDWU3jakLEjN3",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Live Entertainment"
+                    }
+                  ],
+                  "id": "0DGnLZ6YqWjQHkIWkFjz9",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Live music or performance acts tailored to the birthday theme and audience."
+                    }
+                  ],
+                  "id": "wRRcuPjI6HJ8lc_CbjKKu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "600"
+                    }
+                  ],
+                  "id": "XVA0OScrH3cAlaTRet4TY",
+                  "type": "td"
+                }
+              ],
+              "id": "8Z35t9zU9wLv4ROYqKcyQ",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Virtual Party Coordination"
+                    }
+                  ],
+                  "id": "TEPUHJ9TGfIFd8dolyBl1",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Technical setup and coordination for virtual guest participation, including live streaming services."
+                    }
+                  ],
+                  "id": "b2vvlePAtLm2mBo3ut9bn",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "350"
+                    }
+                  ],
+                  "id": "HU9rWPhBPi8nnjswWI8Uj",
+                  "type": "td"
+                }
+              ],
+              "id": "SiEY_kqfhAnHN6Uh9dVCC",
+              "type": "tr"
+            }
+          ],
+          "id": "Sl6EUNSZUfUqAgNtGQVW_",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "text": "ServicesAtTier = {\n Services = filter("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "TZ1nkDjyJvBnjYBaxj0Ys",
+              "type": "smart-ref",
+              "blockId": "UzxCPRUnxm6EaREtGyz0y",
+              "columnId": null,
+              "lastSeenVariableName": "Services"
+            },
+            {
+              "text": " ,"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "O8Z5O0CGcXFBmqB-axOAN",
+              "type": "smart-ref",
+              "blockId": "UzxCPRUnxm6EaREtGyz0y",
+              "columnId": "J66keeYdJFKbJc9loQFLw",
+              "lastSeenVariableName": "Services.Tier"
+            },
+            {
+              "text": " =="
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "gIGf66iWzxEgKBTxryY7W",
+              "type": "smart-ref",
+              "blockId": "F_1NqPyFoqEpIXD2LsabJ",
+              "columnId": null,
+              "lastSeenVariableName": "Tier"
+            },
+            {
+              "text": " ).Service\n}"
+            }
+          ],
+          "id": "dB10FZgzvZSXLdtuszl4O",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "PriceAtTier = sum(filter("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "UPpa9epQxUSqGyEmvgZVM",
+              "type": "smart-ref",
+              "blockId": "UzxCPRUnxm6EaREtGyz0y",
+              "columnId": null,
+              "lastSeenVariableName": "Services"
+            },
+            {
+              "text": " ,"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ki8Y4N5x4vrG4CMbvOq-2",
+              "type": "smart-ref",
+              "blockId": "UzxCPRUnxm6EaREtGyz0y",
+              "columnId": "J66keeYdJFKbJc9loQFLw",
+              "lastSeenVariableName": "Services.Tier"
+            },
+            {
+              "text": " =="
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dKBQL49mZAKbLn292u1r6",
+              "type": "smart-ref",
+              "blockId": "F_1NqPyFoqEpIXD2LsabJ",
+              "columnId": null,
+              "lastSeenVariableName": "Tier"
+            },
+            {
+              "text": ").BasePrice) * (1+"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "71ctIfEwpE3HknVoL_HxF",
+              "type": "smart-ref",
+              "blockId": "IkUh9ctG0cTinP46hNZ1J",
+              "columnId": null,
+              "lastSeenVariableName": "EventMultiplier"
+            },
+            {
+              "text": " )"
+            }
+          ],
+          "id": "r-a16er81grx8gmXdzvWe",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "AddOnsTotal = sumif("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "eBhsAx3FjsDaJkdXJnTL2",
+              "type": "smart-ref",
+              "blockId": "PJZSkfnZYtKMvkVRApxBJ",
+              "columnId": "j2o0zy5T_cJXNgPaRlbJc",
+              "lastSeenVariableName": "AddOnsChoice.Price"
+            },
+            {
+              "text": " , "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Kz2zalOdS7FtHaFL3dHiB",
+              "type": "smart-ref",
+              "blockId": "PJZSkfnZYtKMvkVRApxBJ",
+              "columnId": "RngVLreG3pxohxR-8eCZS",
+              "lastSeenVariableName": "AddOnsChoice.Want"
+            },
+            {
+              "text": " == true)"
+            }
+          ],
+          "id": "fkGYJLPh1ccqhCWiONAyJ",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "TotalEventPrice= "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "3tU80m-BtDtTRUlKNn8W3",
+              "type": "smart-ref",
+              "blockId": "r-a16er81grx8gmXdzvWe",
+              "columnId": null,
+              "lastSeenVariableName": "PriceAtTier"
+            },
+            {
+              "text": " +"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "moQzoRFxLbgFxTyM9IU8d",
+              "type": "smart-ref",
+              "blockId": "fkGYJLPh1ccqhCWiONAyJ",
+              "columnId": null,
+              "lastSeenVariableName": "AddOnsTotal"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "id": "k4U39OLCnwkHXVYH7QjY1",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "PriceAfterTax = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1-EDlEEffi2B92ZbEcnGS",
+              "type": "smart-ref",
+              "blockId": "k4U39OLCnwkHXVYH7QjY1",
+              "columnId": null,
+              "lastSeenVariableName": "TotalEventPrice"
+            },
+            {
+              "text": " * (1+ "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ntEZ4iJwUqc7rHHEh27ZV",
+              "type": "smart-ref",
+              "blockId": "NAGpt0JvBd6ct3VIXgjHX",
+              "columnId": null,
+              "lastSeenVariableName": "TaxRate"
+            },
+            {
+              "text": " )"
+            }
+          ],
+          "id": "HKxsMprDNXtwTv72fVoZX",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "zcg_J2yQlIKXYx-gkQTUX"
+        }
+      ],
+      "type": "tab",
+      "id": "FSKl9Klo0Q6ZRvhjSFDHD",
+      "name": "Data"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "87QhDladgFLEuOznPggCr",
+          "type": "img",
+          "url": "https://app.decipad.com/api/pads/szz7aSdwuRoccI6rIfBJw/attachments/7hflOEBCElZuVkk6y1QlT"
+        },
+        {
+          "children": [
+            {
+              "text": "Client",
+              "bold": true
+            },
+            {
+              "text": "  "
+            },
+            {
+              "text": "ClientName",
+              "magicnumberz": true
+            },
+            {
+              "text": "\n"
+            },
+            {
+              "text": "From",
+              "bold": true
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": "YourCompanyName",
+              "magicnumberz": true
+            },
+            {
+              "text": "\n"
+            },
+            {
+              "text": "Date",
+              "bold": true
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": "ProposalDate",
+              "magicnumberz": true
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "p",
+          "id": "j71vn8McMBLIlhrjdtjhg"
+        },
+        {
+          "children": [
+            {
+              "text": "Dear "
+            },
+            {
+              "text": "ClientName",
+              "magicnumberz": true
+            },
+            {
+              "text": ", \nThank you for considering "
+            },
+            {
+              "text": "YourCompanyName",
+              "magicnumberz": true
+            },
+            {
+              "text": " for your upcoming birthday celebration. We are thrilled at the chance to work alongside you to bring your vision to life, ensuring a fun-filled and memorable experience for you and all your guests. Our commitment is to provide unparalleled service, detailed planning, and flawless execution from the beginning to the end of your event."
+            }
+          ],
+          "type": "p",
+          "id": "YHFJa5fEUUlhwOdPGglEA"
+        },
+        {
+          "children": [
+            {
+              "text": "Within this proposal, you will find a detailed overview of our tiered birthday party planning services, each thoughtfully designed to cater to the diverse array of themes, sizes, and preferences you might have in mind. Whether you're looking to host a cozy, intimate gathering or a grand, festive bash, our packages are tailored to fit every type of birthday party and budget, making sure your celebration unfolds just as you've imagined it to be."
+            }
+          ],
+          "type": "p",
+          "id": "OLtpdKidI6yH-AR3OAZTn"
+        },
+        {
+          "children": [
+            {
+              "text": "We're excited to embark on this planning journey with you and look forward to making your birthday not just a party, but an unforgettable experience."
+            }
+          ],
+          "type": "p",
+          "id": "VZSNEkXnDewGnOUXS03Z7"
+        },
+        {
+          "children": [
+            {
+              "text": "Warm regards,"
+            }
+          ],
+          "type": "p",
+          "id": "wcRN8v72xTT_lUw4U_rfI"
+        },
+        {
+          "children": [
+            {
+              "text": " "
+            },
+            {
+              "text": "YourName",
+              "magicnumberz": true
+            },
+            {
+              "text": " , "
+            },
+            {
+              "text": "YourCompanyName",
+              "magicnumberz": true
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "p",
+          "id": "6MgkTpCbzbCsbVb_wUaYp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "5qXtAxg2UeiERMi_UslDW",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Embarking on Your Event Journey",
+              "bold": true
+            }
+          ],
+          "type": "h2",
+          "id": "osuVQm-BAhpiFAb_Pq8u5"
+        },
+        {
+          "children": [
+            {
+              "text": "Let's begin by gathering some key details about your event. How many guests are you planning to invite, and in which season will the event take place? These important factors will help us tailor our pricing and services more accurately to your event's specific needs."
+            }
+          ],
+          "id": "bKfeb8pvOE3dC5YonzW12",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Specify the number of guests in the \"Guests\" dropdown."
+                }
+              ],
+              "id": "pBDDkFgjrGzjHH_w8pwWq",
+              "type": "callout"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Guests"
+                    }
+                  ],
+                  "id": "dasyMIWP4yRLIij2ayrhs",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400+"
+                    }
+                  ],
+                  "id": "ducg8qRLWli6zYe6cIM7Z",
+                  "type": "dropdown",
+                  "options": [],
+                  "smartSelection": true,
+                  "selectedColumn": "exprRef_lxkdjFdhwhIqSx9GABb1K.Guests"
+                }
+              ],
+              "id": "vy4ykwQqFInNue2RVQ-pg",
+              "type": "def",
+              "variant": "dropdown",
+              "coerceToType": {
+                "kind": "string",
+                "date": "day"
+              }
+            }
+          ],
+          "id": "h1glkfdf94x1abIS0azI-",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Specify the planned season for your event in the \"Season\" dropdown."
+                }
+              ],
+              "id": "sCRga91clQ_ds0L0O3axg",
+              "type": "callout"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Season"
+                    }
+                  ],
+                  "id": "GJYjWzZFA6x3ACzuO2YG9",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Summer"
+                    }
+                  ],
+                  "id": "V7VsXymf6QSxu5aHhL73L",
+                  "type": "dropdown",
+                  "options": [],
+                  "smartSelection": true,
+                  "selectedColumn": "exprRef_72nkzJ1EKgb_Rvbw1gIu3.Season"
+                }
+              ],
+              "id": "bQBVOtteStgSw8tRxYcGn",
+              "type": "def",
+              "variant": "dropdown",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "06H4cF7ixIdiCvggIW3T0",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "AcIFuDn3yCLmw0Vyoukbb",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Crafting Your Dream Event: Choose Your Tier",
+              "bold": true
+            }
+          ],
+          "type": "h2",
+          "id": "NyIb4FpnnA5HeEp0TMFT9"
+        },
+        {
+          "children": [
+            {
+              "text": "Now, let's move on to selecting the right service tier for your birthday party. Please read each description carefully to understand the range of services included in each tier. This step is crucial for aligning our offerings with your vision and ensuring that we provide the best possible experience tailored to your event's unique requirements."
+            }
+          ],
+          "id": "Hsgv2QANrYCrjVLK_Gfi0",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": "Basic Tier "
+            }
+          ],
+          "type": "h3",
+          "id": "BMGy6701AcJZbPK81qB4L"
+        },
+        {
+          "children": [
+            {
+              "text": "\"Simplicity Meets Fun\"\nIdeal for intimate gatherings, our Basic Tier offers essential support including venue recommendations, basic decor and theme consultation, and on-the-day party coordination. This package is designed for those who appreciate the charm of simplicity, ensuring your smaller celebrations are memorable and effortless. Embrace the joy of simplicity with streamlined planning and execution."
+            }
+          ],
+          "type": "p",
+          "id": "o1GN4TXaVj1iGaMaJ1tda"
+        },
+        {
+          "children": [
+            {
+              "text": "Standard Tier "
+            }
+          ],
+          "type": "h3",
+          "id": "XO5NnzYSXZ4L4cZN0H-ML"
+        },
+        {
+          "children": [
+            {
+              "text": "\"Personalized Fun\"\nOur Standard Tier elevates your party with enhanced theme development, comprehensive vendor referrals, full-day event coordination, decor conceptualization, and customized party timeline creation. Perfect for more significant gatherings like milestone birthdays, this package promises a seamless blend of fun and personal touch, making your event uniquely yours."
+            }
+          ],
+          "type": "p",
+          "id": "amixM6D3rkIOFIL5q2Zgp"
+        },
+        {
+          "children": [
+            {
+              "text": "Premium Tier "
+            }
+          ],
+          "type": "h3",
+          "id": "px1Sx36Zm_9USCE6nuS7h"
+        },
+        {
+          "children": [
+            {
+              "text": "\"Ultimate Celebration\"\nOur Luxurious Tier is crafted for those seeking unparalleled sophistication and excitement in their celebration, offering exclusive venue scouting, elite vendor access, and complete event design, styling, and execution. Tailored for lavish parties and grand celebrations, this package ensures your event stands out with elegance and flair, providing an unmatched level of luxury and customization."
+            }
+          ],
+          "type": "p",
+          "id": "WEs8DwlZBY10_xcTGChNB"
+        },
+        {
+          "children": [
+            {
+              "text": "— Each tier has been thoughtfully put together to cater to different types of birthday celebrations, from cozy and intimate gatherings to lavish and grand parties, ensuring that your special day is celebrated in the style it deserves.",
+              "italic": true
+            }
+          ],
+          "id": "P9pVfl1-8pCPCzoCElksy",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "mHqCU9J7350ha4gTIoNnB",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Please select the tier that best fits your event's vision and needs from the dropdown menu after reviewing the options. The price and service list is displayed below."
+                }
+              ],
+              "id": "YJ--UkSV7XcJg4_Wa_p8z",
+              "type": "callout"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Tier"
+                    }
+                  ],
+                  "id": "1GJhsmjJB3uF5MwTIGWxP",
+                  "type": "caption",
+                  "color": "Grapefruit"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Premium"
+                    }
+                  ],
+                  "id": "wOziQ71S3vO5sCoajYBq4",
+                  "type": "dropdown",
+                  "options": [],
+                  "smartSelection": true,
+                  "selectedColumn": "exprRef_UzxCPRUnxm6EaREtGyz0y.Tier"
+                }
+              ],
+              "id": "F_1NqPyFoqEpIXD2LsabJ",
+              "type": "def",
+              "variant": "dropdown",
+              "coerceToType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "id": "Y4QWNl5-1gI5Ika5oYebo",
+          "type": "columns",
+          "coerceToType": {
+            "kind": "string"
+          }
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nNI2Xc6GW-91RzQBmSFzf",
+              "type": "smart-ref",
+              "blockId": "dB10FZgzvZSXLdtuszl4O",
+              "columnId": null,
+              "lastSeenVariableName": "ServicesAtTier"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "id": "vQQBNIfz1varWSNlHzK2k",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "L4wvnDfWYo_NknZBujHGr",
+              "type": "smart-ref",
+              "blockId": "r-a16er81grx8gmXdzvWe",
+              "columnId": null,
+              "lastSeenVariableName": "PriceAtTier"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "id": "IYlHJkKa8yw1_5s1pX4Or",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "Additional Services "
+            }
+          ],
+          "type": "h2",
+          "id": "q8HpjRJDg0OeHD65-z6rM"
+        },
+        {
+          "children": [
+            {
+              "text": "In the 'AddOnsChoice' table, tick the boxes in the 'Want' column for any add-ons you'd like to include in your event."
+            }
+          ],
+          "id": "3o1Ggiqwkz_Px7JWBrz_6",
+          "type": "callout"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "AddOnsChoice"
+                    }
+                  ],
+                  "id": "lqtYbxsr-Kxhg_35Kj1hX",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "0fBNe1SYiFI1bBucl_pr2",
+                      "type": "smart-ref",
+                      "blockId": "Sl6EUNSZUfUqAgNtGQVW_",
+                      "columnId": "LBrtyA3o3ephgit8GUpo0",
+                      "lastSeenVariableName": "AddOns.AddOnService"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "A8lVCQG9qelyk35ZsjIfF",
+                  "type": "table-column-formula",
+                  "columnId": "ZtejwO20R4Aj5Qe0Er4Xi"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "tG4wgUDr3G5TwlKPpvVk4",
+                      "type": "smart-ref",
+                      "blockId": "Sl6EUNSZUfUqAgNtGQVW_",
+                      "columnId": "jrwsqLhVamPzPB0NUafzE",
+                      "lastSeenVariableName": "AddOns.Price"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "ZUZrca3E4q1Ir4ZpYuADP",
+                  "type": "table-column-formula",
+                  "columnId": "j2o0zy5T_cJXNgPaRlbJc"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "aIYPLWwOaVLZ9IlDxrVel",
+                      "type": "smart-ref",
+                      "blockId": "Sl6EUNSZUfUqAgNtGQVW_",
+                      "columnId": "pBNEJDL68QZqA4wSvkE7v",
+                      "lastSeenVariableName": "AddOns.Description"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "rVJh31_kQare0PH60mGdD",
+                  "type": "table-column-formula",
+                  "columnId": "SMpu3fHjuXY0Q8MK4NTUa"
+                }
+              ],
+              "id": "d33Gh2mgVGRq4aubIYrq7",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Want"
+                    }
+                  ],
+                  "id": "RngVLreG3pxohxR-8eCZS",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "boolean"
+                  },
+                  "width": 75
+                },
+                {
+                  "children": [
+                    {
+                      "text": "AddOn"
+                    }
+                  ],
+                  "id": "ZtejwO20R4Aj5Qe0Er4Xi",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "width": 164
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Description"
+                    }
+                  ],
+                  "id": "SMpu3fHjuXY0Q8MK4NTUa",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "width": 138
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Price"
+                    }
+                  ],
+                  "id": "j2o0zy5T_cJXNgPaRlbJc",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "width": 75
+                }
+              ],
+              "id": "o8YCa6Btv-y3E_mdmwM40",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "false"
+                    }
+                  ],
+                  "id": "d2QyDkRj0-K0QoGoPE7VO",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FG3UES-stFXurZ31PANV3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "5l3KTXVs7t6wr2ox_rjoJ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ixPoYmqLf02jgBeHDPkcP",
+                  "type": "td"
+                }
+              ],
+              "id": "JM3lZfqCxRSZvCmMvvAjp",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "s2VFmHGYVizRwrg9eQbHa",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Tm9AqU_O-4u4KDHbwgwq5",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "dlIOXp1_qxOn_0M31Lf66",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "lULjNal-4VnU1ZEN6RYD8",
+                  "type": "td"
+                }
+              ],
+              "id": "tjckxnByu66kfeJCjeCzm",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "i-mbGGtCUENMuBKZ6t6xK",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "f07HkkOyAgmpRBJ9xwDXC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "3SkPQTxhtlQjfffl5zQao",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "XD3Kt2EOcShbb2bqTAr33",
+                  "type": "td"
+                }
+              ],
+              "id": "FkRs9h8_Ne26hy6oOgNz4",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FOGt1dAiJ4Fc3SjB2hsyd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Bxirf6Vyg4QNea9lZhl8O",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "6XuoEvoqj__qEFZKoqZz-",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "hah5PZlqX7yhpSUo3aLEW",
+                  "type": "td"
+                }
+              ],
+              "id": "vZQEm8FQftTknTDiusxiE",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Bfb9dPWxISYB88LS9hKd5",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FJlvyD_eLeeNYQLXYJJRj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "76M1R165wkfeJchtjDMsN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "3J3uddjdlWquYGfWRJx0l",
+                  "type": "td"
+                }
+              ],
+              "id": "cEroG1xJxGEP_6G8L1d8l",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "N5SMd0H-qoOVzpyDEK7sx",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KNXNW1mMczkseXtKHt5d-",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "2V49BAHxyyfs7kH3e6J-r",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "9sMbNbnZxghXKOe5o7WNj",
+                  "type": "td"
+                }
+              ],
+              "id": "25Y73sWSvymnTbzjxzF1t",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "l2bmepZWp3nWYe6fiCOXg",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "BDrFY8PuV6j8gizlaNZNu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "y7H18GrSf_Mkn7kSNEXps",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "_IUjQjrYO02Szwckwsc2O",
+                  "type": "td"
+                }
+              ],
+              "id": "WXfTGXBzKG5Sq3_CMOcV5",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ygx9jTA0KYHELm15_R-y8",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "-rQ8uJCpF0HjfOsHUdnLu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "C5my-cBHLFKkRdmdTL-O_",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ooiF29Z6NuSikslYFKVgG",
+                  "type": "td"
+                }
+              ],
+              "id": "85oEuo9dxon1ZZjCuegCw",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "PGBMUGbDEvR5BrVqYVahv",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "zJrvE8BUQnyxL6zVyUzFd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FZIFWFoowRG25uy3mPJIr",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "CpskfEOHXn01ytLnthG3Z",
+                  "type": "td"
+                }
+              ],
+              "id": "fiB8MGupDzFb9fpb-okuz",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "a40p1BEV8PcnBr6OQ5-ZW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "QEezRpi4Rt-Sxh6Gnjz5x",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "wnao_59DnjhyX6JM_Uz2U",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "DoWB-9-V9riID811EdPQN",
+                  "type": "td"
+                }
+              ],
+              "id": "RWDjZENqdxAWeDCAYcH6S",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "8vwVKBCE2tuV8OKy4xPOC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "8tlLwkIKK5ICNxlTO4r1Z",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FzpweomX1gHDzsP2lMCfc",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "EFhdAeYhY8twpbfsJCFD1",
+                  "type": "td"
+                }
+              ],
+              "id": "XG4EAxco4Ohs5wD2vMvJk",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "pCYH_Ulf-2sfCJvF2_C_R",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "S0JGMOmLNsyERMg9mwKw8",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "gDZEsipZ_14OSYRfBKtTM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "uuWDhwTVStmeQX0paM-dX",
+                  "type": "td"
+                }
+              ],
+              "id": "PZl0eTWhEb6qo1msfE1qM",
+              "type": "tr"
+            }
+          ],
+          "id": "PJZSkfnZYtKMvkVRApxBJ",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": true,
+          "isCollapsed": false
+        },
+        {
+          "children": [
+            {
+              "text": "Summary"
+            }
+          ],
+          "id": "8WZLL5ApyHJALHvrWiORe",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "text": "That's it! Please review the pricing, and don't hesitate to contact us if you have any questions or need further assistance."
+            }
+          ],
+          "id": "sKHKm7ul6Qhy_QDwc4stu",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "cNya_uLhvgMaleGjCfAPR",
+              "type": "smart-ref",
+              "blockId": "r-a16er81grx8gmXdzvWe",
+              "columnId": null,
+              "lastSeenVariableName": "PriceAtTier"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "id": "aU_1aBP7KX98HFutAeXiQ",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "85QMBWM7Fl-mw_uWJVsiV",
+              "type": "smart-ref",
+              "blockId": "fkGYJLPh1ccqhCWiONAyJ",
+              "columnId": null,
+              "lastSeenVariableName": "AddOnsTotal"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "id": "GMyCOPEIcW5y0Nsrwg9bZ",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "hDlIruC4HJJFdooytnr0x",
+              "type": "smart-ref",
+              "blockId": "k4U39OLCnwkHXVYH7QjY1",
+              "columnId": null,
+              "lastSeenVariableName": "TotalEventPrice"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "id": "CNDW98ff-e7PAMBkzigz6",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "kjgP4UASbRGpy366yEagt",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "TaxRate"
+                    }
+                  ],
+                  "id": "lePHtUOE3A2sGgak5aMDB",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15 %"
+                    }
+                  ],
+                  "id": "AxkrhUdsZ4zdMR2tupZbM",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "rKQSzKb-Ul0UP5V2ycqtA",
+                  "type": "slider",
+                  "max": "100",
+                  "min": "1",
+                  "step": "1",
+                  "value": "5"
+                }
+              ],
+              "id": "NAGpt0JvBd6ct3VIXgjHX",
+              "type": "def",
+              "variant": "slider"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "5SWQHNmPu9XioKbk1J3Bn",
+              "blockId": "HKxsMprDNXtwTv72fVoZX",
+              "type": "display",
+              "varName": "PriceAfterTax"
+            }
+          ],
+          "id": "e0S41putfkRzEhkqgb2sw",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "JKBageawZac-gnAFNwh8D"
+        },
+        {
+          "children": [
+            {
+              "text": "Moving Forward"
+            }
+          ],
+          "type": "h3",
+          "id": "Jc5j0Wfxe0az55qoki3jN"
+        },
+        {
+          "children": [
+            {
+              "text": "To begin your journey with "
+            },
+            {
+              "text": "YourCompanyName",
+              "magicnumberz": true
+            },
+            {
+              "text": " for your event planning, kindly go through this proposal and reach out to us. We're eager to delve into any part of this proposal with you, tailor our services to fit your needs perfectly, and clarify any queries you might hold."
+            }
+          ],
+          "type": "p",
+          "id": "oWt7Pll_uLRlOdQPLeJNq"
+        },
+        {
+          "children": [
+            {
+              "text": "Complimentary Consultation"
+            }
+          ],
+          "type": "h3",
+          "id": "aCUsxNKETsosURQVkZCpn"
+        },
+        {
+          "children": [
+            {
+              "text": "Enjoy a free initial consultation to dive deeper into your event's specifics. This conversation is a chance for us to understand your vision, needs, and how Event Masters can craft an unforgettable experience together."
+            }
+          ],
+          "type": "p",
+          "id": "fDSJcN-ESeiroycm_tdZe"
+        },
+        {
+          "children": [
+            {
+              "text": "Get in Touch"
+            }
+          ],
+          "type": "h3",
+          "id": "zS6HLAdlF525hDJfj-U6J"
+        },
+        {
+          "children": [
+            {
+              "text": "Should you have any questions or wish to book your consultation, please don't hesitate to contact us:"
+            }
+          ],
+          "type": "p",
+          "id": "z-pt1qJfIacDOpHG8ako8"
+        },
+        {
+          "children": [
+            {
+              "text": "Thank you for considering "
+            },
+            {
+              "text": "Event Masters",
+              "bold": true
+            },
+            {
+              "text": " for your event planning requirements. We are excited about the prospect of collaborating with you to surpass your event aspirations."
+            }
+          ],
+          "type": "p",
+          "id": "-SpatD_z1UGfyPrJ8hgss"
+        },
+        {
+          "children": [
+            {
+              "text": "Warm regards,"
+            }
+          ],
+          "type": "p",
+          "id": "YZ7x3CLjwEt6wont01l1w"
+        },
+        {
+          "children": [
+            {
+              "text": " "
+            },
+            {
+              "text": "YourName",
+              "magicnumberz": true
+            },
+            {
+              "text": ", "
+            },
+            {
+              "text": "YourPosition",
+              "magicnumberz": true
+            },
+            {
+              "text": " at "
+            },
+            {
+              "text": "YourCompanyName",
+              "magicnumberz": true
+            },
+            {
+              "text": " ."
+            }
+          ],
+          "type": "p",
+          "id": "Tntpns-QBOmZgayA_QFED"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "riapBScYlia_uEsdgIpEw",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "\n\n"
+            }
+          ],
+          "type": "p",
+          "id": "z6IYpKQsA41M4twrVYmqH"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "LBpMu9phgcfwZZLPPnL-1"
+        }
+      ],
+      "type": "tab",
+      "name": "Proposal",
+      "id": "0-xkls0lEnTdjsX9srytc"
+    }
+  ]
+}

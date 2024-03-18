@@ -1511,4 +1511,40 @@ export class Notebook {
   getSliderValueLocator(name: string) {
     return this.getSliderLocator(name).getByTestId('widget-input');
   }
+
+  /**
+   * Check notebook has calculation errors
+   */
+  async checkCalculationErrors() {
+    await test.step(`Check errors`, async () => {
+      await expect(async () => {
+        // check for errors in calculations
+        await expect(
+          this.page.getByTestId('code-line-warning'),
+          `calculation errors visible`
+        ).toBeHidden();
+
+        // check for error blocks
+        await expect(
+          this.page.getByTestId('error-block'),
+          `broken blocks visible`
+        ).toBeHidden();
+
+        // check for results that didn't load or magic errors, the code base uses loading-results & loading-animation
+        await expect(
+          this.page.getByTestId('loading-results'),
+          `loading blocks visible`
+        ).toBeHidden();
+
+        // check if integrations get stuck loading, the code base uses loading-results & loading-animation
+        await expect(
+          this.page.getByTestId('loading-animation'),
+          `loading blocks visible`
+        ).toBeHidden();
+      }).toPass({
+        intervals: [4_000],
+        timeout: 20_000,
+      });
+    });
+  }
 }
