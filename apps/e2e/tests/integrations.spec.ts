@@ -7,8 +7,6 @@ import {
 } from '../utils/src';
 import { ControlPlus } from '../utils/page/Editor';
 
-import { createWithSlashCommand } from '../utils/page/Block';
-
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
     await page.getByTestId('paragraph-content').last().click();
@@ -192,12 +190,12 @@ test('screenshots the import menu', async ({ testUser }) => {
 test('Checks the ability to change the unit of a response', async ({
   testUser,
 }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   const allSources = codePlaceholders;
   expect(allSources.length).toBeGreaterThan(0);
 
-  await createWithSlashCommand(page, '/integrations');
-  await page.getByTestId('select-integration:Code').click();
+  await notebook.addBlockSlashCommand('open-integration');
+  await await page.getByTestId('select-integration:Code').click();
 
   // First line of the CodeMirror
   await page

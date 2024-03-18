@@ -1,5 +1,4 @@
 import { expect, test } from './manager/decipad-tests';
-import { focusOnBody } from '../utils/page/Editor';
 import { createSliderBelow } from 'apps/e2e/utils/page/Block';
 import {
   addColumn,
@@ -39,7 +38,7 @@ test('Creating a basic model', async ({ testUser }) => {
   // | 3     | 2025 | £1,300        | £1,472.88  | £172.88     |
 
   await test.step('Create Table', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createTable(page);
 
     await addColumn(page);

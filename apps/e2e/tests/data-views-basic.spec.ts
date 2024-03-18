@@ -1,10 +1,9 @@
 import { test, expect } from './manager/decipad-tests';
-import { focusOnBody } from '../utils/page/Editor';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
-test('Data Views', async ({ testUser: { page } }) => {
+test('Data Views', async ({ testUser: { page, notebook } }) => {
   await test.step('creates table', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createTable(page);
   });
 

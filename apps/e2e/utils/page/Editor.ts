@@ -8,7 +8,6 @@ import {
   createWorkspace,
   importNotebook,
 } from '../src';
-import { isOnPlayground, navigateToPlayground } from './Playground';
 import { navigateToWorkspacePage } from './Workspace';
 import stringify from 'json-stringify-safe';
 import emptyNotebook from '../../__fixtures__/010-empty-notebook.json';
@@ -33,16 +32,6 @@ export async function waitForEditorToLoad(page: Page) {
     await expect(page.getByTestId('notebook-title')).toBeVisible();
   }).toPass();
   await page.getByTestId('notebook-title').click();
-  if (!isOnPlayground(page)) {
-    if (await page.isVisible('text=/clear all/i')) {
-      await page.click('text=/clear all/i');
-      await page.locator(editorTitleLocator()).first().click({
-        timeout: Timeouts.maxSelectorWaitTime,
-      });
-      // since we have changed the title, we need to move the cursor the to the end of the text
-      await page.keyboard.press('ArrowRight');
-    }
-  }
 }
 
 export async function waitForNotebookToLoad(page: Page) {
@@ -101,24 +90,11 @@ export async function setUp(
   return newUser;
 }
 
-export async function goToPlayground(page: Page) {
-  await navigateToPlayground(page);
-  await waitForEditorToLoad(page);
-  await page.click('[data-slate-editor] h1');
-}
-
 export async function getPadName(page: Page) {
   await page.waitForSelector(editorTitleLocator());
   // eslint-disable-next-line playwright/no-element-handle
   const name = await page.$('[data-slate-editor] h1');
   return (await name?.textContent())?.trim();
-}
-
-export async function focusOnBody(page: Page, paragraphNumber = 0) {
-  const p = await page.waitForSelector(
-    `[data-testid="paragraph-wrapper"] >> nth=${paragraphNumber}`
-  );
-  await p.click();
 }
 
 export async function keyPress(page: Page, k: string) {

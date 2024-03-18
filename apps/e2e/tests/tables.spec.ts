@@ -1,6 +1,5 @@
 import { expect, test, Page } from './manager/decipad-tests';
 import {
-  focusOnBody,
   ControlPlus,
   keyPress,
   navigateToNotebook,
@@ -311,7 +310,7 @@ test('tests table date pickers', async ({ testUser }) => {
   const day = String(today.getDate()).padStart(2, '0');
 
   await test.step('checks table year picker', async () => {
-    await focusOnBody(testUser.page);
+    await testUser.notebook.focusOnBody();
     await createTable(testUser.page);
     line = 1;
     col = 1;
@@ -720,8 +719,8 @@ test('Starts editing cell on enter', async ({ testUser }) => {
   });
 });
 
-test('Table Custom Units', async ({ testUser: { page } }) => {
-  await focusOnBody(page);
+test('Table Custom Units', async ({ testUser: { page, notebook } }) => {
+  await notebook.focusOnBody();
   await createTable(page);
   await addColumnUnit(page, 1, 'bananas');
   // second column
@@ -733,8 +732,8 @@ test('Table Custom Units', async ({ testUser: { page } }) => {
   expect(await getFromTable(page, 3, 1)).toBe('3 bananas');
 });
 
-test('Variables in Table', async ({ testUser: { page } }) => {
-  await focusOnBody(page);
+test('Variables in Table', async ({ testUser: { page, notebook } }) => {
+  await notebook.focusOnBody();
 
   await createCalculationBlockBelow(page, 'Hello = 3 + 6');
   await createCalculationBlockBelow(page, 'World = 2 + 1');

@@ -1,10 +1,6 @@
 import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
-import {
-  editorTitleLocator,
-  keyPress,
-  focusOnBody,
-} from '../utils/page/Editor';
+import { editorTitleLocator, keyPress } from '../utils/page/Editor';
 import {
   createCalculationBlockBelow,
   createCodeLineV2Below,
@@ -189,9 +185,9 @@ test('Navigating with magic numbers', async ({ testUser }) => {
 });
 
 test('Inputs and magic numbers', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('can create an input', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await createInputBelow(page, 'Foo', 1337);
     await page.keyboard.press('ArrowRight');
     await expect(page.getByText('1337')).toBeVisible();

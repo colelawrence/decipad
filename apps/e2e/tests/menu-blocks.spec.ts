@@ -16,14 +16,13 @@ import {
   createSliderBelow,
   createToggleBelow,
 } from '../utils/page/Block';
-import { focusOnBody } from '../utils/page/Editor';
 
 import { createTable } from '../utils/page/Table';
 
 test('check menu blocks', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('focus on notebook', async () => {
-    await focusOnBody(page);
+    await notebook.focusOnBody();
   });
 
   await test.step('creates number input', async () => {
