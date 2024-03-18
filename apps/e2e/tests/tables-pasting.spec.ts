@@ -51,26 +51,29 @@ test('Table Pasting', async ({ testUser }) => {
     expect(await getFromTable(page, 2, 0)).toBe('three');
     expect(await getFromTable(page, 2, 1)).toBe('four');
   });
+});
 
-  await test.step('pastes tabular data into bottom-right corner of table', async () => {
-    await deleteTable(page);
-    await createTable(page);
+test('pastes tabular data into bottom-right corner of table', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
 
-    await pasteHtmlIntoCell(
-      page,
-      '<table>' +
-        '<tr><td>one</td><td>two</td></tr>' +
-        '<tr><td>three</td><td>four</td></tr>' +
-        '</table>',
-      3,
-      2
-    );
+  await pasteHtmlIntoCell(
+    page,
+    '<table>' +
+      '<tr><td>one</td><td>two</td></tr>' +
+      '<tr><td>three</td><td>four</td></tr>' +
+      '</table>',
+    3,
+    2
+  );
 
-    expect(await getFromTable(page, 3, 2)).toBe('one');
-    expect(await getFromTable(page, 3, 3)).toBe('two');
-    expect(await getFromTable(page, 4, 2)).toBe('three');
-    expect(await getFromTable(page, 4, 3)).toBe('four');
-  });
+  expect(await getFromTable(page, 3, 2)).toBe('one');
+  expect(await getFromTable(page, 3, 3)).toBe('two');
+  expect(await getFromTable(page, 4, 2)).toBe('three');
+  expect(await getFromTable(page, 4, 3)).toBe('four');
 
   await test.step('pasting overwrites existing cells', async () => {
     await pasteHtmlIntoCell(
@@ -98,46 +101,56 @@ test('Table Pasting', async ({ testUser }) => {
     expect(await getFromTable(page, 1, 0)).toBe('c2');
     expect(await getFromTable(page, 1, 1)).toBe('d2');
   });
+});
 
-  await test.step('pastes plain text into collapsed cell selection', async () => {
-    await deleteTable(page);
-    await createTable(page);
-    await pastePlainTextIntoCell(page, 'Hello world', 2, 1);
-    expect(await getFromTable(page, 2, 1)).toBe('Hello world');
-  });
+test('pastes plain text into collapsed cell selection', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
+  await pastePlainTextIntoCell(page, 'Hello world', 2, 1);
+  expect(await getFromTable(page, 2, 1)).toBe('Hello world');
+});
 
-  await test.step('pastes html text into collapsed cell selection', async () => {
-    await deleteTable(page);
-    await createTable(page);
-    await pasteHtmlIntoCell(page, '<div>Hello world</div>', 2, 1);
-    expect(await getFromTable(page, 2, 1)).toBe('Hello world');
-  });
+test('pastes html text into collapsed cell selection', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
+  await pasteHtmlIntoCell(page, '<div>Hello world</div>', 2, 1);
+  expect(await getFromTable(page, 2, 1)).toBe('Hello world');
+});
 
-  await test.step('pastes plain text into expanded forward cell selection', async () => {
-    await deleteTable(page);
-    await createTable(page);
+test('pastes plain text into expanded forward cell selection', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
 
-    // Anchor in middle cell, focus to the right of it
-    await clickCell(page, 2, 1);
-    await page.keyboard.down('Shift');
-    await clickCell(page, 2, 2);
-    await page.keyboard.up('Shift');
+  // Anchor in middle cell, focus to the right of it
+  await clickCell(page, 2, 1);
+  await page.keyboard.down('Shift');
+  await clickCell(page, 2, 2);
+  await page.keyboard.up('Shift');
 
-    await pastePlainTextIntoCell(page, 'Hello world', 2, 1, false);
-    expect(await getFromTable(page, 2, 1)).toBe('Hello world');
-  });
+  await pastePlainTextIntoCell(page, 'Hello world', 2, 1, false);
+  expect(await getFromTable(page, 2, 1)).toBe('Hello world');
+});
 
-  await test.step('pastes plain text into expanded backward cell selection', async () => {
-    await deleteTable(page);
-    await createTable(page);
+test('pastes plain text into expanded backward cell selection', async ({
+  testUser,
+}) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
 
-    // Anchor in middle cell, focus to the left of it
-    await clickCell(page, 2, 1);
-    await page.keyboard.down('Shift');
-    await clickCell(page, 2, 0);
-    await page.keyboard.up('Shift');
+  // Anchor in middle cell, focus to the left of it
+  await clickCell(page, 2, 1);
+  await page.keyboard.down('Shift');
+  await clickCell(page, 2, 0);
+  await page.keyboard.up('Shift');
 
-    await pastePlainTextIntoCell(page, 'Hello world', 2, 1, false);
-    expect(await getFromTable(page, 2, 1)).toBe('Hello world');
-  });
+  await pastePlainTextIntoCell(page, 'Hello world', 2, 1, false);
+  expect(await getFromTable(page, 2, 1)).toBe('Hello world');
 });
