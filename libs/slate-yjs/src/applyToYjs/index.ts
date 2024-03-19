@@ -1,6 +1,7 @@
 import invariant from 'tiny-invariant';
 import { TOperation } from '@udecode/plate-common';
 import { captureException } from '@sentry/browser';
+import stringify from 'json-stringify-safe';
 import { SharedType } from '../model';
 import node from './node';
 import text from './text';
@@ -53,12 +54,17 @@ export default function applySlateOps(
           // eslint-disable-next-line no-console
           console.error(
             'Error applying slate op',
-            op,
-            (err as Error).message,
-            (err as Error).stack,
-            err
+            stringify(op),
+            'to',
+            stringify(sharedType.toJSON())
           );
-          captureException(err);
+          captureException(err, {
+            data: {
+              op,
+              sharedType: sharedType.toJSON(),
+              origin,
+            },
+          });
         }
       });
     }, origin);
