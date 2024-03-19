@@ -151,7 +151,7 @@
     "@sentry/react": "7.107.0",
     "@sentry/serverless": "7.107.0",
     "@sentry/tracing": "7.107.0",
-    "@sentry/vite-plugin": "^2.15.0",
+    "@sentry/vite-plugin": "^2.16.0",
     "@storybook/addon-actions": "7.6.1",
     "@storybook/addon-essentials": "7.6.1",
     "@storybook/core-server": "7.6.1",
