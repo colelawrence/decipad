@@ -2,6 +2,7 @@ import { FC } from 'react';
 import * as S from './styles';
 import { Toggle } from '../../../shared';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 interface PublishControlsProps {
   readonly notebookId: string;
@@ -16,7 +17,7 @@ export const PublishControls: FC<PublishControlsProps> = ({
   allowDuplicate,
   onChangeAllowDuplicate,
 }) => {
-  if (publishedStatus !== 'PUBLIC') {
+  if (publishedStatus !== 'PUBLIC' || !isFlagEnabled('NEW_PAYMENTS')) {
     return null;
   }
 

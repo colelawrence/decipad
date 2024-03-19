@@ -28,16 +28,65 @@ import {
   PermissionType,
   Resolvers,
   Role,
+  RoleAccess,
+  User,
+  UserAccess,
   Workspace,
   WorkspaceAccess,
 } from '@decipad/graphqlserver-types';
-import { WorkspaceRecord } from '@decipad/backendtypes';
+import { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
 import { maybeThrowForbidden } from './helpers';
 
 const workspaces = resource('workspace');
+
+async function getUsersFromRole(
+  userRolePermissions: Array<PermissionRecord>
+): Promise<Array<UserAccess>> {
+  const data = await tables();
+
+  const users = await Promise.all(
+    userRolePermissions.map(async (r): Promise<UserAccess | undefined> => {
+      const user = await data.users.get({ id: r.user_id });
+      if (!user) {
+        return undefined;
+      }
+
+      return {
+        userId: user.id,
+        user: user as User,
+        permission: r.type,
+        canComment: r.can_comment,
+      };
+    })
+  );
+
+  return users.filter((u): u is UserAccess => u != null);
+}
+
+async function getUsersFromRoles(
+  roleKeys: Array<string>
+): Promise<Array<UserAccess>> {
+  const data = await tables();
+
+  const allRoleUsers = await Promise.all(
+    roleKeys.map(async (r) => {
+      const { Items: userRolePermissions } = await data.permissions.query({
+        IndexName: 'byResource',
+        KeyConditionExpression: 'resource_uri = :resource_uri',
+        ExpressionAttributeValues: {
+          ':resource_uri': r,
+        },
+      });
+
+      return getUsersFromRole(userRolePermissions);
+    })
+  );
+
+  return allRoleUsers.flat();
+}
 
 function WorkspaceRecordToWorkspace(
   workspaceRecord: WorkspaceRecord
@@ -358,31 +407,35 @@ const resolvers: Resolvers = {
 
       const roleAccesses = permissions
         .filter((p) => p.role_id !== 'null')
-        .map((p) => ({
-          role_id: p.role_id,
-          permission: p.type,
-          canComment: p.can_comment,
-          createdAt: p.createdAt,
-        }))
+        .map(
+          (p): RoleAccess => ({
+            roleId: p.role_id,
+            permission: p.type,
+            canComment: p.can_comment,
+            role: {} as unknown as Role, // Subresolver will catch this
+          })
+        )
         .sort(by('permission'));
 
-      const userAccesses = permissions
+      const rolelessUsers = permissions
         .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
-        .map((p) => ({
-          userId: p.user_id,
-          permission: p.type,
-          canComment: p.can_comment,
-          createdAt: p.createdAt,
-        }))
+        .map(
+          (p): UserAccess => ({
+            userId: p.user_id,
+            permission: p.type,
+            canComment: p.can_comment,
+          })
+        )
         .sort(by('permission'));
+
+      const roleResourceKeys = roleAccesses.map((r) => `/roles/${r.roleId}`);
+
+      const users = await getUsersFromRoles(roleResourceKeys);
 
       return {
         id: workspace.id,
-        roles: roleAccesses.map((r) => ({
-          ...r,
-          roleId: r.role_id,
-        })),
-        users: userAccesses,
+        roles: roleAccesses,
+        users: [...rolelessUsers, ...users],
       } as unknown as WorkspaceAccess;
     },
 

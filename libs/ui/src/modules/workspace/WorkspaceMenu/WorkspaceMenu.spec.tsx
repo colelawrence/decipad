@@ -15,20 +15,21 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
       id: '42',
       membersCount: 2,
       name: 'Some Workspace',
-      isSelected: true,
       sections: [],
+      pads: { items: [] },
     },
     {
       id: '1337',
       membersCount: 2,
       name: 'Some Other Workspace',
-      isSelected: false,
       sections: [],
+      pads: { items: [] },
     },
   ],
   hasFreeWorkspaceSlot: true,
   onCreateWorkspace: noop,
   onSelectWorkspace: noop,
+  getPlanTitle: () => 'bruh',
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (

@@ -1,6 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { CreateSectionMutation } from '@decipad/graphql-client';
+import {
+  CreateSectionMutation,
+  DashboardWorkspaceFragment,
+} from '@decipad/graphql-client';
 import { docs, workspaces } from '@decipad/routing';
 import { FC, useContext, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -33,14 +36,14 @@ import {
 } from '../../../utils';
 import { CreateOrEditSectionModal } from '../CreateOrEditSectionModal/CreateOrEditSectionModal';
 
-import { Section, SectionRecord, WorkspaceMeta } from 'libs/ui/src/types';
+import { Section, SectionRecord } from 'libs/ui/src/types';
 import { NavigationItem } from '../NavigationItem/NavigationItem';
 import { NavigationList } from '../NavigationList/NavigationList';
 import { SectionItem } from '../SectionItem/SectionItem';
 import * as Styled from './styles';
 
 interface WorkspaceNavigationProps {
-  readonly activeWorkspace: WorkspaceMeta;
+  readonly activeWorkspace: DashboardWorkspaceFragment;
   readonly showAdminSettings: boolean;
   readonly onDeleteSection: (sectionId: string) => void;
   readonly onCreateSection: (

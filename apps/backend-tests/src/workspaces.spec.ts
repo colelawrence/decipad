@@ -95,7 +95,12 @@ test('workspaces', (ctx) => {
             },
           },
         ],
-        users: [],
+        users: [
+          {
+            permission: 'ADMIN',
+            user: { name: 'Test User' },
+          },
+        ],
       },
       name: 'Workspace 1',
     });

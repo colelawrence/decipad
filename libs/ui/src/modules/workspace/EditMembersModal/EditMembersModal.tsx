@@ -28,16 +28,8 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
         ...u,
         canComment: true,
       })) ?? []),
-      ...(currentWorkspace.access?.roles?.flatMap((access) =>
-        access.role.users?.map((roleUser) => ({
-          permission: access.permission,
-          // currentSpace is not aware if the user updated their details
-          user: roleUser.id === currentUserId ? user : roleUser,
-          canComment: true,
-        }))
-      ) ?? []),
     ],
-    [currentWorkspace, currentUserId, user]
+    [currentWorkspace]
   );
 
   return (

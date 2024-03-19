@@ -241,32 +241,33 @@ test('Workspace flows', async ({ randomFreeUser: { page, workspace } }) => {
 });
 
 test('workspace permissions', async ({
-  premiumUser,
+  testUser,
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
   test.slow();
   let premiumWorkspaceId: string;
   await test.step('premium user is premium', async () => {
-    await premiumUser.goToWorkspace();
+    await testUser.goToWorkspace();
     premiumWorkspaceId = (
-      await premiumUser.workspace.newWorkspace('Premium Workspace@n1n.co team')
+      await testUser.workspace.newWorkspace('Premium Workspace@n1n.co team')
     )
       .split('/')
       .at(-1)!;
-    await premiumUser.page.reload();
+    await testUser.page.reload();
   });
 
   await test.step('invite member and admin', async () => {
-    await premiumUser.workspace.addWorkspaceMember(randomFreeUser.email);
-    await premiumUser.workspace.addWorkspaceMember(
+    await testUser.workspace.checkWorkspaceMember(testUser.email);
+    await testUser.workspace.addWorkspaceMember(randomFreeUser.email);
+    await testUser.workspace.addWorkspaceMember(
       anotherRandomFreeUser.email,
       'Admin'
     );
-    await premiumUser.createAndNavNewNotebook(premiumWorkspaceId);
-    await premiumUser.notebook.updateNotebookTitle('Test Notepad');
-    await premiumUser.notebook.checkNotebookTitle('Test Notepad');
-    await premiumUser.goToWorkspace(premiumWorkspaceId);
+    await testUser.createAndNavNewNotebook(premiumWorkspaceId);
+    await testUser.notebook.updateNotebookTitle('Test Notepad');
+    await testUser.notebook.checkNotebookTitle('Test Notepad');
+    await testUser.goToWorkspace(premiumWorkspaceId);
   });
 
   await test.step('standard member checks', async () => {
@@ -321,23 +322,23 @@ test('workspace permissions', async ({
 });
 
 test('reader and collaborator permissions', async ({
-  premiumUser,
+  testUser,
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
   let notebook: string;
 
   await test.step('invite reader and collaborator to notebook', async () => {
-    await premiumUser.goToWorkspace();
-    await premiumUser.workspace.newWorkspaceWithPlan('team');
+    await testUser.goToWorkspace();
+    await testUser.workspace.newWorkspaceWithPlan('team');
 
-    await premiumUser.workspace.newNotebook.click();
-    await premiumUser.notebook.inviteUser(randomFreeUser.email, 'reader');
-    await premiumUser.notebook.inviteUser(
+    await testUser.workspace.newNotebook.click();
+    await testUser.notebook.inviteUser(randomFreeUser.email, 'reader');
+    await testUser.notebook.inviteUser(
       anotherRandomFreeUser.email,
       'collaborator'
     );
-    notebook = premiumUser.page.url();
+    notebook = testUser.page.url();
   });
 
   await test.step('reader checks', async () => {
@@ -360,9 +361,6 @@ test('reader and collaborator permissions', async ({
     ).toBeFalsy();
   });
 
-  /*
-  // Requirements are different, random free user shouldn't be
-  // able to invite to notebooks
   await test.step('collaborator checks', async () => {
     await anotherRandomFreeUser.page.goto(notebook);
     await anotherRandomFreeUser.notebook.waitForEditorToLoad();
@@ -374,7 +372,7 @@ test('reader and collaborator permissions', async ({
     await anotherRandomFreeUser.page.getByTestId('publish-button').click();
     await expect(
       anotherRandomFreeUser.page.getByText(
-        'Request access to have more sharing options'
+        'To invite users to the notebook you must have a team or enterprise plan'
       )
     ).toBeVisible();
     await anotherRandomFreeUser.notebook.focusOnBody();
@@ -389,5 +387,4 @@ test('reader and collaborator permissions', async ({
       'edited by collaborator'
     );
   });
-  */
 });

@@ -2,7 +2,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CreateSectionMutation,
-  useWorkspacePermission,
+  DashboardWorkspaceFragment,
 } from '@decipad/graphql-client';
 
 import { smallScreenQuery } from '../../../primitives';
@@ -14,17 +14,19 @@ import { WorkspaceSelector } from '../WorkspaceSelector/WorkspaceSelector';
 
 import { Drawer } from 'vaul';
 import useMediaQuery from '../../../hooks/useMediaQuery';
-import { useLocalStorage } from '@decipad/react-utils';
+import { useLocalStorage, useStripePlans } from '@decipad/react-utils';
 import { WorkspaceNavigation } from '../WorkspaceNavigation/WorkspaceNavigation';
 import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
 import { useLocation } from 'react-router-dom';
 import { SidebarOpen } from 'libs/ui/src/icons';
-import { SectionRecord, WorkspaceMeta } from 'libs/ui/src/types/workspaces';
+import { SectionRecord } from 'libs/ui/src/types/workspaces';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { workspaces as workspaceRouting } from '@decipad/routing';
 
 type DashboardSidebarProps = {
   readonly name: string | undefined;
   readonly email: string | undefined;
-  readonly workspaces: WorkspaceMeta[];
+  readonly workspaces: Array<DashboardWorkspaceFragment>;
   readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onNavigateWorkspace: (id: string) => void;
@@ -39,6 +41,14 @@ type DashboardSidebarProps = {
   readonly onLogout: () => void;
 };
 
+const getPlanTitle =
+  (stripePlans: ReturnType<typeof useStripePlans>) =>
+  (workspace: DashboardWorkspaceFragment): string => {
+    const title = stripePlans.find((p) => p?.key === workspace.plan);
+
+    return title?.title ?? 'Free';
+  };
+
 export const DashboardSidebar = ({
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
@@ -49,14 +59,23 @@ export const DashboardSidebar = ({
     onCreateWorkspace,
   } = props;
 
-  const activeWorkspace = useMemo(
-    () => workspaces.find((workspace) => workspace.isSelected) ?? workspaces[0],
-    [workspaces]
-  );
+  const { workspaceId } = useRouteParams(workspaceRouting({}).workspace);
 
-  const permission = useWorkspacePermission(activeWorkspace.id);
+  const plans = useStripePlans();
+  const getPlanCurried = useMemo(() => getPlanTitle(plans), [plans]);
 
-  const showAdminSettings = permission === 'ADMIN';
+  const [activeWorkspace, planTitle] = useMemo((): [
+    DashboardWorkspaceFragment,
+    string
+  ] => {
+    const ws =
+      workspaces.find((workspace) => workspace.id === workspaceId) ??
+      workspaces[0];
+
+    return [ws, getPlanCurried(ws)];
+  }, [workspaces, getPlanCurried, workspaceId]);
+
+  const showAdminSettings = activeWorkspace.myPermissionType === 'ADMIN';
 
   const SELECTED_WORKSPACE_KEY = 'selectedWorkspace';
 
@@ -119,6 +138,7 @@ export const DashboardSidebar = ({
                   hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
                   onCreateWorkspace={withCloseDrawer(onCreateWorkspace)}
                   onSelectWorkspace={withCloseDrawer(handleSelectWorkspace)}
+                  getPlanTitle={getPlanCurried}
                 />
 
                 <Styled.Separator />
@@ -143,13 +163,14 @@ export const DashboardSidebar = ({
         name={activeWorkspace.name}
         membersCount={activeWorkspace.membersCount ?? 1}
         isPremium={!!activeWorkspace.isPremium}
-        plan={activeWorkspace.plan?.title}
+        plan={planTitle}
         MenuComponent={
           <WorkspaceMenu
             workspaces={workspaces}
             hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
             onCreateWorkspace={onCreateWorkspace}
             onSelectWorkspace={handleSelectWorkspace}
+            getPlanTitle={getPlanCurried}
           />
         }
       />

@@ -11,11 +11,12 @@ import {
   useLocation,
   useNavigationType,
 } from 'react-router-dom';
+import { env } from '@decipad/utils';
 
-const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
+const sentryDsn = env.VITE_SENTRY_DSN;
 
 const analytics = (): AnalyticsBrowser | undefined => {
-  const writeKey = import.meta.env.VITE_ANALYTICS_WRITE_KEY;
+  const writeKey = env.VITE_ANALYTICS_WRITE_KEY;
   if (writeKey) {
     try {
       return AnalyticsBrowser.load({ writeKey });

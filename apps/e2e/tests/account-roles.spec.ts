@@ -1,7 +1,7 @@
 import { expect, test } from './manager/decipad-tests';
 
 test('workspace permissions', async ({
-  premiumUser,
+  testUser,
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
@@ -9,24 +9,24 @@ test('workspace permissions', async ({
 
   let premiumWorkspaceId: string;
   await test.step('premium user is premium', async () => {
-    await premiumUser.goToWorkspace();
+    await testUser.goToWorkspace();
     premiumWorkspaceId = (
-      await premiumUser.workspace.newWorkspace('Premium Workspace@n1n.co')
+      await testUser.workspace.newWorkspace('Premium Workspace@n1n.co')
     )
       .split('/')
       .at(-1)!;
-    await premiumUser.page.reload();
+    await testUser.page.reload();
   });
 
   await test.step('invite member and admin', async () => {
-    await premiumUser.workspace.addWorkspaceMember(randomFreeUser.email);
-    await premiumUser.workspace.addWorkspaceMember(
+    await testUser.workspace.addWorkspaceMember(randomFreeUser.email);
+    await testUser.workspace.addWorkspaceMember(
       anotherRandomFreeUser.email,
       'Admin'
     );
-    await premiumUser.createAndNavNewNotebook(premiumWorkspaceId);
-    await premiumUser.notebook.updateNotebookTitle('Test Notepad');
-    await premiumUser.goToWorkspace(premiumWorkspaceId);
+    await testUser.createAndNavNewNotebook(premiumWorkspaceId);
+    await testUser.notebook.updateNotebookTitle('Test Notepad');
+    await testUser.goToWorkspace(premiumWorkspaceId);
   });
 
   await test.step('standard member checks', async () => {

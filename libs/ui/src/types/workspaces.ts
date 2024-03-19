@@ -1,4 +1,4 @@
-import { Maybe, Workspace } from '@decipad/graphql-client';
+import { Maybe } from '@decipad/graphql-client';
 
 export type Section = {
   id: string;
@@ -16,15 +16,4 @@ export type SectionRecord = {
   name: string;
   color: string;
   workspaceId: string;
-};
-
-export type WorkspaceMeta = Pick<
-  Workspace,
-  'id' | 'name' | 'membersCount' | 'isPremium'
-> & {
-  readonly sections: Section[];
-} & {
-  readonly isSelected: boolean;
-} & {
-  readonly plan?: Maybe<Plan>;
 };

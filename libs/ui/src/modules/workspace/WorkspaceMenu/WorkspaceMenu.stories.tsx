@@ -10,20 +10,21 @@ export default {
 export const Normal: StoryFn = () => (
   <WorkspaceMenu
     hasFreeWorkspaceSlot={true}
+    getPlanTitle={() => 'bruh'}
     workspaces={[
       {
         id: '42',
         membersCount: 2,
         name: 'Some Workspace',
-        isSelected: true,
         sections: [],
+        pads: { items: [] },
       },
       {
         id: '1337',
         membersCount: 2,
         name: 'Some Other Workspace',
-        isSelected: false,
         sections: [],
+        pads: { items: [] },
       },
     ]}
     onCreateWorkspace={noop}

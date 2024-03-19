@@ -157,35 +157,9 @@ const Workspace: FC = () => {
     return getWorkspacePlan(currentWorkspace?.plan);
   }, [currentWorkspace, getWorkspacePlan]);
 
-  const workspacesMeta = useMemo(
-    () =>
-      allWorkspaces.map((w) => {
-        const plan = getWorkspacePlan(w.plan);
-        return {
-          id: w.id,
-          name: w.name,
-          membersCount: w.membersCount ?? 1,
-          isPremium: !!w.isPremium,
-          isSelected: w.id === workspaceId,
-          plan: plan && {
-            key: plan.key,
-            title: plan.title,
-            description: plan.description,
-          },
-          href: w.href,
-          sections: w.sections.map((s) => ({
-            id: s.id,
-            name: s.name,
-            color: s.color,
-          })),
-        };
-      }),
-    [allWorkspaces, workspaceId, getWorkspacePlan]
-  );
-
   const hasFreeWorkspaceSlot = useMemo(
-    () => workspacesMeta.filter((w) => !w.isPremium).length < 1,
-    [workspacesMeta]
+    () => allWorkspaces.filter((w) => !w.isPremium).length < 1,
+    [allWorkspaces]
   );
 
   const {
@@ -308,7 +282,7 @@ const Workspace: FC = () => {
       <DashboardSidebar
         name={session?.user?.name}
         email={session.user?.email}
-        workspaces={workspacesMeta}
+        workspaces={allWorkspaces}
         hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
         onCreateWorkspace={() => {
           if (

@@ -41,13 +41,6 @@ fragment WorkspaceMembers on Workspace {
       permission
       role {
         id
-        users {
-          id
-          name
-          email
-          image
-          emailValidatedAt
-        }
       }
     }
   }
@@ -73,6 +66,7 @@ fragment DashboardWorkspace on Workspace {
   isPremium
   plan
   createdAt
+  myPermissionType
   pads(page: { maxItems: 10000 }) {
     items {
       ...WorkspaceNotebook

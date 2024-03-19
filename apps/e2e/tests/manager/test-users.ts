@@ -70,10 +70,6 @@ export class User {
     await this.setupWithEmail(email);
   }
 
-  async setupRandomPremiumUser(email: string = premiumEmail()) {
-    await this.setupWithEmail(email);
-  }
-
   /**
    *Creates and navigates to a new notebook.
    *

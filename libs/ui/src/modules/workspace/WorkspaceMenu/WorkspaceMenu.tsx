@@ -2,26 +2,32 @@ import { FC } from 'react';
 
 import { noop } from '@decipad/utils';
 import { WorkspaceItem } from '../WorkspaceItem/WorkspaceItem';
+import { workspaces as routingWorkspaces } from '@decipad/routing';
 
 import * as Styled from './styles';
 
 import { Button } from 'libs/ui/src/shared';
-import { WorkspaceMeta } from 'libs/ui/src/types';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
+import { useRouteParams } from 'typesafe-routes/react-router';
 
 interface WorkspaceMenuProps {
-  readonly workspaces: WorkspaceMeta[];
+  readonly workspaces: DashboardWorkspaceFragment[];
   readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onSelectWorkspace: (id: string) => void;
+  readonly getPlanTitle: (workspace: DashboardWorkspaceFragment) => string;
 }
 
 export const WorkspaceMenu = ({
   workspaces,
   hasFreeWorkspaceSlot,
+  getPlanTitle,
   onCreateWorkspace = noop,
   onSelectWorkspace = noop,
 }: WorkspaceMenuProps): ReturnType<FC> => {
+  const { workspaceId } = useRouteParams(routingWorkspaces({}).workspace);
+
   return (
     <Styled.MenuWrapper>
       <Styled.MenuNav>
@@ -34,8 +40,8 @@ export const WorkspaceMenu = ({
             id={workspace.id}
             membersCount={workspace.membersCount ?? 1}
             isPremium={!!workspace.isPremium}
-            isActive={workspace.isSelected}
-            plan={workspace?.plan?.title}
+            isActive={workspace.id === workspaceId}
+            plan={getPlanTitle(workspace)}
           />
         ))}
       </Styled.MenuNav>

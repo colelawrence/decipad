@@ -379,7 +379,6 @@ export class Workspace {
    * @param role - role of user to add
    */
   async addWorkspaceMember(email: string, role: 'Admin' | 'Member' = 'Member') {
-    // open settings section if they are closed
     await this.openWorkspaceSettingsSection();
     await this.page.getByTestId('manage-workspace-members').click();
     await this.page.locator('input[type="email"]').fill(email);
@@ -389,6 +388,22 @@ export class Workspace {
       await this.page.getByText('Workspace admin').click();
     }
     await this.page.getByText('Send invitation').click();
+    await expect(async () => {
+      await this.page.getByTestId('closable-modal').click();
+      await expect(
+        this.page.getByTestId('manage-workspace-members')
+      ).toBeVisible();
+    }).toPass();
+  }
+
+  /**
+   * Check workspace member
+   */
+  async checkWorkspaceMember(email: string) {
+    await this.openWorkspaceSettingsSection();
+    await this.page.getByTestId('manage-workspace-members').click();
+
+    await expect(this.page.getByRole('dialog').getByText(email)).toBeVisible();
     await expect(async () => {
       await this.page.getByTestId('closable-modal').click();
       await expect(

@@ -1,4 +1,7 @@
-import { useGetSubscriptionsPlansQuery } from '@decipad/graphql-client';
+import {
+  SubPlansFragment,
+  useGetSubscriptionsPlansQuery,
+} from '@decipad/graphql-client';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useMemo } from 'react';
 
@@ -10,7 +13,12 @@ type NotebookAvatarTrait = {
 
 const MAX_NOTEBOOK_COLLABORATORS = 3;
 
-export const useStripePlans = () => {
+export type UseStripePlansReturn = SubPlansFragment & {
+  price: number;
+  description: string;
+};
+
+export const useStripePlans = (): Array<UseStripePlansReturn> => {
   const [subscriptionPlans] = useGetSubscriptionsPlansQuery();
 
   const plans = useMemo(() => {
@@ -45,7 +53,9 @@ export const useStripePlans = () => {
   }, [availablePlans]);
 
   const sortedPlans = useMemo(() => {
-    return linkedPlans.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0));
+    return linkedPlans
+      .sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0))
+      .filter((plan): plan is UseStripePlansReturn => plan != null);
   }, [linkedPlans]);
 
   return sortedPlans;
