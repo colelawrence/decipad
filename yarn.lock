@@ -1022,10 +1022,10 @@
     "@smithy/util-utf8" "^2.0.2"
     tslib "^2.5.0"
 
-"@aws-sdk/client-cloudformation@^3.536.0":
-  version "3.536.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.536.0.tgz#8001028979d659b940b34192e91cd6a800dfc9ca"
-  integrity sha512-Pbk2DRL3l6AcNPCpqejh5XrDdqkfVl+934e4BKbd5oiRWmiXvQ9gwWoB4fGhtBmhgCL050KIa5oepnCknBJrhg==
+"@aws-sdk/client-cloudformation@^3.537.0":
+  version "3.537.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.537.0.tgz#c7e00dd37c0379753df1da92dcb8d1aba21785c2"
+  integrity sha512-bzktdQuL1zNziiap/wDaxdtLQdeb/320SwXfY7l1MEMQoXGtKftTmMT9PBh2Zwp69BhGZmt3NQLztM9Z8pmeBA==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
@@ -1211,10 +1211,10 @@
     "@smithy/util-utf8" "^2.3.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-s3@3.536.0", "@aws-sdk/client-s3@^3.316.0", "@aws-sdk/client-s3@^3.319.0", "@aws-sdk/client-s3@^3.536.0":
-  version "3.536.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.536.0.tgz#15cf90a15e68229652227fbacfc90a8c2dc05f42"
-  integrity sha512-UM5txJxq8qKzLDVuW9c904bpb7+u1jOeyJITLz79WpyHSOP6ERHoTx/ltEuGJ4zQVazfkgthqR0lIn09sXEEuw==
+"@aws-sdk/client-s3@3.537.0", "@aws-sdk/client-s3@^3.316.0", "@aws-sdk/client-s3@^3.319.0", "@aws-sdk/client-s3@^3.537.0":
+  version "3.537.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.537.0.tgz#887b2c743da49378104054b66aa135fae805263c"
+  integrity sha512-EMPN2toHz1QtSiDeLKS1zrazh+8J0g1Y5t5lCq25iTXqCSV9vB2jCKwG5+OB6L5tAKkwyl1uZofeWLmdFkztEg==
   dependencies:
     "@aws-crypto/sha1-browser" "3.0.0"
     "@aws-crypto/sha256-browser" "3.0.0"
@@ -1231,7 +1231,7 @@
     "@aws-sdk/middleware-recursion-detection" "3.535.0"
     "@aws-sdk/middleware-sdk-s3" "3.535.0"
     "@aws-sdk/middleware-signing" "3.535.0"
-    "@aws-sdk/middleware-ssec" "3.535.0"
+    "@aws-sdk/middleware-ssec" "3.537.0"
     "@aws-sdk/middleware-user-agent" "3.535.0"
     "@aws-sdk/region-config-resolver" "3.535.0"
     "@aws-sdk/signature-v4-multi-region" "3.535.0"
@@ -2350,10 +2350,10 @@
     "@smithy/util-middleware" "^2.2.0"
     tslib "^2.6.2"
 
-"@aws-sdk/middleware-ssec@3.535.0":
-  version "3.535.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-ssec/-/middleware-ssec-3.535.0.tgz#d4f537d64651f330eada73a7890ff9975760ad0a"
-  integrity sha512-QAQ++9my7VZzusUPOFcUMdhTnjpGRyy/OvPC+jg9usdfcaSZeQbfzbdaVBalcm2Wt+1qxh3LZSTS+LxKikm02Q==
+"@aws-sdk/middleware-ssec@3.537.0":
+  version "3.537.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-ssec/-/middleware-ssec-3.537.0.tgz#c64e4234e38f285e9e2bdf06fdbbb57f6bc848b2"
+  integrity sha512-2QWMrbwd5eBy5KCYn9a15JEWBgrK2qFEKQN2lqb/6z0bhtevIOxIRfC99tzvRuPt6nixFQ+ynKuBjcfT4ZFrdQ==
   dependencies:
     "@aws-sdk/types" "3.535.0"
     "@smithy/types" "^2.12.0"
@@ -2423,12 +2423,12 @@
     "@smithy/util-middleware" "^2.2.0"
     tslib "^2.6.2"
 
-"@aws-sdk/s3-presigned-post@^3.536.0":
-  version "3.536.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/s3-presigned-post/-/s3-presigned-post-3.536.0.tgz#6c08d89b6a575b1a65ea07d1f6c0c3285bcbfa6d"
-  integrity sha512-6CRDpD5GZkHmxBD5UB7NdOmOd2v2By8Mw/kqSGmxgHPsQwrYWnuR3FdxAX4j/QDv81KUiCgak2w/SacDaiPN3g==
+"@aws-sdk/s3-presigned-post@^3.537.0":
+  version "3.537.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/s3-presigned-post/-/s3-presigned-post-3.537.0.tgz#e19d39450a469d825dc2a554fc26274e9511ec7e"
+  integrity sha512-M0aaTmDMjOWF691039kdIZ/FCFbldFXOmzC+brH6sDsfn3jtVFR1Rpl5hE1qibqnx3dIZn7AL80FEFhW7tpTxw==
   dependencies:
-    "@aws-sdk/client-s3" "3.536.0"
+    "@aws-sdk/client-s3" "3.537.0"
     "@aws-sdk/types" "3.535.0"
     "@aws-sdk/util-format-url" "3.535.0"
     "@smithy/middleware-endpoint" "^2.5.0"
@@ -2438,10 +2438,10 @@
     "@smithy/util-utf8" "^2.3.0"
     tslib "^2.6.2"
 
-"@aws-sdk/s3-request-presigner@^3.536.0":
-  version "3.536.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.536.0.tgz#ca1af127c44d0b962bc43626e0b3956c837bc24f"
-  integrity sha512-bMz7nxYfSjCkw72Hah40o0c9scwU2LQWoT3CkTcWs9OCrG4MCzMTBJNlzRUpxOpfGTZqVzrCaUGINIjh3jP/tQ==
+"@aws-sdk/s3-request-presigner@^3.537.0":
+  version "3.537.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.537.0.tgz#4e57a4666adc6424c51165af2b1e299182467a83"
+  integrity sha512-jG3u9PTl9LpMFr+AY4jx4HvN3+qCFN5vy45U4E8zPagsQ4MbEseUcYpyyC9SHo+3DIgAJQLNV8Zv3LrtdiB5vQ==
   dependencies:
     "@aws-sdk/signature-v4-multi-region" "3.535.0"
     "@aws-sdk/types" "3.535.0"
