@@ -16,3 +16,4 @@ export * from './useTabs';
 export * from './useDropdownConsumer';
 export * from './useActiveEditor';
 export * from './useWorker';
+export * from './useGeneratedName';

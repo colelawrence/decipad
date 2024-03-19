@@ -244,7 +244,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
   });
 
   await test.step('Load Drop down with values from table column', async () => {
-    await page.locator('[data-testid="widget-editor"] button >> nth=1').click();
+    await page.getByRole('button', { name: 'Ellipsis' }).click();
     await page.getByRole('menuitem', { name: 'Change type' }).click();
     await page.getByRole('menuitem', { name: 'From existing column' }).click();
 

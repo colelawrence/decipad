@@ -26,7 +26,6 @@ import {
   offBlack,
   smallestDesktop,
   transparency,
-  white,
 } from '../../../primitives';
 import { columns } from '../../../styles';
 import {
@@ -120,32 +119,23 @@ const buttonWrapperStyles = (variant: Variant) =>
     }),
   });
 
-const variableNameStyles = (variant: Variant) =>
-  css({
-    alignSelf: 'start',
-    flexGrow: 2,
-    minWidth: 0,
-    position: 'relative',
+const variableNameStyles = css({
+  alignSelf: 'start',
+  flexGrow: 2,
+  minWidth: 0,
+  position: 'relative',
 
-    '::after': {
-      display: 'block',
-      height: '100%',
-      width: '24px',
-      content: '""',
-      right: 0,
-      top: 0,
-      position: 'absolute',
-      pointerEvents: 'none',
-      ...(variant !== 'display' && {
-        color: 'white',
-        background: `linear-gradient(
-      90deg,
-      ${transparency(white, 0).rgba},
-      ${cssVar('backgroundMain')}
-    )`,
-      }),
-    },
-  });
+  '::after': {
+    display: 'block',
+    height: '100%',
+    width: '24px',
+    content: '""',
+    right: 0,
+    top: 0,
+    position: 'absolute',
+    pointerEvents: 'none',
+  },
+});
 
 const toggleWrapperStyles = css({
   display: 'flex',
@@ -253,7 +243,7 @@ export const VariableEditor = ({
           ]}
         >
           <>
-            <div css={variableNameStyles(variant)}>{childrenArray[0]}</div>
+            <div css={variableNameStyles}>{childrenArray[0]}</div>
             {variant !== 'display' && (
               <span
                 contentEditable={false}

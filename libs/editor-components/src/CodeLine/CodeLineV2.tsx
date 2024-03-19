@@ -19,6 +19,8 @@ import {
 } from '@decipad/editor-utils';
 import {
   useEnsureValidVariableName,
+  useGeneratedName,
+  useNodePath,
   useNodeText,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
@@ -40,6 +42,7 @@ import {
   findNodePath,
   getNodeString,
   getPreviousNode,
+  insertText,
   useElement,
   useEventEditorSelectors,
 } from '@udecode/plate-common';
@@ -233,6 +236,21 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const varResult = useContext(VarResultContext);
   const simpleValue = useContext(SimpleValueContext);
   const isReadOnly = useIsEditorReadOnly();
+  const path = useNodePath(props.element);
+
+  const setLabel = useCallback(
+    (newOption: string) => {
+      insertText(editor, newOption, {
+        at: path,
+      });
+    },
+    [editor, path]
+  );
+
+  const { generate, cancel } = useGeneratedName({
+    element: props.element,
+    setLabel,
+  });
 
   const { id: lineId } = element;
   const lineResult = computer.getBlockIdResult$.use(lineId);
@@ -303,6 +321,8 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
               readOnly={isReadOnly}
               onClick={handleCodeVariableDefinitionClick}
               onDragStartInlineResult={handleDragStartInlineResult}
+              onGenerateName={generate}
+              onCancelGenerateName={cancel}
             >
               <CodeVariableDefinitionEffects onEditorChange={onEditorChange} />
               {props.children}

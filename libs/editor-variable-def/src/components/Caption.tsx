@@ -7,15 +7,16 @@ import {
   useMyEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { getNodeString, isElement } from '@udecode/plate-common';
+import { getNodeString, insertText, isElement } from '@udecode/plate-common';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 import {
   usePathMutatorCallback,
   useEnsureValidVariableName,
   useNodePath,
+  useGeneratedName,
 } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { useContext, useRef } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { useFocused } from 'slate-react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useVariableEditorContext } from './VariableEditorContext';
@@ -32,9 +33,23 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const path = useNodePath(element);
   const setIcon = usePathMutatorCallback(editor, path, 'icon', 'Caption');
   const setColor = usePathMutatorCallback(editor, path, 'color', 'Caption');
+  const setLabel = useCallback(
+    (newOption: string) => {
+      insertText(editor, newOption, {
+        at: path,
+      });
+    },
+    [editor, path]
+  );
+
+  const { generate, cancel } = useGeneratedName({
+    element,
+    setIcon,
+    setLabel,
+  });
 
   // Captions are not editable in read mode.
-  const isEditable = !useIsEditorReadOnly();
+  const readOnly = useIsEditorReadOnly();
   const { color } = useVariableEditorContext();
 
   // ensure variable name is unique
@@ -44,6 +59,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       return isElement(node) && node.type === ELEMENT_VARIABLE_DEF;
     },
   });
+
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   // Analytics
@@ -66,16 +82,19 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const caption = (
     <div
       {...attributes}
-      contentEditable={isEditable}
+      contentEditable={!readOnly}
       suppressContentEditableWarning
       data-testid="widget-caption"
     >
       <UICaption
         color={color}
+        readOnly={readOnly}
         onChangeIcon={setIcon}
         onChangeColor={setColor}
         icon={element.icon as UserIconKey}
         empty={getNodeString(element).length === 0}
+        onGenerateName={generate}
+        onCancelGenerateName={cancel}
       >
         {children}
       </UICaption>

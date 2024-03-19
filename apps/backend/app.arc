@@ -56,6 +56,7 @@ any /api/ai/rewrite-paragraph
 any /api/ai/generate-fetch-js
 any /api/ai/complete-column
 post /api/ai/feedback
+post /api/ai/names/:padid
 
 # Image endpoints
 any /api/image/generate

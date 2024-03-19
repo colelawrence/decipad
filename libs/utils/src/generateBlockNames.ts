@@ -39,7 +39,7 @@ const PositiveWords = [
 
 const Everything = [...Animals, ...Fruits];
 
-const generatedNames = () => {
+export const generatedNames = () => {
   const tI = Math.floor(Math.random() * Everything.length);
   const wI = Math.floor(Math.random() * PositiveWords.length);
   return `${Math.random() > 0.5 ? PositiveWords[wI] : ''}${Everything[tI]}`;

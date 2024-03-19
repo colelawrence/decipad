@@ -11,6 +11,7 @@ import {
   PlateProps,
 } from '@udecode/plate-common';
 import { Caption } from './Caption';
+import { ToastDisplay } from '@decipad/ui';
 
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
@@ -35,9 +36,11 @@ beforeEach(() => {
 
 it('renders the element properties', () => {
   const { getByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>
+    <ToastDisplay>
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>
+    </ToastDisplay>
   );
 
   expect(getByText('var')).toBeVisible();
