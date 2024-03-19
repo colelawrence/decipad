@@ -258,7 +258,7 @@
     "get-stream": "^7.0.1",
     "globby": "14.0.0",
     "graphql": "16.8.0",
-    "graphql-scalars": "1.22.1",
+    "graphql-scalars": "1.23.0",
     "graphql-type-json": "^0.3.2",
     "graphql-ws": "5.15.0",
     "handlebars": "^4.7.7",
