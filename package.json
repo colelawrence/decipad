@@ -351,7 +351,7 @@
     "react-vega": "7.6.0",
     "remark": "15.0.1",
     "remark-parse": "11.0.0",
-    "replicate": "^0.28.1",
+    "replicate": "^0.29.0",
     "run-parallel-limit": "1.1.0",
     "rxjs": "7.8.0",
     "rxjs-hooks": "0.7.0",
