@@ -37,27 +37,28 @@ export const useDataViewLayoutData = ({
   });
 
   return useResolved(
-    useMemo(
-      () =>
-        layoutPowerData({
-          columns: columns.map((column) => ({
-            ...column,
-            value: ColumnImpl.fromValues(column.value as Comparable[]),
-          })),
-          aggregationTypes,
-          expandedGroups,
-          includeTotal,
-          preventExpansion,
-          rotate,
-        }),
-      [
+    useMemo(() => {
+      if (!columns.every((column) => Array.isArray(column.value))) {
+        return;
+      }
+      return layoutPowerData({
+        columns: columns.map((column) => ({
+          ...column,
+          value: ColumnImpl.fromValues(column.value as Comparable[]),
+        })),
         aggregationTypes,
-        columns,
         expandedGroups,
         includeTotal,
         preventExpansion,
         rotate,
-      ]
-    )
+      });
+    }, [
+      aggregationTypes,
+      columns,
+      expandedGroups,
+      includeTotal,
+      preventExpansion,
+      rotate,
+    ])
   );
 };
