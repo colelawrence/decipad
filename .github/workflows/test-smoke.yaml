@@ -88,8 +88,14 @@ jobs:
           DECI_VERBOSE: false
         run: ./scripts/e2e-smoke.sh
 
-      - uses: actions/upload-artifact@v4
-        if: always()
+      - name: Merge GitHub Report
+        run: npx playwright merge-reports --reporter github /home/runner/actions-runner/_work/decipad/decipad/blob-report
+
+      - name: Merge into HTML Report
+        run: npx playwright merge-reports --reporter html /home/runner/actions-runner/_work/decipad/decipad/blob-report
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: /home/runner/actions-runner/_work/decipad/decipad/playwright-report

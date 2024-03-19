@@ -28,9 +28,6 @@ echo "running E2E tests and snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
   npx playwright test --project=smoke --repeat-each 20 --retries 0
-  npx playwright merge-reports --reporter github /home/runner/actions-runner/_work/decipad/decipad/blob-report
-  npx playwright merge-reports --reporter html /home/runner/actions-runner/_work/decipad/decipad/blob-report
-  
 else
   npx playwright test $@
 fi
