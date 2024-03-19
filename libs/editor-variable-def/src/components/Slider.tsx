@@ -1,40 +1,50 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import {
-  ELEMENT_COLUMNS,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
   ExpressionElement,
-  MyEditor,
   PlateComponent,
   SliderElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, mutateText } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  isElementOfType,
+  mutateText,
+} from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 import assert from 'assert';
 import { parseNumberWithUnit } from '@decipad/computer';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
-import { Path } from 'slate';
+import { useParentNode } from '@decipad/editor-hooks';
 
 /**
  * Grabs the expression element from a slider.
  * Taking into account that it could be part of a column element.
  */
-function getParentExpression(editor: MyEditor, path: Path): ExpressionElement {
-  let parent = editor.children[path[0]];
-  if (parent.type === ELEMENT_COLUMNS) {
-    parent = parent.children[path[1]];
-  }
+function useSliderParentExpression(
+  element: SliderElement
+): ExpressionElement | undefined {
+  const parent = useParentNode(element);
+  return useMemo(() => {
+    if (
+      !parent ||
+      !isElementOfType(parent, ELEMENT_VARIABLE_DEF) ||
+      parent.variant !== 'slider'
+    ) {
+      return;
+    }
+    const expressionElement = parent.children[1];
+    if (!isElementOfType(expressionElement, ELEMENT_EXPRESSION)) {
+      return;
+    }
 
-  assertElementType(parent, ELEMENT_VARIABLE_DEF);
-  const [, expression] = parent.children;
-  assertElementType(expression, ELEMENT_EXPRESSION);
-
-  return expression;
+    return expressionElement;
+  }, [parent]);
 }
 
 /**
@@ -48,7 +58,7 @@ function useOnSliderChange(
   const path = findNodePath(editor, element);
   assert(path != null, 'path must always be defined');
 
-  const expression = getParentExpression(editor, path);
+  const expression = useSliderParentExpression(element);
 
   // We keep an extra state, just so the feedback to the user
   // from dragging the slider is instant.
@@ -56,7 +66,7 @@ function useOnSliderChange(
   const [syncValues, setSyncValues] = useState(true);
 
   useEffect(() => {
-    if (!syncValues) return;
+    if (!syncValues || !expression) return;
     const [value] = parseNumberWithUnit(getNodeString(expression)) ?? [];
 
     if (sliderValue !== value) {
@@ -66,7 +76,7 @@ function useOnSliderChange(
 
   const onChange = useCallback(
     (newValue: number) => {
-      if (!path) return;
+      if (!path || !expression) return;
 
       // The path of the expression is 1.
       // It goes: Caption -> Expression -> Slider.
