@@ -15,23 +15,27 @@ import { isElement } from 'react-is';
 
 import { TriggerMenuItem } from '../../atoms';
 import { cssVar, grey500, transparency } from '../../../primitives';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 
 export const Depth = createContext(0);
 
 const shadow1 = transparency(grey500, 0.02).rgba;
 const shadow2 = transparency(grey500, 0.08).rgba;
 
-const defaultStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-
-  gap: '2px',
-  padding: '6px',
-  backgroundColor: cssVar('backgroundMain'),
-  boxShadow: `0px 1px 2px ${shadow1}, 0px 2px 12px ${shadow2}`,
-  border: `1px solid ${cssVar('borderSubdued')}`,
-  borderRadius: '8px',
-});
+const defaultStyles = css(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    padding: '6px',
+    backgroundColor: cssVar('backgroundMain'),
+    boxShadow: `0px 1px 2px ${shadow1}, 0px 2px 12px ${shadow2}`,
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    borderRadius: '8px',
+    maxHeight: 'min(480px, 50vh)',
+  },
+  deciOverflowYStyles
+);
 
 const triggerStyles = css({
   display: 'contents',
