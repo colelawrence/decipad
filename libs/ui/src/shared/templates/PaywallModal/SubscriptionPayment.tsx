@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import * as Styled from './styles';
 import {
   EmbeddedCheckout,
@@ -18,12 +18,15 @@ export const SubscriptionPayment: FC<SubscriptionPaymentProps> = ({
 }) => {
   const stripePromise = loadStripe(env.VITE_STRIPE_API_KEY);
 
-  const stripeOptions = {
-    clientSecret,
-    onComplete: () => {
-      handlePaymentButton('success');
-    },
-  };
+  const stripeOptions = useMemo(
+    () => ({
+      clientSecret,
+      onComplete: () => {
+        handlePaymentButton('success');
+      },
+    }),
+    [clientSecret, handlePaymentButton]
+  );
 
   return (
     <Styled.PaymentFormWrapper>

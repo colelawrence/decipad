@@ -1,5 +1,12 @@
 import { Modal } from '../../molecules';
-import { ComponentProps, useMemo, useState } from 'react';
+import {
+  ComponentProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -8,10 +15,22 @@ import { workspaces } from '@decipad/routing';
 import { SubscriptionPlansList } from './SubscriptionPlansList';
 import { SubscriptionPayment } from './SubscriptionPayment';
 import { useClient } from 'urql';
-import { GetStripeCheckoutSessionInfoDocument } from '@decipad/graphql-client';
+import {
+  GetStripeCheckoutSessionInfoDocument,
+  GetWorkspaceByIdDocument,
+  GetWorkspaceByIdQuery,
+  GetWorkspaceByIdQueryVariables,
+  GetWorkspacesWithNotebooksDocument,
+  GetWorkspacesWithoutNotebooksQuery,
+  GetWorkspacesWithoutNotebooksQueryVariables,
+} from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import { useUserId } from './useUserId';
-import { useOnConfirmPayment } from './helpers';
+import { useToast } from '@decipad/toast';
+import { PaymentAnalyticsProps, getLatestWorkspace } from './helpers';
+import { useAiUsage } from '@decipad/react-contexts';
+import { getAnalytics } from '@decipad/client-events';
+import { useNavigate } from 'react-router-dom';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
@@ -49,21 +68,65 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const client = useClient();
 
+  const toast = useToast();
+  const { tokensQuotaLimit, increaseQuotaLimit } = useAiUsage();
+  const navigate = useNavigate();
   const userId = useUserId();
-
-  const canProceed = useMemo(() => {
-    if (isCreatingNewWorkspace) {
-      return selectedPlan !== undefined;
-    }
-    return selectedPlan !== currentPlan && selectedPlan !== undefined;
-  }, [selectedPlan, currentPlan, isCreatingNewWorkspace]);
-
+  const analytics = getAnalytics();
   const [currentStage, setCurrentStage] = useState('choose-plan');
   const [clientSecret, setClientSecret] = useState('');
+
+  const isFetching = useRef(false);
+
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const [isPollingData, setIsPollingData] = useState(false);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
+
+  const trackAnalytics = useCallback(
+    ({ planName, planKey }: PaymentAnalyticsProps) => {
+      if (!analytics) {
+        return;
+      }
+
+      if (paymentStatus === 'success') {
+        analytics.track('Purchase', {
+          category: 'Subscription',
+          subCategory: 'Plan',
+          resource: {
+            type: 'workspace',
+            id: workspaceId,
+          },
+          plan: planName,
+        });
+      } else {
+        analytics.track('Purchase', {
+          category: 'Subscription',
+          subCategory: 'Plan',
+          resource: {
+            type: 'workspace',
+            id: workspaceId,
+          },
+          plan: planName,
+          error: {
+            code: 'Stripe checkout error',
+            message: `Check error message on Stripe dashboard for plan: ${planKey}`,
+          },
+        });
+      }
+    },
+    [analytics, paymentStatus, workspaceId]
+  );
 
   const selectPlanInfo = useMemo(() => {
     return getDefined(plans.find((p) => p?.key === selectedPlan));
   }, [selectedPlan, plans]);
+
+  const updateAiCredits = useCallback(() => {
+    const aiCreditsPlan = selectPlanInfo.credits ?? 0;
+    if ((tokensQuotaLimit || 0) < aiCreditsPlan) {
+      increaseQuotaLimit(aiCreditsPlan);
+    }
+  }, [increaseQuotaLimit, selectPlanInfo.credits, tokensQuotaLimit]);
 
   const fetchBillingInfo = async (pId: string, resourceId: string) => {
     try {
@@ -84,10 +147,123 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     }
   };
 
-  const onConfirmPayment = useOnConfirmPayment({
+  const canProceed = useMemo(() => {
+    if (isCreatingNewWorkspace) {
+      return selectedPlan !== undefined;
+    }
+    return selectedPlan !== currentPlan && selectedPlan !== undefined;
+  }, [selectedPlan, currentPlan, isCreatingNewWorkspace]);
+
+  const onExecuteGetWSNoNotebooksQuery = useCallback(() => {
+    if (isFetching.current) {
+      return;
+    }
+
+    isFetching.current = true;
+
+    client
+      .query<
+        GetWorkspacesWithoutNotebooksQuery,
+        GetWorkspacesWithoutNotebooksQueryVariables
+      >(
+        GetWorkspacesWithNotebooksDocument,
+        {},
+        { requestPolicy: 'network-only' }
+      )
+      .toPromise()
+      .then(({ data }) => {
+        isFetching.current = false;
+        updateAiCredits();
+        trackAnalytics({
+          planKey: selectPlanInfo.key,
+          planName: selectPlanInfo.title || '',
+        });
+        const wsId = getLatestWorkspace(data?.workspaces ?? []);
+        navigate(workspaces({}).workspace({ workspaceId: wsId }).$);
+      });
+  }, [
+    client,
+    selectPlanInfo.key,
+    selectPlanInfo.title,
+    navigate,
+    trackAnalytics,
+    updateAiCredits,
+  ]);
+
+  const onExecuteGetWSByIdQuery = useCallback(() => {
+    if (isFetching.current) {
+      return;
+    }
+
+    isFetching.current = true;
+
+    client
+      .query<GetWorkspaceByIdQuery, GetWorkspaceByIdQueryVariables>(
+        GetWorkspaceByIdDocument,
+        { workspaceId },
+        { requestPolicy: 'network-only' }
+      )
+      .toPromise()
+      .then(({ data }) => {
+        isFetching.current = false;
+
+        if (data?.getWorkspaceById?.plan !== currentPlan) {
+          toast.success(`Workspace upgraded to ${selectPlanInfo.title} plan`);
+          updateAiCredits();
+          trackAnalytics({
+            planKey: selectPlanInfo.key,
+            planName: selectPlanInfo.title || '',
+          });
+        }
+      });
+  }, [
+    client,
+    currentPlan,
     workspaceId,
-    selectedPlanInfo: selectPlanInfo,
-  });
+    toast,
+    selectPlanInfo.key,
+    selectPlanInfo.title,
+    trackAnalytics,
+    updateAiCredits,
+  ]);
+
+  useEffect(() => {
+    if (!isPollingData) {
+      if (intervalId != null) {
+        clearInterval(intervalId);
+      }
+      return;
+    }
+
+    if (!intervalId) {
+      setIntervalId(
+        setInterval(() => {
+          if (isCreatingNewWorkspace) {
+            onExecuteGetWSNoNotebooksQuery();
+          } else {
+            onExecuteGetWSByIdQuery();
+          }
+        }, 2000)
+      );
+    }
+
+    return () => {
+      if (intervalId != null) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [
+    isCreatingNewWorkspace,
+    isPollingData,
+    intervalId,
+    onExecuteGetWSByIdQuery,
+    onExecuteGetWSNoNotebooksQuery,
+  ]);
+
+  const onConfirmPayment = (_paymentStatus: string) => {
+    setPaymentStatus(_paymentStatus);
+    setIsPollingData(true);
+  };
 
   switch (currentStage) {
     case 'choose-plan': {
