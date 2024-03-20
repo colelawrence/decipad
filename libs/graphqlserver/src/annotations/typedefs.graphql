@@ -1,0 +1,33 @@
+type AnnotationUser {
+  id: ID!
+  username: String!
+  avatar: String
+}
+
+type Annotation {
+  id: ID!
+  content: String!
+  user_id: String!
+  pad_id: String!
+  block_id: String!
+  scenario_id: String
+  dateCreated: Float!
+  dateUpdated: Float
+  user: AnnotationUser
+}
+
+extend type Query {
+  # Needed for polling
+  getAnnotationsByPadId(padId: String!): [Annotation]
+}
+
+extend type Mutation {
+  createAnnotation(
+    content: String!
+    padId: String!
+    blockId: String!
+    scenarioId: String
+  ): Annotation
+  updateAnnotation(id: String!, content: String!): Annotation
+  deleteAnnotation(id: String!): Annotation
+}

@@ -1,5 +1,6 @@
 import { CodeLine } from '@decipad/editor-components';
 import { CodeLineElement, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import { AnnotationsContext } from '@decipad/react-contexts';
 import { render, screen } from '@testing-library/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import React, { createRef, PropsWithChildren } from 'react';
@@ -20,11 +21,21 @@ describe('Placeholders', () => {
 
   it('should hide if there are content', () => {
     render(
-      <TestProvider>
-        <CodeLine element={dumbElement} attributes={attributes}>
-          Some text inside
-        </CodeLine>
-      </TestProvider>
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <TestProvider>
+          <CodeLine element={dumbElement} attributes={attributes}>
+            Some text inside
+          </CodeLine>
+        </TestProvider>
+      </AnnotationsContext.Provider>
     );
     expect(screen.queryByText('Distance = 42 km')).toBeNull();
   });

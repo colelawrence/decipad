@@ -7,6 +7,7 @@ export const sidebarColumnStyles = css`
   flex-direction: row;
   align-items: flex-start;
   gap: 16px;
+  overflow: hidden;
 `;
 
 export const sidebarWrapperStyles = css(
@@ -19,7 +20,7 @@ export const sidebarWrapperStyles = css(
     flexDirection: 'column',
     padding: '16px 8px 16px 16px',
     backgroundColor: cssVar('backgroundMain'),
-    borderRadius: '16px 0px 0px 16px',
+    borderRadius: 16,
   },
   deciOverflowYStyles
 );
@@ -30,6 +31,7 @@ export const sidebarContentStyles = css({
   alignItems: 'center',
   gap: 16,
   width: 288,
+  height: '100%',
 });
 
 export const sidebarPaddingStyles = css`

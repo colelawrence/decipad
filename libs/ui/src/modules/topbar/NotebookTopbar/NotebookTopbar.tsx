@@ -8,7 +8,14 @@ import {
   Tooltip,
   HelpMenu,
 } from '../../../shared';
-import { Cards, Deci, LeftArrowShort, Show, SidebarOpen } from '../../../icons';
+import {
+  Cards,
+  Chat,
+  Deci,
+  LeftArrowShort,
+  Show,
+  SidebarOpen,
+} from '../../../icons';
 
 import { p13Bold } from '../../../primitives';
 import { Anchor } from '../../../utils';
@@ -22,6 +29,7 @@ import {
 } from './types';
 import { NotebookAvatars } from '../NotebookAvatars/NotebookAvatars';
 import { NotebookPath } from '../NotebookPath/NotebookPath';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const Templates: FC<TopbarActions> = ({ onGalleryClick }) => (
   <Styled.TemplateWrapper>
@@ -73,6 +81,32 @@ const SidebarToggle: FC<TopbarActions> = ({
     />
   </Styled.HiddenFromSmallScreens>
 );
+
+const AnnotationsToggle: FC<TopbarActions> = ({
+  onToggleAnnotations,
+  isSidebarOpen,
+}) => {
+  return (
+    <Styled.HiddenFromSmallScreens>
+      <SegmentButtons
+        variant="darker"
+        buttons={[
+          {
+            children: (
+              <Styled.SidebarToggleTrigger>
+                <Chat />
+              </Styled.SidebarToggleTrigger>
+            ),
+            onClick: onToggleAnnotations,
+            selected: isSidebarOpen,
+            tooltip: 'Show annotations',
+            testId: 'top-bar-annotations',
+          },
+        ]}
+      />
+    </Styled.HiddenFromSmallScreens>
+  );
+};
 
 const ReadOnlyWriting: FC = () => {
   return (
@@ -321,10 +355,14 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           {AiModeSwitch}
         </Styled.LeftContainer>
         <Styled.RightContainer>
+          {isFlagEnabled('ENABLE_COMMENTS') && (
+            <AnnotationsToggle {...actions} />
+          )}
           <Templates {...actions} />
           <Help />
           <SidebarToggle {...actions} />
           <NotebookAuthors {...authors} />
+
           <Styled.HideSmallScreen>{NotebookPublishing}</Styled.HideSmallScreen>
         </Styled.RightContainer>
       </Styled.InnerStyles>

@@ -25,6 +25,7 @@ import userEvent from '@testing-library/user-event';
 import { InteractiveParagraph } from './InteractiveParagraph';
 import { ToastDisplay } from '@decipad/ui';
 import { BrowserRouter } from 'react-router-dom';
+import { AnnotationsContext } from '@decipad/react-contexts';
 
 let editor: PlateEditor;
 let plateProps: Omit<PlateProps, 'children'>;
@@ -53,11 +54,21 @@ beforeEach(() => {
         },
       }}
     >
-      <ToastDisplay>
-        <BrowserRouter>
-          <DndProvider backend={HTML5Backend}>{children}</DndProvider>
-        </BrowserRouter>
-      </ToastDisplay>
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <ToastDisplay>
+          <BrowserRouter>
+            <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+          </BrowserRouter>
+        </ToastDisplay>
+      </AnnotationsContext.Provider>
     </SessionProvider>
   );
 });

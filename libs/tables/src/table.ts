@@ -5,6 +5,7 @@ import { ArcServices } from './types';
 const enhancedTables: Set<keyof DataTables> = new Set([
   'docsyncupdates',
   'users',
+  'anonusers',
   'userkeys',
   'userbackups',
   'permissions',

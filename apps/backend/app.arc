@@ -286,6 +286,28 @@ secrets
   secret String
   encrypt true
 
+annotations
+  id *String
+  comment String
+  suggestion String
+  scenario_id String
+  user_id String
+  pad_id String
+  block_id String
+  dateUpdated Number
+
+anonusers
+  id *String
+  secret String
+  username String
+  pad_id String
+
+scenarios
+  id *String
+  scenario_name String
+  pad_id String
+  user_id String
+
 # Big composite key
 # /resource_type/sub_type/field_name/[users/workspaces]/id
 # /openai/gpt-4-1106/users
@@ -305,6 +327,10 @@ workspacexecutedqueries
   id *String
 
 users
+  secret *String
+  name bySecret
+
+anonusers
   secret *String
   name bySecret
 
@@ -458,6 +484,22 @@ secrets
   workspace_id *String
   name byWorkspace
 
+annotations
+  pad_id *String
+  name byPadId
+
+annotations
+  scenario_id *String
+  name byScenarioId
+
+scenarios
+  pad_id *String
+  name byPadId
+
+scenarios
+  pad_id *String
+  scenario_name **String
+  name byPadIdAndName
 resourceusagehistory
   resource_uri *String
   name byResource

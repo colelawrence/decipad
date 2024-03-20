@@ -1,6 +1,7 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
 import type { NotebookResults, SerializedType } from '@decipad/remote-computer';
 import {
+  AnnotationsContext,
   ComputerContextProvider,
   TestResultsProvider,
 } from '@decipad/react-contexts';
@@ -102,15 +103,37 @@ const PlotWithProviders = ({
 };
 
 it('shows nothing if no var has been selected', async () => {
-  const { queryByRole } = render(<PlotWithProviders></PlotWithProviders>);
+  const { queryByRole } = render(
+    <AnnotationsContext.Provider
+      value={{
+        annotations: [],
+        articleRef: { current: null },
+        scenarioId: null,
+        expandedBlockId: null,
+        setExpandedBlockId: () => {},
+      }}
+    >
+      <PlotWithProviders />
+    </AnnotationsContext.Provider>
+  );
   expect(await queryByRole('graphics-document')).toBeNull();
 });
 
 it('shows nothing if var has been selected but no data', async () => {
   const { queryByRole } = render(
-    <PlotWithProviders
-      element={{ sourceVarName: 'varName' }}
-    ></PlotWithProviders>
+    <AnnotationsContext.Provider
+      value={{
+        annotations: [],
+        articleRef: { current: null },
+        scenarioId: null,
+        expandedBlockId: null,
+        setExpandedBlockId: () => {},
+      }}
+    >
+      <PlotWithProviders
+        element={{ sourceVarName: 'varName' }}
+      ></PlotWithProviders>
+    </AnnotationsContext.Provider>
   );
   expect(await queryByRole('graphics-document')).toBeNull();
 });
@@ -118,20 +141,30 @@ it('shows nothing if var has been selected but no data', async () => {
 it('shows a plot if has data and options', async () => {
   const blockId = 'block-id';
   const { queryByRole } = render(
-    <PlotWithProviders
-      element={{ sourceVarName: 'varName' }}
-      blockResults={{
-        [blockId]: {
-          type: 'computer-result',
-          id: blockId,
-          result: {
-            type: tableType,
-            value: tableData,
-          },
-          epoch: 1n,
-        },
+    <AnnotationsContext.Provider
+      value={{
+        annotations: [],
+        articleRef: { current: null },
+        scenarioId: null,
+        expandedBlockId: null,
+        setExpandedBlockId: () => {},
       }}
-    ></PlotWithProviders>
+    >
+      <PlotWithProviders
+        element={{ sourceVarName: 'varName' }}
+        blockResults={{
+          [blockId]: {
+            type: 'computer-result',
+            id: blockId,
+            result: {
+              type: tableType,
+              value: tableData,
+            },
+            epoch: 1n,
+          },
+        }}
+      />
+    </AnnotationsContext.Provider>
   );
   expect(await queryByRole('graphics-document')).toBeDefined();
 });

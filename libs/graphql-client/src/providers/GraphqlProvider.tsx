@@ -2,7 +2,7 @@
 import { produce } from '@decipad/utils';
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   ClientOptions,
@@ -12,6 +12,8 @@ import {
   fetchExchange,
 } from 'urql';
 import { graphCacheConfig } from '../cacheConfig';
+import { Session } from 'next-auth';
+import { getSession } from 'next-auth/react';
 
 const isServerSide = typeof window === 'undefined';
 
@@ -30,7 +32,7 @@ const ssrExchange = createSsrExchange({
     : undefined,
 });
 
-const defaultClientOpts = () => {
+const defaultClientOpts = (session?: Session) => {
   return {
     url: new URL(`/graphql`, window.location.origin).toString(),
     fetchOptions: {
@@ -41,7 +43,7 @@ const defaultClientOpts = () => {
     suspense: true, // React Suspense
     exchanges: [
       devtoolsExchange,
-      cacheExchange(graphCacheConfig),
+      cacheExchange(graphCacheConfig(session)),
       ssrExchange,
       fetchExchange,
     ],
@@ -52,12 +54,25 @@ interface GraphqlProviderProps {
   readonly children: ReactNode;
 }
 
+const useMySession = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    getSession().then((session) => {
+      setSession(session);
+    });
+  }, []);
+
+  return session;
+};
+
 export const GraphqlProvider: FC<GraphqlProviderProps> = ({ children }) => {
   const { search } = useLocation();
+  const session = useMySession();
+
   const clientOpts = useMemo(() => {
     const params = new URLSearchParams(search);
     const secret = params.get('secret');
-    return produce(defaultClientOpts(), (opts) => {
+    return produce(defaultClientOpts(session ?? undefined), (opts) => {
       if (secret) {
         // eslint-disable-next-line no-param-reassign
         opts.fetchOptions.headers = {
@@ -66,7 +81,7 @@ export const GraphqlProvider: FC<GraphqlProviderProps> = ({ children }) => {
         };
       }
     });
-  }, [search]);
+  }, [search, session]);
 
   const client = useMemo(
     () => createClient(clientOpts as ClientOptions),

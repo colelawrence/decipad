@@ -19,7 +19,7 @@ const wrapperStyles = css({
   height: '100%',
   width: '100%',
   padding: 16,
-  borderRadius: '16px 0px 0px 16px',
+  borderRadius: 16,
   backgroundColor: cssVar('backgroundMain'),
 });
 

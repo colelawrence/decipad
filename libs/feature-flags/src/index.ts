@@ -10,6 +10,7 @@ export const availableFlags = [
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
   'SHEETS_ISLANDS',
+  'ENABLE_SCENARIOS',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
   'SILLY_NAMES',
@@ -26,6 +27,7 @@ export const availableFlags = [
   'ALLOW_CREATE_NEW_WORKSPACE',
 
   'VARIABLES_IN_TABLES',
+  'ENABLE_COMMENTS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

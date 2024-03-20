@@ -263,6 +263,10 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
       .click();
     await expect(testUser.page.getByText('Connection Worked')).toBeVisible();
     await testUser.page.getByTestId('add-conn-button').click();
+    await expect(
+      testUser.page.getByText('Successfully added connection').first(),
+      'Adding SQL connection success message didnt show up'
+    ).toBeVisible();
   });
 
   await test.step('write query', async () => {

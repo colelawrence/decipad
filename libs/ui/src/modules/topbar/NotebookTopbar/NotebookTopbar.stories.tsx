@@ -112,6 +112,7 @@ const args: ComponentProps<typeof NotebookTopbar> = {
     onClaimNotebook: () => {},
     onDuplicateNotebook: () => {},
     isSidebarOpen: false,
+    onToggleAnnotations: () => {},
   },
   authors: {
     adminName: 'Me',

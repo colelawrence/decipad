@@ -5,6 +5,7 @@ import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
 import {
+  Comments,
   Delete,
   Download,
   DragHandle,
@@ -33,6 +34,7 @@ import {
 import { editorLayout } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const gridStyles = once(() =>
   css({
@@ -94,6 +96,7 @@ interface BlockDragHandleProps {
   readonly showEyeLabel?: boolean;
   readonly showAddBlock?: boolean;
   readonly onPlus?: () => void;
+  readonly onAnnotation?: () => void;
   readonly onDelete?: (() => void) | 'none';
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
@@ -110,6 +113,7 @@ interface BlockDragHandleProps {
   readonly needsUpgrade?: boolean;
 }
 
+// eslint-disable-next-line complexity
 export const BlockDragHandle = ({
   children,
   menuOpen = false,
@@ -123,6 +127,7 @@ export const BlockDragHandle = ({
   tabs = [],
   onPlus = noop,
   onDelete = noop,
+  onAnnotation = noop,
   onDuplicate = noop,
   onMoveToTab,
   onCopyHref,
@@ -270,6 +275,11 @@ export const BlockDragHandle = ({
           )}
           {children}
           {!isMultipleSelection ? aiButton : null}
+          {isFlagEnabled('ENABLE_COMMENTS') && (
+            <MenuItem icon={<Comments />} onSelect={onAnnotation}>
+              Comment
+            </MenuItem>
+          )}
           <MenuItem disabled>
             <hr css={{ color: cssVar('backgroundDefault') }} />
           </MenuItem>

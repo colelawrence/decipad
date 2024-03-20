@@ -1,0 +1,10 @@
+mutation DeleteAnnotation($annotationId: String!) {
+  deleteAnnotation(id: $annotationId) {
+    id
+    content
+    pad_id
+    block_id
+    dateCreated
+    dateUpdated
+  }
+}

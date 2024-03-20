@@ -4,3 +4,4 @@ export * from './editor';
 export * from './sidebar';
 export * from './topbar';
 export * from './assistant';
+export * from './annotations';

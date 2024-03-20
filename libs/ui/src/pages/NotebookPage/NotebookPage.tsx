@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import {
+  useArticleContentRect,
   useDraggingScroll,
   useScrollToHash,
-  useSetCssVarWidth,
 } from '../../hooks';
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
 import * as S from './styles';
@@ -15,6 +15,7 @@ interface NotebookPageProps {
   readonly isEmbed: boolean;
   // Undefined means we haven't loaded yet
   readonly isReadOnly: boolean | undefined;
+  readonly articleRef: React.RefObject<HTMLElement>;
 }
 
 /**
@@ -29,7 +30,11 @@ function getShowSidebar(
   if (props.isEmbed) return false;
   if (props.sidebar == null) return false;
 
-  if (props.isReadOnly == null || props.isReadOnly) return false;
+  if (
+    (props.isReadOnly == null || props.isReadOnly) &&
+    sidebarComponent !== 'annotations'
+  )
+    return false;
 
   if (sidebarComponent === 'closed') return false;
 
@@ -37,7 +42,14 @@ function getShowSidebar(
 }
 
 export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
-  const { topbar, notebook, sidebar, tabs, isEmbed = false } = props;
+  const {
+    topbar,
+    notebook,
+    sidebar,
+    tabs,
+    isEmbed = false,
+    articleRef,
+  } = props;
 
   const [sidebarComponent] = useNotebookMetaData((state) => [
     state.sidebarComponent,
@@ -49,9 +61,9 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     onDragEnd,
     onDragOver,
   } = useDraggingScroll<HTMLDivElement>();
-  const articleRef = useSetCssVarWidth('editorWidth');
 
   const showSidebar = getShowSidebar(props, sidebarComponent);
+  const articleContentRect = useArticleContentRect();
 
   return (
     <S.AppWrapper isEmbed={isEmbed}>
@@ -68,11 +80,22 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
             ref={overflowingDiv}
             id="overflowing-editor"
           >
+            <S.BorderRadiusWrapper
+              position="left"
+              offset={articleContentRect?.left}
+            />
+            <S.BorderRadiusWrapper
+              position="right"
+              offset={
+                articleContentRect
+                  ? articleContentRect.width + articleContentRect.left - 16
+                  : undefined
+              }
+            />
             {notebook}
           </S.NotebookSpacingWrapper>
           {tabs}
         </S.ArticleWrapper>
-
         {showSidebar && (
           <S.AsideWrapper sidebarComponent={sidebarComponent}>
             {sidebar}

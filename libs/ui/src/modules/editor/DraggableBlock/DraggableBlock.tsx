@@ -70,6 +70,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
 
   readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onShowHide?: (action: 'show' | 'hide') => void;
+  readonly onAnnotation?: () => void;
   readonly onDelete?: (() => void) | 'none';
   readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
@@ -120,6 +121,7 @@ export const DraggableBlock = ({
 
   onMoveToTab,
   onMouseDown,
+  onAnnotation,
   onDelete,
   onDuplicate,
   onAdd,
@@ -234,6 +236,7 @@ export const DraggableBlock = ({
               onMouseDown={onMouseDown}
               onChangeMenuOpen={setMenuOpen}
               onPlus={onPlus}
+              onAnnotation={onAnnotation}
               onDelete={onDelete}
               onDuplicate={onDuplicate}
               onShowHide={onShowHide}

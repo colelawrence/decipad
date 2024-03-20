@@ -1,4 +1,5 @@
 import attachments from './attachments';
+import annotations from './annotations';
 import base from './base';
 import date from './date';
 import externalData from './external-data';
@@ -45,6 +46,7 @@ const modules: GraphqlModule[] = [
   resourceUsage,
   notion,
   pricing,
+  annotations,
   templates,
 ];
 

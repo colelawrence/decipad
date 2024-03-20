@@ -14,7 +14,10 @@ import {
   RemoteComputer,
 } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
-import { ComputerContextProvider } from '@decipad/react-contexts';
+import {
+  AnnotationsContext,
+  ComputerContextProvider,
+} from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
@@ -69,7 +72,17 @@ describe('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
     cleanup = await applyCssVars();
     const bubbleBackgroundColor = findParentWithStyle(
@@ -109,7 +122,17 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
@@ -156,7 +179,17 @@ describe('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
 
     cleanup = await applyCssVars();
@@ -198,7 +231,17 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
 
     const [colDecl, colUsage1, colUsage2] = getAllByText(/A/);
@@ -233,7 +276,17 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
 
     const [colDecl, colUsage] = getAllByText(/A/);
@@ -318,7 +371,17 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <PlateWrapper children={children} computer={computer} />
+      </AnnotationsContext.Provider>
     );
 
     const [xDecl, xUsage] = getAllByText(/X/);

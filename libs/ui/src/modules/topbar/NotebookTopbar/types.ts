@@ -28,6 +28,7 @@ export interface TopbarActions {
   readonly onTryDecipadClick: () => void;
   readonly onClaimNotebook: () => void;
   readonly onDuplicateNotebook: () => void;
+  readonly onToggleAnnotations: () => void;
 
   // info
   readonly isSidebarOpen: boolean;

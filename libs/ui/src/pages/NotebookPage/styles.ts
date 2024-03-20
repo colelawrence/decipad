@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import {
   cssVar,
   mediumShadow,
@@ -11,8 +12,9 @@ import { SidebarComponent } from '@decipad/react-contexts';
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
-const SIDEBAR_WIDTH = '320px';
+export const SIDEBAR_WIDTH = '320px';
 const ASSISTANT_WIDTH = '640px';
+const HEADER_HEIGHT = '64px';
 
 /**
  * Used to wrap everything inside the app.
@@ -22,7 +24,6 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
-  height: '100vh',
   ...(!isE2E &&
     props.isEmbed && {
       border: `1px solid ${cssVar('borderDefault')}`,
@@ -34,8 +35,8 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
   }),
 
   '& > header': {
-    position: 'relative',
-    height: '64px',
+    position: 'fixed',
+    height: HEADER_HEIGHT,
     width: '100%',
     padding: '0px 32px',
     backgroundColor: cssVar('backgroundAccent'),
@@ -64,7 +65,10 @@ export const MainWrapper = styled.main<{ isEmbed: boolean; hasTabs: boolean }>(
     backgroundColor: cssVar('backgroundAccent'),
     padding: '0px 24px 4px',
     gap: '24px',
-
+    marginTop: HEADER_HEIGHT,
+    [tabletScreenQuery]: {
+      gap: 0,
+    },
     [smallScreenQuery]: {
       padding: '0px 4px 12px',
       ...(props.hasTabs && {
@@ -78,11 +82,15 @@ type ArticleWrapperProps = {
   isEmbed: boolean;
 };
 
-const ComponentWidths: Record<SidebarComponent, string> = {
-  'default-sidebar': SIDEBAR_WIDTH,
-  publishing: SIDEBAR_WIDTH,
-  ai: ASSISTANT_WIDTH,
-  closed: '0px',
+const ComponentWidths: Record<
+  SidebarComponent,
+  { default: string; tablet?: string; mobile?: string }
+> = {
+  'default-sidebar': { default: SIDEBAR_WIDTH },
+  publishing: { default: SIDEBAR_WIDTH },
+  ai: { default: ASSISTANT_WIDTH },
+  closed: { default: '0px' },
+  annotations: { default: SIDEBAR_WIDTH, tablet: '0px' },
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
@@ -120,34 +128,95 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
   },
 });
 
+type Position = 'left' | 'right';
+
+export const BorderRadiusWrapper = styled.div<{
+  position: Position;
+  offset?: number;
+}>`
+  display: ${({ offset }) => (offset === null ? 'none' : 'block')};
+  background-color: ${cssVar('backgroundAccent')};
+  width: 16px;
+  height: 16px;
+  position: fixed;
+  top: ${HEADER_HEIGHT};
+  ${({ position, offset }) =>
+    position === 'left'
+      ? css`
+          left: ${offset}px;
+          &:before {
+            border-top-left-radius: 16px;
+          }
+        `
+      : css`
+          left: ${offset}px;
+          &:before {
+            border-top-right-radius: 16px;
+          }
+        `}
+  &:before {
+    display: block;
+    content: '';
+    background-color: ${cssVar('backgroundMain')};
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+  }
+`;
+
 interface AsideWrapperProps {
   readonly sidebarComponent: SidebarComponent;
 }
 
-export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
-  position: 'relative',
-  display: 'flex',
-  justifyContent: 'flex-end',
-  overflowY: 'auto',
-  flexShrink: 0,
-  width: ComponentWidths[props.sidebarComponent],
-  height: 'calc(100% - 12px)',
-  borderRadius: '16px',
-  zIndex: 40,
-
-  [smallScreenQuery]: {
-    display: 'none',
-  },
-  [tabletScreenQuery]: {
-    position: 'fixed',
-    // this is an offset to account for the header and bottom margin
-    height:
-      props.sidebarComponent === 'publishing'
-        ? 'fit-content'
-        : 'calc(100vh - 80px)',
-    border: `solid 1px ${cssVar('borderDefault')}`,
-    borderRight: 'none',
-    boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-    padding: 0,
-  },
-}));
+export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => {
+  return {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    overflowY: 'auto',
+    flexShrink: 0,
+    width: ComponentWidths[props.sidebarComponent].default,
+    height: 'calc(100% - 12px)',
+    borderRadius: '16px',
+    zIndex: 40,
+    overflow: 'visible',
+    '& > :first-child': css({
+      maxHeight: 'calc(100vh - 80px)',
+      position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
+      width: ComponentWidths[props.sidebarComponent].default,
+      height: props.sidebarComponent === 'publishing' ? 'auto' : '100%',
+    }),
+    [smallScreenQuery]: {
+      display: 'none',
+    },
+    [tabletScreenQuery]: {
+      background: cssVar('backgroundMain'),
+      position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
+      ...(ComponentWidths[props.sidebarComponent].tablet && {
+        width: ComponentWidths[props.sidebarComponent].tablet,
+      }),
+      '& > :first-child': {
+        position: 'static',
+      },
+      ...(props.sidebarComponent === 'annotations' && {
+        left: -60,
+        position: 'relative',
+        '& > :first-child': {
+          position: 'fixed',
+          right: -30,
+          width: 'fit-content',
+        },
+      }),
+      // this is an offset to account for the header and bottom margin
+      height:
+        props.sidebarComponent === 'publishing' ||
+        props.sidebarComponent === 'annotations'
+          ? 'fit-content'
+          : 'calc(100vh - 80px)',
+      border: `solid 1px ${cssVar('borderDefault')}`,
+      borderRight: 'none',
+      boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+      padding: 0,
+    },
+  };
+});

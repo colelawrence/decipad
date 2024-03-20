@@ -16,9 +16,19 @@ type User = {
   onboarded?: boolean;
 };
 
+export type AnonUser = {
+  id: ID;
+  createdAt: number;
+  name: string;
+  image?: string | null;
+  last_login?: number;
+  first_login?: number;
+};
+
 export type GraphqlContext = {
   additionalHeaders: Map<string, string>;
   user?: User;
+  anonUser?: AnonUser;
   subscriptionId?: ID;
   connectionId?: ID;
   snapshotName?: string;

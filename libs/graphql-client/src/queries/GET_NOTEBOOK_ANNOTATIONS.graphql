@@ -1,0 +1,16 @@
+query GetNotebookAnnotations($notebookId: String!) {
+  getAnnotationsByPadId(padId: $notebookId) {
+    id
+    content
+    pad_id
+    block_id
+    scenario_id
+    dateCreated
+    dateUpdated
+    user {
+      id
+      username
+      avatar
+    }
+  }
+}

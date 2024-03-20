@@ -19,11 +19,22 @@ import { PropsWithChildren } from 'react';
 import { timeout } from '@decipad/utils';
 import { Paragraph } from './Paragraph';
 import { BrowserRouter } from 'react-router-dom';
+import { AnnotationsContext } from '@decipad/react-contexts';
 
 const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
-  <DndProvider backend={HTML5Backend}>
-    <BrowserRouter>{children}</BrowserRouter>
-  </DndProvider>
+  <AnnotationsContext.Provider
+    value={{
+      annotations: [],
+      articleRef: { current: null },
+      scenarioId: null,
+      expandedBlockId: null,
+      setExpandedBlockId: () => {},
+    }}
+  >
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </DndProvider>
+  </AnnotationsContext.Provider>
 );
 
 let plateProps: Omit<PlateProps, 'children'>;

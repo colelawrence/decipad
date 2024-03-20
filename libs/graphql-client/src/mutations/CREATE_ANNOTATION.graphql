@@ -1,0 +1,19 @@
+mutation CreateAnnotation(
+  $content: String!
+  $padId: String!
+  $blockId: String!
+) {
+  createAnnotation(content: $content, padId: $padId, blockId: $blockId) {
+    id
+    content
+    pad_id
+    block_id
+    dateCreated
+    dateUpdated
+    user {
+      id
+      username
+      avatar
+    }
+  }
+}

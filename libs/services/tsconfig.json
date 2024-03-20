@@ -49,6 +49,9 @@
     },
     {
       "path": "../backend-notebook-content"
+    },
+    {
+      "path": "../feature-flags"
     }
   ]
 }

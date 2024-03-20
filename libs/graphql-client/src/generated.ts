@@ -21,6 +21,26 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Annotation = {
+  __typename?: 'Annotation';
+  block_id: Scalars['String']['output'];
+  content: Scalars['String']['output'];
+  dateCreated: Scalars['Float']['output'];
+  dateUpdated?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  pad_id: Scalars['String']['output'];
+  scenario_id?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<AnnotationUser>;
+  user_id: Scalars['String']['output'];
+};
+
+export type AnnotationUser = {
+  __typename?: 'AnnotationUser';
+  avatar?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  username: Scalars['String']['output'];
+};
+
 export type Attachment = {
   __typename?: 'Attachment';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -164,6 +184,7 @@ export type Mutation = {
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
   claimNotebook?: Maybe<Pad>;
+  createAnnotation?: Maybe<Annotation>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
   createLogs?: Maybe<Scalars['Boolean']['output']>;
   createOrUpdateSnapshot: Scalars['Boolean']['output'];
@@ -173,6 +194,7 @@ export type Mutation = {
   createSnapshot: Scalars['Boolean']['output'];
   createUserViaMagicLink: User;
   createWorkspace: Workspace;
+  deleteAnnotation?: Maybe<Annotation>;
   doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
   getCreateAttachmentForm: CreateAttachmentForm;
@@ -208,6 +230,7 @@ export type Mutation = {
   unsharePadWithRole?: Maybe<Scalars['Boolean']['output']>;
   unsharePadWithUser?: Maybe<Pad>;
   unshareWorkspaceWithUser?: Maybe<Workspace>;
+  updateAnnotation?: Maybe<Annotation>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
   updateExtraAiAllowance?: Maybe<NewResourceQuotaLimit>;
   updatePad: Pad;
@@ -243,6 +266,14 @@ export type MutationAttachFileToPadArgs = {
 
 export type MutationClaimNotebookArgs = {
   notebookId: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateAnnotationArgs = {
+  blockId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  padId: Scalars['String']['input'];
+  scenarioId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -291,6 +322,11 @@ export type MutationCreateUserViaMagicLinkArgs = {
 
 export type MutationCreateWorkspaceArgs = {
   workspace: WorkspaceInput;
+};
+
+
+export type MutationDeleteAnnotationArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -502,6 +538,12 @@ export type MutationUnshareWorkspaceWithUserArgs = {
 };
 
 
+export type MutationUpdateAnnotationArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationUpdateExternalDataSourceArgs = {
   dataSource: ExternalDataSourceUpdateInput;
   id: Scalars['ID']['input'];
@@ -665,6 +707,7 @@ export type PermissionType =
 export type Query = {
   __typename?: 'Query';
   featuredPad?: Maybe<Pad>;
+  getAnnotationsByPadId?: Maybe<Array<Maybe<Annotation>>>;
   getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
   getExternalDataSources: Array<ExternalDataSource>;
@@ -686,6 +729,11 @@ export type Query = {
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
+};
+
+
+export type QueryGetAnnotationsByPadIdArgs = {
+  padId: Scalars['String']['input'];
 };
 
 
@@ -1144,6 +1192,15 @@ export type ClaimNotebookMutationVariables = Exact<{
 
 export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits?: number | null, queries?: number | null, storage?: number | null, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, section?: { __typename?: 'Section', id: string, name: string } | null } | null };
 
+export type CreateAnnotationMutationVariables = Exact<{
+  content: Scalars['String']['input'];
+  padId: Scalars['String']['input'];
+  blockId: Scalars['String']['input'];
+}>;
+
+
+export type CreateAnnotationMutation = { __typename?: 'Mutation', createAnnotation?: { __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null } | null };
+
 export type CreateExternalDataSourceMutationVariables = Exact<{
   dataSource: ExternalDataSourceCreateInput;
 }>;
@@ -1205,6 +1262,13 @@ export type CreateWorkspaceSecretMutationVariables = Exact<{
 
 
 export type CreateWorkspaceSecretMutation = { __typename?: 'Mutation', createSecret: { __typename?: 'Secret', id: string, name: string } };
+
+export type DeleteAnnotationMutationVariables = Exact<{
+  annotationId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteAnnotationMutation = { __typename?: 'Mutation', deleteAnnotation?: { __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, dateCreated: number, dateUpdated?: number | null } | null };
 
 export type DeleteNotebookMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1477,6 +1541,13 @@ export type GetExternalDataSourcesWorkspaceQueryVariables = Exact<{
 
 
 export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> }> };
+
+export type GetNotebookAnnotationsQueryVariables = Exact<{
+  notebookId: Scalars['String']['input'];
+}>;
+
+
+export type GetNotebookAnnotationsQuery = { __typename?: 'Query', getAnnotationsByPadId?: Array<{ __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, scenario_id?: string | null, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null } | null> | null };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -1921,6 +1992,27 @@ ${WorkspaceNotebookFragmentDoc}`;
 export function useClaimNotebookMutation() {
   return Urql.useMutation<ClaimNotebookMutation, ClaimNotebookMutationVariables>(ClaimNotebookDocument);
 };
+export const CreateAnnotationDocument = gql`
+    mutation CreateAnnotation($content: String!, $padId: String!, $blockId: String!) {
+  createAnnotation(content: $content, padId: $padId, blockId: $blockId) {
+    id
+    content
+    pad_id
+    block_id
+    dateCreated
+    dateUpdated
+    user {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+export function useCreateAnnotationMutation() {
+  return Urql.useMutation<CreateAnnotationMutation, CreateAnnotationMutationVariables>(CreateAnnotationDocument);
+};
 export const CreateExternalDataSourceDocument = gql`
     mutation CreateExternalDataSource($dataSource: ExternalDataSourceCreateInput!) {
   createExternalDataSource(dataSource: $dataSource) {
@@ -2011,6 +2103,22 @@ export const CreateWorkspaceSecretDocument = gql`
 
 export function useCreateWorkspaceSecretMutation() {
   return Urql.useMutation<CreateWorkspaceSecretMutation, CreateWorkspaceSecretMutationVariables>(CreateWorkspaceSecretDocument);
+};
+export const DeleteAnnotationDocument = gql`
+    mutation DeleteAnnotation($annotationId: String!) {
+  deleteAnnotation(id: $annotationId) {
+    id
+    content
+    pad_id
+    block_id
+    dateCreated
+    dateUpdated
+  }
+}
+    `;
+
+export function useDeleteAnnotationMutation() {
+  return Urql.useMutation<DeleteAnnotationMutation, DeleteAnnotationMutationVariables>(DeleteAnnotationDocument);
 };
 export const DeleteNotebookDocument = gql`
     mutation DeleteNotebook($id: ID!) {
@@ -2473,6 +2581,28 @@ export const GetExternalDataSourcesWorkspaceDocument = gql`
 export function useGetExternalDataSourcesWorkspaceQuery(options: Omit<Urql.UseQueryArgs<GetExternalDataSourcesWorkspaceQueryVariables>, 'query'>) {
   return Urql.useQuery<GetExternalDataSourcesWorkspaceQuery, GetExternalDataSourcesWorkspaceQueryVariables>({ query: GetExternalDataSourcesWorkspaceDocument, ...options });
 };
+export const GetNotebookAnnotationsDocument = gql`
+    query GetNotebookAnnotations($notebookId: String!) {
+  getAnnotationsByPadId(padId: $notebookId) {
+    id
+    content
+    pad_id
+    block_id
+    scenario_id
+    dateCreated
+    dateUpdated
+    user {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+export function useGetNotebookAnnotationsQuery(options: Omit<Urql.UseQueryArgs<GetNotebookAnnotationsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetNotebookAnnotationsQuery, GetNotebookAnnotationsQueryVariables>({ query: GetNotebookAnnotationsDocument, ...options });
+};
 export const GetNotebookByIdDocument = gql`
     query GetNotebookById($id: ID!, $snapshotName: String) {
   getPadById(id: $id, snapshotName: $snapshotName) {
@@ -2629,6 +2759,8 @@ export function useGetWorkspaceSecretsQuery(options: Omit<Urql.UseQueryArgs<GetW
 export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __typename: NonNullable<T['__typename']> };
 
 export type GraphCacheKeysConfig = {
+  Annotation?: (data: WithTypename<Annotation>) => null | string,
+  AnnotationUser?: (data: WithTypename<AnnotationUser>) => null | string,
   Attachment?: (data: WithTypename<Attachment>) => null | string,
   CheckoutSessionInfo?: (data: WithTypename<CheckoutSessionInfo>) => null | string,
   CreateAttachmentForm?: (data: WithTypename<CreateAttachmentForm>) => null | string,
@@ -2683,6 +2815,7 @@ export type GraphCacheKeysConfig = {
 export type GraphCacheResolvers = {
   Query?: {
     featuredPad?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<Pad> | string>,
+    getAnnotationsByPadId?: GraphCacheResolver<WithTypename<Query>, QueryGetAnnotationsByPadIdArgs, Array<WithTypename<Annotation> | string>>,
     getCreditsPlans?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<CreditsPlan> | string>,
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
     getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, Array<WithTypename<ExternalDataSource> | string>>,
@@ -2704,6 +2837,22 @@ export type GraphCacheResolvers = {
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
     version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
+  },
+  Annotation?: {
+    block_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
+    content?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
+    dateCreated?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['Float'] | string>,
+    dateUpdated?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['Float'] | string>,
+    id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['ID'] | string>,
+    pad_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
+    scenario_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
+    user?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, WithTypename<AnnotationUser> | string>,
+    user_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>
+  },
+  AnnotationUser?: {
+    avatar?: GraphCacheResolver<WithTypename<AnnotationUser>, Record<string, never>, Scalars['String'] | string>,
+    id?: GraphCacheResolver<WithTypename<AnnotationUser>, Record<string, never>, Scalars['ID'] | string>,
+    username?: GraphCacheResolver<WithTypename<AnnotationUser>, Record<string, never>, Scalars['String'] | string>
   },
   Attachment?: {
     createdAt?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['DateTime'] | string>,
@@ -3045,6 +3194,7 @@ export type GraphCacheOptimisticUpdaters = {
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
   claimNotebook?: GraphCacheOptimisticMutationResolver<MutationClaimNotebookArgs, Maybe<WithTypename<Pad>>>,
+  createAnnotation?: GraphCacheOptimisticMutationResolver<MutationCreateAnnotationArgs, Maybe<WithTypename<Annotation>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   createLogs?: GraphCacheOptimisticMutationResolver<MutationCreateLogsArgs, Maybe<Scalars['Boolean']>>,
   createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, Scalars['Boolean']>,
@@ -3054,6 +3204,7 @@ export type GraphCacheOptimisticUpdaters = {
   createSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateSnapshotArgs, Scalars['Boolean']>,
   createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
   createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
+  deleteAnnotation?: GraphCacheOptimisticMutationResolver<MutationDeleteAnnotationArgs, Maybe<WithTypename<Annotation>>>,
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
   getCreateAttachmentForm?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm>>,
@@ -3089,6 +3240,7 @@ export type GraphCacheOptimisticUpdaters = {
   unsharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
   unsharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithUserArgs, Maybe<WithTypename<Pad>>>,
   unshareWorkspaceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareWorkspaceWithUserArgs, Maybe<WithTypename<Workspace>>>,
+  updateAnnotation?: GraphCacheOptimisticMutationResolver<MutationUpdateAnnotationArgs, Maybe<WithTypename<Annotation>>>,
   updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   updateExtraAiAllowance?: GraphCacheOptimisticMutationResolver<MutationUpdateExtraAiAllowanceArgs, Maybe<WithTypename<NewResourceQuotaLimit>>>,
   updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
@@ -3101,6 +3253,7 @@ export type GraphCacheOptimisticUpdaters = {
 export type GraphCacheUpdaters = {
   Query?: {
     featuredPad?: GraphCacheUpdateResolver<{ featuredPad: Maybe<WithTypename<Pad>> }, Record<string, never>>,
+    getAnnotationsByPadId?: GraphCacheUpdateResolver<{ getAnnotationsByPadId: Maybe<Array<WithTypename<Annotation>>> }, QueryGetAnnotationsByPadIdArgs>,
     getCreditsPlans?: GraphCacheUpdateResolver<{ getCreditsPlans: Maybe<WithTypename<CreditsPlan>> }, Record<string, never>>,
     getExternalDataSource?: GraphCacheUpdateResolver<{ getExternalDataSource: WithTypename<ExternalDataSource> }, QueryGetExternalDataSourceArgs>,
     getExternalDataSources?: GraphCacheUpdateResolver<{ getExternalDataSources: Array<WithTypename<ExternalDataSource>> }, QueryGetExternalDataSourcesArgs>,
@@ -3129,6 +3282,7 @@ export type GraphCacheUpdaters = {
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
     claimNotebook?: GraphCacheUpdateResolver<{ claimNotebook: Maybe<WithTypename<Pad>> }, MutationClaimNotebookArgs>,
+    createAnnotation?: GraphCacheUpdateResolver<{ createAnnotation: Maybe<WithTypename<Annotation>> }, MutationCreateAnnotationArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
     createLogs?: GraphCacheUpdateResolver<{ createLogs: Maybe<Scalars['Boolean']> }, MutationCreateLogsArgs>,
     createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: Scalars['Boolean'] }, MutationCreateOrUpdateSnapshotArgs>,
@@ -3138,6 +3292,7 @@ export type GraphCacheUpdaters = {
     createSnapshot?: GraphCacheUpdateResolver<{ createSnapshot: Scalars['Boolean'] }, MutationCreateSnapshotArgs>,
     createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
     createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
+    deleteAnnotation?: GraphCacheUpdateResolver<{ deleteAnnotation: Maybe<WithTypename<Annotation>> }, MutationDeleteAnnotationArgs>,
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
     getCreateAttachmentForm?: GraphCacheUpdateResolver<{ getCreateAttachmentForm: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormArgs>,
@@ -3173,6 +3328,7 @@ export type GraphCacheUpdaters = {
     unsharePadWithRole?: GraphCacheUpdateResolver<{ unsharePadWithRole: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithRoleArgs>,
     unsharePadWithUser?: GraphCacheUpdateResolver<{ unsharePadWithUser: Maybe<WithTypename<Pad>> }, MutationUnsharePadWithUserArgs>,
     unshareWorkspaceWithUser?: GraphCacheUpdateResolver<{ unshareWorkspaceWithUser: Maybe<WithTypename<Workspace>> }, MutationUnshareWorkspaceWithUserArgs>,
+    updateAnnotation?: GraphCacheUpdateResolver<{ updateAnnotation: Maybe<WithTypename<Annotation>> }, MutationUpdateAnnotationArgs>,
     updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
     updateExtraAiAllowance?: GraphCacheUpdateResolver<{ updateExtraAiAllowance: Maybe<WithTypename<NewResourceQuotaLimit>> }, MutationUpdateExtraAiAllowanceArgs>,
     updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
@@ -3188,6 +3344,22 @@ export type GraphCacheUpdaters = {
     subscribeToNothing?: GraphCacheUpdateResolver<{ subscribeToNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     tagsChanged?: GraphCacheUpdateResolver<{ tagsChanged: WithTypename<TagChanges> }, SubscriptionTagsChangedArgs>,
     workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>
+  },
+  Annotation?: {
+    block_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    content?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    dateCreated?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    dateUpdated?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    pad_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    scenario_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    user?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    user_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>
+  },
+  AnnotationUser?: {
+    avatar?: GraphCacheUpdateResolver<Maybe<WithTypename<AnnotationUser>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<AnnotationUser>>, Record<string, never>>,
+    username?: GraphCacheUpdateResolver<Maybe<WithTypename<AnnotationUser>>, Record<string, never>>
   },
   Attachment?: {
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,

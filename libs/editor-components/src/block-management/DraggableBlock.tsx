@@ -18,9 +18,11 @@ import {
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
+  AnnotationsContext,
   dndPreviewActions,
   useComputer,
   useIsEditorReadOnly,
+  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
 import {
@@ -29,7 +31,7 @@ import {
   useMergedRef,
 } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
   findNodePath,
   focusEditor,
@@ -58,6 +60,28 @@ import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
 import { useBlockActions } from './hooks';
+import { createPortal } from 'react-dom';
+import { BlockAnnotations } from 'libs/ui/src/modules/editor/BlockAnnotations/BlockAnnotations';
+
+const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(
+  ({ blockHighlighted }) => ({
+    '> div': {
+      borderRadius: 8,
+      ...(blockHighlighted
+        ? {
+            '&:before': {
+              content: '""',
+              position: 'absolute',
+              width: 5,
+              height: '100%',
+              background: '#FFD700',
+              left: -5,
+            },
+          }
+        : {}),
+    },
+  })
+);
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -112,6 +136,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const tabs = useFilteredTabs();
 
     const event = useContext(ClientEventsContext);
+    const annotationsContext = useContext(AnnotationsContext);
+    if (!annotationsContext) {
+      throw new Error('AnnotationsContext is not defined');
+    }
+
+    const { setExpandedBlockId } = annotationsContext;
 
     const dependencyArray = Array.isArray(dependencyId)
       ? dependencyId
@@ -181,6 +211,22 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       onDelete(parentOnDelete);
       onceDeleted();
     }, [parentOnDelete, event, element, onDelete, onceDeleted]);
+
+    const { setSidebar } = useNotebookMetaData((state) => ({
+      setSidebar: state.setSidebar,
+    }));
+    const [showNewAnnotation, setShowNewAnnotation] = useState<boolean>(false);
+    const handleAnnotation = useCallback(() => {
+      setSidebar('annotations');
+
+      // TODO: reveal the relevant block!
+      setExpandedBlockId(element.id);
+
+      // TODO if I don't do this, then creating a new annotation with the sidebar closed never brings up new annotation. Come back and fix this properly.
+      setTimeout(() => {
+        setShowNewAnnotation(true);
+      }, 250);
+    }, [setShowNewAnnotation]);
 
     const handleDuplicate = useCallback(() => {
       event({
@@ -262,6 +308,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       });
     }, [element.id, element.type, event]);
 
+    const [blockHighlighted, setBlockHighlighted] = useState(false);
+
     if (deleted) {
       return null;
     }
@@ -271,12 +319,26 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           {...props}
           isHidden={element.isHidden}
           ref={ref}
+          onAnnotation={handleAnnotation}
           contentEditable={
             !readOnly || alwaysWritableElementTypes.includes(element.type)
           }
           suppressContentEditableWarning
+          annotationsHovered={blockHighlighted}
         >
           <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
+
+          {document.getElementById('annotations-container') &&
+            createPortal(
+              <BlockAnnotations
+                blockId={element.id}
+                blockRef={blockRef}
+                showNewAnnotation={showNewAnnotation}
+                setShowNewAnnotation={setShowNewAnnotation}
+                setBlockHighlighted={setBlockHighlighted}
+              />,
+              document.getElementById('annotations-container')!
+            )}
         </EditorBlock>
       );
     }
@@ -294,6 +356,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         isBeingDragged={isDragging || draggingIds.has(element.id)}
         onMouseDown={onMouseDown}
         onDelete={handleDelete}
+        onAnnotation={handleAnnotation}
         dependenciesForBlock={dependenciesForBlock}
         onDuplicate={handleDuplicate}
         onShowHide={handleShowHide}
@@ -306,12 +369,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}
       >
-        <div
-          css={css({
-            '> div': {
-              borderRadius: 8,
-            },
-          })}
+        <DraggableBlockStyled
+          blockHighlighted={blockHighlighted}
           data-testid="draggable-block"
         >
           <BlockSelectable element={element}>
@@ -319,7 +378,19 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
               {children}
             </BlockErrorBoundary>
           </BlockSelectable>
-        </div>
+        </DraggableBlockStyled>
+
+        {document.getElementById('annotations-container') &&
+          createPortal(
+            <BlockAnnotations
+              blockId={element.id}
+              blockRef={blockRef}
+              showNewAnnotation={showNewAnnotation}
+              setShowNewAnnotation={setShowNewAnnotation}
+              setBlockHighlighted={setBlockHighlighted}
+            />,
+            document.getElementById('annotations-container')!
+          )}
       </UIDraggableBlock>
     );
   }

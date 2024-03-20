@@ -1,9 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode, useState } from 'react';
 import { p16Regular } from '../../../primitives';
 import { blockAlignment } from '../../../styles';
+import { Chat } from 'libs/ui/src/icons';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
 const defaultVerticalSpacing = `calc(${p16Regular.lineHeight})`;
@@ -67,6 +68,30 @@ const isHiddenStyles = css({
   display: 'none',
 });
 
+const readOnlyCommentButtonStyles = css(`
+  position: absolute;
+  top: 26px;
+  left: 0px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+`);
+
+export const ReadOnlyCommentButton = ({
+  onAnnotation,
+}: {
+  onAnnotation: () => void;
+}) => {
+  return (
+    <button css={readOnlyCommentButtonStyles} onClick={onAnnotation}>
+      <Chat />
+    </button>
+  );
+};
+
 interface EditorBlockProps {
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
@@ -75,20 +100,30 @@ interface EditorBlockProps {
   // such, we'll allow it to receive an arbitrary amount of props in order to facilitate said
   // integration.
   readonly [prop: string]: unknown;
+  readonly onAnnotation?: () => void;
 }
+
+const editorBlockOffset = 30;
 
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
->(({ blockKind, children, isHidden, ...props }, ref) => {
+>(({ blockKind, children, isHidden, annotationsHovered, ...props }, ref) => {
   const readOnly = useIsEditorReadOnly();
+  const [, setShowCommentButton] = useState(false);
+
   return (
     <div
       {...props}
+      onMouseEnter={() => setShowCommentButton(true)}
+      onMouseLeave={() => setShowCommentButton(false)}
       css={[
         readOnly && isHidden && isHiddenStyles,
         {
           position: 'relative',
+          marginLeft: -editorBlockOffset,
+          paddingLeft: editorBlockOffset,
+          border: annotationsHovered ? 'solid 1px red' : 'none',
         },
         spacingStyles,
       ]}

@@ -25,6 +25,10 @@ test('check menu blocks', async ({ testUser }) => {
     await notebook.focusOnBody();
   });
 
+  await test.step('creates date widget', async () => {
+    await createDateBelow(page, 'DateThing');
+  });
+
   await test.step('creates number input', async () => {
     await createNumberInputBelow(page, 'FirstBlock', '$200');
   });
@@ -85,10 +89,6 @@ test('check menu blocks', async ({ testUser }) => {
 
   await test.step('creates toggle widget', async () => {
     await createToggleBelow(page, 'TwelvethBlock');
-  });
-
-  await test.step('creates date widget', async () => {
-    await createDateBelow(page, 'DateThing');
   });
 
   await test.step('creates slider widget', async () => {

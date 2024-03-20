@@ -38,6 +38,7 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { noop } from '@decipad/utils';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { useCancelingEvent } from '../../../utils';
+import { useArticleContentRect } from 'libs/ui/src/hooks';
 
 type UITab = {
   id: string;
@@ -290,11 +291,14 @@ export const NotebookTabs: FC<TabsProps> = ({
     [onSubmitEdit]
   );
 
+  const aritcleContentRect = useArticleContentRect();
+
   return (
     <TabsWrapper
       isEmbed={isEmbed}
       hasScroll={hasScroll}
       isFirstTab={filteredTabs[0]?.id === activeTabId}
+      width={aritcleContentRect ? `${aritcleContentRect.width}px` : '100%'}
     >
       <TabsScrollWrapper ref={containerRef}>
         <TabsContainer>
@@ -558,12 +562,15 @@ const TabsWrapper = styled(TabsPrimitive.Root)<{
   hasScroll: boolean;
   isEmbed: boolean;
   isFirstTab: boolean;
+  width: string;
 }>((props) => ({
-  position: 'relative',
+  position: 'fixed',
+  bottom: 0,
+  paddingBottom: '16px',
   zIndex: 10,
   display: 'flex',
   flex: props.isEmbed ? '0 0 40px' : '0 0 52px',
-  width: '100%',
+  width: props.width,
   backgroundColor: cssVar('backgroundAccent'),
 
   ...((props.hasScroll || props.isFirstTab) && {

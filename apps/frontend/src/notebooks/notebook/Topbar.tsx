@@ -229,6 +229,9 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
         },
         onDuplicateNotebook: () =>
           actions.onDuplicateNotebook(notebookId, true),
+        onToggleAnnotations: () => {
+          sidebarData.toggleSidebar('annotations');
+        },
 
         isSidebarOpen: sidebarData.component !== 'closed',
       }}

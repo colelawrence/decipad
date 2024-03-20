@@ -1,5 +1,9 @@
 /* eslint-disable no-console */
-import { User, UserWithSecret } from '@decipad/backendtypes';
+import {
+  AnonUserWithSecret,
+  User,
+  UserWithSecret,
+} from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
@@ -8,9 +12,11 @@ import { decode as decodeJWT } from 'next-auth/jwt';
 import { parse as parseCookie } from 'simple-cookie';
 import { debug } from './debug';
 import { jwt as jwtConf } from './jwt';
+import { AnonUser } from '@decipad/graphqlserver-types';
 
 export type AuthResult = {
   user?: User;
+  anonUser?: AnonUser;
   token?: string;
   secret?: string;
   gotFromSecProtocolHeader: boolean;
@@ -38,7 +44,7 @@ export const TOKEN_COOKIE_NAMES = [
 ];
 
 export function isValidAuthResult(authResult: AuthResult): boolean {
-  return !!authResult.secret || !!authResult.user;
+  return !!authResult.secret || !!authResult.user || !!authResult.anonUser;
 }
 
 export async function authenticate(event: Request): Promise<AuthResult[]> {
@@ -84,6 +90,15 @@ export async function authenticateOneToken({
           const { secret: _secret, ...userWithoutSecret } = userWithSecret;
           secret = _secret;
           user = userWithoutSecret;
+        }
+        const anonUserWithSecret = await findAnonUserByAccessToken(
+          decoded.accessToken as string
+        );
+        if (anonUserWithSecret) {
+          const { secret: _secret, ...anonUserWithoutSecret } =
+            anonUserWithSecret;
+          secret = _secret;
+          user = anonUserWithoutSecret;
         }
       }
     } catch (err) {
@@ -151,6 +166,22 @@ async function findUserByAccessToken(
   });
 
   return foundUsers.Items[0] as UserWithSecret;
+}
+
+async function findAnonUserByAccessToken(
+  accessToken: string
+): Promise<AnonUserWithSecret | undefined> {
+  const data = await tables();
+
+  const foundUsers = await data.anonusers.query({
+    IndexName: 'bySecret',
+    KeyConditionExpression: 'secret = :secret',
+    ExpressionAttributeValues: {
+      ':secret': accessToken,
+    },
+  });
+
+  return foundUsers.Items[0] as AnonUserWithSecret;
 }
 
 async function secretExists(secret: string): Promise<boolean> {

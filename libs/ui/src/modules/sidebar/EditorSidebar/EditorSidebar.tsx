@@ -16,6 +16,8 @@ import {
   sidebarWrapperStyles,
 } from './styles';
 import { EditorSidebarProps, SelectedTab } from './types';
+import { css } from '@emotion/react';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 
 const AVAILABLE_TABS: SelectedTab[] = ['block', 'variable'];
 
@@ -101,10 +103,12 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
           />
 
           <div
-            css={[
+            css={css([
+              deciOverflowYStyles,
               {
-                paddingBottom: 120,
                 width: '100%',
+                overflowY: 'auto',
+                overflowX: 'hidden',
               },
               {
                 '& > div > div[role="menu"]': {
@@ -112,7 +116,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
                   gridTemplateColumns: '1fr',
                 },
               },
-            ]}
+            ])}
           >
             <TabsContent name="variable">{variable}</TabsContent>
             <TabsContent name="block">{block}</TabsContent>

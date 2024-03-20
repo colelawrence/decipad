@@ -28,13 +28,15 @@ export type SidebarComponent = 'closed' | SidebarComponentsWithoutClosed;
 export type SidebarComponentsWithoutClosed =
   | 'default-sidebar'
   | 'ai'
-  | 'publishing';
+  | 'publishing'
+  | 'annotations';
 
 export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
 
 export interface NotebookMetaDataType {
   readonly sidebarComponent: SidebarComponent;
   readonly toggleSidebar: (component: SidebarComponent) => void;
+  readonly setSidebar: (component: SidebarComponent) => void;
 
   readonly isSidebarOpen: () => boolean;
 
@@ -70,6 +72,10 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
           } else {
             set(() => ({ sidebarComponent }));
           }
+        },
+
+        setSidebar(sidebarComponent) {
+          set(() => ({ sidebarComponent }));
         },
 
         canEdit: true,

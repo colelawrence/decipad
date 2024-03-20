@@ -26,3 +26,4 @@ export * from './notebook-meta-actions';
 export * from './editor-controller';
 export * from './ai-usage';
 export * from './ai-credits';
+export * from './annotation-context';

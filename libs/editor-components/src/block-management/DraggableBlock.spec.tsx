@@ -14,7 +14,10 @@ import {
 import React, { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { EditorReadOnlyContext } from '@decipad/react-contexts';
+import {
+  AnnotationsContext,
+  EditorReadOnlyContext,
+} from '@decipad/react-contexts';
 import { DraggableBlock } from './DraggableBlock';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -44,9 +47,19 @@ beforeEach(() => {
   };
   editor = createPlateEditor({ plugins });
   wrapper = ({ children }) => (
-    <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>{children}</BrowserRouter>
-    </DndProvider>
+    <AnnotationsContext.Provider
+      value={{
+        annotations: [],
+        articleRef: { current: null },
+        scenarioId: null,
+        expandedBlockId: null,
+        setExpandedBlockId: () => {},
+      }}
+    >
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
+    </AnnotationsContext.Provider>
   );
 });
 

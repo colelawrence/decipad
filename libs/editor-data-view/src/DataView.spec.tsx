@@ -13,7 +13,10 @@ import {
 } from '@decipad/editor-types';
 import { tryImport } from '@decipad/import';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { ComputerContextProvider } from '@decipad/react-contexts';
+import {
+  AnnotationsContext,
+  ComputerContextProvider,
+} from '@decipad/react-contexts';
 import { getDefined, timeout } from '@decipad/utils';
 import { act, render } from '@testing-library/react';
 import {
@@ -202,12 +205,22 @@ const runWithDataView = async ({
       };
 
       render(
-        <WithProviders computer={computer} editor={editor}>
-          <WithDataViewHook
-            element={dataViewElement}
-            onDataViewResultChange={onChange}
-          />
-        </WithProviders>
+        <AnnotationsContext.Provider
+          value={{
+            annotations: [],
+            articleRef: { current: null },
+            scenarioId: null,
+            expandedBlockId: null,
+            setExpandedBlockId: () => {},
+          }}
+        >
+          <WithProviders computer={computer} editor={editor}>
+            <WithDataViewHook
+              element={dataViewElement}
+              onDataViewResultChange={onChange}
+            />
+          </WithProviders>
+        </AnnotationsContext.Provider>
       );
     } catch (err) {
       reject(err);
@@ -275,23 +288,33 @@ const runWithLayoutData = async ({
   return new Promise<ReturnType<typeof useDataViewLayoutData>>((resolve) => {
     let count = waitForCallbackCount;
     render(
-      <WithProviders computer={computer} editor={editor}>
-        <WithLayoutDataHook
-          tableName={tableName}
-          columns={columns}
-          aggregationTypes={aggregationTypes}
-          roundings={[]}
-          preventExpansion={false}
-          expandedGroups={expandedGroups}
-          onLayoutDataResultChange={(r) => {
-            count -= 1;
-            if (count === 0) {
-              resolve(r);
-            }
-          }}
-          filters={[]}
-        ></WithLayoutDataHook>
-      </WithProviders>
+      <AnnotationsContext.Provider
+        value={{
+          annotations: [],
+          articleRef: { current: null },
+          scenarioId: null,
+          expandedBlockId: null,
+          setExpandedBlockId: () => {},
+        }}
+      >
+        <WithProviders computer={computer} editor={editor}>
+          <WithLayoutDataHook
+            tableName={tableName}
+            columns={columns}
+            aggregationTypes={aggregationTypes}
+            roundings={[]}
+            preventExpansion={false}
+            expandedGroups={expandedGroups}
+            onLayoutDataResultChange={(r) => {
+              count -= 1;
+              if (count === 0) {
+                resolve(r);
+              }
+            }}
+            filters={[]}
+          ></WithLayoutDataHook>
+        </WithProviders>
+      </AnnotationsContext.Provider>
     );
   });
 };

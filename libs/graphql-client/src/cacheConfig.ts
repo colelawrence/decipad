@@ -7,6 +7,9 @@ import {
   ExternalDataSource,
   GetExternalDataSourcesWorkspaceDocument,
   GetExternalDataSourcesWorkspaceQuery,
+  GetNotebookAnnotationsDocument,
+  GetNotebookAnnotationsQuery,
+  GetNotebookAnnotationsQueryVariables,
   GetNotebookByIdDocument,
   GetNotebookByIdQuery,
   GetNotebookMetaDocument,
@@ -22,7 +25,9 @@ import {
   WorkspaceNotebookFragment,
 } from './generated';
 import * as schema from './schema.generated.json';
+import { nanoid } from 'nanoid';
 import { PublishedVersionName } from './PublishedStates';
+import { Session } from 'next-auth';
 
 const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 
@@ -105,7 +110,7 @@ function getPadId(pad: Pad) {
   return `${pad.id}-section-${pad.sectionId}`;
 }
 
-export const graphCacheConfig: GraphCacheConfig = {
+export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
   schema: schema as GraphCacheConfig['schema'],
   keys: {
     Pad(data) {
@@ -136,6 +141,32 @@ export const graphCacheConfig: GraphCacheConfig = {
         input: true,
         output: true,
       };
+    },
+    createAnnotation(args) {
+      const value: ReturnType<
+        NonNullable<
+          NonNullable<GraphCacheConfig['optimistic']>['createAnnotation']
+        >
+      > = {
+        __typename: 'Annotation',
+        id: nanoid(),
+        dateCreated: new Date().getTime(),
+        dateUpdated: new Date().getTime(),
+        content: args.content,
+        pad_id: args.padId,
+        scenario_id: null,
+        ...(session?.user
+          ? {
+              user: {
+                __typename: 'AnnotationUser',
+                id: session.user.email ?? '',
+                username: session.user.name ?? '',
+                avatar: session.user.image ?? '',
+              },
+            }
+          : {}),
+      };
+      return value;
     },
     updatePad(args) {
       //
@@ -179,6 +210,51 @@ export const graphCacheConfig: GraphCacheConfig = {
             return data;
           }
         );
+      },
+      createAnnotation: (result, args, cache) => {
+        // result.createAnnotation?.user is never defined, so we're stealing the user from the session
+        const user = session?.user;
+        if (!result.createAnnotation || !user) {
+          return;
+        }
+        cache.updateQuery<
+          GetNotebookAnnotationsQuery,
+          GetNotebookAnnotationsQueryVariables
+        >(
+          {
+            query: GetNotebookAnnotationsDocument,
+            variables: { notebookId: args.padId },
+          },
+          (data) => {
+            if (!data || !data.getAnnotationsByPadId) {
+              return data;
+            }
+
+            data.getAnnotationsByPadId.push({
+              dateCreated: new Date().getTime(),
+              content: args.content,
+              pad_id: args.padId,
+              block_id: args.blockId,
+              id: nanoid(),
+              user: user.name
+                ? {
+                    __typename: 'AnnotationUser',
+                    id: '',
+                    username: user.name,
+                    avatar: user.image,
+                  }
+                : undefined,
+              ...result.createAnnotation,
+            });
+            return data;
+          }
+        );
+      },
+      deleteAnnotation: (_result, args, cache) => {
+        cache.invalidate({
+          __typename: 'Annotation',
+          id: args.id,
+        });
       },
       removeWorkspace: (_result, args, cache) => {
         cache.invalidate({
@@ -504,4 +580,4 @@ export const graphCacheConfig: GraphCacheConfig = {
       },
     },
   },
-};
+});

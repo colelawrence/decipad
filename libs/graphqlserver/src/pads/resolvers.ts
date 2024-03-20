@@ -329,7 +329,6 @@ const resolvers: Resolvers = {
           ':section_id': section.id,
         },
       };
-
       const padIds = (await data.pads.query(query)).Items.map((e) => e.id);
       return (await data.pads.batchGet(padIds)) as Array<Pad>;
     },

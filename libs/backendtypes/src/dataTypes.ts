@@ -27,6 +27,15 @@ export type User = {
   banned?: number;
 };
 
+export type AnonUser = {
+  id: ID;
+  createdAt: number;
+  name: string;
+  image?: string | null;
+  last_login?: number;
+  first_login?: number;
+};
+
 export interface UserInput {
   name: string;
   description?: string;
@@ -50,6 +59,11 @@ export interface GithubUser extends UserInput {
 export type UserWithSecret = User & {
   secret: string;
   accessToken?: string;
+};
+
+export type AnonUserWithSecret = AnonUser & {
+  secret: string;
+  accessToken?: string; // N.B. not sure this is necessary
 };
 
 export type Role = {
@@ -606,6 +620,22 @@ export interface ExternalKeyRecord extends TableRecordBase {
   provider: ExternalDataSourceProvider;
 }
 
+export interface AnnotationRecord extends TableRecordBase {
+  content: string;
+  pad_id: string;
+  user_id: string;
+  block_id: string;
+  scenario_id?: string;
+  dateCreated: number;
+  dateUpdated?: number;
+}
+
+export interface ScenarioRecord extends TableRecordBase {
+  pad_id: string;
+  scenario_name?: string;
+  user_id: string;
+}
+
 export interface LogRecord extends TableRecordBase {
   resource: string;
   seq: string;
@@ -656,6 +686,7 @@ export interface EnhancedDataTable<T extends TableRecordBase>
 export interface EnhancedDataTables {
   docsyncupdates: EnhancedDataTable<DocSyncUpdateRecord>;
   users: EnhancedDataTable<UserRecord>;
+  anonusers: EnhancedDataTable<AnonUser>;
   userkeys: EnhancedDataTable<UserKeyRecord>;
   userbackups: DataTable<UserBackup>;
   permissions: EnhancedDataTable<PermissionRecord>;
@@ -672,6 +703,8 @@ export interface EnhancedDataTables {
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;
   resourceusages: EnhancedDataTable<ResourceUsageRecord>;
+  annotations: EnhancedDataTable<AnnotationRecord>;
+  scenarios: EnhancedDataTable<ScenarioRecord>;
   resourceusagehistory: EnhancedDataTable<ResourceUsageHistoryRecord>;
 }
 
@@ -847,6 +880,7 @@ export type WSRequest = import('aws-lambda').APIGatewayProxyEventV2 & {
 export type GraphqlContext = {
   additionalHeaders: Map<string, string>;
   user?: User;
+  anonUser?: AnonUser;
   subscriptionId?: ID;
   connectionId?: ID;
   snapshotName?: string;

@@ -6,6 +6,7 @@ import {
 import { DocSyncEditor } from '@decipad/docsync';
 import {
   useFinishOnboarding,
+  useGetNotebookAnnotationsQuery,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
 import {
@@ -13,6 +14,7 @@ import {
   ControllerProvider,
   EditorChangeContextProvider,
   useAiCreditsStore,
+  AnnotationsContext,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
@@ -21,12 +23,14 @@ import {
   NotebookPage,
   TopbarPlaceholder,
   AddCreditsModal,
+  useSetCssVarWidth,
 } from '@decipad/ui';
 import { FC, Suspense, createContext, useState, useEffect } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
+import { useScenarioNavigate } from './hooks/useScenarioNavigate';
 
 /**
  * Entire Application Wrapper.
@@ -68,61 +72,102 @@ export const Notebook: FC = () => {
   const { isBuyCreditsModalOpen, setIsBuyCreditsModalOpen } =
     useAiCreditsStore();
 
-  if (error) {
-    return getNotebookError(error);
-  }
-
+  const articleRef = useSetCssVarWidth('editorWidth');
+  const [scenarioId] = useScenarioNavigate();
   const props = {
     notebookId,
     docsync,
   };
+  const [annotations, refetch] = useGetNotebookAnnotationsQuery({
+    variables: {
+      notebookId,
+    },
+  });
+
+  useEffect(() => {
+    if (!docsync || docsync.isReadOnly) {
+      return;
+    }
+    refetch({
+      requestPolicy: 'network-only',
+      variables: {
+        notebookId,
+      },
+    });
+    setInterval(() => {
+      refetch({
+        requestPolicy: 'network-only',
+        variables: {
+          notebookId,
+        },
+      });
+    }, 5000);
+  }, [refetch, notebookId, docsync]);
+
+  const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null);
+
+  if (error) {
+    return getNotebookError(error);
+  }
 
   return (
     <EditorChangeContextProvider changeSubject={changeSubject}>
       <DocsyncEditorProvider.Provider value={docsync} key={notebookId}>
         <ControllerProvider.Provider value={docsync}>
           <ComputerContextProvider computer={computer}>
-            <NotebookPage
-              notebook={
-                <Suspense fallback={<EditorPlaceholder />}>
-                  <Editor
-                    notebookId={notebookId}
-                    docsync={docsync}
-                    setDocsync={setDocsync}
-                    setComputer={setComputer}
-                    setError={setError}
+            <AnnotationsContext.Provider
+              value={{
+                annotations:
+                  annotations.data?.getAnnotationsByPadId || undefined,
+                articleRef,
+                scenarioId: scenarioId || null,
+                expandedBlockId,
+                setExpandedBlockId,
+              }}
+            >
+              <NotebookPage
+                notebook={
+                  <Suspense fallback={<EditorPlaceholder />}>
+                    <Editor
+                      notebookId={notebookId}
+                      docsync={docsync}
+                      setDocsync={setDocsync}
+                      setComputer={setComputer}
+                      setError={setError}
+                    />
+                  </Suspense>
+                }
+                topbar={
+                  <Suspense fallback={<TopbarPlaceholder />}>
+                    <Topbar {...props} />
+                  </Suspense>
+                }
+                articleRef={articleRef}
+                sidebar={
+                  <Suspense>
+                    <Sidebar {...props} />
+                  </Suspense>
+                }
+                tabs={
+                  !isEmbed && docsync ? (
+                    <Tabs
+                      notebookId={notebookId}
+                      controller={docsync}
+                      docsync={docsync}
+                    />
+                  ) : null
+                }
+                isEmbed={isEmbed}
+                isReadOnly={docsync?.isReadOnly}
+              />
+              <Suspense>
+                {isBuyCreditsModalOpen && (
+                  <AddCreditsModal
+                    closeAction={() => setIsBuyCreditsModalOpen(false)}
                   />
-                </Suspense>
-              }
-              topbar={
-                <Suspense fallback={<TopbarPlaceholder />}>
-                  <Topbar {...props} />
-                </Suspense>
-              }
-              sidebar={
-                <Suspense>
-                  <Sidebar {...props} />
-                </Suspense>
-              }
-              tabs={
-                !isEmbed && docsync ? (
-                  <Tabs
-                    notebookId={notebookId}
-                    controller={docsync}
-                    docsync={docsync}
-                  />
-                ) : null
-              }
-              isEmbed={isEmbed}
-              isReadOnly={docsync?.isReadOnly}
-            />
-            <Suspense>
-              {isBuyCreditsModalOpen && (
-                <AddCreditsModal
-                  closeAction={() => setIsBuyCreditsModalOpen(false)}
-                />
-              )}
-            </Suspense>
+                )}
+              </Suspense>
+            </AnnotationsContext.Provider>
           </ComputerContextProvider>
         </ControllerProvider.Provider>
       </DocsyncEditorProvider.Provider>
