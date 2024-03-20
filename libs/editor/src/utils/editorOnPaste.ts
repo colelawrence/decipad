@@ -7,6 +7,7 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   MyElement,
+  ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
@@ -36,7 +37,8 @@ export const editorOnPaste = (
   if (
     topLevelNode?.type === ELEMENT_CALLOUT ||
     (topLevelNode?.type === ELEMENT_CODE_LINE_V2 &&
-      secondLevelNode?.type === ELEMENT_CODE_LINE_V2_CODE)
+      secondLevelNode?.type === ELEMENT_CODE_LINE_V2_CODE) ||
+    topLevelNode?.type === ELEMENT_CODE_LINE
   ) {
     const clipboard = e.clipboardData.getData('text/plain');
     editor.insertText(clipboard, { at: editor.selection.anchor });
