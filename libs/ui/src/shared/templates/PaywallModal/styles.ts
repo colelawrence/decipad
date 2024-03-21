@@ -69,7 +69,7 @@ export const PlanItem = styled.button({
       borderColor: cssVar('textDisabled'),
 
       '&::before': {
-        backgroundColor: cssVar('textDisabled'),
+        backgroundColor: 'transparent',
       },
     },
   },

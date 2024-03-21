@@ -1387,7 +1387,7 @@ export class Notebook {
     if (role === 'reader') {
       await this.page.getByTestId('notebook-reader').click();
     } else {
-      await this.page.getByTestId('notebook-collaborator').click();
+      await this.page.getByTestId('notebook-editor').click();
     }
 
     await this.page.getByTestId('send-invitation').click();

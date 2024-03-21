@@ -74,7 +74,9 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
         onSelect={() => onChange('ADMIN')}
         selected={currentPermission === 'ADMIN'}
       >
-        <p css={p14Medium}>Workspace admin</p>
+        <p css={p14Medium} data-testId="collab-member-admin">
+          Administrator
+        </p>
         <p css={dropDownItemStyles}>
           Can edit any notebook in this workspace and manage workspace members
         </p>
@@ -83,7 +85,9 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
         onSelect={() => onChange('WRITE')}
         selected={currentPermission === 'WRITE'}
       >
-        <p css={p14Medium}>Workspace member</p>
+        <p css={p14Medium} data-testId="collab-member-editor">
+          Editor
+        </p>
         <p css={dropDownItemStyles}>Can edit any notebook in this workspace</p>
       </MenuItem>
       {isFlagEnabled('WORKSPACE_READERS') && (
@@ -91,7 +95,9 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
           onSelect={() => onChange('READ')}
           selected={currentPermission === 'READ'}
         >
-          <p css={p14Medium}>Workspace reader</p>
+          <p css={p14Medium} data-testId="collab-member-reader">
+            Reader
+          </p>
           <p css={dropDownItemStyles}>
             Can read any notebook in this workspace
           </p>

@@ -84,7 +84,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
   return (
     <div css={membersWrapperStyle}>
       <p css={pricingWrapper}>
-        You will be charged for each member added. Visit our{' '}
+        You will be charged for each editor or administrator added. Visit our{' '}
         <a css={pricingLink} href="https://www.decipad.com/pricing">
           pricing guide
         </a>{' '}

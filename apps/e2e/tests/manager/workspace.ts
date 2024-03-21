@@ -385,7 +385,7 @@ export class Workspace {
 
     if (role === 'Admin') {
       await this.page.getByTestId('text-icon-button:member').first().click();
-      await this.page.getByText('Workspace admin').click();
+      await this.page.getByTestId('collab-member-admin').click();
     }
     await this.page.getByText('Send invitation').click();
     await expect(async () => {
