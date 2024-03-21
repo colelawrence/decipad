@@ -36,6 +36,8 @@ export function useDraggingScroll<
     typeof window.requestAnimationFrame
   > | null>(null);
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const animationSpeedRef = useRef<number>(0);
 
   const AnimateScroll = useCallback(() => {
@@ -60,6 +62,13 @@ export function useDraggingScroll<
     animationRef.current = null;
   }, []);
 
+  const onSetTimeout = useCallback(() => {
+    if (animationRef.current) {
+      window.cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+  }, []);
+
   const onDragOver = useCallback<DragEventHandler<T>>(
     (e) => {
       if (!ref.current) return;
@@ -73,16 +82,20 @@ export function useDraggingScroll<
         if (!animationRef.current) {
           animationRef.current = window.requestAnimationFrame(AnimateScroll);
         }
+        clearTimeout(timeoutRef.current ?? undefined);
+        timeoutRef.current = setTimeout(onSetTimeout, 100);
       } else if (e.clientY <= bottom && e.clientY >= bottom - ELEMENT_OFFSET) {
         animationSpeedRef.current = SCROLL_SCALAR * (1 / (bottom - e.clientY));
         if (!animationRef.current) {
           animationRef.current = window.requestAnimationFrame(AnimateScroll);
         }
+        clearTimeout(timeoutRef.current ?? undefined);
+        timeoutRef.current = setTimeout(onSetTimeout, 100);
       } else {
         animationRef.current = null;
       }
     },
-    [AnimateScroll, ref]
+    [AnimateScroll, onSetTimeout]
   );
 
   return {
