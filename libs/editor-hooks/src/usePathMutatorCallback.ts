@@ -3,6 +3,8 @@ import { MyElement, MyReactEditor } from '@decipad/editor-types';
 import { useCallback, useEffect, useRef } from 'react';
 import { setNodes } from '@udecode/plate-common';
 import { Path } from 'slate';
+import { getNodeEntrySafe } from '@decipad/editor-utils';
+import { dequal } from '@decipad/utils';
 
 const isTesting = !!process.env.JEST_WORKER_ID;
 
@@ -30,6 +32,13 @@ export const usePathMutatorCallback = <
         [propName]: newValue,
       };
       try {
+        const entry = getNodeEntrySafe(editor, pathRef.current);
+        if (!entry) {
+          return;
+        }
+        if (dequal((entry[0] as E)[propName], newValue)) {
+          return;
+        }
         if (!isTesting) {
           console.debug(
             `>>>>>>>>>> usePathMutatorCallback(${origin})${

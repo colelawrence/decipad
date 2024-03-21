@@ -58,6 +58,8 @@ export default function applySlateOps(
             'to',
             stringify(sharedType.toJSON())
           );
+          // eslint-disable-next-line no-console
+          console.error(err);
           captureException(err, {
             data: {
               op,

@@ -31,7 +31,6 @@ export * from './NormalizeCodeLine';
 export * from './NormalizeColumns';
 export * from './NormalizeEditor';
 export * from './NormalizeElementId';
-export * from './NormalizeImagePlugin';
 export * from './NormalizeLinkPlugin';
 export * from './NormalizeListPlugin';
 export * from './NormalizePlainTextBlock';
