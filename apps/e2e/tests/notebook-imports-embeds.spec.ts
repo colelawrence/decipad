@@ -5,6 +5,8 @@ test('import images @imports @images', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await test.step('Importing image through file explorer', async () => {
+    await notebook.focusOnBody();
+    await page.keyboard.press('Enter');
     await notebook.openImageUploader();
     const fileChooserPromise = page.waitForEvent('filechooser');
     await page.getByText('Choose file').click();
@@ -39,7 +41,7 @@ test('import images @imports @images', async ({ testUser }) => {
   });
 
   await test.step('set image caption', async () => {
-    await page.getByTestId('draggable-block').nth(1).click();
+    await page.getByTestId('notebook-image-block').getByRole('img').click();
     await page.getByTestId('notebook-image-caption').fill('Test Caption');
     await notebook.focusOnBody();
     await expect(page.getByTestId('notebook-image-caption')).toHaveText(

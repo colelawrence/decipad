@@ -35,7 +35,7 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
     (editor: MyEditor, path: Path, url: string, fileName?: string) => {
       switch (fileType) {
         case 'image':
-          return insertImageBelow(editor, path, url);
+          return insertImageBelow(editor, path, url, undefined, true);
         case 'embed':
           return insertEmbedBelow(editor, path, url);
         case 'data':

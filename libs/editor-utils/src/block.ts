@@ -147,7 +147,8 @@ export const insertImageBelow = (
   editor: MyEditor,
   path: Path,
   url: string,
-  alt = ''
+  alt = '',
+  insertInPlace = false
 ): void => {
   insertNodes<TElement>(
     editor,
@@ -159,7 +160,7 @@ export const insertImageBelow = (
         url,
       },
     ],
-    { at: requirePathBelowBlock(editor, path) }
+    { at: insertInPlace ? path : requirePathBelowBlock(editor, path) }
   );
 };
 
