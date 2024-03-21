@@ -4,6 +4,7 @@ import {
   Result,
   isColumn,
   Unknown,
+  buildResult,
 } from '@decipad/remote-computer';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
@@ -19,6 +20,7 @@ const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
       } as Unit.Unit)
   ) ?? null;
 
+// eslint-disable-next-line complexity
 export const deserializeResult = <T extends Result.Result>(
   result: T | undefined
 ): T | undefined => {
@@ -79,16 +81,21 @@ export const deserializeResult = <T extends Result.Result>(
       }
       break;
     case 'table':
-    case 'materialized-table':
-      const replacementColumns = type.columnTypes.map((colType, colIndex) => {
-        return deserializeResult({
+    case 'materialized-table': {
+      const replacementColumns = type.columnTypes.map((colType, colIndex) =>
+        deserializeResult({
           type: {
             kind: 'materialized-column',
             cellType: colType,
-          } as SerializedTypes.MaterializedColumn,
-          value: (value as Result.ResultMaterializedColumn)?.[colIndex],
-        });
-      });
+            indexedBy:
+              colType.kind === 'column' ||
+              colType.kind === 'materialized-column'
+                ? colType.indexedBy
+                : '',
+          },
+          value: (value as Result.OneResult[])?.[colIndex],
+        } as Result.Result)
+      );
       replaceType = {
         ...type,
         kind: 'materialized-table',
@@ -99,9 +106,19 @@ export const deserializeResult = <T extends Result.Result>(
       replaceValue = replacementColumns.map(
         (col) => col?.value
       ) as Result.OneResult;
+      break;
+    }
+    case 'string': {
+      if (typeof value !== 'string') {
+        replaceValue = value?.toString();
+      }
+    }
   }
   if ((replaceType ?? type) != null || (replaceValue ?? value) != null) {
-    return { type: replaceType ?? type, value: replaceValue ?? value } as T;
+    return buildResult(
+      replaceType ?? type,
+      getDefined(replaceValue ?? value)
+    ) as T;
   }
   return result;
 };

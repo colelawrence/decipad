@@ -76,6 +76,7 @@ export {
   Unit,
   areUnitsConvertible,
   buildType,
+  buildResult,
   convertBetweenUnits,
   currencyUnits,
   deserializeType,

@@ -13,6 +13,7 @@ export {
   Value,
   areUnitsConvertible,
   buildType,
+  buildResult,
   convertBetweenUnits,
   currencyUnits,
   deserializeType,

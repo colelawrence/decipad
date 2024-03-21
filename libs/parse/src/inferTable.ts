@@ -4,6 +4,7 @@ import {
   SerializedType,
   memoizedColumnResultGenerator,
   Time,
+  buildResult,
 } from '@decipad/remote-computer';
 import { varNamify } from '@decipad/utils';
 import { slice } from '@decipad/generator-utils';
@@ -97,13 +98,13 @@ export const inferTable = async (
     )
   );
 
-  return {
-    type: {
+  return buildResult(
+    {
       kind: 'table',
       columnTypes,
       columnNames,
       indexName: columnNames[0],
     },
-    value: tableToValue(columnTypes, columnValues),
-  };
+    tableToValue(columnTypes, columnValues)
+  );
 };

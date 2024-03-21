@@ -1,4 +1,8 @@
-import type { Result, SerializedTypes } from '@decipad/remote-computer';
+import {
+  buildResult,
+  type Result,
+  type SerializedTypes,
+} from '@decipad/remote-computer';
 import { ImportResult } from '../types';
 import { matrix } from './matrix';
 import { findAllIslands } from './sheetIslands';
@@ -19,8 +23,8 @@ const sheetToResult = (
         sheets: [],
       },
     },
-    result: {
-      type: {
+    result: buildResult(
+      {
         kind: 'table',
         columnNames: Array.from({ length: columnCount }).fill(
           'col'
@@ -28,9 +32,10 @@ const sheetToResult = (
         columnTypes: Array.from({ length: columnCount }).fill({
           kind: 'string',
         }) as SerializedTypes.String[],
-      } as Result.Result['type'],
-      value: m,
-    },
+        indexName: 'col',
+      },
+      m
+    ),
     loading: false,
   };
 };
@@ -76,6 +81,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -128,6 +134,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -198,6 +205,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -251,6 +259,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -321,6 +330,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -390,6 +400,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [
@@ -456,6 +467,7 @@ describe('findAllIslands', () => {
                   "kind": "string",
                 },
               ],
+              "indexName": "col",
               "kind": "table",
             },
             "value": [

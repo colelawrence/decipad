@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { Result } from '@decipad/language';
+import { Result, buildResult } from '@decipad/language';
 import { getDefined, timeout } from '@decipad/utils';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,16 +20,16 @@ it('unnests table rows', async () => {
       dimensionLength: 1,
     },
   ];
-  const result = {
-    type: {
+  const result = buildResult(
+    {
       kind: 'materialized-column',
       indexedBy: 'Table',
       cellType: {
         kind: 'number',
       },
     },
-    value: [N(1), N(2)],
-  } as Result.Result<'materialized-column'>;
+    [N(1), N(2)]
+  );
 
   expect([...(await all(unnestTableRows(explanation, result)))])
     .toMatchInlineSnapshot(`

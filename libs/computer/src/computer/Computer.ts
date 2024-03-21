@@ -26,6 +26,7 @@ import {
   deserializeType,
   materializeOneResult,
   serializeType,
+  buildResult,
 } from '@decipad/language';
 import {
   anyMappingToMap,
@@ -516,16 +517,22 @@ export class Computer {
                 }
                 return b.result.type.columnNames.map(
                   (columnName, columnIndex) => {
-                    const result = {
-                      type: {
+                    const cellType = (extData.type as SerializedTypes.Table)
+                      .columnTypes[columnIndex];
+                    const result = buildResult(
+                      {
                         kind: 'column',
-                        cellType: (extData.type as SerializedTypes.Table)
-                          .columnTypes[columnIndex],
+                        cellType,
+                        indexedBy:
+                          cellType.kind === 'column' ||
+                          cellType.kind === 'materialized-column'
+                            ? cellType.indexedBy
+                            : '',
                       },
-                      value: (extData.value as Result.Result<'table'>['value'])[
+                      (extData.value as Result.Result<'table'>['value'])[
                         columnIndex
-                      ],
-                    } as Result.Result<'column'>;
+                      ]
+                    );
                     const tableName = this.getSymbolDefinedInBlock(b.id);
                     return {
                       tableName: tableName ?? 'unnamed',
@@ -550,17 +557,22 @@ export class Computer {
                 const tableName = getIdentifierString(statement.args[0]);
                 return b.result.type.columnNames.map(
                   (columnName, columnIndex) => {
-                    const result = {
-                      type: {
+                    const cellType = (b.result.type as SerializedTypes.Table)
+                      .columnTypes[columnIndex];
+                    const result = buildResult(
+                      {
                         kind: 'column',
-                        cellType: (
-                          b.result.type as Result.Result<'table'>['type']
-                        ).columnTypes[columnIndex],
+                        cellType,
+                        indexedBy:
+                          cellType.kind === 'column' ||
+                          cellType.kind === 'materialized-column'
+                            ? cellType.indexedBy
+                            : '',
                       },
-                      value: (
-                        b.result.value as Result.Result<'table'>['value']
-                      )[columnIndex],
-                    } as Result.Result<'column'>;
+                      (b.result.value as Result.Result<'table'>['value'])[
+                        columnIndex
+                      ]
+                    );
                     return {
                       tableName,
                       readableTableName,

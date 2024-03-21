@@ -2,6 +2,7 @@ import {
   Result,
   SerializedType,
   Unknown,
+  buildResult,
   isTableResult,
 } from '@decipad/remote-computer';
 import { empty } from '@decipad/generator-utils';
@@ -41,18 +42,19 @@ const fixTableResult = (
       : createEmptyColumnResult(col);
   });
 
-  return {
-    type: {
+  return buildResult(
+    {
       ...result.type,
       columnNames: replaceWithColumns.map((col) => col.name),
       columnTypes: replaceWithColumns.map(
         (col) => col.cellType as SerializedType
       ),
     },
-    value: replaceWithColumns.map((col) => col.value) as Result.Result<
-      'table' | 'materialized-table'
-    >['value'],
-  };
+    replaceWithColumns.map(
+      (col) =>
+        col.value as Result.Result<'table' | 'materialized-table'>['value']
+    )
+  );
 };
 
 export const selectTableResult = (

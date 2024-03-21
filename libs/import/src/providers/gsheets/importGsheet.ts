@@ -117,7 +117,7 @@ const loadAllSubsheets = async (
       };
       results.push({
         meta: subMeta,
-        result: result as Result.Result,
+        result,
         loading: false,
       });
     } catch (err) {
@@ -145,11 +145,7 @@ const importOneGsheet = async (
   const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
   try {
     const resp = await request(url, true, params);
-    const result = (await handleGsheetsResponse(
-      params.computer,
-      resp,
-      options
-    )) as Result.Result;
+    const result = await handleGsheetsResponse(params.computer, resp, options);
 
     const importResult = {
       meta: {

@@ -59,6 +59,7 @@ export {
   mutateAst,
   isStatement,
 } from './utils';
+export { buildResult } from './utils/buildResult';
 export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';
 

@@ -3,6 +3,7 @@ import {
   type SerializedTypes,
   isColumn,
   Unknown,
+  buildResult,
 } from '@decipad/remote-computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
@@ -53,22 +54,20 @@ const importFromArray = (
   if (!sameType(results.map(({ type }) => type))) {
     return errorResult('not all elements of array are of same type');
   }
-  return {
-    type: {
+  return buildResult(
+    {
       kind: 'column',
       indexedBy: null,
       cellType: results[0].type,
     },
-    value: results.map(
-      (r) => r.value
-    ) as Result.Result<'materialized-column'>['value'],
-  };
+    results.map((r) => r.value as Result.OneResult)
+  ) as Result.Result;
 };
 
 const importTableFromObject = (
   obj: Record<string, unknown>,
   options: ImportOptions
-): Result.Result => {
+): Result.AnyResult => {
   const values = Object.values(obj);
   if (values.length < 0) {
     return errorResult('Don`t know how to import an empty object');
@@ -97,8 +96,8 @@ const importTableFromObject = (
 
   const columnNames = Object.keys(obj).map(normalizeColumnName);
 
-  const r: Result.Result<'materialized-table'> = {
-    type: {
+  return buildResult(
+    {
       kind: 'materialized-table',
       columnNames,
       columnTypes: results.map((res) => {
@@ -109,10 +108,8 @@ const importTableFromObject = (
       }),
       indexName: columnNames[0],
     },
-    value,
-  };
-
-  return r as Result.Result;
+    value
+  );
 };
 
 interface ToStringable {

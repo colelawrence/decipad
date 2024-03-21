@@ -43,7 +43,7 @@ type JSON = Record<string, unknown>;
 
 export interface ImportResult {
   meta?: ImportResultMeta;
-  result?: Result.Result;
+  result?: Result.AnyResult;
   rawResult?: string | JSON;
   loading: boolean;
 }
