@@ -8,7 +8,11 @@ import {
 } from '@udecode/plate-common';
 import { BaseEditor, BaseSelection, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
-import { blockSelectionStore } from '@udecode/plate-selection';
+import {
+  blockSelectionStore,
+  blockSelectionSelectors,
+  copySelectedBlocks,
+} from '@udecode/plate-selection';
 import { MyGenericEditor } from '@decipad/editor-types';
 import assert from 'assert';
 import { dequal } from '@decipad/utils';
@@ -58,6 +62,18 @@ export const createSelectionShortcutPlugin = createOnKeyDownPluginFactory({
   name: 'SELECTION_SHORTCUT_PLUGIN',
   plugin: (editor) => (event) => {
     const { selection } = editor;
+
+    // handle copying when all blocks have been selected with ctrl + a
+    const blocksSelected = blockSelectionSelectors.selectedIds().size > 0;
+    if (
+      (event.metaKey || event.ctrlKey) &&
+      event.key === 'c' &&
+      blocksSelected
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      copySelectedBlocks(editor);
+    }
 
     if ((event.metaKey || event.ctrlKey) && event.key === 'a') {
       event.preventDefault();
