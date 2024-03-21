@@ -115,21 +115,38 @@ export const useDataView = ({
     }
   }, [availableColumns, setDataColumns]);
 
-  const variableNames = useSourceTableNames().filter(
-    (name) => name.blockId !== element.id
+  const allVariableNames = useSourceTableNames();
+  const variableNames = useMemo(
+    () => allVariableNames.filter((name) => name.blockId !== element.id),
+    [allVariableNames, element.id]
   );
 
-  return {
-    variableNames,
-    tableName,
-    onDelete,
-    onInsertColumn,
-    onDeleteColumn,
-    onVariableNameChange,
-    sortedColumns,
-    availableColumns,
-    selectedAggregationTypes,
-    selectedRoundings,
-    selectedFilters,
-  };
+  return useMemo(
+    () => ({
+      variableNames,
+      tableName,
+      onDelete,
+      onInsertColumn,
+      onDeleteColumn,
+      onVariableNameChange,
+      sortedColumns,
+      availableColumns,
+      selectedAggregationTypes,
+      selectedRoundings,
+      selectedFilters,
+    }),
+    [
+      availableColumns,
+      onDelete,
+      onDeleteColumn,
+      onInsertColumn,
+      onVariableNameChange,
+      selectedAggregationTypes,
+      selectedFilters,
+      selectedRoundings,
+      sortedColumns,
+      tableName,
+      variableNames,
+    ]
+  );
 };

@@ -337,7 +337,7 @@ const createStaticServer = async () => {
 describe('useDataView hook performance', () => {
   it('works on an empty computer', async () => {
     expect(
-      (await runWithDataView({ waitForCallbackCount: 2 }))[0]
+      (await runWithDataView({ waitForCallbackCount: 1 }))[0]
     ).toMatchObject({
       availableColumns: undefined,
       selectedAggregationTypes: ['sum', 'max'],
@@ -351,7 +351,7 @@ describe('useDataView hook performance', () => {
     const computer = getRemoteComputer();
     await loadAndPushTable(computer, '/small1.csv');
     const [testResult, editor] = await runWithDataView({
-      waitForCallbackCount: 5,
+      waitForCallbackCount: 4,
       computer,
     });
     expect(testResult).toMatchSnapshot();

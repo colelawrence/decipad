@@ -22,10 +22,11 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
 import { Column } from '../types';
+import { dequal } from '@decipad/utils';
 
 export interface TableActions {
   onDelete: () => void;
@@ -57,8 +58,14 @@ export const useDataViewActions = (
     [editor, element]
   );
 
+  const lastDataColumns = useRef<Column[] | undefined>();
+
   const setDataColumns = useCallback(
     (columns: Column[]) => {
+      if (dequal(lastDataColumns.current, columns)) {
+        return;
+      }
+      lastDataColumns.current = columns;
       const headerRow: DataViewHeaderRowElement | undefined =
         element?.children[1];
       const headerRowPath = headerRow && findNodePath(editor, headerRow);
@@ -227,16 +234,29 @@ export const useDataViewActions = (
     [editor]
   );
 
-  return {
-    onDelete,
-    onVariableNameChange,
-    setDataColumns,
-    onMoveColumn,
-    onInsertColumn,
-    onDeleteColumn,
-    columnChanges$: useMemo(
-      () => columnChanges$.asObservable(),
-      [columnChanges$]
-    ),
-  };
+  const columnChanges$Memo = useMemo(
+    () => columnChanges$.asObservable(),
+    [columnChanges$]
+  );
+
+  return useMemo(
+    () => ({
+      onDelete,
+      onVariableNameChange,
+      setDataColumns,
+      onMoveColumn,
+      onInsertColumn,
+      onDeleteColumn,
+      columnChanges$: columnChanges$Memo,
+    }),
+    [
+      columnChanges$Memo,
+      onDelete,
+      onDeleteColumn,
+      onInsertColumn,
+      onMoveColumn,
+      onVariableNameChange,
+      setDataColumns,
+    ]
+  );
 };

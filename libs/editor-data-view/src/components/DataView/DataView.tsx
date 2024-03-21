@@ -93,6 +93,36 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     ));
   }, [element.children, rotate, path]);
 
+  const data = useMemo(
+    () =>
+      sortedColumns && tableName ? (
+        <DataViewData
+          element={element}
+          tableName={tableName}
+          columns={sortedColumns}
+          aggregationTypes={selectedAggregationTypes}
+          roundings={selectedRoundings}
+          expandedGroups={element.expandedGroups}
+          onChangeExpandedGroups={saveExpandedGroups}
+          rotate={rotate}
+          headers={headers}
+          alternateRotation={element.alternateRotation ?? false}
+          filters={selectedFilters}
+        />
+      ) : null,
+    [
+      element,
+      headers,
+      rotate,
+      saveExpandedGroups,
+      selectedAggregationTypes,
+      selectedFilters,
+      selectedRoundings,
+      sortedColumns,
+      tableName,
+    ]
+  );
+
   return (
     <DraggableBlock
       element={element}
@@ -113,23 +143,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
           rotate={rotate}
           alternateRotation={element.alternateRotation ?? false}
           onChangeAlternateRotation={saveAlternateRotation}
-          data={
-            sortedColumns && tableName ? (
-              <DataViewData
-                element={element}
-                tableName={tableName}
-                columns={sortedColumns}
-                aggregationTypes={selectedAggregationTypes}
-                roundings={selectedRoundings}
-                expandedGroups={element.expandedGroups}
-                onChangeExpandedGroups={saveExpandedGroups}
-                rotate={rotate}
-                headers={headers}
-                alternateRotation={element.alternateRotation ?? false}
-                filters={selectedFilters}
-              />
-            ) : null
-          }
+          data={data}
         >
           {children}
           <VoidBlock>

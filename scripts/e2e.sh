@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+yarn clean
+
 export DECI_E2E=1
 export VITE_E2E=1
 export PERCY_PARALLEL_TOTAL=2

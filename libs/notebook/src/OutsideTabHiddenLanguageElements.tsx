@@ -48,6 +48,7 @@ const RenderElement: FC<{ element: MyNode; editor: MyEditor }> = ({
       const Component = plugin.component as PlateComponent;
       return (
         <Component
+          key={element.id as string}
           attributes={{ 'data-slate-node': 'element', ref }}
           element={element}
         >
@@ -57,35 +58,27 @@ const RenderElement: FC<{ element: MyNode; editor: MyEditor }> = ({
         </Component>
       );
     }
-  } else {
-    return <span>{element.text as string}</span>;
   }
   return null;
 };
 
-const TabElementWrapper: FC<{
-  element: TabElement['children'][number];
+const TabElements: FC<{
+  tab: TabElement;
   editor: MyEditor;
-}> = ({ editor, element }) => {
-  if (needsRenderingLanguageElementTypes.has(element.type)) {
-    return <RenderElement editor={editor} element={element} />;
-  }
-  return null;
-};
-
-const TabElements: FC<{ tab: TabElement; editor: MyEditor }> = ({
-  tab,
-  editor,
-}) => {
+}> = ({ tab, editor }) => {
   return (
     <>
-      {tab.children.map((element) => (
-        <ErrorBoundary>
-          <Plate editor={editor as unknown as PlateEditor}>
-            <TabElementWrapper editor={editor} element={element} />
-          </Plate>
-        </ErrorBoundary>
-      ))}
+      {tab.children
+        .filter((child) => needsRenderingLanguageElementTypes.has(child.type))
+        .map((element) => {
+          return (
+            <ErrorBoundary key={element.id}>
+              <Plate editor={editor as unknown as PlateEditor}>
+                <RenderElement editor={editor} element={element} />
+              </Plate>
+            </ErrorBoundary>
+          );
+        })}
     </>
   );
 };
@@ -104,7 +97,7 @@ export const OutsideTabHiddenLanguageElements: FC<
       {otherTabs.map((tab) =>
         tab.type === ELEMENT_TAB ? (
           <TabElements
-            key={tabId}
+            key={tab.id}
             editor={editor.getTabEditor(tabId)}
             tab={tab}
           />
