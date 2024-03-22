@@ -9,7 +9,7 @@ do
       aws ecs delete-service \
         --cluster $CLUSTER_NAME \
         --service $serviceArn \
-        --force
+        --force \
         --output text
     done
 
