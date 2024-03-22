@@ -6,8 +6,12 @@ test('import images @imports @images', async ({ testUser }) => {
 
   await test.step('Importing image through file explorer', async () => {
     await notebook.focusOnBody();
+    await page.keyboard.type('Insert Below this');
     await page.keyboard.press('Enter');
-    await notebook.openImageUploader();
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('Insert Above this');
+    await page.keyboard.press('ArrowUp');
+    await notebook.openImageUploader(true);
     const fileChooserPromise = page.waitForEvent('filechooser');
     await page.getByText('Choose file').click();
     const fileChooser = await fileChooserPromise;
@@ -50,8 +54,9 @@ test('import images @imports @images', async ({ testUser }) => {
   });
 
   await test.step('delete image imported via file', async () => {
-    await page.getByTestId('drag-handle').nth(1).click();
-    await page.getByRole('menuitem', { name: 'Delete Delete' }).click();
+    await notebook.deleteBlock(0);
+    await notebook.deleteBlock(0);
+    await notebook.deleteBlock(0);
     await expect(
       page.getByTestId('notebook-image-block').locator('img')
     ).toBeHidden();

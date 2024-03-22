@@ -548,12 +548,17 @@ export class Notebook {
    * await notebook.addBlockShashCommand('table');
    * ```
    */
-  async addBlockSlashCommand(command: SlashCommand) {
-    await expect(async () => {
-      await this.notebookParagraph.last().click();
-      await this.notebookParagraph.last().click();
-      await expect(this.page.getByText('for new blocks')).toBeVisible();
-    }).toPass();
+  async addBlockSlashCommand(
+    command: SlashCommand,
+    insertAtCurrentBlock = false
+  ) {
+    if (!insertAtCurrentBlock) {
+      await expect(async () => {
+        await this.notebookParagraph.last().click();
+        await this.notebookParagraph.last().click();
+        await expect(this.page.getByText('for new blocks')).toBeVisible();
+      }).toPass();
+    }
     // check paragraph is ready
     await this.page.keyboard.type(`/`);
     // checks menu had openned
@@ -618,7 +623,8 @@ export class Notebook {
    */
   async addBlock(
     command: SlashCommand,
-    menu: 'slashmenu' | 'sidebar' | 'plusblockmenu' = 'slashmenu'
+    menu: 'slashmenu' | 'sidebar' | 'plusblockmenu' = 'slashmenu',
+    insertAtCurrentBlock = false
   ) {
     switch (menu) {
       case 'sidebar':
@@ -628,7 +634,7 @@ export class Notebook {
         await this.addBlockPlusBlockCommand(command);
         break;
       default:
-        await this.addBlockSlashCommand(command);
+        await this.addBlockSlashCommand(command, insertAtCurrentBlock);
     }
   }
 
@@ -928,8 +934,8 @@ export class Notebook {
    * await notebook.openImageUploader();
    * ```
    */
-  async openImageUploader() {
-    this.addBlock('upload-image');
+  async openImageUploader(insertAtCurrentBlock = false) {
+    this.addBlock('upload-image', undefined, insertAtCurrentBlock);
     await expect(async () => {
       await expect(this.page.getByText('Add an image')).toBeVisible();
     }, `Embed Image modal didn't open`).toPass();
