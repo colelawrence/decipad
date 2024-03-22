@@ -159,7 +159,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
     events: events(event),
     jwt,
     adapter: adapter(event, adapterOptions),
-    debug: !!process.env.DEBUG,
+    debug: true,
     pages: {
       verifyRequest: '/verifyEmail',
       signIn: '/',
