@@ -51,7 +51,7 @@ export default defineConfig({
     outDir: '../../dist/apps/frontend',
   },
   define: {
-    'process.env': process.env,
+    'process.env': {},
     global: 'globalThis',
   },
   server: serverOptions,
