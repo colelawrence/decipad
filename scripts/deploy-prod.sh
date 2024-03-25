@@ -22,8 +22,7 @@ echo "VITE_STRIPE_API_KEY"=${VITE_STRIPE_API_KEY:-} >> apps/frontend/.env.produc
 echo "VITE_DECI_APP_URL_BASE"=${DECI_APP_URL_BASE:-} >> apps/frontend/.env.production
 
 echo "Building frontend..."
-# Very important -i flag to clean the env vars so that they don't leak
-env -i yarn build:frontend
+yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
 # Removes the sourcemaps/built individual JS files
