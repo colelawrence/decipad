@@ -1,2426 +1,2671 @@
 {
-	"children": [
-		{
-			"children": [
-				{
-					"text": "[Template] Sautee Meals Financial Plan"
-				}
-			],
-			"type": "title",
-			"id": "HtxoCt-lJZU01GksXs4oU"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "WeeklyMeals"
-										}
-									],
-									"id": "eAzbwT-ZLv8olrfUfZzsl",
-									"type": "caption",
-									"icon": "Wheat",
-									"color": "Sulu"
-								},
-								{
-									"children": [
-										{
-											"text": "50 meals"
-										}
-									],
-									"id": "z1OC0sumoP5hDq9We6-Jc",
-									"type": "exp"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "gXpDyyvzToCp58yA9wpnq",
-									"type": "slider",
-									"max": "500",
-									"min": "0",
-									"step": "1",
-									"value": "0"
-								}
-							],
-							"id": "SRQ3BJgKZFDQUTwZYqKAA",
-							"type": "def",
-							"variant": "slider"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Price"
-										}
-									],
-									"id": "0otNbXf_6QK-H4OY5716c",
-									"type": "caption",
-									"icon": "Coin",
-									"color": "Sulu"
-								},
-								{
-									"children": [
-										{
-											"text": "£7 per meal"
-										}
-									],
-									"id": "-bNxgZW9rdXXV8VyqwU6f",
-									"type": "exp"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "GmdBgYF2MPWftpj2pAuNf",
-									"type": "slider",
-									"max": "10",
-									"min": "0",
-									"step": "1",
-									"value": "5"
-								}
-							],
-							"id": "2lqpiuDZn0kCqJSQr8Tjs",
-							"type": "def",
-							"variant": "slider"
-						}
-					],
-					"id": "P3RQhbdWnFky-WcRTy9Su",
-					"type": "columns"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "DedicatedKitchen"
-								}
-							],
-							"id": "NDcttHnslv_6AhsLWco3E",
-							"type": "caption",
-							"icon": "Heart",
-							"color": "Rose"
-						},
-						{
-							"children": [
-								{
-									"text": "false"
-								}
-							],
-							"id": "henTQa9vD_gFyrfZF50so",
-							"type": "exp"
-						}
-					],
-					"id": "DgJMSOfzU-jgQSpIygrds",
-					"type": "def",
-					"variant": "toggle",
-					"coerceToType": {
-						"kind": "boolean",
-						"date": "day"
-					}
-				},
-				{
-					"children": [
-						{
-							"text": "Considering we "
-						},
-						{
-							"text": "exprRef_SRQ3BJgKZFDQUTwZYqKAA",
-							"magicnumberz": true
-						},
-						{
-							"text": " at a price"
-						},
-						{
-							"text": "exprRef_2lqpiuDZn0kCqJSQr8Tjs",
-							"magicnumberz": true
-						},
-						{
-							"text": " we will sell a total of "
-						},
-						{
-							"text": "exprRef_UH4Q_eR_HLfhbBozDB40O",
-							"magicnumberz": true
-						},
-						{
-							"text": ". "
-						}
-					],
-					"type": "p",
-					"id": "jUNOi_I_hS5ow649H2aWS"
-				},
-				{
-					"children": [
-						{
-							"text": "The direct cost will be "
-						},
-						{
-							"text": "exprRef__IhIw_YvTtgsg1B2k4QkJ",
-							"magicnumberz": true
-						},
-						{
-							"text": " ("
-						},
-						{
-							"text": "exprRef_Hg3X1rDx8uuUREfPdJZnN",
-							"magicnumberz": true
-						},
-						{
-							"text": "). Operationally we will spend "
-						},
-						{
-							"text": "exprRef_zXrlc1Hg02mIfX9sOGz6L",
-							"magicnumberz": true
-						},
-						{
-							"text": " ("
-						},
-						{
-							"text": "exprRef_wvfZZN_wP1jsawGaFHyT8",
-							"magicnumberz": true
-						},
-						{
-							"text": ") . The profit before tax will be "
-						},
-						{
-							"text": "exprRef_B0_sv1vq27SwebBskvFBq",
-							"magicnumberz": true
-						},
-						{
-							"text": " ("
-						},
-						{
-							"text": "exprRef_duPY_udiHk9iewBpFAqh5",
-							"magicnumberz": true
-						},
-						{
-							"text": ") "
-						}
-					],
-					"type": "p",
-					"id": "64-TRUcusgslhrZEMaG1Y"
-				},
-				{
-					"children": [
-						{
-							"text": "The main difference is that with a new kitchen there's a possibility to expand and sell more weekly meals."
-						}
-					],
-					"type": "p",
-					"id": "xbDbtgNc3QmfH-KLM2cer"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "SQH3ducYsFeMUfbkN49Kj"
-				}
-			],
-			"type": "tab",
-			"id": "gBHIa3hdnAA7Z9EVCcUYX",
-			"name": "P&L",
-			"icon": "Chart"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"text": "Meals"
-						}
-					],
-					"type": "h2",
-					"id": "aflO12caqRXc32PVBFxrp"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "k32P3OsdVyLR6K3jqlR5o",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"text": "The following is a table containing information about meals. Each ingredient needs to be represented in a separate row."
-						}
-					],
-					"type": "p",
-					"id": "v6juEPyIhtutr_ibU2jOa"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Meals"
-										}
-									],
-									"id": "yKH4eEGXubHxQELAOZuDc",
-									"type": "table-var-name"
-								},
-								{
-									"children": [
-										{
-											"text": " "
-										},
-										{
-											"children": [
-												{
-													"text": ""
-												}
-											],
-											"id": "dIU8lplA-qurHpVnwE8kz",
-											"type": "smart-ref",
-											"blockId": "PgoIJpmbzPp7a3hSB16s1",
-											"columnId": null,
-											"lastSeenVariableName": "Quantity"
-										},
-										{
-											"text": " "
-										},
-										{
-											"children": [
-												{
-													"text": ""
-												}
-											],
-											"id": "bozRX857mK6e_5eb3DhvE",
-											"type": "smart-ref",
-											"blockId": "eTp_U6z8s92g860HfgUoC",
-											"columnId": null,
-											"decoration": "cell",
-											"lastSeenVariableName": "Price"
-										},
-										{
-											"text": " "
-										}
-									],
-									"id": "XFHT_rnfMeXPZNlSzBdso",
-									"type": "table-column-formula",
-									"columnId": "zpzjxuzsjc920gc0dRzN1"
-								}
-							],
-							"id": "L571M3i3TB92SbgnvAne5",
-							"type": "table-caption"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Recipe"
-										}
-									],
-									"id": "YAW1W-4Md7kMUz-4u4cNK",
-									"type": "th",
-									"cellType": {
-										"kind": "category"
-									},
-									"categoryValues": [
-										{
-											"id": "ulYHuFeK3eX39ZvZBZm-y",
-											"value": "Chilli Con Carne"
-										},
-										{
-											"id": "oe05qmcOL9FMh6sKWhszx",
-											"value": "Spicy Chicken Rice"
-										},
-										{
-											"id": "akE-ZvyiH9TmAzfuAQ66V",
-											"value": "Meatballs and Pasta"
-										},
-										{
-											"id": "czJ9hid1zzCswYS8KpCa4",
-											"value": "Braised Tofu with Soy Sauce"
-										}
-									]
-								},
-								{
-									"children": [
-										{
-											"text": "Ingredient"
-										}
-									],
-									"id": "PozU8icvSr4EiCAMqWd6V",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									}
-								},
-								{
-									"children": [
-										{
-											"text": "Quantity"
-										}
-									],
-									"id": "PgoIJpmbzPp7a3hSB16s1",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									}
-								},
-								{
-									"children": [
-										{
-											"text": "Price"
-										}
-									],
-									"id": "eTp_U6z8s92g860HfgUoC",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									},
-									"width": 159
-								},
-								{
-									"children": [
-										{
-											"text": "Cost"
-										}
-									],
-									"id": "zpzjxuzsjc920gc0dRzN1",
-									"type": "th",
-									"cellType": {
-										"kind": "table-formula"
-									}
-								}
-							],
-							"id": "GHZwnE5Nz80aBUKStyYKC",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "NbpjDR9CD-sVcbFtj2-vn",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Rice"
-										}
-									],
-									"id": "nKzNGWnPUwrzJ_MyPqU3b",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "50 grams per meal"
-										}
-									],
-									"id": "agbUOEc7MrXKQF6gi6dlO",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£10 per 10 kilograms"
-										}
-									],
-									"id": "t0NpM3Bra1Y1LWffeO1Ma",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "RdIFZeqaY7v1UdYNqmEBK",
-									"type": "td"
-								}
-							],
-							"id": "1fKE051f0bUF-7A7uVqC8",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "U8q8WmNvuIXb7vwFmgQ-m",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Meat"
-										}
-									],
-									"id": "XKPhZhxu1XAwJVJIT8SzD",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "125 grams per meal"
-										}
-									],
-									"id": "60DfTQ53u3EQThr1cJRsy",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£10 per kilogram"
-										}
-									],
-									"id": "rcJELqESpTytXCkAmOJsw",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "O1TB3iv00iWVVPJsF4iyt",
-									"type": "td"
-								}
-							],
-							"id": "kiqEQWImQKzZGR8bp2mVm",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "GiqlcKgizTsu_IAXjG6a8",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Tomatoes"
-										}
-									],
-									"id": "7ekOAerfaI3TgZXyPtciM",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "100 grams per meal"
-										}
-									],
-									"id": "HqHy3mTX37Ud62iWr_cYf",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£4 per kilogram"
-										}
-									],
-									"id": "PCgxkJxvfcMqnPKBZQAY6",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "EWkujTsGzPup9E2ACBzj1",
-									"type": "td"
-								}
-							],
-							"id": "my5qkqChtDdpQxAfc9jan",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "HH40DS79wHv6wtcdM7GpR",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Olive Oil"
-										}
-									],
-									"id": "1QweeKEDXjNJj5X8HeUG7",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "15  grams per meal"
-										}
-									],
-									"id": "OECcf15xE6hzY4t3aiX3E",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£6 per kilogram"
-										}
-									],
-									"id": "DVy6RcpVF_Ibm4sopjkiB",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "84LQQ2_ZzomgOynQnyPrW",
-									"type": "td"
-								}
-							],
-							"id": "fETgE3HsrWXhsQJ1DzV7F",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "HruLfjKxCfKgI0-_5cvu6",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Kidney Beans"
-										}
-									],
-									"id": "a_AckAEJYUBTmbAAtUJhr",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "100 grams per meal"
-										}
-									],
-									"id": "KXmWs_cUzGIzxwsLfEuLf",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£2 per kilogram"
-										}
-									],
-									"id": "4SY7CMG3mhiA73m54skZs",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "tMt--fiQ_R-a4nMz0Iku9",
-									"type": "td"
-								}
-							],
-							"id": "ekj24JqcLiOwkWK6Q4L4U",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "U-1XFfZZCWAK-otlmt3I4",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Onion"
-										}
-									],
-									"id": "htKvtTp6sx-zvRvL00Db0",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "50 grams per meal"
-										}
-									],
-									"id": "M_HwcO-SnmcU0aVxqLq6b",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£1.08 per kilogram"
-										}
-									],
-									"id": "_bEb8LghU44LLeDxvRf-X",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "5hAANep98M0gN6StDSTdW",
-									"type": "td"
-								}
-							],
-							"id": "fwrWWexRfMWmwO9n6OMEC",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "_5OXQZLqkPDgFS6pf4iXz",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Garlic"
-										}
-									],
-									"id": "kmGJ0Y6YjcQefHYbkwy7F",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "2.5 grams per meal"
-										}
-									],
-									"id": "nrNGLBwOVuOe_oGWe8yWA",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£4.5 per kilogram"
-										}
-									],
-									"id": "_X5jrR78nNAI5JyKHLlvV",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "lZm8BzJPX1BT2ZCCAPyHd",
-									"type": "td"
-								}
-							],
-							"id": "xaQrKsJWZro9t_31EqCHO",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "uwo2PBvkDK3YS5F0rmvHV",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Chilli powder"
-										}
-									],
-									"id": "GFWtODl0vMUr8j6cY0A_R",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "4 grams per meal"
-										}
-									],
-									"id": "o55HJCBsbSEOJ2Ndo-tEs",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£150 per 10 kilograms"
-										}
-									],
-									"id": "JuyO63wjrw8oKqDyu0NZA",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "S0kod0Rg3PM_8gOKMRe82",
-									"type": "td"
-								}
-							],
-							"id": "lwGMFHK9Ui3zKeVZqSuv-",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "hyt8Sh3be2DEek8T39TjB",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Cumin"
-										}
-									],
-									"id": "nVnVDHO_NZxzqlbmJuuyK",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "0.5 grams per meal"
-										}
-									],
-									"id": "R0ofjema6UzPWsZx5_mUG",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£200 per 10 kilograms"
-										}
-									],
-									"id": "FRU76i0xB0dILZF6kY0NM",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "KTgI9PfMniIw3eDmlAdaT",
-									"type": "td"
-								}
-							],
-							"id": "6lqxoYXADM2kQg4TG7JD8",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "0b1b_KEP2NBJPOTLBVAsz",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Paprika"
-										}
-									],
-									"id": "G5MRMaYk9EK_jl0C3Ol_A",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "2 grams per meal"
-										}
-									],
-									"id": "fPasF4t6huf-h652E7o6X",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£100 per 10 kilograms"
-										}
-									],
-									"id": "t7pNXpf0mkexgKgFZspy9",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "Prwb2c8f-iAOSNHSPrx8C",
-									"type": "td"
-								}
-							],
-							"id": "Y1ErZBL8ykhoZyf7w0S4b",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "UdWKdJ7bQYynl8ZHXamPN",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Salt"
-										}
-									],
-									"id": "y_r7n1h-ZiGNm6ZNeyMd6",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "0.5 grams per meal"
-										}
-									],
-									"id": "K7jX66aba5Pi0Jb7AbuhB",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£500 per 10 kilograms"
-										}
-									],
-									"id": "mKJbJ4QipR2E5RuGYylgy",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "lIT5dn7Ex986XHCz1uNhZ",
-									"type": "td"
-								}
-							],
-							"id": "cf6inBFPZYid3NAPlXh_D",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "ulYHuFeK3eX39ZvZBZm-y"
-										}
-									],
-									"id": "naOsSD7oHisNqH-jhkWDD",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "Pepper"
-										}
-									],
-									"id": "bzygLKu1fRQq3Sd2Mq3Z_",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "0.25 grams per meal"
-										}
-									],
-									"id": "SkRSX2-u8xIO0z-FdijpD",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£550 per 10 kilograms"
-										}
-									],
-									"id": "x_iUmb5Bt6BUnRnxPXuYt",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "guTqYYe0fa74f0MwhMzjo",
-									"type": "td"
-								}
-							],
-							"id": "YNyNgff6-FEsi2nmzMIjW",
-							"type": "tr"
-						}
-					],
-					"id": "scH8PqZ8FNCMcav0-nFOz",
-					"type": "table",
-					"version": 2,
-					"hideFormulas": false
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "oIZJA1OFPib96vaRBiMJZ"
-				}
-			],
-			"type": "tab",
-			"name": "Meals",
-			"id": "Bok-wIo7-_uOg_5Pt5q8V",
-			"icon": "Wheat"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Recipe"
-								}
-							],
-							"id": "qjHNQG-zxyHZtD1H_1eL0",
-							"type": "caption",
-							"icon": "Leaf"
-						},
-						{
-							"children": [
-								{
-									"text": "Chilli Con Carne"
-								}
-							],
-							"id": "o8OiFOxu4y4gtskN8-snv",
-							"type": "dropdown",
-							"options": [],
-							"smartSelection": true,
-							"selectedColumn": "exprRef_scH8PqZ8FNCMcav0_nFOz.Recipe"
-						}
-					],
-					"id": "7A-bC1IYkB9MnDnzIWUqG",
-					"type": "def",
-					"variant": "dropdown",
-					"coerceToType": {
-						"kind": "string"
-					}
-				},
-				{
-					"children": [
-						{
-							"text": "The cost of this plate is "
-						},
-						{
-							"text": "exprRef_vb7EXp3wH4PsSi1z0_HD_",
-							"magicnumberz": true
-						},
-						{
-							"text": ". Considering we sell for  "
-						},
-						{
-							"text": "exprRef_2lqpiuDZn0kCqJSQr8Tjs",
-							"magicnumberz": true
-						},
-						{
-							"text": " this means ingredients (direct costs) are "
-						},
-						{
-							"text": "exprRef_F1QAMA22xnppGEptFPsZk",
-							"magicnumberz": true
-						},
-						{
-							"text": " of this meal."
-						}
-					],
-					"type": "p",
-					"id": "EsLknNTZBUDjR8oB2Ssoc"
-				},
-				{
-					"children": [
-						{
-							"text": "Here are the ingredients:"
-						}
-					],
-					"type": "p",
-					"id": "P44mua853u2Jriq_InHwL"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Variable"
-								}
-							],
-							"type": "structured_varname",
-							"id": "zeuj6x9u6PtiZanZXbmBo"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "WCP-g9EWW6iMIUK3P0gY7",
-									"type": "smart-ref",
-									"blockId": "eRrXpMIh1bMtkD1kkCgC0",
-									"columnId": null,
-									"lastSeenVariableName": "SelectedIngredients"
-								},
-								{
-									"text": " "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "RSMg9yH8cgaWBCeupu2v_"
-						}
-					],
-					"id": "RGHC_9pj5bBwy1YbHlfBu",
-					"type": "code_line_v2",
-					"showResult": true
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "bYRSYb2IFSY-EOo-tItA0"
-				}
-			],
-			"type": "tab",
-			"name": "Recipes",
-			"id": "TIa1zdtjXAULWGUZ2q0-t",
-			"icon": "Flower"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"text": "Staff"
-						}
-					],
-					"type": "h2",
-					"id": "COx3tAWlqbWCsW0g5roAB"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "kNbStDcwF2SMdlcefCleg",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Staff"
-										}
-									],
-									"id": "coVzfEX1z574J87582XoM",
-									"type": "table-var-name"
-								},
-								{
-									"children": [
-										{
-											"text": " "
-										},
-										{
-											"children": [
-												{
-													"text": ""
-												}
-											],
-											"id": "Ilqvl4iVOYHxDVFiV47yk",
-											"type": "smart-ref",
-											"blockId": "apc_AR5rDponuu-D_VZct",
-											"columnId": null,
-											"lastSeenVariableName": "Salary"
-										},
-										{
-											"text": " in £ per month"
-										}
-									],
-									"id": "C5QD3DAxEI8DHEHc-b5xm",
-									"type": "table-column-formula",
-									"columnId": "ZNPdnCcf69PBGx58AqSVs"
-								}
-							],
-							"id": "5CPwSd9pgsIJ4GK68ZfMX",
-							"type": "table-caption"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Name"
-										}
-									],
-									"id": "NO0z3N5p5-4YrvlSU3iEn",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									}
-								},
-								{
-									"children": [
-										{
-											"text": "Salary"
-										}
-									],
-									"id": "apc_AR5rDponuu-D_VZct",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									}
-								},
-								{
-									"children": [
-										{
-											"text": "PerMonth"
-										}
-									],
-									"id": "ZNPdnCcf69PBGx58AqSVs",
-									"type": "th",
-									"cellType": {
-										"kind": "table-formula"
-									}
-								}
-							],
-							"id": "e-Wa3zgzrl2rSfmoIveC4",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Chef"
-										}
-									],
-									"id": "qOE0T7B9ZoKVq3fHWb3SC",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£0k per year"
-										}
-									],
-									"id": "optZPkG93_7f93laJj3-4",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "a6IxwYt-yZUcjzKEfXoeG",
-									"type": "td"
-								}
-							],
-							"id": "tFfwWuDsxlmEOmanvvlGp",
-							"type": "tr"
-						}
-					],
-					"id": "I06SFc2Boxd12i4wP7mmg",
-					"type": "table",
-					"version": 2,
-					"hideFormulas": false
-				},
-				{
-					"children": [
-						{
-							"text": "Other expenses"
-						}
-					],
-					"type": "h3",
-					"id": "LDEN-fQOekJWjGcFHA7nx"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "gaxxV5OkYWznpxnWxtXPA",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Expenses"
-										}
-									],
-									"id": "n9MWizKlmwAEITXMOCsrY",
-									"type": "table-var-name"
-								}
-							],
-							"id": "rEwLw7_Z9YhplgeXuys2v",
-							"type": "table-caption"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Name"
-										}
-									],
-									"id": "Ftpn9i01HldtwnVja3Sg9",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									}
-								},
-								{
-									"children": [
-										{
-											"text": "Cost"
-										}
-									],
-									"id": "YYGsgM7t0CFXWVAptrnlS",
-									"type": "th",
-									"cellType": {
-										"kind": "anything"
-									},
-									"aggregation": "Sum"
-								}
-							],
-							"id": "BMEdJBNvZnV025mW0V-nP",
-							"type": "tr"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "Rent"
-										}
-									],
-									"id": "4xUDedKYDoeCCxTBmNfDi",
-									"type": "td"
-								},
-								{
-									"children": [
-										{
-											"text": "£500 per month"
-										}
-									],
-									"id": "TpEqC2YoAZ9FQsARclzX_",
-									"type": "td"
-								}
-							],
-							"id": "OXWfCq3qe-HNUnCrq34nZ",
-							"type": "tr"
-						}
-					],
-					"id": "alRnAwSznt2FF8Ph7kto6",
-					"type": "table",
-					"version": 2
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "ExpansionCosts"
-								}
-							],
-							"type": "structured_varname",
-							"id": "JO8aLYjKqZWgHMJiAbUmI"
-						},
-						{
-							"children": [
-								{
-									"text": "sum("
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "E2d_gsk5_y8mjBLfIcmjn",
-									"type": "smart-ref",
-									"blockId": "alRnAwSznt2FF8Ph7kto6",
-									"columnId": "YYGsgM7t0CFXWVAptrnlS",
-									"lastSeenVariableName": "Expenses.Cost"
-								},
-								{
-									"text": ") + sum("
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "bESp6paz6t_0koMWDCQNJ",
-									"type": "smart-ref",
-									"blockId": "I06SFc2Boxd12i4wP7mmg",
-									"columnId": "ZNPdnCcf69PBGx58AqSVs",
-									"lastSeenVariableName": "Staff.PerMonth"
-								},
-								{
-									"text": ")"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "KC2Z7D4Vz3bTVAx3nGcVy"
-						}
-					],
-					"id": "ik50inw4TOqXu8dE7J9Mu",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "ActualExpansionCost"
-								}
-							],
-							"type": "structured_varname",
-							"id": "wuHEuJut_0HlXA6Tc42Ak"
-						},
-						{
-							"children": [
-								{
-									"text": "if "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "LhDPBMJa3YhYhLQwiExXT",
-									"type": "smart-ref",
-									"blockId": "DgJMSOfzU-jgQSpIygrds",
-									"columnId": null,
-									"lastSeenVariableName": "DedicatedKitchen"
-								},
-								{
-									"text": " then "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "tz1cgd8fsQle9yXNKn8cj",
-									"type": "smart-ref",
-									"blockId": "ik50inw4TOqXu8dE7J9Mu",
-									"columnId": null,
-									"lastSeenVariableName": "ExpansionCosts"
-								},
-								{
-									"text": " else 0"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "HOV50Bxk0TKsuKCABEls8"
-						}
-					],
-					"id": "r2KoNcW2kUli4E6q4E4de",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "P7bPoEGq3StfuyCKIs0-6"
-				}
-			],
-			"type": "tab",
-			"name": "Expansion Costs",
-			"id": "vKd3A0heWLpeXlWvCF4Kl",
-			"icon": "Growth"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"text": "Average Costs"
-						}
-					],
-					"id": "TmHbIV0WBFBQ_7uDVzmW0",
-					"type": "h3"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "Si3Xh1K4GBprgOhWeyc91",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": "CostPerMeal"
-										}
-									],
-									"id": "U7nAUd9sQHbZiR7HQ7KgW",
-									"type": "data-view-name"
-								}
-							],
-							"id": "lC_y3FNk76wXkw2jqRcL9",
-							"type": "data-view-caption"
-						},
-						{
-							"children": [
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "S14Eyn4dtAM6tbndyQplN",
-									"type": "data-view-th",
-									"cellType": {
-										"kind": "string"
-									},
-									"label": "Recipe",
-									"name": "YAW1W-4Md7kMUz-4u4cNK"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "QGfLlfMDE4eXRbwVcO6ms",
-									"type": "data-view-th",
-									"cellType": {
-										"kind": "string"
-									},
-									"label": "Ingredient",
-									"name": "PozU8icvSr4EiCAMqWd6V"
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "KAvaKKAaenCxxZAMzhkl2",
-									"type": "data-view-th",
-									"cellType": {
-										"kind": "number",
-										"unit": [
-											{
-												"unit": "meals",
-												"exp": {
-													"n": "1",
-													"d": "1",
-													"s": "-1",
-													"infinite": false
-												},
-												"multiplier": {
-													"n": "1",
-													"d": "1",
-													"s": "1",
-													"infinite": false
-												},
-												"known": false
-											},
-											{
-												"unit": "£",
-												"exp": {
-													"n": "1",
-													"d": "1",
-													"s": "1",
-													"infinite": false
-												},
-												"multiplier": {
-													"n": "1",
-													"d": "1",
-													"s": "1",
-													"infinite": false
-												},
-												"known": true,
-												"baseQuantity": "GBP",
-												"baseSuperQuantity": "currency"
-											}
-										]
-									},
-									"label": "Cost",
-									"name": "zpzjxuzsjc920gc0dRzN1",
-									"aggregation": "Sum"
-								}
-							],
-							"id": "ER5rCn6k1j6VTcSHdMiK7",
-							"type": "data-view-tr"
-						}
-					],
-					"id": "q2hsGp746-DHRoaVruXm0",
-					"type": "data-view",
-					"expandedGroups": [],
-					"varName": "scH8PqZ8FNCMcav0-nFOz"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "AverageMealCost"
-								}
-							],
-							"type": "structured_varname",
-							"id": "CzNWvfOLYFBGg4QKyBGRB"
-						},
-						{
-							"children": [
-								{
-									"text": "avg("
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "prGcoErONSZQRwkvFIlUY",
-									"type": "smart-ref",
-									"blockId": "q2hsGp746-DHRoaVruXm0",
-									"columnId": "q2hsGp746-DHRoaVruXm0--2",
-									"lastSeenVariableName": "CostPerMeal.Cost"
-								},
-								{
-									"text": ")"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "vsBEmO7V-gYEbAxiRdqUm"
-						}
-					],
-					"id": "fv-OrLV8NMQs3nqN5Oxkp",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "q4L4gbN6yoDjGNGga8kJC"
-				},
-				{
-					"children": [
-						{
-							"text": "Selected meal"
-						}
-					],
-					"type": "h3",
-					"id": "3R53kH-L48moC_WzOCQpF"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "uaKAcaXB7YUAXKzIYGRz6",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"text": "The recipe currently selected is "
-						},
-						{
-							"text": "exprRef_YdVsFys8TciATDkFJoZsL",
-							"magicnumberz": true
-						},
-						{
-							"text": " ."
-						}
-					],
-					"type": "p",
-					"id": "gzBH8277dQjnHSXDM9Kv4"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "SelectedName"
-								}
-							],
-							"type": "structured_varname",
-							"id": "RQb7_LuUVV3jxgvqbKBdH"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "fVM_kETooO7Sy3BNo1xe5",
-									"type": "smart-ref",
-									"blockId": "7A-bC1IYkB9MnDnzIWUqG",
-									"columnId": null,
-									"lastSeenVariableName": "Recipe"
-								},
-								{
-									"text": " "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "b4rTU09Dou_mf7iIJ6Vkj"
-						}
-					],
-					"id": "YdVsFys8TciATDkFJoZsL",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "SelectedIngredients"
-								}
-							],
-							"type": "structured_varname",
-							"id": "7w0GDhWYJX3S29VJQaNn7"
-						},
-						{
-							"children": [
-								{
-									"text": "filter("
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "xvoUI6UAYWtlKx2gemB4p",
-									"type": "smart-ref",
-									"blockId": "scH8PqZ8FNCMcav0-nFOz",
-									"columnId": null,
-									"lastSeenVariableName": "Meals"
-								},
-								{
-									"text": ", "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "zU8dw7uLsAL_LwjZUtYQt",
-									"type": "smart-ref",
-									"blockId": "scH8PqZ8FNCMcav0-nFOz",
-									"columnId": "YAW1W-4Md7kMUz-4u4cNK",
-									"lastSeenVariableName": "Meals.Recipe"
-								},
-								{
-									"text": "  == "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "j1dltslBvWotjaomI_rj_",
-									"type": "smart-ref",
-									"blockId": "YdVsFys8TciATDkFJoZsL",
-									"columnId": null,
-									"lastSeenVariableName": "SelectedName"
-								},
-								{
-									"text": " )"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "5re0ujNaElO7VfILoX0ZW"
-						}
-					],
-					"id": "eRrXpMIh1bMtkD1kkCgC0",
-					"type": "code_line_v2",
-					"showResult": false
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "CostOfSelectedMeal"
-								}
-							],
-							"type": "structured_varname",
-							"id": "LC_7ok-szLibzBtuGMGAr"
-						},
-						{
-							"children": [
-								{
-									"text": "sum(SelectedIngredients.Cost)"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "bOwjypFNNP7q_6nhuDHQT"
-						}
-					],
-					"id": "vb7EXp3wH4PsSi1z0_HD_",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "SelectedCogs"
-								}
-							],
-							"type": "structured_varname",
-							"id": "jigAkpjehNfrrAcr4dkE5"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "LSOBz2wY13eDHBiEqkl7h",
-									"type": "smart-ref",
-									"blockId": "vb7EXp3wH4PsSi1z0_HD_",
-									"columnId": null,
-									"lastSeenVariableName": "CostOfSelectedMeal"
-								},
-								{
-									"text": " / "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "e4IBX6kaEfylQBpI9BRuc",
-									"type": "smart-ref",
-									"blockId": "2lqpiuDZn0kCqJSQr8Tjs",
-									"columnId": null,
-									"lastSeenVariableName": "Price"
-								},
-								{
-									"text": " in %"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "Op4OfwcLPFC9MlIgUDB-W"
-						}
-					],
-					"id": "F1QAMA22xnppGEptFPsZk",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "46Yz3wt25YWejk5ZUY2b-"
-				},
-				{
-					"children": [
-						{
-							"text": "Aux"
-						}
-					],
-					"id": "BWAf7JFmVyGDvzLqSqUN9",
-					"type": "h3"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"id": "rAtRjbEzeUqRz1REhpRpc",
-					"type": "divider"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "OpenInWeeks"
-								}
-							],
-							"type": "structured_varname",
-							"id": "q-rLzMf9knkCXQZhQXYMz"
-						},
-						{
-							"children": [
-								{
-									"text": "45"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "RJT9fnajKuDEExMyhyXf7"
-						}
-					],
-					"id": "u3MNG1F-bqaSkYrvcscGk",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "YearOfMeals"
-								}
-							],
-							"type": "structured_varname",
-							"id": "j1htIY8cEmZ-xgLEgqS6x"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "wmpoeLexTLp2mdkpGfm2N",
-									"type": "smart-ref",
-									"blockId": "SRQ3BJgKZFDQUTwZYqKAA",
-									"columnId": null,
-									"lastSeenVariableName": "WeeklyMeals"
-								},
-								{
-									"text": " "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "PImZYyaOmbQ_fdGCR3CJg",
-									"type": "smart-ref",
-									"blockId": "u3MNG1F-bqaSkYrvcscGk",
-									"columnId": null,
-									"lastSeenVariableName": "OpenInWeeks"
-								},
-								{
-									"text": " "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "S3NYZfQPLqzcxUa0uYPh3"
-						}
-					],
-					"id": "sIL1QdnXJoRVHJAaqUwua",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "TotalRevenue"
-								}
-							],
-							"type": "structured_varname",
-							"id": "K6Jgu_BZUYsDpQGlNVB8b"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "cmcp9YAQTKDsxN_muX5O5",
-									"type": "smart-ref",
-									"blockId": "2lqpiuDZn0kCqJSQr8Tjs",
-									"columnId": null,
-									"lastSeenVariableName": "Price"
-								},
-								{
-									"text": " "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "zzZBtHy42MgQN58WkRUej",
-									"type": "smart-ref",
-									"blockId": "sIL1QdnXJoRVHJAaqUwua",
-									"columnId": null,
-									"lastSeenVariableName": "YearOfMeals"
-								},
-								{
-									"text": "  "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "RC2Ck-kLdU6jL7NCKbaZS"
-						}
-					],
-					"id": "UH4Q-eR-HLfhbBozDB40O",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "CostOfRevenue"
-								}
-							],
-							"type": "structured_varname",
-							"id": "a0JANXta9ZlPGNIAtvQPn"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "iN2L-HCVL-KFzBuw90qjS",
-									"type": "smart-ref",
-									"blockId": "fv-OrLV8NMQs3nqN5Oxkp",
-									"columnId": null,
-									"lastSeenVariableName": "AverageMealCost"
-								},
-								{
-									"text": " "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "VSa-p28wa6iIlHK4ncd12",
-									"type": "smart-ref",
-									"blockId": "sIL1QdnXJoRVHJAaqUwua",
-									"columnId": null,
-									"lastSeenVariableName": "YearOfMeals"
-								},
-								{
-									"text": " "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "8M_4Uv-Fq7p-USrU3cx7a"
-						}
-					],
-					"id": "_IhIw_YvTtgsg1B2k4QkJ",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "CostRevPerc"
-								}
-							],
-							"type": "structured_varname",
-							"id": "pbiGhUExVZ_P1qSx2Rzsw"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "3Q6ZkC3_RklU7eoAB68V1",
-									"type": "smart-ref",
-									"blockId": "_IhIw_YvTtgsg1B2k4QkJ",
-									"columnId": null,
-									"lastSeenVariableName": "CostOfRevenue"
-								},
-								{
-									"text": " / "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "-7Xa-wquYgu8RBRtMCCW7",
-									"type": "smart-ref",
-									"blockId": "UH4Q-eR-HLfhbBozDB40O",
-									"columnId": null,
-									"lastSeenVariableName": "TotalRevenue"
-								},
-								{
-									"text": "  in %"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "AePASnZEst1Esygc6L5UA"
-						}
-					],
-					"id": "Hg3X1rDx8uuUREfPdJZnN",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "OpsCost"
-								}
-							],
-							"type": "structured_varname",
-							"id": "rmYINEoubx5ySB4LrpiPZ"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "tY062sDv4XBiZmRB_UaMy",
-									"type": "smart-ref",
-									"blockId": "r2KoNcW2kUli4E6q4E4de",
-									"columnId": null,
-									"lastSeenVariableName": "ActualExpansionCost"
-								},
-								{
-									"text": " * 12 months"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "3VtybOdmxrNKqIQPgo2Ic"
-						}
-					],
-					"id": "zXrlc1Hg02mIfX9sOGz6L",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "OpsPerc"
-								}
-							],
-							"type": "structured_varname",
-							"id": "rJ8zEtBZ_hbRXeQpbpsgj"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "xliMJ50GyS_B4OeAMx-7j",
-									"type": "smart-ref",
-									"blockId": "zXrlc1Hg02mIfX9sOGz6L",
-									"columnId": null,
-									"lastSeenVariableName": "OpsCost"
-								},
-								{
-									"text": " / "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "m_47SrWEwmUyA_IuDdteU",
-									"type": "smart-ref",
-									"blockId": "UH4Q-eR-HLfhbBozDB40O",
-									"columnId": null,
-									"lastSeenVariableName": "TotalRevenue"
-								},
-								{
-									"text": "  in %"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "kTqnBmcEQmIsmbgmXXXOm"
-						}
-					],
-					"id": "wvfZZN_wP1jsawGaFHyT8",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Profit"
-								}
-							],
-							"type": "structured_varname",
-							"id": "8dbFTHd-49YjlkJS4kIM7"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "h6eOQPHa5UJ6hn8O_N6iv",
-									"type": "smart-ref",
-									"blockId": "UH4Q-eR-HLfhbBozDB40O",
-									"columnId": null,
-									"lastSeenVariableName": "TotalRevenue"
-								},
-								{
-									"text": " - "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "YPhIUVG5gVZ04Ee7HOC98",
-									"type": "smart-ref",
-									"blockId": "_IhIw_YvTtgsg1B2k4QkJ",
-									"columnId": null,
-									"lastSeenVariableName": "CostOfRevenue"
-								},
-								{
-									"text": " - "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "14-UVZhr-726IU7zyyZ0D",
-									"type": "smart-ref",
-									"blockId": "zXrlc1Hg02mIfX9sOGz6L",
-									"columnId": null,
-									"lastSeenVariableName": "OpsCost"
-								},
-								{
-									"text": " "
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "kJwJRwXE6rGlP9DxVvBC1"
-						}
-					],
-					"id": "B0_sv1vq27SwebBskvFBq",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "EBITPerc"
-								}
-							],
-							"type": "structured_varname",
-							"id": "iy-48yAIbGsZsWd-4QZir"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "yktIFp7FSWT_B1hfhitcF",
-									"type": "smart-ref",
-									"blockId": "B0_sv1vq27SwebBskvFBq",
-									"columnId": null,
-									"lastSeenVariableName": "Profit"
-								},
-								{
-									"text": " / "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "f9NT2IkKsBQl45IBwp4eT",
-									"type": "smart-ref",
-									"blockId": "UH4Q-eR-HLfhbBozDB40O",
-									"columnId": null,
-									"lastSeenVariableName": "TotalRevenue"
-								},
-								{
-									"text": "  in %"
-								}
-							],
-							"type": "code_line_v2_code",
-							"id": "V_V7ivL4f31g7CEsfMlfs"
-						}
-					],
-					"id": "duPY-udiHk9iewBpFAqh5",
-					"type": "code_line_v2"
-				},
-				{
-					"children": [
-						{
-							"text": ""
-						}
-					],
-					"type": "p",
-					"id": "p_rurb9t6_yLgVrbpa9Nk"
-				}
-			],
-			"type": "tab",
-			"name": "Calculations",
-			"id": "M1ZCn6YMf__V9_mx4JYgH",
-			"icon": "BalanceSheet"
-		}
-	]
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Sautee Meals Financial Plan"
+        }
+      ],
+      "type": "title",
+      "id": "HtxoCt-lJZU01GksXs4oU"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "WeeklyMeals"
+                    }
+                  ],
+                  "id": "eAzbwT-ZLv8olrfUfZzsl",
+                  "type": "caption",
+                  "icon": "Wheat",
+                  "color": "Sulu"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "50 meals"
+                    }
+                  ],
+                  "id": "z1OC0sumoP5hDq9We6-Jc",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "gXpDyyvzToCp58yA9wpnq",
+                  "type": "slider",
+                  "max": "500",
+                  "min": "0",
+                  "step": "1",
+                  "value": "0"
+                }
+              ],
+              "id": "SRQ3BJgKZFDQUTwZYqKAA",
+              "type": "def",
+              "variant": "slider"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Price"
+                    }
+                  ],
+                  "id": "0otNbXf_6QK-H4OY5716c",
+                  "type": "caption",
+                  "icon": "Coin",
+                  "color": "Sulu"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£7 per meal"
+                    }
+                  ],
+                  "id": "-bNxgZW9rdXXV8VyqwU6f",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "GmdBgYF2MPWftpj2pAuNf",
+                  "type": "slider",
+                  "max": "10",
+                  "min": "0",
+                  "step": "1",
+                  "value": "5"
+                }
+              ],
+              "id": "2lqpiuDZn0kCqJSQr8Tjs",
+              "type": "def",
+              "variant": "slider"
+            }
+          ],
+          "id": "P3RQhbdWnFky-WcRTy9Su",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "DedicatedKitchen"
+                }
+              ],
+              "id": "NDcttHnslv_6AhsLWco3E",
+              "type": "caption",
+              "icon": "Heart",
+              "color": "Rose"
+            },
+            {
+              "children": [
+                {
+                  "text": "false"
+                }
+              ],
+              "id": "henTQa9vD_gFyrfZF50so",
+              "type": "exp"
+            }
+          ],
+          "id": "DgJMSOfzU-jgQSpIygrds",
+          "type": "def",
+          "variant": "toggle",
+          "coerceToType": {
+            "kind": "boolean",
+            "date": "day"
+          }
+        },
+        {
+          "children": [
+            {
+              "text": "Considering we "
+            },
+            {
+              "text": "exprRef_SRQ3BJgKZFDQUTwZYqKAA",
+              "magicnumberz": true
+            },
+            {
+              "text": " at a price"
+            },
+            {
+              "text": "exprRef_2lqpiuDZn0kCqJSQr8Tjs",
+              "magicnumberz": true
+            },
+            {
+              "text": " we will sell a total of "
+            },
+            {
+              "text": "exprRef_UH4Q_eR_HLfhbBozDB40O",
+              "magicnumberz": true
+            },
+            {
+              "text": ". "
+            }
+          ],
+          "type": "p",
+          "id": "jUNOi_I_hS5ow649H2aWS"
+        },
+        {
+          "children": [
+            {
+              "text": "The direct cost will be "
+            },
+            {
+              "text": "exprRef__IhIw_YvTtgsg1B2k4QkJ",
+              "magicnumberz": true
+            },
+            {
+              "text": " ("
+            },
+            {
+              "text": "exprRef_Hg3X1rDx8uuUREfPdJZnN",
+              "magicnumberz": true
+            },
+            {
+              "text": "). Operationally we will spend "
+            },
+            {
+              "text": "exprRef_zXrlc1Hg02mIfX9sOGz6L",
+              "magicnumberz": true
+            },
+            {
+              "text": " ("
+            },
+            {
+              "text": "exprRef_wvfZZN_wP1jsawGaFHyT8",
+              "magicnumberz": true
+            },
+            {
+              "text": ") . The profit before tax will be "
+            },
+            {
+              "text": "exprRef_B0_sv1vq27SwebBskvFBq",
+              "magicnumberz": true
+            },
+            {
+              "text": " ("
+            },
+            {
+              "text": "exprRef_duPY_udiHk9iewBpFAqh5",
+              "magicnumberz": true
+            },
+            {
+              "text": ") "
+            }
+          ],
+          "type": "p",
+          "id": "64-TRUcusgslhrZEMaG1Y"
+        },
+        {
+          "children": [
+            {
+              "text": "The main difference is that with a new kitchen there's a possibility to expand and sell more weekly meals."
+            }
+          ],
+          "type": "p",
+          "id": "xbDbtgNc3QmfH-KLM2cer"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "SQH3ducYsFeMUfbkN49Kj"
+        }
+      ],
+      "type": "tab",
+      "id": "gBHIa3hdnAA7Z9EVCcUYX",
+      "name": "P&L",
+      "icon": "Chart"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Meals"
+            }
+          ],
+          "type": "h2",
+          "id": "aflO12caqRXc32PVBFxrp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "k32P3OsdVyLR6K3jqlR5o",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "The following is a table containing information about meals. Each ingredient needs to be represented in a separate row."
+            }
+          ],
+          "type": "p",
+          "id": "v6juEPyIhtutr_ibU2jOa"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Meals"
+                    }
+                  ],
+                  "id": "yKH4eEGXubHxQELAOZuDc",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "dIU8lplA-qurHpVnwE8kz",
+                      "type": "smart-ref",
+                      "blockId": "PgoIJpmbzPp7a3hSB16s1",
+                      "columnId": null,
+                      "lastSeenVariableName": "Quantity"
+                    },
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "bozRX857mK6e_5eb3DhvE",
+                      "type": "smart-ref",
+                      "blockId": "eTp_U6z8s92g860HfgUoC",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "Price"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "XFHT_rnfMeXPZNlSzBdso",
+                  "type": "table-column-formula",
+                  "columnId": "zpzjxuzsjc920gc0dRzN1"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "y4LYu-znwX0vZ5bj76sYc",
+                      "type": "smart-ref",
+                      "blockId": "PgoIJpmbzPp7a3hSB16s1",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "Quantity"
+                    },
+                    {
+                      "text": " * "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "6YfYLwbQxXh8jdafwhUJ2",
+                      "type": "smart-ref",
+                      "blockId": "Mmja4rMRBzurvmF5zk7e0",
+                      "columnId": null,
+                      "lastSeenVariableName": "People"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "s7XUJl-ZZGUBnGzqiu1dY",
+                  "type": "table-column-formula",
+                  "columnId": "4liN4ISbmRumqddxwAlB7"
+                }
+              ],
+              "id": "L571M3i3TB92SbgnvAne5",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Recipe"
+                    }
+                  ],
+                  "id": "YAW1W-4Md7kMUz-4u4cNK",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "category"
+                  },
+                  "categoryValues": [
+                    {
+                      "id": "ulYHuFeK3eX39ZvZBZm-y",
+                      "value": "Chilli Con Carne"
+                    },
+                    {
+                      "id": "oe05qmcOL9FMh6sKWhszx",
+                      "value": "Spicy Chicken Rice"
+                    },
+                    {
+                      "id": "akE-ZvyiH9TmAzfuAQ66V",
+                      "value": "Meatballs and Pasta"
+                    },
+                    {
+                      "id": "czJ9hid1zzCswYS8KpCa4",
+                      "value": "Braised Tofu with Soy Sauce"
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Ingredient"
+                    }
+                  ],
+                  "id": "PozU8icvSr4EiCAMqWd6V",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Quantity"
+                    }
+                  ],
+                  "id": "PgoIJpmbzPp7a3hSB16s1",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Price"
+                    }
+                  ],
+                  "id": "eTp_U6z8s92g860HfgUoC",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  },
+                  "width": 159
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Cost"
+                    }
+                  ],
+                  "id": "zpzjxuzsjc920gc0dRzN1",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "QuantityTotal"
+                    }
+                  ],
+                  "id": "4liN4ISbmRumqddxwAlB7",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                }
+              ],
+              "id": "GHZwnE5Nz80aBUKStyYKC",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "NbpjDR9CD-sVcbFtj2-vn",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Rice"
+                    }
+                  ],
+                  "id": "nKzNGWnPUwrzJ_MyPqU3b",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "50 grams per meal"
+                    }
+                  ],
+                  "id": "agbUOEc7MrXKQF6gi6dlO",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£10 per 10 kilograms"
+                    }
+                  ],
+                  "id": "t0NpM3Bra1Y1LWffeO1Ma",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "RdIFZeqaY7v1UdYNqmEBK",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "IwH1B3T9fObkVgDzG2VaJ",
+                  "type": "td"
+                }
+              ],
+              "id": "1fKE051f0bUF-7A7uVqC8",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "U8q8WmNvuIXb7vwFmgQ-m",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Meat"
+                    }
+                  ],
+                  "id": "XKPhZhxu1XAwJVJIT8SzD",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "125 grams per meal"
+                    }
+                  ],
+                  "id": "60DfTQ53u3EQThr1cJRsy",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£10 per kilogram"
+                    }
+                  ],
+                  "id": "rcJELqESpTytXCkAmOJsw",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "O1TB3iv00iWVVPJsF4iyt",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "eMNeKFK_n-x0ELQg87ZDJ",
+                  "type": "td"
+                }
+              ],
+              "id": "kiqEQWImQKzZGR8bp2mVm",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "GiqlcKgizTsu_IAXjG6a8",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Tomatoes"
+                    }
+                  ],
+                  "id": "7ekOAerfaI3TgZXyPtciM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "100 grams per meal"
+                    }
+                  ],
+                  "id": "HqHy3mTX37Ud62iWr_cYf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£4 per kilogram"
+                    }
+                  ],
+                  "id": "PCgxkJxvfcMqnPKBZQAY6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "EWkujTsGzPup9E2ACBzj1",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "kyfem2WLIilfKpJwDgD00",
+                  "type": "td"
+                }
+              ],
+              "id": "my5qkqChtDdpQxAfc9jan",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "HH40DS79wHv6wtcdM7GpR",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Olive Oil"
+                    }
+                  ],
+                  "id": "1QweeKEDXjNJj5X8HeUG7",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15  grams per meal"
+                    }
+                  ],
+                  "id": "OECcf15xE6hzY4t3aiX3E",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£6 per kilogram"
+                    }
+                  ],
+                  "id": "DVy6RcpVF_Ibm4sopjkiB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "84LQQ2_ZzomgOynQnyPrW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KUKftGHwzwYgSkkVLnouF",
+                  "type": "td"
+                }
+              ],
+              "id": "fETgE3HsrWXhsQJ1DzV7F",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "HruLfjKxCfKgI0-_5cvu6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Kidney Beans"
+                    }
+                  ],
+                  "id": "a_AckAEJYUBTmbAAtUJhr",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "100 grams per meal"
+                    }
+                  ],
+                  "id": "KXmWs_cUzGIzxwsLfEuLf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£2 per kilogram"
+                    }
+                  ],
+                  "id": "4SY7CMG3mhiA73m54skZs",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "tMt--fiQ_R-a4nMz0Iku9",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Fz1Yg3I3lJA_dFmkdIbwQ",
+                  "type": "td"
+                }
+              ],
+              "id": "ekj24JqcLiOwkWK6Q4L4U",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "U-1XFfZZCWAK-otlmt3I4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Onion"
+                    }
+                  ],
+                  "id": "htKvtTp6sx-zvRvL00Db0",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "50 grams per meal"
+                    }
+                  ],
+                  "id": "M_HwcO-SnmcU0aVxqLq6b",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£1.08 per kilogram"
+                    }
+                  ],
+                  "id": "_bEb8LghU44LLeDxvRf-X",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "5hAANep98M0gN6StDSTdW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "NigVdIr3r4aAh1urwFjo_",
+                  "type": "td"
+                }
+              ],
+              "id": "fwrWWexRfMWmwO9n6OMEC",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "_5OXQZLqkPDgFS6pf4iXz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Garlic"
+                    }
+                  ],
+                  "id": "kmGJ0Y6YjcQefHYbkwy7F",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2.5 grams per meal"
+                    }
+                  ],
+                  "id": "nrNGLBwOVuOe_oGWe8yWA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£4.5 per kilogram"
+                    }
+                  ],
+                  "id": "_X5jrR78nNAI5JyKHLlvV",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "lZm8BzJPX1BT2ZCCAPyHd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "v3k-FJZsYWxTAbHeLf9Kw",
+                  "type": "td"
+                }
+              ],
+              "id": "xaQrKsJWZro9t_31EqCHO",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "uwo2PBvkDK3YS5F0rmvHV",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Chilli powder"
+                    }
+                  ],
+                  "id": "GFWtODl0vMUr8j6cY0A_R",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "4 grams per meal"
+                    }
+                  ],
+                  "id": "o55HJCBsbSEOJ2Ndo-tEs",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£150 per 10 kilograms"
+                    }
+                  ],
+                  "id": "JuyO63wjrw8oKqDyu0NZA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "S0kod0Rg3PM_8gOKMRe82",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "QNA922CbWJaf7l8oXKBbX",
+                  "type": "td"
+                }
+              ],
+              "id": "lwGMFHK9Ui3zKeVZqSuv-",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "hyt8Sh3be2DEek8T39TjB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Cumin"
+                    }
+                  ],
+                  "id": "nVnVDHO_NZxzqlbmJuuyK",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0.5 grams per meal"
+                    }
+                  ],
+                  "id": "R0ofjema6UzPWsZx5_mUG",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£200 per 10 kilograms"
+                    }
+                  ],
+                  "id": "FRU76i0xB0dILZF6kY0NM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KTgI9PfMniIw3eDmlAdaT",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "dvkEz47aBwJ0lnejR2cSV",
+                  "type": "td"
+                }
+              ],
+              "id": "6lqxoYXADM2kQg4TG7JD8",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "0b1b_KEP2NBJPOTLBVAsz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Paprika"
+                    }
+                  ],
+                  "id": "G5MRMaYk9EK_jl0C3Ol_A",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2 grams per meal"
+                    }
+                  ],
+                  "id": "fPasF4t6huf-h652E7o6X",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£100 per 10 kilograms"
+                    }
+                  ],
+                  "id": "t7pNXpf0mkexgKgFZspy9",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Prwb2c8f-iAOSNHSPrx8C",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Hhjhg6-zPZshjb0ZJPw-5",
+                  "type": "td"
+                }
+              ],
+              "id": "Y1ErZBL8ykhoZyf7w0S4b",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "UdWKdJ7bQYynl8ZHXamPN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Salt"
+                    }
+                  ],
+                  "id": "y_r7n1h-ZiGNm6ZNeyMd6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0.5 grams per meal"
+                    }
+                  ],
+                  "id": "K7jX66aba5Pi0Jb7AbuhB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£500 per 10 kilograms"
+                    }
+                  ],
+                  "id": "mKJbJ4QipR2E5RuGYylgy",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "lIT5dn7Ex986XHCz1uNhZ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "dI1xpLW4yvUUmY2HHoulZ",
+                  "type": "td"
+                }
+              ],
+              "id": "cf6inBFPZYid3NAPlXh_D",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ulYHuFeK3eX39ZvZBZm-y"
+                    }
+                  ],
+                  "id": "naOsSD7oHisNqH-jhkWDD",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Pepper"
+                    }
+                  ],
+                  "id": "bzygLKu1fRQq3Sd2Mq3Z_",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0.25 grams per meal"
+                    }
+                  ],
+                  "id": "SkRSX2-u8xIO0z-FdijpD",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£550 per 10 kilograms"
+                    }
+                  ],
+                  "id": "x_iUmb5Bt6BUnRnxPXuYt",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "guTqYYe0fa74f0MwhMzjo",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "VkM-9TplJb86qG3d1rgNU",
+                  "type": "td"
+                }
+              ],
+              "id": "YNyNgff6-FEsi2nmzMIjW",
+              "type": "tr"
+            }
+          ],
+          "id": "scH8PqZ8FNCMcav0-nFOz",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "oIZJA1OFPib96vaRBiMJZ"
+        }
+      ],
+      "type": "tab",
+      "name": "Meals",
+      "id": "Bok-wIo7-_uOg_5Pt5q8V",
+      "icon": "Wheat"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Recipe"
+                    }
+                  ],
+                  "id": "qjHNQG-zxyHZtD1H_1eL0",
+                  "type": "caption",
+                  "icon": "Leaf",
+                  "color": "Grapefruit"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Chilli Con Carne"
+                    }
+                  ],
+                  "id": "o8OiFOxu4y4gtskN8-snv",
+                  "type": "dropdown",
+                  "options": [],
+                  "smartSelection": true,
+                  "selectedColumn": "exprRef_scH8PqZ8FNCMcav0_nFOz.Recipe"
+                }
+              ],
+              "id": "7A-bC1IYkB9MnDnzIWUqG",
+              "type": "def",
+              "variant": "dropdown",
+              "coerceToType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "People"
+                    }
+                  ],
+                  "id": "8BpheZtT-A6l56B0onrem",
+                  "type": "caption",
+                  "color": "Sun",
+                  "icon": "Happy"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5 meals"
+                    }
+                  ],
+                  "id": "ucQBOWzQ3iD2x9YjNRPVe",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ZX6RinXkX622SEkj2xEHn",
+                  "type": "slider",
+                  "max": "100",
+                  "min": "0",
+                  "step": "1",
+                  "value": "5"
+                }
+              ],
+              "id": "Mmja4rMRBzurvmF5zk7e0",
+              "type": "def",
+              "variant": "slider"
+            }
+          ],
+          "id": "O25OxKEYdGw8sgPIloS4b",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": "The cost of this plate is "
+            },
+            {
+              "text": "exprRef_vb7EXp3wH4PsSi1z0_HD_",
+              "magicnumberz": true
+            },
+            {
+              "text": ". Considering we sell for  "
+            },
+            {
+              "text": "exprRef_2lqpiuDZn0kCqJSQr8Tjs",
+              "magicnumberz": true
+            },
+            {
+              "text": " this means ingredients (direct costs) are "
+            },
+            {
+              "text": "exprRef_F1QAMA22xnppGEptFPsZk",
+              "magicnumberz": true
+            },
+            {
+              "text": " of this meal."
+            }
+          ],
+          "type": "p",
+          "id": "EsLknNTZBUDjR8oB2Ssoc"
+        },
+        {
+          "children": [
+            {
+              "text": "Here are the ingredients:"
+            }
+          ],
+          "type": "p",
+          "id": "P44mua853u2Jriq_InHwL"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "DataView"
+                    }
+                  ],
+                  "id": "WLq05dtX6oLBmZ8EORaYI",
+                  "type": "data-view-name"
+                }
+              ],
+              "id": "v1Nzj-GeWblxoTLttTcrA",
+              "type": "data-view-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "SOxsCl5zTZ47Gswc_dv_D",
+                  "type": "data-view-th",
+                  "cellType": {
+                    "kind": "string"
+                  },
+                  "label": "Ingredient",
+                  "name": "Ingredient"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "611xwVSSPK-8BU4gJLEyX",
+                  "type": "data-view-th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "grams",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "baseQuantity": "mass",
+                        "baseSuperQuantity": "mass"
+                      }
+                    ]
+                  },
+                  "label": "QuantityTotal",
+                  "name": "QuantityTotal"
+                }
+              ],
+              "id": "9xOs1EYxk-qD8m6q52Kw0",
+              "type": "data-view-tr"
+            }
+          ],
+          "id": "JWrmn3zzoOFHVbW0lA-kc",
+          "type": "data-view",
+          "expandedGroups": [],
+          "varName": "eRrXpMIh1bMtkD1kkCgC0"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "qt0u2NamF_OMGdBgyE7Av"
+        }
+      ],
+      "type": "tab",
+      "name": "Recipes",
+      "id": "TIa1zdtjXAULWGUZ2q0-t",
+      "icon": "Flower"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Staff"
+            }
+          ],
+          "type": "h2",
+          "id": "COx3tAWlqbWCsW0g5roAB"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "kNbStDcwF2SMdlcefCleg",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Staff"
+                    }
+                  ],
+                  "id": "coVzfEX1z574J87582XoM",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "Ilqvl4iVOYHxDVFiV47yk",
+                      "type": "smart-ref",
+                      "blockId": "apc_AR5rDponuu-D_VZct",
+                      "columnId": null,
+                      "lastSeenVariableName": "Salary"
+                    },
+                    {
+                      "text": " in £ per month"
+                    }
+                  ],
+                  "id": "C5QD3DAxEI8DHEHc-b5xm",
+                  "type": "table-column-formula",
+                  "columnId": "ZNPdnCcf69PBGx58AqSVs"
+                }
+              ],
+              "id": "5CPwSd9pgsIJ4GK68ZfMX",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Name"
+                    }
+                  ],
+                  "id": "NO0z3N5p5-4YrvlSU3iEn",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Salary"
+                    }
+                  ],
+                  "id": "apc_AR5rDponuu-D_VZct",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "PerMonth"
+                    }
+                  ],
+                  "id": "ZNPdnCcf69PBGx58AqSVs",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                }
+              ],
+              "id": "e-Wa3zgzrl2rSfmoIveC4",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Chef"
+                    }
+                  ],
+                  "id": "qOE0T7B9ZoKVq3fHWb3SC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£0k per year"
+                    }
+                  ],
+                  "id": "optZPkG93_7f93laJj3-4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "a6IxwYt-yZUcjzKEfXoeG",
+                  "type": "td"
+                }
+              ],
+              "id": "tFfwWuDsxlmEOmanvvlGp",
+              "type": "tr"
+            }
+          ],
+          "id": "I06SFc2Boxd12i4wP7mmg",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "text": "Other expenses"
+            }
+          ],
+          "type": "h3",
+          "id": "LDEN-fQOekJWjGcFHA7nx"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "gaxxV5OkYWznpxnWxtXPA",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Expenses"
+                    }
+                  ],
+                  "id": "n9MWizKlmwAEITXMOCsrY",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "rEwLw7_Z9YhplgeXuys2v",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Name"
+                    }
+                  ],
+                  "id": "Ftpn9i01HldtwnVja3Sg9",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Cost"
+                    }
+                  ],
+                  "id": "YYGsgM7t0CFXWVAptrnlS",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  },
+                  "aggregation": "Sum"
+                }
+              ],
+              "id": "BMEdJBNvZnV025mW0V-nP",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Rent"
+                    }
+                  ],
+                  "id": "4xUDedKYDoeCCxTBmNfDi",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£500 per month"
+                    }
+                  ],
+                  "id": "TpEqC2YoAZ9FQsARclzX_",
+                  "type": "td"
+                }
+              ],
+              "id": "OXWfCq3qe-HNUnCrq34nZ",
+              "type": "tr"
+            }
+          ],
+          "id": "alRnAwSznt2FF8Ph7kto6",
+          "type": "table",
+          "version": 2
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "ExpansionCosts"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "JO8aLYjKqZWgHMJiAbUmI"
+            },
+            {
+              "children": [
+                {
+                  "text": "sum("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "E2d_gsk5_y8mjBLfIcmjn",
+                  "type": "smart-ref",
+                  "blockId": "alRnAwSznt2FF8Ph7kto6",
+                  "columnId": "YYGsgM7t0CFXWVAptrnlS",
+                  "lastSeenVariableName": "Expenses.Cost"
+                },
+                {
+                  "text": ") + sum("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "bESp6paz6t_0koMWDCQNJ",
+                  "type": "smart-ref",
+                  "blockId": "I06SFc2Boxd12i4wP7mmg",
+                  "columnId": "ZNPdnCcf69PBGx58AqSVs",
+                  "lastSeenVariableName": "Staff.PerMonth"
+                },
+                {
+                  "text": ")"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "KC2Z7D4Vz3bTVAx3nGcVy"
+            }
+          ],
+          "id": "ik50inw4TOqXu8dE7J9Mu",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "ActualExpansionCost"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "wuHEuJut_0HlXA6Tc42Ak"
+            },
+            {
+              "children": [
+                {
+                  "text": "if "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "LhDPBMJa3YhYhLQwiExXT",
+                  "type": "smart-ref",
+                  "blockId": "DgJMSOfzU-jgQSpIygrds",
+                  "columnId": null,
+                  "lastSeenVariableName": "DedicatedKitchen"
+                },
+                {
+                  "text": " then "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "tz1cgd8fsQle9yXNKn8cj",
+                  "type": "smart-ref",
+                  "blockId": "ik50inw4TOqXu8dE7J9Mu",
+                  "columnId": null,
+                  "lastSeenVariableName": "ExpansionCosts"
+                },
+                {
+                  "text": " else 0"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "HOV50Bxk0TKsuKCABEls8"
+            }
+          ],
+          "id": "r2KoNcW2kUli4E6q4E4de",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "P7bPoEGq3StfuyCKIs0-6"
+        }
+      ],
+      "type": "tab",
+      "name": "Expansion Costs",
+      "id": "vKd3A0heWLpeXlWvCF4Kl",
+      "icon": "Growth"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Average Costs"
+            }
+          ],
+          "id": "TmHbIV0WBFBQ_7uDVzmW0",
+          "type": "h3"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "Si3Xh1K4GBprgOhWeyc91",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "CostPerMeal"
+                    }
+                  ],
+                  "id": "U7nAUd9sQHbZiR7HQ7KgW",
+                  "type": "data-view-name"
+                }
+              ],
+              "id": "lC_y3FNk76wXkw2jqRcL9",
+              "type": "data-view-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "S14Eyn4dtAM6tbndyQplN",
+                  "type": "data-view-th",
+                  "cellType": {
+                    "kind": "string"
+                  },
+                  "label": "Recipe",
+                  "name": "YAW1W-4Md7kMUz-4u4cNK"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "QGfLlfMDE4eXRbwVcO6ms",
+                  "type": "data-view-th",
+                  "cellType": {
+                    "kind": "string"
+                  },
+                  "label": "Ingredient",
+                  "name": "PozU8icvSr4EiCAMqWd6V"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KAvaKKAaenCxxZAMzhkl2",
+                  "type": "data-view-th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "meals",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "-1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": false
+                      },
+                      {
+                        "unit": "£",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "baseQuantity": "GBP",
+                        "baseSuperQuantity": "currency"
+                      }
+                    ]
+                  },
+                  "label": "Cost",
+                  "name": "zpzjxuzsjc920gc0dRzN1",
+                  "aggregation": "Sum"
+                }
+              ],
+              "id": "ER5rCn6k1j6VTcSHdMiK7",
+              "type": "data-view-tr"
+            }
+          ],
+          "id": "q2hsGp746-DHRoaVruXm0",
+          "type": "data-view",
+          "expandedGroups": [],
+          "varName": "scH8PqZ8FNCMcav0-nFOz"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "AverageMealCost"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "CzNWvfOLYFBGg4QKyBGRB"
+            },
+            {
+              "children": [
+                {
+                  "text": "avg("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "prGcoErONSZQRwkvFIlUY",
+                  "type": "smart-ref",
+                  "blockId": "q2hsGp746-DHRoaVruXm0",
+                  "columnId": "q2hsGp746-DHRoaVruXm0--2",
+                  "lastSeenVariableName": "CostPerMeal.Cost"
+                },
+                {
+                  "text": ")"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "vsBEmO7V-gYEbAxiRdqUm"
+            }
+          ],
+          "id": "fv-OrLV8NMQs3nqN5Oxkp",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "q4L4gbN6yoDjGNGga8kJC"
+        },
+        {
+          "children": [
+            {
+              "text": "Selected meal"
+            }
+          ],
+          "type": "h3",
+          "id": "3R53kH-L48moC_WzOCQpF"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "uaKAcaXB7YUAXKzIYGRz6",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "The recipe currently selected is "
+            },
+            {
+              "text": "exprRef_YdVsFys8TciATDkFJoZsL",
+              "magicnumberz": true
+            },
+            {
+              "text": " ."
+            }
+          ],
+          "type": "p",
+          "id": "gzBH8277dQjnHSXDM9Kv4"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "SelectedName"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "RQb7_LuUVV3jxgvqbKBdH"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "fVM_kETooO7Sy3BNo1xe5",
+                  "type": "smart-ref",
+                  "blockId": "7A-bC1IYkB9MnDnzIWUqG",
+                  "columnId": null,
+                  "lastSeenVariableName": "Recipe"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "b4rTU09Dou_mf7iIJ6Vkj"
+            }
+          ],
+          "id": "YdVsFys8TciATDkFJoZsL",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "SelectedIngredients"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "7w0GDhWYJX3S29VJQaNn7"
+            },
+            {
+              "children": [
+                {
+                  "text": "filter("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "xvoUI6UAYWtlKx2gemB4p",
+                  "type": "smart-ref",
+                  "blockId": "scH8PqZ8FNCMcav0-nFOz",
+                  "columnId": null,
+                  "lastSeenVariableName": "Meals"
+                },
+                {
+                  "text": ", "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "zU8dw7uLsAL_LwjZUtYQt",
+                  "type": "smart-ref",
+                  "blockId": "scH8PqZ8FNCMcav0-nFOz",
+                  "columnId": "YAW1W-4Md7kMUz-4u4cNK",
+                  "lastSeenVariableName": "Meals.Recipe"
+                },
+                {
+                  "text": "  == "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "j1dltslBvWotjaomI_rj_",
+                  "type": "smart-ref",
+                  "blockId": "YdVsFys8TciATDkFJoZsL",
+                  "columnId": null,
+                  "lastSeenVariableName": "SelectedName"
+                },
+                {
+                  "text": " )"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "5re0ujNaElO7VfILoX0ZW"
+            }
+          ],
+          "id": "eRrXpMIh1bMtkD1kkCgC0",
+          "type": "code_line_v2",
+          "showResult": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "CostOfSelectedMeal"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "LC_7ok-szLibzBtuGMGAr"
+            },
+            {
+              "children": [
+                {
+                  "text": "sum(SelectedIngredients.Cost)"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "bOwjypFNNP7q_6nhuDHQT"
+            }
+          ],
+          "id": "vb7EXp3wH4PsSi1z0_HD_",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "SelectedCogs"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "jigAkpjehNfrrAcr4dkE5"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "LSOBz2wY13eDHBiEqkl7h",
+                  "type": "smart-ref",
+                  "blockId": "vb7EXp3wH4PsSi1z0_HD_",
+                  "columnId": null,
+                  "lastSeenVariableName": "CostOfSelectedMeal"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "e4IBX6kaEfylQBpI9BRuc",
+                  "type": "smart-ref",
+                  "blockId": "2lqpiuDZn0kCqJSQr8Tjs",
+                  "columnId": null,
+                  "lastSeenVariableName": "Price"
+                },
+                {
+                  "text": " in %"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "Op4OfwcLPFC9MlIgUDB-W"
+            }
+          ],
+          "id": "F1QAMA22xnppGEptFPsZk",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "46Yz3wt25YWejk5ZUY2b-"
+        },
+        {
+          "children": [
+            {
+              "text": "Aux"
+            }
+          ],
+          "id": "BWAf7JFmVyGDvzLqSqUN9",
+          "type": "h3"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "rAtRjbEzeUqRz1REhpRpc",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "OpenInWeeks"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "q-rLzMf9knkCXQZhQXYMz"
+            },
+            {
+              "children": [
+                {
+                  "text": "45"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "RJT9fnajKuDEExMyhyXf7"
+            }
+          ],
+          "id": "u3MNG1F-bqaSkYrvcscGk",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "YearOfMeals"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "j1htIY8cEmZ-xgLEgqS6x"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "wmpoeLexTLp2mdkpGfm2N",
+                  "type": "smart-ref",
+                  "blockId": "SRQ3BJgKZFDQUTwZYqKAA",
+                  "columnId": null,
+                  "lastSeenVariableName": "WeeklyMeals"
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "PImZYyaOmbQ_fdGCR3CJg",
+                  "type": "smart-ref",
+                  "blockId": "u3MNG1F-bqaSkYrvcscGk",
+                  "columnId": null,
+                  "lastSeenVariableName": "OpenInWeeks"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "S3NYZfQPLqzcxUa0uYPh3"
+            }
+          ],
+          "id": "sIL1QdnXJoRVHJAaqUwua",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "TotalRevenue"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "K6Jgu_BZUYsDpQGlNVB8b"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "cmcp9YAQTKDsxN_muX5O5",
+                  "type": "smart-ref",
+                  "blockId": "2lqpiuDZn0kCqJSQr8Tjs",
+                  "columnId": null,
+                  "lastSeenVariableName": "Price"
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "zzZBtHy42MgQN58WkRUej",
+                  "type": "smart-ref",
+                  "blockId": "sIL1QdnXJoRVHJAaqUwua",
+                  "columnId": null,
+                  "lastSeenVariableName": "YearOfMeals"
+                },
+                {
+                  "text": "  "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "RC2Ck-kLdU6jL7NCKbaZS"
+            }
+          ],
+          "id": "UH4Q-eR-HLfhbBozDB40O",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "CostOfRevenue"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "a0JANXta9ZlPGNIAtvQPn"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "iN2L-HCVL-KFzBuw90qjS",
+                  "type": "smart-ref",
+                  "blockId": "fv-OrLV8NMQs3nqN5Oxkp",
+                  "columnId": null,
+                  "lastSeenVariableName": "AverageMealCost"
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "VSa-p28wa6iIlHK4ncd12",
+                  "type": "smart-ref",
+                  "blockId": "sIL1QdnXJoRVHJAaqUwua",
+                  "columnId": null,
+                  "lastSeenVariableName": "YearOfMeals"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "8M_4Uv-Fq7p-USrU3cx7a"
+            }
+          ],
+          "id": "_IhIw_YvTtgsg1B2k4QkJ",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "CostRevPerc"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "pbiGhUExVZ_P1qSx2Rzsw"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "3Q6ZkC3_RklU7eoAB68V1",
+                  "type": "smart-ref",
+                  "blockId": "_IhIw_YvTtgsg1B2k4QkJ",
+                  "columnId": null,
+                  "lastSeenVariableName": "CostOfRevenue"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "-7Xa-wquYgu8RBRtMCCW7",
+                  "type": "smart-ref",
+                  "blockId": "UH4Q-eR-HLfhbBozDB40O",
+                  "columnId": null,
+                  "lastSeenVariableName": "TotalRevenue"
+                },
+                {
+                  "text": "  in %"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "AePASnZEst1Esygc6L5UA"
+            }
+          ],
+          "id": "Hg3X1rDx8uuUREfPdJZnN",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "OpsCost"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "rmYINEoubx5ySB4LrpiPZ"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "tY062sDv4XBiZmRB_UaMy",
+                  "type": "smart-ref",
+                  "blockId": "r2KoNcW2kUli4E6q4E4de",
+                  "columnId": null,
+                  "lastSeenVariableName": "ActualExpansionCost"
+                },
+                {
+                  "text": " * 12 months"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "3VtybOdmxrNKqIQPgo2Ic"
+            }
+          ],
+          "id": "zXrlc1Hg02mIfX9sOGz6L",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "OpsPerc"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "rJ8zEtBZ_hbRXeQpbpsgj"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "xliMJ50GyS_B4OeAMx-7j",
+                  "type": "smart-ref",
+                  "blockId": "zXrlc1Hg02mIfX9sOGz6L",
+                  "columnId": null,
+                  "lastSeenVariableName": "OpsCost"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "m_47SrWEwmUyA_IuDdteU",
+                  "type": "smart-ref",
+                  "blockId": "UH4Q-eR-HLfhbBozDB40O",
+                  "columnId": null,
+                  "lastSeenVariableName": "TotalRevenue"
+                },
+                {
+                  "text": "  in %"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "kTqnBmcEQmIsmbgmXXXOm"
+            }
+          ],
+          "id": "wvfZZN_wP1jsawGaFHyT8",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Profit"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "8dbFTHd-49YjlkJS4kIM7"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "h6eOQPHa5UJ6hn8O_N6iv",
+                  "type": "smart-ref",
+                  "blockId": "UH4Q-eR-HLfhbBozDB40O",
+                  "columnId": null,
+                  "lastSeenVariableName": "TotalRevenue"
+                },
+                {
+                  "text": " - "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "YPhIUVG5gVZ04Ee7HOC98",
+                  "type": "smart-ref",
+                  "blockId": "_IhIw_YvTtgsg1B2k4QkJ",
+                  "columnId": null,
+                  "lastSeenVariableName": "CostOfRevenue"
+                },
+                {
+                  "text": " - "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "14-UVZhr-726IU7zyyZ0D",
+                  "type": "smart-ref",
+                  "blockId": "zXrlc1Hg02mIfX9sOGz6L",
+                  "columnId": null,
+                  "lastSeenVariableName": "OpsCost"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "kJwJRwXE6rGlP9DxVvBC1"
+            }
+          ],
+          "id": "B0_sv1vq27SwebBskvFBq",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "EBITPerc"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "iy-48yAIbGsZsWd-4QZir"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "yktIFp7FSWT_B1hfhitcF",
+                  "type": "smart-ref",
+                  "blockId": "B0_sv1vq27SwebBskvFBq",
+                  "columnId": null,
+                  "lastSeenVariableName": "Profit"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "f9NT2IkKsBQl45IBwp4eT",
+                  "type": "smart-ref",
+                  "blockId": "UH4Q-eR-HLfhbBozDB40O",
+                  "columnId": null,
+                  "lastSeenVariableName": "TotalRevenue"
+                },
+                {
+                  "text": "  in %"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "V_V7ivL4f31g7CEsfMlfs"
+            }
+          ],
+          "id": "duPY-udiHk9iewBpFAqh5",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "p_rurb9t6_yLgVrbpa9Nk"
+        }
+      ],
+      "type": "tab",
+      "name": "Calculations",
+      "id": "M1ZCn6YMf__V9_mx4JYgH",
+      "icon": "BalanceSheet"
+    }
+  ]
 }

@@ -1,0 +1,5040 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Copy of SaaS/B2B Growth Model"
+				}
+			],
+			"type": "title",
+			"id": "UR_8QKnVlw81L5JQeK5sy"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Q1 2024 Paid Campaigns Summary"
+						}
+					],
+					"type": "h2",
+					"id": "RnklJVwYaQGxfOr6yzwII"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "e7M0vCkTVf_BC6ynwSS9g",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "We currently split our account structure by campaign types as we have two different acquisition funnels - our "
+						},
+						{
+							"text": "demos sales funnel",
+							"highlight": true
+						},
+						{
+							"text": " and our "
+						},
+						{
+							"text": "self-serve funnel",
+							"highlight": true
+						},
+						{
+							"text": "."
+						}
+					],
+					"id": "VPYoMMmE7YPbnsYk_ahnw",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "CampaignView"
+										}
+									],
+									"id": "eag7zDGhvw6-LaJQfl8hX",
+									"type": "data-view-name"
+								}
+							],
+							"id": "Ic7bK2bIC7ftSVDzpBYQB",
+							"type": "data-view-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "H0dUAG1Lysz1Il_cFip7a",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Funnel",
+									"name": "c-70wLy56DlVPGpEPXDFz"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "A55ah_Gpa4xcPNMxW3cbe",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Name",
+									"name": "atbFWZFXvpDkVyDxnKGtU"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "n2WP7L504RDb8E467QQir",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Region",
+									"name": "zBqQW4WpJw9635cCwF1en"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "e_ufxLNaupTimuTAnXjFF",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "gbp",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "GBP",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"label": "Spend",
+									"name": "uueudD5xBT7iUudoS1R3K"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "metaKzUDaPkpNPhsq5MkV",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "Impressions",
+									"name": "tUvO1ZXAxzeqmZ7Bgur3Z"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gEniXyceHTTWz_xvUXv7m",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "gbp",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "GBP",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"label": "CPM",
+									"name": "UTicl8eoFKQqOq-3HKVXg"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ABTqkTZuiC9pb7LziJ8o4",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"numberFormat": "percentage"
+									},
+									"label": "CTR",
+									"name": "hDinzW_QGwQrj2zA7_0kd"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EnRaFU6EijMOKRwQBYdU0",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "NewCustomers",
+									"name": "xeC-_3jSXMz0rk0Dj43OS"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DJRukYFgYB2rxp-enIBpn",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "gbp",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "GBP",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"label": "CostPerActivation",
+									"name": "AD8R5f2KlVN1eCxbvDKeQ"
+								}
+							],
+							"id": "RhXoQLS9XM0O5iu_5eShh",
+							"type": "data-view-tr"
+						}
+					],
+					"id": "CLcHfMgScfLFYkSsAucCl",
+					"type": "data-view",
+					"expandedGroups": [
+						"f61ec10d1385dcc0c473a56fc3691fa9a2fd26105932eb1e10ae0ca7d5f3426a/28692cbae2e9b30c17344d496f4d96b3e241fe90a56cdcb81695a8ecb3252a5d",
+						"f61ec10d1385dcc0c473a56fc3691fa9a2fd26105932eb1e10ae0ca7d5f3426a/df75bb65516416a831af652b8c401775f43eaee5094aed8e4a996c7e5629ab78",
+						"966e5e35f52e27016d80bf4e9058ee7c1eb4b81904d27e410ecfdacd3e3af325/28692cbae2e9b30c17344d496f4d96b3e241fe90a56cdcb81695a8ecb3252a5d",
+						"966e5e35f52e27016d80bf4e9058ee7c1eb4b81904d27e410ecfdacd3e3af325/df75bb65516416a831af652b8c401775f43eaee5094aed8e4a996c7e5629ab78",
+						"f61ec10d1385dcc0c473a56fc3691fa9a2fd26105932eb1e10ae0ca7d5f3426a",
+						"966e5e35f52e27016d80bf4e9058ee7c1eb4b81904d27e410ecfdacd3e3af325"
+					],
+					"varName": "nrGP7UARE4uYdeBf9OjNy",
+					"color": "Catskill"
+				},
+				{
+					"children": [
+						{
+							"text": "We can draw a couple of useful numbers from this table which we'll use below to reverse-engineer our Q2'2024 targets and budgets:"
+						}
+					],
+					"type": "p",
+					"id": "dapxDBBM5zEAR2rthicIU"
+				},
+				{
+					"children": [
+						{
+							"text": "Blended costs across the two funnels"
+						}
+					],
+					"type": "h3",
+					"id": "fP2LWwwy41iqjvylbXijW"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "7docZPNOD6ME2kfYaCbF-",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Demos",
+									"highlight": true
+								}
+							],
+							"type": "p",
+							"id": "mubuOt-KUQ22GvFBTeUZ2"
+						},
+						{
+							"children": [
+								{
+									"text": "Self-serve",
+									"highlight": true
+								}
+							],
+							"type": "p",
+							"id": "6hSyfEgzZHxigFLwMTIrH"
+						}
+					],
+					"id": "oupFdjS-mIpNLjd46NYxE",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WsEW4hKqerjUgK6szOotM",
+							"blockId": "AtkGQdD-zB412Ll8dGKRF",
+							"type": "display",
+							"varName": "BlendedDemoCost",
+							"icon": "Headphones",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "C7IzdRqV2d1DBN3NFxs3u",
+							"blockId": "cDHWkuZJpJvYMFD3na-pr",
+							"type": "display",
+							"varName": "BlendedSelfServeCost",
+							"icon": "Heart",
+							"color": "Rose"
+						}
+					],
+					"id": "ettxFBrB-ktz7c6xPq3Fs",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "A08WWPNr1dUChbP12tKIJ"
+				}
+			],
+			"type": "tab",
+			"id": "_lxHdl6HiWW4rfAzlPfaD",
+			"name": "Q1 2024",
+			"icon": "Growth"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Q2 2024 Targets"
+						}
+					],
+					"id": "621OfmtjJzP-5eQB1IP8Y",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": "Now let's look at how to use our performance to date to set our Q2 targets for each geography. "
+						}
+					],
+					"type": "p",
+					"id": "WQ0y6QtUDhM1CvCwuTY3j"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "SelectGeography"
+										}
+									],
+									"id": "3I3yEGjH0R37FJtg5BaBs",
+									"type": "caption",
+									"icon": "World",
+									"color": "Sun"
+								},
+								{
+									"children": [
+										{
+											"text": "🇬🇧 UK"
+										}
+									],
+									"id": "2ziu4w9da0UW7Y4S7Uy5Z",
+									"type": "dropdown",
+									"options": [],
+									"smartSelection": true,
+									"selectedColumn": "exprRef_V7KIcUHl0DGxpgfaSSzZ1.Geography"
+								}
+							],
+							"id": "Bh8jIMpGo3Sb7XTem5aEp",
+							"type": "def",
+							"variant": "dropdown",
+							"coerceToType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ql6zZyFaoR28iuCW7TTig",
+							"blockId": "BLpxBuM4ThBzTulmZ-rRS",
+							"type": "display",
+							"varName": "TargetNewCustomers",
+							"color": "Sun"
+						}
+					],
+					"id": "Du929o_NlrX4cUTXnDbf-",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "Our Q2 2024 target for "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": " is "
+						},
+						{
+							"text": "exprRef_BLpxBuM4ThBzTulmZ_rRS",
+							"magicnumberz": true
+						},
+						{
+							"text": " total new customers."
+						}
+					],
+					"id": "o76OamesM4EctZSSszVpY",
+					"type": "callout",
+					"icon": "Bolt",
+					"color": "Grapefruit"
+				},
+				{
+					"children": [
+						{
+							"text": "We can break this overall target into two sub-targets based on the two acquisition funnels that we currently have:"
+						}
+					],
+					"id": "jPpLyWsZuKTUU_Us5eSzC",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JNd-9so5D59gZMAhUCWQu",
+							"blockId": "gYvrgFIGkkogcSGGgAUTg",
+							"type": "display",
+							"color": "Grapefruit",
+							"icon": "Bolt",
+							"varName": "CustomersDemosFunnel"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NYVr98nqUa3kpV-tPO1OQ",
+							"blockId": "QxMrUTm8gh-XYRK2ljUMH",
+							"type": "display",
+							"icon": "Bolt",
+							"color": "Grapefruit",
+							"varName": "CustomersSelfServeFunnel"
+						}
+					],
+					"id": "qCOQMxEBpXIe-ltbzyZyB",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "Z4fi2Zz8qE1e_0THSXf5b"
+				},
+				{
+					"children": [
+						{
+							"text": "Demos Funnel"
+						}
+					],
+					"id": "R7fGWCOQ4Z3RGEbr1kHzA",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "QyjQLv4hwmis1_QjYH5c4",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "When it comes to the demos funnel, in Q1 we recorded an average "
+						},
+						{
+							"text": "deal",
+							"bold": true
+						},
+						{
+							"text": " "
+						},
+						{
+							"text": "closed rate",
+							"bold": true
+						},
+						{
+							"text": " of "
+						},
+						{
+							"text": "exprRef_XFSefom6SkQ0Vi9t4wTfd",
+							"magicnumberz": true
+						},
+						{
+							"text": " . Therefore, we can use this number to get from the target of "
+						},
+						{
+							"text": "exprRef_gYvrgFIGkkogcSGGgAUTg",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers to the target of "
+						},
+						{
+							"text": "exprRef_EDmV0Xd7_Cqx878jkbY9C",
+							"magicnumberz": true
+						},
+						{
+							"text": " attended demos ",
+							"bold": true
+						},
+						{
+							"text": "we would need to generate:"
+						}
+					],
+					"id": "ot_BR1yVIqTD-Klvj4CdR",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "To continue the reverse-engineering exercise and figure out the amount of demos booked we need and the investment required, the only missing variable is the "
+						},
+						{
+							"text": "Demo Booked-to-Attended CVR",
+							"bold": true
+						},
+						{
+							"text": ".  Assuming the deal closed rate remains the same, we can create "
+						},
+						{
+							"text": "three scenarios",
+							"bold": true
+						},
+						{
+							"text": " for the "
+						},
+						{
+							"text": "Demo Booked-to-Attended CVR ",
+							"bold": true
+						},
+						{
+							"text": "and the required spend we'll need for each."
+						}
+					],
+					"type": "p",
+					"id": "ryRvmCHGESueIeMErRKfI"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DemosScenarios"
+										}
+									],
+									"id": "ILh7iQ67fVLBeQON7OFXQ",
+									"type": "data-view-name"
+								}
+							],
+							"id": "rQoSCeP5yT8I8eVwyLWwA",
+							"type": "data-view-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kcVJCgaRxjwyHRPhrrlD8",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Scenario",
+									"name": "zlNT9d3oDkmifVqucCFrG"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-3QqszkwT42vZ8L3bUX6O",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"numberFormat": "percentage"
+									},
+									"label": "BookedtoAttendedCVR",
+									"name": "Hrk-gAMg2se8UU0gefdTz"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ed0TUDDxTXp4ExRwj1YLY",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "DemosBookedNeeded",
+									"name": "5vR1NyQD1xLGygb5PS6o5"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ENgLbQK5-QxK8kQoZKrVc",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "gbp",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "GBP",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"label": "SpendRequired",
+									"name": "z0kedm4N73fahjjgNE50c"
+								}
+							],
+							"id": "cV6hAcs9rMZD9g3KeB3Qj",
+							"type": "data-view-tr"
+						}
+					],
+					"id": "X_iktX2R4UKelOM8DE-JI",
+					"type": "data-view",
+					"expandedGroups": [],
+					"varName": "kRpS1cudeExTj9QqXVQEe"
+				},
+				{
+					"children": [
+						{
+							"text": "Based on these calculations, to hit the target of "
+						},
+						{
+							"text": "exprRef_gYvrgFIGkkogcSGGgAUTg",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers  from the demo funnel in the "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": ", we need a budget in the range of "
+						},
+						{
+							"text": "exprRef_2FK__Uw0X_EBBWelBiEMM",
+							"magicnumberz": true
+						},
+						{
+							"text": "."
+						}
+					],
+					"id": "BgiRW_ISyu4yJqJ7wSiYb",
+					"type": "callout",
+					"color": "Grapefruit",
+					"icon": "Bolt"
+				},
+				{
+					"children": [
+						{
+							"text": "And here's a summary of all the geographies, again, based on the logic and calculations from above."
+						}
+					],
+					"type": "p",
+					"id": "fUbkWKA-2WaB4acygdboV"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "TargetToDemos"
+										}
+									],
+									"id": "ZCep4XjSqhnszXGF9J6Ho",
+									"type": "data-view-name"
+								}
+							],
+							"id": "awcist2cYqb0hevkpIuYg",
+							"type": "data-view-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nK9gmTwDEpEpL6S9PaZCO",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Geography",
+									"name": "VFsfShhzzbSX8eifZxvrc"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ehtaDr_61EKEI_7dNovO8",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"numberFormat": "percentage"
+									},
+									"label": "PercentCustomersDemosFunnel",
+									"name": "gXOBFCdtG1YJ7r50bB_Jd"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WF9XaNmGaE3J3RnPlynlB",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "CustomersDemosFunnel",
+									"name": "mlOHp-N_pzbTrgHYqbm7P"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bpCTLDVjRaUIbp_BKj2BK",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "CustomersSelfServeFunnel",
+									"name": "nqGlB5K5bLQmdLpZlizf4"
+								}
+							],
+							"id": "5jcZ6nguPjnC1cOOpgVPN",
+							"type": "data-view-tr"
+						}
+					],
+					"id": "-we1htxztOVLOqOhSNtTH",
+					"type": "data-view",
+					"expandedGroups": [],
+					"varName": "V7KIcUHl0DGxpgfaSSzZ1"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "fnE1gkoilxpGTCdgkC0DN"
+				},
+				{
+					"children": [
+						{
+							"text": "Self-Serve Funnel"
+						}
+					],
+					"id": "RumKzF4UINMlcYfJPM9Ga",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "inXi6rQsRWtZv2SoHTzXk",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "We've looked at the spend and metrics required for hitting the sub-goal of "
+						},
+						{
+							"text": "exprRef_gYvrgFIGkkogcSGGgAUTg",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers from the self-serve sales funnel in "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": ". To hit the overall goal of "
+						},
+						{
+							"text": "exprRef_BLpxBuM4ThBzTulmZ_rRS",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers in "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": ", we need an additional "
+						},
+						{
+							"text": "exprRef_QxMrUTm8gh_XYRK2ljUMH",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers from our self-serve funnel."
+						}
+					],
+					"type": "p",
+					"id": "-QToCa2zBV82SiLxwQjkl"
+				},
+				{
+					"children": [
+						{
+							"text": "We know our trial to customer conversion rate is around "
+						},
+						{
+							"text": "exprRef_K_9eLbwSN5HT_o6Q26d7p",
+							"magicnumberz": true
+						},
+						{
+							"text": " . Therefore, we would need "
+						},
+						{
+							"text": "exprRef_9lzkL8K1WndwN1bCd38_g",
+							"magicnumberz": true
+						},
+						{
+							"text": " target number of trials."
+						}
+					],
+					"type": "p",
+					"id": "l9IBMcxg01Vsi5-cUgxIr"
+				},
+				{
+					"children": [
+						{
+							"text": "However, we know that not everyone that starts the onboarding flow will convert to a trial. So if we want to continue mapping out our targets for the "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": ",  we can look at how many onboarding sign ups we would need to initiate to achieve the trials target. "
+						}
+					],
+					"id": "ZZrGdZvtuSHgx-f09Z51w",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "PlatformMetrics"
+										}
+									],
+									"id": "Tcgbb17f3f6H0utaBli8Q",
+									"type": "data-view-name"
+								}
+							],
+							"id": "lGjWDpko0JlV5Rj3VIR5W",
+							"type": "data-view-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IW1Cs7maAQ4vxi7niyl6D",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "string"
+									},
+									"label": "Scenario",
+									"name": "bSaDnGXcMajwVzwxCgN3t"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NpLJJJ4x9dSKV5CNoGwcK",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"numberFormat": "percentage"
+									},
+									"label": "TrialtoCustomerCVR",
+									"name": "iDUWSuUsu2ei95FB3sXV-"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "d2K-nTRKL05EEupk1tMCu",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "TrialsStartedNeeded",
+									"name": "MkwILgP2TEi0FSgNsvjIt"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rF_DMkI8n2cO5aYwLrI67",
+									"type": "data-view-th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"label": "TrialsStartedNeeded",
+									"name": "MkwILgP2TEi0FSgNsvjIt"
+								}
+							],
+							"id": "DSlEq5LaaBJGFHPrU2RZA",
+							"type": "data-view-tr"
+						}
+					],
+					"id": "7htp1Mr4sHQkbzKQuqNhA",
+					"type": "data-view",
+					"expandedGroups": [],
+					"varName": "hfaZeGTmctq-eatDeWbXY"
+				},
+				{
+					"children": [
+						{
+							"text": "Based on these calculations, to hit the target of "
+						},
+						{
+							"text": "exprRef_gYvrgFIGkkogcSGGgAUTg",
+							"magicnumberz": true
+						},
+						{
+							"text": " new customers  from the demo funnel in the "
+						},
+						{
+							"text": "exprRef_Bh8jIMpGo3Sb7XTem5aEp",
+							"magicnumberz": true
+						},
+						{
+							"text": ", we need a budget in the range of "
+						},
+						{
+							"text": "exprRef_2FK__Uw0X_EBBWelBiEMM",
+							"magicnumberz": true
+						},
+						{
+							"text": "."
+						}
+					],
+					"id": "CCHJsLNdMYqebHyn_mvdo",
+					"type": "callout",
+					"color": "Grapefruit",
+					"icon": "Bolt"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "q84hXb8h8ZeRjNJRPS0Fj"
+				}
+			],
+			"type": "tab",
+			"name": "Q2 2024",
+			"id": "N1iNii-YTkRBzw42WIwyD",
+			"icon": "Target"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Use the table below to input data. For the Demo channel an activation is defined as a demo booked. For the Self-serve channel an activation is defined as a new user sign up."
+						}
+					],
+					"id": "Nr2ihqDqJQu8kAN1E6A5A",
+					"type": "callout",
+					"color": "Grapefruit",
+					"icon": "AnnotationWarning"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Campaigns"
+										}
+									],
+									"id": "czz48MTA3Wk46-mPbkF-i",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "AJos7yXaIRxqAAvaFZULA",
+											"type": "smart-ref",
+											"blockId": "uueudD5xBT7iUudoS1R3K",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "Spend"
+										},
+										{
+											"text": " / "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "NUsVols_IVFFwRKEhhjTX",
+											"type": "smart-ref",
+											"blockId": "tUvO1ZXAxzeqmZ7Bgur3Z",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "Impressions"
+										},
+										{
+											"text": " * 1000"
+										}
+									],
+									"id": "NSuroAJrctceUUO_DiHYA",
+									"type": "table-column-formula",
+									"columnId": "UTicl8eoFKQqOq-3HKVXg"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "iez8ehOygi_fNEnqMP7vy",
+											"type": "smart-ref",
+											"blockId": "uueudD5xBT7iUudoS1R3K",
+											"columnId": null,
+											"lastSeenVariableName": "Spend"
+										},
+										{
+											"text": " per "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "dqnTM6Xb2z-YPg44ScPIq",
+											"type": "smart-ref",
+											"blockId": "fMNDfAGxZM9h_rZIIIVGv",
+											"columnId": null,
+											"lastSeenVariableName": "Clicks"
+										},
+										{
+											"text": ""
+										}
+									],
+									"id": "CZWPyzXwFq5I0nv-gRRgb",
+									"type": "table-column-formula",
+									"columnId": "PJBuASoln0htgqVXaEriH"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "xZcRf0La8bki7gu-L5ogb",
+											"type": "smart-ref",
+											"blockId": "fMNDfAGxZM9h_rZIIIVGv",
+											"columnId": null,
+											"lastSeenVariableName": "Clicks"
+										},
+										{
+											"text": " / "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "9YfysYIA0zqpgRQVtMuMd",
+											"type": "smart-ref",
+											"blockId": "tUvO1ZXAxzeqmZ7Bgur3Z",
+											"columnId": null,
+											"lastSeenVariableName": "Impressions"
+										},
+										{
+											"text": " in %"
+										}
+									],
+									"id": "Ik3sbaO8PW1mCNMjZLFXc",
+									"type": "table-column-formula",
+									"columnId": "pfAOM0ToppguoCtqhnXF3"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ZtzXxoTKgh-I6VhAYpq_j",
+											"type": "smart-ref",
+											"blockId": "uueudD5xBT7iUudoS1R3K",
+											"columnId": null,
+											"lastSeenVariableName": "Spend"
+										},
+										{
+											"text": " per (if "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "hd3F1MskkYCES1GY4bypI",
+											"type": "smart-ref",
+											"blockId": "6ji5XLNFXFWs4Sv8iRLQQ",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "DemosBooked"
+										},
+										{
+											"text": " > 0 then "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "qMTNB8QNQu-Wc2qawqyiS",
+											"type": "smart-ref",
+											"blockId": "6ji5XLNFXFWs4Sv8iRLQQ",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "DemosBooked"
+										},
+										{
+											"text": " else "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "91oZAtQny7CZkpgkPRB-i",
+											"type": "smart-ref",
+											"blockId": "dyiIRFg-lejNeoSnkspfH",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SignUps"
+										},
+										{
+											"text": ") "
+										}
+									],
+									"id": "l4gVBZRxUV9arGf8F7IC2",
+									"type": "table-column-formula",
+									"columnId": "AD8R5f2KlVN1eCxbvDKeQ"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "cJINHvOeHcCAox2xALZB5",
+											"type": "smart-ref",
+											"blockId": "xeC-_3jSXMz0rk0Dj43OS",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "NewCustomers"
+										},
+										{
+											"text": " / (if "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "8KIsBPqsMWHKJr-6dgMee",
+											"type": "smart-ref",
+											"blockId": "6ji5XLNFXFWs4Sv8iRLQQ",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "DemosBooked"
+										},
+										{
+											"text": " > 0 then "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "LT7v8oyPFA3T-lsRQL-Nd",
+											"type": "smart-ref",
+											"blockId": "6ji5XLNFXFWs4Sv8iRLQQ",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "DemosBooked"
+										},
+										{
+											"text": " else "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "EXjrtz6fLQFWUcZEwLG39",
+											"type": "smart-ref",
+											"blockId": "dyiIRFg-lejNeoSnkspfH",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SignUps"
+										},
+										{
+											"text": ") in %"
+										}
+									],
+									"id": "IyVHPsSLe6vmRYW_TWpob",
+									"type": "table-column-formula",
+									"columnId": "uwFNrwQgO8hUwdBGbCB_m"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "M9HdAmYh6s30WDpD_9Ixx",
+											"type": "smart-ref",
+											"blockId": "fMNDfAGxZM9h_rZIIIVGv",
+											"columnId": null,
+											"lastSeenVariableName": "Clicks"
+										},
+										{
+											"text": " per "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "rC1eCN5uHcSDn_WNRhgmQ",
+											"type": "smart-ref",
+											"blockId": "tUvO1ZXAxzeqmZ7Bgur3Z",
+											"columnId": null,
+											"lastSeenVariableName": "Impressions"
+										},
+										{
+											"text": " in %"
+										}
+									],
+									"id": "OOtQENEayaoBy-ZHbMHW1",
+									"type": "table-column-formula",
+									"columnId": "hDinzW_QGwQrj2zA7_0kd"
+								}
+							],
+							"id": "dG2sqi25R0208owK1ICsi",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Name"
+										}
+									],
+									"id": "atbFWZFXvpDkVyDxnKGtU",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Funnel"
+										}
+									],
+									"id": "c-70wLy56DlVPGpEPXDFz",
+									"type": "th",
+									"cellType": {
+										"kind": "category"
+									},
+									"categoryValues": [
+										{
+											"id": "6rqly7NJg4emL6M1BRRUV",
+											"value": "Demos"
+										},
+										{
+											"id": "ScM1QNCl_zmGBqSXerBY9",
+											"value": "Self-serve"
+										}
+									]
+								},
+								{
+									"children": [
+										{
+											"text": "Region"
+										}
+									],
+									"id": "zBqQW4WpJw9635cCwF1en",
+									"type": "th",
+									"cellType": {
+										"kind": "category"
+									},
+									"categoryValues": [
+										{
+											"id": "3UB_zd01txVasYeo7tJ-8",
+											"value": "🇬🇧 UK"
+										},
+										{
+											"id": "Pze3UNzwJ1Z_XObVkp25o",
+											"value": "🇺🇸 US"
+										},
+										{
+											"id": "v0_EolqQEGQRUfcf5tKMq",
+											"value": "🇩🇪 DE"
+										}
+									]
+								},
+								{
+									"children": [
+										{
+											"text": "Spend"
+										}
+									],
+									"id": "uueudD5xBT7iUudoS1R3K",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "gbp",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "GBP",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Impressions"
+										}
+									],
+									"id": "tUvO1ZXAxzeqmZ7Bgur3Z",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Clicks"
+										}
+									],
+									"id": "fMNDfAGxZM9h_rZIIIVGv",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "DemosBooked"
+										}
+									],
+									"id": "6ji5XLNFXFWs4Sv8iRLQQ",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SignUps"
+										}
+									],
+									"id": "dyiIRFg-lejNeoSnkspfH",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "NewCustomers"
+										}
+									],
+									"id": "xeC-_3jSXMz0rk0Dj43OS",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CPM"
+										}
+									],
+									"id": "UTicl8eoFKQqOq-3HKVXg",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CPC"
+										}
+									],
+									"id": "PJBuASoln0htgqVXaEriH",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CPR"
+										}
+									],
+									"id": "pfAOM0ToppguoCtqhnXF3",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CTR"
+										}
+									],
+									"id": "hDinzW_QGwQrj2zA7_0kd",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CostPerActivation"
+										}
+									],
+									"id": "AD8R5f2KlVN1eCxbvDKeQ",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CRVActivationToCustomer"
+										}
+									],
+									"id": "uwFNrwQgO8hUwdBGbCB_m",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								}
+							],
+							"id": "WitBwAVk3AJW62XPiUZ4p",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Prospecting"
+										}
+									],
+									"id": "5DWsmk5a6zJMAZvU4eNE3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6rqly7NJg4emL6M1BRRUV"
+										}
+									],
+									"id": "QYakoxLZzsUmxGbP1JrsB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3UB_zd01txVasYeo7tJ-8"
+										}
+									],
+									"id": "1yrpzYaRe4vGeokYRwo8M",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3360"
+										}
+									],
+									"id": "dcShGUZS2II7yKmw6eT4U",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "278351"
+										}
+									],
+									"id": "_cNxB3wAlaZ69_Kom1T-M",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2423"
+										}
+									],
+									"id": "QJo8luwREHMsEdkSXsXel",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "26"
+										}
+									],
+									"id": "0jiEse3lCZWzGBB2s1yaO",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "M4Dw1_sy5Xcdx5yq8VO0v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "11"
+										}
+									],
+									"id": "VG5i-SedA_dhI3cidfSQh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Q9QyXnCzvca7SGGpAbHy_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mBpnoT2Z1w_XW4LUicotl",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RLyVwziXPzWW3gNP4ct9E",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Pneb4mR1kikdcnG65-6qA",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pev3DqgSiO53MJm2JVai4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wtWXLeWLQsQvDysmnc3kq",
+									"type": "td"
+								}
+							],
+							"id": "WnmuOl4M4zXAXlnor-eq9",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Retargeting"
+										}
+									],
+									"id": "VTQmotp-5QOnA3lPS5RoB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6rqly7NJg4emL6M1BRRUV"
+										}
+									],
+									"id": "2JyQSbhIo02bUyCWuYKbv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3UB_zd01txVasYeo7tJ-8"
+										}
+									],
+									"id": "hoxnlaa2_gV8bg9zvxe4c",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "985"
+										}
+									],
+									"id": "_fI_M1eu6oHVGfYYOcJm4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "43259"
+										}
+									],
+									"id": "Na2x2sg89a0xoYDd8pbDs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "625"
+										}
+									],
+									"id": "ueLriCceqN1QyTDqEdvRF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "9"
+										}
+									],
+									"id": "7vAf4XR3WNtNXRJrwKmxG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "ClYWsg_ClbEF8lhum9tqY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "5"
+										}
+									],
+									"id": "n6pzbFhqUggMJfOf3fzKo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YvWU1szh8DNDslZu7D601",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u_UrfCD0TJu9H_gyFd_CX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "cBj-iSw1IFgmwjiEdt10D",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0YAMqF9XXdYB8b_penEn-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ciScXMANuNh7o0eS2MIST",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FfF9_2NKaCJ7gnJkePj_z",
+									"type": "td"
+								}
+							],
+							"id": "s6zpoFgP8CzINaAsWGJKG",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Prospecting"
+										}
+									],
+									"id": "tFjXUHI3DezgE1_8b2T7v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6rqly7NJg4emL6M1BRRUV"
+										}
+									],
+									"id": "KjZ-_otWn5EA55sUJw88C",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Pze3UNzwJ1Z_XObVkp25o"
+										}
+									],
+									"id": "GpVAg1K_h2bm1B9VQkclV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "10478"
+										}
+									],
+									"id": "3ANr_mZ6HK4vMeyKQzzCb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "867788"
+										}
+									],
+									"id": "Rlbi_byo2AeJnCuJc99wF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3965"
+										}
+									],
+									"id": "P6Popmki2EuQPp-WuBZ66",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "63"
+										}
+									],
+									"id": "Y3VKZO_HrA-URkTqELmkR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "V1ArdJpn8yKjqKDDu9epB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "28"
+										}
+									],
+									"id": "ktZUsoAEAu542UWlZshK3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "shgDeuBhTsdZZpP-cxsvk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mSrdfTik7cFhjNkgoHqCS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CXEsiT6XHQtsuYTB3r4ZT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yFvLXZol8PgKnJfhMTUrD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CvgduXot5K6YscxIF1-rX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FfBMTA82cBMv_7H1iOj8N",
+									"type": "td"
+								}
+							],
+							"id": "xpAXdmAgEdJi0mLBYmlLi",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Retargeting"
+										}
+									],
+									"id": "UgkvpHN8I4vqZF1BMuwkC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6rqly7NJg4emL6M1BRRUV"
+										}
+									],
+									"id": "EMTFwGeAwFL6LB4BpSqSE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Pze3UNzwJ1Z_XObVkp25o"
+										}
+									],
+									"id": "BqF7uiLBaBehlpdjMsKTJ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3718"
+										}
+									],
+									"id": "xO9X9rHAh8MGsHKIiJWFb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "129813"
+										}
+									],
+									"id": "4sKOWFsMHczSDVe9SYfB6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1029"
+										}
+									],
+									"id": "YvoBQ7vubEJbh2Z_krNsS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "27"
+										}
+									],
+									"id": "jTh-wB5THkrNyfYNtW4ZR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "2oM8qNvkD2bmhHQiFlPYR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "14"
+										}
+									],
+									"id": "lhnY0b23BiUKKooIQI5PP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MEBRtcTjkY5VgfdS803yq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pDhVs9zGxLoOu-tz_tu1T",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pL-2BG1qJq-DPt4kaAXyj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "p1BGCKAz1CA8-yxWKSY9K",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B4z8Az2XMUy_aNKJayF5B",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "oUs8B12kgDKskOGZy4CDj",
+									"type": "td"
+								}
+							],
+							"id": "bC1tz4-rDkT5s8G1d5dsG",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Launch"
+										}
+									],
+									"id": "I7jpPVYz057AJEVp3Unb4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6rqly7NJg4emL6M1BRRUV"
+										}
+									],
+									"id": "dxaAtPG45nt8dcMN-GzG8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "v0_EolqQEGQRUfcf5tKMq"
+										}
+									],
+									"id": "W7-VzzDHA29nOjT1nu1-H",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2059"
+										}
+									],
+									"id": "PlVe1qeAngxd3nW1_IWba",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "188950"
+										}
+									],
+									"id": "1tILValHdxQaguJcriu-j",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1305"
+										}
+									],
+									"id": "PMX8kLABbz-ZZg4RjaYmK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "10"
+										}
+									],
+									"id": "msCojoNh5vm3TJEwEmMcr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "QP7Xqsb78-ldJnZyzUJTZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3"
+										}
+									],
+									"id": "g7ASuZvrrC-vmmHc1pS_p",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-WMIVzcdGQ2cdhUC5beHW",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "VwYbVNqHC1YNP_hu4GbK1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jLn8G4uEvEgic16djnbua",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0_giXm0_mpuUHxlEbFqDg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4xJ_p9FB18fqDZqIeONNE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Y1c1xoUlD4q2qsY8JbHLZ",
+									"type": "td"
+								}
+							],
+							"id": "RWEJ8lmPg8DqoY-B-Y7b6",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Prospecting"
+										}
+									],
+									"id": "QnWsos01DyEXMw5C6NK8K",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "ScM1QNCl_zmGBqSXerBY9"
+										}
+									],
+									"id": "w72t0_a2prUfXrvT_qm9d",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3UB_zd01txVasYeo7tJ-8"
+										}
+									],
+									"id": "yGq4EKaAe38B2cXHLJW4b",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "5324"
+										}
+									],
+									"id": "nk6V3UCq2kJphOY2mzIK_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "328351"
+										}
+									],
+									"id": "8Oa9qrOp39r2zqc7kq5n1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3043"
+										}
+									],
+									"id": "fB_DXE9IsyB278IG03P_6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "JQDfn2Hi71lksxNWr9LYC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "52"
+										}
+									],
+									"id": "8VjAZordB8VXw7I-W5Y2Z",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "11"
+										}
+									],
+									"id": "YlAlExITXzNnHpXJsUIzc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lBljfIhg1K6ULzG23Ufr1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TSPjb7mG8UToa7TYGXwgf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wD0qUZy-JJ9a1GOs8Ki76",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6anlGG_dTjF0MInbqOJqd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "XrVt-H1r-2oirddJK63Ai",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B98mp4A-Ox5qpyzlwcwXK",
+									"type": "td"
+								}
+							],
+							"id": "Vx72hzjZ9O3vqTkPg2toa",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Retargeting"
+										}
+									],
+									"id": "MkcPTK8LyV-01dO4G8SjC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "ScM1QNCl_zmGBqSXerBY9"
+										}
+									],
+									"id": "1h73Fzt3kCH3j7ZcdfLNt",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3UB_zd01txVasYeo7tJ-8"
+										}
+									],
+									"id": "rkntrtAe853KIhofcywrc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1201"
+										}
+									],
+									"id": "Z0FhoBSmKlxbieYU2HujR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "41003"
+										}
+									],
+									"id": "tbPK_YC6fZuU_-rsoS_DA",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "651"
+										}
+									],
+									"id": "viETwLQf-RcD6sG8d_EgH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "2gD7TwuWwMGzMoiixqxfr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "18"
+										}
+									],
+									"id": "suepqFCSI9SYq18IlboVR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "4"
+										}
+									],
+									"id": "QBzEb5dhS6Ks-64M-oC8B",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0V5ZMRVUyCc2igweXaGMe",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "i1_YCw-ugFxRkkYffes5v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ySMdVg4S3I7bSNr_u1-mj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_qg_SAiTZFV4RKNmw4zRd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UgJ5ONSYFPgHeCkA0k757",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Sskc2L2RSpjYcDKjn7HIc",
+									"type": "td"
+								}
+							],
+							"id": "-pIVc_Cv58xZISkNJhbqC",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Prospecting"
+										}
+									],
+									"id": "FEhbbbnJfgkILPyiDpFI7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "ScM1QNCl_zmGBqSXerBY9"
+										}
+									],
+									"id": "Kz-J5VIBEpPsstDkVswR2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Pze3UNzwJ1Z_XObVkp25o"
+										}
+									],
+									"id": "zBws0jjxLzC6W21XArLMC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "14548"
+										}
+									],
+									"id": "XpA53YuGLbMGSXaVGhqMk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "894368"
+										}
+									],
+									"id": "1eYI7EQgzSVo3tcIKD5ps",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "7553"
+										}
+									],
+									"id": "uzNJiR3pSAhIRhARYr8tu",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "8UbGFd2ssI-CkOPoPEkhv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "85"
+										}
+									],
+									"id": "K7zQw_fj3BG49s9Cp9oZh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "18"
+										}
+									],
+									"id": "AUDKv4Mih5LzAQ_VFyxfa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "W14A9dIQAOaBUPF0nF2dt",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "p6E-8rGH0ci15aOEwB1YH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZhqZzFm6z5a3-Xmkr7hXx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JJCBB8DAVoajfmZlX2kL7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pHbKDikWX5aPUtsgjHRqN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wwZ_Owirs8AtPh-P2A8tX",
+									"type": "td"
+								}
+							],
+							"id": "yJ_wS3wJIcngxmlWe0K3O",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Retargeting"
+										}
+									],
+									"id": "R9m0eue5wLciJ9Uf4fRjK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "ScM1QNCl_zmGBqSXerBY9"
+										}
+									],
+									"id": "wYDACfnmLV2u_PGDUnmoY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Pze3UNzwJ1Z_XObVkp25o"
+										}
+									],
+									"id": "9lwq-hI8yHVVxFra_QWzr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6769"
+										}
+									],
+									"id": "dZauF51sQauKISTC4pMNP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "172918"
+										}
+									],
+									"id": "UTsO64HP3qdeCGAuCO2xn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3235"
+										}
+									],
+									"id": "KRbmiQQ7T8FJeblkIyX9L",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "ogMNY_SrTYyINQUOAuQ8c",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "54"
+										}
+									],
+									"id": "-X7zYXoKCMZIzumqWR3ru",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "12"
+										}
+									],
+									"id": "KUKXoO3JOeOAU9lEDX1kY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ri19GgecphAIvWTiJ2dDZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "p7ROVT_ur1V0lG-EfaDf4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Kyl23jbE0I1Vo0FegpXMd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6ZclzE1qVadLI8WcDCiNK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MZJ5GsDD8DPq1HY3LOVIj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xeaGvEvzIJkufX06gAXnj",
+									"type": "td"
+								}
+							],
+							"id": "cQl87q1gtqsroiQ1Rvd0Z",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Launch"
+										}
+									],
+									"id": "yjVf8wfyhWuaoasFgp7V-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "ScM1QNCl_zmGBqSXerBY9"
+										}
+									],
+									"id": "3FbGVrFR5SQk7yTigpiwE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "v0_EolqQEGQRUfcf5tKMq"
+										}
+									],
+									"id": "anahIZGkj0V4qUny8TwvI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3706"
+										}
+									],
+									"id": "cmlW41MKg6LlmB4m9oDEa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "198395"
+										}
+									],
+									"id": "njgOCIHtcLo8fn5S2RgXy",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1805"
+										}
+									],
+									"id": "hBeZUnLll13f8MqpwUYPN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "_eBRtjxawwMDydxghmCq8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "31"
+										}
+									],
+									"id": "nTLKQUU5CIl3Q86_b76yp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "4"
+										}
+									],
+									"id": "TyFAKZWdSwNUTzr08UyQL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "l9bptimcZbn6Qbno6-EnR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "seF2HnuT99ng_gHujFQJi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FMBMEVZefM79QokqPsoFr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UXLkQ9YOO6WWom5MZPNM-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xpRaxsdsz2XYkyksF6xnU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aRKbiA-Zp-0SJ_GBnL8_2",
+									"type": "td"
+								}
+							],
+							"id": "JhyyhjWdSrB44QiZdQQLt",
+							"type": "tr"
+						}
+					],
+					"id": "nrGP7UARE4uYdeBf9OjNy",
+					"type": "table",
+					"version": 2,
+					"color": "Grapefruit",
+					"icon": "Compass",
+					"hideFormulas": true
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "mODzDKu3x5ooTKJrRqC1y"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "TVySpOVNjbKiNqc8q2_np"
+				}
+			],
+			"type": "tab",
+			"name": "Campaigns",
+			"id": "gAkyNBw-X34SKoq_vPvcp",
+			"icon": "Frame",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Targets"
+										}
+									],
+									"id": "aDwzhSnRW1t7EAKcFGW3L",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": "round( "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Gb9zSaVS37GoojaWSIFfw",
+											"type": "smart-ref",
+											"blockId": "TcmbDobEVFU_5FEgCCmFA",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "NewCustomers"
+										},
+										{
+											"text": " *"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "3BgE_sV_tnb0gTK2ktSFw",
+											"type": "smart-ref",
+											"blockId": "gXOBFCdtG1YJ7r50bB_Jd",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "PercentCustomersDemosFunnel"
+										},
+										{
+											"text": " ,0)"
+										}
+									],
+									"id": "B80w6-d_xxdE3Td3Zd0jL",
+									"type": "table-column-formula",
+									"columnId": "mlOHp-N_pzbTrgHYqbm7P"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "lGdAB3et6qgLcURWOLRmf",
+											"type": "smart-ref",
+											"blockId": "TcmbDobEVFU_5FEgCCmFA",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "NewCustomers"
+										},
+										{
+											"text": " -"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "C9YrTQ9Oj-mH1eIrl7HBy",
+											"type": "smart-ref",
+											"blockId": "mlOHp-N_pzbTrgHYqbm7P",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CustomersDemosFunnel"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "-Vrjo1piOgi9kMrKqH_6F",
+									"type": "table-column-formula",
+									"columnId": "nqGlB5K5bLQmdLpZlizf4"
+								}
+							],
+							"id": "ljDz9uvc3CuJfZyForyIe",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Geography"
+										}
+									],
+									"type": "th",
+									"id": "VFsfShhzzbSX8eifZxvrc",
+									"cellType": {
+										"kind": "string"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "NewCustomers"
+										}
+									],
+									"id": "TcmbDobEVFU_5FEgCCmFA",
+									"type": "th",
+									"variant": "slider",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									},
+									"aggregation": "Sum"
+								},
+								{
+									"children": [
+										{
+											"text": "PercentCustomersDemosFunnel"
+										}
+									],
+									"id": "gXOBFCdtG1YJ7r50bB_Jd",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CustomersDemosFunnel"
+										}
+									],
+									"type": "th",
+									"id": "mlOHp-N_pzbTrgHYqbm7P",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "Sum"
+								},
+								{
+									"children": [
+										{
+											"text": "CustomersSelfServeFunnel"
+										}
+									],
+									"id": "nqGlB5K5bLQmdLpZlizf4",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "Sum"
+								}
+							],
+							"id": "eEG0bVf8bQcpvwdByQEX4",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "🇬🇧 UK"
+										}
+									],
+									"id": "w-dQU5tBPqVo-gcoZGBVU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "45"
+										}
+									],
+									"id": "UcW8gM0D3bRVxTHpHCq7e",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "30%"
+										}
+									],
+									"id": "NoBMmZ35vH1eOS95cbFoE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3pv41Ys6XVysdTkdqk8PV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NhdhZIpZtPc_wzo849TGI",
+									"type": "td"
+								}
+							],
+							"id": "kvEDp9Y7XSuvoysy8ES1O",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "🇺🇸 US"
+										}
+									],
+									"id": "EZTNVs2y4v10Vb0JORl6a",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "70"
+										}
+									],
+									"id": "rEBZCVD8Bt6-EW0Mp6TBl",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "30%"
+										}
+									],
+									"id": "yIxzWMR5UhDSJxjiCkuT3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UtZU3mXzDCB7pCRmLIFyK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5d5wcyzYg0EVl6P-aJwSG",
+									"type": "td"
+								}
+							],
+							"id": "DyumHRbuZUTQB_inP2Iqt",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "🇩🇪 DE"
+										}
+									],
+									"id": "dezAOx2_udxZuzldK7yQv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "10"
+										}
+									],
+									"id": "yuXpAVz1e406NHskF8S6-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "40%"
+										}
+									],
+									"id": "ZW3ZuGxJ6E4QktLDk0wE4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "dEkc8VQbyml-zdUsOEvNf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FSX1k8jR4cBXNndJW0sLM",
+									"type": "td"
+								}
+							],
+							"id": "qpar-qiXeMlUBBN6FKXJK",
+							"type": "tr"
+						}
+					],
+					"id": "V7KIcUHl0DGxpgfaSSzZ1",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true,
+					"isHidden": false,
+					"color": "Grapefruit",
+					"icon": "Fire"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "WXWjjSbyDJ7u3koLrg7gd"
+				}
+			],
+			"type": "tab",
+			"name": "Targets",
+			"id": "EU8KdA9OqRA_FiNwU4o92",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Funnel efficiency"
+						}
+					],
+					"type": "h3",
+					"id": "u3wiZMfiKp40QOiAgd8Fj"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "PKAjz4yYm-O2F7FfkvloG",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DemosSpend"
+								}
+							],
+							"type": "structured_varname",
+							"id": "EPlQw4C2dDCy7Nmz5wWum"
+						},
+						{
+							"children": [
+								{
+									"text": "sum(filter(Campaigns, Campaigns.Funnel == \"Demos\").Spend)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "0vp6VwLZnpRTETeazP3w0"
+						}
+					],
+					"id": "2F4OZgut1PvkiYW5c01n_",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DemosBooked"
+								}
+							],
+							"type": "structured_varname",
+							"id": "Zz1YaSZ_sDuINaekEOhy6"
+						},
+						{
+							"children": [
+								{
+									"text": "sum(filter("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yXB0tA_MISg7aR_N2Uy25",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": null,
+									"lastSeenVariableName": "Campaigns"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PjcAZxUayoDgb62dCVoSe",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": "c-70wLy56DlVPGpEPXDFz",
+									"lastSeenVariableName": "Campaigns.Funnel"
+								},
+								{
+									"text": " == \"Demos\").DemosBooked)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "-yeY8-9R6BnTq9bprChk5"
+						}
+					],
+					"id": "bPWbzaBbgy6VePkmUdFLq",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "BlendedDemoCost"
+								}
+							],
+							"type": "structured_varname",
+							"id": "vlfLO-PKcj1ieiHqwRhSd"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5mXVZ-5-90yk2zZk-coPo",
+									"type": "smart-ref",
+									"blockId": "2F4OZgut1PvkiYW5c01n_",
+									"columnId": null,
+									"lastSeenVariableName": "DemosSpend"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JTvvzmHpuoAiLHJL7gxLS",
+									"type": "smart-ref",
+									"blockId": "bPWbzaBbgy6VePkmUdFLq",
+									"columnId": null,
+									"lastSeenVariableName": "DemosBooked"
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "Cif3R5ydCcoBy0L2C79yI"
+						}
+					],
+					"id": "AtkGQdD-zB412Ll8dGKRF",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SelfServeSpend"
+								}
+							],
+							"type": "structured_varname",
+							"id": "M_Oq-GRdwQW-gMrZ-c8IO"
+						},
+						{
+							"children": [
+								{
+									"text": "sum(filter("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "dov4IoC1MzV4zx-rksf3B",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": null,
+									"lastSeenVariableName": "Campaigns"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JVw90YYO0tbw3nLIIbPu3",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": "c-70wLy56DlVPGpEPXDFz",
+									"lastSeenVariableName": "Campaigns.Funnel"
+								},
+								{
+									"text": " == \"Self-serve\").Spend)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "6EavEQTDKCspFRTUV6y5d"
+						}
+					],
+					"id": "BAaXBeWvrJvhdatwiHSaw",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SelfServeSignUps"
+								}
+							],
+							"type": "structured_varname",
+							"id": "i2HLAQuDQmDgMEyFLZ-zL"
+						},
+						{
+							"children": [
+								{
+									"text": "sum(filter("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LqBtl6dy6pe-QbbJY3ykv",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": null,
+									"lastSeenVariableName": "Campaigns"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7GMq2Nm4_0MdbAl6i92nM",
+									"type": "smart-ref",
+									"blockId": "nrGP7UARE4uYdeBf9OjNy",
+									"columnId": "c-70wLy56DlVPGpEPXDFz",
+									"lastSeenVariableName": "Campaigns.Funnel"
+								},
+								{
+									"text": " == \"Self-serve\").SignUps)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "k1IgLR_ozoBRstJbPaUo2"
+						}
+					],
+					"id": "81ew55lcWS8VKa4NOQHF1",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "BlendedSelfServeCost"
+								}
+							],
+							"type": "structured_varname",
+							"id": "GYSOGc8R9aAoi7oR7eKYf"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wHHyV6WwMEvf3EUNF6etc",
+									"type": "smart-ref",
+									"blockId": "BAaXBeWvrJvhdatwiHSaw",
+									"columnId": null,
+									"lastSeenVariableName": "SelfServeSpend"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "m63KGZo_wFPM6REjlkJ-3",
+									"type": "smart-ref",
+									"blockId": "81ew55lcWS8VKa4NOQHF1",
+									"columnId": null,
+									"lastSeenVariableName": "SelfServeSignUps"
+								},
+								{
+									"text": "  "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "-gKlh1C6P6Dg2lKEtnK4R"
+						}
+					],
+					"id": "cDHWkuZJpJvYMFD3na-pr",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "1f5caY95dZK_JHKhJsja7"
+				},
+				{
+					"children": [
+						{
+							"text": "Targets"
+						}
+					],
+					"type": "h3",
+					"id": "SSsqyyX7vuH1VZnCV-T1m"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "qWcm69HMoTPygEb27Icxl",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TargetNewCustomers"
+								}
+							],
+							"type": "structured_varname",
+							"id": "OyWYvBwOHHlzf2wNA93vT"
+						},
+						{
+							"children": [
+								{
+									"text": "lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-JGQ40H0-r9aKFZT-2W14",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": null,
+									"lastSeenVariableName": "Targets"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BWpXt22VLed_fouvAz87o",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": "VFsfShhzzbSX8eifZxvrc",
+									"lastSeenVariableName": "Targets.Geography"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PSCcETVb82SqIY6Zy6VpR",
+									"type": "smart-ref",
+									"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+									"columnId": null,
+									"lastSeenVariableName": "SelectGeography"
+								},
+								{
+									"text": ").NewCustomers"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "twUGwlXIR9vIib1fpjPkt"
+						}
+					],
+					"id": "BLpxBuM4ThBzTulmZ-rRS",
+					"type": "code_line_v2",
+					"showResult": true,
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CustomersDemosFunnel"
+								}
+							],
+							"type": "structured_varname",
+							"id": "BZ_pJPIQmmt5NSd3kV1Ya"
+						},
+						{
+							"children": [
+								{
+									"text": "lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sFUxwe1pKQuYqqKJhRFRp",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": null,
+									"lastSeenVariableName": "Targets"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Hd57jjAOd86k1oEO2_uuC",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": "VFsfShhzzbSX8eifZxvrc",
+									"lastSeenVariableName": "Targets.Geography"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "me8C7J6Vsj8N-lIFiZWRj",
+									"type": "smart-ref",
+									"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+									"columnId": null,
+									"lastSeenVariableName": "SelectGeography"
+								},
+								{
+									"text": " ).CustomersDemosFunnel"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "KVAK1KrpC2qvYReuyHEWi"
+						}
+					],
+					"id": "gYvrgFIGkkogcSGGgAUTg",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CustomersSelfServeFunnel"
+								}
+							],
+							"type": "structured_varname",
+							"id": "nS6CQ57gyjdRZaM9yaktE"
+						},
+						{
+							"children": [
+								{
+									"text": "lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AF7KLc3DkC6KUHysUYGSO",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": null,
+									"lastSeenVariableName": "Targets"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Q4aQksq7nNRsHHqft1jGq",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": "VFsfShhzzbSX8eifZxvrc",
+									"lastSeenVariableName": "Targets.Geography"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "k69hYkR2l3zAEIx0yRkgm",
+									"type": "smart-ref",
+									"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+									"columnId": null,
+									"lastSeenVariableName": "SelectGeography"
+								},
+								{
+									"text": " ).CustomersSelfServeFunnel"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "hv5rjgYY6hmr6V0w8Q5V8"
+						}
+					],
+					"id": "QxMrUTm8gh-XYRK2ljUMH",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "LaGuhMQPqobuPERHHqf4e"
+				},
+				{
+					"children": [
+						{
+							"text": "Funnels"
+						}
+					],
+					"type": "h3",
+					"id": "Pr3kuOrZlnOU8hIvJhOPM"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "h9UyF92o67CQ3mRgfkqmS",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DealClosedRate"
+								}
+							],
+							"type": "structured_varname",
+							"id": "EtBsJq9ywblaVUcxiqLDv"
+						},
+						{
+							"children": [
+								{
+									"text": "45%"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "njFaNYz-wJvO7ISi3Lxtg"
+						}
+					],
+					"id": "XFSefom6SkQ0Vi9t4wTfd",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DemosAttended"
+								}
+							],
+							"type": "structured_varname",
+							"id": "KtRSMfQuHriFS5OD7Q7Yr"
+						},
+						{
+							"children": [
+								{
+									"text": "round(lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "cgh3vlFsbxUDto4qfuaNy",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": null,
+									"lastSeenVariableName": "Targets"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YcmIPdaGWONPEnkQi9UJ8",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": "VFsfShhzzbSX8eifZxvrc",
+									"lastSeenVariableName": "Targets.Geography"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-TdYjG1VaXLaoCFzrggA1",
+									"type": "smart-ref",
+									"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+									"columnId": null,
+									"lastSeenVariableName": "SelectGeography"
+								},
+								{
+									"text": " ).CustomersDemosFunnel/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "18R6TtITorNrx7EjeZYOJ",
+									"type": "smart-ref",
+									"blockId": "XFSefom6SkQ0Vi9t4wTfd",
+									"columnId": null,
+									"lastSeenVariableName": "DealClosedRate"
+								},
+								{
+									"text": " ,0)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "tE1xwHuP9TCwrEn3Mj989"
+						}
+					],
+					"id": "EDmV0Xd7_Cqx878jkbY9C",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DemosSpendRange"
+								}
+							],
+							"type": "structured_varname",
+							"id": "XcSFKfxNB1e3Qlk-VDeon"
+						},
+						{
+							"children": [
+								{
+									"text": "range(min( "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JdA3RGU52q8rmw-eCU16g",
+									"type": "smart-ref",
+									"blockId": "kRpS1cudeExTj9QqXVQEe",
+									"columnId": "z0kedm4N73fahjjgNE50c",
+									"lastSeenVariableName": "DemoScenarios.SpendRequired"
+								},
+								{
+									"text": ") to max( "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "e9Xxe6NBYKVfi0zXKX1Lw",
+									"type": "smart-ref",
+									"blockId": "kRpS1cudeExTj9QqXVQEe",
+									"columnId": "z0kedm4N73fahjjgNE50c",
+									"lastSeenVariableName": "DemoScenarios.SpendRequired"
+								},
+								{
+									"text": "))"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "WrIK84TSI3jQD0FaE4t6M"
+						}
+					],
+					"id": "2FK--Uw0X-EBBWelBiEMM",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TrialtoCustomerCVR"
+								}
+							],
+							"type": "structured_varname",
+							"id": "cZ1rxByZ2wwHpOHgq-GbH"
+						},
+						{
+							"children": [
+								{
+									"text": "35%"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "vLWaCTgypfhTjlaRRoQJg"
+						}
+					],
+					"id": "K_9eLbwSN5HT_o6Q26d7p",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TrialsStarted"
+								}
+							],
+							"type": "structured_varname",
+							"id": "z0p91k04u-OwlviOkemiK"
+						},
+						{
+							"children": [
+								{
+									"text": "round(lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "woewQDDlPSN9np7HYuwin",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": null,
+									"lastSeenVariableName": "Targets"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gPoSzdSqrw_y1cxwEm2uC",
+									"type": "smart-ref",
+									"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+									"columnId": "VFsfShhzzbSX8eifZxvrc",
+									"lastSeenVariableName": "Targets.Geography"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "St7kseNS08GaBmVlsqD5d",
+									"type": "smart-ref",
+									"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+									"columnId": null,
+									"lastSeenVariableName": "SelectGeography"
+								},
+								{
+									"text": " ).CustomersSelfServeFunnel/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "K8iXyVlAP5bo5sQiIpxTT",
+									"type": "smart-ref",
+									"blockId": "K_9eLbwSN5HT_o6Q26d7p",
+									"columnId": null,
+									"lastSeenVariableName": "TrialtoCustomerCVR"
+								},
+								{
+									"text": "  ,0)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "udQaFSHLUdTqGB--yYi96"
+						}
+					],
+					"id": "9lzkL8K1WndwN1bCd38_g",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TrialsSpendRangeCopy"
+								}
+							],
+							"type": "structured_varname",
+							"id": "lfjRlHv6Zac7noDQYaOOe"
+						},
+						{
+							"children": [
+								{
+									"text": "range(min( "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MFCunkKCr2Kq6kEqRpimT",
+									"type": "smart-ref",
+									"blockId": "hfaZeGTmctq-eatDeWbXY",
+									"columnId": "JJQliHHYkgSBQwVCsi3d7",
+									"lastSeenVariableName": "TrialsScenarios.SelfServeSpendRequired"
+								},
+								{
+									"text": "   ) to max( "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ughsRo7iXIt5c1AiduLnH",
+									"type": "smart-ref",
+									"blockId": "hfaZeGTmctq-eatDeWbXY",
+									"columnId": "JJQliHHYkgSBQwVCsi3d7",
+									"lastSeenVariableName": "TrialsScenarios.SelfServeSpendRequired"
+								},
+								{
+									"text": "   ))"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "vVenE0s6bh51HJn1v8zCB"
+						}
+					],
+					"id": "b8h5zKPFGQNSjuTzngSvp",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "HUQJkyxoR9q5VzScaxkD4"
+				},
+				{
+					"children": [
+						{
+							"text": "Scenarios"
+						}
+					],
+					"type": "h3",
+					"id": "1X_cOfjuQev_6Rc3dypPe"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "j3FCBrUmpGsBbB8IcFJBb",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DemoScenarios"
+										}
+									],
+									"id": "UzmAYBCj8NR4dok1jnnU0",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "EJSaBR9ujY13kKb9nu2Aa",
+											"type": "smart-ref",
+											"blockId": "5vR1NyQD1xLGygb5PS6o5",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "DemosBookedNeeded"
+										},
+										{
+											"text": " * "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "-0bPW-oYeq1YpOEJTxC-A",
+											"type": "smart-ref",
+											"blockId": "AtkGQdD-zB412Ll8dGKRF",
+											"columnId": null,
+											"lastSeenVariableName": "BlendedDemoCost"
+										},
+										{
+											"text": "  "
+										}
+									],
+									"id": "S2Ocbp_B5fC20yHqtAKz0",
+									"type": "table-column-formula",
+									"columnId": "z0kedm4N73fahjjgNE50c"
+								},
+								{
+									"children": [
+										{
+											"text": " round((lookup("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ICQ89ckGvi5o4LV6Yj_aF",
+											"type": "smart-ref",
+											"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+											"columnId": null,
+											"lastSeenVariableName": "Targets"
+										},
+										{
+											"text": ", "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "vuELCHrlc66pA7-TdD8ZR",
+											"type": "smart-ref",
+											"blockId": "V7KIcUHl0DGxpgfaSSzZ1",
+											"columnId": "VFsfShhzzbSX8eifZxvrc",
+											"lastSeenVariableName": "Targets.Geography"
+										},
+										{
+											"text": " == "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "p3E6NRwiqWRMYlMBjjwHN",
+											"type": "smart-ref",
+											"blockId": "Bh8jIMpGo3Sb7XTem5aEp",
+											"columnId": null,
+											"lastSeenVariableName": "SelectGeography"
+										},
+										{
+											"text": " ).CustomersDemosFunnel/"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "p6v0IBAAXAmk33iuyb4sF",
+											"type": "smart-ref",
+											"blockId": "XFSefom6SkQ0Vi9t4wTfd",
+											"columnId": null,
+											"lastSeenVariableName": "DealClosedRate"
+										},
+										{
+											"text": " )/"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "PUYbCeEQruA9-mHa_UJrm",
+											"type": "smart-ref",
+											"blockId": "Hrk-gAMg2se8UU0gefdTz",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "BookedtoAttendedCVR"
+										},
+										{
+											"text": " ,0)"
+										}
+									],
+									"id": "ZjrqqDxg1wf0D1WD7hceX",
+									"type": "table-column-formula",
+									"columnId": "5vR1NyQD1xLGygb5PS6o5"
+								}
+							],
+							"id": "-SlYJgK-ltITeuHZOQ1yV",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Scenario"
+										}
+									],
+									"id": "zlNT9d3oDkmifVqucCFrG",
+									"type": "th",
+									"cellType": {
+										"kind": "string"
+									},
+									"width": 124
+								},
+								{
+									"children": [
+										{
+											"text": "BookedtoAttendedCVR"
+										}
+									],
+									"id": "Hrk-gAMg2se8UU0gefdTz",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "DemosBookedNeeded"
+										}
+									],
+									"id": "5vR1NyQD1xLGygb5PS6o5",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SpendRequired"
+										}
+									],
+									"id": "z0kedm4N73fahjjgNE50c",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								}
+							],
+							"id": "EKSO4qMZ1nCH5TFzCkZbb",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Conservative"
+										}
+									],
+									"id": "4t8lu4uVhi6lZbHkORccd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "65%"
+										}
+									],
+									"id": "Eu_SATlVZUIGJ-zhDXV8w",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JylTval2CkODGMzZu6y6v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "8FoGPev66Ads7zE6mui_h",
+									"type": "td"
+								}
+							],
+							"id": "uSEb8JZGt2D0UP1ql-yuL",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Realistic"
+										}
+									],
+									"id": "qOVReAJzs_mWSW1_0ERwx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "70%"
+										}
+									],
+									"id": "lA-u8e3l3PJ3LzdaGcnfA",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7RYe5hES16-Av__crLQxM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "W68pnBa0oH4u0QmOAVFWF",
+									"type": "td"
+								}
+							],
+							"id": "JyjC-YmxPj16FirOQ00Mv",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Optimistic"
+										}
+									],
+									"id": "-42crH8pAzqvzRRTo0dTq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "75%"
+										}
+									],
+									"id": "1gB4C-8jIEUiUcCLHOGm8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-LYvwaf52BR_Vv7Zf07_j",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "b71X16p1KbRH7u6eQP_YR",
+									"type": "td"
+								}
+							],
+							"id": "QOCBUk5IHAQmPhX01Dc4s",
+							"type": "tr"
+						}
+					],
+					"id": "kRpS1cudeExTj9QqXVQEe",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": false,
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "TrialsScenarios"
+										}
+									],
+									"id": "K7F4IgJnQ1MP50JEqnTkM",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " round("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "oIx67r1SMismFU1AZYiJU",
+											"type": "smart-ref",
+											"blockId": "9lzkL8K1WndwN1bCd38_g",
+											"columnId": null,
+											"lastSeenVariableName": "TrialsStarted"
+										},
+										{
+											"text": " /"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "VFH4teLhiAcwloAf7ur58",
+											"type": "smart-ref",
+											"blockId": "iDUWSuUsu2ei95FB3sXV-",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SignupToTrialCVR"
+										},
+										{
+											"text": " ,0)"
+										}
+									],
+									"id": "_5GGlb9MskxZBChgImYPD",
+									"type": "table-column-formula",
+									"columnId": "MkwILgP2TEi0FSgNsvjIt"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "xehbmk8wCei01Zh1zAX_1",
+											"type": "smart-ref",
+											"blockId": "MkwILgP2TEi0FSgNsvjIt",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SignUpsNeeded"
+										},
+										{
+											"text": " *"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "i5gur5NQiFxRArtvYjr0W",
+											"type": "smart-ref",
+											"blockId": "cDHWkuZJpJvYMFD3na-pr",
+											"columnId": null,
+											"lastSeenVariableName": "BlendedSelfServeCost"
+										},
+										{
+											"text": ""
+										}
+									],
+									"id": "5XtCNNULufln1xIiRd0lU",
+									"type": "table-column-formula",
+									"columnId": "JJQliHHYkgSBQwVCsi3d7"
+								}
+							],
+							"id": "IO4usNzobzmlvxo4Ltzck",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Scenario"
+										}
+									],
+									"type": "th",
+									"id": "bSaDnGXcMajwVzwxCgN3t",
+									"cellType": {
+										"kind": "string"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SignupToTrialCVR"
+										}
+									],
+									"type": "th",
+									"id": "iDUWSuUsu2ei95FB3sXV-",
+									"cellType": {
+										"kind": "number",
+										"unit": null
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SignUpsNeeded"
+										}
+									],
+									"type": "th",
+									"id": "MkwILgP2TEi0FSgNsvjIt",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "Sum"
+								},
+								{
+									"children": [
+										{
+											"text": "SelfServeSpendRequired"
+										}
+									],
+									"type": "th",
+									"id": "JJQliHHYkgSBQwVCsi3d7",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								}
+							],
+							"id": "lXOMiQvtiiFK4KDLTBFgZ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Conservative"
+										}
+									],
+									"id": "4xjev-2EaZxWyvrCI0Buw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "50%"
+										}
+									],
+									"id": "CEBbdCJeA8rCmM5eFY18u",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zdrf2N4h5tC0as-O3YJTX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gazhGaIoK2Vt46mljuR8W",
+									"type": "td"
+								}
+							],
+							"id": "_Scmgqt2abBR-RCXgrrRO",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Realistic"
+										}
+									],
+									"id": "dQ6wfFLfGkSkyF6AevnfX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "55%"
+										}
+									],
+									"id": "OAMIic-qJGD0YJxEn7Cxk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2KrMVpfQ0vOroELM594xR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bde4g5RNivduUZe3rgZRA",
+									"type": "td"
+								}
+							],
+							"id": "ynLsDhBDvtfVaPqbVll6i",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Optimistic"
+										}
+									],
+									"id": "ePxS2xx9A8JnhaU7fu77q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "65%"
+										}
+									],
+									"id": "Fuww60I-AHrHL3sjW0sMS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L6V9U7PTQP8Md1Odxxdhd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0tnJuG-LGgYQawTxakFUY",
+									"type": "td"
+								}
+							],
+							"id": "Lw4yfZsVtwo5kYtlK_O5b",
+							"type": "tr"
+						}
+					],
+					"id": "hfaZeGTmctq-eatDeWbXY",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": false,
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "eWL6IPHa6J7IUrtwi02PJ"
+				}
+			],
+			"type": "tab",
+			"name": "Calculations",
+			"id": "Awo_vKUbZiiQZFeQn1G4b",
+			"isHidden": true,
+			"icon": "Paperclip"
+		}
+	]
+}
