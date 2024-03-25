@@ -5,8 +5,8 @@ import { ExternalDataSourceRecord, User } from '@decipad/backendtypes';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { Provider } from 'libs/externaldata/src/providers';
 import { OAuth2 } from 'oauth';
-import { parse as decodeCookie } from 'simple-cookie';
 import { saveExternalKey } from './save-keys';
+import { OAuthState } from './state';
 
 export function getOAuthResponse(
   oauth2Client: OAuth2,
@@ -14,7 +14,7 @@ export function getOAuthResponse(
   provider: Provider,
   externalDataSource: ExternalDataSourceRecord,
   user: User,
-  cookies: Array<ReturnType<typeof decodeCookie>>
+  state: OAuthState
 ): Promise<APIGatewayProxyResultV2> {
   const config = app();
 
@@ -50,7 +50,6 @@ export function getOAuthResponse(
           }
 
           await saveExternalKey({
-            resourceType: 'pads',
             externalDataSource,
             user,
             tokenType: token_type,
@@ -60,15 +59,10 @@ export function getOAuthResponse(
             expiredAt: results.expired_in,
           });
 
-          const redirectUri = cookies?.find(
-            (c) => c.name === 'redirect_uri'
-          )?.value;
-
-          // redirect user back to where they were
           resolve({
             statusCode: 302,
             headers: {
-              Location: decodeURIComponent(redirectUri || '/'),
+              Location: decodeURIComponent(state.completionUrl),
             },
           });
         }

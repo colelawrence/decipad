@@ -13,6 +13,18 @@ enum ExternalProvider {
   notion
 }
 
+enum HTTPMethods {
+  GET
+  PUT
+  POST
+  DELETE
+  PATCH
+  HEAD
+  OPTIONS
+  TRACE
+  CONNECT
+}
+
 type ExternalKey {
   id: ID!
   lastError: String
@@ -37,6 +49,14 @@ input ExternalDataSourceUpdateInput {
   externalId: String
 }
 
+type ExternalDataSourceDataLink {
+  id: ID!
+  name: String!
+  url: String!
+
+  method: HTTPMethods
+}
+
 enum ExternalDataSourceOwnership {
   PAD
   WORKSPACE
@@ -51,11 +71,13 @@ type ExternalDataSource {
   authUrl: String
   externalId: String
 
+  owner: ExternalDataSourceOwnership!
+  ownerId: String!
+
   access: ResourceAccess!
   keys: [ExternalKey!]!
 
-  owner: ExternalDataSourceOwnership!
-  ownerId: String!
+  dataLinks: [ExternalDataSourceDataLink!]!
 }
 
 extend type Query {
@@ -69,6 +91,13 @@ extend type Mutation {
   createExternalDataSource(
     dataSource: ExternalDataSourceCreateInput!
   ): ExternalDataSource
+
+  createExternalDataLink(
+    externalDataId: String!
+    name: String!
+    url: String!
+    method: HTTPMethods
+  ): ExternalDataSourceDataLink
 
   removeExternalDataSource(id: ID!): Boolean
 

@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 export * from './useCreateIntegration';
 export * from './useEditorElements';
 export * from './useIntegrationScreenFactory';
-export * from './useNotionQuery';
 export * from './useDeciVariables';
 export * from './useIntegrationOptions';
 

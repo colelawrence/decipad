@@ -18,7 +18,6 @@ import secrets from './secrets';
 import workspaceSubscriptions from './workspaceSubscriptions';
 import workspaceExecutedQueries from './workspaceExecutedQueries';
 import resourceUsage from './resource-usage';
-import notion from './notion';
 import pricing from './pricing';
 import templates from './templates';
 
@@ -44,7 +43,6 @@ const modules: GraphqlModule[] = [
   workspaceSubscriptions,
   workspaceExecutedQueries,
   resourceUsage,
-  notion,
   pricing,
   annotations,
   templates,

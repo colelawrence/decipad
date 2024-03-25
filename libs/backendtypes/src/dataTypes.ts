@@ -2,7 +2,10 @@ import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { OBSERVED } from './constants';
-import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import {
+  HttpMethods,
+  SubscriptionPlansNames,
+} from '@decipad/graphqlserver-types';
 import { ArcTable } from '@architect/functions/types/tables';
 import type { DynamoDB } from 'aws-sdk';
 
@@ -226,6 +229,13 @@ export interface ExternalDataSourceCreateInput
 export interface ExternalDataSource extends ExternalDataSourceCreateInput {
   dataUrl: string;
   authUrl: string;
+}
+
+export interface ExternalDataSourceDataLinks extends TableRecordIdentifier {
+  resource_uri: string;
+  name: string;
+  url: string;
+  method?: HttpMethods;
 }
 
 export type ExternalDataSourceProvider =
@@ -699,6 +709,7 @@ export interface EnhancedDataTables {
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
+  externaldatasourcedatalinks: DataTable<ExternalDataSourceDataLinks>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;

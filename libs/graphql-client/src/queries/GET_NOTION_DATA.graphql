@@ -1,3 +1,0 @@
-query GetNotion($url: String!, $notebookId: ID!) {
-  getNotion(url: $url, notebookId: $notebookId)
-}

@@ -1,10 +1,11 @@
 import { thirdParty } from '@decipad/backend-config';
-import { Provider } from '.';
+import { GoogleSheetProvider } from './types';
 
-export const gsheets = (): Provider => {
+export const gsheets = (): GoogleSheetProvider => {
   const config = thirdParty();
   return {
     id: 'gsheets',
+    type: 'gsheets',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/auth',
     accessTokenUrl: 'https://accounts.google.com/o/oauth2/token',
     clientId: config.google.sheets.clientId,

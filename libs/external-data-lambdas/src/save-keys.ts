@@ -6,9 +6,9 @@ import {
 } from '@decipad/backendtypes';
 import tables, { timestamp } from '@decipad/tables';
 import { nanoid } from 'nanoid';
+import { getResourceUri } from './helpers';
 
 type SaveExternalKeyOptions = {
-  resourceType: 'pads' | 'workspaces';
   externalDataSource: ExternalDataSourceRecord;
   user: User;
   tokenType: 'Bearer';
@@ -20,7 +20,6 @@ type SaveExternalKeyOptions = {
 };
 
 export async function saveExternalKey({
-  resourceType,
   externalDataSource,
   user,
   tokenType,
@@ -35,14 +34,15 @@ export async function saveExternalKey({
     id: nanoid(),
     createdAt: timestamp(),
 
-    resource_uri: `/${resourceType}/${externalDataSource.padId}`,
+    resource_uri: getResourceUri(externalDataSource),
+
     provider: externalDataSource.provider,
-    // eslint-disable-next-line camelcase
     token_type: tokenType,
     createdBy: user.id,
-    scope,
     access_token: accessToken,
     refresh_token: refreshToken,
+
+    scope,
   };
 
   keyRecord.expiresAt =

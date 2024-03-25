@@ -12,6 +12,22 @@ import {
 import { getDefined } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 
+export function getNotionDbLink(url: string): string | undefined {
+  const parsedUrl = url.match(/notion.so\/.*\?v=/);
+  if (parsedUrl == null || parsedUrl.length !== 1) {
+    return undefined;
+  }
+
+  return parsedUrl[0].slice(
+    'notion.so/'.length,
+    parsedUrl[0].length - '?v='.length
+  );
+}
+
+export function getNotionDataLink(notionDatabaseId: string): string {
+  return `${window.location.origin}/api/externaldatasources/notion/${notionDatabaseId}/data`;
+}
+
 /**
  * Helper function to return the correct new integration,
  * with the correct state.
@@ -65,6 +81,13 @@ export function getNewIntegration(
       const notionStore = useNotionConnectionStore.getState();
       const store = useConnectionStore.getState();
 
+      const url =
+        notionStore.mode === 'public'
+          ? `${window.location.origin}/api/externaldatasources/${getDefined(
+              getNotionDbLink(notionStore.NotionDatabaseUrl!)
+            )}/notion`
+          : getDefined(notionStore.NotionDatabaseUrl);
+
       return {
         id: nanoid(),
         type: ELEMENT_INTEGRATION,
@@ -74,7 +97,7 @@ export function getNewIntegration(
           type: 'notion',
           latestResult: notionStore.latestResult,
           timeOfLastRun: null,
-          notionUrl: getDefined(notionStore.NotionDatabaseUrl),
+          notionUrl: url,
         },
       };
     }

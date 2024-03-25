@@ -50,9 +50,11 @@ export const externalDataResource = Resource<
         ...omit(record, 'workspace_id'),
         owner: 'WORKSPACE',
         ownerId: record.workspace_id,
+
         // Sub resolvers will find these.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         access: {} as any,
+        dataLinks: [],
         keys: [],
       };
     }
@@ -62,9 +64,11 @@ export const externalDataResource = Resource<
         ...record,
         owner: 'PAD',
         ownerId: record.padId,
+
         // Sub resolvers will find these.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         access: {} as any,
+        dataLinks: [],
         keys: [],
       };
     }

@@ -14,6 +14,12 @@ fragment ExternalDataSourceFragment on ExternalDataSource {
     expiresAt
     lastUsedAt
   }
+  dataLinks {
+    id
+    name
+    url
+    method
+  }
 }
 
 query GetExternalDataSources($notebookId: ID!) {

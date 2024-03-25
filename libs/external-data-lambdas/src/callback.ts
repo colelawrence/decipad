@@ -2,34 +2,50 @@ import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import {
-  APIGatewayProxyEventQueryStringParameters,
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2 as HttpResponse,
 } from 'aws-lambda';
 import { OAuth2 } from 'oauth';
-import { parse as decodeCookie } from 'simple-cookie';
 import { getDefined } from '@decipad/utils';
-import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 import { getOAuthResponse } from './promisify-oauth';
 import { saveExternalKey } from './save-keys';
+import { decodeState } from './state';
+import { checkNotebookOrWorkspaceAccess } from './checkAccess';
+
+async function saveExternalResourceName(
+  externalDataId: string,
+  name: string
+): Promise<void> {
+  const data = await tables();
+
+  const datasource = await data.externaldatasources.get({ id: externalDataId });
+  if (datasource == null) {
+    throw new Error('External data source could not be found');
+  }
+
+  datasource.name = name;
+
+  await data.externaldatasources.put(datasource);
+}
 
 export const callback = async (
   event: APIGatewayProxyEvent
 ): Promise<HttpResponse> => {
-  const cookies = event.cookies?.map((c) => decodeCookie(c));
-  const id = cookies?.find((c) => c.name === 'externaldatasourceid')?.value;
-  const { code } =
-    event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
+  const { code, state: stringState } = getDefined(event.queryStringParameters);
 
-  if (!id || !code) {
+  if (!stringState || !code) {
     return {
       statusCode: 401,
       body: 'missing parameters',
     };
   }
 
+  const state = decodeState(stringState);
+
   const data = await tables();
-  const externalDataSource = await data.externaldatasources.get({ id });
+  const externalDataSource = await data.externaldatasources.get({
+    id: state.externalDataId,
+  });
   if (!externalDataSource) {
     throw Boom.notFound();
   }
@@ -51,23 +67,18 @@ export const callback = async (
   );
 
   const authorizationUrl = new URL(provider.authorizationUrl);
-
-  const getThirdPartyBaseUrlFromHeaders =
-    provider.id === 'testdatasource' &&
-    event.headers['x-use-third-party-test-server'];
-
-  const basePath = getThirdPartyBaseUrlFromHeaders
-    ? getDefined(event.headers['x-use-third-party-test-server'])
-    : authorizationUrl.origin;
-
   const authorizePath = authorizationUrl.pathname;
   const accessTokenPath = new URL(provider.accessTokenUrl).pathname;
 
   if (provider.getAccessToken != null) {
-    const { accessToken, refreshToken } = await provider.getAccessToken(code);
+    const { accessToken, refreshToken, resourceName } =
+      await provider.getAccessToken(code);
+
+    if (resourceName != null) {
+      await saveExternalResourceName(state.externalDataId, resourceName);
+    }
 
     await saveExternalKey({
-      resourceType: 'pads',
       externalDataSource,
       user,
       tokenType: 'Bearer',
@@ -75,12 +86,10 @@ export const callback = async (
       refreshToken,
     });
 
-    const redirectUri = cookies?.find((c) => c.name === 'redirect_uri')?.value;
-
     return {
       statusCode: 302,
       headers: {
-        Location: decodeURIComponent(redirectUri || '/'),
+        Location: state.completionUrl,
       },
     };
   }
@@ -88,7 +97,7 @@ export const callback = async (
   const oauth2Client = new OAuth2(
     provider.clientId,
     provider.clientSecret,
-    basePath,
+    authorizationUrl.origin,
     authorizePath,
     accessTokenPath,
     provider.headers ?? {}
@@ -100,6 +109,6 @@ export const callback = async (
     provider,
     externalDataSource,
     user,
-    cookies ?? []
+    state
   );
 };

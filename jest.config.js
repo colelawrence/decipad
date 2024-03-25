@@ -26,6 +26,7 @@ module.exports = {
     '<rootDir>/libs/editor-data-view',
     '<rootDir>/libs/editor-utils',
     '<rootDir>/libs/editor-hooks',
+    '<rootDir>/libs/editor-integrations',
     '<rootDir>/libs/y-websocket',
     '<rootDir>/libs/format',
     '<rootDir>/libs/repl',

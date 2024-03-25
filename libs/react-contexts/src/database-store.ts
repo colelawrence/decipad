@@ -160,6 +160,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
     // Reset dependent stores.
     useCodeConnectionStore.getState().reset();
     useSQLConnectionStore.getState().reset();
+    useNotionConnectionStore.getState().Reset();
   },
 
   createIntegration: false,
@@ -252,6 +253,17 @@ export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
 
 interface NotionConnectionStore extends ConnectionStore {
   NotionDatabaseUrl: string | undefined;
+  AvailableDatabases: Array<{ id: string; name: string }>;
+
+  ExternalDataId: string | undefined;
+  ExternalDataName: string | undefined;
+
+  DatabaseId: string | undefined;
+  DatabaseName: string | undefined;
+
+  lastFetchedDatabasesFor: string | undefined;
+
+  mode: 'public' | 'private' | undefined;
 
   Reset: () => void;
   Set: (NewState: Partial<NotionConnectionStore>) => void;
@@ -263,6 +275,15 @@ export const useNotionConnectionStore = create<NotionConnectionStore>(
     latestResult: '',
     timeOfLastRun: null,
 
+    ExternalDataId: undefined,
+    ExternalDataName: undefined,
+
+    DatabaseId: undefined,
+    DatabaseName: undefined,
+
+    mode: undefined,
+    lastFetchedDatabasesFor: undefined,
+
     /* Notion Specific Fields */
     NotionDatabaseUrl: undefined,
     Reset() {
@@ -270,8 +291,15 @@ export const useNotionConnectionStore = create<NotionConnectionStore>(
         NotionDatabaseUrl: undefined,
         latestResult: '',
         timeOfLastRun: null,
+        ExternalDataId: undefined,
+        ExternalDataName: undefined,
+        DatabaseId: undefined,
+        DatabaseName: undefined,
+        mode: undefined,
       }));
     },
+
+    AvailableDatabases: [],
 
     Set(NewState) {
       set(() => NewState);

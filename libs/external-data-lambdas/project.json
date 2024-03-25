@@ -23,6 +23,13 @@
         "command": "../../node_modules/.bin/madge --circular src",
         "cwd": "libs/external-data-lambdas"
       }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/external-data-lambdas"],
+      "options": {
+        "jestConfig": "libs/external-data-lambdas/jest.config.js"
+      }
     }
   },
   "tags": []

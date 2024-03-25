@@ -11,6 +11,8 @@ import {
 } from './externalDataResource';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
+import { nanoid } from 'nanoid';
+import { ExternalDataSourceDataLinks } from '@decipad/backendtypes';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
@@ -97,6 +99,29 @@ const resolvers: Resolvers = {
 
       return externalDataResource.create(_, dataSource, context);
     },
+
+    async createExternalDataLink(_, { externalDataId, name, url, method }) {
+      const data = await tables();
+
+      const externalDataSource = await data.externaldatasources.get({
+        id: externalDataId,
+      });
+      if (externalDataSource == null) {
+        throw Boom.badRequest('ExternalData does not exist with this ID');
+      }
+
+      const dataLink: ExternalDataSourceDataLinks = {
+        id: nanoid(),
+        resource_uri: externalDataId,
+        name,
+        url,
+        method,
+      };
+
+      await data.externaldatasourcedatalinks.put(dataLink);
+
+      return dataLink;
+    },
     updateExternalDataSource: externalDataResource.update,
     removeExternalDataSource: externalDataResource.remove,
     shareExternalDataSourceWithUser: externalDataResource.shareWithUser,
@@ -127,6 +152,20 @@ const resolvers: Resolvers = {
     },
     dataUrl: (d) => dataUrlFor(d),
     authUrl: (d) => authUrlFor(d),
+
+    async dataLinks(externalData) {
+      const data = await tables();
+
+      return data.externaldatasourcedatalinks
+        .query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':resource_uri': externalData.id,
+          },
+        })
+        .then((r) => r.Items);
+    },
   },
 };
 

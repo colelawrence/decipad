@@ -16,7 +16,8 @@ interface IntegrationProps {
   readonly workspaceId?: string;
 }
 
-/** When you navigate to the workspace, you might `leave` the store open.
+/**
+ * When you navigate to the workspace, you might `leave` the store open.
  * So we need to clean up after the user.
  */
 function useAbortOnMount() {
@@ -42,8 +43,9 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
     status: 'unset',
   });
 
-  const screen = useIntegrationScreenFactory();
+  const screen = useIntegrationScreenFactory(workspaceId);
   const actionMenu = useConnectionActionMenu(workspaceId, onExecute);
+
   useCreateIntegration();
 
   return (

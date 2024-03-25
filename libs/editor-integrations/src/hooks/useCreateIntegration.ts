@@ -1,4 +1,8 @@
-import { IntegrationTypes, useMyEditorRef } from '@decipad/editor-types';
+import {
+  ImportElementSource,
+  IntegrationTypes,
+  useMyEditorRef,
+} from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,
@@ -12,9 +16,62 @@ import {
   insertText,
   setNodes,
 } from '@udecode/plate-common';
-import { useEffect } from 'react';
-import { getDefined } from '@decipad/utils';
+import { useCallback, useEffect } from 'react';
+import { assertDefined, getDefined } from '@decipad/utils';
 import { getNewIntegration } from '../utils';
+import { useCreateExternalDataLinkMutation } from '@decipad/graphql-client';
+
+const getNotionQueryDbLink = (databaseId: string) =>
+  `https://api.notion.com/v1/databases/${databaseId}/query`;
+
+type UseBeforeCreateConnectionReturn = (
+  type: ImportElementSource | undefined
+) => Promise<void>;
+
+function useBeforeCreateConnection(): UseBeforeCreateConnectionReturn {
+  const [, createDataLink] = useCreateExternalDataLinkMutation();
+
+  return useCallback<UseBeforeCreateConnectionReturn>(
+    async (type) => {
+      if (type !== 'notion') {
+        return;
+      }
+
+      const notionState = useNotionConnectionStore.getState();
+
+      if (notionState.mode !== 'private') {
+        return;
+      }
+
+      if (
+        notionState.ExternalDataId == null ||
+        notionState.DatabaseName == null ||
+        notionState.DatabaseId == null
+      ) {
+        throw new Error('i probably dont want to throw here');
+      }
+
+      const res = await createDataLink({
+        externalDataId: notionState.ExternalDataId,
+        name: notionState.DatabaseName,
+        url: getNotionQueryDbLink(notionState.DatabaseId),
+        method: 'POST',
+      });
+
+      if (res.error != null) {
+        throw res.error;
+      }
+
+      const data = res.data?.createExternalDataLink;
+      assertDefined(data);
+
+      const url = `${window.location.origin}/api/externaldatasources/${notionState.ExternalDataId}/data?externalDataLinkId=${data.id}`;
+
+      notionState.Set({ NotionDatabaseUrl: url });
+    },
+    [createDataLink]
+  );
+}
 
 /**
  * Used to create an integration with all its state in the editor
@@ -24,6 +81,8 @@ export const useCreateIntegration = () => {
   const [createIntegration] = useConnectionStore((state) => [
     state.createIntegration,
   ]);
+
+  const beforeCreate = useBeforeCreateConnection();
 
   useEffect(() => {
     if (createIntegration) {
@@ -105,18 +164,31 @@ export const useCreateIntegration = () => {
         return;
       }
 
-      const newIntegration = getNewIntegration(
-        store.connectionType,
-        store.varName
-      );
-      // 1 is the first thing after h1, shouldn't happen but
-      const path = editor.selection?.anchor.path[0] || 1;
-      insertNodes(editor, newIntegration, {
-        at: [path],
-      });
-      const anchor = { offset: 0, path: [path, 0] };
-      setTimeout(() => setSelection(editor, { anchor, focus: anchor }), 0);
-      store.abort();
+      // eslint-disable-next-line no-inner-declarations
+      async function createNewIntegration() {
+        if (store.connectionType == null || store.varName == null) {
+          return;
+        }
+
+        await beforeCreate(store.connectionType);
+
+        const newIntegration = getNewIntegration(
+          store.connectionType,
+          store.varName
+        );
+
+        // 1 is the first thing after h1, shouldn't happen but
+        const path = editor.selection?.anchor.path[0] || 1;
+        insertNodes(editor, newIntegration, {
+          at: [path],
+        });
+
+        const anchor = { offset: 0, path: [path, 0] };
+        setTimeout(() => setSelection(editor, { anchor, focus: anchor }), 0);
+        store.abort();
+      }
+
+      createNewIntegration();
     }
-  }, [editor, createIntegration]);
+  }, [editor, createIntegration, beforeCreate]);
 };

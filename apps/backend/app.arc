@@ -35,6 +35,7 @@ get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
+any /api/externaldatasources/notion/:id/data
 any /api/externaldatasources/db/testconn
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
@@ -234,6 +235,13 @@ fileattachments
 
 externaldatasources
   id *String
+  encrypt true
+
+externaldatasourcedatalinks
+  id *String
+  name String
+  resource_uri String
+  url String
   encrypt true
 
 externaldatasourcekeys
@@ -468,6 +476,10 @@ externaldatasources
   name byWorkspace
 
 externaldatasourcekeys
+  resource_uri *String
+  name byResource
+
+externaldatasourcedatalinks
   resource_uri *String
   name byResource
 

@@ -1,3 +1,0 @@
-extend type Query {
-  getNotion(url: String!, notebookId: ID!): String!
-}

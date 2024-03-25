@@ -105,6 +105,18 @@ enum ExternalProvider {
   notion
 }
 
+enum HTTPMethods {
+  GET
+  PUT
+  POST
+  DELETE
+  PATCH
+  HEAD
+  OPTIONS
+  TRACE
+  CONNECT
+}
+
 type ExternalKey {
   id: ID!
   lastError: String
@@ -129,6 +141,14 @@ input ExternalDataSourceUpdateInput {
   externalId: String
 }
 
+type ExternalDataSourceDataLink {
+  id: ID!
+  name: String!
+  url: String!
+
+  method: HTTPMethods
+}
+
 enum ExternalDataSourceOwnership {
   PAD
   WORKSPACE
@@ -143,11 +163,13 @@ type ExternalDataSource {
   authUrl: String
   externalId: String
 
+  owner: ExternalDataSourceOwnership!
+  ownerId: String!
+
   access: ResourceAccess!
   keys: [ExternalKey!]!
 
-  owner: ExternalDataSourceOwnership!
-  ownerId: String!
+  dataLinks: [ExternalDataSourceDataLink!]!
 }
 
 extend type Query {
@@ -161,6 +183,13 @@ extend type Mutation {
   createExternalDataSource(
     dataSource: ExternalDataSourceCreateInput!
   ): ExternalDataSource
+
+  createExternalDataLink(
+    externalDataId: String!
+    name: String!
+    url: String!
+    method: HTTPMethods
+  ): ExternalDataSourceDataLink
 
   removeExternalDataSource(id: ID!): Boolean
 
@@ -238,9 +267,6 @@ input LogInput {
 
 extend type Mutation {
   createLogs(input: LogInput!): Boolean
-}
-extend type Query {
-  getNotion(url: String!, notebookId: ID!): String!
 }
 input PadInput {
   name: String
@@ -778,51 +804,6 @@ extend type Mutation {
 extend type Workspace {
   workspaceExecutedQuery: WorkspaceExecutedQuery
 }
-enum SubscriptionStatus {
-  active
-  canceled
-  unpaid
-  trialing
-  incomplete
-  incomplete_expired
-  past_due
-  paused
-}
-
-enum SubscriptionPlansNames {
-  free
-  # Pro and personal are basically the same
-  # Only that pro is legacy
-  pro
-  personal
-  team
-  enterprise
-}
-
-enum SubscriptionPaymentStatus {
-  paid
-  unpaid
-  no_payment_required
-}
-
-type WorkspaceSubscription {
-  id: String!
-  paymentStatus: SubscriptionPaymentStatus!
-  status: SubscriptionStatus
-  workspace: Workspace
-  seats: Int
-  credits: Int
-  queries: Int
-  storage: Int
-}
-
-extend type Mutation {
-  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
-}
-
-extend type Workspace {
-  workspaceSubscription: WorkspaceSubscription
-}
 input WorkspaceInput {
   name: String!
 }
@@ -875,5 +856,50 @@ extend type Mutation {
 
 extend type Subscription {
   workspacesChanged: WorkspacesChanges!
+}
+enum SubscriptionStatus {
+  active
+  canceled
+  unpaid
+  trialing
+  incomplete
+  incomplete_expired
+  past_due
+  paused
+}
+
+enum SubscriptionPlansNames {
+  free
+  # Pro and personal are basically the same
+  # Only that pro is legacy
+  pro
+  personal
+  team
+  enterprise
+}
+
+enum SubscriptionPaymentStatus {
+  paid
+  unpaid
+  no_payment_required
+}
+
+type WorkspaceSubscription {
+  id: String!
+  paymentStatus: SubscriptionPaymentStatus!
+  status: SubscriptionStatus
+  workspace: Workspace
+  seats: Int
+  credits: Int
+  queries: Int
+  storage: Int
+}
+
+extend type Mutation {
+  syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
+}
+
+extend type Workspace {
+  workspaceSubscription: WorkspaceSubscription
 }
 `;

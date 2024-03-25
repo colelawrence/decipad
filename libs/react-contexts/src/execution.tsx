@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext } from 'react';
 
 export type TExecution<T> =
   | {
@@ -19,9 +19,9 @@ export type TExecutionContext<T> = {
   info: TExecution<T>;
 };
 
-export const ExecutionContext = React.createContext<TExecutionContext<boolean>>(
-  {
-    onExecute: () => ({ status: 'unset' }),
-    info: { status: 'unset' },
-  }
-);
+export const ExecutionContext = createContext<TExecutionContext<boolean>>({
+  onExecute: () => ({ status: 'unset' }),
+  info: { status: 'unset' },
+});
+
+export const useExecutionContext = () => useContext(ExecutionContext);

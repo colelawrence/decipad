@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Modal, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type EditDataConnectionsModalProps = {
   readonly onClose: () => void;
@@ -43,6 +44,9 @@ export const EditDataConnectionsModal: React.FC<
               case 'connections':
                 navigate(connections.sqlConnections({}).$);
                 break;
+              case 'services':
+                navigate(connections.services({}).$);
+                break;
               default:
                 console.warn('This tab is not available');
                 break;
@@ -71,6 +75,15 @@ export const EditDataConnectionsModal: React.FC<
                 disabled: false,
               }}
             />
+            {isFlagEnabled('NOTION_CONNECTIONS') && (
+              <TabsTrigger
+                name="services"
+                trigger={{
+                  label: 'Services',
+                  disabled: false,
+                }}
+              />
+            )}
           </TabsList>
         </TabsRoot>
 

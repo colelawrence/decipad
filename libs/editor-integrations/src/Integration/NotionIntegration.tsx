@@ -10,14 +10,6 @@ import {
   columnTypeCoercionsToRec,
 } from '@decipad/import';
 import { useEffect } from 'react';
-import {
-  GetNotionDocument,
-  GetNotionQuery,
-  GetNotionQueryVariables,
-} from '@decipad/graphql-client';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
-import { useClient } from 'urql';
 import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
 
@@ -28,9 +20,6 @@ export const NotionIntegration = function CodeIntegration({
   varName,
 }: ConcreteIntegrationBlock<'notion'>): null {
   const computer = useComputer();
-
-  const client = useClient();
-  const { notebook } = useRouteParams(notebooks({}).notebook);
 
   useEffect(() => {
     const res = JSON.parse(blockOptions.latestResult);
@@ -44,21 +33,15 @@ export const NotionIntegration = function CodeIntegration({
 
   useIntegrationOptions({
     onRefresh() {
-      client
-        .query<GetNotionQuery, GetNotionQueryVariables>(GetNotionDocument, {
-          url: blockOptions.notionUrl,
-          notebookId: notebook.id,
-        })
+      fetch(blockOptions.notionUrl)
+        .then((res) => res.json())
         .then((res) => {
-          if (!res.data?.getNotion) return;
+          const notionImported = importFromNotion(res);
+          const result = importFromUnknownJson(notionImported, {
+            columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
+          });
 
-          const notionResult = importFromUnknownJson(
-            importFromNotion(JSON.parse(res.data.getNotion)),
-            {
-              columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
-            }
-          );
-          pushResultToComputer(computer, id, varName, notionResult);
+          pushResultToComputer(computer, id, varName, result);
         });
     },
     onShowSource() {

@@ -3,3 +3,22 @@ mutation CreateExternalDataSource($dataSource: ExternalDataSourceCreateInput!) {
     ...ExternalDataSourceFragment
   }
 }
+
+mutation CreateExternalDataLink(
+  $externalDataId: String!
+  $name: String!
+  $url: String!
+  $method: HTTPMethods
+) {
+  createExternalDataLink(
+    externalDataId: $externalDataId
+    name: $name
+    url: $url
+    method: $method
+  ) {
+    id
+    name
+    url
+    method
+  }
+}

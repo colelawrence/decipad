@@ -1,6 +1,8 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { workspaces } from '@decipad/routing';
 import {
   DatabaseConnectionScreen,
+  Services,
   EditDataConnectionsModal as UIEditDataConnectionsModal,
   WorkspaceSecrets,
 } from '@decipad/ui';
@@ -43,6 +45,12 @@ const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
             <DatabaseConnectionScreen workspaceId={props.currentWorkspace.id} />
           }
         />
+        {isFlagEnabled('NOTION_CONNECTIONS') && (
+          <Route
+            path={currentWorkspaceRoute.connections({}).services.template}
+            element={<Services workspaceId={props.currentWorkspace.id} />}
+          />
+        )}
       </Route>
     </Routes>
   );

@@ -1,6 +1,9 @@
 import type {
+  UserObjectResponse,
   PageObjectResponse,
   QueryDatabaseResponse,
+  RichTextItemResponse,
+  PartialUserObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 
 export function importFromNotion(
@@ -23,6 +26,75 @@ export function importFromNotion(
   return data;
 }
 
+interface ImportDatabaseResult {
+  id: string;
+  name: string;
+}
+
+function richTextToString(richText: Array<RichTextItemResponse>): string {
+  let title = '';
+
+  for (const text of richText) {
+    if (text.type !== 'text') {
+      continue;
+    }
+
+    title += text.plain_text;
+  }
+
+  return title;
+}
+
+function usersToString(
+  users: Array<UserObjectResponse | PartialUserObjectResponse>
+): string {
+  let text = '';
+
+  for (const user of users) {
+    text += userToString(user);
+  }
+
+  return text;
+}
+
+function userToString(
+  user: UserObjectResponse | PartialUserObjectResponse
+): string {
+  if (!('type' in user)) {
+    return '';
+  }
+
+  if (user.type === 'bot') {
+    return user.name ?? 'Robot';
+  }
+
+  return user.name ?? user.person.email ?? '';
+}
+
+export function importDatabases(
+  source: Array<{
+    object: string;
+    id: string;
+    title: Array<RichTextItemResponse>;
+    properties: Record<string, QueryDatabaseResponse['results']>;
+  }>
+): Array<ImportDatabaseResult> {
+  const databases: Array<ImportDatabaseResult> = [];
+
+  for (const item of source) {
+    if (item.object !== 'database') {
+      continue;
+    }
+
+    databases.push({
+      id: item.id,
+      name: richTextToString(item.title),
+    });
+  }
+
+  return databases;
+}
+
 export interface NotionResponse {
   type: string;
   column_name: string;
@@ -40,13 +112,13 @@ function getValue(
 ): string {
   switch (object.type) {
     case 'title':
-      return object.title[0].plain_text;
+      return richTextToString(object.title);
     case 'number':
       return object.number?.toString() ?? '0';
     case 'checkbox':
       return String(object.checkbox);
     case 'rich_text':
-      return object.rich_text[0].plain_text;
+      return richTextToString(object.rich_text);
     case 'select':
       return object.select?.name ?? '';
     case 'status':
@@ -70,12 +142,16 @@ function getValue(
     // TODO: What to do with types below.
     case 'formula':
     case 'files':
+      return '';
     case 'people':
+      return usersToString(object.people);
     case 'rollup':
     case 'relation':
-    case 'multi_select':
-    case 'last_edited_by':
       return '';
+    case 'multi_select':
+      return '';
+    case 'last_edited_by':
+      return userToString(object.last_edited_by);
   }
 }
 

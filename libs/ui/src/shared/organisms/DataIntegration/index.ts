@@ -5,3 +5,4 @@ export * from './SecretsMenu';
 export * from './SelectIntegration';
 export * from './ConnectionsMenu';
 export * from './NotionConnection';
+export * from './Services';

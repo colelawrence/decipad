@@ -12,7 +12,7 @@ import { IntegrationList, Connection, ResultPreview } from '../Connections';
  * Factory method to return different integrations based on state.
  * Used to abstract away the selection of integration screens.
  */
-export const useIntegrationScreenFactory = (): ReactNode => {
+export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
   const store = useConnectionStore((state) => ({
     connectionType: state.connectionType,
     resultPreview: state.resultPreview,
@@ -31,6 +31,7 @@ export const useIntegrationScreenFactory = (): ReactNode => {
       'pick-integration': <SelectIntegration integrations={IntegrationList} />,
       connect: (
         <Connection
+          workspaceId={workspaceId}
           type={store.connectionType}
           typeMapping={store.resultTypeMapping}
           setResultPreview={store.setResultPreview}
@@ -46,7 +47,7 @@ export const useIntegrationScreenFactory = (): ReactNode => {
         />
       ),
     }),
-    [store]
+    [store, workspaceId]
   );
 
   return useMemo(() => componentMap[store.stage], [componentMap, store.stage]);

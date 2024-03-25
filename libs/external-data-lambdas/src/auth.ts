@@ -1,4 +1,4 @@
-import { app } from '@decipad/backend-config';
+/* eslint-disable camelcase */
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
@@ -9,15 +9,29 @@ import {
 } from 'aws-lambda';
 import { nanoid } from 'nanoid';
 import { OAuth2 } from 'oauth';
-import { stringify as encodeCookie } from 'simple-cookie';
 import { checkNotebookOrWorkspaceAccess } from './checkAccess';
+import { encodeState } from './state';
+import { ExternalDataSourceRecord } from '@decipad/backendtypes';
+import { app } from '@decipad/backend-config';
 
-export const auth = async (
+/**
+ * Helper function
+ *
+ * @returns [redirectUrl, ExternalDataSource]
+ * @throws if various conditions aren't met.
+ */
+async function getRequestData(
   event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResultV2> => {
+): Promise<[string, ExternalDataSourceRecord]> {
   const { id } = event.pathParameters || {};
   if (!id) {
     throw Boom.badRequest('missing parameters');
+  }
+
+  const { referer } = getDefined(event.headers);
+
+  if (!referer) {
+    throw Boom.badRequest('no referer header in request');
   }
 
   const data = await tables();
@@ -32,6 +46,13 @@ export const auth = async (
     event,
   });
 
+  return [referer, externalDataSource];
+}
+
+export const auth = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResultV2> => {
+  const [completionUrl, externalDataSource] = await getRequestData(event);
   const provider = externalDataProvider(externalDataSource.provider);
 
   if (!provider) {
@@ -41,60 +62,36 @@ export const auth = async (
   }
 
   const authorizationUrl = new URL(provider.authorizationUrl);
-
-  const getThirdPartyBaseUrlFromHeaders =
-    provider.id === 'testdatasource' &&
-    event.headers['x-use-third-party-test-server'];
-
-  const basePath = getThirdPartyBaseUrlFromHeaders
-    ? getDefined(event.headers['x-use-third-party-test-server'])
-    : authorizationUrl.origin;
-
   const authorizePath = authorizationUrl.pathname;
   const accessTokenPath = new URL(provider.accessTokenUrl).pathname;
 
   const oauth2Client = new OAuth2(
     provider.clientId,
     provider.clientSecret,
-    basePath,
+    authorizationUrl.origin,
     authorizePath,
     accessTokenPath,
     provider.headers || {}
   );
 
+  const state = encodeState({
+    completionUrl,
+    externalDataId: externalDataSource.id,
+  });
+
   const config = app();
+
   const authorizeUrl = oauth2Client.getAuthorizeUrl({
     ...provider.authorizationParams,
     scope: provider.scope,
     redirect_uri: `${config.urlBase}${config.apiPathBase}/externaldatasources/callback`,
     cacheBuster: nanoid(),
+    state,
   });
-
-  // set client cookies
-  const cookies = [
-    encodeCookie({
-      name: 'externaldatasourceid',
-      value: id,
-      httponly: true,
-      path: '/',
-    }),
-  ];
-  const { redirect_uri: redirectUri } = event.queryStringParameters || {};
-  if (redirectUri) {
-    cookies.push(
-      encodeCookie({
-        name: 'redirect_uri',
-        value: redirectUri,
-        httponly: true,
-        path: '/',
-      })
-    );
-  }
 
   // redirect client to provider authorize url
   return {
     statusCode: 302,
-    cookies,
     headers: {
       Location: authorizeUrl,
     },
