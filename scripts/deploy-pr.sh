@@ -23,7 +23,7 @@ echo "VITE_DECI_APP_URL_BASE"=${DECI_APP_URL_BASE:-} >> apps/frontend/.env.produ
 
 
 echo "Building frontend..."
-env -i npx yarn build:frontend
+env -i yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
 echo "Building notebook open API manifest..."
