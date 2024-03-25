@@ -1,23 +1,28 @@
 import { expect, test, Page } from './manager/decipad-tests';
 import { Timeouts, snapshot } from '../utils/src';
 
-test('import images @imports @images', async ({ testUser }) => {
+test('import image via upload @imports @images', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await test.step('Importing image through file explorer', async () => {
     await notebook.focusOnBody();
-    await page.keyboard.type('Insert Below this');
+    await notebook.addParagraph('Insert Below this');
     await page.keyboard.press('Enter');
-    await page.keyboard.press('Enter');
-    await page.keyboard.type('Insert Above this');
+    await notebook.addParagraph('Insert Above this');
     await page.keyboard.press('ArrowUp');
-    await notebook.openImageUploader(true);
+
+    await notebook.openImageUploader(false);
     const fileChooserPromise = page.waitForEvent('filechooser');
     await page.getByText('Choose file').click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles('./__fixtures__/images/download.png');
     await expect(
-      page.getByTestId('notebook-image-block').locator('img')
+      page
+        .getByTestId('draggable-block')
+        .nth(1)
+        .getByTestId('notebook-image-block')
+        .getByRole('img'),
+      "Image wasn't added on the second block position between insert below and insert above"
     ).toBeVisible();
     await snapshot(
       page as Page,
@@ -61,28 +66,31 @@ test('import images @imports @images', async ({ testUser }) => {
       page.getByTestId('notebook-image-block').locator('img')
     ).toBeHidden();
   });
+});
 
-  await test.step('Importing image via link', async () => {
-    await notebook.selectLastParagraph();
-    await notebook.openImageUploader();
-    await page.getByTestId('link-file-tab').click();
-    await page
-      .getByPlaceholder('Paste the image link here')
-      .fill(
-        'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png'
-      );
-    await page.getByRole('button', { name: 'Insert image' }).click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
-    await expect(
-      page.getByTestId('notebook-image-block').locator('img')
-    ).toBeVisible();
-  });
+test('import image via link @imports @images', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+
+  await notebook.selectLastParagraph();
+  await notebook.openImageUploader();
+  await page.getByTestId('link-file-tab').click();
+  await page
+    .getByPlaceholder('Paste the image link here')
+    .fill(
+      'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png'
+    );
+  await page.getByRole('button', { name: 'Insert image' }).click();
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.computerDelay);
+  await expect(
+    page.getByTestId('notebook-image-block').locator('img')
+  ).toBeVisible();
 });
 
 test('import CSVs via link @imports @csv', async ({ testUser }) => {
   test.slow();
   const { page, notebook } = testUser;
+  notebook.focusOnBody();
   await test.step('importing csv file through csv panel with file', async () => {
     await notebook.openCSVUploader();
     await page.getByTestId('upload-file-tab').click();
@@ -127,8 +135,9 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
   });
 });
 
-test('embed on deipad @embeds', async ({ testUser }) => {
+test('embed loom on deipad @embeds', async ({ testUser }) => {
   const { page, notebook } = testUser;
+  notebook.focusOnBody();
   await test.step('embed from loom', async () => {
     await notebook.openEmbedUploader();
     await page
@@ -142,13 +151,17 @@ test('embed on deipad @embeds', async ({ testUser }) => {
     await expect(
       page
         .frameLocator('iframe[title="decipad-embed"]')
-        .nth(0)
         .getByRole('link', {
           name: 'Loom video for E2E',
         })
         .first()
     ).toBeVisible();
   });
+});
+
+test('embed google slided deipad @embeds', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  notebook.focusOnBody();
   await test.step('embed from google slides', async () => {
     await notebook.openEmbedUploader();
     await page
@@ -162,10 +175,14 @@ test('embed on deipad @embeds', async ({ testUser }) => {
     await expect(
       page
         .frameLocator('iframe[title="decipad-embed"]')
-        .nth(1)
         .getByRole('link', { name: 'Google Slides' })
     ).toBeVisible();
   });
+});
+
+test('embed pitch on deipad @embeds', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  notebook.focusOnBody();
 
   await test.step('embed from pitch', async () => {
     await notebook.openEmbedUploader();
@@ -179,7 +196,6 @@ test('embed on deipad @embeds', async ({ testUser }) => {
       await expect(
         page
           .frameLocator('iframe[title="decipad-embed"]')
-          .nth(2)
           .locator('[data-test-id="read-only-text"]')
           .getByText('Pitch Slides Decipad')
       ).toBeVisible();
@@ -192,6 +208,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
 }) => {
   test.slow();
   const { page, notebook } = testUser;
+  notebook.focusOnBody();
   await test.step('importing csv link through csv panel with link', async () => {
     await notebook.openCSVUploader();
     await page.getByTestId('link-file-tab').click();

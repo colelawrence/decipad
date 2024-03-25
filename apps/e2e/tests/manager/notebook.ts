@@ -550,15 +550,18 @@ export class Notebook {
    */
   async addBlockSlashCommand(
     command: SlashCommand,
-    insertAtCurrentBlock = false
+    insertLastParagraph = true
   ) {
-    if (!insertAtCurrentBlock) {
-      await expect(async () => {
-        await this.notebookParagraph.last().click();
-        await this.notebookParagraph.last().click();
-        await expect(this.page.getByText('for new blocks')).toBeVisible();
-      }).toPass();
-    }
+    await expect(async () => {
+      if (insertLastParagraph) {
+        this.selectLastParagraph();
+      }
+      await expect(this.page.getByText('for new blocks')).toBeVisible();
+      await this.page
+        .getByTestId('draggable-block')
+        .filter({ hasText: 'for new blocks' })
+        .click();
+    }).toPass();
     // check paragraph is ready
     await this.page.keyboard.type(`/`);
     // checks menu had openned
@@ -624,7 +627,7 @@ export class Notebook {
   async addBlock(
     command: SlashCommand,
     menu: 'slashmenu' | 'sidebar' | 'plusblockmenu' = 'slashmenu',
-    insertAtCurrentBlock = false
+    insertLastParagraph = true
   ) {
     switch (menu) {
       case 'sidebar':
@@ -634,7 +637,7 @@ export class Notebook {
         await this.addBlockPlusBlockCommand(command);
         break;
       default:
-        await this.addBlockSlashCommand(command, insertAtCurrentBlock);
+        await this.addBlockSlashCommand(command, insertLastParagraph);
     }
   }
 
@@ -931,11 +934,11 @@ export class Notebook {
    * **Usage**
    *
    * ```js
-   * await notebook.openImageUploader();
+   * await notebook.openImageUploader(insertLastParagraph = true);
    * ```
    */
-  async openImageUploader(insertAtCurrentBlock = false) {
-    this.addBlock('upload-image', undefined, insertAtCurrentBlock);
+  async openImageUploader(insertLastParagraph = true) {
+    this.addBlock('upload-image', undefined, insertLastParagraph);
     await expect(async () => {
       await expect(this.page.getByText('Add an image')).toBeVisible();
     }, `Embed Image modal didn't open`).toPass();
