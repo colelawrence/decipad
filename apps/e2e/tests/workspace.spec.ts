@@ -3,24 +3,31 @@
 import { expect, test, Page } from './manager/decipad-tests';
 import { Timeouts, snapshot } from '../utils/src';
 
-test('Section creation', async ({ randomFreeUser }) => {
+const byName = (a: { name: string }, b: { name: string }): number => {
+  return a.name.localeCompare(b.name);
+};
+
+test('can create workspace folders @workspace', async ({ randomFreeUser }) => {
   const { page, workspace } = randomFreeUser;
-  await test.step('Creating a new section', async () => {
-    await workspace.newSection('Section Creation Test 1', { colourIndex: 2 });
+  await test.step('create new workspace folder', async () => {
+    await workspace.newFolder('Section Creation Test 1', { colourIndex: 2 });
   });
 
-  await test.step('Cancelling a new section', async () => {
-    await workspace.newSection('Section Creation Test 1', { create: false });
+  await test.step('can cancel creation of a new workspace folder', async () => {
+    await workspace.newFolder('Section Creation Test 1', { create: false });
     await workspace.modalCloseButton.click();
     await expect(page.getByText('Section Creation Test 2')).toBeHidden();
   });
 });
 
-test('workspace sections', async ({ randomFreeUser }) => {
+test('can move noteboks to workspace folders @workspace', async ({
+  randomFreeUser,
+}) => {
   const { page, workspace } = randomFreeUser;
+  const sectionName = 'Drag and Drop Test';
 
-  await test.step('new workspacsection', async () => {
-    await workspace.newSection('Drag and Drop Test');
+  await test.step('new workspace folder', async () => {
+    await workspace.newFolder(sectionName);
 
     // Navigating back to My Notebooks
     await expect(async () => {
@@ -35,29 +42,27 @@ test('workspace sections', async ({ randomFreeUser }) => {
     }).toPass();
     await workspace.searchForNotebook('Welcome to Decipad!');
 
-    await workspace.moveNotebookToSection(
-      'Welcome to Decipad!',
-      'Drag and Drop Test'
-    );
+    await workspace.moveNotebookToFolder('Welcome to Decipad!', sectionName);
+    await workspace.checkLabel(sectionName);
   });
 
   await test.step('Checking if the right notebook was dragged into the section', async () => {
-    workspace.selectSection('Drag and Drop Test');
+    await workspace.selectSection(sectionName);
     await expect(
       page.getByTestId('notebook-list-item').getByText('Welcome to Decipad!')
     ).toBeVisible();
 
     // check section labels are visible with filter
-    await workspace.checkLabel('Drag and Drop Test');
+    await workspace.checkLabel(sectionName);
 
     // check section label are persistant on reload
     await page.reload();
-    await workspace.checkLabel('Drag and Drop Test');
+    await workspace.checkLabel(sectionName);
 
     // check standard view showcases notebook labels
     await expect(async () => {
       await page.getByTestId('my-notebooks').click();
-      await workspace.checkLabel('Drag and Drop Test');
+      await workspace.checkLabel(sectionName);
     }).toPass();
   });
 
@@ -66,27 +71,23 @@ test('workspace sections', async ({ randomFreeUser }) => {
   });
 });
 
-const byName = (a: { name: string }, b: { name: string }): number => {
-  return a.name.localeCompare(b.name);
-};
-
-test('should display the initial notebooks', async ({
-  randomFreeUser: { page, workspace },
+test('should display the initial notebooks @workspace', async ({
+  randomFreeUser: { page, workspace, notebook },
 }) => {
-  const pads = await workspace.getPadList(true);
+  const workspaceNotebooks = await workspace.getPadList(true);
 
   // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
   process.env.CI || process.env.DECI_E2E
-    ? expect(pads).toMatchObject(
+    ? expect(workspaceNotebooks).toMatchObject(
         [
           'Welcome to Decipad!',
           'Starting a Business - Example Notebook',
           'Weekend Trip - Example Notebook',
         ]
-          .map((notebook) => ({ name: notebook }))
+          .map((workspaceNotebook) => ({ name: workspaceNotebook }))
           .sort(byName)
       )
-    : expect(pads).toMatchObject(
+    : expect(workspaceNotebooks).toMatchObject(
         [
           '[Template] Capitalisation table for seed founders',
           '[Template] Decipad Investor Update: Mar 2023',
@@ -103,17 +104,22 @@ test('should display the initial notebooks', async ({
           'Starting a Business - Example Notebook',
           'Weekend Trip - Example Notebook',
         ]
-          .map((notebook) => ({ name: notebook }))
+          .map((workspaceNotebook) => ({ name: workspaceNotebook })) // Rename 'notebook' to 'pad'
           .sort(byName)
       );
 
+  // take snapshot after visint a notebook to check with the layout of the workspace if affected
+  await page.getByRole('link', { name: /Starting a Business/ }).click();
+  await notebook.waitForEditorToLoad();
+  await notebook.checkNotebookTitle('🕯Starting a Business - Example Notebook');
+  await notebook.returnToWorkspace();
   await snapshot(page as Page, 'Dashboard: Initial Notebooks');
 });
 
-test.use({ colorScheme: 'dark' });
-test('shows workspace in dark mode mode', async ({
+test('shows workspace in dark mode mode @workspace', async ({
   randomFreeUser: { page },
 }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
   let localStorageValue: string | null;
   await expect(async () => {
     localStorageValue = await page.evaluate(() => {
@@ -130,10 +136,10 @@ test('shows workspace in dark mode mode', async ({
   await snapshot(page as Page, 'Dashboard: Initial Notebooks Darkmode');
 });
 
-test.use({ colorScheme: 'light' });
-test('shows workspace in light mode mode', async ({
+test('shows workspace in light mode mode @workspace', async ({
   randomFreeUser: { page },
 }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
   await expect(async () => {
     const localStorageValue = await page.evaluate(() => {
       window.localStorage.setItem('deciThemePreference', 'light');
@@ -147,7 +153,7 @@ test('shows workspace in light mode mode', async ({
   await page.reload({ waitUntil: 'load' });
 });
 
-test('Dashboard operations', async ({
+test('workspace operations @workspace', async ({
   randomFreeUser: { page, workspace },
 }) => {
   await test.step('creates a new pad and navigates to pad detail', async () => {
@@ -206,7 +212,9 @@ test('Dashboard operations', async ({
   });
 });
 
-test('Workspace flows', async ({ randomFreeUser: { page, workspace } }) => {
+test('workspace flows @workspace', async ({
+  randomFreeUser: { page, workspace },
+}) => {
   await test.step('Archive & delete a notebook', async () => {
     await workspace.archivePad(0);
     await workspace.openArchive();
@@ -240,7 +248,7 @@ test('Workspace flows', async ({ randomFreeUser: { page, workspace } }) => {
   });
 });
 
-test('workspace permissions', async ({
+test('workspace permissions @workspace', async ({
   testUser,
   randomFreeUser,
   anotherRandomFreeUser,

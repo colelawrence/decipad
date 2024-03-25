@@ -118,29 +118,30 @@ export class Workspace {
     await expect(
       await this.notebookLabel.filter({
         hasText: label,
-      })
+      }),
+      `Notebook doesn't have the folder tag "${label}" visible`
     ).toBeVisible();
   }
 
   /**
-   * Create a new section in the workspace
+   * Create a new folder in the workspace
    *
-   * @param {string} name - Name of the section
-   * @param {number} [options.colourIndex=-1] - Colour index of the section
-   * @param {boolean} [options.create=true] - Whether to create the section or not. If not created modal will still be open after execution.
+   * @param {string} name - Name of the folder
+   * @param {number} [options.colourIndex=-1] - Colour index of the folder
+   * @param {boolean} [options.create=true] - Whether to create the folfer or not. If not created modal will still be open after execution.
    *
    * **Usage**
    * ```js
-   * await workspace.newSection('Section Name');
+   * await workspace.newFolder('Section Name');
    *
    * // with colour
-   * await workspace.newSection('Section Name', { colourIndex: 2 });
+   * await workspace.newFolder('Section Name', { colourIndex: 2 });
    *
    * // without creating
-   * await workspace.newSection('Section Name', { create: false });
+   * await workspace.newFolder('Section Name', { create: false });
    * ```
    */
-  async newSection(
+  async newFolder(
     name: string,
     options: { colourIndex?: number; create?: boolean } = {
       colourIndex: -1,
@@ -179,23 +180,23 @@ export class Workspace {
   }
 
   /**
-   * Move notebook from current section to another section
+   * Move notebook from current folder to another folder
    * @param {string} notebookName - Name of the notebook to be moved
-   * @param {string} sectionName - Name of the section to move the notebook to
+   * @param {string} folderName - Name of the folder to move the notebook to
    *
    * **Usage**
    * ```js
-   * await workspace.moveNotebookToSection('Notebook Name', 'Section Name');
+   * await workspace.moveNotebookToFolder('Notebook Name', 'Folder Name');
    * ```
    */
-  async moveNotebookToSection(notebookName: string, sectionName: string) {
+  async moveNotebookToFolder(notebookName: string, folderName: string) {
     await this.openFolderSection();
     await this.page
       .getByTestId('notebook-list-item')
       .getByText(notebookName)
       .hover();
     await this.page.mouse.down();
-    await this.page.getByText(sectionName).hover();
+    await this.page.getByText(folderName).hover();
     await this.page.mouse.up();
   }
 

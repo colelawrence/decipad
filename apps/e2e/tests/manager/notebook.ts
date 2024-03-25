@@ -1390,6 +1390,15 @@ export class Notebook {
   }
 
   /**
+   * Return to workspace using the button on the notebook topbar
+   *
+   */
+  async returnToWorkspace() {
+    await this.page.getByTestId('go-to-workspace').click();
+    await expect(this.page.getByTestId('new-notebook')).toBeVisible();
+  }
+
+  /**
    * Duplicate notebook using options menu.
    *
    * **Usage**
