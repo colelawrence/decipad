@@ -25,7 +25,14 @@ import {
   AddCreditsModal,
   useSetCssVarWidth,
 } from '@decipad/ui';
-import { FC, Suspense, createContext, useState, useEffect } from 'react';
+import {
+  FC,
+  Suspense,
+  createContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -84,6 +91,8 @@ export const Notebook: FC = () => {
     },
   });
 
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     if (!docsync || docsync.isReadOnly) {
       return;
@@ -94,7 +103,8 @@ export const Notebook: FC = () => {
         notebookId,
       },
     });
-    setInterval(() => {
+    clearInterval(intervalRef.current ?? undefined);
+    intervalRef.current = setInterval(() => {
       refetch({
         requestPolicy: 'network-only',
         variables: {
@@ -102,6 +112,11 @@ export const Notebook: FC = () => {
         },
       });
     }, 5000);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [refetch, notebookId, docsync]);
 
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null);
