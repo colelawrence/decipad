@@ -12,7 +12,7 @@ rm -rf apps/backend/public
 mkdir apps/backend/public
 
 echo "Building frontend..."
-env -i yarn build:frontend
+yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
 echo "Building docs..."
