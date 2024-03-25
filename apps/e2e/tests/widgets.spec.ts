@@ -13,7 +13,6 @@ import {
   createDropdownBelow,
   createToggleBelow,
   createSliderBelow,
-  createCalculationBlockBelow,
   createResultBelow,
 } from '../utils/page/Block';
 
@@ -331,8 +330,8 @@ test('result widget', async ({ testUser }) => {
 
   await test.step('shows the available calculations', async () => {
     await notebook.focusOnBody();
-    await createCalculationBlockBelow(page, 'Hello = 5 + 1');
-    await createCalculationBlockBelow(page, 'World = 5 + 3');
+    await notebook.addAdvancedFormula('Hello = 5 + 1');
+    await notebook.addAdvancedFormula('World = 5 + 3');
 
     await page.getByTestId('result-widget').click();
 
@@ -367,8 +366,8 @@ test('result widget', async ({ testUser }) => {
   });
 
   await test.step('doesnt show tables nor formulas on widget dropdown', async () => {
-    await createCalculationBlockBelow(page, 'table = { hello = [1, 2, 3] }');
-    await createCalculationBlockBelow(page, 'f(x) = x + 10');
+    await notebook.addAdvancedFormula('table = { hello = [1, 2, 3] }');
+    await notebook.addAdvancedFormula('f(x) = x + 10');
 
     await page.getByTestId('result-widget').click();
     // only one different variable available

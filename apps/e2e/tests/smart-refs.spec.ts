@@ -1,21 +1,18 @@
 import { expect, test } from './manager/decipad-tests';
-import { createCalculationBlockBelow } from '../utils/page/Block';
-import { createTable } from '../utils/page/Table';
 import { cleanText } from '../utils/src';
 
 test('SmartRefs simple case', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('replaces variable name with smart ref', async () => {
-    await createCalculationBlockBelow(page, 'var = 10');
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'x = var ');
+    await notebook.addAdvancedFormula('var = 10');
+    await notebook.addAdvancedFormula('x = var ');
     await expect(page.locator('span[data-slate-node="element"]')).toContainText(
       'var'
     );
   });
 
   await test.step('does not replace variable name with smart ref if selected', async () => {
-    await createCalculationBlockBelow(page, 'y = var');
+    await notebook.addAdvancedFormula('y = var');
     await expect(
       page.locator('span[data-slate-node="element"]'),
       'new smart refs were added'
@@ -24,11 +21,10 @@ test('SmartRefs simple case', async ({ testUser }) => {
 });
 
 test('SmartRefs in low code tables', async ({ testUser }) => {
-  const { page } = testUser;
-  await page.keyboard.press('Enter');
-  await createTable(page);
-  await page.keyboard.press('Enter');
-  await createCalculationBlockBelow(page, 'x = Table1.Column1');
+  const { page, notebook } = testUser;
+  await notebook.addTable();
+  await notebook.selectLastParagraph();
+  await notebook.addAdvancedFormula('x = Table1.Column1');
   await page.keyboard.press('Enter');
   await page.getByTestId('smart-ref').getByText('Column1').waitFor();
   const text = await page.getByTestId('smart-ref').textContent();
@@ -37,17 +33,14 @@ test('SmartRefs in low code tables', async ({ testUser }) => {
 });
 
 test('SmartRefs in code tables', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('no infinite loops on code table column declaration', async () => {
-    await createCalculationBlockBelow(page, 'A = 5');
-    await page.keyboard.press('Enter');
-
-    await createCalculationBlockBelow(page, 'Tab = {Col1 = A, Col2 = A}');
-    await page.keyboard.press('Enter');
-
-    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
-      2
-    );
+    await notebook.addAdvancedFormula('A = 5');
+    await notebook.addAdvancedFormula('Tab = {Col1 = A, Col2 = A}');
+    await expect(
+      page.locator('span[data-slate-node="element"]'),
+      'The notebook doesnt have the 2 expected advanced formulas'
+    ).toHaveCount(2);
   });
 
   await test.step('no highlight in column declarations in code tables', async () => {
@@ -57,19 +50,17 @@ test('SmartRefs in code tables', async ({ testUser }) => {
 });
 
 test('Deleting SmartRefs', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('selects, then deletes smart ref on Backspace', async () => {
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       0
     );
+    await notebook.addAdvancedFormula('var = 10');
+    await notebook.addAdvancedFormula('x = var ');
 
-    await createCalculationBlockBelow(page, 'var = 10');
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'x = var ');
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       1
     );
-
     await page.keyboard.press('Backspace'); // space
     await page.keyboard.press('Backspace'); // select smart ref
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
@@ -83,9 +74,9 @@ test('Deleting SmartRefs', async ({ testUser }) => {
   });
 
   await test.step('selects, then deletes smart ref on Delete', async () => {
-    await createCalculationBlockBelow(page, 'var2 = 10');
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'var2 ');
+    await notebook.addAdvancedFormula('var2 = 10');
+    await notebook.addParagraph(' ');
+    await notebook.addAdvancedFormula('var2 ');
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       1
     );

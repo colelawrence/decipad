@@ -6,7 +6,6 @@ import {
   writeInTable,
 } from '../utils/page/Table';
 import { Timeouts } from '../utils/src/timeout';
-import { createCalculationBlockBelow } from '../utils/page/Block';
 
 test('Custom function Table', async ({ testUser }) => {
   const { page, notebook } = testUser;
@@ -26,7 +25,7 @@ test('Custom function Table', async ({ testUser }) => {
   });
 
   await test.step('Creates custom formula', async () => {
-    await createCalculationBlockBelow(page, 'add5(number) = number + 5');
+    await notebook.addAdvancedFormula('add5(number) = number + 5');
     // eslint-disable-next-line playwright/no-wait-for-selector
     await page.waitForSelector(':text("ƒ")');
   });

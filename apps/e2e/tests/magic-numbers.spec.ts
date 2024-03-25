@@ -1,11 +1,7 @@
 import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
 import { editorTitleLocator, keyPress } from '../utils/page/Editor';
-import {
-  createCalculationBlockBelow,
-  createCodeLineV2Below,
-  createInputBelow,
-} from '../utils/page/Block';
+import { createCodeLineV2Below, createInputBelow } from '../utils/page/Block';
 
 test('Testing magic numbers', async ({ testUser }) => {
   const { page } = testUser;
@@ -136,20 +132,19 @@ test('Testing magic numbers', async ({ testUser }) => {
 
 test('Navigating with magic numbers', async ({ testUser }) => {
   const { page, notebook } = testUser;
-  const notebookTitke = 'Should you buy a house?';
+  const notebookTitle = 'Should you buy a house?';
 
   await test.step('Set editor title', async () => {
-    await notebook.updateNotebookTitle(notebookTitke);
-    await notebook.checkNotebookTitle(notebookTitke);
+    await notebook.updateNotebookTitle(notebookTitle);
+    await notebook.checkNotebookTitle(notebookTitle);
   });
 
   await test.step('creates some text', async () => {
-    await page.getByTestId('paragraph-content').last().click();
+    await notebook.focusOnBody();
     await page.keyboard.type('Price is %Price');
     await page.keyboard.press('%');
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'Fees = 5£');
-    await page.getByText(notebookTitke).waitFor();
+    await notebook.selectLastParagraph();
+    await notebook.addAdvancedFormula('Fees = 5£');
   });
 
   await test.step('goes all the way down to australia', async () => {

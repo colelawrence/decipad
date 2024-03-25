@@ -2,7 +2,6 @@ import { expect, test } from './manager/decipad-tests';
 import {
   createAreaChartBelow,
   createBarChartBelow,
-  createCalculationBlockBelow,
   createCodeLineV2Below,
   createDataViewBelow,
   createDateBelow,
@@ -38,7 +37,7 @@ test('check menu blocks', async ({ testUser }) => {
   });
 
   await test.step('creates advanced formula', async () => {
-    await createCalculationBlockBelow(page, 'ThirdBlock = 68 + 1');
+    await notebook.addAdvancedFormula('ThirdBlock = 68 + 1');
   });
 
   await test.step('creates table', async () => {

@@ -1,5 +1,5 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 
@@ -202,26 +202,6 @@ export async function createDateBelow(page: Page, identifier: string) {
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
-}
-
-export async function createCalculationBlockBelow(
-  page: Page,
-  decilang: string
-) {
-  const checkIncremented = await page.getByTestId('code-line').count();
-  await createWithSlashCommand(page, '/advanced');
-  await expect(async () => {
-    await expect(await page.getByTestId('code-line').count()).toBe(
-      checkIncremented + 1
-    );
-  }).toPass();
-
-  await page.keyboard.type(decilang);
-
-  await page.waitForSelector('[data-testid="code-line"] >> nth=-1');
-
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.computerDelay);
 }
 
 export async function createCodeLineV2Below(

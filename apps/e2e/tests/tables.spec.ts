@@ -43,7 +43,6 @@ import {
 } from '../utils/src';
 import fs from 'fs';
 import path from 'path';
-import { createCalculationBlockBelow } from '../utils/page/Block';
 
 const getTableCellRenderCount = (page: Page) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -735,10 +734,10 @@ test('Table Custom Units', async ({ testUser: { page, notebook } }) => {
 test('Variables in Table', async ({ testUser: { page, notebook } }) => {
   await notebook.focusOnBody();
 
-  await createCalculationBlockBelow(page, 'Hello = 3 + 6');
-  await createCalculationBlockBelow(page, 'World = 2 + 1');
+  await notebook.addAdvancedFormula('Hello = 3 + 6');
+  await notebook.addAdvancedFormula('World = 2 + 1');
 
-  await createTable(page);
+  await notebook.addTable();
 
   await doubleClickCell(page, 1, 0);
   await page.keyboard.type('He');
