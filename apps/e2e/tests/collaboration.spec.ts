@@ -17,12 +17,10 @@ test('check notebooks stay private for other logged in users', async ({
   await testUser.notebook.waitForEditorToLoad();
   const notebookURL = testUser.page.url();
 
-  await test.step('Check user cannot access notebook they do not have permission to', async () => {
+  await test.step('Check user cannot access notebook they do not have permission to - Show NOT FOUND error, as showing forbidden could be security problem', async () => {
     await anotherTestUser.page.goto(notebookURL);
     await expect(
-      anotherTestUser.page.getByText(
-        "You don't have permissions to access this page"
-      )
+      anotherTestUser.page.getByText('The requested URL was not found')
     ).toBeVisible();
     await anotherTestUser.page.close();
   });

@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react';
-import { useToast } from '@decipad/toast';
 import { captureException } from '@sentry/browser';
 import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import {
@@ -13,7 +12,6 @@ import { getDefined } from '@decipad/utils';
 export const useExternalDataSources = (
   notebookId: string
 ): ExternalDataSourcesContextValue => {
-  const toast = useToast();
   const [externalDataSources] = useGetExternalDataSourcesQuery({
     variables: { notebookId },
   });
@@ -22,13 +20,12 @@ export const useExternalDataSources = (
 
   useEffect(() => {
     if (externalDataSources.error) {
-      toast(externalDataSources.error.message, 'error');
       if (!isExpectableServerSideError(externalDataSources.error)) {
         console.error(externalDataSources.error);
         captureException(externalDataSources.error);
       }
     }
-  }, [externalDataSources.error, toast]);
+  }, [externalDataSources.error]);
 
   return {
     externalDataSources: externalDataSources.data?.getExternalDataSources ?? [],

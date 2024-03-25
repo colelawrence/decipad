@@ -27,7 +27,7 @@ import {
 } from '@decipad/ui';
 import { FC, Suspense, createContext, useState, useEffect } from 'react';
 import { Subject } from 'rxjs';
-import { ErrorPage, RequireSession } from '../../meta';
+import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
 import { useScenarioNavigate } from './hooks/useScenarioNavigate';
@@ -183,15 +183,8 @@ const DocsyncEditorProvider = createContext<DocSyncEditor | undefined>(
 
 export function getNotebookError(error: Error | undefined): JSX.Element | null {
   if (error) {
-    if (/no such/i.test(error?.message))
+    if (/no such/i.test(error?.message) || /forbidden/i.test(error?.message))
       return <ErrorPage Heading="h1" wellKnown="404" />;
-    if (/forbidden/i.test(error?.message)) {
-      return (
-        <RequireSession>
-          <ErrorPage Heading="h1" wellKnown="403" />
-        </RequireSession>
-      );
-    }
     throw error;
   }
   return null;
