@@ -62,7 +62,7 @@ test.describe('production regression checks', () => {
       await expect(page.getByText('Regression Testing').first()).toBeVisible();
 
       // if there are notebooks there from previous fails remove eveything
-      deleteAllWorkspaceNotebooks(page, workspace);
+      await deleteAllWorkspaceNotebooks(page, workspace);
 
       // go back to production (in case it went to the archive to reset the workspace)
       await page.goto('https://app.decipad.com');
@@ -80,24 +80,19 @@ test.describe('production regression checks', () => {
       await page.getByTestId('go-to-workspace').click();
 
       // restored an empty workspace for the next test
-      deleteAllWorkspaceNotebooks(page, workspace);
+      await deleteAllWorkspaceNotebooks(page, workspace);
     });
+    page.close();
   });
 
   test('checks image uploads work', async () => {
-    await test.step('Importing image through file explorer', async () => {
-      await notebook.openImageUploader();
-      const fileChooserPromise = page.waitForEvent('filechooser');
-      await page.getByText('Choose file').click();
-      const fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles('./__fixtures__/images/download.png');
-      await expect(
-        page.getByTestId('notebook-image-block').locator('img')
-      ).toBeVisible();
+    await notebook.addImage({
+      method: 'upload',
+      file: './__fixtures__/images/download.png',
     });
 
-    await test.step('delete image imported via file', async () => {
-      await page.getByTestId('drag-handle').nth(1).click();
+    await test.step('delete image imported', async () => {
+      await page.getByTestId('drag-handle').nth(0).click();
       await page.getByRole('menuitem', { name: 'Delete Delete' }).click();
       await expect(
         page.getByTestId('notebook-image-block').locator('img')
@@ -108,14 +103,13 @@ test.describe('production regression checks', () => {
   test('checks csv uploads work', async () => {
     await test.step('importing csv link through csv panel with link', async () => {
       await notebook.openCSVUploader();
-      await page.getByRole('button', { name: 'Choose file' }).first().click();
       await page.getByTestId('link-file-tab').click();
       await page
-        .getByTestId('upload-link-input')
+        .getByPlaceholder('Paste the data link here')
         .fill(
           'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv'
         );
-      await page.getByTestId('link-button').click();
+      await page.getByRole('button', { name: 'insert data' }).click();
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
       await expect(async () => {

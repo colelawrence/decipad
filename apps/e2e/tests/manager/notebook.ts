@@ -946,6 +946,65 @@ export class Notebook {
   }
 
   /**
+   * Add Image to Notebook.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.addImage({
+          method: 'link',
+          link: './__fixtures__/images/download.png',
+        });
+   * ```
+   */
+  async addImage(
+    option:
+      | { method: 'upload'; file: string }
+      | { method: 'link'; link: string }
+      | { method: 'replicate'; prompt: string }
+      | { method: 'unsplash'; prompt: string }
+      | { method: 'giphy'; prompt: string },
+    insertAtCurrentBlock = false
+  ) {
+    switch (option.method) {
+      case 'upload':
+        await this.openImageUploader(insertAtCurrentBlock);
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByText('Choose file').click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(option.file);
+        await expect(
+          this.page.getByTestId('notebook-image-block').locator('img')
+        ).toBeVisible();
+        break;
+      case 'link':
+        await test.step('Importing image through file explorer', async () => {
+          await this.openImageUploader(insertAtCurrentBlock);
+          await this.page.getByTestId('link-file-tab').click();
+          await this.page
+            .getByPlaceholder('Paste the image link here')
+            .fill(option.link);
+          await this.page.getByRole('button', { name: 'Insert image' }).click();
+          await expect(
+            this.page.getByTestId('notebook-image-block').locator('img')
+          ).toBeVisible();
+        });
+        break;
+      case 'replicate':
+        break;
+      case 'unsplash':
+        break;
+      case 'giphy':
+        break;
+      default:
+        this.addImage({
+          method: 'link',
+          link: './__fixtures__/images/download.png',
+        });
+    }
+  }
+
+  /**
    * Open Embed uploader.
    *
    * **Usage**
