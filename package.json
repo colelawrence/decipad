@@ -509,7 +509,7 @@
     "eslint-plugin-tailwindcss": "3.15.0",
     "eslint-plugin-testing-library": "6.2.0",
     "fake-indexeddb": "5.0.0",
-    "fast-check": "3.16.0",
+    "fast-check": "3.17.0",
     "geometry-polyfill": "1.0.7",
     "husky": "9.0.6",
     "jest": "29.7.0",
