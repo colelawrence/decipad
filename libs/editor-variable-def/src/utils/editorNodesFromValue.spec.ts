@@ -2,10 +2,10 @@ import { editorNodesFromValue } from './editorNodesFromValue';
 
 it('puts the text into a line node', () => {
   expect(editorNodesFromValue('id', '123 bananas')).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [
-          Object {
+    [
+      {
+        "children": [
+          {
             "text": "123 bananas",
           },
         ],
@@ -13,5 +13,5 @@ it('puts the text into a line node', () => {
         "type": "code_line",
       },
     ]
-    `);
+  `);
 });

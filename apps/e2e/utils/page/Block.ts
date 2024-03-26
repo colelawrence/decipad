@@ -162,7 +162,7 @@ export async function createSliderBelow(
   await keyPress(page, 'Backspace');
   await keyPress(page, 'Backspace');
 
-  await page.keyboard.type(value.toString());
+  await page.keyboard.type(value.toString(), { delay: Timeouts.typing });
 
   if (options) {
     await page

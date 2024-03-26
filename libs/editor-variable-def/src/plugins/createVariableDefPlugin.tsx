@@ -24,8 +24,11 @@ import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { Dropdown } from '../components/Dropdown';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
+import { RemoteComputer } from '@decipad/remote-computer';
 
-export const createVariableDefPlugin = (): MyPlatePlugin => ({
+export const createVariableDefPlugin = (
+  computer: RemoteComputer
+): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
   isElement: true,
   component: VariableDef,
@@ -63,7 +66,7 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
   plugins: [
     createMigrateElementInputToVariableDefPlugin(),
     createNormalizeVariableDefPlugin(),
-    createNormalizeCaptionPlugin(),
+    createNormalizeCaptionPlugin(computer)(),
     createNormalizeExpressionPlugin(),
     // createEnterOnExpressionPlugin(),
     {

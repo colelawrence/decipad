@@ -177,23 +177,23 @@ describe('createNormalizeVariablePlugin for dropdown elements', () => {
     delete myDropdown.children[1].options;
     normalizeEditor(editor, { force: true });
     expect(editor.children[0]).toMatchInlineSnapshot(`
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
+      {
+        "children": [
+          {
+            "children": [
+              {
                 "text": "hello",
               },
             ],
             "type": "caption",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
-            "options": Array [],
+            "options": [],
             "type": "dropdown",
           },
         ],

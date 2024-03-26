@@ -5,13 +5,22 @@ import {
   TopLevelValue,
   MyNode,
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
-  MyElement,
   ELEMENT_CODE_LINE,
+  ElementKind,
+  ELEMENT_VARIABLE_DEF,
+  ELEMENT_BLOCKQUOTE,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
 import { clone } from '@decipad/editor-utils';
+
+const PASTE_PLAIN_ELEMENTS = new Set<ElementKind>([
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CALLOUT,
+  ELEMENT_VARIABLE_DEF,
+  ELEMENT_BLOCKQUOTE,
+]);
 
 /**
  * Override default onPaste behaviour for editor, when components require special handling.
@@ -29,17 +38,8 @@ export const editorOnPaste = (
   const topLevelNode = getNode<TopLevelValue>(editor, [
     editor.selection.anchor.path[0],
   ]);
-  const secondLevelNode = getNode<MyElement>(editor, [
-    editor.selection.anchor.path[0],
-    editor.selection.anchor.path[1],
-  ]);
 
-  if (
-    topLevelNode?.type === ELEMENT_CALLOUT ||
-    (topLevelNode?.type === ELEMENT_CODE_LINE_V2 &&
-      secondLevelNode?.type === ELEMENT_CODE_LINE_V2_CODE) ||
-    topLevelNode?.type === ELEMENT_CODE_LINE
-  ) {
+  if (topLevelNode != null && PASTE_PLAIN_ELEMENTS.has(topLevelNode?.type)) {
     const clipboard = e.clipboardData.getData('text/plain');
     editor.insertText(clipboard, { at: editor.selection.anchor });
     e.preventDefault();

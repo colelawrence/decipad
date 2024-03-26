@@ -194,7 +194,7 @@ export const plugins = ({
       // language
       createCodeLinePlugin(computer),
       createCodeLineV2Plugin(computer),
-      createVariableDefPlugin(),
+      createVariableDefPlugin(computer),
       createPotentialFormulaHighlightPlugin(readOnly),
 
       // tables
