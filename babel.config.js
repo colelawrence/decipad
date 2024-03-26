@@ -7,6 +7,7 @@ module.exports = {
     require.resolve('@babel/plugin-transform-runtime'),
     // required until using actual workspace packages instead of path definitions
     require.resolve('babel-plugin-tsconfig-paths'),
+    require.resolve('./babel-replace-env'),
   ],
   babelrcRoots: ['libs/*', 'apps/*'],
 };

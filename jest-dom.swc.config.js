@@ -6,6 +6,9 @@ const jsc = {
       runtime: 'automatic',
     },
   },
+  experimental: {
+    plugins: [['swc-plugin-import-meta-env', {}]],
+  },
 };
 
 module.exports = {
