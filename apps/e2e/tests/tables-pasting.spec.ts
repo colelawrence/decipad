@@ -6,7 +6,11 @@ import {
   pasteHtmlIntoCell,
   clickCell,
   pastePlainTextIntoCell,
+  writeInTable,
+  getSelectionGrid,
 } from '../utils/page/Table';
+
+import { ControlPlus } from '../utils/page/Editor';
 
 test('Table Pasting', async ({ testUser }) => {
   const { page, notebook } = testUser;
@@ -153,4 +157,58 @@ test('pastes plain text into expanded backward cell selection', async ({
 
   await pastePlainTextIntoCell(page, 'Hello world', 2, 1, false);
   expect(await getFromTable(page, 2, 1)).toBe('Hello world');
+});
+
+test('copy column values into another column', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
+
+  await writeInTable(testUser.page, '1', 1, 0, 'Table');
+  expect(await getFromTable(testUser.page, 1, 0, 'Table')).toBe('1');
+  await writeInTable(testUser.page, '2', 2, 0, 'Table');
+  expect(await getFromTable(testUser.page, 2, 0, 'Table')).toBe('2');
+  await writeInTable(testUser.page, '3', 3, 0, 'Table');
+  expect(await getFromTable(testUser.page, 3, 0, 'Table')).toBe('3');
+
+  // +---------+----------+
+  // | Column1 | Column2  |
+  // +---------+----------+
+  // | 1       |          |
+  // +---------+----------+
+  // | 2       |          |
+  // +---------+----------+
+  // | 3       |          |
+  // +---------+----------+
+
+  await clickCell(page, 1, 0);
+
+  await page.keyboard.down('Shift');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.up('Shift');
+
+  expect(await getSelectionGrid(page)).toEqual({
+    start: { line: 1, col: 0 },
+    end: { line: 3, col: 0 },
+  });
+
+  await ControlPlus(testUser.page, 'C');
+  await page.keyboard.press('ArrowRight');
+  await ControlPlus(testUser.page, 'V');
+
+  // +---------+----------+
+  // | Column1 | Column2  |
+  // +---------+----------+
+  // | 1       | 1        |
+  // +---------+----------+
+  // | 2       | 2        |
+  // +---------+----------+
+  // | 3       | 3        |
+  // +---------+----------+
+
+  expect(await getFromTable(testUser.page, 1, 1, 'Table')).toBe('1');
+  expect(await getFromTable(testUser.page, 2, 1, 'Table')).toBe('2');
+  expect(await getFromTable(testUser.page, 3, 1, 'Table')).toBe('3');
 });
