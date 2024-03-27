@@ -166,7 +166,8 @@ const cellInputStyles = css({
   '& [data-slate-editor]': {
     width: '100%',
     height: '100%',
-    display: 'table',
+    display: 'flex',
+    flexDirection: 'column',
   },
   '& [data-slate-editor] > [data-slate-node="element"]': {
     height: '100%',
@@ -189,14 +190,7 @@ export const createCellEditorInputPlugin = (
   key: 'cell-editor-input',
   decorate: decorateCode(computer, ELEMENT_PARAGRAPH),
   withOverrides: (editor) => {
-    const { insertText, insertTextData } = editor;
-
-    // Prevent inserting text containing line breaks
-    // eslint-disable-next-line no-param-reassign
-    editor.insertText = (text) => {
-      insertText(text.replace(/\n+/g, ' '));
-    };
-
+    const { insertTextData } = editor;
     // Prevent pasting Slate fragments
     // eslint-disable-next-line no-param-reassign
     editor.insertData = insertTextData;
@@ -246,6 +240,11 @@ const CellInput = ({
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (isHotkey('mod+a', event)) {
       editor.select([]);
+      event.preventDefault();
+      return;
+    }
+    if (isHotkey('mod+enter', event)) {
+      editor.insertSoftBreak();
       event.preventDefault();
       return;
     }

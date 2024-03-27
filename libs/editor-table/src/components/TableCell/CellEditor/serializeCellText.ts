@@ -18,20 +18,19 @@ export type CellInputInlineValue = TText | SmartRefElement;
 export type ParsedCellValue = (TText | { blockId: string })[];
 
 export const serializeCellText = (value: CellInputValue): string => {
-  const inlines = value[0].children;
+  const inlines = value.map((val) => val.children).flat();
 
   return inlines
-    .map((inline) => {
-      if (isText(inline)) return inline.text;
-
-      if (inline.type === ELEMENT_SMART_REF)
-        return `${getExprRef(inline.blockId)} `;
-
+    .reduce((acc, inline) => {
+      if (isText(inline)) {
+        return `${acc}${inline.text}\n`;
+      }
+      if (inline.type === ELEMENT_SMART_REF) {
+        return `${acc.replace(/\n$/, '')}${getExprRef(inline.blockId)} `;
+      }
       throw new Error(`Unexpected inline type: ${inline.type}`);
-    })
-    .join('')
-    .trim()
-    .replace(/\s+/g, ' ');
+    }, '')
+    .trim();
 };
 
 export const deserializeCellText = (
