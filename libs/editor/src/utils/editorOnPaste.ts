@@ -6,9 +6,10 @@ import {
   MyNode,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE,
-  ElementKind,
+  ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_BLOCKQUOTE,
+  ElementKind,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
@@ -39,6 +40,7 @@ export const editorOnPaste = (
     editor.selection.anchor.path[0],
   ]);
 
+  // special handling for pasting into custom components
   if (topLevelNode != null && PASTE_PLAIN_ELEMENTS.has(topLevelNode?.type)) {
     const clipboard = e.clipboardData.getData('text/plain');
     editor.insertText(clipboard, { at: editor.selection.anchor });
@@ -49,16 +51,16 @@ export const editorOnPaste = (
 
   if (e.clipboardData.types.includes('application/x-slate-fragment')) {
     const data = e.clipboardData.getData('application/x-slate-fragment');
-    const decodedData = JSON.parse(decodeURIComponent(window.atob(data)));
+    let decodedData = JSON.parse(decodeURIComponent(window.atob(data)));
+
+    if (topLevelNode?.type !== ELEMENT_TABLE) {
+      decodedData = decodedData.map((node: MyNode) => clone(computer, node));
+    }
 
     e.preventDefault();
     e.stopPropagation();
-    insertFragment(
-      editor,
-      decodedData.map((node: MyNode) => clone(computer, node)),
-      {
-        at: editor.selection.anchor.path,
-      }
-    );
+    insertFragment(editor, decodedData, {
+      at: editor.selection.anchor.path,
+    });
   }
 };
