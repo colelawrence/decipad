@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { env } from '@decipad/utils';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import { isServerSideRendering } from '@decipad/support';
 
@@ -11,7 +12,7 @@ export const getAnalytics = (): AnalyticsBrowser | undefined => {
   if (isServerSideRendering()) {
     return undefined;
   }
-  const writeKey = process.env.VITE_ANALYTICS_WRITE_KEY;
+  const writeKey = env.VITE_ANALYTICS_WRITE_KEY;
   if (writeKey) {
     try {
       globalAnalytics = AnalyticsBrowser.load({ writeKey });
