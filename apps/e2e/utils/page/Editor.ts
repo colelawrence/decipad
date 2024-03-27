@@ -108,5 +108,9 @@ export async function keyPress(page: Page, k: string) {
 export async function ControlPlus(page: Page, key: string) {
   const isMac = process.platform === 'darwin';
   const modifier = isMac ? 'Meta' : 'Control';
-  await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
+  if (key === 'Enter') {
+    await page.keyboard.press(`${modifier}+${key}`);
+  } else {
+    await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
+  }
 }

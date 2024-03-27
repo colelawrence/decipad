@@ -759,3 +759,27 @@ test('Variables in Table', async ({ testUser: { page, notebook } }) => {
   expect(await getFromTable(page, 1, 1)).toBe('9');
   expect(await getFromTable(page, 2, 1)).toBe('3');
 });
+
+test('multiline table cells', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await createTable(page);
+
+  // +---------+----------+
+  // | Column1 | Column2  |
+  // +---------+----------+
+  // | A       |          |
+  // | B       |          |
+  // +---------+----------+
+  // |         |          |
+  // +---------+----------+
+  // |         |          |
+  // +---------+----------+
+
+  await writeInTable(testUser.page, 'A', 1, 0, 'Table');
+  await doubleClickCell(page, 1, 0);
+  await page.keyboard.press('End');
+  await ControlPlus(testUser.page, 'Enter');
+  await page.keyboard.insertText('B');
+  expect(await getFromTable(testUser.page, 1, 0, 'Table')).toBe('A\nBA﻿B');
+});
