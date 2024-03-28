@@ -352,7 +352,7 @@ export const AutoCompleteMenu = ({
                 <>
                   <span onMouseDown={handleMouseDown}>
                     <Link
-                      href={docs({}).page({ name: 'formulas' }).$}
+                      href={docs({}).page({ name: 'functions-list' }).$}
                       onClick={handleClientEvent}
                     >
                       Explore Docs
@@ -410,9 +410,9 @@ const footerStyles = css(p12Medium, {
   boxShadow: `0px -1px 0px ${cssVar('borderSubdued')}`,
   margin: '0px 0px',
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   alignItems: 'space-between',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   gap: '4px',
   zIndex: '4',
 });
