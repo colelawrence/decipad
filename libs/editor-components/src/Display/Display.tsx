@@ -19,6 +19,7 @@ import {
 } from '@decipad/editor-utils';
 import {
   useComputer,
+  useEditorStylesContext,
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
@@ -172,6 +173,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     }
   }, [changeResult, element.blockId, allResults.length, loaded]);
 
+  const { color: defaultColor } = useEditorStylesContext();
+  const { color = defaultColor } = element;
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
       <DraggableBlock
@@ -185,7 +188,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           onChangeFormatting={changeFormatting}
           variant="display"
           readOnly={readOnly}
-          color={element.color as AvailableSwatchColor}
+          color={color as AvailableSwatchColor}
           lineResult={res}
           formatting={element.formatting as ResultFormatting}
         >
@@ -198,7 +201,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             lineResult={res}
             result={element.varName}
             readOnly={readOnly}
-            color={element.color as AvailableSwatchColor}
+            color={color as AvailableSwatchColor}
             icon={element.icon as UserIconKey}
             saveIcon={saveIcon}
             saveColor={saveColor}
