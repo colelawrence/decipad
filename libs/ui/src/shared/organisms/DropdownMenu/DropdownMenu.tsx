@@ -85,6 +85,7 @@ export type DropdownMenuProps = EditItemsOptions & {
   readonly isEditingAllowed?: boolean;
   readonly addOption?: (a: string) => void;
   readonly children?: ReactNode;
+  readonly selectedIndex?: number;
 };
 
 /**
@@ -101,13 +102,14 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   onRemoveOption,
   isEditingAllowed = false,
   children,
+  selectedIndex,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
   const [inputValue, setInputValue] = useState('');
   const [addingNew, setAddingNew] = useState(false);
   const [error, setError] = useState(false);
-  const [focusedItem, setFocusedItem] = useState(0);
+  const [focusedItem, setFocusedItem] = useState(selectedIndex);
 
   const showInput = isEditingAllowed && (addingNew || groups.length === 0);
 
@@ -137,6 +139,12 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     [groups]
   );
 
+  useEffect(() => {
+    if (open) {
+      setFocusedItem(selectedIndex);
+    }
+  }, [open, selectedIndex]);
+
   // Handles keyboard selection of items (up and down), as well as
   // Enter press when user is adding new option
   const onKeyDown = useCallback(
@@ -158,17 +166,17 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
           setOpen(false);
           break;
         case event.key === 'ArrowDown':
-          setFocusedItem((focusedItem + 1) % groups.length);
+          setFocusedItem(((focusedItem ?? 0) + 1) % groups.length);
           break;
         case event.key === 'ArrowUp':
-          if (focusedItem === 0) {
+          if (focusedItem == null || focusedItem === 0) {
             setFocusedItem(groups.length - 1);
             break;
           }
-          setFocusedItem(focusedItem - 1);
+          setFocusedItem((focusedItem ?? 0) - 1);
       }
     },
-    [open, addOption, inputValue, groups, showInput, setOpen, focusedItem]
+    [open, focusedItem, inputValue, showInput, groups, setOpen, addOption]
   );
 
   useWindowListener('keydown', onKeyDown);
