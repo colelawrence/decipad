@@ -116,6 +116,17 @@ export const NotebookCollaborateTab = ({
   const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
 
   const handleAddCollaborator = useCallback(() => {
+    if (hasPaywall && workspaceId) {
+      navigate(
+        workspaces({})
+          .workspace({
+            workspaceId,
+          })
+          .members({}).$,
+        { replace: true }
+      );
+      return;
+    }
     if (loading) return;
     if (!email) return;
     if (isInvalidEmail) return;
@@ -127,7 +138,17 @@ export const NotebookCollaborateTab = ({
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
     });
-  }, [loading, email, isInvalidEmail, onInvite, notebookId, permission]);
+  }, [
+    loading,
+    email,
+    isInvalidEmail,
+    hasPaywall,
+    workspaceId,
+    onInvite,
+    notebookId,
+    permission,
+    navigate,
+  ]);
 
   const handleRemoveCollaborator = useCallback(
     (userId: string) => {
@@ -146,8 +167,6 @@ export const NotebookCollaborateTab = ({
     },
     [loading, notebookId, onChange]
   );
-
-  const disabled = hasPaywall || !isAdmin;
 
   if (hasPaywall && isFlagEnabled('NEW_PAYMENTS')) {
     return (
@@ -211,41 +230,23 @@ export const NotebookCollaborateTab = ({
               />
             </span>
           </div>
-          {hasPaywall ? (
-            <Button
-              size="extraSlim"
-              type={'primary'}
-              testId="upgrade-button"
-              onClick={() => {
-                if (workspaceId) {
-                  navigate(
-                    workspaces({})
-                      .workspace({
-                        workspaceId,
-                      })
-                      .members({}).$,
-                    { replace: true }
-                  );
-                }
-              }}
-            >
-              Upgrade to invite more people
-            </Button>
-          ) : (
-            <Button
-              size="extraSlim"
-              type="tertiaryAlt"
-              onClick={handleAddCollaborator}
-              disabled={disabled}
-              testId="send-invitation"
-            >
+          <Button
+            size="extraSlim"
+            type={hasPaywall ? 'primary' : 'tertiaryAlt'}
+            disabled={!isAdmin}
+            testId={hasPaywall ? 'upgrade-button' : 'send-invitation'}
+            onClick={handleAddCollaborator}
+          >
+            {hasPaywall ? (
+              'Upgrade to invite more people'
+            ) : (
               <div css={invitationButtonContentStyles}>
                 {success && <CheckMark />}
                 {loading && <LoadingDots />}
                 Send invite
               </div>
-            </Button>
-          )}
+            )}
+          </Button>
         </div>
       )}
 
