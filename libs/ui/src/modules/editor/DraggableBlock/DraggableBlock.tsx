@@ -20,6 +20,7 @@ import { TabElement } from '@decipad/editor-types';
 import { EditorBlock } from '../EditorBlock/EditorBlock';
 import { DropLine } from '../DropLine/DropLine';
 import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
+import { Path } from 'slate';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -60,6 +61,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly isHidden?: boolean;
   readonly isBeingDragged?: boolean;
   readonly dropLine?: 'top' | 'bottom' | 'left' | 'right';
+  readonly path?: Path;
 
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: Ref<HTMLDivElement>;
@@ -148,7 +150,7 @@ export const DraggableBlock = ({
   isDownloadable,
   onDownload,
   needsUpgrade = false,
-
+  path,
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -249,6 +251,7 @@ export const DraggableBlock = ({
               isDownloadable={isDownloadable}
               onDownload={onDownload}
               needsUpgrade={needsUpgrade}
+              path={path}
             >
               {!isMultipleSelection &&
                 turnInto != null &&

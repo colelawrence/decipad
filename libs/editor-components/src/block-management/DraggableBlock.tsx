@@ -368,6 +368,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         showLine={showLine}
         isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}
+        path={path}
       >
         <DraggableBlockStyled
           blockHighlighted={blockHighlighted}

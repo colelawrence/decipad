@@ -4,6 +4,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { DraggableBlock } from './DraggableBlock';
+import { Plate } from '@udecode/plate-common';
 
 const props: ComponentProps<typeof DraggableBlock> = {
   blockKind: 'paragraph',
@@ -13,7 +14,9 @@ const props: ComponentProps<typeof DraggableBlock> = {
 
 it('opens the menu when clicking the drag handle', async () => {
   const { getByTitle, getAllByTitle, queryByTitle } = render(
-    <DraggableBlock {...props} />
+    <Plate>
+      <DraggableBlock {...props} />
+    </Plate>
   );
   expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
 
@@ -24,14 +27,20 @@ it('opens the menu when clicking the drag handle', async () => {
 
 it('changes opacity when being dragged', () => {
   const { getByText, rerender } = render(
-    <DraggableBlock {...props} isBeingDragged={false} />
+    <Plate>
+      <DraggableBlock {...props} isBeingDragged={false} />
+    </Plate>
   );
   const normalOpacity = findParentWithStyle(
     getByText('block'),
     'opacity'
   )?.opacity;
 
-  rerender(<DraggableBlock {...props} isBeingDragged />);
+  rerender(
+    <Plate>
+      <DraggableBlock {...props} isBeingDragged />
+    </Plate>
+  );
   const beingDraggedOpacity = findParentWithStyle(
     getByText('block'),
     'opacity'
@@ -41,14 +50,18 @@ it('changes opacity when being dragged', () => {
 
 it('does not render a drop line by default', () => {
   const { queryByLabelText } = render(
-    <DraggableBlock {...props} dropLine={undefined} />
+    <Plate>
+      <DraggableBlock {...props} dropLine={undefined} />
+    </Plate>
   );
   expect(queryByLabelText(/drop/i)).not.toBeInTheDocument();
 });
 /* eslint-disable no-bitwise */
 it('can render a drop line above the block', () => {
   const { getByText, getByLabelText } = render(
-    <DraggableBlock {...props} dropLine="top" />
+    <Plate>
+      <DraggableBlock {...props} dropLine="top" />
+    </Plate>
   );
   expect(
     getByText('block').compareDocumentPosition(getByLabelText(/drop/i)) &
@@ -57,7 +70,9 @@ it('can render a drop line above the block', () => {
 });
 it('can render a drop line below the block', () => {
   const { getByText, getByLabelText } = render(
-    <DraggableBlock {...props} dropLine="bottom" />
+    <Plate>
+      <DraggableBlock {...props} dropLine="bottom" />
+    </Plate>
   );
   expect(
     getByText('block').compareDocumentPosition(getByLabelText(/drop/i)) &

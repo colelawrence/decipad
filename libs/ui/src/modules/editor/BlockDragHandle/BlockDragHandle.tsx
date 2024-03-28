@@ -1,9 +1,24 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { TabElement } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_TABLE,
+  ELEMENT_VARIABLE_DEF,
+  TabElement,
+  TopLevelValue,
+  useMyEditorRef,
+} from '@decipad/editor-types';
 import type { BlockDependents } from '@decipad/remote-computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
+import {
+  FC,
+  HTMLProps,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Comments,
   Delete,
@@ -35,6 +50,8 @@ import { editorLayout } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { Path } from 'slate';
+import { getNode } from '@udecode/plate-common';
 
 const gridStyles = once(() =>
   css({
@@ -111,6 +128,7 @@ interface BlockDragHandleProps {
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
   readonly needsUpgrade?: boolean;
+  readonly path?: Path;
 }
 
 // eslint-disable-next-line complexity
@@ -136,6 +154,7 @@ export const BlockDragHandle = ({
   isDownloadable = false,
   onDownload = noop,
   needsUpgrade = false,
+  path,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -143,6 +162,8 @@ export const BlockDragHandle = ({
   const hideAction = useCallback(() => onShowHide('hide'), [onShowHide]);
   const setHovered = useCallback(() => setIsHovered(true), [setIsHovered]);
   const setNotHovered = useCallback(() => setIsHovered(false), [setIsHovered]);
+
+  const editor = useMyEditorRef();
 
   const onClick = useCallback(() => {
     onDelete !== 'none' && onChangeMenuOpen(!menuOpen);
@@ -194,6 +215,18 @@ export const BlockDragHandle = ({
     </MenuItem>
   ) : null;
 
+  const showCopyHref = useMemo(() => {
+    if (!path) return false;
+    const node = getNode<TopLevelValue>(editor, path);
+    const supportedTypes = [
+      ELEMENT_CODE_LINE,
+      ELEMENT_TABLE,
+      ELEMENT_CODE_LINE_V2,
+      ELEMENT_VARIABLE_DEF,
+    ];
+    return onCopyHref && supportedTypes.includes(node?.type!);
+  }, [editor, onCopyHref, path]);
+
   return (
     <div css={[gridStyles(), hideOnPrint]} onMouseDown={onMouseDown}>
       {showAddBlock && (
@@ -217,7 +250,7 @@ export const BlockDragHandle = ({
           <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
             Duplicate
           </MenuItem>
-          {onCopyHref && !isMultipleSelection && (
+          {showCopyHref && !isMultipleSelection && (
             <MenuItem icon={<Link />} onSelect={onCopyHref}>
               <Tooltip trigger={<span>Copy reference link</span>} side="right">
                 <div css={{ width: '180px' }}>
