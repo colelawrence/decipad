@@ -32,6 +32,19 @@ mkdir -p apps/backend/src/shared;
 echo "Deploying \"$DEPLOY_NAME\"...";
 cd apps/backend
 
+cd public
+
+set +euo pipefail
+SEARCH_RESULT=`grep -rl "AWS_SECRET"`
+set -euo pipefail
+
+if [ -n "${SEARCH_RESULT:-}" ]; then
+  echo "Found AWS_SECRET in production build"
+  exit 1
+fi
+
+cd ..
+
 export PATH=./node_modules/.bin:$PATH;
 arc env staging DECI_APP_URL_BASE "$DECI_APP_URL_BASE"
 arc env staging DECI_INVITE_EXPIRATION_SECONDS "$DECI_INVITE_EXPIRATION_SECONDS"

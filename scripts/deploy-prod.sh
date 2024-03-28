@@ -48,6 +48,22 @@ echo "Clearing sourcemaps..."
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
+
+cd public
+
+set +euo pipefail
+SEARCH_RESULT=`grep -rl "AWS_SECRET"`
+set -euo pipefail
+
+if [ -n "${SEARCH_RESULT:-}" ]; then
+  echo "Found AWS_SECRET in production build"
+  exit 1
+else
+  echo "Success: Did NOT find AWS_SECRET in production build"
+fi
+
+cd ..
+
 arc env staging DECI_APP_URL_BASE "$DECI_APP_URL_BASE"
 arc env staging NEXTAUTH_URL "${DECI_APP_URL_BASE}/api/auth"
 

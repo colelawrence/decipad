@@ -24,6 +24,7 @@ echo "Building frontend..."
 yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
+
 # Removes the sourcemaps/built individual JS files
 rm -r dist/apps/frontend/src 2> /dev/null || true
 
@@ -48,5 +49,23 @@ echo "Clearing sourcemaps..."
 echo "Deploying..."
 mkdir -p tmp/deploy
 cd apps/backend
+
+# Do grep to get AWS_SECRET
+# To check if we leaked keys again.
+
+cd public
+
+set +euo pipefail
+SEARCH_RESULT=`grep -rl "AWS_SECRET"`
+set -euo pipefail
+
+if [ -n "${SEARCH_RESULT:-}" ]; then
+  echo "Found AWS_SECRET in dev build"
+  exit 1
+else
+  echo "Success: Did NOT find AWS_SECRET in dev build"
+fi
+
+cd ..
 
 ../../node_modules/.bin/arc deploy --no-hydrate

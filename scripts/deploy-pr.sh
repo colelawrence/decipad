@@ -46,4 +46,22 @@ echo "Clearing sourcemaps..."
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
+
+cd public
+
+set +euo pipefail
+SEARCH_RESULT=`grep -rl "AWS_SECRET"`
+set -euo pipefail
+
+if [ -n "${SEARCH_RESULT:-}" ]
+then
+  echo "Found AWS_SECRET in PR build in files:"
+  echo "${SEARCH_RESULT}"
+  exit 1
+fi
+
+echo Success: Did NOT find AWS_SECRET in PR build
+
+cd ..
+
 ../../node_modules/.bin/arc deploy --no-hydrate --name "$DEPLOY_NAME"

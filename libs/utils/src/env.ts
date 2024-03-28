@@ -9,6 +9,5 @@
 //
 
 export const env = {
-  ...process.env,
   ...import.meta.env,
 } as ImportMetaEnv;

@@ -305,7 +305,7 @@ build
 
 # SWC
 
-apps/frontend/.swc
+.swc
 libs/live-connect/**/*.bundle.js
 
 # Vite
