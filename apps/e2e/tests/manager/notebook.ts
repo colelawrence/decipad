@@ -947,6 +947,10 @@ export class Notebook {
 
   /**
    * Add Image to Notebook.
+   * 
+   * replicate util to be implemented
+   * unsplash util to be implemented
+   * giphy util to be implemented
    *
    * **Usage**
    *
@@ -968,17 +972,19 @@ export class Notebook {
   ) {
     switch (option.method) {
       case 'upload':
-        await this.openImageUploader(insertAtCurrentBlock);
-        const fileChooserPromise = this.page.waitForEvent('filechooser');
-        await this.page.getByText('Choose file').click();
-        const fileChooser = await fileChooserPromise;
-        await fileChooser.setFiles(option.file);
-        await expect(
-          this.page.getByTestId('notebook-image-block').locator('img')
-        ).toBeVisible();
+        await test.step('Importing image through file explorer', async () => {
+          await this.openImageUploader(insertAtCurrentBlock);
+          const fileChooserPromise = this.page.waitForEvent('filechooser');
+          await this.page.getByText('Choose file').click();
+          const fileChooser = await fileChooserPromise;
+          await fileChooser.setFiles(option.file);
+          await expect(
+            this.page.getByTestId('notebook-image-block').locator('img')
+          ).toBeVisible();
+        });
         break;
       case 'link':
-        await test.step('Importing image through file explorer', async () => {
+        await test.step('Importing image via link', async () => {
           await this.openImageUploader(insertAtCurrentBlock);
           await this.page.getByTestId('link-file-tab').click();
           await this.page
@@ -991,13 +997,85 @@ export class Notebook {
         });
         break;
       case 'replicate':
+        // replicate util to be implemented
+        test.fail();
         break;
       case 'unsplash':
+        // unsplsh util to be implemented
+        test.fail();
         break;
       case 'giphy':
+        // giphy util to be implemented
+        test.fail();
         break;
       default:
         this.addImage({
+          method: 'link',
+          link: './__fixtures__/images/download.png',
+        });
+    }
+  }
+
+  /**
+   * Add Embed to Notebook.
+   * 
+   *
+   * **Usage**
+   *
+   * ```js
+ await notebook.addEmbed(
+    'https://www.loom.com/embed/fdd9cc32f4b2494ca4e4e4420795d2e0?sid=e1964b86-c0a2-424c-8b12-df108627ecd2'
+  );
+   * ```
+   */
+  async addEmbed(link: string) {
+    await this.openEmbedUploader();
+    await this.page.getByPlaceholder('Paste the embed link here').fill(link);
+    await this.page.getByRole('button', { name: 'insert embed' }).click();
+  }
+
+  /**
+   * Add CSV to Notebook.
+   * 
+   *
+   * **Usage**
+   *
+   * ```js
+ await notebook.addCSV({
+      method: 'upload',
+      file: './__fixtures__/csv/accounts.csv',
+    });
+   * ```
+   */
+  async addCSV(
+    option:
+      | { method: 'upload'; file: string }
+      | { method: 'link'; link: string }
+  ) {
+    switch (option.method) {
+      case 'upload':
+        await test.step('Importing csv through file explorer', async () => {
+          await this.openCSVUploader();
+          await this.page.getByTestId('upload-file-tab').click();
+          await this.page.getByRole('button', { name: 'Choose file' }).click();
+          const fileChooserPromise = this.page.waitForEvent('filechooser');
+          await this.page.getByText('Choose file').click();
+          const fileChooser = await fileChooserPromise;
+          await fileChooser.setFiles(option.file);
+        });
+        break;
+      case 'link':
+        await test.step('Importing csv via link', async () => {
+          await this.openCSVUploader();
+          await this.page.getByTestId('link-file-tab').click();
+          await this.page
+            .getByPlaceholder('Paste the data link here')
+            .fill(option.link);
+          await this.page.getByRole('button', { name: 'insert data' }).click();
+        });
+        break;
+      default:
+        this.addCSV({
           method: 'link',
           link: './__fixtures__/images/download.png',
         });

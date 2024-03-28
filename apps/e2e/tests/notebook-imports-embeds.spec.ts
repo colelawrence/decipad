@@ -1,5 +1,5 @@
 import { expect, test, Page } from './manager/decipad-tests';
-import { Timeouts, snapshot } from '../utils/src';
+import { snapshot } from '../utils/src';
 
 test('import image via upload @imports @images', async ({ testUser }) => {
   const { page, notebook } = testUser;
@@ -11,11 +11,10 @@ test('import image via upload @imports @images', async ({ testUser }) => {
     await notebook.addParagraph('Insert Above this');
     await page.keyboard.press('ArrowUp');
 
-    await notebook.openImageUploader(false);
-    const fileChooserPromise = page.waitForEvent('filechooser');
-    await page.getByText('Choose file').click();
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles('./__fixtures__/images/download.png');
+    await notebook.addImage({
+      method: 'upload',
+      file: './__fixtures__/images/download.png',
+    });
     await expect(
       page
         .getByTestId('draggable-block')
@@ -70,18 +69,11 @@ test('import image via upload @imports @images', async ({ testUser }) => {
 
 test('import image via link @imports @images', async ({ testUser }) => {
   const { page, notebook } = testUser;
-
-  await notebook.selectLastParagraph();
-  await notebook.openImageUploader();
-  await page.getByTestId('link-file-tab').click();
-  await page
-    .getByPlaceholder('Paste the image link here')
-    .fill(
-      'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png'
-    );
-  await page.getByRole('button', { name: 'Insert image' }).click();
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.computerDelay);
+  await notebook.focusOnBody();
+  await notebook.addImage({
+    method: 'link',
+    link: 'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png',
+  });
   await expect(
     page.getByTestId('notebook-image-block').locator('img')
   ).toBeVisible();
@@ -90,17 +82,12 @@ test('import image via link @imports @images', async ({ testUser }) => {
 test('import CSVs via link @imports @csv', async ({ testUser }) => {
   test.slow();
   const { page, notebook } = testUser;
-  notebook.focusOnBody();
+  await notebook.focusOnBody();
   await test.step('importing csv file through csv panel with file', async () => {
-    await notebook.openCSVUploader();
-    await page.getByTestId('upload-file-tab').click();
-    await page.getByRole('button', { name: 'Choose file' }).click();
-    const fileChooserPromise = page.waitForEvent('filechooser');
-    await page.getByText('Choose file').click();
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles('./__fixtures__/csv/accounts.csv');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
+    await notebook.addCSV({
+      method: 'upload',
+      file: './__fixtures__/csv/accounts.csv',
+    });
     await expect(async () => {
       await expect(
         page.getByTestId('live-code').getByTestId('loading-animation').first()
@@ -137,70 +124,47 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
 
 test('embed loom on deipad @embeds', async ({ testUser }) => {
   const { page, notebook } = testUser;
-  notebook.focusOnBody();
-  await test.step('embed from loom', async () => {
-    await notebook.openEmbedUploader();
-    await page
-      .getByPlaceholder('Paste the embed link here')
-      .fill(
-        'https://www.loom.com/embed/fdd9cc32f4b2494ca4e4e4420795d2e0?sid=e1964b86-c0a2-424c-8b12-df108627ecd2'
-      );
-    await page.getByRole('button', { name: 'insert embed' }).click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
-    await expect(
-      page
-        .frameLocator('iframe[title="decipad-embed"]')
-        .getByRole('link', {
-          name: 'Loom video for E2E',
-        })
-        .first()
-    ).toBeVisible();
-  });
+  await notebook.focusOnBody();
+  await notebook.addEmbed(
+    'https://www.loom.com/embed/fdd9cc32f4b2494ca4e4e4420795d2e0?sid=e1964b86-c0a2-424c-8b12-df108627ecd2'
+  );
+  await expect(
+    page
+      .frameLocator('iframe[title="decipad-embed"]')
+      .getByRole('link', {
+        name: 'Loom video for E2E',
+      })
+      .first()
+  ).toBeVisible();
 });
 
 test('embed google slided deipad @embeds', async ({ testUser }) => {
   const { page, notebook } = testUser;
-  notebook.focusOnBody();
-  await test.step('embed from google slides', async () => {
-    await notebook.openEmbedUploader();
-    await page
-      .getByPlaceholder('Paste the embed link here')
-      .fill(
-        'https://docs.google.com/presentation/d/e/2PACX-1vR4fKEEmGwjs7JUioJup8U4ERoV7xkVc2NEJdhNlAfIQRo-uShVPz2EERzEef8K5vAoqr4TBgTO8dMC/embed?start=false&loop=false&delayms=3000'
-      );
-    await page.getByRole('button', { name: 'insert embed' }).click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
-    await expect(
-      page
-        .frameLocator('iframe[title="decipad-embed"]')
-        .getByRole('link', { name: 'Google Slides' })
-    ).toBeVisible();
-  });
+  await notebook.focusOnBody();
+  await notebook.addEmbed(
+    'https://docs.google.com/presentation/d/e/2PACX-1vR4fKEEmGwjs7JUioJup8U4ERoV7xkVc2NEJdhNlAfIQRo-uShVPz2EERzEef8K5vAoqr4TBgTO8dMC/embed?start=false&loop=false&delayms=3000'
+  );
+  await expect(
+    page
+      .frameLocator('iframe[title="decipad-embed"]')
+      .getByRole('link', { name: 'Google Slides' })
+  ).toBeVisible();
 });
 
 test('embed pitch on deipad @embeds', async ({ testUser }) => {
   const { page, notebook } = testUser;
-  notebook.focusOnBody();
-
-  await test.step('embed from pitch', async () => {
-    await notebook.openEmbedUploader();
-    await page
-      .getByPlaceholder('Paste the embed link here')
-      .fill('https://pitch.com/embed/d32f33f3-1ac8-4d44-aee6-672899febcf9');
-    await page.getByRole('button', { name: 'insert embed' }).click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
-    await expect(async () => {
-      await expect(
-        page
-          .frameLocator('iframe[title="decipad-embed"]')
-          .locator('[data-test-id="read-only-text"]')
-          .getByText('Pitch Slides Decipad')
-      ).toBeVisible();
-    }, `Pitch Embed didn't load properly`).toPass();
-  });
+  await notebook.focusOnBody();
+  await notebook.addEmbed(
+    'https://pitch.com/embed/d32f33f3-1ac8-4d44-aee6-672899febcf9'
+  );
+  await expect(async () => {
+    await expect(
+      page
+        .frameLocator('iframe[title="decipad-embed"]')
+        .locator('[data-test-id="read-only-text"]')
+        .getByText('Pitch Slides Decipad')
+    ).toBeVisible();
+  }, `Pitch Embed didn't load properly`).toPass();
 });
 
 test('check calculations from CSVs imported with link work across tabs @imports @csv @tabs', async ({
@@ -210,16 +174,10 @@ test('check calculations from CSVs imported with link work across tabs @imports 
   const { page, notebook } = testUser;
   notebook.focusOnBody();
   await test.step('importing csv link through csv panel with link', async () => {
-    await notebook.openCSVUploader();
-    await page.getByTestId('link-file-tab').click();
-    await page
-      .getByPlaceholder('Paste the data link here')
-      .fill(
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv'
-      );
-    await page.getByRole('button', { name: 'insert data' }).click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
+    await notebook.addCSV({
+      method: 'link',
+      link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv',
+    });
     await expect(async () => {
       await expect(
         page.getByTestId('live-code').getByTestId('loading-animation').first()
