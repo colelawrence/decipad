@@ -1,9 +1,10 @@
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { track } from '@decipad/backend-analytics';
 import templates from '@decipad/emails';
 import { sendEmail } from '@decipad/services/email';
+import { captureException } from '@decipad/backend-trace';
 import handle from '../handle';
 import { debug } from '../../debug';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 // TODO restructure and use input validation to check parameters are correct for the given template, making it possible to type without any
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -38,6 +39,7 @@ async function handleSendEmail(
     debug('email sent', params);
     await track(event, { event: 'email sent', properties: params });
   } catch (err) {
+    await captureException(err as Error);
     console.error('Error sending email', err);
   }
 }
