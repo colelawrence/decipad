@@ -1,10 +1,11 @@
-import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useMemo, useState } from 'react';
+import { concatMap, distinctUntilChanged } from 'rxjs';
+import { useComputer } from '@decipad/react-contexts';
 import { isColumn, materializeResult } from '@decipad/remote-computer';
-import { Column } from '../../types';
-import { concatMap } from 'rxjs';
-import { buildExpression } from './buildExpression';
 import { DataViewFilter } from '@decipad/editor-types';
+import { dequal } from '@decipad/utils';
+import { Column } from '../../types';
+import { buildExpression } from './buildExpression';
 
 interface UserReplacingColumnsProps {
   tableName: string;
@@ -44,7 +45,10 @@ export const useReplacingColumns = ({
   useEffect(() => {
     const subscriptions = replacingColumnObservables.map((obs, colIndex) =>
       obs
-        ?.pipe(concatMap(async (result) => materializeResult(result)))
+        ?.pipe(
+          concatMap(async (result) => materializeResult(result)),
+          distinctUntilChanged((prev, curr) => dequal(prev, curr))
+        )
         .subscribe((result) => {
           const originalColumn = columns[colIndex];
           if (originalColumn) {
