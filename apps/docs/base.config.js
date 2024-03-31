@@ -1,9 +1,9 @@
-const defaultBaseName = 'https://staging.decipad.com';
+const defaultBaseName = 'https://decipadstaging.com';
 
 module.exports = function baseName() {
   return (
     (typeof window !== 'undefined' &&
-      `docs.${window?.location?.hostname || 'staging.decipad.com'}`) ||
+      `docs.${window?.location?.hostname || 'decipadstaging.com'}`) ||
     defaultBaseName
   );
 };

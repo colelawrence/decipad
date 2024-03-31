@@ -38,7 +38,7 @@ const isTesting = !!process.env.JEST_WORKER_ID;
 // A few helper functions to help customer support recover notebooks.
 if (
   typeof window !== 'undefined' &&
-  (window.location.host.includes('staging.decipad.com') ||
+  (window.location.host.includes('decipadstaging.com') ||
     window.location.host.includes('localhost'))
 ) {
   window.yjsToJson = (text: string) => {

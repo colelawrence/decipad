@@ -61,11 +61,11 @@ jobs:
         env:
           NODE_ENV: 'production'
           DEPLOY_NAME: '${{ github.event.pull_request.number }}'
-          DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.staging.decipad.com'
+          DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.decipadstaging.com'
           DECI_ZONE_ID: '${{secrets.DECI_DEV_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_DEV_CERTIFICATE_ARN}}'
           VITE_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
-          NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.staging.decipad.com/api/auth'
+          NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.decipadstaging.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'
           JWT_SECRET: '${{secrets.JWT_SECRET}}'
@@ -77,7 +77,7 @@ jobs:
           DECI_INVITE_EXPIRATION_SECONDS: '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
           DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
           DECI_FROM_EMAIL_ADDRESS: '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
-          DECI_APP_URL_BASE: 'https://${{ github.event.pull_request.number }}.staging.decipad.com'
+          DECI_APP_URL_BASE: 'https://${{ github.event.pull_request.number }}.decipadstaging.com'
           DECI_S3_ENDPOINT: 's3.eu-west-2.amazonaws.com'
           DECI_S3_ACCESS_KEY_ID: '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
           DECI_S3_SECRET_ACCESS_KEY: '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
@@ -111,7 +111,7 @@ jobs:
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant,@decipad/notebook-open-api,@decipad/backend-notebook,@decipad/backend-search'
         run: |
-          export SAM_BUCKET="decipad-newdev-backend-sam"
+          export SAM_BUCKET="decipad-dev-backend-sam"
           export SAM_LOCATION="s3://decipad-dev-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh
 
@@ -144,7 +144,7 @@ jobs:
         uses: decipad/discord-webhook@v5
         with:
           title: "${{ needs.deploy.result == 'success' && '💚' || needs.deploy.result == 'cancelled' &&  '🗑️' || '🔴'}} Deploy PR #${{ github.event.pull_request.number }} ${{github.event.pull_request.title }}"
-          description: 'https://${{  github.event.pull_request.number  }}.staging.decipad.com'
+          description: 'https://${{  github.event.pull_request.number  }}.decipadstaging.com'
           github-token: ${{ secrets.github_token }}
           avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

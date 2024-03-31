@@ -3,7 +3,7 @@ import { once } from '@decipad/utils';
 import { forbidden, notAcceptable } from '@hapi/boom';
 
 const protectedUrlBases = once(
-  () => new Set(['https://dev.decipad.com', 'https://staging.decipad.com'])
+  () => new Set(['https://dev.decipad.com', 'https://decipadstaging.com'])
 );
 
 const allowedDomains = once(

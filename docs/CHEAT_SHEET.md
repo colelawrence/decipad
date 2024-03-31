@@ -6,7 +6,7 @@ jest path/to/test --watch # watch the test continuously running
 
 jest apps/client-e2e/src/pad-markdown.ts # runs a test in the browser (headless)
 PWDEBUG=1 jest apps/client-e2e/src/pad-markdown.ts # runs a test in the browser (headed) pause execution with await page.pause();
- npx playwright codegen https://staging.decipad.com # try out playwright and get some selectors and code for tests
+ npx playwright codegen https://decipadstaging.com # try out playwright and get some selectors and code for tests
 
 nx test language # tests the language
 nx lint language --fix # lints the language

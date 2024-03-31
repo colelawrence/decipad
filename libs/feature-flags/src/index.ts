@@ -102,7 +102,7 @@ export const isFlagEnabled = (flag: Flag): boolean =>
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   (!inE2E &&
     'location' in globalThis &&
-    /localhost|.*staging.decipad.com|.*dev.decipad.com/.test(
+    /localhost|.*decipadstaging.com|.*dev.decipad.com/.test(
       globalThis.location.hostname
     ));
 

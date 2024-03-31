@@ -43,7 +43,7 @@ const configs = {
 module.exports = function algoliaConfig() {
   const algoliaIndexName =
     (typeof window !== 'undefined' &&
-      `docs.${window?.location?.hostname || 'staging.decipad.com'}`) ||
+      `docs.${window?.location?.hostname || 'decipadstaging.com'}`) ||
     defaultIndexName;
   return configs[algoliaIndexName] || configs[defaultIndexName];
 };

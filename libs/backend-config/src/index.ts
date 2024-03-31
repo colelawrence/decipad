@@ -149,10 +149,7 @@ function getEnvironment(base: string): 'localhost' | 'staging' | 'production' {
     return 'localhost';
   }
 
-  if (
-    base.includes('staging.decipad.com') ||
-    base.includes('dev.decipad.com')
-  ) {
+  if (base.includes('decipadstaging.com') || base.includes('dev.decipad.com')) {
     return 'staging';
   }
 

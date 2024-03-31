@@ -25,7 +25,7 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { getEmailDomain, isInternalEmail } from '@decipad/utils';
 
 const isDevOrStaging =
-  app().urlBase.includes('staging.decipad.com') ||
+  app().urlBase.includes('decipadstaging.com') ||
   app().urlBase.includes('dev.decipad.com') ||
   app().urlBase.includes('localhost');
 

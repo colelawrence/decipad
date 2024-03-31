@@ -41,7 +41,7 @@ describe('in production builds', () => {
   it.each([
     'http://localhost:1234',
     'https://dev.decipad.com',
-    'https://staging.decipad.com',
+    'https://decipadstaging.com',
   ])('enables flags if hosted on %s', (host) => {
     mockGetLocation.mockReturnValue(new URL(host));
     expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
