@@ -1,3 +1,5 @@
+import { Node } from 'slate';
+import { useSelected } from 'slate-react';
 import { selectErrorFromResult } from '@decipad/remote-computer';
 import { useAutoConvertToSmartRef } from '@decipad/editor-components';
 import {
@@ -7,9 +9,9 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';
-import { Node } from 'slate';
-import { useSelected } from 'slate-react';
+import { useDeepMemo } from '@decipad/react-utils';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
+import { useCallback } from 'react';
 
 const errorDebounceMs = 500;
 
@@ -35,7 +37,9 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
     >
       <span contentEditable={false}>
         <CodeVariable type={{ kind: 'table-formula' }} showTooltip={false}>
-          {header && Node.string(header)}
+          {useDeepMemo(
+            useCallback(() => header && Node.string(header), [header])
+          )}
         </CodeVariable>{' '}
         ={' '}
       </span>

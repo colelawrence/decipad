@@ -5,7 +5,7 @@ import {
   VariableDropdownElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   useGlobalFindNode,
   usePathMutatorCallback,
@@ -14,6 +14,7 @@ import type { Path } from 'slate';
 import { useCategoriesNames } from '@decipad/react-contexts';
 import { TNode, getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
+import { useDeepMemo } from '@decipad/react-utils';
 
 function FilterForDropdowns(
   el: TNode | undefined
@@ -40,22 +41,24 @@ export const useTableHeaderCellDropdownNames = (
   const categories = useCategoriesNames();
   const globalFindNode = useGlobalFindNode();
 
-  const dropdownNames: Array<ColumnMenuDropdown> = useMemo(() => {
-    if (globalFindNode == null) {
-      return [];
-    }
+  const dropdownNames: Array<ColumnMenuDropdown> = useDeepMemo(
+    useCallback(() => {
+      if (globalFindNode == null) {
+        return [];
+      }
 
-    return categories
-      .map((c) => globalFindNode((el) => el.id === c))
-      .filter(FilterForDropdowns)
-      .map(
-        (el): ColumnMenuDropdown => ({
-          id: el.id,
-          value: getNodeString(el.children[0]),
-          type: (el.children[1].variant as 'string' | 'number') ?? 'string',
-        })
-      );
-  }, [categories, globalFindNode]);
+      return categories
+        .map((c) => globalFindNode((el) => el.id === c))
+        .filter(FilterForDropdowns)
+        .map(
+          (el): ColumnMenuDropdown => ({
+            id: el.id,
+            value: getNodeString(el.children[0]),
+            type: (el.children[1].variant as 'string' | 'number') ?? 'string',
+          })
+        );
+    }, [categories, globalFindNode])
+  );
 
   const mutateDropdownType = usePathMutatorCallback(
     editor,

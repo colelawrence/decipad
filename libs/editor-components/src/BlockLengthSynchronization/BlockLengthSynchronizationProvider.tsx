@@ -47,6 +47,7 @@ export const BlockLengthSynchronizationProvider = ({
   const editorChange$ = useContext(EditorChangeContext);
 
   useEffect(() => {
+    let terminated = false;
     const sub = editorChange$
       .pipe(
         debounceTime(100),
@@ -57,11 +58,19 @@ export const BlockLengthSynchronizationProvider = ({
         combineLatestWith(updatedLength$),
         map(([groups]) =>
           getNewGroupsTargetLengths(groups, measuredLengths.current)
-        )
+        ),
+        distinctUntilChanged((cur, next) => dequal(cur, next))
       )
-      .subscribe(setTargetWidths);
+      .subscribe((newTargetWidths) => {
+        if (!terminated) {
+          setTargetWidths(newTargetWidths);
+        }
+      });
 
-    return () => sub.unsubscribe();
+    return () => {
+      terminated = true;
+      sub.unsubscribe();
+    };
   }, [editor, editorChange$, updatedLength$]);
 
   const setMeasuredLength = useCallback(

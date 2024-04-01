@@ -8,6 +8,7 @@ export * from './useStripe';
 export * from './use-behavior-subject';
 export * from './useActiveElement';
 export * from './useCanUseDom';
+export * from './useDeepMemo';
 export * from './useEventListener';
 export * from './useIntercom';
 export * from './useLocalStorage';

@@ -75,7 +75,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
   readOnly = false,
   isForImportedColumn = false,
   children,
-  dropdownNames = [],
+  dropdownNames,
   isLiveResult = false,
   error,
   ...props

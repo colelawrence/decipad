@@ -1,6 +1,12 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { css } from '@emotion/react';
-import { Children, FC, PropsWithChildren, useContext } from 'react';
+import {
+  Children,
+  FC,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+} from 'react';
 import * as userIcons from '../../../icons/user-icons';
 import {
   IconPopover,
@@ -74,13 +80,18 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   const Icon = userIcons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
+  const onPivotViewButtonPress = useCallback(
+    () => onAddDataViewButtonPress(),
+    [onAddDataViewButtonPress]
+  );
+
   const actions = (
     <>
       {!readOnly && (
         <TextAndIconButton
           text="Pivot view"
           iconPosition="left"
-          onClick={() => onAddDataViewButtonPress()}
+          onClick={onPivotViewButtonPress}
         >
           <TableRows />
         </TextAndIconButton>
