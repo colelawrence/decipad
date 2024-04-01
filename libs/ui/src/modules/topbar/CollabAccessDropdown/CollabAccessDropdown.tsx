@@ -27,7 +27,7 @@ type CollabAccessDropdownProps = {
 
 const HumanReadablePermission: Record<PermissionType, string> = {
   READ: 'reader',
-  WRITE: 'collaborator',
+  WRITE: 'editor',
   ADMIN: 'author',
 };
 
@@ -79,6 +79,14 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       trigger={triggerElement(true)}
     >
       <MenuItem
+        onSelect={onCollaboratorSelected}
+        selected={currentPermission === 'WRITE'}
+        testid="notebook-editor"
+      >
+        <p css={p13Medium}>Notebook editor</p>
+        <p css={dropDownItemStyles}>Can edit only this notebook</p>
+      </MenuItem>
+      <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
         testid="notebook-reader"
@@ -87,14 +95,6 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         <p css={dropDownItemStyles}>
           Can read and interact only with this notebook
         </p>
-      </MenuItem>
-      <MenuItem
-        onSelect={onCollaboratorSelected}
-        selected={currentPermission === 'WRITE'}
-        testid="notebook-editor"
-      >
-        <p css={p13Medium}>Notebook editor</p>
-        <p css={dropDownItemStyles}>Can edit only this notebook</p>
       </MenuItem>
 
       {onRemove && (

@@ -113,11 +113,13 @@ export const triggerStyles = css(p13Medium, {
   border: `1px solid ${cssVar('borderSubdued')}`,
   padding: '8px',
   svg: { width: '16px', height: '16px' },
+  alignItems: 'center',
 });
 
 export const triggerTitleIconStyles = css({
   display: 'flex',
   gap: '4px',
+  alignItems: 'center',
 });
 
 export const publishModeWrapper = css({
@@ -140,7 +142,6 @@ export const publishModeWrapper = css({
 
 export const publishMode = css({
   display: 'flex',
-  alignItems: 'center',
   gap: '12px',
   padding: '8px 12px 8px 8px',
   cursor: 'pointer',

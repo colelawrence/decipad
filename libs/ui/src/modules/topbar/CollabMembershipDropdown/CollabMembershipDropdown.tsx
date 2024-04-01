@@ -39,7 +39,7 @@ const labelStyle = css(p13Medium, {
 
 const HumanReadablePermission: Record<PermissionType, string> = {
   READ: 'reader',
-  WRITE: 'member',
+  WRITE: 'editor',
   ADMIN: 'admin',
 };
 

@@ -577,7 +577,7 @@ test('check collaborator duplicate mulpliple workspaces', async ({
   await test.step('create notebook and invite [randomFreeUser] to collaborate', async () => {
     await testUserNotebook.updateNotebookTitle(notebookTitle);
     notebookURL = testUserPage.url();
-    await testUserNotebook.inviteUser(anotherTestUser.email, 'collaborator');
+    await testUserNotebook.inviteUser(anotherTestUser.email, 'editor');
   });
 
   await test.step('[randomFreeUser] create new workspace to duplicate shared notebook', async () => {

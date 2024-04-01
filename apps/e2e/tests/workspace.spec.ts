@@ -342,10 +342,7 @@ test('reader and collaborator permissions', async ({
 
     await testUser.workspace.newNotebook.click();
     await testUser.notebook.inviteUser(randomFreeUser.email, 'reader');
-    await testUser.notebook.inviteUser(
-      anotherRandomFreeUser.email,
-      'collaborator'
-    );
+    await testUser.notebook.inviteUser(anotherRandomFreeUser.email, 'editor');
     notebook = testUser.page.url();
   });
 

@@ -157,82 +157,85 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
           </S.BasicGap>
         </>
       )}
-      <S.BasicGap>
-        <S.PublishedDate
-          currentSnapshot={currentSnapshot}
-          publishedVersionState={publishedVersionState}
-        />
-        {isAdmin && isPublished && publishedVersionState !== 'up-to-date' && (
-          <div css={S.groupStyles}>
-            <div css={S.horizontalGroupStyles}>
-              <Button
-                size="extraSlim"
-                type={
-                  publishedVersionState === 'first-time-publish'
-                    ? 'primaryBrand'
-                    : 'tertiaryAlt'
-                }
-                onClick={() => onPublish(notebookId)}
-                testId="publish-changes"
-              >
-                <span css={S.publishNewChangesStyles}>
-                  {publishedVersionState === 'unpublished-changes' && !open && (
-                    <Dot noBorder size={8} position="relative" />
-                  )}
-                  {publishedVersionState === 'first-time-publish'
-                    ? 'Publish'
-                    : 'Publish with new changes'}
-                </span>
-              </Button>
-            </div>
-          </div>
-        )}
-        {isPublished && publishedVersionState !== 'first-time-publish' && (
-          <div css={S.groupStyles}>
-            <div css={S.clipboardWrapperStyles}>
-              <div css={S.copyButtonStyles}>
-                <Tooltip
-                  variant="small"
-                  open={copiedPublicStatusVisible}
-                  usePortal={false}
-                  trigger={
-                    <div>
-                      <CopyToClipboard
-                        text={link}
-                        options={{ format: 'text/plain' }}
-                        onCopy={() => {
-                          setCopiedPublicStatusVisible(true);
-                          setTimeout(() => {
-                            setCopiedPublicStatusVisible(false);
-                          }, 1000);
-                          // Analytics
-                          clientEvent({
-                            type: 'action',
-                            action: 'notebook share link copied',
-                          });
-                        }}
-                      >
-                        <button
-                          aria-roledescription="copy url to clipboard"
-                          data-testid="copy-published-link"
-                          css={S.copyInnerButtonStyles}
-                        >
-                          <Link />
-                          <span>Copy</span>
-                        </button>
-                      </CopyToClipboard>
-                    </div>
+      {isPublished && (
+        <S.BasicGap>
+          <S.PublishedDate
+            currentSnapshot={currentSnapshot}
+            publishedVersionState={publishedVersionState}
+          />
+          {isAdmin && publishedVersionState !== 'up-to-date' && (
+            <div css={S.groupStyles}>
+              <div css={S.horizontalGroupStyles}>
+                <Button
+                  size="extraSlim"
+                  type={
+                    publishedVersionState === 'first-time-publish'
+                      ? 'primaryBrand'
+                      : 'tertiaryAlt'
                   }
+                  onClick={() => onPublish(notebookId)}
+                  testId="publish-changes"
                 >
-                  <p>Copied!</p>
-                </Tooltip>
+                  <span css={S.publishNewChangesStyles}>
+                    {publishedVersionState === 'unpublished-changes' &&
+                      !open && <Dot noBorder size={8} position="relative" />}
+                    {publishedVersionState === 'first-time-publish'
+                      ? 'Publish'
+                      : 'Publish with new changes'}
+                  </span>
+                </Button>
               </div>
-
-              <p css={S.padLinkTextStyles}>{link.replace(/https?:\/\//, '')}</p>
             </div>
-          </div>
-        )}
-      </S.BasicGap>
+          )}
+          {publishedVersionState !== 'first-time-publish' && (
+            <div css={S.groupStyles}>
+              <div css={S.clipboardWrapperStyles}>
+                <div css={S.copyButtonStyles}>
+                  <Tooltip
+                    variant="small"
+                    open={copiedPublicStatusVisible}
+                    usePortal={false}
+                    trigger={
+                      <div>
+                        <CopyToClipboard
+                          text={link}
+                          options={{ format: 'text/plain' }}
+                          onCopy={() => {
+                            setCopiedPublicStatusVisible(true);
+                            setTimeout(() => {
+                              setCopiedPublicStatusVisible(false);
+                            }, 1000);
+                            // Analytics
+                            clientEvent({
+                              type: 'action',
+                              action: 'notebook share link copied',
+                            });
+                          }}
+                        >
+                          <button
+                            aria-roledescription="copy url to clipboard"
+                            data-testid="copy-published-link"
+                            css={S.copyInnerButtonStyles}
+                          >
+                            <Link />
+                            <span>Copy</span>
+                          </button>
+                        </CopyToClipboard>
+                      </div>
+                    }
+                  >
+                    <p>Copied!</p>
+                  </Tooltip>
+                </div>
+
+                <p css={S.padLinkTextStyles}>
+                  {link.replace(/https?:\/\//, '')}
+                </p>
+              </div>
+            </div>
+          )}
+        </S.BasicGap>
+      )}
     </div>
   );
 };

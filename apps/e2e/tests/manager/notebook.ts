@@ -1601,10 +1601,10 @@ export class Notebook {
    * **Usage**
    *
    * ```js
-   * await inviteNotebookCollaborator('test-email@gmal.com')
+   * await inviteUser('test-email@gmal.com')
    * ```
    */
-  async inviteUser(email: string, role: 'reader' | 'collaborator') {
+  async inviteUser(email: string, role: 'reader' | 'editor') {
     if (!(await this.publishingSidebar.isVisible())) {
       await this.page.getByRole('button', { name: 'Share' }).click();
     }
@@ -1614,10 +1614,13 @@ export class Notebook {
     await this.page.keyboard.press('Tab');
     await this.page.keyboard.press('Enter');
 
-    if (role === 'reader') {
-      await this.page.getByTestId('notebook-reader').click();
-    } else {
-      await this.page.getByTestId('notebook-editor').click();
+    switch (role) {
+      case 'editor':
+        await this.page.getByTestId('notebook-editor').click();
+        break;
+      case 'reader':
+        await this.page.getByTestId('notebook-reader').click();
+        break;
     }
 
     await this.page.getByTestId('send-invitation').click();
