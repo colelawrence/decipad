@@ -18,15 +18,15 @@ afterEach(() => {
 
 it('disables flags in unknown environments', () => {
   process.env.NODE_ENV = 'unknown';
-  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+  expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
 });
 it('disables flags without an environment', () => {
   process.env.NODE_ENV = undefined;
-  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+  expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
 });
 it.each(['test', 'development'])('enables flags in %s', (nodeEnv) => {
   process.env.NODE_ENV = nodeEnv;
-  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
+  expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
 });
 describe('in production builds', () => {
   beforeEach(() => {
@@ -35,8 +35,8 @@ describe('in production builds', () => {
   const { mockGetLocation } = mockLocation();
 
   it('disables flags', () => {
-    mockGetLocation.mockReturnValue(new URL('https://alpha.decipad.com'));
-    expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+    mockGetLocation.mockReturnValue(new URL('https://app.decipad.com'));
+    expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
   });
   it.each([
     'http://localhost:1234',
@@ -44,7 +44,7 @@ describe('in production builds', () => {
     'https://decipadstaging.com',
   ])('enables flags if hosted on %s', (host) => {
     mockGetLocation.mockReturnValue(new URL(host));
-    expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
+    expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
   });
 });
 
@@ -55,24 +55,24 @@ describe('in test', () => {
 
   describe('disable', () => {
     it('disables a flag', () => {
-      disable('FEATURE_FLAG_SWITCHER');
-      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+      disable('DEVELOPER_TOOLBAR');
+      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
     });
 
     it('changes the overrides identity', () => {
       const prevOverrides = getOverrides();
-      disable('FEATURE_FLAG_SWITCHER');
+      disable('DEVELOPER_TOOLBAR');
       expect(getOverrides()).not.toBe(prevOverrides);
     });
   });
 
   describe('reset', () => {
     it('undoes disable', () => {
-      disable('FEATURE_FLAG_SWITCHER');
-      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+      disable('DEVELOPER_TOOLBAR');
+      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
 
       reset();
-      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
+      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
     });
 
     it('changes the overrides identity', () => {
@@ -84,12 +84,12 @@ describe('in test', () => {
 
   describe('the Jest environment configuration', () => {
     test('[leaves a modified state]', () => {
-      disable('FEATURE_FLAG_SWITCHER');
-      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
+      disable('DEVELOPER_TOOLBAR');
+      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
     });
 
     it('automatically resets between tests', () => {
-      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
+      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
     });
   });
 

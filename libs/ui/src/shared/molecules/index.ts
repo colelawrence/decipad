@@ -6,7 +6,7 @@ export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
 export { Dialog } from './Dialog/Dialog';
 export { DropdownOption } from './DropdownOption/DropdownOption';
-export { FeatureFlagsSwitcher } from './FeatureFlagsSwitcher/FeatureFlagsSwitcher';
+
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
 export { IconPopover } from './IconPopover/IconPopover';
 export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/ImportTableFirstRowControls';

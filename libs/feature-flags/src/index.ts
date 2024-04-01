@@ -3,7 +3,7 @@ export const availableFlags = [
   'COPY_HREF',
   // allows the user to download a chart as a PNG image
   'DOWNLOAD_CHART',
-  'FEATURE_FLAG_SWITCHER',
+  'DEVELOPER_TOOLBAR',
   'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
   'ALTERNATE_ROTATION_DATA_VIEW',

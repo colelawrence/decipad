@@ -5,3 +5,4 @@ export * from './sidebar';
 export * from './topbar';
 export * from './assistant';
 export * from './annotations';
+export * from './toolbar';

@@ -1,7 +1,7 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
 import { notebooks, onboard, playground, workspaces } from '@decipad/routing';
-import { FeatureFlagsSwitcher } from '@decipad/ui';
+import { Toolbar } from '@decipad/ui';
 import { useMemo, type FC } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
@@ -98,8 +98,8 @@ export const App: FC = () => {
       {/* Feature flagging the feature flag switcher makes it unreacheable in
       production, even if you press the shortcut, unless you know how */}
       {canUseDom &&
-        isFlagEnabled('FEATURE_FLAG_SWITCHER') &&
-        createPortal(<FeatureFlagsSwitcher />, document.body)}
+        isFlagEnabled('DEVELOPER_TOOLBAR') &&
+        createPortal(<Toolbar />, document.getElementById('root')!)}
     </>
   );
 };

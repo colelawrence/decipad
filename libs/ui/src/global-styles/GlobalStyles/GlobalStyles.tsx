@@ -258,6 +258,12 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
 
           backgroundColor: cssVar('backgroundMain'),
         },
+        'body.css-debug *': {
+          outline: '1px solid red !important',
+          '&:hover': {
+            outline: '2px solid blue !important',
+          },
+        },
         'button, [type="button"], [type="reset"], [type="submit"]': {
           WebkitAppearance: 'none',
         },
