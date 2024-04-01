@@ -1,3 +1,4 @@
+import { NotebookMetaDataFragment } from '@decipad/graphql-client';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { MenuList } from '../../../shared/molecules';
 import {
@@ -10,6 +11,8 @@ import {
   MenuItem,
   TriggerMenuItem,
 } from '../../../shared/atoms';
+import { p12Regular } from '../../../primitives';
+import styled from '@emotion/styled';
 import {
   DropdownRootMenuListProps,
   MenuItemMenuListProps,
@@ -21,6 +24,7 @@ export interface NotebookStatusDropdownProps {
   readonly trigger?: ReactNode;
 
   readonly onChangeStatus: (status: TColorStatus) => void;
+  readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
 }
 
 /**
@@ -31,6 +35,7 @@ export const NotebookStatusDropdown: FC<NotebookStatusDropdownProps> = ({
   status,
   trigger,
   onChangeStatus,
+  permissionType,
 }) => {
   const [statusOpen, setStatusOpen] = useState(false);
 
@@ -62,19 +67,31 @@ export const NotebookStatusDropdown: FC<NotebookStatusDropdownProps> = ({
       open={statusOpen}
       onChangeOpen={setStatusOpen}
     >
-      {AvailableColorStatus.map((label) => (
-        <MenuItem
-          key={label}
-          icon={<ColorStatusCircle name={label} />}
-          onSelect={() => {
-            onChangeStatus(label as TColorStatus);
-            setStatusOpen(!statusOpen);
-          }}
-          selected={status === label}
-        >
-          <span>{ColorStatusNames[label]}</span>
-        </MenuItem>
-      ))}
+      {permissionType === 'READ' && (
+        <ReaderInfo>
+          As a Reader, you can not change Notebook status.
+        </ReaderInfo>
+      )}
+      {permissionType !== 'READ' &&
+        AvailableColorStatus.map((label) => (
+          <MenuItem
+            key={label}
+            icon={<ColorStatusCircle name={label} />}
+            onSelect={() => {
+              onChangeStatus(label as TColorStatus);
+              setStatusOpen(!statusOpen);
+            }}
+            selected={status === label}
+          >
+            <span>{ColorStatusNames[label]}</span>
+          </MenuItem>
+        ))}
     </MenuList>
   );
 };
+
+const ReaderInfo = styled.li(p12Regular, {
+  padding: '4px 8px',
+  width: '152px',
+  listStyle: 'none',
+});

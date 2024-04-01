@@ -43,7 +43,11 @@ const args: ComponentProps<typeof NotebookTopbar> = {
         </div>
       }
       notebookStatus={
-        <NotebookStatusDropdown status="done" onChangeStatus={() => {}} />
+        <NotebookStatusDropdown
+          status="done"
+          onChangeStatus={() => {}}
+          permissionType={undefined}
+        />
       }
       actions={{
         onChangeStatus: () => {},

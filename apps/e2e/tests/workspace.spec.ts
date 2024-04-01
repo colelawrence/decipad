@@ -393,3 +393,67 @@ test('reader and collaborator permissions', async ({
     );
   });
 });
+
+test('workspace reader checks @workspace @roles', async ({
+  testUser,
+  randomFreeUser,
+}) => {
+  await testUser.goToWorkspace();
+  await testUser.workspace.newWorkspaceWithPlan('team');
+  const teamWorkspaceURL = testUser.page.url();
+
+  await testUser.workspace.checkWorkspaceMember(testUser.email);
+  await testUser.workspace.addWorkspaceMember(randomFreeUser.email, 'Reader');
+  await testUser.workspace.createNewNotebook();
+  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.waitForEditorToLoad();
+
+  await test.step('standard member checks', async () => {
+    await randomFreeUser.page.goto(teamWorkspaceURL);
+    await randomFreeUser.workspace.waitWorkspaceLoad();
+    await expect(
+      randomFreeUser.workspace.settingsSection,
+      'workspace readers shoudnt be able to access workspace settings'
+    ).toBeHidden();
+    await expect(
+      randomFreeUser.page.getByTestId('my-archive'),
+      'workspace readers shoudnt be able to  access workspace archive'
+    ).toBeHidden();
+    await randomFreeUser.page.getByTestId('list-notebook-options').click();
+    await expect(
+      randomFreeUser.page.getByText(
+        'As a Reader, you can not download or copy this notebook.'
+      ),
+      'workspace readers shoudnt be able to notebook options menu'
+    ).toBeVisible();
+    await randomFreeUser.page.keyboard.press('Escape');
+    await randomFreeUser.page.getByTestId('notebook-state').click();
+    await expect(
+      randomFreeUser.page.getByText(
+        'As a Reader, you can not change Notebook status.'
+      ),
+      'workspace readers shoudnt be able to access notebook options menu'
+    ).toBeVisible();
+    await randomFreeUser.page.keyboard.press('Escape');
+
+    await randomFreeUser.page.getByText('Welcome to Decipad').click();
+
+    // For some reason, right now, users invited to be readers on a
+    // notebook can open the notebook options menu, adding some checks to prevent escalation of privileges
+    await randomFreeUser.notebook.notebookActions.click();
+    await expect(
+      randomFreeUser.page.getByText(
+        'As a Reader, you can not download or copy this notebook.'
+      ),
+      'workspace readers shoudnt be able to access notebook options menu'
+    ).toBeVisible();
+    await expect(
+      randomFreeUser.notebook.changeStatusMenu,
+      "user invited to be notebook reader can't acces change notebook status menu"
+    ).toBeHidden();
+    await expect(
+      randomFreeUser.notebook.archiveNotebook,
+      "user invited to be notebook reader can't access notebook archive menu"
+    ).toBeHidden();
+  });
+});

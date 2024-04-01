@@ -151,6 +151,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
             <NotebookStatusDropdown
               status={(data?.status ?? 'Draft') as TColorStatus}
               onChangeStatus={(s) => actions.onChangeStatus(notebookId, s)}
+              permissionType={data?.myPermissionType}
             />
           }
           actions={actions}

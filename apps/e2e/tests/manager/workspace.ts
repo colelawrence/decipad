@@ -69,6 +69,10 @@ export class Workspace {
     return this.page.url();
   }
 
+  async waitWorkspaceLoad() {
+    await expect(this.workspaceHeroName).toBeVisible();
+  }
+
   async createNewNotebook() {
     await this.newNotebook.waitFor();
     await this.newNotebook.click();
@@ -379,15 +383,25 @@ export class Workspace {
    * @param email - email of user to add
    * @param role - role of user to add
    */
-  async addWorkspaceMember(email: string, role: 'Admin' | 'Member' = 'Member') {
+  async addWorkspaceMember(
+    email: string,
+    role: 'Admin' | 'Editor' | 'Reader' = 'Editor'
+  ) {
     await this.openWorkspaceSettingsSection();
     await this.page.getByTestId('manage-workspace-members').click();
     await this.page.locator('input[type="email"]').fill(email);
 
-    if (role === 'Admin') {
-      await this.page.getByTestId('text-icon-button:editor').first().click();
-      await this.page.getByTestId('collab-member-admin').click();
+    switch (role) {
+      case 'Admin':
+        await this.page.getByTestId('text-icon-button:editor').first().click();
+        await this.page.getByTestId('collab-member-admin').click();
+        break;
+      case 'Reader':
+        await this.page.getByTestId('text-icon-button:editor').first().click();
+        await this.page.getByTestId('collab-member-reader').click();
+        break;
     }
+
     await this.page.getByText('Send invitation').click();
     await expect(async () => {
       await this.page.getByTestId('closable-modal').click();

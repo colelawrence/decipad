@@ -59,7 +59,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   onDuplicate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const disableActions = permissionType == null || permissionType === 'READ';
 
   return (
     <div css={menuActionsStyles}>
@@ -70,10 +69,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         side="bottom"
         sideOffset={10}
         open={isOpen}
-        onChangeOpen={(o) => {
-          if (disableActions) return;
-          setIsOpen(o);
-        }}
+        onChangeOpen={setIsOpen}
         trigger={trigger}
       >
         {permissionType === 'READ' && (
@@ -114,7 +110,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
               <MinDiv>Duplicate</MinDiv>
             </MenuItem>
           ))}
-        {notebookStatus && notebookStatus}
+        {permissionType !== 'READ' && notebookStatus && <>{notebookStatus}</>}
         {permissionType === 'ADMIN' && workspaces.length > 1 && (
           <MenuList
             itemTrigger={

@@ -76,6 +76,7 @@ export const DashboardSidebar = ({
   }, [workspaces, getPlanCurried, workspaceId]);
 
   const showAdminSettings = activeWorkspace.myPermissionType === 'ADMIN';
+  const showArchive = activeWorkspace.myPermissionType !== 'READ';
 
   const SELECTED_WORKSPACE_KEY = 'selectedWorkspace';
 
@@ -146,6 +147,7 @@ export const DashboardSidebar = ({
                   {...props}
                   activeWorkspace={activeWorkspace}
                   showAdminSettings={showAdminSettings}
+                  showArchive={showArchive}
                 />
                 <Styled.Separator />
                 <WorkspaceAccount />
@@ -179,6 +181,7 @@ export const DashboardSidebar = ({
         {...props}
         activeWorkspace={activeWorkspace}
         showAdminSettings={showAdminSettings}
+        showArchive={showArchive}
       />
       <Styled.Separator />
       <WorkspaceAccount />

@@ -29,6 +29,7 @@ export class Notebook {
   readonly notebookIconButton: Locator;
   readonly notebookHelpButton: Locator;
   readonly archiveNotebook: Locator;
+  readonly changeStatusMenu: Locator;
   readonly downloadNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
@@ -66,6 +67,9 @@ export class Notebook {
     this.resultWidget = page.getByTestId('result-widget');
     this.republishNotification = page.getByTestId('publish-notification');
     this.publishingSidebar = page.getByTestId('publishing-sidebar');
+    this.changeStatusMenu = page.getByRole('menuitem', {
+      name: 'Change Status',
+    });
   }
 
   /**
@@ -1473,12 +1477,10 @@ export class Notebook {
    */
   async changeStatus(newSatus: 'Draft' | 'Review' | 'Approval' | 'Done') {
     await this.notebookActions.click();
-    await this.page.getByRole('menuitem', { name: 'Change Status' }).click();
+    await this.changeStatusMenu.click();
     await this.page.getByRole('menuitem', { name: newSatus }).click();
     // check menu closed
-    await expect(
-      this.page.getByRole('menuitem', { name: 'Change Status' })
-    ).toBeHidden();
+    await expect(this.changeStatusMenu).toBeHidden();
   }
   /**
    * Achive notebook using options menu.

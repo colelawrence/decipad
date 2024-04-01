@@ -45,6 +45,7 @@ import * as Styled from './styles';
 interface WorkspaceNavigationProps {
   readonly activeWorkspace: DashboardWorkspaceFragment;
   readonly showAdminSettings: boolean;
+  readonly showArchive: boolean;
   readonly onDeleteSection: (sectionId: string) => void;
   readonly onCreateSection: (
     record: SectionRecord
@@ -60,6 +61,7 @@ export const WorkspaceNavigation = ({
   onCreateSection,
   onUpdateSection,
   showAdminSettings = false,
+  showArchive = true,
   onShowFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
   const activeWorkspaceRoute = workspaces({}).workspace({
@@ -277,17 +279,19 @@ export const WorkspaceNavigation = ({
             <Styled.TextWrapper>Shared with me</Styled.TextWrapper>
           </Styled.ItemWrapper>
         </NavigationItem>
-        <NavigationItem
-          href={activeWorkspaceRoute.archived({}).$}
-          key="archieved"
-        >
-          <Styled.ItemWrapper data-testid="my-archive">
-            <Styled.IconWrapper>
-              <Archive />
-            </Styled.IconWrapper>
-            <Styled.TextWrapper>Archived</Styled.TextWrapper>
-          </Styled.ItemWrapper>
-        </NavigationItem>
+        {showArchive && (
+          <NavigationItem
+            href={activeWorkspaceRoute.archived({}).$}
+            key="archieved"
+          >
+            <Styled.ItemWrapper data-testid="my-archive">
+              <Styled.IconWrapper>
+                <Archive />
+              </Styled.IconWrapper>
+              <Styled.TextWrapper>Archived</Styled.TextWrapper>
+            </Styled.ItemWrapper>
+          </NavigationItem>
+        )}
       </NavigationList>
       <NavigationList>
         <NavigationItem

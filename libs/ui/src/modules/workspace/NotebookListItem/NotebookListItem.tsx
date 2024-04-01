@@ -200,6 +200,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               status={status}
               isPublic={Boolean(isPublic)}
               onChangeStatus={changeStatus}
+              permissionType={permissionType}
               section={section}
               isArchived={isArchived}
             />
@@ -207,7 +208,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               permissionType={permissionType}
               onDuplicate={onDuplicate}
               trigger={
-                <div css={mainIconWrapper}>
+                <div css={mainIconWrapper} data-testid="list-notebook-options">
                   <Ellipsis />
                 </div>
               }
