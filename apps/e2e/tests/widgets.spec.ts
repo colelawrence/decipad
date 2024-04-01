@@ -330,49 +330,39 @@ test('result widget', async ({ testUser }) => {
 
   await test.step('shows the available calculations', async () => {
     await notebook.focusOnBody();
-    await notebook.addAdvancedFormula('Hello = 5 + 1');
-    await notebook.addAdvancedFormula('World = 5 + 3');
-
-    await page.getByTestId('result-widget').click();
-
-    await expect(
-      page.locator('[aria-roledescription="dropdownOption"]').getByText('Hello')
-    ).toBeVisible();
-    await expect(
-      page.locator('[aria-roledescription="dropdownOption"]').getByText('World')
-    ).toBeVisible();
+    await notebook.addAdvancedFormula('Hello = $5 + $1');
+    await notebook.addAdvancedFormula('World = $5 + $3.33333');
+    await notebook.addAdvancedFormula('Bye = $8');
+    await notebook.resultWidget.click();
+    await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
   });
 
-  await test.step('shows the result of a calculation', async () => {
-    await page
-      .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('Hello')
-      .click();
-
-    await expect(
-      page.getByTestId('result-widget').getByText('6')
-    ).toBeVisible();
+  await test.step('shows correct result of a variable', async () => {
+    await notebook.selectDropdownOption('Bye');
+    await expect(await notebook.getResultWidgetValue('Bye')).toBe('$8');
   });
 
   await test.step('updates the result when calculation changes', async () => {
-    await page.getByText('Hello = 5 + 1').click();
+    await page.getByText('Bye = $8').click();
     await ControlPlus(page, 'a');
     await page.keyboard.press('ArrowRight');
     await page.keyboard.type(' + 4');
 
-    await expect(
-      page.getByTestId('result-widget').getByText('10')
-    ).toBeVisible();
+    await expect(async () => {
+      await expect(await notebook.getResultWidgetValue('Bye')).toBe('$12');
+    }).toPass();
   });
 
   await test.step('doesnt show tables nor formulas on widget dropdown', async () => {
     await notebook.addAdvancedFormula('table = { hello = [1, 2, 3] }');
     await notebook.addAdvancedFormula('f(x) = x + 10');
 
-    await page.getByTestId('result-widget').click();
-    // only one different variable available
-    await expect(
-      page.locator('[aria-roledescription="dropdownOption"]')
-    ).toHaveCount(2);
+    await notebook.resultWidget.click();
+    // make sure formulas and table names weren't added to result widget
+    await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
+  });
+
+  await test.step('check displayed option is selected', async () => {
+    await notebook.checkDropdownOptionIsSelected('Bye');
   });
 });

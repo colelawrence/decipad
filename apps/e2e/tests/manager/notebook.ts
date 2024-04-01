@@ -32,6 +32,7 @@ export class Notebook {
   readonly downloadNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
+  readonly resultWidget: Locator;
   readonly topRightDuplicateNotebook: Locator;
   readonly republishNotification: Locator;
   readonly publishingSidebar: Locator;
@@ -62,6 +63,7 @@ export class Notebook {
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
       name: 'Folder Open Unarchive',
     });
+    this.resultWidget = page.getByTestId('result-widget');
     this.republishNotification = page.getByTestId('publish-notification');
     this.publishingSidebar = page.getByTestId('publishing-sidebar');
   }
@@ -861,10 +863,83 @@ export class Notebook {
     const dropdownOptionsArray: string[] = [];
     for (const tabElement of await this.page
       .getByTestId('dropdown-option')
-      .all())
+      .all()) {
       dropdownOptionsArray.push(await tabElement.innerText());
+    }
 
     return dropdownOptionsArray;
+  }
+
+  /**
+   * Check Dropdown option is selected.
+   *
+   * This is a hacky solution since current dropdown aren't using the [selected attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.checkDropdownOptionIsSelected('Hello')
+   * ```
+   */
+  async checkDropdownOptionIsSelected(option: string) {
+    await expect(
+      this.page.getByTestId('dropdown-option').filter({ hasText: option }),
+      `Dropdown did't have "${option}" selected`
+    ).toHaveCSS('background-color', 'rgb(245, 247, 250)');
+  }
+
+  /**
+   * Validate Dropdown options without caring for display order.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.checkDropdownOptions()
+   * ```
+   * **Example**
+   *
+   * ```js
+   *  await notebook.checkDropdownOptions(['Hello', 'World']);
+   * ```
+   */
+  async checkDropdownOptions(options: string[]) {
+    const dropdownOptionsArray = await this.getDropdownOptions();
+    // make sure all the dropdown options are displayed and don't care about its order, the lenght should also be the same.
+    expect(dropdownOptionsArray).toEqual(expect.arrayContaining(options));
+    expect(dropdownOptionsArray.length).toEqual(options.length);
+  }
+
+  /**
+   * Select Dropdown Option
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.selectDropdownOption()
+   * ```
+   */
+  async selectDropdownOption(option: string) {
+    this.page
+      .getByTestId('dropdown-option')
+      .filter({ hasText: option })
+      .click();
+  }
+
+  /**
+   * Get Result Widget Display Value Option
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.getResultWidgetValue('Hello')
+   * ```
+   */
+  async getResultWidgetValue(widgetName: string) {
+    return this.page
+      .getByTestId('widget-editor')
+      .filter({ hasText: widgetName })
+      .getByTestId('result-widget')
+      .innerText();
   }
 
   /**
