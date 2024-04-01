@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: 📋 Lint & Typecheck
     timeout-minutes: 45
     runs-on: ubuntu-latest
     concurrency:
@@ -25,16 +26,31 @@ jobs:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v4
 
+      - name: Cache Yarn dependencies and Node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: yarn
 
-      - name: Install
+      - name: Check if node_modules is cached
+        id: cache-check
+        run: |
+          if [ -d "node_modules" ]; then
+            echo "restored=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install Dependencies
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
         run: yarn install --ignore-engines
+        if: steps.cache-check.outputs.restored != 'true'
 
       - name: Lint
         run:
