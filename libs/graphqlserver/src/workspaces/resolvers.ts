@@ -111,7 +111,7 @@ function WorkspaceRecordToWorkspace(
 
 function isLocalOrDev(): boolean {
   const url = process.env.DECI_APP_URL_BASE;
-  const stagingRegex = /^https:\/\/\d{4}\.staging\.decipad\.com/;
+  const stagingRegex = /^https:\/\/\d+\.decipadstaging\.com/;
 
   return (
     url == null ||
