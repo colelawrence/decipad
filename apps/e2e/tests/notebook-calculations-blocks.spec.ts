@@ -32,6 +32,9 @@ test.describe('structured input and calculations @calculation-blocks', () => {
         .getByTestId('autocomplete-group:Variables')
         .getByText('MyVar')
         .waitFor();
+      await expect(
+        page.getByTestId('code-line').last().getByTestId('number-result:2 Mies')
+      ).toBeVisible();
       await snapshot(page as Page, 'Auto Complete Menu: Open');
     });
 
