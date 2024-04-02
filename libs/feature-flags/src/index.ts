@@ -26,6 +26,8 @@ export const availableFlags = [
   // because we need it easily test stuff by creating workspaces.
   'ALLOW_CREATE_NEW_WORKSPACE',
   'ENABLE_COMMENTS',
+  // Data views filtering
+  'DATA_VIEWS_FILTER',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
