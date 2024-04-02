@@ -31,7 +31,6 @@ import {
   serializeCellText,
 } from './serializeCellText';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
   const { cellProps, value, onChange, onConfirm, onCancel } = props;
@@ -210,17 +209,15 @@ const CellInput = ({
   const [editor] = useState(() => {
     const plugins = [createCellEditorInputPlugin(computer)];
 
-    if (isFlagEnabled('VARIABLES_IN_TABLES')) {
-      plugins.push(
-        createAutoCompleteMenuPlugin({
-          options: {
-            mode: 'tableCell',
-          },
-        })
-      );
+    plugins.push(
+      createAutoCompleteMenuPlugin({
+        options: {
+          mode: 'tableCell',
+        },
+      })
+    );
 
-      plugins.push(createSmartRefPlugin());
-    }
+    plugins.push(createSmartRefPlugin());
 
     return createPlateEditor<CellInputValue>({
       plugins,

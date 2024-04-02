@@ -25,8 +25,6 @@ export const availableFlags = [
   // This will not be enabled in production but must remain a feature flag
   // because we need it easily test stuff by creating workspaces.
   'ALLOW_CREATE_NEW_WORKSPACE',
-
-  'VARIABLES_IN_TABLES',
   'ENABLE_COMMENTS',
 ] as const;
 
