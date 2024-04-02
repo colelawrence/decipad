@@ -329,14 +329,14 @@ test('workspace permissions @workspace', async ({
   });
 });
 
-test('reader and collaborator permissions', async ({
+test('notebook reader and editor permissions', async ({
   testUser,
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
   let notebook: string;
 
-  await test.step('invite reader and collaborator to notebook', async () => {
+  await test.step('invite reader and editor to notebook', async () => {
     await testUser.goToWorkspace();
     await testUser.workspace.newWorkspaceWithPlan('team');
 
@@ -454,6 +454,30 @@ test('workspace reader checks @workspace @roles', async ({
     await expect(
       randomFreeUser.notebook.archiveNotebook,
       "user invited to be notebook reader can't access notebook archive menu"
+    ).toBeHidden();
+  });
+});
+
+test('workspace editor checks @workspace @roles', async ({
+  testUser,
+  randomFreeUser,
+}) => {
+  await testUser.goToWorkspace();
+  await testUser.workspace.newWorkspaceWithPlan('team');
+  const teamWorkspaceURL = testUser.page.url();
+
+  await testUser.workspace.checkWorkspaceMember(testUser.email);
+  await testUser.workspace.addWorkspaceMember(randomFreeUser.email, 'Editor');
+  await testUser.workspace.createNewNotebook();
+  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.waitForEditorToLoad();
+
+  await test.step('standard editor member checks', async () => {
+    await randomFreeUser.page.goto(teamWorkspaceURL);
+    await randomFreeUser.workspace.waitWorkspaceLoad();
+    await expect(
+      randomFreeUser.workspace.settingsSection,
+      'workspace editors shoudnt be able to access workspace settings'
     ).toBeHidden();
   });
 });
