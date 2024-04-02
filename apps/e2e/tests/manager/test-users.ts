@@ -122,6 +122,7 @@ export class User {
       throw new Error(resp.errors[0].message);
     }
     const notebookId = resp.data.importPad.id;
+
     await this.navigateToNotebook(notebookId);
     return notebookId;
   }

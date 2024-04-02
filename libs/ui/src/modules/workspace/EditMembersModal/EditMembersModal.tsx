@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import {
-  DashboardWorkspaceFragment,
+  ShallowWorkspaceFragment,
   UserAccessMetaFragment,
 } from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
@@ -11,7 +11,7 @@ import { WorkspaceMembers } from '../WorkspaceMembers/WorkspaceMembers';
 
 type EditWorkspaceModalProps = {
   readonly onClose: () => void;
-  readonly currentWorkspace: DashboardWorkspaceFragment;
+  readonly currentWorkspace: ShallowWorkspaceFragment;
 };
 
 export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({

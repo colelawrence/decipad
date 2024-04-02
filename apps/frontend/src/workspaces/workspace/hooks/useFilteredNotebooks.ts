@@ -23,7 +23,7 @@ export function useFilteredNotebooks(
       case 'shared':
         return sharedNotebooks;
       case 'section':
-        return notebooks.filter((n) => n.section?.id === params.sectionId);
+        return notebooks.filter((n) => n.sectionId === params.sectionId);
       default:
         return [];
     }

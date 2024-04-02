@@ -1,26 +1,7 @@
-fragment WorkspaceNotebook on Pad {
-  id
-  name
-  icon
-  status
-  createdAt
-  archived
-  isPublic
-  sectionId
-  section {
-    id
-    name
-  }
-  myPermissionType
-}
-
 fragment WorkspaceSection on Section {
   id
   name
   color
-  pads {
-    ...WorkspaceNotebook
-  }
   createdAt
 }
 
@@ -60,37 +41,6 @@ fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
   quotaLimit
 }
 
-fragment DashboardWorkspace on Workspace {
-  id
-  name
-  isPremium
-  plan
-  createdAt
-  myPermissionType
-  pads(page: { maxItems: 10000 }) {
-    items {
-      ...WorkspaceNotebook
-    }
-  }
-  workspaceSubscription {
-    ...WorkspaceSubscriptionWithData
-  }
-  workspaceExecutedQuery {
-    ...WorkspaceExecutedQueryData
-  }
-  membersCount
-  sections {
-    ...WorkspaceSection
-  }
-  ...WorkspaceMembers
-  resourceUsages {
-    id
-    resourceType
-    consumption
-    originalAmount
-  }
-}
-
 fragment ShallowWorkspace on Workspace {
   id
   name
@@ -112,7 +62,9 @@ fragment ShallowWorkspace on Workspace {
     id
     resourceType
     consumption
+    originalAmount
   }
+  myPermissionType
 }
 
 query GetWorkspacesWithoutNotebooks {
@@ -121,9 +73,9 @@ query GetWorkspacesWithoutNotebooks {
   }
 }
 
-query GetWorkspacesWithNotebooks {
+query GetWorkspacesWithSharedNotebooks {
   workspaces {
-    ...DashboardWorkspace
+    ...ShallowWorkspace
   }
 
   padsSharedWithMe(page: { maxItems: 10000 }) {

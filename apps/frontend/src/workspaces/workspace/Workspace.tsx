@@ -5,7 +5,7 @@ import {
   useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
   useGetSubscriptionsPlansQuery,
-  useGetWorkspacesWithNotebooksQuery,
+  useGetWorkspacesWithSharedNotebooksQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
@@ -23,6 +23,7 @@ import {
   EditUserModal,
   EditWorkspaceModal,
   LoadingLogo,
+  NotebookListPlaceholder,
   PaywallModal,
   WorkspaceHero,
 } from '@decipad/ui';
@@ -47,10 +48,10 @@ import {
 } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
-import { NotebookList } from './NotebookList';
 import { initNewDocument } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { NotebookList } from './NotebookList';
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
@@ -79,7 +80,7 @@ const Workspace: FC = () => {
   const { data: session } = useSession();
   const toast = useToast();
 
-  const [result] = useGetWorkspacesWithNotebooksQuery();
+  const [result] = useGetWorkspacesWithSharedNotebooksQuery();
 
   const createNotebook = useMutationResultHandler(
     useCreateNotebookMutation()[1],
@@ -341,19 +342,25 @@ const Workspace: FC = () => {
                     membersHref={currentWorkspaceRoute.members({}).$}
                     creditsHref={currentWorkspaceRoute.addcredits({}).$}
                   />
-                  <NotebookList
-                    pageType={pageInfo}
-                    notebooks={currentWorkspace.pads.items}
-                    sharedNotebooks={workspaceData.padsSharedWithMe.items}
-                    workspaces={allWorkspaces}
-                    onImport={(source) =>
-                      importNotebook({
-                        workspaceId: currentWorkspace.id,
-                        source,
-                      })
-                    }
-                    workspaceId={currentWorkspace.id}
-                  />
+                  <Frame
+                    Heading="h1"
+                    title={null}
+                    suspenseFallback={<NotebookListPlaceholder />}
+                  >
+                    <NotebookList
+                      pageType={pageInfo}
+                      sharedNotebooks={workspaceData.padsSharedWithMe.items}
+                      workspaces={allWorkspaces}
+                      sections={currentWorkspace.sections}
+                      onImport={(source) =>
+                        importNotebook({
+                          workspaceId: currentWorkspace.id,
+                          source,
+                        })
+                      }
+                      workspaceId={currentWorkspace.id}
+                    />
+                  </Frame>
                 </>
               </Dashboard>
               <Outlet />

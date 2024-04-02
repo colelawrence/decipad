@@ -10,7 +10,7 @@ export const horizontalPadding = viewportCalc(
   'px',
   'vw'
 );
-export const verticalPadding = '26px';
+export const verticalPadding = '4px';
 
 export const gridStyles: CSSObject = {
   width: '100%',

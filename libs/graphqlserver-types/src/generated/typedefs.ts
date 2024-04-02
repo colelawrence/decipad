@@ -386,7 +386,8 @@ extend type Mutation {
   removePad(id: ID!): Boolean
   duplicatePad(id: ID!, targetWorkspace: ID!, document: String): Pad!
   importPad(workspaceId: ID!, source: String!): Pad!
-  movePad(id: ID!, workspaceId: ID!): Pad!
+  # fromWorkspaceId is only used for caching purposes.
+  movePad(id: ID!, workspaceId: ID!, fromWorkspaceId: ID): Pad!
 
   setPadPublic(id: ID!, publishState: PUBLISH_STATE!): Boolean!
 

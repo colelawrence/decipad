@@ -156,9 +156,9 @@ export function useNotebookMetaActions(
   const onMoveToWorkspace = useCallback<
     NotebookMetaActionsReturn['onMoveToWorkspace']
   >(
-    (notebookId, workspaceId) => {
+    (notebookId, workspaceId, fromWorkspaceId) => {
       toast('Successfully moved notebook!', 'info');
-      moveNotebook({ id: notebookId, workspaceId });
+      moveNotebook({ id: notebookId, workspaceId, fromWorkspaceId });
     },
     [moveNotebook, toast]
   );
@@ -191,10 +191,10 @@ export function useNotebookMetaActions(
   const onDuplicateNotebook = useCallback<
     NotebookMetaActionsReturn['onDuplicateNotebook']
   >(
-    async (notebookId, navigateToNotebook, workspaceId) => {
+    async (notebookId, workspaceId, navigateToNotebook) => {
       const res = await duplicateNotebook({
         id: notebookId,
-        targetWorkspace: workspaceId ?? '',
+        targetWorkspace: workspaceId,
       });
 
       if (res.error || !res.data?.duplicatePad) {

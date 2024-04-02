@@ -2,7 +2,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CreateSectionMutation,
-  DashboardWorkspaceFragment,
+  ShallowWorkspaceFragment,
 } from '@decipad/graphql-client';
 
 import { smallScreenQuery } from '../../../primitives';
@@ -26,7 +26,7 @@ import { workspaces as workspaceRouting } from '@decipad/routing';
 type DashboardSidebarProps = {
   readonly name: string | undefined;
   readonly email: string | undefined;
-  readonly workspaces: Array<DashboardWorkspaceFragment>;
+  readonly workspaces: Array<ShallowWorkspaceFragment>;
   readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onNavigateWorkspace: (id: string) => void;
@@ -43,7 +43,7 @@ type DashboardSidebarProps = {
 
 const getPlanTitle =
   (stripePlans: ReturnType<typeof useStripePlans>) =>
-  (workspace: DashboardWorkspaceFragment): string => {
+  (workspace: ShallowWorkspaceFragment): string => {
     const title = stripePlans.find((p) => p?.key === workspace.plan);
 
     return title?.title ?? 'Free';
@@ -65,7 +65,7 @@ export const DashboardSidebar = ({
   const getPlanCurried = useMemo(() => getPlanTitle(plans), [plans]);
 
   const [activeWorkspace, planTitle] = useMemo((): [
-    DashboardWorkspaceFragment,
+    ShallowWorkspaceFragment,
     string
   ] => {
     const ws =

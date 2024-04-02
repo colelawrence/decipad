@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { DocSyncEditor } from '@decipad/docsync';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useNotebookMetaActions } from '../../hooks';
 import {
@@ -110,7 +110,14 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
   const clientEvent = useContext(ClientEventsContext);
 
   const data = meta.data?.getPadById;
+
   const userWorkspaces = meta.data?.workspaces ?? [];
+
+  // prepping functionality to choose a workspace to duplicate to
+  const workspaceForDuplicate = useMemo(
+    () => meta.data?.workspaces[0]?.id,
+    [meta.data?.workspaces]
+  );
 
   const { status: sessionStatus } = useSession();
 
@@ -120,14 +127,14 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     isSharedNotebook: data?.myPermissionType == null,
   });
 
-  if (!meta.data?.getPadById) {
-    return <TopbarPlaceholder />;
-  }
-
   const isReadOnly = Boolean(docsync?.isReadOnly);
   const notebookName = data?.name ?? 'Untitled';
   const showTrigger =
     data?.myPermissionType === 'WRITE' || data?.myPermissionType === 'ADMIN';
+
+  if (!meta.data?.getPadById) {
+    return <TopbarPlaceholder />;
+  }
 
   return (
     <NotebookTopbar
@@ -157,8 +164,9 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           actions={actions}
           creationDate={new Date(data?.createdAt)}
           workspaceId={data?.workspace?.id ?? ''}
+          workspaceForDuplicate={workspaceForDuplicate}
           onDuplicate={(workspaceId) =>
-            actions.onDuplicateNotebook(notebookId, true, workspaceId)
+            actions.onDuplicateNotebook(notebookId, workspaceId, true)
           }
         />
       }
@@ -229,7 +237,13 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           claimNotebook({ notebookId });
         },
         onDuplicateNotebook: () =>
-          actions.onDuplicateNotebook(notebookId, true),
+          workspaceForDuplicate
+            ? actions.onDuplicateNotebook(
+                notebookId,
+                workspaceForDuplicate,
+                true
+              )
+            : noop,
         onToggleAnnotations: () => {
           sidebarData.toggleSidebar('annotations');
         },

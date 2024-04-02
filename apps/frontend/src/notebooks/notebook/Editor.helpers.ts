@@ -31,7 +31,8 @@ export function useNotebookTitleChange(
 ) {
   const [, renameNotebook] = useRenameNotebookMutation();
   const { changeNotebookTitle } = useTabNavigate(false);
-  return useCallback(
+
+  const onNotebookTitleChange = useCallback(
     (newName?: string) => {
       if (newName != null && !isServerSideRendering()) {
         const nameTrimmed = newName.trim();
@@ -50,4 +51,6 @@ export function useNotebookTitleChange(
     },
     [changeNotebookTitle, notebookId, notebookTitle, renameNotebook]
   );
+
+  return { onNotebookTitleChange };
 }

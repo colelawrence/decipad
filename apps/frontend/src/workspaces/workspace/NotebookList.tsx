@@ -1,6 +1,8 @@
 import {
   WorkspaceNotebookFragment,
+  WorkspaceSectionFragment,
   WorkspaceSwitcherWorkspaceFragment,
+  useGetWorkspaceNotebooksQuery,
 } from '@decipad/graphql-client';
 import {
   NotebookListItem,
@@ -17,9 +19,9 @@ type NotebookListProps = Pick<
   'onImport'
 > & {
   readonly pageType: PageTypes;
-  readonly notebooks: Array<WorkspaceNotebookFragment>;
   readonly sharedNotebooks: Array<WorkspaceNotebookFragment>;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly sections: Array<WorkspaceSectionFragment>;
   readonly workspaceId: string;
 };
 
@@ -30,13 +32,17 @@ type ListItemType = ComponentProps<typeof NotebookListItem>;
  * It handles filtering, search, etc...
  */
 export const NotebookList: FC<NotebookListProps> = ({
-  notebooks,
   sharedNotebooks,
   pageType,
   workspaces,
+  sections,
   onImport,
   workspaceId,
 }) => {
+  const [result] = useGetWorkspaceNotebooksQuery({
+    variables: { workspaceId },
+  });
+  const notebooks = result?.data?.pads?.items ?? [];
   const actions = useNotebookMetaActions(pageType === 'archived');
   const { search, status, visibility } = useSearchBarStore();
   const filteredNotebooks = useFilteredNotebooks(
@@ -71,7 +77,7 @@ export const NotebookList: FC<NotebookListProps> = ({
               id={n.id}
               isArchived={pageType === 'archived'}
               status={(n.status as ListItemType['status']) ?? 'draft'}
-              section={n.section?.name || undefined}
+              section={sections.find((s) => s.id === n.sectionId)?.name}
               isPublic={Boolean(n.isPublic)}
               creationDate={n.createdAt && new Date(n.createdAt)}
               name={n.name}
@@ -81,8 +87,8 @@ export const NotebookList: FC<NotebookListProps> = ({
               actions={actions}
               notebookId={n.id}
               workspaceId={workspaceId}
-              onDuplicate={(workspace?: string) => {
-                actions.onDuplicateNotebook(n.id, false, workspace);
+              onDuplicate={(workspace: string) => {
+                actions.onDuplicateNotebook(n.id, workspace, false);
               }}
             />
           </li>

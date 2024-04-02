@@ -2,7 +2,6 @@ import {
   NotebookMetaDataFragment,
   WorkspaceSwitcherWorkspaceFragment,
 } from '@decipad/graphql-client';
-import { NotebookMetaActionsType } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import format from 'date-fns/format';
@@ -25,18 +24,20 @@ import {
   p12Regular,
   shortAnimationDuration,
 } from '../../../primitives';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 
 export interface NotebookOptionsProps {
   readonly notebookId: string;
   readonly isArchived: boolean;
   readonly trigger: ReactNode;
   readonly workspaceId: string;
+  readonly workspaceForDuplicate?: string;
   readonly canDelete?: boolean;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
-  readonly actions: NotebookMetaActionsType;
+  readonly actions: NotebookMetaActionsReturn;
 
   // Custom onDuplicate for redirecting purposes.
-  readonly onDuplicate: (workspaceId?: string) => void;
+  readonly onDuplicate: (workspaceId: string) => void;
   readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
 
   /* Optionals */
@@ -52,6 +53,8 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   isArchived,
   workspaces,
   notebookId: id,
+  workspaceForDuplicate,
+  workspaceId,
   creationDate,
   notebookStatus,
   canDelete = true,
@@ -103,7 +106,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<Copy />}
               onSelect={() => {
-                onDuplicate();
+                onDuplicate(workspaceForDuplicate ?? workspaceId);
                 setIsOpen(false);
               }}
             >
@@ -124,7 +127,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 key={workspace.id}
                 icon={<AddToWorkspace />}
                 onSelect={() => {
-                  actions.onMoveToWorkspace(id, workspace.id);
+                  actions.onMoveToWorkspace(id, workspace.id, workspaceId);
                   setIsOpen(false);
                 }}
               >

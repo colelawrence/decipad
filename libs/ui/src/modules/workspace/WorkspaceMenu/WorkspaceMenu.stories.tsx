@@ -17,14 +17,12 @@ export const Normal: StoryFn = () => (
         membersCount: 2,
         name: 'Some Workspace',
         sections: [],
-        pads: { items: [] },
       },
       {
         id: '1337',
         membersCount: 2,
         name: 'Some Other Workspace',
         sections: [],
-        pads: { items: [] },
       },
     ]}
     onCreateWorkspace={noop}

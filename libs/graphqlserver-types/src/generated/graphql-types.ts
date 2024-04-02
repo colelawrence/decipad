@@ -391,6 +391,7 @@ export type MutationInviteUserToRoleArgs = {
 
 
 export type MutationMovePadArgs = {
+  fromWorkspaceId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
 };

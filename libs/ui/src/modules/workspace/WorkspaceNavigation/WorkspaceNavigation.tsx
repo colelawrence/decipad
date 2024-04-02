@@ -2,7 +2,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import {
   CreateSectionMutation,
-  DashboardWorkspaceFragment,
+  ShallowWorkspaceFragment,
 } from '@decipad/graphql-client';
 import { docs, workspaces } from '@decipad/routing';
 import { FC, useContext, useMemo, useState } from 'react';
@@ -43,7 +43,7 @@ import { SectionItem } from '../SectionItem/SectionItem';
 import * as Styled from './styles';
 
 interface WorkspaceNavigationProps {
-  readonly activeWorkspace: DashboardWorkspaceFragment;
+  readonly activeWorkspace: ShallowWorkspaceFragment;
   readonly showAdminSettings: boolean;
   readonly showArchive: boolean;
   readonly onDeleteSection: (sectionId: string) => void;

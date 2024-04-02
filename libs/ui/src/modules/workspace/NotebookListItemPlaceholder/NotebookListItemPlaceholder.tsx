@@ -32,8 +32,8 @@ const descriptionStyles = css({});
 const middleAndRightStyles = css({
   gap: '8px',
   marginLeft: '36px',
-
   alignSelf: 'center',
+  justifyContent: 'end',
   display: 'flex',
 });
 
@@ -58,7 +58,7 @@ export const NotebookListItemPlaceholder: React.FC<{ pos?: number }> = ({
   const tagsCount = Math.floor(seedRandom((pos ?? 1) + 10) * 2 + 1);
 
   return (
-    <div role="presentation" css={styles}>
+    <li role="presentation" css={styles}>
       <div css={[iconStyles, { gridArea: 'icon' }]}>
         <Placeholder />
       </div>
@@ -81,6 +81,6 @@ export const NotebookListItemPlaceholder: React.FC<{ pos?: number }> = ({
             <span css={tagStyle} key={i} />
           ))}
       </div>
-    </div>
+    </li>
   );
 };

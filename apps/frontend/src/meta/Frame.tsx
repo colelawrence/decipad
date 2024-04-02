@@ -16,8 +16,9 @@ export const Frame: React.FC<FrameProps> = ({
   suspenseFallback,
   ...props
 }) => {
-  const pageTitle = title ? `${title} | Decipad` : null;
   const location = useLocation();
+  const pageTitle = title ? `${title} | Decipad` : null;
+
   return (
     <ErrorBoundary {...props}>
       {pageTitle && (

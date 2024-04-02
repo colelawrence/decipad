@@ -3,41 +3,43 @@
 /* eslint-disable no-param-reassign */
 import { Cache } from '@urql/exchange-graphcache';
 import {
-  DashboardWorkspaceFragment,
   ExternalDataSource,
   GetExternalDataSourcesWorkspaceDocument,
   GetExternalDataSourcesWorkspaceQuery,
   GetNotebookAnnotationsDocument,
   GetNotebookAnnotationsQuery,
   GetNotebookAnnotationsQueryVariables,
-  GetNotebookByIdDocument,
-  GetNotebookByIdQuery,
   GetNotebookMetaDocument,
   GetNotebookMetaQuery,
-  GetWorkspacesWithNotebooksDocument,
-  GetWorkspacesWithNotebooksQuery,
+  GetWorkspacesWithSharedNotebooksDocument,
+  GetWorkspacesWithSharedNotebooksQuery,
   GraphCacheConfig,
   Pad,
   Section,
   UserDocument,
   UserQuery,
   Workspace,
+  GetWorkspaceNotebooksDocument,
+  GetWorkspaceNotebooksQuery,
+  GetWorkspaceNotebooksQueryVariables,
   WorkspaceNotebookFragment,
 } from './generated';
 import * as schema from './schema.generated.json';
 import { nanoid } from 'nanoid';
 import { PublishedVersionName } from './PublishedStates';
+import { gql } from 'urql';
 import { Session } from 'next-auth';
 
 const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 
-const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
-  cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
-    { query: GetWorkspacesWithNotebooksDocument },
+const addNotebookToItsWorkspace = (
+  cache: Cache,
+  { notebook, workspaceId }: { notebook: Pad; workspaceId: string | number }
+) => {
+  cache.updateQuery<GetWorkspaceNotebooksQuery>(
+    { query: GetWorkspaceNotebooksDocument, variables: { workspaceId } },
     (data) => {
-      data?.workspaces
-        .find(({ id }) => notebook.workspace?.id === id)
-        ?.pads.items.unshift(notebook as Pad);
+      data?.pads.items.unshift(notebook as Pad);
       return data;
     }
   );
@@ -48,8 +50,8 @@ const addSectionToItsWorkspace = (
   section: Section,
   workspaceId: string
 ) => {
-  cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
-    { query: GetWorkspacesWithNotebooksDocument },
+  cache.updateQuery<GetWorkspacesWithSharedNotebooksQuery>(
+    { query: GetWorkspacesWithSharedNotebooksDocument },
     (data) => {
       data?.workspaces
         .find(({ id }) => workspaceId === id)
@@ -59,63 +61,9 @@ const addSectionToItsWorkspace = (
   );
 };
 
-/**
- * Returns workspace index and pad index as a tuple type.
- * or undefined if any aren't found.
- *
- * Useful when you want to get a workspace based on a padId.
- */
-const getWorkspaceIndexAndPadIndex = (
-  workspaces: Array<Workspace>,
-  padId: string
-): [number, number] | undefined => {
-  // The updatePad doesnt know about the workspace of the pad.
-  // So we must search workspaces until we find the pad we want.
-  // O(n^2) but most users only have 1 workspace, and either way
-  // number of workspaces is usually small.
-
-  let workspaceIndex: number | undefined;
-  let padIndex: number | undefined;
-
-  outerLoop: for (let i = 0; i < workspaces.length; i += 1) {
-    const workspace = workspaces[i];
-    for (let j = 0; j < workspace.pads.items.length; j += 1) {
-      const pad = workspace.pads.items[j];
-      if (pad.id === padId) {
-        workspaceIndex = i;
-        padIndex = j;
-        break outerLoop;
-      }
-    }
-  }
-
-  if (workspaceIndex == null) return undefined;
-  if (padIndex == null) return undefined;
-
-  return [workspaceIndex, padIndex];
-};
-
-//
-// Important that we include section ID as a composite key,
-// otherwise we will not regiser that notebooks are part of sections.
-//
-// This is likely a misunderstaing of Urql cache on my part, but
-// until I figure it out we need to have this as a key.
-//
-function getPadId(pad: Pad) {
-  if (pad.sectionId == null) {
-    return pad.id;
-  }
-
-  return `${pad.id}-section-${pad.sectionId}`;
-}
-
 export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
   schema: schema as GraphCacheConfig['schema'],
   keys: {
-    Pad(data) {
-      return getPadId(data as Pad);
-    },
     UserAccess(data) {
       return data.user?.id ?? null;
     },
@@ -168,27 +116,6 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
       };
       return value;
     },
-    updatePad(args) {
-      //
-      // Very ugly,
-      // The reason we do this is because args.pad can include nulls.
-      // but `updatePad` cannot accept nulls, but only undefineds.
-      //
-      // Hence the weird null chaining to undefined.
-      //
-
-      return {
-        __typename: 'Pad',
-        canPublicDuplicate: args.pad.canPublicDuplicate ?? undefined,
-        name: args.pad.name ?? undefined,
-        icon: args.pad.icon ?? undefined,
-        tags: args.pad.tags ?? undefined,
-        status: args.pad.status ?? undefined,
-        archived: args.pad.archived ?? undefined,
-        isTemplate: args.pad.isTemplate ?? undefined,
-        section_id: args.pad.section_id ?? undefined,
-      };
-    },
   },
   resolvers: {
     PadSnapshot: {
@@ -203,8 +130,8 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
   updates: {
     Mutation: {
       createWorkspace: (result, _args, cache) => {
-        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
-          { query: GetWorkspacesWithNotebooksDocument },
+        cache.updateQuery<GetWorkspacesWithSharedNotebooksQuery>(
+          { query: GetWorkspacesWithSharedNotebooksDocument },
           (data) => {
             data?.workspaces.push(result.createWorkspace as Workspace);
             return data;
@@ -262,14 +189,23 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           id: args.id,
         });
       },
-      createPad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.createPad as Pad);
+      createPad: (result, args, cache) => {
+        addNotebookToItsWorkspace(cache, {
+          notebook: result.createPad as Pad,
+          workspaceId: args.workspaceId,
+        });
       },
-      duplicatePad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.duplicatePad as Pad);
+      duplicatePad: (result, args, cache) => {
+        addNotebookToItsWorkspace(cache, {
+          notebook: result.duplicatePad as Pad,
+          workspaceId: args.targetWorkspace,
+        });
       },
-      importPad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.importPad as Pad);
+      importPad: (result, args, cache) => {
+        addNotebookToItsWorkspace(cache, {
+          notebook: result.importPad as Pad,
+          workspaceId: args.workspaceId,
+        });
       },
       createOrUpdateSnapshot(_result, { params: args }, cache) {
         if (typeof args.remoteState !== 'string') return;
@@ -329,59 +265,6 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           }
         );
       },
-      updatePad: (_result, args, cache) => {
-        //
-        // Updating Pad!
-        // - The workspace is aware of pads by `GetWorkspaces` query.
-        // - Therefore, we need to update both the notebook query and this workspace query.
-        //
-
-        cache.updateQuery<GetNotebookByIdQuery>(
-          {
-            query: GetNotebookByIdDocument,
-            variables: {
-              id: args.id,
-            },
-          },
-          (data) => {
-            if (!data?.getPadById) return data;
-
-            for (const [k, v] of Object.entries(args.pad)) {
-              if (v != null) {
-                data.getPadById[k as keyof typeof data.getPadById] = v;
-              }
-            }
-            return data;
-          }
-        );
-
-        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
-          {
-            query: GetWorkspacesWithNotebooksDocument,
-          },
-          (data) => {
-            if (!data) return data;
-
-            const indexes = getWorkspaceIndexAndPadIndex(
-              data.workspaces as Array<Workspace>,
-              args.id.toString()
-            );
-
-            if (!indexes) return data;
-            const [workspaceIndex, padIndex] = indexes;
-
-            for (const [k, v] of Object.entries(args.pad)) {
-              if (v != null) {
-                data.workspaces[workspaceIndex].pads.items[padIndex][
-                  k as keyof typeof data.workspaces[number]['pads']['items'][number]
-                ] = v;
-              }
-            }
-
-            return data;
-          }
-        );
-      },
       setPadPublic: (_result, args, cache) => {
         cache.updateQuery<GetNotebookMetaQuery>(
           {
@@ -425,75 +308,72 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
         );
       },
       removePad: (_result, args, cache) => {
-        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
+        cache.invalidate({
+          __typename: 'Pad',
+          id: args.id,
+        });
+      },
+      movePad: (_result, args, cache) => {
+        let pad: WorkspaceNotebookFragment | undefined;
+        cache.updateQuery<
+          GetWorkspaceNotebooksQuery,
+          GetWorkspaceNotebooksQueryVariables
+        >(
           {
-            query: GetWorkspacesWithNotebooksDocument,
+            query: GetWorkspaceNotebooksDocument,
+            variables: {
+              workspaceId: args.fromWorkspaceId!,
+            },
           },
           (data) => {
-            if (!data) return data;
+            const workspacePads = data?.pads;
 
-            const indexes = getWorkspaceIndexAndPadIndex(
-              data.workspaces as Array<Workspace>,
-              args.id.toString()
+            if (!workspacePads) {
+              throw new Error('Something went wrong');
+            }
+
+            const padIndex = workspacePads.items.findIndex(
+              (p) => p.id === args.id
             );
 
-            if (!indexes) return data;
-            const [workspaceIndex, padIndex] = indexes;
+            if (padIndex === -1) {
+              throw new Error('Could not find the notebook');
+            }
 
-            data.workspaces[workspaceIndex].pads.items.splice(padIndex, 1);
+            pad = workspacePads.items[padIndex];
+
+            workspacePads.items.splice(padIndex, 1);
+
+            workspacePads.count--;
 
             return data;
           }
         );
-      },
-      movePad: (_result, args, cache) => {
-        cache.updateQuery<GetWorkspacesWithNotebooksQuery>(
+        cache.updateQuery<
+          GetWorkspaceNotebooksQuery,
+          GetWorkspaceNotebooksQueryVariables
+        >(
           {
-            query: GetWorkspacesWithNotebooksDocument,
+            query: GetWorkspaceNotebooksDocument,
             variables: {
-              id: args.id,
+              workspaceId: args.workspaceId,
             },
           },
           (data) => {
-            if (!data?.workspaces) {
-              throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
+            const workspacePads = data?.pads;
+
+            if (!workspacePads) {
+              return data;
             }
 
-            // O(n^2) to find the workspace of the notebook.
-            // Most people have 1 workspace so O(n).
-            // But could become performance problem.
-            let currentNotebook: WorkspaceNotebookFragment | undefined;
-            let currentWorkspace: DashboardWorkspaceFragment | undefined;
-
-            topLoop: for (const workspace of data.workspaces) {
-              for (const n of workspace.pads.items) {
-                if (n.id === args.id) {
-                  currentNotebook = n;
-                  currentWorkspace = workspace;
-                  break topLoop;
-                }
-              }
-            }
-
-            if (!currentNotebook) {
+            if (pad == null) {
               throw new Error('Could not find the notebook');
             }
 
-            if (!currentWorkspace) {
-              throw new Error('Could not find notebooks workspace');
-            }
+            workspacePads.items.push(pad);
 
-            // Remove notebook from current workspace
-            currentWorkspace.pads.items = currentWorkspace.pads.items.filter(
-              (n) => n.id !== args.id
-            );
+            workspacePads.count++;
 
-            const targetWorkspace = data.workspaces.find(
-              (w) => w.id === args.workspaceId
-            );
-
-            // Add notebook to new workspace.
-            targetWorkspace?.pads.items.push(currentNotebook);
             return data;
           }
         );
@@ -509,7 +389,15 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
         cache.invalidate({ __typename: 'Section', id: args.sectionId });
       },
       addNotebookToSection: (_result, args, cache) => {
-        cache.invalidate({ __typename: 'Section', id: args.sectionId });
+        cache.writeFragment(
+          gql`
+            fragment _ on Pad {
+              id
+              sectionId
+            }
+          `,
+          { id: args.notebookId, sectionId: args.sectionId }
+        );
       },
       removeSectionFromWorkspace: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Section', id: args.sectionId });

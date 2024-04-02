@@ -52,7 +52,7 @@ export const UINotebookList: FC<UINotebookListProps> = ({
 );
 
 const NotebookWrapper = styled.div({
-  padding: `2px ${notebookList.horizontalPadding}`,
+  padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,
   display: 'grid',
   [smallScreenQuery]: {
     paddingTop: '16px',

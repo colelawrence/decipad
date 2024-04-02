@@ -20,9 +20,9 @@ import {
   GetWorkspaceByIdDocument,
   GetWorkspaceByIdQuery,
   GetWorkspaceByIdQueryVariables,
-  GetWorkspacesWithNotebooksDocument,
-  GetWorkspacesWithoutNotebooksQuery,
-  GetWorkspacesWithoutNotebooksQueryVariables,
+  GetWorkspacesWithSharedNotebooksDocument,
+  GetWorkspacesWithSharedNotebooksQuery,
+  GetWorkspacesWithSharedNotebooksQueryVariables,
 } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import { useUserId } from './useUserId';
@@ -163,10 +163,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
     client
       .query<
-        GetWorkspacesWithoutNotebooksQuery,
-        GetWorkspacesWithoutNotebooksQueryVariables
+        GetWorkspacesWithSharedNotebooksQuery,
+        GetWorkspacesWithSharedNotebooksQueryVariables
       >(
-        GetWorkspacesWithNotebooksDocument,
+        GetWorkspacesWithSharedNotebooksDocument,
         {},
         { requestPolicy: 'network-only' }
       )

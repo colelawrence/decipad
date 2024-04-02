@@ -12,3 +12,4 @@ export * from './NotebookListItem/NotebookListItem';
 export * from './DashboardTopbar/DashboardTopbar';
 export * from './WorkspaceSecrets/WorkspaceSecrets';
 export * from './EditDataConnectionsModal/EditDataConnectionsModal';
+export * from './NotebookListPlaceholder/NotebookListPlaceholder';

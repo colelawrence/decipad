@@ -1,7 +1,8 @@
 import tables, { allPages } from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
-import { MutationResolvers, Pad } from '@decipad/graphqlserver-types';
+import { MutationResolvers } from '@decipad/graphqlserver-types';
+import { padResource } from './padResource';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
@@ -53,5 +54,5 @@ export const movePad: MutationResolvers['movePad'] = async (
     }
   }
 
-  return pad as Pad;
+  return padResource.toGraphql(pad);
 };

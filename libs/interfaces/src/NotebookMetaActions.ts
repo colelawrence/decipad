@@ -9,14 +9,18 @@ export interface NotebookMetaActionsReturn {
   onDownloadNotebookHistory: (notebookId: string) => Promise<void>;
 
   onMoveToSection: (notebookId: string, sectionId: string) => void;
-  onMoveToWorkspace: (notebookId: string, workspaceId: string) => void;
+  onMoveToWorkspace: (
+    notebookId: string,
+    workspaceId: string,
+    fromWorkspaceId?: string
+  ) => void;
 
   onChangeStatus: (notebookId: string, status: string) => void;
 
   onDuplicateNotebook: (
     notebookId: string,
-    navigateToNotebook?: boolean,
-    workspaceId?: string
+    workspaceId: string,
+    navigateToNotebook?: boolean
   ) => Promise<boolean>;
 
   onUpdatePublishState: (

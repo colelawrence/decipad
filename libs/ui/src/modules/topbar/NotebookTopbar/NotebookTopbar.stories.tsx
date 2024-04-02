@@ -57,7 +57,10 @@ const args: ComponentProps<typeof NotebookTopbar> = {
         onDownloadNotebook: () => {},
         onDuplicateNotebook: async () => true,
         onUnarchiveNotebook: () => {},
-        onDownloadNotebookHistory: () => {},
+        onDownloadNotebookHistory: async () => {},
+        onUpdatePublishState: async () => {},
+        onPublishNotebook: async () => {},
+        onUpdateAllowDuplicate: async () => {},
       }}
       creationDate={new Date()}
       workspaceId={workspaceId}

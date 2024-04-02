@@ -1,4 +1,4 @@
-import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
+import { ShallowWorkspaceFragment } from '@decipad/graphql-client';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 
 type EditDataConnectionsModalProps = {
   readonly onClose: () => void;
-  readonly currentWorkspace: DashboardWorkspaceFragment;
+  readonly currentWorkspace: ShallowWorkspaceFragment;
 };
 
 export const EditDataConnectionsModal: React.FC<

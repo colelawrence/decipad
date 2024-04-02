@@ -6,7 +6,7 @@ import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseI
 // eslint-disable-next-line import/no-relative-packages
 import { defaultEnv } from '../../../libs/backend-config/src/default';
 // eslint-disable-next-line import/no-relative-packages
-import { GetWorkspacesWithNotebooksDocument } from '../../../libs/graphql-client/src/generated';
+import { GetWorkspacesWithSharedNotebooksDocument } from '../../../libs/graphql-client/src/generated';
 import { limits, thirdParty } from '@decipad/backend-config';
 
 const stripeApiVersion = thirdParty().stripe.apiVersion;
@@ -178,7 +178,7 @@ test('workspaces', (ctx) => {
 
     const { workspaces } = (
       await client.query({
-        query: GetWorkspacesWithNotebooksDocument,
+        query: GetWorkspacesWithSharedNotebooksDocument,
       })
     ).data;
 
@@ -210,7 +210,7 @@ test('workspaces', (ctx) => {
 
     const { workspaces } = (
       await client.query({
-        query: GetWorkspacesWithNotebooksDocument,
+        query: GetWorkspacesWithSharedNotebooksDocument,
       })
     ).data;
 
@@ -245,7 +245,7 @@ test('workspaces', (ctx) => {
 
     const { workspaces } = (
       await client.query({
-        query: GetWorkspacesWithNotebooksDocument,
+        query: GetWorkspacesWithSharedNotebooksDocument,
       })
     ).data;
 
@@ -284,7 +284,7 @@ test('workspaces', (ctx) => {
 
     const { workspaces } = (
       await client.query({
-        query: GetWorkspacesWithNotebooksDocument,
+        query: GetWorkspacesWithSharedNotebooksDocument,
       })
     ).data;
 

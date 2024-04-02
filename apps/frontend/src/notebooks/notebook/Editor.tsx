@@ -1,7 +1,7 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { Notebook as NotebookEditor } from '@decipad/notebook';
 import { RemoteComputer } from '@decipad/remote-computer';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useNotebookStateAndActions } from './hooks';
 import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
 import { useRouteParams } from 'typesafe-routes/react-router';
@@ -11,6 +11,7 @@ import {
   ExternalDataSourcesContextProvider,
 } from '@decipad/react-contexts';
 import { EditorIcon, GlobalThemeStyles } from '@decipad/ui';
+import { Frame } from '../../meta';
 
 export interface EditorProps {
   readonly notebookId: string;
@@ -44,53 +45,50 @@ const AppEditor: FC<EditorProps> = ({
   }, [actions.error, setError]);
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
-  const onNotebookTitleChange = useNotebookTitleChange(
+  const { onNotebookTitleChange } = useNotebookTitleChange(
     notebookId,
     actions.notebook?.name
   );
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  const pageTitle = `${actions.notebook?.name ?? 'New Notebook'} | Decipad`;
-
-  useEffect(() => {
-    // ugly hack to update the document title
-    const intv = setInterval(() => {
-      document.title = pageTitle;
-    }, 1000);
-
-    return () => clearInterval(intv);
-  }, [pageTitle]);
+  const pageTitle = useMemo(() => actions.notebook?.name, [actions.notebook]);
 
   return (
-    <ExternalDataSourcesContextProvider provider={actions.externalData}>
-      <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
-        <GlobalThemeStyles color={actions.iconColor} />
-        {!isEmbed && (
-          <EditorIcon
-            icon={actions.icon ?? 'Deci'}
-            color={actions.iconColor}
-            onChangeIcon={actions.updateIcon}
-            onChangeColor={actions.updateIconColor}
+    <Frame
+      Heading="h1"
+      suspenseFallback={null}
+      title={pageTitle ?? 'New Notebook'}
+    >
+      <ExternalDataSourcesContextProvider provider={actions.externalData}>
+        <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
+          <GlobalThemeStyles color={actions.iconColor} />
+          {!isEmbed && (
+            <EditorIcon
+              icon={actions.icon ?? 'Deci'}
+              color={actions.iconColor}
+              onChangeIcon={actions.updateIcon}
+              onChangeColor={actions.updateIconColor}
+              readOnly={actions.isReadOnly}
+            />
+          )}
+          <NotebookEditor
+            secret={undefined}
+            notebookId={notebookId}
+            onNotebookTitleChange={onNotebookTitleChange}
+            onDocsync={setDocsync}
+            onComputer={setComputer}
+            notebookMetaLoaded={actions.notebook != null}
+            workspaceId={actions.notebook?.workspace?.id ?? ''}
             readOnly={actions.isReadOnly}
+            connectionParams={actions.connectionParams}
+            initialState={actions.initialState}
+            getAttachmentForm={actions.getAttachmentForm}
+            onAttached={actions.onAttached}
           />
-        )}
-        <NotebookEditor
-          secret={undefined}
-          notebookId={notebookId}
-          onNotebookTitleChange={onNotebookTitleChange}
-          onDocsync={setDocsync}
-          onComputer={setComputer}
-          notebookMetaLoaded={actions.notebook != null}
-          workspaceId={actions.notebook?.workspace?.id ?? ''}
-          readOnly={actions.isReadOnly}
-          connectionParams={actions.connectionParams}
-          initialState={actions.initialState}
-          getAttachmentForm={actions.getAttachmentForm}
-          onAttached={actions.onAttached}
-        />
-      </EditorStylesContext.Provider>
-    </ExternalDataSourcesContextProvider>
+        </EditorStylesContext.Provider>
+      </ExternalDataSourcesContextProvider>
+    </Frame>
   );
 };
 

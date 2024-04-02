@@ -67,10 +67,15 @@ const resolvers: Resolvers = {
     async pads(_, { page, workspaceId }, context) {
       const workspaceResource = `/workspaces/${workspaceId}`;
       if (await isAuthorized(workspaceResource, context, 'READ')) {
-        return (await getWorkspaceNotebooks({
+        const pads = await getWorkspaceNotebooks({
           workspaceId,
           page,
-        })) as PagedPadResult;
+        });
+
+        return {
+          ...pads,
+          items: pads.items.map(padResource.toGraphql),
+        };
       }
       return {
         items: [],

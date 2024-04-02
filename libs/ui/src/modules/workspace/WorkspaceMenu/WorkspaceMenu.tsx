@@ -8,15 +8,15 @@ import * as Styled from './styles';
 
 import { Button } from 'libs/ui/src/shared';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
+import { ShallowWorkspaceFragment } from '@decipad/graphql-client';
 import { useRouteParams } from 'typesafe-routes/react-router';
 
 interface WorkspaceMenuProps {
-  readonly workspaces: DashboardWorkspaceFragment[];
+  readonly workspaces: ShallowWorkspaceFragment[];
   readonly hasFreeWorkspaceSlot: boolean;
   readonly onCreateWorkspace: () => void;
   readonly onSelectWorkspace: (id: string) => void;
-  readonly getPlanTitle: (workspace: DashboardWorkspaceFragment) => string;
+  readonly getPlanTitle: (workspace: ShallowWorkspaceFragment) => string;
 }
 
 export const WorkspaceMenu = ({

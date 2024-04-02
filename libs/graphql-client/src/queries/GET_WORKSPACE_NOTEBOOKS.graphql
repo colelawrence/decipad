@@ -1,0 +1,22 @@
+fragment WorkspaceNotebook on Pad {
+  id
+  name
+  icon
+  status
+  createdAt
+  archived
+  isPublic
+  sectionId
+  workspaceId
+  myPermissionType
+}
+
+query GetWorkspaceNotebooks($workspaceId: ID!) {
+  pads(workspaceId: $workspaceId, page: { maxItems: 10000 }) {
+    items {
+      ...WorkspaceNotebook
+    }
+    count
+    hasNextPage
+  }
+}

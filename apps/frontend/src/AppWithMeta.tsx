@@ -6,11 +6,7 @@ initSentry();
 
 const AppWithMeta: React.FC = () => (
   <Providers>
-    <Frame
-      Heading="h1"
-      title="Decipad — Make sense of numbers"
-      suspenseFallback={<LoadingLogo />}
-    >
+    <Frame Heading="h1" title={null} suspenseFallback={<LoadingLogo />}>
       <App />
     </Frame>
   </Providers>
