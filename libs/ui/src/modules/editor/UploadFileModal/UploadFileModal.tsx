@@ -230,7 +230,6 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               workspaceId={workspaceId}
               insertFromPreview={insertFromPreview}
               apiSource="replicate"
-              apiKey={process.env.REPLICATE_API_KEY}
             />
           </div>
         </TabsContent>
@@ -287,7 +286,6 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               insertFromPreview={insertFromPreview}
               apiSource="giphy"
               beans={giphyBeans}
-              apiKey={process.env.GIPHY_API_KEY}
             />
           </div>
         </TabsContent>
@@ -297,7 +295,6 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               workspaceId={workspaceId}
               insertFromPreview={insertFromPreview}
               apiSource="unsplash"
-              apiKey={process.env.UNSPLASH_API_KEY}
               beans={unsplashBeans}
             />
           </div>

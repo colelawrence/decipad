@@ -13,7 +13,6 @@ type ApiSource = 'giphy' | 'unsplash' | 'replicate';
 type ImageSearchProps = {
   insertFromPreview: (url: string, trackerUrl?: string) => void;
   apiSource: ApiSource;
-  apiKey?: string;
   beans?: string[];
   workspaceId: string;
 };
@@ -36,7 +35,6 @@ function isImageUrlWithMetadata(item: any): item is ImageUrlWithMetadata {
 export const ImageSearch = ({
   insertFromPreview,
   apiSource,
-  apiKey,
   workspaceId,
   beans,
 }: ImageSearchProps) => {
@@ -97,11 +95,7 @@ export const ImageSearch = ({
     count = model ? model.outputs : 4; // Default to 4 if model not found
   }
 
-  return !apiKey ? (
-    <p>
-      There was a problem on our side. Please report it to our support staff
-    </p>
-  ) : (
+  return (
     <>
       <SearchForm
         searchTerm={searchTerm}
