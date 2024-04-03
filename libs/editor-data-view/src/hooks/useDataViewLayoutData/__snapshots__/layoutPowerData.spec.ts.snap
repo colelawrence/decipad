@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`layoutPowerData works with two column two groups tree and aggregation 1`] = `
+Object {
+  "type": Object {
+    "columnNames": Array [
+      "Column1",
+      "Column2",
+    ],
+    "columnTypes": Array [
+      Object {
+        "kind": "string",
+      },
+      Object {
+        "kind": "number",
+        "unit": null,
+      },
+    ],
+    "kind": "tree",
+  },
+  "value": Tree {
+    "children": Array [
+      Tree {
+        "children": Array [
+          Tree {
+            "children": Array [],
+            "columns": Array [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            "rootAggregation": undefined,
+          },
+          Tree {
+            "children": Array [],
+            "columns": Array [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
+            "rootAggregation": undefined,
+          },
+        ],
+        "columns": Array [
+          Object {
+            "aggregation": Object {
+              "type": Object {
+                "kind": "number",
+                "unit": null,
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 4n,
+                "s": 1n,
+              },
+            },
+            "name": "Column2",
+          },
+        ],
+        "originalCardinality": 2,
+        "root": "A",
+        "rootAggregation": Object {
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+        },
+      },
+      Tree {
+        "children": Array [
+          Tree {
+            "children": Array [],
+            "columns": Array [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
+            "rootAggregation": undefined,
+          },
+        ],
+        "columns": Array [
+          Object {
+            "aggregation": Object {
+              "type": Object {
+                "kind": "number",
+                "unit": null,
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            },
+            "name": "Column2",
+          },
+        ],
+        "originalCardinality": 1,
+        "root": "B",
+        "rootAggregation": Object {
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+        },
+      },
+    ],
+    "columns": Array [
+      Object {
+        "aggregation": Object {
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+        },
+        "name": "Column1",
+      },
+      Object {
+        "aggregation": Object {
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
+        },
+        "name": "Column2",
+      },
+    ],
+    "originalCardinality": 1,
+    "root": Symbol(unknown),
+    "rootAggregation": undefined,
+  },
+}
+`;

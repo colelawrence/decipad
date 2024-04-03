@@ -1,52 +1,90 @@
-import { BehaviorSubject } from 'rxjs';
 import {
-  AggregationKind,
-  DataGroup,
-  PreviousColumns,
-  VirtualColumn,
-} from '../../types';
+  Unknown,
+  type Result,
+  type SerializedType,
+  type Value,
+} from '@decipad/remote-computer';
+import { type DataViewFilter } from '@decipad/editor-types';
+import { type DataGroup } from '../../types';
+import { aggregationExpression as createAggregationExpression } from '../../utils/aggregationExpression';
 
 export interface GenerateSmartRowProps {
-  columns: VirtualColumn[];
-  columnIndex: number;
-  aggregationTypes: (AggregationKind | undefined)[];
-  previousColumns: PreviousColumns;
-  parentHighlight$?: BehaviorSubject<boolean>;
+  aggregation: Result.Result | undefined;
+  tableName: string;
+  columnTypes: SerializedType[];
+  columns: Value.TreeColumn[];
+  previousColumns: Value.TreeColumn[];
+  previousColumnTypes: SerializedType[];
+  previousFilters: Array<DataViewFilter | undefined>;
+  valuePath: Array<Result.OneResult>;
+  aggregations: Array<string | undefined>;
+  roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   global?: boolean;
-  rotate: boolean;
+  indent?: number;
 }
 
-export const generateSmartRow = ({
+export type GenerateSmartRow = (props: GenerateSmartRowProps) => DataGroup;
+
+export const generateSmartRow: GenerateSmartRow = ({
+  aggregation,
+  tableName,
+  columnTypes,
   columns,
-  columnIndex,
-  aggregationTypes,
   previousColumns,
-  parentHighlight$,
+  previousColumnTypes,
+  previousFilters,
+  valuePath,
+  aggregations,
+  roundings,
+  filters,
   global = false,
-  rotate,
-}: GenerateSmartRowProps): DataGroup => {
+  indent = 0,
+}): DataGroup => {
   const [firstColumn, ...rest] = columns;
+
+  const newPreviousColumns = [...previousColumns, firstColumn];
+  const newPreviousColumnTypes = [...previousColumnTypes, columnTypes[0]];
+  const newPreviousFilters = [...previousFilters, filters[0]];
+
+  const children =
+    rest.length > 0
+      ? [
+          generateSmartRow({
+            aggregation: rest[0].aggregation,
+            tableName,
+            columnTypes: columnTypes.slice(1),
+            columns: rest,
+            previousColumns: newPreviousColumns,
+            previousColumnTypes: newPreviousColumnTypes,
+            previousFilters: newPreviousFilters,
+            valuePath,
+            aggregations: aggregations.slice(1),
+            roundings: roundings.slice(1),
+            filters: filters.slice(1),
+            global,
+            indent: indent + 1,
+          }),
+        ]
+      : [];
+
+  const aggregationExpression = createAggregationExpression(
+    tableName,
+    newPreviousColumns,
+    newPreviousColumnTypes,
+    valuePath,
+    previousFilters,
+    aggregations[0],
+    roundings[0],
+    filters[0]
+  );
 
   return {
     elementType: 'smartrow',
-    children:
-      rest.length > 0
-        ? [
-            generateSmartRow({
-              columns: rest,
-              columnIndex: columnIndex + 1,
-              aggregationTypes,
-              previousColumns,
-              parentHighlight$,
-              global,
-              rotate,
-            }),
-          ]
-        : [],
-    column: firstColumn,
-    columnIndex,
-    previousColumns,
-    parentHighlight$,
+    children,
     global,
+    type: aggregation?.type,
+    value: aggregation?.value ?? Unknown,
+    aggregationExpression,
   };
 };

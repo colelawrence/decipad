@@ -1,5 +1,9 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { ColumnDesc, materializeColumnDesc } from '@decipad/remote-computer';
+import {
+  ColumnDesc,
+  buildResult,
+  materializeColumnDesc,
+} from '@decipad/remote-computer';
 import {
   useNodePath,
   useGlobalParentNode,
@@ -247,10 +251,9 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
               ...colValues.result.value.map((v) => ({
                 group: 'Values',
                 blockId: v?.toString(),
-                item: formatResultPreview({
-                  value: v,
-                  type: colValues.result.type.cellType,
-                }),
+                item: formatResultPreview(
+                  buildResult(colValues.result.type.cellType, v, false)
+                ),
               })),
             ],
             'item'

@@ -255,6 +255,10 @@ export const snapshotType = (type: Type | SerializedType): string => {
       return `date<${type.date}>`;
     }
 
+    case 'tree': {
+      return `tree`;
+    }
+
     case 'type-error': {
       return `InferError ${type.errorCause.errType}`;
     }

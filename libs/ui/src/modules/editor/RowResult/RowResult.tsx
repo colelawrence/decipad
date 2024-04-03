@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { type Result } from '@decipad/remote-computer';
 import { CodeResult } from '..';
 import { Table } from '../Table/Table';
-
 import { table } from '../../../styles';
 import { CodeResultProps } from '../../../types';
 import { isTabularType, toTableHeaderType } from '../../../utils';
@@ -50,7 +50,7 @@ export const RowResult = ({
                   <CodeResult
                     parentType={type}
                     type={rowCellTypes[colIndex]}
-                    value={col}
+                    value={col as Result.Result['value']}
                     variant="block"
                     element={element}
                   />

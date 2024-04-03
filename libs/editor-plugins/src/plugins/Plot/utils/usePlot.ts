@@ -5,7 +5,7 @@ import {
   getExprRef,
   isTable as isComputerTable,
 } from '@decipad/remote-computer';
-import { PlotElement, useMyEditorRef } from '@decipad/editor-types';
+import { PlotElement, useMyEditorRef, MyNode } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
@@ -108,7 +108,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const setMarkType = usePathMutatorCallback(
     editor,
     path,
-    'markType',
+    'markType' as keyof MyNode,
     'usePlot'
   );
 
@@ -119,49 +119,49 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     return undefined;
   }, [element.markType]);
 
-  const setSourceVarName = usePathMutatorCallback(
+  const setSourceVarName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'sourceVarName',
     'usePlot'
   );
-  const setXColumnName = usePathMutatorCallback(
+  const setXColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'xColumnName',
     'usePlot'
   );
-  const setYColumnName = usePathMutatorCallback(
+  const setYColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'yColumnName',
     'usePlot'
   );
-  const setSizeColumnName = usePathMutatorCallback(
+  const setSizeColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'sizeColumnName',
     'usePlot'
   );
-  const setColorColumnName = usePathMutatorCallback(
+  const setColorColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'colorColumnName',
     'usePlot'
   );
-  const setThetaColumnName = usePathMutatorCallback(
+  const setThetaColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'thetaColumnName',
     'usePlot'
   );
-  const setY2ColumnName = usePathMutatorCallback(
+  const setY2ColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'y2ColumnName',
     'usePlot'
   );
-  const setColorScheme = usePathMutatorCallback(
+  const setColorScheme = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'colorScheme',

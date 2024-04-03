@@ -35,11 +35,9 @@ export async function seriesColumn(
       const cell = await parseCell(computer, cellType, source);
       if (cell instanceof Error || cell == null) {
         errors.push(
-          simpleArtifficialError(
-            id,
-            cell ? cell.message : 'Error',
-            parentBlockId
-          )
+          simpleArtifficialError(id, cell ? cell.message : 'Error', [
+            parentBlockId,
+          ])
         );
       } else {
         cells.push(cell);
@@ -74,7 +72,7 @@ export async function seriesColumn(
         simpleArtifficialError(
           ids[0],
           e instanceof Error ? e.message : 'Error',
-          parentBlockId
+          [parentBlockId]
         ),
       ],
     ];

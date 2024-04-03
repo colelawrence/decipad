@@ -11,7 +11,7 @@ export type IdentifiedBlock = {
   definesVariable?: string;
   definesTableColumn?: [string, string];
   isArtificial?: boolean;
-  artificiallyDerivedFrom?: string;
+  artificiallyDerivedFrom?: Array<string>;
 };
 
 /** A parse error */
@@ -27,7 +27,7 @@ type BaseParseError = {
   definesVariable?: string;
   definesTableColumn?: [string, string];
   isArtificial?: boolean;
-  artificiallyDerivedFrom?: string;
+  artificiallyDerivedFrom?: Array<string>;
 };
 export type IdentifiedError =
   | (BaseParseError & {

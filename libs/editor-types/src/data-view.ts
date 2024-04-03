@@ -15,14 +15,7 @@ export interface DataViewHeaderRowElement extends BaseElement {
 export interface DataViewHeader extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TH;
   cellType: TableCellType;
-  aggregation?:
-    | 'average'
-    | 'max'
-    | 'median'
-    | 'min'
-    | 'span'
-    | 'sum'
-    | 'stddev';
+  aggregation?: string;
   rounding?: string;
   filter?: DataViewFilter;
   name: string;
@@ -84,3 +77,9 @@ export type DataViewFilter =
       operation: DataViewBooleanOperation;
       valueOrValues: boolean;
     };
+
+export type DataViewOperation =
+  | DataViewStringOperation
+  | DataViewNumberOperation
+  | DataViewDateOperation
+  | DataViewBooleanOperation;

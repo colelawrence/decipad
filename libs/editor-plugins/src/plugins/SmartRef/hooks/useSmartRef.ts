@@ -72,7 +72,7 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
-  const setLastSeenVariableName = usePathMutatorCallback(
+  const setLastSeenVariableName = usePathMutatorCallback<SmartRefElement>(
     editor,
     path,
     'lastSeenVariableName',

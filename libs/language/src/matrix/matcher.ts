@@ -13,9 +13,10 @@ import {
 import { Context } from '..';
 import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate, Realm } from '../interpreter';
-import { getIdentifierString, getOfType } from '../utils';
+import { getIdentifierString } from '../utils';
 import { evaluateVariable, getIndexName } from './getVariable';
 import { generatorOfPromisesToGenerator } from '../../../generator-utils/src/generatorOfPromisesToGenerator';
+import { getOfType } from '../parser/getOfType';
 
 /** Read inside the square brackets */
 export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {

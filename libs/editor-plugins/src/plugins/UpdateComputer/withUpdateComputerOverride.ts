@@ -34,7 +34,10 @@ export const withUpdateComputerOverride =
         if (
           block.isArtificial &&
           block.artificiallyDerivedFrom != null &&
-          dirtyBlocksSet.has(block.artificiallyDerivedFrom)
+          // eslint-disable-next-line no-loop-func
+          block.artificiallyDerivedFrom.some((derivedFromBlockId) =>
+            dirtyBlocksSet.has(derivedFromBlockId)
+          )
         ) {
           programCache.delete(id);
         }
@@ -89,7 +92,10 @@ export const withUpdateComputerOverride =
           if (
             block.type === 'identified-block' &&
             block.isArtificial &&
-            block.artificiallyDerivedFrom === blockId
+            block.artificiallyDerivedFrom != null &&
+            block.artificiallyDerivedFrom.some(
+              (derivedFromBlockId) => derivedFromBlockId === blockId
+            )
           ) {
             removeNode(nodeId);
           }

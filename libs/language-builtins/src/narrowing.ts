@@ -128,6 +128,7 @@ export async function narrowTypes(
         });
       }
 
+      case 'tree':
       case 'materialized-table':
       case 'table': {
         throw new Error('tables cannot be narrowed');

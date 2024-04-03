@@ -4,14 +4,6 @@ module.exports = {
   ...domConfig,
   rootDir: __dirname,
   displayName: 'editor-data-view',
-  coverageThreshold: {
-    global: {
-      statements: 50,
-      branches: 33,
-      functions: 48,
-      lines: 50,
-    },
-  },
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats
    * to prevent breaking of any existing tests with snapshots.

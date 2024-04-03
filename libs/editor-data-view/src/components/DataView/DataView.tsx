@@ -13,6 +13,7 @@ import {
   DataView as UIDataView,
   DataViewMenu,
   VoidBlock,
+  CodeError,
 } from '@decipad/ui';
 import { ReactNode, useMemo } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
@@ -21,6 +22,7 @@ import { DataViewColumnHeader } from '../DataViewColumnHeader';
 import { DataViewData } from '../DataViewData';
 import { getNodeString } from '@udecode/plate-common';
 import { DataViewContextProvider } from '../DataViewContext';
+import { formatError } from '@decipad/format';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -53,6 +55,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   );
 
   const {
+    error,
     variableNames,
     tableName,
     onVariableNameChange,
@@ -95,7 +98,13 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const data = useMemo(
     () =>
-      sortedColumns && tableName ? (
+      error ? (
+        <CodeError
+          message={
+            typeof error === 'string' ? error : formatError('en-US', error)
+          }
+        />
+      ) : sortedColumns && tableName ? (
         <DataViewData
           element={element}
           tableName={tableName}
@@ -112,6 +121,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
       ) : null,
     [
       element,
+      error,
       headers,
       rotate,
       saveExpandedGroups,

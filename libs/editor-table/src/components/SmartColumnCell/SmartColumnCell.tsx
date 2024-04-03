@@ -12,8 +12,8 @@ import {
 } from 'react';
 import { EMPTY } from 'rxjs';
 import { Path } from 'slate';
+import { type AggregationType } from '@decipad/language-aggregations';
 import { useColumnAggregationTypes } from '../../hooks';
-import { AggregationType } from '../../utils';
 import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 import { TableColumn } from '../../types';
@@ -55,7 +55,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     const aggType =
       (selectedAggregationTypeName != null &&
         availableAggregationTypes?.find(
-          (agg) => agg.name === selectedAggregationTypeName
+          (agg) => agg.id === selectedAggregationTypeName
         )) ||
       undefined;
     setSelectedAggregationType(aggType);
@@ -108,6 +108,21 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
 
   const showMenu = availableAggregationTypes?.length > 0;
 
+  const onAggregationNameChanged = useCallback(
+    (aggName: string | undefined) => {
+      if (!aggName) {
+        onAggregationTypeNameChange(undefined);
+        return;
+      }
+      const aggType = availableAggregationTypes?.find(
+        (agg) => agg.name === aggName
+      );
+      setSelectedAggregationType(aggType);
+      onAggregationTypeNameChange(aggType?.id);
+    },
+    [availableAggregationTypes, onAggregationTypeNameChange]
+  );
+
   return (
     <UISmartColumnCell
       onDragStart={onDragExpressionStart}
@@ -130,7 +145,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
             options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
             value={selectedAggregationType?.name}
             clear={!!selectedAggregationType}
-            onChange={onAggregationTypeNameChange}
+            onChange={onAggregationNameChanged}
           ></Select>
         )
       }

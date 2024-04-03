@@ -1,11 +1,15 @@
-import { AutocompleteName, SerializedType } from '@decipad/remote-computer';
+import {
+  AutocompleteName,
+  ErrSpec,
+  SerializedType,
+} from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
 import {
   DataViewElement,
   DataViewFilter,
   MyEditor,
 } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useResult } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Path } from 'slate';
@@ -36,6 +40,7 @@ interface UseDataViewReturnType {
   selectedAggregationTypes: Array<AggregationKind | undefined>;
   selectedRoundings: Array<string | undefined>;
   selectedFilters: Array<DataViewFilter | undefined>;
+  error?: string | ErrSpec;
 }
 
 const greaterOrEqualToZero = (n: number): boolean => n >= 0;
@@ -44,6 +49,13 @@ export const useDataView = ({
   editor,
   element,
 }: UseDataViewProps): UseDataViewReturnType => {
+  const result = useResult(`${element.id}_shadow`);
+  const error =
+    result?.error?.message ??
+    (result?.result?.type.kind === 'type-error'
+      ? result.result.type.errorCause
+      : undefined);
+
   const {
     onDelete,
     onInsertColumn,
@@ -134,6 +146,7 @@ export const useDataView = ({
       selectedAggregationTypes,
       selectedRoundings,
       selectedFilters,
+      error,
     }),
     [
       availableColumns,
@@ -147,6 +160,7 @@ export const useDataView = ({
       sortedColumns,
       tableName,
       variableNames,
+      error,
     ]
   );
 };

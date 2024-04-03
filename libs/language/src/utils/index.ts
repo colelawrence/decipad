@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { AST, Unit } from '@decipad/language-types';
 import DeciNumber, { N } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
 
 export { date } from '../date';
 
@@ -241,17 +240,6 @@ export function funcDef(
 export function prop(thing: string | AST.Expression, propName: string) {
   const asExp = typeof thing === 'string' ? n('ref', thing) : thing;
   return n('property-access', asExp, n('colref', propName));
-}
-
-export function getOfType<
-  K extends AST.Node['type'],
-  N extends Extract<AST.Node, { type: K }>
->(desiredType: K, node: AST.Node): N {
-  if (getDefined(node).type !== desiredType) {
-    throw new Error(`getOfType: expected ${desiredType}, found ${node.type}`);
-  } else {
-    return node as N;
-  }
 }
 
 export const isNode = (value: unknown | AST.Node): value is AST.Node => {

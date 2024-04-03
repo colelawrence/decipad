@@ -41,7 +41,7 @@ export const convertInto =
     if (value === 'calculation' && result) {
       let code: string;
       try {
-        code = textify(result);
+        code = textify(result.value as Result.OneResult, result.type);
       } catch {
         return;
       }

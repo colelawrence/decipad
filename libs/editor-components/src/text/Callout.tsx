@@ -4,6 +4,7 @@ import {
   PlateComponent,
   UserIconKey,
   useMyEditorRef,
+  MyNode,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -23,8 +24,18 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   const editor = useMyEditorRef();
 
   const path = useNodePath(element);
-  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Callout');
-  const saveColor = usePathMutatorCallback(editor, path, 'color', 'Callout');
+  const saveIcon = usePathMutatorCallback(
+    editor,
+    path,
+    'icon' as keyof MyNode,
+    'Callout'
+  );
+  const saveColor = usePathMutatorCallback(
+    editor,
+    path,
+    'color' as keyof MyNode,
+    'Callout'
+  );
   const { color: defaultColor } = useEditorStylesContext();
 
   const turnIntoProps = useTurnIntoProps(element);

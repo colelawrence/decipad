@@ -1,3 +1,4 @@
+import os from 'node:os';
 import { expect, test, Page } from './manager/decipad-tests';
 import {
   ControlPlus,
@@ -571,7 +572,10 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
     await randomFreeUser.aiAssistant.closePannel();
     await notebook.waitForEditorToLoad();
     await notebook.focusOnBody();
-    await page.keyboard.press('Control+v');
+
+    await page.keyboard.press(
+      os.platform() === 'darwin' ? 'Meta+v' : 'Control+v'
+    );
   });
 
   await test.step("check that table's data is correct", async () => {
@@ -601,8 +605,7 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
   await test.step('create data view and display data from table', async () => {
     await notebook.addDataView();
     await page.getByTestId('data-view-source').click();
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
+    await page.getByTestId('data-view-source').selectOption('Table');
 
     await page.getByTestId('add-data-view-column-button').click();
     await page.getByRole('menuitem', { name: 'Index' }).click();
@@ -631,13 +634,13 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
       expect(
         page
           .locator('output')
-          .filter({ hasText: 'Count values:' })
+          .filter({ hasText: 'Count:' })
           .getByTestId('number-result:3')
       ).toBeVisible(),
       expect(
         page
           .locator('output')
-          .filter({ hasText: 'Time span:' })
+          .filter({ hasText: 'Span:' })
           .getByTestId('number-result:5 years')
       ).toBeVisible(),
       expect(

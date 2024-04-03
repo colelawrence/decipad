@@ -1614,7 +1614,7 @@
                   "cellType": {
                     "kind": "anything"
                   },
-                  "aggregation": "Sum"
+                  "aggregation": "number:sum"
                 }
               ],
               "id": "BMEdJBNvZnV025mW0V-nP",
@@ -1888,7 +1888,7 @@
                   },
                   "label": "Cost",
                   "name": "zpzjxuzsjc920gc0dRzN1",
-                  "aggregation": "Sum"
+                  "aggregation": "number:sum"
                 }
               ],
               "id": "ER5rCn6k1j6VTcSHdMiK7",
@@ -1914,7 +1914,7 @@
             {
               "children": [
                 {
-                  "text": "avg("
+                  "text": "average("
                 },
                 {
                   "children": [
@@ -1922,14 +1922,14 @@
                       "text": ""
                     }
                   ],
-                  "id": "prGcoErONSZQRwkvFIlUY",
+                  "id": "2RGbsy6R_VWb0QzlI5k0r",
                   "type": "smart-ref",
                   "blockId": "q2hsGp746-DHRoaVruXm0",
-                  "columnId": "q2hsGp746-DHRoaVruXm0--2",
-                  "lastSeenVariableName": "CostPerMeal.Cost"
+                  "columnId": null,
+                  "lastSeenVariableName": "CostPerMeal"
                 },
                 {
-                  "text": ")"
+                  "text": ".Cost)"
                 }
               ],
               "type": "code_line_v2_code",

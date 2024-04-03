@@ -14,6 +14,7 @@ import { createNormalizeTdPlugin } from './createNormalizeTdPlugin';
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
+import { createNormalizeTableHeaderAggregationPlugin } from './createNormalizeTableHeaderAggregationPlugin';
 
 type Attributes =
   | {
@@ -34,6 +35,7 @@ export const createTablePluginNoUI = <
     createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
     createNormalizeTablesPlugin<TV, TE>(computer),
+    createNormalizeTableHeaderAggregationPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,

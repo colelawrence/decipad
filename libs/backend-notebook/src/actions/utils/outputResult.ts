@@ -1,9 +1,9 @@
 import DeciNumber from '@decipad/number';
-import { type Result } from '@decipad/remote-computer';
+import { buildResult, type Result } from '@decipad/remote-computer';
 
-type OutputValue = Result.Result['value'] | string;
+type OutputValue = Result.OneResult | string;
 
-const outputValue = (value: Result.Result['value']): OutputValue => {
+const outputValue = (value: Result.OneResult): OutputValue => {
   if (value instanceof DeciNumber) {
     return value.toString(5);
   }
@@ -14,8 +14,9 @@ const outputValue = (value: Result.Result['value']): OutputValue => {
 };
 
 export const outputResult = (result: Result.Result): Result.Result => {
-  return {
-    ...result,
-    value: outputValue(result.value),
-  };
+  return buildResult(
+    result.type,
+    outputValue(result.value as Result.OneResult),
+    false
+  );
 };

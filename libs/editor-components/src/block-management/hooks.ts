@@ -3,7 +3,12 @@ import {
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import { MyEditor, MyElement, TopLevelValue } from '@decipad/editor-types';
+import {
+  MyEditor,
+  MyElement,
+  TopLevelValue,
+  MyNode,
+} from '@decipad/editor-types';
 import { requirePathBelowBlock, setSelection } from '@decipad/editor-utils';
 import {
   findNode,
@@ -43,7 +48,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
   const setIsHidden = usePathMutatorCallback(
     editor,
     nodePath,
-    'isHidden',
+    'isHidden' as keyof MyNode,
     'DraggableBlock'
   );
 

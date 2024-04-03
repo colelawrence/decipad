@@ -16,7 +16,7 @@ const unnestOneColumnOneCellIfNecessary = (
     return {
       type: result.type.cellType,
       value: result.value[0],
-    };
+    } as Result.Result;
   }
   return result;
 };

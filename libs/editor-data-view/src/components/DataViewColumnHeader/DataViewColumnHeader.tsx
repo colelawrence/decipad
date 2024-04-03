@@ -1,8 +1,7 @@
+import { useCallback, useMemo, useRef } from 'react';
+import { Path } from 'slate';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import {
-  columnAggregationTypes,
-  isCellAlignRight,
-} from '@decipad/editor-table';
+import { isCellAlignRight } from '@decipad/editor-table';
 import {
   DataViewElement,
   ELEMENT_DATA_VIEW_TH,
@@ -13,13 +12,14 @@ import {
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
+import { availableAggregations as getAvailableAggregations } from '@decipad/language-aggregations';
 import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
 import { useDragColumn } from 'libs/editor-table/src/hooks/useDragColumn';
-import { useCallback, useMemo, useRef } from 'react';
-import { Path } from 'slate';
 import { useDataViewActions, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
 import { useDataViewContext } from '../DataViewContext';
+import { useDeepMemo } from '@decipad/react-utils';
+import { useDataViewNormalizeColumnHeader } from '../../hooks/useDataViewNormalizeColumnHeader';
 
 export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   attributes,
@@ -28,6 +28,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   overridePath,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
+
   const editor = useMyEditorRef();
   const { columns } = useDataViewContext();
   const { dragSource, dragPreview } = useDragColumn(
@@ -46,6 +47,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
         | undefined)
     );
   }, [editor, actualPath]);
+
   const columnHeaderRef = useRef<HTMLTableCellElement>(null);
 
   const [{ isOverCurrent }, connectDropTarget, hoverDirection] = useDropColumn(
@@ -61,9 +63,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
       // first column: do not present aggregation choices
       return [];
     }
-    return columnAggregationTypes(element.cellType as TableCellType).map(
-      (agg) => agg.name
-    );
+    return getAvailableAggregations(element.cellType as TableCellType);
   }, [element.cellType, actualPath]);
 
   const onAggregationChange = usePathMutatorCallback(
@@ -81,16 +81,12 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     }
   }, [onDeleteColumn, actualPath]);
 
-  const computer = useComputer();
-
-  const columnName = element.label
-    ? element.label
-    : computer.getColumnNameDefinedInBlock$.use(element.name) || element.name;
-
   // roundings
-  const roundings = useMemo(
-    () => (element ? availableRoundings(element.cellType) : []),
-    [element]
+  const roundings = useDeepMemo(
+    useCallback(
+      () => (element ? availableRoundings(element.cellType) : []),
+      [element]
+    )
   );
   const onRoundingChange = usePathMutatorCallback(
     editor,
@@ -106,14 +102,22 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     'DataViewColumnHeader'
   );
 
+  useDataViewNormalizeColumnHeader(
+    editor,
+    useComputer(),
+    dataView?.varName,
+    element
+  );
+
   return (
     <UIDataViewColumnHeader
-      name={columnName}
+      key={element.id}
+      name={element.label}
       type={element.cellType}
       attributes={attributes}
       selectedAggregation={element.aggregation}
       availableAggregations={availableAggregations}
-      onAggregationChange={onAggregationChange as (agg?: string) => void}
+      onAggregationChange={onAggregationChange}
       availableRoundings={roundings}
       onRoundingChange={onRoundingChange}
       selectedRounding={element.rounding}

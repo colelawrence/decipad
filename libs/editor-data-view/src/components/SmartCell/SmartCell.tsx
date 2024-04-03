@@ -6,7 +6,6 @@ import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
-import { useAggregation } from '../../hooks/useAggregation';
 
 const emptyCellStyles = css({
   borderBottom: 0,
@@ -15,29 +14,17 @@ const emptyCellStyles = css({
 });
 
 export const SmartCell: FC<SmartProps> = ({
-  column,
-  tableName,
+  aggregationResult: result,
+  aggregationExpression: expression,
   aggregationType,
-  roundings,
   rowSpan,
   colSpan,
-  onHover,
-  hover,
   alignRight,
-  previousColumns,
   global = false,
   rotate,
 }: SmartProps) => {
   const editor = useMyEditorRef();
   const computer = useComputer();
-
-  const { result, expression } = useAggregation({
-    tableName,
-    column,
-    aggregationType,
-    roundings,
-    previousColumns,
-  });
 
   const onDragStart = useCallback(
     (ev: DragEvent) => {
@@ -59,8 +46,6 @@ export const SmartCell: FC<SmartProps> = ({
       result={result}
       rowSpan={rowSpan}
       colSpan={colSpan}
-      onHover={onHover}
-      hover={hover}
       alignRight={alignRight}
       global={global}
       rotate={rotate}

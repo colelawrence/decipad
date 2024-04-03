@@ -12,6 +12,7 @@ import {
   PlateComponent,
   UserIconKey,
   useMyEditorRef,
+  MyNode,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -51,26 +52,36 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const editor = useMyEditorRef();
   const path = useNodePath(element);
 
-  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Display');
-  const saveColor = usePathMutatorCallback(editor, path, 'color', 'Display');
+  const saveIcon = usePathMutatorCallback(
+    editor,
+    path,
+    'icon' as keyof MyNode,
+    'Display'
+  );
+  const saveColor = usePathMutatorCallback(
+    editor,
+    path,
+    'color' as keyof MyNode,
+    'Display'
+  );
 
   const changeFormatting = usePathMutatorCallback(
     editor,
     path,
-    'formatting',
+    'formatting' as keyof MyNode,
     'Display'
   );
 
   const changeBlockId = usePathMutatorCallback(
     editor,
     path,
-    'blockId',
+    'blockId' as keyof MyNode,
     'Display'
   );
   const changeVarName = usePathMutatorCallback(
     editor,
     path,
-    'varName',
+    'varName' as keyof MyNode,
     'Display'
   );
 

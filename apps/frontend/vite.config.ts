@@ -6,12 +6,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isForTests = !!process.env.CI || !!process.env.DECI_E2E;
+// eslint-disable-next-line no-console
+console.log(
+  `Vite config: Running in ${isForTests ? 'test or production' : 'dev'} mode`
+);
+
 const serverOptions: UserConfig['server'] = {
   port: 3000,
   fs: {
     cachedChecks: false,
   },
-  open: 'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
+  open: !isForTests
+    ? 'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI'
+    : undefined,
   proxy: {
     '/api': {
       target: 'http://localhost:3333',
@@ -22,6 +30,7 @@ const serverOptions: UserConfig['server'] = {
       changeOrigin: true,
     },
   },
+  hmr: !isForTests,
 };
 
 const plugins = [

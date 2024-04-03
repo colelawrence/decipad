@@ -3,11 +3,12 @@ import pSeries from 'p-series';
 import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import { AST, RuntimeError, Unit, Value } from '@decipad/language-types';
+import { getDefined } from '@decipad/utils';
+import { type TRealm } from './types';
 import { prettyPrintAST } from '..';
-import { getOfType, getIdentifierString } from '../utils';
+import { getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
 import { expandDirectiveToValue } from '../directives';
-import { Realm } from './Realm';
 import { columnFromDateSequence, columnFromSequence } from '../value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { getDateSequenceIncrement } from '../infer/sequence';
@@ -21,14 +22,14 @@ import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { isPrevious } from '../utils/isPrevious';
-import { getDefined } from '@decipad/utils';
+import { getOfType } from '../parser/getOfType';
 
 // Gets a single value from an expanded AST.
 
 // exhaustive switch
 // eslint-disable-next-line consistent-return, complexity
 async function internalEvaluate(
-  realm: Realm,
+  realm: TRealm,
   node: AST.Statement
 ): Promise<Value.Value> {
   switch (node.type) {
@@ -253,7 +254,7 @@ async function internalEvaluate(
 }
 
 export async function evaluate(
-  realm: Realm,
+  realm: TRealm,
   node: AST.Statement
 ): Promise<Value.Value> {
   realm.incrementStatsCounter('evaluateCount');
@@ -273,7 +274,7 @@ export async function evaluate(
 }
 
 export async function evaluateStatement(
-  realm: Realm,
+  realm: TRealm,
   statement: AST.Statement
 ) {
   realm.incrementStatsCounter('evaluateStatementCount');
@@ -281,7 +282,7 @@ export async function evaluateStatement(
 }
 
 export async function evaluateBlock(
-  realm: Realm,
+  realm: TRealm,
   block: AST.Block
 ): Promise<Value.Value> {
   let previous;

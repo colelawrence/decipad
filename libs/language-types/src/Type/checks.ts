@@ -90,11 +90,31 @@ export const isColumn = checker(async (me: Type) => {
   }
 });
 
+export const isFunction = checker(async (me: Type) => {
+  if (
+    me.functionness != null &&
+    me.functionArgNames != null &&
+    me.functionBody != null
+  ) {
+    return me;
+  } else {
+    return me.expected('function');
+  }
+});
+
 export const isTable = checker(async (me: Type) => {
-  if (me.columnNames != null && me.columnTypes != null) {
+  if (me.columnNames != null && me.columnTypes != null && me.tree == null) {
     return me;
   } else {
     return me.expected('table');
+  }
+});
+
+export const isTree = checker(async (me: Type) => {
+  if (me.tree != null) {
+    return me;
+  } else {
+    return me.expected('tree');
   }
 });
 

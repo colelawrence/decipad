@@ -1,64 +1,64 @@
 import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
-import { Column as ColumnImpl, Comparable } from '@decipad/column';
-import { DataViewFilter } from '@decipad/editor-types';
+import { useResult } from '@decipad/react-contexts';
+import { type Result, Value } from '@decipad/remote-computer';
+import { type DataViewFilter } from '@decipad/editor-types';
 import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
-import { useReplacingColumns } from './useReplacingColumns';
 
 interface UseDataViewLayoutDataProps {
+  blockId: string;
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   expandedGroups: string[] | undefined;
   includeTotal?: boolean;
   preventExpansion: boolean;
-  rotate: boolean;
-  filters: Array<DataViewFilter | undefined>;
 }
 
 export const useDataViewLayoutData = ({
+  blockId,
   tableName,
   columns: _columns,
   aggregationTypes,
   roundings,
+  filters,
   expandedGroups,
   includeTotal = true,
   preventExpansion = false,
-  rotate,
-  filters,
 }: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
-  const columns = useReplacingColumns({
-    tableName,
-    columns: _columns,
-    roundings,
-    filters,
-  });
+  const treeIdentResult = useResult(`${blockId}_shadow`);
 
   return useResolved(
     useMemo(() => {
-      if (!columns.every((column) => Array.isArray(column.value))) {
-        return;
+      if (!treeIdentResult || treeIdentResult.type !== 'computer-result') {
+        return undefined;
+      }
+      const tree = treeIdentResult.result;
+      if (tree.type.kind !== 'tree' || !(tree.value instanceof Value.Tree)) {
+        return undefined;
       }
       return layoutPowerData({
-        columns: columns.map((column) => ({
-          ...column,
-          value: ColumnImpl.fromValues(column.value as Comparable[]),
-        })),
+        tableName,
+        tree: tree as Result.Result<'tree'>,
         aggregationTypes,
+        roundings,
+        filters,
         expandedGroups,
         includeTotal,
         preventExpansion,
-        rotate,
       });
     }, [
       aggregationTypes,
-      columns,
       expandedGroups,
       includeTotal,
       preventExpansion,
-      rotate,
+      roundings,
+      filters,
+      tableName,
+      treeIdentResult,
     ])
   );
 };

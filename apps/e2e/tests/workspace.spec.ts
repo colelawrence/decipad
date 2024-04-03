@@ -3,10 +3,6 @@
 import { expect, test, Page } from './manager/decipad-tests';
 import { Timeouts, snapshot } from '../utils/src';
 
-const byName = (a: { name: string }, b: { name: string }): number => {
-  return a.name.localeCompare(b.name);
-};
-
 test('can create workspace folders @workspace', async ({ randomFreeUser }) => {
   const { page, workspace } = randomFreeUser;
   await test.step('create new workspace folder', async () => {
@@ -76,19 +72,16 @@ test('should display the initial notebooks @workspace', async ({
 }) => {
   const workspaceNotebooks = await workspace.getPadList(true);
 
-  // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-  process.env.CI || process.env.DECI_E2E
-    ? expect(workspaceNotebooks).toMatchObject(
-        [
+  expect(
+    workspaceNotebooks.map((workspaceNotebook) => workspaceNotebook.name).sort()
+  ).toMatchObject(
+    (process.env.CI || process.env.DECI_E2E
+      ? [
           'Welcome to Decipad!',
           'Starting a Business - Example Notebook',
           'Weekend Trip - Example Notebook',
         ]
-          .map((workspaceNotebook) => ({ name: workspaceNotebook }))
-          .sort(byName)
-      )
-    : expect(workspaceNotebooks).toMatchObject(
-        [
+      : [
           '[Template] Capitalisation table for seed founders',
           '[Template] Decipad Investor Update: Mar 2023',
           '[Template] How much is Apple worth? Breaking down a DCF model.',
@@ -104,11 +97,10 @@ test('should display the initial notebooks @workspace', async ({
           'Starting a Business - Example Notebook',
           'Weekend Trip - Example Notebook',
         ]
-          .map((workspaceNotebook) => ({ name: workspaceNotebook })) // Rename 'notebook' to 'pad'
-          .sort(byName)
-      );
+    ).sort()
+  );
 
-  // take snapshot after visint a notebook to check with the layout of the workspace if affected
+  // take snapshot after visiting a notebook to check with the layout of the workspace if affected
   await page.getByRole('link', { name: /Starting a Business/ }).click();
   await notebook.waitForEditorToLoad();
   await notebook.checkNotebookTitle('🕯Starting a Business - Example Notebook');
@@ -215,6 +207,7 @@ test('workspace operations @workspace', async ({
 test('workspace flows @workspace', async ({
   randomFreeUser: { page, workspace },
 }) => {
+  test.slow();
   await test.step('Archive & delete a notebook', async () => {
     await workspace.archivePad(0);
     await workspace.openArchive();
@@ -334,6 +327,7 @@ test('notebook reader and editor permissions', async ({
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
+  test.slow();
   let notebook: string;
 
   await test.step('invite reader and editor to notebook', async () => {

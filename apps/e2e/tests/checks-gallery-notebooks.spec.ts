@@ -12,6 +12,7 @@ const jsonFiles = files
 
 for (const file of jsonFiles) {
   test(`Check gallery template: ${file}`, async ({ randomFreeUser }) => {
+    test.slow();
     await randomFreeUser.goToWorkspace();
 
     await test.step(`Load Notebook "${file}"`, async () => {

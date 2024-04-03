@@ -1026,7 +1026,7 @@ export class Notebook {
 
   /**
    * Add Image to Notebook.
-   * 
+   *
    * replicate util to be implemented
    * unsplash util to be implemented
    * giphy util to be implemented
@@ -1097,7 +1097,7 @@ export class Notebook {
 
   /**
    * Add Embed to Notebook.
-   * 
+   *
    *
    * **Usage**
    *
@@ -1115,7 +1115,7 @@ export class Notebook {
 
   /**
    * Add CSV to Notebook.
-   * 
+   *
    *
    * **Usage**
    *

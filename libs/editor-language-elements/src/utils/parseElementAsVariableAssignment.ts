@@ -13,7 +13,7 @@ export function parseElementAsVariableAssignment(
   varName: string,
   source: string | AST.Expression,
   isArtificial?: boolean,
-  artificiallyDerivedFrom?: string
+  artificiallyDerivedFrom?: Array<string>
 ): Program {
   const { solution: expression, error } =
     typeof source === 'string'

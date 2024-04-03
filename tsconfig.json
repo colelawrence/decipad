@@ -116,6 +116,10 @@
       "@decipad/language-types": ["libs/language-types/src/index.ts"],
       "@decipad/language-units": ["libs/language-units/src/index.ts"],
       "@decipad/language-utils": ["libs/language-utils/src/index.ts"],
+      "@decipad/language-aggregations": [
+        "libs/language-aggregations/src/index.ts"
+      ],
+      "@decipad/language-filters": ["libs/language-filters/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/message-packer": ["libs/message-packer/src/index.ts"],
       "@decipad/meta": ["libs/meta/src/index.ts"],

@@ -1,4 +1,9 @@
-import { Result, SerializedType, Format } from '@decipad/remote-computer';
+import {
+  Result,
+  SerializedType,
+  Format,
+  buildResult,
+} from '@decipad/remote-computer';
 import DeciNumber from '@decipad/number';
 import { formatResult } from './formatResult';
 
@@ -27,7 +32,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'string': {
-      return `${value as string}`;
+      return `${value?.toString() || ''}`;
     }
 
     case 'date': {
@@ -49,11 +54,16 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     case 'range': {
       const [start, end] = value as Result.OneResult[];
       const innerType = type.rangeOf;
-      return `range(${formatResultPreview({
+      return `range(${formatResultPreview(
+        buildResult(innerType, start, false)
+      )} through ${formatResultPreview({
         type: innerType,
-        value: start,
-      })} through ${formatResultPreview({ type: innerType, value: end })})`;
+        value: end,
+      } as Result.Result)})`;
     }
+
+    case 'tree':
+      return 'tree';
 
     case 'type-error': {
       return Format.formatError('en-US', type.errorCause);
@@ -71,7 +81,7 @@ function limitedColumnSizePreview(
   const len = () => ret.reduce((accum, item) => accum + item.length + 2, 0);
 
   for (const cell of value) {
-    const fmt = formatResultPreview({ type: cellType, value: cell });
+    const fmt = formatResultPreview(buildResult(cellType, cell, false));
 
     if (len() + fmt.length > LOOSE_PREVIEW_LIMIT) {
       ret.push('...');

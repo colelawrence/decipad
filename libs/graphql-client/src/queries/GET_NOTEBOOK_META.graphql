@@ -44,7 +44,6 @@ fragment NotebookMetaData on Pad {
     createdAt
     updatedAt
     version
-    data
   }
   archived
   access {

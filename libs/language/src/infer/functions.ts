@@ -12,9 +12,10 @@ import {
 import { callBuiltinFunctor } from '@decipad/language-builtins';
 import { inferExpression, inferStatement } from '.';
 import { Realm } from '..';
-import { getIdentifierString, getOfType } from '../utils';
+import { getIdentifierString } from '../utils';
 import { Context, logRetrievedFunctionName } from './context';
 import { isPrevious } from '../utils/isPrevious';
+import { getOfType } from '../parser/getOfType';
 
 export function inferFunctionDefinition(
   ctx: Context,
@@ -28,9 +29,35 @@ export function inferFunctionDefinition(
   return t.functionPlaceholder(
     fName,
     args.args.map((a) => a.args[0]),
+    getOfType('block', statement.args[2]),
     ctx.stack.depth
   );
 }
+
+export const internalInferFunction = async (
+  realm: Realm,
+  funcBody: AST.Block,
+  argNames: string[],
+  args: Type[],
+  depth = 0
+) => {
+  const { inferContext: ctx } = realm;
+  return ctx.scopedToDepth(depth, async () =>
+    ctx.stack.withPush(async () => {
+      for (const [argDef, arg] of zip(argNames, args)) {
+        ctx.stack.set(argDef, arg);
+      }
+
+      let returned;
+      for (const statement of funcBody.args) {
+        // eslint-disable-next-line no-await-in-loop
+        returned = await inferStatement(realm, statement);
+      }
+
+      return getDefined(returned, 'panic: function did not return');
+    })
+  );
+};
 
 export const inferFunction = async (
   realm: Realm,
@@ -38,33 +65,22 @@ export const inferFunction = async (
   givenArguments: Type[],
   depth = 0
 ): Promise<Type> => {
-  const { inferContext: ctx } = realm;
-  return ctx.scopedToDepth(depth, async () =>
-    ctx.stack.withPush(async () => {
-      const [fName, fArgs, fBody] = func.args;
+  const [fName, fArgs, fBody] = func.args;
+  if (givenArguments.length !== fArgs.args.length) {
+    const error = InferError.expectedArgCount(
+      getIdentifierString(fName),
+      fArgs.args.length,
+      givenArguments.length
+    );
 
-      if (givenArguments.length !== fArgs.args.length) {
-        const error = InferError.expectedArgCount(
-          getIdentifierString(fName),
-          fArgs.args.length,
-          givenArguments.length
-        );
-
-        return t.impossible(error);
-      }
-
-      for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
-        ctx.stack.set(getIdentifierString(argDef), arg);
-      }
-
-      let returned;
-      for (const statement of fBody.args) {
-        // eslint-disable-next-line no-await-in-loop
-        returned = await inferStatement(realm, statement);
-      }
-
-      return getDefined(returned, 'panic: function did not return');
-    })
+    return t.impossible(error);
+  }
+  return internalInferFunction(
+    realm,
+    fBody,
+    fArgs.args.map((a) => getIdentifierString(a)),
+    givenArguments,
+    depth
   );
 };
 

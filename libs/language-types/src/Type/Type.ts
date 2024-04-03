@@ -9,6 +9,7 @@ import {
   getRangeOf,
   isColumn,
   isDate,
+  isFunction,
   isNothing,
   isPrimitive,
   isRange,
@@ -16,6 +17,7 @@ import {
   isTable,
   isTableOrRow,
   isTimeQuantity,
+  isTree,
   multiplyUnit,
   reduced,
   reducedToLowest,
@@ -70,7 +72,10 @@ export class Type {
   functionness = false;
   functionName: string | undefined;
   functionArgNames: string[] | undefined;
+  functionBody: AST.Block | undefined;
   functionScopeDepth: number | undefined;
+
+  tree: Type[] | undefined;
 
   // Set to true when the type is still pending inference
   pending = false;
@@ -168,6 +173,14 @@ export class Type {
 
   async isColumn(): Promise<Type> {
     return isColumn(this);
+  }
+
+  async isTree(): Promise<Type> {
+    return isTree(this);
+  }
+
+  async isFunction(): Promise<Type> {
+    return isFunction(this);
   }
 
   async isTable(): Promise<Type> {
@@ -294,6 +307,24 @@ export const table = ({
   });
 };
 
+interface BuildTreeArgs {
+  columnTypes: Type[];
+  columnNames: string[];
+}
+
+export const tree = ({ columnTypes, columnNames }: BuildTreeArgs) => {
+  if (!columnTypes) {
+    throw new TypeError('columnTypes is required when building tree');
+  }
+  if (!columnNames) {
+    throw new TypeError('columnNames is required when building tree');
+  }
+  return produce(new Type(), (t) => {
+    t.tree = columnTypes;
+    t.columnNames = columnNames;
+  });
+};
+
 export const row = (
   cells: Type[],
   cellNames: string[],
@@ -334,13 +365,15 @@ export const column = (
 
 export const functionPlaceholder = (
   name: string,
-  argNames: string[] | undefined,
+  argNames?: string[],
+  functionBody?: AST.Block,
   scopeDepth = 0
 ) =>
   produce(new Type(), (fType) => {
     fType.functionness = true;
     fType.functionName = name;
     fType.functionArgNames = argNames;
+    fType.functionBody = functionBody;
     fType.functionScopeDepth = scopeDepth;
   });
 

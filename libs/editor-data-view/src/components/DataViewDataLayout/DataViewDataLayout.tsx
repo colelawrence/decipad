@@ -1,15 +1,14 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
-import { DataViewRow, PaginationControl, p13Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { DataViewRow, PaginationControl, p13Medium } from '@decipad/ui';
+import { DataViewElement, DataViewFilter } from '@decipad/editor-types';
 import { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
 import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
-import { usePushDataViewToComputer } from '../../hooks/usePushDataViewToComputer';
-import { DataViewElement, DataViewFilter } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate-common';
+import { getAggregationShortName } from '../../../../language-aggregations/src/aggregations';
 
 export interface DataViewLayoutProps {
   element: DataViewElement;
@@ -17,11 +16,11 @@ export interface DataViewLayoutProps {
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
-  filters: Array<DataViewFilter | undefined>;
 }
 
 const MAX_PAGE_SIZE = 60;
@@ -39,22 +38,22 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   columns,
   aggregationTypes,
   roundings,
+  filters,
   expandedGroups = [],
   onChangeExpandedGroups,
   rotate,
   headers,
-  filters,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData({
     tableName,
+    blockId: element.id,
     columns,
     aggregationTypes,
     roundings,
+    filters,
     expandedGroups,
     includeTotal: true,
     preventExpansion: rotate,
-    rotate,
-    filters,
   });
 
   const [page, setPage] = useState(1);
@@ -78,9 +77,9 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
         {
           elementType: 'group',
           children: pageGroups,
-          columnIndex: -1,
-          previousColumns: [],
           replicaCount: 1,
+          aggregationResult: undefined,
+          aggregationExpression: undefined,
         },
         {
           rotate,
@@ -107,17 +106,6 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     [groups]
   );
 
-  const dataViewName = getNodeString(element.children[0].children[0]);
-
-  usePushDataViewToComputer({
-    element,
-    groups,
-    dataViewName,
-    tableName,
-    aggregationTypes,
-    roundings,
-  });
-
   return (
     <>
       {table.map((row, index) => {
@@ -136,10 +124,10 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
               <DataViewDataGroupElement
                 key={`${table.indexOf(row)}-${index}-${cellIndex}}`}
                 index={index}
-                tableName={tableName}
                 element={cell}
-                roundings={roundings}
-                aggregationType={aggregationTypes[cell.columnIndex]}
+                aggregationType={getAggregationShortName(
+                  aggregationTypes[cellIndex]
+                )}
                 Header={DataViewTableHeader}
                 SmartCell={SmartCell}
                 isFullWidthRow={row.length === maxCols}

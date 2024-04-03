@@ -7,7 +7,7 @@ import { Timeouts, snapshot } from '../utils/src';
 
 const waitForPageLoad = async (page: Page) =>
   Promise.all([
-    page.getByTestId('number-result:454534534534534510149632').nth(0).waitFor(),
+    page.getByTestId('number-result:454534534534534535345340').nth(0).waitFor(),
     page.waitForSelector('text="ם עוד. על בקר"'),
   ]);
 

@@ -3,6 +3,7 @@ import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_PLOT,
   PlateComponent,
+  PlotElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
@@ -20,7 +21,12 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   const readOnly = useIsEditorReadOnly();
   const plot = usePlot(element);
   const path = useNodePath(element);
-  const onTitleChange = usePathMutatorCallback(editor, path, 'title', 'Plot');
+  const onTitleChange = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'title',
+    'Plot'
+  );
   const result = useMemo(
     () =>
       (plot != null &&

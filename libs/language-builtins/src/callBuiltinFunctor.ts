@@ -1,11 +1,7 @@
 import { getOnly, produce } from '@decipad/utils';
-import { getOperatorByName } from './operators';
-import { FullBuiltinSpec, Functor } from './interfaces';
-import { parseFunctor } from './parseFunctor';
 // eslint-disable-next-line no-restricted-imports
 import {
   AST,
-  ContextUtils,
   Dimension,
   InferError,
   Type,
@@ -13,13 +9,17 @@ import {
   buildType as t,
   typeIsPending,
 } from '@decipad/language-types';
+import { getOperatorByName } from './operators';
+import { FullBuiltinSpec, Functor } from './interfaces';
+import { parseFunctor } from './parseFunctor';
+import { BuiltinContextUtils, CallBuiltinFunctor } from './types';
 
 type CallBuiltinFunctorParams =
-  | [ContextUtils, string, Type[]]
-  | [ContextUtils, string, Type[], AST.Expression[]];
+  | [BuiltinContextUtils, string, Type[]]
+  | [BuiltinContextUtils, string, Type[], AST.Expression[]];
 
 const internalCallBuiltinFunctor = async (
-  context: ContextUtils,
+  context: BuiltinContextUtils,
   opName: string,
   givenArguments: Type[],
   givenValues: AST.Expression[]
@@ -118,14 +118,16 @@ const enrichErrorType = (
   return type;
 };
 
-export const callBuiltinFunctor = async (
-  ...params: CallBuiltinFunctorParams
+export const callBuiltinFunctor: CallBuiltinFunctor = async (
+  ...[utils, ...params]
 ): Promise<Type> => {
-  const returnType = await internalCallBuiltinFunctor(
-    ...(params as [ContextUtils, string, Type[], AST.Expression[]])
-  );
+  const internalParams: CallBuiltinFunctorParams = [
+    utils,
+    ...(params as [string, Type[], AST.Expression[]]),
+  ];
+  const returnType = await internalCallBuiltinFunctor(...internalParams);
   if (typeHasError(returnType)) {
-    return enrichErrorType(params, returnType);
+    return enrichErrorType(internalParams, returnType);
   }
   return returnType;
 };

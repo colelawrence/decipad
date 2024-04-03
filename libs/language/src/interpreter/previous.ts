@@ -1,18 +1,16 @@
-// Accumulate values into a list by consuming an async iterable.
-
 import { getDefined } from '@decipad/utils';
+import { type TRealm } from './types';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Value } from '@decipad/language-types';
-import { Realm } from './Realm';
+import { type AST, type Value } from '@decipad/language-types';
 
-type Evaluate = (realm: Realm, block: AST.Statement) => Promise<Value.Value>;
+type Evaluate = (realm: TRealm, block: AST.Statement) => Promise<Value.Value>;
 
 export const CURRENT_COLUMN_SYMBOL = Symbol('current column');
 
 // Accumulates values into an array by consuming async iterable of values.
 // Manages realm.previousValue too.
 export const mapWithPrevious = async (
-  realm: Realm,
+  realm: TRealm,
   otherColumns: Map<string, Value.ColumnLikeValue>,
   iter: () => AsyncIterable<Value.Value>
 ) => {
@@ -45,7 +43,7 @@ export const mapWithPrevious = async (
 };
 
 export const usingPrevious = async (
-  realm: Realm,
+  realm: TRealm,
   expression: AST.Expression,
   evaluate: Evaluate
 ): Promise<Value.Value> => {

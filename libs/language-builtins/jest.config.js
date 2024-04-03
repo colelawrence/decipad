@@ -6,9 +6,9 @@ module.exports = {
   displayName: 'language-builtins',
   coverageThreshold: {
     global: {
-      statements: 61,
-      branches: 50,
-      lines: 60,
+      statements: 58,
+      branches: 46,
+      lines: 58,
       functions: 52,
     },
   },

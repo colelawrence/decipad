@@ -2,6 +2,7 @@ import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   AnyElement,
   AvailableSwatchColor,
+  MyNode,
   PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -283,7 +284,7 @@ export const SubmitForm: PlateComponent<{}> = ({ ...props }) => {
   const updatePath = usePathMutatorCallback(
     editor,
     path,
-    'endpointUrlSecretName',
+    'endpointUrlSecretName' as keyof MyNode,
     'submit form'
   );
   const { secrets } = useWorkspaceSecrets(workspaceId as string);

@@ -2,13 +2,14 @@ import { NotebookResults, Result } from '@decipad/remote-computer';
 import { ExportedResult } from '.';
 import { formatUnit } from '@decipad/format';
 import { ColumnValue, FormattedResult, VarnameExportedResult } from './types';
+import { OneResult } from 'libs/language-types/src/Result';
 
 async function getSingleResult(
-  _value: Result.Result['value'],
+  _value: Result.OneResult,
   _type: Result.Result['type']
 ): Promise<FormattedResult | undefined> {
   const { kind } = _type;
-  const result: Result.Result = { value: _value, type: _type };
+  const result: Result.Result = { value: _value, type: _type } as Result.Result;
 
   if (kind === 'string') {
     const { value } = result as Result.Result<'string'>;
@@ -104,7 +105,7 @@ export async function exportProgram(
       if (result.type === 'identified-error') return;
 
       const res = await getSingleResult(
-        result.result.value,
+        result.result.value as OneResult,
         result.result.type
       );
 

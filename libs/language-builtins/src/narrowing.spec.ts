@@ -16,6 +16,7 @@ it('can narrow some types', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -32,6 +33,7 @@ it('can narrow some types', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": null,
       Symbol(immer-draftable): true,
@@ -49,6 +51,7 @@ it('can narrow some types', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -65,6 +68,7 @@ it('can narrow some types', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "boolean",
       "unit": null,
       Symbol(immer-draftable): true,
@@ -73,7 +77,9 @@ it('can narrow some types', async () => {
 
   expect(
     (await narrowTypes(parseType('number'), parseType('string'))).errorCause
-  ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
+  ).toMatchInlineSnapshot(
+    `[Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["number",{"node":null,"errorCause":null,"type":"string","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}]`
+  );
 });
 
 it('can narrow percentages', async () => {
@@ -89,6 +95,7 @@ it('can narrow percentages', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -105,6 +112,7 @@ it('can narrow percentages', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": null,
       Symbol(immer-draftable): true,
@@ -122,6 +130,7 @@ it('can narrow percentages', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -138,6 +147,7 @@ it('can narrow percentages', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": null,
       Symbol(immer-draftable): true,
@@ -159,6 +169,7 @@ it('can narrow percentages', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -175,6 +186,7 @@ it('can narrow percentages', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": null,
       Symbol(immer-draftable): true,
@@ -198,6 +210,7 @@ it('can narrow `anything`', async () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -214,6 +227,7 @@ it('can narrow `anything`', async () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -224,6 +238,7 @@ it('can narrow `anything`', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -240,6 +255,7 @@ it('can narrow `anything`', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": null,
       "unit": null,
       Symbol(immer-draftable): true,
@@ -264,6 +280,7 @@ it('can narrow `anything`', async () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -280,6 +297,7 @@ it('can narrow `anything`', async () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -290,6 +308,7 @@ it('can narrow `anything`', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -306,6 +325,7 @@ it('can narrow `anything`', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": null,
       "unit": null,
       Symbol(immer-draftable): true,
@@ -326,6 +346,7 @@ it('can narrow units', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -342,6 +363,7 @@ it('can narrow units', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": Array [
         Object {
@@ -378,6 +400,7 @@ it('can narrow units', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -394,6 +417,7 @@ it('can narrow units', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": "number",
       "unit": Array [
         Object {
@@ -421,7 +445,9 @@ it('can narrow units', async () => {
 
   expect(
     (await narrowTypes(meters, t.number([parseUnit('seconds')]))).errorCause
-  ).toMatchInlineSnapshot(`[Error: Inference Error: expected-unit]`);
+  ).toMatchInlineSnapshot(
+    `[Error: Inference Error: expected-unit : {"errType":"expected-unit","expectedUnit":[[{"unit":"seconds","exp":{"n":"1","d":"1","s":"1","infinite":false},"multiplier":{"n":"1","d":"1","s":"1","infinite":false},"known":true,"baseQuantity":"second","baseSuperQuantity":"second"}],[{"unit":"meters","exp":{"n":"1","d":"1","s":"1","infinite":false},"multiplier":{"n":"1","d":"1","s":"1","infinite":false},"known":true,"baseQuantity":"length","baseSuperQuantity":"length"}]]}]`
+  );
 });
 
 describe('percentages', () => {
@@ -438,6 +464,7 @@ describe('percentages', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -454,6 +481,7 @@ describe('percentages', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -472,6 +500,7 @@ describe('percentages', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -488,6 +517,7 @@ describe('percentages', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -506,6 +536,7 @@ describe('percentages', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -522,6 +553,7 @@ describe('percentages', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -543,6 +575,7 @@ describe('percentages', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -559,6 +592,7 @@ describe('percentages', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": Array [
           Object {
@@ -599,6 +633,7 @@ it('can narrow dates', async () => {
       "delegatesIndexTo": undefined,
       "errorCause": null,
       "functionArgNames": undefined,
+      "functionBody": undefined,
       "functionName": undefined,
       "functionScopeDepth": undefined,
       "functionness": false,
@@ -615,6 +650,7 @@ it('can narrow dates', async () => {
       "rowCount": undefined,
       "rowIndexName": null,
       "symbol": null,
+      "tree": undefined,
       "type": null,
       "unit": null,
       Symbol(immer-draftable): true,
@@ -622,7 +658,9 @@ it('can narrow dates', async () => {
   `);
   expect(
     (await narrowTypes(t.date('day'), t.date('hour'))).errorCause
-  ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
+  ).toMatchInlineSnapshot(
+    `[Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["day",{"node":null,"errorCause":null,"type":null,"unit":null,"numberFormat":null,"numberError":null,"date":"hour","rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}]`
+  );
 });
 
 it('explains where the error came from', async () => {
@@ -663,6 +701,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -679,6 +718,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "string",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -692,7 +732,9 @@ describe('narrow func call', () => {
           ...parseFunctionSignature('number, number -> string'),
         })
       ).errorCause
-    ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
+    ).toMatchInlineSnapshot(
+      `[Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["number",{"node":null,"errorCause":null,"type":"string","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}]`
+    );
   });
 
   it('propagates symbols to ret', async () => {
@@ -712,6 +754,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -728,6 +771,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -753,6 +797,7 @@ describe('narrow func call', () => {
           "delegatesIndexTo": undefined,
           "errorCause": null,
           "functionArgNames": undefined,
+          "functionBody": undefined,
           "functionName": undefined,
           "functionScopeDepth": undefined,
           "functionness": false,
@@ -769,6 +814,7 @@ describe('narrow func call', () => {
           "rowCount": undefined,
           "rowIndexName": null,
           "symbol": null,
+          "tree": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -779,6 +825,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -795,6 +842,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -817,6 +865,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -833,6 +882,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "boolean",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -858,6 +908,7 @@ describe('narrow func call', () => {
           "delegatesIndexTo": undefined,
           "errorCause": null,
           "functionArgNames": undefined,
+          "functionBody": undefined,
           "functionName": undefined,
           "functionScopeDepth": undefined,
           "functionness": false,
@@ -874,6 +925,7 @@ describe('narrow func call', () => {
           "rowCount": undefined,
           "rowIndexName": null,
           "symbol": null,
+          "tree": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -884,6 +936,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -900,6 +953,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -924,6 +978,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -940,6 +995,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "boolean",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -960,8 +1016,9 @@ describe('narrow func call', () => {
         "columnTypes": null,
         "date": null,
         "delegatesIndexTo": undefined,
-        "errorCause": [Error: Inference Error: expected-but-got],
+        "errorCause": [Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["string",{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}],
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -978,6 +1035,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -1000,6 +1058,7 @@ describe('narrow func call', () => {
         "delegatesIndexTo": undefined,
         "errorCause": null,
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -1016,6 +1075,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": "boolean",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -1036,8 +1096,9 @@ describe('narrow func call', () => {
         "columnTypes": null,
         "date": null,
         "delegatesIndexTo": undefined,
-        "errorCause": [Error: Inference Error: expected-but-got],
+        "errorCause": [Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["string",{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}],
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -1054,6 +1115,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -1074,8 +1136,9 @@ describe('narrow func call', () => {
         "columnTypes": null,
         "date": null,
         "delegatesIndexTo": undefined,
-        "errorCause": [Error: Inference Error: expected-but-got],
+        "errorCause": [Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["number",{"node":null,"errorCause":null,"type":"string","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}],
         "functionArgNames": undefined,
+        "functionBody": undefined,
         "functionName": undefined,
         "functionScopeDepth": undefined,
         "functionness": false,
@@ -1092,6 +1155,7 @@ describe('narrow func call', () => {
         "rowCount": undefined,
         "rowIndexName": null,
         "symbol": null,
+        "tree": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -1106,7 +1170,11 @@ it('cant narrow tables, rows, functions', async () => {
     columnTypes: [t.boolean()],
   });
   const row = t.row([t.boolean()], ['X']);
-  const func = t.functionPlaceholder('fname', undefined);
+  const func = t.functionPlaceholder('fname', ['X'], {
+    type: 'block',
+    id: 'body-block-id',
+    args: [],
+  });
 
   await expect(async () => narrowTypes(table, table)).rejects.toThrow();
   await expect(async () => narrowTypes(row, row)).rejects.toThrow();

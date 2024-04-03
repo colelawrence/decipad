@@ -25,6 +25,11 @@ export type Table = {
   columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;
+export type Tree = {
+  readonly kind: 'tree';
+  columnTypes: SerializedType[];
+  readonly columnNames: string[];
+} & Common;
 export type MaterializedTable = {
   readonly kind: 'materialized-table';
   readonly indexName: string | null;
@@ -72,6 +77,7 @@ export type Function = {
   readonly kind: 'function';
   readonly name: string;
   readonly argNames?: string[];
+  readonly body?: AST.Block;
   readonly ast?: AST.Node | null;
 } & Common;
 export type TypeError = {

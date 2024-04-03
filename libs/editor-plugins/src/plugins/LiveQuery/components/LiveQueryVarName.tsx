@@ -3,6 +3,7 @@ import {
   LiveQueryElement,
   PlateComponent,
   useMyEditorRef,
+  LiveQueryVarNameElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
@@ -56,7 +57,7 @@ export const LiveQueryVarName: PlateComponent = ({
         label="Source:"
         variableNames={useSourceLiveConnections()}
         selectedVariableName={parent?.[0].connectionBlockId}
-        onChangeVariableName={usePathMutatorCallback(
+        onChangeVariableName={usePathMutatorCallback<LiveQueryVarNameElement>(
           editor,
           parent?.[1],
           'connectionBlockId',

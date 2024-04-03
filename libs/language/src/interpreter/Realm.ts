@@ -10,12 +10,15 @@ import {
 import { ExpressionCache } from '../expression-cache';
 import { InterpreterStats, initialInterpreterStats } from './interpreterStats';
 import { simpleExpressionEvaluate } from './simpleExpressionEvaluate';
+import { functionCallValue } from './functionCallValue';
+import { internalInferFunction } from '../infer/functions';
+import { TRealm } from './types';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
 // contains a stack of variables and a map of
 // function names to AST.FunctionDefinition.
-export class Realm {
+export class Realm implements TRealm {
   stack = createStack<Value.Value>(
     undefined,
     tableItemsToTable,
@@ -89,6 +92,9 @@ export class Realm {
         simpleExpressionEvaluate(this, s),
       retrieveVariableValueByGlobalVariableName: (varName) =>
         this.stack.get(varName),
+      callValue: async (body, argNames, args) =>
+        functionCallValue(this, body, argNames, args),
+      callFunctor: async (...args) => internalInferFunction(this, ...args),
     };
   }
 

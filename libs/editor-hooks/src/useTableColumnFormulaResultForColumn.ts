@@ -1,5 +1,5 @@
 import { findNodePath } from '@udecode/plate-common';
-import { Result, isTableResult } from '@decipad/remote-computer';
+import { Result, buildResult, isTableResult } from '@decipad/remote-computer';
 import {
   MyReactEditor,
   TableCellElement,
@@ -20,10 +20,11 @@ export function useTableColumnFormulaResultForCell(
   return useMemo(
     () =>
       rowIndex != null && columnResult?.type.kind === 'materialized-column'
-        ? {
-            type: columnResult.type.cellType,
-            value: columnResult.value[rowIndex] as Result.OneResult,
-          }
+        ? (buildResult(
+            columnResult.type.cellType,
+            columnResult.value[rowIndex],
+            false
+          ) as Result.Result)
         : undefined,
     [columnResult, rowIndex]
   );

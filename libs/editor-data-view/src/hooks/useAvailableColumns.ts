@@ -2,14 +2,8 @@ import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { SerializedType, isColumn } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  switchMap,
-} from 'rxjs/operators';
-import { Column, ImmaterializedColumn } from '../types';
-import { materializeColumn } from '../utils/materializeColumn';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Column } from '../types';
 
 const DEBOUNCE_RESULT_MS = 100;
 
@@ -33,25 +27,17 @@ export const useAvailableColumns = (blockId: string): Column[] | undefined => {
       .pipe(
         map((columns) => {
           return columns.map(
-            (column): ImmaterializedColumn => ({
+            (column): Column => ({
               name: column.columnName,
               blockId: column.blockId,
               type: getColumnType(column.result.type),
-              value: column.result.value,
             })
           );
         }),
         debounceTime(DEBOUNCE_RESULT_MS),
-        distinctUntilChanged(
-          (cur: ImmaterializedColumn[], next: ImmaterializedColumn[]) =>
-            dequal(cur, next)
-        ),
-        switchMap((columns: ImmaterializedColumn[]): Promise<Column[]> => {
-          const materializedColumns = columns.map(
-            materializeColumn
-          ) as Promise<Column>[];
-          return Promise.all(materializedColumns);
-        })
+        distinctUntilChanged((cur: Column[], next: Column[]) =>
+          dequal(cur, next)
+        )
       )
       .subscribe(setAvailableColumns);
 

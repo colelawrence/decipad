@@ -1,89 +1,102 @@
-import { type SerializedType } from '@decipad/remote-computer';
-import { BehaviorSubject } from 'rxjs';
-import { Comparable } from '@decipad/universal-compare';
 import {
-  DataGroup,
-  PreviousColumns,
-  SmartRowColumn,
-  VirtualColumn,
-} from '../../types';
-import type { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
+  type SerializedType,
+  type Result,
+  Value,
+} from '@decipad/remote-computer';
+import { DataViewFilter } from '@decipad/editor-types';
+import { type DataGroup } from '../../types';
+import { type GenerateGroups } from './types';
+import { type GenerateSmartRow } from './generateSmartRow';
 
 interface SliceToGroupProps {
+  tableName: string;
+  tree: Result.Result<'tree'>;
   isExpanded: boolean;
-  value: Comparable | undefined;
+  value: Result.OneResult;
   type: SerializedType;
+  previousColumns: Array<Value.TreeColumn>;
+  previousColumnTypes: Array<SerializedType>;
+  previousFilters: Array<DataViewFilter | undefined>;
+  valuePath: Array<Result.OneResult>;
+  aggregations: Array<string | undefined>;
+  roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   hideSmartRow: boolean;
-  columns: VirtualColumn[];
   groupId: string;
-  columnIndex: number;
-  parentHighlight$?: BehaviorSubject<boolean>;
-  previousColumns: PreviousColumns;
-  generateGroups: GenerateGroups;
-  generateSmartRow: GenerateSubSmartRow;
   preventExpansion: boolean;
-  rotate: boolean;
   replicaCount: number;
+  indent?: number;
+  expandedGroups?: string[];
+  aggregationExpression?: string;
+  generateGroups: GenerateGroups;
+  generateSmartRow: GenerateSmartRow;
 }
 
 export const sliceToGroup = async ({
+  tableName,
+  tree,
   isExpanded,
   value,
   type,
-  columns,
+  previousColumns,
+  previousColumnTypes,
+  previousFilters,
+  valuePath,
+  aggregations,
+  roundings,
+  filters,
   hideSmartRow,
   groupId,
-  columnIndex,
-  parentHighlight$,
-  previousColumns,
+  preventExpansion,
+  replicaCount,
+  indent = 0,
+  expandedGroups,
+  aggregationExpression,
   generateGroups,
   generateSmartRow,
-  preventExpansion,
-  rotate,
-  replicaCount,
 }: SliceToGroupProps): Promise<DataGroup> => {
-  const selfHighlight$ = new BehaviorSubject<boolean>(false);
-
   const newGroups = await generateGroups({
-    columns,
-    columnIndex: columnIndex + 1,
+    tableName,
+    tree,
     previousColumns,
-    parentHighlight$: selfHighlight$,
+    previousColumnTypes,
+    previousFilters,
+    valuePath,
     parentGroupId: groupId,
     preventExpansion,
-    rotate,
+    aggregations,
+    roundings,
+    filters,
+    indent: indent + 1,
+    expandedGroups,
   });
 
-  const expandable = newGroups.length > 1;
+  const collapsible = newGroups.length > 1;
 
   const smartRow =
-    (!hideSmartRow &&
-      expandable &&
-      generateSmartRow({
-        columns,
-        columnIndex: columnIndex + 1,
-        previousColumns,
-        parentHighlight$,
-        rotate,
-      })) ||
-    null;
+    !hideSmartRow && collapsible && tree.value.columns.length > 0
+      ? generateSmartRow({
+          aggregation: tree.value.columns[0].aggregation,
+          tableName,
+          columnTypes: tree.type.columnTypes,
+          columns: tree.value.columns,
+          previousColumns,
+          previousColumnTypes,
+          previousFilters,
+          valuePath,
+          aggregations,
+          roundings,
+          filters,
+          indent,
+        })
+      : null;
 
-  let children = [
+  const children = [
     smartRow,
-    ...(isExpanded || !expandable ? newGroups : []),
+    ...(isExpanded || !collapsible ? newGroups : []),
   ].filter(Boolean) as DataGroup[];
 
-  if (isExpanded) {
-    children = children.map((child, index) => {
-      if (index > 0 && child.elementType === 'group') {
-        return {
-          ...child,
-          column: undefined,
-        };
-      }
-      return child;
-    });
-  }
+  const aggregationResult = indent > 0 ? tree.value.rootAggregation : undefined;
 
   return {
     elementType: 'group',
@@ -91,12 +104,9 @@ export const sliceToGroup = async ({
     value,
     type,
     children,
-    collapsible: expandable,
-    selfHighlight$,
-    parentHighlight$,
-    columnIndex,
-    previousColumns,
-    column: previousColumns[previousColumns.length - 1] as SmartRowColumn,
+    collapsible,
     replicaCount,
+    aggregationResult,
+    aggregationExpression,
   };
 };

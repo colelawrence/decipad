@@ -42,6 +42,12 @@
     },
     {
       "path": "../universal-compare"
+    },
+    {
+      "path": "../language-aggregations"
+    },
+    {
+      "path": "../language-filters"
     }
   ]
 }

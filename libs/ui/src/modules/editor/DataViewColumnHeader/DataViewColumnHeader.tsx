@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { css } from '@emotion/react';
-import { FC, forwardRef, ReactNode } from 'react';
+import { css, SerializedStyles } from '@emotion/react';
+import { FC, forwardRef, PropsWithChildren, ReactNode } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
@@ -16,26 +16,48 @@ import {
   DataViewColumnMenu,
 } from '../DataViewColumnMenu/DataViewColumnMenu';
 import { componentCssVars, cssVar } from '../../../primitives';
+import { useIsHovering } from '@decipad/react-utils';
+import { getTypeIcon } from '../../../utils';
 
 const dragHandleStyles = css({
-  width: '8px',
-  height: 9,
-  transform: 'translateY(50%)',
   display: 'block',
-  margin: 'auto 0',
-  cursor: 'grab',
   pointerEvents: 'all',
-  marginTop: 0,
-  mixBlendMode: 'luminosity',
+  height: 16,
+  width: 16,
+
+  svg: {
+    width: 16,
+    height: 16,
+    margin: 'auto',
+  },
   'svg > rect': {
     fill: 'transparent',
   },
 });
 
-const DragHandle = () => {
+const smallerDragHandleStyles = css({
+  display: 'block',
+  pointerEvents: 'all',
+  height: 2,
+  width: 16,
+
+  svg: {
+    width: 9,
+    height: 9,
+    margin: 'auto',
+    transform: 'translateY(-45%)',
+  },
+  'svg > rect': {
+    fill: 'transparent',
+  },
+});
+
+const DragHandle: FC<
+  PropsWithChildren<{ overrideStyles?: SerializedStyles }>
+> = ({ children, overrideStyles = dragHandleStyles }) => {
   return (
-    <button css={dragHandleStyles} contentEditable={false}>
-      <DragHandleIcon />
+    <button css={overrideStyles} contentEditable={false}>
+      {children}
     </button>
   );
 };
@@ -132,6 +154,9 @@ export const DataViewColumnHeader = forwardRef<
 
   const readOnly = useIsEditorReadOnly();
 
+  const { isHovering, onMouseEnter, onMouseLeave } = useIsHovering();
+  const Icon = getTypeIcon(rest.type);
+
   return (
     <th
       {...attributes}
@@ -146,6 +171,8 @@ export const DataViewColumnHeader = forwardRef<
       ]}
       contentEditable={false}
       ref={refs}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div
         // eslint-disable-next-line no-sparse-arrays
@@ -155,7 +182,15 @@ export const DataViewColumnHeader = forwardRef<
         ]}
         contentEditable={false}
       >
-        {!readOnly && <DragHandle />}
+        {!readOnly && (
+          <DragHandle
+            overrideStyles={
+              isHovering ? smallerDragHandleStyles : dragHandleStyles
+            }
+          >
+            {isHovering ? <DragHandleIcon /> : <Icon />}
+          </DragHandle>
+        )}
         <span>{name}</span>
 
         {!readOnly && <DataViewColumnMenu columnName={name} {...rest} />}

@@ -1,12 +1,26 @@
 // eslint-disable-next-line no-restricted-imports
-import { ContextUtils, Value, Unit, AST } from '@decipad/language-types';
+import { Value, Unit, AST } from '@decipad/language-types';
 import DeciNumber, { N } from '@decipad/number';
+import { BuiltinContextUtils } from '../types';
+import { callBuiltinFunctor } from '../callBuiltinFunctor';
+import { callBuiltin } from '../callBuiltin';
 
-export const makeContext = (): ContextUtils => ({
+export const makeContext = (
+  u?: Partial<BuiltinContextUtils>
+): BuiltinContextUtils => ({
+  ...u,
   retrieveIndexByName: () => null,
   retrieveVariableTypeByGlobalVariableName: () => null,
   simpleExpressionEvaluate: async () => Promise.resolve(Value.UnknownValue),
   retrieveVariableValueByGlobalVariableName: () => null,
+  callBuiltinFunctor,
+  callBuiltin,
+  callFunctor: async () => {
+    throw new Error('Not implemented');
+  },
+  callValue: async () => {
+    throw new Error('Not implemented');
+  },
 });
 
 export function u(

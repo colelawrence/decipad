@@ -6,39 +6,41 @@ import { NestedGroups } from './NestedGroups';
 import { DataViewFilter } from '@decipad/editor-types';
 
 export interface DataViewDataAlternatedRotationLayoutProps {
+  blockId: string;
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
-  filters: Array<DataViewFilter | undefined>;
 }
 
 export const DataViewDataAlternatedRotationLayout: FC<
   DataViewDataAlternatedRotationLayoutProps
 > = ({
+  blockId,
   tableName,
   columns,
   aggregationTypes,
   roundings,
+  filters,
   expandedGroups = [],
   onChangeExpandedGroups,
   rotate,
-  filters,
 }) => {
   const groups = useDataViewLayoutData({
+    blockId,
     tableName,
     columns,
     aggregationTypes,
     roundings,
+    filters,
     expandedGroups,
     includeTotal: true,
     preventExpansion: rotate,
-    rotate,
-    filters,
   });
 
   return (
@@ -52,7 +54,6 @@ export const DataViewDataAlternatedRotationLayout: FC<
             expandedGroups={expandedGroups}
             onChangeExpandedGroups={onChangeExpandedGroups}
             rotate={rotate}
-            roundings={roundings}
             columnIndex={0}
           />
         ) : (

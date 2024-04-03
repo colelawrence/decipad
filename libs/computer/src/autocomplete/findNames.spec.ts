@@ -85,6 +85,106 @@ it('finds names', async () => {
             "x",
           ],
           "ast": null,
+          "body": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "+",
+                    ],
+                    "end": Object {
+                      "char": 9,
+                      "column": 10,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 9,
+                      "column": 10,
+                      "line": 1,
+                    },
+                    "type": "funcref",
+                  },
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "x",
+                        ],
+                        "end": Object {
+                          "char": 7,
+                          "column": 8,
+                          "line": 1,
+                        },
+                        "isMissing": false,
+                        "start": Object {
+                          "char": 7,
+                          "column": 8,
+                          "line": 1,
+                        },
+                        "type": "ref",
+                      },
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 11,
+                          "column": 12,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 11,
+                          "column": 12,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 11,
+                      "column": 12,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 7,
+                      "column": 8,
+                      "line": 1,
+                    },
+                    "type": "argument-list",
+                  },
+                ],
+                "end": Object {
+                  "char": 11,
+                  "column": 12,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 7,
+                  "column": 8,
+                  "line": 1,
+                },
+                "type": "function-call",
+              },
+            ],
+            "end": Object {
+              "char": 11,
+              "column": 12,
+              "line": 1,
+            },
+            "start": Object {
+              "char": 7,
+              "column": 8,
+              "line": 1,
+            },
+            "type": "block",
+          },
           "kind": "function",
           "name": "exprRef_block_4",
         },

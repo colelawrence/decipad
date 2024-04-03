@@ -1,16 +1,22 @@
 import { PromiseOrType } from '@decipad/utils';
 
-/* eslint-disable no-await-in-loop */
-type GenerateFunction<T> = (done: () => void) => PromiseOrType<T>;
+export const DONE = Symbol('done');
+
+type GenerateFunction<T> = (
+  done: typeof DONE
+) => PromiseOrType<T | typeof DONE>;
 
 export const generate = async function* generate<T>(
   generateFn: GenerateFunction<T>
 ): AsyncGenerator<T> {
   let done = false;
-  const setDone = () => {
-    done = true;
-  };
   do {
-    yield await generateFn(setDone);
+    // eslint-disable-next-line no-await-in-loop
+    const value = await generateFn(DONE);
+    if (value === DONE) {
+      done = true;
+      break;
+    }
+    yield value;
   } while (!done);
 };

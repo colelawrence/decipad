@@ -60,7 +60,7 @@ export const useTableHeaderCellDropdownNames = (
     }, [categories, globalFindNode])
   );
 
-  const mutateDropdownType = usePathMutatorCallback(
+  const mutateDropdownType = usePathMutatorCallback<TableHeaderElement>(
     editor,
     path,
     'cellType',

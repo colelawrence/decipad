@@ -3,6 +3,7 @@ import { immerable } from 'immer';
 import type { Unit } from '@decipad/language-units';
 import type * as Time from './Time';
 import type { Type } from './Type';
+import stringify from 'json-stringify-safe';
 
 export type ErrSpec = {
   context?: string;
@@ -138,7 +139,7 @@ export class InferError extends Error implements IInferError {
         message: spec,
       };
     }
-    super(`Inference Error: ${spec.errType}`);
+    super(`Inference Error: ${spec.errType} : ${stringify(spec)}`);
     this.spec = spec;
   }
 

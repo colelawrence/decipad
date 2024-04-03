@@ -1,4 +1,3 @@
-export * from './columnAggregationTypes';
 export * from './findColumnByCell';
 export * from './findSwappableColumns';
 export * from './getColumnName';

@@ -1,6 +1,7 @@
 import { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { Value, Type, AST, ContextUtils } from '@decipad/language-types';
+import { BuiltinContextUtils } from './types';
 
 export type Functor = (
   types: Type[],
@@ -41,19 +42,19 @@ export interface FullBuiltinSpec extends GenericBuiltinSpec {
   fnValuesNoAutomap?: (
     args: Value.Value[],
     argTypes: Type[],
-    utils: ContextUtils
+    utils: BuiltinContextUtils
   ) => PromiseOrType<Value.Value>;
   fnValues?: (
     args: Value.Value[],
     argTypes: Type[],
-    utils: ContextUtils
+    utils: BuiltinContextUtils
   ) => PromiseOrType<Value.Value>;
   functor?: Functor;
   functionSignature?: string;
   functorNoAutomap?: (
     types: Type[],
     values: AST.Expression[],
-    utils: ContextUtils
+    utils: BuiltinContextUtils
   ) => PromiseOrType<Type>;
   toMathML?: (args: string[]) => string;
 }

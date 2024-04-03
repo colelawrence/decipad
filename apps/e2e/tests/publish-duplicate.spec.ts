@@ -546,7 +546,7 @@ test('check collaborator duplicate single workspace', async ({
   });
 });
 
-test('check collaborator duplicate mulpliple workspaces', async ({
+test('check collaborator duplicate multiple workspaces', async ({
   testUser,
   anotherTestUser,
 }) => {
@@ -670,14 +670,15 @@ test('reader can load notebook with link to deleted tab @tabs', async ({
   });
 });
 
-test('checks big notebooks dont have issues publishing', async ({
+test("checks big notebooks don't have issues publishing", async ({
   testUser,
 }) => {
+  test.slow();
   const { page, notebook } = testUser;
   await testUser.importNotebook(oldNotebookJson);
   await testUser.notebook.waitForEditorToLoad();
   // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
+  await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay * 3);
   await notebook.publishNotebook();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.computerDelay);
@@ -701,7 +702,7 @@ test('checks big notebooks dont have issues publishing', async ({
   ).toBeHidden();
 });
 
-test('checks big notebooks dont get stuck with publish changes notification', async ({
+test("checks big notebooks don't get stuck with publish changes notification", async ({
   testUser,
 }) => {
   const { page, notebook } = testUser;

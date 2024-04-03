@@ -67,7 +67,7 @@ const tableFormulaColumnToColumn = ({
       simpleArtifficialError(
         th.id,
         'Could not find a formula for this column',
-        th.id
+        [th.id]
       ),
     ],
   };
@@ -168,7 +168,7 @@ const dataColumnToColumn = async ({
 
       if (parsed instanceof Error) {
         errors.push(
-          simpleArtifficialError(cellIds[index], parsed.message, th.id)
+          simpleArtifficialError(cellIds[index], parsed.message, [th.id])
         );
         parsed = null;
       }

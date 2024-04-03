@@ -3,6 +3,7 @@ import {
   RemoteComputer,
   Result,
   SerializedType,
+  buildResult,
   isTableResult,
   materializeResult,
 } from '@decipad/remote-computer';
@@ -109,10 +110,9 @@ const dataRows = (
       if (col.length < it) {
         hasMoreData = false;
       }
-      const text = valueToString({
-        type: columnTypes[colIndex],
-        value: col[it],
-      });
+      const text = valueToString(
+        buildResult(columnTypes[colIndex], col[it], false)
+      );
       return {
         type: ELEMENT_TD,
         id: nanoid(),

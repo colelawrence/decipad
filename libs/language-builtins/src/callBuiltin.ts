@@ -14,6 +14,7 @@ import {
   autoconvertArguments,
   autoconvertResult,
 } from '@decipad/language-types';
+import { BuiltinContextUtils, CallBuiltin } from './types';
 
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
   // console.log(
@@ -36,7 +37,7 @@ async function shouldAutoconvert(types: Type[]): Promise<boolean> {
 }
 
 async function callBuiltinAfterAutoconvert(
-  context: ContextUtils,
+  context: BuiltinContextUtils,
   funcName: string,
   builtin: FullBuiltinSpec,
   args: Value.Value[],
@@ -109,16 +110,16 @@ async function callBuiltinAfterAutoconvert(
   );
 }
 
-const stages = ['autoConvertArguments', 'builtin', 'autoConvertResult'];
+const stages = ['autoConvertArguments', 'callBuiltin', 'autoConvertResult'];
 
 // eslint-disable-next-line complexity
-export const callBuiltin = async (
-  ctx: ContextUtils,
-  funcName: string,
-  argsBeforeConvert: Value.Value[],
-  argTypes: Type[],
-  returnType: Type
-): Promise<Value.Value> => {
+export const callBuiltin: CallBuiltin = async (
+  ctx,
+  funcName,
+  argsBeforeConvert,
+  argTypes,
+  returnType
+) => {
   const op = getDefined(
     getOperatorByName(funcName),
     `panic: builtin not found: ${funcName}`
@@ -159,6 +160,7 @@ export const callBuiltin = async (
       args,
       argTypes
     );
+
     stage += 1;
     return autoConvert
       ? autoconvertResult(ctx, resultBeforeConvertingBack, returnType)
@@ -169,7 +171,10 @@ export const callBuiltin = async (
       typeof jest === 'undefined' &&
       !(err instanceof RuntimeError)
     ) {
-      console.error(`Error at stage ${stages[stage]}`, err);
+      console.error(
+        `callBuiltin "${funcName}": Error at stage ${stage} (${stages[stage]})`
+      );
+      console.error(err);
     }
     throw new RuntimeError((err as Error)?.message || 'Unknown error');
   }

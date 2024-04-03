@@ -85,7 +85,7 @@ export * from './computer';
 
 export * from './reporting';
 
-export { getExprRef, isExprRef } from './exprRefs';
+export { getExprRef, isExprRef, shadowExprRef } from './exprRefs';
 export type {
   IdentifiedBlock,
   BlockDependents,

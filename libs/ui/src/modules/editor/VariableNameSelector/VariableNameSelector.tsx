@@ -20,11 +20,12 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
   testId,
 }) => {
   return (
-    <div css={hideOnPrint} contentEditable={false} data-testid={testId}>
+    <div css={hideOnPrint} contentEditable={false}>
       <SelectInput
         labelText={label}
         value={selectedVariableName}
         setValue={onChangeVariableName}
+        testId={testId}
       >
         <option key="empty" value={''}>
           Source...

@@ -18,7 +18,7 @@ interface Rounding {
 export interface DataViewColumnMenuProps {
   type: TableCellType;
   selectedAggregation?: string;
-  availableAggregations: Array<string>;
+  availableAggregations: Array<{ id: string; name: string }>;
   availableRoundings: Array<Rounding>;
   selectedRounding?: string;
   onAggregationChange: (aggregation: string | undefined) => void;
@@ -108,11 +108,11 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
           {availableAggregations.map((availableAggregation, index) => {
             return (
               <MenuItem
-                onSelect={() => onAggregationChange(availableAggregation)}
-                selected={availableAggregation === selectedAggregation}
+                onSelect={() => onAggregationChange(availableAggregation.id)}
+                selected={availableAggregation.id === selectedAggregation}
                 key={index}
               >
-                {capitalize(availableAggregation)}
+                {capitalize(availableAggregation.name)}
               </MenuItem>
             );
           })}

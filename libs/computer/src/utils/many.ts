@@ -193,7 +193,7 @@ export function statementToIdentifiedBlock(
   id: string,
   stat: AST.Statement,
   isArtificial?: boolean,
-  artificiallyDerivedFrom?: string
+  artificiallyDerivedFrom?: Array<string>
 ): IdentifiedBlock {
   const varName = getDefinedSymbol(stat, true);
   let defs: Partial<IdentifiedBlock> = {};

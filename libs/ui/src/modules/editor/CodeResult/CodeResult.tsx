@@ -39,6 +39,9 @@ const DefaultResult: CodeResultComponentType<SerializedTypeKind> = ({
 const InlineTableResult: CodeResultComponentType<'table'> = () => (
   <span>Table</span>
 );
+const InlineTreeResult: CodeResultComponentType<'tree'> = () => (
+  <span>Tree</span>
+);
 
 // Result matchers
 
@@ -130,6 +133,10 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: PendingResult,
     match: ({ type }) => type.kind === 'pending',
+  },
+  {
+    component: InlineTreeResult,
+    match: ({ type }) => type.kind === 'tree',
   },
 ];
 

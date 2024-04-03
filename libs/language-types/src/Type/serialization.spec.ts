@@ -121,14 +121,26 @@ it('can stringify a type', () => {
       "kind": "date",
     }
   `);
-  expect(serializeType(t.functionPlaceholder('fname', ['a', 'b'])))
-    .toMatchInlineSnapshot(`
+  expect(
+    serializeType(
+      t.functionPlaceholder('fname', ['a', 'b'], {
+        type: 'block',
+        id: 'block-id',
+        args: [],
+      })
+    )
+  ).toMatchInlineSnapshot(`
     Object {
       "argNames": Array [
         "a",
         "b",
       ],
       "ast": null,
+      "body": Object {
+        "args": Array [],
+        "id": "block-id",
+        "type": "block",
+      },
       "kind": "function",
       "name": "fname",
     }
@@ -230,10 +242,25 @@ it('can parse a type', () => {
   });
 
   expect(
-    deserializeType({ kind: 'function', name: 'fname', argNames: ['a', 'b'] })
+    deserializeType({
+      kind: 'function',
+      name: 'fname',
+      argNames: ['a', 'b'],
+      body: {
+        type: 'block',
+        id: 'body-block-id',
+        args: [{ type: 'literal', args: ['number', N(1)] }],
+      },
+    })
   ).toMatchObject({
     functionness: true,
     functionName: 'fname',
+    functionArgNames: ['a', 'b'],
+    functionBody: {
+      type: 'block',
+      id: 'body-block-id',
+      args: [{ type: 'literal', args: ['number', N(1)] }],
+    },
   });
 
   expect(

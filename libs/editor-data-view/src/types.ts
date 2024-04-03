@@ -1,48 +1,25 @@
-import { ColumnLike } from '@decipad/column';
 import type { Result, SerializedType } from '@decipad/remote-computer';
-import { Comparable } from '@decipad/universal-compare';
-import { Subject } from 'rxjs';
 
 // Row layout
 
-export type ValueCell = Comparable;
-
 export interface SmartProps {
-  tableName: string;
-  column: {
-    type: SerializedType;
-    value: ColumnLike<Comparable>;
-    name: string;
-  };
-  roundings: Array<string | undefined>;
   columnIndex?: number;
   aggregationType: AggregationKind | undefined;
+  aggregationExpression: string | undefined;
+  aggregationResult: Result.AnyResult | undefined;
   rowSpan?: number;
   colSpan?: number;
-  onHover: (hover: boolean) => void;
-  hover: boolean;
-  previousColumns: PreviousColumns;
   alignRight?: boolean;
   global?: boolean;
   rotate: boolean;
 }
 
 export interface HeaderProps {
-  tableName: string;
-  column?: {
-    type: SerializedType;
-    value: ColumnLike<Comparable>;
-    name: string;
-  };
-  previousColumns: PreviousColumns;
-  roundings: Array<string | undefined>;
   type?: SerializedType;
-  value?: ValueCell;
+  value?: Result.OneResult;
   rowSpan?: number;
   colSpan?: number;
   collapsible?: boolean;
-  onHover?: (hover: boolean) => void;
-  hover?: boolean;
   alignRight?: boolean;
   isFullWidthRow?: boolean;
   groupId: string;
@@ -54,51 +31,36 @@ export interface HeaderProps {
   rotate: boolean;
   isFirstLevelHeader: boolean;
   aggregationType?: string;
+  aggregationResult: Result.Result | undefined;
+  aggregationExpression: string | undefined;
   replicaCount: number;
 }
 
 export interface SmartRowColumn {
   name: string;
-  type: SerializedType;
-  value: ColumnLike<Comparable>;
+  result?: Result.AnyResult;
 }
 
-interface BaseElement {
-  columnIndex: number;
-  parentHighlight$?: Subject<boolean>;
-  selfHighlight$?: Subject<boolean>;
-}
-
-export interface SmartRowElement extends BaseElement {
+export interface SmartRowElement {
   elementType: 'smartrow';
   id?: string;
-  type?: never;
-  value?: never;
+  type?: SerializedType;
+  value?: Result.OneResult;
+  aggregationExpression: string | undefined;
   children: DataGroup[];
-  column: SmartRowColumn;
-  columnIndex: number;
-  previousColumns: {
-    type: SerializedType;
-    value: Comparable | undefined;
-    name: string;
-  }[];
   global?: boolean;
 }
 
-export interface DataGroupElement extends BaseElement {
+export interface DataGroupElement {
   elementType: 'group';
   id?: string;
   type?: SerializedType;
-  value?: ValueCell;
+  value?: Result.OneResult;
   children: DataGroup[];
   collapsible?: boolean;
-  column?: SmartRowColumn;
   global?: boolean;
-  previousColumns: {
-    type: SerializedType;
-    value: Comparable | undefined;
-    name: string;
-  }[];
+  aggregationResult: Result.Result | undefined;
+  aggregationExpression: string | undefined;
   replicaCount: number;
 }
 
@@ -112,18 +74,6 @@ export interface Column {
   name: string;
   blockId?: string;
   type: SerializedType;
-  value: Result.Result<'materialized-column'>['value'];
-}
-
-export type ImmaterializedColumn = Omit<Column, 'value'> & {
-  value: Result.Result<'column'>['value'];
-};
-
-export interface VirtualColumn {
-  name: string;
-  blockId?: string;
-  type: SerializedType;
-  value: ColumnLike<Comparable>;
 }
 
 // Aggregations
@@ -134,9 +84,3 @@ export type Aggregator = (params: {
   expressionFilter: string;
   columnType: string;
 }) => string | undefined;
-
-export type PreviousColumns = Array<{
-  type: SerializedType;
-  value: Comparable | undefined;
-  name: string;
-}>;

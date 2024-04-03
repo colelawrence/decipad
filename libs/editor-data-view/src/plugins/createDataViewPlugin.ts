@@ -13,6 +13,7 @@ import {
   DataViewColumnHeaderRow,
 } from '../components';
 import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
+import { createNormalizeDataViewHeaderAggregationPlugin } from './createNormalizeDataViewHeaderAggregationPlugin';
 
 export const createDataViewPlugin = createPluginFactory({
   key: ELEMENT_DATA_VIEW,
@@ -36,6 +37,7 @@ export const createDataViewPlugin = createPluginFactory({
       component: DataViewColumnHeader,
     },
     createNormalizeDataViewPlugin(),
+    createNormalizeDataViewHeaderAggregationPlugin(),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_DATA_VIEW',
       elementTypes: [ELEMENT_DATA_VIEW],

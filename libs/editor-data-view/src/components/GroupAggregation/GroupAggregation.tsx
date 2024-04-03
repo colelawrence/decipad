@@ -1,46 +1,27 @@
 import type { DragEvent, FC } from 'react';
 import { useCallback } from 'react';
 import { Aggregation } from '@decipad/ui';
-import { AnyElement, useMyEditorRef } from '@decipad/editor-types';
-import { SerializedType } from '@decipad/remote-computer';
-import { ColumnLike, Comparable } from '@decipad/column';
+import { type AnyElement, useMyEditorRef } from '@decipad/editor-types';
+import { Result } from '@decipad/remote-computer';
 import { useOnDragEnd } from '@decipad/editor-components';
 import { useComputer } from '@decipad/react-contexts';
-import { useAggregation } from '../../hooks/useAggregation';
-import { PreviousColumns } from '../../types';
 import { onDragStartSmartCell } from '../SmartCell';
 
 interface GroupAggregationProps {
-  tableName: string;
   aggregationType?: string;
   element?: AnyElement;
-  column?: {
-    type: SerializedType;
-    value: ColumnLike<Comparable>;
-    name: string;
-  };
-  previousColumns: PreviousColumns;
-  roundings: Array<string | undefined>;
+  aggregationResult: Result.Result | undefined;
+  aggregationExpression: string | undefined;
 }
 
 export const GroupAggregation: FC<GroupAggregationProps> = ({
-  tableName,
   aggregationType,
   element,
-  column,
-  previousColumns,
-  roundings,
+  aggregationResult: result,
+  aggregationExpression: expression,
 }) => {
   const computer = useComputer();
   const editor = useMyEditorRef();
-
-  const { result, expression } = useAggregation({
-    tableName,
-    aggregationType,
-    column,
-    previousColumns,
-    roundings,
-  });
 
   const onDragStart = useCallback(
     (ev: DragEvent) => {
@@ -54,15 +35,13 @@ export const GroupAggregation: FC<GroupAggregationProps> = ({
 
   const onDragEnd = useOnDragEnd();
 
-  return (
-    result && (
-      <Aggregation
-        aggregationType={aggregationType}
-        result={result}
-        element={element}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      />
-    )
-  );
+  return result ? (
+    <Aggregation
+      aggregationType={aggregationType}
+      result={result}
+      element={element}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    />
+  ) : null;
 };

@@ -15,6 +15,7 @@ import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
 import { BuiltinSpec, Functor } from '../interfaces';
 import { coherceToFraction } from '../utils/coherceToFraction';
+import { FromJSArg } from 'libs/language-types/src/Value';
 
 const binopFunctor = async ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -122,7 +123,7 @@ const median = async (
     await sortedValues.atIndex(rightCenterPos)
   ).getData();
   if (length % 2 === 1) {
-    return Value.fromJS(rightCenter, Value.defaultValue(type));
+    return Value.fromJS(rightCenter as FromJSArg, Value.defaultValue(type));
   }
   const leftCenter = coherceToFraction(
     await getDefined(await sortedValues.atIndex(rightCenterPos - 1)).getData()

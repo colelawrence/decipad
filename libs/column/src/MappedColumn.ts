@@ -21,10 +21,10 @@ export class MappedColumn<TValue> implements ColumnLike<TValue> {
     if (index > stopAt) {
       return empty();
     }
-    return generate<TValue>(async (done): Promise<TValue> => {
+    return generate(async (done) => {
       index += 1;
-      if (index === stopAt) {
-        done();
+      if (index > stopAt) {
+        return done;
       }
       const pos = getDefined(this.map[index], `no map at position ${index}`);
       return this.source.atIndex(pos) as TValue;

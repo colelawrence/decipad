@@ -1,121 +1,101 @@
-import { BehaviorSubject } from 'rxjs';
+import pSeries from 'p-series';
+import { type Result, Value, buildResult } from '@decipad/remote-computer';
 import { generateHash } from '@decipad/editor-utils';
-import {
-  Comparable,
-  applyMap,
-  contiguousSlices,
-  slice,
-  sortMap,
-} from '@decipad/column';
-import { compare } from '@decipad/universal-compare';
-import {
-  AggregationKind,
-  DataGroup,
-  PreviousColumns,
-  VirtualColumn,
-} from '../../types';
-import { generateSmartRow, GenerateSmartRowProps } from './generateSmartRow';
+import { type DataGroup } from '../../types';
 import { sliceToGroup } from './sliceToGroup';
-
-export interface GenerateGroupsProps {
-  columns: VirtualColumn[];
-  columnIndex: number;
-  previousColumns: PreviousColumns;
-  parentGroupId?: string;
-  parentHighlight$?: BehaviorSubject<boolean>;
-  preventExpansion: boolean;
-  rotate: boolean;
-}
-
-export type GenerateSubSmartRowProps = Omit<
-  GenerateSmartRowProps,
-  'aggregationTypes'
->;
-
-export type GenerateSubSmartRow = (
-  props: GenerateSubSmartRowProps
-) => DataGroup;
-
-export type GenerateGroups = (
-  props: GenerateGroupsProps
-) => Promise<DataGroup[]>;
+import { generateSmartRow } from './generateSmartRow';
+import { aggregationExpression as createAggregationExpression } from '../../utils/aggregationExpression';
+import { GenerateGroupsProps } from './types';
 
 export const generateGroups = async ({
-  columns,
-  aggregationTypes,
-  expandedGroups = [],
-  columnIndex,
+  tableName,
+  tree,
   previousColumns,
-  parentHighlight$,
-  parentGroupId,
+  previousColumnTypes,
+  previousFilters,
+  valuePath,
+  aggregations,
+  roundings,
+  filters,
+  expandedGroups = [],
+  parentGroupId = '',
   preventExpansion,
-  rotate,
-}: GenerateGroupsProps & {
-  aggregationTypes: (AggregationKind | undefined)[];
-  expandedGroups?: string[];
-}): Promise<DataGroup[]> => {
-  if (columns.length < 1) {
+  indent = 0,
+}: GenerateGroupsProps): Promise<DataGroup[]> => {
+  if (!(tree.value instanceof Value.Tree) || tree.value.children.length === 0) {
     return [];
   }
-  const [firstColumn, ...restOfColumns] = columns;
-
-  const map = await sortMap<Comparable>(firstColumn.value, compare);
-  const sortedFirstColumn = applyMap(firstColumn.value, map);
-  const sortedRestOfColumns: VirtualColumn[] = restOfColumns.map((column) => ({
-    ...column,
-    value: applyMap(column.value, map),
-  }));
-  const slices = await contiguousSlices<Comparable>(sortedFirstColumn, compare);
-
-  const subGenerateGroups: GenerateGroups = (props) =>
-    generateGroups({ ...props, aggregationTypes, expandedGroups });
-
-  const subGenerateSmartRow: GenerateSubSmartRow = (props) =>
-    generateSmartRow({ ...props, aggregationTypes });
-
-  const groups = await Promise.all(
-    slices.map(async ([start, end]) => {
-      const value = await sortedFirstColumn.atIndex(start);
-      const generatedHash = await generateHash(value);
-      const groupId = parentGroupId
-        ? `${parentGroupId}/${generatedHash}`
-        : generatedHash;
-
+  // console.log(`>>>>>>>>>>>>>> generateGroups (${indent})`, {
+  //   expandedGroups,
+  //   tableName,
+  //   valuePath,
+  //   previousColumnTypes,
+  //   previousColumns,
+  //   aggregations,
+  //   parentGroupId,
+  // });
+  const nextPreviousColumns = [...previousColumns, tree.value.columns[0]];
+  const nextPreviousColumnTypes = [
+    ...previousColumnTypes,
+    tree.type.columnTypes[0],
+  ];
+  const nextPreviousFilters = [...previousFilters, filters[0]];
+  const dataGroups = await pSeries(
+    tree.value.children.map((child) => async (): Promise<DataGroup> => {
+      const groupId = `${parentGroupId}/${await generateHash(child)}`;
       const isExpanded = expandedGroups.includes(groupId);
+      const hideSmartRow = child.columns.every(
+        (col) => col.aggregation == null
+      );
+      const type = tree.type.columnTypes[0];
+      const subTree: Result.Result<'tree'> = buildResult(
+        {
+          kind: 'tree',
+          columnTypes: tree.type.columnTypes.slice(1),
+          columnNames: tree.type.columnNames.slice(1),
+        },
+        child
+      );
+      const nextValuePath = valuePath.concat(child.root);
 
-      const groupColumns: VirtualColumn[] = sortedRestOfColumns.map(
-        (column) => ({
-          ...column,
-          value: slice(column.value, start, end + 1),
-        })
+      const aggregationExpression = createAggregationExpression(
+        tableName,
+        nextPreviousColumns,
+        nextPreviousColumnTypes,
+        nextValuePath,
+        nextPreviousFilters,
+        aggregations[0],
+        roundings[0],
+        filters[0]
       );
 
-      const hideSmartRow =
-        !aggregationTypes || aggregationTypes.filter(Boolean).length === 0;
-
-      const slicePreviousColumns = [
-        ...previousColumns,
-        { ...firstColumn, value },
-      ];
-
       return sliceToGroup({
-        isExpanded,
-        value,
-        type: firstColumn.type,
-        columns: groupColumns,
+        tableName,
+        tree: subTree,
         groupId,
-        columnIndex,
+        type,
+        previousColumns: nextPreviousColumns,
+        previousColumnTypes: nextPreviousColumnTypes,
+        previousFilters: nextPreviousFilters,
+        value: child.root,
+        valuePath: nextValuePath,
+        isExpanded,
         hideSmartRow,
-        parentHighlight$,
-        previousColumns: slicePreviousColumns,
-        generateGroups: subGenerateGroups,
-        generateSmartRow: subGenerateSmartRow,
         preventExpansion,
-        rotate,
-        replicaCount: end - start + 1,
+        replicaCount: child.originalCardinality,
+        aggregations: aggregations.slice(1),
+        roundings: roundings.slice(1),
+        filters: filters.slice(1),
+        indent,
+        expandedGroups,
+        aggregationExpression,
+        generateGroups,
+        generateSmartRow,
       });
     })
   );
 
-  return Promise.all(groups);
+  // console.log(`<<<<<<<<<<<<<< generateGroups (${indent})`);
+
+  return dataGroups;
 };

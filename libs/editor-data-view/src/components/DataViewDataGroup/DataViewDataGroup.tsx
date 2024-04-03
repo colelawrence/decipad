@@ -1,6 +1,5 @@
 import { isCellAlignRight } from 'libs/editor-table/src/components';
-import { FC, useCallback, useEffect, useState } from 'react';
-import type { Subscription } from 'rxjs';
+import { type FC } from 'react';
 import type {
   AggregationKind,
   DataGroup,
@@ -8,14 +7,13 @@ import type {
   SmartProps,
 } from '../../types';
 import type { Element as GroupElement } from '../../utils/types';
+import { Result } from '@decipad/remote-computer';
 
 interface DataViewDataGroupElementProps {
-  tableName: string;
   element: GroupElement<DataGroup>;
   Header: FC<HeaderProps>;
   SmartCell: FC<SmartProps>;
   aggregationType: AggregationKind | undefined;
-  roundings: Array<string | undefined>;
   isFullWidthRow: boolean;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
@@ -27,12 +25,10 @@ interface DataViewDataGroupElementProps {
 }
 
 export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
-  tableName,
   element,
   Header,
   SmartCell,
   aggregationType,
-  roundings,
   isFullWidthRow,
   expandedGroups,
   onChangeExpandedGroups,
@@ -42,45 +38,13 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   isFirstLevel,
   alignRight,
 }) => {
-  const [parentHover, setParentHover] = useState(false);
-  const [selfHover, setSelfHover] = useState(false);
-
-  useEffect(() => {
-    let sub: Subscription;
-    if (element.parentHighlight$) {
-      sub = element.parentHighlight$.subscribe(setParentHover);
-    }
-    return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    };
-  }, [element.parentHighlight$]);
-
-  useEffect(() => {
-    element.selfHighlight$?.next(parentHover || selfHover);
-  }, [element.selfHighlight$, parentHover, selfHover]);
-
-  const onHover = useCallback(
-    (hover: boolean) => {
-      setSelfHover(hover);
-      if (element.selfHighlight$) {
-        element.selfHighlight$.next(selfHover);
-      }
-    },
-    [element.selfHighlight$, selfHover]
-  );
-
   return element.elementType === 'group' ? (
     <Header
-      tableName={tableName}
       type={element.type}
       value={element.value}
       rowSpan={element.rowspan}
       colSpan={element.colspan}
       collapsible={element.collapsible}
-      onHover={onHover}
-      hover={parentHover || selfHover}
       alignRight={alignRight ?? isCellAlignRight(element.type)}
       isFullWidthRow={isFullWidthRow}
       expandedGroups={expandedGroups}
@@ -92,25 +56,24 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       rotate={rotate}
       isFirstLevelHeader={isFirstLevel}
       aggregationType={aggregationType}
-      column={element.column}
-      previousColumns={element.previousColumns}
-      roundings={roundings}
+      aggregationResult={element.aggregationResult}
+      aggregationExpression={element.aggregationExpression}
       replicaCount={element.replicaCount}
     />
   ) : (
     <SmartCell
-      tableName={tableName}
       rowSpan={element.rowspan}
       colSpan={element.colspan}
-      column={element.column}
-      roundings={roundings}
       aggregationType={aggregationType}
-      onHover={onHover}
-      hover={parentHover || selfHover}
-      alignRight={alignRight ?? isCellAlignRight(element.column?.type)}
-      previousColumns={element.previousColumns}
+      alignRight={alignRight ?? isCellAlignRight(element.type)}
       global={element.global}
       rotate={rotate}
+      aggregationResult={
+        element.value != null && element.type
+          ? ({ type: element.type, value: element.value } as Result.Result)
+          : undefined
+      }
+      aggregationExpression={element.aggregationExpression}
     />
   );
 };

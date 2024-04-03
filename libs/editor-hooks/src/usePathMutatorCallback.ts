@@ -10,7 +10,7 @@ const isTesting = !!process.env.JEST_WORKER_ID;
 
 export const usePathMutatorCallback = <
   E extends MyElement,
-  PropName extends keyof E
+  PropName extends keyof E = keyof E
 >(
   editor: MyReactEditor,
   path: Path | null | undefined,

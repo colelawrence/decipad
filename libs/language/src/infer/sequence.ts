@@ -11,8 +11,9 @@ import {
   AST,
 } from '@decipad/language-types';
 import { Realm } from '..';
-import { getIdentifierString, getOfType } from '../utils';
+import { getIdentifierString } from '../utils';
 import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
+import { getOfType } from '../parser/getOfType';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 

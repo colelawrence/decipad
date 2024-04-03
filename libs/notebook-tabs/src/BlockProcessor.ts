@@ -183,7 +183,9 @@ export class BlockProcessor {
       if (
         block.isArtificial &&
         block.artificiallyDerivedFrom != null &&
-        this.DirtyBlocksSet.has(block.artificiallyDerivedFrom)
+        block.artificiallyDerivedFrom.some((blockId) =>
+          this.DirtyBlocksSet.has(blockId)
+        )
       ) {
         this.ProgramCache.delete(id);
       }
@@ -199,7 +201,10 @@ export class BlockProcessor {
           if (
             block.type === 'identified-block' &&
             block.isArtificial &&
-            block.artificiallyDerivedFrom === blockId
+            block.artificiallyDerivedFrom != null &&
+            block.artificiallyDerivedFrom.some(
+              (derivedFromBlockId) => derivedFromBlockId === blockId
+            )
           ) {
             this.RemoveNode(nodeId);
           }

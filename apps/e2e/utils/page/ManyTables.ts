@@ -48,7 +48,7 @@ const fetchColumnHeaders = async (
 const fetchDataRowCount = (
   page: Page,
   tableSelector: string
-): Promise<number> => page.locator(`${tableSelector} tbody  tr`).count();
+): Promise<number> => page.locator(`${tableSelector} tbody > tr`).count();
 
 const fetchDataRows = async (
   page: Page,
@@ -57,13 +57,17 @@ const fetchDataRows = async (
   const rowCount = await fetchDataRowCount(page, tableSelector);
   const selectors = Array.from(
     { length: rowCount },
-    (_, i) => `${tableRowSelector(tableSelector, i + 1)} td`
+    (_, i) =>
+      `${tableRowSelector(
+        tableSelector,
+        i + 1
+      )} td div[contenteditable=false] > :first-child`
   );
   const cells = await Promise.all(
     selectors.map((selector) => fetchAllStringElements(page, selector))
   );
   const rows: TableRow[] = cells.map((cell) => ({ cells: cell }));
-  return rows;
+  return rows.filter((r) => r.cells.length > 0);
 };
 
 export const fetchTable = async (

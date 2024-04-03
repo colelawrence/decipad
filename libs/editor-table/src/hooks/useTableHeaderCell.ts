@@ -25,6 +25,7 @@ import { DRAG_ITEM_COLUMN } from '../contexts/TableDndContext';
 import { sanitizeColumnDropDirection } from '../utils';
 import { useDragColumn } from './useDragColumn';
 import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
+import { useNormalizeTableHeaderAggregation } from './useNormalizeTableHeaderAggregation';
 
 export interface UseTableHeaderCellResult {
   readOnly: boolean;
@@ -80,6 +81,8 @@ export const useTableHeaderCell = (
 
   const dropDownNames = useTableHeaderCellDropdownNames(element, path);
   const inferredType = useCellType(element);
+
+  useNormalizeTableHeaderAggregation(element, inferredType);
 
   const { width } = element;
   const setWidth = usePathMutatorCallback(editor, path, 'width', 'TableHeader');

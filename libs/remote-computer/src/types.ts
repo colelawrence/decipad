@@ -38,6 +38,7 @@ export type ResultType = Result.Result<
   | 'materialized-column'
   | 'table'
   | 'materialized-table'
+  | 'tree'
   | 'row'
   | 'date'
   | 'range'

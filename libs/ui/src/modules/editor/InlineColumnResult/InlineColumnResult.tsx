@@ -1,5 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Fragment } from 'react';
+import { type Result } from '@decipad/remote-computer';
 import { characterLimitStyles } from '../../../styles/results';
 import { CodeResultProps } from '../../../types';
 import { useMaterializedColumnResultValue } from '../../../utils/useMaterializedColumnResultValue';
@@ -32,7 +33,7 @@ export const InlineColumnResult = ({
         return (
           <Fragment key={rowIndex}>
             <CodeResult
-              value={row}
+              value={row as Result.Result['value']}
               variant="inline"
               type={cellType}
               element={element}

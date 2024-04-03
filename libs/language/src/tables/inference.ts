@@ -149,7 +149,10 @@ export async function inferTableColumn(
 
   if (columnAst.type === 'table-column-assign') {
     type = produce(type, (t: Type) => {
-      t.atParentIndex ??= columnAst.args[3] ?? null;
+      const sortOrder = columnAst.args[3];
+      if (sortOrder != null) {
+        t.atParentIndex = sortOrder;
+      }
     });
   }
 

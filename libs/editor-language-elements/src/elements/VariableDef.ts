@@ -131,7 +131,7 @@ async function parseDropdownOptions(
         getExprRef(option.id),
         dropdownExpression,
         true, // isArtificial
-        element.id // origin block id
+        [element.id] // origin block id
       );
     })
   );

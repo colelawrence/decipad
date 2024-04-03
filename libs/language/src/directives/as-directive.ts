@@ -163,9 +163,6 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   const [, expression, unitsExpression] = root.args;
   const expressionType = realm.getTypeAt(expression);
   const expressionValue = await evaluate(realm, expression);
-  const sourceUnits = inlineUnitAliases(
-    (await expressionType.reducedToLowest()).unit
-  );
 
   if (representsPercentage(unitsExpression)) {
     return Dimension.automapValues(
@@ -201,7 +198,6 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   }
 
   const returnExpressionType = realm.getTypeAt(root);
-
   const targetUnitsEvalResult = await evaluate(realm, unitsExpression);
   const targetUnitsData = getInstanceof(
     await targetUnitsEvalResult.getData(),
@@ -221,6 +217,10 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
     inlineUnitAliases(returnExpressionType.unit)
   );
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
+
+  const sourceUnits = inlineUnitAliases(
+    (await expressionType.reducedToLowest()).unit
+  );
 
   return Dimension.automapValues(
     realm.utils,

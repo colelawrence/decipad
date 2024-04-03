@@ -28,7 +28,7 @@ export const deserializeResult = <T extends Result.Result>(
     return undefined;
   }
   const { type, value } = result;
-  let replaceValue: typeof value | undefined;
+  let replaceValue: Result.OneResult | undefined;
   let replaceType: typeof type | undefined;
   switch (type.kind) {
     case 'number':
@@ -65,10 +65,7 @@ export const deserializeResult = <T extends Result.Result>(
         break;
       }
       const replacements = (value as Result.OneResult[])?.map((v) =>
-        deserializeResult({
-          type: type.cellType,
-          value: v,
-        })
+        deserializeResult({ type: type.cellType, value: v } as Result.Result)
       );
       replaceValue = replacements?.map((r) => r?.value) as
         | Result.OneResult

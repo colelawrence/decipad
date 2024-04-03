@@ -109,6 +109,8 @@ it('random types', async () => {
       type: {
         kind: 'function',
         name: 'functionName',
+        argNames: ['arg1', 'arg2'],
+        body: undefined,
       },
       value: Unknown,
     })

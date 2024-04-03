@@ -14,8 +14,12 @@ export const materializeResult = <T extends SerializedTypeKind>(
     const valueP =
       result.value != null ? materializeOneResult(result.value) : null;
 
-    return bind(valueP, (value) => ({
-      ...result,
-      value,
-    }));
+    return bind(
+      valueP,
+      (value) =>
+        ({
+          ...result,
+          value,
+        } as Result.Result)
+    );
   });

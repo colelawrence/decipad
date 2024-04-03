@@ -3,8 +3,9 @@ import { getDefined } from '@decipad/utils';
 import { Value, AST, InferError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin } from '@decipad/language-builtins';
-import { getOfType, getIdentifierString } from '../utils';
+import { getIdentifierString } from '../utils';
 import type { Realm } from './Realm';
+import { getOfType } from '../parser/getOfType';
 
 // Gets a single value from a simple expression (literals and
 // zero-dimension builtin functions only) expanded AST.

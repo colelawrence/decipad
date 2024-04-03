@@ -11,6 +11,7 @@ export * from './useCanUseDom';
 export * from './useDeepMemo';
 export * from './useEventListener';
 export * from './useIntercom';
+export * from './useIsHovering';
 export * from './useLocalStorage';
 export * from './useMemoPath';
 export * from './useResolved';

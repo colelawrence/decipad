@@ -76,9 +76,10 @@ export default function createHandler(): Handler {
 
       const p = handler(adaptedEvent, context as Context, callback);
       if (p) {
-        p.then((result) => callback(null, result)).catch((err) =>
-          callback(err)
-        );
+        p.then((result) => {
+          debug('result: %j', result);
+          callback(null, result);
+        }).catch((err) => callback(err));
       }
     }
   ) as Handler;

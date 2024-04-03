@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { type Result } from '@decipad/remote-computer';
 import { CodeResult } from '..';
 import { CodeResultProps } from '../../../types';
 
@@ -16,7 +17,7 @@ export const InlineRowResult = ({
         return (
           <Fragment key={colIndex}>
             <CodeResult
-              value={column}
+              value={column as Result.Result['value']}
               variant="inline"
               type={rowCellTypes[colIndex]}
               tooltip={tooltip}

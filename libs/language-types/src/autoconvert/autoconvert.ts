@@ -121,7 +121,7 @@ export async function autoconvertResult(
       return value;
     });
   }
-  return Promise.resolve(value);
+  return value;
 }
 
 export async function autoconvertArguments(

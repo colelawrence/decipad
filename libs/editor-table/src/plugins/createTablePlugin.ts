@@ -35,6 +35,7 @@ import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
 import { TablePlugin } from '@udecode/plate-table';
 import { TableAboveEditable } from './TableAboveEditable';
+import { createNormalizeTableHeaderAggregationPlugin } from './createNormalizeTableHeaderAggregationPlugin';
 
 type Attributes =
   | {
@@ -84,6 +85,7 @@ export const createTablePlugin = <
     createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
     createNormalizeTablesPlugin<TV, TE>(computer),
+    createNormalizeTableHeaderAggregationPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,

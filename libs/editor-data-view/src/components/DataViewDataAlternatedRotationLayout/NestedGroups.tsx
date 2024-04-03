@@ -3,6 +3,7 @@ import { DataGroup, AggregationKind } from '../../types';
 import { DataViewDataGroupElement } from '../DataViewDataGroup/DataViewDataGroup';
 import { DataViewTableHeader } from '../DataViewTableHeader';
 import { SmartCell } from '../SmartCell';
+import { getAggregationShortName } from '../../../../language-aggregations/src/aggregations';
 
 interface NestedGroupsProps {
   groups: DataGroup[];
@@ -11,7 +12,6 @@ interface NestedGroupsProps {
   rotate: boolean;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   aggregationTypes: Array<AggregationKind | undefined>;
-  roundings: Array<string | undefined>;
   columnIndex: number;
 }
 
@@ -22,9 +22,11 @@ export const NestedGroups: FC<NestedGroupsProps> = ({
   rotate,
   onChangeExpandedGroups,
   aggregationTypes,
-  roundings,
   columnIndex,
 }) => {
+  const aggregationTypeName = getAggregationShortName(
+    aggregationTypes[columnIndex]
+  );
   return (
     <table>
       {rotate ? (
@@ -32,12 +34,10 @@ export const NestedGroups: FC<NestedGroupsProps> = ({
           <tr>
             {groups.map((group) => (
               <DataViewDataGroupElement
-                tableName={tableName}
                 element={group}
                 rotate={rotate}
                 expandedGroups={expandedGroups}
-                aggregationType={aggregationTypes[columnIndex]}
-                roundings={roundings}
+                aggregationType={aggregationTypeName}
                 isFullWidthRow={false}
                 groupLength={1}
                 onChangeExpandedGroups={onChangeExpandedGroups}
@@ -59,7 +59,6 @@ export const NestedGroups: FC<NestedGroupsProps> = ({
                   rotate={!rotate}
                   onChangeExpandedGroups={onChangeExpandedGroups}
                   aggregationTypes={aggregationTypes}
-                  roundings={roundings}
                   columnIndex={columnIndex + 1}
                 />
               </th>
@@ -70,12 +69,10 @@ export const NestedGroups: FC<NestedGroupsProps> = ({
         groups.map((group) => (
           <tr>
             <DataViewDataGroupElement
-              tableName={tableName}
               element={group}
               rotate={rotate}
               expandedGroups={expandedGroups}
-              aggregationType={aggregationTypes[columnIndex]}
-              roundings={roundings}
+              aggregationType={aggregationTypeName}
               isFullWidthRow={false}
               groupLength={1}
               onChangeExpandedGroups={onChangeExpandedGroups}
@@ -92,7 +89,6 @@ export const NestedGroups: FC<NestedGroupsProps> = ({
                 rotate={!rotate}
                 onChangeExpandedGroups={onChangeExpandedGroups}
                 aggregationTypes={aggregationTypes}
-                roundings={roundings}
                 columnIndex={columnIndex + 1}
               />
             </th>

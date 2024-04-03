@@ -15,7 +15,7 @@ export function parseElementAsSourceCode(
   source: string,
   sourceKind: 'statement' | 'expression' = 'statement',
   isArtificial = false,
-  artificiallyDerivedFrom: string | undefined = undefined
+  artificiallyDerivedFrom: Array<string> | undefined = undefined
 ): Program {
   const { solution, error } =
     sourceKind === 'statement'

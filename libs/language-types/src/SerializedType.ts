@@ -7,6 +7,7 @@ export type SerializedType =
   | SerializedTypes.Column
   | SerializedTypes.MaterializedColumn
   | SerializedTypes.Table
+  | SerializedTypes.Tree
   | SerializedTypes.MaterializedTable
   | SerializedTypes.Row
 

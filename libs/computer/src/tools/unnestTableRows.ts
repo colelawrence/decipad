@@ -51,7 +51,10 @@ export async function* unnestTableRows(
     if (dims.length === 0) {
       yield {
         labelInfo,
-        result: { type: scalarType, value: deepValue },
+        result: {
+          type: scalarType,
+          value: deepValue as Result.OneResult,
+        } as Result.Result,
       };
       return;
     }

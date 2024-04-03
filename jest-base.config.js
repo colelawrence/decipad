@@ -20,7 +20,7 @@ module.exports = {
     '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|y-protocols|@udecode/plate-.*|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth|is-stream|get-stream|langchain|csv-parse|jsonpath-plus|react-tweet|p-time|mimic-function|p-series|remark-parse|unified|bail|devlop|is-plain-obj|trough|vfile|vfile-message|unist-.*|unist-util-is|mdast-.*|micromark|micromark-.*|decode-named-character-reference|character-entities)/)',
+    'node_modules/(?!(lib0|y-protocols|@udecode/plate-.*|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth|is-stream|get-stream|langchain|csv-parse|jsonpath-plus|react-tweet|p-time|mimic-function|p-series|p-reduce|remark-parse|unified|bail|devlop|is-plain-obj|trough|vfile|vfile-message|unist-.*|unist-util-is|mdast-.*|micromark|micromark-.*|decode-named-character-reference|character-entities)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 

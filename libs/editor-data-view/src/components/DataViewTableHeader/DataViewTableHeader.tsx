@@ -22,16 +22,10 @@ interface DataViewTableHeaderProps extends HeaderProps {
 }
 
 export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
-  tableName,
-  column,
-  previousColumns,
-  roundings,
   type,
   value,
   rowSpan = 1,
   colSpan = 1,
-  onHover,
-  hover = false,
   alignRight,
   expandedGroups = [],
   onChangeExpandedGroups,
@@ -42,6 +36,8 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   rotate,
   isFirstLevelHeader,
   aggregationType,
+  aggregationResult,
+  aggregationExpression,
   replicaCount,
 }) => {
   const editor = useMyEditorRef();
@@ -87,10 +83,8 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
 
   return (
     <DataViewTableHeaderUI
-      hover={hover}
       rowSpan={rowSpan}
       colSpan={groupIsExpanded ? colSpan : 1}
-      onHover={onHover}
       alignRight={alignRight}
       global={global}
       rotate={rotate}
@@ -116,12 +110,10 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
         replicaCount > 1 && (
           <div css={groupAggregationWrapper}>
             <GroupAggregation
-              tableName={tableName}
               aggregationType={aggregationType}
               element={element}
-              column={column}
-              previousColumns={previousColumns.slice(0, -1)}
-              roundings={roundings}
+              aggregationResult={aggregationResult}
+              aggregationExpression={aggregationExpression}
             />
           </div>
         )}

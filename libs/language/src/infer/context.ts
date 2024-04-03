@@ -14,6 +14,8 @@ import {
   Type,
   buildType as t,
 } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { callBuiltin, callBuiltinFunctor } from '@decipad/language-builtins';
 import { ExternalDataMap } from '..';
 import {
   Stack,
@@ -27,7 +29,10 @@ import { ContextStats, initialInferStats } from './inferStats';
 
 type InferContextUtils = Omit<
   ContextUtils,
-  'simpleExpressionEvaluate' | 'retrieveVariableValueByGlobalVariableName'
+  | 'simpleExpressionEvaluate'
+  | 'retrieveVariableValueByGlobalVariableName'
+  | 'callValue'
+  | 'callFunctor'
 >;
 
 export interface Context {
@@ -105,6 +110,8 @@ export const makeContext = ({
     retrieveIndexByName: (indexName: string) => stack.get(indexName),
     retrieveVariableTypeByGlobalVariableName: (varName: string) =>
       stack.get(varName),
+    callBuiltinFunctor,
+    callBuiltin,
   };
 
   const scopedToDepth = async (

@@ -1,4 +1,4 @@
-import { DocSyncEditor } from '@decipad/docsync';
+import { DocSyncEditor, getLocalNotebookUpdates } from '@decipad/docsync';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
 import {
   PublishedVersionName,
@@ -8,6 +8,8 @@ import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
 import { useEffect, useMemo, useState } from 'react';
 import { concat, debounce, interval, take } from 'rxjs';
+import { Doc, applyUpdate } from 'yjs';
+import { toSlateDoc } from '@decipad/slate-yjs';
 
 export interface Props {
   readonly notebookId: string;
@@ -94,13 +96,26 @@ export function usePublishedVersionState({
         return;
       }
 
-      const version = md5(canonicalize(docsync.children));
-      if (version === publishedStateHash) {
-        setHasUnpublishedChanges('up-to-date');
-        return;
-      }
+      getLocalNotebookUpdates(notebookId).then((localState) => {
+        const base64State = localState && Buffer.from(localState);
 
-      setHasUnpublishedChanges('unpublished-changes');
+        let version: string | undefined;
+
+        if (base64State) {
+          const doc = new Doc();
+          applyUpdate(doc, base64State);
+          version = md5(canonicalize(toSlateDoc(doc.getArray())));
+          if (version === publishedStateHash) {
+            setHasUnpublishedChanges('up-to-date');
+            return;
+          }
+
+          // eslint-disable-next-line no-console
+          console.log('has unpublished changes', version, publishedStateHash);
+
+          setHasUnpublishedChanges('unpublished-changes');
+        }
+      });
     });
 
     // Fire once when use effect is first called.
@@ -109,7 +124,7 @@ export function usePublishedVersionState({
     return () => {
       s.unsubscribe();
     };
-  }, [docsync, publishedSnapshot, publishedStateHash]);
+  }, [docsync, notebookId, publishedSnapshot, publishedStateHash]);
 
   return hasUnpublishedChanges;
 }

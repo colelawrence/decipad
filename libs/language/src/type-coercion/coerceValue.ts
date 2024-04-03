@@ -4,6 +4,7 @@ import { Type, Value, RuntimeError } from '@decipad/language-types';
 import { singular } from '@decipad/language-utils';
 import { columnToTable } from './columnToTable';
 import { Realm } from '../interpreter';
+import { treeToTable } from './treeToTable';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());
 
@@ -14,8 +15,19 @@ export const coerceValue = async (
   _target: string
 ): Promise<Value.Value> => {
   const target = normalizeTarget(_target);
-  if ((await sourceType.isColumn()) && target === 'table') {
-    return columnToTable.value(realm, sourceType, sourceValue);
+  if (target === 'table') {
+    if (!(await sourceType.isColumn()).errorCause) {
+      return columnToTable.value(realm, sourceType, sourceValue);
+    }
+    if (!(await sourceType.isTree()).errorCause) {
+      return treeToTable.value(realm, sourceType, sourceValue);
+    }
+    if (!(await sourceType.isTable()).errorCause) {
+      return sourceValue;
+    }
+    throw new RuntimeError(
+      `Don't know how to convert non-column or non-tree value to ${target}`
+    );
   }
-  throw new RuntimeError(`Don't know how to convert to ${target}`);
+  throw new RuntimeError(`Don't know how to convert value to ${target}`);
 };

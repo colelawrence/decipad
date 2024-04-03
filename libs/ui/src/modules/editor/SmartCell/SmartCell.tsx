@@ -2,9 +2,8 @@
 import type { Result } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { DragEvent, FC, useCallback } from 'react';
+import { DragEvent, FC } from 'react';
 import { cssVar, p14Medium } from '../../../primitives';
 import { Aggregation } from '../Aggregation/Aggregation';
 
@@ -47,7 +46,6 @@ export interface SmartRowProps {
   result?: Result.Result;
   rowSpan?: number;
   colSpan?: number;
-  onHover?: (hover: boolean) => void;
   onDragStart?: (e: DragEvent) => void;
   onDragEnd?: (e: DragEvent) => void;
   hover?: boolean;
@@ -64,15 +62,12 @@ export function SmartCell({
   onDragEnd,
   rowSpan = 1,
   colSpan = 1,
-  onHover = noop,
   hover = false,
   alignRight = false,
   global = false,
   rotate,
   element,
 }: SmartRowProps): ReturnType<FC> {
-  const onMouseOver = useCallback(() => onHover(true), [onHover]);
-  const onMouseOut = useCallback(() => onHover(false), [onHover]);
   const readOnly = useIsEditorReadOnly();
 
   return (
@@ -87,8 +82,6 @@ export function SmartCell({
       rowSpan={rowSpan}
       colSpan={colSpan}
       draggable
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}
     >
       <Aggregation
         aggregationType={aggregationType}

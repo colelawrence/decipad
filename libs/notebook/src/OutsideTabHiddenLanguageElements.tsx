@@ -1,7 +1,6 @@
 import { FC, useRef } from 'react';
 import { type DocSyncEditor } from '@decipad/docsync';
 import {
-  ELEMENT_DATA_VIEW,
   ELEMENT_INTEGRATION,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
@@ -28,7 +27,6 @@ export interface OutsideTabHiddenLanguageElementsProps {
 }
 
 const needsRenderingLanguageElementTypes: Set<ElementKind> = new Set([
-  ELEMENT_DATA_VIEW,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
   ELEMENT_INTEGRATION,

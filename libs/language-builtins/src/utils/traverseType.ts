@@ -37,6 +37,7 @@ export function traverseType(
     }
 
     case 'table':
+    case 'tree':
     case 'materialized-table':
     case 'row':
     case 'function': {

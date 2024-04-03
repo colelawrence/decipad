@@ -27,6 +27,7 @@ import {
   materializeOneResult,
   serializeType,
   buildResult,
+  Unknown,
 } from '@decipad/language';
 import {
   anyMappingToMap,
@@ -723,7 +724,7 @@ export class Computer {
       );
 
       if (type.errorCause) {
-        return { value: null, type: serializeType(type) };
+        return buildResult(serializeType(type), Unknown, false);
       }
 
       try {
@@ -732,10 +733,11 @@ export class Computer {
           expression
         );
 
-        return {
-          value: await value.getData(),
-          type: serializeType(type),
-        };
+        return buildResult(
+          serializeType(type),
+          (await value.getData()) as Result.OneResult,
+          false
+        );
       } catch (err) {
         return {
           value: null,

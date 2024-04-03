@@ -16,7 +16,12 @@ type ValidFromJSArg =
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function;
 
-export type FromJSArg = symbol | undefined | FromJSArg[] | ValidFromJSArg;
+export type FromJSArg =
+  | symbol
+  | undefined
+  | FromJSArg[]
+  | ValidFromJSArg
+  | ValidFromJSArg[];
 
 const invalidTypes = new Set(['symbol']);
 

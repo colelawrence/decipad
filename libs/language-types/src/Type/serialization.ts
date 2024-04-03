@@ -21,6 +21,19 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         cellType: serializeType(type.cellType),
       };
     }
+    if (type.tree) {
+      return {
+        kind: 'tree',
+        columnTypes: getDefined(
+          type.tree,
+          'tree should have tree columnTypes'
+        ).map((t) => serializeType(t)),
+        columnNames: getDefined(
+          type.columnNames,
+          'tree should have columnNames'
+        ),
+      };
+    }
     if (type.columnTypes && type.columnNames) {
       return {
         kind: 'table',
@@ -86,6 +99,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         kind: 'function',
         name: getDefined(type.functionName),
         argNames: type.functionArgNames,
+        body: type.functionBody,
         ast: type.node,
       };
     }
@@ -138,13 +152,21 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'materialized-column':
           return t.column(deserializeType(type.cellType), type.indexedBy);
         case 'materialized-table':
-        case 'table':
+        case 'table': {
           const { columnTypes, columnNames, delegatesIndexTo } = type;
           return t.table({
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
             delegatesIndexTo,
           });
+        }
+        case 'tree': {
+          const { columnTypes, columnNames } = type;
+          return t.tree({
+            columnTypes: columnTypes.map((t) => deserializeType(t)),
+            columnNames,
+          });
+        }
         case 'row':
           return t.row(
             type.rowCellTypes.map((t) => deserializeType(t)),
@@ -158,7 +180,7 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'anything':
           return t.nothing();
         case 'function':
-          return t.functionPlaceholder(type.name, type.argNames);
+          return t.functionPlaceholder(type.name, type.argNames, type.body);
         case 'type-error':
           return t.impossible(new InferError(type.errorCause));
       }

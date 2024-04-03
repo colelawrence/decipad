@@ -2,6 +2,8 @@ import { N } from '@decipad/number';
 import { from, map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
 import { Result, SerializedTypes, Value } from '@decipad/language-types';
+import { getInstanceof } from '@decipad/utils';
+import { buildResult } from '../utils/buildResult';
 
 // eslint-disable-next-line complexity
 export const resultToValue = async (
@@ -71,12 +73,15 @@ export const resultToValue = async (
       if (typeof columnValue === 'function') {
         columnGen = (start?: number, end?: number) =>
           map(columnValue(start, end), async (cell: Result.OneResult) =>
-            resultToValue({ type: columnType.cellType, value: cell })
+            resultToValue(buildResult(columnType.cellType, cell, false))
           );
       } else if (Array.isArray(columnValue)) {
         columnGen = () =>
           map(from(columnValue.slice()), async (cell: Result.OneResult) =>
-            resultToValue({ type: columnType.cellType, value: cell })
+            resultToValue({
+              type: columnType.cellType,
+              value: cell,
+            } as Result.Result)
           );
       } else {
         throw new Error(`panic: got invalid column: ${typeof value}`);
@@ -124,10 +129,13 @@ export const resultToValue = async (
       return Value.Row.fromNamedCells(
         await Promise.all(
           rowValue.map(async (cell, index) =>
-            resultToValue({ type: rowType.rowCellTypes[index], value: cell })
+            resultToValue(buildResult(rowType.rowCellTypes[index], cell, false))
           )
         ),
         rowType.rowCellNames
       );
+
+    case 'tree':
+      return getInstanceof(value, Value.Tree);
   }
 };

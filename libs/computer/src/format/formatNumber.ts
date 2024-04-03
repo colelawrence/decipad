@@ -464,9 +464,8 @@ export function formatNumber(
   }
 
   let deciNumber;
-  if (unit) {
-    const units = Unit.normalizeUnits(unit) as Unit.Unit[];
-
+  const units = unit && Unit.normalizeUnits(unit);
+  if (units) {
     if (hasCurrency(units) !== -1) {
       deciNumber = formatAnyCurrency(locale, units, fraction);
     } else if (isUserDefined(units)) {

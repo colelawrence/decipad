@@ -15,6 +15,7 @@ import {
 } from '@decipad/language-types';
 import { validateColumnResult } from './validateColumnResult';
 import { Validate } from './types';
+import stringify from 'json-stringify-safe';
 
 const getTrue = (cond: boolean, failureMessage: string) => {
   if (cond) return true;
@@ -61,7 +62,10 @@ const validate: Validate = <
       break;
     }
     case 'string': {
-      getTrue(typeof value === 'string', 'panic: expected string');
+      getTrue(
+        typeof value === 'string',
+        `panic: expected string and got ${typeof value} (${stringify(value)})`
+      );
       break;
     }
     case 'date': {
@@ -102,7 +106,7 @@ const validate: Validate = <
       ) as T;
     }
     case 'table': {
-      const columnValues = getArray(value as Result.ResultTable);
+      const columnValues = getArray(value);
       if (columnValues.length !== type.columnTypes.length) {
         console.log('columnValues', columnValues);
         throw new Error(
@@ -122,8 +126,8 @@ const validate: Validate = <
       break;
     }
     case 'row': {
-      zip(type.rowCellTypes, getArray(value as Result.ResultRow)).forEach(
-        ([type, value]) => validate(type, value)
+      zip(type.rowCellTypes, getArray(value)).forEach(([type, value]) =>
+        validate(type, value)
       );
       break;
     }
@@ -136,7 +140,11 @@ const validate: Validate = <
       break;
     }
     case 'function': {
-      getTrue(value instanceof Value.FunctionValue, 'expected no value');
+      getTrue(value instanceof Value.FunctionValue, 'expected function value');
+      break;
+    }
+    case 'tree': {
+      getTrue(value instanceof Value.Tree, 'expected tree value');
       break;
     }
   }
@@ -148,7 +156,10 @@ const reportError = (
   value: Result.OneResult | null | undefined,
   error?: Error
 ) => {
-  console.error('Failed to validate a Result:', error?.message);
+  console.error(
+    `Failed to validate a Result of type ${type.kind}"`,
+    error?.message
+  );
   console.error({ type, value });
 };
 

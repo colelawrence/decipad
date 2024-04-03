@@ -2,7 +2,6 @@ import { getDefined } from '@decipad/utils';
 import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
-  ContextUtils,
   InferError,
   Type,
   Value,
@@ -10,6 +9,7 @@ import {
 } from '@decipad/language-types';
 import { FullBuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
+import { BuiltinContextUtils } from './types';
 
 export type OverloadTypeName =
   | 'number'
@@ -25,7 +25,7 @@ export type OverloadedBuiltinSpec =
       fnValues: (
         values: Value.Value[],
         types: Type[],
-        utils: ContextUtils
+        utils: BuiltinContextUtils
       ) => PromiseOrType<Value.Value>;
       functor: Functor;
       functionSignature?: undefined;
@@ -35,7 +35,7 @@ export type OverloadedBuiltinSpec =
       fnValues: (
         values: Value.Value[],
         types: Type[],
-        utils: ContextUtils
+        utils: BuiltinContextUtils
       ) => PromiseOrType<Value.Value>;
       functor?: undefined;
       functionSignature: string;
@@ -60,7 +60,7 @@ export const overloadBuiltin = (
   const fnValues = async (
     values: Value.Value[],
     types: Type[],
-    utils: ContextUtils
+    utils: BuiltinContextUtils
   ): Promise<Value.Value> => {
     if (values.find(Value.isUnknownValue)) {
       return Value.UnknownValue;

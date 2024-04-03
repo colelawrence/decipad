@@ -15,4 +15,16 @@ export const makeContext = (): ContextUtils => ({
   retrieveVariableTypeByGlobalVariableName: () => null,
   retrieveVariableValueByGlobalVariableName: () => UnknownValue,
   simpleExpressionEvaluate: async () => Promise.resolve(UnknownValue),
+  callBuiltinFunctor: async () => {
+    throw new Error('Not implemented');
+  },
+  callBuiltin: async () => {
+    throw new Error('Not implemented');
+  },
+  callFunctor: async () => {
+    throw new Error('Not implemented');
+  },
+  callValue: async () => {
+    throw new Error('Not implemented');
+  },
 });

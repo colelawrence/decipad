@@ -9,12 +9,12 @@ interface DataViewDataProps {
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
+  filters: Array<DataViewFilter | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
   alternateRotation?: boolean;
-  filters: Array<DataViewFilter | undefined>;
 }
 
 export const DataViewData: FC<DataViewDataProps> = ({
@@ -22,7 +22,10 @@ export const DataViewData: FC<DataViewDataProps> = ({
   ...props
 }) => {
   return alternateRotation ? (
-    <DataViewDataAlternatedRotationLayout {...props} />
+    <DataViewDataAlternatedRotationLayout
+      {...props}
+      blockId={props.element.id}
+    />
   ) : (
     <DataViewDataLayout {...props} />
   );

@@ -19,6 +19,7 @@ import { all, findIndex, map } from '@decipad/generator-utils';
 import { sortMap } from '@decipad/column';
 import { BuiltinSpec } from '../interfaces';
 import { applyFilterMap, applyMap } from '../utils/valueTransforms';
+import { tree } from './tree';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
@@ -243,4 +244,5 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     formulaGroup: 'Tables',
     example: 'grab(Prices, Prices.Discount > 20%)',
   },
+  tree,
 };

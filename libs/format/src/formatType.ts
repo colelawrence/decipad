@@ -64,6 +64,8 @@ export function formatTypeInner(
       }
       return columnStr;
     }
+    case 'tree':
+      return '<tree>';
     case 'type-error':
       return `Error: ${Format.formatError(locale, type.errorCause)}`;
   }

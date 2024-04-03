@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC } from 'react';
 import { css } from '@emotion/react';
+import { Result } from '@decipad/remote-computer';
 import { cssVar } from '../../../primitives';
-
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
 import { useSimplePagination } from '../../../utils/usePagination';
@@ -52,7 +52,7 @@ export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
                   <span css={rowLabelStyles}>
                     <CodeResult
                       type={type.cellType}
-                      value={oneValue}
+                      value={oneValue as Result.Result['value']}
                       element={element}
                     />
                   </span>

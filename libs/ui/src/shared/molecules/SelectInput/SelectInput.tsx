@@ -21,6 +21,7 @@ interface SelectInputProps {
   readonly children: ReactNode;
   readonly value?: string;
   readonly setValue: (value: string) => void;
+  readonly testId?: string;
 }
 
 export const SelectInput = ({
@@ -28,6 +29,7 @@ export const SelectInput = ({
   children,
   value,
   setValue,
+  testId,
 }: SelectInputProps): ReturnType<FC> => {
   return (
     <Label
@@ -35,6 +37,7 @@ export const SelectInput = ({
         <select
           css={[selectFontStyles, selectStyles]}
           id={id}
+          data-testid={testId}
           onChange={(ev) => {
             setValue(ev.target.value);
           }}

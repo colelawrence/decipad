@@ -30,6 +30,12 @@
     },
     {
       "path": "../import"
+    },
+    {
+      "path": "../language-aggregations"
+    },
+    {
+      "path": "../language-filters"
     }
   ]
 }

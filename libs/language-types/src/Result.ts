@@ -16,9 +16,16 @@ export type ResultColumn = ResultGenerator;
 export type ResultMaterializedColumn = OneResult[];
 export type ResultRow = OneResult[];
 export type ResultTable = Array<ResultColumn>;
+export type ResultTree = Value.Tree;
 export type ResultMaterializedTable = ResultMaterializedColumn[];
 export type ResultUnknown = symbol;
 export type ResultFunction = Value.FunctionValue;
+
+// trees
+export type ResultTreeGroup = {
+  root: OneResult;
+  children: ResultTreeGroup[];
+};
 
 export type OneMaterializedResult =
   | ResultNumber
@@ -42,6 +49,7 @@ export type OneResult =
   | ResultMaterializedColumn
   | ResultRow
   | ResultTable
+  | ResultTree
   | ResultMaterializedTable
   | ResultUnknown
   | ResultFunction;
@@ -69,6 +77,8 @@ export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
     ? ResultMaterializedTable
     : T extends 'row'
     ? ResultRow
+    : T extends 'tree'
+    ? ResultTree
     : T extends 'function'
     ? ResultFunction
     : T extends 'type-error'

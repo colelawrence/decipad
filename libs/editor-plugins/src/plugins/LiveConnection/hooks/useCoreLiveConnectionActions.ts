@@ -39,12 +39,9 @@ export const useCoreLiveConnectionActions = ({
     [editor, element?.columnTypeCoercions, path]
   );
 
-  const setIsFirstRowHeader = usePathMutatorCallback(
-    editor,
-    path,
-    'isFirstRowHeaderRow',
-    'useCoreLiveConnectionActions'
-  );
+  const setIsFirstRowHeader = usePathMutatorCallback<
+    LiveConnectionElement | LiveDataSetElement
+  >(editor, path, 'isFirstRowHeaderRow', 'useCoreLiveConnectionActions');
 
   const beforeAuthenticate = useCallback(
     (source: ExternalDataSourceFragmentFragment) => {

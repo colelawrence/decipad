@@ -178,9 +178,7 @@ export function getIdentifiedBlock(
 }
 
 export const simplifyInBlockResults = async (results: IdentifiedResult[]) => {
-  const numberToString = async (
-    value: Result.Result['value']
-  ): Promise<string> => {
+  const numberToString = async (value: Result.OneResult): Promise<string> => {
     if (Array.isArray(value))
       return `[${(await Promise.all(value.map(numberToString))).join(', ')}]`;
     if (typeof value === 'function') {
@@ -200,8 +198,10 @@ export const simplifyInBlockResults = async (results: IdentifiedResult[]) => {
     if (type.kind === 'type-error') {
       simpleUpdates.push(`${prefix}${formatError('en-us', type.errorCause)}`);
     } else {
-      // eslint-disable-next-line no-await-in-loop
-      simpleUpdates.push(prefix + (await numberToString(value)));
+      simpleUpdates.push(
+        // eslint-disable-next-line no-await-in-loop
+        prefix + (await numberToString(value as Result.OneResult))
+      );
     }
   }
   return simpleUpdates;

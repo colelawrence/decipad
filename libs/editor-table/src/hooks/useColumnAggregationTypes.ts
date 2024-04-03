@@ -4,8 +4,8 @@ import { useTableColumnFormulaResultForColumn } from '@decipad/editor-hooks';
 import { TableCellType } from '@decipad/editor-types';
 import {
   AggregationType,
-  columnAggregationTypes,
-} from '../utils/columnAggregationTypes';
+  availableAggregations,
+} from '@decipad/language-aggregations';
 import { TableColumn } from '../types';
 
 interface UseAggregationTypeProps {
@@ -21,7 +21,7 @@ export const useColumnAggregationTypes = ({
   const formulaResult = useTableColumnFormulaResultForColumn(columnIndex);
   return useMemo(
     () =>
-      columnAggregationTypes(
+      availableAggregations(
         formulaResult
           ? (formulaResult.type.cellType as TableCellType)
           : (column.cellType as TableCellType)

@@ -49,12 +49,12 @@ export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
 
 const wrap =
   <T extends AST.Node>(
-    fn: (realm: Realm, node: T, cohercingTo?: Type) => Promise<Type>
+    fn: (realm: Realm, node: T, coercingTo?: Type) => Promise<Type>
   ) =>
-  async (realm: Realm, node: T, cohercingTo?: Type): Promise<Type> => {
+  async (realm: Realm, node: T, coercingTo?: Type): Promise<Type> => {
     let type = await fn(realm, node);
-    if (cohercingTo) {
-      type = await type.sameAs(cohercingTo);
+    if (coercingTo) {
+      type = await type.sameAs(coercingTo);
     }
     return linkToAST(node, type);
   };

@@ -28,7 +28,9 @@ describe('date overloads common functions', () => {
           t.timeQuantity('day'),
         ])
       ).errorCause
-    ).toMatchInlineSnapshot(`[Error: Inference Error: mismatched-specificity]`);
+    ).toMatchInlineSnapshot(
+      `[Error: Inference Error: mismatched-specificity : {"errType":"mismatched-specificity","expectedSpecificity":"month","gotSpecificity":"day"}]`
+    );
 
     expect(
       (
@@ -114,7 +116,9 @@ describe('date overloads', () => {
           makeContext()
         )
       ).errorCause
-    ).toMatchInlineSnapshot(`[Error: Inference Error: mismatched-specificity]`);
+    ).toMatchInlineSnapshot(
+      `[Error: Inference Error: mismatched-specificity : {"errType":"mismatched-specificity","expectedSpecificity":"month","gotSpecificity":"day"}]`
+    );
     expect(
       (
         await plus.functor!(
