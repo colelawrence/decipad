@@ -168,7 +168,9 @@ function NewDataConnection({
     const url =
       connMethod === 'full-url'
         ? fullUrl
-        : `${protocol}://${username}:${password}@${host}:${port}/${databaseName}`;
+        : `${protocol}://${encodeURIComponent(username)}:${encodeURIComponent(
+            password
+          )}@${host}:${port}/${databaseName}`;
 
     fetch(BackendUrl.pingDatabase(), {
       method: 'POST',
@@ -216,7 +218,9 @@ function NewDataConnection({
     const url =
       connMethod === 'full-url'
         ? fullUrl
-        : `${protocol}://${username}:${password}@${host}:${port}/${databaseName}`;
+        : `${protocol}://${username}:${encodeURIComponent(
+            password
+          )}@${host}:${port}/${databaseName}`;
 
     if (initialValues) {
       update(initialValues.id as string, {

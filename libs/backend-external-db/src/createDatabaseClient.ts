@@ -54,8 +54,8 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
     debug: true,
     useNullAsDefault: true,
     connection: {
-      user: url.username,
-      password: url.password,
+      user: url.username ? decodeURIComponent(url.username) : url.username,
+      password: url.password ? decodeURIComponent(url.password) : url.password,
       host: url.hostname,
       port: !url.port ? undefined : Number(url.port),
       database: url.pathname.substring(1),
