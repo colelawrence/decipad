@@ -7,7 +7,7 @@ const resolvers: Resolvers = {
   Query: {
     getAnnotationsByPadId: async (_, { padId }, context) => {
       if (!context.user) {
-        throw new Error('User not authenticated');
+        return [];
       }
       const data = await tables();
 
