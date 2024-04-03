@@ -4,7 +4,7 @@ import {
 } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { isServerSideRendering } from '@decipad/support';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTabNavigate } from './hooks';
 
 export function useSetWorkspaceQuota(
@@ -52,5 +52,10 @@ export function useNotebookTitleChange(
     [changeNotebookTitle, notebookId, notebookTitle, renameNotebook]
   );
 
-  return { onNotebookTitleChange };
+  return useMemo(
+    () => ({
+      onNotebookTitleChange,
+    }),
+    [onNotebookTitleChange]
+  );
 }

@@ -1,7 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import {
+  FC,
+  MouseEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Refresh } from '../../../icons';
 import {
   black,
@@ -97,25 +104,28 @@ export const TextAndIconButton = ({
           color === 'brand' && brandBackgroundStyles(disabled),
         ],
   ]);
+
+  const onInternalButtonClick = useCallback(
+    (ev: MouseEvent) => {
+      if (animateIcon) {
+        setAnimated(true);
+        setCurrentColor('default');
+        setCurrentIcon(<Refresh />);
+        setTimeout(() => {
+          setAnimated(false);
+          setCurrentColor(color);
+          setCurrentIcon(children);
+        }, 5000);
+      }
+      onButtonClick(ev);
+    },
+    [animateIcon, children, color, onButtonClick]
+  );
+
   return (
     <div css={wrapperStyles} contentEditable={false}>
       {onClick ? (
-        <button
-          css={buttonStyles}
-          onClick={(ev) => {
-            if (animateIcon) {
-              setAnimated(true);
-              setCurrentColor('default');
-              setCurrentIcon(<Refresh />);
-              setTimeout(() => {
-                setAnimated(false);
-                setCurrentColor(color);
-                setCurrentIcon(children);
-              }, 5000);
-            }
-            onButtonClick(ev);
-          }}
-        >
+        <button css={buttonStyles} onClick={onInternalButtonClick}>
           {iconPosition === 'left' ? (
             <>
               {iconElement}
