@@ -1,4 +1,4 @@
-import stringify from 'json-stringify-safe';
+/* eslint-disable no-param-reassign */
 import cloneDeep from 'lodash.clonedeep';
 import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -7,29 +7,25 @@ import { RemoteComputer } from '@decipad/remote-computer';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 
-const traverseElements = <T extends MyElement>(
-  el: T,
-  t: (e: MyElement) => void
-) => {
-  t(el);
+const recReplaceIds = <T extends MyNode>(el: T): T => {
+  if (!isElement(el)) return el;
+
+  // @ts-ignore
+  el.id = nanoid();
+
   for (const child of el.children) {
-    if (isElement(child)) {
-      traverseElements(child, t);
-    }
+    recReplaceIds(child);
   }
+
+  return el;
 };
 
 const cloneAndReplaceElementIds = <T extends MyElement>(
   el: T,
   transform: (e: T) => T = identity
 ): T => {
-  let text = stringify(el);
-  traverseElements(el, (e) => {
-    if (e.id) {
-      text = text.replaceAll(e.id, nanoid());
-    }
-  });
-  return transform(JSON.parse(text));
+  const clone = structuredClone(el);
+  return transform(recReplaceIds(clone));
 };
 
 const cloneElement = <T extends MyElement>(

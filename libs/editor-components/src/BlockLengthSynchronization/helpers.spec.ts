@@ -12,9 +12,9 @@ it('finds contiguous groups', () => {
       { id: '2', type: ELEMENT_CODE_LINE_V2 },
     ])
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "memberIds": Array [
+    [
+      {
+        "memberIds": [
           "1",
           "2",
         ],
@@ -31,15 +31,15 @@ it('finds contiguous groups', () => {
       { id: '5', type: ELEMENT_CODE_LINE_V2 },
     ])
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "memberIds": Array [
+    [
+      {
+        "memberIds": [
           "1",
           "2",
         ],
       },
-      Object {
-        "memberIds": Array [
+      {
+        "memberIds": [
           "4",
           "5",
         ],
@@ -47,13 +47,13 @@ it('finds contiguous groups', () => {
     ]
   `);
 
-  expect(getContiguousGroups([])).toMatchInlineSnapshot(`Array []`);
+  expect(getContiguousGroups([])).toMatchInlineSnapshot(`[]`);
 
   expect(getContiguousGroups([{ id: '1', type: ELEMENT_CODE_LINE_V2 }]))
     .toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "memberIds": Array [
+    [
+      {
+        "memberIds": [
           "1",
         ],
       },
@@ -76,23 +76,23 @@ it('generates target lengths per group and per column', () => {
 
   expect(targetLengths).toMatchInlineSnapshot(`
     Map {
-      "1" => Object {
+      "1" => {
         "resultColumn": 40,
         "variableNameColumn": 30,
       },
-      "2" => Object {
+      "2" => {
         "resultColumn": 40,
         "variableNameColumn": 30,
       },
-      "3" => Object {
+      "3" => {
         "resultColumn": 40,
         "variableNameColumn": 30,
       },
-      "4" => Object {
+      "4" => {
         "resultColumn": 60,
         "variableNameColumn": 50,
       },
-      "5" => Object {
+      "5" => {
         "resultColumn": 60,
         "variableNameColumn": 50,
       },
@@ -116,10 +116,10 @@ it('can deeply update a measuredLengths map', () => {
 
   expect(measuredLengths).toMatchInlineSnapshot(`
     Map {
-      "1" => Object {
+      "1" => {
         "variableNameColumn": 100,
       },
-      "new-one" => Object {
+      "new-one" => {
         "variableNameColumn": 1234,
       },
     }

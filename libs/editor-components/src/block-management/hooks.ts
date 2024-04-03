@@ -151,13 +151,14 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
       });
       return;
     }
+
     const path = findNodePath(editor, element);
-    if (path) {
-      const newEl = utils.cloneProxy(computer, element);
-      insertElements(editor, newEl, {
-        at: requirePathBelowBlock(editor, path),
-      });
-    }
+    if (!path) return;
+
+    const newEl = utils.cloneProxy(computer, element);
+    insertElements(editor, newEl, {
+      at: requirePathBelowBlock(editor, path),
+    });
   }, [computer, editor, element]);
 
   const onShowHide = useCallback(

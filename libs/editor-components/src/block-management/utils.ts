@@ -1,5 +1,9 @@
 import { RemoteComputer } from '@decipad/remote-computer';
-import { ELEMENT_VARIABLE_DEF, MyElement } from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_VARIABLE_DEF,
+  MyElement,
+} from '@decipad/editor-types';
 import { clone } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 
@@ -19,6 +23,21 @@ const utils = {
           }
         }
         break;
+      }
+      case ELEMENT_TABLE: {
+        //
+        // Look for category values, and de-duplicate the IDs
+        //
+
+        for (const col of newElement.children[1].children) {
+          if (col.categoryValues == null) {
+            continue;
+          }
+
+          for (const category of col.categoryValues) {
+            category.id = nanoid();
+          }
+        }
       }
     }
     return newElement;

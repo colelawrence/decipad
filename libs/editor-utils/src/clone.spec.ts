@@ -100,3 +100,51 @@ it('clones while using a different varname (2)', () => {
     }
   `);
 });
+
+//
+//
+//
+
+it('only changes ID field', () => {
+  expect(
+    clone(computer, {
+      type: ELEMENT_CODE_LINE_V2,
+      id: 'old-id',
+      children: [
+        {
+          type: ELEMENT_STRUCTURED_VARNAME,
+          id: 'var-id',
+          children: [{ text: 'var-id' }],
+        },
+        {
+          type: ELEMENT_CODE_LINE_V2_CODE,
+          id: 'code-id',
+          children: [{ text: '"world"' }],
+        },
+      ],
+    })
+  ).toMatchObject({
+    children: [
+      {
+        children: [
+          {
+            text: 'var-idCopy',
+          },
+        ],
+        id: 'mock-nanoid',
+        type: 'structured_varname',
+      },
+      {
+        children: [
+          {
+            text: '"world"',
+          },
+        ],
+        id: 'mock-nanoid',
+        type: 'code_line_v2_code',
+      },
+    ],
+    id: 'mock-nanoid',
+    type: 'code_line_v2',
+  });
+});
