@@ -55,7 +55,7 @@ describe('Create Integration Block Normalizer', () => {
           notionUrl:
             'https://www.notion.so/56a46e9f8d6d49e082641b7bd081fe65?v=32db954931114b7f861ab7bb707233fb&pvs=4',
         },
-      },
+      } as any,
     ];
 
     editor.normalize({ force: true });
@@ -75,6 +75,9 @@ describe('Create Integration Block Normalizer', () => {
           timeOfLastRun: 'bruh',
           type: 'notion',
           notionUrl: `${window.location.origin}/api/externaldatasources/notion/56a46e9f8d6d49e082641b7bd081fe65/data`,
+          externalDataId: '',
+          externalDataName: '',
+          databaseName: '',
         },
       },
     ]);
@@ -93,7 +96,7 @@ describe('Create Integration Block Normalizer', () => {
           timeOfLastRun: 'bruh',
           notionUrl:
             'https://dev.decipad.com/api/externaldatasources/notion/56a46e9f8d6d49e082641b7bd081fe65/data',
-        },
+        } as any,
       },
     ];
 
@@ -114,6 +117,9 @@ describe('Create Integration Block Normalizer', () => {
           latestResult: 'result',
           timeOfLastRun: 'bruh',
           notionUrl: `${window.location.origin}/api/externaldatasources/notion/56a46e9f8d6d49e082641b7bd081fe65/data`,
+          externalDataId: '',
+          externalDataName: '',
+          databaseName: '',
         },
       },
     ]);

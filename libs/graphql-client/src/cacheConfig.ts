@@ -6,6 +6,7 @@ import {
   ExternalDataSource,
   GetExternalDataSourcesWorkspaceDocument,
   GetExternalDataSourcesWorkspaceQuery,
+  GetExternalDataSourcesWorkspaceQueryVariables,
   GetNotebookAnnotationsDocument,
   GetNotebookAnnotationsQuery,
   GetNotebookAnnotationsQueryVariables,
@@ -383,6 +384,38 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           cache,
           result.addSectionToWorkspace as Section,
           args.workspaceId as string
+        );
+      },
+      removeExternalDataSource(_result, args, cache) {
+        if (args.workspaceId == null) {
+          return;
+        }
+
+        cache.updateQuery<
+          GetExternalDataSourcesWorkspaceQuery,
+          GetExternalDataSourcesWorkspaceQueryVariables
+        >(
+          {
+            query: GetExternalDataSourcesWorkspaceDocument,
+            variables: { workspaceId: args.workspaceId },
+          },
+          (data) => {
+            if (data == null) {
+              return data;
+            }
+
+            const externalDataId =
+              data.getExternalDataSourcesWorkspace.findIndex(
+                (d) => d.id === args.id
+              );
+            if (externalDataId === -1) {
+              throw new Error('Could not find external data to delete');
+            }
+
+            data.getExternalDataSourcesWorkspace.splice(externalDataId, 1);
+
+            return data;
+          }
         );
       },
       updateSectionInWorkspace: (_result, args, cache) => {

@@ -194,17 +194,17 @@ const AiPanel = ({
 
 export const CodeConnection: FC<ConnectionProps> = ({
   setResultPreview,
+  setRawResult,
   typeMapping,
 }) => {
-  const { stage, setRawResult } = useConnectionStore();
+  const { stage } = useConnectionStore();
 
   const { setCode, setLatestResult, code, showAi, toggleShowAi, onReset } =
     useCodeConnectionStore();
 
   const { onExecute, info } = useContext(ExecutionContext);
-  const [log, setLog] = useState<TExecution<boolean>[]>(
-    [] as TExecution<boolean>[]
-  );
+  const [log, setLog] = useState<TExecution<boolean>[]>([]);
+
   const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
@@ -311,7 +311,11 @@ export const CodeConnection: FC<ConnectionProps> = ({
 
   const runCode = useCallback(() => {
     try {
-      worker?.execute(code, deciVariables);
+      if (!worker) return;
+
+      setTimeout(() => {
+        worker.execute(code, deciVariables);
+      }, 0);
     } catch (err) {
       console.error(err);
       setResultPreview(undefined);

@@ -405,6 +405,7 @@ export type MutationRemoveAttachmentFromPadArgs = {
 
 export type MutationRemoveExternalDataSourceArgs = {
   id: Scalars['ID']['input'];
+  workspaceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -1229,7 +1230,7 @@ export type CreateExternalDataSourceMutationVariables = Exact<{
 }>;
 
 
-export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> } | null };
+export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', id: string, lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> } | null };
 
 export type CreateExternalDataLinkMutationVariables = Exact<{
   externalDataId: Scalars['String']['input'];
@@ -1327,6 +1328,7 @@ export type DeleteWorkspaceMutation = { __typename?: 'Mutation', removeWorkspace
 
 export type DeleteExternalDataMutationVariables = Exact<{
   id: Scalars['ID']['input'];
+  workspaceId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
@@ -1560,21 +1562,21 @@ export type GetCreditsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCreditsPlansQuery = { __typename?: 'Query', getCreditsPlans?: { __typename?: 'CreditsPlan', id: string, title?: string | null, description?: string | null, plans: Array<{ __typename?: 'CreditPricePlan', id: string, title?: string | null, description?: string | null, price: number, credits: number, isDefault?: boolean | null, promotionTag?: string | null, currency: string }> } | null };
 
-export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> };
+export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', id: string, lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> };
 
 export type GetExternalDataSourcesQueryVariables = Exact<{
   notebookId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> }> };
+export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', id: string, lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> }> };
 
 export type GetExternalDataSourcesWorkspaceQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> }> };
+export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', id: string, lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }>, dataLinks: Array<{ __typename?: 'ExternalDataSourceDataLink', id: string, name: string, url: string, method?: HttpMethods | null }> }> };
 
 export type GetNotebookAnnotationsQueryVariables = Exact<{
   notebookId: Scalars['String']['input'];
@@ -1694,6 +1696,7 @@ export const ExternalDataSourceFragmentFragmentDoc = gql`
   authUrl
   externalId
   keys {
+    id
     lastError
     createdAt
     expiresAt
@@ -2164,8 +2167,8 @@ export function useDeleteWorkspaceMutation() {
   return Urql.useMutation<DeleteWorkspaceMutation, DeleteWorkspaceMutationVariables>(DeleteWorkspaceDocument);
 };
 export const DeleteExternalDataDocument = gql`
-    mutation DeleteExternalData($id: ID!) {
-  removeExternalDataSource(id: $id)
+    mutation DeleteExternalData($id: ID!, $workspaceId: ID) {
+  removeExternalDataSource(id: $id, workspaceId: $workspaceId)
 }
     `;
 

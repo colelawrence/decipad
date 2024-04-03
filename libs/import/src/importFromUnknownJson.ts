@@ -51,9 +51,21 @@ const importFromArray = (
   const results = arr.map((cell) =>
     importFromUnknownJson(cell, options, cohersion)
   );
+
   if (!sameType(results.map(({ type }) => type))) {
-    return errorResult('not all elements of array are of same type');
+    // return errorResult('not all elements of array are of same type');
+    return buildResult(
+      {
+        kind: 'column',
+        indexedBy: null,
+        cellType: {
+          kind: 'string',
+        },
+      },
+      results.map((r) => r.value as Result.OneResult)
+    ) as Result.Result;
   }
+
   return buildResult(
     {
       kind: 'column',
@@ -176,30 +188,23 @@ const internalImportFromUnknownJson = (
   }
   if (tof === 'string') {
     const value = (json as string).trim();
-    if (value) {
-      if (cohersion?.kind === 'date') {
-        const date = parseDate(value, cohersion.date);
-        if (date) {
-          return {
-            type: { ...cohersion },
-            value: date.date,
-          };
-        }
+    if (cohersion?.kind === 'date') {
+      const date = parseDate(value, cohersion.date);
+      if (date) {
+        return {
+          type: { ...cohersion },
+          value: date.date,
+        };
       }
-      return {
-        type: {
-          kind: 'string',
-        },
-        value: json as string,
-      };
     }
     return {
       type: {
-        kind: 'anything',
+        kind: 'string',
       },
-      value: Unknown,
+      value: json as string,
     };
   }
+
   if (tof === 'object' && json != null) {
     return importTableFromObject(json as Record<string, unknown>, options);
   }

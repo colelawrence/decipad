@@ -39,10 +39,6 @@ function useBeforeCreateConnection(): UseBeforeCreateConnectionReturn {
 
       const notionState = useNotionConnectionStore.getState();
 
-      if (notionState.mode !== 'private') {
-        return;
-      }
-
       if (
         notionState.ExternalDataId == null ||
         notionState.DatabaseName == null ||
@@ -143,6 +139,7 @@ export const useCreateIntegration = () => {
           );
         } else if (node.integrationType.type === 'notion') {
           const notionStore = useNotionConnectionStore.getState();
+
           setNodes(
             editor,
             {
@@ -152,7 +149,10 @@ export const useCreateIntegration = () => {
                 type: 'notion',
                 latestResult: notionStore.latestResult,
                 timeOfLastRun: notionStore.timeOfLastRun,
-                notionUrl: getDefined(notionStore.NotionDatabaseUrl),
+                notionUrl: notionStore.NotionDatabaseUrl!,
+                externalDataId: notionStore.ExternalDataId!,
+                externalDataName: notionStore.ExternalDataName!,
+                databaseName: notionStore.DatabaseName!,
               } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
             },
             { at: path }

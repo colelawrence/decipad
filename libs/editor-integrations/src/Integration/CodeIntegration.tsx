@@ -61,20 +61,24 @@ export const CodeIntegration = function CodeIntegration({
     },
     onShowSource() {
       store.abort();
-      store.setConnectionType('codeconnection');
-      store.setStage('connect');
-      store.setExistingIntegration(id);
 
       const res = importFromJSONAndCoercions(
         blockOptions.latestResult,
         store.resultTypeMapping
       );
+
       if (res) {
-        store.setResultPreview(res);
+        store.Set({ resultPreview: res });
       }
 
+      store.Set({
+        connectionType: 'codeconnection',
+        stage: 'connect',
+        existingIntegration: id,
+        varName,
+      });
+
       store.setAllTypeMapping(typeMappings);
-      store.setVarName(varName);
       store.changeOpen(true);
 
       codeStore.setCode(blockOptions.code);

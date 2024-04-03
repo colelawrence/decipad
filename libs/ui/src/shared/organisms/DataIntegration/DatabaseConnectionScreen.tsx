@@ -8,8 +8,8 @@ import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageBlock } from '.';
-import { Caret, Edit, Loading, Trash, Warning } from '../../../icons';
-import { cssVar, p13Bold, p14Medium, p16Bold } from '../../../primitives';
+import { Caret, Integrations, Warning } from '../../../icons';
+import { cssVar, p13Bold, p14Medium } from '../../../primitives';
 import { useCancelingEvent } from '../../../utils';
 import { Button, MenuItem } from '../../atoms';
 import {
@@ -19,6 +19,7 @@ import {
   TabsRoot,
   TabsTrigger,
 } from '../../molecules';
+import { IntegrationActionItem } from './IntegrationStyles';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -39,6 +40,8 @@ const placeholderList: Partial<Record<ImportElementSource, string>> = {
   redshift: 'redshift://',
   cockroachdb: 'postgresql://',
 };
+
+const databases = Object.keys(placeholderList);
 
 export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
   workspaceId,
@@ -82,69 +85,35 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
       </div>
 
       <span css={p14Medium}>Existing Connections</span>
-      {workspaceExternalData == null && (
-        <div css={{ display: 'flex' }}>
-          Loading
-          <div css={{ width: '16px' }}>
-            <Loading />
-          </div>
-        </div>
-      )}
-      {workspaceExternalData?.map((externalData) => (
-        <MenuList
-          key={externalData.id}
-          root
-          dropdown
-          trigger={
-            <div css={existingConStyle}>
-              <span css={[p16Bold, { cursor: 'pointer' }]}>
-                {externalData.dataSourceName}
-              </span>
-              <div css={{ width: '16px' }}>
-                <Caret variant="down" />
-              </div>
-            </div>
-          }
-        >
-          <MenuItem
-            onSelect={() => {
-              if (!externalData.externalId) {
-                throw new Error('External ID should be present');
-              }
-              if (!externalData.dataSourceName) {
-                throw new Error('Datasource should always have a name');
-              }
-              setEditConnectionValues({
-                id: externalData.id,
-                name: externalData.dataSourceName,
-                fullUrl: externalData.externalId,
-              });
-              setIsAddingNewConnection(true);
-            }}
-          >
-            <span css={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span css={{ width: '16px' }}>
-                <Edit />
-              </span>
-              <span>Edit Connection</span>
-            </span>
-          </MenuItem>
-          <MenuItem onSelect={() => remove(externalData.id)}>
-            <span css={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span css={{ width: '16px' }}>
-                <Trash />
-              </span>
-              <span
-                css={{
-                  color: cssVar('stateDangerBackground'),
-                }}
-              >
-                Delete Connection
-              </span>
-            </span>
-          </MenuItem>
-        </MenuList>
-      ))}
+      {workspaceExternalData
+        ?.filter((d) => databases.includes(d.provider))
+        .map((externalData) => {
+          return (
+            <IntegrationActionItem
+              icon={<Integrations />}
+              title={externalData.dataSourceName ?? ''}
+              description=""
+              onEdit={() => {
+                if (!externalData.externalId) {
+                  throw new Error('External ID should be present');
+                }
+                if (!externalData.dataSourceName) {
+                  throw new Error('Datasource should always have a name');
+                }
+                setEditConnectionValues({
+                  id: externalData.id,
+                  name: externalData.dataSourceName,
+                  fullUrl: externalData.externalId,
+                });
+                setIsAddingNewConnection(true);
+              }}
+              onDelete={() => {
+                remove(externalData.id);
+              }}
+              onClick={() => {}}
+            />
+          );
+        })}
     </div>
   );
 };
@@ -570,13 +539,6 @@ const bottomButtons = css({
   display: 'flex',
   gap: '20px',
   gridColumn: 'span 2',
-});
-
-const existingConStyle = css({
-  display: 'flex',
-  padding: '4px',
-  gap: '4px',
-  alignItems: 'center',
 });
 
 const inputStyles = css({

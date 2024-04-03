@@ -35,7 +35,6 @@ get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
-any /api/externaldatasources/notion/:id/data
 any /api/externaldatasources/db/testconn
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
@@ -474,6 +473,11 @@ externaldatasources
 externaldatasources
   workspace_id *String
   name byWorkspace
+
+externaldatasources
+  externalId *String
+  workspace_id **String
+  name byExternalId
 
 externaldatasourcekeys
   resource_uri *String

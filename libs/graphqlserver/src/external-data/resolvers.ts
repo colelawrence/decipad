@@ -1,8 +1,5 @@
 import tables from '@decipad/tables';
-import {
-  ExternalDataSourceOwnership,
-  Resolvers,
-} from '@decipad/graphqlserver-types';
+import { Resolvers } from '@decipad/graphqlserver-types';
 import { getDefined } from '@decipad/utils';
 import {
   authUrlFor,
@@ -16,21 +13,6 @@ import { ExternalDataSourceDataLinks } from '@decipad/backendtypes';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
-
-function getExternalResourceKey(
-  owner: ExternalDataSourceOwnership,
-  ownerId: string
-): string {
-  if (owner === 'PAD') {
-    return `/pads/${ownerId}`;
-  }
-
-  if (owner === 'WORKSPACE') {
-    return `/workspaces/${ownerId}`;
-  }
-
-  throw new Error('Unreachable');
-}
 
 const resolvers: Resolvers = {
   Query: {
@@ -55,7 +37,9 @@ const resolvers: Resolvers = {
         },
       });
 
-      return Items.map(externalDataResource.toGraphql);
+      return Items.filter((d) => !d.isProcessing).map(
+        externalDataResource.toGraphql
+      );
     },
     getExternalDataSourcesWorkspace: async (_, { workspaceId }, context) => {
       await workspaces.expectAuthorizedForGraphql({
@@ -74,7 +58,9 @@ const resolvers: Resolvers = {
         },
       });
 
-      return Items.map(externalDataResource.toGraphql);
+      return Items.filter((d) => !d.isProcessing).map(
+        externalDataResource.toGraphql
+      );
     },
   },
 
@@ -97,7 +83,11 @@ const resolvers: Resolvers = {
         );
       }
 
-      return externalDataResource.create(_, dataSource, context);
+      return externalDataResource.create(
+        _,
+        { ...dataSource, isProcessing: true },
+        context
+      );
     },
 
     async createExternalDataLink(_, { externalDataId, name, url, method }) {
@@ -135,17 +125,13 @@ const resolvers: Resolvers = {
     access: externalDataResource.access,
     keys: async (externalDataSource) => {
       const data = await tables();
-      const externalDataResourceUri = getExternalResourceKey(
-        externalDataSource.owner,
-        externalDataSource.ownerId
-      );
 
       return (
         await data.externaldatasourcekeys.query({
           IndexName: 'byResource',
           KeyConditionExpression: 'resource_uri = :resource_uri',
           ExpressionAttributeValues: {
-            ':resource_uri': externalDataResourceUri,
+            ':resource_uri': externalDataSource.id,
           },
         })
       ).Items;

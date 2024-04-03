@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { ConnectionsMenu, SecretsMenu, SelectIntegration } from '@decipad/ui';
 import {
   IntegrationStore,
@@ -7,24 +7,22 @@ import {
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { IntegrationList, Connection, ResultPreview } from '../Connections';
+import { useToast } from '@decipad/toast';
 
 /**
  * Factory method to return different integrations based on state.
  * Used to abstract away the selection of integration screens.
  */
 export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
-  const store = useConnectionStore((state) => ({
-    connectionType: state.connectionType,
-    resultPreview: state.resultPreview,
-    resultTypeMapping: state.resultTypeMapping,
-    rawResult: state.rawResult,
-    varName: state.varName,
-    stage: state.stage,
-    setVarName: state.setVarName,
-    setResultPreview: state.setResultPreview,
-    setResultTypeMapping: state.setResultTypeMapping,
-    setRawResult: state.setRawResult,
-  }));
+  const { warning, Set, ...store } = useConnectionStore();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (warning) {
+      toast('This type cannot be used for this value', 'warning');
+      Set({ warning: undefined });
+    }
+  }, [Set, warning, toast]);
 
   const componentMap: Record<IntegrationStore['stage'], ReactNode> = useMemo(
     () => ({
@@ -34,20 +32,29 @@ export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
           workspaceId={workspaceId}
           type={store.connectionType}
           typeMapping={store.resultTypeMapping}
-          setResultPreview={store.setResultPreview}
-          setRawResult={store.setRawResult}
+          setResultPreview={(r) => Set({ resultPreview: r })}
+          setRawResult={(r) => Set({ rawResult: r })}
         />
       ),
       map: (
         <ResultPreview
           result={store.rawResult != null ? store.resultPreview : undefined}
           name={store.varName || ''}
-          setName={store.setVarName}
+          setName={(name) => Set({ varName: name })}
           setTypeMapping={store.setResultTypeMapping}
         />
       ),
     }),
-    [store, workspaceId]
+    [
+      Set,
+      store.connectionType,
+      store.rawResult,
+      store.resultPreview,
+      store.resultTypeMapping,
+      store.setResultTypeMapping,
+      store.varName,
+      workspaceId,
+    ]
   );
 
   return useMemo(() => componentMap[store.stage], [componentMap, store.stage]);

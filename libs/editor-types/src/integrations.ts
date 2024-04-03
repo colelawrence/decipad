@@ -25,6 +25,10 @@ export interface SQLBlockIntegration extends BlockIntegration {
 export interface NotionBlockIntegration extends BlockIntegration {
   type: 'notion';
   notionUrl: string;
+
+  externalDataId: string;
+  externalDataName: string;
+  databaseName: string;
 }
 
 type IntegrationTypes =

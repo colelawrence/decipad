@@ -11,18 +11,17 @@ import {
   importFromUnknownJson,
 } from '@decipad/import';
 import {
-  Divider,
-  InputField,
   LoadingIndicator,
+  MenuItem,
+  MenuList,
   cssVar,
   p13Bold,
-  p14Regular,
 } from '@decipad/ui';
-import * as Popover from '@radix-ui/react-popover';
 import { useGetExternalDataSourcesWorkspaceQuery } from '@decipad/graphql-client';
 import styled from '@emotion/styled';
-import assert from 'assert';
-import { getNotionDbLink } from '../utils';
+import { Link, useNavigate } from 'react-router-dom';
+import { workspaces } from '@decipad/routing';
+import { Caret } from 'libs/ui/src/icons';
 
 const Styles = {
   OuterWrapper: styled.div({
@@ -34,7 +33,7 @@ const Styles = {
   Wrapper: styled.div({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '8px',
   }),
 
   Trigger: styled.div({
@@ -47,29 +46,9 @@ const Styles = {
     svg: { width: '16px', height: '16px' },
   }),
 
-  ContentWrapper: styled.div({
-    width: '240px',
-
-    backgroundColor: cssVar('backgroundMain'),
-    border: `1px solid ${cssVar('borderSubdued')}`,
-    marginTop: '4px',
-    borderRadius: '8px',
-    display: 'flex',
-    overflow: 'hidden',
-    maxHeight: '320px',
-    overflowY: 'auto',
-    flexDirection: 'column',
-    padding: '6px',
-    gap: '4px',
-    zIndex: 10000,
-    svg: {
-      width: '24px',
-      height: '24px',
-    },
-    div: {
-      cursor: 'pointer',
-      ...p14Regular,
-      textTransform: 'capitalize',
+  Link: styled.span({
+    ':hover': {
+      textDecoration: 'underline',
     },
   }),
 };
@@ -79,6 +58,21 @@ const getNotionQueryDbLink = (databaseId: string) =>
 
 const WorkspaceNotionConnections: FC<ConnectionProps> = ({ workspaceId }) => {
   const [open, setOpen] = useState(false);
+  const nav = useNavigate();
+
+  const reset = useNotionConnectionStore((s) => s.Reset);
+
+  const navigateToIntegrations = () => {
+    reset();
+    setTimeout(() => {
+      nav(
+        workspaces({})
+          .workspace({ workspaceId })
+          .connections({})
+          .integrations({}).$
+      );
+    }, 0);
+  };
 
   const [{ data }] = useGetExternalDataSourcesWorkspaceQuery({
     variables: {
@@ -96,32 +90,63 @@ const WorkspaceNotionConnections: FC<ConnectionProps> = ({ workspaceId }) => {
       (conn) => conn.provider === 'notion'
     ) ?? [];
 
+  if (notionConnections.length === 0) {
+    return (
+      <Link
+        to={
+          workspaces({})
+            .workspace({ workspaceId })
+            .connections({})
+            .integrations({}).$
+        }
+      >
+        <Styles.Link>No Notion Connections. Click to create one.</Styles.Link>
+      </Link>
+    );
+  }
+
   return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger>
-        <Styles.Trigger>
-          {externalDataName ?? 'Select Notion Connection...'}
-        </Styles.Trigger>
-      </Popover.Trigger>
-      <Popover.Content>
-        <Styles.ContentWrapper>
-          {notionConnections.map((conn) => (
-            <div
+    <>
+      <p css={p13Bold}>
+        Connect a Notion Database from a Workspace Connection.
+      </p>
+      <MenuList
+        root
+        dropdown
+        open={open}
+        onChangeOpen={setOpen}
+        trigger={
+          <Styles.Trigger>
+            {externalDataName ?? 'Select Notion Connection...'}
+            <Caret variant={open ? 'up' : 'down'} />
+          </Styles.Trigger>
+        }
+      >
+        <MenuItem
+          key="add-new"
+          css={{ minWidth: '240px' }}
+          onSelect={navigateToIntegrations}
+        >
+          + Add new connection
+        </MenuItem>
+        {notionConnections
+          .filter((c) => c.name !== 'TEMP_CONNECTION')
+          .map((conn) => (
+            <MenuItem
+              css={{ minWidth: '240px' }}
               key={conn.id}
-              onClick={() =>
+              onSelect={() =>
                 setter({
                   ExternalDataId: conn.id,
                   ExternalDataName: conn.name,
-                  mode: 'private',
                 })
               }
             >
               {conn.name}
-            </div>
+            </MenuItem>
           ))}
-        </Styles.ContentWrapper>
-      </Popover.Content>
-    </Popover.Root>
+      </MenuList>
+    </>
   );
 };
 
@@ -172,50 +197,59 @@ const NotionPrivateDatabases: FC<ConnectionProps> = () => {
     }
   }, [setter, externalDataId, lastFetched, isFetching]);
 
+  function getTriggerChildren() {
+    if (isFetching) {
+      return <LoadingIndicator />;
+    }
+
+    if (databaseName == null) {
+      return 'Select Database';
+    }
+
+    if (databaseName != null && databaseName.length === 0) {
+      return 'Unnamed Database';
+    }
+
+    return databaseName;
+  }
+
+  if (externalDataId == null) {
+    return null;
+  }
+
+  if (availableDatabases.length === 0 && !isFetching) {
+    return <p>No databases found.</p>;
+  }
+
   return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger>
+    <MenuList
+      root
+      dropdown
+      open={open}
+      onChangeOpen={setOpen}
+      trigger={
         <Styles.Trigger>
-          {isFetching
-            ? 'Loading Databases...'
-            : databaseName ?? 'Choose Database'}
+          {getTriggerChildren()}
+
+          <Caret variant={open ? 'up' : 'down'} />
         </Styles.Trigger>
-      </Popover.Trigger>
-      <Popover.Content>
-        <Styles.ContentWrapper>
-          {availableDatabases.map((db) => (
-            <div
-              key={db.id}
-              onClick={() =>
-                setter({
-                  DatabaseId: db.id,
-                  DatabaseName: db.name,
-                  mode: 'private',
-                })
-              }
-            >
-              {db.name}
-            </div>
-          ))}
-        </Styles.ContentWrapper>
-      </Popover.Content>
-    </Popover.Root>
-  );
-};
-
-const NotionPublicDatabase: FC<ConnectionProps> = () => {
-  const [notionDatabaseUrl, setter] = useNotionConnectionStore((s) => [
-    s.NotionDatabaseUrl,
-    s.Set,
-  ]);
-
-  return (
-    <InputField
-      type="text"
-      value={notionDatabaseUrl ?? ''}
-      placeholder="Database URL"
-      onChange={(e) => setter({ NotionDatabaseUrl: e, mode: 'public' })}
-    />
+      }
+    >
+      {availableDatabases.map((db) => (
+        <MenuItem
+          key={db.id}
+          css={{ minWidth: '240px' }}
+          onSelect={() =>
+            setter({
+              DatabaseId: db.id,
+              DatabaseName: db.name,
+            })
+          }
+        >
+          {db.name.length > 0 ? db.name : 'Unnamed Database'}
+        </MenuItem>
+      ))}
+    </MenuList>
   );
 };
 
@@ -239,7 +273,6 @@ async function notionResponseToDeciResult(
 
 async function runPrivateIntegration(props: ConnectionProps) {
   const state = useNotionConnectionStore.getState();
-  assert(state.mode === 'private');
 
   if (state.ExternalDataId == null || state.DatabaseId == null) {
     throw new Error('You must select a data source and a database');
@@ -253,40 +286,13 @@ async function runPrivateIntegration(props: ConnectionProps) {
 
   notionResponseToDeciResult(notionQuery, props);
 }
-async function runPublicIntegration(props: ConnectionProps) {
-  const state = useNotionConnectionStore.getState();
-  assert(state.mode === 'public');
-
-  if (state.NotionDatabaseUrl == null) {
-    throw new Error('Database URL is invalid');
-  }
-
-  const id = getNotionDbLink(state.NotionDatabaseUrl);
-  if (id == null) {
-    throw new Error('Database URL is invalid');
-  }
-
-  const publicNotionQuery = await fetch(
-    `${window.location.origin}/api/externaldatasources/notion/${id}/data`
-  );
-
-  notionResponseToDeciResult(publicNotionQuery, props);
-}
 
 export const NotionConnection: FC<ConnectionProps> = (props) => {
   const { onExecute, info } = useExecutionContext();
 
   const runCode = async () => {
-    const state = useNotionConnectionStore.getState();
-
     try {
-      if (state.mode === 'public') {
-        await runPublicIntegration(props);
-      } else if (state.mode === 'private') {
-        await runPrivateIntegration(props);
-      } else {
-        onExecute({ status: 'error', err: 'You must fill in the fields' });
-      }
+      await runPrivateIntegration(props);
     } catch (e) {
       if (e instanceof Error) {
         onExecute({ status: 'error', err: e });
@@ -307,20 +313,10 @@ export const NotionConnection: FC<ConnectionProps> = (props) => {
   return (
     <Styles.OuterWrapper>
       <Styles.Wrapper>
-        <p css={p13Bold}>
-          Connect a Notion Database from a Workspace Connection.
-        </p>
-        <Suspense fallback={<LoadingIndicator />}>
+        <Suspense>
           <WorkspaceNotionConnections {...props} />
+          <NotionPrivateDatabases {...props} />
         </Suspense>
-        <NotionPrivateDatabases {...props} />
-      </Styles.Wrapper>
-
-      <Divider />
-
-      <Styles.Wrapper>
-        <p css={p13Bold}>Or connect to a Public Notion Database.</p>
-        <NotionPublicDatabase {...props} />
       </Styles.Wrapper>
     </Styles.OuterWrapper>
   );

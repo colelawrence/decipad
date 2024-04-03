@@ -31,6 +31,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly tooltip?: boolean;
   readonly formatting?: ResultFormatting;
   readonly isLiveResult?: boolean;
+  readonly isResultPreview?: boolean;
   readonly isNotEditable?: boolean;
   readonly firstTableRowControls?: ReactNode;
   readonly onChangeColumnType?: (

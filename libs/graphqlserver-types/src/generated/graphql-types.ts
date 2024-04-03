@@ -404,6 +404,7 @@ export type MutationRemoveAttachmentFromPadArgs = {
 
 export type MutationRemoveExternalDataSourceArgs = {
   id: Scalars['ID']['input'];
+  workspaceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 

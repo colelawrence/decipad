@@ -86,8 +86,8 @@ export const notion = (): NotionProvider => {
 
       return {
         accessToken: jsonRes.access_token,
-        refreshToken: undefined,
         resourceName: jsonRes.workspace_name,
+        workspaceId: jsonRes.workspace_id,
       };
     },
 

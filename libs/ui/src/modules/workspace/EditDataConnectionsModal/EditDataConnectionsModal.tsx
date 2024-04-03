@@ -1,7 +1,7 @@
 import { ShallowWorkspaceFragment } from '@decipad/graphql-client';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Modal, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -22,9 +22,12 @@ export const EditDataConnectionsModal: React.FC<
     })
     .connections({});
 
+  const location = useLocation();
+  const lastUrlPath = location.pathname.split('/').at(-1);
+
   return (
     <Modal
-      title="Integration Settings"
+      title="Data connections"
       size="xl"
       onClose={onClose}
       defaultOpen={true}
@@ -32,10 +35,10 @@ export const EditDataConnectionsModal: React.FC<
       <div css={modalWrapper}>
         <TabsRoot
           styles={fullWidth}
-          defaultValue={'secrets'}
+          defaultValue={lastUrlPath ?? 'integrations'}
           onValueChange={(newTab: string) => {
             switch (newTab) {
-              case 'secrets':
+              case 'code-secrets':
                 navigate(connections.codeSecrets({}).$);
                 break;
               case 'webhooks':
@@ -44,8 +47,8 @@ export const EditDataConnectionsModal: React.FC<
               case 'connections':
                 navigate(connections.sqlConnections({}).$);
                 break;
-              case 'services':
-                navigate(connections.services({}).$);
+              case 'integrations':
+                navigate(connections.integrations({}).$);
                 break;
               default:
                 console.warn('This tab is not available');
@@ -54,8 +57,17 @@ export const EditDataConnectionsModal: React.FC<
           }}
         >
           <TabsList>
+            {isFlagEnabled('NOTION_CONNECTIONS') && (
+              <TabsTrigger
+                name="integrations"
+                trigger={{
+                  label: 'Integrations',
+                  disabled: false,
+                }}
+              />
+            )}
             <TabsTrigger
-              name="secrets"
+              name="code-secrets"
               trigger={{
                 label: 'API Secrets',
                 disabled: false,
@@ -75,15 +87,6 @@ export const EditDataConnectionsModal: React.FC<
                 disabled: false,
               }}
             />
-            {isFlagEnabled('NOTION_CONNECTIONS') && (
-              <TabsTrigger
-                name="services"
-                trigger={{
-                  label: 'Services',
-                  disabled: false,
-                }}
-              />
-            )}
           </TabsList>
         </TabsRoot>
 

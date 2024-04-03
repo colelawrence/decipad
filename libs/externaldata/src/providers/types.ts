@@ -9,17 +9,6 @@ interface BaseProvider {
   headers: Record<string, string>;
 
   /**
-   * Some OAuth2 providers are different enough such that `oauth` library cannot handle the.
-   *
-   * In these cases, it is easier for us to make the request ourselves.
-   */
-  getAccessToken?: (code: string) => Promise<{
-    accessToken: string;
-    refreshToken: string | undefined;
-    resourceName?: string;
-  }>;
-
-  /**
    * Extra headers to send to OAuth provider during data fetching stage.
    */
   dataHeaders?: Record<string, string>;
@@ -30,6 +19,17 @@ export interface NotionProvider extends BaseProvider {
   getAllDatabases: (
     authHeaders: Record<string, string>
   ) => Promise<Array<object>>;
+
+  /**
+   * Some OAuth2 providers are different enough such that `oauth` library cannot handle the.
+   *
+   * In these cases, it is easier for us to make the request ourselves.
+   */
+  getAccessToken: (code: string) => Promise<{
+    workspaceId: string;
+    accessToken: string;
+    resourceName: string;
+  }>;
 }
 
 export interface GoogleSheetProvider extends BaseProvider {

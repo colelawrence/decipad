@@ -8,6 +8,7 @@ import {
   useState,
   type FC,
   type ReactNode,
+  useEffect,
 } from 'react';
 import { cssVar, p13Medium } from '../../../primitives';
 import { Tooltip } from '../../atoms';
@@ -98,6 +99,10 @@ export const TabsRoot = ({
 }: TabsRootProps) => {
   const [value, setValue] = useState(defaultValue);
   const valueObj = { activeTab: value, setActiveTab: setValue };
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   const setValueForAll = useCallback(
     (val: string) => {

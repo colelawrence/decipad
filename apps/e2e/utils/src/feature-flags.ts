@@ -3,5 +3,6 @@ export const e2eFlags = {
   NEW_PAYMENTS: true,
   ALLOW_CREATE_NEW_WORKSPACE: true,
   WORKSPACE_READERS: true,
+  NOTION_CONNECTIONS: true,
   DATA_VIEWS_FILTER: true,
 };

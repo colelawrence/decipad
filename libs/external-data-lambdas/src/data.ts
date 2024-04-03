@@ -12,7 +12,6 @@ import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import fetch from 'isomorphic-fetch';
 import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 import { debug } from './debug';
-import { getResourceUri } from './helpers';
 
 const fetchExternalDataSource = async (
   id: string
@@ -35,15 +34,13 @@ const getDataLink = async (
 const getAccessKey = async (
   externalDataSource: ExternalDataSourceRecord
 ): Promise<ExternalKeyRecord | undefined> => {
-  const resourceKey = getResourceUri(externalDataSource);
-
   const data = await tables();
   const keys = (
     await data.externaldatasourcekeys.query({
       IndexName: 'byResource',
       KeyConditionExpression: 'resource_uri = :resource_uri',
       ExpressionAttributeValues: {
-        ':resource_uri': resourceKey,
+        ':resource_uri': externalDataSource.id,
       },
     })
   ).Items;

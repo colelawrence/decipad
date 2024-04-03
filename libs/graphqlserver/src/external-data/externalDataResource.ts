@@ -38,7 +38,7 @@ export function authUrlFor(externalDataSource: ExternalDataSource): string {
 export const externalDataResource = Resource<
   ExternalDataSourceRecord,
   ExternalDataSource,
-  ExternalDataSourceCreateInput,
+  ExternalDataSourceCreateInput & { isProcessing?: boolean },
   { dataSource: ExternalDataSourceUpdateInput }
 >({
   resourceTypeName: 'externaldatasources',

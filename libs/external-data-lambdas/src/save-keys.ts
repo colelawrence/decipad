@@ -6,7 +6,6 @@ import {
 } from '@decipad/backendtypes';
 import tables, { timestamp } from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import { getResourceUri } from './helpers';
 
 type SaveExternalKeyOptions = {
   externalDataSource: ExternalDataSourceRecord;
@@ -34,7 +33,7 @@ export async function saveExternalKey({
     id: nanoid(),
     createdAt: timestamp(),
 
-    resource_uri: getResourceUri(externalDataSource),
+    resource_uri: externalDataSource.id,
 
     provider: externalDataSource.provider,
     token_type: tokenType,

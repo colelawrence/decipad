@@ -111,6 +111,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
             onChangeColumnType={onChangeColumnType}
             parseUnit={parseUnit}
             isFirst={isFirst}
+            isLiveResult={isLiveResult}
             type={type}
             isForImportedColumn={isForImportedColumn}
             dropdownNames={dropdownNames}

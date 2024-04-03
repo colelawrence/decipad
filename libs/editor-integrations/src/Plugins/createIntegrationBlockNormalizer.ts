@@ -57,6 +57,8 @@ export const createNormalizeIntegrationBlock = createNormalizerPlugin({
         const url = element.integrationType.notionUrl;
         const notionDatabaseId = getNotionDbLink(url);
 
+        const options = element.integrationType;
+
         //
         // We have the old format: `notion.so/id....`.
         // Let's point it to new URL.
@@ -70,6 +72,9 @@ export const createNormalizeIntegrationBlock = createNormalizerPlugin({
                   ...element.integrationType,
                   type: 'notion',
                   notionUrl: getNotionDataLink(notionDatabaseId),
+                  externalDataId: options.externalDataId ?? '',
+                  externalDataName: options.externalDataName ?? '',
+                  databaseName: options.databaseName ?? '',
                 },
               } satisfies DeepPartial<IntegrationTypes.IntegrationBlock>,
               { at: path }
@@ -90,6 +95,9 @@ export const createNormalizeIntegrationBlock = createNormalizerPlugin({
                   ...element.integrationType,
                   type: 'notion',
                   notionUrl: newUrl,
+                  externalDataId: options.externalDataId ?? '',
+                  externalDataName: options.externalDataName ?? '',
+                  databaseName: options.databaseName ?? '',
                 },
               } satisfies DeepPartial<IntegrationTypes.IntegrationBlock>,
               { at: path }

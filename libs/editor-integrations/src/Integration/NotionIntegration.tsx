@@ -49,9 +49,6 @@ export const NotionIntegration = function CodeIntegration({
       const notionStore = useNotionConnectionStore.getState();
 
       store.abort();
-      store.setConnectionType('notion');
-      store.setStage('connect');
-      store.setExistingIntegration(id);
 
       const notionResult = importFromUnknownJson(
         importFromNotion(JSON.parse(blockOptions.latestResult)),
@@ -61,18 +58,28 @@ export const NotionIntegration = function CodeIntegration({
       );
 
       if (notionResult) {
-        store.setResultPreview(notionResult);
+        store.Set({ resultPreview: notionResult });
       }
 
-      store.setRawResult(blockOptions.latestResult);
+      store.Set({
+        connectionType: 'notion',
+        stage: 'connect',
+        existingIntegration: id,
+        rawResult: blockOptions.latestResult,
+        varName,
+      });
+
       store.setAllTypeMapping(typeMappings);
-      store.setVarName(varName);
       store.changeOpen(true);
 
       notionStore.Set({
         latestResult: blockOptions.latestResult,
         timeOfLastRun: blockOptions.timeOfLastRun,
         NotionDatabaseUrl: blockOptions.notionUrl,
+
+        ExternalDataId: blockOptions.externalDataId,
+        ExternalDataName: blockOptions.externalDataName,
+        DatabaseName: blockOptions.databaseName,
       });
     },
     onDelete() {

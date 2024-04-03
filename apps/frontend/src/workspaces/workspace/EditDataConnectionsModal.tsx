@@ -47,7 +47,7 @@ const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
         />
         {isFlagEnabled('NOTION_CONNECTIONS') && (
           <Route
-            path={currentWorkspaceRoute.connections({}).services.template}
+            path={currentWorkspaceRoute.connections({}).integrations.template}
             element={<Services workspaceId={props.currentWorkspace.id} />}
           />
         )}

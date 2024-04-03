@@ -1,6 +1,7 @@
 import {
   ExecutionContext,
   TExecution,
+  getConnectionDisplayLabel,
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
@@ -55,8 +56,9 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
           title="Connect to your data"
           workspaceId={workspaceId}
           tabStage={store.stage}
+          connectionTabLabel={getConnectionDisplayLabel(store.connectionType)}
           showTabs={store.stage !== 'pick-integration'}
-          onTabClick={(stage) => store.setStage(stage)}
+          onTabClick={(stage) => store.Set({ stage })}
           onBack={store.back}
           onReset={codeStore.reset}
           onContinue={store.next}

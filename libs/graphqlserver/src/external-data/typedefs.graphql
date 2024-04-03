@@ -99,7 +99,8 @@ extend type Mutation {
     method: HTTPMethods
   ): ExternalDataSourceDataLink
 
-  removeExternalDataSource(id: ID!): Boolean
+  # WorkspaceID used for caching on frontend, not used in backend.
+  removeExternalDataSource(id: ID!, workspaceId: ID): Boolean
 
   updateExternalDataSource(
     id: ID!

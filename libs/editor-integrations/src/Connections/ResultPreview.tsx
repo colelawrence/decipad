@@ -107,6 +107,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
               type={result.type}
               value={result.value}
               variant="block"
+              isResultPreview
               isLiveResult
               onChangeColumnType={onChangeColumnType}
             />
@@ -206,13 +207,12 @@ const resultPreviewWrapperStyles = (isVariableResult: boolean) =>
     }
   );
 
-const maxWidthParaStyles = css({
+const maxWidthParaStyles = css(deciOverflowStyles, {
+  width: '100%',
+  overflowX: 'auto',
   span: {
     maxWidth: 400,
     overflow: 'initial',
     whiteSpace: 'normal',
-  },
-  div: {
-    maxWidth: '100%',
   },
 });

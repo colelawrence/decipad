@@ -67,6 +67,7 @@ export const TableResult: FC<TableResultProps> = ({
   // isNotEditable = false,
   firstTableRowControls,
   onChangeColumnType,
+  isResultPreview,
   element,
 }) => {
   let value = useMaterializedResult(_value) as
@@ -100,11 +101,13 @@ export const TableResult: FC<TableResultProps> = ({
 
   return (
     <div
-      css={[
-        isLiveResult && tableWrapperStyles,
-        isLiveResult && liveTableWrapperStyles,
-        deciOverflowStyles, // cause of nested tables
-      ]}
+      css={
+        !isResultPreview && [
+          isLiveResult && tableWrapperStyles,
+          isLiveResult && liveTableWrapperStyles,
+          deciOverflowStyles, // cause of nested tables
+        ]
+      }
     >
       <div
         css={[

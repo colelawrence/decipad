@@ -149,7 +149,12 @@ function getValue(
     case 'relation':
       return '';
     case 'multi_select':
-      return '';
+      let value = '';
+      object.multi_select.sort((a, b) => (a.name < b.name ? 1 : -1));
+      for (const select of object.multi_select) {
+        value += select.name;
+      }
+      return value;
     case 'last_edited_by':
       return userToString(object.last_edited_by);
   }

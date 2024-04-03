@@ -50,20 +50,24 @@ export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
     },
     onShowSource() {
       store.abort();
-      store.setConnectionType('mysql');
-      store.setStage('connect');
-      store.setExistingIntegration(id);
 
       const res = importFromJSONAndCoercions(
         blockOptions.latestResult,
         typeMappings
       );
+
       if (res) {
-        store.setResultPreview(res);
+        store.Set({ resultPreview: res });
       }
 
+      store.Set({
+        connectionType: 'mysql',
+        stage: 'connect',
+        existingIntegration: id,
+        varName,
+      });
+
       store.setAllTypeMapping(typeMappings);
-      store.setVarName(varName);
       store.changeOpen(true);
 
       sqlStore.Set({

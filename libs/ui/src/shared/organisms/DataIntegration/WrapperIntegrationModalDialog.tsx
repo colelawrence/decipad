@@ -44,6 +44,8 @@ interface WrapperIntegrationModalDialogProps {
   readonly title: string;
   readonly workspaceId?: string;
 
+  readonly connectionTabLabel?: string;
+
   readonly showTabs: boolean;
   readonly tabStage?: Stages;
   readonly onTabClick?: (s: Stages) => void;
@@ -80,6 +82,7 @@ export const WrapperIntegrationModalDialog: FC<
   children,
   workspaceId,
   isCode,
+  connectionTabLabel = 'Code',
 
   actionMenu,
 }) => {
@@ -178,7 +181,7 @@ export const WrapperIntegrationModalDialog: FC<
         <TabsTrigger
           name="connect"
           trigger={{
-            label: 'Code',
+            label: connectionTabLabel,
             disabled: false,
           }}
         />

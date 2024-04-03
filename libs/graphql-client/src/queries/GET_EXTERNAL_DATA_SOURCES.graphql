@@ -9,6 +9,7 @@ fragment ExternalDataSourceFragment on ExternalDataSource {
   authUrl
   externalId
   keys {
+    id
     lastError
     createdAt
     expiresAt

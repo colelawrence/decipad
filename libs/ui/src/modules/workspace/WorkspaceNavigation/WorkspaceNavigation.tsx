@@ -148,7 +148,7 @@ export const WorkspaceNavigation = ({
                 </Styled.ItemWrapper>
               </NavigationItem>,
               <NavigationItem
-                href={activeWorkspaceRoute.connections({}).codeSecrets({}).$}
+                href={activeWorkspaceRoute.connections({}).integrations({}).$}
                 key="data-connections"
               >
                 <Styled.ItemWrapper>

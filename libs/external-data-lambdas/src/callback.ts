@@ -11,32 +11,21 @@ import { getOAuthResponse } from './promisify-oauth';
 import { saveExternalKey } from './save-keys';
 import { decodeState } from './state';
 import { checkNotebookOrWorkspaceAccess } from './checkAccess';
-
-async function saveExternalResourceName(
-  externalDataId: string,
-  name: string
-): Promise<void> {
-  const data = await tables();
-
-  const datasource = await data.externaldatasources.get({ id: externalDataId });
-  if (datasource == null) {
-    throw new Error('External data source could not be found');
-  }
-
-  datasource.name = name;
-
-  await data.externaldatasources.put(datasource);
-}
+import { app } from '@decipad/backend-config';
 
 export const callback = async (
   event: APIGatewayProxyEvent
 ): Promise<HttpResponse> => {
   const { code, state: stringState } = getDefined(event.queryStringParameters);
 
+  const config = app();
+
   if (!stringState || !code) {
     return {
-      statusCode: 401,
-      body: 'missing parameters',
+      statusCode: 302,
+      headers: {
+        Location: config.urlBase,
+      },
     };
   }
 
@@ -66,16 +55,66 @@ export const callback = async (
     `no such provider: ${externalDataSource.provider}`
   );
 
+  //
+  // Let's always set `isProcessing` to false here.
+  // To `unlock` it to the user
+  //
+  externalDataSource.isProcessing = false;
+  await data.externaldatasources.put(externalDataSource);
+
   const authorizationUrl = new URL(provider.authorizationUrl);
   const authorizePath = authorizationUrl.pathname;
   const accessTokenPath = new URL(provider.accessTokenUrl).pathname;
 
-  if (provider.getAccessToken != null) {
-    const { accessToken, refreshToken, resourceName } =
-      await provider.getAccessToken(code);
+  if (provider.type === 'notion') {
+    const {
+      accessToken,
+      resourceName,
+      workspaceId: notionWorkspaceId,
+    } = await provider.getAccessToken(code);
 
-    if (resourceName != null) {
-      await saveExternalResourceName(state.externalDataId, resourceName);
+    const existingExternalData = await data.externaldatasources.query({
+      IndexName: 'byExternalId',
+      KeyConditionExpression:
+        'externalId = :externalId AND workspace_id = :workspace_id',
+      ExpressionAttributeValues: {
+        ':externalId': notionWorkspaceId,
+        ':workspace_id': externalDataSource.workspace_id!,
+      },
+    });
+
+    if (existingExternalData.Items.length > 1) {
+      throw new Error(
+        'Database is in bad state - Multiple external data with same externalId'
+      );
+    }
+
+    //
+    // If true, then external, then we have `updated` connection.
+    // Because the notion workspaceId is the same as the existing
+    // externalData.externalId
+    //
+    // A brand new externalDataSource will have externalId as nanoid.
+    //
+    // So lets:
+    // 1) Update the key to the new access token.
+    //
+    if (existingExternalData.Items.length === 1) {
+      const existingData = existingExternalData.Items[0];
+
+      await saveExternalKey({
+        externalDataSource: existingData,
+        user,
+        tokenType: 'Bearer',
+        accessToken,
+      });
+
+      return {
+        statusCode: 302,
+        headers: {
+          Location: state.completionUrl,
+        },
+      };
     }
 
     await saveExternalKey({
@@ -83,8 +122,11 @@ export const callback = async (
       user,
       tokenType: 'Bearer',
       accessToken,
-      refreshToken,
     });
+
+    externalDataSource.name = resourceName;
+    externalDataSource.externalId = notionWorkspaceId;
+    await data.externaldatasources.put(externalDataSource);
 
     return {
       statusCode: 302,

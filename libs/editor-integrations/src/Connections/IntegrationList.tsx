@@ -21,8 +21,8 @@ export const IntegrationList: ComponentProps<
     description:
       'Harness the power of JavaScript to manipulate data from web APIs.',
     onClick: () => {
-      store.setConnectionType('codeconnection');
-      store.setStage('connect');
+      store.Set({ connectionType: 'codeconnection' });
+      store.Set({ stage: 'connect' });
     },
     enabled: true,
   },
@@ -32,8 +32,8 @@ export const IntegrationList: ComponentProps<
     description:
       'Effortlessly access data from SQL databases through simple queries.',
     onClick: () => {
-      store.setConnectionType('mysql');
-      store.setStage('connect');
+      store.Set({ connectionType: 'mysql' });
+      store.Set({ stage: 'connect' });
     },
     enabled: true,
   },
@@ -45,8 +45,8 @@ export const IntegrationList: ComponentProps<
           title: 'Notion',
           description: 'Connect your notion databases to decipad.',
           onClick: () => {
-            store.setConnectionType('notion');
-            store.setStage('connect');
+            store.Set({ connectionType: 'notion' });
+            store.Set({ stage: 'connect' });
           },
           enabled: isFlagEnabled('NOTION_CONNECTIONS'),
         },

@@ -67,6 +67,7 @@ interface TableColumnMenuProps
   readonly trigger: ReactNode;
   readonly type: CellValueType;
   readonly isForImportedColumn?: boolean;
+  readonly isLiveResult?: boolean;
   readonly dropdownNames?: ColumnMenuDropdown[];
   readonly onRemoveColumn?: () => void;
   readonly onAddColRight?: () => void;
@@ -104,6 +105,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   trigger,
   type,
   isForImportedColumn = false,
+  isLiveResult = false,
   dropdownNames = [],
   onAddColLeft,
   onAddColRight,
@@ -371,36 +373,40 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             }}
             parseUnit={parseUnit}
           />
-          <h3 css={dividerLabel}>Column Actions</h3>
-          <MenuItem
-            key="populate-column"
-            icon={<Magic />}
-            onSelect={onPopulateColumn}
-            disabled={shouldDisableAI}
-          >
-            Populate with AI
-          </MenuItem>
-          <MenuItem
-            key="add-column-left"
-            icon={<AlignArrowLeft />}
-            onSelect={onAddColLeft}
-          >
-            Add column left
-          </MenuItem>
-          <MenuItem
-            key="add-column-right"
-            icon={<AlignArrowRight />}
-            onSelect={onAddColRight}
-          >
-            Add column right
-          </MenuItem>
-          <MenuItem
-            key="remove-column"
-            icon={<Delete />}
-            onSelect={onRemoveColumn}
-          >
-            Remove column
-          </MenuItem>
+          {!isLiveResult && (
+            <>
+              <h3 css={dividerLabel}>Column Actions</h3>
+              <MenuItem
+                key="populate-column"
+                icon={<Magic />}
+                onSelect={onPopulateColumn}
+                disabled={shouldDisableAI}
+              >
+                Populate with AI
+              </MenuItem>
+              <MenuItem
+                key="add-column-left"
+                icon={<AlignArrowLeft />}
+                onSelect={onAddColLeft}
+              >
+                Add column left
+              </MenuItem>
+              <MenuItem
+                key="add-column-right"
+                icon={<AlignArrowRight />}
+                onSelect={onAddColRight}
+              >
+                Add column right
+              </MenuItem>
+              <MenuItem
+                key="remove-column"
+                icon={<Delete />}
+                onSelect={onRemoveColumn}
+              >
+                Remove column
+              </MenuItem>
+            </>
+          )}
         </MenuList>
       ) : (
         <div onClick={onTriggerClick}>{trigger}</div>

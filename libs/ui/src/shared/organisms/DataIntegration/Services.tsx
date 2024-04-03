@@ -1,9 +1,35 @@
 import {
   ExternalDataSourceFragmentFragment,
+  ExternalProvider,
   useCreateExternalDataSourceMutation,
+  useDeleteExternalDataMutation,
+  useGetExternalDataSourcesWorkspaceQuery,
 } from '@decipad/graphql-client';
+import { workspaces } from '@decipad/routing';
+import { useToast } from '@decipad/toast';
+import { css } from '@emotion/react';
+import { Notion } from 'libs/ui/src/icons';
+import { p13Bold } from 'libs/ui/src/primitives';
 import { nanoid } from 'nanoid';
-import { FC } from 'react';
+import { FC, ReactNode, Suspense, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { IntegrationActionItem, IntegrationItem } from './IntegrationStyles';
+
+const Wrapper = css({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '16px',
+});
+
+interface ServicesProps {
+  readonly workspaceId: string;
+}
+
+const IconMap: Partial<Record<ExternalProvider, ReactNode>> = {
+  notion: <Notion />,
+};
 
 function OnAuth(externalData: ExternalDataSourceFragmentFragment) {
   window.location.replace(
@@ -11,9 +37,40 @@ function OnAuth(externalData: ExternalDataSourceFragmentFragment) {
   );
 }
 
-interface ServicesProps {
-  readonly workspaceId: string;
-}
+const ExistingServices: FC<ServicesProps> = ({ workspaceId }) => {
+  const [{ data }] = useGetExternalDataSourcesWorkspaceQuery({
+    variables: { workspaceId },
+  });
+
+  const [, removeExternalData] = useDeleteExternalDataMutation();
+
+  const filteredDataSources =
+    data?.getExternalDataSourcesWorkspace.filter(
+      (e) => e.name !== 'TEMP_CONNECTION' && e.provider === 'notion'
+    ) ?? [];
+
+  if (filteredDataSources.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <p css={p13Bold}>Connected</p>
+      {filteredDataSources.map((externalDataSource) => (
+        <IntegrationActionItem
+          icon={IconMap[externalDataSource.provider]}
+          title={externalDataSource.name}
+          description=""
+          onClick={() => {}}
+          onEdit={() => OnAuth(externalDataSource)}
+          onDelete={() =>
+            removeExternalData({ id: externalDataSource.id, workspaceId })
+          }
+        />
+      ))}
+    </>
+  );
+};
 
 /**
  * Connect to various OAuth services
@@ -23,6 +80,19 @@ interface ServicesProps {
  */
 export const Services: FC<ServicesProps> = ({ workspaceId }) => {
   const [, createDataSource] = useCreateExternalDataSourceMutation();
+  const [, setQueryParams] = useSearchParams();
+
+  const { connected } = useRouteParams(
+    workspaces({}).workspace({ workspaceId }).connections({}).integrations
+  );
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (connected != null) {
+      toast(`Successfully connected ${connected}`, 'success');
+    }
+  }, [connected, setQueryParams, toast]);
 
   async function OnConnectNotion() {
     const res = await createDataSource({
@@ -31,7 +101,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         workspaceId,
         provider: 'notion',
 
-        name: 'to be changed when auth completes',
+        name: 'TEMP_CONNECTION',
       },
     });
 
@@ -45,8 +115,20 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
   }
 
   return (
-    <div>
-      <button onClick={OnConnectNotion}>Notion</button>
+    <div css={Wrapper}>
+      <Suspense>
+        <ExistingServices workspaceId={workspaceId} />
+      </Suspense>
+
+      <p css={p13Bold}>
+        Effortlessly connect your Decipad workspace to any of these services.
+      </p>
+      <IntegrationItem
+        icon={<Notion />}
+        title="Notion"
+        description="Work with Notion Databases at the speed of thought!"
+        onClick={OnConnectNotion}
+      />
     </div>
   );
 };

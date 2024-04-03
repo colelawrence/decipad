@@ -8,6 +8,9 @@ dotenv.config();
 
 const serverOptions: UserConfig['server'] = {
   port: 3000,
+  fs: {
+    cachedChecks: false,
+  },
   open: 'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
   proxy: {
     '/api': {

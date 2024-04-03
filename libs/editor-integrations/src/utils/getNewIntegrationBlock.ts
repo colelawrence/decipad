@@ -81,14 +81,7 @@ export function getNewIntegration(
       const notionStore = useNotionConnectionStore.getState();
       const store = useConnectionStore.getState();
 
-      const url =
-        notionStore.mode === 'public'
-          ? `${window.location.origin}/api/externaldatasources/${getDefined(
-              getNotionDbLink(notionStore.NotionDatabaseUrl!)
-            )}/notion`
-          : getDefined(notionStore.NotionDatabaseUrl);
-
-      return {
+      const notionIntegration: IntegrationTypes.IntegrationBlock = {
         id: nanoid(),
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
@@ -97,9 +90,14 @@ export function getNewIntegration(
           type: 'notion',
           latestResult: notionStore.latestResult,
           timeOfLastRun: null,
-          notionUrl: url,
+          notionUrl: notionStore.NotionDatabaseUrl!,
+          externalDataId: notionStore.ExternalDataId!,
+          externalDataName: notionStore.ExternalDataName!,
+          databaseName: notionStore.DatabaseName!,
         },
       };
+
+      return notionIntegration;
     }
 
     default: {

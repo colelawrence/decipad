@@ -226,6 +226,7 @@ export interface ExternalDataSourceCreateInput
   dataSourceName?: string;
 }
 
+// TODO: This is an old graphql type we don't need anymore!
 export interface ExternalDataSource extends ExternalDataSourceCreateInput {
   dataUrl: string;
   authUrl: string;
@@ -568,6 +569,12 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   provider: ExternalDataSourceProvider;
   externalId: string;
   dataSourceName?: string;
+
+  //
+  // We create the external data source before finishing its completion
+  // So, we must keep track of whether it is currently being processed or not.
+  //
+  isProcessing?: boolean;
 }
 
 export interface SecretRecord extends TableRecordBase {
