@@ -44,8 +44,13 @@ import {
   translatePathUp,
 } from './TranslatePaths';
 import { IsTab, IsTitle } from './utils';
-import { createTitleEditor, TitleEditor } from './TitleEditor';
-import { BaseEditor, isNormalizing, Path, setNormalizing } from 'slate';
+import {
+  BaseEditor,
+  createEditor,
+  isNormalizing,
+  Path,
+  setNormalizing,
+} from 'slate';
 import { RootEditorController } from './types';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import stringify from 'json-stringify-safe';
@@ -86,7 +91,7 @@ export class EditorController implements RootEditorController {
   public id: string;
   public events: RootEditorController['events'];
 
-  private titleEditor: TitleEditor;
+  private titleEditor: BaseEditor;
   private tabEditors: Array<MyTabEditor> = [];
   private selectedTab = 0;
   private editorPlugins: Array<MyPlatePlugin>;
@@ -119,8 +124,8 @@ export class EditorController implements RootEditorController {
     });
   }
 
-  private createTitleEditor(): TitleEditor {
-    const titleEditor = createTitleEditor();
+  private createTitleEditor(): BaseEditor {
+    const titleEditor = createEditor();
     titleEditor.children = [];
 
     const { apply, onChange } = titleEditor;

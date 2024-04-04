@@ -2,7 +2,6 @@ import type { EElement, ENode, TEditor } from '@udecode/plate-common';
 import { MyEditor, NotebookValue, UserIconKey } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { BaseEditor, Path } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 export interface ObservableRootEditorNewTabEvent {
   type: 'new-tab';
@@ -54,7 +53,7 @@ interface TabEditable {
 }
 
 interface TitleEditable {
-  getTitleEditor: () => BaseEditor & ReactEditor;
+  getTitleEditor: () => BaseEditor;
 }
 
 interface WithoutNormalizingRootEditor {

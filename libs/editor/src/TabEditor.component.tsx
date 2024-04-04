@@ -31,6 +31,7 @@ import {
 import styled from '@emotion/styled';
 import { useIntercom } from 'react-use-intercom';
 import { captureException } from '@decipad/remote-computer';
+import { withReact } from 'slate-react';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
@@ -63,6 +64,11 @@ export const TabEditorComponent: FC<
     return tabs.at(0);
   }, [tabId, tabs]);
 
+  const titleEditor = useMemo(
+    () => withReact(controller.getTitleEditor()),
+    [controller]
+  );
+
   const tabEditorContextValue: TabEditorContextValue = useMemo(
     () => ({
       tabIndex: tab ? tabs.findIndex((t) => t.id === tab.id) : -1,
@@ -81,8 +87,8 @@ export const TabEditorComponent: FC<
   }
 
   unsetTimer();
+
   const subEditor = controller.getTabEditor(tab.id);
-  const titleEditor = controller.getTitleEditor();
 
   return (
     <EditorIdContext.Provider value={notebookId}>

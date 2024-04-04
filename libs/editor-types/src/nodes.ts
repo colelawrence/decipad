@@ -22,7 +22,6 @@ import { BaseEditor, Path } from 'slate';
 import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
 import type { NotebookValue, UserIconKey } from '.';
-import { ReactEditor } from 'slate-react';
 
 /**
  * Node
@@ -75,7 +74,7 @@ export type MinimalRootEditor = Pick<
 };
 
 interface WithTitleEditor {
-  getTitleEditor: () => BaseEditor & ReactEditor;
+  getTitleEditor: () => BaseEditor;
 }
 interface WithTabs {
   insertTab: (tabId?: string, skipParagraph?: boolean) => string;
