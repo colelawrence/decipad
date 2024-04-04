@@ -58,7 +58,10 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
     return (
       <NewDataConnection
         workspaceId={workspaceId}
-        onExit={() => setIsAddingNewConnection(false)}
+        onExit={() => {
+          setIsAddingNewConnection(false);
+          setEditConnectionValues(undefined);
+        }}
         initialValues={editConnectionValues}
         resetInitialValues={() => setEditConnectionValues(undefined)}
       />

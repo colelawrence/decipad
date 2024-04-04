@@ -44,7 +44,7 @@ export const EditDataConnectionsModal: React.FC<
               case 'webhooks':
                 navigate(connections.webhooks({}).$);
                 break;
-              case 'connections':
+              case 'sql-connections':
                 navigate(connections.sqlConnections({}).$);
                 break;
               case 'integrations':
@@ -81,7 +81,7 @@ export const EditDataConnectionsModal: React.FC<
               }}
             />
             <TabsTrigger
-              name="connections"
+              name="sql-connections"
               trigger={{
                 label: 'SQL',
                 disabled: false,
