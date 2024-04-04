@@ -1022,10 +1022,10 @@
     "@smithy/util-utf8" "^2.0.2"
     tslib "^2.5.0"
 
-"@aws-sdk/client-cloudformation@^3.540.0":
-  version "3.540.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.540.0.tgz#8efb2ff965f98abdbabe9837c9226e8e6b7f3146"
-  integrity sha512-D4HVytBmbF7+dwVmN0rmtyhbeRQU9NZIEYHQN0l1YbQ1+QSlO/4ArB2R2rAM9+GJRt8nY4vkWrwuQkSzGthD8w==
+"@aws-sdk/client-cloudformation@^3.548.0":
+  version "3.548.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-cloudformation/-/client-cloudformation-3.548.0.tgz#288305661e8a1565c077ea0d9316d40073dfe9b0"
+  integrity sha512-3I2Gznh6hNFN7Jbc3vHpSLsreUIX/+e7n0GKJy9vnmU8Zrdhu8TYvp1jZ45NtUyi0gOHQJlnFH9fH8G/X2JBTQ==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
@@ -16171,7 +16171,7 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1589.0:
+aws-sdk@2.1589.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
   version "2.1589.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1589.0.tgz#b000aff456e2046c45c0d6a5d1e1281c14a7a7fe"
   integrity sha512-Tt3UHH6hoUEAjbCscqvfEAoq9VSTN5iSQO9XSisiiH/QJo8sf+iLCYmfJHM4tVkd92bQH61/xxj9t2Mazwc/WQ==
@@ -16201,22 +16201,6 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
-
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1584.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1584.0.tgz#3ffe7e9f2ae42587d80721cf17b4a93d2dda692c"
-  integrity sha512-57Qizb+bLOhrBLWQSWw6WXTtbO/lFKzLouHxTfm/QeXm38gs0Q0knFxhdH+sWc/DPPJYSRGy7MNiuQcmsq5zxA==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.6.2"
 
 aws4@^1.11.0, aws4@^1.12.0:
   version "1.12.0"
