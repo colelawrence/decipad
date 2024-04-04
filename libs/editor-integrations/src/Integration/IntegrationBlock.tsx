@@ -30,7 +30,11 @@ import {
   UpgradePlanWarningTooltip,
   icons,
 } from '@decipad/ui';
-import { getPreviousNode, setNodes } from '@udecode/plate-common';
+import {
+  getNodeString,
+  getPreviousNode,
+  setNodes,
+} from '@udecode/plate-common';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
 import {
   ComponentProps,
@@ -193,10 +197,10 @@ export const IntegrationBlock: PlateComponent = ({
         path,
         computer,
         element.id,
-        getExprRef(element.id)
+        getNodeString(element.children[0])
       )
     );
-  }, [computer, editor, element.id, path]);
+  }, [computer, editor, element, path]);
 
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {
