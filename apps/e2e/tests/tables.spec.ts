@@ -33,6 +33,7 @@ import {
   doubleClickCell,
   downloadTableCSV,
   addColumnUnit,
+  openColTypeMenu,
 } from '../utils/page/Table';
 
 import notebookSource from '../__fixtures__/006-notebook-formula-tables.json';
@@ -785,4 +786,71 @@ test('multiline table cells', async ({ testUser }) => {
   await ControlPlus(testUser.page, 'Enter');
   await page.keyboard.insertText('B');
   expect(await getFromTable(testUser.page, 1, 0, 'Table')).toBe('A\nBA﻿B');
+});
+
+test('table categories', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  const dropdownOptions = ['option 1', 'option 2', 'option 3'];
+  await notebook.focusOnBody();
+  await createTable(page);
+
+  await openColTypeMenu(page, 2);
+  await page.getByRole('menuitem', { name: /Text/ }).click();
+  await page.getByRole('menuitem', { name: /Category/ }).click();
+  await clickCell(page, 1, 2);
+  await expect(async () => {
+    await expect(page.getByPlaceholder('Type here')).toBeVisible();
+  }).toPass();
+
+  // add new table categories to column
+  for (const option of dropdownOptions) {
+    await page.keyboard.type(option);
+    await page.keyboard.press('Enter');
+    const addNew = page.getByText('Add new');
+    await addNew.click();
+  }
+
+  expect(
+    await notebook.getDropdownOptions(),
+    `table categories on dropdown don't match ${dropdownOptions}`
+  ).toEqual(dropdownOptions);
+
+  // click away to remove selection
+  await clickCell(page, 1, 0);
+
+  // use table categoties on table
+  for (let i = 0; i < dropdownOptions.length; i++) {
+    await clickCell(page, i + 1, 2);
+    await page.getByText(dropdownOptions[i], { exact: true }).click();
+  }
+
+  await notebook.duplicateBlock(0);
+
+  // check table have categories
+  const table = getTableOrPage(page, 'Table');
+  const tableCopy = getTableOrPage(page, 'TableCopy');
+
+  for (const option of dropdownOptions) {
+    await expect(
+      table.getByRole('button', { name: new RegExp(option) }).first()
+    ).toBeVisible();
+    await expect(
+      tableCopy.getByRole('button', { name: new RegExp(option) }).first()
+    ).toBeVisible();
+  }
+
+  // check new table with categories was added
+  await page.reload();
+  await notebook.waitForEditorToLoad();
+  await testUser.aiAssistant.closePannel();
+
+  // check both tables still have categories
+  for (const option of dropdownOptions) {
+    await expect(
+      table.getByRole('button', { name: new RegExp(option) }).first()
+    ).toBeVisible();
+    await expect(
+      tableCopy.getByRole('button', { name: new RegExp(option) }).first()
+    ).toBeVisible();
+  }
 });

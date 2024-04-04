@@ -1691,6 +1691,11 @@ export class Notebook {
     await this.page.getByRole('menuitem', { name: 'Delete' }).click();
   }
 
+  async duplicateBlock(index: number) {
+    await this.page.getByTestId('drag-handle').nth(index).click();
+    await this.page.getByRole('menuitem', { name: 'Duplicate' }).click();
+  }
+
   async copyBlockReference(index: number) {
     await this.page.getByTestId('drag-handle').nth(index).click();
     await this.page
