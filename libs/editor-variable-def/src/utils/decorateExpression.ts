@@ -1,18 +1,19 @@
-import {
-  ELEMENT_EXPRESSION,
+import type {
   MyDecorate,
   MyDecorateEntry,
   MyEditor,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
+import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import {
   filterDecorate,
   getSyntaxErrorRanges,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import { Token, tokenize } from '@decipad/remote-computer';
+import type { Token } from '@decipad/remote-computer';
+import { tokenize } from '@decipad/remote-computer';
 import { getNodeString, getParentNode, isElement } from '@udecode/plate-common';
-import { NodeEntry, Path, Range } from 'slate';
+import type { NodeEntry, Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 

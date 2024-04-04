@@ -1,11 +1,7 @@
-import {
-  Editor,
-  Element,
-  NodeEntry,
-  createEditor as createEditorSlate,
-} from 'slate';
+import type { NodeEntry } from 'slate';
+import { Editor, Element, createEditor as createEditorSlate } from 'slate';
 import { normalizeCurried } from './normalizeNode';
-import { TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
 
 function createEditor() {
   return createEditorSlate() as TEditor;

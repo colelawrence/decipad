@@ -1,9 +1,9 @@
+import type { AST } from '@decipad/remote-computer';
 import {
-  AST,
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { getColumnRef } from './getColumnRef';
 

@@ -1,5 +1,6 @@
-import DeciNumber, { ONE } from '@decipad/number';
-import { Unit } from './Unit';
+import type DeciNumber from '@decipad/number';
+import { ONE } from '@decipad/number';
+import type { Unit } from './Unit';
 
 export function multiplyMultipliers(
   units: Unit[] | undefined | null,

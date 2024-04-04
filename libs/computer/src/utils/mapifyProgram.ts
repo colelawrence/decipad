@@ -1,5 +1,5 @@
-import { ProgramBlock } from '..';
-import { ComputerProgram } from '../types';
+import type { ProgramBlock } from '..';
+import type { ComputerProgram } from '../types';
 
 export const mapifyProgram = (
   blocks: ProgramBlock[]

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Doc as YDoc } from 'yjs';
+import type { Doc as YDoc } from 'yjs';
 import * as encoding from 'lib0/encoding';
 import * as decoding from 'lib0/decoding';
 import * as syncProtocol from 'y-protocols/sync';
@@ -10,10 +10,11 @@ import { Observable } from 'lib0/observable';
 import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 import pSeries from 'p-series';
 import { captureException } from '@decipad/backend-trace';
-import { MessageSender, sender } from './send';
+import type { MessageSender } from './send';
+import { sender } from './send';
 
 interface Options {
   awareness?: awarenessProtocol.Awareness;

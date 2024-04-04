@@ -1,10 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  Time,
-  AST,
-  SerializedType,
-  getDateFromAstForm,
-} from '@decipad/language';
+import type { AST, SerializedType } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { Time, getDateFromAstForm } from '@decipad/language';
 
 export interface Parseable {
   varName?: string;

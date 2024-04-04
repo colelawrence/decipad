@@ -1,7 +1,7 @@
 import { all, map } from '@decipad/generator-utils';
 import { N, ONE } from '@decipad/number';
-import { PromiseOrType } from '@decipad/utils';
-import { OperationFunction } from './types';
+import type { PromiseOrType } from '@decipad/utils';
+import type { OperationFunction } from './types';
 import { fromJS } from '../Value/fromJS';
 import { NumberValue } from '../Value/Number';
 import { createLazyOperation } from './LazyOperation';
@@ -13,8 +13,8 @@ import { materializeOneResult } from '../utils';
 import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
 import { createSwappedDimensions } from './SwappedDimensions';
 import * as t from '../Type/Type';
-import { OneResult } from '../Result';
-import { Column, Value } from '../Value';
+import type { OneResult } from '../Result';
+import type { Column, Value } from '../Value';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));

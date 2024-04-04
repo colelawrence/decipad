@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import { app } from '@decipad/backend-config';
 import { HttpError } from '@decipad/backend-utils';
-import { ExternalDataSourceRecord, User } from '@decipad/backendtypes';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
-import { Provider } from 'libs/externaldata/src/providers';
-import { OAuth2 } from 'oauth';
+import type { ExternalDataSourceRecord, User } from '@decipad/backendtypes';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { Provider } from 'libs/externaldata/src/providers';
+import type { OAuth2 } from 'oauth';
 import { saveExternalKey } from './save-keys';
-import { OAuthState } from './state';
+import type { OAuthState } from './state';
 
 export function getOAuthResponse(
   oauth2Client: OAuth2,

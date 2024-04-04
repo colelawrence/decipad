@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyStructuredResultV2,
   Context,

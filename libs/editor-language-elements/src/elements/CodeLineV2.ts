@@ -1,11 +1,10 @@
 import type { AST, RemoteComputer, Program } from '@decipad/remote-computer';
-import {
+import type {
   CodeLineV2Element,
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_SMART_REF,
   MinimalRootEditor,
   MyEditor,
 } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE_V2, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import {
   assertElementType,
   getCodeLineSource,
@@ -14,7 +13,7 @@ import {
 import { N } from '@decipad/number';
 import { parseCell } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate-common';
-import { InteractiveLanguageElement } from '../types';
+import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 const tryParseAsNumber: InteractiveLanguageElement['getParsedBlockFromElement'] =

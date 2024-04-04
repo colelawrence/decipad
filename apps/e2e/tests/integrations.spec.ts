@@ -1,4 +1,5 @@
-import { Page, expect, test } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import {
   codePlaceholders,
   getClearText,

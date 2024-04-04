@@ -1,10 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  Result,
-  SerializedTypeKind,
-  Type,
-  serializeType,
-} from '@decipad/language-types';
+import type { Result, SerializedTypeKind, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { serializeType } from '@decipad/language-types';
 import { validateResult } from '../validateResult';
 
 export * from './resultToValue';

@@ -1,12 +1,12 @@
-import {
-  ELEMENT_TR,
+import type {
   MyEditor,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TR } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate-common';
-import { Path } from 'slate';
-import { DragColumnItem } from '../types';
+import type { Path } from 'slate';
+import type { DragColumnItem } from '../types';
 
 export const findColumnByCell = (
   editor: MyEditor,

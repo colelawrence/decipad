@@ -1,5 +1,5 @@
 import { parseDate } from './parseDate';
-import { DateGranularity } from './types';
+import type { DateGranularity } from './types';
 
 describe('dates', () => {
   it.each([

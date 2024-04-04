@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createPlateEditor,
   type CreatePlateEditorOptions,
@@ -8,9 +7,9 @@ import {
   type NoInfer,
   type PlatePlugin,
   type PluginOptions,
-  TEditor,
   useEditorRef,
-  Value,
+  type TEditor,
+  type Value,
 } from '@udecode/plate-common';
 import {
   type AutoformatPlugin,
@@ -42,12 +41,14 @@ export const createMyPlateEditor = (
   options: Omit<CreatePlateEditorOptions<MyValue, MyEditor>, 'plugins'> & {
     plugins?: MyPlatePlugin[];
   } = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) => createPlateEditor<MyValue, MyEditor>(options as any) as MyEditor;
 
 export const createMyPlugins = (
   plugins: MyPlatePlugin[],
   options?: Parameters<typeof createPlugins>[1]
 ) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createPlugins<MyValue, MyEditor>(plugins as any, options) as MyPlatePlugin[];
 
 export const createMyPlateRootEditor = (

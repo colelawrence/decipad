@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { useToast } from '@decipad/toast';
-import { OperationResult } from 'urql';
+import type { OperationResult } from 'urql';
 
 type Fn<TArgs, TResult extends OperationResult> = (
   arg: TArgs

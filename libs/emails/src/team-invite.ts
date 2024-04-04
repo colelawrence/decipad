@@ -1,5 +1,5 @@
-import { User } from '@decipad/interfaces';
-import { EmailGenerator } from './types';
+import type { User } from '@decipad/interfaces';
+import type { EmailGenerator } from './types';
 
 const teamInvite: EmailGenerator<{
   from: User;

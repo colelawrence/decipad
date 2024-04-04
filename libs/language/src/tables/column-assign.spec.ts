@@ -1,11 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  Value,
-  materializeOneResult,
-  buildType as t,
-} from '@decipad/language-types';
-import { Context, inferStatement, makeContext } from '../infer';
+import type { AST, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { materializeOneResult, buildType as t } from '@decipad/language-types';
+import type { Context } from '../infer';
+import { inferStatement, makeContext } from '../infer';
 import { c, col, l, r, tableColAssign } from '../utils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';
 import { Realm } from '../interpreter';

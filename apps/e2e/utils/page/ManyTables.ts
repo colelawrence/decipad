@@ -1,5 +1,6 @@
-import { Page } from '@playwright/test';
-import { TableColumnHeader, TableRow, toAsciiTable } from '../src';
+import type { Page } from '@playwright/test';
+import type { TableColumnHeader, TableRow } from '../src';
+import { toAsciiTable } from '../src';
 
 const tableNameSelector = (tableSelector: string): string => {
   return `${tableSelector} [aria-roledescription="table name"]`;

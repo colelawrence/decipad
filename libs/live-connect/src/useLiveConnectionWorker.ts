@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { LiveConnectionWorker } from './types';
+import type { LiveConnectionWorker } from './types';
 
 export const useLiveConnectionWorker = (
   workerGen: number

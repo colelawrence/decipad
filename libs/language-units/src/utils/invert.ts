@@ -1,4 +1,5 @@
-import DeciNumber, { ONE } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { ONE } from '@decipad/number';
 
 export function invert(
   f: (n: DeciNumber) => DeciNumber

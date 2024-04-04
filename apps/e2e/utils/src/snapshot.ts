@@ -1,5 +1,5 @@
 import percySnapshot from '@percy/playwright';
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 10_000;
 

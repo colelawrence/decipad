@@ -1,8 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { Result, isTable } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
+import { isTable } from '@decipad/remote-computer';
 import { getDefined, dequal } from '@decipad/utils';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
-import { ImportResult } from '../types';
+import type { ImportResult } from '../types';
 import { matrix } from './matrix';
 
 interface VisitStackElement {

@@ -1,16 +1,13 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import { ELEMENT_CODE_LINE_V2, MyEditor, MyValue } from '@decipad/editor-types';
+import { type RemoteComputer } from '@decipad/remote-computer';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { generateVarName } from '@decipad/utils';
-import {
-  EElementOrText,
-  PlateEditor,
-  Value,
-  deleteText,
-  getEditorString,
-} from '@udecode/plate-common';
+import type { EElementOrText, PlateEditor, Value } from '@udecode/plate-common';
+import { deleteText, getEditorString } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { BaseEditor, Path, Transforms } from 'slate';
+import type { BaseEditor, Path } from 'slate';
+import { Transforms } from 'slate';
 import { createCodeLine, createStructuredCodeLine } from './createCodeLine';
 import { insertNodes } from './insertNodes';
 import { requireBlockParentPath, requirePathBelowBlock } from './path';

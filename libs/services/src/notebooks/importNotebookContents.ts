@@ -1,7 +1,7 @@
-import { PadRecord, User } from '@decipad/backendtypes';
-import { Document, MyValue } from '@decipad/editor-types';
+import type { PadRecord, User } from '@decipad/backendtypes';
+import type { Document, MyValue } from '@decipad/editor-types';
 import Boom from '@hapi/boom';
-import { TNode } from '@udecode/plate-common';
+import type { TNode } from '@udecode/plate-common';
 import { Node, Element as SlateElement } from 'slate';
 import { create as createContent } from '../pad-content';
 import { applyReplaceList } from './applyReplaceList';

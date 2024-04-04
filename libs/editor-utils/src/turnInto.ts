@@ -1,3 +1,4 @@
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
@@ -5,8 +6,6 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
-  MyEditor,
-  MyElement,
 } from '@decipad/editor-types';
 import { findNodePath, focusEditor, setNodes } from '@udecode/plate-common';
 

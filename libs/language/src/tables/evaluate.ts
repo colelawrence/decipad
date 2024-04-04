@@ -1,10 +1,13 @@
 import { getDefined, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, RuntimeError, Value } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError, Value } from '@decipad/language-types';
 import { refersToOtherColumnsByName } from './inference';
 import { mapWithPrevious } from '../interpreter/previous';
 import { walkAst, getIdentifierString, isExpression } from '../utils';
-import { Realm, evaluate } from '../interpreter';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { requiresWholeColumn } from './requiresWholeColumn';
 import { isPrevious } from '../utils/isPrevious';

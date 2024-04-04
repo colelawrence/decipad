@@ -1,11 +1,11 @@
-import {
+import type {
   CodeLineElement,
   CodeLineV2Element,
   MyEditor,
 } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import React from 'react';
-import { Result } from '@decipad/remote-computer';
+import type React from 'react';
+import type { Result } from '@decipad/remote-computer';
 
 export const DRAG_INLINE_RESULT = 'inline-result';
 

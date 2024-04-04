@@ -1,12 +1,13 @@
+import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_H1,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
-  MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizePlainTextBlockPlugin } from './createNormalizePlainTextBlockPlugin';
 
 let editor: TEditor;

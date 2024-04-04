@@ -1,9 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { getDefined } from '@decipad/utils';
-import { ToStringable } from './types';
-import { isBinding, Val } from './Binding';
-import { LogicVar, isLvar } from './LogicVar';
+import type { ToStringable } from './types';
+import type { Val } from './Binding';
+import { isBinding } from './Binding';
+import type { LogicVar } from './LogicVar';
+import { isLvar } from './LogicVar';
 
 type IteratorFn<T> = (a: T) => unknown;
 type MapFn<T, R> = (a: T) => R;

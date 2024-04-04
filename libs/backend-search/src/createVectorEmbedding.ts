@@ -1,7 +1,7 @@
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { thirdParty } from '../../backend-config/src';
 import { shortenNotebook } from './shortenNotebook';
-import { EmbeddingsVector } from './types';
+import type { EmbeddingsVector } from './types';
 import { getDefined } from '@decipad/utils';
 
 interface ErrorWithType extends Error {

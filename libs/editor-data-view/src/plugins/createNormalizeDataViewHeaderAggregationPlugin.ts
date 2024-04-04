@@ -1,19 +1,18 @@
-import {
-  NormalizerReturnValue,
-  createNormalizerPlugin,
-} from '@decipad/editor-plugins';
-import {
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import type {
   MyEditor,
   MyNodeEntry,
-  ELEMENT_DATA_VIEW_TH,
   DataViewHeader,
 } from '@decipad/editor-types';
+import { ELEMENT_DATA_VIEW_TH } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
   hasAggregationId,
   translateOldToNewAggregationId,
 } from '@decipad/language-aggregations';
-import { TNodeEntry, setNodes } from '@udecode/plate-common';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { setNodes } from '@udecode/plate-common';
 
 const normalizeDataViewHeaderAggregation = (
   editor: MyEditor,

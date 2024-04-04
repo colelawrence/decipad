@@ -5,7 +5,7 @@ import {
   serializeResult,
 } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
-import { BehaviorSubject } from 'rxjs';
+import type { BehaviorSubject } from 'rxjs';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { pushResultToComputer } from './useLiveConnection';
 

@@ -1,16 +1,10 @@
 /* eslint-disable no-param-reassign */
-import {
-  ELEMENT_INLINE_NUMBER,
-  ELEMENT_LINK,
-  MyEditor,
-  MyNodeEntry,
-} from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_INLINE_NUMBER, ELEMENT_LINK } from '@decipad/editor-types';
 import { RICH_TEXT_BLOCK_TYPES } from '@decipad/editor-utils';
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 const ALLOWED_CHILD_TYPES = new Set([ELEMENT_LINK, ELEMENT_INLINE_NUMBER]);
 

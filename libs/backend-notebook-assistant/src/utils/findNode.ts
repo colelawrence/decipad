@@ -1,4 +1,4 @@
-import { MyNode, RootDocument } from '@decipad/editor-types';
+import type { MyNode, RootDocument } from '@decipad/editor-types';
 import { isElement } from '@udecode/plate-common';
 
 export const findNode = (

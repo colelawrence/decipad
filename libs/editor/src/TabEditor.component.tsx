@@ -1,22 +1,17 @@
-import {
-  ComponentProps,
-  FC,
-  useMemo,
-  useEffect,
-  PropsWithChildren,
-} from 'react';
+import type { ComponentProps, FC, PropsWithChildren } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Editor } from './Editor.component';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
+import type { TabEditorContextValue } from '@decipad/react-contexts';
 import {
   EditorIdContext,
   TabEditorContext,
-  TabEditorContextValue,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
-import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
+import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
 import { useTabs } from '@decipad/editor-hooks';
 import { useRecoverNotebook } from './hooks';
 import {

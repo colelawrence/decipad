@@ -1,4 +1,4 @@
-import { DataViewElement } from '@decipad/editor-types';
+import { type DataViewElement } from '@decipad/editor-types';
 import {
   shadowExprRef,
   statementToIdentifiedBlock,

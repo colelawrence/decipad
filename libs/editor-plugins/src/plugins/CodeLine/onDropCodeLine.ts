@@ -1,5 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
-import React from 'react';
+import type { MyEditor } from '@decipad/editor-types';
+import type React from 'react';
 import { onDropTableCellResult } from './onDropTableCellResult';
 import { onDropSmartCell } from './onDropSmartCell';
 

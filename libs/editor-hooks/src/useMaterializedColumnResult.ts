@@ -1,4 +1,5 @@
-import { Result, Unknown } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
+import { Unknown } from '@decipad/remote-computer';
 import { useMemo } from 'react';
 import { useMaterializedColumnResultValue } from './useMaterializedColumnResultValue';
 

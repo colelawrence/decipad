@@ -10,8 +10,8 @@ import {
   isVoid,
 } from '@udecode/plate-common';
 import { useCallback, useEffect } from 'react';
-import { BaseSelection, Path, Selection } from 'slate';
-import { MyEditor } from '@decipad/editor-types';
+import type { BaseSelection, Path, Selection } from 'slate';
+import type { MyEditor } from '@decipad/editor-types';
 import { getPersistedSelection } from '@decipad/editor-plugins';
 import { getPointSafe } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';

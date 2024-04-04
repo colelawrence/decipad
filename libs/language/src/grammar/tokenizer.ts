@@ -1,4 +1,5 @@
-import moo, { error, Token } from 'moo';
+import type { Token } from 'moo';
+import moo, { error } from 'moo';
 import { BracketCounter, doSeparateStatement } from './containmentCounting';
 
 export type { Token };

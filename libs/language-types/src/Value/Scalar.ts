@@ -3,7 +3,7 @@ import { DateValue } from './Date';
 import { NumberValue } from './Number';
 import { BooleanValue } from './Boolean';
 import { StringValue } from './String';
-import { NonColumn } from './NonColumn';
+import type { NonColumn } from './NonColumn';
 
 export class Scalar {
   static fromValue(

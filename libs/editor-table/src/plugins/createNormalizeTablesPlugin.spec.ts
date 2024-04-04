@@ -7,12 +7,8 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import {
-  TEditor,
-  TElement,
-  createPlateEditor,
-  normalizeEditor,
-} from '@udecode/plate-common';
+import type { TEditor, TElement } from '@udecode/plate-common';
+import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import { createTablePlugin } from './createTablePlugin';
 import { getRemoteComputer } from '@decipad/remote-computer';
 

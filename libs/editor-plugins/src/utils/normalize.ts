@@ -1,17 +1,19 @@
+import type {
+  TEditor,
+  TElement,
+  TNode,
+  TNodeEntry,
+  TNodeProps,
+} from '@udecode/plate-common';
 import {
   deleteText,
   getNodeProps,
   isElement,
   isText,
   setNodes,
-  TEditor,
-  TElement,
-  TNode,
-  TNodeEntry,
-  TNodeProps,
   unsetNodes,
 } from '@udecode/plate-common';
-import { NormalizerReturnValue } from '../pluginFactories';
+import type { NormalizerReturnValue } from '../pluginFactories';
 
 const baseProps = {
   element: ['type', 'children', 'id', 'isHidden'],

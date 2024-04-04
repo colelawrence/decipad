@@ -2,8 +2,8 @@ import {
   blockSelectionSelectors,
   copySelectedBlocks,
 } from '@udecode/plate-selection';
-import { ClipboardEvent } from 'react';
-import { MyEditor } from '@decipad/editor-types';
+import type { ClipboardEvent } from 'react';
+import type { MyEditor } from '@decipad/editor-types';
 
 /**
  * Override default onCopy behaviour for editor, use copy blocks when blocks are selected.

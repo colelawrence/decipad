@@ -5,7 +5,7 @@ import {
 } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 

@@ -1,22 +1,20 @@
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { Awareness } from 'y-protocols/awareness';
 import { applyUpdate, encodeStateAsUpdate, Doc as YDoc } from 'yjs';
 import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
+import type { SyncElement } from '@decipad/slate-yjs';
 import {
   applySlateOps,
-  SyncElement,
   toSlateDoc,
   withCursor,
   withYjs,
 } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import {
-  createWebsocketProvider,
-  TWebSocketProvider,
-} from '@decipad/y-websocket';
+import type { TWebSocketProvider } from '@decipad/y-websocket';
+import { createWebsocketProvider } from '@decipad/y-websocket';
 import { supports } from '@decipad/support';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import { docSyncEditor } from './docSyncEditor';
 import { setupUndo } from './setupUndo';
 import { nanoid } from 'nanoid';

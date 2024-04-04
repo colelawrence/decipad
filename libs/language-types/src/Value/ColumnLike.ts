@@ -1,7 +1,7 @@
 import type { ColumnLike } from '@decipad/column';
 import type { Value } from './Value';
 import type { OneResult } from '../Result';
-import { Dimension } from '../Dimension';
+import type { Dimension } from '../Dimension';
 
 export interface ColumnLikeValue extends Value, ColumnLike<Value> {
   getData(): Promise<OneResult>;

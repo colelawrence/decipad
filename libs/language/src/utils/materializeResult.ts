@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 // eslint-disable-next-line no-restricted-imports
-import {
-  Result,
-  SerializedTypeKind,
-  materializeOneResult,
-} from '@decipad/language-types';
-import { PromiseOrType, bind } from '@decipad/utils';
+import type { Result, SerializedTypeKind } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { materializeOneResult } from '@decipad/language-types';
+import type { PromiseOrType } from '@decipad/utils';
+import { bind } from '@decipad/utils';
 
 export const materializeResult = <T extends SerializedTypeKind>(
   _result: PromiseOrType<Result.Result<T>>

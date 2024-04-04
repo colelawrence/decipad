@@ -1,4 +1,4 @@
-import Fraction from '.';
+import type Fraction from '.';
 
 export const lessThan = (a: Fraction, b: Fraction) => a.compare(b) < 0;
 

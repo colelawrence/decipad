@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { timeout } from '@decipad/utils';
 import { trace, captureException } from '@decipad/backend-trace';
-import { Handler, Response } from './types';
+import type { Handler, Response } from './types';
 import { RENDER_TIMEOUT_MS } from './constants';
 import { fallbackHandler } from './fallbackHandler';
 

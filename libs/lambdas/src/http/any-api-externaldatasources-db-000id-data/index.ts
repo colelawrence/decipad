@@ -6,7 +6,7 @@ import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
-import { ExternalDataSourceRecord } from '../../types';
+import type { ExternalDataSourceRecord } from '../../types';
 
 const notebook = resource('notebook');
 const workspace = resource('workspace');

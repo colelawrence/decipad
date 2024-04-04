@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { Unit } from '@decipad/language-units';
 import type * as Time from './Time';
-import * as AST from './AST';
+import type * as AST from './AST';
 import type { ErrSpec } from './InferError';
 import type { SerializedType } from './SerializedType';
 

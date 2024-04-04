@@ -1,32 +1,31 @@
+import type {
+  LiveQueryQueryElement,
+  MyGenericEditor,
+} from '@decipad/editor-types';
 import {
   createMyPluginFactory,
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  LiveQueryQueryElement,
-  MyGenericEditor,
 } from '@decipad/editor-types';
 import {
   assertElementType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
+import type { ENodeEntry, Value } from '@udecode/plate-common';
 import {
-  ENodeEntry,
   getChildren,
   insertNodes,
   nanoid,
   removeNodes,
-  Value,
 } from '@udecode/plate-common';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveQueryVarName } from './components/LiveQueryVarName';
 import { LiveQueryQuery } from './components/LiveQueryQuery';
-import {
-  createNormalizerPlugin,
-  NormalizerReturnValue,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPlugin } from '../../pluginFactories';
 import { createSoftBreakLiveQueryPluginFactory } from './createSoftBreakLiveQueryPluginFactory';
-import { LiveQueryVarNameElement } from '../../../../editor-types/src/interactive-elements';
+import type { LiveQueryVarNameElement } from '../../../../editor-types/src/interactive-elements';
 
 const LazyLiveQuery = lazyElementComponent(
   () =>

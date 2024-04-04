@@ -1,6 +1,7 @@
-import { findNode, TNodeEntry } from '@udecode/plate-common';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { findNode } from '@udecode/plate-common';
 import { notAcceptable } from '@hapi/boom';
-import { AnyElement, MyEditor } from '@decipad/editor-types';
+import type { AnyElement, MyEditor } from '@decipad/editor-types';
 
 export const findElementById = <T extends AnyElement>(
   editor: MyEditor,

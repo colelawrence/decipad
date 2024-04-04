@@ -1,5 +1,6 @@
 import { findNode, isElement, type TNodeEntry } from '@udecode/plate-common';
 import {
+  type VariableDefinitionElement,
   type CodeLineElement,
   type CodeLineV2Element,
   ELEMENT_CODE_LINE,
@@ -8,7 +9,6 @@ import {
   type MyEditor,
   type TableElement,
   ELEMENT_VARIABLE_DEF,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { matchElementByVariableName } from '../../utils/matchElementByVariableName';
 

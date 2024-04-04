@@ -1,8 +1,4 @@
-import {
-  ELEMENT_SMART_REF,
-  ELEMENT_TABLE,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TR,
+import type {
   MyEditor,
   MyValue,
   SmartRefElement,
@@ -10,6 +6,12 @@ import {
   TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_SMART_REF,
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TR,
 } from '@decipad/editor-types';
 import type { Token } from 'moo';
 import {
@@ -19,17 +21,12 @@ import {
   isEntryOfType,
 } from '@decipad/editor-utils';
 import { tokenize } from '@decipad/remote-computer';
-import {
-  getChildren,
-  getNodeString,
-  nanoid,
-  TNodeEntry,
-} from '@udecode/plate-common';
-import { BaseEditor, Range, Transforms } from 'slate';
-import {
-  createNormalizerPluginFactory,
-  NormalizerReturnValue,
-} from '../../../pluginFactories';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { getChildren, getNodeString, nanoid } from '@udecode/plate-common';
+import type { BaseEditor, Range } from 'slate';
+import { Transforms } from 'slate';
+import type { NormalizerReturnValue } from '../../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../../pluginFactories';
 
 export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<
   MyValue,

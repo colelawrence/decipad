@@ -1,4 +1,4 @@
-import moo from 'moo';
+import type moo from 'moo';
 import { getDefined } from '@decipad/utils';
 
 const parenTypes = ['Paren', 'SquareBracket', 'CurlyBracket', 'PartialIf'];

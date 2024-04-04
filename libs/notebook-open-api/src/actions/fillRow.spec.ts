@@ -1,5 +1,6 @@
 import { EditorController } from '@decipad/notebook-tabs';
 import { callAction } from '../callAction';
+import type { MyEditor } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -7,7 +8,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
 } from '@decipad/editor-types';
 import {
   type RemoteComputer,

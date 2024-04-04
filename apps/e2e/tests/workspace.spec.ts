@@ -1,6 +1,7 @@
 /* eslint-disable playwright/valid-describe-callback */
 /* eslint-disable playwright/no-conditional-expect */
-import { expect, test, Page } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import { Timeouts, snapshot } from '../utils/src';
 
 test('can create workspace folders @workspace', async ({ randomFreeUser }) => {

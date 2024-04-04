@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-underscore-dangle */
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { renderToPipeableStream, renderToString } from 'react-dom/server';
 import ReactDOM from 'react-dom';
 import htmlescape from 'htmlescape';
 import createEmotionServer from '@emotion/server/create-instance';
 
-import { EmotionCache } from '@emotion/react';
-import { Session } from 'next-auth';
+import type { EmotionCache } from '@emotion/react';
+import type { Session } from 'next-auth';
 import { captureException } from '@decipad/backend-trace';
 import { bufferStream } from './utils/bufferStream';
 import { RENDER_TIMEOUT_MS } from './constants';

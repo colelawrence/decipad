@@ -12,7 +12,7 @@ import {
   Value,
 } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
-import { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
 
 const roundNumberFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));

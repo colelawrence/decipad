@@ -1,5 +1,5 @@
 import type { AuthResult } from '@decipad/services/authentication';
-import { PermissionType } from '@decipad/backendtypes';
+import type { PermissionType } from '@decipad/backendtypes';
 import {
   isAuthorized,
   maximumPermissionIn,

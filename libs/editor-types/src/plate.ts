@@ -17,7 +17,7 @@ import type {
   Value,
   WithOverride,
 } from '@udecode/plate-common';
-import { AutoformatRule } from '@udecode/plate-autoformat';
+import type { AutoformatRule } from '@udecode/plate-autoformat';
 import type { MyEditor, MyGenericEditor, RootEditor } from './nodes';
 import type { MyValue, NotebookValue } from './value';
 

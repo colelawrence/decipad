@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { useCallback } from 'react';
 import { useToast } from '@decipad/toast';
+import type { PermissionType } from '..';
 import {
-  PermissionType,
   useChangeWorkspaceAccessLevelMutation,
   useShareWorkspaceWithEmailMutation,
   useUnshareWorkspaceWithUserMutation,

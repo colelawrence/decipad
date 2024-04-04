@@ -1,7 +1,9 @@
-import {
+import type {
   RemoteComputer,
   Result,
   SerializedType,
+} from '@decipad/remote-computer';
+import {
   memoizedColumnResultGenerator,
   Time,
   buildResult,
@@ -11,7 +13,7 @@ import { slice } from '@decipad/generator-utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
-import { Sheet, SpreadsheetColumn, InferTableOptions } from './types';
+import type { Sheet, SpreadsheetColumn, InferTableOptions } from './types';
 import { parseBoolean } from './inferBoolean';
 import { fasterNumber } from './fasterNumber';
 

@@ -1,8 +1,11 @@
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
 import { ForbiddenError } from 'apollo-server-lambda';
 import tables from '@decipad/tables';
-import { GraphqlContext, PermissionType } from '@decipad/graphqlserver-types';
-import { User } from '@decipad/backendtypes';
+import type {
+  GraphqlContext,
+  PermissionType,
+} from '@decipad/graphqlserver-types';
+import type { User } from '@decipad/backendtypes';
 
 export function loadUser(context: GraphqlContext): User | undefined {
   return context.user;

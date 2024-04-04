@@ -4,7 +4,7 @@ import { type Awareness } from 'y-protocols/awareness';
 import debounce from 'lodash.debounce';
 import { type Session } from 'next-auth';
 import { jsonify } from '../utils/jsonify';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import type {
   TYjsEditor as GTYjsEditor,
   TCursorEditor as GTCursorEditor,

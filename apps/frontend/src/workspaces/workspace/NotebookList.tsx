@@ -1,18 +1,19 @@
-import {
+import type {
   WorkspaceNotebookFragment,
   WorkspaceSectionFragment,
   WorkspaceSwitcherWorkspaceFragment,
-  useGetWorkspaceNotebooksQuery,
 } from '@decipad/graphql-client';
+import { useGetWorkspaceNotebooksQuery } from '@decipad/graphql-client';
 import {
   NotebookListItem,
   UINotebookList,
   useSearchBarStore,
 } from '@decipad/ui';
-import { ComponentProps, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
 import { useNotebookMetaActions } from '../../hooks';
 import { parseIconColorFromIdentifier } from '../../utils';
-import { PageTypes, useFilteredNotebooks, useSearchResults } from './hooks';
+import type { PageTypes } from './hooks';
+import { useFilteredNotebooks, useSearchResults } from './hooks';
 
 type NotebookListProps = Pick<
   ComponentProps<typeof UINotebookList>,

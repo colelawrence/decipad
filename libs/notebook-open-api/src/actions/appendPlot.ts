@@ -1,4 +1,4 @@
-import { RequiresNotebookAction } from './types';
+import type { RequiresNotebookAction } from './types';
 import { appendPath } from '../utils/appendPath';
 import { insertNodes } from '@udecode/plate-common';
 import { z } from 'zod';

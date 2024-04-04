@@ -1,8 +1,9 @@
 import stringify from 'json-stringify-safe';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
-import { SharedType, SyncElement, SyncNode } from '../model';
+import type { SharedType, SyncElement } from '../model';
+import { SyncNode } from '../model';
 import { toSlateDoc } from '../utils/convert';
 
 const isTree = (node: SyncNode): boolean => !!SyncNode.getChildren(node);

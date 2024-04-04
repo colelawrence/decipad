@@ -1,9 +1,9 @@
 import type { Time } from '@decipad/remote-computer';
-import { Duration } from 'date-fns';
+import type { Duration } from 'date-fns';
 import { N, ONE } from '@decipad/number';
 import { formatNumber } from '@decipad/format';
-import { SeriesType } from '@decipad/editor-types';
-import { DateTime } from 'luxon';
+import type { SeriesType } from '@decipad/editor-types';
+import type { DateTime } from 'luxon';
 import { dateFromMillis, formatDate } from '@decipad/utils';
 import { parseDate } from './parseDate';
 

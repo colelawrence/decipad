@@ -1,5 +1,5 @@
 import { getExprRef } from '@decipad/remote-computer';
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 
 export const title = 'Welcome to Decipad!';

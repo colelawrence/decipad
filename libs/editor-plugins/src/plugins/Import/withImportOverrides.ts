@@ -1,7 +1,8 @@
-import { WithOverride, getNode } from '@udecode/plate-common';
+import type { WithOverride } from '@udecode/plate-common';
+import { getNode } from '@udecode/plate-common';
 import { isImportUrl } from '@decipad/import';
 import type { UserInteraction } from '@decipad/react-contexts';
-import { Subject } from 'rxjs';
+import type { Subject } from 'rxjs';
 
 export const withImportOverrides =
   (interactions?: Subject<UserInteraction>): WithOverride =>

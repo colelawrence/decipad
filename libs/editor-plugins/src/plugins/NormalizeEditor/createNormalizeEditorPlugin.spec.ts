@@ -1,3 +1,4 @@
+import type { H1Element, MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_BLOCKQUOTE,
@@ -10,10 +11,9 @@ import {
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-  H1Element,
-  MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 
 const h1Element = () =>

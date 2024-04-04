@@ -1,5 +1,5 @@
-import { Result } from '@decipad/remote-computer';
-import { TableCellType } from '@decipad/editor-types';
+import type { Result } from '@decipad/remote-computer';
+import type { TableCellType } from '@decipad/editor-types';
 import { columnTypeCoercionsToRec } from './columnTypeCoersionsToRec';
 import { tableFlip } from './tableFlip';
 import { importFromUnknownJson } from '../importFromUnknownJson';

@@ -8,7 +8,7 @@ import {
   Type,
   buildType as t,
 } from '@decipad/language-types';
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 import { reverse, sort, unique } from '../utils/valueTransforms';
 
 export const listOperators: Record<string, BuiltinSpec> = {

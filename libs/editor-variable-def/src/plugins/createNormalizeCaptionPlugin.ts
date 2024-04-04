@@ -1,8 +1,7 @@
-import { ELEMENT_CAPTION, MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_CAPTION } from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
 import {
   deleteText,
@@ -12,8 +11,8 @@ import {
   isText,
   unwrapNodes,
 } from '@udecode/plate-common';
-import { RemoteComputer } from '@decipad/remote-computer';
-import { Path } from 'slate';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Path } from 'slate';
 
 /**
  * Solves the edge case of widgets being in columns or top level.

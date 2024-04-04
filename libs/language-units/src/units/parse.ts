@@ -1,6 +1,7 @@
-import DeciNumber, { N, ONE } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ONE } from '@decipad/number';
 import { getUnitByName, knowsUnit, unitUsesPrefixes } from '.';
-import { Unit } from '../Unit/Unit';
+import type { Unit } from '../Unit/Unit';
 
 const abbreviatedPrefixes = {
   q: 'quecto',

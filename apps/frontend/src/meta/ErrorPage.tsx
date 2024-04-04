@@ -1,6 +1,7 @@
 import { ErrorPage as ErrorPageUi } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { FC, ComponentProps, useMemo } from 'react';
+import type { FC, ComponentProps } from 'react';
+import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const messagesFromError: Record<string, string[]> = {

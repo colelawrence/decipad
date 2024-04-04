@@ -1,4 +1,4 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md';
 import { createCodeLineV2NoUiPlugin } from '../../../../editor-plugins/src/plugins/CodeLineV2/createCodeLineV2NoUiPlugin';

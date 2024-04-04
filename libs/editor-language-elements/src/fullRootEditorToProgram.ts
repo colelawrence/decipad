@@ -1,9 +1,6 @@
-import {
-  RootDocument,
-  TabElement,
-  createMyPlateEditor,
-} from '@decipad/editor-types';
-import {
+import type { RootDocument, TabElement } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
+import type {
   RemoteComputer,
   Program,
   ProgramBlock,

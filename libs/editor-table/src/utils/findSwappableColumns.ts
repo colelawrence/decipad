@@ -1,9 +1,9 @@
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 import { getNodeChildren } from '@udecode/plate-common';
-import { Path } from 'slate';
-import { DropTargetMonitor } from 'react-dnd';
+import type { Path } from 'slate';
+import type { DropTargetMonitor } from 'react-dnd';
 import { getHoverDirection } from '.';
-import { DragColumnItem } from '../types';
+import type { DragColumnItem } from '../types';
 
 export const findSwappableColumns = (
   {

@@ -1,19 +1,17 @@
+import type { MyValue, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_TABLE,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
-  MyValue,
-  TableElement,
 } from '@decipad/editor-types';
+import type { Value, PlateEditor } from '@udecode/plate-common';
 import {
   getParentNode,
   moveSelection,
   select,
   isElement,
-  Value,
-  PlateEditor,
 } from '@udecode/plate-common';
 import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { Range } from 'slate';

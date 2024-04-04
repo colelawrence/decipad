@@ -1,4 +1,4 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import { cursorStore } from '@decipad/react-contexts';
 import { componentCssVars } from '@decipad/ui';
 import { findEventRange } from '@udecode/plate-common';

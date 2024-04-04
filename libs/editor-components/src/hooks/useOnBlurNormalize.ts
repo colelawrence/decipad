@@ -1,4 +1,4 @@
-import {
+import type {
   CodeLineElement,
   CodeLineV2Element,
   CodeLineV2ElementCode,

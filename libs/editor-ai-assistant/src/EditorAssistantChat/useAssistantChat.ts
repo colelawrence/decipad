@@ -1,4 +1,5 @@
-import { useAIChatHistory, UserMessage } from '@decipad/react-contexts';
+import type { UserMessage } from '@decipad/react-contexts';
+import { useAIChatHistory } from '@decipad/react-contexts';
 
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useRef, useState } from 'react';

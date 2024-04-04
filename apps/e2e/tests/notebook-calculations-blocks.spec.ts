@@ -1,5 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { expect, Page, test } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import { getClearText, snapshot, Timeouts } from '../utils/src';
 import { ControlPlus, keyPress } from '../utils/page/Editor';
 import { getResult } from '../utils/page/Block';

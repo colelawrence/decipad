@@ -3,8 +3,8 @@ import type { Context } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
-import { ExprRefToVarNameMap } from '../internalTypes';
-import { ComputerProgram } from '../types';
+import type { ExprRefToVarNameMap } from '../internalTypes';
+import type { ComputerProgram } from '../types';
 
 export interface VisibleVariables {
   global: ReadonlySet<string>;

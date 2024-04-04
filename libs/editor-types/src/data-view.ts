@@ -1,5 +1,5 @@
 import type { BaseElement, EmptyText, TableCellType, Text } from '.';
-import {
+import type {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,

@@ -1,6 +1,7 @@
-import React, { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import React from 'react';
 import { LoadingLogo } from '@decipad/ui';
-import { ErrorBoundary } from './ErrorBoundary';
+import type { ErrorBoundary } from './ErrorBoundary';
 import { Frame } from './Frame';
 
 type FrameProps = {

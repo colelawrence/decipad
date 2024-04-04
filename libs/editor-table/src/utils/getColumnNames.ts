@@ -1,10 +1,6 @@
-import { Path } from 'slate';
-import {
-  TEditor,
-  Value,
-  getNodeChildren,
-  getNodeString,
-} from '@udecode/plate-common';
+import type { Path } from 'slate';
+import type { TEditor, Value } from '@udecode/plate-common';
+import { getNodeChildren, getNodeString } from '@udecode/plate-common';
 
 export const getColumnNames = <
   TV extends Value,

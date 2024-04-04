@@ -3,13 +3,12 @@ import * as encoding from 'lib0/encoding';
 import * as syncProtocol from 'y-protocols/sync';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as authProtocol from 'y-protocols/auth';
+import type { MessageHandler, TWebSocketProvider } from './types';
 import {
   messageAuth,
   messageAwareness,
-  MessageHandler,
   messageQueryAwareness,
   messageSync,
-  TWebSocketProvider,
 } from './types';
 
 const permissionDeniedHandler = (

@@ -22,15 +22,8 @@ import {
   materializeResult,
 } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import {
+import type {
   AnyElement,
-  ELEMENT_TABLE,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TABLE_VARIABLE_NAME,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
   NotebookValue,
   TableCellElement,
   TableCellType,
@@ -38,8 +31,18 @@ import {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
+} from '@decipad/editor-types';
 import { timeout } from '@decipad/utils';
-import { BaseEditor, Editor } from 'slate';
+import type { BaseEditor } from 'slate';
+import { Editor } from 'slate';
 import { createCodeLine } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
 import { createTestEditorController } from '../../utils/createTestEditorController';

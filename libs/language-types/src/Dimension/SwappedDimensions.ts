@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
 import { implementColumnLike } from '../utils';
-import { ColumnLikeValue, MinimalTensor } from '../Value';
-import { Dimension } from './Dimension';
+import type { ColumnLikeValue, MinimalTensor } from '../Value';
+import type { Dimension } from './Dimension';
 import { chooseFirst, undoChooseFirst } from './chooseFirst';
 
 /**

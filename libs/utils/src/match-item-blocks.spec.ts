@@ -1,4 +1,5 @@
-import { ItemBlockId, matchItemBlocks } from './match-item-blocks';
+import type { ItemBlockId } from './match-item-blocks';
+import { matchItemBlocks } from './match-item-blocks';
 
 interface TestObject {
   readonly secondItem: ItemBlockId;

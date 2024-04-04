@@ -1,6 +1,6 @@
 import type { Range } from 'slate';
 import type { CellValueType, TableHeaderElement } from '@decipad/editor-types';
-import { DECORATION_CELL_UNIT } from './constants';
+import type { DECORATION_CELL_UNIT } from './constants';
 
 export interface DecorationCellUnit extends Range {
   [DECORATION_CELL_UNIT]: true;

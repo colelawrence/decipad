@@ -1,9 +1,10 @@
-import { ELEMENT_PLOT, MyEditor, PlotElement } from '@decipad/editor-types';
+import type { MyEditor, PlotElement } from '@decipad/editor-types';
+import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { MarkType } from '@decipad/ui';
+import type { MarkType } from '@decipad/ui';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 const getPlotElement = (
   markType: MarkType = 'bar',

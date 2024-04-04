@@ -11,7 +11,7 @@ import {
   setIntersection,
 } from '../utils';
 import { areProgramBlocksEqual } from './areBlocksEqual';
-import { ComputerProgram } from '../types';
+import type { ComputerProgram } from '../types';
 
 export const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,

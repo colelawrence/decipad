@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
+import type {
   ColIndex,
   ImportElementSource,
   LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
-import { ImportResult } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
 import { deserializeResult } from '@decipad/editor-utils';
-import { Unsubscribe } from './types';
+import type { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
 

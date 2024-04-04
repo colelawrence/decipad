@@ -1,12 +1,14 @@
-import {
+import type {
   DeprecatedCodeBlockElement,
   CodeLineElement,
+  CodeLineV2Element,
+} from '@decipad/editor-types';
+import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_CODE_LINE_V2_CODE,
-  CodeLineV2Element,
 } from '@decipad/editor-types';
 
 export function codeLine(code: string): CodeLineElement {

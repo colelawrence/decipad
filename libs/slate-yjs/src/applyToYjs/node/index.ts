@@ -1,5 +1,5 @@
-import { TNodeOperation } from '@udecode/plate-common';
-import { OpMapper } from '../types';
+import type { TNodeOperation } from '@udecode/plate-common';
+import type { OpMapper } from '../types';
 import insertNode from './insertNode';
 import mergeNode from './mergeNode';
 import moveNode from './moveNode';

@@ -1,4 +1,4 @@
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { useCallback } from 'react';
 

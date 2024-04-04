@@ -1,5 +1,5 @@
-import { MyElement, MyEditor } from '@decipad/editor-types';
-import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
+import type { MyElement, MyEditor } from '@decipad/editor-types';
+import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate-common';

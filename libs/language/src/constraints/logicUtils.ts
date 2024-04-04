@@ -1,4 +1,5 @@
-import { EMPTY_PACKAGE, Package } from './Package';
+import type { Package } from './Package';
+import { EMPTY_PACKAGE } from './Package';
 import { EMPTY_STREAM, makeStream } from './Stream';
 
 export const win = (pack: Package) => makeStream(pack || nil);

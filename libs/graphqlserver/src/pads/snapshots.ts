@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { backup, currentEpoque } from '@decipad/notebook-maintenance';
-import { ID } from '@decipad/backendtypes';
+import type { ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { snapshot, storeSnapshotDataAsFile } from '@decipad/services/notebooks';
 import { timestamp } from '@decipad/backend-utils';
@@ -9,7 +9,7 @@ import { resource } from '@decipad/backend-resources';
 import { indexNotebook } from '@decipad/backend-search';
 import { snapshotFilePath } from './snapshotFilePath';
 import stringify from 'json-stringify-safe';
-import {
+import type {
   GraphqlContext,
   MutationResolvers,
 } from '@decipad/graphqlserver-types';

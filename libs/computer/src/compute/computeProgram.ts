@@ -1,13 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Type, Context, Realm } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   buildType as t,
   RuntimeError,
   Value,
-  Type,
   Unknown,
-  Context,
-  Realm,
   evaluateStatement,
   inferBlock,
   serializeResult,
@@ -15,13 +13,16 @@ import {
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
-import { ComputerProgram, IdentifiedResult } from '../types';
+import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getBlockFromProgram } from '../utils';
-import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
+import type {
+  CacheContents,
+  ComputationRealm,
+} from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef, toUserlandResult } from '../exprRefs';
 import { identifiedResultForTable } from './identifiedResultForTable';
-import { Computer } from '../computer';
+import type { Computer } from '../computer';
 
 /*
  - Skip cached stuff

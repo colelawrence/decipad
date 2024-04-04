@@ -1,6 +1,6 @@
 import { produce } from '@decipad/utils';
 import { getUnitByName } from '../units/known-units';
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 
 export const normalizeUnitNameString = (unitName: string): string => {
   const symbolUnit = getUnitByName(unitName);

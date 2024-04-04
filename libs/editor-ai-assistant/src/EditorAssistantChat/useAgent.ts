@@ -1,9 +1,11 @@
 /* eslint-disable complexity */
-import {
-  ControllerProvider,
+import type {
   EventMessage,
   Message,
   UserMessage,
+} from '@decipad/react-contexts';
+import {
+  ControllerProvider,
   useAIChatHistory,
   useAiUsage,
   useComputer,
@@ -14,14 +16,13 @@ import { useCallback, useContext, useRef } from 'react';
 import { nanoid } from 'nanoid';
 
 import { useActiveEditor } from '@decipad/editor-hooks';
-import {
+import type {
   Action,
   GenericSummaryResult,
   NotebookError,
-  actions,
-  callAction,
 } from '@decipad/notebook-open-api';
-import { EditorController } from '@decipad/notebook-tabs';
+import { actions, callAction } from '@decipad/notebook-open-api';
+import type { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from '@decipad/utils';
 import { objectToHumanReadableString } from './helpers';
 import { useRemoteAgent } from './useRemoteAgent';

@@ -1,7 +1,7 @@
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2 as HttpResponse,
 } from 'aws-lambda';

@@ -1,9 +1,6 @@
-import {
-  createMyPluginFactory,
-  MyGenericEditor,
-  MyKeyboardHandler,
-} from '@decipad/editor-types';
-import { Value } from '@udecode/plate-common';
+import type { MyGenericEditor, MyKeyboardHandler } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
+import type { Value } from '@udecode/plate-common';
 
 type OnKeyDownFactoryArgs<TV extends Value, TE extends MyGenericEditor<TV>> = {
   name: string;

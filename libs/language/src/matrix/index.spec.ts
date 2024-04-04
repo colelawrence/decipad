@@ -12,7 +12,8 @@ import {
   inferMatrixRef,
   inferMatrixAssign,
 } from '.';
-import { Context, makeContext } from '..';
+import type { Context } from '..';
+import { makeContext } from '..';
 import { Realm } from '../interpreter';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
 

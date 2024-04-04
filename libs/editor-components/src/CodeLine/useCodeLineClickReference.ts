@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { RemoteComputer, parseBlock } from '@decipad/remote-computer';
-import { MyEditor } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseBlock } from '@decipad/remote-computer';
+import type { MyEditor } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 
 const ENABLE_CLICK_REFERENCING = false;

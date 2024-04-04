@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 /* eslint-disable no-use-before-define */
 
-import { spawn, ChildProcess } from 'child_process';
+import type { ChildProcess } from 'child_process';
+import { spawn } from 'child_process';
 import assert from 'assert';
 import { join } from 'path';
-import { Env } from './sandbox-env';
-import { Config } from './config';
+import type { Env } from './sandbox-env';
+import type { Config } from './config';
 
 let child: ChildProcess | undefined;
 let started = false;

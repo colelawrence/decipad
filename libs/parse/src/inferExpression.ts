@@ -1,8 +1,6 @@
-import {
-  RemoteComputer,
-  parseExpressionOrThrow,
-} from '@decipad/remote-computer';
-import { CoercibleType } from './types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseExpressionOrThrow } from '@decipad/remote-computer';
+import type { CoercibleType } from './types';
 
 export const inferExpression = async (
   computer: RemoteComputer,

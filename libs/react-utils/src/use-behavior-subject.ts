@@ -1,6 +1,6 @@
 import { identity } from '@decipad/utils';
 import { useEffect, useState } from 'react';
-import { BehaviorSubject, Observable } from 'rxjs';
+import type { BehaviorSubject, Observable } from 'rxjs';
 
 export function useBehaviorSubject<T>(
   subject: BehaviorSubject<T>,

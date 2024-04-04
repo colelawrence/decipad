@@ -1,4 +1,5 @@
-import { test, Page } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { test } from './manager/decipad-tests';
 import polish from '../__fixtures__/007-polish.json';
 import { Timeouts, snapshot } from '../utils/src';
 

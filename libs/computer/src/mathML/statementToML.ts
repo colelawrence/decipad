@@ -1,12 +1,8 @@
 import { escape } from 'html-escaper';
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  FullBuiltinSpec,
-  Time,
-  getDateFromAstForm,
-  operators,
-} from '@decipad/language';
+import type { AST, FullBuiltinSpec, Time } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { getDateFromAstForm, operators } from '@decipad/language';
 import { formatDate } from '@decipad/utils';
 import type { Computer } from '../computer/Computer';
 import { getIdentifierString } from '../utils/many';

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { Dimension } from '..';
-import { ColumnLikeValue, MinimalTensor } from '../Value';
+import type { Dimension } from '..';
+import type { ColumnLikeValue, MinimalTensor } from '../Value';
 import { lowLevelGet } from '../Value/lowLevelGet';
 import { implementColumnLike } from '../utils';
 import { getLabelIndex } from './getLabelIndex';

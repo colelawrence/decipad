@@ -1,4 +1,5 @@
-import { createMyPluginFactory, MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
 
 interface CreateOverrideApplyPluginFactoryProps {
   name: string;

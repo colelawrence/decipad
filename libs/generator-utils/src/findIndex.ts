@@ -1,4 +1,4 @@
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 
 type FinderFunction<T> = (value: T) => PromiseOrType<boolean>;
 

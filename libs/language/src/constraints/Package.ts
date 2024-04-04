@@ -1,11 +1,14 @@
 import { getDefined } from '@decipad/utils';
 import type { Domain } from './Domain';
-import { EMPTY_LIST, List } from './List';
-import { Binding, isBinding, makeBinding, Val } from './Binding';
-import { isLvar, LogicVar } from './LogicVar';
-import { Constraint } from './Constraint';
-import { Frame } from './Frame';
-import { ToStringable } from './types';
+import type { List } from './List';
+import { EMPTY_LIST } from './List';
+import type { Binding, Val } from './Binding';
+import { isBinding, makeBinding } from './Binding';
+import type { LogicVar } from './LogicVar';
+import { isLvar } from './LogicVar';
+import type { Constraint } from './Constraint';
+import type { Frame } from './Frame';
+import type { ToStringable } from './types';
 import { equals } from './Infinity';
 
 export class Package {

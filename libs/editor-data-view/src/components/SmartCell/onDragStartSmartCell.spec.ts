@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { DRAG_SMART_CELL } from '@decipad/editor-plugins';

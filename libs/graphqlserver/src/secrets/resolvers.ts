@@ -1,8 +1,8 @@
-import { GraphqlContext, SecretRecord } from '@decipad/backendtypes';
+import type { GraphqlContext, SecretRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { resource } from '@decipad/backend-resources';
 import { UserInputError } from 'apollo-server-lambda';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 
 const workspaces = resource('workspace');
 

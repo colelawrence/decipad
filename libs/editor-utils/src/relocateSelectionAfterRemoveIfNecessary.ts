@@ -1,4 +1,4 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { getParentNode, getStartPoint, hasNode } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { setSelection } from './setSelection';

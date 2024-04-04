@@ -1,11 +1,9 @@
-import {
-  authenticate,
-  AuthResult,
-  jwt as jwtConf,
-} from '@decipad/services/authentication';
+import type { AuthResult } from '@decipad/services/authentication';
+import { authenticate, jwt as jwtConf } from '@decipad/services/authentication';
 import { UserInputError } from 'apollo-server-lambda';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { encode, JWTEncodeParams } from 'next-auth/jwt';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { JWTEncodeParams } from 'next-auth/jwt';
+import { encode } from 'next-auth/jwt';
 
 const credentialHasUserOrSecret = (cred: AuthResult) =>
   !!cred.user || !!cred.secret;

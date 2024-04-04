@@ -1,8 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { useCallback } from 'react';
-import {
+import type {
   ExternalDataSourceCreateInput,
   ExternalDataSourceUpdateInput,
+} from '../generated';
+import {
   useCreateExternalDataSourceMutation,
   useDeleteExternalDataMutation,
   useGetExternalDataSourcesWorkspaceQuery,

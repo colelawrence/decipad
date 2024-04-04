@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
-import { Value } from '@udecode/plate-common';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { Value } from '@udecode/plate-common';
 
 const pluginStoreSymbol = Symbol('PLUGIN_STORE');
 

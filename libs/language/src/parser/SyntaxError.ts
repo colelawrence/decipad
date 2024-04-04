@@ -1,4 +1,4 @@
-import { Token } from 'moo';
+import type { Token } from 'moo';
 
 export interface ISyntaxError {
   message: string;

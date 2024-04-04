@@ -3,7 +3,7 @@ import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
 import { OAuth2 } from 'oauth';
 import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 import { encodeState } from './state';
-import { ExternalDataSourceRecord } from '@decipad/backendtypes';
+import type { ExternalDataSourceRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
 
 /**

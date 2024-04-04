@@ -1,14 +1,8 @@
-import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_SMART_REF,
-  SmartRefElement,
-} from '@decipad/editor-types';
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
-  parseCellText,
-  serializeCellText,
-  CellInputValue,
-} from './serializeCellText';
+import type { SmartRefElement } from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH, ELEMENT_SMART_REF } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { CellInputValue } from './serializeCellText';
+import { parseCellText, serializeCellText } from './serializeCellText';
 
 const computerStub = {
   getVarBlockId: (varName: string) =>

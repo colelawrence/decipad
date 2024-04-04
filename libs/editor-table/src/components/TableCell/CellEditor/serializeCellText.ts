@@ -1,7 +1,9 @@
 import { getExprRef } from '@decipad/computer';
-import { ELEMENT_SMART_REF, SmartRefElement } from '@decipad/editor-types';
-import { RemoteComputer } from '@decipad/remote-computer';
-import { isText, TText } from '@udecode/plate-common';
+import type { SmartRefElement } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { TText } from '@udecode/plate-common';
+import { isText } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { nanoid } from 'nanoid';
 

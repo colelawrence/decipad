@@ -1,4 +1,4 @@
-import { TableElement } from '@decipad/editor-types';
+import type { TableElement } from '@decipad/editor-types';
 import { notAcceptable } from '@hapi/boom';
 import { getNodeString } from '../../utils/getNodeString';
 

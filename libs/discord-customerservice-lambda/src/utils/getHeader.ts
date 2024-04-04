@@ -1,4 +1,4 @@
-import { APIGatewayProxyEventHeaders } from 'aws-lambda';
+import type { APIGatewayProxyEventHeaders } from 'aws-lambda';
 
 export function getHeader(
   name: string,

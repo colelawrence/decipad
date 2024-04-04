@@ -1,16 +1,18 @@
-import {
+import type {
   RemoteComputer,
   Parseable,
   ParseableDate,
 } from '@decipad/remote-computer';
+import type {
+  MyElement,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
-  MyElement,
   useMyEditorRef,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import {

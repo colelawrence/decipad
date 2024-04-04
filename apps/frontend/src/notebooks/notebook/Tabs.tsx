@@ -1,5 +1,5 @@
-import { DocSyncEditor } from '@decipad/docsync';
-import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
+import type { DocSyncEditor } from '@decipad/docsync';
+import type { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
 import { type FC } from 'react';
 import { useNotebookStateAndActions, useTabNavigate } from './hooks';
 import { NotebookTabs } from '@decipad/ui';

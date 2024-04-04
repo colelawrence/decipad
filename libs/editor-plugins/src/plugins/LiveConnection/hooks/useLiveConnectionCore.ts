@@ -1,18 +1,18 @@
 import { useEffect, useMemo } from 'react';
 import { getNodeString } from '@udecode/plate-common';
-import {
+import type {
   LiveConnectionElement,
   LiveDataSetElement,
-  MAX_IMPORT_CELL_COUNT,
   TableCellType,
 } from '@decipad/editor-types';
+import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { useNodePath } from '@decipad/editor-hooks';
 import { useLiveConnection } from '@decipad/live-connect';
 import {
   useComputer,
   ExternalDataSourceContext,
 } from '@decipad/react-contexts';
-import { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
 import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';

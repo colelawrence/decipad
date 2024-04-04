@@ -1,12 +1,8 @@
 /* eslint-disable no-param-reassign */
-import {
-  RemoteComputer,
-  SerializedType,
-  isColumn,
-  isTable,
-} from '@decipad/remote-computer';
+import type { RemoteComputer, SerializedType } from '@decipad/remote-computer';
+import { isColumn, isTable } from '@decipad/remote-computer';
 import { encodingFor } from './plotUtils';
-import { PlotSpec } from './plotUtils.interface';
+import type { PlotSpec } from './plotUtils.interface';
 
 type KindSet = Set<SerializedType['kind']>;
 

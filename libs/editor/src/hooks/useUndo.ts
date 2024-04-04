@@ -1,6 +1,6 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { useCallback } from 'react';
-import { WithUndo } from '@decipad/editor-types';
+import type { WithUndo } from '@decipad/editor-types';
 
 export const useUndo = (controller: WithUndo) => {
   useWindowListener(

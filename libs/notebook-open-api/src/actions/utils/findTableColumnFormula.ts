@@ -1,11 +1,12 @@
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
+import type {
   MyEditor,
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { findNode, TNodeEntry } from '@udecode/plate-common';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { findNode } from '@udecode/plate-common';
 
 export const findTableColumnFormula = (
   editor: MyEditor,

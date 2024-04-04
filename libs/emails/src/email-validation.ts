@@ -1,4 +1,4 @@
-import { EmailGenerator } from './types';
+import type { EmailGenerator } from './types';
 
 const emailValidation: EmailGenerator<{
   name: string;

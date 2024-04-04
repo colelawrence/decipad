@@ -1,6 +1,6 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { getNodeChildren, hasNode } from '@udecode/plate-common';
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 
 export const getTableColumnCount = (
   editor: MyEditor,

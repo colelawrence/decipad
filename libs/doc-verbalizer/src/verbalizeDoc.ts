@@ -1,19 +1,19 @@
 import { isElement } from '@udecode/plate-common';
 import {
+  type RootDocument,
+  type TabElement,
+  type ElementKind,
   type AnyElement,
   type ColumnsElement,
   type MyNode,
   ELEMENT_SMART_REF,
   ELEMENT_COLUMNS,
   ELEMENT_TAB,
-  RootDocument,
-  TabElement,
-  ElementKind,
 } from '../../editor-types/src';
 import { getVerbalizer, getVarnameToId } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
 import { getNodeString } from './utils/getNodeString';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { verbalizeResult } from './verbalizeResult';
 
 export interface VerbalizedElement {

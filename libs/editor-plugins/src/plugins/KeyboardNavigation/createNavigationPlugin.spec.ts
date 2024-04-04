@@ -1,17 +1,16 @@
+import type { CodeLineElement, TableElement } from '@decipad/editor-types';
 import {
-  CodeLineElement,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   ELEMENT_TR,
   ELEMENT_TD,
-  TableElement,
   ELEMENT_TABLE,
   ELEMENT_TH,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
   createMyPlateEditor,
 } from '@decipad/editor-types';
-import { TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { createNavigationPlugin } from './createNavigationPlugin';
 

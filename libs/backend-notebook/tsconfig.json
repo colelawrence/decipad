@@ -23,7 +23,6 @@
     { "path": "../doc-verbalizer" },
     { "path": "../notebook-open-api" },
     { "path": "../tables" },
-    { "path": "../backend-search" },
-    { "path": "../editor-utils" }
+    { "path": "../backend-search" }
   ]
 }

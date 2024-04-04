@@ -1,12 +1,12 @@
 import DeciNumber, { N, ONE } from '@decipad/number';
 import { produce, getDefined, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   Dimension,
   InferError,
   RuntimeError,
-  Type,
   Unit,
   Value,
   areUnitsConvertible,

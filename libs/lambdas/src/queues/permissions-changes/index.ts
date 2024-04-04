@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import assert from 'assert';
-import {
+import type {
   ID,
   TableRecordChanges,
   TableRecordIdentifier,

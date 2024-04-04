@@ -1,4 +1,9 @@
 import { getExprRef, parseStatement } from '@decipad/remote-computer';
+import type {
+  MyElement,
+  RichText,
+  SmartRefElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
@@ -11,13 +16,10 @@ import {
   ELEMENT_SMART_REF,
   ELEMENT_TABLE_COLUMN_FORMULA,
   MARK_MAGICNUMBER,
-  MyElement,
-  RichText,
-  SmartRefElement,
 } from '@decipad/editor-types';
 import { last } from '@decipad/utils';
 import { nanoid } from 'nanoid';
-import { Text } from 'slate';
+import type { Text } from 'slate';
 
 /**
  * Attempt to parse surrounded with +, suffixed with +, and prefixed with +.

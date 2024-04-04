@@ -1,4 +1,4 @@
-import { CatalogGroups, CatalogItems } from './types';
+import type { CatalogGroups, CatalogItems } from './types';
 
 export const catalogGroups = {
   current: 'This tab',

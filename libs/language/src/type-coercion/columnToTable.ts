@@ -1,13 +1,14 @@
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
+import type { Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
   RuntimeError,
-  Type,
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 
 const getColumnDimensionTypes = (
   realm: Realm,

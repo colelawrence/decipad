@@ -8,7 +8,7 @@ import { debug } from './debug';
 import { createVectorEmbeddings } from './createVectorEmbedding';
 import { indexNames } from './config';
 import { thirdParty } from '@decipad/backend-config';
-import { SearchHit } from './types';
+import type { SearchHit } from './types';
 import { messageContentToString } from './utils/messageContentToString';
 
 export interface TemplateSearchResult {

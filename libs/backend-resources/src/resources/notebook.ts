@@ -1,6 +1,6 @@
-import { PadRecord } from '@decipad/backendtypes';
+import type { PadRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { BackendResourceDef } from '../types';
+import type { BackendResourceDef } from '../types';
 
 export const notebook: BackendResourceDef<PadRecord> = {
   name: 'pads',

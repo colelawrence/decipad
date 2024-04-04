@@ -1,5 +1,5 @@
 import { isServerSideRendering } from '@decipad/support';
-import { User } from '@decipad/interfaces';
+import type { User } from '@decipad/interfaces';
 import { useSession } from 'next-auth/react';
 
 export const useRequiresOnboarding = () => {

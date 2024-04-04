@@ -1,32 +1,30 @@
 /* eslint-disable no-param-reassign */
-import {
-  ELEMENT_LI,
-  ELEMENT_LIC,
-  ELEMENT_OL,
-  ELEMENT_UL,
+import type {
   ListElement,
   ListItemElement,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { insertNodes } from '@decipad/editor-utils';
 import {
-  ChildOf,
+  ELEMENT_LI,
+  ELEMENT_LIC,
+  ELEMENT_OL,
+  ELEMENT_UL,
+} from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
+import type { ChildOf, TElement, TNodeEntry } from '@udecode/plate-common';
+import {
   getNodeChildren,
   isElement,
   isText,
   removeNodes,
-  TElement,
-  TNodeEntry,
   unwrapNodes,
   wrapNodeChildren,
   wrapNodes,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const normalizeList =

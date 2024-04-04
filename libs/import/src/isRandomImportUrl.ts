@@ -1,4 +1,4 @@
-import { ImportElementSource } from '@decipad/editor-types';
+import type { ImportElementSource } from '@decipad/editor-types';
 
 const supportedPathTerminations = new Map<string, ImportElementSource>([
   ['.csv', 'csv'],

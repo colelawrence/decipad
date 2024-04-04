@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Buffer } from 'buffer';
-import { applyUpdate, Doc as YDoc, mergeUpdates } from 'yjs';
+import type { Doc as YDoc } from 'yjs';
+import { applyUpdate, mergeUpdates } from 'yjs';
 import { Observable } from 'lib0/observable';
 import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';

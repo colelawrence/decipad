@@ -4,7 +4,11 @@
 /* eslint-disable jest/expect-expect */
 
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { Role, RoleInvitation, Workspace } from '@decipad/graphqlserver-types';
+import type {
+  Role,
+  RoleInvitation,
+  Workspace,
+} from '@decipad/graphqlserver-types';
 
 test('workspaces', (ctx) => {
   const { test: it } = ctx;

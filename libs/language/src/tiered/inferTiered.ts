@@ -1,12 +1,14 @@
 /* eslint-disable no-await-in-loop */
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Type, buildType as t } from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import pSeries from 'p-series';
 import { inferExpression } from '../infer';
 import { getIdentifierString } from '../utils';
 import { cleanInferred } from './cleanInferred';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);
 

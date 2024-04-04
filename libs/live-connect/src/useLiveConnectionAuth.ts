@@ -4,8 +4,8 @@ import { useToast } from '@decipad/toast';
 import { useMyEditorRef } from '@decipad/editor-types';
 import type { ImportElementSource } from '@decipad/editor-types';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
-import { PromiseOrType } from '@decipad/utils';
-import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import type { PromiseOrType } from '@decipad/utils';
+import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 interface UseLiveConnectionAuthProps {
   notebookId: string;

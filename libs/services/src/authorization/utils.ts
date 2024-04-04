@@ -1,4 +1,4 @@
-import { PermissionRecord, PermissionType } from '@decipad/backendtypes';
+import type { PermissionRecord, PermissionType } from '@decipad/backendtypes';
 
 export function P(type: PermissionType): PermissionRecord {
   return {

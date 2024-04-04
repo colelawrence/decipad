@@ -1,6 +1,6 @@
 import { thirdParty } from '@decipad/client-config';
 import { stringify as encodeQuery } from 'querystring';
-import { SheetMeta } from '../../types';
+import type { SheetMeta } from '../../types';
 
 export const getDataUrlFromSheetMeta = (
   sheetId: string,

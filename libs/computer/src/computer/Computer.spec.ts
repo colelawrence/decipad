@@ -1,14 +1,16 @@
 import { all } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
+import type { Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
 import {
   serializeType,
   buildType as t,
-  Result,
   astNode,
   parseBlockOrThrow,
 } from '@decipad/language';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { AnyMapping, produce, timeout } from '@decipad/utils';
+import type { AnyMapping } from '@decipad/utils';
+import { produce, timeout } from '@decipad/utils';
 import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
@@ -17,7 +19,7 @@ import {
   testProgram as makeTestProgram,
   simplifyComputeResponse,
 } from '../testUtils';
-import { ColumnDesc, ComputeRequestWithExternalData } from '../types';
+import type { ColumnDesc, ComputeRequestWithExternalData } from '../types';
 import { getResultGenerator } from '../utils';
 import { Computer } from './Computer';
 

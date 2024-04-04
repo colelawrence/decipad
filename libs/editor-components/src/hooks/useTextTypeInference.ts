@@ -1,4 +1,7 @@
-import { MyEditor, VariableDefinitionElement } from '@decipad/editor-types';
+import type {
+  MyEditor,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { useCallback, useState } from 'react';
 import { dequal } from '@decipad/utils';

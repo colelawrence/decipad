@@ -1,5 +1,6 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
+import type { MyGenericEditor, MyPlatePlugin } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -7,11 +8,9 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyGenericEditor,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import { Value } from '@udecode/plate-common';
+import type { Value } from '@udecode/plate-common';
 import {
   Table,
   TableCaption,
@@ -33,7 +32,7 @@ import { createClearCellPlugin } from './createClearCellPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
-import { TablePlugin } from '@udecode/plate-table';
+import type { TablePlugin } from '@udecode/plate-table';
 import { TableAboveEditable } from './TableAboveEditable';
 import { createNormalizeTableHeaderAggregationPlugin } from './createNormalizeTableHeaderAggregationPlugin';
 

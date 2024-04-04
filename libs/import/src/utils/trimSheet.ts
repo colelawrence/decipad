@@ -1,4 +1,4 @@
-import { Sheet, SpreadsheetColumn, SpreadsheetValue } from '../types';
+import type { Sheet, SpreadsheetColumn, SpreadsheetValue } from '../types';
 
 interface NeedsTrimming {
   trimTopRowCount: number;

@@ -1,4 +1,4 @@
-import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
+import { type MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
 import { createContext, useContext } from 'react';
 
 export const ControllerProvider = createContext<

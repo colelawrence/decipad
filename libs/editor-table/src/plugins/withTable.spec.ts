@@ -1,8 +1,10 @@
-import { createPlateEditor, PlatePlugin, TEditor } from '@udecode/plate-common';
+import type { PlatePlugin, TEditor } from '@udecode/plate-common';
+import { createPlateEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
 
 import { nanoid } from 'nanoid';
 import { getRemoteComputer } from '@decipad/remote-computer';
+import type { TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -11,7 +13,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  TableElement,
 } from '@decipad/editor-types';
 import { createTablePlugin } from './createTablePlugin';
 

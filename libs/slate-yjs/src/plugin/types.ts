@@ -1,6 +1,6 @@
 import type { SharedType } from '../model';
 import type { Awareness } from 'y-protocols/awareness';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 
 export type TYjsEditor<TEditor extends MinimalRootEditor> = TEditor & {
   editor: TEditor;

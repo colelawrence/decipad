@@ -1,23 +1,21 @@
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { STATEMENT_SEP_TOKEN_TYPE, tokenize } from '@decipad/remote-computer';
+import type { PlateEditor, Value } from '@udecode/plate-common';
 import {
-  RemoteComputer,
-  STATEMENT_SEP_TOKEN_TYPE,
-  tokenize,
-} from '@decipad/remote-computer';
-import {
-  PlateEditor,
-  Value,
   getBlockAbove,
   getChildren,
   getNodeString,
   isElement,
 } from '@udecode/plate-common';
+import type {
+  CodeLineV2Element,
+  CodeLineElement,
+  MyValue,
+} from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
-  CodeLineV2Element,
-  CodeLineElement,
-  MyValue,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 

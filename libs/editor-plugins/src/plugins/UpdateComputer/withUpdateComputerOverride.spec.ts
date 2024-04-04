@@ -1,11 +1,12 @@
+import type { MyEditor } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
-  MyEditor,
   createMyPlateEditor,
 } from '@decipad/editor-types';
-import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
 import { insertNodes, removeNodes, setNodes } from '@udecode/plate-common';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';

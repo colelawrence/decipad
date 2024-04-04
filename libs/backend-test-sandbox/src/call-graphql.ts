@@ -1,13 +1,13 @@
+import type { StoreObject } from '@apollo/client';
 import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
   gql,
-  StoreObject,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import baseUrl from './base-url';
-import { AuthReturnValue } from './auth';
+import type { AuthReturnValue } from './auth';
 
 interface CallGraphql {
   withAuth(args: AuthReturnValue): ApolloClient<StoreObject>;

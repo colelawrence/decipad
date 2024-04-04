@@ -1,11 +1,11 @@
 import { mockLocation } from '@decipad/dom-test-utils';
+import type { Flag } from '.';
 import {
   isFlagEnabled,
   disable,
   reset,
   getOverrides,
   getQueryStringOverrides,
-  Flag,
 } from '.';
 
 const originalNodeEnv = process.env.NODE_ENV;

@@ -1,6 +1,6 @@
 import { app, thirdParty } from '@decipad/backend-config';
 import fetch from 'node-fetch';
-import { NotionProvider } from './types';
+import type { NotionProvider } from './types';
 
 type NotionAccessTokenResponse = {
   access_token: string;

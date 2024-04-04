@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 
 import { getColumnDropDirection } from '../utils/getColumnDropDirection';
 import { TableDndContext } from '../contexts/TableDndContext';

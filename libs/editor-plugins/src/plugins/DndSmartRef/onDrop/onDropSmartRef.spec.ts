@@ -1,9 +1,5 @@
-import {
-  ELEMENT_CODE_LINE,
-  CodeLineElement,
-  MyElement,
-  ELEMENT_SMART_REF,
-} from '@decipad/editor-types';
+import type { CodeLineElement, MyElement } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { findTextBeforeAndAfterPoint } from './onDropSmartRef';
 
 const testText = (text: string) => ({ text });

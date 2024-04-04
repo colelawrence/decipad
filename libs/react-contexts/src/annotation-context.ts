@@ -1,4 +1,4 @@
-import { GetNotebookAnnotationsQuery } from '@decipad/graphql-client';
+import { type GetNotebookAnnotationsQuery } from '@decipad/graphql-client';
 import { createContext } from 'react';
 
 export type AnnotationArray = NonNullable<

@@ -1,12 +1,11 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
-  ELEMENT_MATH,
-  ELEMENT_SMART_REF,
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type {
   MathElement,
   MyEditor,
   MyElement,
   MyNode,
 } from '@decipad/editor-types';
+import { ELEMENT_MATH, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import {
   DRAG_BLOCK_ID_CONTENT_TYPE,
   DRAG_SMART_REF,
@@ -23,8 +22,9 @@ import {
   isElement,
 } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
-import React from 'react';
-import { BasePoint, Path } from 'slate';
+import type React from 'react';
+import type { BasePoint } from 'slate';
+import { Path } from 'slate';
 import { insertSmartRef } from './insertSmartRef';
 import { nanoid } from 'nanoid';
 

@@ -1,11 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import pSeries from 'p-series';
-import { Writable } from 'utility-types';
+import type { Writable } from 'utility-types';
 // eslint-disable-next-line no-restricted-imports
 import { getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   InferError,
   Type,
   deserializeType,
@@ -20,7 +21,8 @@ import { expandDirectiveToType } from '../directives';
 import { inferTable } from '../tables/inference';
 import { inferColumnAssign } from '../tables/column-assign';
 
-import { Context, makeContext, logRetrievedName } from './context';
+import type { Context } from './context';
+import { makeContext, logRetrievedName } from './context';
 import { inferSequence } from './sequence';
 import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';

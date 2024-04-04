@@ -1,5 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { expect, ElementHandle, Page } from '@playwright/test';
+import type { ElementHandle, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';

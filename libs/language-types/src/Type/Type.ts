@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
 import omit from 'lodash.omit';
-import { PromiseOrType, produce, getDefined } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
+import { produce, getDefined } from '@decipad/utils';
 import type { Unit } from '@decipad/language-units';
 import type { AST, Time } from '..';
 import {
@@ -27,7 +28,7 @@ import {
   withMinimumColumnCount,
 } from './checks';
 import { InferError } from '../InferError';
-import { Specificity } from '../Time/Time';
+import type { Specificity } from '../Time/Time';
 import { N } from '@decipad/number';
 import { timeUnitFromUnit } from '../Time/timeUnitFromUnit';
 

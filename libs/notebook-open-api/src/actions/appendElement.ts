@@ -1,8 +1,10 @@
-import { EElementOrText, insertNodes, isElement } from '@udecode/plate-common';
+import type { EElementOrText } from '@udecode/plate-common';
+import { insertNodes, isElement } from '@udecode/plate-common';
 import { notAcceptable } from '@hapi/boom';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { MyValue, topLevelBlockKinds } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import { topLevelBlockKinds } from '@decipad/editor-types';
 import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { anyElement } from './schemas/anyElement';

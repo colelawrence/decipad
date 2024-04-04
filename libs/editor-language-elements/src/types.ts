@@ -1,6 +1,10 @@
-import { RemoteComputer, Program } from '@decipad/remote-computer';
-import { AnyElement, MinimalRootEditor, MyEditor } from '@decipad/editor-types';
-import { PromiseOrType } from '@decipad/utils';
+import type { RemoteComputer, Program } from '@decipad/remote-computer';
+import type {
+  AnyElement,
+  MinimalRootEditor,
+  MyEditor,
+} from '@decipad/editor-types';
+import type { PromiseOrType } from '@decipad/utils';
 
 export type InteractiveLanguageElement = {
   getParsedBlockFromElement?: (

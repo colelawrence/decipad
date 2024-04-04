@@ -1,4 +1,9 @@
-import { PadRecord, PagedResult, PageInput, User } from '@decipad/backendtypes';
+import type {
+  PadRecord,
+  PagedResult,
+  PageInput,
+  User,
+} from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 

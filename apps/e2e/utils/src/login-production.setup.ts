@@ -1,4 +1,5 @@
-import { Page, expect, test } from '../../tests/manager/decipad-tests';
+import type { Page } from '../../tests/manager/decipad-tests';
+import { expect, test } from '../../tests/manager/decipad-tests';
 import { STORAGE_STATE_PRODUCTION } from '../../playwright.config';
 import axios from 'axios';
 import { Workspace } from '../../tests/manager/workspace';

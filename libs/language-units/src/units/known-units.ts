@@ -1,4 +1,4 @@
-import DeciNumber from '@decipad/number';
+import type DeciNumber from '@decipad/number';
 import * as AngleUnits from './angle-units';
 import * as AreaUnits from './area-units';
 import * as CurrencyUnits from './currency-units';
@@ -25,7 +25,7 @@ import * as TimeUnits from './time-units';
 import { doNotPluralize, normalizeUnitName } from './utils';
 import * as VoltageUnits from './voltage-units';
 import * as VolumeUnits from './volume-units';
-import { BaseQuantity } from '../Unit';
+import type { BaseQuantity } from '../Unit';
 
 const baseQuantities: ReadonlyArray<BaseQuantity> = [
   'length',

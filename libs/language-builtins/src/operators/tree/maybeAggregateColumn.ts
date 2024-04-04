@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import {
-  Result,
-  Type,
-  Value,
+  type Result,
+  type Type,
+  type Value,
   buildType,
   serializeType,
 } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
-import { BuiltinContextUtils } from '../../types';
+import { type BuiltinContextUtils } from '../../types';
 
 export const maybeAggregateColumn = async (
   ctx: BuiltinContextUtils,

@@ -1,12 +1,10 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { LoadingLogo } from '@decipad/ui';
 import { useLocalStorage } from '@decipad/react-utils';
-import {
-  useGetWorkspacesIDsQuery,
-  GetWorkspacesIDsQuery,
-} from '@decipad/graphql-client';
+import type { GetWorkspacesIDsQuery } from '@decipad/graphql-client';
+import { useGetWorkspacesIDsQuery } from '@decipad/graphql-client';
 
 export const SELECTED_WORKSPACE_KEY = 'selectedWorkspace';
 

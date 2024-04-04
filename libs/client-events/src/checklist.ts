@@ -1,4 +1,4 @@
-import { ElementKind } from '@decipad/editor-types';
+import type { ElementKind } from '@decipad/editor-types';
 
 type ElementInteraction = {
   interaction: 'interaction';

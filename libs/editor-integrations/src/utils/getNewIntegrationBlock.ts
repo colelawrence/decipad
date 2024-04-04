@@ -1,8 +1,8 @@
-import {
-  ELEMENT_INTEGRATION,
+import type {
   ImportElementSource,
   IntegrationTypes,
 } from '@decipad/editor-types';
+import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
 import {
   useCodeConnectionStore,
   useConnectionStore,

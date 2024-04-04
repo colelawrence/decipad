@@ -1,11 +1,12 @@
+import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_FETCH,
   DEPRECATED_ELEMENT_TABLE_INPUT,
-  MyElement,
   DEPRECATED_ELEMENT_INPUT,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeVoidPlugin } from './createNormalizeVoidPlugin';
 
 let editor: TEditor;

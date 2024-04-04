@@ -1,6 +1,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import {
-  ColumnDesc,
+  type ColumnDesc,
+  type MaterializedColumnDesc,
   buildResult,
   materializeColumnDesc,
 } from '@decipad/remote-computer';
@@ -21,7 +22,6 @@ import { useResolved } from '@decipad/react-utils';
 import { icons, SelectItems } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
 import { insertText, isElement, nanoid } from '@udecode/plate-common';
-import { MaterializedColumnDesc } from 'libs/computer/src/types';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';

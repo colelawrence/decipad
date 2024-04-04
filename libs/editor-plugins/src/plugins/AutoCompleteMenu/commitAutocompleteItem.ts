@@ -1,8 +1,5 @@
-import {
-  ELEMENT_SMART_REF,
-  MyEditor,
-  SmartRefElement,
-} from '@decipad/editor-types';
+import type { MyEditor, SmartRefElement } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { insertNodes, setSelection } from '@decipad/editor-utils';
 import {
   deleteText,
@@ -14,7 +11,8 @@ import {
   nanoid,
   select,
 } from '@udecode/plate-common';
-import { BasePoint, Range } from 'slate';
+import type { BasePoint } from 'slate';
+import { Range } from 'slate';
 import type { MenuItem } from './AutoCompleteMenu';
 
 export const commitAutocompleteItem = (

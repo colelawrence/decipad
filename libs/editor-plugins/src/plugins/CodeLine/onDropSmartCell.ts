@@ -1,17 +1,16 @@
+import type { MyEditor, MyText } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
-  MyEditor,
-  MyText,
 } from '@decipad/editor-types';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
 import { getBlockAbove } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
-import React from 'react';
+import type React from 'react';
 
 export const DRAG_SMART_CELL = 'smart-cell';
 

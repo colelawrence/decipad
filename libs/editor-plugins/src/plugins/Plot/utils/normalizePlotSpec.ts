@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { componentCssVarHex, cssVarHex } from '@decipad/ui';
-import { PlotSpec } from './plotUtils.interface';
+import type { PlotSpec } from './plotUtils.interface';
 
 // eslint-disable-next-line complexity
 export const normalizePlotSpec = (

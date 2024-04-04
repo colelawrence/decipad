@@ -1,22 +1,18 @@
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TH,
+import type {
   MyEditor,
   MyNodeEntry,
   TableCellElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TH } from '@decipad/editor-types';
 import {
   getNodeString,
   isElement,
   replaceNodeChildren,
 } from '@udecode/plate-common';
-import {
-  createNormalizerPluginFactory,
-  NormalizerReturnValue,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { assertElementType } from '@decipad/editor-utils';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 export const createMigrateTableDropdownToId = createNormalizerPluginFactory({
   name: 'MIGRATE_TABLE_DROPDOWN_TO_ID',

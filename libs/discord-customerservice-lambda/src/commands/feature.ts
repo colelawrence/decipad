@@ -4,7 +4,7 @@ import {
   featureNotebook,
   removeFeaturedNotebook,
 } from '@decipad/services/notebooks';
-import {
+import type {
   NotebookApplicationCommandDataOption,
   FeatureApplicationCommandDataOption,
   FeatureAddCommandDataOption,

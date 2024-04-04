@@ -1,4 +1,4 @@
-import { Class } from 'utility-types';
+import type { Class } from 'utility-types';
 
 export const getInstanceof = <T>(
   thing: T | unknown,

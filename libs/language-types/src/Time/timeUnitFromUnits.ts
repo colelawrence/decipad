@@ -1,6 +1,6 @@
 import { singular } from 'pluralize';
 import { type Unit } from '@decipad/language-units';
-import { TimeUnit } from './Time';
+import type { TimeUnit } from './Time';
 import { getTimeUnit } from './getTimeUnit';
 import { RuntimeError } from '../RuntimeError';
 

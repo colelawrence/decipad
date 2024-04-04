@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import isPromise from 'is-promise';
-import { PromiseOrType, dequal } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
+import { dequal } from '@decipad/utils';
 
 export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   const lastP = useRef(p);

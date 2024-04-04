@@ -1,4 +1,4 @@
-import { TableCellType } from '@decipad/editor-types';
+import type { TableCellType } from '@decipad/editor-types';
 import { once } from '@decipad/utils';
 
 export interface TotalAggregationExpressions {

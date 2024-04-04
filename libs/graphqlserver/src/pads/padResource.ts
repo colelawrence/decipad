@@ -4,8 +4,8 @@ import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { nanoid } from 'nanoid';
 import { resource } from '@decipad/backend-resources';
-import { ID, PadRecord } from '@decipad/backendtypes';
-import { Pad, PadInput } from '@decipad/graphqlserver-types';
+import type { ID, PadRecord } from '@decipad/backendtypes';
+import type { Pad, PadInput } from '@decipad/graphqlserver-types';
 
 const workspaces = resource('workspace');
 

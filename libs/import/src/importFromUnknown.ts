@@ -1,8 +1,9 @@
-import { RemoteComputer, Result, isColumn } from '@decipad/remote-computer';
+import type { RemoteComputer, Result } from '@decipad/remote-computer';
+import { isColumn } from '@decipad/remote-computer';
 import type { ImportOptions } from './import';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
-import { ImportResult } from './types';
+import type { ImportResult } from './types';
 import { sanitizeRawResult } from './utils/sanitizeRawResult';
 
 const unnestOneColumnOneCellIfNecessary = (

@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import { MyElement, MyReactEditor } from '@decipad/editor-types';
+import type { MyElement, MyReactEditor } from '@decipad/editor-types';
 import { useCallback, useEffect, useRef } from 'react';
 import { setNodes } from '@udecode/plate-common';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { dequal } from '@decipad/utils';
 

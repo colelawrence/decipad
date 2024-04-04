@@ -1,22 +1,20 @@
 // eslint-disable-next-line no-restricted-imports
+import type * as language from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
 import {
   Time,
-  Type,
   Value,
-  ExternalDataMap,
   makeContext as makeInferContext,
   Realm,
 } from '@decipad/language';
 import { all, map } from '@decipad/generator-utils';
-import {
-  getStatementsToEvict,
-  GetStatementsToEvictArgs,
-} from '../caching/getStatementsToEvict';
+import type { GetStatementsToEvictArgs } from '../caching/getStatementsToEvict';
+import { getStatementsToEvict } from '../caching/getStatementsToEvict';
 import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { createComputerStats } from './computerStats';
-import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
+import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -31,7 +29,7 @@ export class ComputationRealm {
   epoch = 0n;
   stats = createComputerStats(this.inferContext, this.interpreterRealm);
 
-  setExternalData(externalData: ExternalDataMap) {
+  setExternalData(externalData: language.ExternalDataMap) {
     this.interpreterRealm.externalData = externalData;
     this.inferContext.externalData = externalData;
   }
@@ -76,7 +74,7 @@ export class ComputationRealm {
     const addLabels = async (
       _name: string,
       column?: Value.ColumnLikeValue,
-      cellType?: Type
+      cellType?: language.Type
     ) => {
       if (!column || !cellType) {
         return;

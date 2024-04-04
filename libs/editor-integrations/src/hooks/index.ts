@@ -1,5 +1,5 @@
 import { useContext, createContext } from 'react';
-import { Subject } from 'rxjs';
+import type { Subject } from 'rxjs';
 
 export * from './useCreateIntegration';
 export * from './useEditorElements';

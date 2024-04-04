@@ -1,6 +1,6 @@
 import DeciNumber, { N } from '@decipad/number';
-import { Unit } from '@decipad/language-units';
-import { AST } from '.';
+import type { Unit } from '@decipad/language-units';
+import type { AST } from '.';
 
 export function u(
   unit: string | Unit.Unit,

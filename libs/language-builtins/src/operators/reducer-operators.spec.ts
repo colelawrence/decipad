@@ -5,7 +5,7 @@ import { Value, buildType as t } from '@decipad/language-types';
 import { parseFunctor } from '../parseFunctor';
 import { reducerOperators as operators } from './reducer-operators';
 import { makeContext } from '../utils/testUtils';
-import { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../interfaces';
 
 setupDeciNumberSnapshotSerializer();
 

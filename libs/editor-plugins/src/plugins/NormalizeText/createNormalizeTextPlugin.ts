@@ -1,10 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { markKinds, MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { markKinds } from '@decipad/editor-types';
 import { isText } from '@udecode/plate-common';
-import {
-  createNormalizerPluginFactory,
-  NormalizerReturnValue,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const normalizeTextPlugin =

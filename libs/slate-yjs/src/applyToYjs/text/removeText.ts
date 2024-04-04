@@ -1,6 +1,7 @@
 import { getDefined } from '@decipad/utils';
-import { TRemoveTextOperation } from '@udecode/plate-common';
-import { SharedType, SyncElement } from '../../model';
+import type { TRemoveTextOperation } from '@udecode/plate-common';
+import type { SharedType } from '../../model';
+import { SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
 /**

@@ -1,18 +1,17 @@
-import DeciNumber, { ONE } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { ONE } from '@decipad/number';
 import { produce, getDefined, identity } from '@decipad/utils';
-import {
-  UnitOfMeasure,
-  getUnitByName,
-  isBaseQuantity,
-} from '../../units/known-units';
-import { BaseQuantityExpansion, expansions } from './expansions';
+import type { UnitOfMeasure } from '../../units/known-units';
+import { getUnitByName, isBaseQuantity } from '../../units/known-units';
+import type { BaseQuantityExpansion } from './expansions';
+import { expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../../units/base-units';
-import {
+import type {
   Converter,
   ExpandUnitResult,
   ExpandUnitResultWithNullableUnits,
 } from '.';
-import { Unit } from '..';
+import type { Unit } from '..';
 import { normalizeUnits } from '../normalizeUnits';
 import {
   normalizeUnitNameString,

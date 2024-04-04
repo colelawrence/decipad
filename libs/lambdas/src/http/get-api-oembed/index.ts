@@ -1,4 +1,4 @@
-import { APIGatewayProxyResultV2 as HttpResponse } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 as HttpResponse } from 'aws-lambda';
 import { matchPath } from 'react-router-dom';
 import { notAcceptable, notFound } from '@hapi/boom';
 import handle from '../handle';

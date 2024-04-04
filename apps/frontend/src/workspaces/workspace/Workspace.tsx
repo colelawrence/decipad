@@ -29,7 +29,8 @@ import {
 } from '@decipad/ui';
 import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Outlet,
   Route,

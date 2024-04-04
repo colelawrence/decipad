@@ -1,14 +1,13 @@
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   createEventInterceptorPluginFactory,
   createStructuredKeyboard,
 } from '@decipad/editor-plugins';
+import type { MyPlatePlugin, MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  MyPlatePlugin,
-  MyValue,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import {
@@ -21,7 +20,7 @@ import {
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
-import { PlateEditor, Value } from '@udecode/plate-common';
+import type { PlateEditor, Value } from '@udecode/plate-common';
 
 const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
   key: ELEMENT_CODE_LINE_V2,

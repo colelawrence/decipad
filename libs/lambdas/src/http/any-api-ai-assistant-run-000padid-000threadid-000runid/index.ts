@@ -6,9 +6,9 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
-import { RequestPayload } from './types';
+import type { RequestPayload } from './types';
 import { timeout } from '@decipad/utils';
-import { Run } from 'openai/resources/beta/threads/runs/runs';
+import type { Run } from 'openai/resources/beta/threads/runs/runs';
 
 const notebooks = resource('notebook');
 

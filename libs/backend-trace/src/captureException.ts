@@ -1,6 +1,7 @@
 import { AWSLambda as SentryAWSLambda, Integrations } from '@sentry/serverless';
 import '@sentry/tracing';
-import { Boom, boomify } from '@hapi/boom';
+import type { Boom } from '@hapi/boom';
+import { boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
 import meta from '@decipad/meta';
 import { extraErrorDataIntegration } from '@sentry/integrations';

@@ -1,3 +1,4 @@
+import type { ElementKind, SlashCommand } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
@@ -8,8 +9,6 @@ import {
   ELEMENT_PLOT,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
-  ElementKind,
-  SlashCommand,
 } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { createCodeBlockPlugin } from '@udecode/plate-code-block';

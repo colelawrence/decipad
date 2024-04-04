@@ -1,4 +1,4 @@
-import { ConnectionRecord } from '@decipad/backendtypes';
+import type { ConnectionRecord } from '@decipad/backendtypes';
 import { tables } from '@decipad/tables';
 
 export const onDisconnect = async (

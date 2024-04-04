@@ -1,4 +1,4 @@
-import { TimeUnit } from './Time';
+import type { TimeUnit } from './Time';
 import { timeUnitToJSDateUnit } from './timeUnitToJsDateUnit';
 
 export const getTimeUnit = (thing: string): TimeUnit => {

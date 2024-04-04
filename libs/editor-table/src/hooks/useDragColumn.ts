@@ -1,4 +1,4 @@
-import {
+import type {
   DataViewHeader,
   MyEditor,
   TableCellElement,
@@ -7,10 +7,8 @@ import {
 import { useDragNode } from '@udecode/plate-dnd';
 import { getEmptyImage } from '@decipad/ui';
 import { useContext, useMemo } from 'react';
-import {
-  TableDndContext,
-  GoodToDragColumns,
-} from '../contexts/TableDndContext';
+import type { GoodToDragColumns } from '../contexts/TableDndContext';
+import { TableDndContext } from '../contexts/TableDndContext';
 
 export const useDragColumn = (
   editor: MyEditor,

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {
+import type {
   TableRecordChanges,
   FileAttachmentRecord,
 } from '@decipad/backendtypes';

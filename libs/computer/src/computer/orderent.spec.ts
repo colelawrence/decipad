@@ -1,7 +1,7 @@
 import permutations from 'just-permutations';
 import { simplifyComputeResponse, getIdentifiedBlocks } from '../testUtils';
 import { Computer } from './Computer';
-import { ComputeRequest } from '../types';
+import type { ComputeRequest } from '../types';
 
 let computer: Computer;
 beforeEach(() => {

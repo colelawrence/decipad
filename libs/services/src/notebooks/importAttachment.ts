@@ -1,7 +1,7 @@
-import { FileAttachmentRecord, User } from '@decipad/backendtypes';
+import type { FileAttachmentRecord, User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import { NotebookAttachment } from './notebookMeta';
+import type { NotebookAttachment } from './notebookMeta';
 import { attachmentFilePath } from '../blobs/attachments';
 import { save } from '../blobs/save';
 

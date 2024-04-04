@@ -2,15 +2,15 @@
 /* eslint-disable no-await-in-loop */
 import DeciNumber, { min, max, ZERO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Type, Unit } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   RuntimeError,
-  Type,
-  Unit,
   Value,
   convertBetweenUnits,
 } from '@decipad/language-types';
-import { evaluate, Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { predicateSymbols } from './inferTiered';
 import { cleanInferred } from './cleanInferred';

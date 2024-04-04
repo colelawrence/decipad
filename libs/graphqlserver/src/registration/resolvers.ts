@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { UserInputError } from 'apollo-server-lambda';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 
 const resolvers: Resolvers = {
   Mutation: {

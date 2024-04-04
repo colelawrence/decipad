@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t, Value } from '@decipad/language-types';
+import type { OverloadedBuiltinSpec } from './overloadBuiltin';
 import {
   getOverloadedTypeFromType,
   getOverloadedTypeFromValue,
   overloadBuiltin,
-  OverloadedBuiltinSpec,
 } from './overloadBuiltin';
 import { makeContext } from './utils/testUtils';
 import { getDefined } from '@decipad/utils';

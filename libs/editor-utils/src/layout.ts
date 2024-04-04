@@ -4,12 +4,12 @@ import {
   wrapNodes,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
-import {
+import type {
   ColumnsElement,
-  ELEMENT_COLUMNS,
   MyEditor,
   MyElementOrText,
 } from '@decipad/editor-types';
+import { ELEMENT_COLUMNS } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { insertNodes } from './insertNodes';
 import { getAboveNodeSafe } from './getAboveNodeSafe';

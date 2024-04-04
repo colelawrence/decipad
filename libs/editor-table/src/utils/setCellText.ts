@@ -1,11 +1,8 @@
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import {
-  Value,
-  replaceNodeChildren,
-  withoutNormalizing,
-} from '@udecode/plate-common';
-import { Path } from 'slate';
+import type { Value } from '@udecode/plate-common';
+import { replaceNodeChildren, withoutNormalizing } from '@udecode/plate-common';
+import type { Path } from 'slate';
 import { coerceInputToNumber } from './coerceInputToNumber';
 
 export const setCellText = <

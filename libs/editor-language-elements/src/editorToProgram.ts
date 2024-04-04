@@ -1,4 +1,8 @@
-import { AnyElement, MinimalRootEditor, MyEditor } from '@decipad/editor-types';
+import type {
+  AnyElement,
+  MinimalRootEditor,
+  MyEditor,
+} from '@decipad/editor-types';
 import type { RemoteComputer, Program } from '@decipad/remote-computer';
 import {
   elementToLanguageBlocks,

@@ -1,10 +1,10 @@
-import {
-  ELEMENT_EXPRESSION,
+import type {
   ExpressionElement,
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { PluginOptions, WithPlatePlugin } from '@udecode/plate-common';
+import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
+import type { PluginOptions, WithPlatePlugin } from '@udecode/plate-common';
 import { createEditor } from 'slate';
 import { decorateExpression } from './decorateExpression';
 

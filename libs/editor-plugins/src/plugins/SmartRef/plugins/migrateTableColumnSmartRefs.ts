@@ -1,19 +1,16 @@
+import type { MyEditor, MyValue, SmartRefElement } from '@decipad/editor-types';
 import {
   ELEMENT_SMART_REF,
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TH,
-  MyEditor,
-  MyValue,
-  SmartRefElement,
 } from '@decipad/editor-types';
 import { assertElementType, isElementOfType } from '@decipad/editor-utils';
 import { findNode } from '@udecode/plate-common';
-import { BaseEditor, Editor, Transforms } from 'slate';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../../pluginFactories';
+import type { BaseEditor } from 'slate';
+import { Editor, Transforms } from 'slate';
+import type { NormalizerReturnValue } from '../../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../../pluginFactories';
 
 export const migrateTableColumnSmartRefs = createNormalizerPluginFactory<
   MyValue,

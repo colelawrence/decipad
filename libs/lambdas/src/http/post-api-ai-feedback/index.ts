@@ -7,9 +7,9 @@ import { thirdParty } from '@decipad/backend-config';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import { Message } from '@decipad/react-contexts';
+import type { Message } from '@decipad/react-contexts';
 import { nanoid } from 'nanoid';
-import { User } from '@decipad/interfaces';
+import type { User } from '@decipad/interfaces';
 
 export interface FeedbackObject {
   rating?: 'like' | 'dislike';

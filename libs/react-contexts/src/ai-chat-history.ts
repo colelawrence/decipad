@@ -1,8 +1,11 @@
-import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
+import {
+  type StateStorage,
+  createJSONStorage,
+  persist,
+} from 'zustand/middleware';
 import { create } from 'zustand';
-
 import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
-import { IntegrationMessageData } from '@decipad/utils';
+import { type IntegrationMessageData } from '@decipad/utils';
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {

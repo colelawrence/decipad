@@ -1,9 +1,7 @@
-import {
-  RemoteComputer,
-  parseExpressionOrThrow,
-} from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseExpressionOrThrow } from '@decipad/remote-computer';
 import { containsNumber } from '@decipad/utils';
-import { CoercibleType } from './types';
+import type { CoercibleType } from './types';
 
 interface InferNumberOptions {
   doNotTryExpressionNumbersParse?: boolean;

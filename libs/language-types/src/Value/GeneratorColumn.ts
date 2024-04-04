@@ -9,7 +9,7 @@ import type { OneResult } from '../Result';
 import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
 import type { Value } from './Value';
 import type { ValueGeneratorFunction } from './ValueGenerator';
-import { Dimension } from '../Dimension';
+import type { Dimension } from '../Dimension';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { lowLevelGet } from './lowLevelGet';
 import { getDefined } from '@decipad/utils';

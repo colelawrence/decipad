@@ -1,4 +1,5 @@
-import { expect, Page, test } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import { snapshot, Timeouts } from '../utils/src';
 import startingACandleBusiness from '../__fixtures__/gallery/apple-model.json';
 
@@ -150,7 +151,7 @@ test('writing in the editor', async ({ testUser }) => {
       const el = boldButtonPaths.nth(i);
 
       // eslint-disable-next-line
-        const strokeWidth = await el.evaluate((element) =>
+      const strokeWidth = await el.evaluate((element) =>
         window.getComputedStyle(element).getPropertyValue('stroke-width')
       );
       expect(strokeWidth).not.toBe(unclickedButtonStroke);

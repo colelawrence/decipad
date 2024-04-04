@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { badRequest, unauthorized, internal, notFound } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
-import { DynamoDbQuery, PadRecord } from '@decipad/backendtypes';
+import type { DynamoDbQuery, PadRecord } from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import {

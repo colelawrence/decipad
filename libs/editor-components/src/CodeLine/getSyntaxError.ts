@@ -1,9 +1,8 @@
-import {
+import type {
   IdentifiedError,
   IdentifiedResult,
-  isBracketError,
-  isSyntaxError,
 } from '@decipad/remote-computer';
+import { isBracketError, isSyntaxError } from '@decipad/remote-computer';
 import { docs } from '@decipad/routing';
 
 export const getSyntaxError = (line?: IdentifiedResult | IdentifiedError) => {

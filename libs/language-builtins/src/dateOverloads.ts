@@ -8,7 +8,7 @@ import {
   Unknown,
   buildType as t,
 } from '@decipad/language-types';
-import { OverloadedBuiltinSpec } from './overloadBuiltin';
+import type { OverloadedBuiltinSpec } from './overloadBuiltin';
 import { getDefined, getInstanceof } from '@decipad/utils';
 
 export const addDateAndTimeQuantity = async (

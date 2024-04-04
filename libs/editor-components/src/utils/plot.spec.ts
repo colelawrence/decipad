@@ -1,4 +1,5 @@
-import { ELEMENT_PLOT, MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { createTEditor } from '@udecode/plate-common';
 import { insertPlotBelow } from './plot';
 

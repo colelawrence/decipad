@@ -1,4 +1,4 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import { canDropFile } from '@decipad/editor-components';
 
 export const createAttachmentPlugin = (): MyPlatePlugin => ({

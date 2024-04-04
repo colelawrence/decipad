@@ -1,5 +1,5 @@
-import DeciNumber from '@decipad/number';
-import { Unit } from '../Unit';
+import type DeciNumber from '@decipad/number';
+import type { Unit } from '../Unit';
 
 export type Converter = (n: DeciNumber) => DeciNumber;
 export type ExpandUnitResult = [Unit[], Converter];

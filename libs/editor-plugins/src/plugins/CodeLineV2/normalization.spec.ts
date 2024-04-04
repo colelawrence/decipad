@@ -1,5 +1,5 @@
+import type { CodeLineElement } from '@decipad/editor-types';
 import {
-  CodeLineElement,
   createMyPlateEditor,
   createMyPlugins,
   ELEMENT_CODE_LINE_V2,
@@ -8,7 +8,8 @@ import {
   ELEMENT_SMART_REF,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
-import { normalizeEditor, PlateEditor } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import {
   createNormalizeCodeLineCodePlugin,
   createNormalizeCodeLineV2Plugin,

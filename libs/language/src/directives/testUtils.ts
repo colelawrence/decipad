@@ -1,9 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST, Type, Value, buildType as t } from '@decipad/language-types';
+import type { AST, Type, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { isExpression, isNode } from '../utils';
 import { Realm } from '../interpreter';
 import { inferExpression, makeContext } from '../infer';
-import { DirectiveImpl } from './types';
+import type { DirectiveImpl } from './types';
 
 export const directiveFor = (args: AST.Node[]): AST.Directive => {
   return {

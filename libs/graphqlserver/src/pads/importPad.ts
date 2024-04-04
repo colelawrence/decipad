@@ -1,4 +1,4 @@
-import { GraphqlContext, ID, PadRecord } from '@decipad/backendtypes';
+import type { GraphqlContext, ID, PadRecord } from '@decipad/backendtypes';
 import { importNotebook } from '@decipad/services/notebooks';
 import { resource } from '@decipad/backend-resources';
 import { ForbiddenError } from 'apollo-server-lambda';

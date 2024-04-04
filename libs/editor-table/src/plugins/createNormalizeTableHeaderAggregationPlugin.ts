@@ -1,14 +1,13 @@
 import {
+  type ENodeEntry,
   setNodes,
   type Value,
   type PlateEditor,
-  ENodeEntry,
 } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPlugin,
-} from '@decipad/editor-plugins';
-import { ELEMENT_TH, TableHeaderElement } from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import type { TableHeaderElement } from '@decipad/editor-types';
+import { ELEMENT_TH } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
   hasAggregationId,

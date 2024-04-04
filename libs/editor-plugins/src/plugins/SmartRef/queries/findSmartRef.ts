@@ -1,14 +1,7 @@
-import {
-  findNode,
-  FindNodeOptions,
-  getPluginType,
-} from '@udecode/plate-common';
-import {
-  ELEMENT_SMART_REF,
-  MyEditor,
-  MyValue,
-  SmartRefElement,
-} from '@decipad/editor-types';
+import type { FindNodeOptions } from '@udecode/plate-common';
+import { findNode, getPluginType } from '@udecode/plate-common';
+import type { MyEditor, MyValue, SmartRefElement } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 
 export const findSmartRef = (
   editor: MyEditor,

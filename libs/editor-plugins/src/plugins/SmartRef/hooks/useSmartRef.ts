@@ -4,12 +4,8 @@ import {
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import {
-  ELEMENT_SMART_REF,
-  MyElement,
-  SmartRefElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { MyElement, SmartRefElement } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF, useMyEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import {
   getNextNode,

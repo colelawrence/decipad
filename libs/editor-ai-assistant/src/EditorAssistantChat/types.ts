@@ -1,4 +1,4 @@
-import { ChatCompletionMessageParam } from 'openai/resources';
+import type { ChatCompletionMessageParam } from 'openai/resources';
 
 export interface AgentAPIPayload {
   messages: ChatCompletionMessageParam[];

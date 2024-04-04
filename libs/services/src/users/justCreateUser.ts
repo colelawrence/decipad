@@ -1,4 +1,4 @@
-import { UserInput, UserWithSecret } from '@decipad/backendtypes';
+import type { UserInput, UserWithSecret } from '@decipad/backendtypes';
 import tables, { timestamp } from '@decipad/tables';
 import { forbidden, notAcceptable } from '@hapi/boom';
 import { isAllowedToLogIn } from './isAllowed';

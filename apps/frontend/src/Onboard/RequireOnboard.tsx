@@ -1,5 +1,6 @@
 import { onboard } from '@decipad/routing';
-import { FC, ReactNode, useEffect } from 'react';
+import type { FC, ReactNode } from 'react';
+import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { useRequiresOnboarding } from './useRequiresOnboarding';

@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { N } from '@decipad/number';
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { Type, Unit, buildType as t } from '@decipad/language-types';
+import type { Type, Unit } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 import { U, makeContext } from './utils/testUtils';
 

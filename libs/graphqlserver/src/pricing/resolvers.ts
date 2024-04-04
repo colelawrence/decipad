@@ -1,4 +1,4 @@
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 import {
   getPlansForCredits,
   getPlansForSubscriptions,

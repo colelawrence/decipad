@@ -1,11 +1,10 @@
 import { Editor, Element } from 'slate';
+import type { TabElement, TitleElement } from '@decipad/editor-types';
 import {
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
-  TabElement,
-  TitleElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import assert from 'assert';

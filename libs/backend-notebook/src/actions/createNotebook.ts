@@ -1,17 +1,17 @@
 import { create as createNotebookRecord } from '@decipad/services/notebooks';
 import { create as createNotebookContent } from '@decipad/services/pad-content';
 import { app } from '@decipad/backend-config';
-import { CustomAction } from '@decipad/notebook-open-api';
+import type { CustomAction } from '@decipad/notebook-open-api';
+import type { NotebookValue } from '@decipad/editor-types';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
-  NotebookValue,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import slug from 'slug';
 import { z } from 'zod';
-import { ServerSideNotebookApi } from '../types';
+import type { ServerSideNotebookApi } from '../types';
 
 export const createNotebook: CustomAction<
   Parameters<ServerSideNotebookApi['createNotebook']>[0],

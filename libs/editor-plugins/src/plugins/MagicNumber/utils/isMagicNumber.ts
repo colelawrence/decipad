@@ -1,5 +1,5 @@
 import { MARK_MAGICNUMBER } from '@decipad/editor-types';
-import { TText } from '@udecode/plate-common';
+import type { TText } from '@udecode/plate-common';
 
 export type MagicNumber = TText & {
   [MARK_MAGICNUMBER]: true;

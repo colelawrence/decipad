@@ -1,8 +1,8 @@
-import {
+import type {
   ImportElementSource,
   IntegrationTypes,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,

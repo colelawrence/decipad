@@ -1,12 +1,7 @@
+import type { AnyElement, MyEditor, MyValue } from '@decipad/editor-types';
+import { ELEMENT_TD } from '@decipad/editor-types';
+import type { EElement, TNodeEntry } from '@udecode/plate-common';
 import {
-  AnyElement,
-  ELEMENT_TD,
-  MyEditor,
-  MyValue,
-} from '@decipad/editor-types';
-import {
-  EElement,
-  TNodeEntry,
   hasNode,
   insertText,
   isElement,

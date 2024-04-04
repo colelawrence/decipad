@@ -1,4 +1,4 @@
-import { UIEvent } from 'react';
+import type { UIEvent } from 'react';
 
 export const justStopPropagation = <T extends UIEvent>(ev: T) => {
   ev.stopPropagation();

@@ -1,10 +1,5 @@
-import {
-  AnyElement,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ElementKind,
-} from '../../../editor-types/src';
+import type { AnyElement, ElementKind } from '../../../editor-types/src';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '../../../editor-types/src';
 import { getNodeString } from '../utils/getNodeString';
 
 const markdownPrefix: Partial<Record<ElementKind, string>> = {

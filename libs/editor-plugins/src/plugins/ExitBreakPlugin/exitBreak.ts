@@ -1,15 +1,10 @@
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import {
-  getPath,
-  getPluginType,
-  insertElements,
-  PlateEditor,
-  Value,
-} from '@udecode/plate-common';
+import type { PlateEditor, Value } from '@udecode/plate-common';
+import { getPath, getPluginType, insertElements } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { exitBreakAtEdges } from './exitBreakAtEdges';
-import { ExitBreakRule } from '@udecode/plate-break';
+import type { ExitBreakRule } from '@udecode/plate-break';
 
 export const exitBreak = <V extends Value>(
   editor: PlateEditor<V>,

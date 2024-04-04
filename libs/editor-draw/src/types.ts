@@ -1,5 +1,5 @@
-import { DrawElementDescendant } from '@decipad/editor-types';
-import { MutableRefObject } from 'react';
+import type { DrawElementDescendant } from '@decipad/editor-types';
+import type { MutableRefObject } from 'react';
 
 export declare type ExcalidrawImperativeAPI = {
   updateScene: (sceneData: { elements?: ExcalidrawDrawElement[] }) => void;

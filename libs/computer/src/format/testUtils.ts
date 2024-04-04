@@ -1,6 +1,10 @@
-import DeciNumber, { DeciNumberInputWithNumerator, N } from '@decipad/number';
+import type { DeciNumberInputWithNumerator } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { parseUnit, Unit } from '@decipad/language';
+import type { Unit } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { parseUnit } from '@decipad/language';
 
 export function F(n: number | bigint, d?: number | bigint): DeciNumber;
 export function F(

@@ -1,20 +1,20 @@
 import DeciNumber from '@decipad/number';
 import { getDefined, getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
-import { FullBuiltinSpec } from './interfaces';
+import { type FullBuiltinSpec } from './interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
-  ContextUtils,
+  type ContextUtils,
+  type Type,
   Dimension,
   RuntimeError,
-  Type,
   Unit,
   Unknown,
   Value,
   autoconvertArguments,
   autoconvertResult,
 } from '@decipad/language-types';
-import { BuiltinContextUtils, CallBuiltin } from './types';
+import { type BuiltinContextUtils, type CallBuiltin } from './types';
 
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
   // console.log(

@@ -1,4 +1,5 @@
-import { ElementKind, userIconKeys } from '@decipad/editor-types';
+import type { ElementKind } from '@decipad/editor-types';
+import { userIconKeys } from '@decipad/editor-types';
 
 export const DOC_FILTER_ITEMS: Set<ElementKind> = new Set([
   'def',

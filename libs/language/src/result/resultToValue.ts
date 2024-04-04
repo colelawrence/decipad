@@ -1,7 +1,9 @@
 import { N } from '@decipad/number';
 import { from, map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import { Result, SerializedTypes, Value } from '@decipad/language-types';
+import type { Result, SerializedTypes } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value } from '@decipad/language-types';
 import { getInstanceof } from '@decipad/utils';
 import { buildResult } from '../utils/buildResult';
 

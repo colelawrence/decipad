@@ -1,19 +1,20 @@
+import type { Value } from '@udecode/plate-common';
 import {
-  Value,
   getEndPoint,
   getNodeEntry,
   getStartPoint,
   isCollapsed,
   isText,
 } from '@udecode/plate-common';
-import { BaseEditor, BaseSelection, Transforms } from 'slate';
+import type { BaseEditor, BaseSelection } from 'slate';
+import { Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import {
   blockSelectionStore,
   blockSelectionSelectors,
   copySelectedBlocks,
 } from '@udecode/plate-selection';
-import { MyGenericEditor } from '@decipad/editor-types';
+import type { MyGenericEditor } from '@decipad/editor-types';
 import assert from 'assert';
 import { dequal } from '@decipad/utils';
 

@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom';
 import tables, { allScanPages } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import {
+import type {
   AllowlistAddApplicationCommandDataOption,
   AllowlistRemoveApplicationCommandDataOption,
   AllowListApplicationCommandDataOption,

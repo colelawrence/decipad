@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { getElementById as getElementById2 } from './utils/getElementById';
 
 extendZodWithOpenApi(z);

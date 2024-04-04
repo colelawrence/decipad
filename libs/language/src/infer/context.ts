@@ -1,31 +1,28 @@
-import {
-  AnyMapping,
-  PromiseOrType,
-  anyMappingToMap,
-  produce,
-  zip,
-} from '@decipad/utils';
+import type { AnyMapping, PromiseOrType } from '@decipad/utils';
+import { anyMappingToMap, produce, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import {
+import type {
   AST,
   ContextUtils,
   Result,
   SerializedType,
   Type,
-  buildType as t,
 } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import { callBuiltin, callBuiltinFunctor } from '@decipad/language-builtins';
-import { ExternalDataMap } from '..';
-import {
+import type { ExternalDataMap } from '..';
+import type {
   Stack,
   StackNamespaceJoiner,
   StackNamespaceSplitter,
   StackNamespaceRetrieverHackForTypesystemTables,
-  createStack,
 } from '../stack';
+import { createStack } from '../stack';
 import { sortType } from './sortType';
-import { ContextStats, initialInferStats } from './inferStats';
+import type { ContextStats } from './inferStats';
+import { initialInferStats } from './inferStats';
 
 type InferContextUtils = Omit<
   ContextUtils,

@@ -1,5 +1,5 @@
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
-import { Value } from '@udecode/plate-common';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { Value } from '@udecode/plate-common';
 import { getTableGridAbove } from '@udecode/plate-table';
 
 export const getSelectedCells = <

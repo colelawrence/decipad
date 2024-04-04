@@ -1,4 +1,5 @@
-import { DRAG_ITEM_COLUMN, DragColumnItem } from '@decipad/editor-table';
+import type { DragColumnItem } from '@decipad/editor-table';
+import { DRAG_ITEM_COLUMN } from '@decipad/editor-table';
 import { useDndPreviewSelectors } from '@decipad/react-contexts';
 import { cssVar } from '@decipad/ui';
 import { varStyles } from '@decipad/ui/src/styles/code-block';

@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid';
-import {
+import type {
   WorkspaceInput,
   TableRecordIdentifier,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { create as createResourcePermission } from '../permissions/create';
-import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 
 function getWorkspacePlan(wsName: string): SubscriptionPlansNames {
   if (process.env.NODE_ENV === 'production' || !wsName.includes('@n1n')) {

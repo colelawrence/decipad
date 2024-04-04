@@ -1,6 +1,7 @@
 import invariant from 'tiny-invariant';
-import { TRemoveNodeOperation } from '@udecode/plate-common';
-import { SharedType, SyncNode } from '../../model';
+import type { TRemoveNodeOperation } from '@udecode/plate-common';
+import type { SharedType } from '../../model';
+import { SyncNode } from '../../model';
 import { getParent } from '../../path';
 
 /**

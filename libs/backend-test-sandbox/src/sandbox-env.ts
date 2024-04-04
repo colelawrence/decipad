@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import stringify from 'json-stringify-safe';
 import { nanoid } from 'nanoid';
 import baseUrl from './base-url';
-import { Config } from './config';
+import type { Config } from './config';
 import getPorts from './get-ports';
 
 configDotEnv();

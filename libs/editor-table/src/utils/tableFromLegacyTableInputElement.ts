@@ -1,16 +1,18 @@
 import { nanoid } from 'nanoid';
-import {
-  ELEMENT_TABLE,
+import type {
   TableHeaderRowElement,
-  ELEMENT_TH,
-  ELEMENT_TR,
   TableHeaderElement,
   TableRowElement,
-  ELEMENT_TD,
   TableElement,
   DeprecatedTableInputElement,
-  ELEMENT_TABLE_CAPTION,
   TableCaptionElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_TH,
+  ELEMENT_TR,
+  ELEMENT_TD,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
 } from '@decipad/editor-types';
 

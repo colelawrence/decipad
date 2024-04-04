@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { min as minFraction } from '@decipad/fraction';
 import DeciNumber, { isFinite, isInfinite, isUndefined, N } from '.';
-import { FiniteNumber } from './types';
+import type { FiniteNumber } from './types';
 
 const isNegativeInfinite = (n: DeciNumber) => isInfinite(n) && n.s < 0n;
 

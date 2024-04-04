@@ -92,6 +92,7 @@ export type {
   DimensionExplanation,
   ColumnDesc,
   ComputeRequestWithExternalData,
+  MaterializedColumnDesc,
 } from './types';
 
 export * from './result';

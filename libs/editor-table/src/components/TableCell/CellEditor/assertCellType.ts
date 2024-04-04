@@ -1,4 +1,4 @@
-import { CellValueType } from '@decipad/editor-types';
+import type { CellValueType } from '@decipad/editor-types';
 
 export function assertCellType(
   cellType: CellValueType,

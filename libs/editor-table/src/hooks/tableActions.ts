@@ -1,10 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
+import type {
   MyEditor,
   MyValue,
   TableCellElement,
@@ -13,6 +9,12 @@ import {
   TableHeaderElement,
   TableHeaderRowElement,
   TableRowElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
 } from '@decipad/editor-types';
 import {
   forceDownload,
@@ -27,10 +29,8 @@ import {
   useCurrentWorkspaceStore,
   useEditorTableContext,
 } from '@decipad/react-contexts';
+import type { InsertNodesOptions, TEditor, Value } from '@udecode/plate-common';
 import {
-  InsertNodesOptions,
-  TEditor,
-  Value,
   getNodeChildren,
   getNodeString,
   hasNode,
@@ -47,7 +47,8 @@ import { useCallback, useEffect } from 'react';
 import { type Path } from 'slate';
 import * as Sentry from '@sentry/react';
 import { exportCsv } from '@decipad/export';
-import { Result, materializeResult } from '@decipad/computer';
+import type { Result } from '@decipad/computer';
+import { materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';

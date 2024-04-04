@@ -1,11 +1,10 @@
+import type { MyGenericEditor, MyText } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
-  MyGenericEditor,
-  MyText,
 } from '@decipad/editor-types';
 import {
   getSlateFragment,
@@ -13,10 +12,8 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
+import type { ElementOf, TEditor, Value } from '@udecode/plate-common';
 import {
-  ElementOf,
-  TEditor,
-  Value,
   getBlockAbove,
   isElementEmpty,
   isText,
@@ -24,7 +21,7 @@ import {
 } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import { nanoid } from 'nanoid';
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
 type DragCellData = string;

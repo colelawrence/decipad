@@ -1,5 +1,5 @@
 import { Doc as YDoc } from 'yjs';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';

@@ -1,15 +1,13 @@
 /* eslint-disable jest/no-disabled-tests */
+import type { MyEditor, MyElement, MyPlatePlugin } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
-  MyEditor,
-  MyElement,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
-import React from 'react';
+import type React from 'react';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 import { getRemoteComputer } from '@decipad/remote-computer';

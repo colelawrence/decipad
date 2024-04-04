@@ -1,6 +1,6 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { getNodeChildren, getNodeString, hasNode } from '@udecode/plate-common';
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 
 export const isTableColumnEmpty = (

@@ -1,4 +1,5 @@
-import DeciNumber, { N } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
 import { prefixCurrencies } from '../grammar/tokenizer';

@@ -1,11 +1,11 @@
 import { getUsedIdentifiers, tokenize } from '@decipad/remote-computer';
-import {
-  ELEMENT_SMART_REF,
+import type {
   MyEditor,
   MyNode,
   SmartRefElement,
   TableElement,
 } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { captureException } from '@sentry/react';
 import {
   getNextNode,
@@ -17,7 +17,8 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { BaseEditor, Editor, Location, Path, Point, Range } from 'slate';
+import type { BaseEditor, Location, Path, Point } from 'slate';
+import { Editor, Range } from 'slate';
 import { insertNodes } from './insertNodes';
 import { isElementOfType } from './isElementOfType';
 import { setSelection } from './setSelection';

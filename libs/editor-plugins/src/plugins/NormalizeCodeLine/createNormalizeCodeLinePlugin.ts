@@ -1,16 +1,14 @@
 /* eslint-disable no-param-reassign */
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
-  ELEMENT_CODE_LINE,
-  ELEMENT_SMART_REF,
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type {
   MyEditor,
   MyGenericEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
+import type { ENodeEntry, Value } from '@udecode/plate-common';
 import {
-  ENodeEntry,
-  Value,
   deleteText,
   getNodeChildren,
   insertText,
@@ -20,10 +18,8 @@ import {
   unwrapNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPlugin,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPlugin } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 export const normalizeCodeChildren = <

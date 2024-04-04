@@ -1,4 +1,5 @@
-import { TEditor, withoutNormalizing } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { withoutNormalizing } from '@udecode/plate-common';
 
 export const withoutNormalizingEditors = (
   editors: TEditor[],

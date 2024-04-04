@@ -1,15 +1,15 @@
-import {
-  RemoteComputer,
-  identifierRegExpGlobal,
-} from '@decipad/remote-computer';
-import { MyElement, PlainText, useMyEditorRef } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { identifierRegExpGlobal } from '@decipad/remote-computer';
+import type { MyElement, PlainText } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { generateVarName, timeout } from '@decipad/utils';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { BehaviorSubject, switchMap } from 'rxjs';
 import { useSelected } from 'slate-react';
 
 /**

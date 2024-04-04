@@ -1,14 +1,13 @@
 import { getNodeString } from '@udecode/plate-common';
-import { ELEMENT_TABLE, TableHeaderElement } from '@decipad/editor-types';
+import type { TableHeaderElement } from '@decipad/editor-types';
+import { ELEMENT_TABLE } from '@decipad/editor-types';
+import type { Program, AST, RemoteComputer } from '@decipad/remote-computer';
 import {
-  Program,
-  AST,
   statementToIdentifiedBlock,
   getExprRef,
-  RemoteComputer,
 } from '@decipad/remote-computer';
 import { assertElementType } from '@decipad/editor-utils';
-import { InteractiveLanguageElement } from '../../types';
+import type { InteractiveLanguageElement } from '../../types';
 import { headerToColumn } from './headerToColumn';
 import { parseElementAsVariableAssignment } from '../../utils/parseElementAsVariableAssignment';
 import { inferType } from '@decipad/parse';

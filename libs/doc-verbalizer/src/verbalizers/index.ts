@@ -10,12 +10,12 @@ import {
   ELEMENT_TH,
   ELEMENT_VARIABLE_DEF,
 } from '../../../editor-types/src';
-import { AnyElement } from '../../../editor-types/src/value';
+import type { AnyElement } from '../../../editor-types/src/value';
 import { codeLineVarnameToId, codeLineVerbalizer } from './codeLine';
 import { defVarnameToId, defVerbalizer } from './def';
 import { columnVarnameToId, tableVarnameToId, tableVerbalizer } from './table';
 import { headingVerbalizer } from './headingVerbalizer';
-import { VarnameToId, Verbalizer } from './types';
+import type { VarnameToId, Verbalizer } from './types';
 import { defaultVerbalizer } from './default';
 import { captionVerbalizer } from './caption';
 

@@ -1,18 +1,21 @@
-import { PromiseOrType, getDefined, zip } from '@decipad/utils';
+import { type PromiseOrType, getDefined, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, ContextUtils, Value } from '@decipad/language-types';
+import { type AST, type ContextUtils, Value } from '@decipad/language-types';
 import type { ExternalDataMap, Context } from '..';
 import {
-  StackNamespaceJoiner,
-  StackNamespaceSplitter,
+  type StackNamespaceJoiner,
+  type StackNamespaceSplitter,
   createStack,
 } from '../stack';
 import { ExpressionCache } from '../expression-cache';
-import { InterpreterStats, initialInterpreterStats } from './interpreterStats';
+import {
+  type InterpreterStats,
+  initialInterpreterStats,
+} from './interpreterStats';
 import { simpleExpressionEvaluate } from './simpleExpressionEvaluate';
 import { functionCallValue } from './functionCallValue';
 import { internalInferFunction } from '../infer/functions';
-import { TRealm } from './types';
+import { type TRealm } from './types';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and

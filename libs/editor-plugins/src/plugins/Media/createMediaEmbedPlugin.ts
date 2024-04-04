@@ -1,11 +1,12 @@
+import type { TMediaEmbedElement } from '@udecode/plate-media';
 import {
   createMediaEmbedPlugin as _createMediaEmbedPlugin,
   parseTwitterUrl,
   parseVideoUrl,
-  TMediaEmbedElement,
 } from '@udecode/plate-media';
 
-import { getPluginType, PlateEditor, Value } from '@udecode/plate-common';
+import type { PlateEditor, Value } from '@udecode/plate-common';
+import { getPluginType } from '@udecode/plate-common';
 import { ELEMENT_MEDIA_EMBED } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { insertNodes } from '@decipad/editor-utils';

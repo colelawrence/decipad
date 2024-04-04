@@ -1,9 +1,9 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { Unit } from '@decipad/language-units';
+import type { Unit } from '@decipad/language-units';
 import { deserializeType, serializeType } from './serialization';
 import { InferError } from '../InferError';
 import * as t from './Type';
-import { SerializedType } from '../SerializedType';
+import type { SerializedType } from '../SerializedType';
 import { U } from '../testUtils';
 
 setupDeciNumberSnapshotSerializer();

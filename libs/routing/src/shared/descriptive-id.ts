@@ -1,5 +1,5 @@
 import slug from 'slug';
-import { Parser } from 'typesafe-routes';
+import type { Parser } from 'typesafe-routes';
 
 export interface DescriptiveId {
   readonly id: string;

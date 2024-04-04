@@ -1,3 +1,4 @@
+import type { MyEditor, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -5,13 +6,11 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
-  TableElement,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { generateTableName } from '@decipad/utils';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import type { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = () => {

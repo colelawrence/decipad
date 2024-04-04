@@ -1,4 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import type { TNodeEntry } from '@udecode/plate-common';
 import {
   deleteText,
   getEditorString,
@@ -7,9 +8,8 @@ import {
   getPointBefore,
   getStartPoint,
   isRangeAcrossBlocks,
-  TNodeEntry,
 } from '@udecode/plate-common';
-import { Point, Range } from 'slate';
+import type { Point, Range } from 'slate';
 
 export const normalizeCodeLineSpace = (editor: MyEditor, entry: TNodeEntry) => {
   // const firstLine =

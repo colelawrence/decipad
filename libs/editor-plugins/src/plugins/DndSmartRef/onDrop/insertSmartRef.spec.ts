@@ -3,7 +3,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { Text } from 'slate';
+import type { Text } from 'slate';
 import { insertSmartRef } from './insertSmartRef';
 
 jest.mock('nanoid', () => ({ nanoid: () => 'randomId' }));

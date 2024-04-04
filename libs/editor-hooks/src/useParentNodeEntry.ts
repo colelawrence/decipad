@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
-import { MyNode, useMyEditorRef } from '@decipad/editor-types';
-import { TNodeEntry, getParentNode } from '@udecode/plate-common';
+import type { MyNode } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { getParentNode } from '@udecode/plate-common';
 import { useNodePath } from './useNodePath';
 import { useEditorChange } from './useEditorChange';
 

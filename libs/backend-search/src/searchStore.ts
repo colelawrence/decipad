@@ -1,4 +1,4 @@
-import { Client } from '@opensearch-project/opensearch';
+import type { Client } from '@opensearch-project/opensearch';
 import { createInitialSearchIndexes } from './createInitialSearchIndexes';
 import { searchStoreClient } from './searchStoreClient';
 

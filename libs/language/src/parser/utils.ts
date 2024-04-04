@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-safe';
 import DeciNumber, { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
 // eslint-disable-next-line complexity

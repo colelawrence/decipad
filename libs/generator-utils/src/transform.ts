@@ -1,4 +1,4 @@
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 
 type TransformFn<I, R> = (arg: I) => PromiseOrType<R>;
 

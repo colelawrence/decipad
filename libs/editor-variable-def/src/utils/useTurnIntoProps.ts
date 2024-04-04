@@ -1,10 +1,6 @@
-import { Result } from '@decipad/remote-computer';
-import {
-  ELEMENT_VARIABLE_DEF,
-  MyEditor,
-  MyElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { Result } from '@decipad/remote-computer';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
+import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
   getNodeEntrySafe,

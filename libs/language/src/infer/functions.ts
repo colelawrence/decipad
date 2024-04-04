@@ -1,19 +1,21 @@
 import pSeries from 'p-series';
-import { PromiseOrType, getDefined, zip } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
+import { getDefined, zip } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import type { Type, AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   buildType as t,
   InferError,
-  Type,
   typeIsPending,
-  AST,
 } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltinFunctor } from '@decipad/language-builtins';
 import { inferExpression, inferStatement } from '.';
-import { Realm } from '..';
+import type { Realm } from '..';
 import { getIdentifierString } from '../utils';
-import { Context, logRetrievedFunctionName } from './context';
+import type { Context } from './context';
+import { logRetrievedFunctionName } from './context';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';
 

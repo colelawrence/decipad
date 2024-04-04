@@ -1,11 +1,12 @@
 import { Doc as YDoc } from 'yjs';
-import { SyncElement, applySlateOps } from '@decipad/slate-yjs';
+import type { SyncElement } from '@decipad/slate-yjs';
+import { applySlateOps } from '@decipad/slate-yjs';
 import { nanoid } from 'nanoid';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { slateYjsSymbol } from './docsync';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { starterNotebook } from './initialNotebook';
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 
 export interface InitDocumentResult {
   id: string;

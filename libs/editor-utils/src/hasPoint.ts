@@ -1,5 +1,10 @@
-import { Point } from 'slate';
-import { getNode, getNodeString, TEditor, Value } from '@udecode/plate-common';
+import { type Point } from 'slate';
+import {
+  getNode,
+  getNodeString,
+  type TEditor,
+  type Value,
+} from '@udecode/plate-common';
 
 export const hasPoint = <
   TV extends Value,

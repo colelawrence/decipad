@@ -1,11 +1,10 @@
+import type { MyEditor, SliderElement } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_PARAGRAPH,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  MyEditor,
-  SliderElement,
 } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate-common';
 

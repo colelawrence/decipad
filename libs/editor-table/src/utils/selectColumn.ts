@@ -1,5 +1,6 @@
-import { ELEMENT_TABLE, MyEditor, TableElement } from '@decipad/editor-types';
-import { Path } from 'slate';
+import type { MyEditor, TableElement } from '@decipad/editor-types';
+import { ELEMENT_TABLE } from '@decipad/editor-types';
+import type { Path } from 'slate';
 import { getEndPoint, getStartPoint, select } from '@udecode/plate-common';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 

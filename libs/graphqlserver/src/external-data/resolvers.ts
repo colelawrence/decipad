@@ -1,5 +1,5 @@
 import tables from '@decipad/tables';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 import { getDefined } from '@decipad/utils';
 import {
   authUrlFor,
@@ -9,7 +9,7 @@ import {
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
 import { nanoid } from 'nanoid';
-import { ExternalDataSourceDataLinks } from '@decipad/backendtypes';
+import type { ExternalDataSourceDataLinks } from '@decipad/backendtypes';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');

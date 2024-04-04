@@ -1,11 +1,11 @@
 import invariant from 'tiny-invariant';
-import { TOperation } from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
 import { captureException } from '@sentry/browser';
 import stringify from 'json-stringify-safe';
-import { SharedType } from '../model';
+import type { SharedType } from '../model';
 import node from './node';
 import text from './text';
-import { ApplyFunc, OpMapper } from './types';
+import type { ApplyFunc, OpMapper } from './types';
 
 const nullOp: ApplyFunc = (doc: SharedType) => doc;
 

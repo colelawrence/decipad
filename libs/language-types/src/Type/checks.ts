@@ -1,11 +1,13 @@
-import { dequal, produce, PromiseOrType, zip } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
+import { dequal, produce, zip } from '@decipad/utils';
 import { Unit } from '@decipad/language-units';
-import { PrimitiveTypeName, Type } from '.';
+import type { PrimitiveTypeName } from '.';
+import { Type } from '.';
 import { InferError, type Time } from '..';
 import { setUnit, propagateTypeUnits } from './units';
 import { propagatePercentage } from './percentages';
 import { timeUnits } from '../Time/timeUnits';
-import { Specificity } from '../Time/Time';
+import type { Specificity } from '../Time/Time';
 
 const primitive = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {

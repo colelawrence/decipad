@@ -1,4 +1,5 @@
-import { Result, isTableResult } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
+import { isTableResult } from '@decipad/remote-computer';
 
 export const getDatabaseUrl = async (
   result: Result.Result

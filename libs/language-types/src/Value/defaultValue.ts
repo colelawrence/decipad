@@ -1,8 +1,9 @@
 import DeciNumber from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { Type, serializeType } from '../Type';
-import { SerializedType, SerializedTypes } from '../SerializedType';
-import { Value } from './Value';
+import type { Type } from '../Type';
+import { serializeType } from '../Type';
+import type { SerializedType, SerializedTypes } from '../SerializedType';
+import type { Value } from './Value';
 import { UnknownValue } from './Unknown';
 import { Scalar } from './Scalar';
 import { EmptyColumn } from './EmptyColumn';

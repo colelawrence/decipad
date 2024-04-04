@@ -1,9 +1,9 @@
 import {
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  LiveQueryElement,
-  PlateComponent,
+  type LiveQueryElement,
+  type PlateComponent,
   useMyEditorRef,
-  LiveQueryVarNameElement,
+  type LiveQueryVarNameElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {

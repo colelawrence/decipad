@@ -1,8 +1,8 @@
+import type { TPath } from '@udecode/plate-common';
 import {
   insertNodes,
   getNode,
   withoutNormalizing,
-  TPath,
   insertText,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -15,7 +15,7 @@ import {
   type TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { Action } from './types';
+import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { findColumn } from './utils/findColumn';
 import { findTableColumnFormula } from './utils/findTableColumnFormula';

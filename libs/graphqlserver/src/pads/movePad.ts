@@ -1,7 +1,7 @@
 import tables, { allPages } from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
-import { MutationResolvers } from '@decipad/graphqlserver-types';
+import type { MutationResolvers } from '@decipad/graphqlserver-types';
 import { padResource } from './padResource';
 
 const notebooks = resource('notebook');

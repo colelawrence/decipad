@@ -1,11 +1,8 @@
-import {
-  createMyPlateEditor,
-  ELEMENT_CODE_LINE,
-  MyEditor,
-} from '@decipad/editor-types';
-import { ACItemType } from '@decipad/ui';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import type { ACItemType } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
-import { BasePoint } from 'slate';
+import type { BasePoint } from 'slate';
 import { setSelection } from '@decipad/editor-utils';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 

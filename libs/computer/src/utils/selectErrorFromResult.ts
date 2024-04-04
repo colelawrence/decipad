@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
-import { Result, Unknown } from '@decipad/language';
-import { IdentifiedError, IdentifiedResult } from '../types';
+import type { Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { Unknown } from '@decipad/language';
+import type { IdentifiedError, IdentifiedResult } from '../types';
 
 const errorMessage = (message?: IdentifiedError['errorKind']): string => {
   switch (message) {

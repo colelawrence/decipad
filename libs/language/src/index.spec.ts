@@ -2,9 +2,10 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
+import type { Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   Time,
-  Type,
   materializeOneResult,
   buildType as t,
   serializeType,

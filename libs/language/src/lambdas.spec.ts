@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
 import { inferStatement, makeContext } from './infer';
 import { Realm, evaluateStatement } from './interpreter';
 import { N } from '@decipad/number';

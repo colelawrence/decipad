@@ -1,12 +1,13 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
+import type { CodeLineElement } from '@decipad/editor-types';
 import {
-  CodeLineElement,
   createMyPlateEditor,
   createMyPlugins,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { normalizeEditor, PlateEditor } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeCodeLinePlugin } from './createNormalizeCodeLinePlugin';
 
 function codeLine(code: string): CodeLineElement {

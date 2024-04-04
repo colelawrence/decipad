@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
-import {
+import type {
   DrawElement,
   DrawElementDescendant,
   MyEditor,
@@ -12,10 +12,10 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { NodeEntry } from 'slate';
+import type { NodeEntry } from 'slate';
 import { drawDummyElement } from './drawDummyElement';
 import { fixElement } from './fixElement';
-import { DrawElementsDiff } from './types';
+import type { DrawElementsDiff } from './types';
 
 const removeRemoved = (
   editor: MyEditor,

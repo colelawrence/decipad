@@ -1,8 +1,5 @@
-import {
-  ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
-  MyEditor,
-} from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate-common';
 import {
   allowsTextStyling,

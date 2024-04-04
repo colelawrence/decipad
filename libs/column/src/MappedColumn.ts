@@ -1,6 +1,6 @@
 import { empty, generate } from '@decipad/generator-utils';
 import { getDefined } from '@decipad/utils';
-import { ColumnLike } from './ColumnLike';
+import type { ColumnLike } from './ColumnLike';
 
 /* eslint-disable no-underscore-dangle */
 export class MappedColumn<TValue> implements ColumnLike<TValue> {

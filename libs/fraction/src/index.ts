@@ -1,5 +1,6 @@
 import Fraction from 'fraction.js/bigfraction';
-import { FractionLike, isFractionLike } from './isFractionLike';
+import type { FractionLike } from './isFractionLike';
+import { isFractionLike } from './isFractionLike';
 
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
   function toJSON() {

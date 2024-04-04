@@ -1,9 +1,9 @@
 import {
+  type Value,
   type SerializedType,
   type Result,
-  Value,
 } from '@decipad/remote-computer';
-import { DataViewFilter } from '@decipad/editor-types';
+import type { DataViewFilter } from '@decipad/editor-types';
 import { type DataGroup } from '../../types';
 import { type GenerateGroups } from './types';
 import { type GenerateSmartRow } from './generateSmartRow';

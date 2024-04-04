@@ -1,4 +1,4 @@
-import { TableElement } from '@decipad/editor-types';
+import type { TableElement } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import utils from './utils';
 

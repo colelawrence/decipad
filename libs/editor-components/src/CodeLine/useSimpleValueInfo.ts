@@ -1,16 +1,12 @@
 import { useCallback, useMemo } from 'react';
+import type { RemoteComputer, AST } from '@decipad/remote-computer';
 import {
-  RemoteComputer,
-  AST,
   simpleValueToString,
   parseSimpleValueUnit,
   parseSimpleValue,
 } from '@decipad/remote-computer';
-import {
-  CodeLineV2Element,
-  ELEMENT_SMART_REF,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { CodeLineV2Element } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF, useMyEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { findNodePath, insertText } from '@udecode/plate-common';
 

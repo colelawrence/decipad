@@ -1,5 +1,8 @@
 import assert from 'assert';
-import { TableRecordChanges, DocSyncUpdateRecord } from '@decipad/backendtypes';
+import type {
+  TableRecordChanges,
+  DocSyncUpdateRecord,
+} from '@decipad/backendtypes';
 import { notebookMaintenance } from '@decipad/notebook-maintenance';
 import handle from '../handle';
 

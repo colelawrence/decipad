@@ -1,9 +1,9 @@
 import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
-  Result,
+  type Result,
   RuntimeError,
-  Type,
+  type Type,
   Value,
   buildType as t,
 } from '@decipad/language-types';

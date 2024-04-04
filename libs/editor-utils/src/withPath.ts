@@ -1,6 +1,6 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { findNodePath } from '@udecode/plate-common';
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 
 type WithPathFunction = (path: Path) => void;
 

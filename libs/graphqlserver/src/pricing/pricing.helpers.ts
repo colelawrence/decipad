@@ -1,6 +1,9 @@
 import { limits, plans, thirdParty } from '@decipad/backend-config';
-import { CheckoutSessionInfo, SubscriptionPlan } from '@decipad/backendtypes';
-import { QueryResolvers } from '@decipad/graphqlserver-types';
+import type {
+  CheckoutSessionInfo,
+  SubscriptionPlan,
+} from '@decipad/backendtypes';
+import type { QueryResolvers } from '@decipad/graphqlserver-types';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import Stripe from 'stripe';

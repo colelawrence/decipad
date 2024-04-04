@@ -1,5 +1,5 @@
-import { Dimension } from '../Dimension';
-import { Value } from './Value';
+import type { Dimension } from '../Dimension';
+import type { Value } from './Value';
 
 export interface MinimalTensor {
   lowLevelGet(...keys: number[]): Promise<Value>;

@@ -1,3 +1,9 @@
+import type {
+  MyValue,
+  TableCellType,
+  TableColumnFormulaElement,
+  TableElement,
+} from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_TABLE,
@@ -7,12 +13,9 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyValue,
-  TableCellType,
-  TableColumnFormulaElement,
-  TableElement,
 } from '@decipad/editor-types';
-import { BaseEditor, Editor } from 'slate';
+import type { BaseEditor } from 'slate';
+import { Editor } from 'slate';
 import { findNode } from '@udecode/plate-common';
 import { isElementOfType } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from '../createSmartRefPlugin';

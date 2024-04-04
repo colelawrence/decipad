@@ -1,8 +1,8 @@
-import { WithRequired } from '@udecode/plate-common';
+import type { WithRequired } from '@udecode/plate-common';
+import type { TableCaptionElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
-  TableCaptionElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 

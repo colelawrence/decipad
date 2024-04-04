@@ -20,10 +20,8 @@ import {
   exportNotebookBackups,
   useMutationResultHandler,
 } from '../utils';
-import {
-  NotebookMetaActionsReturn,
-  PublishedVersionName,
-} from '@decipad/interfaces';
+import type { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import { PublishedVersionName } from '@decipad/interfaces';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
 import md5 from 'md5';

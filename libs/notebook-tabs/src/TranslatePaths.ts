@@ -1,6 +1,6 @@
-import { TOperation } from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { debug } from './debug';
 import stringify from 'json-stringify-safe';
 import { getDefined } from '@decipad/utils';

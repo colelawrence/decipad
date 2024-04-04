@@ -1,8 +1,8 @@
 import { zip } from '@decipad/utils';
 import { isColumnLike } from '../Value/ColumnLike';
-import { Dimension } from './Dimension';
+import type { Dimension } from './Dimension';
 import type { HypercubeArg } from './LazyOperation';
-import { DimensionId } from './types';
+import type { DimensionId } from './types';
 
 export const uniqDimensions = async (
   args: HypercubeArg[]

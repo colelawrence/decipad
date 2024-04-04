@@ -1,6 +1,7 @@
 import { LoginPage, VerifyEmail } from '@decipad/ui';
 import { signIn } from 'next-auth/react';
-import { FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { loadWorkspaces } from '../../App';
 import { useSearchParams } from 'react-router-dom';
 import { Loaders } from '../../notebooks/notebook/LoadComponents';

@@ -1,4 +1,4 @@
-import { PadRecord } from '@decipad/backendtypes';
+import type { PadRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 
 /**

@@ -1,6 +1,6 @@
 import {
-  CellValueType,
-  TableHeaderElement,
+  type CellValueType,
+  type TableHeaderElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { findNodePath, setNodes } from '@udecode/plate-common';

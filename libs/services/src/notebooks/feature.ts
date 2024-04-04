@@ -6,7 +6,7 @@ import * as Y from 'yjs';
 import { toSlateDoc } from '@decipad/slate-yjs';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
-import { DynamoDbQuery } from '@decipad/backendtypes';
+import type { DynamoDbQuery } from '@decipad/backendtypes';
 
 // ss = snapshot
 const FEATURED_SS_NAME = 'Featured 1';

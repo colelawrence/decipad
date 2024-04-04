@@ -1,10 +1,9 @@
-import {
+import type {
   ColumnMenuDropdown,
-  ELEMENT_VARIABLE_DEF,
   TableHeaderElement,
   VariableDropdownElement,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
 import { useCallback, useEffect } from 'react';
 import {
   useGlobalFindNode,
@@ -12,7 +11,8 @@ import {
 } from '@decipad/editor-hooks';
 import type { Path } from 'slate';
 import { useCategoriesNames } from '@decipad/react-contexts';
-import { TNode, getNodeString } from '@udecode/plate-common';
+import type { TNode } from '@udecode/plate-common';
+import { getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
 import { useDeepMemo } from '@decipad/react-utils';
 

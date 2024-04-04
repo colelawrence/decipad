@@ -1,5 +1,5 @@
 import { getWorkspaceSubscription } from './subscription.helpers';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 import { syncWorkspaceSeats } from './syncWorkspaceSeats';
 
 const resolvers: Resolvers = {

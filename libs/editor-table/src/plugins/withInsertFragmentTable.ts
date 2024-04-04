@@ -4,28 +4,30 @@
  *    void table cells are cleared before inserting new text.
  */
 
+import type {
+  PlateEditor,
+  TElement,
+  Value,
+  WithPlatePlugin,
+} from '@udecode/plate-common';
 import {
   getEndPoint,
   getPluginType,
   getStartPoint,
   getTEditor,
   hasNode,
-  PlateEditor,
   replaceNodeChildren,
   select,
-  TElement,
-  Value,
   withoutNormalizing,
-  WithPlatePlugin,
 } from '@udecode/plate-common';
+import type { TablePlugin } from '@udecode/plate-table';
 import {
   getTableAbove,
   getTableGridAbove,
   ELEMENT_TABLE,
-  TablePlugin,
 } from '@udecode/plate-table';
 import { cloneDeep } from 'lodash';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 /**
  * If inserting a table,

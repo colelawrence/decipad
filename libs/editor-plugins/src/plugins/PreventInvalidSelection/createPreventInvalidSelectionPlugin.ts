@@ -1,13 +1,8 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import { hasPoint } from '@decipad/editor-utils';
-import {
-  hasNode,
-  isText,
-  getNode,
-  TOperation,
-  getStartPoint,
-} from '@udecode/plate-common';
-import { Point } from 'slate';
+import type { TOperation } from '@udecode/plate-common';
+import { hasNode, isText, getNode, getStartPoint } from '@udecode/plate-common';
+import type { Point } from 'slate';
 
 export const createPreventInvalidSelectionPlugin = (): MyPlatePlugin => ({
   key: 'PREVENT_INVALID_SELECTION_PLUGIN',

@@ -5,7 +5,7 @@ import { justCreateUser } from '../../../libs/services/src/users/justCreateUser'
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
 
 import * as Y from 'yjs';
-import { TOperation } from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
 import { applySlateOps } from '@decipad/slate-yjs';
 
 const slateYjsSymbol = Symbol('slate-yjs');

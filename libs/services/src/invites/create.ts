@@ -1,11 +1,11 @@
 import { queues } from '@architect/functions';
 import { timestamp } from '@decipad/backend-utils';
-import { ID, PermissionType, User } from '@decipad/backendtypes';
+import type { ID, PermissionType, User } from '@decipad/backendtypes';
 import { app as appConfig, auth as authConfig } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import { createVerifier } from '../authentication';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export interface INotifyInviteArguments {
   user: User;

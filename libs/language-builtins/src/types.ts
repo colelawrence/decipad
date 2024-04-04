@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { ContextUtils, AST, Value, Type } from '@decipad/language-types';
+import type { ContextUtils, AST, Value, Type } from '@decipad/language-types';
 
 export type CallBuiltinFunctor = (
   ctx: BuiltinContextUtils,

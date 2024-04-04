@@ -1,7 +1,7 @@
-import { AST } from '.';
+import { type AST } from '.';
 import { type Statement, type Expression } from './AST';
 import type { Type } from './Type/Type';
-import { Value } from './Value/Value';
+import { type Value } from './Value/Value';
 
 export type CallBuiltinFunctor = (
   ctx: ContextUtils,

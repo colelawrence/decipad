@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST, Unit } from '@decipad/language';
-import DeciNumber, {
+import type { AST } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { Unit } from '@decipad/language';
+import type DeciNumber from '@decipad/number';
+import {
   DEFAULT_PRECISION,
   MAX_PRECISION,
   N,
@@ -15,12 +18,8 @@ import {
   isEdgeCaseNumber,
 } from './formatEdgeCaseNumbers';
 import { formatTime, isTimeUnit } from './formatTime';
-import {
-  UnitPart,
-  formatUnitAsParts,
-  isUserDefined,
-  prettyENumbers,
-} from './formatUnit';
+import type { UnitPart } from './formatUnit';
+import { formatUnitAsParts, isUserDefined, prettyENumbers } from './formatUnit';
 import { getCurrency, getPrettyCurrency, hasCurrency } from './getCurrency';
 
 const DEFAULT_NUMBER_OPTIONS: Intl.NumberFormatOptions = {

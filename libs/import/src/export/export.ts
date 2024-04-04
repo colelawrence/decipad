@@ -1,8 +1,11 @@
-import { NotebookResults, Result } from '@decipad/remote-computer';
-import { ExportedResult } from '.';
+import { type NotebookResults, type Result } from '@decipad/remote-computer';
+import type { ExportedResult } from '.';
 import { formatUnit } from '@decipad/format';
-import { ColumnValue, FormattedResult, VarnameExportedResult } from './types';
-import { OneResult } from 'libs/language-types/src/Result';
+import type {
+  ColumnValue,
+  FormattedResult,
+  VarnameExportedResult,
+} from './types';
 
 async function getSingleResult(
   _value: Result.OneResult,
@@ -105,7 +108,7 @@ export async function exportProgram(
       if (result.type === 'identified-error') return;
 
       const res = await getSingleResult(
-        result.result.value as OneResult,
+        result.result.value as Result.OneResult,
         result.result.type
       );
 

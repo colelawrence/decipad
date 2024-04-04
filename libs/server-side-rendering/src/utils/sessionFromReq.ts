@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { fetch } from '@decipad/fetch';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { Session } from 'next-auth';
+import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import type { Session } from 'next-auth';
 import { app } from '@decipad/backend-config';
 import { authCookieHeader } from './authCookieHeader';
 

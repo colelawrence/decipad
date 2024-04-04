@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
 import { parseExpression } from '../parser';
-import { SimpleValueAST, findLiteralNumber } from './common';
+import type { SimpleValueAST } from './common';
+import { findLiteralNumber } from './common';
 import { getSimpleValueUnit } from './getSimpleValueUnit';
 import { isValue } from './isValue';
 

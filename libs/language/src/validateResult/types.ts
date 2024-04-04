@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { Result, SerializedType } from '@decipad/language-types';
+import type { Result, SerializedType } from '@decipad/language-types';
 
 export type Validate = <T extends Result.OneResult | null | undefined>(
   type: SerializedType,

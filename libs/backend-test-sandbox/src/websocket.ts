@@ -1,4 +1,4 @@
-import { Config } from './config';
+import type { Config } from './config';
 import { websocketURL } from './websocket-url';
 
 export function createWebsocket(config: Config, token: string): WebSocket {

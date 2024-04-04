@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import Fuse from 'fuse.js';
-import { WorkspaceNotebookFragment } from '@decipad/graphql-client';
+import type { WorkspaceNotebookFragment } from '@decipad/graphql-client';
 import {
   acceptableStatus,
   acceptableVisibility,

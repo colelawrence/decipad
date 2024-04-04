@@ -1,6 +1,7 @@
-import DeciNumber, { N } from '@decipad/number';
-import * as Value from '../Value';
-import { Specificity } from './Time';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
+import type * as Value from '../Value';
+import type { Specificity } from './Time';
 import { Unknown } from '../Unknown';
 import { toLuxonUTC } from './toLuxonUTC';
 

@@ -1,12 +1,11 @@
+import type { ENode, TNodeEntry } from '@udecode/plate-common';
 import {
-  ENode,
   getNextNode,
   getPreviousNode,
   getStartPoint,
-  TNodeEntry,
 } from '@udecode/plate-common';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 
 export const createTabSelectionPlugin = createOnKeyDownPluginFactory({
   name: 'TAB_INDEX_PLUGIN',

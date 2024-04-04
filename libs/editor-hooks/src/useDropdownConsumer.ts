@@ -1,5 +1,6 @@
-import { materializeResult, Result } from '@decipad/computer';
-import { CellValueType } from '@decipad/editor-types';
+import type { Result } from '@decipad/computer';
+import { materializeResult } from '@decipad/computer';
+import type { CellValueType } from '@decipad/editor-types';
 import { useMemo } from 'react';
 import { useCategories, useComputer } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';

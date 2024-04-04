@@ -1,4 +1,5 @@
-import { UserConfig, defineConfig } from 'vite';
+import type { UserConfig } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { sentryVitePlugin } from '@sentry/vite-plugin';

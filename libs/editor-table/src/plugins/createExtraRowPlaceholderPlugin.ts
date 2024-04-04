@@ -5,15 +5,9 @@ import {
   isElement,
   removeNodes,
 } from '@udecode/plate-common';
-import { Path, Selection } from 'slate';
-import {
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
-  MyEditor,
-  MyNode,
-  TableRowElement,
-} from '@decipad/editor-types';
+import type { Path, Selection } from 'slate';
+import type { MyEditor, MyNode, TableRowElement } from '@decipad/editor-types';
+import { ELEMENT_TD, ELEMENT_TH, ELEMENT_TR } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import {
   getAboveNodeSafe,

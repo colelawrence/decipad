@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { from } from '@decipad/generator-utils';
-import { Dimension } from '../Dimension';
+import type { Dimension } from '../Dimension';
 import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
 import { EmptyColumn } from './EmptyColumn';
 import { GeneratorColumn } from './GeneratorColumn';
 import type { Value } from './Value';
-import { ValueGeneratorFunction } from './ValueGenerator';
+import type { ValueGeneratorFunction } from './ValueGenerator';
 import { lowLevelGet } from './lowLevelGet';
 import { UnknownValue } from './Unknown';
-import { OneResult } from '../Result';
+import type { OneResult } from '../Result';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 
 export class Column implements ColumnLikeValue {

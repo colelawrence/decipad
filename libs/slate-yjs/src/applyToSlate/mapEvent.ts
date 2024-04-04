@@ -1,7 +1,7 @@
-import { TNodeOperation } from '@udecode/plate-common';
-import * as Y from 'yjs';
-import { MinimalRootEditor } from '@decipad/editor-types';
-import { SyncElement } from '../model';
+import type { TNodeOperation } from '@udecode/plate-common';
+import type * as Y from 'yjs';
+import type { MinimalRootEditor } from '@decipad/editor-types';
+import type { SyncElement } from '../model';
 import { toSlatePath } from '../utils/convert';
 
 /**

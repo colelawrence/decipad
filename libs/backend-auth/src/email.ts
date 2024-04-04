@@ -1,5 +1,5 @@
-import { Account } from 'next-auth';
-import { UserInput, UserWithSecret } from '@decipad/backendtypes';
+import type { Account } from 'next-auth';
+import type { UserInput, UserWithSecret } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
   create as createUser,
@@ -8,7 +8,7 @@ import {
 } from '@decipad/services/users';
 import { track } from '@decipad/backend-analytics';
 import { timestamp } from '@decipad/backend-utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export async function signInEmail(
   event: APIGatewayProxyEventV2,

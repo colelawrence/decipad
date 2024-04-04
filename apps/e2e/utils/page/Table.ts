@@ -1,5 +1,5 @@
 /* eslint-disable playwright/no-force-option */
-import { JSHandle, Locator, Page } from '@playwright/test';
+import type { JSHandle, Locator, Page } from '@playwright/test';
 import { Timeouts } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 import { createWithSlashCommand } from './Block';

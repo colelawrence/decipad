@@ -1,6 +1,6 @@
-import DeciNumber from '@decipad/number';
-import { Type } from './Type';
-import * as Time from './Time';
+import type DeciNumber from '@decipad/number';
+import type { Type } from './Type';
+import type * as Time from './Time';
 
 interface BasicNode {
   cacheKey?: string;

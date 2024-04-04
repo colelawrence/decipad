@@ -1,9 +1,9 @@
 import { N } from '@decipad/number';
-import { TableCellType } from '@decipad/editor-types';
+import type { TableCellType } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   getRemoteComputer,
   prettyPrintAST,
-  RemoteComputer,
   parseBlockOrThrow,
 } from '@decipad/remote-computer';
 import { getDefined } from '@decipad/utils';

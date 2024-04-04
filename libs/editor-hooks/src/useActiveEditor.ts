@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import {
+import type {
   MyEditor,
   MinimalRootEditorWithEventsAndTabs,
 } from '@decipad/editor-types';

@@ -1,6 +1,7 @@
-import { S3ClientConfig } from '@aws-sdk/client-s3';
+import type { S3ClientConfig } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
-import { defaultEnv, SupportedEnvKey } from './default';
+import type { SupportedEnvKey } from './default';
+import { defaultEnv } from './default';
 
 export { defaultEnv };
 

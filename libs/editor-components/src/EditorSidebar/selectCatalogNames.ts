@@ -1,4 +1,4 @@
-import { AutocompleteName } from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/remote-computer';
 
 export const acceptableNumberCatalogKinds = new Set([
   'boolean',

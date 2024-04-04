@@ -1,7 +1,7 @@
+import type { Program } from '@decipad/remote-computer';
 import {
   parseExpression,
   parseStatement,
-  Program,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
 

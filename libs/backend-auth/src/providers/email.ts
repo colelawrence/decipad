@@ -6,7 +6,7 @@ import tables from '@decipad/tables';
 import { differenceInMinutes } from 'date-fns';
 import Email from 'next-auth/providers/email';
 import { timestamp } from '@decipad/backend-utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 type EmailVerificationRequest = {
   identifier: string;

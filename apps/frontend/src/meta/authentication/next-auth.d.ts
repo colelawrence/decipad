@@ -1,5 +1,5 @@
 import 'next-auth';
-import { User as DecipadUser } from '@decipad/interfaces';
+import type { User as DecipadUser } from '@decipad/interfaces';
 
 declare module 'next-auth' {
   type User = DecipadUser;

@@ -1,5 +1,5 @@
 import arc from '@architect/functions';
-import { Changes, TableRecord } from '@decipad/backendtypes';
+import type { Changes, TableRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import handle from '../handle';
 

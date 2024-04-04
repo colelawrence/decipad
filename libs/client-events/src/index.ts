@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { ActionEvent } from './action';
-import { PageEvent } from './page';
-import { ChecklistEvent } from './checklist';
+import type { ActionEvent } from './action';
+import type { PageEvent } from './page';
+import type { ChecklistEvent } from './checklist';
 
 export type ClientEvent = PageEvent | ActionEvent | ChecklistEvent;
 export type ClientEventContextType = (arg0: ClientEvent) => Promise<void>;

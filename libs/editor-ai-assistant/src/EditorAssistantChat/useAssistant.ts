@@ -1,18 +1,19 @@
+import type { UserMessage } from '@decipad/react-contexts';
 import {
   ControllerProvider,
-  UserMessage,
   useAIChatHistory,
   useComputer,
 } from '@decipad/react-contexts';
 import { useCallback, useContext, useMemo, useRef } from 'react';
-import { Action, actions } from 'libs/notebook-open-api/src/actions';
+import type { Action } from 'libs/notebook-open-api/src/actions';
+import { actions } from 'libs/notebook-open-api/src/actions';
 import { callAction } from 'libs/notebook-open-api/src/callAction';
-import { EditorController } from '@decipad/notebook-tabs';
-import {
+import type { EditorController } from '@decipad/notebook-tabs';
+import type {
   RequiredActionFunctionToolCall,
   RunSubmitToolOutputsParams,
 } from 'openai/resources/beta/threads/runs/runs';
-import { MessageCreateParams } from 'openai/resources/beta/threads/messages/messages';
+import type { MessageCreateParams } from 'openai/resources/beta/threads/messages/messages';
 
 type ModelAgentOptions = {
   notebookId: string;

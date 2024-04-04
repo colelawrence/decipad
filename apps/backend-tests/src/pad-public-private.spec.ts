@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 /* eslint-env jest */
 
-import { Workspace, Pad } from '@decipad/backendtypes';
+import type { Workspace, Pad } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { Publish_State } from '@decipad/graphqlserver-types';
+import type { Publish_State } from '@decipad/graphqlserver-types';
 
 // Helper function so we get auto complete.
 function getPublishState(x: Publish_State): Publish_State {

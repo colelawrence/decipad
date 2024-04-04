@@ -1,5 +1,5 @@
 import stringify from 'json-stringify-safe';
-import { CoercibleType } from './types';
+import type { CoercibleType } from './types';
 
 const coerceToString = (text: string): string => {
   return stringify(text);

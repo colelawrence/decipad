@@ -1,21 +1,22 @@
+import type {
+  MyKeyboardHandler,
+  MyValue,
+  MyGenericEditor,
+} from '@decipad/editor-types';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TABLE,
-  MyKeyboardHandler,
   ELEMENT_TD,
-  MyValue,
-  MyGenericEditor,
   ELEMENT_TH,
 } from '@decipad/editor-types';
 import isHotkey from 'is-hotkey';
+import type { TElement, Value } from '@udecode/plate-common';
 import {
   findNode,
   getAboveNode,
   moveSelection,
-  TElement,
   select,
   getNodeEntries,
-  Value,
   getBlockAbove,
   getPointBefore,
 } from '@udecode/plate-common';

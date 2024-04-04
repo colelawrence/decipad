@@ -1,8 +1,7 @@
-import { FC, Suspense } from 'react';
-import {
-  SidebarComponentsWithoutClosed,
-  useNotebookMetaData,
-} from '@decipad/react-contexts';
+import type { FC } from 'react';
+import { Suspense } from 'react';
+import type { SidebarComponentsWithoutClosed } from '@decipad/react-contexts';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useActiveEditor } from '@decipad/editor-hooks';
 
 import AssistantChat from './AssistantChat';

@@ -3,7 +3,7 @@
 // existing tests very granular
 /* eslint-disable jest/expect-expect */
 
-import { Workspace } from '@decipad/backendtypes';
+import type { Workspace } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 test('Executed queries', (ctx) => {

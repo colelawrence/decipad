@@ -1,13 +1,14 @@
 import { captureException } from '@sentry/react';
-import { RemoteComputer, Result, Unknown } from '@decipad/remote-computer';
+import type { RemoteComputer, Result } from '@decipad/remote-computer';
+import { Unknown } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
-import {
+import type {
   ImportResult,
   ImportResultWithMandatoryResult,
   Sheet,
 } from '../../types';
-import { ImportOptions, ImportParams } from '../../import';
+import type { ImportOptions, ImportParams } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
 import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';

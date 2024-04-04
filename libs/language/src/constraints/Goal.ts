@@ -2,11 +2,13 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
 import { win, fail, nil } from './logicUtils';
-import { isLvar, LogicVar } from './LogicVar';
+import type { LogicVar } from './LogicVar';
+import { isLvar } from './LogicVar';
 import type { Package } from './Package';
-import { Stream } from './Stream';
-import { ConstraintFn, makeConstraint } from './Constraint';
-import { Val } from './Binding';
+import type { Stream } from './Stream';
+import type { ConstraintFn } from './Constraint';
+import { makeConstraint } from './Constraint';
+import type { Val } from './Binding';
 
 export type Goal = (f: Package) => Stream<Package>;
 

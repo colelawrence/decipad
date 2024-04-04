@@ -1,10 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST, Value } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value } from '@decipad/language-types';
 import { inferExpression } from '..';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
-import { DirectiveImpl } from './types';
+import type { DirectiveImpl } from './types';
 
 export const over: DirectiveImpl<AST.OverDirective> = {
   async getType(ctx, overExp) {

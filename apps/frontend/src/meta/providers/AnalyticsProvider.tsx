@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
-import {
-  ClientEvent,
-  ClientEventsContext,
-  getAnalytics,
-} from '@decipad/client-events';
+import type { ClientEvent } from '@decipad/client-events';
+import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
 import { useSession } from 'next-auth/react';
-import { ReactNode, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
 
 const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({

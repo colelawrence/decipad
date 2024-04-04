@@ -2,7 +2,7 @@ import Boom from '@hapi/boom';
 import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import {
+import type {
   SuperadminsAddApplicationCommandDataOption,
   SuperadminsRemoveApplicationCommandDataOption,
   SuperadminsApplicationCommandDataOption,

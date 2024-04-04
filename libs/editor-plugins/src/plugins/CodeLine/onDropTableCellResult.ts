@@ -1,17 +1,13 @@
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
-import {
-  ELEMENT_CODE_LINE,
-  MyEditor,
-  MyElement,
-  MyText,
-} from '@decipad/editor-types';
+import type { MyEditor, MyElement, MyText } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import {
   getSlateFragment,
   insertNodes,
   selectEventRange,
 } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
-import { CodeResult } from '@decipad/ui';
+import type { CodeResult } from '@decipad/ui';
 import {
   getBlockAbove,
   isElementEmpty,
@@ -19,7 +15,8 @@ import {
 } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import { nanoid } from 'nanoid';
-import React, { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
+import type React from 'react';
 
 type DragCellData = Parameters<
   NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']>

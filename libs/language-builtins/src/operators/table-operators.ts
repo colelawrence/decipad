@@ -6,18 +6,19 @@ import {
   zip,
 } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
+import type { Comparable } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   Type,
   Value,
   buildType as t,
   valueToResultValue,
   compare,
-  Comparable,
   RuntimeError,
 } from '@decipad/language-types';
 import { all, findIndex, map } from '@decipad/generator-utils';
 import { sortMap } from '@decipad/column';
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 import { applyFilterMap, applyMap } from '../utils/valueTransforms';
 import { tree } from './tree';
 

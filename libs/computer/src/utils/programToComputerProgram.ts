@@ -1,5 +1,5 @@
-import { Program } from '..';
-import { ComputerProgram } from '../types';
+import type { Program } from '..';
+import type { ComputerProgram } from '../types';
 import { mapifyProgram } from './mapifyProgram';
 
 export const programToComputerProgram = (

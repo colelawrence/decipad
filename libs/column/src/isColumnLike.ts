@@ -1,4 +1,4 @@
-import { ColumnLike } from './ColumnLike';
+import type { ColumnLike } from './ColumnLike';
 
 export const isColumnLike = (thing: unknown): thing is ColumnLike<unknown> => {
   const col = thing as ColumnLike<unknown>;

@@ -1,6 +1,6 @@
-import { AnyElement, MyElement } from '@decipad/editor-types';
-import { TElement, isElement } from '@udecode/plate-common';
-import { Node } from 'slate';
+import type { AnyElement, MyElement } from '@decipad/editor-types';
+import { type TElement, isElement } from '@udecode/plate-common';
+import { type Node } from 'slate';
 
 export function assertElementType<Type extends AnyElement['type']>(
   node: Node | undefined,

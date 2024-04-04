@@ -1,11 +1,7 @@
-import {
-  Value,
-  getPointAfter,
-  select,
-  getPointBefore,
-} from '@udecode/plate-common';
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
-import { Location, Path } from 'slate';
+import type { Value } from '@udecode/plate-common';
+import { getPointAfter, select, getPointBefore } from '@udecode/plate-common';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { Location, Path } from 'slate';
 import { nextCellPath } from './nextCellPath';
 
 export const selectNextCell = <

@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { CurrencyUnits, Unit, getUnitByName } from '@decipad/language';
+import type { Unit } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { CurrencyUnits, getUnitByName } from '@decipad/language';
 import { N, ONE } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 

@@ -1,5 +1,6 @@
-import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { ReactEditor } from 'slate-react';
+import type { FC } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import type { ReactEditor } from 'slate-react';
 import { Subject } from 'rxjs';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
@@ -10,7 +11,8 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { createMyPlateEditor, MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import {
   BlockLengthSynchronizationProvider,
   TeleportEditor,

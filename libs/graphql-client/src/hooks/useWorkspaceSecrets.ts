@@ -3,11 +3,8 @@ import {
   useGetWorkspaceSecretsQuery,
 } from '..';
 import { useMutationResultHandler } from '../utils/useMutationResultHandler';
-import {
-  Secret,
-  SecretInput,
-  useDeleteWorkspaceSecretMutation,
-} from '../generated';
+import type { Secret, SecretInput } from '../generated';
+import { useDeleteWorkspaceSecretMutation } from '../generated';
 
 export const useWorkspaceSecrets = (workspaceId: string) => {
   const [{ data: secretsData }, refetch] = useGetWorkspaceSecretsQuery({

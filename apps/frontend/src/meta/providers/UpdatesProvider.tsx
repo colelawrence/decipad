@@ -1,4 +1,5 @@
-import { createContext, FC, PropsWithChildren, useEffect } from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext, useEffect } from 'react';
 
 export type UpdatesContextValue = boolean;
 

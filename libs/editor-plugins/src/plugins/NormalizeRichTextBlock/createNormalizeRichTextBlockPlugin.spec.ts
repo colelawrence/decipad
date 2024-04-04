@@ -1,3 +1,4 @@
+import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_BLOCKQUOTE,
@@ -5,9 +6,9 @@ import {
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   markKinds,
-  MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeRichTextBlockPlugin } from './createNormalizeRichTextBlockPlugin';
 import { createLinkPlugin } from '../Link/index';
 import { upsertLink } from '@udecode/plate-link';

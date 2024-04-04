@@ -1,4 +1,4 @@
-import { SectionRecord } from '@decipad/backendtypes';
+import type { SectionRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { byAsc, getDefined } from '@decipad/utils';
 import { timestamp } from '@decipad/backend-utils';
@@ -6,7 +6,7 @@ import Boom from '@hapi/boom';
 import { nanoid } from 'nanoid';
 import { resource } from '@decipad/backend-resources';
 import { isAuthenticatedAndAuthorized } from '../authorization';
-import { Resolvers, Section } from '@decipad/graphqlserver-types';
+import type { Resolvers, Section } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 

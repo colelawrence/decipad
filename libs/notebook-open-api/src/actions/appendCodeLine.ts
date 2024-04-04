@@ -1,4 +1,5 @@
-import { insertNodes, getNode, TPath } from '@udecode/plate-common';
+import type { TPath } from '@udecode/plate-common';
+import { insertNodes, getNode } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { notAcceptable } from '@hapi/boom';
@@ -13,7 +14,7 @@ import {
 import { getDefined } from '@decipad/utils';
 import { extendZodWithOpenApi } from 'zod-openapi';
 
-import { Action, NotebookActionHandler } from './types';
+import type { Action, NotebookActionHandler } from './types';
 import { appendPath } from '../utils/appendPath';
 import {} from '../../../editor-types/src/value';
 import { updateCodeLine } from './updateCodeLine';

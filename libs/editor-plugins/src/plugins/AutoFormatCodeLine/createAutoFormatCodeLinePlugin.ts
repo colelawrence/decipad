@@ -1,16 +1,19 @@
 import { getAnalytics } from '@decipad/client-events';
-import { RemoteComputer, getExprRef } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getExprRef } from '@decipad/remote-computer';
 import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
-import {
+import type {
   BlockElement,
   CodeLineElement,
-  ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
-  MARK_MAGICNUMBER,
   MyEditor,
   MyGenericEditor,
   ParagraphElement,
   RichText,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
@@ -20,14 +23,16 @@ import {
   pluginStore,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { ShadowCalcReference } from '@decipad/react-contexts';
+import type { ShadowCalcReference } from '@decipad/react-contexts';
 import { generateVarName } from '@decipad/utils';
-import {
+import type {
   EElement,
   EElementOrText,
   TEditor,
   TNodeProps,
   Value,
+} from '@udecode/plate-common';
+import {
   getBlockAbove,
   getEndPoint,
   getNodeString,
@@ -38,7 +43,7 @@ import {
   setNodes,
   toDOMNode,
 } from '@udecode/plate-common';
-import { BaseRange, Point } from 'slate';
+import type { BaseRange, Point } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { getTextBeforeCursor } from './utils';
 

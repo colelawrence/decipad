@@ -1,14 +1,12 @@
 import stringify from 'json-stringify-safe';
-import { AnyMapping } from '@decipad/utils';
+import type { AnyMapping } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  Result,
-  Type,
-  materializeOneResult,
-} from '@decipad/language-types';
+import type { AST, Result, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { materializeOneResult } from '@decipad/language-types';
 import { isExpression, prettyPrintAST, validateResult } from '.';
-import { Context, inferBlock, makeContext } from './infer';
+import type { Context } from './infer';
+import { inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
 

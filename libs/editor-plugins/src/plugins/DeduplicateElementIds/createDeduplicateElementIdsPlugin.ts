@@ -1,22 +1,16 @@
-import {
-  AnyElement,
-  createMyPluginFactory,
-  MyValue,
-} from '@decipad/editor-types';
+import type { AnyElement, MyValue } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { captureException } from '@sentry/browser';
-import {
-  findNode,
-  isElement,
-  nanoid,
+import type {
   PlateEditor,
-  setNodes,
   TEditor,
   TNodeProps,
   Value,
 } from '@udecode/plate-common';
-import { Element } from 'slate';
+import { findNode, isElement, nanoid, setNodes } from '@udecode/plate-common';
+import type { Element } from 'slate';
 
 const key = 'DEDUPLICATE_ELEMENT_IDS_PLUGIN';
 

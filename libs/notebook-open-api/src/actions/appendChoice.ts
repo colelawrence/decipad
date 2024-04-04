@@ -9,9 +9,9 @@ import {
 import { getDefined } from '@decipad/utils';
 import { extendZodWithOpenApi } from 'zod-openapi';
 
-import { Action } from './types';
+import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
-import {
+import type {
   VariableSliderElement,
   VariableDropdownElement,
 } from '../../../editor-types/src/interactive-elements';

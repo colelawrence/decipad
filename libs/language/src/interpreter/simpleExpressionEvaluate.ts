@@ -1,6 +1,8 @@
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { Value, AST, InferError } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value, InferError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin } from '@decipad/language-builtins';
 import { getIdentifierString } from '../utils';

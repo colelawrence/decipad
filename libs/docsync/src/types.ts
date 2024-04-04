@@ -1,11 +1,16 @@
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import {
   type TCursorEditor as GTCursorEditor,
   type TYjsEditor as GTYjsEditor,
 } from '@decipad/slate-yjs';
-import { BehaviorSubject } from 'rxjs';
-import { Array as YArray, Text as YText, Map as YMap, UndoManager } from 'yjs';
-import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '../../editor-types/src/nodes';
+import type { BehaviorSubject } from 'rxjs';
+import type {
+  Array as YArray,
+  Text as YText,
+  Map as YMap,
+  UndoManager,
+} from 'yjs';
+import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '../../editor-types/src/nodes';
 
 export type Doc = YArray<RootElement>;
 

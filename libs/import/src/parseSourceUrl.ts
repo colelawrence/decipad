@@ -1,5 +1,5 @@
-import { ImportElementSource } from '@decipad/editor-types';
-import { SourceUrlParseResponse } from './types';
+import type { ImportElementSource } from '@decipad/editor-types';
+import type { SourceUrlParseResponse } from './types';
 import { gsheets } from './providers';
 
 export const parseSourceUrl = (

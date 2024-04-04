@@ -1,5 +1,5 @@
+import type { DataViewElement, TableElement } from '@decipad/editor-types';
 import {
-  DataViewElement,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
@@ -12,10 +12,10 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  TableElement,
   createMyPlateEditor,
 } from '@decipad/editor-types';
-import { TEditor, findNode, normalizeEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { findNode, normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 
 describe('createNormalizeDataViewPlugin', () => {

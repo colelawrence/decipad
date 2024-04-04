@@ -1,18 +1,20 @@
-import { ClipboardEvent } from 'react';
-import {
+import type { ClipboardEvent } from 'react';
+import type {
   MyEditor,
-  ELEMENT_CALLOUT,
   TopLevelValue,
   MyNode,
+  ElementKind,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_CALLOUT,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_BLOCKQUOTE,
-  ElementKind,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { clone } from '@decipad/editor-utils';
 
 const PASTE_PLAIN_ELEMENTS = new Set<ElementKind>([

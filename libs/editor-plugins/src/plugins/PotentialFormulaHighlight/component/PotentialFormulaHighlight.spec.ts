@@ -1,11 +1,12 @@
-import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   createMyPlateEditor,
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 

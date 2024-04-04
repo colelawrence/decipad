@@ -7,7 +7,7 @@ import {
 } from 'simple-cookie';
 import { encode as qsEncode } from 'querystring';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { VerificationRequestRecord } from '@decipad/backendtypes';
+import type { VerificationRequestRecord } from '@decipad/backendtypes';
 
 waitForExpect.defaults.interval = 250;
 

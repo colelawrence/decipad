@@ -1,9 +1,9 @@
 import {
-  IdentifiedBlock,
+  type IdentifiedBlock,
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import { DataViewElement } from '@decipad/editor-types';
+import { type DataViewElement } from '@decipad/editor-types';
 import { getColumnRef } from './getColumnRef';
 
 export const generateAssembledTableDef = (

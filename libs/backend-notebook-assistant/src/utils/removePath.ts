@@ -1,4 +1,4 @@
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
 import get from 'lodash.get';
 

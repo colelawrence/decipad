@@ -1,6 +1,7 @@
 import { once } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import { JSONPatchISOFormat, create, formatters } from 'jsondiffpatch';
+import type { JSONPatchISOFormat } from 'jsondiffpatch';
+import { create, formatters } from 'jsondiffpatch';
 import md5 from 'md5';
 
 export const diff = once(() => {

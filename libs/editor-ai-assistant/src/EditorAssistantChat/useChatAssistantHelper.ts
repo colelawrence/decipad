@@ -1,9 +1,9 @@
-import {
+import type {
   EventMessage,
   Message,
   UserMessage,
-  useAIChatHistory,
 } from '@decipad/react-contexts';
+import { useAIChatHistory } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useCallback } from 'react';
 import { useAgent } from './useAgent';

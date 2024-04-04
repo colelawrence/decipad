@@ -1,5 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
-import { Path } from 'slate';
+import { type MyEditor } from '@decipad/editor-types';
+import { type Path } from 'slate';
 import { getEndPoint, getNode, isVoid } from '@udecode/plate-common';
 import { ReactEditor } from 'slate-react';
 import { setSelection } from './setSelection';

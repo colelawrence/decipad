@@ -1,15 +1,9 @@
 /* eslint-disable no-param-reassign */
-import {
-  ELEMENT_H1,
-  MyEditor,
-  MyNodeEntry,
-  MyValue,
-} from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry, MyValue } from '@decipad/editor-types';
+import { ELEMENT_H1 } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 

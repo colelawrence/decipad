@@ -1,5 +1,5 @@
 import stringify from 'json-stringify-safe';
-import { BaseRange } from 'slate';
+import type { BaseRange } from 'slate';
 
 let showedError = false;
 

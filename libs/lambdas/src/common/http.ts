@@ -1,8 +1,8 @@
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
-import { Payload } from '@hapi/boom';
+import type { Payload } from '@hapi/boom';
 
 const allowedErrorKeys = new Set<keyof Payload>([
   'statusCode',

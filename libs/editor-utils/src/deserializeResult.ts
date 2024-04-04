@@ -1,11 +1,5 @@
-import {
-  SerializedTypes,
-  Unit,
-  Result,
-  isColumn,
-  Unknown,
-  buildResult,
-} from '@decipad/remote-computer';
+import type { SerializedTypes, Unit, Result } from '@decipad/remote-computer';
+import { isColumn, Unknown, buildResult } from '@decipad/remote-computer';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 

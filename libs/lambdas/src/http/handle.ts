@@ -1,7 +1,7 @@
 import { inspect } from 'util';
 import stringify from 'json-stringify-safe';
 import { boomify } from '@hapi/boom';
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyEventV2WithRequestContext,
   APIGatewayProxyResultV2,
@@ -13,7 +13,7 @@ import chalk from 'chalk';
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { captureException, trace } from '@decipad/backend-trace';
 import { analyticsClient } from '@decipad/backend-analytics';
-import { Handler as MyHandler } from '@decipad/backendtypes';
+import type { Handler as MyHandler } from '@decipad/backendtypes';
 import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { debug } from '../debug';
 import {

@@ -4,7 +4,7 @@ import { timestamp } from '@decipad/backend-utils';
 import { AuthenticationError, UserInputError } from 'apollo-server-lambda';
 import { requireUser } from '../authorization';
 import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
-import { Resolvers, User } from '@decipad/graphqlserver-types';
+import type { Resolvers, User } from '@decipad/graphqlserver-types';
 
 const minimumUsernameCharCount = 1;
 

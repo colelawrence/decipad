@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/browser';
 import { useEffect, useState } from 'react';
-import { ChatCompletionMessageParam } from 'openai/resources/chat';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat';
 
 export type RemoteData<T> =
   | {

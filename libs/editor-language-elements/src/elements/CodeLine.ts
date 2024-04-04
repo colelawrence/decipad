@@ -1,6 +1,6 @@
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { getCodeLineSource } from '@decipad/editor-utils';
-import { InteractiveLanguageElement } from '../types';
+import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 
 export const getUnparsedBlockFromCodeLine: InteractiveLanguageElement['getParsedBlockFromElement'] =

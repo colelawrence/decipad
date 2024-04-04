@@ -1,4 +1,4 @@
-import { TableCellType } from '@decipad/editor-types';
+import type { TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { formatUnit } from '@decipad/format';
 

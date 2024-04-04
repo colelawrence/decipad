@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import { RootDocument } from '@decipad/editor-types';
-import {
+import type { RootDocument } from '@decipad/editor-types';
+import type {
   ChatCompletionAssistantMessageParam,
   ChatCompletionSystemMessageParam,
   ChatCompletionUserMessageParam,
@@ -11,8 +11,8 @@ import { debug } from '../debug';
 import { getCode } from '../utils/getCode';
 import { splitCode } from '../utils/splitCode';
 import { generateInitialMessages } from './generateInitialMessages';
-import { SplitCodeResult } from '../types';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { SplitCodeResult } from '../types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 const fineTunedModelForDecilangCode =
   'ft:gpt-3.5-turbo-0613:team-n1n-co::8L7t8n9c';

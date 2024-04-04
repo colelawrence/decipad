@@ -1,6 +1,6 @@
 import DeciNumber from '@decipad/number';
 import { isInfinity } from './Infinity';
-import { LogicNumber } from './types';
+import type { LogicNumber } from './types';
 
 interface WithType {
   type: string;

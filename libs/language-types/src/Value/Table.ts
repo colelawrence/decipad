@@ -1,14 +1,11 @@
-import { ColumnLikeValue, isColumnLike } from './ColumnLike';
+import type { ColumnLikeValue } from './ColumnLike';
+import { isColumnLike } from './ColumnLike';
 import type { Value } from './Value';
 import { EmptyColumn } from './EmptyColumn';
-import {
-  AnyMapping,
-  anyMappingToMap,
-  filterUnzipped,
-  unzip,
-} from '@decipad/utils';
+import type { AnyMapping } from '@decipad/utils';
+import { anyMappingToMap, filterUnzipped, unzip } from '@decipad/utils';
 import { RuntimeError } from '../RuntimeError';
-import { OneResult } from '../Result';
+import type { OneResult } from '../Result';
 
 export class Table implements Value {
   columns: ColumnLikeValue[];

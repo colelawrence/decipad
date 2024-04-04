@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import { ColumnLike } from '@decipad/column';
+import type { ColumnLike } from '@decipad/column';
 import { from } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import { Comparable } from '@decipad/language-types';
+import type { Comparable } from '@decipad/language-types';
 
 export type ColumnLikeResult<T = Comparable> = ColumnLike<T>;
 

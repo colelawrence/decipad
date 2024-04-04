@@ -1,6 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 import { useStore } from 'zustand';
-import {
+import type {
   ComputerStat,
   ComputerExpressionResultStat,
 } from '@decipad/remote-computer';

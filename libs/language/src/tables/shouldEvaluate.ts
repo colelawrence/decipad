@@ -1,4 +1,4 @@
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 
 /** If the typecheck failed, we don't execute */
 export const shouldEvaluate = (

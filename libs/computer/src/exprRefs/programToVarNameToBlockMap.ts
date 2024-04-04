@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
 import { type AST, isAssignment } from '@decipad/language';
 import { getExprRef } from '..';
-import { VarNameToBlockMap } from '../internalTypes';
-import { Program } from '../types';
+import type { VarNameToBlockMap } from '../internalTypes';
+import type { Program } from '../types';
 import { getIdentifierString } from '../utils';
 
 interface ProgramToVarNameToBlockMapResult {

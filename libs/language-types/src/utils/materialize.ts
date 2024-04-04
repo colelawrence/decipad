@@ -1,9 +1,9 @@
 import { empty, from } from '@decipad/generator-utils';
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 import { materializeOneResult } from './materializeOneResult';
-import { Dimension } from '../Dimension';
-import { MinimalTensor } from '../Value/MinimalTensor';
-import { OneResult } from '../Result';
+import type { Dimension } from '../Dimension';
+import type { MinimalTensor } from '../Value/MinimalTensor';
+import type { OneResult } from '../Result';
 
 const recurse = async (
   dims: Dimension[],

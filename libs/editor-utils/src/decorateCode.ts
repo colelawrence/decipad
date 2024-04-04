@@ -1,22 +1,15 @@
-import {
+import type {
   ENodeEntry,
   PlateEditor,
   TElement,
   TNodeEntry,
   TRange,
   Value,
-  getNodeString,
-  getPointAfter,
 } from '@udecode/plate-common';
-import {
+import { getNodeString, getPointAfter } from '@udecode/plate-common';
+import type {
   MyDecorate,
   ELEMENT_CODE_LINE,
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
-  DECORATE_CODE_VARIABLE,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  DECORATE_AUTO_COMPLETE_MENU,
-  ELEMENT_SMART_REF,
   CodeLineV2Element,
   CodeLineElement,
   CodeLineV2ElementCode,
@@ -25,8 +18,18 @@ import {
   ELEMENT_PARAGRAPH,
   ParagraphElement,
 } from '@decipad/editor-types';
-import { BasePoint, Path, Range } from 'slate';
-import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
+import {
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  DECORATE_CODE_VARIABLE,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  DECORATE_AUTO_COMPLETE_MENU,
+  ELEMENT_SMART_REF,
+} from '@decipad/editor-types';
+import type { BasePoint } from 'slate';
+import { Path, Range } from 'slate';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseStatement } from '@decipad/remote-computer';
 import { isExprRef } from 'libs/computer/src/exprRefs';
 import { getVariableRanges } from './getVariableRanges';
 import type { RangeWithVariableInfo } from './getVariableRanges';

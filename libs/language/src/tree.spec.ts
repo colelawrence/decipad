@@ -1,5 +1,6 @@
 import DeciNumber from '@decipad/number';
-import { Result, serializeType } from '.';
+import type { Result } from '.';
+import { serializeType } from '.';
 import { runCodeForVariables } from './testUtils';
 
 describe('tree builtin', () => {

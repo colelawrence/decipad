@@ -1,11 +1,7 @@
-import React from 'react';
-import {
-  PlateEditor,
-  Value,
-  findEventRange,
-  select,
-} from '@udecode/plate-common';
-import { MyValue } from '@decipad/editor-types';
+import type React from 'react';
+import type { PlateEditor, Value } from '@udecode/plate-common';
+import { findEventRange, select } from '@udecode/plate-common';
+import type { MyValue } from '@decipad/editor-types';
 
 /**
  * Find the range where the drop happened and select it if defined.

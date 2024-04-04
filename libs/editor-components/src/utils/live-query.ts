@@ -1,14 +1,14 @@
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { LiveQueryElement, MyEditor } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  LiveQueryElement,
-  MyEditor,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { generateVarName } from '@decipad/utils';
-import { TEditor, findNode, focusEditor, nanoid } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { findNode, focusEditor, nanoid } from '@udecode/plate-common';
 import clone from 'lodash.clonedeep';
 import { Path } from 'slate';
 

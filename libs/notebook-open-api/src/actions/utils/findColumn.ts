@@ -1,9 +1,10 @@
-import {
+import type {
   MyEditor,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { getNode, TNodeEntry } from '@udecode/plate-common';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { getNode } from '@udecode/plate-common';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const findColumn = (

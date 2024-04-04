@@ -1,7 +1,7 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { findColumnByCell } from '@decipad/editor-table';
-import { Path } from 'slate';
-import { CellDndProps } from '../contexts/TableDndContext';
+import type { Path } from 'slate';
+import type { CellDndProps } from '../contexts/TableDndContext';
 
 export const findColumnAndDragItem = (
   editor: MyEditor,

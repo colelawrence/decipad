@@ -1,18 +1,15 @@
-import {
-  ComponentProps,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { BehaviorSubject } from 'rxjs';
-import { DocSyncEditor } from '@decipad/docsync';
+import type { ComponentProps } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import type { BehaviorSubject } from 'rxjs';
+import type { DocSyncEditor } from '@decipad/docsync';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
-import { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
-import {
+import type { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
+import type {
   GetNotebookByIdQuery,
+  PermissionType,
+} from '@decipad/graphql-client';
+import {
   useCreateOrUpdateNotebookSnapshotMutation,
   useGetNotebookByIdQuery,
   useUpdateNotebookIconMutation,
@@ -21,21 +18,18 @@ import {
   useSharePadWithEmailMutation,
   useUnsharePadWithUserMutation,
   useUpdatePadPermissionMutation,
-  PermissionType,
   useCreateNotebookSnapshotMutation,
   useSetNotebookPublishStateMutation,
 } from '@decipad/graphql-client';
-import EditorIcon from '../EditorIcon';
-import { TColorStatus } from '@decipad/ui';
+import type EditorIcon from '../EditorIcon';
+import type { TColorStatus } from '@decipad/ui';
 import {
   isNewNotebook,
   parseIconColorFromIdentifier,
 } from 'apps/frontend/src/utils';
 import { useExternalDataSources } from './useExternalDataSources';
-import {
-  ExternalDataSourcesContextValue,
-  PublishedVersionName,
-} from '@decipad/interfaces';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 

@@ -1,8 +1,8 @@
-import {
-  ELEMENT_TABLE,
+import type {
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TABLE } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { useCallback } from 'react';

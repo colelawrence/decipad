@@ -1,9 +1,6 @@
-import {
-  authenticate,
-  AuthResult,
-  jwt as jwtConf,
-} from '@decipad/services/authentication';
-import {
+import type { AuthResult } from '@decipad/services/authentication';
+import { authenticate, jwt as jwtConf } from '@decipad/services/authentication';
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';

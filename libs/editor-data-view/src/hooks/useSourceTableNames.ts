@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  AutocompleteName,
-  isTable as isComputerTable,
-} from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/remote-computer';
+import { isTable as isComputerTable } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { dequal } from '@decipad/utils';
 import { debounce } from 'lodash';

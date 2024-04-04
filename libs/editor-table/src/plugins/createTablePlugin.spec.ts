@@ -1,10 +1,6 @@
-import { MyValue } from '@decipad/editor-types';
-import {
-  createPlateEditor,
-  normalizeEditor,
-  PlatePlugin,
-  TEditor,
-} from '@udecode/plate-common';
+import type { MyValue } from '@decipad/editor-types';
+import type { PlatePlugin, TEditor } from '@udecode/plate-common';
+import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
 
 import { nanoid } from 'nanoid';

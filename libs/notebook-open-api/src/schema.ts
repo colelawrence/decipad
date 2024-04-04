@@ -1,11 +1,9 @@
-import {
-  ZodOpenApiRequestBodyObject,
-  createDocument,
-  oas30,
-} from 'zod-openapi';
-import { Action, actions } from './actions';
-import { NotebookOpenApi } from './types';
-import { ChatCompletionCreateParams } from 'openai/resources';
+import type { ZodOpenApiRequestBodyObject, oas30 } from 'zod-openapi';
+import { createDocument } from 'zod-openapi';
+import type { Action } from './actions';
+import { actions } from './actions';
+import type { NotebookOpenApi } from './types';
+import type { ChatCompletionCreateParams } from 'openai/resources';
 
 const getSchema = <T extends keyof NotebookOpenApi>(
   action: Action<T>

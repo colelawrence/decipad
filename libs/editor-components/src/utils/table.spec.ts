@@ -1,4 +1,5 @@
-import { ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { ELEMENT_TABLE } from '@decipad/editor-types';
 import { createTEditor } from '@udecode/plate-common';
 import { insertTableBelow } from './table';
 

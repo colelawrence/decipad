@@ -1,10 +1,5 @@
-import {
-  ElementKind,
-  elementKinds,
-  MyEditor,
-  MyElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { ElementKind, MyEditor, MyElement } from '@decipad/editor-types';
+import { elementKinds, useMyEditorRef } from '@decipad/editor-types';
 import {
   createPathRef,
   createZustandStore,
@@ -18,18 +13,17 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
-import { Path, PathRef } from 'slate';
+import type { DropTargetMonitor, XYCoord } from 'react-dnd';
+import { useDrop } from 'react-dnd';
+import type { PathRef } from 'slate';
+import { Path } from 'slate';
 import {
   blockSelectionActions,
   blockSelectionSelectors,
 } from '@udecode/plate-selection';
 import { getAnalytics } from '@decipad/client-events';
-import {
-  dndStore as plateDndStore,
-  useDragNode,
-  UseDropNodeOptions,
-} from '@udecode/plate-dnd';
+import type { UseDropNodeOptions } from '@udecode/plate-dnd';
+import { dndStore as plateDndStore, useDragNode } from '@udecode/plate-dnd';
 
 export declare type DropDirection =
   | 'top'

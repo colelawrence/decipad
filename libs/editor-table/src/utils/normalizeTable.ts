@@ -1,12 +1,6 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
-import { NormalizerReturnValue } from '@decipad/editor-plugins';
-import {
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TABLE_VARIABLE_NAME,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import type {
   TableCaptionElement,
   TableCellElement,
   TableColumnFormulaElement,
@@ -14,6 +8,14 @@ import {
   TableHeaderElement,
   TableRowElement,
   TableVariableNameElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
 } from '@decipad/editor-types';
 import {
   insertNodes,
@@ -25,7 +27,7 @@ import {
   generateColumnName,
   generateTableName,
 } from '@decipad/utils';
-import {
+import type {
   ChildOf,
   EElement,
   EElementOrText,
@@ -36,6 +38,8 @@ import {
   TNodeEntry,
   TNodeProps,
   Value,
+} from '@udecode/plate-common';
+import {
   deleteText,
   getChildren,
   getNodeChildren,
@@ -48,7 +52,7 @@ import {
   wrapNodes,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { convertLegacyType } from './convertLegacyType';
 import { createTableCaption } from './createTableCaption';
 import { setCellText } from './setCellText';

@@ -1,7 +1,7 @@
-import { Unit } from '@decipad/language-units';
+import type { Unit } from '@decipad/language-units';
 // eslint-disable-next-line no-restricted-imports
 import { singular } from '@decipad/language-utils';
-import { Specificity } from './Time';
+import type { Specificity } from './Time';
 import { allSpecificities } from './allSpecificities';
 
 export const getSpecificity = (thing?: string | Unit.Unit): Specificity => {

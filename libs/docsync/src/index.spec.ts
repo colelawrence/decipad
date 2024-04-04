@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
-import { Pad } from '@decipad/backendtypes';
+import type { Pad } from '@decipad/backendtypes';
 import fetch from 'jest-fetch-mock';
 import waitForExpect from 'wait-for-expect';
-import { createDocSyncEditor, DocSyncEditor } from '.';
+import type { DocSyncEditor } from '.';
+import { createDocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';

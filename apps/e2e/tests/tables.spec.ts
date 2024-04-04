@@ -1,5 +1,6 @@
 import os from 'node:os';
-import { expect, test, Page } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import {
   ControlPlus,
   keyPress,

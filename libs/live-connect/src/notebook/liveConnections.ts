@@ -1,15 +1,16 @@
-import {
+import type {
   AnyElement,
   LiveConnectionElement,
-  ELEMENT_LIVE_CONNECTION,
   LiveDataSetElement,
   LiveQueryElement,
   NotebookValue,
 } from '@decipad/editor-types';
+import { ELEMENT_LIVE_CONNECTION } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import isEmpty from 'lodash.isempty';
-import { BehaviorSubject, SubscriptionLike } from 'rxjs';
-import { ConnectionResult, Observe } from '../types';
+import type { SubscriptionLike } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import type { ConnectionResult, Observe } from '../types';
 
 type LiveConnectionElementWithConnections =
   | LiveConnectionElement

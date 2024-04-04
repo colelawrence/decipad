@@ -1,8 +1,8 @@
 import stringify from 'json-stringify-safe';
-import { TestContext } from '@decipad/backend-test-sandbox';
+import type { TestContext } from '@decipad/backend-test-sandbox';
 import defaultDocument from './__fixtures__/no-code.json';
 import { noop } from '@decipad/utils';
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 
 interface AfterRunResults {
   notebookId: string;

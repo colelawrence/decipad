@@ -1,11 +1,6 @@
-import {
-  Result,
-  type SerializedTypes,
-  isColumn,
-  Unknown,
-  buildResult,
-} from '@decipad/remote-computer';
-import { ColIndex, TableCellType } from '@decipad/editor-types';
+import type { Result, SerializedTypes } from '@decipad/remote-computer';
+import { isColumn, Unknown, buildResult } from '@decipad/remote-computer';
+import type { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
 import stringify from 'json-stringify-safe';

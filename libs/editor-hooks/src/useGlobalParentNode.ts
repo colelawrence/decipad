@@ -1,7 +1,8 @@
-import { MyElement, MyNode } from '@decipad/editor-types';
+import type { MyElement, MyNode } from '@decipad/editor-types';
 import { useEditorController } from './useActiveEditor';
-import { TNode, TNodeEntry, isElement } from '@udecode/plate-common';
-import { Path } from 'slate';
+import type { TNode, TNodeEntry } from '@udecode/plate-common';
+import { isElement } from '@udecode/plate-common';
+import type { Path } from 'slate';
 
 const findGlobalNode = <TN extends TNode>(
   children: TNode[],

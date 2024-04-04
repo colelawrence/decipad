@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-use-before-define */
-import { Account, NextAuthOptions, User } from 'next-auth';
-import { UserInput } from '@decipad/backendtypes';
+import type { Account, NextAuthOptions, User } from 'next-auth';
+import type { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
   create as createUser,
@@ -9,7 +9,7 @@ import {
 } from '@decipad/services/users';
 import { createVerifier } from '@decipad/services/authentication';
 import pick from 'lodash.pick';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 // Next-Auth does not expose some types
 // So we have to help here.

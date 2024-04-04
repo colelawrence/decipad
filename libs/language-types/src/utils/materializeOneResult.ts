@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 import { all, map } from '@decipad/generator-utils';
-import { PromiseOrType, bind, sequence } from '@decipad/utils';
-import { OneResult, ResultGenerator } from '../Result';
+import type { PromiseOrType } from '@decipad/utils';
+import { bind, sequence } from '@decipad/utils';
+import type { OneResult, ResultGenerator } from '../Result';
 
 export const materializeOneResult = (
   _result: PromiseOrType<OneResult>

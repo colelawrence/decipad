@@ -1,16 +1,12 @@
-import {
-  EElement,
-  findNode,
-  isElement,
-  TNodeEntry,
-} from '@udecode/plate-common';
+import type { EElement, TNodeEntry } from '@udecode/plate-common';
+import { findNode, isElement } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import { notAcceptable, notFound } from '@hapi/boom';
 import { matchElementId } from '../utils/matchElementId';
-import { Action } from './types';
+import type { Action } from './types';
 import { replaceText } from './utils/replaceText';
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 
 extendZodWithOpenApi(z);
 

@@ -1,12 +1,12 @@
-import { SubscriptionLike } from 'rxjs';
-import {
+import type { SubscriptionLike } from 'rxjs';
+import type {
   ImportElementSource,
   LiveConnectionElement,
   LiveDataSetElement,
   LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
-import { ImportResult } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
 
 export type SubscriptionId = string;
 

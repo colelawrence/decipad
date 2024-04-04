@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import {
+import type {
   AnonUserWithSecret,
   User,
   UserWithSecret,
@@ -7,12 +7,12 @@ import {
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { decode as decodeJWT } from 'next-auth/jwt';
 import { parse as parseCookie } from 'simple-cookie';
 import { debug } from './debug';
 import { jwt as jwtConf } from './jwt';
-import { AnonUser } from '@decipad/graphqlserver-types';
+import type { AnonUser } from '@decipad/graphqlserver-types';
 
 export type AuthResult = {
   user?: User;

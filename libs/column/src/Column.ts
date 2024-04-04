@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import DeciNumber, { DeciNumberInput } from '@decipad/number';
+import type { DeciNumberInput } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
 import { from } from '@decipad/generator-utils';
-import { ColumnLike } from './ColumnLike';
+import type { ColumnLike } from './ColumnLike';
 
 export type Comparable =
   | string

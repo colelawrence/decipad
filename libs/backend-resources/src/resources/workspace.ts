@@ -1,6 +1,6 @@
-import { WorkspaceRecord } from '@decipad/backendtypes';
+import type { WorkspaceRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { BackendResourceDef } from '../types';
+import type { BackendResourceDef } from '../types';
 
 export const workspace: BackendResourceDef<WorkspaceRecord> = {
   name: 'workspaces',

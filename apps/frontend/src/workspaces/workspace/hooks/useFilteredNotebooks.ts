@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { WorkspaceNotebookFragment } from '@decipad/graphql-client';
+import type { WorkspaceNotebookFragment } from '@decipad/graphql-client';
 
 export type PageTypes = 'workspace' | 'archived' | 'shared' | 'section';
 

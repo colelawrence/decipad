@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
-import {
+import type {
   MinimalRootEditor,
   MyElement,
   MyNode,
   MyText,
 } from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
 import { timeout } from '@decipad/utils';
 import { randomChar } from './random-char';
 

@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import {
+import type {
   Context,
   ContextStats,
   InterpreterStats,
   Realm,
-  initialInferStats,
-  initialInterpreterStats,
 } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { initialInferStats, initialInterpreterStats } from '@decipad/language';
 import cloneDeep from 'lodash.clonedeep';
 import { BehaviorSubject } from 'rxjs';
 

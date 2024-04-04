@@ -1,11 +1,13 @@
-import {
-  ELEMENT_COLUMNS,
-  ELEMENT_LIC,
-  ELEMENT_TD,
+import type {
   InterceptableEvent,
   MyEditor,
   MyElementEntry,
   MyPlatePlugin,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_COLUMNS,
+  ELEMENT_LIC,
+  ELEMENT_TD,
 } from '@decipad/editor-types';
 import {
   getLevels,
@@ -15,7 +17,7 @@ import {
   isCollapsed,
   isElement,
 } from '@udecode/plate-common';
-import { Location } from 'slate';
+import type { Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
 

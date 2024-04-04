@@ -1,5 +1,8 @@
-import DeciNumber, { DeciNumberInputWithNumerator, N } from '@decipad/number';
-import { parseUnit, Unit } from '@decipad/remote-computer';
+import type { DeciNumberInputWithNumerator } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
+import type { Unit } from '@decipad/remote-computer';
+import { parseUnit } from '@decipad/remote-computer';
 
 export function F(n: number | bigint, d?: number | bigint): DeciNumber;
 export function F(

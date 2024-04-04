@@ -1,4 +1,4 @@
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import {} from '@architect/functions';
 import { encode } from 'next-auth/jwt';
 import tables from '@decipad/tables';

@@ -1,10 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { CacheProvider, EmotionCache } from '@emotion/react';
-import { FC } from 'react';
+import type { EmotionCache } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
+import type { FC } from 'react';
 import { StaticRouter } from 'react-router-dom/server';
-import { Provider as GraphqlProvider, Client } from 'urql';
+import type { Client } from 'urql';
+import { Provider as GraphqlProvider } from 'urql';
 import { SessionProvider } from 'next-auth/react';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 // eslint-disable-next-line import/no-relative-packages
 import AppLoader from '../../../apps/frontend/src/AppLoader';
 

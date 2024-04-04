@@ -1,11 +1,11 @@
 import {
   isSyntaxError,
-  Parser,
+  type Parser,
   hasBracketError,
 } from '@decipad/remote-computer';
-import { Path } from 'slate';
+import { type Path } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
-import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
+import { type SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
 
 export function getSyntaxErrorRanges(
   path: Path,

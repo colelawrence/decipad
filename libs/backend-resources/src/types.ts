@@ -1,5 +1,8 @@
-import { ConcreteRecord, DataTable, User } from '@decipad/backendtypes';
-import { GraphqlContext, PermissionType } from '@decipad/graphqlserver-types';
+import type { ConcreteRecord, DataTable, User } from '@decipad/backendtypes';
+import type {
+  GraphqlContext,
+  PermissionType,
+} from '@decipad/graphqlserver-types';
 
 export type BackendResourceDef<DataTableType extends ConcreteRecord> = {
   name: string;

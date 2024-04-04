@@ -1,8 +1,6 @@
-import DeciNumber from '@decipad/number';
-import {
-  Unit,
-  convertBetweenUnits as realConvertBetweenUnits,
-} from '@decipad/language-units';
+import type DeciNumber from '@decipad/number';
+import type { Unit } from '@decipad/language-units';
+import { convertBetweenUnits as realConvertBetweenUnits } from '@decipad/language-units';
 import { InferError } from '../InferError';
 
 interface ImprecisionOpts {

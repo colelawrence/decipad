@@ -1,6 +1,6 @@
 import { RPC } from '@mixer/postmessage-rpc';
 import { createResponse } from './createResponse';
-import {
+import type {
   LiveConnectionWorker,
   RPCResponse,
   SubscriptionId,

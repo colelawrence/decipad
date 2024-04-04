@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
 import { Buffer } from 'buffer';
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyEventHeaders,
 } from 'aws-lambda';

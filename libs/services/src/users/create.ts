@@ -1,5 +1,5 @@
 import { track } from '@decipad/backend-analytics';
-import {
+import type {
   PadRecord,
   SectionRecord,
   User,
@@ -7,11 +7,11 @@ import {
   UserWithSecret,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
-import { MyElement } from '@decipad/editor-types';
+import type { MyElement } from '@decipad/editor-types';
 import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import timestamp from '../common/timestamp';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';

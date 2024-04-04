@@ -1,11 +1,6 @@
-import {
-  AnyReadonlyMapping,
-  PromiseOrType,
-  anyMappingToMap,
-  getDefined,
-  identity,
-} from '@decipad/utils';
-import {
+import type { AnyReadonlyMapping, PromiseOrType } from '@decipad/utils';
+import { anyMappingToMap, getDefined, identity } from '@decipad/utils';
+import type {
   Stack,
   StackNamespaceJoiner,
   StackNamespaceRetrieverHackForTypesystemTables,

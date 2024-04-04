@@ -1,4 +1,4 @@
-import { AnyElement, ElementVariants } from '@decipad/editor-types';
+import type { AnyElement, ElementVariants } from '@decipad/editor-types';
 
 type Action =
   // Notebook operations

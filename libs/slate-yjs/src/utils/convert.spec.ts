@@ -1,8 +1,8 @@
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { toSlateNode, toSyncElement } from './convert';
-import { SyncElement } from '../model';
-import { TabElement } from '@decipad/editor-types';
+import type { SyncElement } from '../model';
+import type { TabElement } from '@decipad/editor-types';
 
 const testElement = <T extends SyncElement>(elem: T): T => {
   const doc = new YDoc();

@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { Result, SerializedTypes } from '@decipad/language-types';
-import { Validate } from './types';
+import type { Result, SerializedTypes } from '@decipad/language-types';
+import type { Validate } from './types';
 
 export const validateColumnResult = (
   type: SerializedTypes.Column | SerializedTypes.MaterializedColumn,

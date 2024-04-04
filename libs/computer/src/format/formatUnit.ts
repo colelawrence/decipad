@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import DeciNumber, { N, ONE, TWO } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ONE, TWO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
   getUnitByName,

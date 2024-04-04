@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ImportResult } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
 import { jsonPathsFromObject } from '../utils/jsonPathsFromObject';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';
 

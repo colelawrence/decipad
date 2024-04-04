@@ -1,7 +1,7 @@
 import { removeNodes } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { findElementById } from './utils/findElementById';
 import { notFound } from '@hapi/boom';
 

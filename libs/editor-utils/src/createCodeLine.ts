@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid';
+import type { CodeLineElement, CodeLineV2Element } from '@decipad/editor-types';
 import {
-  CodeLineElement,
-  CodeLineV2Element,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,

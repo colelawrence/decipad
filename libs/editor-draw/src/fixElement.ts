@@ -1,6 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { DrawElementDescendant, DrawElements } from '@decipad/editor-types';
-import { ExcalidrawDrawElement } from './types';
+import type {
+  DrawElementDescendant,
+  DrawElements,
+} from '@decipad/editor-types';
+import type { ExcalidrawDrawElement } from './types';
 
 const notDeleted = (element: DrawElementDescendant): boolean =>
   !element.isDeleted;

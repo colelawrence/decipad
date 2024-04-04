@@ -1,9 +1,9 @@
-import { WorkspaceExecutedQueryRecord } from '@decipad/backendtypes';
+import type { WorkspaceExecutedQueryRecord } from '@decipad/backendtypes';
 import {
   incrementQueryCount,
   getWorkspaceExecutedQuery,
 } from './queries.helpers';
-import {
+import type {
   Resolvers,
   WorkspaceExecutedQuery,
 } from '@decipad/graphqlserver-types';

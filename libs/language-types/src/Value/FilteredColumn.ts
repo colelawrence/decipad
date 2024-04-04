@@ -5,7 +5,7 @@ import type { Value } from './Value';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { lowLevelGet } from './lowLevelGet';
-import { OneResult } from '../Result';
+import type { OneResult } from '../Result';
 
 export class FilteredColumn
   extends FilteredColumnBase<Value>

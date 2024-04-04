@@ -1,16 +1,19 @@
-import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
-import {
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseStatement } from '@decipad/remote-computer';
+import type {
   AnyElement,
   CodeLineElement,
   CodeLineV2Element,
+  StructuredInputElement,
+  TableElement,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
+import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
-  StructuredInputElement,
-  TableElement,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 

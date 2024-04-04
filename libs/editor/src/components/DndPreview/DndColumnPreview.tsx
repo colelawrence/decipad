@@ -1,12 +1,11 @@
-import { DragColumnItem } from '@decipad/editor-table';
-import {
-  DataViewHeader,
-  TableHeaderElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { DragColumnItem } from '@decipad/editor-table';
+import type { DataViewHeader, TableHeaderElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { ColumnDndPreview as UIColumnDndPreview } from '@decipad/ui';
-import { TNodeEntry, findNode } from '@udecode/plate-common';
-import { CSSProperties, useMemo } from 'react';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { findNode } from '@udecode/plate-common';
+import type { CSSProperties } from 'react';
+import { useMemo } from 'react';
 
 const previewOpacity = 0.7;
 

@@ -1,9 +1,11 @@
 /* eslint-disable no-await-in-loop */
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Type, buildType as t } from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { inferExpression } from '../infer';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 
 const inferMatchDef = async (
   realm: Realm,

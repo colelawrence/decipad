@@ -1,18 +1,16 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
-import {
-  isHistoryEditor,
-  TOperation,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
+import { isHistoryEditor, withoutSavingHistory } from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
-import * as Y from 'yjs';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type * as Y from 'yjs';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import type { TYjsEditor } from './types';
 import { applyYjsEvents } from '../applyToSlate';
 import applySlateOps from '../applyToYjs';
-import { SharedType, slateYjsSymbol } from '../model';
+import type { SharedType } from '../model';
+import { slateYjsSymbol } from '../model';
 
 const IS_REMOTE: WeakSet<MinimalRootEditor> = new WeakSet();
 const LOCAL_OPERATIONS: WeakMap<

@@ -1,7 +1,7 @@
+import type { MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_LIVE_CONNECTION,
-  MyValue,
 } from '@decipad/editor-types';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 

@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/browser';
-import { TOperation } from '@udecode/plate-common';
+import type { TOperation } from '@udecode/plate-common';
 import { createOverrideApplyPluginFactory } from '../../pluginFactories';
 
 const maxHistorySize = 50;

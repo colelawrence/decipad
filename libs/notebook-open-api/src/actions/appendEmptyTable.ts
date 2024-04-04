@@ -2,6 +2,7 @@ import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
+import type { TableElement, TableRowElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -9,12 +10,10 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  TableElement,
-  TableRowElement,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
-import { Action } from './types';
+import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getNodeString } from '../utils/getNodeString';
 

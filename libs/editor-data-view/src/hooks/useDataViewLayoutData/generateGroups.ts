@@ -5,7 +5,7 @@ import { type DataGroup } from '../../types';
 import { sliceToGroup } from './sliceToGroup';
 import { generateSmartRow } from './generateSmartRow';
 import { aggregationExpression as createAggregationExpression } from '../../utils/aggregationExpression';
-import { GenerateGroupsProps } from './types';
+import type { GenerateGroupsProps } from './types';
 
 export const generateGroups = async ({
   tableName,

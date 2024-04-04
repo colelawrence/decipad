@@ -1,7 +1,7 @@
 import groupBy from 'lodash.groupby';
 // eslint-disable-next-line no-restricted-imports
 import { type AST } from '@decipad/language';
-import { ProgramBlock } from '../types';
+import type { ProgramBlock } from '../types';
 import { decilang } from '..';
 import { statementToIdentifiedBlock } from '../utils';
 

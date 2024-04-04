@@ -1,7 +1,6 @@
-import { Selection } from 'slate';
+import type { Selection } from 'slate';
+import type { TEditor, Value } from '@udecode/plate-common';
 import {
-  TEditor,
-  Value,
   // eslint-disable-next-line no-restricted-imports
   setSelection as plateSetSelection,
   deselect,

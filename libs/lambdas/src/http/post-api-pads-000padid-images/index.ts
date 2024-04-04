@@ -5,7 +5,7 @@ import { createImageAttachment } from '@decipad/services/images';
 import { resourceusage } from '@decipad/services';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 import tables from '@decipad/tables';

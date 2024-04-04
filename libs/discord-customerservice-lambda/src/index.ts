@@ -1,13 +1,14 @@
 /* eslint-disable no-console */
 import stringify from 'json-stringify-safe';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import {
+import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import type {
   APIInteraction,
   APIInteractionResponse,
-  InteractionResponseType,
 } from 'discord-api-types/payloads/v9';
+import { InteractionResponseType } from 'discord-api-types/payloads/v9';
 import fetch from 'isomorphic-fetch';
-import { boomify, Boom } from '@hapi/boom';
+import type { Boom } from '@hapi/boom';
+import { boomify } from '@hapi/boom';
 import { validate } from './validate';
 import { processCommand } from './process-command';
 import type { Command, CommandReply } from './command';

@@ -1,8 +1,8 @@
 import { parse as parseCSV } from 'csv-parse/browser/esm';
-import { RemoteComputer, Result } from '@decipad/remote-computer';
+import type { RemoteComputer, Result } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';
-import { Sheet, SpreadsheetValue } from './types';
+import type { Sheet, SpreadsheetValue } from './types';
 import type { ImportOptions } from './import';
 import { trimSheet } from './utils/trimSheet';
 

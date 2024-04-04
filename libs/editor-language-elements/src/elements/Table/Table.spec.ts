@@ -1,4 +1,5 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
+import type { TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -7,7 +8,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  TableElement,
 } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';

@@ -1,9 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import DeciNumber, {
-  isDeciNumberInput,
-  N,
-  DeciNumberInput,
-} from '@decipad/number';
+import type { DeciNumberInput } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { isDeciNumberInput, N } from '@decipad/number';
 import { zip } from '@decipad/utils';
 
 export type CompareResult = -1 | 0 | 1;

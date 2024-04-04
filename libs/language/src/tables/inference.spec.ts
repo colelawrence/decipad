@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST, buildType as t } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { inferStatement, makeContext } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
 import { objectToMap } from '../testUtils';

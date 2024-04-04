@@ -1,5 +1,6 @@
 import stringify from 'json-stringify-safe';
-import { Stack, createStack } from './index';
+import type { Stack } from './index';
+import { createStack } from './index';
 
 let stack: Stack<string>;
 beforeEach(() => {

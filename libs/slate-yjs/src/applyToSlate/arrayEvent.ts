@@ -5,10 +5,10 @@ import {
   type TNodeOperation,
 } from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
-import * as Y from 'yjs';
-import { SyncElement } from '../model';
+import type * as Y from 'yjs';
+import type { SyncElement } from '../model';
 import { toSlateNode, toSlatePath } from '../utils/convert';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 
 /**
  * Translates a Yjs array event into a slate operations.

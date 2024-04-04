@@ -1,4 +1,4 @@
-import { PermissionType } from '@decipad/backendtypes';
+import type { PermissionType } from '@decipad/backendtypes';
 import { permissionLevelFrom } from './permission-level';
 
 interface PermissionLikeRecord {

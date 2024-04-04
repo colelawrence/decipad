@@ -1,5 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { ToStringable } from './types';
+import type { ToStringable } from './types';
 import { hasType } from './utils';
 
 type MapFn<T, R> = (a: T) => R;

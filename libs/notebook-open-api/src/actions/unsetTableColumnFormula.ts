@@ -5,10 +5,10 @@ import {
 } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { TableHeaderElement } from '@decipad/editor-types';
+import type { TableHeaderElement } from '@decipad/editor-types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
-import { Action } from './types';
+import type { Action } from './types';
 
 extendZodWithOpenApi(z);
 

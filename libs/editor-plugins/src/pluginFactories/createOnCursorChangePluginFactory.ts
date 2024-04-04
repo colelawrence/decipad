@@ -1,7 +1,8 @@
-import { Selection } from 'slate';
+import type { Selection } from 'slate';
 import { dequal } from '@decipad/utils';
-import { createMyPluginFactory, MyEditor } from '@decipad/editor-types';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 type OnCursorChangePlugin = (
   editor: MyEditor,

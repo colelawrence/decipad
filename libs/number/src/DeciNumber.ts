@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import Fraction, { F, isFractionLike } from '../../fraction/src';
-import {
+import type {
   DeciNumberInput,
   DeciNumberInputWithNumerator,
   FiniteNumber,

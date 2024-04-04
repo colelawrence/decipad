@@ -1,5 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
 export const handler: APIGatewayProxyHandlerV2 = async () => {
   const wssAddress = getDefined(

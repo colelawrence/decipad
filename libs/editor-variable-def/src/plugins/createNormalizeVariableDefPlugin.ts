@@ -1,12 +1,7 @@
 import { nanoid } from 'nanoid';
-import {
+import type {
   CaptionElement,
   DropdownElement,
-  ELEMENT_CAPTION,
-  ELEMENT_DROPDOWN,
-  ELEMENT_EXPRESSION,
-  ELEMENT_SLIDER,
-  ELEMENT_VARIABLE_DEF,
   ExpressionElement,
   MyEditor,
   MyNode,
@@ -14,9 +9,14 @@ import {
   SliderElement,
 } from '@decipad/editor-types';
 import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+  ELEMENT_CAPTION,
+  ELEMENT_DROPDOWN,
+  ELEMENT_EXPRESSION,
+  ELEMENT_SLIDER,
+  ELEMENT_VARIABLE_DEF,
+} from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { removeNodes, setNodes } from '@udecode/plate-common';
 import { insertNodes, isElementOfType } from '@decipad/editor-utils';
 

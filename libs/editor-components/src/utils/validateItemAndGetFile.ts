@@ -1,5 +1,5 @@
+import type { FileType } from '@decipad/editor-types';
 import {
-  FileType,
   MAX_UPLOAD_FILE_SIZE,
   SUPPORTED_FILE_TYPES,
 } from '@decipad/editor-types';

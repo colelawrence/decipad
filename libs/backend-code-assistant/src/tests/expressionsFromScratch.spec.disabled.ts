@@ -1,4 +1,4 @@
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 import { codeAssistant } from '../codeAssistant';
 import noCodeDoc from './__fixtures__/no-code.json';
 import doc from './__fixtures__/simple-code-lines.json';

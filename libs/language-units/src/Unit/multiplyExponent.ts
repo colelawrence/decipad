@@ -1,5 +1,5 @@
 import { produce } from '@decipad/utils';
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 import { normalizeUnits } from './normalizeUnits';
 import { N } from '@decipad/number';
 

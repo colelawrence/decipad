@@ -42,6 +42,9 @@
     },
     {
       "path": "../language-aggregations"
+    },
+    {
+      "path": "../react-contexts"
     }
   ]
 }

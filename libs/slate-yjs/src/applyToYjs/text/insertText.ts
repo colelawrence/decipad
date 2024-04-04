@@ -1,6 +1,7 @@
 import invariant from 'tiny-invariant';
-import { TInsertTextOperation } from '@udecode/plate-common';
-import { SharedType, SyncElement } from '../../model';
+import type { TInsertTextOperation } from '@udecode/plate-common';
+import type { SharedType } from '../../model';
+import { SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
 /**

@@ -1,14 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { createHmac } from 'crypto';
 import { identify, track } from '@decipad/backend-analytics';
-import { UserWithSecret } from '@decipad/backendtypes';
+import type { UserWithSecret } from '@decipad/backendtypes';
 import { app, auth as authConfig, thirdParty } from '@decipad/backend-config';
 import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyHandlerV2, APIGatewayProxyEventV2 } from 'aws-lambda';
+import type {
+  APIGatewayProxyHandlerV2,
+  APIGatewayProxyEventV2,
+} from 'aws-lambda';
 import pick from 'lodash.pick';
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
+import NextAuth from 'next-auth';
 import adaptReqRes from './adapt-req-res';
 import { adapter } from './db-adapter';
 import { signInEmail } from './email';

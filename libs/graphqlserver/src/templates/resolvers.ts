@@ -1,6 +1,6 @@
 import { searchTemplates } from '@decipad/backend-search';
 import { requireUser } from '../authorization';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 
 const resolvers: Resolvers = {
   Query: {

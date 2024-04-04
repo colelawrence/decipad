@@ -1,5 +1,6 @@
-import { isSelectionExpanded, TEditor } from '@udecode/plate-common';
-import { Path, Point } from 'slate';
+import type { TEditor } from '@udecode/plate-common';
+import { isSelectionExpanded } from '@udecode/plate-common';
+import type { Path, Point } from 'slate';
 import { getNodeEntrySafe } from './getNodeEntrySafe';
 
 /**

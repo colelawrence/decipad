@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Stripe } from 'stripe';
+import type { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { tables } from '@decipad/tables';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { resourceusage, subscriptions } from '@decipad/services';
 import { limits } from '@decipad/backend-config';
 

@@ -1,11 +1,11 @@
+import type { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
-  MyEditor,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
-import { createMarksPlugins, StrictPlugin } from './createMarksPlugins';
+import type { StrictPlugin } from './createMarksPlugins';
+import { createMarksPlugins } from './createMarksPlugins';
 
 describe('Ctrl+b', () => {
   let editor: MyEditor;

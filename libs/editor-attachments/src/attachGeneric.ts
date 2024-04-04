@@ -1,4 +1,5 @@
-import axios, { AxiosProgressEvent } from 'axios';
+import type { AxiosProgressEvent } from 'axios';
+import axios from 'axios';
 
 export const attachGenericFile = async (
   file: File,

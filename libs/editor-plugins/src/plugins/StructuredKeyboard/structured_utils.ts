@@ -1,4 +1,4 @@
-import { CodeLineV2Element } from '@decipad/editor-types';
+import type { CodeLineV2Element } from '@decipad/editor-types';
 
 // Utils can be expanded to work with any code that has smart refs + text nodes.
 const utils = {

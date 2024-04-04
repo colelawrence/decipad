@@ -1,16 +1,19 @@
 /* eslint-disable no-param-reassign */
+import type {
+  MyElement,
+  MyValue,
+  MyWithOverride,
+  TableHeaderRowElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TH,
   ELEMENT_TR,
   getMyEditor,
-  MyElement,
-  MyValue,
-  MyWithOverride,
-  TableHeaderRowElement,
 } from '@decipad/editor-types';
-import { isElement, someNode, TDescendant, Value } from '@udecode/plate-common';
+import type { TDescendant, Value } from '@udecode/plate-common';
+import { isElement, someNode } from '@udecode/plate-common';
 import { withDeleteTable, withGetFragmentTable } from '@udecode/plate-table';
 import { createTableCaption } from '../utils/createTableCaption';
 import { withInsertFragmentTable } from './withInsertFragmentTable';

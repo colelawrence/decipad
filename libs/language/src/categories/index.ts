@@ -1,13 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  InferError,
-  Type,
-  Value,
-  buildType as t,
-} from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { InferError, Value, buildType as t } from '@decipad/language-types';
 import { inferExpression } from '../infer';
-import { evaluate, Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 
 export const inferCategories = async (

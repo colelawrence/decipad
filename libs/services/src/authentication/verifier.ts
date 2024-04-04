@@ -1,9 +1,9 @@
 import { createHash } from 'crypto';
 import tables from '@decipad/tables';
-import { VerificationRequestRecord } from '@decipad/backendtypes';
+import type { VerificationRequestRecord } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
 import { randomString } from '../utils/randomString';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 interface AdapterOptions {
   secret: string;

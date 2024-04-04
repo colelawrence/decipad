@@ -1,29 +1,34 @@
-import { useCallback, useEffect, Context, useState } from 'react';
+import type { Context } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   astNode,
   buildType,
   deserializeType,
   materializeResult,
   serializeType,
-  Result,
   isTableResult,
   Unknown,
 } from '@decipad/remote-computer';
-import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
-import { PromiseOrType, zip } from '@decipad/utils';
-import {
+import type {
+  RemoteComputer,
+  ProgramBlock,
+  Result,
+} from '@decipad/remote-computer';
+import type { PromiseOrType } from '@decipad/utils';
+import { zip } from '@decipad/utils';
+import type {
   ColIndex,
   ImportElementSource,
   LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
-import { ImportResult } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
 import { useCache, deserializeResult } from '@decipad/editor-utils';
-import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
-import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 export interface LiveConnectionResult {
   error?: Error;

@@ -1,13 +1,13 @@
 import Zip from 'adm-zip';
 import Boom from '@hapi/boom';
-import { PadRecord, User } from '@decipad/backendtypes';
+import type { PadRecord, User } from '@decipad/backendtypes';
 import { app as getAppConfig } from '@decipad/backend-config';
 import { nanoid } from 'nanoid';
 import { importNotebookContent } from './importNotebookContents';
-import { NotebookMeta } from './notebookMeta';
+import type { NotebookMeta } from './notebookMeta';
 import { parseJSON } from './parseJSON';
 import { importAttachment } from './importAttachment';
-import { ReplaceList } from './types';
+import type { ReplaceList } from './types';
 
 export interface ImportNotebookFromZipProps {
   workspaceId: string;

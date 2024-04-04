@@ -1,5 +1,5 @@
 import { LoadingIndicator } from '@decipad/ui';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export const Loading: FC = () => {
   return <LoadingIndicator />;

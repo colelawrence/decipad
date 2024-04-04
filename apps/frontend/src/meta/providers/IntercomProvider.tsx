@@ -1,6 +1,6 @@
 import { ErrorBoundary } from '@sentry/react';
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { IntercomProvider as Provider } from 'react-use-intercom';
 

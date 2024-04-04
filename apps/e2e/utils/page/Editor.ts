@@ -1,6 +1,7 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { Flag } from '@decipad/feature-flags';
-import { expect, BrowserContext, Page } from '@playwright/test';
+import type { Flag } from '@decipad/feature-flags';
+import type { BrowserContext, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import {
   Timeouts,
   genericTestEmail,

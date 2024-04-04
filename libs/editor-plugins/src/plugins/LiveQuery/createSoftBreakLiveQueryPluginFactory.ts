@@ -1,10 +1,8 @@
-import {
-  ELEMENT_LIVE_QUERY_QUERY,
-  MyGenericEditor,
-} from '@decipad/editor-types';
+import type { MyGenericEditor } from '@decipad/editor-types';
+import { ELEMENT_LIVE_QUERY_QUERY } from '@decipad/editor-types';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { getSoftBreakOnKeyDown } from '../SoftBreakPlugin/getSoftBreakOnKeyDown';
-import { Value } from '@udecode/plate-common';
+import type { Value } from '@udecode/plate-common';
 
 export const createSoftBreakLiveQueryPluginFactory = <
   TV extends Value,

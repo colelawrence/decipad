@@ -1,7 +1,7 @@
-import { NotebookAccessActionsReturn } from '@decipad/interfaces';
+import type { NotebookAccessActionsReturn } from '@decipad/interfaces';
 import { useCallback } from 'react';
+import type { PermissionType } from '@decipad/graphql-client';
 import {
-  PermissionType,
   useSharePadWithEmailMutation,
   useUnsharePadWithUserMutation,
   useUpdatePadPermissionMutation,

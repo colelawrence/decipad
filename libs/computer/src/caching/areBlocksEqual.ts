@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { type AST } from '@decipad/language';
 import { dequal } from '@decipad/utils';
-import { ProgramBlock } from '..';
+import type { ProgramBlock } from '..';
 
 type Arg = AST.Node['args'][number];
 const areArgsEqual = (a: Arg, b: Arg) => {

@@ -1,4 +1,4 @@
-import {
+import type {
   EDescendant,
   EElement,
   EElementEntry,
@@ -18,7 +18,7 @@ import {
 import type { RefObject } from 'react';
 import type { UndoManager } from 'yjs';
 import type { Subject } from 'rxjs';
-import { BaseEditor, Path } from 'slate';
+import type { BaseEditor, Path } from 'slate';
 import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
 import type { NotebookValue, UserIconKey } from '.';

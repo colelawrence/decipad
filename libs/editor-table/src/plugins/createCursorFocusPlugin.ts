@@ -1,5 +1,6 @@
-import { createMyPluginFactory, MyEditor } from '@decipad/editor-types';
-import { Path } from 'slate';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
+import type { Path } from 'slate';
 import { focusAndSetSelection, pluginStore } from '@decipad/editor-utils';
 import { hasNode } from '@udecode/plate-common';
 

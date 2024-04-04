@@ -1,6 +1,6 @@
 import { captureException, trace } from '@decipad/backend-trace';
 import { timeout as runTimeout } from '@decipad/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { debug } from '../debug';
 
 type RecordHandler<T> = (

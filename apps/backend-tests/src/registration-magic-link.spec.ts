@@ -3,7 +3,7 @@
 
 import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
-import { User } from '@decipad/backendtypes';
+import type { User } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 waitForExpect.defaults.interval = 250;

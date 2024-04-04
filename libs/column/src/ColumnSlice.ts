@@ -1,5 +1,5 @@
 import { firstOrUndefined, slice } from '@decipad/generator-utils';
-import { ColumnLike } from './ColumnLike';
+import type { ColumnLike } from './ColumnLike';
 
 export class ColumnSlice<TValue> implements ColumnLike<TValue> {
   readonly begin: number;

@@ -1,6 +1,6 @@
 import { simpleFormatUnit } from '@decipad/format';
 import { type AST, parseBlock } from '@decipad/remote-computer';
-import { TableCellType } from '@decipad/editor-types';
+import type { TableCellType } from '@decipad/editor-types';
 
 export const unitToAST = (
   unit: Extract<TableCellType, { kind: 'number' }>['unit']

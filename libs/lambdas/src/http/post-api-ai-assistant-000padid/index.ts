@@ -5,7 +5,7 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
-import { ThreadCreateParams } from 'openai/resources/beta/threads/threads';
+import type { ThreadCreateParams } from 'openai/resources/beta/threads/threads';
 
 const notebooks = resource('notebook');
 

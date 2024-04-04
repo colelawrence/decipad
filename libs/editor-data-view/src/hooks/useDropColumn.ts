@@ -1,16 +1,16 @@
-import {
-  ColumnDndDirection,
-  DragColumnItem,
-  findSwappableColumns,
-  getHoverDirection,
-} from '@decipad/editor-table';
-import { DataViewElement, MyEditor, MyElement } from '@decipad/editor-types';
-import {
-  DRAG_ITEM_DATAVIEW_COLUMN,
-  GoodToDragColumns,
-} from 'libs/editor-table/src/contexts/TableDndContext';
-import { MutableRefObject, useState, useMemo } from 'react';
-import { ConnectDropTarget, useDrop } from 'react-dnd';
+import type { ColumnDndDirection, DragColumnItem } from '@decipad/editor-table';
+import { findSwappableColumns, getHoverDirection } from '@decipad/editor-table';
+import type {
+  DataViewElement,
+  MyEditor,
+  MyElement,
+} from '@decipad/editor-types';
+import type { GoodToDragColumns } from 'libs/editor-table/src/contexts/TableDndContext';
+import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
+import type { MutableRefObject } from 'react';
+import { useState, useMemo } from 'react';
+import type { ConnectDropTarget } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { dndStore } from '@udecode/plate-dnd';
 import { findNodePath } from '@udecode/plate-common';
 import { useDataViewActions } from './useDataViewActions';

@@ -1,7 +1,8 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
 import { ELEMENT_TD } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import { getBlockAbove, getNode, TElement } from '@udecode/plate-common';
+import type { TElement } from '@udecode/plate-common';
+import { getBlockAbove, getNode } from '@udecode/plate-common';
 import { nextCellPath } from '../utils/nextCellPath';
 
 export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({

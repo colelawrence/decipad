@@ -3,14 +3,14 @@ import Boom from '@hapi/boom';
 import { thirdParty, app } from '@decipad/backend-config';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { resourceusage } from '@decipad/services';
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-import {
+import type {
   ChatCompletionMessage,
   ChatCompletionMessageParam,
 } from 'openai/resources';
 import { track } from '@decipad/backend-analytics';
-import { User } from '@decipad/backendtypes';
+import type { User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
 import { getRemoteComputer } from '@decipad/remote-computer';
@@ -21,7 +21,7 @@ import {
   MODE_DETECTION_PROMPT,
 } from './constants';
 import { resource } from '@decipad/backend-resources';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { getEmailDomain, isInternalEmail } from '@decipad/utils';
 
 const isDevOrStaging =

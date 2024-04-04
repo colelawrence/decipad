@@ -1,18 +1,18 @@
+import type { TNodeEntry } from '@udecode/plate-common';
 import {
   getNode,
   insertNodes,
   setNodes,
-  TNodeEntry,
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { TableHeaderElement } from '@decipad/editor-types';
-import { Action } from './types';
+import type { TableHeaderElement } from '@decipad/editor-types';
+import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
-import { TableColumnFormulaElement } from '../../../editor-types/src/table';
+import type { TableColumnFormulaElement } from '../../../editor-types/src/table';
 import { replaceText } from './utils/replaceText';
 import { getDefined } from '@decipad/utils';
 

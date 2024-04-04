@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { Publish_State } from '@decipad/graphql-client';
+import type { Publish_State } from '@decipad/graphql-client';
 
 export interface NotebookMetaActionsReturn {
   onDeleteNotebook: (notebookId: string, showToast?: true) => void;

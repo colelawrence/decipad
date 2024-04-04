@@ -1,5 +1,5 @@
 import { signOut, useSession } from 'next-auth/react';
-import { DefaultSession } from 'next-auth';
+import type { DefaultSession } from 'next-auth';
 import { useCallback, useMemo } from 'react';
 
 /* we need to override the Session object from useSession()

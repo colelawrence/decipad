@@ -1,6 +1,7 @@
-import { Column as ColumnImpl, Comparable, applyMap } from '@decipad/column';
+import type { Comparable } from '@decipad/column';
+import { Column as ColumnImpl, applyMap } from '@decipad/column';
 import { all, filter } from '@decipad/generator-utils';
-import { Column } from '../types';
+import type { Column } from '../types';
 
 export const sortColumns = async (
   availableColumns: Column[] | undefined,

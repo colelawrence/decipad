@@ -3,7 +3,7 @@ import { useResolved } from '@decipad/react-utils';
 import { useResult } from '@decipad/react-contexts';
 import { type Result, Value } from '@decipad/remote-computer';
 import { type DataViewFilter } from '@decipad/editor-types';
-import { AggregationKind, Column, DataGroup } from '../../types';
+import type { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 
 interface UseDataViewLayoutDataProps {

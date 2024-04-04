@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
+import type {
   GraphqlContext,
   WorkspaceRecord,
 } from '../../../backendtypes/src/dataTypes';

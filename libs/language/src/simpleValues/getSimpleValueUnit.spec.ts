@@ -1,5 +1,5 @@
 import { decilang, prettyPrintAST } from '..';
-import { SimpleValueAST } from './common';
+import type { SimpleValueAST } from './common';
 import { getSimpleValueUnit } from './getSimpleValueUnit';
 
 const snapshot = (exp?: SimpleValueAST | '%') =>

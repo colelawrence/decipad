@@ -1,4 +1,4 @@
-import { User, WorkspaceRecord } from '@decipad/backendtypes';
+import type { User, WorkspaceRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { create } from './create';
 import { publicWorkspaceNameFor } from '../users';

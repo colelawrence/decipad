@@ -1,4 +1,4 @@
-import { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../interfaces';
 import { operators } from './operators';
 
 export { operators };

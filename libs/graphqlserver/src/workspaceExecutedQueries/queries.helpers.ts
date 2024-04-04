@@ -5,7 +5,7 @@ import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { track } from '@decipad/backend-analytics';
 import { GraphQLError } from 'graphql';
 import { limits } from '@decipad/backend-config';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import Boom from '@hapi/boom';
 
 export const getWorkspaceExecutedQuery = async (

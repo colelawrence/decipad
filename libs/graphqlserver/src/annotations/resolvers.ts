@@ -1,5 +1,5 @@
-import { AnnotationRecord } from '@decipad/backendtypes';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { AnnotationRecord } from '@decipad/backendtypes';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 

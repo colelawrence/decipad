@@ -6,7 +6,7 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
-import { RequestPayload } from './types';
+import type { RequestPayload } from './types';
 
 const notebooks = resource('notebook');
 

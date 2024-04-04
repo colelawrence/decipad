@@ -1,13 +1,10 @@
 /* istanbul ignore file */
 /* tested in apps/client-e2e/src/notebook-calculation-block.ts */
-import React from 'react';
-import {
-  MyEditor,
-  ELEMENT_CODE_LINE,
-  MyNodeEntry,
-} from '@decipad/editor-types';
+import type React from 'react';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate-common';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   focusAndSetSelection,
   insertCodeLineBelow,

@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { LoadingLogo } from '@decipad/ui';
 import { SECRET_URL_PARAM } from '@decipad/routing';

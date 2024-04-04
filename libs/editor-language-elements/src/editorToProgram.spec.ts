@@ -1,8 +1,13 @@
-import {
+import type {
   ColumnsElement,
   ParagraphElement,
   TableElement,
   TableCaptionElement,
+  VariableDefinitionElement,
+  CodeLineElement,
+  CodeLineV2Element,
+} from '@decipad/editor-types';
+import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -13,19 +18,13 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
-  VariableDefinitionElement,
-  CodeLineElement,
-  CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_TITLE,
   ELEMENT_TAB,
 } from '@decipad/editor-types';
-import {
-  prettyPrintAST,
-  Program,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
+import type { Program } from '@decipad/remote-computer';
+import { prettyPrintAST, getRemoteComputer } from '@decipad/remote-computer';
 import { getOnly } from '@decipad/utils';
 import { editorToProgram } from './editorToProgram';
 import { createTestEditorController } from './testEditorController';

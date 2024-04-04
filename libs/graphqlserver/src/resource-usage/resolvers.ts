@@ -3,7 +3,7 @@ import {
   getStorageUsage,
   updateExtraAiAllowance,
 } from './queries.helpers';
-import { Resolvers } from '@decipad/graphqlserver-types';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 
 const resolvers: Resolvers = {
   Mutation: {

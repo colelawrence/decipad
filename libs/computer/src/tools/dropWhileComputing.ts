@@ -1,4 +1,5 @@
-import { Observable, OperatorFunction } from 'rxjs';
+import type { OperatorFunction } from 'rxjs';
+import { Observable } from 'rxjs';
 
 /**
  * rxjs operator that calls a slow function with its inputs,

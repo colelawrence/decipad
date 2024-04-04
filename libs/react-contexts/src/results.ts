@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
+import type { NotebookResults } from '@decipad/remote-computer';
 import {
   defaultComputerResults,
   getRemoteComputer,
-  NotebookResults,
 } from '@decipad/remote-computer';
 import { ComputerContextProvider, useComputer } from './computer';
 

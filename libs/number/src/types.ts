@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import Fraction, { FractionLike } from '@decipad/fraction';
+import type { FractionLike } from '@decipad/fraction';
+// eslint-disable-next-line no-restricted-imports
+import type Fraction from '@decipad/fraction';
 
 export interface DeciNumberBase {
   abs(): DeciNumber;

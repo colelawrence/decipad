@@ -7,11 +7,11 @@ import { onConnect as onChatAgentConnect } from '@decipad/backend-notebook-assis
 import { getDefined } from '@decipad/utils';
 import { trace } from '@decipad/backend-trace';
 import Boom, { boomify, notAcceptable } from '@hapi/boom';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import EventEmitter from 'events';
 import { resource } from '@decipad/backend-resources';
 import { docIdFromPath } from '../path';
-import { TWSRequestEvent } from '../../types';
+import type { TWSRequestEvent } from '../../types';
 
 EventEmitter.defaultMaxListeners = 1000;
 

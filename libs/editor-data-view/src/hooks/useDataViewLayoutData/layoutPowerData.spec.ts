@@ -1,8 +1,10 @@
-import {
+import type {
   AST,
   IdentifiedBlock,
   Program,
   Result,
+} from '@decipad/remote-computer';
+import {
   Unknown,
   Value,
   buildResult,

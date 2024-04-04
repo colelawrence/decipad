@@ -1,12 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
-import DeciNumber, {
-  DeciNumberInput,
-  N,
-  isDeciNumberInput,
-} from '@decipad/number';
+import type { DeciNumberInput } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, isDeciNumberInput } from '@decipad/number';
 import { zip } from '@decipad/utils';
-import { DeepReadonly } from 'utility-types';
+import type { DeepReadonly } from 'utility-types';
 import { UnknownValue } from '../Value/Unknown';
 import { Unknown } from '../Unknown';
 import { NumberValue } from '../Value/Number';
@@ -15,7 +13,7 @@ import { BooleanValue } from '../Value/Boolean';
 import { DateValue } from '../Value/Date';
 import { Column } from '../Value/Column';
 import { RuntimeError } from '../RuntimeError';
-import { Value } from '../Value/Value';
+import type { Value } from '../Value/Value';
 
 export type CompareResult = -1 | 0 | 1;
 

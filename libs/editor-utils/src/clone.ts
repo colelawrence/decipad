@@ -2,8 +2,8 @@
 import cloneDeep from 'lodash.clonedeep';
 import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { MyElement, MyNode } from '@decipad/editor-types';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { MyElement, MyNode } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 

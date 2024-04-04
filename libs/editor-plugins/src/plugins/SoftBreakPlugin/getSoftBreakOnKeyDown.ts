@@ -1,12 +1,11 @@
-import {
+import type {
   ENodeEntry,
-  getBlockAbove,
-  queryNode,
   QueryNodeOptions,
   Value,
 } from '@udecode/plate-common';
+import { getBlockAbove, queryNode } from '@udecode/plate-common';
 import isHotkey from 'is-hotkey';
-import {
+import type {
   BlockElement,
   MyGenericEditor,
   MyKeyboardHandler,

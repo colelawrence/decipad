@@ -1,8 +1,9 @@
-import { SerializedType, getRemoteComputer } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
+import type { DisplayProps } from './plotUtils';
 import {
-  DisplayProps,
   enhanceSpecFromWideData,
   resultToPlotResultData,
   specFromType,

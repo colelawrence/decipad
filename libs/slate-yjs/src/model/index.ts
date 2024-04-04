@@ -1,4 +1,4 @@
-import { Range } from 'slate';
+import type { Range } from 'slate';
 import * as Y from 'yjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

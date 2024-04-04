@@ -1,7 +1,8 @@
 /* eslint-disable playwright/no-wait-for-selector */
 /* eslint-disable playwright/valid-describe-callback */
 /* eslint-disable playwright/no-conditional-expect */
-import { Page, expect, test } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/001-notebook.json';
 import { Timeouts, snapshot } from '../utils/src';
 

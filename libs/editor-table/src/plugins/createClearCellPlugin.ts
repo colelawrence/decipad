@@ -1,14 +1,11 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
+import type { BlockElement } from '@decipad/editor-types';
 import {
-  BlockElement,
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
-import {
-  getBlockAbove,
-  Value,
-  withoutNormalizing,
-} from '@udecode/plate-common';
+import type { Value } from '@udecode/plate-common';
+import { getBlockAbove, withoutNormalizing } from '@udecode/plate-common';
 import { ELEMENT_TD } from '@udecode/plate-table';
 import { getSelectedCells } from '../utils/getSelectedCells';
 import { setCellText } from '../utils';

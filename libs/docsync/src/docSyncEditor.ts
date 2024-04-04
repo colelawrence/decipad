@@ -7,10 +7,10 @@ import { type TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
 import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
-import { Doc as YDoc } from 'yjs';
+import type { Doc as YDoc } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { supportBigIntToJSON } from '@decipad/utils';
-import {
+import type {
   DocSyncEditor,
   OnLoadedCallback,
   OnSavedCallback,
@@ -18,7 +18,7 @@ import {
   OnConnectedCallback,
 } from './types';
 import { download } from './download';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 
 supportBigIntToJSON();
 

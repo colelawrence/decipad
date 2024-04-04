@@ -1,5 +1,5 @@
-import { ImportElementSource } from '@decipad/editor-types';
-import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import type { ImportElementSource } from '@decipad/editor-types';
+import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 export interface ExternalDataSourceKey {
   lastError?: string | null;

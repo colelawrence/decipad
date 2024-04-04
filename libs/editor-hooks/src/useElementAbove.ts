@@ -4,7 +4,7 @@ import { getAboveNodeSafe } from '@decipad/editor-utils';
 import { useCallback } from 'react';
 import { useNodePath } from './useNodePath';
 import { useEditorChange } from './useEditorChange';
-import { TElement } from '@udecode/plate-common';
+import type { TElement } from '@udecode/plate-common';
 
 export const useElementAbove = (
   node: MyNode,

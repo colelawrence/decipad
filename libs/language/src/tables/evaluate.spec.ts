@@ -1,6 +1,8 @@
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { AST, materializeOneResult } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { materializeOneResult } from '@decipad/language-types';
 import { runAST } from '..';
 import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
 

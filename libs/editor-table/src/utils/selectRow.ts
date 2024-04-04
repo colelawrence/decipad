@@ -1,5 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
-import { Path } from 'slate';
+import type { MyEditor } from '@decipad/editor-types';
+import type { Path } from 'slate';
 import { select } from '@udecode/plate-common';
 
 export const selectRow = (editor: MyEditor, rowPath: Path) => {

@@ -1,6 +1,7 @@
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
+import type { ColumnsElement } from '@decipad/editor-types';
 import {
-  ColumnsElement,
   createMyPlateEditor,
   ELEMENT_COLUMNS,
   ELEMENT_PARAGRAPH,

@@ -1,10 +1,10 @@
-import {
+import type {
   AutocompleteName,
   ErrSpec,
   SerializedType,
 } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
-import {
+import type {
   DataViewElement,
   DataViewFilter,
   MyEditor,
@@ -12,9 +12,9 @@ import {
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { useDataViewActions } from '.';
-import { AggregationKind, Column } from '../types';
+import type { AggregationKind, Column } from '../types';
 import { sortColumns } from '../utils/sortColumns';
 import { useAvailableColumns } from './useAvailableColumns';
 import { useSourceTableNames } from './useSourceTableNames';

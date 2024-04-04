@@ -3,7 +3,7 @@ import { notAcceptable } from '@hapi/boom';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import { insertTableRow } from './insertTableRow';
-import { Action, RequiresNotebookAction } from './types';
+import type { Action, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { updateTableCell } from './updateTableCell';
 import { getNodeString } from '../utils/getNodeString';

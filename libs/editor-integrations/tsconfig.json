@@ -30,6 +30,9 @@
     },
     {
       "path": "../import"
+    },
+    {
+      "path": "../remote-computer"
     }
   ]
 }

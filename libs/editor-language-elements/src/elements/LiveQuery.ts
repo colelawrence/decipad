@@ -1,8 +1,8 @@
-import { AST } from '@decipad/remote-computer';
+import type { AST } from '@decipad/remote-computer';
 import { ELEMENT_LIVE_QUERY } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate-common';
-import { InteractiveLanguageElement } from '../types';
+import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 export const LiveQuery: InteractiveLanguageElement = {

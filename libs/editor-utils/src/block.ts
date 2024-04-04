@@ -6,22 +6,22 @@ import {
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
-  ElementKind,
-  InlineNumberElement,
-  MyEditor,
-  MyElement,
+  type ElementKind,
+  type InlineNumberElement,
+  type MyEditor,
+  type MyElement,
 } from '@decipad/editor-types';
 import {
-  TDescendant,
-  TEditor,
-  TElement,
-  Value,
+  type TDescendant,
+  type TEditor,
+  type TElement,
+  type Value,
   getEndPoint,
   getNextNode,
   getNode,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import { type Path } from 'slate';
 import { insertNodes } from './insertNodes';
 import {
   getBlockParentPath,

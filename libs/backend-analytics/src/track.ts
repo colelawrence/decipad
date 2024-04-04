@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { analyticsClient } from './client';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export interface AnalyticsEvent {
   event: string;

@@ -1,5 +1,5 @@
 import tables, { allPages } from '@decipad/tables';
-import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
+import type { DocSyncSnapshotRecord } from '@decipad/backendtypes';
 
 const MAX_BACKUPS_PER_NOTEBOOK = 50;
 

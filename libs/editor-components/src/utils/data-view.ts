@@ -1,16 +1,16 @@
+import type { DataViewElement } from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_TR,
-  DataViewElement,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { Path } from 'slate';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 const getInitialDataViewElement = (
   computer: RemoteComputer,

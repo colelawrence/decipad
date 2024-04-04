@@ -1,4 +1,4 @@
-import { Selection } from 'slate';
+import type { Selection } from 'slate';
 import { useSelected } from 'slate-react';
 import { useCallback } from 'react';
 import { useEditorChange } from './useEditorChange';

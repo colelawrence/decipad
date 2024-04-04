@@ -1,6 +1,6 @@
-import { MARK_MAGICNUMBER, MyEditor } from '@decipad/editor-types';
-import { getNodeTexts, TNode } from '@udecode/plate-common';
-import { Path } from 'slate';
+import { MARK_MAGICNUMBER, type MyEditor } from '@decipad/editor-types';
+import { getNodeTexts, type TNode } from '@udecode/plate-common';
+import { type Path } from 'slate';
 
 /**
  * Get magic number path from what node looks like.

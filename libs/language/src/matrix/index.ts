@@ -1,10 +1,12 @@
 import { getOnly } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Type, Value, typeIsPending } from '@decipad/language-types';
+import type { AST, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Type, typeIsPending } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { valueTransforms } from '@decipad/language-builtins';
 import { inferExpression } from '../infer';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import {
   evaluateMultidimAssignment,

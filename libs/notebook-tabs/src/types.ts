@@ -1,7 +1,11 @@
 import type { EElement, ENode, TEditor } from '@udecode/plate-common';
-import { MyEditor, NotebookValue, UserIconKey } from '@decipad/editor-types';
-import { Subject } from 'rxjs';
-import { BaseEditor, Path } from 'slate';
+import type {
+  MyEditor,
+  NotebookValue,
+  UserIconKey,
+} from '@decipad/editor-types';
+import type { Subject } from 'rxjs';
+import type { BaseEditor, Path } from 'slate';
 
 export interface ObservableRootEditorNewTabEvent {
   type: 'new-tab';

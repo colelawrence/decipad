@@ -1,6 +1,6 @@
-import { MyEditor } from '@decipad/editor-types';
+import { type MyEditor } from '@decipad/editor-types';
 import { getRange } from '@udecode/plate-common';
-import { BaseRange, Location } from 'slate';
+import { type BaseRange, type Location } from 'slate';
 
 export const getRangeSafe = (
   editor: MyEditor,

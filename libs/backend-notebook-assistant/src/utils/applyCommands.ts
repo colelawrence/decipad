@@ -1,9 +1,9 @@
-import {
+import type {
   AnyElement,
-  ELEMENT_TAB,
   RootDocument,
   TabElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TAB } from '@decipad/editor-types';
 import cloneDeep from 'lodash.clonedeep';
 import { getCommands } from './getCommands';
 import { findPath } from './findPath';

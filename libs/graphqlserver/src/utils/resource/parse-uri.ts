@@ -1,4 +1,4 @@
-import { Resource } from '@decipad/backendtypes';
+import type { Resource } from '@decipad/backendtypes';
 
 export default function parseResourceUri(uri: string): Resource {
   const parts = uri.split('/');

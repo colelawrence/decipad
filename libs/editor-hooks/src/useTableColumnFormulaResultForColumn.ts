@@ -1,11 +1,12 @@
 import { findNodePath } from '@udecode/plate-common';
-import { Result, buildResult, isTableResult } from '@decipad/remote-computer';
-import {
+import type { Result } from '@decipad/remote-computer';
+import { buildResult, isTableResult } from '@decipad/remote-computer';
+import type {
   MyReactEditor,
   TableCellElement,
   TableHeaderElement,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useEditorTableResultContext } from '@decipad/react-contexts';
 import { useMemo } from 'react';
 import { all } from '@decipad/generator-utils';

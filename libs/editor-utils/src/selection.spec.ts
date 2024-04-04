@@ -1,5 +1,6 @@
-import { createPlateEditor, TEditor } from '@udecode/plate-common';
-import { Point } from 'slate';
+import type { TEditor } from '@udecode/plate-common';
+import { createPlateEditor } from '@udecode/plate-common';
+import type { Point } from 'slate';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   getPathContainingSelection,

@@ -1,11 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // to run this test you need to
 // yarn build:backend:ssr
-import {
-  AuthReturnValue,
-  testWithSandbox as test,
-} from '@decipad/backend-test-sandbox';
-import { Pad } from '@decipad/backendtypes';
+import type { AuthReturnValue } from '@decipad/backend-test-sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import type { Pad } from '@decipad/backendtypes';
 import 'cross-fetch/polyfill';
 import { distance } from 'fastest-levenshtein';
 import { readFileSync } from 'node:fs';

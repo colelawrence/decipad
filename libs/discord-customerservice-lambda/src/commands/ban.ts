@@ -1,14 +1,14 @@
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import {
+import type {
   TemplatesApplicationCommandDataOption,
   BanApplicationCommandDataOption,
   BanUnbanAddApplicationCommandDataOption,
   BanBanAddApplicationCommandDataOption,
   BanIsBannedRemoveApplicationCommandDataOption,
 } from '../command';
-import { CommandContext } from '../types';
+import type { CommandContext } from '../types';
 
 async function banban(
   options: BanBanAddApplicationCommandDataOption['options'],

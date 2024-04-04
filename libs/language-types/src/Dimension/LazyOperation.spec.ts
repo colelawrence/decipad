@@ -1,11 +1,11 @@
-import DeciNumber, {
-  N,
-  setupDeciNumberSnapshotSerializer,
-} from '@decipad/number';
-import { createLazyOperationBase, HypercubeArg } from './LazyOperation';
+import type DeciNumber from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
+import type { HypercubeArg } from './LazyOperation';
+import { createLazyOperationBase } from './LazyOperation';
 import { uniqDimensions } from './uniqDimensions';
 import { materializeOneResult } from '../utils/materializeOneResult';
-import { NumberValue, Value, fromJS, getColumnLike } from '../Value';
+import type { Value } from '../Value';
+import { NumberValue, fromJS, getColumnLike } from '../Value';
 import { getInstanceof } from '@decipad/utils';
 import { hcArg } from './testUtils';
 

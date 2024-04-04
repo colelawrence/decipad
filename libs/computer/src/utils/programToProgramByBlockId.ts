@@ -1,4 +1,4 @@
-import { Program, ProgramBlock } from '../types';
+import type { Program, ProgramBlock } from '../types';
 
 const programBlockToProgramBlockMap = (
   pb: ProgramBlock

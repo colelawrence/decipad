@@ -1,6 +1,6 @@
 import tables from '@decipad/tables';
 import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export const getWorkspaceMembersCount = async (workspaceId: string) => {
   const data = await tables();

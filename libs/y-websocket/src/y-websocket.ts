@@ -7,18 +7,14 @@ import * as time from 'lib0/time';
 import debounce from 'lodash.debounce';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
-import { Doc as YDoc, mergeUpdates } from 'yjs';
+import type { Doc as YDoc } from 'yjs';
+import { mergeUpdates } from 'yjs';
 import { isValidMessage } from './isValidMessage';
 import { messageHandlers } from './messageHandlers';
 import { printReceivedMessage } from './printReceivedMessage';
 import { receiver } from './receive';
-import {
-  MessageHandler,
-  MessageType,
-  TWebSocketProvider,
-  messageAwareness,
-  messageSync,
-} from './types';
+import type { MessageHandler, MessageType, TWebSocketProvider } from './types';
+import { messageAwareness, messageSync } from './types';
 
 export type { TWebSocketProvider };
 

@@ -1,6 +1,7 @@
 import type { RootDocument } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { isElement, TNode } from '@udecode/plate-common';
+import type { TNode } from '@udecode/plate-common';
+import { isElement } from '@udecode/plate-common';
 import { encoder } from 'basex-encoder';
 import { invertMap } from './invertMap';
 

@@ -16,9 +16,9 @@ import {
   hasMinimumPermission,
   parsePermissionType,
 } from '@decipad/services/authorization';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { captureException } from '@decipad/backend-trace';
-import { ConnectionRecord } from '@decipad/backendtypes';
+import type { ConnectionRecord } from '@decipad/backendtypes';
 import pSeries from 'p-series';
 
 type SyncConnectionRecord = ConnectionRecord & {

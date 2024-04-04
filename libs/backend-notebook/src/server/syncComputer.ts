@@ -1,5 +1,5 @@
-import { RootEditorController } from '@decipad/notebook-tabs';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RootEditorController } from '@decipad/notebook-tabs';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { fullRootEditorToProgram } from '@decipad/editor-language-elements';
 
 export const syncComputer = async (

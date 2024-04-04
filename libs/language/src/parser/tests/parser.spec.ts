@@ -1,4 +1,4 @@
-import { SyntaxError } from '..';
+import type { SyntaxError } from '..';
 import { parse } from '../parser';
 
 it('includes the last token in "no solutions" errors', () => {

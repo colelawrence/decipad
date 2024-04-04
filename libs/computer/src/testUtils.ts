@@ -1,8 +1,8 @@
 import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
-  Result,
   astNode,
   parseBlock,
   parseStatementOrThrow,
@@ -11,8 +11,9 @@ import {
 import DeciNumber, { N } from '@decipad/number';
 import { getOnly, timeout } from '@decipad/utils';
 import { all } from '@decipad/generator-utils';
-import { Computer, Program, prettyPrintAST } from '.';
-import {
+import type { Program } from '.';
+import { Computer, prettyPrintAST } from '.';
+import type {
   ComputerProgram,
   IdentifiedBlock,
   IdentifiedError,
@@ -26,7 +27,7 @@ import {
   getResultGenerator,
 } from './utils';
 import { programToComputerProgram } from './utils/programToComputerProgram';
-import { Unit } from '@decipad/language-units';
+import type { Unit } from '@decipad/language-units';
 import { formatError } from './format/formatError';
 
 export function u(

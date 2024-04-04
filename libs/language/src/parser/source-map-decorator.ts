@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
-import { ParserNode } from './types';
+import type { AST } from '@decipad/language-types';
+import type { ParserNode } from './types';
 
 const typesWithArgs = new Set<AST.Node['type']>([
   'argument-list',

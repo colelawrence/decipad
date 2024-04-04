@@ -1,5 +1,6 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
-import { createMyPlateEditor, MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import { reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 import { getSmartRef, getStructuredCalc } from './test_utils';

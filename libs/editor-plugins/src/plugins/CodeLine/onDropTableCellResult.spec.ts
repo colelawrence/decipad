@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable import/no-extraneous-dependencies */
+import type { MyEditor } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
-  MyEditor,
 } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
 import * as plate from '@udecode/plate-common';
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
 import { onDragStartTableCellResult } from '@decipad/editor-components';
 import { onDropTableCellResult } from './onDropTableCellResult';
 

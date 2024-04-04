@@ -1,6 +1,7 @@
 import { enumerate } from '@decipad/utils';
-import { Type } from '../Type';
-import { IndexNames, getCardinality } from './cardinality';
+import type { Type } from '../Type';
+import type { IndexNames } from './cardinality';
+import { getCardinality } from './cardinality';
 
 const isColumn = (arg: Type) => arg.cellType != null;
 

@@ -1,7 +1,8 @@
-import { DocSyncEditor } from '@decipad/docsync';
+import type { DocSyncEditor } from '@decipad/docsync';
 import { Notebook as NotebookEditor } from '@decipad/notebook';
-import { RemoteComputer } from '@decipad/remote-computer';
-import { FC, useEffect, useMemo } from 'react';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { FC } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNotebookStateAndActions } from './hooks';
 import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
 import { useRouteParams } from 'typesafe-routes/react-router';

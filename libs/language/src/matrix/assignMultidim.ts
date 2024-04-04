@@ -1,15 +1,16 @@
 import { getDefined } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   InferError,
   RuntimeError,
-  Type,
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import { evaluate, Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
 

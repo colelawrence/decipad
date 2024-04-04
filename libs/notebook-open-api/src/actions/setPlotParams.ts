@@ -2,7 +2,7 @@ import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { setNodes } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { RequiresNotebookAction } from './types';
+import type { RequiresNotebookAction } from './types';
 import { getElementById } from './utils/getElementById';
 import { getPartialPlotParams } from './utils/getPartialPlotParams';
 import { plotParams } from './schemas/plotParams';

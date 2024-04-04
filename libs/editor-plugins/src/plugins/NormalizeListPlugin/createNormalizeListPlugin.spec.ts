@@ -1,3 +1,4 @@
+import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_LI,
@@ -5,9 +6,9 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-  MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeListPlugin } from './createNormalizeListPlugin';
 
 let editor: TEditor;

@@ -13,7 +13,7 @@ import {
   type TableCellElement,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { Action } from './types';
+import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getNodeString } from '../utils/getNodeString';
 

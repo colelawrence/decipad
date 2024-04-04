@@ -1,7 +1,7 @@
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import Stripe from 'stripe';
 import { addMonths } from 'date-fns';
-import { Workspace } from '@decipad/backendtypes';
+import type { Workspace } from '@decipad/backendtypes';
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
 // eslint-disable-next-line import/no-relative-packages
 import { defaultEnv } from '../../../libs/backend-config/src/default';

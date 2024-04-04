@@ -1,9 +1,9 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
+import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
-  VariableDefinitionElement,
   ELEMENT_SLIDER,
 } from '@decipad/editor-types';
 import { astNode } from '@decipad/editor-utils';

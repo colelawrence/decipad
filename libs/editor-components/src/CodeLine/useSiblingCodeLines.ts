@@ -1,4 +1,5 @@
-import { ELEMENT_CODE_LINE, MyElement } from '@decipad/editor-types';
+import type { MyElement } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { useEditorChange } from '@decipad/editor-hooks';
 import {
   getNextNode,

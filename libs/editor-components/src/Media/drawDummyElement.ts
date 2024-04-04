@@ -1,4 +1,5 @@
-import { ELEMENT_FREEDRAW, DrawElementDescendant } from '@decipad/editor-types';
+import type { DrawElementDescendant } from '@decipad/editor-types';
+import { ELEMENT_FREEDRAW } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 
 export const drawDummyElement = (): DrawElementDescendant => ({

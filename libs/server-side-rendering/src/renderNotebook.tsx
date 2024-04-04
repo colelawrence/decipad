@@ -8,9 +8,10 @@ import {
 } from 'urql';
 import { renderToPipeableStream } from 'react-dom/server';
 import createCache from '@emotion/cache';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { App } from './App';
-import { renderApp, RenderDependencies } from './renderApp';
+import type { RenderDependencies } from './renderApp';
+import { renderApp } from './renderApp';
 import { authCookieHeader } from './utils/authCookieHeader';
 import documentTemplate from '../public/index.html';
 

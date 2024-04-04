@@ -4,7 +4,8 @@ import {
   TeleportEditor,
 } from '@decipad/editor-components';
 import { plugins } from '@decipad/editor-config';
-import { createMyPlateEditor, MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import {
   ComputerContextProvider,
   EditorChangeContextProvider,
@@ -15,9 +16,11 @@ import {
 } from '@decipad/react-contexts';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
-import { ReactEditor, withReact } from 'slate-react';
+import type { ReactEditor } from 'slate-react';
+import { withReact } from 'slate-react';
 import { Tooltip } from './components';
 import {
   emptyNotebook,

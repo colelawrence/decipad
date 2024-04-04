@@ -1,8 +1,8 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { setSlateFragment } from '@decipad/editor-utils';
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
 import { DRAG_SMART_CELL } from '@decipad/editor-plugins';
-import { RemoteComputer, Result } from '@decipad/remote-computer';
+import type { RemoteComputer, Result } from '@decipad/remote-computer';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';
 

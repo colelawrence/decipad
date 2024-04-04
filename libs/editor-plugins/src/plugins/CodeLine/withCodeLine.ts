@@ -1,7 +1,7 @@
+import type { MyWithOverride } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
-  MyWithOverride,
 } from '@decipad/editor-types';
 import {
   getEditorString,

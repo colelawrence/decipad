@@ -1,7 +1,7 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { focusEditor } from '@udecode/plate-common';
 import { useState, useCallback } from 'react';
-import { ReactEditor } from 'slate-react';
+import type { ReactEditor } from 'slate-react';
 
 export const useWriteLock = (editor: ReactEditor) => {
   const [writeLockCount, setWriteLockCount] = useState(0);

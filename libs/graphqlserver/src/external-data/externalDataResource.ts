@@ -1,9 +1,9 @@
-import { ExternalDataSourceRecord } from '@decipad/backendtypes';
+import type { ExternalDataSourceRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
 import Resource from '@decipad/graphqlresource';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import {
+import type {
   ExternalDataSource,
   ExternalDataSourceCreateInput,
   ExternalDataSourceUpdateInput,

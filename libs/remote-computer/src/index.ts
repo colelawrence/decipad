@@ -66,6 +66,7 @@ export {
   type IdentifiedError,
   type IdentifiedResult,
   type IdentifiedBlock,
+  type MaterializedColumnDesc,
   type NotebookResults,
   type Parseable,
   type ParseableDate,

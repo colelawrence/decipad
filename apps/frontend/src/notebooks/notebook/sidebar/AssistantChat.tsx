@@ -1,9 +1,10 @@
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { EditorAssistantChat } from '@decipad/editor-ai-assistant';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
 import { useAiUsage } from '@decipad/react-contexts';
 import { useNotebookStateAndActions } from '../hooks';
-import { SidebarComponentProps } from './types';
+import type { SidebarComponentProps } from './types';
 
 const AssistantChat: FC<SidebarComponentProps> = ({
   notebookId,

@@ -2,7 +2,7 @@ import tables from '@decipad/tables';
 import { track } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
-import { MutationResolvers } from '@decipad/graphqlserver-types';
+import type { MutationResolvers } from '@decipad/graphqlserver-types';
 import { PublishedVersionName } from '@decipad/interfaces';
 
 const notebooks = resource('notebook');

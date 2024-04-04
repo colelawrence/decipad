@@ -1,4 +1,4 @@
-import {
+import type {
   ExternalDataSourceDataLinks,
   ExternalDataSourceRecord,
   ExternalKeyRecord,
@@ -8,7 +8,7 @@ import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import fetch from 'isomorphic-fetch';
 import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 import { debug } from './debug';

@@ -1,12 +1,12 @@
 import type { PromiseOrType } from '@decipad/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { OBSERVED } from './constants';
-import {
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import type { OBSERVED } from './constants';
+import type {
   HttpMethods,
   SubscriptionPlansNames,
 } from '@decipad/graphqlserver-types';
-import { ArcTable } from '@architect/functions/types/tables';
+import type { ArcTable } from '@architect/functions/types/tables';
 import type { DynamoDB } from 'aws-sdk';
 
 /* Basic */
@@ -887,7 +887,7 @@ export interface VersionedDataTables {
 
 /* Lambda */
 
-export type WSRequest = import('aws-lambda').APIGatewayProxyEventV2 & {
+export type WSRequest = APIGatewayProxyEventV2 & {
   requestContext: {
     connectionId: string;
   };

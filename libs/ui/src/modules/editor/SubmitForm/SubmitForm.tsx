@@ -1,9 +1,9 @@
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
-  AnyElement,
-  AvailableSwatchColor,
-  MyNode,
-  PlateComponent,
+  type AnyElement,
+  type AvailableSwatchColor,
+  type MyNode,
+  type PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
@@ -17,7 +17,7 @@ import {
   useThemeFromStore,
 } from '@decipad/react-contexts';
 import { workspaces } from '@decipad/routing';
-import { ToastContextType, useToast } from '@decipad/toast';
+import { type ToastContextType, useToast } from '@decipad/toast';
 import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';

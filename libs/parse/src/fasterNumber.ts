@@ -1,4 +1,5 @@
-import DeciNumber, { N, ZERO } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ZERO } from '@decipad/number';
 
 const toIntegerNumber = (
   n: number | bigint | string

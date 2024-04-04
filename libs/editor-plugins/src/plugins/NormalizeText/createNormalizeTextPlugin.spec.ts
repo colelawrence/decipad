@@ -3,7 +3,8 @@ import {
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeTextPlugin } from './createNormalizeTextPlugin';
 
 let editor: TEditor;

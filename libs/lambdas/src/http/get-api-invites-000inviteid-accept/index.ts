@@ -1,8 +1,8 @@
-import { PermissionType } from '@decipad/backendtypes';
+import type { PermissionType } from '@decipad/backendtypes';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import {
+import type {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';

@@ -1,5 +1,5 @@
 import { filter, slice } from '@decipad/generator-utils';
-import { ColumnLike } from './ColumnLike';
+import type { ColumnLike } from './ColumnLike';
 
 export class FilteredColumn<TValue> implements ColumnLike<TValue> {
   readonly map: boolean[];

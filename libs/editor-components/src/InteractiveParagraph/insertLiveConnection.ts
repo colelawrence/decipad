@@ -1,11 +1,13 @@
-import {
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-  ELEMENT_PARAGRAPH,
+import type {
   ImportElementSource,
   LiveConnectionElement,
   MyEditor,
   ParagraphElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+  ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import {
   getNotebook,
@@ -14,13 +16,13 @@ import {
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { ExternalProvider } from '@decipad/graphql-client';
+import type { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { insertExternalData } from '../utils/insertExternalData';
 import { needsToCreateExternalData } from '../utils/needsToCreateExternalData';
 

@@ -1,4 +1,4 @@
-import { FetchResult } from '@apollo/client';
+import type { FetchResult } from '@apollo/client';
 
 export const ensureGraphqlResponseIsErrorFree = async <T extends FetchResult>(
   pResult: Promise<T>

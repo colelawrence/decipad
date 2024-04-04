@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { gql, useQuery } from '@apollo/client';
-import {
+import type {
   GetPadById,
   GetPadByIdVariables,
   GetPadById_getPadById,

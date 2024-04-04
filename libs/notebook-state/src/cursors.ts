@@ -1,5 +1,5 @@
 import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
-import {
+import type {
   TCursorEditor as GTCursorEditor,
   TYjsEditor as GTYjsEditor,
 } from '@decipad/slate-yjs';
@@ -12,11 +12,13 @@ import {
   teal400,
   yellow500,
 } from '@decipad/ui';
-import { OpaqueColor, dequal } from '@decipad/utils';
+import type { OpaqueColor } from '@decipad/utils';
+import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
-import { cursorStore, UserCursorState } from '@decipad/react-contexts';
-import { MinimalRootEditor } from '@decipad/editor-types';
-import { Session } from 'next-auth';
+import type { UserCursorState } from '@decipad/react-contexts';
+import { cursorStore } from '@decipad/react-contexts';
+import type { MinimalRootEditor } from '@decipad/editor-types';
+import type { Session } from 'next-auth';
 
 type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
 type TYjsEditor = GTYjsEditor<MinimalRootEditor>;

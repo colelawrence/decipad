@@ -1,5 +1,5 @@
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
-import { SourceUrlParseResponse } from '../../types';
+import type { SourceUrlParseResponse } from '../../types';
 
 const getUserUrl = (sheetId: string, gid: string): string =>
   `https://docs.google.com/spreadsheets/d/${encodeURIComponent(

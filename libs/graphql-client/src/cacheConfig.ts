@@ -1,35 +1,37 @@
 /* eslint-disable no-labels */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
-import { Cache } from '@urql/exchange-graphcache';
-import {
+import type { Cache } from '@urql/exchange-graphcache';
+import type {
   ExternalDataSource,
-  GetExternalDataSourcesWorkspaceDocument,
   GetExternalDataSourcesWorkspaceQuery,
   GetExternalDataSourcesWorkspaceQueryVariables,
-  GetNotebookAnnotationsDocument,
   GetNotebookAnnotationsQuery,
   GetNotebookAnnotationsQueryVariables,
-  GetNotebookMetaDocument,
   GetNotebookMetaQuery,
-  GetWorkspacesWithSharedNotebooksDocument,
   GetWorkspacesWithSharedNotebooksQuery,
   GraphCacheConfig,
   Pad,
   Section,
-  UserDocument,
   UserQuery,
   Workspace,
-  GetWorkspaceNotebooksDocument,
   GetWorkspaceNotebooksQuery,
   GetWorkspaceNotebooksQueryVariables,
   WorkspaceNotebookFragment,
+} from './generated';
+import {
+  GetExternalDataSourcesWorkspaceDocument,
+  GetNotebookAnnotationsDocument,
+  GetNotebookMetaDocument,
+  GetWorkspacesWithSharedNotebooksDocument,
+  UserDocument,
+  GetWorkspaceNotebooksDocument,
 } from './generated';
 import * as schema from './schema.generated.json';
 import { nanoid } from 'nanoid';
 import { PublishedVersionName } from './PublishedStates';
 import { gql } from 'urql';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 
 const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 

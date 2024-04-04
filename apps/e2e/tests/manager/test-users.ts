@@ -1,5 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { type Page, Browser, expect, BrowserContext } from '@playwright/test';
+import type { Browser, BrowserContext, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';

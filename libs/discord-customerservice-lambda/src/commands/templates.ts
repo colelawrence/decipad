@@ -2,7 +2,7 @@ import Boom, { notFound } from '@hapi/boom';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import { parseNotebookUrl } from '@decipad/backend-utils';
-import {
+import type {
   TemplatesApplicationCommandDataOption,
   TemplatesAddApplicationCommandDataOption,
   TemplatesRemoveApplicationCommandDataOption,

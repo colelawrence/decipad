@@ -1,4 +1,4 @@
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 import { testWithSandbox as test } from '../../../backend-test-sandbox/src';
 import { codeAssistant } from '../codeAssistant';
 import doc from './__fixtures__/simple-code-lines.json';

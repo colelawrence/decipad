@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { useDrop } from 'react-dnd';
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 
 import { getHoverDirection } from '../utils';
-import { ColumnDndDirection, DragColumnItem } from '../types';
+import type { ColumnDndDirection, DragColumnItem } from '../types';
 import { DRAG_ITEM_COLUMN, TableDndContext } from '../contexts/TableDndContext';
 
 interface CollectedProps {

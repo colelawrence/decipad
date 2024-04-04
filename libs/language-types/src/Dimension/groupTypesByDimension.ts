@@ -1,6 +1,6 @@
 import { enumerate } from '@decipad/utils';
-import { ContextUtils } from '../ContextUtils';
-import { Type } from '../Type';
+import type { ContextUtils } from '../ContextUtils';
+import type { Type } from '../Type';
 import { getDimensionId } from './getDimensionId';
 
 export function groupTypesByDimension(

@@ -4,20 +4,17 @@
  * to normalize them anyways.
  */
 
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
-  MyEditor,
-  MyNodeEntry,
 } from '@decipad/editor-types';
 import { isElement, removeNodes, setNodes } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 export const createMigrateStructuredInputs = createNormalizerPluginFactory({
   name: 'MIGRATE_STRUCTURED_IN_TO_CODELINE_V2',

@@ -1,14 +1,18 @@
 // eslint-disable-next-line no-restricted-imports
+import type * as languageTypes from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
   InferError,
-  Type,
   Value,
   buildType as t,
 } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
 
-export const dimSwapTypes = async (dominantIndexName: string, type: Type) => {
+export const dimSwapTypes = async (
+  dominantIndexName: string,
+  type: languageTypes.Type
+) => {
   return (await type.isColumn()).mapType(async (matrix) => {
     const types = Dimension.linearizeType(await matrix);
     const scalarTip = getDefined(types.pop());
@@ -27,7 +31,7 @@ export const dimSwapTypes = async (dominantIndexName: string, type: Type) => {
 
 export const dimSwapValues = async (
   dominantIndexName: string,
-  type: Type,
+  type: languageTypes.Type,
   value: Value.ColumnLikeValue
 ): Promise<Value.ColumnLikeValue> => {
   const linear = Dimension.linearizeType(type).slice(0, -1);

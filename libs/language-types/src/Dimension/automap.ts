@@ -1,7 +1,8 @@
 import { map } from '@decipad/generator-utils';
-import { PromiseOrType } from '@decipad/utils';
-import { ContextUtils } from '../ContextUtils';
-import { Type, buildType as t, typeIsPending } from '../Type';
+import type { PromiseOrType } from '@decipad/utils';
+import type { ContextUtils } from '../ContextUtils';
+import type { Type } from '../Type';
+import { buildType as t, typeIsPending } from '../Type';
 import {
   arrayOfOnes,
   findInvalidCardinality,
@@ -9,7 +10,7 @@ import {
 } from './cardinality';
 import { deLinearizeType, linearizeType } from './linearizeType';
 import { groupTypesByDimension } from './groupTypesByDimension';
-import { Value } from '../Value/Value';
+import type { Value } from '../Value/Value';
 import { createLazyOperation } from './LazyOperation';
 import { getReductionPlan } from './getReductionPlan';
 import { getColumnLike } from '../Value/ColumnLike';

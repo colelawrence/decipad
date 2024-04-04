@@ -1,5 +1,6 @@
 import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
-import { createServer, Server } from 'http';
+import type { Server } from 'http';
+import { createServer } from 'http';
 import path from 'path';
 import handler from 'serve-handler';
 import getPort from 'get-port';

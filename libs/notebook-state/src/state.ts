@@ -1,8 +1,8 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
-import { BlockProcessor } from '@decipad/notebook-tabs';
-import { MyPlatePlugin } from '@decipad/editor-types';
-import { Session } from 'next-auth';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
+import type { BlockProcessor } from '@decipad/notebook-tabs';
+import type { MyPlatePlugin } from '@decipad/editor-types';
+import type { Session } from 'next-auth';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;

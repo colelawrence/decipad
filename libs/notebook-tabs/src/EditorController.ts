@@ -4,15 +4,10 @@
 /* eslint-disable no-plusplus */
 import { nanoid } from 'nanoid';
 import { Subject } from 'rxjs';
-import {
-  createPlateEditor,
+import type {
   EElement,
   ENode,
-  getNode,
-  isEditorNormalizing,
-  isElement,
   PlateEditor,
-  removeNodes,
   TDescendant,
   TEditor,
   TInsertNodeOperation,
@@ -23,11 +18,14 @@ import {
   TSetNodeOperation,
 } from '@udecode/plate-common';
 import {
+  createPlateEditor,
+  getNode,
+  isEditorNormalizing,
+  isElement,
+  removeNodes,
+} from '@udecode/plate-common';
+import type {
   AnyElement,
-  createMyPlateEditor,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
   MyEditor,
   MyPlatePlugin,
   MyTabEditor,
@@ -35,6 +33,12 @@ import {
   TabElement,
   TitleElement,
   UserIconKey,
+} from '@decipad/editor-types';
+import {
+  createMyPlateEditor,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
 } from '@decipad/editor-types';
 import { assertEqual, getDefined } from '@decipad/utils';
 import {
@@ -45,13 +49,13 @@ import {
 } from './TranslatePaths';
 import { IsTab, IsTitle } from './utils';
 import {
-  BaseEditor,
+  type BaseEditor,
   createEditor,
   isNormalizing,
-  Path,
+  type Path,
   setNormalizing,
 } from 'slate';
-import { RootEditorController } from './types';
+import type { RootEditorController } from './types';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import stringify from 'json-stringify-safe';
 import { normalizeCurried } from './RootEditor/normalizeNode';

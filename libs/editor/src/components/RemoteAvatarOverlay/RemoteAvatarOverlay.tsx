@@ -1,7 +1,7 @@
 import { cursorStore, useTabEditorContext } from '@decipad/react-contexts';
 import { RemoteAvatarOverlay as UIRemoteAvatarOverlay } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import { FC, RefObject } from 'react';
+import type { FC, RefObject } from 'react';
 import { RemoteAvatar } from './RemoteAvatar';
 
 interface RemoteAvatarOverlayProps {

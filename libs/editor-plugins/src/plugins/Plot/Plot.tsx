@@ -2,14 +2,14 @@ import { DraggableBlock } from '@decipad/editor-components';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_PLOT,
-  PlateComponent,
-  PlotElement,
+  type PlateComponent,
+  type PlotElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { PlotBlock } from '@decipad/ui';
-import { ComponentProps, useMemo } from 'react';
+import { type ComponentProps, useMemo } from 'react';
 import { usePlot } from './utils/usePlot';
 
 type PlotBlockProps = ComponentProps<typeof PlotBlock>;

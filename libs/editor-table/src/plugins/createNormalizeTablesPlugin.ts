@@ -1,19 +1,20 @@
-import { NormalizerReturnValue } from '@decipad/editor-plugins';
-import {
-  ELEMENT_TABLE,
-  DEPRECATED_ELEMENT_TABLE_INPUT,
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import type {
   DeprecatedTableInputElement,
   TableElement,
 } from '@decipad/editor-types';
 import {
-  deleteText,
+  ELEMENT_TABLE,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
+} from '@decipad/editor-types';
+import type {
   EElementOrText,
   ENodeEntry,
-  isElement,
   PlateEditor,
   TNodeEntry,
   Value,
 } from '@udecode/plate-common';
+import { deleteText, isElement } from '@udecode/plate-common';
 import { insertNodes } from '@decipad/editor-utils';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';

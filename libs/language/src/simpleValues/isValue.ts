@@ -1,12 +1,9 @@
-import DeciNumber from '@decipad/number';
+import type DeciNumber from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
 import { parseExpression } from '..';
-import {
-  findLiteralNumber,
-  SimpleValueAST,
-  simplisticFunctions,
-} from './common';
+import type { SimpleValueAST } from './common';
+import { findLiteralNumber, simplisticFunctions } from './common';
 import { getIdentifierString } from '../utils';
 
 /**

@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError } from '@decipad/language-types';
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 
 export const contractOperators: Record<string, BuiltinSpec> = {
   assert: {

@@ -1,4 +1,5 @@
-import { test, expect, Page } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { test, expect } from './manager/decipad-tests';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 import { snapshot, Timeouts } from '../utils/src';
 

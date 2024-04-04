@@ -1,5 +1,8 @@
 import { app, auth as authConfig } from '@decipad/backend-config';
-import { APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import type {
+  APIGatewayProxyHandlerV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import { createAuthHandler, testUserAuth } from '@decipad/backend-auth';
 
 const auth = createAuthHandler();

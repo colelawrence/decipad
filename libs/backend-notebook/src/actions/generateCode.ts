@@ -1,13 +1,10 @@
-import {
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
-  RootDocument,
-} from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
+import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
 import { codeAssistant } from '@decipad/backend-code-assistant';
 import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
-import { ServerSideNotebookApi } from '../types';
-import { CustomAction } from '@decipad/notebook-open-api';
+import type { ServerSideNotebookApi } from '../types';
+import type { CustomAction } from '@decipad/notebook-open-api';
 import { z } from 'zod';
 
 export const generateCode: CustomAction<

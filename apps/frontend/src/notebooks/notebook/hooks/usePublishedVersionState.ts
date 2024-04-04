@@ -1,9 +1,8 @@
-import { DocSyncEditor, getLocalNotebookUpdates } from '@decipad/docsync';
+import type { DocSyncEditor } from '@decipad/docsync';
+import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
-import {
-  PublishedVersionName,
-  PublishedVersionState,
-} from '@decipad/interfaces';
+import type { PublishedVersionState } from '@decipad/interfaces';
+import { PublishedVersionName } from '@decipad/interfaces';
 import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
 import { useEffect, useMemo, useState } from 'react';

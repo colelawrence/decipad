@@ -1,4 +1,4 @@
-import { Provider } from '../types';
+import type { Provider } from '../types';
 import { importGsheet } from './importGsheet';
 import { parseGsheetsSourceUrl } from './parseGsheetsSourceUrl';
 

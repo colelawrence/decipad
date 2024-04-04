@@ -1,6 +1,8 @@
 import { isMarkActive, toggleMark } from '@udecode/plate-common';
-import { FC, useState } from 'react';
-import { MyMark, useMyEditorRef } from '@decipad/editor-types';
+import type { FC } from 'react';
+import { useState } from 'react';
+import type { MyMark } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { FloatingButton } from '@decipad/ui';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { dividerStyle } from '../../styles/divider';

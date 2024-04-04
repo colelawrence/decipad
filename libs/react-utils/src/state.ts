@@ -1,12 +1,5 @@
-import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import type { Dispatch, RefObject, SetStateAction } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useMounted = (): RefObject<boolean> => {
   const mounted = useRef(false);

@@ -1,4 +1,4 @@
-import { AnyMapping, PromiseOrType } from '@decipad/utils';
+import type { AnyMapping, PromiseOrType } from '@decipad/utils';
 
 /** Take a mapping of keys to values and join it. Used to join tables */
 export type StackNamespaceJoiner<T> = (

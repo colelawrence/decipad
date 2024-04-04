@@ -3,7 +3,7 @@ import {
   type Time,
   parseNumberWithUnit,
 } from '@decipad/remote-computer';
-import { SeriesType } from '@decipad/editor-types';
+import type { SeriesType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { parseDate } from './parseDate';
 

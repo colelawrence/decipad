@@ -2,7 +2,7 @@
 import { type AST, walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { getIdentifierString } from '../utils';
-import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
+import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';
 import { isExprRef } from '.';
 

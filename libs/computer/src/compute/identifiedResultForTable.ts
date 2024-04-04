@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
-  Result,
   Value,
   buildType as t,
   serializeResult,
@@ -9,7 +9,7 @@ import {
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import { ComputationRealm } from '../computer/ComputationRealm';
+import type { ComputationRealm } from '../computer/ComputationRealm';
 
 export const identifiedResultForTable = (
   realm: ComputationRealm,

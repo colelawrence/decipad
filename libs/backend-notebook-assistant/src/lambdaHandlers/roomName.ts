@@ -1,4 +1,4 @@
-import { URI, Resource } from '@decipad/backendtypes';
+import type { URI, Resource } from '@decipad/backendtypes';
 
 type ChatProtocol = 'agent-chat-1';
 

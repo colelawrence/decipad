@@ -1,6 +1,6 @@
-import { MyNodeEntry } from '@decipad/editor-types';
-import { TDescendant, TEditor } from '@udecode/plate-common';
-import { Element, type BaseEditor, NodeEntry, Node, Editor } from 'slate';
+import type { MyNodeEntry } from '@decipad/editor-types';
+import type { TDescendant, TEditor } from '@udecode/plate-common';
+import { type NodeEntry, Element, type BaseEditor, Node, Editor } from 'slate';
 
 //
 // An override of Slate's default normalizeNode behavior.

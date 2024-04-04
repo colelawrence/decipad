@@ -1,6 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
 import Boom from '@hapi/boom';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { resource } from '@decipad/backend-resources';
 import tables from '@decipad/tables';
 import { fetch } from 'cross-fetch';

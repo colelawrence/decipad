@@ -3,13 +3,13 @@ import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
-  Type,
+  type Type,
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import { FullBuiltinSpec, Functor } from './interfaces';
+import { type FullBuiltinSpec, type Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
-import { BuiltinContextUtils } from './types';
+import { type BuiltinContextUtils } from './types';
 
 export type OverloadTypeName =
   | 'number'

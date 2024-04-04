@@ -1,10 +1,10 @@
 import {
-  Result,
-  SerializedType,
+  type Result,
+  type SerializedType,
   Format,
   buildResult,
 } from '@decipad/remote-computer';
-import DeciNumber from '@decipad/number';
+import type DeciNumber from '@decipad/number';
 import { formatResult } from './formatResult';
 
 const DEFAULT_LOCALE = 'en-US';

@@ -1,8 +1,8 @@
-import {
+import type {
   ColumnsElement,
   VariableDefinitionElement,
-  createMyPlateEditor,
 } from '@decipad/editor-types';
+import { createMyPlateEditor } from '@decipad/editor-types';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { getRemoteComputer } from '@decipad/remote-computer';
 

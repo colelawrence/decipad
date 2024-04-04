@@ -1,19 +1,18 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
+import type { TableHeaderElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  TableHeaderElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
-import {
-  hasNode,
-  deleteText,
+import type {
   Value,
   PlateEditor,
   ENodeEntry,
   EElement,
 } from '@udecode/plate-common';
+import { hasNode, deleteText } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 // We do this following import this way because tree-shaking is not good enough
 import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';

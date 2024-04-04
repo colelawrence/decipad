@@ -1,9 +1,9 @@
-import {
+import type {
   AutocompleteName,
   RemoteComputer,
   Result,
-  isTable,
 } from '@decipad/remote-computer';
+import { isTable } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useState } from 'react';
 

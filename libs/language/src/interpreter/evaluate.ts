@@ -2,7 +2,9 @@ import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
-import { AST, RuntimeError, Unit, Value } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError, Unit, Value } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
 import { type TRealm } from './types';
 import { prettyPrintAST } from '..';

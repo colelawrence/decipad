@@ -1,11 +1,15 @@
 import {
-  AutocompleteName,
-  RemoteComputer,
-  SerializedType,
+  type AutocompleteName,
+  type RemoteComputer,
+  type SerializedType,
   getExprRef,
   isTable as isComputerTable,
 } from '@decipad/remote-computer';
-import { PlotElement, useMyEditorRef, MyNode } from '@decipad/editor-types';
+import {
+  type PlotElement,
+  useMyEditorRef,
+  type MyNode,
+} from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';

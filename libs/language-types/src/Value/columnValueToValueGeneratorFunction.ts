@@ -1,5 +1,5 @@
-import { ColumnLikeValue } from './ColumnLike';
-import { ValueGeneratorFunction } from './ValueGenerator';
+import type { ColumnLikeValue } from './ColumnLike';
+import type { ValueGeneratorFunction } from './ValueGenerator';
 
 export const columnValueToValueGeneratorFunction =
   (column: ColumnLikeValue): ValueGeneratorFunction =>

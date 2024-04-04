@@ -1,5 +1,5 @@
-import * as Time from './Time';
-import { Unit } from '@decipad/language-units';
+import type * as Time from './Time';
+import type { Unit } from '@decipad/language-units';
 // eslint-disable-next-line no-restricted-imports
 import { singular } from '@decipad/language-utils';
 import { timeUnits } from './timeUnits';

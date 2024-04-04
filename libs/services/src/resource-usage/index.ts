@@ -1,5 +1,5 @@
 import { limits } from '@decipad/backend-config';
-import {
+import type {
   AiFields,
   AiResourceUsageKeyWithoutID,
   ResourceConsumer,
@@ -9,7 +9,7 @@ import {
   StorageResourceUsageKeyWithoutID,
   StorageSubtypes,
 } from '@decipad/backendtypes';
-import { ResourceTypes } from '@decipad/graphqlserver-types';
+import type { ResourceTypes } from '@decipad/graphqlserver-types';
 import tables, { incrementTableField, timestamp } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import { paymentRequired } from '@hapi/boom';

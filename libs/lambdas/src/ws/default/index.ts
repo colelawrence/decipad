@@ -5,7 +5,7 @@ import tables from '@decipad/tables';
 import { captureException, trace } from '@decipad/backend-trace';
 import EventEmitter from 'events';
 import { getDefined } from '@decipad/utils';
-import { TWSRequestContext } from '../../types';
+import type { TWSRequestContext } from '../../types';
 import { getBody } from '../getBody';
 
 EventEmitter.defaultMaxListeners = 1000;

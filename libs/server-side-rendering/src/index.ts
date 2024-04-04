@@ -7,7 +7,7 @@ import Boom from '@hapi/boom';
 import { handle } from './handle';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { renderNotebook } from './renderNotebook';
-import { Handler } from './types';
+import type { Handler } from './types';
 import { loadManifest } from './utils/loadManifest';
 import { sessionFromReq } from './utils/sessionFromReq';
 import { app } from '@decipad/backend-config';

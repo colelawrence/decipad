@@ -7,7 +7,7 @@ import { createComputationalSummary } from '../utils/createComputationalSummary'
 import { debug } from '../debug';
 import { getLanguageDocSnippets } from '../utils/getLanguageDocSnippets';
 import { instructions, intro } from './texts';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 const maxLanguageDocSnippetCount = 2;
 

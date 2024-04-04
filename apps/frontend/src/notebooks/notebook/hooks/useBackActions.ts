@@ -1,4 +1,4 @@
-import {
+import type {
   NotebookMetaDataFragment,
   NotebookWorkspacesDataFragment,
 } from '@decipad/graphql-client';

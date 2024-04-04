@@ -1,4 +1,4 @@
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
 

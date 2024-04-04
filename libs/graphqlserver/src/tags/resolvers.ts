@@ -1,10 +1,13 @@
-import { UserTaggedResourceRecord, PadRecord } from '@decipad/backendtypes';
+import type {
+  UserTaggedResourceRecord,
+  PadRecord,
+} from '@decipad/backendtypes';
 import assert from 'assert';
 import tables, { allPages, paginate } from '@decipad/tables';
 import { resource } from '@decipad/backend-resources';
 import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
-import { PagedPadResult, Resolvers } from '@decipad/graphqlserver-types';
+import type { PagedPadResult, Resolvers } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 

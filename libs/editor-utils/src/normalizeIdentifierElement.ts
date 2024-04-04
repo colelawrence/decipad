@@ -1,11 +1,11 @@
 import { identifierRegExpGlobal } from '@decipad/remote-computer';
 import {
-  ENodeEntry,
+  type ENodeEntry,
   getNodeString,
   insertText,
-  Value,
+  type Value,
 } from '@udecode/plate-common';
-import { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { Path } from 'slate';
 
 export const normalizeIdentifierElement = <

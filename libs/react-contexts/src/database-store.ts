@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import type { Result } from '@decipad/remote-computer';
 import { codePlaceholder } from '@decipad/frontend-config';
-import {
+import type {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';

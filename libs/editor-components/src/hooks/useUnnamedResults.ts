@@ -1,7 +1,7 @@
+import type { SmartRefElement } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
-  SmartRefElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';

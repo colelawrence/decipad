@@ -1,7 +1,10 @@
 /* eslint-disable no-param-reassign */
-import { ParsedUrlQuery } from 'querystring';
+import type { ParsedUrlQuery } from 'querystring';
 import stringify from 'json-stringify-safe';
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import type {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { boomify } from '@hapi/boom';
 import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';

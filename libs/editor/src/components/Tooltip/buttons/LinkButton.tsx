@@ -1,5 +1,6 @@
 import { focusEditor, getPluginType, someNode } from '@udecode/plate-common';
-import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
+import type { ComponentProps, FC, MouseEvent } from 'react';
+import { useCallback } from 'react';
 import { ELEMENT_LINK, useMyEditorRef } from '@decipad/editor-types';
 import { FloatingButton, useEventNoEffect } from '@decipad/ui';
 import { triggerFloatingLink, unwrapLink } from '@udecode/plate-link';

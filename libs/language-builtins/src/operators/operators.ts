@@ -1,4 +1,4 @@
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 import { mathOperators } from './math-operators';
 import { comparisonOperators } from './comparison-operators';
 import { equalityOperators } from './equality-operators';

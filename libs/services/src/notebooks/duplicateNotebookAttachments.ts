@@ -1,4 +1,4 @@
-import { FileAttachmentRecord } from '@decipad/backendtypes';
+import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
@@ -6,7 +6,7 @@ import {
   duplicate as duplicateFile,
   attachmentFilePath,
 } from '../blobs/attachments';
-import { ReplaceList } from './types';
+import type { ReplaceList } from './types';
 
 const isAttachmentAbsolute = (attachment: FileAttachmentRecord): boolean =>
   attachment.filename.startsWith('http://') ||

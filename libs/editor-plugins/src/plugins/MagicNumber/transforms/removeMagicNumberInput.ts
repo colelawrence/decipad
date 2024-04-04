@@ -1,12 +1,12 @@
+import type { TElement } from '@udecode/plate-common';
 import {
   getNode,
   insertText,
-  TElement,
   unwrapNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Path } from 'slate';
-import { MyEditor } from '@decipad/editor-types';
+import type { Path } from 'slate';
+import type { MyEditor } from '@decipad/editor-types';
 
 export const removeMagicNumberInput = (editor: MyEditor, path: Path) =>
   withoutNormalizing(editor, () => {

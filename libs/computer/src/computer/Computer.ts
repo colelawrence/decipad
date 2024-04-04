@@ -1,4 +1,5 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
   distinctUntilChanged,
@@ -9,20 +10,23 @@ import {
 import { fnQueue } from '@decipad/fnqueue';
 
 // eslint-disable-next-line no-restricted-imports
-import {
+import type {
   AutocompleteName,
   ExternalDataMap,
+  AST,
+  Result,
+  SerializedType,
+  SerializedTypes,
+  Unit,
+} from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import {
   evaluateStatement,
   inferExpression,
   parseExpression,
   parseExpressionOrThrow,
   runCode,
   serializeResult,
-  AST,
-  Result,
-  SerializedType,
-  SerializedTypes,
-  Unit,
   deserializeType,
   materializeOneResult,
   serializeType,
@@ -59,6 +63,9 @@ import type {
   NotebookResults,
   Program,
   ProgramBlock,
+  ColumnDesc,
+  DimensionExplanation,
+  TableDesc,
 } from '../types';
 import {
   getDefinedSymbol,
@@ -76,7 +83,6 @@ import { emptyBlockResultSubject } from './emptyBlockSubject';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from '../topological-sort';
 import { flattenTableDeclarations } from './transformTables';
-import { ColumnDesc, DimensionExplanation, TableDesc } from '../types';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';

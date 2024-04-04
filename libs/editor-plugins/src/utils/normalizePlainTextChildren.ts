@@ -1,15 +1,14 @@
-import { MyGenericEditor } from '@decipad/editor-types';
+import type { MyGenericEditor } from '@decipad/editor-types';
+import type { Value, ENodeEntry } from '@udecode/plate-common';
 import {
   getNodeString,
   unwrapNodes,
   isElement,
   isText,
   removeNodes,
-  Value,
-  ENodeEntry,
 } from '@udecode/plate-common';
 import { normalizeExcessProperties } from './normalize';
-import { NormalizerReturnValue } from '../pluginFactories';
+import type { NormalizerReturnValue } from '../pluginFactories';
 
 export const normalizePlainTextChildren = <
   TV extends Value,

@@ -1,8 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
-import { Result, Type, Unknown, Value } from '@decipad/language-types';
+import {
+  type Result,
+  type Type,
+  Unknown,
+  Value,
+} from '@decipad/language-types';
 import { getInstanceof } from '@decipad/utils';
-import { FullBuiltinSpec } from '../../interfaces';
-import { BuiltinContextUtils } from '../../types';
+import { type FullBuiltinSpec } from '../../interfaces';
+import { type BuiltinContextUtils } from '../../types';
 import { applyTableFilters } from './applyTableFilters';
 import { applyTableFunctions } from './applyTableFunctions';
 import { makeRecursiveTreeValue } from './makeRecursiveTreeValue';

@@ -1,6 +1,6 @@
-import { ColumnLike } from './ColumnLike';
-import { SlicesMap } from './SlicesMap';
-import { CompareFn } from './types';
+import type { ColumnLike } from './ColumnLike';
+import type { SlicesMap } from './SlicesMap';
+import type { CompareFn } from './types';
 
 export const contiguousSlices = async <T>(
   column: ColumnLike<T>,

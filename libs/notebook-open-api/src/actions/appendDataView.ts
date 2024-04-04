@@ -1,6 +1,5 @@
+import type { DataViewElement, DataViewHeader } from '@decipad/editor-types';
 import {
-  DataViewElement,
-  DataViewHeader,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
@@ -11,7 +10,7 @@ import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { insertNodes } from '@udecode/plate-common';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getTableById } from './utils/getTablebyId';
 import { fixColumnName } from './utils/fixColumnName';

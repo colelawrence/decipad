@@ -1,4 +1,4 @@
-import { Type } from '../Type/Type';
+import type { Type } from '../Type/Type';
 
 export type IndexNames = (string | null)[];
 

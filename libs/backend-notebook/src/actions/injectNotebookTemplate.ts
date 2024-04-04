@@ -1,13 +1,14 @@
 import { getStoredSnapshot } from '@decipad/services/notebooks';
-import { ServerSideNotebookApi } from '../types';
-import { CustomAction } from '@decipad/notebook-open-api';
+import type { ServerSideNotebookApi } from '../types';
+import type { CustomAction } from '@decipad/notebook-open-api';
 import { tables } from '@decipad/tables';
 import { forbidden, notFound } from '@hapi/boom';
 import { z } from 'zod';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-import { ELEMENT_TAB, ELEMENT_TITLE, MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import type { EElementOrText } from '@udecode/plate-common';
 import {
-  EElementOrText,
   getNodeString,
   insertNodes,
   isElement,

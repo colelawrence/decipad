@@ -2,8 +2,9 @@ import { insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { ELEMENT_TD, ELEMENT_TR, TableRowElement } from '@decipad/editor-types';
-import { Action } from './types';
+import type { TableRowElement } from '@decipad/editor-types';
+import { ELEMENT_TD, ELEMENT_TR } from '@decipad/editor-types';
+import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 
 extendZodWithOpenApi(z);

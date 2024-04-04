@@ -1,4 +1,5 @@
-import { MyElement, useMyEditorRef } from '@decipad/editor-types';
+import type { MyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   defaultConvertInto,
   defaultTextConversions,

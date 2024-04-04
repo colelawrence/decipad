@@ -1,5 +1,5 @@
 import arc from '@architect/functions';
-import { TableRecordChanges, UserKeyRecord } from '@decipad/backendtypes';
+import type { TableRecordChanges, UserKeyRecord } from '@decipad/backendtypes';
 import { app as appConfig, auth as authConfig } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import assert from 'assert';

@@ -1,4 +1,4 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import {
   allowsTextStyling,
   getPathContainingSelection,
@@ -11,7 +11,7 @@ import {
   createUnderlinePlugin,
 } from '@udecode/plate-basic-marks';
 
-import { WithRequired } from '@udecode/plate-common';
+import type { WithRequired } from '@udecode/plate-common';
 import { createMagicNumberPlugin } from '../MagicNumber';
 import { createInlineNumberPlugin } from '../MagicNumber/createInlineNumberPlugin';
 import { createSpoilerPlugin } from './createSpoilerPlugin';

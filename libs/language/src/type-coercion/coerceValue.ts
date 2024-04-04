@@ -1,9 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
-import { Type, Value, RuntimeError } from '@decipad/language-types';
+import type { Type, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { singular } from '@decipad/language-utils';
 import { columnToTable } from './columnToTable';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 import { treeToTable } from './treeToTable';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());

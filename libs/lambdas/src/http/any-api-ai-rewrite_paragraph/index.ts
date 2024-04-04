@@ -3,7 +3,7 @@ import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
-import { Completion } from 'openai/resources';
+import type { Completion } from 'openai/resources';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,

@@ -1,7 +1,8 @@
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { tables } from '@architect/functions';
-import { DataTables, VersionedTableRecord } from '@decipad/backendtypes';
-import { PromiseOrType, getDefined } from '../../utils/src';
+import type { DataTables, VersionedTableRecord } from '@decipad/backendtypes';
+import type { PromiseOrType } from '../../utils/src';
+import { getDefined } from '../../utils/src';
 
 export type WithLockUserFunction<T> = (
   record: T | undefined

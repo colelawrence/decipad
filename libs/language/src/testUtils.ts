@@ -1,7 +1,8 @@
 import stringify from 'json-stringify-safe';
 import pTime from 'p-time';
 import DeciNumber, { N } from '@decipad/number';
-import { AnyMapping, getDefined, zip, produce } from '@decipad/utils';
+import type { AnyMapping } from '@decipad/utils';
+import { getDefined, zip, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
   type AST,
@@ -18,11 +19,8 @@ import { parseBlockOrThrow } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { getErrSpec } from './type/getErrorSpec';
-import {
-  FromJSArg,
-  fromJS,
-  getColumnLike,
-} from '../../language-types/src/Value';
+import type { FromJSArg } from '../../language-types/src/Value';
+import { fromJS, getColumnLike } from '../../language-types/src/Value';
 
 export const runAST = async (
   block: AST.Block,

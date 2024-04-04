@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { LiveQueryElement, LiveQueryQueryElement } from '@decipad/editor-types';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type {
+  LiveQueryElement,
+  LiveQueryQueryElement,
+} from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { getDatabaseUrl } from '../utils/getDatabaseUrl';
 
 export const useLiveConnectionUrl = (

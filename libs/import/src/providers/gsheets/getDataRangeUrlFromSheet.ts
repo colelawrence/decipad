@@ -1,6 +1,6 @@
 import { thirdParty } from '@decipad/client-config';
 import { stringify as encodeQuery } from 'querystring';
-import { SheetMeta } from '../../types';
+import type { SheetMeta } from '../../types';
 import { sheetColumnName } from '../../utils/sheetColumnName';
 import type { Island } from '../../utils/sheetIslands';
 

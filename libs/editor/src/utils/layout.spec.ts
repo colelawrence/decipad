@@ -1,10 +1,11 @@
-import { createPlateEditor, PlateEditor } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-common';
+import { createPlateEditor } from '@udecode/plate-common';
+import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_COLUMNS,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { hasLayoutAncestor, insertNodeIntoColumns } from './layout';
 

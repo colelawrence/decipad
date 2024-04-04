@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app } from '@decipad/backend-config';
 import documentTemplate from '../public/index.html';
-import { Request, Response } from './types';
+import type { Request, Response } from './types';
 import { loadManifest } from './utils/loadManifest';
 import loadingMarkup from '../public/loadingMarkup.html';
 

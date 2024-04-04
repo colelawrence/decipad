@@ -1,6 +1,6 @@
 import { encodeDocumentIds } from './encodeDocumentIds';
 import notebook from './__fixtures__/notebook.json';
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 
 describe('encodeDocumentIds', () => {
   it('encodes and decodes', () => {

@@ -1,7 +1,7 @@
 import { ELEMENT_VARIABLE_DEF } from '../../../editor-types/src';
 import stringify from 'json-stringify-safe';
 import { assertElementType } from '../utils/assertElementType';
-import { VarnameToId, Verbalizer } from './types';
+import type { VarnameToId, Verbalizer } from './types';
 import { getNodeString } from '@udecode/plate-common';
 
 export const defVerbalizer: Verbalizer = (element, verbalize) => {

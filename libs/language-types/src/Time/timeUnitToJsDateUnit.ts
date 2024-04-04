@@ -1,4 +1,4 @@
-import * as Time from './Time';
+import type * as Time from './Time';
 
 export const timeUnitToJSDateUnit: Readonly<
   Record<Time.TimeUnit, [Time.JSDateUnit, bigint] | undefined>

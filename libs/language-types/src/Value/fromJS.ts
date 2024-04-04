@@ -1,5 +1,5 @@
-import DeciNumber from '@decipad/number';
-import { Value } from './Value';
+import type DeciNumber from '@decipad/number';
+import type { Value } from './Value';
 import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { Scalar } from './Scalar';

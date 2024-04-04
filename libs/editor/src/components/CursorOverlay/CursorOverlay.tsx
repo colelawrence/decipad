@@ -1,11 +1,7 @@
-import {
-  CursorData,
-  CursorState,
-  cursorStore,
-  useTabEditorContext,
-} from '@decipad/react-contexts';
+import type { CursorData, CursorState } from '@decipad/react-contexts';
+import { cursorStore, useTabEditorContext } from '@decipad/react-contexts';
 import { CursorOverlay as CursorOverlayPrimitive } from '@decipad/editor-components';
-import { CursorOverlayProps } from '@udecode/plate-cursor';
+import type { CursorOverlayProps } from '@udecode/plate-cursor';
 
 // TODO: styling once plate decouples SC
 export const CursorOverlay = (props: CursorOverlayProps<CursorData>) => {

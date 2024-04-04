@@ -1,9 +1,8 @@
+import type { CodeLineV2Element, SmartRefElement } from '@decipad/editor-types';
 import {
-  CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  SmartRefElement,
 } from '@decipad/editor-types';
 
 export function getStructuredCalc(

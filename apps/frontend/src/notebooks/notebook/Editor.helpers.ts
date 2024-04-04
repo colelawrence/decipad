@@ -1,7 +1,5 @@
-import {
-  EditorNotebookFragment,
-  useRenameNotebookMutation,
-} from '@decipad/graphql-client';
+import type { EditorNotebookFragment } from '@decipad/graphql-client';
+import { useRenameNotebookMutation } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { isServerSideRendering } from '@decipad/support';
 import { useCallback, useEffect, useMemo } from 'react';

@@ -1,14 +1,11 @@
 /* eslint-disable no-await-in-loop */
-import {
-  areUnitsConvertible,
-  RemoteComputer,
-  SerializedTypes,
-} from '@decipad/remote-computer';
-import { CellValueType } from '@decipad/editor-types';
+import type { RemoteComputer, SerializedTypes } from '@decipad/remote-computer';
+import { areUnitsConvertible } from '@decipad/remote-computer';
+import type { CellValueType } from '@decipad/editor-types';
 import { containsNumber } from '@decipad/utils';
 import { inferType } from '.';
 import { highestTimeSpecificity } from './parseDate';
-import { SpreadsheetColumn } from './types';
+import type { SpreadsheetColumn } from './types';
 
 interface InferColumnOptions {
   userType?: CellValueType;

@@ -1,4 +1,4 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 
 /**
  * After initial page load `editor.selection` is not set so `setSelection` does nothing.

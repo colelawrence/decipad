@@ -1,4 +1,5 @@
-import DeciNumber, { N, ZERO } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ZERO } from '@decipad/number';
 import type { DeciNumberPart } from './formatNumber';
 
 export const large = N(1_000_000_000_000_000_000_000n);

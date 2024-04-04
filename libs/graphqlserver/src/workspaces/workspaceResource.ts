@@ -1,4 +1,4 @@
-import { WorkspaceInput, WorkspaceRecord } from '@decipad/backendtypes';
+import type { WorkspaceInput, WorkspaceRecord } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';

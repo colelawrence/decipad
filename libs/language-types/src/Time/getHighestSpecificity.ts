@@ -1,5 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { Unit } from '@decipad/language-units';
+import type { Unit } from '@decipad/language-units';
 import { getSpecificity } from './getSpecificity';
 import { cmpSpecificities } from './cmpSpecificities';
 

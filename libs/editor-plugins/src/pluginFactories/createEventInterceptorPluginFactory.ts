@@ -1,8 +1,5 @@
-import {
-  createMyPluginFactory,
-  EventInterceptor,
-  MyElement,
-} from '@decipad/editor-types';
+import type { EventInterceptor, MyElement } from '@decipad/editor-types';
+import { createMyPluginFactory } from '@decipad/editor-types';
 
 interface EventInterceptorPluginProps {
   name: string;

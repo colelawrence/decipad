@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import { notAcceptable } from '@hapi/boom';
-import { Action } from './types';
+import type { Action } from './types';
 
 extendZodWithOpenApi(z);
 

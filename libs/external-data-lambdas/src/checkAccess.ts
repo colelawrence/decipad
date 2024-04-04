@@ -1,8 +1,8 @@
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { PermissionType, User } from '@decipad/backendtypes';
+import type { PermissionType, User } from '@decipad/backendtypes';
 import { resource } from '@decipad/backend-resources';
 
 const notebooks = resource('notebook');

@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom';
 import { getDefined } from '@decipad/utils';
 import { parseNotebookUrl } from '@decipad/backend-utils';
-import {
+import type {
   NotebookWriteApplicationCommandDataOption,
   NotebookReadApplicationCommandDataOption,
   NotebookApplicationCommandDataOption,

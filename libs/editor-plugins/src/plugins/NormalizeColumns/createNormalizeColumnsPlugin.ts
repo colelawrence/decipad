@@ -1,10 +1,6 @@
 /* eslint-disable no-param-reassign */
-import {
-  COLUMN_KINDS,
-  ELEMENT_COLUMNS,
-  MyEditor,
-  MyNodeEntry,
-} from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { COLUMN_KINDS, ELEMENT_COLUMNS } from '@decipad/editor-types';
 import {
   getNodeChildren,
   isElement,
@@ -13,10 +9,8 @@ import {
   removeNodes,
   unwrapNodes,
 } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 const normalizeColumns =
   (editor: MyEditor) =>

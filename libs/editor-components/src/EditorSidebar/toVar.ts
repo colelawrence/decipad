@@ -1,6 +1,6 @@
-import { AutocompleteName } from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/remote-computer';
 import { getDefined } from '@decipad/utils';
-import { CatalogItemVar } from './types';
+import type { CatalogItemVar } from './types';
 
 export const toVar = (
   name: AutocompleteName

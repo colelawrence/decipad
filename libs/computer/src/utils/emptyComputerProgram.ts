@@ -1,4 +1,4 @@
-import { ComputerProgram } from '../types';
+import type { ComputerProgram } from '../types';
 
 export const emptyComputerProgram = (): ComputerProgram => ({
   asBlockIdMap: new Map(),

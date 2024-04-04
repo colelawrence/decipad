@@ -1,8 +1,9 @@
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { findNode, getNodeString } from '@udecode/plate-common';
-import { NodeEntry, Path } from 'slate';
+import type { NodeEntry } from 'slate';
+import { Path } from 'slate';
 import { findParent } from './findParent';
-import { CatalogHeadingItem, CatalogItemVar, CatalogItems } from './types';
+import type { CatalogHeadingItem, CatalogItemVar, CatalogItems } from './types';
 
 const insertInOrder = (
   items: CatalogItems,

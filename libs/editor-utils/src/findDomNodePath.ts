@@ -1,5 +1,9 @@
-import { Path } from 'slate';
-import { findNodePath, toSlateNode, TReactEditor } from '@udecode/plate-common';
+import { type Path } from 'slate';
+import {
+  findNodePath,
+  toSlateNode,
+  type TReactEditor,
+} from '@udecode/plate-common';
 
 export const findDomNodePath = (
   editor: TReactEditor,

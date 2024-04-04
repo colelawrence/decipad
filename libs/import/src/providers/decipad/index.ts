@@ -1,4 +1,4 @@
-import { ImportResult, Provider } from '../../types';
+import type { ImportResult, Provider } from '../../types';
 
 export const decipad: Provider = {
   name: 'decipad',

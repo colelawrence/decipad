@@ -1,4 +1,4 @@
-import { MessageContent } from 'langchain/schema';
+import type { MessageContent } from 'langchain/schema';
 
 export const messageContentToString = (content: MessageContent): string => {
   if (typeof content === 'string') {

@@ -1,14 +1,16 @@
 /* eslint-disable no-param-reassign */
+import type {
+  MyEditor,
+  MyElement,
+  MyNodeEntry,
+  MyText,
+} from '@decipad/editor-types';
 import {
   DEPRECATED_ELEMENT_INPUT,
   ELEMENT_FETCH,
   ELEMENT_IMPORT,
   ELEMENT_PLOT,
   DEPRECATED_ELEMENT_TABLE_INPUT,
-  MyEditor,
-  MyElement,
-  MyNodeEntry,
-  MyText,
 } from '@decipad/editor-types';
 import {
   deleteText,
@@ -16,11 +18,9 @@ import {
   isElement,
   isText,
 } from '@udecode/plate-common';
-import { Path } from 'slate';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { Path } from 'slate';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import {
   normalizeExcessProperties,
   normalizeMissingProperties,

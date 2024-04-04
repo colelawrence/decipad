@@ -1,13 +1,7 @@
-import {
-  ELEMENT_EXPRESSION,
-  MyEditor,
-  MyElement,
-  MyNodeEntry,
-} from '@decipad/editor-types';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+import type { MyEditor, MyElement, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
   hasNode,
   insertText,

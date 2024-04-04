@@ -1,7 +1,8 @@
-import { isText, TTextOperation } from '@udecode/plate-common';
+import type { TTextOperation } from '@udecode/plate-common';
+import { isText } from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
-import * as Y from 'yjs';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type * as Y from 'yjs';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import { toSlatePath } from '../utils/convert';
 
 /**

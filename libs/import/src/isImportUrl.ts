@@ -1,5 +1,6 @@
-import { ImportElementSource } from '@decipad/editor-types';
-import { PromiseOrType, getDefined } from '@decipad/utils';
+import type { ImportElementSource } from '@decipad/editor-types';
+import type { PromiseOrType } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import providers from './providers';
 import { isRandomImportUrl } from './isRandomImportUrl';
 

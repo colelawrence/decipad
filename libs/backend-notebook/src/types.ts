@@ -1,9 +1,9 @@
-import { Result } from '@decipad/remote-computer';
-import {
+import type { Result } from '@decipad/remote-computer';
+import type {
   NotebookOpenApi,
-  type AllNotebookElementsDescriptionResult,
+  AllNotebookElementsDescriptionResult,
 } from '@decipad/notebook-open-api';
-import { SplitCodeResult } from '@decipad/backend-code-assistant';
+import type { SplitCodeResult } from '@decipad/backend-code-assistant';
 
 export interface CreateNotebookResult {
   createdNotebookId: string;

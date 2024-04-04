@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { RuntimeError, AST } from '@decipad/language';
+import type { AST } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError } from '@decipad/language';
 import { computeProgram, resultFromError } from './computeProgram';
 import {
   deeperProgram,
@@ -8,7 +10,7 @@ import {
 } from '../testUtils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 import { Computer } from '../computer';
-import { IdentifiedBlock } from '..';
+import type { IdentifiedBlock } from '..';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 
 it('creates a result from an error', () => {

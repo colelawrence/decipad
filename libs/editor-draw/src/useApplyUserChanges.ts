@@ -1,12 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { findNodePath } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
-import { MutableRefObject, useCallback, useRef } from 'react';
+import type { MutableRefObject } from 'react';
+import { useCallback, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { DrawElement, MyEditor, DrawElements } from '@decipad/editor-types';
+import type {
+  DrawElement,
+  MyEditor,
+  DrawElements,
+} from '@decipad/editor-types';
 import { applyElementsDiffToEditor } from './applyElementsDiffToEditor';
 import { fixElements } from './fixElement';
-import { ExcalidrawDrawElement } from './types';
+import type { ExcalidrawDrawElement } from './types';
 import { findElementsDiff } from './findElementsDiff';
 
 type UpdateScene = (elements: Readonly<DrawElements>) => void;

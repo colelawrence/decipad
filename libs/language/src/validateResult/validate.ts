@@ -2,11 +2,14 @@ import DeciNumber from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { empty } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  EMPTY,
+import type {
   Result,
   SerializedType,
   SerializedTypeKind,
+} from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import {
+  EMPTY,
   Time,
   Type,
   Unknown,
@@ -14,7 +17,7 @@ import {
   serializeType,
 } from '@decipad/language-types';
 import { validateColumnResult } from './validateColumnResult';
-import { Validate } from './types';
+import type { Validate } from './types';
 import stringify from 'json-stringify-safe';
 
 const getTrue = (cond: boolean, failureMessage: string) => {

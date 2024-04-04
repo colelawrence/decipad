@@ -1,4 +1,4 @@
-import { MutationResolvers } from '@decipad/graphqlserver-types';
+import type { MutationResolvers } from '@decipad/graphqlserver-types';
 import {
   findSubscriptionByWorkspaceId,
   updateStripeIfNeeded,

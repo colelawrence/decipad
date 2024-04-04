@@ -1,4 +1,4 @@
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 
 export const from = async function* from<T>(
   values: PromiseOrType<ReadonlyArray<T>>

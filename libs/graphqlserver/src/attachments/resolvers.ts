@@ -11,8 +11,13 @@ import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
-import { Attachment, Pad, Resolvers, User } from '@decipad/graphqlserver-types';
-import { FileAttachmentRecord } from '@decipad/backendtypes';
+import type {
+  Attachment,
+  Pad,
+  Resolvers,
+  User,
+} from '@decipad/graphqlserver-types';
+import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import Boom from '@hapi/boom';
 import { resourceusage, subscriptions } from '@decipad/services';
 import { limits } from '@decipad/backend-config';

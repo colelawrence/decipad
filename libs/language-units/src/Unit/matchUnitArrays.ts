@@ -1,5 +1,5 @@
 import { areUnitsCompatible } from '../units/known-units';
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 import { expandUnits } from './expand/expand-units';
 
 export const matchUnitArrays = (

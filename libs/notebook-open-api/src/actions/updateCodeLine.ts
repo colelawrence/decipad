@@ -1,10 +1,6 @@
-import { Path } from 'slate';
-import {
-  isElement,
-  findNode,
-  withoutNormalizing,
-  TNodeEntry,
-} from '@udecode/plate-common';
+import type { Path } from 'slate';
+import type { TNodeEntry } from '@udecode/plate-common';
+import { isElement, findNode, withoutNormalizing } from '@udecode/plate-common';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -15,7 +11,7 @@ import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import type { Action } from './types';
 import { replaceText } from './utils/replaceText';
-import {
+import type {
   StructuredVarnameElement,
   CodeLineV2ElementCode,
 } from '../../../editor-types/src/value';

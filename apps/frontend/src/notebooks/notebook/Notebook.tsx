@@ -3,7 +3,7 @@ import {
   type RemoteComputer,
   getRemoteComputer,
 } from '@decipad/remote-computer';
-import { DocSyncEditor } from '@decipad/docsync';
+import type { DocSyncEditor } from '@decipad/docsync';
 import {
   useFinishOnboarding,
   useGetNotebookAnnotationsQuery,
@@ -25,14 +25,8 @@ import {
   AddCreditsModal,
   useSetCssVarWidth,
 } from '@decipad/ui';
-import {
-  FC,
-  Suspense,
-  createContext,
-  useState,
-  useEffect,
-  useRef,
-} from 'react';
+import type { FC } from 'react';
+import { Suspense, createContext, useState, useEffect, useRef } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';

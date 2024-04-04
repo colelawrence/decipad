@@ -1,8 +1,12 @@
 import pReduce from 'p-reduce';
 // eslint-disable-next-line no-restricted-imports
-import { Type, Value, materializeOneResult } from '@decipad/language-types';
+import {
+  type Type,
+  Value,
+  materializeOneResult,
+} from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
-import { BuiltinContextUtils } from '../../types';
+import { type BuiltinContextUtils } from '../../types';
 
 export const applyTableFilters = async (
   ctx: BuiltinContextUtils,

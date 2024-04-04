@@ -1,6 +1,6 @@
 import { queues } from '@architect/functions';
-import { PermissionType, User } from '@decipad/backendtypes';
-import { AuthResult } from '@decipad/services/authentication';
+import type { PermissionType, User } from '@decipad/backendtypes';
+import type { AuthResult } from '@decipad/services/authentication';
 import {
   isAuthorized,
   maximumPermissionIn,

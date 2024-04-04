@@ -1,10 +1,12 @@
-import {
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_DATASET,
+import type {
   ImportElementSource,
   LiveConnectionElement,
   LiveDataSetElement,
   LiveQueryElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
 } from '@decipad/editor-types';
 
 const databaseSources = new Set<ImportElementSource | undefined>([

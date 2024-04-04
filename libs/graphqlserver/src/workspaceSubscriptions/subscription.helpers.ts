@@ -1,10 +1,10 @@
 import tables from '@decipad/tables';
 import { Stripe } from 'stripe';
 import { limits, plans, thirdParty } from '@decipad/backend-config';
-import { ID } from '@decipad/backendtypes';
+import type { ID } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import {
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type {
   SubscriptionPaymentStatus,
   WorkspaceSubscription,
 } from '@decipad/graphqlserver-types';

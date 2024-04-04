@@ -1,4 +1,4 @@
-import {
+import type {
   DrawElement,
   DrawElementDescendant,
   DrawElements,
@@ -7,7 +7,7 @@ import { useEditorChangeCallback } from '@decipad/editor-hooks';
 import { findNodePath, getNode } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useRef } from 'react';
-import { DrawElementsDiff } from './types';
+import type { DrawElementsDiff } from './types';
 import { findElementsDiff } from './findElementsDiff';
 
 type UpdateScene = (elements: Readonly<DrawElements>) => void;

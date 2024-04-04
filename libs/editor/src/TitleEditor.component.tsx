@@ -1,8 +1,15 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { EditorBlock, EditorTitle, useCancelingEvent } from '@decipad/ui';
-import { FC, KeyboardEvent, useMemo, type ClipboardEvent } from 'react';
-import { BaseEditor, BaseText, Descendant, Text } from 'slate';
-import { Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
+import {
+  type FC,
+  type KeyboardEvent,
+  useMemo,
+  type ClipboardEvent,
+} from 'react';
+import type { BaseEditor, BaseText, Descendant } from 'slate';
+import { Text } from 'slate';
+import type { RenderElementProps } from 'slate-react';
+import { Editable, ReactEditor, Slate } from 'slate-react';
 
 interface TitleEditorProps {
   tab: string | undefined;

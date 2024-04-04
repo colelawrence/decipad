@@ -1,9 +1,5 @@
-import {
-  AST,
-  Parser,
-  parseStatement,
-  isExpression,
-} from '@decipad/remote-computer';
+import type { AST, Parser } from '@decipad/remote-computer';
+import { parseStatement, isExpression } from '@decipad/remote-computer';
 
 interface ExpressionFromEditorNodesResult {
   expression?: AST.Statement;

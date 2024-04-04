@@ -3,7 +3,7 @@
 /* eslint-disable jest/expect-expect */
 
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { Attachment, Pad, Workspace } from '@decipad/backendtypes';
+import type { Attachment, Pad, Workspace } from '@decipad/backendtypes';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';

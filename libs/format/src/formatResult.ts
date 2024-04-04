@@ -1,14 +1,9 @@
 import util from 'util';
-import DeciNumber, { N } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
 import { getDefined, identity, zip } from '@decipad/utils';
-import {
-  Result,
-  SerializedType,
-  Time,
-  Type,
-  Unit,
-  serializeType,
-} from '@decipad/remote-computer';
+import type { Result, SerializedType, Type } from '@decipad/remote-computer';
+import { Time, Unit, serializeType } from '@decipad/remote-computer';
 import { formatType } from './formatType';
 
 export type FormatResult = (

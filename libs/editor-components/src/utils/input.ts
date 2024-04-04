@@ -1,19 +1,23 @@
-import type { SerializedTypeKind } from '@decipad/remote-computer';
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
+import type {
+  SerializedTypeKind,
+  RemoteComputer,
+} from '@decipad/remote-computer';
+import type {
   DisplayElement,
   DropdownElement,
+  ElementVariants,
+  MyEditor,
+  VariableDefinitionElement,
+  VariableDropdownElement,
+  VariableSliderElement,
+} from '@decipad/editor-types';
+import {
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  ElementVariants,
-  MyEditor,
-  VariableDefinitionElement,
-  VariableDropdownElement,
-  VariableSliderElement,
 } from '@decipad/editor-types';
 import {
   insertNodes,
@@ -27,7 +31,7 @@ import {
 } from '@decipad/utils';
 import { getEndPoint, getStartPoint } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 const DEFAULT_INPUT_VALUE = '100$';
 const getInitialInputElement = ({

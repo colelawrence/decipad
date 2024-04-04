@@ -1,14 +1,14 @@
 import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
 import {
-  Result,
-  Type,
+  type Result,
+  type Type,
   Value,
   buildType,
   compare,
 } from '@decipad/language-types';
 import { sortMap, contiguousSlices } from '@decipad/column';
-import { BuiltinContextUtils } from '../../types';
+import { type BuiltinContextUtils } from '../../types';
 import { maybeAggregateColumn } from './maybeAggregateColumn';
 import { getDefined } from '@decipad/utils';
 

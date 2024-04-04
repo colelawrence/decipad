@@ -4,7 +4,7 @@ import { canonicalize } from 'json-canonicalize';
 import { toSlateDoc } from '@decipad/slate-yjs';
 import { notFound } from '@hapi/boom';
 import tables, { allPages } from '@decipad/tables';
-import { NotebookValue, RootDocument } from '@decipad/editor-types';
+import type { NotebookValue, RootDocument } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import type { DocSyncSnapshotRecord } from '@decipad/backendtypes';
 import { fetchSnapshotFromFile } from '../../../backend-notebook-content/src/fetchSnapshotFromFile';

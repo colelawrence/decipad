@@ -1,8 +1,8 @@
 import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
-import { Type, Value } from '@decipad/language-types';
+import { type Type, Value } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
-import { BuiltinContextUtils } from '../../types';
+import { type BuiltinContextUtils } from '../../types';
 
 export const applyTableFunctions = async (
   ctx: BuiltinContextUtils,

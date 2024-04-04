@@ -1,9 +1,6 @@
-import {
-  CalloutElement,
-  ELEMENT_CALLOUT,
-  userIconKeys,
-} from '@decipad/editor-types';
-import { DeserializeHtml } from '@udecode/plate-common';
+import type { CalloutElement } from '@decipad/editor-types';
+import { ELEMENT_CALLOUT, userIconKeys } from '@decipad/editor-types';
+import type { DeserializeHtml } from '@udecode/plate-common';
 import { swatchNames } from 'libs/ui/src/utils';
 import { nanoid } from 'nanoid';
 import { cleanString } from '../../utils/cleanString';

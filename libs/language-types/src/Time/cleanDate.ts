@@ -1,5 +1,5 @@
 import { startOfDate } from '@decipad/utils';
-import * as Time from './Time';
+import type * as Time from './Time';
 import { dateToArray } from './dateToArray';
 import { arrayToDate } from './arrayToDate';
 

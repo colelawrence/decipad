@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { Result } from '@decipad/language';
+import type { Result } from '@decipad/language';
 import { isTable } from './isTable';
 
 export const isTableResult = (

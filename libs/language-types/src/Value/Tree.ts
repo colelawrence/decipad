@@ -1,6 +1,6 @@
-import { Result } from '..';
-import { OneResult } from '../Result';
-import type { Value } from './Value';
+import { type Result } from '..';
+import { type OneResult } from '../Result';
+import { type Value } from './Value';
 
 export interface TreeColumn {
   name: string;

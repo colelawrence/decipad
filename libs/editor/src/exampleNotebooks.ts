@@ -1,4 +1,4 @@
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { nanoid } from 'nanoid';
 

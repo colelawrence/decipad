@@ -1,25 +1,21 @@
-import {
+import type {
   ENodeEntry,
-  getChildren,
-  getNodeString,
-  isElement,
   PlateEditor,
   TNodeEntry,
   Value,
 } from '@udecode/plate-common';
+import { getChildren, getNodeString, isElement } from '@udecode/plate-common';
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TR,
+import type {
   TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@decipad/editor-types';
 import { enumerate } from '@decipad/utils';
-import { NodeEntry } from 'slate';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { NodeEntry } from 'slate';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { setCellText } from '../utils/setCellText';
 // We do this following import this way because tree-shaking is not good enough

@@ -1,5 +1,6 @@
 import { c, getIdentifierString } from '../utils';
-import { findLiteralNumber, SimpleValueAST } from './common';
+import type { SimpleValueAST } from './common';
+import { findLiteralNumber } from './common';
 
 export function getSimpleValueUnit(
   ast: SimpleValueAST

@@ -1,6 +1,6 @@
 import { produce } from '@decipad/utils';
 import { areUnitsCompatible } from '../units/known-units';
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 import { normalizeUnits } from './normalizeUnits';
 import { areUnitQualitiesCompatible } from './areUnitQualitiesCompatible';
 

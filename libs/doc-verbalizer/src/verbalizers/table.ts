@@ -1,13 +1,12 @@
 import { identity, transpose } from 'ramda';
 import { assertElementType } from '../utils/assertElementType';
-import { VarnameToId, Verbalizer } from './types';
+import type { VarnameToId, Verbalizer } from './types';
 import stringify from 'json-stringify-safe';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TH,
+import type {
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '../../../editor-types/src';
+import { ELEMENT_TABLE, ELEMENT_TH } from '../../../editor-types/src';
 import { getNodeString } from '../utils/getNodeString';
 
 export const tableVerbalizer: Verbalizer = (element, verbalize) => {

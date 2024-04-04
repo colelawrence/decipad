@@ -5,7 +5,7 @@ import {
   statementToIdentifiedBlock,
   parseExpression,
 } from '@decipad/remote-computer';
-import { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement } from '@decipad/editor-types';
 import { getAggregationById } from '@decipad/language-aggregations';
 import { getColumnRef } from './getColumnRef';
 

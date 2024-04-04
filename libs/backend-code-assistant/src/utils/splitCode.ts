@@ -1,6 +1,6 @@
 import { splitCodeUsingGrammar } from './splitCodeUsingGrammar';
 import { debug } from '../debug';
-import { SplitCodeResult } from '../types';
+import type { SplitCodeResult } from '../types';
 import { splitCodeByLine } from './splitCodeByLine';
 
 export const splitCode = (code: string): SplitCodeResult => {

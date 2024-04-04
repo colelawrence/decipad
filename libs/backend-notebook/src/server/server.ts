@@ -1,15 +1,15 @@
 import { notAcceptable, unauthorized } from '@hapi/boom';
-import {
+import type {
   APIGatewayProxyStructuredResultV2,
   APIGatewayProxyEventV2,
 } from 'aws-lambda';
 import stringify from 'json-stringify-safe';
 import { getRemoteComputer } from '@decipad/remote-computer';
-import {
+import type {
   CustomAction,
   ActionResultWithNotebookError,
-  callAction,
 } from '@decipad/notebook-open-api';
+import { callAction } from '@decipad/notebook-open-api';
 import { getEditor } from './editor/getEditor';
 import { attachEditorToBackend } from './attachEditorToBackend';
 import { actions } from '../actions';

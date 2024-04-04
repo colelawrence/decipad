@@ -1,5 +1,6 @@
 import { once } from '@decipad/utils';
-import { defaultEnv, SupportedEnvKey } from './default';
+import type { SupportedEnvKey } from './default';
+import { defaultEnv } from './default';
 
 export { defaultEnv };
 

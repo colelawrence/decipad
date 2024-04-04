@@ -1,12 +1,12 @@
 import { Doc as YDoc } from 'yjs';
-import {
+import type {
   SyncElement,
   TYjsEditor as GTYjsEditor,
-  withYjs,
 } from '@decipad/slate-yjs';
+import { withYjs } from '@decipad/slate-yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import { timeout } from '@decipad/utils';
 
 type Detach = () => Promise<void>;

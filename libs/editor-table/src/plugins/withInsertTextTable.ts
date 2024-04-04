@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { ELEMENT_TD, MyGenericEditor, MyValue } from '@decipad/editor-types';
+import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import { ELEMENT_TD } from '@decipad/editor-types';
 import { setCellText } from '../utils';
-import { getAboveNode, getNodeString, Value } from '@udecode/plate-common';
+import type { Value } from '@udecode/plate-common';
+import { getAboveNode, getNodeString } from '@udecode/plate-common';
 
 /**
  * Not related to the withInsertTextTable exported from Plate. Ensures that

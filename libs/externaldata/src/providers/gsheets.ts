@@ -1,5 +1,5 @@
 import { thirdParty } from '@decipad/backend-config';
-import { GoogleSheetProvider } from './types';
+import type { GoogleSheetProvider } from './types';
 
 export const gsheets = (): GoogleSheetProvider => {
   const config = thirdParty();

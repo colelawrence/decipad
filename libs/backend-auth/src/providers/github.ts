@@ -1,4 +1,4 @@
-import { GithubUser } from '@decipad/backendtypes';
+import type { GithubUser } from '@decipad/backendtypes';
 
 export default function GitHub(
   options: Record<string, unknown>

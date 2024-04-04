@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { type SerializedType } from '@decipad/remote-computer';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import {
+import type {
   DataViewElement,
   DataViewHeader,
   DataViewHeaderRowElement,
-  ELEMENT_DATA_VIEW_TH,
   MyEditor,
   TableCellType,
 } from '@decipad/editor-types';
+import { ELEMENT_DATA_VIEW_TH } from '@decipad/editor-types';
 import { insertNodes, withPath } from '@decipad/editor-utils';
 import {
   deleteText,
@@ -23,9 +23,10 @@ import {
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useRef } from 'react';
-import { Observable, Subject } from 'rxjs';
-import { Path } from 'slate';
-import { Column } from '../types';
+import type { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import type { Path } from 'slate';
+import type { Column } from '../types';
 import { dequal } from '@decipad/utils';
 
 export interface TableActions {

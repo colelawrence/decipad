@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { Dimension } from '../Dimension';
+import type { Dimension } from '../Dimension';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { implementColumnLike } from '../utils/implementColumnLike';
-import { ColumnLikeValue } from './ColumnLike';
-import { MinimalTensor } from './MinimalTensor';
+import type { ColumnLikeValue } from './ColumnLike';
+import type { MinimalTensor } from './MinimalTensor';
 import { lowLevelGet } from './lowLevelGet';
 
 const ConcatenatedColumn = implementColumnLike(

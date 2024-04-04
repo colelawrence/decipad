@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-import { IdentifiedError, IdentifiedResult } from '../types';
+import type { BehaviorSubject, Observable } from 'rxjs';
+import type { IdentifiedError, IdentifiedResult } from '../types';
 
 export type BlockResultStream = BehaviorSubject<
   IdentifiedResult | IdentifiedError

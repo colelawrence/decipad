@@ -1,11 +1,11 @@
 import { getNodeString, isText } from '@udecode/plate-common';
-import {
+import type {
   CodeLineElement,
   CodeLineV2ElementCode,
-  ELEMENT_SMART_REF,
   ParagraphElement,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { getExprRef } from '@decipad/remote-computer';
 import { isElementOfType } from './isElementOfType';
 

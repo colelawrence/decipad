@@ -4,8 +4,8 @@ import type { ColumnLike } from '.';
 import { ColumnSlice } from './ColumnSlice';
 import { FilteredColumn } from './FilteredColumn';
 import { MappedColumn } from './MappedColumn';
-import { SlicesMap } from './SlicesMap';
-import { CompareFn } from './types';
+import type { SlicesMap } from './SlicesMap';
+import type { CompareFn } from './types';
 
 export const sortMap = async <TValue>(
   col: ColumnLike<TValue>,

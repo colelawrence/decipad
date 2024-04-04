@@ -4,7 +4,7 @@ import textOnly from './__fixtures__/text-only.json';
 import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
 import mostComponents from './__fixtures__/most-components.json';
-import { ElementKind, RootDocument } from '@decipad/editor-types';
+import type { ElementKind, RootDocument } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('verbalizeDoc', () => {

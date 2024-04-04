@@ -1,5 +1,7 @@
-import { ELEMENT_CODE_LINE, MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
+import type { TNodeEntry, TOperation } from '@udecode/plate-common';
 import {
   getNodeChildren,
   getPointAfter,
@@ -7,8 +9,6 @@ import {
   isElement,
   isText,
   someNode,
-  TNodeEntry,
-  TOperation,
 } from '@udecode/plate-common';
 import { normalizeCodeLineSpace } from './normalizeCodeLineSpace';
 

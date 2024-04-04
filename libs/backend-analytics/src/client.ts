@@ -1,11 +1,8 @@
 /* eslint-disable no-console */
-import {
-  Analytics as AnalyticsClient,
-  AnalyticsSettings,
-  TrackParams,
-} from '@segment/analytics-node';
+import type { AnalyticsSettings, TrackParams } from '@segment/analytics-node';
+import { Analytics as AnalyticsClient } from '@segment/analytics-node';
 import { analytics } from '@decipad/backend-config';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const { secretKey } = analytics();
 

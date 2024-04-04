@@ -1,7 +1,5 @@
-import {
-  ELEMENT_VARIABLE_DEF,
-  VariableDropdownElement,
-} from '@decipad/editor-types';
+import type { VariableDropdownElement } from '@decipad/editor-types';
+import { ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import {
   type AST,
   type RemoteComputer,
@@ -12,7 +10,7 @@ import { getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType, parseCell } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
-import { InteractiveLanguageElement } from '../types';
+import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 export const VariableDef: InteractiveLanguageElement = {

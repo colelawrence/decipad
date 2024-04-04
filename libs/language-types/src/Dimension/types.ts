@@ -1,5 +1,5 @@
-import { PromiseOrType } from '@decipad/utils';
-import { Value } from '../Value/Value';
+import type { PromiseOrType } from '@decipad/utils';
+import type { Value } from '../Value/Value';
 
 export type DimensionId = string | number;
 

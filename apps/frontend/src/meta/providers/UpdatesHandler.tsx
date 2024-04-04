@@ -1,13 +1,7 @@
 import { useToast } from '@decipad/toast';
 import { UpdatePrompt } from '@decipad/ui';
-import {
-  FC,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { UpdatesContextProvider } from './UpdatesProvider';
 
 const initialTimeoutMs = 1_000;

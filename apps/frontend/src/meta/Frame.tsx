@@ -1,4 +1,5 @@
-import { ComponentProps, ReactNode, Suspense } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';

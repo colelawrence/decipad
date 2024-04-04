@@ -1,11 +1,9 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
-import { ImportResult, tryImport } from '@decipad/import';
-import {
-  RemoteComputer,
-  getRemoteComputer,
-  setErrorReporter,
-} from '@decipad/remote-computer';
+import type { ImportResult } from '@decipad/import';
+import { tryImport } from '@decipad/import';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer, setErrorReporter } from '@decipad/remote-computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';

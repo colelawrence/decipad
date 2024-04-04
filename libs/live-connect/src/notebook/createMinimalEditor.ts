@@ -1,7 +1,8 @@
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { createPlateEditor, getNode, TNode } from '@udecode/plate-common';
-import { Path } from 'slate';
+import type { TNode } from '@udecode/plate-common';
+import { createPlateEditor, getNode } from '@udecode/plate-common';
+import type { Path } from 'slate';
 
 export const createMinimalEditor = (): MinimalRootEditor => {
   const editor = createPlateEditor();

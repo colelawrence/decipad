@@ -1,8 +1,8 @@
 import { DECORATE_TYPE_ERROR } from '@decipad/editor-types';
 import type { SerializedTypes } from '@decipad/remote-computer';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { formatError } from '@decipad/format';
-import { TypeErrorAnnotation } from './TypeErrorAnnotation';
+import type { TypeErrorAnnotation } from './TypeErrorAnnotation';
 
 interface ErrorType {
   errorLocation?: SerializedTypes.TypeError['errorLocation'];

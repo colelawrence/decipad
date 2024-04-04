@@ -4,7 +4,7 @@ import {
   TeleportEditor,
 } from '@decipad/editor-components';
 import { Integrations } from '@decipad/editor-integrations';
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   CategoriesContextProvider,
   EditorBlockParentRefProvider,
@@ -15,19 +15,11 @@ import { useCanUseDom, useWindowListener } from '@decipad/react-utils';
 import { EditorLayout, EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import {
-  FC,
-  PropsWithChildren,
-  ReactNode,
-  RefObject,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { BaseEditor, Scrubber, Editor as SlateEditor } from 'slate';
-import { ReactEditor } from 'slate-react';
+import type { FC, PropsWithChildren, ReactNode, RefObject } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import type { BaseEditor } from 'slate';
+import { Scrubber, Editor as SlateEditor } from 'slate';
+import type { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';

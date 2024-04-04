@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { MyEditor, DrawElement, ELEMENT_DRAW } from '@decipad/editor-types';
+import type { MyEditor, DrawElement } from '@decipad/editor-types';
+import { ELEMENT_DRAW } from '@decipad/editor-types';
 import {
   insertNodes,
   requirePathBelowBlock,

@@ -1,4 +1,4 @@
-import { Client } from '@opensearch-project/opensearch';
+import type { Client } from '@opensearch-project/opensearch';
 import { indexNames } from './config';
 
 const creatingIndex = async (fn: () => Promise<unknown>) => {

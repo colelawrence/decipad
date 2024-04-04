@@ -1,25 +1,26 @@
-import {
-  deleteText,
+import type {
   EElement,
   ENodeEntry,
-  getNode,
-  hasNode,
-  isElement,
   PlateEditor,
   TDescendant,
   TEditor,
   TElement,
   TNodeEntry,
-  unsetNodes,
   Value,
 } from '@udecode/plate-common';
 import {
-  createMyPluginFactory,
-  getMyEditor,
+  deleteText,
+  getNode,
+  hasNode,
+  isElement,
+  unsetNodes,
+} from '@udecode/plate-common';
+import type {
   MyElement,
   MyPlatePlugin,
   MyWithOverride,
 } from '@decipad/editor-types';
+import { createMyPluginFactory, getMyEditor } from '@decipad/editor-types';
 import { captureException } from '@sentry/browser';
 
 export type NormalizerNormaliser = () => void;

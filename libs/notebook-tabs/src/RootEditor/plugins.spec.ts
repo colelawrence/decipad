@@ -3,7 +3,7 @@ import { normalizeCurried } from './normalizeNode';
 import { normalizers } from './plugins';
 import { ELEMENT_H1 } from '@udecode/plate-heading';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { TEditor } from '@udecode/plate-common';
+import type { TEditor } from '@udecode/plate-common';
 
 jest.mock('nanoid', () => ({
   nanoid: () => 'mocked-id',

@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import DeciNumber from '@decipad/number';
-import { inf, minusInf } from './consts';
+import type DeciNumber from '@decipad/number';
+import type { inf, minusInf } from './consts';
 
 export interface ToStringable {
   toString: () => string;

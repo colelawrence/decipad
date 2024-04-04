@@ -1,7 +1,7 @@
 import type { Time } from '@decipad/remote-computer';
 import { formatDate } from '@decipad/utils';
 import { parseDate } from './parseDate';
-import { CoercibleType, DateGranularity } from './types';
+import type { CoercibleType, DateGranularity } from './types';
 
 const defaultFormatForSpecificity = (s: Time.Specificity) => {
   switch (s) {

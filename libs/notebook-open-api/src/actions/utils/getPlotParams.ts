@@ -1,7 +1,8 @@
-import { ELEMENT_PLOT, PlotElement, TableElement } from '@decipad/editor-types';
+import type { PlotElement, TableElement } from '@decipad/editor-types';
+import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/remote-computer';
-import { PlotParams } from '../../types';
+import type { PlotParams } from '../../types';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const getPlotParams = (

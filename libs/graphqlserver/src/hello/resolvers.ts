@@ -1,4 +1,4 @@
-import { GraphqlContext } from '@decipad/backendtypes';
+import type { GraphqlContext } from '@decipad/backendtypes';
 import { requireUser } from '../authorization';
 
 export default {

@@ -1,12 +1,12 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type {
   ColIndex,
   ImportElementSource,
   TableCellType,
 } from '@decipad/editor-types';
 import { importFromUnknown } from './importFromUnknown';
 import { decipad, gsheets } from './providers';
-import { ImportResult } from './types';
+import type { ImportResult } from './types';
 
 export interface ImportParams {
   computer: RemoteComputer;

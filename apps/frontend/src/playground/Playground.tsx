@@ -7,7 +7,8 @@ import {
   PlaygroundTopBar,
   useSetCssVarWidth,
 } from '@decipad/ui';
-import { ComponentProps, useState } from 'react';
+import type { ComponentProps } from 'react';
+import { useState } from 'react';
 import { lazyLoad } from '@decipad/react-utils';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';

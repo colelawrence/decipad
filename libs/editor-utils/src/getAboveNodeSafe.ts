@@ -1,10 +1,10 @@
-import { MyNode } from '@decipad/editor-types';
+import { type MyNode } from '@decipad/editor-types';
 import {
   // eslint-disable-next-line no-restricted-imports
   getAboveNode,
-  GetAboveNodeOptions,
-  TEditor,
-  TNodeEntry,
+  type GetAboveNodeOptions,
+  type TEditor,
+  type TNodeEntry,
 } from '@udecode/plate-common';
 
 export const getAboveNodeSafe = <T extends MyNode>(

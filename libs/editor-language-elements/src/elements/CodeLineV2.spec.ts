@@ -1,10 +1,12 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
-import {
+import type {
   CodeLineV2Element,
+  CodeLineV2ElementCode,
+} from '@decipad/editor-types';
+import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  CodeLineV2ElementCode,
   ELEMENT_SMART_REF,
   ELEMENT_TITLE,
   ELEMENT_TAB,

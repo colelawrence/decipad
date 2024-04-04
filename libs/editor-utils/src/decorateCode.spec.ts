@@ -1,6 +1,6 @@
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
-  CodeLineElement,
+  type CodeLineElement,
   createMyPlateEditor,
   DECORATE_AUTO_COMPLETE_MENU,
   DECORATE_CODE_VARIABLE,
@@ -9,15 +9,16 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_H1,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
-  MyElementEntry,
-  MyValue,
+  type MyEditor,
+  type MyElementEntry,
+  type MyValue,
 } from '@decipad/editor-types';
 import { getDefined, getOnly } from '@decipad/utils';
 import {
@@ -25,10 +26,9 @@ import {
   findNode,
   getSelectionText,
 } from '@udecode/plate-common';
-import { NodeEntry, Path } from 'slate';
+import type { NodeEntry, Path } from 'slate';
 import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 let editor = createMyPlateEditor({});
 const computer = getRemoteComputer();

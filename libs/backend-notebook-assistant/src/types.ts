@@ -1,6 +1,6 @@
-import { TOperation } from '@udecode/plate-common';
-import { RootDocument } from '@decipad/editor-types';
-import { CompletionUsage } from 'openai/resources';
+import type { TOperation } from '@udecode/plate-common';
+import type { RootDocument } from '@decipad/editor-types';
+import type { CompletionUsage } from 'openai/resources';
 
 export interface NotebookAssistantReply {
   operations: TOperation[];

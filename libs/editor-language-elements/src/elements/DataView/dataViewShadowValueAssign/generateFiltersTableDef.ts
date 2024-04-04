@@ -1,10 +1,10 @@
+import type { AST } from '@decipad/remote-computer';
 import {
-  AST,
   getExprRef,
   statementToIdentifiedBlock,
   parseExpression,
 } from '@decipad/remote-computer';
-import { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement } from '@decipad/editor-types';
 import { getFilterExpression } from '@decipad/language-filters';
 import { getColumnRef } from './getColumnRef';
 

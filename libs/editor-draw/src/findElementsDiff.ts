@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
-import { DrawElementDescendant } from '@decipad/editor-types';
+import type { DrawElementDescendant } from '@decipad/editor-types';
 import { dequal } from '@decipad/utils';
 import invariant from 'tiny-invariant';
-import { DrawElementsDiff } from './types';
+import type { DrawElementsDiff } from './types';
 
 const findRemoved = (
   elementsBefore: Readonly<Array<DrawElementDescendant>>,

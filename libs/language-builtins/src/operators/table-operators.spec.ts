@@ -1,15 +1,16 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
+import type { Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   RuntimeError,
-  Type,
   Value,
   materializeOneResult,
   buildType as t,
 } from '@decipad/language-types';
 import { tableOperators as operators } from './table-operators';
 import { U, makeContext } from '../utils/testUtils';
-import { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../interfaces';
 
 setupDeciNumberSnapshotSerializer();
 

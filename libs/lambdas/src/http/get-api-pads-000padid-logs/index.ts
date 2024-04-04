@@ -1,4 +1,4 @@
-import { LogRecord, User } from '@decipad/backendtypes';
+import type { LogRecord, User } from '@decipad/backendtypes';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';

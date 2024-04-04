@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from 'react';
 import { setNodes } from '@udecode/plate-common';
-import {
+import type {
   LiveConnectionElement,
   LiveDataSetElement,
   TableCellType,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
-import { Path } from 'slate';
-import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import type { Path } from 'slate';
+import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 interface UseCoreLiveConnectionActionsProps {
   path?: Path;

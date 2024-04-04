@@ -1,8 +1,6 @@
-import { Path } from 'slate';
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  TableElement,
-} from '@decipad/editor-types';
+import type { Path } from 'slate';
+import type { TableElement } from '@decipad/editor-types';
+import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
 
 export const findTableFormulaPath = (
   table: TableElement,

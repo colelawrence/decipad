@@ -1,4 +1,4 @@
-import { ContextUtils } from '../ContextUtils';
+import type { ContextUtils } from '../ContextUtils';
 
 export const resolveIndexDelegation = (
   utils: ContextUtils,

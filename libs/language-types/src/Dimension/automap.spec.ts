@@ -1,8 +1,5 @@
-import DeciNumber, {
-  N,
-  ZERO,
-  setupDeciNumberSnapshotSerializer,
-} from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ZERO, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { Type, buildType as t } from '../Type';
 import {
   automapTypes,
@@ -11,7 +8,8 @@ import {
   automapValuesForReducer,
 } from './automap';
 import { materializeOneResult } from '../utils/materializeOneResult';
-import { Column, Scalar, Table, Value, fromJS, getColumnLike } from '../Value';
+import type { Value } from '../Value';
+import { Column, Scalar, Table, fromJS, getColumnLike } from '../Value';
 import { makeContext } from './testUtils';
 
 setupDeciNumberSnapshotSerializer();

@@ -1,5 +1,5 @@
 import { notebooks, workspaces } from '@decipad/routing';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 export const NotebookRedirect: FC = () => {

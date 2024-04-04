@@ -1,5 +1,5 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import { Locator, Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 

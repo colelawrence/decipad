@@ -4,7 +4,7 @@ import DeciNumber, {
   ZERO,
 } from '@decipad/number';
 import { inf, minusInf } from './consts';
-import { LogicNumber, Infinity } from './types';
+import type { LogicNumber, Infinity } from './types';
 
 export const isInfinity = (n: unknown): n is Infinity => {
   return n === inf || n === minusInf;

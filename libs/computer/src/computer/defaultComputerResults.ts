@@ -1,4 +1,4 @@
-import { NotebookResults } from '../types';
+import type { NotebookResults } from '../types';
 
 export const defaultComputerResults: NotebookResults = {
   blockResults: {},

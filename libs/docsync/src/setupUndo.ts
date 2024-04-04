@@ -1,6 +1,6 @@
 import { slateYjsSymbol } from 'libs/slate-yjs/src/model';
 import { UndoManager } from 'yjs';
-import { DocSyncEditor } from '.';
+import type { DocSyncEditor } from '.';
 
 export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
   let captureTransaction = true;

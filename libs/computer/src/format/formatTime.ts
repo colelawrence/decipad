@@ -1,4 +1,5 @@
-import DeciNumber, { ONE, N } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { ONE, N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
   areUnitsConvertible,
@@ -8,7 +9,8 @@ import {
 } from '@decipad/language';
 import pluralize from 'pluralize';
 
-import { Options, prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
+import type { Options } from './parseMs';
+import { prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
 import type { IntermediateDeciNumber } from './formatNumber';
 
 import { once } from '@decipad/utils';

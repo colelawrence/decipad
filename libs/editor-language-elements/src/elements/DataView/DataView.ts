@@ -1,7 +1,7 @@
-import { Program } from '@decipad/remote-computer';
+import { type Program } from '@decipad/remote-computer';
 import { ELEMENT_DATA_VIEW } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { InteractiveLanguageElement } from '../../types';
+import { type InteractiveLanguageElement } from '../../types';
 import { dataViewShadowValueAssign } from './dataViewShadowValueAssign';
 import { dataViewToOutputAssign } from './dataViewToOutputAssign';
 

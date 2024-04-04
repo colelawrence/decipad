@@ -1,6 +1,7 @@
-import { FromJSArg, UnknownValue, fromJS, getColumnLike } from '../Value';
-import { HypercubeArg } from './LazyOperation';
-import { DimensionId } from './types';
+import type { FromJSArg } from '../Value';
+import { UnknownValue, fromJS, getColumnLike } from '../Value';
+import type { HypercubeArg } from './LazyOperation';
+import type { DimensionId } from './types';
 import type { ContextUtils } from '../ContextUtils';
 
 export const jsCol = (items: FromJSArg) => getColumnLike(fromJS(items));

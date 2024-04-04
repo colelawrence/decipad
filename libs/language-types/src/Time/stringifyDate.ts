@@ -1,5 +1,5 @@
 import { UNKNOWN_ASSTRING } from '@decipad/number';
-import { Specificity } from './Time';
+import type { Specificity } from './Time';
 import { dateToArray } from './dateToArray';
 
 const pad = (x: bigint | string) => String(x).padStart(2, '0');

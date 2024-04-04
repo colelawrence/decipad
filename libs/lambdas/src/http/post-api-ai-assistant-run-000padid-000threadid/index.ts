@@ -5,7 +5,7 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 import { exportNotebookContent } from '@decipad/services/notebooks';
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 

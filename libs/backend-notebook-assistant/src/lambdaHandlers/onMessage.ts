@@ -1,5 +1,5 @@
 import { queues } from '@architect/functions';
-import { ConnectionRecord } from '@decipad/backendtypes';
+import type { ConnectionRecord } from '@decipad/backendtypes';
 
 const getBody = (message: unknown, isBase64Encoded: boolean) => {
   if (Buffer.isBuffer(message)) {

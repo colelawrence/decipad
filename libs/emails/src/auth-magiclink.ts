@@ -1,4 +1,4 @@
-import { EmailGenerator } from './types';
+import type { EmailGenerator } from './types';
 
 const authMagiclink: EmailGenerator<{ url: string }> = ({ url }) => ({
   subject: `Log in to Decipad`,

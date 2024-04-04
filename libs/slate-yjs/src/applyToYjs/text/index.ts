@@ -1,5 +1,5 @@
-import { TTextOperation } from '@udecode/plate-common';
-import { OpMapper } from '../types';
+import type { TTextOperation } from '@udecode/plate-common';
+import type { OpMapper } from '../types';
 import insertText from './insertText';
 import removeText from './removeText';
 

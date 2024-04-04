@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { encode as encodeJWT } from 'next-auth/jwt';
 import arc from '@architect/functions';
-import { ApolloLink } from '@apollo/client';
-import { User } from '@decipad/backendtypes';
+import type { ApolloLink } from '@apollo/client';
+import type { User } from '@decipad/backendtypes';
 
 export interface AuthReturnValue {
   token: string;

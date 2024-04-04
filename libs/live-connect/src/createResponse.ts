@@ -1,5 +1,5 @@
-import { ImportResult } from '@decipad/import';
-import { RPCResponse } from './types';
+import type { ImportResult } from '@decipad/import';
+import type { RPCResponse } from './types';
 
 export const createResponse = (result: ImportResult): ImportResult => {
   return result; // TODO: un-serialize JSON-unfriendly structs (like Fraction and bigints)

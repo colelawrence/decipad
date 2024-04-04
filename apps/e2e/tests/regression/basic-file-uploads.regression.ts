@@ -1,4 +1,5 @@
-import { Page, expect, test } from '../manager/decipad-tests';
+import type { Page } from '../manager/decipad-tests';
+import { expect, test } from '../manager/decipad-tests';
 import { Notebook } from '../manager/notebook';
 import { Workspace } from '../manager/workspace';
 import { AiAssistant } from '../manager/ai-assistant';

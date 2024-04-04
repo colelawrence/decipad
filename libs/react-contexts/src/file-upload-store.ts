@@ -1,4 +1,4 @@
-import { FileType } from '@decipad/editor-types';
+import { type FileType } from '@decipad/editor-types';
 import { create } from 'zustand';
 
 interface UploadFileStore {

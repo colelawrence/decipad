@@ -2,8 +2,8 @@ import { getDefined } from '@decipad/utils';
 import { materialize } from '../utils/materialize';
 import type { ColumnLikeValue } from './ColumnLike';
 import { values } from '../utils/values';
-import { Value } from './Value';
-import { OneResult } from '../Result';
+import type { Value } from './Value';
+import type { OneResult } from '../Result';
 
 /**
  * Used to lazily lookup into a hypercube

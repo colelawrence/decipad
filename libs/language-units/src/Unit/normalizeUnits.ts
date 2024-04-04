@@ -1,4 +1,4 @@
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 import { simplifyUnits } from './simplifyUnits';
 
 const byUnitName = (a: Unit, b: Unit): number => {

@@ -1,7 +1,8 @@
 import { disable } from '@decipad/feature-flags';
 import { getDefined } from '@decipad/utils';
 import waitForExpect from 'wait-for-expect';
-import { createDocSyncEditor, DocSyncEditor } from '.';
+import type { DocSyncEditor } from '.';
+import { createDocSyncEditor } from '.';
 import { createTestEditorController } from './testEditorController';
 
 describe('pad editor persistence', () => {

@@ -1,18 +1,18 @@
 import { getOnly } from '@decipad/utils';
 import { all, map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
+import type { AST, Type, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
-  AST,
   Dimension,
   InferError,
-  Type,
-  Value,
   compare,
   buildType as t,
 } from '@decipad/language-types';
-import { Context } from '..';
+import type { Context } from '..';
 import { inferExpression, logRetrievedName } from '../infer';
-import { evaluate, Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { evaluateVariable, getIndexName } from './getVariable';
 import { generatorOfPromisesToGenerator } from '../../../generator-utils/src/generatorOfPromisesToGenerator';

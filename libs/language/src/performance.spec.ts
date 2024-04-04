@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Result } from '@decipad/language-types';
+import type { AST, Result } from '@decipad/language-types';
 import { serializeResult } from './result';
 import { runAST } from '.';
 

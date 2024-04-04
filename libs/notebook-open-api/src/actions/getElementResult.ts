@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { findElementByVariableName } from './utils/findElementByVariableName';
 import { findElementById } from './utils/findElementById';
 import { notAcceptable, notFound } from '@hapi/boom';

@@ -34,6 +34,9 @@
     },
     {
       "path": "../react-utils"
+    },
+    {
+      "path": "../number"
     }
   ]
 }

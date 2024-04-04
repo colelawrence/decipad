@@ -1,8 +1,8 @@
-import { CellValueType, TableElement } from '@decipad/editor-types';
+import type { CellValueType, TableElement } from '@decipad/editor-types';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback } from 'react';
-import { TableInfo } from '../types';
+import type { TableInfo } from '../types';
 
 export const useTableInfo = (
   element: TableElement,

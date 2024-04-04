@@ -1,5 +1,16 @@
 import type { Unit } from '@decipad/remote-computer';
 import type { TElement } from '@udecode/plate-common';
+import type {
+  ELEMENT_INLINE_NUMBER,
+  ELEMENT_LI,
+  ELEMENT_LIC,
+  ELEMENT_LINK,
+  ElementKind,
+  IntegrationTypes,
+  InteractiveElement,
+  MarkKind,
+  UserIconKey,
+} from '.';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -13,22 +24,13 @@ import {
   ELEMENT_H3,
   ELEMENT_HR,
   ELEMENT_IMAGE,
-  ELEMENT_INLINE_NUMBER,
   ELEMENT_INTEGRATION,
-  ELEMENT_LI,
-  ELEMENT_LIC,
-  ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
   ELEMENT_TABLE,
   ELEMENT_UL,
-  ElementKind,
-  IntegrationTypes,
-  InteractiveElement,
-  MarkKind,
-  UserIconKey,
 } from '.';
 import type {
   DataViewCaptionElement,
@@ -38,9 +40,16 @@ import type {
   DataViewNameElement,
 } from './data-view';
 import type { DrawElement, DrawElementDescendant, DrawElements } from './draw';
+import type {
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_SMART_REF,
+  ELEMENT_STRUCTURED_IN_CHILD,
+  ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from './element-kinds';
 import {
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_VIEW,
   ELEMENT_DISPLAY,
   ELEMENT_DRAW,
@@ -50,13 +59,8 @@ import {
   ELEMENT_LIVE_DATASET,
   ELEMENT_LIVE_QUERY,
   ELEMENT_MATH,
-  ELEMENT_SMART_REF,
   ELEMENT_STRUCTURED_IN,
-  ELEMENT_STRUCTURED_IN_CHILD,
-  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_SUBMIT_FORM,
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import type {
@@ -82,7 +86,7 @@ import type {
   TableRowElement,
   TableVariableNameElement,
 } from './table';
-import { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
+import type { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
 
 export type { DrawElement, DrawElementDescendant, DrawElements };
 

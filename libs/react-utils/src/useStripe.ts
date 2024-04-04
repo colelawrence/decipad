@@ -1,7 +1,5 @@
-import {
-  SubPlansFragment,
-  useGetSubscriptionsPlansQuery,
-} from '@decipad/graphql-client';
+import type { SubPlansFragment } from '@decipad/graphql-client';
+import { useGetSubscriptionsPlansQuery } from '@decipad/graphql-client';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useMemo } from 'react';
 

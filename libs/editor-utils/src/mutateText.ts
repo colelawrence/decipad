@@ -1,4 +1,4 @@
-import { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import {
   deleteText,
   getChildren,
@@ -9,7 +9,7 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import diff from 'fast-diff';
-import { Path, Point } from 'slate';
+import type { Path, Point } from 'slate';
 
 const getPoint = (entry: MyNodeEntry, offset: number): Point | undefined => {
   let currentOffset = 0;

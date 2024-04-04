@@ -1,4 +1,4 @@
-import { AST } from '..';
+import type { AST } from '..';
 import type { Value } from './Value';
 
 export class FunctionValue implements Value {

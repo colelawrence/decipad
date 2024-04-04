@@ -1,10 +1,9 @@
-import {
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
+import type {
   H1Element,
   MyEditor,
   ParagraphElement,
 } from '@decipad/editor-types';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { insertNodes } from './insertNodes';

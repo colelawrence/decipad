@@ -1,4 +1,4 @@
-import { BaseQuantity } from '../Unit';
+import type { BaseQuantity } from '../Unit';
 
 const baseQuantityToBaseUnit: Readonly<Record<BaseQuantity, string>> = {
   length: 'meter',

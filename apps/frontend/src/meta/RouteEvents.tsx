@@ -1,6 +1,8 @@
-import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
+import type { ClientEvent } from '@decipad/client-events';
+import { ClientEventsContext } from '@decipad/client-events';
 import { useSession } from 'next-auth/react';
-import { ReactNode, FC, useContext, useEffect } from 'react';
+import type { ReactNode, FC } from 'react';
+import { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { hasUpdate } from './providers/UpdatesProvider';
 

@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { Type, Value, buildType as t } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value, buildType as t } from '@decipad/language-types';
 import { N } from '@decipad/number';
 import { once } from '@decipad/utils';
 

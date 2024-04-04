@@ -1,10 +1,10 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
-  ELEMENT_IMPORT,
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type {
   ImportElement,
   ImportElementSource,
   MyEditor,
 } from '@decipad/editor-types';
+import { ELEMENT_IMPORT } from '@decipad/editor-types';
 import {
   insertNodes,
   requirePathBelowBlock,

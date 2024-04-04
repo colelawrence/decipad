@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { Result, Unknown } from '@decipad/remote-computer';
+import { type Result, Unknown } from '@decipad/remote-computer';
 
 export type EditorTableResultContextValue =
   | Result.Result<'materialized-table'>

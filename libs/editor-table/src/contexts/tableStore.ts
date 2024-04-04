@@ -1,4 +1,5 @@
-import { createAtomStore, TElement } from '@udecode/plate-common';
+import type { TElement } from '@udecode/plate-common';
+import { createAtomStore } from '@udecode/plate-common';
 
 export const { useTableStore, TableProvider } = createAtomStore(
   {

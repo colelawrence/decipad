@@ -9,9 +9,9 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
-import { Action } from './types';
+import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
-import { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
+import type { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
 import { getNodeString } from '../utils/getNodeString';
 
 extendZodWithOpenApi(z);

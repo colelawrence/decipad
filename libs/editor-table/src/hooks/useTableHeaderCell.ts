@@ -1,17 +1,17 @@
 import { type Unit } from '@decipad/remote-computer';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import {
+import type {
   CellValueType,
   ColumnMenuDropdown,
   TableCellType,
   TableElement,
   TableHeaderElement,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getNode } from '@udecode/plate-common';
 import { useMemo } from 'react';
-import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
+import type { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
 import { useDebounce } from 'use-debounce';

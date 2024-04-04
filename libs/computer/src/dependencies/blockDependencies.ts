@@ -1,5 +1,5 @@
 import type { Computer } from '../computer/Computer';
-import { BlockDependents, ComputerProgram } from '../types';
+import type { BlockDependents, ComputerProgram } from '../types';
 
 const blockDependents =
   (computer: Computer, program: ComputerProgram) =>

@@ -1,4 +1,4 @@
-import nearley from 'nearley';
+import type nearley from 'nearley';
 import G from './nearley/deci-language-grammar-generated';
 
 export {

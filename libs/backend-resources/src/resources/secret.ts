@@ -1,6 +1,6 @@
-import { SecretRecord } from '@decipad/backendtypes';
+import type { SecretRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { BackendResourceDef } from '../types';
+import type { BackendResourceDef } from '../types';
 
 export const secret: BackendResourceDef<SecretRecord> = {
   name: 'secrets',

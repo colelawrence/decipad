@@ -1,3 +1,4 @@
+import type { FileType, MyEditor, SlashCommand } from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
@@ -5,10 +6,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
-  FileType,
-  MyEditor,
   ELEMENT_SUBMIT_FORM,
-  SlashCommand,
 } from '@decipad/editor-types';
 import {
   insertBlockOfTypeBelow,
@@ -25,7 +23,7 @@ import {
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Location, Path } from 'slate';
+import type { Location, Path } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -37,7 +35,7 @@ import {
 import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
 export interface ExecuteProps {

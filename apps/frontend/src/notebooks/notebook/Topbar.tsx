@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
-import { DocSyncEditor } from '@decipad/docsync';
-import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { DocSyncEditor } from '@decipad/docsync';
+import type { FC } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useNotebookMetaActions } from '../../hooks';
 import {
@@ -14,6 +15,7 @@ import {
   useEditorUndoState,
   usePublishedVersionState,
 } from './hooks';
+import type { TColorStatus } from '@decipad/ui';
 import {
   AIModeSwitch,
   Button,
@@ -22,7 +24,6 @@ import {
   NotebookPath,
   NotebookStatusDropdown,
   NotebookTopbar,
-  TColorStatus,
   TopbarPlaceholder,
   UndoButtons,
   p13Medium,

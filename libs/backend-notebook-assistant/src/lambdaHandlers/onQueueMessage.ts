@@ -1,8 +1,8 @@
 import assert from 'assert';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { ChatCompletionMessage } from 'openai/resources';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { ChatCompletionMessage } from 'openai/resources';
 import { resourceFromRoomName } from './roomName';
 import { engageAssistant } from '../notebookAssistant/engageAssistant';
 import { boomify, badRequest } from '@hapi/boom';

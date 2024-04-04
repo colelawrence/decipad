@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom';
-import { Knex } from 'knex';
+import type { Knex } from 'knex';
 import { createDatabaseClient } from './createDatabaseClient';
 import { rowsToColumns } from './rowsToColumns';
 

@@ -1,4 +1,4 @@
-import { H1Element, MyEditor } from '@decipad/editor-types';
+import type { H1Element, MyEditor } from '@decipad/editor-types';
 import { insertNodes, nanoid, withoutNormalizing } from '@udecode/plate-common';
 import { ELEMENT_H1 } from '@udecode/plate-heading';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';

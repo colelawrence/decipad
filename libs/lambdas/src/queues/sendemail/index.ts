@@ -1,4 +1,4 @@
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { track } from '@decipad/backend-analytics';
 import templates from '@decipad/emails';
 import { sendEmail } from '@decipad/services/email';

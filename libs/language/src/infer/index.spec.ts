@@ -2,13 +2,9 @@ import omit from 'lodash.omit';
 import { dequal, produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  InferError,
-  Type,
-  Unit,
-  buildType as t,
-} from '@decipad/language-types';
+import type { AST, Type, Unit } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { InferError, buildType as t } from '@decipad/language-types';
 import { Realm, inferBlock, parseBlockOrThrow } from '..';
 import { objectToMap, objectToTableType } from '../testUtils';
 import {

@@ -3,7 +3,7 @@ import {
   type Result,
   type SerializedTypes,
 } from '@decipad/remote-computer';
-import { ImportResult } from '../types';
+import type { ImportResult } from '../types';
 import { matrix } from './matrix';
 import { findAllIslands } from './sheetIslands';
 

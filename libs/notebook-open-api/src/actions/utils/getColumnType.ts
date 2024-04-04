@@ -1,8 +1,8 @@
-import { TableCellType, TableElement } from '@decipad/editor-types';
+import type { TableCellType, TableElement } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { getColumnData } from './getColumnData';
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const getColumnType = (

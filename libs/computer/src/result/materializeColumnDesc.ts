@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { buildResult } from '@decipad/language';
 import { all } from '@decipad/generator-utils';
-import { ColumnDesc, MaterializedColumnDesc } from '../types';
+import type { ColumnDesc, MaterializedColumnDesc } from '../types';
 
 export const materializeColumnDesc = async (
   columnDesc: ColumnDesc

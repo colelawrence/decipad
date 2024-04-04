@@ -12,7 +12,7 @@ import {
 } from '@decipad/editor-types';
 import { magicNumberId } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate-common';
-import { InteractiveLanguageElement } from '../types';
+import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 
 export const Paragraph: InteractiveLanguageElement = {

@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import type { Subject } from 'rxjs';
 import { version1 } from './version1';
 import { version2 } from './version2';
 

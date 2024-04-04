@@ -1,6 +1,6 @@
 import type { Time } from '@decipad/remote-computer';
 import { parseDate as globalParseDate, once } from '@decipad/utils';
-import { DateFormat } from './types';
+import type { DateFormat } from './types';
 
 const granularityRank = new Map(
   Object.entries({

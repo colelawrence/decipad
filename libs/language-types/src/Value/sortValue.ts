@@ -1,7 +1,7 @@
-import { Type } from '../Type';
+import type { Type } from '../Type';
 import { Table, isTableValue } from './Table';
-import { ColumnLikeValue } from './ColumnLike';
-import { Value } from './Value';
+import type { ColumnLikeValue } from './ColumnLike';
+import type { Value } from './Value';
 import zip from 'lodash.zip';
 import unzip from 'lodash.unzip';
 import { produce } from '@decipad/utils';

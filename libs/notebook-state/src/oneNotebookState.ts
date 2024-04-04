@@ -1,16 +1,13 @@
 /* eslint-disable no-labels */
-import {
-  createDocSyncEditor,
-  DocSyncEditor,
-  OnLoadedCallback,
-} from '@decipad/docsync';
+import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
+import { createDocSyncEditor } from '@decipad/docsync';
 import { createStore } from 'zustand';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
 import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
-import { EnhancedPromise, NotebookState } from './state';
+import type { EnhancedPromise, NotebookState } from './state';
 import { isNewNotebook } from './isNewNotebook';
 import { CursorAwarenessSchedule } from './cursors';
 import debounce from 'lodash.debounce';

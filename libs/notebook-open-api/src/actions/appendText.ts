@@ -1,12 +1,12 @@
 import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { AnyElement, MyElement } from '@decipad/editor-types';
+import type { AnyElement, MyElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
 import { deserializeMd } from '@udecode/plate-serializer-md';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import { Action } from './types';
+import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 
 extendZodWithOpenApi(z);

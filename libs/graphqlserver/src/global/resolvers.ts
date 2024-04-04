@@ -1,4 +1,4 @@
-import { Resolvers, User } from '@decipad/graphqlserver-types';
+import type { Resolvers, User } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import md5 from 'md5';

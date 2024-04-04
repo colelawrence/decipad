@@ -1,14 +1,10 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  AST,
-  InferError,
-  Type,
-  Value,
-  buildType as t,
-} from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { InferError, Value, buildType as t } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';

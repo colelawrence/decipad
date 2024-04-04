@@ -1,14 +1,13 @@
-import {
+import type {
   ENodeEntry,
   TEditor,
   TNodeProps,
   Value,
-  isElement,
-  setNodes,
 } from '@udecode/plate-common';
+import { isElement, setNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { MyGenericEditor } from '@decipad/editor-types';
-import { NormalizerReturnValue } from '../../pluginFactories';
+import type { MyGenericEditor } from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '../../pluginFactories';
 
 export const normalizeElementIdPlugin =
   <TV extends Value, TE extends MyGenericEditor<TV>>() =>

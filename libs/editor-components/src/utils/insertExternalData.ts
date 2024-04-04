@@ -1,9 +1,11 @@
-import {
-  createClient,
-  CreateExternalDataSourceDocument,
+import type {
   CreateExternalDataSourceMutation,
   CreateExternalDataSourceMutationVariables,
   ExternalProvider,
+} from '@decipad/graphql-client';
+import {
+  createClient,
+  CreateExternalDataSourceDocument,
 } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 

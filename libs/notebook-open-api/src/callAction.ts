@@ -3,7 +3,7 @@ import { type MyEditor } from '@decipad/editor-types';
 import { type RemoteComputer } from '@decipad/remote-computer';
 import { type RootEditorController } from '@decipad/notebook-tabs';
 import { notAcceptable } from '@hapi/boom';
-import { ZodFormattedError } from 'zod';
+import type { ZodFormattedError } from 'zod';
 import { type CustomAction } from './actions/types';
 import { gatherNotebookErrors } from './utils/gatherNotebookErrors';
 import { type NotebookError } from './types';

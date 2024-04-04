@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import {
+import type {
   WorkspaceRecord,
   WorkspaceSubscriptionRecord,
 } from '@decipad/backendtypes';
-import { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { type Stripe } from 'stripe';

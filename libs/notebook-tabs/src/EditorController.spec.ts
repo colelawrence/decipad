@@ -1,12 +1,10 @@
 /* eslint-disable no-plusplus */
+import type { MyValue, TabElement, TitleElement } from '@decipad/editor-types';
 import {
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
-  MyValue,
-  TabElement,
-  TitleElement,
 } from '@decipad/editor-types';
 import { EditorController } from './EditorController';
 import { nanoid } from 'nanoid';

@@ -1,22 +1,22 @@
+import type { TNodeEntry } from '@udecode/plate-common';
 import {
   isElement,
   findNode,
   withoutNormalizing,
   setNodes,
-  TNodeEntry,
 } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import {
+  type SliderElement,
   ELEMENT_VARIABLE_DEF,
   type AnyElement,
-  SliderElement,
 } from '@decipad/editor-types';
 import {
   parseSimpleValue,
   simpleValueToString,
 } from '@decipad/remote-computer';
-import { Action } from './types';
+import type { Action } from './types';
 import { getNodeString } from '../utils/getNodeString';
 import { notFound, notAcceptable } from '@hapi/boom';
 import { matchElementId } from '../utils/matchElementId';

@@ -9,6 +9,7 @@
   ],
   "rules": {
     "import/no-extraneous-dependencies": ["off"],
+    "@typescript-eslint/consistent-type-imports": "off",
     "decipad/css-prop-named-variable": "error",
     "no-restricted-imports": [
       "error",

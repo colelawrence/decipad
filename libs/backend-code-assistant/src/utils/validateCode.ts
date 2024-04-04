@@ -1,4 +1,4 @@
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { fullRootEditorToProgram } from '@decipad/editor-language-elements';
 import { formatError } from '@decipad/format';

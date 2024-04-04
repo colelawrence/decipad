@@ -9,7 +9,7 @@ import {
 } from '..';
 import { getIdentifierString } from '../utils';
 import { statementWithAbstractRefs } from './statementWithAbstractRefs';
-import {
+import type {
   BlockDependentsMap,
   ReadOnlyVarNameToBlockMap,
 } from '../internalTypes';

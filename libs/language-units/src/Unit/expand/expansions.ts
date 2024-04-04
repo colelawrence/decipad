@@ -1,6 +1,7 @@
-import DeciNumber, { N, ONE } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ONE } from '@decipad/number';
 import { identity } from '@decipad/utils';
-import { BaseQuantity } from '..';
+import type { BaseQuantity } from '..';
 
 export interface ExpandTo {
   baseQuantity: BaseQuantity;

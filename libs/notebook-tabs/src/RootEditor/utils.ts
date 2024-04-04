@@ -1,4 +1,4 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 /**
  * An old notebook will be: Array<H1, ...OtherElements>;

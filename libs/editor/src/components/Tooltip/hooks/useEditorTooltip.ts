@@ -3,12 +3,12 @@ import {
   allowsTextStyling,
   getPathContainingSelection,
 } from '@decipad/editor-utils';
+import type { UseVirtualFloatingOptions } from '@udecode/plate-floating';
 import {
   flip,
   offset,
   useFloatingToolbar,
   useFloatingToolbarState,
-  UseVirtualFloatingOptions,
 } from '@udecode/plate-floating';
 
 const floatingOptions: UseVirtualFloatingOptions = {

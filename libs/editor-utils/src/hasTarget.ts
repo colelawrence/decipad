@@ -1,5 +1,5 @@
 import { hasEditorDOMNode } from '@udecode/plate-common';
-import { MyReactEditor } from '@decipad/editor-types';
+import { type MyReactEditor } from '@decipad/editor-types';
 import { isDOMNode } from './isDOMNode';
 
 export const hasTarget = (

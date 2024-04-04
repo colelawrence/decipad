@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import DeciNumber, { ZERO } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { ZERO } from '@decipad/number';
 import type { Val } from './Binding';
 import { inf, minusInf } from './consts';
 import {
@@ -16,9 +17,10 @@ import {
   equals,
   isInfinity,
 } from './Infinity';
-import { isLvar, LogicVar } from './LogicVar';
-import { Package } from './Package';
-import { LogicNumber } from './types';
+import type { LogicVar } from './LogicVar';
+import { isLvar } from './LogicVar';
+import type { Package } from './Package';
+import type { LogicNumber } from './types';
 
 export const isDomain = (d: unknown): d is Domain => d instanceof Domain;
 

@@ -1,11 +1,14 @@
-import { DraggableBlock, defaultMoveNode } from '@decipad/editor-components';
-import { COLUMN_KINDS, MyEditor, MyElement } from '@decipad/editor-types';
+import type { DraggableBlock } from '@decipad/editor-components';
+import { defaultMoveNode } from '@decipad/editor-components';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
+import { COLUMN_KINDS } from '@decipad/editor-types';
 import { wrapIntoColumns } from '@decipad/editor-utils';
 import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate-common';
-import { ComponentProps, useCallback } from 'react';
+import type { ComponentProps } from 'react';
+import { useCallback } from 'react';
 import { Path } from 'slate';
-import { DropTargetMonitor } from 'react-dnd';
-import { Axis, DragItemNode } from '../utils/useDnd';
+import type { DropTargetMonitor } from 'react-dnd';
+import type { Axis, DragItemNode } from '../utils/useDnd';
 
 interface useDragAndDropGetAxisProps {
   isHorizontal?: boolean;

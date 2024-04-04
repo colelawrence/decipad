@@ -1,6 +1,6 @@
-import DeciNumber from '@decipad/number';
-import { SerializedType, SerializedTypeKind } from './SerializedType';
-import { Value } from '.';
+import type DeciNumber from '@decipad/number';
+import type { SerializedType, SerializedTypeKind } from './SerializedType';
+import type { Value } from '.';
 
 export type ResultGenerator = (
   start?: number,

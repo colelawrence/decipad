@@ -2,9 +2,9 @@ import { getDefined } from '@decipad/utils';
 import type { Class } from 'utility-types';
 import type { ColumnLikeValue } from '../Value/ColumnLike';
 import type { MinimalTensor } from '../Value/MinimalTensor';
-import { Value } from '../Value/Value';
+import type { Value } from '../Value/Value';
 import { createLazyAtIndex } from '../Value/LazyAtIndex';
-import { OneResult } from '../Result';
+import type { OneResult } from '../Result';
 import { materialize } from './materialize';
 import { values } from './values';
 

@@ -1,4 +1,4 @@
-import { TimeUnit } from './Time';
+import type { TimeUnit } from './Time';
 import { arrayToDate } from './arrayToDate';
 import { cleanDate } from './cleanDate';
 import { sortSpecificities } from './getHighestSpecificity';

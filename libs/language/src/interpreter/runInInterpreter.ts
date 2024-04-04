@@ -1,6 +1,8 @@
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Result, materializeOneResult } from '@decipad/language-types';
+import type { AST, Result } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { materializeOneResult } from '@decipad/language-types';
 import pSeries from 'p-series';
 import { block } from '../utils';
 import { inferProgram } from '../infer';

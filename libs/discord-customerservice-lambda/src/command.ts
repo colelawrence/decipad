@@ -1,4 +1,4 @@
-import {
+import type {
   APIBaseInteraction,
   InteractionType,
   APIInteractionResponseChannelMessageWithSource,

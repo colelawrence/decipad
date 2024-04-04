@@ -1,5 +1,4 @@
-import React from 'react';
-import { DeciNumber } from '@decipad/number';
+import { N } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { onDragStartSmartRef } from './onDragStartSmartRef';
 
@@ -33,7 +32,7 @@ describe('onDragStartSmartRef', () => {
       type: {
         kind: 'number',
       },
-      value: new DeciNumber('2'),
+      value: N('2'),
     };
   });
 

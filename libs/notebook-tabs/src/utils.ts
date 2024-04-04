@@ -1,10 +1,6 @@
-import {
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
-  TabElement,
-  TitleElement,
-} from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate-common';
+import type { TabElement, TitleElement } from '@decipad/editor-types';
+import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import type { TOperation } from '@udecode/plate-common';
 import { Element, Text } from 'slate';
 
 export function IsTitle(node: unknown): node is TitleElement {

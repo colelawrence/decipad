@@ -1,16 +1,15 @@
 /* eslint-disable no-param-reassign */
-import { MyGenericEditor } from '@decipad/editor-types';
-import {
-  setNodes,
-  getChildren,
+import type { MyGenericEditor } from '@decipad/editor-types';
+import type {
   TDescendant,
   Value,
   TNodeProps,
   TEditor,
 } from '@udecode/plate-common';
+import { setNodes, getChildren } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { pluginStore } from '@decipad/editor-utils';
-import { Node, NodeEntry } from 'slate';
+import type { Node, NodeEntry } from 'slate';
 
 type Store = Set<string>;
 type NodeWithId = Node & { id?: string };

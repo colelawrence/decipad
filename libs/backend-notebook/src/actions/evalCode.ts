@@ -1,7 +1,7 @@
 import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
 import { outputResult } from './utils/outputResult';
-import { ServerSideNotebookApi } from '../types';
-import { CustomAction } from '@decipad/notebook-open-api';
+import type { ServerSideNotebookApi } from '../types';
+import type { CustomAction } from '@decipad/notebook-open-api';
 import { z } from 'zod';
 
 export const evalCode: CustomAction<

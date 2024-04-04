@@ -1,12 +1,10 @@
-import {
-  createMyPlateEditor,
-  ELEMENT_CODE_LINE,
-  MyEditor,
-} from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import { createCodeLinePlugin } from './createCodeLinePlugin';
 import { codeLine } from '../NormalizeCodeBlock/testUtils';
-import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('withCodeLine', () => {
   let editor: MyEditor;

@@ -1,7 +1,7 @@
-import { ComponentProps } from 'react';
-import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
-import { Range } from 'slate';
-import { SyntaxErrorHighlight } from './plugins/SyntaxErrorHighlight';
+import type { ComponentProps } from 'react';
+import type { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
+import type { Range } from 'slate';
+import type { SyntaxErrorHighlight } from './plugins/SyntaxErrorHighlight';
 
 export interface SyntaxErrorAnnotation extends Range {
   [DECORATE_SYNTAX_ERROR]: true;

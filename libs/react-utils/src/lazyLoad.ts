@@ -1,4 +1,5 @@
-import { lazy, FC } from 'react';
+import type { FC } from 'react';
+import { lazy } from 'react';
 
 type LazyComponentType<P = {}> = FC<P>;
 type LazyComponentTypeModule<P = {}> = {

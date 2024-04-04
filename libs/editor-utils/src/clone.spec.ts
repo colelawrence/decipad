@@ -1,4 +1,5 @@
-import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,

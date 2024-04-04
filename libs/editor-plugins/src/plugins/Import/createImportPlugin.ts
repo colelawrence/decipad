@@ -1,7 +1,7 @@
 import { ELEMENT_IMPORT } from '@decipad/editor-types';
 import type { UserInteraction } from '@decipad/react-contexts';
 import type { PlatePlugin } from '@udecode/plate-common';
-import { Subject } from 'rxjs';
+import type { Subject } from 'rxjs';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { withImportOverrides } from './withImportOverrides';
 

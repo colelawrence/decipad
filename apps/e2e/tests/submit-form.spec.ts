@@ -3,7 +3,7 @@
 import { expect, test } from './manager/decipad-tests';
 import express from 'express';
 import bodyParser from 'body-parser';
-import { Server } from 'http';
+import type { Server } from 'http';
 import { createSliderBelow } from '../utils/page/Block';
 import util from 'util';
 

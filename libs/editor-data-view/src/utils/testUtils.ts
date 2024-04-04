@@ -1,4 +1,4 @@
-import { Element } from './types';
+import type { Element } from './types';
 
 type TEl<TElement> = Omit<Element<TElement>, 'children'>;
 type TempEl<TElement> = TEl<TElement> & {

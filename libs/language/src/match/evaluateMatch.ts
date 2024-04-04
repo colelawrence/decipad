@@ -1,7 +1,10 @@
 /* eslint-disable no-await-in-loop */
 // eslint-disable-next-line no-restricted-imports
-import { AST, RuntimeError, Value } from '@decipad/language-types';
-import { evaluate, Realm } from '../interpreter';
+import type { AST, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError } from '@decipad/language-types';
+import type { Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 
 const evaluateMatchDef = async (
   realm: Realm,

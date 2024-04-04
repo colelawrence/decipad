@@ -1,6 +1,7 @@
 /* eslint-disable playwright/valid-describe-callback */
 /* eslint-disable playwright/valid-title */
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import type { BrowserContext, Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import notebookSource from '../__fixtures__/004-testing-edit-permissions.json';
 import {
   navigateToNotebook,

@@ -1,9 +1,10 @@
-import DeciNumber, { ONE } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { ONE } from '@decipad/number';
 import { produce, getDefined, zip } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from '../Unit/expand';
 import { getImpreciseConversionFactor } from './imprecise-conversions';
-import { Unit } from '../Unit';
+import type { Unit } from '../Unit';
 import { normalizeUnits } from '../Unit/normalizeUnits';
 import { simplifyUnits } from '../Unit/simplifyUnits';
 

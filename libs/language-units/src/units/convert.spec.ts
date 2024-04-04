@@ -1,7 +1,7 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { convertBetweenUnits, normalizeUnitName } from '.';
 import { U, u } from '../utils/testUtils';
-import { Unit } from '../Unit';
+import type { Unit } from '../Unit';
 
 setupDeciNumberSnapshotSerializer();
 

@@ -1,21 +1,21 @@
 import {
-  NormalizerReturnValue,
+  type NormalizerReturnValue,
   createNormalizerPlugin,
 } from '@decipad/editor-plugins';
 import {
   ELEMENT_DATA_VIEW,
-  MyEditor,
-  MyNodeEntry,
-  TableColumnFormulaElement,
+  type MyEditor,
+  type MyNodeEntry,
+  type TableColumnFormulaElement,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_DATA_VIEW_TR,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  DataViewCaptionElement,
-  DataViewElement,
-  DataViewHeaderRowElement,
-  DataViewNameElement,
+  type DataViewCaptionElement,
+  type DataViewElement,
+  type DataViewHeaderRowElement,
+  type DataViewNameElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import {
@@ -27,7 +27,7 @@ import {
   wrapNodes,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { NodeEntry } from 'slate';
+import { type NodeEntry } from 'slate';
 
 const normalizeDataViewElement = (
   editor: MyEditor,

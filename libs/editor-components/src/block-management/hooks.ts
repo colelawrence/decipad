@@ -3,13 +3,14 @@ import {
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import {
+import type {
   MyEditor,
   MyElement,
   TopLevelValue,
   MyNode,
 } from '@decipad/editor-types';
 import { requirePathBelowBlock, setSelection } from '@decipad/editor-utils';
+import type { TNodeEntry } from '@udecode/plate-common';
 import {
   findNode,
   findNodePath,
@@ -18,7 +19,6 @@ import {
   insertElements,
   removeNodes,
   setNodes,
-  TNodeEntry,
   withoutNormalizing,
 } from '@udecode/plate-common';
 import {

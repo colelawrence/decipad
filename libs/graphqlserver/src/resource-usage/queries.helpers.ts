@@ -4,7 +4,7 @@ import {
   type User,
   type ResourceConsumer,
 } from '@decipad/backendtypes';
-import { ResourceTypes } from '@decipad/graphqlserver-types';
+import type { ResourceTypes } from '@decipad/graphqlserver-types';
 import { resourceusage } from '@decipad/services';
 import Stripe from 'stripe';
 

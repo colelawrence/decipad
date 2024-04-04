@@ -3,7 +3,8 @@ import { Value, buildType as t } from '@decipad/language-types';
 import { col, categories } from '../utils';
 import { inferCategories } from '.';
 import { Realm } from '../interpreter';
-import { Context, makeContext } from '..';
+import type { Context } from '..';
+import { makeContext } from '..';
 
 let testRealm: Realm;
 let testContext: Context;

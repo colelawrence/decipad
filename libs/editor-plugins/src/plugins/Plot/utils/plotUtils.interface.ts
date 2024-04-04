@@ -1,4 +1,4 @@
-import { PlotElement } from '@decipad/editor-types';
+import type { PlotElement } from '@decipad/editor-types';
 
 export interface LegendConfig {
   direction: 'horizontal' | 'vertical';

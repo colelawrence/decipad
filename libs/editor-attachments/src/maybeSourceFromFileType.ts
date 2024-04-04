@@ -1,4 +1,4 @@
-import { ImportElementSource } from '@decipad/editor-types';
+import { type ImportElementSource } from '@decipad/editor-types';
 
 export const maybeSourceFromFileType = (
   fileType: string

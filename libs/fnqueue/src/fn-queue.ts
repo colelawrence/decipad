@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { PromiseOrType, noop, timeout } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
+import { noop, timeout } from '@decipad/utils';
 
 type AsyncFunction<T> = () => PromiseOrType<T>;
 type Fn<T> = (value: T) => void;

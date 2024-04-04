@@ -2,7 +2,7 @@ import {
   createMyPlateEditor,
   ELEMENT_TABLE_CAPTION,
 } from '@decipad/editor-types';
-import { Range } from 'slate';
+import type { Range } from 'slate';
 import { selectColumn } from './selectColumn';
 
 describe('selectColumn', () => {

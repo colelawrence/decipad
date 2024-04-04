@@ -5,7 +5,7 @@ import {
   buildType as t,
   compare,
 } from '@decipad/language-types';
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 
 const cmpFunctor = async ([left, right]: Type[]) => {
   if (left.type === 'boolean') {

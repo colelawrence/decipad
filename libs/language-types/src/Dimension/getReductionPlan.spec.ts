@@ -1,6 +1,7 @@
 import { getReductionPlan } from './getReductionPlan';
-import { buildType, Type } from '../Type';
-import { IndexNames } from './cardinality';
+import type { Type } from '../Type';
+import { buildType } from '../Type';
+import type { IndexNames } from './cardinality';
 
 const testReduction = (
   cardinalities: number[],

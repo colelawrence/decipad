@@ -1,4 +1,5 @@
-import { ClientEventContextType } from '@decipad/client-events';
+import type { ClientEventContextType } from '@decipad/client-events';
+import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CAPTION,
@@ -6,11 +7,10 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_PARAGRAPH,
   ELEMENT_VARIABLE_DEF,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
-import { TEditor } from '@udecode/plate-common';
-import { ChecklistEvent } from 'libs/client-events/src/checklist';
+import type { TEditor } from '@udecode/plate-common';
+import type { ChecklistEvent } from 'libs/client-events/src/checklist';
 import { nanoid } from 'nanoid';
 import { createUserEventPlugin } from './createUserEventPlugin';
 

@@ -1,6 +1,6 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import { DRAG_SMART_REF } from '@decipad/editor-utils';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { onDropSmartRef } from './onDrop/onDropSmartRef';
 
 /**

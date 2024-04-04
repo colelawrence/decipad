@@ -9,10 +9,10 @@ import {
   setExtras,
   setUser,
 } from '@sentry/serverless';
-import { GraphqlContext } from '@decipad/backendtypes';
-import { GraphQLError } from 'graphql';
+import type { GraphqlContext } from '@decipad/backendtypes';
+import type { GraphQLError } from 'graphql';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
-import { Class } from 'utility-types';
+import type { Class } from 'utility-types';
 import { captureException } from '@decipad/backend-trace';
 import { boomify } from '@hapi/boom';
 import { debug } from './debug';

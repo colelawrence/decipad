@@ -1,12 +1,6 @@
 import { dequal } from '@decipad/utils';
-import {
-  useEffect,
-  createElement,
-  Fragment,
-  ReactNode,
-  useState,
-  useRef,
-} from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, createElement, Fragment, useState, useRef } from 'react';
 import { BehaviorSubject } from 'rxjs';
 
 export interface SelectableContext<T> {

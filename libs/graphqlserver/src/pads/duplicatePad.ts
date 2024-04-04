@@ -13,11 +13,12 @@ import { resource } from '@decipad/backend-resources';
 import { isAuthorized, loadUser } from '../authorization';
 import { isLocalDev } from '@decipad/initial-workspace';
 import { byAsc } from '@decipad/utils';
-import { ELEMENT_TITLE, RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
+import { ELEMENT_TITLE } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import Boom from '@hapi/boom';
 import { getNodeString } from '@udecode/plate-common';
-import {
+import type {
   GraphqlContext,
   MutationResolvers,
 } from '@decipad/graphqlserver-types';

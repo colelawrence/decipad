@@ -1,8 +1,8 @@
+import type { MyEditor } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,
-  MyEditor,
 } from '@decipad/editor-types';
 import { getRange, getStartPoint } from '@udecode/plate-common';
 import { createSelectionShortcutPlugin } from './createSelectionShortcutPlugin';

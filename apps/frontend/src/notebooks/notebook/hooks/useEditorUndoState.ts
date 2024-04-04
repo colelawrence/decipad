@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DocSyncEditor } from '@decipad/docsync';
+import type { DocSyncEditor } from '@decipad/docsync';
 
 /**
  * Responsively returns if the editor can undo/redo any changes.

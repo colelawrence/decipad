@@ -1,22 +1,22 @@
-import {
+import type {
   BlockElement,
   MyElement,
   MyNode,
   PlainText,
   MyValue,
 } from '@decipad/editor-types';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import * as Y from 'yjs';
-import {
+import type {
   EElement,
   TDescendant,
   TElement,
   Value,
-  isElement,
-  isText,
 } from '@udecode/plate-common';
+import { isElement, isText } from '@udecode/plate-common';
 import { supportBigIntToJSON } from '@decipad/utils';
-import { SharedType, SyncElement } from '../model';
+import type { SharedType } from '../model';
+import { SyncElement } from '../model';
 
 supportBigIntToJSON();
 

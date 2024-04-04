@@ -1,4 +1,5 @@
-import DeciNumber, { N } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N } from '@decipad/number';
 import { identity } from '@decipad/utils';
 import type { UnitOfMeasure } from './known-units';
 import { invert } from '../utils/invert';

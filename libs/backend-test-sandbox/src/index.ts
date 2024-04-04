@@ -8,7 +8,8 @@
 
 import stringify from 'json-stringify-safe';
 import sandbox from './sandbox';
-import { createSandboxEnv, Env } from './sandbox-env';
+import type { Env } from './sandbox-env';
+import { createSandboxEnv } from './sandbox-env';
 import callGraphql, { gql } from './call-graphql';
 import call from './call-simple';
 import auth from './auth';

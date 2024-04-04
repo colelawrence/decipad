@@ -1,4 +1,4 @@
-import { CreateAttachmentFormResult } from '@decipad/backendtypes';
+import type { CreateAttachmentFormResult } from '@decipad/backendtypes';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   CopyObjectCommand,

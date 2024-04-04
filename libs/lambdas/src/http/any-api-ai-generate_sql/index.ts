@@ -6,7 +6,7 @@ import { resource } from '@decipad/backend-resources';
 import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { thirdParty } from '@decipad/backend-config';
 import handle from '../handle';
-import { ExternalDataSourceRecord } from '../../types';
+import type { ExternalDataSourceRecord } from '../../types';
 import { getSchemaString } from './getSchemaString';
 
 const openai = new OpenAI({

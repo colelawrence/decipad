@@ -1,5 +1,6 @@
-import { Result, materializeResult } from '@decipad/remote-computer';
-import { PromiseOrType } from '@decipad/utils';
+import type { Result } from '@decipad/remote-computer';
+import { materializeResult } from '@decipad/remote-computer';
+import type { PromiseOrType } from '@decipad/utils';
 import { useEffect, useState } from 'react';
 
 export const useMaterializedResult = <TResult extends Result.AnyResult>(

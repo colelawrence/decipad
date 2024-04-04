@@ -1,14 +1,15 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
 import pSeries from 'p-series';
 import { ONE } from '@decipad/number';
+import type { Unit } from '@decipad/language-units';
 import {
   contractUnits,
   expandUnits,
   getUnitByName,
-  Unit,
 } from '@decipad/language-units';
-import { ContextUtils } from '../ContextUtils';
-import { NumberValue, Value } from '../Value';
+import type { ContextUtils } from '../ContextUtils';
+import type { Value } from '../Value';
+import { NumberValue } from '../Value';
 import { type Type } from '../Type';
 import { automapValues } from '../Dimension';
 

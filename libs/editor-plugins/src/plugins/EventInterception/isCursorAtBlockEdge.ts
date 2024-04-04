@@ -1,3 +1,4 @@
+import type { TNode } from '@udecode/plate-common';
 import {
   getEdgePoints,
   getNode,
@@ -5,10 +6,10 @@ import {
   isCollapsed,
   isEditor,
   isElement,
-  TNode,
 } from '@udecode/plate-common';
-import { Path, Point } from 'slate';
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { Path } from 'slate';
+import { Point } from 'slate';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 
 /** Is the cursor at the end|start of the parent element? */

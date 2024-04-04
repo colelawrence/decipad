@@ -1,5 +1,5 @@
-import { ServerSideNotebookApi } from '../types';
-import { CustomAction } from '@decipad/notebook-open-api';
+import type { ServerSideNotebookApi } from '../types';
+import type { CustomAction } from '@decipad/notebook-open-api';
 import { z } from 'zod';
 import { searchTemplates } from '@decipad/backend-search';
 

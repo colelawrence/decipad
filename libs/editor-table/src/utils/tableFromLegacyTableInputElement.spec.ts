@@ -1,3 +1,7 @@
+import type {
+  TableData,
+  DeprecatedTableInputElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_TABLE_CAPTION,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -5,8 +9,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  TableData,
-  DeprecatedTableInputElement,
 } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { tableFromLegacyTableInputElement } from './tableFromLegacyTableInputElement';

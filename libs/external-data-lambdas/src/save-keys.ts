@@ -1,5 +1,5 @@
 import { thirdParty } from '@decipad/backend-config';
-import {
+import type {
   ExternalDataSourceRecord,
   ExternalKeyRecord,
   User,

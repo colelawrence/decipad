@@ -1,4 +1,4 @@
-import { TableElement } from '@decipad/editor-types';
+import type { TableElement } from '@decipad/editor-types';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const getColumnData = (

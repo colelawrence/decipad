@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import AsciiTable from 'ascii-table';
-import { Table } from './types';
+import type { Table } from './types';
 
 export const toAsciiTable = (table: Table): string => {
   const aTable = new AsciiTable(table.name);

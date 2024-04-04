@@ -1,9 +1,11 @@
 import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports
-import { AST, Value } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
 import { evaluateStatement } from './evaluate';
-import { Realm } from './Realm';
+import type { Realm } from './Realm';
 import { getDefined } from '@decipad/utils';
 
 // (object identity equality) of the returned statements.

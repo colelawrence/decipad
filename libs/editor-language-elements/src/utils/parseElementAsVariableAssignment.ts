@@ -1,7 +1,6 @@
+import type { AST, Program } from '@decipad/remote-computer';
 import {
-  AST,
   parseExpression,
-  Program,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
 

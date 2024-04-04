@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
-import { SerializedType, isColumn } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/remote-computer';
+import { isColumn } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { Column } from '../types';
+import type { Column } from '../types';
 
 const DEBOUNCE_RESULT_MS = 100;
 

@@ -1,12 +1,10 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { useMemo } from 'react';
 import { useTableColumnFormulaResultForColumn } from '@decipad/editor-hooks';
-import { TableCellType } from '@decipad/editor-types';
-import {
-  AggregationType,
-  availableAggregations,
-} from '@decipad/language-aggregations';
-import { TableColumn } from '../types';
+import type { TableCellType } from '@decipad/editor-types';
+import type { AggregationType } from '@decipad/language-aggregations';
+import { availableAggregations } from '@decipad/language-aggregations';
+import type { TableColumn } from '../types';
 
 interface UseAggregationTypeProps {
   column: TableColumn;

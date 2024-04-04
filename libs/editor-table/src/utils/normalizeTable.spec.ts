@@ -1,10 +1,10 @@
 import { insertTableBelow } from '@decipad/editor-components';
-import { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
+import type { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { createTEditor } from '@udecode/plate-common';
 import { getRemoteComputer } from '@decipad/remote-computer';
-import { NodeEntry } from 'slate';
+import type { NodeEntry } from 'slate';
 import { normalizeTable } from './normalizeTable';
 
 const getAvailableIdentifier = (prefix: string, start?: number) =>

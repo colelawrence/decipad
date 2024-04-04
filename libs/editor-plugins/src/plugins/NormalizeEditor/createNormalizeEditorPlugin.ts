@@ -1,9 +1,11 @@
 /* eslint-disable no-param-reassign */
-import {
-  ELEMENT_PARAGRAPH,
+import type {
   MyEditor,
   MyNodeEntry,
   ParagraphElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_PARAGRAPH,
   topLevelBlockKinds as allowedTopLevelBlockTypes,
 } from '@decipad/editor-types';
 import {
@@ -15,10 +17,8 @@ import {
   wrapNodes,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 const normalizeEditor =
   (editor: MyEditor) =>

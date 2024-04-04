@@ -1,6 +1,12 @@
-import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
-import {
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
+import type {
   CodeLineElement,
+  MyEditor,
+  MyValue,
+  TableElement,
+} from '@decipad/editor-types';
+import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
@@ -9,14 +15,12 @@ import {
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
-  MyValue,
-  TableElement,
 } from '@decipad/editor-types';
 import { convertCodeSmartRefs, createCodeLine } from '@decipad/editor-utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { timeout } from '@decipad/utils';
-import { BaseEditor, Editor } from 'slate';
+import type { BaseEditor } from 'slate';
+import { Editor } from 'slate';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
 
 type VarAndCol = [string, string?];

@@ -1,10 +1,10 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import {
   hasNode,
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 
 export const safeDelete = (editor: MyEditor, path: Path): boolean => {
   if (hasNode(editor, path)) {

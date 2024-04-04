@@ -1,5 +1,6 @@
-import sharp, { Sharp } from 'sharp';
-import { Dimensions } from './types';
+import type { Sharp } from 'sharp';
+import sharp from 'sharp';
+import type { Dimensions } from './types';
 
 const MAX_WIDTH = 580;
 

@@ -4,7 +4,7 @@ import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import * as resourceusage from '../../../libs/services/src/resource-usage';
 import { create } from '../../../libs/services/src/workspaces/create';
 import { getDefined } from '@decipad/utils';
-import { WorkspaceRecord } from '@decipad/backendtypes';
+import type { WorkspaceRecord } from '@decipad/backendtypes';
 
 // Otherwise debugging becomes very strange.
 jest.retryTimes(1);

@@ -1,4 +1,5 @@
-import { AnyElement, ELEMENT_CAPTION } from '../../../editor-types/src';
+import type { AnyElement } from '../../../editor-types/src';
+import { ELEMENT_CAPTION } from '../../../editor-types/src';
 import { assertElementType } from '../utils/assertElementType';
 import { getNodeString } from '../utils/getNodeString';
 

@@ -2,7 +2,7 @@ import {
   AWSLambda as SentryAWSLambda,
   configureScope,
 } from '@sentry/serverless';
-import {
+import type {
   Context,
   Handler,
   APIGatewayProxyResultV2,
@@ -12,7 +12,8 @@ import {
 import { boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
 import { getDefined } from '@decipad/utils';
-import { captureException, initTrace, TraceOptions } from './captureException';
+import type { TraceOptions } from './captureException';
+import { captureException, initTrace } from './captureException';
 import isPromise from 'is-promise';
 
 const {

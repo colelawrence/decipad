@@ -2,7 +2,7 @@ import { produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { pluralize } from '@decipad/language-utils';
 import { isKnownSymbol } from '../units/known-units';
-import { Unit } from './Unit';
+import type { Unit } from './Unit';
 
 export const pluralizeUnit = (
   baseUnit: Unit,

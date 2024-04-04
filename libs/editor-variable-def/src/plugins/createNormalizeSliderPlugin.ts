@@ -1,8 +1,7 @@
-import { ELEMENT_SLIDER, MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_SLIDER } from '@decipad/editor-types';
+import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { isElement, setNodes, unwrapNodes } from '@udecode/plate-common';
 
 const normalizeSlider =

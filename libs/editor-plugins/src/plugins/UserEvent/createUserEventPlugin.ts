@@ -1,6 +1,6 @@
-import { ClientEventContextType } from '@decipad/client-events';
+import type { ClientEventContextType } from '@decipad/client-events';
 import { createOverrideApplyPluginFactory } from '@decipad/editor-plugins';
-import { BaseElement, ElementKind } from '@decipad/editor-types';
+import type { BaseElement, ElementKind } from '@decipad/editor-types';
 import { getParentNode } from '@udecode/plate-common';
 
 export const createUserEventPlugin = (events: ClientEventContextType) => {

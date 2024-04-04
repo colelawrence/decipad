@@ -1,9 +1,11 @@
+import type {
+  DeprecatedInputElement,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
-  DeprecatedInputElement,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 

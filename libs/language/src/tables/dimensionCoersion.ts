@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { Dimension, Type, Value } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Dimension, Value } from '@decipad/language-types';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 
 /**

@@ -1,5 +1,5 @@
-import { TSetNodeOperation } from '@udecode/plate-common';
-import { SharedType, SyncElement } from '../../model';
+import type { TSetNodeOperation } from '@udecode/plate-common';
+import type { SharedType, SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
 /**

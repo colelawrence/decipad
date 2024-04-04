@@ -1,6 +1,6 @@
-import { Result, SerializedType, Value } from '@decipad/remote-computer';
-import { DataViewFilter } from '@decipad/editor-types';
-import { DataGroup } from '../../types';
+import type { Result, SerializedType, Value } from '@decipad/remote-computer';
+import type { DataViewFilter } from '@decipad/editor-types';
+import type { DataGroup } from '../../types';
 
 export interface GenerateGroupsProps {
   tableName: string;

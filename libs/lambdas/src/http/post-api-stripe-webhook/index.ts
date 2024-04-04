@@ -1,4 +1,4 @@
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';

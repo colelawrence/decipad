@@ -1,15 +1,11 @@
 import { tokenize } from '@decipad/remote-computer';
-import {
-  ELEMENT_PARAGRAPH,
-  MARK_MAGICNUMBER,
-  ParagraphElement,
-  RichText,
-} from '@decipad/editor-types';
+import type { ParagraphElement, RichText } from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH, MARK_MAGICNUMBER } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
-import { NodeEntry, Range } from 'slate';
+import type { NodeEntry, Range } from 'slate';
 import { decoratePotentialFormula } from './decoratePotentialFormula';
 import { isPotentialFormula } from './findPotentialFormulas';
-import { PotentialFormulaDecoration } from './interface';
+import type { PotentialFormulaDecoration } from './interface';
 
 it('finds simple expressions in strings', () => {
   expect(testFindFormulas('1 + 1')).toMatchInlineSnapshot(`

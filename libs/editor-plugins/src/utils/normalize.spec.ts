@@ -1,4 +1,5 @@
-import { createTEditor, TEditor, TText } from '@udecode/plate-common';
+import type { TEditor, TText } from '@udecode/plate-common';
+import { createTEditor } from '@udecode/plate-common';
 import { mockConsoleError } from '@decipad/testutils';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
@@ -6,7 +7,7 @@ import {
   normalizeExcessProperties,
   normalizeMissingProperties,
 } from './normalize';
-import { NormalizerReturnValue } from '../pluginFactories';
+import type { NormalizerReturnValue } from '../pluginFactories';
 
 const applyNormalization = (norm: NormalizerReturnValue): boolean => {
   if (norm) {

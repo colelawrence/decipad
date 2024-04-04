@@ -1,6 +1,6 @@
 import arc from '@architect/functions';
 import { nanoid } from 'nanoid';
-import {
+import type {
   ID,
   URI,
   GraphqlContext,

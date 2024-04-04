@@ -1,7 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import { Value, Unit, AST } from '@decipad/language-types';
+import type { Unit, AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Value } from '@decipad/language-types';
 import DeciNumber, { N } from '@decipad/number';
-import { BuiltinContextUtils } from '../types';
+import type { BuiltinContextUtils } from '../types';
 import { callBuiltinFunctor } from '../callBuiltinFunctor';
 import { callBuiltin } from '../callBuiltin';
 

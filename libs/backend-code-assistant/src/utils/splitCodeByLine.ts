@@ -1,4 +1,4 @@
-import { SplitCodeResult, CodeResult } from '../types';
+import type { SplitCodeResult, CodeResult } from '../types';
 
 const structureLine = (line: string): CodeResult => {
   const equalIndex = line.indexOf('=');

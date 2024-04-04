@@ -1,11 +1,11 @@
-import { ConcreteRecord } from '@decipad/backendtypes';
+import type { ConcreteRecord } from '@decipad/backendtypes';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import { ForbiddenError } from 'apollo-server-lambda';
 import { isAuthorizedGraphql } from './graphql';
 import * as resources from './resources';
-import { BackendResource, BackendResourceDef } from './types';
+import type { BackendResource, BackendResourceDef } from './types';
 
 export const resource = <TData extends ConcreteRecord>(
   name: keyof typeof resources

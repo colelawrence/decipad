@@ -1,5 +1,5 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import { DocSyncEditor } from '@decipad/docsync';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { DocSyncEditor } from '@decipad/docsync';
 
 export interface NotebookConnectionParams {
   url: string;

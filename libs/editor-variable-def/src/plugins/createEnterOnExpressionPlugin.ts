@@ -1,9 +1,6 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
-import {
-  MyElement,
-  ELEMENT_EXPRESSION,
-  ELEMENT_CAPTION,
-} from '@decipad/editor-types';
+import type { MyElement } from '@decipad/editor-types';
+import { ELEMENT_EXPRESSION, ELEMENT_CAPTION } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
   getNextNode,

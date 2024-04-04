@@ -1,12 +1,21 @@
 /* eslint-disable no-loop-func */
-import {
+import type {
   RemoteComputer,
   Result,
   SerializedType,
+} from '@decipad/remote-computer';
+import {
   buildResult,
   isTableResult,
   materializeResult,
 } from '@decipad/remote-computer';
+import type {
+  MyEditor,
+  TableCellElement,
+  TableCellType,
+  TableElement,
+  TableRowElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -14,18 +23,13 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
-  TableCellElement,
-  TableCellType,
-  TableElement,
-  TableRowElement,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
-import { ImportResult } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
 import { generateTableName, getDefined, varNamify } from '@decipad/utils';
 import { format } from 'date-fns';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 interface ImportTableProps {
   editor: MyEditor;

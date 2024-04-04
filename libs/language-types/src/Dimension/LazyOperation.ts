@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined, zip } from '@decipad/utils';
-import { MinimalTensor, Value, isColumnLike } from '../Value';
-import { Type } from '../Type';
+import type { MinimalTensor, Value } from '../Value';
+import { isColumnLike } from '../Value';
+import type { Type } from '../Type';
 import { implementColumnLike } from '../utils/implementColumnLike';
 import type { DimensionId, OperationFunction } from './types';
 import type { Dimension } from './Dimension';

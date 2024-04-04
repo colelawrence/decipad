@@ -1,4 +1,4 @@
-import { SeriesType } from '@decipad/editor-types';
+import type { SeriesType } from '@decipad/editor-types';
 import type {
   AST,
   RemoteComputer,

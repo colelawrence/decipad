@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
+import type { Type, AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
 import {
   InferError,
-  Type,
   buildType as t,
   Value,
   RuntimeError,
-  AST,
 } from '@decipad/language-types';
 import { type Context } from '..';
 import { type Realm } from '../interpreter/Realm';

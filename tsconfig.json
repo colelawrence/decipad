@@ -179,6 +179,7 @@
     }
   },
   "files": [],
+  "exclude": ["node_modules", "dist"],
   "include": [],
   "ts-node": {
     "compilerOptions": {

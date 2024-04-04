@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import arc from '@architect/functions';
 import { nanoid } from 'nanoid';
-import {
+import type {
   ID,
   GraphqlContext,
   RoleRecord,
@@ -14,7 +14,7 @@ import { timestamp } from '@decipad/backend-utils';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
-import {
+import type {
   Resolvers,
   Role,
   RoleInvitation,

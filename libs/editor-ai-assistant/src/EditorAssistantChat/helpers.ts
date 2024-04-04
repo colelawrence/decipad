@@ -1,6 +1,5 @@
-import { Message } from '@decipad/react-contexts';
-
-import { ChatCompletionMessageParam } from 'openai/resources';
+import type { Message } from '@decipad/react-contexts';
+import type { ChatCompletionMessageParam } from 'openai/resources';
 
 export const mapChatHistoryToGPTChat = (
   data: Message[]

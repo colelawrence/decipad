@@ -4,12 +4,12 @@ import {
   type IdentifiedError,
   getExprRef,
 } from '@decipad/remote-computer';
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
+import type {
   TableElement,
   TableHeaderElement,
   TableRowElement,
 } from '@decipad/editor-types';
+import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
 import {
   astColumn,
   getCodeLineSource,
@@ -21,7 +21,7 @@ import {
   getNullReplacementValue,
 } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate-common';
-import { PromiseOrType } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
 import { simpleArtifficialError } from './common';

@@ -9,7 +9,8 @@ import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
 import { EditorChangeContext } from '@decipad/react-contexts';
-import { MyEditor, MyValue, useMyEditorRef } from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 
 export interface UseEditorChangeOptions {
   debounceTimeMs?: number;

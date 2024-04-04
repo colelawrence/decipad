@@ -1,9 +1,6 @@
-import { RemoteComputer } from '@decipad/remote-computer';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_VARIABLE_DEF,
-  MyElement,
-} from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { MyElement } from '@decipad/editor-types';
+import { ELEMENT_TABLE, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { clone } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 

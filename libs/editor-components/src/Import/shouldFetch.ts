@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react';
+import type { useSession } from 'next-auth/react';
 
 type SessionContextValue = ReturnType<typeof useSession>;
 

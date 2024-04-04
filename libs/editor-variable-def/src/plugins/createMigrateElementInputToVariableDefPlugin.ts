@@ -1,10 +1,10 @@
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import {
-  DEPRECATED_ELEMENT_INPUT,
+import type {
   DeprecatedInputElement,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
+import { DEPRECATED_ELEMENT_INPUT } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
 import { deleteText } from '@udecode/plate-common';
 import { inputElementToVariableDef } from '../utils/inputElementToVariableDef';

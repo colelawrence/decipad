@@ -1,4 +1,4 @@
-import { MyNode } from '@decipad/editor-types';
+import type { MyNode } from '@decipad/editor-types';
 import { useParentNodeEntry } from './useParentNodeEntry';
 
 export const useParentNode = <TNode extends MyNode = MyNode>(

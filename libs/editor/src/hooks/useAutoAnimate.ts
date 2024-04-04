@@ -1,5 +1,7 @@
-import { MutableRefObject, useCallback } from 'react';
-import autoAnimate, { AutoAnimateOptions } from '@formkit/auto-animate';
+import type { MutableRefObject } from 'react';
+import { useCallback } from 'react';
+import type { AutoAnimateOptions } from '@formkit/auto-animate';
+import autoAnimate from '@formkit/auto-animate';
 import {
   easing as defaultEasing,
   shortAnimationDurationMs as defaultDuration,

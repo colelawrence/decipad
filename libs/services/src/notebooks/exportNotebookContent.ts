@@ -1,4 +1,4 @@
-import { Document, RootDocument } from '@decipad/editor-types';
+import type { Document, RootDocument } from '@decipad/editor-types';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { applyUpdate, Doc as YDoc } from 'yjs';
 

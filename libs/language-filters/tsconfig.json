@@ -8,12 +8,6 @@
   "references": [
     {
       "path": "../editor-types"
-    },
-    {
-      "path": "../parse"
-    },
-    {
-      "path": "../remote-computer"
     }
   ]
 }

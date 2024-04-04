@@ -1,14 +1,16 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TD,
-  ELEMENT_TH,
+import type {
   MyEditor,
   TableCaptionElement,
   TableCellType,
   TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TD,
+  ELEMENT_TH,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -24,7 +26,7 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { focusCursorOnPath } from '../plugins/createCursorFocusPlugin';
 import { findTableFormulaPath } from './findTableFormulaPath';
 

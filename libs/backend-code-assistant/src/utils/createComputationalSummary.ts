@@ -1,13 +1,13 @@
-import { VerbalizedElement, verbalizeDoc } from '@decipad/doc-verbalizer';
+import type { VerbalizedElement } from '@decipad/doc-verbalizer';
+import { verbalizeDoc } from '@decipad/doc-verbalizer';
+import type { AnyElement, RootDocument } from '../../../editor-types/src';
 import {
-  AnyElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
-  RootDocument,
 } from '../../../editor-types/src';
 import { debug } from '../debug';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 const computationalBlocks: Set<AnyElement['type']> = new Set([
   ELEMENT_CODE_LINE_V2,

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import arc from '@architect/functions';
-import {
+import type {
   ID,
   URI,
   DynamoDbQuery,

@@ -1,16 +1,17 @@
-import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
+import type DeciNumber from '@decipad/number';
+import { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import type { Type, AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
-  Type,
   typeIsPending,
   buildType as t,
   Time,
   Value,
-  AST,
 } from '@decipad/language-types';
-import { Realm } from '..';
+import type { Realm } from '..';
 import { getIdentifierString } from '../utils';
 import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
 import { getOfType } from '../parser/getOfType';

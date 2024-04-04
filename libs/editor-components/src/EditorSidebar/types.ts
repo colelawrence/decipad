@@ -1,5 +1,5 @@
-import { Path } from 'slate';
-import { ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
+import type { Path } from 'slate';
+import type { ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
 
 export type CatalogHeadingItem = {
   type: typeof ELEMENT_H2 | typeof ELEMENT_H3;

@@ -1,3 +1,9 @@
+import type {
+  LiveConnectionVarNameElement,
+  LiveDataSetVarNameElement,
+  LiveQueryElement,
+  MyGenericEditor,
+} from '@decipad/editor-types';
 import {
   createMyPluginFactory,
   ELEMENT_LIVE_CONNECTION,
@@ -7,27 +13,16 @@ import {
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  LiveConnectionVarNameElement,
-  LiveDataSetVarNameElement,
-  LiveQueryElement,
-  MyGenericEditor,
 } from '@decipad/editor-types';
 import {
   assertElementType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
-import {
-  ENodeEntry,
-  getChildren,
-  insertNodes,
-  removeNodes,
-  Value,
-} from '@udecode/plate-common';
+import type { ENodeEntry, Value } from '@udecode/plate-common';
+import { getChildren, insertNodes, removeNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import {
-  createNormalizerPlugin,
-  NormalizerReturnValue,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPlugin } from '../../pluginFactories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveConnectionVarName } from './components/LiveConnectionVarName';
 import { LiveDataSetVarName } from './components/LiveDataSetVarName';

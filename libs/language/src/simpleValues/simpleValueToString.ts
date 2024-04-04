@@ -5,11 +5,8 @@ import type { AST } from '@decipad/language-types';
 import { operators } from '@decipad/language-builtins';
 import { prefixCurrencies } from '../grammar/tokenizer';
 import { getIdentifierString } from '../utils';
-import {
-  deciNumberToSimpleString,
-  SimpleValue,
-  SimpleValueAST,
-} from './common';
+import type { SimpleValue, SimpleValueAST } from './common';
+import { deciNumberToSimpleString } from './common';
 import { isValue } from './isValue';
 
 /** Turns a simple value (an ast that passed `isValue`) into a string parsable by decilang. Returns undefined on error. */

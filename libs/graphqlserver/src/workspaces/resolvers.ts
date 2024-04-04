@@ -24,7 +24,7 @@ import {
 import { getWorkspaceMembersCount } from './workspace.helpers';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
-import {
+import type {
   PermissionType,
   Resolvers,
   Role,
@@ -34,7 +34,7 @@ import {
   Workspace,
   WorkspaceAccess,
 } from '@decipad/graphqlserver-types';
-import { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
+import type { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';

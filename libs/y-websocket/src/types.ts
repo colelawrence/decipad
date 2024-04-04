@@ -1,8 +1,8 @@
-import { Doc as YDoc } from 'yjs';
-import * as awarenessProtocol from 'y-protocols/awareness';
-import * as decoding from 'lib0/decoding';
-import * as encoding from 'lib0/encoding';
-import { Observable } from 'lib0/observable';
+import type { Doc as YDoc } from 'yjs';
+import type * as awarenessProtocol from 'y-protocols/awareness';
+import type * as decoding from 'lib0/decoding';
+import type * as encoding from 'lib0/encoding';
+import type { Observable } from 'lib0/observable';
 
 export type MessageType = 0 | 1 | 2 | 3;
 

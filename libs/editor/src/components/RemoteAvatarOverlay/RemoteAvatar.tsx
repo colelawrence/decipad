@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
-import { MyValue, useMyEditorRef } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   isPotentiallyWideElement,
   isTopLevelBlock,
 } from '@decipad/editor-utils';
-import { UserCursorState } from '@decipad/react-contexts';
+import type { UserCursorState } from '@decipad/react-contexts';
 import { RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
 import {
   getNodeEntries,
@@ -12,7 +13,7 @@ import {
   isElement,
   toDOMNode,
 } from '@udecode/plate-common';
-import { FC, RefObject } from 'react';
+import type { FC, RefObject } from 'react';
 
 const MIN_VERTICAL_DISPLACEMENT = 50;
 

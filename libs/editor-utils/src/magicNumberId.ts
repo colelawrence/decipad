@@ -1,4 +1,4 @@
-import { AnyElement } from '@decipad/editor-types';
+import { type AnyElement } from '@decipad/editor-types';
 
 /** Get the (unstable) ID for a magic number. */
 export const magicNumberId = (

@@ -1,9 +1,9 @@
 import { Observable } from 'lib0/observable';
 import { noop } from '@decipad/utils';
 import * as awarenessProtocol from 'y-protocols/awareness';
-import { Doc } from 'yjs';
+import type { Doc } from 'yjs';
 import { messageHandlers } from './messageHandlers';
-import { TWebSocketProvider } from './types';
+import type { TWebSocketProvider } from './types';
 
 class TestProvider extends Observable<string> implements TWebSocketProvider {
   doc: Doc;

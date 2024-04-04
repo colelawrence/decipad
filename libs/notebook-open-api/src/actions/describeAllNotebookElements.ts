@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-import { Action } from './types';
+import type { Action } from './types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 
 export const describeAllNotebookElements: Action<'describeAllNotebookElements'> =

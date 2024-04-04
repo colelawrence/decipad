@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
 
 export function getOfType<

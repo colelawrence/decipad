@@ -13,10 +13,11 @@ import {
 import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
-import { EElement, TOperation, isElement } from '@udecode/plate-common';
+import type { EElement, TOperation } from '@udecode/plate-common';
+import { isElement } from '@udecode/plate-common';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
-import { RootEditorController } from './types';
+import type { RootEditorController } from './types';
 
 export class BlockProcessor {
   private rootEditor: RootEditorController;

@@ -1,11 +1,9 @@
-import { Range } from 'slate';
+import type { Range } from 'slate';
+import type { MyEditor, MyText, MyValue } from '@decipad/editor-types';
 import {
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
   markKinds,
-  MyEditor,
-  MyText,
-  MyValue,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -14,7 +12,7 @@ import {
 } from '@decipad/editor-utils';
 import { isElement, isText } from '@udecode/plate-common';
 import { findPotentialFormulas } from './findPotentialFormulas';
-import { PotentialFormulaDecoration } from './interface';
+import type { PotentialFormulaDecoration } from './interface';
 
 const allMarks = new Set<string>(Object.values(markKinds));
 const hasTextMark = (text: MyText) =>

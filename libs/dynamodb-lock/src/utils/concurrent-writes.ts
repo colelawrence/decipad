@@ -4,7 +4,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { tables } from '@architect/functions';
-import { DocSyncRecord } from '@decipad/backendtypes';
+import type { DocSyncRecord } from '@decipad/backendtypes';
 import { timeout, getDefined } from '../../../utils/src';
 import { withLock } from '..';
 

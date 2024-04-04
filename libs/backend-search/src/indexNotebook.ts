@@ -1,4 +1,4 @@
-import { PadRecord } from '@decipad/backendtypes';
+import type { PadRecord } from '@decipad/backendtypes';
 import { searchStore } from './searchStore';
 import { indexNames } from './config';
 import { debug } from './debug';

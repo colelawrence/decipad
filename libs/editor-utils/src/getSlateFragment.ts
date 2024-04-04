@@ -1,4 +1,4 @@
-import { TDescendant } from '@udecode/plate-common';
+import { type TDescendant } from '@udecode/plate-common';
 
 /**
  * Get slate fragment from data transfer.

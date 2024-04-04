@@ -1,12 +1,7 @@
 import { formatResult } from '@decipad/format';
-import DeciNumber from '@decipad/number';
-import {
-  Result,
-  SerializedType,
-  Type,
-  Unit,
-  serializeType,
-} from '@decipad/remote-computer';
+import type DeciNumber from '@decipad/number';
+import type { Result, SerializedType, Type } from '@decipad/remote-computer';
+import { Unit, serializeType } from '@decipad/remote-computer';
 
 export const simpleFormatResult = (
   locale: string,

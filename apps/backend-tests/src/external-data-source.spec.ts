@@ -1,4 +1,4 @@
-import { ExternalDataSource, Pad } from '@decipad/backendtypes';
+import type { ExternalDataSource, Pad } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import getDefined from './utils/get-defined';
 

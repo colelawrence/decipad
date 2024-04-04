@@ -1,4 +1,4 @@
-import { LogEntry } from '@decipad/graphql-client';
+import type { LogEntry } from '@decipad/graphql-client';
 
 export const chunkify = (
   entries: Array<LogEntry>,

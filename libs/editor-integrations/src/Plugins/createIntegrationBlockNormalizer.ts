@@ -1,10 +1,10 @@
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
-import {
-  ELEMENT_INTEGRATION,
+import type {
   IntegrationTypes,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
+import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { setNodes } from '@udecode/plate-common';
 

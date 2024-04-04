@@ -3,7 +3,7 @@ import { onDisconnect as onChatAgentDisconnect } from '@decipad/backend-notebook
 import { trace } from '@decipad/backend-trace';
 import EventEmitter from 'events';
 import { getDefined } from '@decipad/utils';
-import {
+import type {
   ConnectionRecord,
   TWSRequestContext,
   TWSRequestEvent,

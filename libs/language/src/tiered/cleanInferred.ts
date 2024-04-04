@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { Type, Unit } from '@decipad/language-types';
+import type { Type, Unit } from '@decipad/language-types';
 import { produce } from '@decipad/utils';
 import { singular } from 'pluralize';
 

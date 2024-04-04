@@ -1,4 +1,5 @@
-import { expect, test, Page } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 import { snapshot } from '../utils/src';
 import { app } from '@decipad/backend-config';
 

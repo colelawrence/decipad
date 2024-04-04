@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject } from 'rxjs';
+import type { Observable, BehaviorSubject } from 'rxjs';
 // eslint-disable-next-line no-restricted-imports
 import type {
   IdentifiedError,

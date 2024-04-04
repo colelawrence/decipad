@@ -1,5 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
-import { BaseSelection } from 'slate';
+import type { MyEditor } from '@decipad/editor-types';
+import type { BaseSelection } from 'slate';
 import { selectionStorageKey } from './selectionStorageKey';
 
 export const getPersistedSelection = (

@@ -1,5 +1,5 @@
 import { isElement, type TNode } from '@udecode/plate-common';
-import { RootDocument } from '@decipad/editor-types';
+import type { RootDocument } from '@decipad/editor-types';
 
 const scanNodeElementIds = (
   node: TNode,

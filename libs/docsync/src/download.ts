@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
 import { getNodeString } from '@udecode/plate-common';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import type { MinimalRootEditor } from '@decipad/editor-types';
 import { forceDownload } from '@decipad/editor-utils';
 
 const getNotebookTitle = (editor: MinimalRootEditor): string =>

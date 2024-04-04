@@ -4,7 +4,7 @@ import {
   getPointBefore,
   isCollapsed,
 } from '@udecode/plate-common';
-import { MyWithOverride } from '@decipad/editor-types';
+import type { MyWithOverride } from '@decipad/editor-types';
 import { removeMagicNumberInput } from './transforms';
 import { findMagicNumberInput } from './queries';
 

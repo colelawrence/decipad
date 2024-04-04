@@ -1,6 +1,6 @@
-import { TableElement } from '@decipad/editor-types';
+import type { TableElement } from '@decipad/editor-types';
 import { useColumnsInferredTypes } from './useColumnsInferredTypes';
-import { TableInfo } from '../types';
+import type { TableInfo } from '../types';
 import { useTableInfo } from './useTableInfo';
 
 const defaultTableInfo: TableInfo = {

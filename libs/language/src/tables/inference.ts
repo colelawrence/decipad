@@ -1,15 +1,19 @@
 import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { AST, InferError, Type, buildType as t } from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { FullBuiltinSpec, operators } from '@decipad/language-builtins';
+import { InferError, buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import type { FullBuiltinSpec } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
+import { operators } from '@decipad/language-builtins';
 import { getIdentifierString, walkAst, mutateAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 import { sortType } from '../infer/sortType';
 import { fakeFunctionCall, requiresWholeColumn } from './requiresWholeColumn';
-import { Realm } from '../interpreter';
+import type { Realm } from '../interpreter';
 
 export const inferTable = async (realm: Realm, table: AST.Table) => {
   const { inferContext: ctx } = realm;

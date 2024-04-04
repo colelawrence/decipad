@@ -1,6 +1,7 @@
-import { authenticate, AuthResult } from '@decipad/services/authentication';
+import type { AuthResult } from '@decipad/services/authentication';
+import { authenticate } from '@decipad/services/authentication';
 import { debug } from './debug';
-import { GraphqlContext } from '@decipad/graphqlserver-types';
+import type { GraphqlContext } from '@decipad/graphqlserver-types';
 
 function hasUser(authResult: AuthResult): boolean {
   return !!authResult.user;

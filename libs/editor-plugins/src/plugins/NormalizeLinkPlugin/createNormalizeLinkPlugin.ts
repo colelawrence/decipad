@@ -1,15 +1,14 @@
 /* eslint-disable no-param-reassign */
-import { ELEMENT_LINK, MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { ELEMENT_LINK } from '@decipad/editor-types';
 import {
   getNodeChildren,
   getNodeString,
   isElement,
   unwrapNodes,
 } from '@udecode/plate-common';
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '../../pluginFactories';
+import type { NormalizerReturnValue } from '../../pluginFactories';
+import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const normalizeLink =

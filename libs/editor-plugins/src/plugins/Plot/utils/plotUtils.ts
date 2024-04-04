@@ -1,18 +1,19 @@
-import {
+import type {
   RemoteComputer,
-  Unit,
-  materializeResult,
   Result,
-  safeNumberForPrecision,
   SerializedType,
 } from '@decipad/remote-computer';
-import { PlotElement } from '@decipad/editor-types';
-import { formatResult } from '@decipad/format';
-import DeciNumber from '@decipad/number';
-import { componentCssVarHex, cssVarHex } from '@decipad/ui';
 import {
+  Unit,
+  materializeResult,
+  safeNumberForPrecision,
+} from '@decipad/remote-computer';
+import type { PlotElement } from '@decipad/editor-types';
+import { formatResult } from '@decipad/format';
+import type DeciNumber from '@decipad/number';
+import { componentCssVarHex, cssVarHex } from '@decipad/ui';
+import type {
   AllowedPlotValue,
-  comparableChartTypes,
   DisplayType,
   EncodingKey,
   EncodingSpec,
@@ -22,6 +23,7 @@ import {
   Row,
   TimeUnit,
 } from './plotUtils.interface';
+import { comparableChartTypes } from './plotUtils.interface';
 
 export type DisplayProps = {
   sourceVarName: string;

@@ -6,7 +6,7 @@ import {
   EditDataConnectionsModal as UIEditDataConnectionsModal,
   WorkspaceSecrets,
 } from '@decipad/ui';
-import { ComponentProps, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 type EditDataConnectionsModalProps = ComponentProps<

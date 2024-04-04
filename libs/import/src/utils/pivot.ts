@@ -1,4 +1,4 @@
-import { SpreadsheetColumn, SpreadsheetRow } from '../types';
+import type { SpreadsheetColumn, SpreadsheetRow } from '../types';
 
 export const pivot = (rows: SpreadsheetRow[]): SpreadsheetColumn[] => {
   const columns: SpreadsheetColumn[] = [];

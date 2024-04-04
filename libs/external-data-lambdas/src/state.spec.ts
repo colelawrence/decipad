@@ -1,4 +1,5 @@
-import { OAuthState, decodeState, encodeState } from './state';
+import type { OAuthState } from './state';
+import { decodeState, encodeState } from './state';
 
 describe('encodeState', () => {
   it('throws if `redirect_url` is not URL', () => {
