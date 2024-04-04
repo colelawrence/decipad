@@ -96,7 +96,7 @@ jobs:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=32768'
           GIT_COMMIT_HASH: '${{github.sha}}'
           NOTION_CLIENT_ID: '${{secrets.NOTION_CLIENT_ID}}'
-          NOTION_CLIENT_SECRET: '${{secrets.NOTION_SECRET}}'
+          NOTION_CLIENT_SECRET: '${{secrets.NOTION_CLIENT_SECRET}}'
           WORKSPACE_PRO_PLAN: '${{secrets.WORKSPACE_PRO_PLAN}}'
           WORKSPACE_FREE_PLAN: '${{secrets.WORKSPACE_FREE_PLAN}}'
           WORKSPACE_FREE_PLAN_NAME: '${{secrets.WORKSPACE_FREE_PLAN_NAME}}'

@@ -76,6 +76,8 @@ export const getQueryStringOverrides = (): Flags => {
 let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
+
+  NOTION_CONNECTIONS: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
