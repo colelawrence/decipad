@@ -115,8 +115,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_SUBSCRIPTIONS_PRODUCT_ID);
     case 'VITE_STRIPE_CUSTOMER_PORTAL_LINK':
       return valueOrDefault(name, process.env.VITE_STRIPE_CUSTOMER_PORTAL_LINK);
-    case 'NOTION_TOKEN':
-      return valueOrDefault(name, process.env.NOTION_TOKEN);
     case 'NOTION_CLIENT_ID':
       return valueOrDefault(name, process.env.NOTION_CLIENT_ID);
     case 'NOTION_CLIENT_SECRET':
@@ -328,7 +326,6 @@ export function thirdParty() {
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')
     ),
     notion: {
-      apiKey: env('NOTION_TOKEN'),
       clientId: env('NOTION_CLIENT_ID'),
       clientSecret: env('NOTION_CLIENT_SECRET'),
     },

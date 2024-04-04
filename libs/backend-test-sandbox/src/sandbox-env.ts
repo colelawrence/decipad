@@ -112,7 +112,6 @@ export async function createSandboxEnv(
     STRIPE_EXTRA_CREDITS_PRODUCT_ID:
       process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
-    NOTION_TOKEN: process.env.NOTION_TOKEN,
     DECI_BACKEND_TEST: 'true',
     DECI_SEARCH_URL: process.env.DECI_SEARCH_URL,
     DECI_SEARCH_USERNAME: process.env.DECI_SEARCH_USERNAME,
