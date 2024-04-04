@@ -13,7 +13,7 @@ jobs:
   deploy:
     name: 🚧 Deploy PR ${{ github.event.pull_request.number }}
     timeout-minutes: 90
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'
       cancel-in-progress: false
@@ -34,7 +34,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - name: Cache Yarn dependencies and Node modules
-        uses: actions/cache@v4
+        uses: buildjet/cache@v4
         with:
           path: |
             ~/.cache/yarn
@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: buildjet/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -65,7 +65,7 @@ jobs:
 
       - name: Cache NX things
         id: node-modules-nx-cache
-        uses: actions/cache@v4
+        uses: buildjet/cache@v4
         with:
           path: |
             node_modules/.cache
