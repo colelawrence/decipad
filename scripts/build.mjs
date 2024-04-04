@@ -132,6 +132,9 @@ async function esBuildOptions(env) {
     define: envVarDefines(env),
     minify: !process.env.DEBUG && !!process.env.MINIFY,
     watch,
+    logOverride: {
+      'empty-import-meta': 'silent',
+    },
     loader: {
       '.woff': 'file',
       '.woff2': 'file',
