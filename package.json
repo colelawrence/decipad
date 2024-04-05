@@ -260,7 +260,7 @@
     "graphql": "16.8.0",
     "graphql-scalars": "1.23.0",
     "graphql-type-json": "^0.3.2",
-    "graphql-ws": "5.15.0",
+    "graphql-ws": "5.16.0",
     "handlebars": "^4.7.7",
     "html-escaper": "^3.0.3",
     "htmlescape": "^1.1.1",
