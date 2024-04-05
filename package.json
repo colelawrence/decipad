@@ -185,7 +185,7 @@
     "@types/lodash.unzip": "^3.4.7",
     "@types/lodash.zip": "^4.2.7",
     "@types/md5": "^2.3.2",
-    "@types/mkdirp": "1.0.2",
+    "@types/mkdirp": "2.0.0",
     "@types/ramda": "0.29.2",
     "@types/react-gravatar": "^2.6.10",
     "@types/toposort": "^2.0.4",
