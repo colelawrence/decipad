@@ -337,6 +337,24 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
       ).toBeVisible(),
     ]);
   });
+
+  await testUser.page.getByTestId('integration-modal-continue').click();
+
+  await expect(testUser.page.getByText('MySQL')).toBeVisible();
+
+  // open integration table to show data
+  await testUser.page.locator('figure').filter({ hasText: 'Show' }).click();
+
+  await expect(
+    testUser.page.getByText('15 rows, previewing rows 1 to 10')
+  ).toBeVisible();
+
+  await testUser.page.getByRole('button', { name: 'Pivot view' }).click();
+
+  await expect(
+    testUser.page.getByTestId('add-data-view-column-button')
+  ).toBeVisible();
+  await expect(testUser.page.getByText('exprRef')).toBeHidden();
 });
 
 test('Checks copy link to block integrations', async ({ testUser }) => {
