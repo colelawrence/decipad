@@ -32,8 +32,6 @@ import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 
-const analytics = getAnalytics();
-
 const isSelected = (editor: MyEditor, element: MyElement) => {
   if (!editor.selection) {
     return false;
@@ -83,9 +81,7 @@ export const Paragraph: PlateComponent = ({
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = () => {
-    if (analytics) {
-      analytics.track('Opening paragraph AI panel');
-    }
+    getAnalytics().then(({ track }) => track('Opening paragraph AI panel'));
     setShowAiPanel((t) => !t);
   };
 

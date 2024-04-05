@@ -10,8 +10,6 @@ import { useParentNode } from '@decipad/editor-hooks';
 import { getAnalytics } from '@decipad/client-events';
 import { LiveQueryCore } from './LiveQueryCore';
 
-const analytics = getAnalytics();
-
 export const AIPanelContext = createContext({
   showAiPanel: false,
   toggle: () => {},
@@ -24,9 +22,7 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
   const parent = useParentNode<LiveDataSetElement>(element);
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = useCallback(() => {
-    if (analytics) {
-      analytics.track('Opening live query AI panel');
-    }
+    getAnalytics().then(({ track }) => track('Opening live query AI panel'));
     setShowAiPanel((t) => !t);
   }, [setShowAiPanel]);
 

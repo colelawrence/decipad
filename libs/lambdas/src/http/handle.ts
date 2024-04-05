@@ -129,15 +129,12 @@ const utmKeys = [
   'utm_term',
 ] as const;
 
-const anonymousIdFromCookies = (cookies: string[]): string =>
-  cookies
-    .filter((cookie) => cookie.startsWith('ajs_anonymous_id='))
-    .reduce((_, cookie) => cookie.split('=')[1], '');
-
 const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
   return async (event, ctx, cb) => {
-    const client = analyticsClient(event);
-    if (client) {
+    // track user id
+    const user = await getAuthenticatedUser(event);
+    const client = user ? analyticsClient(event) : undefined;
+    if (user && client) {
       // track UTM params
       const params = event.queryStringParameters ?? {};
       for (const utmKey of utmKeys) {
@@ -159,19 +156,8 @@ const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
         }
       }
 
-      // track user id
-      const user = await getAuthenticatedUser(event);
-      if (user) {
-        client.myIdentify({ userId: user.id });
-        client.identify({ userId: user.id });
-      } else {
-        const anonymousId =
-          anonymousIdFromCookies(event.cookies ?? []) || 'unknown';
-        client.myIdentify({
-          anonymousId,
-        });
-        client.identify({ anonymousId });
-      }
+      client.myIdentify({ userId: user.id });
+      client.identify({ userId: user.id });
     }
     return handler(event, ctx, cb);
   };

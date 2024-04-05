@@ -296,10 +296,7 @@ export const defaultMoveNode = (
         to,
       });
 
-      const analytics = getAnalytics();
-      if (analytics) {
-        analytics.track('move block');
-      }
+      getAnalytics().then(({ track }) => track('move block'));
     });
   });
 };

@@ -72,7 +72,6 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const { tokensQuotaLimit, increaseQuotaLimit } = useAiUsage();
   const navigate = useNavigate();
   const userId = useUserId();
-  const analytics = getAnalytics();
   const [currentStage, setCurrentStage] = useState('choose-plan');
   const [clientSecret, setClientSecret] = useState('');
 
@@ -84,37 +83,37 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const trackAnalytics = useCallback(
     ({ planName, planKey }: PaymentAnalyticsProps) => {
-      if (!analytics) {
-        return;
-      }
-
       if (paymentStatus === 'success') {
-        analytics.track('Purchase', {
-          category: 'Subscription',
-          subCategory: 'Plan',
-          resource: {
-            type: 'workspace',
-            id: workspaceId,
-          },
-          plan: planName,
-        });
+        getAnalytics().then(({ track }) =>
+          track('Purchase', {
+            category: 'Subscription',
+            subCategory: 'Plan',
+            resource: {
+              type: 'workspace',
+              id: workspaceId,
+            },
+            plan: planName,
+          })
+        );
       } else {
-        analytics.track('Purchase', {
-          category: 'Subscription',
-          subCategory: 'Plan',
-          resource: {
-            type: 'workspace',
-            id: workspaceId,
-          },
-          plan: planName,
-          error: {
-            code: 'Stripe checkout error',
-            message: `Check error message on Stripe dashboard for plan: ${planKey}`,
-          },
-        });
+        getAnalytics().then(({ track }) =>
+          track('Purchase', {
+            category: 'Subscription',
+            subCategory: 'Plan',
+            resource: {
+              type: 'workspace',
+              id: workspaceId,
+            },
+            plan: planName,
+            error: {
+              code: 'Stripe checkout error',
+              message: `Check error message on Stripe dashboard for plan: ${planKey}`,
+            },
+          })
+        );
       }
     },
-    [analytics, paymentStatus, workspaceId]
+    [paymentStatus, workspaceId]
   );
 
   const selectPlanInfo = useMemo(() => {

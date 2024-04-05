@@ -44,7 +44,6 @@ export const AddCreditsPaymentComponent: React.FC<
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    const analytics = getAnalytics();
     if (!stripe || !elements) {
       return;
     }
@@ -58,8 +57,8 @@ export const AddCreditsPaymentComponent: React.FC<
       });
 
       if (result.error) {
-        if (analytics) {
-          analytics.track('Purchase', {
+        getAnalytics().then(({ track }) =>
+          track('Purchase', {
             category: 'Credits',
             subCategory: 'AI',
             resource: {
@@ -71,8 +70,8 @@ export const AddCreditsPaymentComponent: React.FC<
               code: result.error.code,
               message: result.error.message,
             },
-          });
-        }
+          })
+        );
         console.error(result.error.message);
       } else {
         setLoadingState(true);
@@ -80,8 +79,8 @@ export const AddCreditsPaymentComponent: React.FC<
           result.paymentMethod.id
         );
         if (newCreditsLimitResult.data) {
-          if (analytics) {
-            analytics.track('Purchase', {
+          getAnalytics().then(({ track }) =>
+            track('Purchase', {
               category: 'Credits',
               subCategory: 'AI',
               resource: {
@@ -89,8 +88,8 @@ export const AddCreditsPaymentComponent: React.FC<
                 id: resourceId,
               },
               amount: credits,
-            });
-          }
+            })
+          );
 
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??

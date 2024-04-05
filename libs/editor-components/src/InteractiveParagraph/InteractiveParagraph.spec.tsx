@@ -30,6 +30,7 @@ import { AnnotationsContext } from '@decipad/react-contexts';
 let editor: PlateEditor;
 let plateProps: Omit<PlateProps, 'children'>;
 let wrapper: React.FC<PropsWithChildren<unknown>>;
+
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {

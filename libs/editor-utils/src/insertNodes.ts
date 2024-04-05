@@ -22,11 +22,10 @@ type InsertNodes = <N extends EElementOrText<V>, V extends Value = Value>(
 
 export const insertNodes: InsertNodes = (editor, options, ...args) => {
   setTimeout(() => {
-    const analytics = getAnalytics();
-    if (analytics) {
-      for (const el of elementsFrom(options)) {
-        analytics.track('create notebook element', { type: el.type });
-      }
+    for (const el of elementsFrom(options)) {
+      getAnalytics().then(({ track }) =>
+        track('create notebook element', { type: el.type })
+      );
     }
   }, 0);
   return plateInsertNodes(editor, options, ...args);

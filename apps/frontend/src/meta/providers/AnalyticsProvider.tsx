@@ -18,13 +18,17 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
     if (
       analytics &&
       session?.user &&
+      session.user.id &&
+      session.user.email &&
       (session.user.id !== userId || session.user.email !== userEmail)
     ) {
       setUserId(session.user.id);
       setUserEmail(session.user.email);
-      console.debug('analytics: identifying user with id', session.user.id);
-      analytics.identify(session.user.id, {
-        email: session.user.email,
+      console.debug('analytics: identifying user with id', userId);
+      analytics.then(({ identify }) => {
+        identify(userId, {
+          email: userEmail,
+        });
       });
     }
   }, [analytics, session, userId, userEmail]);
@@ -44,9 +48,8 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
 const ClientEventsAnalytics: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const analytics = getAnalytics();
-
   const handleClientEvent = async (clientEvent: ClientEvent) => {
+    const [analytics] = await getAnalytics();
     if (!analytics) {
       return;
     }
