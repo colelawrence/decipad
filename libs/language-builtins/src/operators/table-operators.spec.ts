@@ -9,6 +9,7 @@ import {
   buildType as t,
 } from '@decipad/language-types';
 import { tableOperators as operators } from './table-operators';
+import { miscOperators } from './misc-operators';
 import { U, makeContext } from '../utils/testUtils';
 import type { FullBuiltinSpec } from '../interfaces';
 
@@ -18,7 +19,7 @@ describe('table operators', () => {
   it('concatenates tables', async () => {
     expect(
       await (
-        await (operators.concatenate as FullBuiltinSpec).fnValues?.(
+        await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
           [
             Value.Table.fromNamedColumns(
               [
@@ -109,7 +110,7 @@ describe('table operators', () => {
     });
 
     const result = (
-      await (operators.concatenate as FullBuiltinSpec).fnValues?.(
+      await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
         [t1, t2],
         [t1Type, t2Type],
         makeContext()
@@ -175,7 +176,7 @@ describe('table operators', () => {
     });
 
     expect(
-      await (operators.concatenate as FullBuiltinSpec).functor?.(
+      await (miscOperators.concat as FullBuiltinSpec).functorNoAutomap?.(
         [tNumber, tNumber],
         [],
         makeContext()
@@ -197,7 +198,7 @@ describe('table operators', () => {
     });
 
     expect(
-      (operators.concatenate as FullBuiltinSpec).functor?.(
+      (miscOperators.concat as FullBuiltinSpec).functorNoAutomap?.(
         [t1, t2],
         [],
         makeContext()
@@ -214,7 +215,7 @@ describe('table operators', () => {
     });
     const column = t.column(t.number(U('bananas')), undefined, 1);
     expect(
-      await (operators.sortby as FullBuiltinSpec).functor!(
+      await (operators.sortby as FullBuiltinSpec).functor?.(
         [table, column],
         [],
         makeContext()

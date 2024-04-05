@@ -513,7 +513,7 @@ describe('Multidimensional operations', () => {
     await expect(
       runCode(`cat(1, 1)`)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"panic: one or more cardinalities are too low"`
+      `"panic: expected column-like value"`
     );
   });
 });

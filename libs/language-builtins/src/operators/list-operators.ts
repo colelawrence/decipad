@@ -28,21 +28,6 @@ export const listOperators: Record<string, BuiltinSpec> = {
     example: 'len(Sales.Entries)',
     formulaGroup: 'Columns',
   },
-  cat: {
-    argCount: 2,
-    argCardinalities: [2, 2],
-    // TODO: make this a varargs function
-    fnValues: async ([a, b]: Value.Value[]) =>
-      Value.createConcatenatedColumn(
-        Value.getColumnLike(a),
-        Value.getColumnLike(b)
-      ),
-    functionSignature: 'column<A>, column<A> -> column<A>',
-    explanation: 'Joins two tables or columns into one.',
-    syntax: 'cat(Table1.Col1, Table2.Col2)',
-    example: 'cat(Day1.Sales, Day2.Sales)',
-    formulaGroup: 'Tables or Columns',
-  },
   first: {
     argCount: 1,
     argCardinalities: [2],

@@ -9,6 +9,12 @@ export type Functor = (
   utils: ContextUtils
 ) => Type | Promise<Type>;
 
+export type Evaluator = (
+  args: Value.Value[],
+  argTypes: Type[],
+  utils: BuiltinContextUtils
+) => PromiseOrType<Value.Value>;
+
 export interface GenericBuiltinSpec {
   explanation?: string;
   syntax?: string;
@@ -39,16 +45,8 @@ export interface FullBuiltinSpec extends GenericBuiltinSpec {
   absoluteNumberInput?: boolean;
   coerceToColumn?: boolean;
 
-  fnValuesNoAutomap?: (
-    args: Value.Value[],
-    argTypes: Type[],
-    utils: BuiltinContextUtils
-  ) => PromiseOrType<Value.Value>;
-  fnValues?: (
-    args: Value.Value[],
-    argTypes: Type[],
-    utils: BuiltinContextUtils
-  ) => PromiseOrType<Value.Value>;
+  fnValuesNoAutomap?: Evaluator;
+  fnValues?: Evaluator;
   functor?: Functor;
   functionSignature?: string;
   functorNoAutomap?: (

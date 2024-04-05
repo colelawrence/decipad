@@ -1,10 +1,4 @@
-import {
-  getDefined,
-  dequal,
-  produce,
-  getInstanceof,
-  zip,
-} from '@decipad/utils';
+import { getDefined, produce, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { Comparable } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
@@ -121,70 +115,6 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     formulaGroup: 'Tables',
     syntax: 'lookup(Table, Column Condition)',
     example: 'lookup(Prices, Prices.Discount == 10%)',
-  },
-
-  concatenate: {
-    argCount: 2,
-    functor: async ([tab1, tab2]) =>
-      (await Type.combine(tab1.isTable(), tab2.isTable())).mapType(() => {
-        if (!dequal(new Set(tab1.columnNames), new Set(tab2.columnNames))) {
-          return t.impossible('Incompatible tables');
-        }
-        if (tab1.columnTypes?.length !== tab2.columnTypes?.length) {
-          return t.impossible('Incompatible tables');
-        }
-
-        // Check that column types match, even though we don't care about column order
-        for (const tab1ColIndex in tab1.columnNames as string[]) {
-          if (typeof tab1ColIndex === 'number') {
-            const tab1ColName = (tab1.columnNames as string[])[tab1ColIndex];
-            const tab2ColIndex = tab2.columnNames?.indexOf(tab1ColName);
-            if (tab2ColIndex === undefined) {
-              throw new Error('Something went wrong comparing tables.');
-            }
-            const tab1ColType = (tab1.columnTypes as Type[])[tab1ColIndex];
-            const tab2ColType = (tab2.columnTypes as Type[])[tab2ColIndex];
-
-            if (!dequal(tab1ColType, tab2ColType)) {
-              return t.impossible('Incompatible tables');
-            }
-          }
-        }
-
-        return tab1;
-      }),
-    fnValues: async ([tab1, tab2]) => {
-      const { columns: cols1, columnNames: names1 } = getInstanceof(
-        tab1,
-        Value.Table
-      );
-      const { columns: cols2, columnNames: names2 } = getInstanceof(
-        tab2,
-        Value.Table
-      );
-
-      const tab2Sorted = zip(names2, cols2).sort((a, b) => {
-        const aIndex = names1.indexOf(a[0]);
-        const bIndex = names1.indexOf(b[0]);
-        if (aIndex < bIndex) return -1;
-        if (aIndex > bIndex) return 1;
-        return 0;
-      });
-
-      return Value.Table.fromNamedColumns(
-        await Promise.all(
-          zip(
-            cols1,
-            tab2Sorted.map((x) => x[1])
-          ).map(async ([c1, c2]) => Value.createConcatenatedColumn(c1, c2))
-        ),
-        getDefined(names1)
-      );
-    },
-    explanation: 'Joins two tables or columns into one.',
-    syntax: 'concatenate(Table1.Col1, Table2.Col2)',
-    example: 'concatenate(Day1.Sales, Day2.Sales)',
-    formulaGroup: 'Tables or Columns',
   },
 
   sortby: {

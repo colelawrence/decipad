@@ -4,6 +4,7 @@ import { Type, Value, compare, buildType as t } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
 import type { BuiltinSpec } from '../interfaces';
 import { getDefined, getInstanceof } from '@decipad/utils';
+import { concat } from './concat';
 
 const extractDateValues = async (a: Value.Value) => {
   const aVal = getInstanceof(a, Value.DateValue);
@@ -107,5 +108,12 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     example: 'getunit(5 minutes)',
     syntax: 'getunit(Number with unit)',
     formulaGroup: 'Units',
+  },
+  concat,
+  cat: {
+    aliasFor: 'concat',
+  },
+  concatenate: {
+    aliasFor: 'concat',
   },
 };
