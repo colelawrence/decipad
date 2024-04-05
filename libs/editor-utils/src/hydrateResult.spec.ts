@@ -1,13 +1,13 @@
 import type { Result, Unit } from '@decipad/remote-computer';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { deserializeResult } from './deserializeResult';
+import { hydrateResult } from './hydrateResult';
 
 setupDeciNumberSnapshotSerializer();
 
-describe('deserialize result', () => {
+describe('hydrateResult result', () => {
   it('works for numbers and units', () => {
     expect(
-      deserializeResult({
+      hydrateResult({
         type: {
           kind: 'number',
           unit: [
@@ -84,7 +84,7 @@ describe('deserialize result', () => {
 
   it('works for columns of numbers', () => {
     expect(
-      deserializeResult({
+      hydrateResult({
         type: {
           kind: 'column',
           indexedBy: '',
@@ -180,7 +180,7 @@ describe('deserialize result', () => {
 
   it('works for tables with columns of numbers', () => {
     expect(
-      deserializeResult({
+      hydrateResult({
         type: {
           kind: 'table',
           indexName: 'Column1',

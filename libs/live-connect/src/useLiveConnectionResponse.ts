@@ -7,7 +7,7 @@ import type {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
-import { deserializeResult } from '@decipad/editor-utils';
+import { hydrateResult } from '@decipad/editor-utils';
 import type { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
@@ -84,7 +84,7 @@ export const useLiveConnectionResponse = ({
                   } else if (res.result) {
                     setResult({
                       ...res,
-                      result: deserializeResult(res.result),
+                      result: hydrateResult(res.result),
                     });
                   }
                   if (res.loading != null) {

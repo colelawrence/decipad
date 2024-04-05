@@ -23,7 +23,7 @@ import type {
   TableCellType,
 } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
-import { useCache, deserializeResult } from '@decipad/editor-utils';
+import { useCache, hydrateResult } from '@decipad/editor-utils';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
@@ -131,7 +131,7 @@ export const useLiveConnection = (
       (importRes: ImportResult | undefined) =>
         importRes && {
           ...importRes,
-          result: deserializeResult(importRes.result),
+          result: hydrateResult(importRes.result),
         },
       []
     ),

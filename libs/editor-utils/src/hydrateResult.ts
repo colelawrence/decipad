@@ -15,7 +15,7 @@ const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
   ) ?? null;
 
 // eslint-disable-next-line complexity
-export const deserializeResult = <T extends Result.Result>(
+export const hydrateResult = <T extends Result.Result>(
   result: T | undefined
 ): T | undefined => {
   if (result == null) {
@@ -47,7 +47,7 @@ export const deserializeResult = <T extends Result.Result>(
     case 'column':
     case 'materialized-column':
       if (type.cellType.kind === 'number') {
-        replaceValue = (value as Result.OneResult[])?.map(fromNumber);
+        replaceValue = (value as Result.OneResult[])?.map((n) => fromNumber(n));
         replaceType = {
           ...type,
           kind: 'materialized-column',
@@ -59,7 +59,7 @@ export const deserializeResult = <T extends Result.Result>(
         break;
       }
       const replacements = (value as Result.OneResult[])?.map((v) =>
-        deserializeResult({ type: type.cellType, value: v } as Result.Result)
+        hydrateResult({ type: type.cellType, value: v } as Result.Result)
       );
       replaceValue = replacements?.map((r) => r?.value) as
         | Result.OneResult
@@ -74,7 +74,7 @@ export const deserializeResult = <T extends Result.Result>(
     case 'table':
     case 'materialized-table': {
       const replacementColumns = type.columnTypes.map((colType, colIndex) =>
-        deserializeResult({
+        hydrateResult({
           type: {
             kind: 'materialized-column',
             cellType: colType,

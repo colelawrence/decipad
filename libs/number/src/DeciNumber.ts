@@ -204,6 +204,7 @@ export class DeciNumber {
           infinite: false,
         });
       }
+
       // n / 0 = infinity
       return new DeciNumber({
         n: undefined,

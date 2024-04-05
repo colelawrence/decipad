@@ -10,8 +10,9 @@ import {
   columnTypeCoercionsToRec,
 } from '@decipad/import';
 import { useEffect } from 'react';
-import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
+import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
+import { hydrateResult } from '@decipad/editor-utils';
 
 export const NotionIntegration = function CodeIntegration({
   blockOptions,
@@ -27,7 +28,7 @@ export const NotionIntegration = function CodeIntegration({
       const notionResult = importFromUnknownJson(importFromNotion(res), {
         columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
       });
-      pushResultToComputer(computer, id, varName, notionResult);
+      pushResultToComputer(computer, id, varName, hydrateResult(notionResult));
     }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
@@ -40,8 +41,7 @@ export const NotionIntegration = function CodeIntegration({
           const result = importFromUnknownJson(notionImported, {
             columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
           });
-
-          pushResultToComputer(computer, id, varName, result);
+          pushResultToComputer(computer, id, varName, hydrateResult(result));
         });
     },
     onShowSource() {

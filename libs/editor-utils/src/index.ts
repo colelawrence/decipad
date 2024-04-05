@@ -7,7 +7,7 @@ export * from './convertSmartRefs';
 export * from './createCodeLine';
 export * from './createDefaultNotebook';
 export * from './decorateCode';
-export * from './deserializeResult';
+export * from './hydrateResult';
 export * from './filterDecorate';
 export * from './findDomNodePath';
 export * from './focusAndSetSelection';
