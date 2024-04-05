@@ -66,6 +66,7 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
           isEditing={!!store.existingIntegration}
           actionMenu={actionMenu}
           isCode={store.connectionType === 'codeconnection'}
+          hideRunButton={store.connectionType === 'notion'}
         >
           {screen}
         </WrapperIntegrationModalDialog>

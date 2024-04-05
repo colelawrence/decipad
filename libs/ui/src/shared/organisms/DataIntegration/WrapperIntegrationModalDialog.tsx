@@ -60,6 +60,8 @@ interface WrapperIntegrationModalDialogProps {
   // REFACTOR: Remove this.
   readonly isCode: boolean;
 
+  readonly hideRunButton?: boolean;
+
   /** Display custom react component to perform some actions
    * Currently being used for SecretsMenu or ConnectionsMenu
    */
@@ -83,6 +85,8 @@ export const WrapperIntegrationModalDialog: FC<
   workspaceId,
   isCode,
   connectionTabLabel = 'Code',
+
+  hideRunButton = false,
 
   actionMenu,
 }) => {
@@ -299,16 +303,18 @@ export const WrapperIntegrationModalDialog: FC<
               )}
             </>
           )}
-          <TextAndIconButton
-            text="Run"
-            size="normal"
-            iconPosition="left"
-            color="brand"
-            onClick={execSource}
-            disabled={runButtonDisabled}
-          >
-            <Play variant="black" />
-          </TextAndIconButton>
+          {!hideRunButton && (
+            <TextAndIconButton
+              text="Run"
+              size="normal"
+              iconPosition="left"
+              color="brand"
+              onClick={execSource}
+              disabled={runButtonDisabled}
+            >
+              <Play variant="black" />
+            </TextAndIconButton>
+          )}
         </div>
       )}
     </div>

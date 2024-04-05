@@ -150,7 +150,9 @@ const WorkspaceNotionConnections: FC<ConnectionProps> = ({ workspaceId }) => {
   );
 };
 
-const NotionPrivateDatabases: FC<ConnectionProps> = () => {
+const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
+  onRun,
+}) => {
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -226,7 +228,10 @@ const NotionPrivateDatabases: FC<ConnectionProps> = () => {
       root
       dropdown
       open={open}
-      onChangeOpen={setOpen}
+      onChangeOpen={(o) => {
+        if (isFetching) return;
+        setOpen(o);
+      }}
       trigger={
         <Styles.Trigger>
           {getTriggerChildren()}
@@ -239,12 +244,13 @@ const NotionPrivateDatabases: FC<ConnectionProps> = () => {
         <MenuItem
           key={db.id}
           css={{ minWidth: '240px' }}
-          onSelect={() =>
+          onSelect={() => {
             setter({
               DatabaseId: db.id,
               DatabaseName: db.name,
-            })
-          }
+            });
+            onRun();
+          }}
         >
           {db.name.length > 0 ? db.name : 'Unnamed Database'}
         </MenuItem>
@@ -279,8 +285,7 @@ async function runPrivateIntegration(props: ConnectionProps) {
   }
 
   const notionQuery = await fetch(
-    `${window.location.origin}/api/externaldatasources/${
-      state.ExternalDataId
+    `${window.location.origin}/api/externaldatasources/${state.ExternalDataId
     }/data?url=${getNotionQueryDbLink(state.DatabaseId)}&method=POST`
   );
 
@@ -315,7 +320,7 @@ export const NotionConnection: FC<ConnectionProps> = (props) => {
       <Styles.Wrapper>
         <Suspense>
           <WorkspaceNotionConnections {...props} />
-          <NotionPrivateDatabases {...props} />
+          <NotionPrivateDatabases {...props} onRun={() => runCode()} />
         </Suspense>
       </Styles.Wrapper>
     </Styles.OuterWrapper>

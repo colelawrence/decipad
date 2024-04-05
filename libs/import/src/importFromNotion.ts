@@ -157,6 +157,15 @@ function getValue(
       return value;
     case 'last_edited_by':
       return userToString(object.last_edited_by);
+
+    //
+    // Future proofing
+    //
+    // If notion types are lying to us and there are more,
+    // let's handle them.
+    //
+    default:
+      return '';
   }
 }
 
