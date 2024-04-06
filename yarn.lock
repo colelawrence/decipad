@@ -16171,10 +16171,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1593.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1593.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1593.0.tgz#37cb0afa89040fad3fab6231afb665f0987d8b83"
-  integrity sha512-Oiu6HxWax6Ns75IEYNTVmxT9G1klHMszJKfnHSFv/LlNg432TdkI8Irefw2XRTMxTcWCjbxSnG4+HYDHWE+mXw==
+aws-sdk@2.1594.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1594.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1594.0.tgz#9da5347b5f164f8197af1287a70c3cec35375042"
+  integrity sha512-ZvJ63Vm/ZuygGuO19n1PjPkyo4OcKQzgK62kAhsp4SUBDMYuemOXHpIH+ORFOjO8Js7exoqHtNS4p9fHt6cW2Q==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -39174,10 +39174,10 @@ zipit@~2.0.0:
     insync "2.1.1"
     yazl "2.5.1"
 
-zod-openapi@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.14.0.tgz#9c87f3821d226f2d1fec3ecd0c16fe952f279ee9"
-  integrity sha512-TywDpZKfbNSMspWtT152DaO+/cK0xqK/bv7Kt4ZMHhzEZS1rCFYxxFwDZdQd4Nrq5g4kX/R1SKI+FkYg4QkBlw==
+zod-openapi@^2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.15.0.tgz#37de1a96073ff1aa272486b09d6c3505c5f16ac3"
+  integrity sha512-pISLVXyOtczrpZeXBDNLl4zYCvKMRbeWZNyEyiMGHpAvWQy9mXbfXAPPcTe6ejXHlgvTMu0y4OKX1dHnYosc6A==
 
 zod-to-json-schema@3.20.3:
   version "3.20.3"
