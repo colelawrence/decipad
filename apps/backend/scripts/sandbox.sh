@@ -25,7 +25,13 @@ teardown () {
 trap "teardown" EXIT
 
 if [[ -z "${DECI_E2E:-}" ]]; then
-  yarn build:backend:watch&
+
+  if [[ -z "${WATCH:-}" ]]; then
+    yarn build:backend &
+  else
+    yarn build:backend:watch &
+  fi
+
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
   if [ -n "${DECI_SSR:-}" ]; then
     nx serve server-side-rendering&
