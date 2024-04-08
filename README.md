@@ -129,7 +129,7 @@ yarn serve:all
 ```
 
 > By default a browser window should open with the auto-login URL.
-> If you want to change the browser, define the `DECI_BROWSER` environment variable (in a `.env` file, for instance).
+> If you want to change the browser, define the `BROWSER` environment variable (in a `.env` file, for instance).
 
 ### Testing the project
 
