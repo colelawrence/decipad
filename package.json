@@ -315,7 +315,7 @@
     "nodemailer": "6.9.0",
     "oauth": "0.10.0",
     "open": "^10.1.0",
-    "openai": "^4.29.0",
+    "openai": "^4.33.0",
     "p-reduce": "^3.0.0",
     "p-series": "3.0.0",
     "patch-package": "7.0.2",
