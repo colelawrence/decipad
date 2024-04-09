@@ -18,8 +18,10 @@ export const EmptyWorkspaceCta = ({
   const onGalleryClick = useCallback(
     () =>
       clientEvent({
-        type: 'action',
-        action: 'notebook templates clicked',
+        segmentEvent: {
+          type: 'action',
+          action: 'notebook templates clicked',
+        },
       }),
     [clientEvent]
   );

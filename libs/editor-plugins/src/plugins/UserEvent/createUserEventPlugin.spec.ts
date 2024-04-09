@@ -1,4 +1,8 @@
-import type { ClientEventContextType } from '@decipad/client-events';
+import type {
+  ClientEventContextType,
+  HandleClientEventArgs,
+  SegmentEventArgs,
+} from '@decipad/client-events';
 import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
@@ -10,15 +14,18 @@ import {
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
 import type { TEditor } from '@udecode/plate-common';
-import type { ChecklistEvent } from 'libs/client-events/src/checklist';
 import { nanoid } from 'nanoid';
 import { createUserEventPlugin } from './createUserEventPlugin';
+import type {
+  ChecklistEvent,
+  ElementInteraction,
+} from 'libs/client-events/src/checklist';
 
 let editor: TEditor;
-let mockClientEvent: ChecklistEvent | null;
+let mockClientEvent: HandleClientEventArgs | null;
 const mockEvents: ClientEventContextType = jest.fn((event) => {
   // Casting is safe because plugin does not return anything except action events.
-  mockClientEvent = event as ChecklistEvent;
+  mockClientEvent = event as HandleClientEventArgs;
   return Promise.resolve();
 });
 
@@ -90,9 +97,14 @@ it('returns the element type on creation', () => {
     at: [0],
   });
   expect(mockClientEvent).not.toBeNull();
-  expect(mockClientEvent?.type).toBe('checklist');
+  expect((mockClientEvent as SegmentEventArgs)?.segmentEvent?.type).toBe(
+    'checklist'
+  );
 
-  expect(mockClientEvent!.props.element).toBe(ELEMENT_PARAGRAPH);
+  expect(
+    ((mockClientEvent as SegmentEventArgs)!.segmentEvent as ChecklistEvent)
+      .props.element
+  ).toBe(ELEMENT_PARAGRAPH);
 });
 
 it('emits an event on element interaction and text on interaction', () => {
@@ -111,8 +123,13 @@ it('emits an event on element interaction and text on interaction', () => {
   };
   editor.insertText('hello world');
 
-  expect(mockClientEvent?.type).toBe('checklist');
-  expect(mockClientEvent!.props.element).toBe(ELEMENT_CODE_LINE);
+  expect((mockClientEvent as SegmentEventArgs)?.segmentEvent?.type).toBe(
+    'checklist'
+  );
+  expect(
+    ((mockClientEvent as SegmentEventArgs)?.segmentEvent as ChecklistEvent)
+      ?.props.element
+  ).toBe(ELEMENT_CODE_LINE);
 });
 
 it('returns parent and variant of widgets on interaction', () => {
@@ -131,10 +148,29 @@ it('returns parent and variant of widgets on interaction', () => {
   };
   editor.insertText('123');
 
-  expect(mockClientEvent?.type).toBe('checklist');
-  expect(mockClientEvent?.props.element).toBe(ELEMENT_EXPRESSION);
+  expect((mockClientEvent as SegmentEventArgs)?.segmentEvent?.type).toBe(
+    'checklist'
+  );
+  expect(
+    ((mockClientEvent as SegmentEventArgs)?.segmentEvent as ChecklistEvent)
+      .props.element
+  ).toBe(ELEMENT_EXPRESSION);
 
-  if (mockClientEvent?.props.interaction !== 'interaction') return;
-  expect(mockClientEvent.props.parent).toBe(ELEMENT_VARIABLE_DEF);
-  expect(mockClientEvent.props.variant).toBe('expression');
+  if (
+    ((mockClientEvent as SegmentEventArgs)?.segmentEvent as ChecklistEvent)
+      ?.props.interaction !== 'interaction'
+  )
+    return;
+  expect(
+    (
+      ((mockClientEvent as SegmentEventArgs).segmentEvent as ChecklistEvent)
+        .props as ElementInteraction
+    ).parent
+  ).toBe(ELEMENT_VARIABLE_DEF);
+  expect(
+    (
+      ((mockClientEvent as SegmentEventArgs).segmentEvent as ChecklistEvent)
+        .props as ElementInteraction
+    ).variant
+  ).toBe('expression');
 });

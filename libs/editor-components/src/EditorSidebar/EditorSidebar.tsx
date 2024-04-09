@@ -66,9 +66,11 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
         });
       }
       clientEvent({
-        type: 'action',
-        action: 'sidebar block add',
-        props: { command },
+        segmentEvent: {
+          type: 'action',
+          action: 'sidebar block add',
+          props: { command },
+        },
       });
     },
     [clientEvent, computer, editor]

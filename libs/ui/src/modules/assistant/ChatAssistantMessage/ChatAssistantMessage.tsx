@@ -143,10 +143,12 @@ export const ChatAssistantMessage: React.FC<Props> = ({
     (s: string) => {
       sendMessage(s);
       clientEvent({
-        type: 'action',
-        action: 'ai chat send message',
-        props: {
-          isSuggested: true,
+        segmentEvent: {
+          type: 'action',
+          action: 'ai chat send message',
+          props: {
+            isSuggested: true,
+          },
         },
       });
     },

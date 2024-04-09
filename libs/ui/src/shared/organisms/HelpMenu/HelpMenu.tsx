@@ -213,8 +213,10 @@ export const HelpMenu = ({
       onChangeOpen={() => {
         if (!open) {
           clientEvent({
-            type: 'action',
-            action: 'help button clicked',
+            segmentEvent: {
+              type: 'action',
+              action: 'help button clicked',
+            },
           });
         }
         setOpen(!open);
@@ -249,8 +251,10 @@ export const HelpMenu = ({
         icon={statusIcon}
         onClick={() => {
           clientEvent({
-            type: 'action',
-            action: 'contact live support',
+            segmentEvent: {
+              type: 'action',
+              action: 'contact live support',
+            },
           });
         }}
         dataTestid="contact-live-support"
@@ -263,8 +267,10 @@ export const HelpMenu = ({
         icon={<LightBulb background />}
         onClick={() =>
           clientEvent({
-            type: 'action',
-            action: 'visit releases',
+            segmentEvent: {
+              type: 'action',
+              action: 'visit releases',
+            },
           })
         }
         dataTestid="releases-link"
@@ -276,10 +282,12 @@ export const HelpMenu = ({
         icon={<Docs />}
         onClick={() =>
           clientEvent({
-            type: 'action',
-            action: 'visit docs',
-            props: {
-              source: 'Help Button',
+            segmentEvent: {
+              type: 'action',
+              action: 'visit docs',
+              props: {
+                source: 'Help Button',
+              },
             },
           })
         }
@@ -291,8 +299,10 @@ export const HelpMenu = ({
         icon={<Chat />}
         onClick={() => {
           clientEvent({
-            type: 'action',
-            action: 'send feedback',
+            segmentEvent: {
+              type: 'action',
+              action: 'send feedback',
+            },
           });
         }}
         dataTestid="send-feedback"
@@ -304,8 +314,10 @@ export const HelpMenu = ({
         icon={<Discord />}
         onClick={() =>
           clientEvent({
-            type: 'action',
-            action: 'join discord',
+            segmentEvent: {
+              type: 'action',
+              action: 'join discord',
+            },
           })
         }
         dataTestid="discord-link"

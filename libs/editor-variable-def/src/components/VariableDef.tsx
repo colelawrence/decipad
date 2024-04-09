@@ -88,18 +88,20 @@ export const VariableDef: PlateComponent = ({
     (type: SerializedType | 'smart-selection' | undefined): void => {
       // Analytics
       userEvents({
-        type: 'action',
-        action: 'widget type changed',
-        props: {
-          variant: element.variant,
-          ...(element.variant === 'date' &&
-            type !== 'smart-selection' &&
-            type?.kind === 'date' && {
-              subVar: type.date,
-            }),
-          isReadOnly: readOnly,
-          newType:
-            type === 'smart-selection' ? 'smart-selection' : type?.kind || '',
+        segmentEvent: {
+          type: 'action',
+          action: 'widget type changed',
+          props: {
+            variant: element.variant,
+            ...(element.variant === 'date' &&
+              type !== 'smart-selection' &&
+              type?.kind === 'date' && {
+                subVar: type.date,
+              }),
+            isReadOnly: readOnly,
+            newType:
+              type === 'smart-selection' ? 'smart-selection' : type?.kind || '',
+          },
         },
       });
 

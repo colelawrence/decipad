@@ -59,9 +59,11 @@ export const InteractiveParagraph =
                       computer.getAvailableIdentifier.bind(computer),
                   });
                 clientEvent({
-                  type: 'action',
-                  action: 'slash command',
-                  props: { command },
+                  segmentEvent: {
+                    type: 'action',
+                    action: 'slash command',
+                    props: { command },
+                  },
                 });
               }}
               search={search}

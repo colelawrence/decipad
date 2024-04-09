@@ -97,8 +97,10 @@ export const CodeError: FC<CodeErrorProps> = ({
           // Analytics
           onClick={() =>
             clientEvent({
-              type: 'action',
-              action: 'notebook code error docs link clicked',
+              segmentEvent: {
+                type: 'action',
+                action: 'notebook code error docs link clicked',
+              },
             })
           }
         >

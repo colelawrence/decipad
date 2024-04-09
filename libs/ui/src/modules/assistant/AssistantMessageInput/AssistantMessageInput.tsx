@@ -162,10 +162,12 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
   const handleSubmit = () => {
     onSubmit(value);
     clientEvent({
-      type: 'action',
-      action: 'ai chat send message',
-      props: {
-        isSuggested: false,
+      segmentEvent: {
+        type: 'action',
+        action: 'ai chat send message',
+        props: {
+          isSuggested: false,
+        },
       },
     });
     resetInput();

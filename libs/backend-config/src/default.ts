@@ -50,6 +50,7 @@ const defaultEnvValues = {
   DISCORD_APP_ID: 'discord app id',
 
   VITE_ANALYTICS_WRITE_KEY: '',
+  VITE_GOOGLE_ANALYTICS_ID: '',
 
   // Tests-related
   DECI_TEST_USER_SECRET: '8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',

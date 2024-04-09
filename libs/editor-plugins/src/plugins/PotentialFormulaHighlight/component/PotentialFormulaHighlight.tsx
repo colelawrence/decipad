@@ -59,8 +59,10 @@ export const PotentialFormulaHighlight: PlateComponent<{
     commitPotentialFormula(editor, computer, path, leaf, 'magic', afterCommit);
 
     clientEvent({
-      type: 'action',
-      action: 'number converted to code line',
+      segmentEvent: {
+        type: 'action',
+        action: 'number converted to code line',
+      },
     });
   }, [editor, text, leaf, clientEvent, computer, openEditor]);
 

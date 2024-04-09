@@ -127,10 +127,12 @@ export const AutoCompleteMenu = ({
     useCancelingEvent(noop);
   const handleClientEvent = useCallback(() => {
     clientEvent({
-      type: 'action',
-      action: 'visit docs',
-      props: {
-        source: 'Autocomplete Menu',
+      segmentEvent: {
+        type: 'action',
+        action: 'visit docs',
+        props: {
+          source: 'Autocomplete Menu',
+        },
       },
     });
   }, [clientEvent]);

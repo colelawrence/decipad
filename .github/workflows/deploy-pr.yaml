@@ -84,6 +84,7 @@ jobs:
           DECI_ZONE_ID: '${{secrets.DECI_DEV_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_DEV_CERTIFICATE_ARN}}'
           VITE_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
+          VITE_GOOGLE_ANALYTICS_ID: '${{secrets.DEV_GOOGLE_ANALYTICS_ID}}'
           NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.decipadstaging.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'

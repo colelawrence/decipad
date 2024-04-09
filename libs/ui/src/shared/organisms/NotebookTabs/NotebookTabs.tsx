@@ -265,8 +265,10 @@ export const NotebookTabs: FC<TabsProps> = ({
   const handleAddTab = useCancelingEvent(
     useCallback(() => {
       clientEvent({
-        type: 'action',
-        action: 'create new tab',
+        segmentEvent: {
+          type: 'action',
+          action: 'create new tab',
+        },
       });
       const id = onCreateTab();
       setEditableTabId(id);

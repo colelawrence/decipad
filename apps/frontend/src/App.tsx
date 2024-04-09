@@ -10,6 +10,7 @@ import { RequireOnboard } from './Onboard/RequireOnboard';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import Notebooks from './notebooks/Notebooks';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
+import { useGAPageTracking } from '@decipad/client-events';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
@@ -39,6 +40,7 @@ const NavigateToWorkspaces: FC = () => {
 
 export const App: FC = () => {
   const canUseDom = useCanUseDom();
+  useGAPageTracking();
 
   return (
     <>

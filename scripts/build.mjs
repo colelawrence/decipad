@@ -15,6 +15,7 @@ const pExec = promisify(exec);
 const envVarNames = [
   'NEXTAUTH_URL',
   'VITE_ANALYTICS_WRITE_KEY',
+  'VITE_GOOGLE_ANALYTICS_ID',
   'VITE_HOTJAR_SITE_ID',
   'GIT_COMMIT_HASH',
   'GITHUB_CLIENT_ID',

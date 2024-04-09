@@ -92,11 +92,18 @@ export const Expression: PlateComponent = ({
       oldStr.current = nodeText;
       if (parent && parent.variant !== 'slider') {
         userEvents({
-          type: 'action',
-          action: 'widget value updated',
-          props: {
-            variant: parent.variant,
-            isReadOnly,
+          segmentEvent: {
+            type: 'action',
+            action: 'widget value updated',
+            props: {
+              variant: parent.variant,
+              isReadOnly,
+            },
+          },
+          gaEvent: {
+            category: 'widget',
+            action: 'widget value updated',
+            label: parent.variant,
           },
         });
       }

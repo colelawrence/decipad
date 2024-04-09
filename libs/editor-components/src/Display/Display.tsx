@@ -155,11 +155,18 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
       // Analytics
       userEvents({
-        type: 'action',
-        action: 'widget value updated',
-        props: {
-          variant: 'display',
-          isReadOnly: readOnly,
+        segmentEvent: {
+          type: 'action',
+          action: 'widget value updated',
+          props: {
+            variant: 'display',
+            isReadOnly: readOnly,
+          },
+        },
+        gaEvent: {
+          category: 'widget',
+          action: 'widget value updated',
+          label: 'display',
         },
       });
     },

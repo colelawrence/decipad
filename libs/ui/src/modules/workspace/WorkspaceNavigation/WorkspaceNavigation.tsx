@@ -322,8 +322,10 @@ export const WorkspaceNavigation = ({
           key={'feedback'}
           onClick={() => {
             clientEvent({
-              type: 'action',
-              action: 'send feedback',
+              segmentEvent: {
+                type: 'action',
+                action: 'send feedback',
+              },
             });
             onShowFeedback();
           }}

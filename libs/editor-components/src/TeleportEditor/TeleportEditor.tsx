@@ -70,8 +70,10 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
         }
 
         clientEvent({
-          type: 'action',
-          action: 'code line teleported back',
+          segmentEvent: {
+            type: 'action',
+            action: 'code line teleported back',
+          },
         });
 
         return old;
@@ -102,8 +104,10 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
       setEditing(ref);
 
       clientEvent({
-        type: 'action',
-        action: 'code line teleported',
+        segmentEvent: {
+          type: 'action',
+          action: 'code line teleported',
+        },
       });
     },
     [setEditing, clientEvent]
@@ -116,7 +120,9 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
   }, [openEditor]);
 
   useEffect(() => {
-    const sub = editorAnalytics$.subscribe((event) => clientEvent(event));
+    const sub = editorAnalytics$.subscribe((event) =>
+      clientEvent({ segmentEvent: event })
+    );
 
     return () => sub.unsubscribe();
   }, [clientEvent]);

@@ -206,9 +206,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const handleDelete = useCallback(() => {
       event({
-        type: 'action',
-        action: 'block deleted',
-        props: { blockType: element.type },
+        segmentEvent: {
+          type: 'action',
+          action: 'block deleted',
+          props: { blockType: element.type },
+        },
       });
       setDeleted(true);
       onDelete(parentOnDelete);
@@ -233,9 +235,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const handleDuplicate = useCallback(() => {
       event({
-        type: 'action',
-        action: 'block duplicated',
-        props: { blockType: element.type },
+        segmentEvent: {
+          type: 'action',
+          action: 'block duplicated',
+          props: { blockType: element.type },
+        },
       });
       onDuplicate();
     }, [event, onDuplicate, element]);
@@ -243,9 +247,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const handleMoveTab = useCallback(
       (tabId: string) => {
         event({
-          type: 'action',
-          action: 'block moved to other tab',
-          props: { blockType: element.type },
+          segmentEvent: {
+            type: 'action',
+            action: 'block moved to other tab',
+            props: { blockType: element.type },
+          },
         });
         onMoveTab(tabId);
       },
@@ -255,9 +261,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const handleShowHide = useCallback(
       (action: 'show' | 'hide') => {
         event({
-          type: 'action',
-          action: `${action} block`,
-          props: { blockType: element.type },
+          segmentEvent: {
+            type: 'action',
+            action: `${action} block`,
+            props: { blockType: element.type },
+          },
         });
         onShowHide(action);
       },
@@ -283,9 +291,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const onPlus = useCallback(() => {
       openSlashMenu(editor, element);
       event({
-        type: 'action',
-        action: 'click +',
-        props: { blockType: element.type },
+        segmentEvent: {
+          type: 'action',
+          action: 'click +',
+          props: { blockType: element.type },
+        },
       });
     }, [editor, element, event]);
 
@@ -305,9 +315,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       copyToClipboard(newUrl);
 
       event({
-        type: 'action',
-        action: 'copy block href',
-        props: { blockType: element.type },
+        segmentEvent: {
+          type: 'action',
+          action: 'copy block href',
+          props: { blockType: element.type },
+        },
       });
     }, [element.id, element.type, event]);
 

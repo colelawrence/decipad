@@ -1,6 +1,6 @@
 import type { ElementKind } from '@decipad/editor-types';
 
-type ElementInteraction = {
+export type ElementInteraction = {
   interaction: 'interaction';
   element: ElementKind;
   parent?: ElementKind;

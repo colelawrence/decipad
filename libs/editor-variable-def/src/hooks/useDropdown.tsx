@@ -162,11 +162,18 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         changeOptions(option.item);
 
         userEvents({
-          type: 'action',
-          action: 'widget value updated',
-          props: {
-            variant: 'dropdown',
-            isReadOnly: readOnly,
+          segmentEvent: {
+            type: 'action',
+            action: 'widget value updated',
+            props: {
+              variant: 'dropdown',
+              isReadOnly: readOnly,
+            },
+          },
+          gaEvent: {
+            category: 'widget',
+            action: 'value updated',
+            label: 'dropdown',
           },
         });
         setDropdownOpen(false);

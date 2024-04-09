@@ -100,6 +100,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
     case 'VITE_ANALYTICS_WRITE_KEY':
       return valueOrDefault(name, process.env.VITE_ANALYTICS_WRITE_KEY);
+    case 'VITE_GOOGLE_ANALYTICS_ID':
+      return valueOrDefault(name, process.env.VITE_GOOGLE_ANALYTICS_ID);
     case 'SENTRY_DSN':
       return valueOrDefault(name, process.env.SENTRY_DSN);
     case 'INTERCOM_SECRET_ID':

@@ -212,7 +212,12 @@ export const useNotebookStateAndActions = ({
   // ------- actions -------
   const removeLocalChanges = useCallback(async () => {
     await docsync?.removeLocalChanges();
-    await event({ type: 'action', action: 'notebook local changes removed' });
+    await event({
+      segmentEvent: {
+        type: 'action',
+        action: 'notebook local changes removed',
+      },
+    });
     window.location.reload();
   }, [docsync, event]);
 
@@ -239,7 +244,9 @@ export const useNotebookStateAndActions = ({
         }).catch((err) => {
           toast(`Error updating icon: ${(err as Error).message}`, 'error');
         });
-        event({ type: 'action', action: 'notebook icon changed' });
+        event({
+          segmentEvent: { type: 'action', action: 'notebook icon changed' },
+        });
       }
     },
     [
@@ -266,7 +273,12 @@ export const useNotebookStateAndActions = ({
         }).catch((err) => {
           toast(`Error updating icon: ${(err as Error).message}`, 'error');
         });
-        event({ type: 'action', action: 'notebook icon color changed' });
+        event({
+          segmentEvent: {
+            type: 'action',
+            action: 'notebook icon color changed',
+          },
+        });
       }
     },
     [event, icon, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
@@ -302,9 +314,11 @@ export const useNotebookStateAndActions = ({
         }
         return setNotebookPublic(true).then(() => {
           event({
-            type: 'action',
-            action: 'publish notebook',
-            props: { id: notebookId },
+            segmentEvent: {
+              type: 'action',
+              action: 'publish notebook',
+              props: { id: notebookId },
+            },
           });
         });
       })
@@ -323,9 +337,11 @@ export const useNotebookStateAndActions = ({
   const unpublishNotebook = useCallback(() => {
     setNotebookPublic(false).then(() => {
       event({
-        type: 'action',
-        action: 'unpublish notebook',
-        props: { id: notebookId },
+        segmentEvent: {
+          type: 'action',
+          action: 'unpublish notebook',
+          props: { id: notebookId },
+        },
       });
     });
   }, [event, notebookId, setNotebookPublic]);

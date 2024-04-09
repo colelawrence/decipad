@@ -22,25 +22,29 @@ export const createUserEventPlugin = (events: ClientEventContextType) => {
               const node = parentNode[0] as unknown as BaseElement;
 
               events({
-                type: 'checklist',
-                props: {
-                  interaction: 'interaction',
-                  element: node.type,
-                  parent: editorParent.type,
-                  variant:
-                    'variant' in editorParent
-                      ? (editorParent.variant as string)
-                      : undefined,
-                  text: node.children[0].text as string,
+                segmentEvent: {
+                  type: 'checklist',
+                  props: {
+                    interaction: 'interaction',
+                    element: node.type,
+                    parent: editorParent.type,
+                    variant:
+                      'variant' in editorParent
+                        ? (editorParent.variant as string)
+                        : undefined,
+                    text: node.children[0].text as string,
+                  },
                 },
               });
             } else if (op.type === 'insert_node') {
               if ('id' in op.node) {
                 events({
-                  type: 'checklist',
-                  props: {
-                    interaction: 'creation',
-                    element: op.node.type as ElementKind,
+                  segmentEvent: {
+                    type: 'checklist',
+                    props: {
+                      interaction: 'creation',
+                      element: op.node.type as ElementKind,
+                    },
                   },
                 });
               }
@@ -50,10 +54,12 @@ export const createUserEventPlugin = (events: ClientEventContextType) => {
                 // Interesting castings
                 const newNode = (op.newProperties as any).type as ElementKind;
                 events({
-                  type: 'checklist',
-                  props: {
-                    interaction: 'creation',
-                    element: newNode,
+                  segmentEvent: {
+                    type: 'checklist',
+                    props: {
+                      interaction: 'creation',
+                      element: newNode,
+                    },
                   },
                 });
               }

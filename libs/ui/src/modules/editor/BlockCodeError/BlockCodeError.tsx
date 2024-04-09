@@ -23,13 +23,15 @@ export const BlockCodeError: FC<BlockCodeErrorProps> = ({ type, element }) => {
 
   useEffect(() => {
     clientEvent({
-      type: 'action',
-      action: 'user code error',
-      props: {
-        errorType: type.errorCause.errType,
-        elementType: element?.type,
-        message,
-        url,
+      segmentEvent: {
+        type: 'action',
+        action: 'user code error',
+        props: {
+          errorType: type.errorCause.errType,
+          elementType: element?.type,
+          message,
+          url,
+        },
       },
     });
   }, [clientEvent, element?.type, message, type.errorCause.errType, url]);

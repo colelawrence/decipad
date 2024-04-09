@@ -3,6 +3,9 @@ import { env } from '@decipad/utils';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import { isServerSideRendering } from '@decipad/support';
 import { getSession } from 'next-auth/react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 let globalAnalytics: AnalyticsBrowser;
 
@@ -33,4 +36,18 @@ export const getAnalytics = async (): Promise<AnalyticsBrowser> => {
   }
 
   return globalAnalytics;
+};
+
+if (!isTesting) {
+  ReactGA.initialize(env.VITE_GOOGLE_ANALYTICS_ID);
+}
+
+export const useGAPageTracking = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isTesting) {
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+  }, [location]);
 };

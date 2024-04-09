@@ -158,8 +158,10 @@ export const NotebookEmbedTab = ({
                         }, 1000);
                         // Analytics
                         clientEvent({
-                          type: 'action',
-                          action: 'notebook embed link copied',
+                          segmentEvent: {
+                            type: 'action',
+                            action: 'notebook embed link copied',
+                          },
                         });
                       }}
                     >

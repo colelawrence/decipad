@@ -83,6 +83,7 @@ jobs:
           DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
           VITE_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
           VITE_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
+          VITE_GOOGLE_ANALYTICS_ID: '${{secrets.ALPHA_GOOGLE_ANALYTICS_ID}}'
           VITE_INTERCOM_APP_ID: '${{secrets.ALPHA_INTERCOM_APP_ID}}'
           VITE_INTERCOM_API_BASE: '${{secrets.INTERCOM_API_BASE}}'
           INTERCOM_SECRET_ID: '${{secrets.ALPHA_INTERCOM_SECRET_ID}}'

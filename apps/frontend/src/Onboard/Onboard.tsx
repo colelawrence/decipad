@@ -55,10 +55,12 @@ export const Onboard = () => {
   const next = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) + 1 }).$);
     clientEvent({
-      type: 'action',
-      action: 'onboarding screen',
-      props: {
-        screen: `Screen ${Number(step)} finished`,
+      segmentEvent: {
+        type: 'action',
+        action: 'onboarding screen',
+        props: {
+          screen: `Screen ${Number(step)} finished`,
+        },
       },
     });
   }, [navigate, step, clientEvent]);
@@ -182,10 +184,12 @@ export const Onboard = () => {
                     } else {
                       navigate(redirectPath);
                       clientEvent({
-                        type: 'action',
-                        action: 'onboarding screen',
-                        props: {
-                          screen: `Screen 3 finished`,
+                        segmentEvent: {
+                          type: 'action',
+                          action: 'onboarding screen',
+                          props: {
+                            screen: `Screen 3 finished`,
+                          },
                         },
                       });
                     }

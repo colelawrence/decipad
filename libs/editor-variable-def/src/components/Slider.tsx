@@ -125,11 +125,18 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const onCommit = useCallback(() => {
     setSyncValues(true);
     userEvents({
-      type: 'action',
-      action: 'widget value updated',
-      props: {
-        variant: 'slider',
-        isReadOnly,
+      segmentEvent: {
+        type: 'action',
+        action: 'widget value updated',
+        props: {
+          variant: 'slider',
+          isReadOnly,
+        },
+      },
+      gaEvent: {
+        category: 'widget',
+        action: 'widget value updated',
+        label: 'slider',
       },
     });
   }, [isReadOnly, userEvents, setSyncValues]);

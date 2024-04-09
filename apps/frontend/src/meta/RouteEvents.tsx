@@ -30,7 +30,7 @@ export function RouteEvents({
   }, [status, url]);
 
   useEffect(() => {
-    clientEvent({ type: 'page', category, url });
+    clientEvent({ segmentEvent: { type: 'page', category, url } });
   }, [clientEvent, category, url]);
 
   return <>{children}</>;

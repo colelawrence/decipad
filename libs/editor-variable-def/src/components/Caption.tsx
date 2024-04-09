@@ -73,10 +73,12 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   if (nodeText !== oldStr.current && !focused) {
     oldStr.current = getNodeString(element);
     userEvents({
-      type: 'action',
-      action: 'widget renamed',
-      props: {
-        variant: parent?.[0].variant || 'expression',
+      segmentEvent: {
+        type: 'action',
+        action: 'widget renamed',
+        props: {
+          variant: parent?.[0].variant || 'expression',
+        },
       },
     });
   }

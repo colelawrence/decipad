@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-import type { ClientEvent } from '@decipad/client-events';
+import type { HandleClientEventArgs } from '@decipad/client-events';
 import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
 import { useSession } from 'next-auth/react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
+import ReactGA from 'react-ga';
 
 const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
   children,
@@ -48,19 +49,26 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
 const ClientEventsAnalytics: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const handleClientEvent = async (clientEvent: ClientEvent) => {
+  const handleClientEvent = async (clientEvent: HandleClientEventArgs) => {
     const [analytics] = await getAnalytics();
     if (!analytics) {
       return;
     }
-    switch (clientEvent.type) {
-      case 'page': {
-        await analytics.page(clientEvent.category);
-        break;
+    if ('segmentEvent' in clientEvent) {
+      const { segmentEvent } = clientEvent;
+      switch (segmentEvent.type) {
+        case 'page': {
+          await analytics.page(segmentEvent.category);
+          break;
+        }
+        case 'action': {
+          await analytics.track(segmentEvent.action, segmentEvent.props);
+        }
       }
-      case 'action': {
-        await analytics.track(clientEvent.action, clientEvent.props);
-      }
+    }
+
+    if ('gaEvent' in clientEvent) {
+      ReactGA.event(clientEvent.gaEvent);
     }
   };
 

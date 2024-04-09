@@ -223,15 +223,19 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
         onBack,
         onGalleryClick: () => {
           clientEvent({
-            type: 'action',
-            action: 'notebook templates clicked',
+            segmentEvent: {
+              type: 'action',
+              action: 'notebook templates clicked',
+            },
           });
         },
         onToggleSidebar: () => sidebarData.toggleSidebar('default-sidebar'),
         onTryDecipadClick: () => {
           clientEvent({
-            type: 'action',
-            action: 'try decipad',
+            segmentEvent: {
+              type: 'action',
+              action: 'try decipad',
+            },
           });
         },
         onClaimNotebook: () => {
