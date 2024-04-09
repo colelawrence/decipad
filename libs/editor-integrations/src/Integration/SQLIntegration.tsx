@@ -23,60 +23,64 @@ export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
   const sqlStore = useSQLConnectionStore();
 
   useEffect(() => {
-    const result = importFromJSONAndCoercions(
-      blockOptions.latestResult,
-      typeMappings
-    );
-    if (result) {
+    async function getResult() {
+      const result = await importFromJSONAndCoercions(
+        blockOptions.latestResult,
+        typeMappings
+      );
+
+      if (!result) return;
+
       pushResultToComputer(computer, id, varName, result);
     }
+
+    getResult();
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   useIntegrationOptions({
     onRefresh() {
       fetchQuery(blockOptions.externalDataUrl, blockOptions.query).then(
-        (res) => {
-          if (res?.type === 'success') {
-            const result = importFromJSONAndCoercions(
-              JSON.stringify(res.data),
-              typeMappings
-            );
-            if (result) {
-              pushResultToComputer(computer, id, varName, result);
-            }
+        async (res) => {
+          if (res?.type !== 'success') {
+            return;
           }
-          // TODO: Handle error case
+
+          const result = await importFromJSONAndCoercions(
+            JSON.stringify(res.data),
+            typeMappings
+          );
+          if (!result) return;
+          pushResultToComputer(computer, id, varName, result);
         }
       );
     },
     onShowSource() {
       store.abort();
 
-      const res = importFromJSONAndCoercions(
-        blockOptions.latestResult,
-        typeMappings
+      importFromJSONAndCoercions(blockOptions.latestResult, typeMappings).then(
+        (res) => {
+          if (res) {
+            store.Set({ resultPreview: res });
+          }
+
+          store.Set({
+            connectionType: 'mysql',
+            stage: 'connect',
+            existingIntegration: id,
+            varName,
+          });
+
+          store.setAllTypeMapping(typeMappings);
+          store.changeOpen(true);
+
+          sqlStore.Set({
+            Query: blockOptions.query,
+            latestResult: blockOptions.latestResult,
+            ExternalDataName: blockOptions.externalDataName,
+            ExternalDataId: blockOptions.externalDataUrl,
+          });
+        }
       );
-
-      if (res) {
-        store.Set({ resultPreview: res });
-      }
-
-      store.Set({
-        connectionType: 'mysql',
-        stage: 'connect',
-        existingIntegration: id,
-        varName,
-      });
-
-      store.setAllTypeMapping(typeMappings);
-      store.changeOpen(true);
-
-      sqlStore.Set({
-        Query: blockOptions.query,
-        latestResult: blockOptions.latestResult,
-        ExternalDataName: blockOptions.externalDataName,
-        ExternalDataId: blockOptions.externalDataUrl,
-      });
     },
     onDelete() {
       pushResultToComputer(computer, id, varName, undefined);

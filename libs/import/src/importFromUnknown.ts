@@ -45,7 +45,7 @@ const importFromUnknownResponse = async (
     rawResult = sanitizeRawResult(await resp.json()) as
       | ImportResult['rawResult']
       | undefined;
-    result = importFromUnknownJson(rawResult, options);
+    result = await importFromUnknownJson(rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
     if (options.provider && options.provider !== 'csv') {
       throw new TypeError(

@@ -12,7 +12,6 @@ import {
 import { useEffect } from 'react';
 import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
-import { hydrateResult } from '@decipad/editor-utils';
 
 export const NotionIntegration = function CodeIntegration({
   blockOptions,
@@ -24,24 +23,28 @@ export const NotionIntegration = function CodeIntegration({
 
   useEffect(() => {
     const res = JSON.parse(blockOptions.latestResult);
-    if (res) {
-      const notionResult = importFromUnknownJson(importFromNotion(res), {
+    if (!res) return;
+
+    async function getResult() {
+      const notionResult = await importFromUnknownJson(importFromNotion(res), {
         columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
       });
-      pushResultToComputer(computer, id, varName, hydrateResult(notionResult));
+      pushResultToComputer(computer, id, varName, notionResult);
     }
+
+    getResult();
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   useIntegrationOptions({
     onRefresh() {
       fetch(blockOptions.notionUrl)
         .then((res) => res.json())
-        .then((res) => {
+        .then(async (res) => {
           const notionImported = importFromNotion(res);
-          const result = importFromUnknownJson(notionImported, {
+          const result = await importFromUnknownJson(notionImported, {
             columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
           });
-          pushResultToComputer(computer, id, varName, hydrateResult(result));
+          pushResultToComputer(computer, id, varName, result);
         });
     },
     onShowSource() {
@@ -50,36 +53,36 @@ export const NotionIntegration = function CodeIntegration({
 
       store.abort();
 
-      const notionResult = importFromUnknownJson(
+      importFromUnknownJson(
         importFromNotion(JSON.parse(blockOptions.latestResult)),
         {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
         }
-      );
+      ).then((notionResult) => {
+        if (notionResult) {
+          store.Set({ resultPreview: notionResult });
+        }
 
-      if (notionResult) {
-        store.Set({ resultPreview: notionResult });
-      }
+        store.Set({
+          connectionType: 'notion',
+          stage: 'connect',
+          existingIntegration: id,
+          rawResult: blockOptions.latestResult,
+          varName,
+        });
 
-      store.Set({
-        connectionType: 'notion',
-        stage: 'connect',
-        existingIntegration: id,
-        rawResult: blockOptions.latestResult,
-        varName,
-      });
+        store.setAllTypeMapping(typeMappings);
+        store.changeOpen(true);
 
-      store.setAllTypeMapping(typeMappings);
-      store.changeOpen(true);
+        notionStore.Set({
+          latestResult: blockOptions.latestResult,
+          timeOfLastRun: blockOptions.timeOfLastRun,
+          NotionDatabaseUrl: blockOptions.notionUrl,
 
-      notionStore.Set({
-        latestResult: blockOptions.latestResult,
-        timeOfLastRun: blockOptions.timeOfLastRun,
-        NotionDatabaseUrl: blockOptions.notionUrl,
-
-        ExternalDataId: blockOptions.externalDataId,
-        ExternalDataName: blockOptions.externalDataName,
-        DatabaseName: blockOptions.databaseName,
+          ExternalDataId: blockOptions.externalDataId,
+          ExternalDataName: blockOptions.externalDataName,
+          DatabaseName: blockOptions.databaseName,
+        });
       });
     },
     onDelete() {

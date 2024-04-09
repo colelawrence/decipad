@@ -1,8 +1,13 @@
-import type { Result, SerializedTypes } from '@decipad/remote-computer';
-import { isColumn, Unknown, buildResult } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
+import {
+  isColumn,
+  Unknown,
+  buildResult,
+  getRemoteComputer,
+  hydrateResult,
+} from '@decipad/remote-computer';
 import type { ColIndex, TableCellType } from '@decipad/editor-types';
-import { N } from '@decipad/number';
-import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
+import { columnNameFromIndex, inferBoolean, inferNumber } from '@decipad/parse';
 import stringify from 'json-stringify-safe';
 import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
@@ -12,13 +17,14 @@ import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
 import omit from 'lodash.omit';
 
-const importTableFromArray = (
+const importTableFromArray = async (
   arr: Array<unknown>,
   options: ImportOptions
-): Result.Result => {
+): Promise<Result.Result> => {
   if (arr.length === 0) {
     return errorResult('Don`t know how to import empty array');
   }
+
   return importTableFromObject(
     Object.fromEntries(
       arr.map((elem, index) => [columnNameFromIndex(index), elem])
@@ -27,11 +33,11 @@ const importTableFromArray = (
   );
 };
 
-const importFromArray = (
+const importFromArray = async (
   arr: Array<unknown>,
   options: ImportOptions,
   cohersion?: TableCellType
-): Result.Result => {
+): Promise<Result.Result> => {
   if (arr.length === 0) {
     return {
       type: {
@@ -40,15 +46,16 @@ const importFromArray = (
       value: Unknown,
     };
   }
+
   if (arr.some((elem) => Array.isArray(elem))) {
     return importTableFromArray(arr, options);
   }
-  const results = arr.map((cell) =>
-    importFromUnknownJson(cell, options, cohersion)
+
+  const results = await Promise.all(
+    arr.map((cell) => importFromUnknownJson(cell, options, cohersion))
   );
 
   if (!sameType(results.map(({ type }) => type))) {
-    // return errorResult('not all elements of array are of same type');
     return buildResult(
       {
         kind: 'column',
@@ -57,7 +64,8 @@ const importFromArray = (
           kind: 'string',
         },
       },
-      results.map((r) => r.value as Result.OneResult)
+      results.map((r) => r.value as Result.OneResult),
+      false
     ) as Result.Result;
   }
 
@@ -67,27 +75,32 @@ const importFromArray = (
       indexedBy: null,
       cellType: results[0].type,
     },
-    results.map((r) => r.value as Result.OneResult)
+    results.map((r) => r.value as Result.OneResult),
+    false
   ) as Result.Result;
 };
 
-const importTableFromObject = (
-  obj: Record<string, unknown>,
+const importTableFromObject = async (
+  obj: object,
   options: ImportOptions
-): Result.AnyResult => {
+): Promise<Result.AnyResult> => {
   const values = Object.values(obj);
   if (values.length < 0) {
     return errorResult('Don`t know how to import an empty object');
   }
-  const results = values
-    .map((value, index) => [index, value])
-    .map(([index, value]) =>
-      importFromUnknownJson(
-        value,
-        options,
-        options.columnTypeCoercions?.[index as ColIndex]
+
+  const results = await Promise.all(
+    values
+      .map((value, index) => [index, value])
+      .map(([index, value]) =>
+        importFromUnknownJson(
+          value,
+          options,
+          options.columnTypeCoercions?.[index as ColIndex]
+        )
       )
-    );
+  );
+
   const value = results.map((res) => {
     if (res.value == null) {
       return Unknown;
@@ -115,21 +128,132 @@ const importTableFromObject = (
       }),
       indexName: columnNames[0],
     },
-    value
+    value,
+    false
   );
 };
 
-interface ToStringable {
-  toString: () => string;
-}
+const importSingleValueWithCohersion = async (
+  value: bigint | number | boolean | string,
+  cohersion: TableCellType
+): Promise<Result.Result> => {
+  switch (cohersion.kind) {
+    case 'string':
+      return {
+        type: {
+          kind: 'string',
+        },
+        value: value.toString(),
+      };
+    case 'date': {
+      let unixDate = 0n;
+      if (typeof value === 'string') {
+        let parsedDate = new Date(value);
+        if (parsedDate.toString() === 'Invalid Date') {
+          parsedDate = new Date(0);
+        }
 
-// eslint-disable-next-line complexity
-const internalImportFromUnknownJson = (
+        unixDate = BigInt(parsedDate.getTime());
+      } else if (typeof value === 'boolean') {
+        unixDate = BigInt(new Date(0).getTime());
+      } else {
+        unixDate = BigInt(value);
+      }
+
+      return {
+        type: cohersion,
+        value: unixDate,
+      };
+    }
+    case 'number': {
+      let newValue = value;
+      if (typeof value === 'boolean') {
+        newValue = value ? '1' : '0';
+      }
+
+      return {
+        type: cohersion,
+        value: newValue.toString(),
+      };
+    }
+
+    case 'boolean': {
+      const booleanValue = Boolean(value);
+
+      return {
+        type: cohersion,
+        value: booleanValue,
+      };
+    }
+    default: {
+      throw new Error(
+        `Don't know what to do with cohersion of ${stringify(cohersion)}`
+      );
+    }
+  }
+};
+
+const importSingleValue = async (
+  value: bigint | number | boolean | string
+): Promise<Result.Result> => {
+  switch (typeof value) {
+    case 'bigint':
+    case 'number':
+      return {
+        type: {
+          kind: 'number',
+          unit: null,
+        },
+        value: value.toString(),
+      };
+    case 'boolean':
+      return {
+        type: {
+          kind: 'boolean',
+        },
+        value: Boolean(value),
+      };
+    case 'string': {
+      const inferredBoolean = inferBoolean(value);
+
+      if (inferredBoolean != null) {
+        return {
+          type: inferredBoolean.type,
+          value: Boolean(value.toLowerCase()),
+        };
+      }
+
+      const inferredType = await inferNumber(getRemoteComputer(), value);
+
+      if (inferredType == null) {
+        return {
+          type: {
+            kind: 'string',
+          },
+          value,
+        };
+      }
+
+      return {
+        type: inferredType.type,
+        value: value.replaceAll(/[^0-9.]*/g, ''),
+      };
+    }
+    default: {
+      throw new Error('Reached default, shouldnt happen');
+    }
+  }
+};
+
+const internalImportFromUnknownJson = async (
   _json: unknown,
-  { jsonPath, ...options }: ImportOptions,
+  options: ImportOptions,
   cohersion?: TableCellType
-): Result.Result => {
-  const json = jsonPath ? selectUsingJsonPath(_json, jsonPath) : _json;
+): Promise<Result.Result> => {
+  const json = options.jsonPath
+    ? selectUsingJsonPath(_json, options.jsonPath)
+    : _json;
+
   if (Array.isArray(json)) {
     return importFromArray(
       json,
@@ -137,78 +261,47 @@ const internalImportFromUnknownJson = (
       cohersion
     );
   }
-  const tof = typeof json;
-
-  if (cohersion?.kind === 'string') {
-    return {
-      type: {
-        ...cohersion,
-      },
-      value: (json as ToStringable).toString(),
-    };
-  }
-
-  if ((tof === 'number' || tof === 'bigint') && cohersion?.kind === 'date') {
-    return {
-      type: {
-        ...cohersion,
-      },
-      value: BigInt(json as number),
-    };
-  }
 
   if (
-    tof === 'number' ||
-    tof === 'bigint' ||
-    (tof === 'string' && cohersion?.kind === 'number')
+    typeof json === 'undefined' ||
+    typeof json === 'symbol' ||
+    typeof json === 'function'
   ) {
-    const type: SerializedTypes.Number =
-      cohersion?.kind === 'number' ? cohersion : { kind: 'number' };
-    return {
-      type,
-      value: N(json as number | bigint | string),
-    };
+    throw new Error(`Dont know what to do with ${stringify(typeof json)}`);
   }
-  if (
-    tof === 'boolean' ||
-    (tof === 'string' && cohersion?.kind === 'boolean')
-  ) {
-    return {
-      type: {
-        kind: 'boolean',
-      },
-      value:
-        tof === 'boolean' ? (json as boolean) : parseBoolean(json as string),
-    };
-  }
-  if (tof === 'string') {
-    const value = (json as string).trim();
-    if (cohersion?.kind === 'date') {
-      const date = parseDate(value, cohersion.date);
-      if (date) {
-        return {
-          type: { ...cohersion },
-          value: date.date,
-        };
-      }
+
+  if (typeof json === 'object') {
+    if (json == null) {
+      throw new Error("Don't know what to do with null");
     }
-    return {
-      type: {
-        kind: 'string',
-      },
-      value: json as string,
-    };
+    return importTableFromObject(json, options);
   }
 
-  if (tof === 'object' && json != null) {
-    return importTableFromObject(json as Record<string, unknown>, options);
+  const puntedJson = json as bigint | number | boolean | string;
+
+  if (cohersion == null) {
+    return importSingleValue(puntedJson);
   }
-  throw new Error(`Don't know what to do with ${stringify(_json)}`);
+
+  if (cohersion != null) {
+    return importSingleValueWithCohersion(puntedJson, cohersion);
+  }
+
+  throw new Error('Shouldnt reach end of function');
 };
 
-export const importFromUnknownJson = (
+export const importFromUnknownJson = async (
   json: unknown,
   options: ImportOptions,
   cohersion?: TableCellType
-): Result.Result =>
-  rowsToColumns(internalImportFromUnknownJson(json, options, cohersion));
+): Promise<Result.Result> => {
+  const hydratedResult = hydrateResult(
+    rowsToColumns(await internalImportFromUnknownJson(json, options, cohersion))
+  );
+
+  if (hydratedResult == null) {
+    throw new Error('Could not hydrate the result');
+  }
+
+  return hydratedResult;
+};

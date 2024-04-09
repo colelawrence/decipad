@@ -37,13 +37,14 @@ export const SQLConnection: FC<ConnectionProps> = ({
 
       if (queryExec.type === 'success') {
         sqlStore.Set({ latestResult: JSON.stringify(queryExec.data) });
-        const res = importFromUnknownJson(queryExec.data, {
+        importFromUnknownJson(queryExec.data, {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
-        });
-        setResultPreview(res);
+        }).then((res) => {
+          setResultPreview(res);
 
-        setRawResult(JSON.stringify(queryExec.data));
-        onExecute({ status: 'success', ok: true });
+          setRawResult(JSON.stringify(queryExec.data));
+          onExecute({ status: 'success', ok: true });
+        });
       } else {
         onExecute({ status: 'error', err: queryExec.message });
         setLog([{ status: 'error', err: queryExec.message }]);

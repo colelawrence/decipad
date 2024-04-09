@@ -4,10 +4,10 @@ import { columnTypeCoercionsToRec } from './columnTypeCoersionsToRec';
 import { tableFlip } from './tableFlip';
 import { importFromUnknownJson } from '../importFromUnknownJson';
 
-export const importFromJSONAndCoercions = (
+export const importFromJSONAndCoercions = async (
   msg: string,
   columnTypeCoercions: Array<TableCellType | undefined>
-): Result.Result | undefined => {
+): Promise<Result.Result | undefined> => {
   try {
     let parsedMsg: unknown = JSON.parse(msg);
     if (parsedMsg == null) {

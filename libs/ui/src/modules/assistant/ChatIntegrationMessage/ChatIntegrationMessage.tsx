@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { EElementOrText } from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
-import { Fragment, useCallback, useContext, useState } from 'react';
+import { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import { Chevron, Code, DeciAI, Duplicate } from '../../../icons';
 import {
   componentCssVars,
@@ -28,6 +28,7 @@ import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { ResultPreview } from './ResultPreview';
 import { SecretInput } from './SecretInput';
+import { Result } from '@decipad/computer';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -296,6 +297,22 @@ const Integration = ({
     toast,
   ]);
 
+  const [deciResult, setDeciResult] = useState<Result.Result | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    async function getResult() {
+      if (resultJSON.status !== 'success') {
+        return;
+      }
+
+      setDeciResult(await jsonToResult(resultJSON.result));
+    }
+
+    getResult();
+  }, [resultJSON]);
+
   return (
     <div>
       <div css={codeContainerStyles}>
@@ -375,7 +392,7 @@ const Integration = ({
       )}
       {resultJSON.status === 'success' && functionBody && (
         <ResultPreview
-          result={jsonToResult(resultJSON.result)}
+          result={deciResult}
           name={fnName}
           setName={() => {}}
           setTypeMapping={() => {}}

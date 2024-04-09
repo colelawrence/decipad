@@ -56,6 +56,7 @@ export {
   tokenRules,
   parseUnit,
   walkAst,
+  hydrateResult,
   CurrencyUnits,
   type AutocompleteName,
   type BlockDependents,

@@ -7,6 +7,7 @@ import {
   materializeResult,
   serializeType,
   isTableResult,
+  hydrateResult,
   Unknown,
 } from '@decipad/remote-computer';
 import type {
@@ -23,7 +24,7 @@ import type {
   TableCellType,
 } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
-import { useCache, hydrateResult } from '@decipad/editor-utils';
+import { useCache } from '@decipad/editor-utils';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';

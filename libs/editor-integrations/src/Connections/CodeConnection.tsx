@@ -267,12 +267,13 @@ export const CodeConnection: FC<ConnectionProps> = ({
           jsonMsg = tableFlip(jsonMsg);
         }
 
-        const res = importFromUnknownJson(jsonMsg, {
+        importFromUnknownJson(jsonMsg, {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
-        });
-        setResultPreview(res);
+        }).then((res) => {
+          setResultPreview(res);
 
-        onExecute({ status: 'success', ok: true });
+          onExecute({ status: 'success', ok: true });
+        });
       } catch (err) {
         setResultPreview(undefined);
         console.error(err);

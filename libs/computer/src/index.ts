@@ -77,6 +77,7 @@ export {
   isTableResult,
   getResultGenerator,
   selectErrorFromResult,
+  hydrateResult,
 } from './utils';
 
 export { unnestTableRows } from './tools';

@@ -31,23 +31,36 @@ export const CodeIntegration = function CodeIntegration({
   const deciVars = useDeciVariables();
 
   useEffect(() => {
-    const result = importFromJSONAndCoercions(
-      blockOptions.latestResult,
-      typeMappings
-    );
-    if (result) {
+    async function getResult() {
+      const result = await importFromJSONAndCoercions(
+        blockOptions.latestResult,
+        typeMappings
+      );
+
+      if (!result) return;
+
       pushResultToComputer(computer, id, varName, result);
     }
+
+    getResult();
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   const notebookId = useNotebookId();
   const [worker] = useWorker(
     useCallback(
       (msg: ResultMessageType) => {
-        const result = importFromJSONAndCoercions(msg.result, typeMappings);
-        if (result) {
+        async function getResult() {
+          const result = await importFromJSONAndCoercions(
+            msg.result,
+            typeMappings
+          );
+
+          if (!result) return;
+
           pushResultToComputer(computer, id, varName, result);
         }
+
+        getResult();
       },
       [computer, id, varName, typeMappings]
     ),
@@ -62,27 +75,27 @@ export const CodeIntegration = function CodeIntegration({
     onShowSource() {
       store.abort();
 
-      const res = importFromJSONAndCoercions(
+      importFromJSONAndCoercions(
         blockOptions.latestResult,
         store.resultTypeMapping
-      );
+      ).then((res) => {
+        if (res) {
+          store.Set({ resultPreview: res });
+        }
 
-      if (res) {
-        store.Set({ resultPreview: res });
-      }
+        store.Set({
+          connectionType: 'codeconnection',
+          stage: 'connect',
+          existingIntegration: id,
+          varName,
+        });
 
-      store.Set({
-        connectionType: 'codeconnection',
-        stage: 'connect',
-        existingIntegration: id,
-        varName,
+        store.setAllTypeMapping(typeMappings);
+        store.changeOpen(true);
+
+        codeStore.setCode(blockOptions.code);
+        codeStore.setLatestResult(blockOptions.latestResult);
       });
-
-      store.setAllTypeMapping(typeMappings);
-      store.changeOpen(true);
-
-      codeStore.setCode(blockOptions.code);
-      codeStore.setLatestResult(blockOptions.latestResult);
     },
     onDelete() {
       pushResultToComputer(computer, id, varName, undefined);

@@ -115,17 +115,16 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
 
     if (rawResult && connectionType) {
       const processedResult = getProcessedResult(rawResult, connectionType);
-      const res = importFromJSONAndCoercions(
-        processedResult,
-        clonedTypeMappings
+      importFromJSONAndCoercions(processedResult, clonedTypeMappings).then(
+        (res) => {
+          if (res == null) {
+            // This means our new type mappings cannot be used for the table.
+            set({ warning: 'types' });
+          } else {
+            set({ resultTypeMapping: clonedTypeMappings, resultPreview: res });
+          }
+        }
       );
-
-      if (res == null) {
-        // This means our new type mappings cannot be used for the table.
-        set({ warning: 'types' });
-      } else {
-        set({ resultTypeMapping: clonedTypeMappings, resultPreview: res });
-      }
     }
   },
   setAllTypeMapping(types) {

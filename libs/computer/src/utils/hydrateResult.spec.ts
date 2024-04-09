@@ -1,4 +1,4 @@
-import type { Result, Unit } from '@decipad/remote-computer';
+import type { Result, Unit } from '..';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { hydrateResult } from './hydrateResult';
 

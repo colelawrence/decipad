@@ -7,10 +7,10 @@ import type {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
-import { hydrateResult } from '@decipad/editor-utils';
 import type { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
+import { hydrateResult } from '@decipad/remote-computer';
 
 export interface LiveConnectionResponseResult {
   error?: Error;

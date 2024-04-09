@@ -269,13 +269,13 @@ async function notionResponseToDeciResult(
 
   const importedNotion = importFromNotion(notionResult);
   const rawStringResult = JSON.stringify(notionResult);
-  const deciRes = importFromUnknownJson(importedNotion, {
+  importFromUnknownJson(importedNotion, {
     columnTypeCoercions: columnTypeCoercionsToRec(props.typeMapping),
+  }).then((deciRes) => {
+    props.setRawResult(rawStringResult);
+    state.Set({ latestResult: rawStringResult });
+    props.setResultPreview(deciRes);
   });
-
-  props.setRawResult(rawStringResult);
-  state.Set({ latestResult: rawStringResult });
-  props.setResultPreview(deciRes);
 }
 
 async function runPrivateIntegration(props: ConnectionProps) {
