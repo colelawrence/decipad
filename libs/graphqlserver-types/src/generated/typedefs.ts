@@ -483,7 +483,6 @@ type SubscriptionPlan {
   id: ID!
   key: String!
   isDefault: Boolean
-  pricePerSeat: Int
 }
 
 type CheckoutSessionInfo {

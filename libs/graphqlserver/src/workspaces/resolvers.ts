@@ -178,7 +178,7 @@ const resolvers: Resolvers = {
           if (isLocalOrDev() && w.name.includes('@n1n.co')) {
             w.isPremium = true;
 
-            if (w.name.includes('team')) {
+            if (w.name.includes('team') || w.name.includes('business')) {
               w.plan = 'team';
             } else if (w.name.includes('enterprise')) {
               w.plan = 'enterprise';
@@ -265,7 +265,10 @@ const resolvers: Resolvers = {
       if (isLocalOrDev() && newWorkspace.name.includes('@n1n.co')) {
         newWorkspace.isPremium = true;
 
-        if (newWorkspace.name.includes('team')) {
+        if (
+          newWorkspace.name.includes('team') ||
+          newWorkspace.name.includes('business')
+        ) {
           newWorkspace.plan = 'team';
         } else if (newWorkspace.name.includes('enterprise')) {
           newWorkspace.plan = 'enterprise';

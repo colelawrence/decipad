@@ -9,5 +9,4 @@ export interface SubscriptionPlan {
   price?: number | null;
   currency?: string | null;
   id?: string | null;
-  pricePerSeat?: number | null;
 }

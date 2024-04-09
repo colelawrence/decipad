@@ -1034,7 +1034,6 @@ export type SubscriptionPlan = {
   key: Scalars['String']['output'];
   paymentLink?: Maybe<Scalars['String']['output']>;
   price?: Maybe<Scalars['Int']['output']>;
-  pricePerSeat?: Maybe<Scalars['Int']['output']>;
   queries?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   storage?: Maybe<Scalars['Int']['output']>;
@@ -1624,12 +1623,12 @@ export type GetStripeCheckoutSessionInfoQueryVariables = Exact<{
 
 export type GetStripeCheckoutSessionInfoQuery = { __typename?: 'Query', getStripeCheckoutSessionInfo?: { __typename?: 'CheckoutSessionInfo', id?: string | null, clientSecret?: string | null } | null };
 
-export type SubPlansFragment = { __typename?: 'SubscriptionPlan', paymentLink?: string | null, credits?: number | null, queries?: number | null, seats?: number | null, storage?: number | null, description?: string | null, price?: number | null, currency?: string | null, title?: string | null, id: string, key: string, isDefault?: boolean | null, pricePerSeat?: number | null };
+export type SubPlansFragment = { __typename?: 'SubscriptionPlan', paymentLink?: string | null, credits?: number | null, queries?: number | null, seats?: number | null, storage?: number | null, description?: string | null, price?: number | null, currency?: string | null, title?: string | null, id: string, key: string, isDefault?: boolean | null };
 
 export type GetSubscriptionsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubscriptionsPlansQuery = { __typename?: 'Query', getSubscriptionsPlans?: Array<{ __typename?: 'SubscriptionPlan', paymentLink?: string | null, credits?: number | null, queries?: number | null, seats?: number | null, storage?: number | null, description?: string | null, price?: number | null, currency?: string | null, title?: string | null, id: string, key: string, isDefault?: boolean | null, pricePerSeat?: number | null } | null> | null };
+export type GetSubscriptionsPlansQuery = { __typename?: 'Query', getSubscriptionsPlans?: Array<{ __typename?: 'SubscriptionPlan', paymentLink?: string | null, credits?: number | null, queries?: number | null, seats?: number | null, storage?: number | null, description?: string | null, price?: number | null, currency?: string | null, title?: string | null, id: string, key: string, isDefault?: boolean | null } | null> | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1855,7 +1854,6 @@ export const SubPlansFragmentDoc = gql`
   id
   key
   isDefault
-  pricePerSeat
 }
     `;
 export const WorkspaceSubscriptionWithDataFragmentDoc = gql`
@@ -3122,7 +3120,6 @@ export type GraphCacheResolvers = {
     key?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['String'] | string>,
     paymentLink?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['String'] | string>,
     price?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['Int'] | string>,
-    pricePerSeat?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['Int'] | string>,
     queries?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['Int'] | string>,
     seats?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['Int'] | string>,
     storage?: GraphCacheResolver<WithTypename<SubscriptionPlan>, Record<string, never>, Scalars['Int'] | string>,
@@ -3637,7 +3634,6 @@ export type GraphCacheUpdaters = {
     key?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
     paymentLink?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
     price?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
-    pricePerSeat?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
     queries?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
     seats?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,
     storage?: GraphCacheUpdateResolver<Maybe<WithTypename<SubscriptionPlan>>, Record<string, never>>,

@@ -109,7 +109,7 @@ export const updateStripeIfNeeded = async (
     throw new Error('Subscription has no items');
   }
 
-  if (workspacePlan === 'pro' && workspace?.isPremium) {
+  if (workspace?.isPremium) {
     const planSubsInfo = subscription.items.data[0];
     previousQuantity = planSubsInfo?.quantity || 0;
     const subscriptionItemID = planSubsInfo?.id || '';
@@ -128,53 +128,6 @@ export const updateStripeIfNeeded = async (
         plan: workspacePlan,
       },
     });
-  } else if (subs.seats && workspace?.isPremium) {
-    if (newQuantity < subs.seats) {
-      // nothing to do
-      return;
-    }
-
-    const pricePerSeatItemResponse = await stripe.prices.search({
-      query: `metadata["key"]:"${workspacePlan}" AND metadata["type"]:"seat"`,
-    });
-
-    if (pricePerSeatItemResponse.data.length !== 1) {
-      throw new Error(
-        `Price per seat for plan ${workspacePlan} does not exist or has multiple items`
-      );
-    }
-
-    const pricePerSeat = pricePerSeatItemResponse.data[0];
-
-    const nrOfAdditionalSeats = newQuantity - subs.seats;
-    const subscriptionItemId = subscription.items.data.find(
-      (si) => si.price.id === pricePerSeat.id
-    )?.id;
-
-    if (!subscriptionItemId) {
-      await stripe.subscriptionItems.create({
-        subscription: subs.id,
-        price: pricePerSeat.id,
-        quantity: nrOfAdditionalSeats,
-      });
-    } else {
-      await stripe.subscriptionItems.update(subscriptionItemId, {
-        quantity: nrOfAdditionalSeats,
-      });
-    }
-
-    if (nrOfAdditionalSeats > 0) {
-      await track(event, {
-        event: 'update Stripe subscription seats',
-        properties: {
-          stripeSubscriptionId: subscription.id,
-          previousQuantity: (nrOfAdditionalSeats - 1).toString(),
-          newQuantity: nrOfAdditionalSeats.toString(),
-          workspaceId,
-          plan: workspacePlan,
-        },
-      });
-    }
   }
 };
 
@@ -186,6 +139,8 @@ export const cancelStripeSubscription = async (subscriptionId: ID) => {
   }
 
   await stripe.subscriptions.cancel(subscriptionId);
+
+  return subscription;
 };
 
 export const cancelSubscriptionFromWorkspaceId = async (
@@ -198,15 +153,18 @@ export const cancelSubscriptionFromWorkspaceId = async (
     throw new Error('Stripe Subscription does not exist');
   }
 
+  const stripeSubscription = await cancelStripeSubscription(subscription.id);
+  const billingEmail = await stripe.customers.retrieve(
+    stripeSubscription.customer.toString() // this is always a string, according to their documentation
+  );
+
   await track(event, {
     event: 'Stripe subscription deleted',
     properties: {
       id: subscription.id,
       workspaceId: subscription.id,
-      // TODO
-      // billingEmail: subscription.email,
+      plan: subscription.workspace?.plan,
+      billingEmail,
     },
   });
-
-  await cancelStripeSubscription(subscription.id);
 };

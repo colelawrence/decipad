@@ -285,7 +285,6 @@ export interface SubscriptionPlan {
   key: string;
   isDefault?: boolean;
   storage?: number;
-  pricePerSeat?: number;
 }
 
 export interface CheckoutSessionInfo {

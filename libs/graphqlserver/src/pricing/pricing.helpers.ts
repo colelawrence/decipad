@@ -30,7 +30,6 @@ export const getPlansForCredits: QueryResolvers['getCreditsPlans'] =
           credits,
           isDefault,
           promotionTag,
-          pricePerSeat,
           storage,
           queries,
           description,
@@ -46,7 +45,6 @@ export const getPlansForCredits: QueryResolvers['getCreditsPlans'] =
           isDefault: isDefault === 'true',
           // not used yet
           promotionTag,
-          pricePerSeat,
           storage: Number(storage),
           queries: Number(queries),
         };
@@ -75,10 +73,6 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
         (s) => s.metadata.type === 'plan'
       );
 
-      const pricesPerSeat = (subscriptionPlansAndData.data || []).filter(
-        (s) => s.metadata.type === 'seat'
-      );
-
       const allPlans: SubscriptionPlan[] = subscriptionPlans.map((p) => {
         // eslint-disable-next-line camelcase
         const { id, metadata, unit_amount, currency } = p;
@@ -105,9 +99,6 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
           description,
           storage: Number(storage) || 0,
           isDefault: isDefault === 'true',
-          pricePerSeat:
-            pricesPerSeat.find((price) => price.metadata?.key === key)
-              ?.unit_amount ?? 0,
           // field to be deprecated soon
           paymentLink: undefined,
         };

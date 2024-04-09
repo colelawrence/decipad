@@ -11,7 +11,6 @@ fragment SubPlans on SubscriptionPlan {
   id
   key
   isDefault
-  pricePerSeat
 }
 
 query GetSubscriptionsPlans {
