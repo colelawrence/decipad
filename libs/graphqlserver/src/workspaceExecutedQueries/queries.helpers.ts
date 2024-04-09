@@ -34,15 +34,15 @@ export const incrementQueryCount = async (
   const executedQuery = await data.workspacexecutedqueries.get({
     id: workspaceId,
   });
-  const maxCreditsPerPlan = workspace.isPremium
-    ? limits().maxCredits.pro
-    : limits().maxCredits.free;
+  const maxQueriesPerPlan = workspace.isPremium
+    ? limits().maxQueries.pro
+    : limits().maxQueries.free;
 
   if (!executedQuery) {
     const execQuery = {
       queryCount: 1,
       query_reset_date: timestamp(),
-      quotaLimit: maxCreditsPerPlan,
+      quotaLimit: maxQueriesPerPlan,
       id: workspaceId,
     };
 
@@ -53,7 +53,7 @@ export const incrementQueryCount = async (
   // eslint-disable-next-line camelcase
   const { queryCount } = executedQuery;
 
-  if (queryCount >= maxCreditsPerPlan) {
+  if (queryCount >= maxQueriesPerPlan) {
     await track(event, {
       event: 'Query execution limit exceeded',
       properties: {
@@ -62,7 +62,7 @@ export const incrementQueryCount = async (
       },
     });
     throw Boom.tooManyRequests(
-      `Query execution limit of ${maxCreditsPerPlan}/month exceeded.`,
+      `Query execution limit of ${maxQueriesPerPlan}/month exceeded.`,
       {
         extensions: {
           code: 'LIMIT_EXCEEDED',

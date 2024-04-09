@@ -111,7 +111,7 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
         credits: limits().maxCredits.free,
         title: plans().freePlanName,
         seats: 1,
-        queries: limits().maxCredits.free,
+        queries: limits().maxQueries.free,
         description:
           'The perfect starting point. All the good data modeling stuff, no fluff.',
       });

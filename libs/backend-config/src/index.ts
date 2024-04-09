@@ -130,6 +130,10 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_FREE);
     case 'DECI_MAX_CREDITS_PRO':
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_PRO);
+    case 'DECI_MAX_QUERIES_FREE':
+      return valueOrDefault(name, process.env.DECI_MAX_QUERIES_FREE);
+    case 'DECI_MAX_QUERIES_PRO':
+      return valueOrDefault(name, process.env.DECI_MAX_QUERIES_PRO);
     case 'DECI_TOKENS_TO_CREDITS':
       return valueOrDefault(name, process.env.DECI_TOKENS_TO_CREDITS);
     case 'WORKSPACE_FREE_PLAN':
@@ -268,9 +272,16 @@ export function limits() {
     pro: 50,
   };
 
+  // please don't remove those as they are not the same as AI Credits
+  const maxQueries = {
+    free: Number(env('DECI_MAX_QUERIES_FREE')),
+    pro: Number(env('DECI_MAX_QUERIES_PRO')),
+  };
+
   const TOKENS_TO_CREDITS = Number(env('DECI_TOKENS_TO_CREDITS'));
   return {
     maxCredits,
+    maxQueries,
     openAiTokensLimit: {
       free: maxCredits.free * TOKENS_TO_CREDITS,
       pro: maxCredits.pro * TOKENS_TO_CREDITS,

@@ -80,7 +80,7 @@ export const processSubscriptionDeleted = async (
     });
     subscriptions.updateQueryExecutionTable(
       workspace.id,
-      limits().maxCredits.free
+      limits().maxQueries.free
     );
 
     await track(req, {
@@ -150,7 +150,7 @@ export const processSubscriptionUpdated = async (
   });
   subscriptions.updateQueryExecutionTable(
     workspace.id,
-    wsSubscription.queries ?? limits().maxCredits.pro
+    wsSubscription.queries ?? limits().maxQueries.pro
   );
 
   return {

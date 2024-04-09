@@ -5,6 +5,7 @@
 
 import type { Workspace } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { limits } from '@decipad/backend-config';
 
 test('Executed queries', (ctx) => {
   const { test: it } = ctx;
@@ -42,6 +43,6 @@ test('Executed queries', (ctx) => {
       })
     ).data.incrementQueryCount;
     expect(workspaceQueryCount.queryCount).toBe(1);
-    expect(workspaceQueryCount.quotaLimit).toBe(50);
+    expect(workspaceQueryCount.quotaLimit).toBe(limits().maxQueries.free);
   });
 });

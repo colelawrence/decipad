@@ -86,6 +86,8 @@ jobs:
           DECI_GOOGLESHEETS_CLIENT_SECRET: '${{secrets.DECI_GOOGLESHEETS_CLIENT_SECRET}}'
           DECI_MAX_CREDITS_FREE: '${{secrets.DECI_MAX_CREDITS_FREE}}'
           DECI_MAX_CREDITS_PRO: '${{secrets.DECI_MAX_CREDITS_PRO}}'
+          DECI_MAX_QUERIES_FREE: '${{secrets.DECI_MAX_QUERIES_FREE}}'
+          DECI_MAX_QUERIES_PRO: '${{secrets.DECI_MAX_QUERIES_PRO}}'
           DISCORD_PUBLIC_KEY: '${{secrets.DEV_DISCORD_PUBLIC_KEY}}'
           DISCORD_APP_ID: '${{secrets.DEV_DISCORD_APP_ID}}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=32768'

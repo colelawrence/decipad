@@ -188,7 +188,7 @@ test('workspaces', (ctx) => {
     expect(workspaceSubscription.paymentStatus).toBe('paid');
     expect(workspaceSubscription.credits).toBe(limits().maxCredits.pro);
     expect(isPremium).toBeTruthy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.pro);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxQueries.pro);
   });
 
   it('can update a subscription', async () => {
@@ -220,7 +220,7 @@ test('workspaces', (ctx) => {
     expect(workspaceSubscription.paymentStatus).toBe('paid');
     expect(workspaceSubscription.credits).toBe(limits().maxCredits.pro);
     expect(isPremium).toBeTruthy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.pro);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxQueries.pro);
   });
 
   it('can reset the query count when a subscription is renewed', async () => {
@@ -294,6 +294,6 @@ test('workspaces', (ctx) => {
     expect(workspaceSubscription.paymentStatus).toBe('unpaid');
     expect(workspaceSubscription.credits).toBe(limits().maxCredits.free);
     expect(isPremium).toBeFalsy();
-    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxCredits.free);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(limits().maxQueries.free);
   });
 });
