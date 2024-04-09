@@ -1,9 +1,6 @@
 import { css } from '@emotion/react';
-import {
-  ElementAttributes,
-  ELEMENT_INLINE_NUMBER,
-  PlateComponent,
-} from '@decipad/editor-types';
+import type { ElementAttributes, PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_INLINE_NUMBER } from '@decipad/editor-types';
 import { brand700, CodeResult, cssVar } from '@decipad/ui';
 import { useComputer, useShadowCodeLine } from '@decipad/react-contexts';
 import { useMergedRef } from '@decipad/ui/src/hooks/useMergedRef';

@@ -1,4 +1,5 @@
-import { ELEMENT_DROPDOWN, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_DROPDOWN } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { DropdownMenu, WidgetDisplay } from '@decipad/ui';

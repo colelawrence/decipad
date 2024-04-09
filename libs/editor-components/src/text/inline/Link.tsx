@@ -1,4 +1,5 @@
-import { ELEMENT_LINK, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_LINK } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { Link as UILink } from '@decipad/ui';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';

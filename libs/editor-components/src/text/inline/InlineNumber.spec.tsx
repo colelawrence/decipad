@@ -1,18 +1,17 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlateProps,
 } from '@udecode/plate-common';
 import {
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { InlineNumber } from '.';

@@ -1,8 +1,8 @@
+import type { MyEditor } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
-  MyEditor,
 } from '@decipad/editor-types';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';

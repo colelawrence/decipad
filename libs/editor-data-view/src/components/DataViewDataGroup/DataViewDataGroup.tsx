@@ -7,7 +7,7 @@ import type {
   SmartProps,
 } from '../../types';
 import type { Element as GroupElement } from '../../utils/types';
-import { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
 
 interface DataViewDataGroupElementProps {
   element: GroupElement<DataGroup>;

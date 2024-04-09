@@ -1,23 +1,18 @@
-import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
-import { MyEditor } from '@decipad/editor-types';
+import type { ClientEvent } from '@decipad/client-events';
+import { ClientEventsContext } from '@decipad/client-events';
+import type { MyEditor } from '@decipad/editor-types';
 import {
   focusAndSetSelection,
   getMagicNumberPath,
 } from '@decipad/editor-utils';
-import {
-  EditorTeleportContext,
+import type {
   ShadowCalcPortal,
   ShadowCalcReference,
 } from '@decipad/react-contexts';
+import { EditorTeleportContext } from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate-common';
-import {
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type { PropsWithChildren } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import { DISMISS_KEYS } from '../CodeLine/CodeLineTeleport';
 import { ensureSelectionHack } from './ensureSelectionHack';

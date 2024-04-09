@@ -1,7 +1,7 @@
+import type { PlateComponent } from '@decipad/editor-types';
 import {
   COLUMN_KINDS,
   ELEMENT_IMAGE,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {

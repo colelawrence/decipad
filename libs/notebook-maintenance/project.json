@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/notebook-maintenance/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/notebook-maintenance/**/*.ts",
+          "libs/notebook-maintenance/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

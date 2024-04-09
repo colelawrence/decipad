@@ -1,13 +1,16 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { RemoteComputer, getExprRef } from '@decipad/remote-computer';
-import {
-  ELEMENT_INLINE_NUMBER,
-  ELEMENT_PARAGRAPH,
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getExprRef } from '@decipad/remote-computer';
+import type {
   InlineNumberElement,
-  MARK_MAGICNUMBER,
   MyEditor,
   PlateComponent,
   RichText,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_INLINE_NUMBER,
+  ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -18,17 +21,18 @@ import {
   magicNumberId,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import {
-  ShadowCalcReference,
-  useComputer,
-  useEditorTeleportContext,
-} from '@decipad/react-contexts';
+import type { ShadowCalcReference } from '@decipad/react-contexts';
+import { useComputer, useEditorTeleportContext } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
-import { findNodePath, getEndPoint, getNodeString } from '@udecode/plate-common';
+import {
+  findNodePath,
+  getEndPoint,
+  getNodeString,
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useEffect } from 'react';
-import { BaseRange, Path, Point } from 'slate';
+import type { BaseRange, Path, Point } from 'slate';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
 import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
 

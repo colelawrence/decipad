@@ -1,28 +1,23 @@
-import {
-  AutocompleteName,
-  getBuiltinsForAutocomplete,
-} from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/remote-computer';
+import { getBuiltinsForAutocomplete } from '@decipad/remote-computer';
+import type { PlateComponent } from '@decipad/editor-types';
 import {
   DECORATE_AUTO_COMPLETE_MENU,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
-import {
-  ACItemType,
-  AutoCompleteMenu as UIAutoCompleteMenu,
-  AutoCompleteMenuMode,
-  Identifier,
-} from '@decipad/ui';
+import type { ACItemType, AutoCompleteMenuMode, Identifier } from '@decipad/ui';
+import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
 import sortBy from 'lodash/sortBy';
-import { ComponentProps, useCallback, useMemo, useRef, useState } from 'react';
+import type { ComponentProps } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 import { useTableCaption } from './useTableCaption';
 import { getPluginOptions } from '@udecode/plate-common';
-import { AutoCompletePlugin } from './types';
+import type { AutoCompletePlugin } from './types';
 
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));

@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
-import { LogEntry, useCreateLogsMutation } from '@decipad/graphql-client';
+import type { LogEntry } from '@decipad/graphql-client';
+import { useCreateLogsMutation } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
 import debounce from 'lodash.debounce';
-import { FC, PropsWithChildren, useCallback, useEffect } from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import { useCallback, useEffect } from 'react';
 import { chunkify } from './chunkify';
 
 type Fn = (...args: unknown[]) => unknown;

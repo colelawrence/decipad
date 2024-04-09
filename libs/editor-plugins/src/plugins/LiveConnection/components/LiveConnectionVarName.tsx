@@ -7,23 +7,26 @@ import {
   useParentNodeEntry,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
+import type {
+  LiveConnectionElement,
+  MyEditor,
+  PlateComponent,
+} from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ImportElementSourcePretty,
-  LiveConnectionElement,
-  MyEditor,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
+import type { SourceUrlParseResponse } from '@decipad/import';
+import { parseSourceUrl } from '@decipad/import';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
 import { useToast } from '@decipad/toast';
+import type { MarkType } from '@decipad/ui';
 import {
   ImportTableFirstRowControls,
-  MarkType,
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
@@ -35,7 +38,8 @@ import {
   isElement,
 } from '@udecode/plate-common';
 import { Hide, Show } from 'libs/ui/src/icons';
-import { ComponentProps, useCallback, useMemo, useState } from 'react';
+import type { ComponentProps } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
 import { useComputer } from '@decipad/react-contexts';

@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
-import {
-  ELEMENT_TH,
-  PlateComponent,
-  TableCellType,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent, TableCellType } from '@decipad/editor-types';
+import { ELEMENT_TH, useMyEditorRef } from '@decipad/editor-types';
 import { TableColumnHeader } from '@decipad/ui';
 import {
   assertElementType,

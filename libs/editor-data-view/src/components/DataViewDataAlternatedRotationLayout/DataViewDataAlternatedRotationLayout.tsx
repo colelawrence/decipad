@@ -1,9 +1,9 @@
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { Spinner } from '@decipad/ui';
-import { AggregationKind, Column } from '../../types';
+import type { AggregationKind, Column } from '../../types';
 import { useDataViewLayoutData } from '../../hooks';
 import { NestedGroups } from './NestedGroups';
-import { DataViewFilter } from '@decipad/editor-types';
+import type { DataViewFilter } from '@decipad/editor-types';
 
 export interface DataViewDataAlternatedRotationLayoutProps {
   blockId: string;

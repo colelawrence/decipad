@@ -1,9 +1,11 @@
-import { ComponentProps, Suspense } from 'react';
+import type { ComponentProps } from 'react';
+import { Suspense } from 'react';
 import type { PlateComponent } from '@decipad/editor-types';
 import { LoadingIndicator, ErrorBlock } from '@decipad/ui';
 import { useLockEditorWriting } from '@decipad/react-contexts';
 import { ErrorBoundary } from '@sentry/react';
-import { Loader, lazyLoad } from '@decipad/react-utils';
+import type { Loader } from '@decipad/react-utils';
+import { lazyLoad } from '@decipad/react-utils';
 
 const EditorElementPlaceholder: PlateComponent = (props) => {
   useLockEditorWriting();

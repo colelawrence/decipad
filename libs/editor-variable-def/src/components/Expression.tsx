@@ -1,10 +1,9 @@
 import { Expression as UIExpression } from '@decipad/ui';
-import {
-  ELEMENT_EXPRESSION,
+import type {
   PlateComponent,
-  useMyEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
+import { ELEMENT_EXPRESSION, useMyEditorRef } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/remote-computer';
 import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate-common';

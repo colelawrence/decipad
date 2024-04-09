@@ -1,6 +1,6 @@
 import { cssVar, p10Medium, yellow400 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 type LiveDataSetCaptionProps = PropsWithChildren<{
   source?: string;

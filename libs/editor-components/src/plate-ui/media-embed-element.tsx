@@ -1,5 +1,5 @@
 import { PlateElement, withHOC } from '@udecode/plate-common';
-import { ComponentProps, FC, ReactNode } from 'react';
+import type { ComponentProps, FC, ReactNode } from 'react';
 import type {
   MediaEmbedElement as MediaEmbedElementType,
   MyElement,
@@ -23,7 +23,7 @@ import { Tweet } from 'react-tweet';
 import { css } from '@emotion/react';
 import { Caption, CaptionTextarea } from './caption';
 import { cn, componentCssVars, p14Regular } from '@decipad/ui';
-import { DraggableBlock } from '../block-management/index';
+import type { DraggableBlock } from '../block-management/index';
 import { draggableStyles } from './image-element';
 
 const resizableSelectedStyles = css({
@@ -104,7 +104,7 @@ export const MediaEmbedElement: Component = withHOC(
                         '[&.lyt-activated]:before:absolute [&.lyt-activated]:before:top-0 [&.lyt-activated]:before:h-[60px] [&.lyt-activated]:before:w-full [&.lyt-activated]:before:bg-top [&.lyt-activated]:before:bg-repeat-x [&.lyt-activated]:before:pb-[50px] [&.lyt-activated]:before:[transition:all_0.2s_cubic-bezier(0,_0,_0.2,_1)]',
                         '[&.lyt-activated]:before:bg-[url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==)]',
                         'after:block after:pb-[var(--aspect-ratio)] after:content-[""]',
-                        '[&_>_iframe]:absolute [&_>_iframe]:left-0 [&_>_iframe]:top-0 [&_>_iframe]:h-full [&_>_iframe]:w-full',
+                        '[&_>_iframe]:absolute [&_>_iframe]:left-0 [&_>_iframe]:top-0 [&_>_iframe]:size-full',
                         '[&_>_.lty-playbtn]:z-[1] [&_>_.lty-playbtn]:h-[46px] [&_>_.lty-playbtn]:w-[70px] [&_>_.lty-playbtn]:rounded-[14%] [&_>_.lty-playbtn]:bg-[#212121] [&_>_.lty-playbtn]:opacity-80 [&_>_.lty-playbtn]:[transition:all_0.2s_cubic-bezier(0,_0,_0.2,_1)]',
                         '[&:hover_>_.lty-playbtn]:bg-[red] [&:hover_>_.lty-playbtn]:opacity-100',
                         '[&_>_.lty-playbtn]:before:border-y-[11px] [&_>_.lty-playbtn]:before:border-l-[19px] [&_>_.lty-playbtn]:before:border-r-0 [&_>_.lty-playbtn]:before:border-[transparent_transparent_transparent_#fff] [&_>_.lty-playbtn]:before:content-[""]',
@@ -126,7 +126,7 @@ export const MediaEmbedElement: Component = withHOC(
                     >
                       <iframe
                         className={cn(
-                          'absolute left-0 top-0 h-full w-full rounded-sm border-0'
+                          'absolute left-0 top-0 size-full rounded-sm border-0'
                         )}
                         src={embed!.url}
                         title="embed"

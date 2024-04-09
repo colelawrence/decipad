@@ -1,9 +1,11 @@
 import { CodeLine } from '@decipad/editor-components';
-import { CodeLineElement, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import type { CodeLineElement } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { AnnotationsContext } from '@decipad/react-contexts';
 import { render, screen } from '@testing-library/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import React, { createRef, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import React, { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter } from 'react-router-dom';

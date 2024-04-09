@@ -1,5 +1,5 @@
 import { getNodeString } from '@udecode/plate-common';
-import { MySerializeHtml } from '@decipad/editor-types';
+import type { MySerializeHtml } from '@decipad/editor-types';
 
 export const serializeCodeLineHtml: MySerializeHtml = ({
   element,

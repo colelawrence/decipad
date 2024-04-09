@@ -1,5 +1,5 @@
 import { Underline as UIUnderline } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 
 export const Underline: PlateComponent = ({ attributes, children }) => {
   return (

@@ -1,13 +1,15 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
+import type {
+  MyEditor,
+  MyElement,
+  MyElementOrText,
+} from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
-  MyEditor,
-  MyElement,
-  MyElementOrText,
   alwaysWritableElementTypes,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -24,7 +26,8 @@ import {
   useIsEditorReadOnly,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
-import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { parseSimpleValue } from '@decipad/remote-computer';
 import {
   EditorBlock,
   DraggableBlock as UIDraggableBlock,
@@ -45,9 +48,8 @@ import {
 import { blockSelectionSelectors } from '@udecode/plate-selection';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
+import type { ComponentProps, ReactNode } from 'react';
 import {
-  ComponentProps,
-  ReactNode,
   forwardRef,
   useCallback,
   useContext,
@@ -58,7 +60,8 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
-import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
+import type { UseDndNodeOptions } from '../utils/useDnd';
+import { dndStore, useDnd } from '../utils/useDnd';
 import { useBlockActions } from './hooks';
 import { createPortal } from 'react-dom';
 import { BlockAnnotations } from 'libs/ui/src/modules/editor/BlockAnnotations/BlockAnnotations';
@@ -226,7 +229,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       setTimeout(() => {
         setShowNewAnnotation(true);
       }, 250);
-    }, [setShowNewAnnotation]);
+    }, [element.id, setExpandedBlockId, setSidebar]);
 
     const handleDuplicate = useCallback(() => {
       event({

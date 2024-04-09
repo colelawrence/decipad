@@ -1,14 +1,16 @@
 import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
+import type {
+  PlateEditor,
+  PlatePlugin,
+  PlateProps,
+} from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlatePlugin,
-  PlateProps,
 } from '@udecode/plate-common';
 import { Expression } from './Expression';
 import { BrowserRouter } from 'react-router-dom';

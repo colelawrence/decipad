@@ -1,10 +1,8 @@
-import { ErrSpec, Result } from '@decipad/remote-computer';
-import { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
+import type { ErrSpec, Result } from '@decipad/remote-computer';
+import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
-import {
-  IntegrationStore,
-  useCodeConnectionStore,
-} from '@decipad/react-contexts';
+import type { IntegrationStore } from '@decipad/react-contexts';
+import { useCodeConnectionStore } from '@decipad/react-contexts';
 import {
   CodeResult,
   ContentEditableInput,
@@ -19,7 +17,8 @@ import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
-import { FC, useCallback, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
 
 interface ResultPreviewProps {
   result?: Result.Result;

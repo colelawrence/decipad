@@ -1,4 +1,5 @@
-import { ELEMENT_SMART_REF, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { SmartRef as UISmartRef } from '@decipad/ui';
 import { useReinstateSmartRefBlockId } from '../hooks/useReinstateSmartRefBlockId';

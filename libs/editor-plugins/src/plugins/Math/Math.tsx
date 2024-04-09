@@ -1,9 +1,6 @@
 import { DraggableBlock } from '@decipad/editor-components';
-import {
-  ELEMENT_MATH,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_MATH, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, setSelection } from '@decipad/editor-utils';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';

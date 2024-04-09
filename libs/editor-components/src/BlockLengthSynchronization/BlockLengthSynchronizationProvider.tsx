@@ -1,9 +1,9 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { EditorChangeContext } from '@decipad/react-contexts';
 import { createSelectableContext } from '@decipad/react-utils';
 import { noop, dequal } from '@decipad/utils';
+import type { ReactNode } from 'react';
 import {
-  ReactNode,
   useState,
   useMemo,
   useCallback,
@@ -20,10 +20,10 @@ import {
   mergeWith,
   Subject,
 } from 'rxjs';
+import type { MeasuredLengths } from './helpers';
 import {
   getContiguousGroups,
   getNewGroupsTargetLengths,
-  MeasuredLengths,
   setIn,
 } from './helpers';
 

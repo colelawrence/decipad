@@ -1,4 +1,5 @@
-import { FC, Suspense, useCallback, useEffect, useMemo } from 'react';
+import type { FC } from 'react';
+import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { lastValueFrom } from 'rxjs';
 import {

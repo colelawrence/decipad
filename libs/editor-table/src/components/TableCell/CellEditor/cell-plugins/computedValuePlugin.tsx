@@ -1,5 +1,5 @@
 import { useTableColumnFormulaResultForCell } from '@decipad/editor-hooks';
-import { SerializedType } from '@decipad/language-types';
+import type { SerializedType } from '@decipad/language-types';
 import { CodeResult } from '@decipad/ui';
 import { containsExprRef } from '@decipad/utils';
 

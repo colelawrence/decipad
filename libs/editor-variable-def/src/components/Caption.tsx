@@ -1,11 +1,13 @@
 import { Caption as UICaption, Tooltip } from '@decipad/ui';
+import type {
+  PlateComponent,
+  UserIconKey,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_VARIABLE_DEF,
-  PlateComponent,
-  UserIconKey,
   useMyEditorRef,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { getNodeString, insertText, isElement } from '@udecode/plate-common';
 import { getAboveNodeSafe } from '@decipad/editor-utils';

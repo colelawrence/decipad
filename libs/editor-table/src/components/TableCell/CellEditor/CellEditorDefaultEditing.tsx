@@ -5,6 +5,7 @@ import { table as tableStyles } from '@decipad/ui';
 import isHotkey from 'is-hotkey';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import type { PlatePlugin } from '@udecode/plate-common';
 import {
   toDOMNode,
   useEditorRef,
@@ -13,23 +14,19 @@ import {
   Plate,
   PlateContent,
   createPlateEditor,
-  PlatePlugin,
   getRange,
   select,
 } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH, ELEMENT_TD } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import {
   createAutoCompleteMenuPlugin,
   createSmartRefPlugin,
 } from '@decipad/editor-plugins';
-import {
-  CellInputValue,
-  deserializeCellText,
-  serializeCellText,
-} from './serializeCellText';
+import type { CellInputValue } from './serializeCellText';
+import { deserializeCellText, serializeCellText } from './serializeCellText';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
 
 export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {

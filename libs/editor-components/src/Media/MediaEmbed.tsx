@@ -1,5 +1,6 @@
 import { MediaEmbedElement as UIMediaEmbed } from '../plate-ui';
-import { ELEMENT_MEDIA_EMBED, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_MEDIA_EMBED } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { assertElementType } from '@decipad/editor-utils';
 import { DraggableBlock } from '../block-management/index';

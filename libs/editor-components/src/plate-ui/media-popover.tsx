@@ -81,7 +81,7 @@ export const MediaPopover = ({ pluginKey, children }: MediaPopoverProps) => {
             <Separator orientation="vertical" className="h-5" />
 
             <Button variant="ghost" size="sms" {...buttonProps}>
-              <Icons.delete className="h-4 w-4" />
+              <Icons.delete className="size-4" />
             </Button>
           </div>
         )}

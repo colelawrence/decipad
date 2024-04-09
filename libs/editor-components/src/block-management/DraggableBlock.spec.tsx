@@ -1,17 +1,21 @@
-import { ELEMENT_PARAGRAPH, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, thro } from '@decipad/utils';
 import { act, fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type {
+  PlateEditor,
+  PlatePlugin,
+  PlateProps,
+} from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlatePlugin,
-  PlateProps,
 } from '@udecode/plate-common';
-import React, { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {

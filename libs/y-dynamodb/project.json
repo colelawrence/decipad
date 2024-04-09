@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/y-dynamodb/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/y-dynamodb/**/*.ts",
+          "libs/y-dynamodb/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

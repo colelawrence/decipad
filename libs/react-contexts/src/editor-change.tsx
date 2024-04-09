@@ -1,4 +1,5 @@
-import { createContext, FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
+import { createContext } from 'react';
 import { Subject } from 'rxjs';
 
 export const EditorChangeContext = createContext<Subject<undefined>>(

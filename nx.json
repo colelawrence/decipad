@@ -63,7 +63,7 @@
           "echo WORKSPACE_FREE_PLAN=$WORKSPACE_FREE_PLAN",
           "echo WORKSPACE_PRO_PLAN=$WORKSPACE_PRO_PLAN"
         ],
-        "parallel": 3
+        "parallel": 8
       }
     }
   },

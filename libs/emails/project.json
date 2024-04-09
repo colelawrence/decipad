@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/emails/src/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/emails/src/**/*.ts",
+          "libs/emails/src/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

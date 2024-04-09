@@ -1,4 +1,5 @@
-import { ELEMENT_SUBMIT_FORM, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_SUBMIT_FORM } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { DraggableBlock } from '../block-management/index';
 import { SubmitForm as SubmitFormComponent } from '@decipad/ui';

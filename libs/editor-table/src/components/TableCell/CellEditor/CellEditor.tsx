@@ -1,6 +1,7 @@
-import { CellValueType, TableCellElement } from '@decipad/editor-types';
-import { Path } from 'slate';
-import { FC, HTMLAttributes, useMemo, useRef } from 'react';
+import type { CellValueType, TableCellElement } from '@decipad/editor-types';
+import type { Path } from 'slate';
+import type { FC, HTMLAttributes } from 'react';
+import { useMemo, useRef } from 'react';
 import type { CellProps } from './types';
 import { cellPlugins } from './cell-plugins';
 import { CellEditorDefault } from './CellEditorDefault';

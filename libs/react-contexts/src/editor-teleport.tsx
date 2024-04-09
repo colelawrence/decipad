@@ -1,5 +1,6 @@
-import { MyElement } from '@decipad/editor-types';
-import { TNode } from '@udecode/plate-common';
+/* eslint-disable unused-imports/no-unused-vars */
+import type { MyElement } from '@decipad/editor-types';
+import type { TNode } from '@udecode/plate-common';
 import { createContext, useContext } from 'react';
 
 export type ShadowCalcReference = {

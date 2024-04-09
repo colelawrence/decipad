@@ -1,19 +1,17 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
+import type { CodeLineV2Element, MyValue } from '@decipad/editor-types';
 import {
-  CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  MyValue,
 } from '@decipad/editor-types';
 import {
   insertStructuredCodeLineBelow,
   isElementOfType,
   setSelection,
 } from '@decipad/editor-utils';
+import type { PlateEditor, Value } from '@udecode/plate-common';
 import {
-  PlateEditor,
-  Value,
   getEndPoint,
   getFirstNode,
   getLastNode,
@@ -21,8 +19,9 @@ import {
   getNodeString,
   getStartPoint,
 } from '@udecode/plate-common';
-import { KeyboardEvent } from 'react';
-import { BaseEditor, Editor, Path, Transforms } from 'slate';
+import type { KeyboardEvent } from 'react';
+import type { BaseEditor, Path } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
 import utils from './structured_utils';

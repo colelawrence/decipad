@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useCallback, useRef, useContext } from 'react';
-import {
-  ELEMENT_TD,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_TD, useMyEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCellType, useCellAnchor, useCellSelected } from '../../hooks';

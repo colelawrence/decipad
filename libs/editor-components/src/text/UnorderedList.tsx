@@ -1,4 +1,4 @@
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 import { UnorderedList as UIUnorderedList } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 

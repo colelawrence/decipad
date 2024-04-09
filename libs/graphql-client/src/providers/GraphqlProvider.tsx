@@ -2,17 +2,18 @@
 import { produce } from '@decipad/utils';
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import type { FC, ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import type { ClientOptions } from 'urql';
 import {
-  ClientOptions,
   Provider as UrqlProvider,
   createClient,
   ssrExchange as createSsrExchange,
   fetchExchange,
 } from 'urql';
 import { graphCacheConfig } from '../cacheConfig';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 
 const isServerSide = typeof window === 'undefined';
@@ -57,8 +58,8 @@ interface GraphqlProviderProps {
 const useMySession = () => {
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
-    getSession().then((session) => {
-      setSession(session);
+    getSession().then((s) => {
+      setSession(s);
     });
   }, []);
 

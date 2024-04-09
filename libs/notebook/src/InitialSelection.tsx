@@ -1,5 +1,5 @@
-import { MyEditor } from '@decipad/editor-types';
-import { FC } from 'react';
+import type { MyEditor } from '@decipad/editor-types';
+import type { FC } from 'react';
 import { useInitialSelection } from './useInitialSelection';
 
 interface InitialSelectionProps {

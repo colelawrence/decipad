@@ -1,5 +1,6 @@
-import { Result } from '@decipad/remote-computer';
-import { AnyElement, useMyEditorRef } from '@decipad/editor-types';
+import type { Result } from '@decipad/remote-computer';
+import type { AnyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   CodeResult,
   DataViewTableHeader as DataViewTableHeaderUI,
@@ -8,8 +9,9 @@ import {
 import { css } from '@emotion/react';
 import { deselect } from '@udecode/plate-common';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
-import { FC, useCallback } from 'react';
-import { HeaderProps } from '../../types';
+import type { FC } from 'react';
+import { useCallback } from 'react';
+import type { HeaderProps } from '../../types';
 import { GroupAggregation } from '../GroupAggregation/GroupAggregation';
 
 const iconStyles = css({

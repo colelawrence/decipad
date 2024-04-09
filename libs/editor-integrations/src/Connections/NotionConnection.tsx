@@ -1,5 +1,6 @@
-import { FC, Suspense, useEffect, useState } from 'react';
-import { ConnectionProps } from './types';
+import type { FC } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import type { ConnectionProps } from './types';
 import {
   useExecutionContext,
   useNotionConnectionStore,
@@ -285,7 +286,8 @@ async function runPrivateIntegration(props: ConnectionProps) {
   }
 
   const notionQuery = await fetch(
-    `${window.location.origin}/api/externaldatasources/${state.ExternalDataId
+    `${window.location.origin}/api/externaldatasources/${
+      state.ExternalDataId
     }/data?url=${getNotionQueryDbLink(state.DatabaseId)}&method=POST`
   );
 

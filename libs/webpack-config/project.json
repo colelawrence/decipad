@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/webpack-config/**/*.js"],
+        "lintFilePatterns": [
+          "libs/webpack-config/**/*.js",
+          "libs/webpack-config/**/*.jsx"
+        ],
         "maxWarnings": 0
       }
     },

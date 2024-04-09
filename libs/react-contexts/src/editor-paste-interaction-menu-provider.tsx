@@ -1,17 +1,8 @@
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { ImportElementSource } from '@decipad/editor-types';
-import {
-  useEditorUserInteractions,
-  UserInteraction,
-} from './editor-user-interactions';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import type { ImportElementSource } from '@decipad/editor-types';
+import type { UserInteraction } from './editor-user-interactions';
+import { useEditorUserInteractions } from './editor-user-interactions';
 
 export interface EditorPasteInteractionMenuContextValue {
   showInteractionMenu: boolean;

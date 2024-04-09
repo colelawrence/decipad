@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/number/**/*.ts"],
+        "lintFilePatterns": ["libs/number/**/*.ts", "libs/number/**/*.tsx"],
         "maxWarnings": 0
       }
     },

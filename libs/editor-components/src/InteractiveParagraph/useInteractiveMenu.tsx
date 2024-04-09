@@ -1,10 +1,7 @@
+import type { ImportElementSource, MyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
+import type { EditorPasteInteractionMenuContextValue } from '@decipad/react-contexts';
 import {
-  ImportElementSource,
-  MyElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
-import {
-  EditorPasteInteractionMenuContextValue,
   useComputer,
   useEditorPasteInteractionMenuContext,
 } from '@decipad/react-contexts';

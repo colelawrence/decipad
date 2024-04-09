@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/graphqlserver/src/**/*.ts",
+          "libs/graphqlserver/src/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

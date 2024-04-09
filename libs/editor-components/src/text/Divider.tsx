@@ -1,5 +1,5 @@
 import { Divider as UIDivider } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 import { DraggableBlock } from '../block-management';
 
 export const Divider: PlateComponent = ({ attributes, element, children }) => {

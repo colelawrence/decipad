@@ -1,7 +1,7 @@
-import { User } from '@decipad/interfaces';
+import type { User } from '@decipad/interfaces';
 import { render } from '@react-email/render';
 import { GenericInvite } from '@decipad/email-templates';
-import { EmailGenerator } from './types';
+import type { EmailGenerator } from './types';
 
 const genericInvite: EmailGenerator<{
   from: User;

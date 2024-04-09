@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { getAggregationShortName } from '@decipad/language-aggregations';
-import { DataGroup, AggregationKind } from '../../types';
+import type { DataGroup, AggregationKind } from '../../types';
 import { DataViewDataGroupElement } from '../DataViewDataGroup/DataViewDataGroup';
 import { DataViewTableHeader } from '../DataViewTableHeader';
 import { SmartCell } from '../SmartCell';

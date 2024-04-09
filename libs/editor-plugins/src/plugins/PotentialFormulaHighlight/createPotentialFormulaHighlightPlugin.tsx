@@ -1,9 +1,5 @@
-import {
-  DECORATE_POTENTIAL_FORMULA,
-  MyEditor,
-  MyPlatePlugin,
-  MyValue,
-} from '@decipad/editor-types';
+import type { MyEditor, MyPlatePlugin, MyValue } from '@decipad/editor-types';
+import { DECORATE_POTENTIAL_FORMULA } from '@decipad/editor-types';
 import { decoratePotentialFormula } from './decorate/decoratePotentialFormula';
 import { PotentialFormulaHighlight } from './component/PotentialFormulaHighlight';
 

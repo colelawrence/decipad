@@ -2,8 +2,7 @@ import { cssVar, offBlack, transparency, weakOpacity } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Close } from 'libs/ui/src/icons';
 import { closeButtonStyles } from 'libs/ui/src/styles/buttons';
-import type { FC } from 'react';
-import { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 const aiContainerParaStyles = css({
   border: `solid 1px ${cssVar('borderDefault')}`,

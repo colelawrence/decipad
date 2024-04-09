@@ -8,13 +8,14 @@ import {
   NumberCatalog as UINumberCatalog,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import { FC, useCallback, useContext, useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { execute } from '../utils/slashCommands';
 import { useOnDragEnd } from '../utils/useDnd';
 import { catalogItems } from './catalogItems';
 import { selectCatalogNames } from './selectCatalogNames';
 import { toVar } from './toVar';
-import { MyEditor, SlashCommand } from '@decipad/editor-types';
+import type { MyEditor, SlashCommand } from '@decipad/editor-types';
 import { groupByTab } from './groupByTab';
 
 const catalogDebounceTimeMs = 1_000;

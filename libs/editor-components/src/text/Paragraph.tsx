@@ -4,13 +4,15 @@ import {
   useNodePath,
   useNodeText,
 } from '@decipad/editor-hooks';
-import {
-  COLUMN_KINDS,
-  ELEMENT_PARAGRAPH,
+import type {
   MyEditor,
   MyElement,
   ParagraphElement,
   PlateComponent,
+} from '@decipad/editor-types';
+import {
+  COLUMN_KINDS,
+  ELEMENT_PARAGRAPH,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';

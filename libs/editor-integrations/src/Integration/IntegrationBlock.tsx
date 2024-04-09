@@ -4,13 +4,15 @@ import {
   insertPlotBelow,
 } from '@decipad/editor-components';
 import { useNodePath } from '@decipad/editor-hooks';
-import {
-  ELEMENT_INTEGRATION,
-  ImportElementSourcePretty,
+import type {
   IntegrationTypes,
   MyElement,
   PlateComponent,
   SimpleTableCellType,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_INTEGRATION,
+  ImportElementSourcePretty,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
@@ -23,9 +25,9 @@ import {
 } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
+import type { MarkType } from '@decipad/ui';
 import {
   AnimatedIcon,
-  MarkType,
   IntegrationBlock as UIIntegrationBlock,
   UpgradePlanWarningTooltip,
   icons,
@@ -36,17 +38,11 @@ import {
   setNodes,
 } from '@udecode/plate-common';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
-import {
-  ComponentProps,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
-import { ContextActions, IntegrationBlockContext } from '../hooks';
+import type { ContextActions } from '../hooks';
+import { IntegrationBlockContext } from '../hooks';
 import { CodeIntegration } from './CodeIntegration';
 import { NotionIntegration } from './NotionIntegration';
 import { SQLIntegration } from './SQLIntegration';

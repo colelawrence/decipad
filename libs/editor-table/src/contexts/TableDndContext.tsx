@@ -1,6 +1,6 @@
 import type { MyElement, TableHeaderElement } from '@decipad/editor-types';
 import { createContext } from 'react';
-import { DropTargetMonitor } from 'react-dnd';
+import type { DropTargetMonitor } from 'react-dnd';
 import type { ColumnDndDirection, DragColumnItem } from '..';
 
 export type GoodToDragColumns = 'column' | 'DataViewColumn';

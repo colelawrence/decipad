@@ -1,5 +1,7 @@
-import React, { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import React from 'react';
 import { createParagraphPlugin } from '@udecode/plate-paragraph';
+import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
@@ -8,8 +10,6 @@ import {
   insertText,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlateProps,
   select,
 } from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';

@@ -1,5 +1,6 @@
 import { insertLiveConnection } from '@decipad/editor-components';
-import { MyEditor, useMyEditorRef } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { insertEmbedBelow, insertImageBelow } from '@decipad/editor-utils';
 import {
   useAttachFileToNotebookMutation,
@@ -11,8 +12,9 @@ import { Modal, UploadFileModal } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { getStartPoint } from '@udecode/plate-common';
 import axios, { AxiosError } from 'axios';
-import { FC, useCallback } from 'react';
-import { Path } from 'slate';
+import type { FC } from 'react';
+import { useCallback } from 'react';
+import type { Path } from 'slate';
 import { attachGenericFile } from './attachGeneric';
 
 export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({

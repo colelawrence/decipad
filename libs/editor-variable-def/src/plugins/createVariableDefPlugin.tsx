@@ -1,11 +1,11 @@
 import { isElement } from '@udecode/plate-common';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import { setSelectionNext } from '@decipad/editor-utils';
@@ -24,7 +24,7 @@ import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { Dropdown } from '../components/Dropdown';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 export const createVariableDefPlugin = (
   computer: RemoteComputer

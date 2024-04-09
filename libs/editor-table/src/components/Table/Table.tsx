@@ -1,25 +1,22 @@
 import { type Result } from '@decipad/remote-computer';
 import { DraggableBlock } from '@decipad/editor-components';
 import { useNodePath } from '@decipad/editor-hooks';
-import {
-  ELEMENT_TABLE,
-  PlateComponent,
-  UserIconKey,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent, UserIconKey } from '@decipad/editor-types';
+import { ELEMENT_TABLE, useMyEditorRef } from '@decipad/editor-types';
 import {
   assertElementType,
   useMaterializedResult,
 } from '@decipad/editor-utils';
+import type { EditorTableContextValue } from '@decipad/react-contexts';
 import {
   EditorTableContext,
-  EditorTableContextValue,
   EditorTableResultContext,
   useComputer,
   useCurrentWorkspaceStore,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
-import { AvailableSwatchColor, EditorTable } from '@decipad/ui';
+import type { AvailableSwatchColor } from '@decipad/ui';
+import { EditorTable } from '@decipad/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
 import { WIDE_MIN_COL_COUNT } from '../../constants';

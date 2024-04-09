@@ -6,11 +6,8 @@ import {
   useFloatingLinkInsert,
   useFloatingLinkInsertState,
 } from '@udecode/plate-link';
-import {
-  flip,
-  offset,
-  UseVirtualFloatingOptions,
-} from '@udecode/plate-floating';
+import type { UseVirtualFloatingOptions } from '@udecode/plate-floating';
+import { flip, offset } from '@udecode/plate-floating';
 import { Icons } from './icons';
 import { cn } from '@decipad/ui';
 import { inputVariants } from './input';

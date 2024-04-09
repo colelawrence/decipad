@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/slate-yjs/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/slate-yjs/**/*.ts",
+          "libs/slate-yjs/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

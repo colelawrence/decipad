@@ -9,7 +9,7 @@ import type { ResultMessageType } from '@decipad/safejs';
 import { useCallback, useEffect } from 'react';
 import { useDeciVariables, useIntegrationOptions } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
-import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
+import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useWorker } from '@decipad/editor-hooks';
 
 /**

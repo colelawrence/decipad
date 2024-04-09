@@ -2,13 +2,12 @@ import { useCallback, useMemo, useRef } from 'react';
 import { Path } from 'slate';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { isCellAlignRight } from '@decipad/editor-table';
-import {
+import type {
   DataViewElement,
-  ELEMENT_DATA_VIEW_TH,
   PlateComponent,
   TableCellType,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { ELEMENT_DATA_VIEW_TH, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';

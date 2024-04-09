@@ -1,11 +1,11 @@
 import { getExprRef } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
-import {
+import type {
   MyElement,
   PlateComponent,
   RichText,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   getAboveNodeSafe,
   insertStructuredCodeLineBelow,

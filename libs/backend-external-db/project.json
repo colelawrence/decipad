@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/backend-external-db/src/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/backend-external-db/src/**/*.ts",
+          "libs/backend-external-db/src/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

@@ -1,4 +1,4 @@
-import {
+import type {
   DrawElement,
   DrawElementDescendant,
   DrawElements,
@@ -11,21 +11,13 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { THEME } from '@excalidraw/excalidraw';
-import { ExcalidrawDataState } from '@udecode/plate-excalidraw';
-import {
-  ComponentProps,
-  FC,
-  MouseEvent,
-  ReactNode,
-  useCallback,
-  useRef,
-} from 'react';
-import { blue200, blue300, cssVar, DraggableBlock } from '@decipad/ui';
-import {
-  ExcalidrawElement,
-  ExcalidrawProps,
-  ExcalidrawRef,
-} from './excalidraw-element';
+import type { ExcalidrawDataState } from '@udecode/plate-excalidraw';
+import type { ComponentProps, FC, MouseEvent, ReactNode } from 'react';
+import { useCallback, useRef } from 'react';
+import type { DraggableBlock } from '@decipad/ui';
+import { blue200, blue300, cssVar } from '@decipad/ui';
+import type { ExcalidrawProps, ExcalidrawRef } from './excalidraw-element';
+import { ExcalidrawElement } from './excalidraw-element';
 
 const drawStyles = css({
   display: 'block',

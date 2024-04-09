@@ -1,22 +1,17 @@
 import { type Result } from '@decipad/remote-computer';
-import { AnyElement, useMyEditorRef } from '@decipad/editor-types';
+import type { AnyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { Select, SmartColumnCell as UISmartColumnCell } from '@decipad/ui';
-import {
-  DragEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type { DragEvent, FC } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EMPTY } from 'rxjs';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { type AggregationType } from '@decipad/language-aggregations';
 import { useColumnAggregationTypes } from '../../hooks';
 import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
-import { TableColumn } from '../../types';
+import type { TableColumn } from '../../types';
 
 interface SmartColumnCellProps {
   tableName: string;

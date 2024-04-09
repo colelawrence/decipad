@@ -1,13 +1,8 @@
-import { LiveConnectionResult } from '@decipad/live-connect';
+import type { LiveConnectionResult } from '@decipad/live-connect';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
-import {
-  FC,
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useMemo,
-} from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { BehaviorSubject } from 'rxjs';
 
 type LiveConnectionResult$ = BehaviorSubject<LiveConnectionResult>;

@@ -1,8 +1,8 @@
 import { DraggableBlock } from '@decipad/editor-components';
+import type { PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
-  PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementMultipleType } from '@decipad/editor-utils';
 import { useState } from 'react';

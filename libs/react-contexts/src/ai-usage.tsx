@@ -1,12 +1,6 @@
-import { AiUsage } from '@decipad/interfaces';
-import {
-  FC,
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import type { AiUsage } from '@decipad/interfaces';
+import type { FC, ReactNode } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 type AiUsageActions = AiUsage & {
   updateUsage: (usage: Partial<AiUsage>) => void;

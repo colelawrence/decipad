@@ -1,9 +1,6 @@
-import {
-  CursorOverlay as CursorOverlayPrimitive,
-  CursorOverlayProps,
-  CursorProps,
-} from '@udecode/plate-cursor';
-import { CursorData as DecipadCursorData } from '@decipad/react-contexts';
+import type { CursorOverlayProps, CursorProps } from '@udecode/plate-cursor';
+import { CursorOverlay as CursorOverlayPrimitive } from '@udecode/plate-cursor';
+import type { CursorData as DecipadCursorData } from '@decipad/react-contexts';
 import { cn } from '@decipad/ui';
 
 export function Cursor({

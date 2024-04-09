@@ -1,10 +1,6 @@
 import { MagicNumber } from '@decipad/editor-components';
-import {
-  createMyPluginFactory,
-  MARK_MAGICNUMBER,
-  MyEditor,
-  MyValue,
-} from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
+import { createMyPluginFactory, MARK_MAGICNUMBER } from '@decipad/editor-types';
 import { withMagicNumberOverrides } from './withMagicNumberOverrides';
 import {
   createMagicCursorKeysPlugin,

@@ -1,10 +1,7 @@
 import { useCallback, useState, createContext } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
-import {
-  ELEMENT_LIVE_QUERY,
-  LiveDataSetElement,
-  PlateComponent,
-} from '@decipad/editor-types';
+import type { LiveDataSetElement, PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_LIVE_QUERY } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useParentNode } from '@decipad/editor-hooks';
 import { getAnalytics } from '@decipad/client-events';

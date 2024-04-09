@@ -1,8 +1,9 @@
-import { DocSyncEditor } from '@decipad/docsync';
+import type { DocSyncEditor } from '@decipad/docsync';
 import { useToast } from '@decipad/toast';
 import { Button, Tooltip } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 const warningContainerStyles = css({
   whiteSpace: 'nowrap',

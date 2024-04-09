@@ -1,15 +1,13 @@
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
-import { useState, useEffect, useCallback, FC } from 'react';
-import {
-  DropdownMenu,
-  SelectItems,
-  CodeResult,
-  icons as Icons,
-} from '@decipad/ui';
+import type { FC } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import type { SelectItems } from '@decipad/ui';
+import { DropdownMenu, CodeResult, icons as Icons } from '@decipad/ui';
 
 import { getNode, setNodes } from '@udecode/plate-common';
-import { useMyEditorRef, TableHeaderElement } from '@decipad/editor-types';
+import type { TableHeaderElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';

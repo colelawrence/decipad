@@ -7,7 +7,7 @@ export type EditorTableContextValue = Readonly<{
   cellTypes: CellValueType[];
   columnBlockIds: string[];
   tableFrozen: boolean;
-  setTableFrozen: (b: boolean) => void;
+  setTableFrozen: (_b: boolean) => void;
 }>;
 
 const defaultValue: EditorTableContextValue = {

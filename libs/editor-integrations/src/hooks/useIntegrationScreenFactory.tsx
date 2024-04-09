@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ConnectionsMenu, SecretsMenu, SelectIntegration } from '@decipad/ui';
+import type { IntegrationStore, TExecution } from '@decipad/react-contexts';
 import {
-  IntegrationStore,
-  TExecution,
   useConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';

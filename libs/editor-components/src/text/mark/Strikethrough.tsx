@@ -1,5 +1,5 @@
 import { Strikethrough as UIStrikethrough } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 
 export const Strikethrough: PlateComponent = ({ attributes, children }) => {
   return (

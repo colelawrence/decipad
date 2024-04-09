@@ -1,10 +1,11 @@
-import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import {
+import type { PlateElementProps } from '@udecode/plate-common';
+import { PlateElement } from '@udecode/plate-common';
+import type {
   TExcalidrawElement,
   TExcalidrawProps,
-  useExcalidrawElement,
 } from '@udecode/plate-excalidraw';
-import { DrawElementDescendant } from '@decipad/editor-types';
+import { useExcalidrawElement } from '@udecode/plate-excalidraw';
+import type { DrawElementDescendant } from '@decipad/editor-types';
 
 export type ExcalidrawRef = NonNullable<TExcalidrawProps['excalidrawRef']>;
 

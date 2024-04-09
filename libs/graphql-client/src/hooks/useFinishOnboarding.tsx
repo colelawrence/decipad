@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { DefaultSession } from 'next-auth';
+import type { DefaultSession } from 'next-auth';
 import { useUpdateUserMutation } from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
 

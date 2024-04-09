@@ -19,11 +19,14 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
-import axios, { AxiosProgressEvent } from 'axios';
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import { DropTargetMonitor, useDrop } from 'react-dnd';
+import type { AxiosProgressEvent } from 'axios';
+import axios from 'axios';
+import type { FC, PropsWithChildren } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import type { DropTargetMonitor } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { isServerSideRendering } from '../../support/src/isServerSideRendering';
 import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
@@ -38,9 +41,9 @@ const uploadProgressWrapperStyles = css({
 type EditorAttachmentsHandlerProps = PropsWithChildren<{
   notebookId: string;
   getAttachmentForm: (
-    file: File
+    _file: File
   ) => Promise<undefined | [URL, FormData, string]>;
-  onAttached: (handle: string) => Promise<undefined | { url: URL }>;
+  onAttached: (_handle: string) => Promise<undefined | { url: URL }>;
 }>;
 
 export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({

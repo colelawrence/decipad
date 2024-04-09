@@ -1,5 +1,5 @@
 import { Italic as UIItalic } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 
 export const Italic: PlateComponent = ({ attributes, children }) => {
   return (

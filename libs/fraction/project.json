@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/fraction/**/*.ts"],
+        "lintFilePatterns": ["libs/fraction/**/*.ts", "libs/fraction/**/*.tsx"],
         "maxWarnings": 0
       }
     },

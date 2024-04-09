@@ -1,9 +1,8 @@
-import { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
+import type { DisplayElement, PlateComponent } from '@decipad/editor-types';
 import {
-  DisplayElement,
   ELEMENT_CODE_LINE,
   ELEMENT_DISPLAY,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {

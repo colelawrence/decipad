@@ -1,4 +1,5 @@
-import { ELEMENT_DATA_VIEW_TR, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_DATA_VIEW_TR } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { DataViewColumnHeaderRow as UIDataViewColumnHeaderRow } from '@decipad/ui';
 

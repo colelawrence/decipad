@@ -1,6 +1,6 @@
 import { CodeSyntax as UICodeSyntax } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
-import { CodeSyntaxRange } from '../utils/decorateExpression';
+import type { PlateComponent } from '@decipad/editor-types';
+import type { CodeSyntaxRange } from '../utils/decorateExpression';
 
 export const CodeSyntax: PlateComponent = ({ attributes, children, leaf }) => {
   return (

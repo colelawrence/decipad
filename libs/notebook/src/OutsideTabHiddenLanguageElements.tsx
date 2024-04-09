@@ -1,24 +1,23 @@
-import { FC, useRef } from 'react';
+import type { FC } from 'react';
+import { useRef } from 'react';
 import { type DocSyncEditor } from '@decipad/docsync';
-import {
-  ELEMENT_INTEGRATION,
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_DATASET,
-  ELEMENT_TAB,
-  ELEMENT_VARIABLE_DEF,
+import type {
   ElementKind,
   MyEditor,
   MyNode,
   PlateComponent,
   TabElement,
 } from '@decipad/editor-types';
-import { css } from '@emotion/react';
 import {
-  Plate,
-  PlateEditor,
-  getPlugin,
-  isElement,
-} from '@udecode/plate-common';
+  ELEMENT_INTEGRATION,
+  ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
+  ELEMENT_TAB,
+  ELEMENT_VARIABLE_DEF,
+} from '@decipad/editor-types';
+import { css } from '@emotion/react';
+import type { PlateEditor } from '@udecode/plate-common';
+import { Plate, getPlugin, isElement } from '@udecode/plate-common';
 import { ErrorBoundary } from '@sentry/react';
 
 export interface OutsideTabHiddenLanguageElementsProps {

@@ -3,17 +3,17 @@ import {
   insertPlotBelow,
 } from '@decipad/editor-components';
 import { useEnsureValidVariableName } from '@decipad/editor-hooks';
+import type { PlateComponent, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
-  PlateComponent,
-  TableElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getExprRef } from '@decipad/remote-computer';
-import { EditableTableCaption, MarkType, Tooltip } from '@decipad/ui';
+import type { MarkType } from '@decipad/ui';
+import { EditableTableCaption, Tooltip } from '@decipad/ui';
 import {
   findNodePath,
   getNodeChild,

@@ -1,19 +1,19 @@
-import {
+import type {
   DrawElement,
   DrawElements,
-  ELEMENT_DRAW,
   PlateComponent,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { ELEMENT_DRAW, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Draw as UIDraw } from '../../editor-components/src/plate-ui/draw';
 import cloneDeep from 'lodash.clonedeep';
-import { MutableRefObject, useCallback, useRef, useState } from 'react';
+import type { MutableRefObject } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import { dequal } from '@decipad/utils';
 import { unfixElements } from './fixElement';
-import { ExcalidrawImperativeAPI, ExcalidrawRef } from './types';
+import type { ExcalidrawImperativeAPI, ExcalidrawRef } from './types';
 import { useApplyEditorChanges } from './useApplyEditorChanges';
 import { useApplyUserChanges } from './useApplyUserChanges';
 

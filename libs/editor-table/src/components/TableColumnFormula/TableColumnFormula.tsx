@@ -2,10 +2,8 @@ import { Node } from 'slate';
 import { useSelected } from 'slate-react';
 import { selectErrorFromResult } from '@decipad/remote-computer';
 import { useAutoConvertToSmartRef } from '@decipad/editor-components';
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  PlateComponent,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';

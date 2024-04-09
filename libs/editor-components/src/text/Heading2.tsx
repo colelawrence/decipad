@@ -1,4 +1,4 @@
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 import { Heading2 as UIHeading2 } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 import { useTurnIntoProps } from '../utils';

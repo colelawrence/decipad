@@ -1,29 +1,24 @@
+import type { ComponentProps, CSSProperties, RefObject } from 'react';
 import React, {
-  ComponentProps,
-  CSSProperties,
-  RefObject,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import {
-  captionGlobalStore,
-  CaptionOptions,
-  TCaptionElement,
-  TextareaAutosize,
-} from '@udecode/plate-caption';
-import { cva, VariantProps } from 'class-variance-authority';
+import type { CaptionOptions, TCaptionElement } from '@udecode/plate-caption';
+import { captionGlobalStore, TextareaAutosize } from '@udecode/plate-caption';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 import { cn } from '@decipad/ui';
+import type { TElement } from '@udecode/plate-common';
 import {
   findNodePath,
   focusEditor,
   getNodeString,
   getPointAfter,
   setNodes,
-  TElement,
   useEditorRef,
   useElement,
 } from '@udecode/plate-common';

@@ -3,14 +3,15 @@ import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC, useCallback, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   AIPanelContainer,
   AIPanelForm,
   AIPanelSuggestion,
   AIPanelTitle,
 } from './components';
-import { PromptSuggestion } from './components/PromptSuggestions';
+import type { PromptSuggestion } from './components/PromptSuggestions';
 import { useRdFetch } from './hooks';
 
 type LiveQueryAIPanelProps = {

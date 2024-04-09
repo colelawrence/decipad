@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/toast/**/*.ts"],
+        "lintFilePatterns": ["libs/toast/**/*.ts", "libs/toast/**/*.tsx"],
         "maxWarnings": 0
       }
     },

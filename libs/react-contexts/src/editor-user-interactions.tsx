@@ -1,13 +1,13 @@
+import type { FC, ReactNode } from 'react';
 import {
   createContext,
-  FC,
-  ReactNode,
   useCallback,
   useContext,
   useMemo,
   useState,
 } from 'react';
-import { Observable, Subject } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import type { ImportElementSource } from '@decipad/editor-types';
 

@@ -1,4 +1,5 @@
-import { ELEMENT_IFRAME, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_IFRAME } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { IframeEmbed as UIIframeEmbed } from '@decipad/ui';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';

@@ -1,11 +1,7 @@
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
-import {
-  DropdownMenu,
-  SelectItems,
-  CodeResult,
-  icons as Icons,
-} from '@decipad/ui';
+import type { SelectItems } from '@decipad/ui';
+import { DropdownMenu, CodeResult, icons as Icons } from '@decipad/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDropdownConsumer } from '@decipad/editor-hooks';
 import { focusEditor, useEditorRef } from '@udecode/plate-common';

@@ -2,9 +2,10 @@
 import { AssistantChat } from '@decipad/ui';
 import { useAssistantChat } from './useAssistantChat';
 import { useAiUsage } from '@decipad/react-contexts';
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
-import { EElementOrText, insertNodes } from '@udecode/plate-common';
+import type { EElementOrText } from '@udecode/plate-common';
+import { insertNodes } from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
 import { TOKENS_TO_CREDITS } from './limits';
 

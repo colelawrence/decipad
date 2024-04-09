@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/docsync/**/*.ts"],
+        "lintFilePatterns": ["libs/docsync/**/*.ts", "libs/docsync/**/*.tsx"],
         "maxWarnings": 0
       }
     },

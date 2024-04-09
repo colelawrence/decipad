@@ -1,5 +1,6 @@
-import { createContext, FC, ReactNode, useContext } from 'react';
-import { Column } from '../types';
+import type { FC, ReactNode } from 'react';
+import { createContext, useContext } from 'react';
+import type { Column } from '../types';
 
 export interface DataViewContextValue {
   columns: Column[] | undefined;

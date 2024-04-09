@@ -2,9 +2,9 @@ import { Button, ErrorMessage, cssVar, p16Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Refresh } from 'libs/ui/src/icons';
 import type { FC } from 'react';
-import { ParagraphAIPanelProps } from '../ParagraphAIPanel';
-import { RemoteData } from '../hooks';
-import { PromptSuggestion } from './PromptSuggestions';
+import type { ParagraphAIPanelProps } from '../ParagraphAIPanel';
+import type { RemoteData } from '../hooks';
+import type { PromptSuggestion } from './PromptSuggestions';
 
 const completionCss = css(p16Regular, {
   background: cssVar('backgroundDefault'),

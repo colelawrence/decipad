@@ -2,6 +2,7 @@ import { ELEMENT_H1 } from '@decipad/editor-types';
 import { findDomNodePath } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
 import { render, waitFor } from '@testing-library/react';
+import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
@@ -9,8 +10,6 @@ import {
   insertText,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlateProps,
   select,
 } from '@udecode/plate-common';
 import { Title } from './Title';

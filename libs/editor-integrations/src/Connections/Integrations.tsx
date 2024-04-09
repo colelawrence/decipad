@@ -1,12 +1,13 @@
+import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
-  TExecution,
   getConnectionDisplayLabel,
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
 import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useConnectionActionMenu,
   useCreateIntegration,

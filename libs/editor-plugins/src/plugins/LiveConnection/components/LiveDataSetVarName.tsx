@@ -2,15 +2,15 @@ import {
   useEnsureValidVariableName,
   useParentNodeEntry,
 } from '@decipad/editor-hooks';
+import type { LiveDataSetElement, PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_DATASET,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
-  LiveDataSetElement,
-  PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
+import type { SourceUrlParseResponse } from '@decipad/import';
+import { parseSourceUrl } from '@decipad/import';
 import { useConnectionStore } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,

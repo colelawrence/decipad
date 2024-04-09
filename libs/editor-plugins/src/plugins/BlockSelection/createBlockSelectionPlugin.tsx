@@ -1,4 +1,4 @@
-import { MyPlatePlugin } from '@decipad/editor-types';
+import type { MyPlatePlugin } from '@decipad/editor-types';
 import {
   BlockSelectionArea,
   BlockStartArea,

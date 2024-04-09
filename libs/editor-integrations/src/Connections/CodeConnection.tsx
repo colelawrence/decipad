@@ -3,16 +3,17 @@ import {
   importFromUnknownJson,
   tableFlip,
 } from '@decipad/import';
+import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
-  TExecution,
   useCodeConnectionStore,
   useConnectionStore,
   useCurrentWorkspaceStore,
   useNotebookId,
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
-import { FC, useCallback, useContext, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Button,
   CodeEditor,
@@ -24,12 +25,10 @@ import {
 } from '@decipad/ui';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
-import {
-  RemoteData,
-  useRdFetch,
-} from 'libs/editor-components/src/AIPanel/hooks';
+import type { RemoteData } from 'libs/editor-components/src/AIPanel/hooks';
+import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { useDeciVariables } from '../hooks';
-import { ConnectionProps } from './types';
+import type { ConnectionProps } from './types';
 import { useWorker } from '@decipad/editor-hooks';
 
 const fieldsetStyles = css({

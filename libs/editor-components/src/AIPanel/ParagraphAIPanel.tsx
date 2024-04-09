@@ -1,23 +1,25 @@
 import { getAnalytics } from '@decipad/client-events';
-import { MyEditor, useMyEditorRef } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { getNodeString } from '@udecode/plate-common';
 import { blockSelectionStore } from '@udecode/plate-selection';
-import { FC, useCallback, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   AIPanelContainer,
   AIPanelForm,
   AIPanelSuggestion,
   AIPanelTitle,
 } from './components';
-import {
+import type {
   AiParaOp,
   PromptSuggestion,
-  PromptSuggestions,
 } from './components/PromptSuggestions';
+import { PromptSuggestions } from './components/PromptSuggestions';
 import { useRdFetch } from './hooks';
 
 const getTextFromSelectParagraphs = (

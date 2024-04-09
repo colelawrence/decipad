@@ -9,8 +9,8 @@ import {
   transparency,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC } from 'react';
-import { ConnectDropTarget } from 'react-dnd';
+import type { FC } from 'react';
+import type { ConnectDropTarget } from 'react-dnd';
 
 interface DropZoneProps {
   connectDropTarget: ConnectDropTarget;

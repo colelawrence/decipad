@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
+        "lintFilePatterns": ["libs/fnqueue/**/*.ts", "libs/fnqueue/**/*.tsx"],
         "maxWarnings": 0
       }
     },

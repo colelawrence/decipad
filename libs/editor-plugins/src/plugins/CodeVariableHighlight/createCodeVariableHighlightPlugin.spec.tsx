@@ -1,18 +1,18 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
-import {
+import type {
   CodeLineElement,
-  DEPRECATED_ELEMENT_CODE_BLOCK,
   DeprecatedCodeBlockElement,
-  ELEMENT_CODE_LINE,
   MyValue,
 } from '@decipad/editor-types';
-import { render } from '@testing-library/react';
-import { Plate, PlateContent, PlatePlugin } from '@udecode/plate-common';
 import {
-  getRemoteComputer,
-  parseBlock,
-  RemoteComputer,
-} from '@decipad/remote-computer';
+  DEPRECATED_ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+} from '@decipad/editor-types';
+import { render } from '@testing-library/react';
+import type { PlatePlugin } from '@udecode/plate-common';
+import { Plate, PlateContent } from '@udecode/plate-common';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import { getRemoteComputer, parseBlock } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
 import {
   AnnotationsContext,

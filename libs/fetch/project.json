@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/fetch/**/*.ts"],
+        "lintFilePatterns": ["libs/fetch/**/*.ts", "libs/fetch/**/*.tsx"],
         "maxWarnings": 0
       }
     },

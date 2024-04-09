@@ -1,4 +1,5 @@
-import { FC, useMemo } from 'react';
+import type { FC } from 'react';
+import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { StatsPopup } from '@decipad/ui';
 import { useEditorStats } from '@decipad/react-contexts';

@@ -7,8 +7,8 @@ import {
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Send } from 'libs/ui/src/icons';
-import { RemoteDataStatus } from '../hooks';
-import { PromptSuggestion } from './PromptSuggestions';
+import type { RemoteDataStatus } from '../hooks';
+import type { PromptSuggestion } from './PromptSuggestions';
 
 // Used for submit button css too
 const spinnerCss = css({

@@ -1,13 +1,13 @@
 import { getAnalytics } from '@decipad/client-events';
-import { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/remote-computer';
 import { useNodePath } from '@decipad/editor-hooks';
-import {
+import type {
   LiveQueryElement,
   MyEditor,
   MyValue,
   TableCellType,
-  useMyEditorRef,
 } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
@@ -24,7 +24,8 @@ import {
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { setNodes } from '@udecode/plate-common';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
 
 export interface LiveConnectionCoreProps {

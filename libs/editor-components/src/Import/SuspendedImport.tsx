@@ -1,12 +1,10 @@
 import { isTableResult } from '@decipad/remote-computer';
-import {
-  ImportElement,
-  useMyEditorRef,
-  MAX_IMPORT_CELL_COUNT,
-} from '@decipad/editor-types';
+import type { ImportElement } from '@decipad/editor-types';
+import { useMyEditorRef, MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
 import { formatError } from '@decipad/format';
-import { ImportResult, tryImport } from '@decipad/import';
+import type { ImportResult } from '@decipad/import';
+import { tryImport } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import { Spinner } from '@decipad/ui';
 import {
@@ -15,7 +13,8 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { useSession } from 'next-auth/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { importTable } from './importTable';
 
 interface SuspendedImportProps {

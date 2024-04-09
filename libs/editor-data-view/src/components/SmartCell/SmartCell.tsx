@@ -1,10 +1,11 @@
-import { DragEvent, FC, useCallback } from 'react';
+import type { DragEvent, FC } from 'react';
+import { useCallback } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
-import { SmartProps } from '../../types';
+import type { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
 const emptyCellStyles = css({

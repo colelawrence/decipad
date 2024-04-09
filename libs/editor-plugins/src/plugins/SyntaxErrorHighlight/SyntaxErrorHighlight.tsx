@@ -1,6 +1,6 @@
 import { SyntaxErrorHighlight as UISyntaxErrorHighlight } from '@decipad/ui';
-import { ComponentProps } from 'react';
-import { PlateComponent } from '@decipad/editor-types';
+import type { ComponentProps } from 'react';
+import type { PlateComponent } from '@decipad/editor-types';
 import { useDelayedTrue } from '@decipad/react-utils';
 
 export type SyntaxErrorHighlightProps = Pick<

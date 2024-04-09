@@ -6,13 +6,15 @@ import {
   useUnnamedResults,
 } from '@decipad/editor-components';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import type {
+  PlateComponent,
+  UserIconKey,
+  MyNode,
+} from '@decipad/editor-types';
 import {
   COLUMN_KINDS,
   ELEMENT_DISPLAY,
-  PlateComponent,
-  UserIconKey,
   useMyEditorRef,
-  MyNode,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -24,15 +26,11 @@ import {
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
-import {
-  DisplayWidget,
-  VariableEditor,
-  SelectItems,
-  AvailableSwatchColor,
-} from '@decipad/ui';
+import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
+import { DisplayWidget, VariableEditor } from '@decipad/ui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Number } from 'libs/ui/src/icons';
-import { ResultFormatting } from 'libs/ui/src/types';
+import type { ResultFormatting } from 'libs/ui/src/types';
 
 const displayDebounceNamesDefinedMs = 500;
 

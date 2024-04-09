@@ -1,5 +1,6 @@
 import { JellyBeans } from 'libs/ui/src/shared';
-import { ReactNode, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback } from 'react';
 
 export type AiParaOp = 'replace' | 'below';
 

@@ -1,7 +1,8 @@
-import { FC, useCallback, useContext, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
-  TExecution,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { CodeEditor } from '@decipad/ui';
@@ -9,7 +10,7 @@ import {
   columnTypeCoercionsToRec,
   importFromUnknownJson,
 } from '@decipad/import';
-import { ConnectionProps } from './types';
+import type { ConnectionProps } from './types';
 import { fetchQuery } from '../utils';
 
 export const SQLConnection: FC<ConnectionProps> = ({
@@ -52,7 +53,7 @@ export const SQLConnection: FC<ConnectionProps> = ({
       onExecute({ status: 'error', err: 'No data connection selected.' });
       setLog([{ status: 'error', err: 'No data connection selected.' }]);
     }
-  }, [onExecute, setResultPreview, sqlStore, typeMapping]);
+  }, [onExecute, setRawResult, setResultPreview, sqlStore, typeMapping]);
 
   useEffect(() => {
     if (info.status === 'run') {

@@ -1,18 +1,13 @@
-import {
+import type {
   ImageElement as ImageElementType,
   MyElement,
   PlateComponent,
 } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { PlateElement, withHOC } from '@udecode/plate-common';
-import { ComponentProps, FC, ReactNode } from 'react';
-import {
-  cn,
-  componentCssVars,
-  cssVar,
-  DraggableBlock,
-  p14Regular,
-} from '@decipad/ui';
+import type { ComponentProps, FC, ReactNode } from 'react';
+import type { DraggableBlock } from '@decipad/ui';
+import { cn, componentCssVars, cssVar, p14Regular } from '@decipad/ui';
 import { MediaPopover } from './media-popover';
 import {
   ELEMENT_IMAGE,

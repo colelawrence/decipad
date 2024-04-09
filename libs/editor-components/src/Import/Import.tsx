@@ -1,6 +1,8 @@
-import { FC, Suspense } from 'react';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ELEMENT_IMPORT, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_IMPORT } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { ErrorMessage, Spinner } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';

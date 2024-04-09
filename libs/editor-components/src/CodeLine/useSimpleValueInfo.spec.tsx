@@ -1,23 +1,22 @@
 import { renderHook } from '@testing-library/react';
 
-import {
+import type {
   CodeLineV2Element,
-  createMyPlateEditor,
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_STRUCTURED_VARNAME,
   MyEditor,
   MyElement,
   MyValue,
 } from '@decipad/editor-types';
+import {
+  createMyPlateEditor,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_STRUCTURED_VARNAME,
+} from '@decipad/editor-types';
 import { getNodeString, Plate, PlateContent } from '@udecode/plate-common';
 import { useState } from 'react';
 
-import {
-  AST,
-  parseSimpleValueUnit,
-  prettyPrintAST,
-} from '@decipad/remote-computer';
+import type { AST } from '@decipad/remote-computer';
+import { parseSimpleValueUnit, prettyPrintAST } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { timeout } from '@decipad/utils';
 import { act } from 'react-dom/test-utils';

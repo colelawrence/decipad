@@ -1,4 +1,5 @@
-import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
+import type { PlotElement } from '@decipad/editor-types';
+import { ELEMENT_PLOT } from '@decipad/editor-types';
 import type { NotebookResults, SerializedType } from '@decipad/remote-computer';
 import {
   AnnotationsContext,

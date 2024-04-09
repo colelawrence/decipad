@@ -1,8 +1,9 @@
 import { createPortal } from 'react-dom';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { noop } from 'lodash';
 import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
-import { ShadowCalcPortal } from '@decipad/react-contexts';
+import type { ShadowCalcPortal } from '@decipad/react-contexts';
 import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
@@ -14,7 +15,7 @@ export const DISMISS_KEYS = ['Escape', 'Enter'];
 export const CodeLineTeleport: React.FC<
   PropsWithChildren<{
     codeLine?: ShadowCalcPortal;
-    onDismiss?(key?: string): void;
+    onDismiss?(_key?: string): void;
     onTeleport?(): void;
     onBringBack?(): void;
   }>

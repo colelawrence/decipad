@@ -7,7 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/column/**/*.ts"],
+        "lintFilePatterns": ["libs/column/**/*.ts", "libs/column/**/*.tsx"],
         "maxWarnings": 0
       }
     },

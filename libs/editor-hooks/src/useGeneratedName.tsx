@@ -1,4 +1,5 @@
-import { AnyElement, UserIconKey, userIconKeys } from '@decipad/editor-types';
+import type { AnyElement, UserIconKey } from '@decipad/editor-types';
+import { userIconKeys } from '@decipad/editor-types';
 import { useAiUsage, useNotebookId } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useCallback, useRef } from 'react';

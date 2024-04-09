@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/language-filters/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/language-filters/**/*.ts",
+          "libs/language-filters/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

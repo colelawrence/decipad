@@ -1,4 +1,4 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { EditorChangeContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { isCollapsed } from '@udecode/plate-common';

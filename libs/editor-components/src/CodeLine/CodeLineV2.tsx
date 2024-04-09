@@ -3,13 +3,15 @@ import type {
   IdentifiedResult,
   SimpleValue,
 } from '@decipad/remote-computer';
-import {
+import type {
   CodeLineV2Element,
+  MyElement,
+  PlateComponent,
+} from '@decipad/editor-types';
+import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  MyElement,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -46,10 +48,10 @@ import {
   useElement,
   useEventEditorSelectors,
 } from '@udecode/plate-common';
+import type { MouseEvent } from 'react';
 import {
   Children,
   createContext,
-  MouseEvent,
   useCallback,
   useContext,
   useEffect,

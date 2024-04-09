@@ -4,12 +4,8 @@ import {
   TableRow as UITableRow,
   TableStyleContext,
 } from '@decipad/ui';
-import {
-  ELEMENT_TR,
-  PlateComponent,
-  TableElement,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent, TableElement } from '@decipad/editor-types';
+import { ELEMENT_TR, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
 import React, { useContext, useEffect, useRef } from 'react';

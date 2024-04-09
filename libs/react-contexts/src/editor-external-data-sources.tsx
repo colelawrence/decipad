@@ -1,5 +1,6 @@
-import { createContext, FC, PropsWithChildren } from 'react';
-import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext } from 'react';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 
 const NO_CONTEXT_ERROR_MESSAGE = 'No external data sources context';
 

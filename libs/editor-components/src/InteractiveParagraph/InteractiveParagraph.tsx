@@ -1,14 +1,10 @@
 import { useContext } from 'react';
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ClientEventsContext } from '@decipad/client-events';
-import { RemoteComputer } from '@decipad/remote-computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { Paragraph } from '@decipad/editor-components';
-import {
-  ELEMENT_PARAGRAPH,
-  PlateComponent,
-  SlashCommand,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent, SlashCommand } from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH, useMyEditorRef } from '@decipad/editor-types';
 import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
 
 import { assertElementType } from '@decipad/editor-utils';

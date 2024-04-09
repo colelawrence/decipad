@@ -1,8 +1,5 @@
-import {
-  COLUMN_KINDS,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { COLUMN_KINDS, useMyEditorRef } from '@decipad/editor-types';
 import {
   assertElementType,
   isDragAndDropHorizontal,

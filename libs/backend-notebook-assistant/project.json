@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/backend-notebook-assistant/src/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/backend-notebook-assistant/src/**/*.ts",
+          "libs/backend-notebook-assistant/src/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

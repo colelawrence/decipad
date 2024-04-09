@@ -1,6 +1,7 @@
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { act, render, waitFor } from '@testing-library/react';
 import { createParagraphPlugin } from '@udecode/plate-paragraph';
+import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
@@ -8,14 +9,12 @@ import {
   insertText,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlateProps,
   select,
 } from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { findDomNodePath } from '@decipad/editor-utils';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { timeout } from '@decipad/utils';
 import { Paragraph } from './Paragraph';
 import { BrowserRouter } from 'react-router-dom';

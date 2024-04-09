@@ -1,10 +1,5 @@
-import {
-  FC,
-  MutableRefObject,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-} from 'react';
+import type { FC, MutableRefObject, PropsWithChildren } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface EditorBlockParentRefProviderProps {
   onRefChange: (ref: MutableRefObject<HTMLElement | undefined>) => void;

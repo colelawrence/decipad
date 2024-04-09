@@ -1,21 +1,18 @@
 import { DraggableBlock } from '@decipad/editor-components';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import {
-  ELEMENT_DATA_VIEW,
-  PlateComponent,
-  UserIconKey,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent, UserIconKey } from '@decipad/editor-types';
+import { ELEMENT_DATA_VIEW, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useEditorStylesContext } from '@decipad/react-contexts';
+import type { AvailableSwatchColor } from '@decipad/ui';
 import {
-  AvailableSwatchColor,
   DataView as UIDataView,
   DataViewMenu,
   VoidBlock,
   CodeError,
 } from '@decipad/ui';
-import { ReactNode, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { useMemo } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';

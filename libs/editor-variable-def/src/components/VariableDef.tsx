@@ -6,12 +6,14 @@ import {
   useDragAndDropOnDrop,
   useTextTypeInference,
 } from '@decipad/editor-components';
-import {
-  ELEMENT_DISPLAY,
-  ELEMENT_VARIABLE_DEF,
+import type {
   PlateComponent,
   VariableDropdownElement,
   VariableSliderElement,
+} from '@decipad/editor-types';
+import {
+  ELEMENT_DISPLAY,
+  ELEMENT_VARIABLE_DEF,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -26,7 +28,7 @@ import {
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
-import { AvailableSwatchColor } from 'libs/ui/src/utils';
+import type { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { useCallback, useContext } from 'react';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';

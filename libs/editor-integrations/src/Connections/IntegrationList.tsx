@@ -1,13 +1,7 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { useConnectionStore } from '@decipad/react-contexts';
-import {
-  GoogleSheet,
-  MongoDb,
-  OtherSql,
-  SelectIntegration,
-  WebApi,
-  icons,
-} from '@decipad/ui';
+import type { SelectIntegration } from '@decipad/ui';
+import { GoogleSheet, MongoDb, OtherSql, WebApi, icons } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 

@@ -26,6 +26,9 @@ module.exports = {
 
     'no-console': ['error', { allow: ['error', 'warn', 'info'] }],
 
+    'tailwindcss/no-unnecessary-arbitrary-value': 'off',
+    'tailwindcss/enforces-shorthand': 'off',
+
     // testing-library's waitFor is sometimes used in beforeEach and requires an expect inside
     'jest/no-standalone-expect': 'off',
 

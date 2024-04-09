@@ -10,7 +10,8 @@ import {
   useGlobalParentNode,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import { DropdownElement, useMyEditorRef } from '@decipad/editor-types';
+import type { DropdownElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { formatResultPreview } from '@decipad/format';
 import {
   CategoriesContext,
@@ -19,7 +20,8 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
-import { icons, SelectItems } from '@decipad/ui';
+import type { SelectItems } from '@decipad/ui';
+import { icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
 import { insertText, isElement, nanoid } from '@udecode/plate-common';
 import uniqBy from 'lodash.uniqby';

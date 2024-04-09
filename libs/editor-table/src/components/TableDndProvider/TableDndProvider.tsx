@@ -5,18 +5,18 @@ import {
   getHoverDirection,
   useTableActions,
 } from '@decipad/editor-table';
-import {
+import type {
   MyEditor,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { dndStore } from '@udecode/plate-dnd';
 import { findNodePath } from '@udecode/plate-common';
-import {
+import type {
   CellDndProps,
   ColumnDropLine,
-  TableDndContext,
 } from '../../contexts/TableDndContext';
+import { TableDndContext } from '../../contexts/TableDndContext';
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 import { useMemoPath } from '@decipad/react-utils';

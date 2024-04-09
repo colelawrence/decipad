@@ -1,6 +1,6 @@
 import { useTableColumnFormulaResultForCell } from '@decipad/editor-hooks';
 import { CodeResult, table as tableStyles } from '@decipad/ui';
-import { SerializedType } from '@decipad/language';
+import type { SerializedType } from '@decipad/language';
 import type { CellProps } from './types';
 import { css } from '@emotion/react';
 

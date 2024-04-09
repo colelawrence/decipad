@@ -1,11 +1,13 @@
 import { useNodePath, useSelection } from '@decipad/editor-hooks';
-import { ParagraphElement, useMyEditorRef } from '@decipad/editor-types';
+import type { ParagraphElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import { useWindowListener } from '@decipad/react-utils';
 import { dequal } from '@decipad/utils';
 import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate-common';
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { Location, Path } from 'slate';
+import type { RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Location, Path } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 
 interface UseSlashCommandMenuResult {

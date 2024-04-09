@@ -1,5 +1,6 @@
 import { DraggableBlock } from '@decipad/editor-components';
-import { ELEMENT_COLUMNS, PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_COLUMNS } from '@decipad/editor-types';
 import { EditorColumns } from '@decipad/ui';
 
 export const Columns: PlateComponent = ({ attributes, children, element }) => {

@@ -1,9 +1,8 @@
 import { useEnsureValidVariableName } from '@decipad/editor-hooks';
+import type { DataViewElement, PlateComponent } from '@decipad/editor-types';
 import {
-  DataViewElement,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';

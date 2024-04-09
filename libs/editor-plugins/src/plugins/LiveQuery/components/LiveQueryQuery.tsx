@@ -1,6 +1,6 @@
+import type { PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_QUERY_QUERY,
-  PlateComponent,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';

@@ -1,5 +1,7 @@
-import { ErrorInfo, FC, ReactNode, useCallback } from 'react';
-import { MyElement, useMyEditorRef } from '@decipad/editor-types';
+import type { ErrorInfo, FC, ReactNode } from 'react';
+import { useCallback } from 'react';
+import type { MyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { removeNodes } from '@udecode/plate-common';
 import { ErrorBlock } from '@decipad/ui';
 import { useNodePath } from '@decipad/editor-hooks';

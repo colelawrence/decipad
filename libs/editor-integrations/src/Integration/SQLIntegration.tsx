@@ -1,4 +1,5 @@
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
   useComputer,
@@ -7,7 +8,7 @@ import {
 } from '@decipad/react-contexts';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { fetchQuery } from '../utils';
-import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
+import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
 
 export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({

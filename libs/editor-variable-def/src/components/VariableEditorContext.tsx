@@ -1,4 +1,4 @@
-import { AvailableSwatchColor } from '@decipad/ui';
+import type { AvailableSwatchColor } from '@decipad/ui';
 import { createContext, useContext } from 'react';
 
 interface VariableEditorContextValue {

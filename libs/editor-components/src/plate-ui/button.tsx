@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { cva, VariantProps } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 import { cn } from '@decipad/ui';
 
@@ -22,9 +23,9 @@ const buttonVariants = cva(
         default: 'h-10 px-4 py-2',
         xs: 'h-8 rounded-md px-3',
         sm: 'h-6 rounded-md px-2.5 py-1',
-        sms: 'h-6 w-6 rounded-md px-1',
+        sms: 'size-6 rounded-md px-1',
         lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10 p-1',
+        icon: 'size-10 p-1',
       },
       isMenu: {
         true: 'h-auto w-full cursor-pointer justify-start',

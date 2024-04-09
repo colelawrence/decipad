@@ -1,8 +1,5 @@
-import {
-  ELEMENT_H1,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_H1, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditorBlock, EditorTitle, isEmbed } from '@decipad/ui';

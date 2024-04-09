@@ -1,8 +1,9 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import type { FC, ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { css } from '@emotion/react';
 import { DataViewRow, PaginationControl, p13Medium } from '@decipad/ui';
-import { DataViewElement, DataViewFilter } from '@decipad/editor-types';
-import { AggregationKind, Column } from '../../types';
+import type { DataViewElement, DataViewFilter } from '@decipad/editor-types';
+import type { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';

@@ -1,12 +1,10 @@
-import {
-  MyElement,
-  PlateComponent,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { MyElement, PlateComponent } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ComponentProps, useState } from 'react';
+import type { ComponentProps } from 'react';
+import { useState } from 'react';
 
 import {
   createPlateEditor,

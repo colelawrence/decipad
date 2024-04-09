@@ -1,11 +1,13 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import type {
+  ExpressionElement,
+  PlateComponent,
+  SliderElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  ExpressionElement,
-  PlateComponent,
-  SliderElement,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import {

@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/notebook-open-api/src/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/notebook-open-api/src/**/*.ts",
+          "libs/notebook-open-api/src/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },

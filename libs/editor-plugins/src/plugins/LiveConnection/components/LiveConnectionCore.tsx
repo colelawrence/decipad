@@ -1,12 +1,14 @@
-import {
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_DATASET,
+import type {
   LiveConnectionElement,
   LiveDataSetElement,
 } from '@decipad/editor-types';
+import {
+  ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
+} from '@decipad/editor-types';
 import { assertElementMultipleType } from '@decipad/editor-utils';
 import { LiveError } from '@decipad/ui';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
 import { useNotebookId } from '@decipad/react-contexts';
 

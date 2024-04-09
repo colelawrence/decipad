@@ -6,14 +6,16 @@ import {
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
+import type {
+  PlateEditor,
+  PlatePlugin,
+  PlateProps,
+} from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
   Plate,
   PlateContent,
-  PlateEditor,
-  PlatePlugin,
-  PlateProps,
 } from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

@@ -1,8 +1,5 @@
-import {
-  createMyPluginFactory,
-  DisplayElement,
-  ELEMENT_DISPLAY,
-} from '@decipad/editor-types';
+import type { DisplayElement } from '@decipad/editor-types';
+import { createMyPluginFactory, ELEMENT_DISPLAY } from '@decipad/editor-types';
 import { Display } from '@decipad/editor-components';
 import { nanoid } from 'nanoid';
 import { createEventInterceptorPluginFactory } from '../../pluginFactories';

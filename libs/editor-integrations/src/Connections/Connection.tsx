@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { CodeConnection } from './CodeConnection';
-import { ConnectionProps } from './types';
+import type { ConnectionProps } from './types';
 import { SQLConnection } from './SQLConnection';
 import { NotionConnection } from './NotionConnection';
 

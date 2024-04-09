@@ -7,7 +7,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/editor-integrations/**/*.ts"],
+        "lintFilePatterns": [
+          "libs/editor-integrations/**/*.ts",
+          "libs/editor-integrations/**/*.tsx"
+        ],
         "maxWarnings": 0
       }
     },
