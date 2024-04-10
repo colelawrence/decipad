@@ -51,7 +51,7 @@ const languageDocs = [
   'docs/help/clear-cache-cookies.md',
   'docs/help/help.mdx',
 
-  'docs/integrations/01-basics.md',
+  'docs/integrations/01-notion.md',
   'docs/integrations/11-code.md',
   'docs/integrations/21-SQL.md',
 

@@ -1,9 +1,10 @@
 ---
 sidebar_position: 21
-sidebar_class_name: new
 ---
 
-# Code: Data from SQL
+# SQL Imports
+
+Easily import your data into Decipad using SQL.
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
@@ -11,20 +12,25 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
 <br />
 
-## Database Connections
+## Connecting a Database to Decipad
 
-To create a SQL integration, you first need to set up a database connection on the workspace level. To do this, go to your workspace and select "Integration Settings" from the sidebar menu. After configuring and saving your connection, it will the be available for querying in all notebooks in your workspace.
+To import data into your Decipad Notebook using SQL, you need to start by connecting Decipad to a Database:
 
-## Querying Data in a Notebook
+1. Go to your [workspace](https://app.decipad.com/w).
+2. Select `Settings and Members` and then click on `Data Connections`.
+3. Choose the `SQL` tab and click `Add new connection`.
+4. Provide either a link or your access credentials to connect your database.
+5. After configuring, test your connection. If successful, click `Add` to integrate it into your workspace.
 
-To create a SQL integration, add a new integration block and choose "SQL" (see [Integration Basics](/docs/integrations/basics) for details). In the SQL editor, you can then compose your query.
+## Importing Data with SQL in a Notebook
 
-![code editor](./img/sql-editor.png)
+After connecting your database to your Decipad workspace, follow these steps to import data into any notebook:
 
-In order to get data from the SQL integration into your document, run the code with the "Run"-button. Running the code will show a small console so you get feedback if errors occur. Once ran successfully, you can then continue to the result preview either via the navigation bar, or the "Continue"-button.
+1. Type `/integrations` on an empty paragraph.
+2. Choose `SQL` from the integration options.
+3. Select your database from the connections picker located at the top right.
+4. Write your SQL query and press `Run` to execute it.
+5. Utilize the preview tab to adjust data types if needed.
+6. Click `Insert` to add the data into your notebook.
 
-## Previewing Data
-
-![result preview](./img/code-preview.png)
-
-On the preview pane you see the result and the format it will be available in. Here you can change the data type of your result, and verify that you actually got the data you wanted. Once done with this step, the "Insert"-button will give you a new integration block that you can then re-use in your document just like any other variable (see [Integration Basics](/docs/integrations/basics) for details).
+Once your integration is added to your notebook, you can use the refresh button to update the table with the latest data.

@@ -1,4 +1,5 @@
 /* eslint-env jest */
+
 import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
 import {
