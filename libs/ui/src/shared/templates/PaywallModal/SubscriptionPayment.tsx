@@ -4,7 +4,7 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from '@stripe/react-stripe-js';
-import { env } from '@decipad/utils';
+import { env } from '@decipad/client-env';
 import { loadStripe } from '@stripe/stripe-js';
 
 interface SubscriptionPaymentProps {

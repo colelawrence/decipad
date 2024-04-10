@@ -42,7 +42,6 @@ export * from './unzip';
 export * from './varnamify';
 export * from './zip';
 export * from './isE2E';
-export * from './env';
 export * from './containsExprRefs';
 export * from './email';
 export * from './prettify';

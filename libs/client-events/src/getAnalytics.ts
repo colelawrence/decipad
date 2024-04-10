@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { env } from '@decipad/utils';
+import { env } from '@decipad/client-env';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import { isServerSideRendering } from '@decipad/support';
 import { getSession } from 'next-auth/react';

@@ -1,15 +1,15 @@
+import { useMemo } from 'react';
+import styled from '@emotion/styled';
+import { Elements } from '@stripe/react-stripe-js';
 import {
   useGetCreditsPlansQuery,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
 import { notebooks, useRouteParams } from '@decipad/routing';
-import styled from '@emotion/styled';
-import { Elements } from '@stripe/react-stripe-js';
+import { env } from '@decipad/client-env';
 import { Modal } from '../../../shared';
 import { cssVar, p14Regular, p18Medium } from '../../../primitives';
 import { AddCreditsPaymentComponent } from './AddCreditsPaymentComponent';
-import { env } from '@decipad/utils';
-import { useMemo } from 'react';
 
 type AddCreditsModalProps = {
   closeAction: () => void;

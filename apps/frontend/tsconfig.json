@@ -61,6 +61,9 @@
     },
     {
       "path": "../../libs/editor-ai-assistant"
+    },
+    {
+      "path": "../../libs/client-env"
     }
   ]
 }

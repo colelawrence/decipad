@@ -1,12 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { FC, useContext, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ClientEventsContext } from '@decipad/client-events';
 import {
   CreateSectionMutation,
   ShallowWorkspaceFragment,
 } from '@decipad/graphql-client';
 import { docs, workspaces } from '@decipad/routing';
-import { FC, useContext, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { OpaqueColor } from '@decipad/utils';
+import { env } from '@decipad/client-env';
 import {
   Archive,
   ArrowDiagonalTopRight,
@@ -25,7 +27,6 @@ import {
 } from '../../../icons';
 import { MenuItem, MenuList } from '../../../shared';
 
-import { OpaqueColor, env } from '@decipad/utils';
 import { hexToOpaqueColor, opaqueColorToHex } from '../../../primitives';
 import {
   AvailableSwatchColor,

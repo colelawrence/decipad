@@ -1,17 +1,17 @@
+import { useEffect } from 'react';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import * as Sentry from '@sentry/react';
 import {
   ExtraErrorData,
   HttpClient as HttpClientIntegration,
 } from '@sentry/integrations';
-import { useEffect } from 'react';
 import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
   useNavigationType,
 } from 'react-router-dom';
-import { env } from '@decipad/utils';
+import { env } from '@decipad/client-env';
 
 const sentryDsn = env.VITE_SENTRY_DSN;
 
