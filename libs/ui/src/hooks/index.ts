@@ -1,6 +1,6 @@
 export * from './useMergedRef';
 export * from './useAutoAnimate';
-export * from './useMaterializedResult';
+export * from './useMaterializedOneResult';
 export * from './useDraggingScroll';
 export * from './useCssVarWidth';
 export * from './useScrollToHash';

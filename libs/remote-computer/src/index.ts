@@ -75,6 +75,7 @@ export {
   type ProgramBlock,
   type SimpleValueAST,
   type DeciNumberRep,
+  type ResultAndLabelInfo,
   AST,
   Time,
   Unit,

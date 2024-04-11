@@ -60,9 +60,9 @@ export async function columnFromDateSequence(
     return undefined;
   }
   if (end >= start) {
-    end = await endD.getEnd();
+    end = endD.getEnd();
   } else {
-    start = await startD.getEnd();
+    start = startD.getEnd();
   }
   if (start == null || end == null) {
     return undefined;

@@ -80,7 +80,7 @@ export {
   hydrateResult,
 } from './utils';
 
-export { unnestTableRows } from './tools';
+export { unnestTableRows, type ResultAndLabelInfo } from './tools';
 
 export * from './computer';
 

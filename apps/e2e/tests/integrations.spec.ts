@@ -84,8 +84,13 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
     await expect(page.getByTitle('Error')).toBeHidden();
   });
 
-test('Make sure our js code templates work', async ({ testUser }) => {
-  const { page } = testUser;
+test('Make sure our js code templates work', async ({ randomFreeUser }) => {
+  const { page, notebook, workspace } = randomFreeUser;
+
+  await workspace.createNewNotebook();
+  await randomFreeUser.aiAssistant.closePannel();
+  await notebook.waitForEditorToLoad();
+  await notebook.focusOnBody();
 
   await test.step('Checks all the files', async () => {
     const allSources = codePlaceholders;
@@ -111,8 +116,13 @@ test('Make sure our js code templates work', async ({ testUser }) => {
   });
 });
 
-test('More JS codeblock checks', async ({ testUser }) => {
-  const { page, notebook } = testUser;
+test('More JS codeblock checks', async ({ randomFreeUser }) => {
+  const { page, notebook, workspace } = randomFreeUser;
+
+  await workspace.createNewNotebook();
+  await randomFreeUser.aiAssistant.closePannel();
+  await notebook.waitForEditorToLoad();
+  await notebook.focusOnBody();
 
   let generatedVarName: string;
 
@@ -171,8 +181,14 @@ return this.${generatedVarName};`;
   });
 });
 
-test('screenshots the import menu', async ({ testUser }) => {
-  const { page } = testUser;
+test('screenshots the import menu', async ({ randomFreeUser }) => {
+  const { page, notebook, workspace } = randomFreeUser;
+
+  await workspace.createNewNotebook();
+  await randomFreeUser.aiAssistant.closePannel();
+  await notebook.waitForEditorToLoad();
+  await notebook.focusOnBody();
+
   await page.getByTestId('paragraph-content').last().click();
   await page.keyboard.type('hello world');
   await page.keyboard.press('Enter');
@@ -189,11 +205,16 @@ test('screenshots the import menu', async ({ testUser }) => {
 });
 
 test('Checks the ability to change the unit of a response', async ({
-  testUser,
+  randomFreeUser,
 }) => {
-  const { page, notebook } = testUser;
+  const { page, notebook, workspace } = randomFreeUser;
   const allSources = codePlaceholders;
   expect(allSources.length).toBeGreaterThan(0);
+
+  await workspace.createNewNotebook();
+  await randomFreeUser.aiAssistant.closePannel();
+  await notebook.waitForEditorToLoad();
+  await notebook.focusOnBody();
 
   await notebook.addBlockSlashCommand('open-integration');
   await await page.getByTestId('select-integration:Code').click();

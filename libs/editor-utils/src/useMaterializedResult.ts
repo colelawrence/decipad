@@ -1,20 +1,14 @@
+import { useMemo } from 'react';
 import type { Result } from '@decipad/remote-computer';
 import { materializeResult } from '@decipad/remote-computer';
-import type { PromiseOrType } from '@decipad/utils';
-import { useEffect, useState } from 'react';
+import { useResolved } from '@decipad/react-utils';
 
 export const useMaterializedResult = <TResult extends Result.AnyResult>(
-  result: PromiseOrType<TResult> | undefined
-): Result.Result | undefined => {
-  const [materializedResult, setMaterializedResult] = useState<
-    Result.Result | undefined
-  >();
-  useEffect(() => {
-    (async () => {
-      if (result != null) {
-        setMaterializedResult(await materializeResult(await result));
-      }
-    })();
-  }, [result]);
-  return materializedResult;
-};
+  result: TResult | undefined
+): Result.Result | undefined =>
+  useResolved(
+    useMemo(
+      () => (result != null ? materializeResult(result) : undefined),
+      [result]
+    )
+  );

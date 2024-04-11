@@ -84,7 +84,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const source = computer.getVarResult$.use(element.sourceVarName)?.result;
   const sourceType: SerializedType | undefined = source?.type;
 
-  const data = useResolved(
+  const data = useResolved<PlotData | undefined>(
     useMemo(() => resultToPlotResultData(source, element), [element, source])
   );
 

@@ -6,8 +6,6 @@ import {
 } from '@decipad/remote-computer';
 import { isDeciNumberInput } from '@decipad/number';
 
-import { useMaterializedResult } from '../../../hooks';
-
 import { CodeResultProps } from '../../../types';
 import { InlineCodeError } from '../InlineCodeError/InlineCodeError';
 import { AnyResult } from '../AnyResult/AnyResult';
@@ -165,13 +163,8 @@ export function CodeResult<T extends SerializedTypeKind>(
     isLiveResult,
     expanded,
   } = props;
-  const materializedValue = useMaterializedResult(value) as
-    | CodeResultProps<T>['value']
-    | undefined;
-  const shouldUseMaterializedValue =
-    isLiveResult && value != null && materializedValue;
   const ResultComponent = getResultComponent({
-    value: shouldUseMaterializedValue ? materializedValue : value,
+    value,
     variant,
     type,
     element,

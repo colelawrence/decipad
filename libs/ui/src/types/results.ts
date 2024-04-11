@@ -18,8 +18,9 @@ export type ResultFormatting =
   | 'financial'
   | 'scientific';
 
-export interface CodeResultProps<T extends SerializedTypeKind>
-  extends Result.Result<T> {
+export interface CodeResultProps<T extends SerializedTypeKind> {
+  readonly type: Result.Result<T>['type'];
+  readonly value: Result.Result<T>['value'];
   readonly parentType?: SerializedType;
   readonly variant?: 'block' | 'inline';
   readonly expanded?: boolean;

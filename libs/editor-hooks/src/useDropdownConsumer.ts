@@ -31,7 +31,7 @@ export const useMaterializedDropdownResult = (blockId: string | undefined) => {
     blockId
   );
 
-  const materializedDropdownResult = useResolved(
+  const materializedDropdownResult: Result.Result | undefined = useResolved(
     useMemo(
       () =>
         dropdownResult && dropdownResult?.type.kind !== 'pending'

@@ -45,7 +45,7 @@ export function useTableColumnFormulaResultForColumn(
             )
           : undefined,
       [colIndex, tableResult]
-    )
+    ) as Promise<Result.Result<'materialized-column'>> | undefined
   );
 }
 

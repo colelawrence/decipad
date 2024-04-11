@@ -8,7 +8,7 @@ import { concat } from './concat';
 
 const extractDateValues = async (a: Value.Value) => {
   const aVal = getInstanceof(a, Value.DateValue);
-  return [await aVal.getData(), await aVal.getEnd()];
+  return [await aVal.getData(), aVal.getEnd()];
 };
 
 export const miscOperators: Record<string, BuiltinSpec> = {

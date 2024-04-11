@@ -6,11 +6,11 @@ import { toLuxonUTC } from './toLuxonUTC';
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const addTime = async (
+export const addTime = (
   date: bigint | undefined,
   timeUnit: Time.TimeUnit,
   quantity: bigint
-): Promise<bigint | undefined> => {
+): bigint | undefined => {
   if (date == null) {
     return undefined;
   }
@@ -19,7 +19,7 @@ export const addTime = async (
     `bad time unit ${timeUnit}`
   );
 
-  const added = (await toLuxonUTC(date)).plus({
+  const added = toLuxonUTC(date).plus({
     [composedUnit]: Number(BigInt(quantity) * compositeMultiplier),
   });
 

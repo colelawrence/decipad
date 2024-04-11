@@ -1,59 +1,27 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import isPromise from 'is-promise';
+import { useEffect, useRef, useState } from 'react';
 import type { PromiseOrType } from '@decipad/utils';
-import { dequal } from '@decipad/utils';
 
 export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
-  const lastP = useRef(p);
-  lastP.current = p;
-  const initialResult = isPromise(p) ? undefined : p;
-  const [result, setResult] = useState<T | undefined>(initialResult);
-  const resolving = useRef(false);
-  const lastResult = useRef<T | undefined>(initialResult);
-  const lastResultP = useRef<PromiseOrType<T> | undefined>();
-
-  const setResultSafe = useCallback(
-    (r: T) => {
-      if (lastP.current === p && !dequal(lastResult.current, r)) {
-        lastResult.current = r;
-        lastResultP.current = p;
-        setResult(r);
-      }
-    },
-    [p]
-  );
+  const [resolved, setResolved] = useState<T | undefined>();
+  const latest = useRef<PromiseOrType<T> | undefined>();
 
   useEffect(() => {
-    let canceled = false;
-    if (lastResultP.current !== p) {
-      if (isPromise(p)) {
-        if (!resolving.current) {
-          resolving.current = true;
-          p.then((r) => {
-            if (!canceled) {
-              setResultSafe(r);
-            }
-          })
-            .catch((err: Error) => {
-              if (!canceled) {
-                console.error(err);
-              }
-            })
-            .finally(() => {
-              if (!canceled) {
-                resolving.current = false;
-              }
-            });
-        }
-      } else if (p != null) {
-        setResultSafe(p);
-      }
+    if (p == null) {
+      return;
     }
-
-    return () => {
-      canceled = true;
-      resolving.current = false;
-    };
-  }, [p, setResultSafe]);
-  return result;
+    if (latest.current === p) {
+      return;
+    }
+    latest.current = p;
+    (async () => {
+      if (p == null) {
+        return;
+      }
+      const newResult = await Promise.resolve(p);
+      if (latest.current === p) {
+        setResolved(newResult);
+      }
+    })();
+  }, [p]);
+  return resolved;
 };

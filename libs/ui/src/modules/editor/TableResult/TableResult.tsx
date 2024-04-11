@@ -6,7 +6,7 @@ import { FC, useMemo } from 'react';
 import { PaginationControl } from '../../../shared';
 import { Table } from '../Table/Table';
 import { TableHeader } from '../TableHeader/TableHeader';
-import { useMaterializedResult } from '../../../hooks/useMaterializedResult';
+import { useMaterializedOneResult } from '../../../hooks/useMaterializedOneResult';
 import { TableHeaderRow } from '../TableHeaderRow/TableHeaderRow';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableRow } from '../TableRow/TableRow';
@@ -70,7 +70,7 @@ export const TableResult: FC<TableResultProps> = ({
   isResultPreview,
   element,
 }) => {
-  let value = useMaterializedResult(_value) as
+  let value = useMaterializedOneResult(_value) as
     | undefined
     | CodeResultProps<'materialized-table'>['value'];
 

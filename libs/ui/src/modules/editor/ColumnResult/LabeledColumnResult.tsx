@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import {
   unnestTableRows,
   type DimensionExplanation,
+  ResultAndLabelInfo,
 } from '@decipad/remote-computer';
 import { all as allElements } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
@@ -54,8 +55,8 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
 }) => {
   const pageSize = targetPageSize(labels);
   const all =
-    useResolved(
-      useMemo(
+    useResolved<ResultAndLabelInfo[]>(
+      useMemo<Promise<ResultAndLabelInfo[]>>(
         async () =>
           Array.from(
             await allElements(unnestTableRows(labels, { type, value }))

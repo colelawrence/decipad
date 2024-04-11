@@ -1,7 +1,7 @@
 export const slice = async function* slice<T>(
   gen: AsyncGenerator<T>,
-  start: number,
-  end: number
+  start = 0,
+  end = Infinity
 ): AsyncGenerator<T> {
   let n = -1;
   for await (const v of gen) {

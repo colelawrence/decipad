@@ -93,7 +93,7 @@ export const useDataView = ({
       debounceTimeMs: 500,
     }
   );
-  const sortedColumns = useResolved(
+  const sortedColumns = useResolved<Column[] | undefined>(
     useMemo(
       () => columnOrder && sortColumns(availableColumns, columnOrder),
       [availableColumns, columnOrder]

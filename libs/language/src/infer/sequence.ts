@@ -71,10 +71,7 @@ export const getDateSequenceError = async (
   }
   // Get the end of the year, month or day.
   const end = getDefined(
-    await Value.DateValue.fromDateAndSpecificity(
-      _end,
-      boundsSpecificity
-    ).getEnd()
+    Value.DateValue.fromDateAndSpecificity(_end, boundsSpecificity).getEnd()
   );
 
   const dateUnitAndMultiplier = getJSDateUnitAndMultiplier(by);

@@ -6,7 +6,7 @@ import { cssVar } from '../../../primitives';
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
 import { useSimplePagination } from '../../../utils/usePagination';
-import { useMaterializedResult } from '../../../hooks';
+import { useMaterializedOneResult } from '../../../hooks';
 import { Table } from '../Table/Table';
 import { TableRow } from '../TableRow/TableRow';
 import { TableData } from '../TableData/TableData';
@@ -36,7 +36,7 @@ export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
   element,
 }) => {
   const { page, valuesForPage, setPage } = useSimplePagination({
-    all: useMaterializedResult(value),
+    all: useMaterializedOneResult(value) as Result.OneResult[] | undefined,
     maxRowsPerPage: MAX_CELLS_PER_PAGE,
   });
 
