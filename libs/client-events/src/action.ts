@@ -1,5 +1,7 @@
 import type { AnyElement, ElementVariants } from '@decipad/editor-types';
 
+type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql';
+
 type Action =
   // Notebook operations
   | { action: 'notebook duplicated'; props?: undefined }
@@ -89,7 +91,20 @@ type Action =
   // Tabs actions
   | { action: 'create new tab'; props?: undefined }
   // AI chat assistant actions
-  | { action: 'ai chat send message'; props: { isSuggested: boolean } };
+  | { action: 'ai chat send message'; props: { isSuggested: boolean } }
+  | {
+      action: 'Integration: Notebook viewed';
+      props: { type: TrackedIntegrations };
+    }
+  | {
+      action: 'Integration: Workspace Integration connection added';
+      props: { type: TrackedIntegrations };
+    }
+  | {
+      action: 'Integration: Notebook Integration added';
+      props: { type: TrackedIntegrations };
+    }
+  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } };
 
 export type ActionEvent = {
   type: 'action';

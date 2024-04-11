@@ -13,6 +13,7 @@ import {
   useCreateIntegration,
   useIntegrationScreenFactory,
 } from '../hooks';
+import { useClientEvents } from '@decipad/client-events';
 
 interface IntegrationProps {
   readonly workspaceId?: string;
@@ -34,6 +35,46 @@ function useAbortOnMount() {
   }, [abort]);
 }
 
+function useAnalytics() {
+  const [stage, connectionType, createIntegration] = useConnectionStore((s) => [
+    s.stage,
+    s.connectionType,
+    s.createIntegration,
+  ]);
+
+  const track = useClientEvents();
+
+  useEffect(() => {
+    if (
+      connectionType !== 'notion' &&
+      connectionType !== 'codeconnection' &&
+      connectionType !== 'mysql'
+    ) {
+      return;
+    }
+
+    if (stage === 'connect') {
+      track({
+        segmentEvent: {
+          type: 'action',
+          action: 'Integration: Notebook viewed',
+          props: { type: connectionType },
+        },
+      });
+    }
+
+    if (createIntegration) {
+      track({
+        segmentEvent: {
+          type: 'action',
+          action: 'Integration: Notebook Integration added',
+          props: { type: connectionType },
+        },
+      });
+    }
+  }, [connectionType, stage, track, createIntegration]);
+}
+
 export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
@@ -49,6 +90,7 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   const actionMenu = useConnectionActionMenu(workspaceId, onExecute);
 
   useCreateIntegration();
+  useAnalytics();
 
   return (
     <ExecutionContext.Provider value={{ info, onExecute }}>

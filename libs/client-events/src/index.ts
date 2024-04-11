@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import type { ActionEvent } from './action';
 import type { PageEvent } from './page';
 import type { ChecklistEvent } from './checklist';
@@ -26,6 +26,8 @@ export type ClientEventContextType = (
 const noop = () => Promise.resolve();
 
 export const ClientEventsContext = createContext<ClientEventContextType>(noop);
+
+export const useClientEvents = () => useContext(ClientEventsContext);
 
 export * from './getAnalytics';
 export * from './action';

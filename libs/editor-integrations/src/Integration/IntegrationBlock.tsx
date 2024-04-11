@@ -46,6 +46,7 @@ import { IntegrationBlockContext } from '../hooks';
 import { CodeIntegration } from './CodeIntegration';
 import { NotionIntegration } from './NotionIntegration';
 import { SQLIntegration } from './SQLIntegration';
+import { useClientEvents } from '@decipad/client-events';
 
 function getIntegrationComponent(
   id: string,
@@ -239,6 +240,8 @@ export const IntegrationBlock: PlateComponent = ({
       : [editButton],
   };
 
+  const track = useClientEvents();
+
   const handleClick = async () => {
     setAnimated(true);
     const result = await updateQueryExecutionCount();
@@ -254,6 +257,15 @@ export const IntegrationBlock: PlateComponent = ({
 
     if (newExecutedQueryData) {
       observable.current.next('refresh');
+
+      track({
+        segmentEvent: {
+          type: 'action',
+          action: 'Integration: Query sent',
+          props: { type: element.integrationType.type },
+        },
+      });
+
       setCurrentWorkspaceInfo({
         ...workspaceInfo,
         queryCount: newExecutedQueryData.queryCount,

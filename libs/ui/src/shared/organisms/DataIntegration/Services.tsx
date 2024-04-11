@@ -11,10 +11,11 @@ import { css } from '@emotion/react';
 import { Notion } from 'libs/ui/src/icons';
 import { p13Bold } from 'libs/ui/src/primitives';
 import { nanoid } from 'nanoid';
-import { FC, ReactNode, Suspense, useEffect } from 'react';
+import { FC, ReactNode, Suspense, useContext, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { IntegrationActionItem, IntegrationItem } from './IntegrationStyles';
+import { ClientEventsContext } from '@decipad/client-events';
 
 const Wrapper = css({
   display: 'flex',
@@ -87,6 +88,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
   );
 
   const toast = useToast();
+  const track = useContext(ClientEventsContext);
 
   useEffect(() => {
     if (connected != null) {
@@ -127,7 +129,16 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         icon={<Notion />}
         title="Notion"
         description="Work with Notion Databases at the speed of thought!"
-        onClick={OnConnectNotion}
+        onClick={() => {
+          track({
+            segmentEvent: {
+              type: 'action',
+              action: 'Integration: Workspace Integration connection added',
+              props: { type: 'notion' },
+            },
+          });
+          OnConnectNotion();
+        }}
       />
     </div>
   );
