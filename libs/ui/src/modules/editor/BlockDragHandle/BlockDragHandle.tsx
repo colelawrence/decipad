@@ -247,7 +247,11 @@ export const BlockDragHandle = ({
           side="left"
         >
           {showHideButton}
-          <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
+          <MenuItem
+            data-testid="duplicate-block"
+            icon={<Duplicate />}
+            onSelect={onDuplicate}
+          >
             Duplicate
           </MenuItem>
           {showCopyHref && !isMultipleSelection && (

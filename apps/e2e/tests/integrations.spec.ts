@@ -175,9 +175,22 @@ return this.${generatedVarName};`;
 
     await expect(page.getByTestId('number-result:100')).toBeVisible();
 
+    await page.getByRole('textbox').click();
+    await page.keyboard.press('Control+a', { delay: Timeouts.typing });
+    await page.keyboard.press('Backspace');
+    await page.keyboard.type('MyCode', { delay: Timeouts.typing });
+
     await page.getByTestId('integration-modal-continue').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.liveBlockDelay);
+  });
+
+  await test.step('Check duplicating works', async () => {
+    await randomFreeUser.notebook.duplicateBlock(2);
+
+    // 1 for MyCode, and another for MyCodeCopy
+    await expect(page.getByText('MyCode')).toHaveCount(2);
+    await expect(page.getByText('MyCodeCopy')).toHaveCount(1);
   });
 });
 

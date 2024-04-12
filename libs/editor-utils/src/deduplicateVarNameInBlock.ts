@@ -4,6 +4,7 @@ import type {
   AnyElement,
   CodeLineElement,
   CodeLineV2Element,
+  IntegrationTypes,
   StructuredInputElement,
   TableElement,
   VariableDefinitionElement,
@@ -11,6 +12,7 @@ import type {
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_INTEGRATION,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
@@ -65,6 +67,15 @@ function deduplicateTableVarName(computer: RemoteComputer, e: TableElement) {
   );
 }
 
+function deduplicateIntegrationVarName(
+  computer: RemoteComputer,
+  e: IntegrationTypes.IntegrationBlock
+): void {
+  const varName = getNodeString(e.children[0]);
+
+  e.children[0].text = computer.getAvailableIdentifier(`${varName}Copy`);
+}
+
 export const deduplicateVarNameInBlock = <T extends AnyElement>(
   computer: RemoteComputer,
   el: T
@@ -84,6 +95,9 @@ export const deduplicateVarNameInBlock = <T extends AnyElement>(
       break;
     case ELEMENT_TABLE:
       deduplicateTableVarName(computer, el);
+      break;
+    case ELEMENT_INTEGRATION:
+      deduplicateIntegrationVarName(computer, el);
       break;
   }
   return el;
