@@ -52,8 +52,12 @@ const groupStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
-  marginTop: '16px',
 });
+
+const groupStylesTabs = css`
+  ${groupStyles};
+  margin-top: 18px;
+`;
 
 export type NotebookSharingPopUpProps = Pick<
   ComponentProps<typeof NotebookCollaborateTab>,
@@ -182,7 +186,7 @@ export const NotebookPublishingPopUp = ({
               />
             </TabsList>
             <TabsContent name="collaborators">
-              <div css={groupStyles} className="notebook-collaborate-tab">
+              <div css={groupStylesTabs} className="notebook-collaborate-tab">
                 <NotebookCollaborateTab
                   hasPaywall={hasPaywall}
                   usersWithAccess={invitedUsers}
@@ -199,7 +203,7 @@ export const NotebookPublishingPopUp = ({
               </div>
             </TabsContent>
             <TabsContent name="publishing">
-              <div css={groupStyles} className="notebook-publish-tab">
+              <div css={groupStylesTabs} className="notebook-publish-tab">
                 <NotebookPublishTab
                   isPremium={isPremium}
                   notebookId={notebookId}
@@ -216,7 +220,7 @@ export const NotebookPublishingPopUp = ({
               </div>
             </TabsContent>
             <TabsContent name="embed">
-              <div css={groupStyles} className="notebook-embed-tab">
+              <div css={groupStylesTabs} className="notebook-embed-tab">
                 <NotebookEmbedTab
                   isAdmin={isAdmin}
                   isPublished={isPublished}
@@ -243,21 +247,24 @@ export const NotebookPublishingPopUp = ({
                 onChange={onChange}
               />
             </div>
-            <div css={groupStyles} className="notebook-not-admin-tab">
-              <NotebookPublishTab
-                notebookId={notebookId}
-                isAdmin={isAdmin}
-                publishingState={publishingState}
-                link={link}
-                isPremium={isPremium}
-                publishedVersionState={publishedVersionState}
-                currentSnapshot={currentSnapshot}
-                onUpdatePublish={onUpdatePublish}
-                onPublish={onPublish}
-                allowDuplicate={allowDuplicate}
-                onUpdateAllowDuplicate={onUpdateAllowDuplicate}
-              />
-            </div>
+
+            {publishingState !== 'PRIVATE' && (
+              <div css={groupStyles} className="notebook-not-admin-tab">
+                <NotebookPublishTab
+                  notebookId={notebookId}
+                  isAdmin={isAdmin}
+                  publishingState={publishingState}
+                  link={link}
+                  isPremium={isPremium}
+                  publishedVersionState={publishedVersionState}
+                  currentSnapshot={currentSnapshot}
+                  onUpdatePublish={onUpdatePublish}
+                  onPublish={onPublish}
+                  allowDuplicate={allowDuplicate}
+                  onUpdateAllowDuplicate={onUpdateAllowDuplicate}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
