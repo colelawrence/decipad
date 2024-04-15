@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { MenuItem, MenuList, TextAndIconButton, icons } from '@decipad/ui';
+import { MenuItem, MenuList, TextAndIconButton } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
@@ -10,6 +10,7 @@ import {
   p13Medium,
   p14Medium,
 } from '../../../primitives';
+import { CaretDown } from 'libs/ui/src/icons';
 
 export interface DropdownChoice {
   label: string;
@@ -41,7 +42,7 @@ export const Dropdown: FC<DropdownProps> = ({
       data-testId="ui-level-dropdown"
     >
       <TextAndIconButton text={selection} onClick={noop} color={'transparent'}>
-        {caret && <icons.Caret variant="down" />}
+        {caret && <CaretDown />}
       </TextAndIconButton>
     </div>
   );

@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { Meta, StoryFn } from '@storybook/react';
-import { Create } from '../../../icons';
+import { Add } from '../../../icons';
 import { circleIcon } from '../../../storybook-utils';
 import { IconButton } from './IconButton';
 
@@ -11,7 +11,7 @@ export default {
 
 export const Default: StoryFn = () => (
   <IconButton href="">
-    <Create />
+    <Add />
   </IconButton>
 );
 

@@ -81,7 +81,8 @@ test('publish notebook, check logged out reader + logged in duplication', async 
     await expect(randomFreeUserNotebook.notebookParagraph.nth(1)).toHaveText(
       moreText
     );
-    await randomFreeUserPage.getByText('Duplicate').click();
+    await randomFreeUserPage.getByRole('button', { name: 'Duplicate' }).click();
+
     // Waits for the share button to be visible, meaning the notebook was duplicated
     await expect(
       randomFreeUserPage.getByTestId('publish-button')

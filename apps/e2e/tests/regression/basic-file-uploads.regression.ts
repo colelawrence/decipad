@@ -94,7 +94,7 @@ test.describe('production regression checks', () => {
 
     await test.step('delete image imported', async () => {
       await page.getByTestId('drag-handle').nth(0).click();
-      await page.getByRole('menuitem', { name: 'Delete Delete' }).click();
+      await page.getByRole('menuitem', { name: 'Trash Delete' }).click();
       await expect(
         page.getByTestId('notebook-image-block').locator('img')
       ).toBeHidden();

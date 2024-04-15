@@ -345,7 +345,10 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
       ).toBeVisible(),
     ]);
 
-    testUser.page.getByRole('button', { name: 'Go to page' }).nth(1).click();
+    testUser.page
+      .getByTestId(/Go to page/)
+      .nth(1)
+      .click();
 
     await Promise.all([
       expect(

@@ -8,7 +8,6 @@ import {
 import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
-import { Notion } from 'libs/ui/src/icons';
 import { p13Bold } from 'libs/ui/src/primitives';
 import { nanoid } from 'nanoid';
 import { FC, ReactNode, Suspense, useContext, useEffect } from 'react';
@@ -16,6 +15,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { IntegrationActionItem, IntegrationItem } from './IntegrationStyles';
 import { ClientEventsContext } from '@decipad/client-events';
+import { ThumbnailNotion } from '../../../icons/thumbnail-icons';
 
 const Wrapper = css({
   display: 'flex',
@@ -29,7 +29,7 @@ interface ServicesProps {
 }
 
 const IconMap: Partial<Record<ExternalProvider, ReactNode>> = {
-  notion: <Notion />,
+  notion: <ThumbnailNotion />,
 };
 
 function OnAuth(externalData: ExternalDataSourceFragmentFragment) {
@@ -126,7 +126,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         Effortlessly connect your Decipad workspace to any of these services.
       </p>
       <IntegrationItem
-        icon={<Notion />}
+        icon={<ThumbnailNotion />}
         title="Notion"
         description="Work with Notion Databases at the speed of thought!"
         onClick={() => {

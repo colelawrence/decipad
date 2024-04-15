@@ -18,11 +18,11 @@ it('opens the menu when clicking the drag handle', async () => {
       <DraggableBlock {...props} />
     </Plate>
   );
-  expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
+  expect(queryByTitle(/trash/i)).not.toBeInTheDocument();
 
   await userEvent.click(getAllByTitle(/drag/i)[0]);
 
-  expect(getByTitle(/delete/i)).toBeInTheDocument();
+  expect(getByTitle(/trash/i)).toBeInTheDocument();
 }, 20_000);
 
 it('changes opacity when being dragged', () => {

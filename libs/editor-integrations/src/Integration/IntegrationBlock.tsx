@@ -37,7 +37,6 @@ import {
   getPreviousNode,
   setNodes,
 } from '@udecode/plate-common';
-import { Hide, Refresh, Show } from 'libs/ui/src/icons';
 import type { ComponentProps, ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
@@ -230,7 +229,7 @@ export const IntegrationBlock: PlateComponent = ({
             type: 'button',
             text: 'Pivot view',
             onClick: onAddDataViewButtonPress,
-            icon: <icons.TableRows />,
+            icon: <icons.TableSmall />,
           },
           {
             type: 'chart',
@@ -312,14 +311,16 @@ export const IntegrationBlock: PlateComponent = ({
           actionButtons={actionButtons}
           buttons={[
             {
-              children: <AnimatedIcon icon={<Refresh />} animated={animated} />,
+              children: (
+                <AnimatedIcon icon={<icons.Refresh />} animated={animated} />
+              ),
               onClick: handleClick,
               tooltip: tooltipContent,
               visible: !readOnly,
               disabled: maxQueryExecution,
             },
             {
-              children: showData ? <Hide /> : <Show />,
+              children: showData ? <icons.Hide /> : <icons.Show />,
               onClick: () => {
                 setShowData(!showData);
                 removeFocusFromAllBecauseSlate();

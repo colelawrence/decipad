@@ -8,7 +8,7 @@ import {
   shapes,
 } from '../PlotParams/PlotParams';
 import { hideOnPrint } from '../../../styles/editor-layout';
-import { Plot } from '../../../icons';
+import { BarChart } from '../../../icons';
 
 type CreateChartMenuProps = PropsWithChildren<{
   onAddChartViewButtonPress: (_type: typeof markTypes[number]) => void;
@@ -23,7 +23,7 @@ export const CreateChartMenu: FC<CreateChartMenuProps> = ({
     trigger={
       <button data-testid="create-chart-from-table-button" css={buttonStyles}>
         <TextAndIconButton text="Chart" iconPosition="left">
-          <Plot />
+          <BarChart />
         </TextAndIconButton>
       </button>
     }

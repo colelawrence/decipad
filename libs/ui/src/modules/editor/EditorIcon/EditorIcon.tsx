@@ -76,7 +76,7 @@ export const EditorIcon = ({
       ]}
     >
       <div css={iconStyles}>
-        <Icon title={icon} />
+        <Icon />
       </div>
     </button>
   );

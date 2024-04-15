@@ -10,20 +10,21 @@ import { docs, workspaces } from '@decipad/routing';
 import { OpaqueColor } from '@decipad/utils';
 import { env } from '@decipad/client-env';
 import {
+  Add,
   Archive,
   ArrowDiagonalTopRight,
   Chat,
-  DeciBoxes,
   Docs,
-  DollarCircle,
   Ellipsis,
   Folder,
-  Gear,
+  Settings2,
   Home,
   Key,
-  Magic,
-  Plus,
   Users,
+  Templates,
+  CreditCard,
+  Settings,
+  Upgrade,
 } from '../../../icons';
 import { MenuItem, MenuList } from '../../../shared';
 
@@ -103,7 +104,7 @@ export const WorkspaceNavigation = ({
           >
             <Styled.ItemWrapper data-testid="workspace_upgrade_pro">
               <Styled.IconWrapper>
-                <DeciBoxes />
+                <Upgrade />
               </Styled.IconWrapper>
               <Styled.TextWrapper>Upgrade workspace</Styled.TextWrapper>
             </Styled.ItemWrapper>
@@ -131,7 +132,7 @@ export const WorkspaceNavigation = ({
                 >
                   <Styled.ItemWrapper data-testid="billing-settings">
                     <Styled.IconWrapper>
-                      <DollarCircle />
+                      <CreditCard />
                     </Styled.IconWrapper>
                     <Styled.TextWrapper>Billing settings</Styled.TextWrapper>
                   </Styled.ItemWrapper>
@@ -143,7 +144,7 @@ export const WorkspaceNavigation = ({
               >
                 <Styled.ItemWrapper>
                   <Styled.IconWrapper>
-                    <Gear />
+                    <Settings />
                   </Styled.IconWrapper>
                   <Styled.TextWrapper>Workspace settings</Styled.TextWrapper>
                 </Styled.ItemWrapper>
@@ -163,7 +164,7 @@ export const WorkspaceNavigation = ({
           >
             <Styled.ItemWrapper data-testid="settings-and-members">
               <Styled.IconWrapper>
-                <Gear />
+                <Settings2 />
               </Styled.IconWrapper>
               <Styled.TextWrapper>Settings and members</Styled.TextWrapper>
             </Styled.ItemWrapper>
@@ -254,7 +255,7 @@ export const WorkspaceNavigation = ({
             >
               <Styled.ItemWrapper data-testid="new-section-button" isButton>
                 <Styled.IconWrapper>
-                  <Plus />
+                  <Add />
                 </Styled.IconWrapper>
                 <Styled.TextWrapper>New folder</Styled.TextWrapper>
               </Styled.ItemWrapper>
@@ -301,7 +302,7 @@ export const WorkspaceNavigation = ({
         >
           <Styled.ItemWrapper>
             <Styled.IconWrapper>
-              <Magic />
+              <Templates />
             </Styled.IconWrapper>
             <Styled.TextWrapper>
               Templates <ArrowDiagonalTopRight />

@@ -1,7 +1,7 @@
 import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
 import { p16Regular } from '../../../primitives';
-import { Bullet } from '../../../icons';
+import { Bullet, BulletAlt } from '../../../icons';
 
 const Depth = createContext(0);
 
@@ -25,12 +25,24 @@ const bulletStyles = css({
   // align vertically with the first line, even if the item is multiline
   alignSelf: 'start',
 
-  width: '6px',
-  height: `${p16Regular.lineHeight}`,
+  width: p16Regular.lineHeight,
+  height: p16Regular.lineHeight,
 
   display: 'grid',
   alignContent: 'center',
 });
+
+type BulletIconProps = {
+  readonly depth: number;
+};
+
+const BulletIcon = ({ depth }: BulletIconProps) => {
+  if (depth % 2 === 0) {
+    return <BulletAlt />;
+  }
+
+  return <Bullet />;
+};
 
 type UnorderedListProps = {
   readonly children?: ReactNode;
@@ -50,7 +62,7 @@ export const UnorderedList = ({
               contentEditable={false}
               css={bulletStyles}
             >
-              <Bullet depth={depth} />
+              <BulletIcon depth={depth} />
             </span>
             {child}
           </li>

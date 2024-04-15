@@ -3,13 +3,12 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FormEvent, useCallback } from 'react';
-import { Button, InputField } from '../../shared';
+import { Button, InputField, Loading } from '../../shared';
 import { h1, p12Medium, p16Regular } from '../../primitives';
 import { AccountSetup } from '../../shared/templates';
 import modelDark from './model2_dark.png';
 import modelLight from './model2_light.png';
 import { backgroundStyles } from './styles';
-import { Loading } from '../../icons';
 
 const leftStyles = css({
   display: 'flex',

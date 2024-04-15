@@ -47,8 +47,8 @@ export const normalDragHandleStyles = css({
   width: '18px',
   height: '18px',
   borderRadius: '6px',
+  padding: '2px',
 
-  padding: '5px',
   ':hover': {
     background: cssVar('backgroundDefault'),
   },

@@ -69,7 +69,7 @@ export async function getFromTable(
   const textContent = await getTableOrPage(page, tableName)
     .locator(tableCellTextLocator(line, col))
     .textContent();
-  return textContent?.trim().replace(/Caret (up|down)/, '') ?? null;
+  return textContent?.trim().replace(/Caret(Up|Down)/, '') ?? null;
 }
 
 export async function clickCell(

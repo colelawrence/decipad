@@ -1,24 +1,15 @@
 import type { SVGProps } from 'react';
 
-interface SVGRProps {
-  title?: string;
-  titleId?: string;
-}
-export const Virus = ({
-  title,
-  titleId,
-  ...props
-}: SVGProps<SVGSVGElement> & SVGRProps) => {
+export const Virus = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       role="img"
-      aria-labelledby={titleId}
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      <title>Virus</title>
       <path
         stroke="currentColor"
         strokeLinecap="round"

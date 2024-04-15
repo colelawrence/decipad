@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Children, ComponentProps, FC, ReactNode } from 'react';
-import { Generic, Info } from '../../../icons';
+import { List, Info } from '../../../icons';
 import { cssVar, smallScreenQuery } from '../../../primitives';
 import { dashboard, notebookList } from '../../../styles';
 import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
@@ -40,7 +40,7 @@ export const UINotebookList: FC<UINotebookListProps> = ({
         ) : (
           <DashboardCTAWrapper>
             <DashboardDialogCTA
-              icon={<Generic />}
+              icon={<List />}
               primaryText="No documents to list"
               secondaryText="When you create a document they will show up here"
             />

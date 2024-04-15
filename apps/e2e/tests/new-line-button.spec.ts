@@ -39,20 +39,12 @@ test('Basic + button to insert new line', async ({ testUser }) => {
 
   await test.step('press + button after structured input', async () => {
     // first column
-    await page
-      .getByRole('button')
-      .filter({ hasText: /^Create$/ })
-      .nth(1)
-      .click();
+    await page.getByTestId('add-new-line-button').nth(1).click();
   });
 
   await test.step('press + button after table', async () => {
     // first column
-    await page
-      .getByRole('button')
-      .filter({ hasText: /^Create$/ })
-      .nth(3)
-      .click();
+    await page.getByTestId('add-new-line-button').nth(3).click();
 
     // Check only two structure inputs were created and no structured input was added when we press the + button after the table
     await expect(page.getByTestId('codeline-code')).toHaveCount(2);

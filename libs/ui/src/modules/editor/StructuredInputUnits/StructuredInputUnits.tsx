@@ -5,8 +5,8 @@ import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
 import {
-  Caret,
-  DollarCircle,
+  CaretDown,
+  Dollar,
   Number,
   Percentage,
   Ruler,
@@ -28,7 +28,7 @@ const ExpandableColumnsArr = [
   ['Distance', Ruler],
   ['Weight', Scale],
   ['Time', Timer],
-  ['Currency', DollarCircle],
+  ['Currency', Dollar],
 ] as const;
 type ExpandableColumns = typeof ExpandableColumnsArr[number][0] | null;
 
@@ -81,6 +81,7 @@ const categoryAndCaretStyles = css([
     width: '100%',
     borderRadius: '16px',
     display: 'inline-flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: '8px',
   },
@@ -160,12 +161,13 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
               </span>
               <span
                 css={{
-                  width: 18,
+                  width: 16,
+                  height: 16,
                   display: 'grid',
                 }}
                 data-testid="unit-picker-button"
               >
-                <Caret variant="down" />
+                <CaretDown />
               </span>
             </span>
           }
@@ -178,7 +180,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           </MenuItem>
           <MenuList
             itemTrigger={
-              <TriggerMenuItem icon={<DollarCircle />}>
+              <TriggerMenuItem icon={<Dollar />}>
                 <div css={{ minWidth: '132px' }}>Currency</div>
               </TriggerMenuItem>
             }

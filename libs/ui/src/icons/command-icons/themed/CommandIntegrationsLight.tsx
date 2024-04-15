@@ -1,24 +1,15 @@
 import type { SVGProps } from 'react';
 
-interface SVGRProps {
-  title?: string;
-  titleId?: string;
-}
-export const CommandIntegrationsLight = ({
-  title,
-  titleId,
-  ...props
-}: SVGProps<SVGSVGElement> & SVGRProps) => {
+export const CommandIntegrationsLight = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 40 40"
       role="img"
-      aria-labelledby={titleId}
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      <title>CommandIntegrationsLight</title>
       <rect width={40} height={40} fill="#ECF0F6" rx={8} />
       <path
         stroke="#4D5664"

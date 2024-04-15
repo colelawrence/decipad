@@ -22,7 +22,7 @@ import { useGetExternalDataSourcesWorkspaceQuery } from '@decipad/graphql-client
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
-import { Caret } from 'libs/ui/src/icons';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 
 const Styles = {
   OuterWrapper: styled.div({
@@ -119,7 +119,7 @@ const WorkspaceNotionConnections: FC<ConnectionProps> = ({ workspaceId }) => {
         trigger={
           <Styles.Trigger>
             {externalDataName ?? 'Select Notion Connection...'}
-            <Caret variant={open ? 'up' : 'down'} />
+            {open ? <CaretUp /> : <CaretDown />}
           </Styles.Trigger>
         }
       >
@@ -237,7 +237,7 @@ const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
         <Styles.Trigger>
           {getTriggerChildren()}
 
-          <Caret variant={open ? 'up' : 'down'} />
+          {open ? <CaretUp /> : <CaretDown />}
         </Styles.Trigger>
       }
     >

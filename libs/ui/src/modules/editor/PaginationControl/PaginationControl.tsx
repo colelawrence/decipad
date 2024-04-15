@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import { Button, PositiveIntegerInput } from '../../../shared';
-import { LeftArrow, RightArrow } from '../../../icons';
+import { ArrowBack, ArrowRight } from '../../../icons';
 import { cssVar } from '../../../primitives';
 import { VoidBlock } from '../VoidBlock/VoidBlock';
 
@@ -67,13 +67,14 @@ export const PaginationControl: FC<
             <Button
               type="minimal"
               size="extraExtraSlim"
+              testId={`Go to page ${targetPage(page, -1)}`}
               onClick={useCallback(
                 () => onPageChange(targetPage(page, -1)),
                 [onPageChange, page, targetPage]
               )}
             >
               <span css={iconWrapperStyles}>
-                <LeftArrow title={`Go to page ${targetPage(page, -1)}`} />
+                <ArrowBack />
               </span>
             </Button>
           </VoidBlock>
@@ -91,13 +92,14 @@ export const PaginationControl: FC<
             <Button
               type="minimal"
               size="extraExtraSlim"
+              testId={`Go to page ${targetPage(page, 1)}`}
               onClick={useCallback(
                 () => onPageChange(targetPage(page, 1)),
                 [onPageChange, page, targetPage]
               )}
             >
               <span css={iconWrapperStyles}>
-                <RightArrow title={`Go to page ${targetPage(page, 1)}`} />
+                <ArrowRight />
               </span>
             </Button>
           </VoidBlock>

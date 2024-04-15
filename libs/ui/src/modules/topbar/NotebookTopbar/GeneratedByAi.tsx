@@ -1,4 +1,4 @@
-import { OpenAI } from '../../../icons';
+import { OpenAi } from '../../../icons';
 import { Anchor } from '../../../utils';
 import * as Styled from './styles';
 
@@ -10,7 +10,7 @@ export const GeneratedByAi: React.FC = () => (
     <Styled.GPTAuthorContainer>
       <p>Created using Decipad GPT</p>
       <Styled.GPTIcon>
-        <OpenAI />
+        <OpenAi />
       </Styled.GPTIcon>
     </Styled.GPTAuthorContainer>
   </Anchor>

@@ -11,7 +11,7 @@ import {
   getStartPoint,
   someNode,
 } from '@udecode/plate-common';
-import { Tooltip } from 'libs/ui/src/shared';
+import { Loading, Tooltip } from 'libs/ui/src/shared';
 import {
   HTMLAttributes,
   MouseEvent,
@@ -22,7 +22,7 @@ import {
   useState,
 } from 'react';
 import { Location } from 'slate';
-import { Formula, Loading, Magic, Number } from '../../../icons';
+import { Formula, Sparkles, Number } from '../../../icons';
 import { cssVar } from '../../../primitives';
 import { codeBlock } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
@@ -271,7 +271,7 @@ export const CodeVariableDefinition = ({
                   : handleGenerateName();
               }}
             >
-              {isGenerating ? <Loading /> : <Magic />}
+              {isGenerating ? <Loading /> : <Sparkles />}
             </button>
           }
         >

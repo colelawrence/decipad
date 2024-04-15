@@ -1,24 +1,15 @@
 import type { SVGProps } from 'react';
 
-interface SVGRProps {
-  title?: string;
-  titleId?: string;
-}
-export const CommandToggleLight = ({
-  title,
-  titleId,
-  ...props
-}: SVGProps<SVGSVGElement> & SVGRProps) => {
+export const CommandToggleLight = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 40 40"
       role="img"
-      aria-labelledby={titleId}
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      <title>CommandToggleLight</title>
       <rect width={40} height={40} fill="#ECF0F6" rx={8} />
       <g clipPath="url(#CommandToggleLight_svg__a)">
         <rect width={17} height={10} x={9} y={15} fill="#AAB1BD" rx={5} />

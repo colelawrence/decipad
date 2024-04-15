@@ -6,12 +6,11 @@ import {
   AreaChart,
   BarChart,
   Brush,
-  Generic,
+  Shapes,
   LineChart,
   List,
   PieChart,
-  Plot,
-  ScatterPlot,
+  PointChart,
   Settings,
   TableSmall,
 } from '../../../icons';
@@ -51,7 +50,7 @@ const comparableChartTypes = [
 export const markTypeIcons: Record<MarkType, ReactNode> = {
   bar: <BarChart />,
   line: <LineChart />,
-  point: <ScatterPlot />,
+  point: <PointChart />,
   arc: <PieChart />,
   area: <AreaChart />,
 };
@@ -308,7 +307,7 @@ export const PlotParams = ({
           onChangeOpen={onChangeOpen('chart-type')}
           itemTrigger={
             <TriggerMenuItem
-              icon={<Plot />}
+              icon={<BarChart />}
               selectedPreview={markTypeNames[markType]}
             >
               Chart type
@@ -337,7 +336,7 @@ export const PlotParams = ({
             open={open === 'shape'}
             onChangeOpen={onChangeOpen('shape')}
             itemTrigger={
-              <TriggerMenuItem icon={<Generic />} selectedPreview={shape}>
+              <TriggerMenuItem icon={<Shapes />} selectedPreview={shape}>
                 Shape
               </TriggerMenuItem>
             }

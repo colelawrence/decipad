@@ -1,6 +1,5 @@
 // DragArea.tsx
 import { css } from '@emotion/react';
-import { Plus } from 'libs/ui/src/icons';
 import { cssVar, cssVarHex, transparencyHex } from 'libs/ui/src/primitives';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -11,6 +10,7 @@ import {
 } from './styles';
 import { DragAreaProps } from './types';
 import { useFileDrop } from './useFileDrop';
+import { Add } from 'libs/ui/src/icons';
 
 const weakestColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.08);
 const weakColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.16);
@@ -60,7 +60,7 @@ const DragArea = ({
           <>
             <div css={dndTextAreaStyles}>
               <span>
-                <Plus />
+                <Add />
               </span>
               <span>{`Drag and drop your ${fileType} here`}</span>
             </div>

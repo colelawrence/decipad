@@ -22,7 +22,7 @@ import { ELEMENT_TABLE, ELEMENT_TD } from '@udecode/plate-table';
 import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Point } from 'slate';
-import { Create } from '../../../icons';
+import { Add } from '../../../icons';
 import { cssVar, smallScreenQuery } from '../../../primitives';
 import { AddTableRowButton } from '../../../shared';
 import { editorLayout, scrollbars } from '../../../styles';
@@ -419,7 +419,7 @@ export const EditorTable: FC<EditorTableProps> = ({
                   ]}
                   title="Add Column"
                 >
-                  <Create />
+                  <Add />
                 </button>
               </div>
             </div>

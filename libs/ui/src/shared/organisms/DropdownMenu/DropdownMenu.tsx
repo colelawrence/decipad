@@ -12,8 +12,7 @@ import {
   useRef,
   useState,
 } from 'react';
-
-import { Plus } from '../../../icons';
+import { Add } from 'libs/ui/src/icons';
 import { DropdownOption, EditItemsOptions, SelectItems } from '../../molecules';
 import { cssVar, mediumShadow, p13Medium } from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
@@ -237,7 +236,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 ) : (
                   <>
                     <div css={{ width: 16, height: 16 }}>
-                      <Plus />
+                      <Add />
                     </div>
                     Add new
                   </>

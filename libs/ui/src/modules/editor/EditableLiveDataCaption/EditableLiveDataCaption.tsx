@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
 import { Spinner, Tag } from '../../../shared';
-import { Data, Zap } from '../../../icons';
+import { Table, Bolt } from '../../../icons';
 import {
   normalOpacity,
   offBlack,
@@ -93,7 +93,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
           contentEditable={false}
         >
           {icon ??
-            (loading ? <Spinner /> : isUiIntegration ? <Data /> : <Zap />)}
+            (loading ? <Spinner /> : isUiIntegration ? <Table /> : <Bolt />)}
         </div>
         <div
           role="textbox"

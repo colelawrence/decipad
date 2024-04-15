@@ -35,23 +35,6 @@ const dragHandleStyles = css({
   },
 });
 
-const smallerDragHandleStyles = css({
-  display: 'block',
-  pointerEvents: 'all',
-  height: 2,
-  width: 16,
-
-  svg: {
-    width: 9,
-    height: 9,
-    margin: 'auto',
-    transform: 'translateY(-45%)',
-  },
-  'svg > rect': {
-    fill: 'transparent',
-  },
-});
-
 const DragHandle: FC<
   PropsWithChildren<{ overrideStyles?: SerializedStyles }>
 > = ({ children, overrideStyles = dragHandleStyles }) => {
@@ -183,11 +166,7 @@ export const DataViewColumnHeader = forwardRef<
         contentEditable={false}
       >
         {!readOnly && (
-          <DragHandle
-            overrideStyles={
-              isHovering ? smallerDragHandleStyles : dragHandleStyles
-            }
-          >
+          <DragHandle overrideStyles={dragHandleStyles}>
             {isHovering ? <DragHandleIcon /> : <Icon />}
           </DragHandle>
         )}

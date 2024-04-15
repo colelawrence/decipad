@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Image, Trash, WarningRound } from 'libs/ui/src/icons';
+import { Image, Trash, WarningCircle } from '../../../icons';
 import { Tooltip } from 'libs/ui/src/shared';
 import React from 'react';
 import {
@@ -59,7 +59,7 @@ export const SelectedFile: React.FC<SelectedFileProps> = ({
             hoverOnly
             trigger={
               <div css={fileWarningRoundStyles}>
-                <WarningRound variant={'warning'} />
+                <WarningCircle />
               </div>
             }
           >

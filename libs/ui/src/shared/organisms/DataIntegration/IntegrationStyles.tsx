@@ -138,14 +138,15 @@ const IntegrationItemIconWrapper = css({
   display: 'grid',
   placeItems: 'center',
   flexShrink: 0,
-
   width: '40px',
   height: '40px',
-
-  padding: '10px',
-
   backgroundColor: cssVar('iconBackground'),
   borderRadius: '8px',
+
+  '& > svg': {
+    width: '100%',
+    height: '100%',
+  },
 });
 
 const IntegrationItemTextAndActions = css({
@@ -197,7 +198,7 @@ const IntegrationItemTextAndActions = css({
 
 const IntegrationItemIconDisabledWrapper = css(IntegrationItemIconWrapper, {
   backgroundColor: cssVar('iconColorSubdued'),
-  img: {
+  svg: {
     filter: 'grayscale(1)',
   },
 });

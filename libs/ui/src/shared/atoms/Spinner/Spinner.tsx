@@ -1,54 +1,28 @@
-import { css } from '@emotion/react';
-import { FC } from 'react';
-import { cssVar } from '../../../primitives';
+/* eslint decipad/css-prop-named-variable: 0 */
+import { motion } from 'framer-motion';
 
-const spinnerWrapperStyles = css({
-  height: '16px',
-  width: '16px',
-  lineHeight: '35px',
-});
-
-const spinnerStyles = css({
-  animation: 'rotate 2s linear infinite',
-});
-
-const circleStyles = css({
-  stroke: cssVar('textDefault'),
-  strokeLinecap: 'round',
-  animation: 'dash 1.5s ease-in-out infinite',
-  '@keyframes rotate': {
-    '100%': {
-      transform: 'rotate(360deg)',
-    },
-  },
-
-  '@keyframes dash': {
-    '0%': {
-      strokeDasharray: '1, 150',
-      strokeDashoffset: 0,
-    },
-    '50%': {
-      strokeDasharray: '90, 150',
-      strokeDashoffset: -35,
-    },
-    '100%': {
-      strokeDasharray: '90, 150',
-      strokeDashoffset: -124,
-    },
-  },
-});
-
-export const Spinner: FC = () => (
-  <div css={spinnerWrapperStyles}>
-    <svg css={spinnerStyles} viewBox="0 0 25 25">
-      <circle
-        css={circleStyles}
-        cx="12.5"
-        cy="12.5"
-        r="10"
+export const Spinner: React.FC = () => (
+  <div
+    css={{ display: 'grid', alignItems: 'center', justifyContent: 'center' }}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+      <path
+        d="M10.217 2.41402C10.9521 2.69763 11.6242 3.12326 12.1948 3.6666C12.7654 4.20994 13.2235 4.86036 13.5427 5.58071C13.862 6.30106 14.0362 7.07724 14.0555 7.86494C14.0748 8.65263 13.9388 9.43642 13.6552 10.1715C13.3715 10.9067 12.9459 11.5787 12.4026 12.1493C11.8592 12.72 11.2088 13.178 10.4885 13.4972C9.76811 13.8165 8.99193 13.9908 8.20424 14.0101C7.41654 14.0293 6.63276 13.8933 5.89764 13.6097C5.16252 13.3261 4.49046 12.9005 3.91984 12.3571C3.34921 11.8138 2.89119 11.1634 2.57193 10.443C2.25267 9.72265 2.07841 8.94646 2.05912 8.15877C2.03983 7.37107 2.17587 6.58729 2.45949 5.85217C2.7431 5.11706 3.16873 4.445 3.71207 3.87437C4.25541 3.30374 4.90583 2.84572 5.62618 2.52646C6.34653 2.2072 7.12271 2.03295 7.91041 2.01365C8.6981 1.99436 9.48189 2.1304 10.217 2.41402L10.217 2.41402Z"
+        stroke="currentColor"
         fill="none"
-        strokeWidth="2.5"
-      ></circle>
+        strokeWidth="2"
+        opacity="0.2"
+      />
+      <motion.path
+        d="M10.217 2.41402C10.9521 2.69763 11.6242 3.12326 12.1948 3.6666C12.7654 4.20994 13.2235 4.86036 13.5427 5.58071C13.862 6.30106 14.0362 7.07724 14.0555 7.86494C14.0748 8.65263 13.9388 9.43642 13.6552 10.1715C13.3715 10.9067 12.9459 11.5787 12.4026 12.1493C11.8592 12.72 11.2088 13.178 10.4885 13.4972C9.76811 13.8165 8.99193 13.9908 8.20424 14.0101C7.41654 14.0293 6.63276 13.8933 5.89764 13.6097C5.16252 13.3261 4.49046 12.9005 3.91984 12.3571C3.34921 11.8138 2.89119 11.1634 2.57193 10.443C2.25267 9.72265 2.07841 8.94646 2.05912 8.15877C2.03983 7.37107 2.17587 6.58729 2.45949 5.85217C2.7431 5.11706 3.16873 4.445 3.71207 3.87437C4.25541 3.30374 4.90583 2.84572 5.62618 2.52646C6.34653 2.2072 7.12271 2.03295 7.91041 2.01365C8.6981 1.99436 9.48189 2.1304 10.217 2.41402L10.217 2.41402Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+        style={{
+          strokeDasharray: '16, 64',
+        }}
+        animate={{ rotate: 360, transition: { duration: 1, repeat: Infinity } }}
+      />
     </svg>
   </div>
 );

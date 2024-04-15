@@ -122,8 +122,8 @@ const dragHandleStyles = css({
   justifyContent: 'center',
   color: cssVar('textHeavy'),
   svg: {
-    width: '10px',
-    height: '10px',
+    width: '16px',
+    height: '16px',
   },
 });
 

@@ -5,7 +5,7 @@ import { ComponentProps, useState } from 'react';
 
 import { noop } from '@decipad/utils';
 import { Avatar } from '../../../shared/atoms';
-import { Chevron } from '../../../icons';
+import { CaretDown, CaretUp } from '../../../icons';
 import { p12Medium, shortAnimationDuration } from '../../../primitives';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 
@@ -49,7 +49,7 @@ export const AccountAvatar = ({
 
       {variant && (
         <div css={chevronStyles(hoverSelector)}>
-          <Chevron type={menuOpen ? 'collapse' : 'expand'} />
+          {menuOpen ? <CaretUp /> : <CaretDown />}
         </div>
       )}
       <p></p>

@@ -244,7 +244,8 @@ describe('variable highlights', () => {
       </AnnotationsContext.Provider>
     );
 
-    const [colDecl, colUsage1, colUsage2] = getAllByText(/A/);
+    // first element resolves to <Add /> icon
+    const [_, colDecl, colUsage1, colUsage2] = getAllByText(/A/);
     cleanup = await applyCssVars();
     expect(
       findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor

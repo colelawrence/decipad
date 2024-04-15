@@ -2,7 +2,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SearchFieldWithDropdown } from 'libs/ui/src/shared/molecules';
 import { Children, FC, useState } from 'react';
-import { FileText, Formula, Plus, Search } from '../../../icons';
+import { Formula, MagnifyingGlass, Sheet, ShowMore } from '../../../icons';
 import {
   SidebarIcon,
   TabsContent,
@@ -27,13 +27,13 @@ const getTriggerMetaForTab = (tab: SelectedTab) => {
       return {
         tooltip: 'Re-use data and variables',
         label: 'Data',
-        children: <SidebarIcon description={'Data'} icon={<FileText />} />,
+        children: <SidebarIcon description={'Data'} icon={<Sheet />} />,
       };
     case 'block':
       return {
         tooltip: 'Insert new blocks',
         label: 'Insert',
-        children: <SidebarIcon description={'Insert'} icon={<Plus />} />,
+        children: <SidebarIcon description={'Insert'} icon={<ShowMore />} />,
       };
     default:
       return {
@@ -99,7 +99,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
                 ? 'Search for variables...'
                 : 'Search for blocks...'
             }
-            icon={<Search />}
+            icon={<MagnifyingGlass />}
           />
 
           <div

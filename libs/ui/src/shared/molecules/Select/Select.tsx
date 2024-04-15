@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { ReactNode, useCallback, useState } from 'react';
 import { MenuItem, MenuList } from '../..';
-import { Caret } from '../../../icons';
+import { CaretDown } from '../../../icons';
 import { p12Regular } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
@@ -33,7 +33,6 @@ const triggerStyles = css({
 
 interface SelectProps<T extends string> {
   variant?: 'transparent';
-  caretColor?: 'weak' | 'normal';
   options: T[];
   value?: T;
   label?: ReactNode;
@@ -46,7 +45,6 @@ export function Select<T extends string>({
   value,
   onChange,
   label,
-  caretColor = 'normal',
   clear = false,
 }: SelectProps<T>) {
   const [opened, setOpened] = useState(false);
@@ -73,7 +71,7 @@ export function Select<T extends string>({
             >
               {label}
               <span css={[triggerStyles, hideOnPrint]}>
-                <Caret color={caretColor} variant="down" />
+                <CaretDown />
               </span>
             </button>
           }

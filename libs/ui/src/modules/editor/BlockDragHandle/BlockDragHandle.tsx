@@ -20,17 +20,17 @@ import {
   useState,
 } from 'react';
 import {
-  Comments,
-  Delete,
+  Chat,
+  Trash,
   Download,
   DragHandle,
   Duplicate,
   Hide,
   Link,
-  Magic,
-  Plus,
+  Sparkles,
+  Add,
   Show,
-  Switch,
+  Move,
 } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import {
@@ -91,7 +91,13 @@ const handleStyle = css(handleButtonStyle, {
   cursor: 'grab',
   height: '20px',
   width: '20px',
+  padding: '1px',
+  color: cssVar('iconColorHeavy'),
   marginLeft: '2px',
+
+  '> svg': {
+    height: '100%',
+  },
 });
 
 const plusStyle = css(handleButtonStyle, {
@@ -99,7 +105,12 @@ const plusStyle = css(handleButtonStyle, {
   cursor: 'pointer',
   color: cssVar('iconColorHeavy'),
   height: '20px',
+  padding: '1px',
   width: '20px',
+
+  '> svg': {
+    height: '100%',
+  },
 });
 
 interface BlockDragHandleProps {
@@ -179,7 +190,7 @@ export const BlockDragHandle = ({
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
       onClick={onClick}
-      css={[handleStyle, !showHidden && css({ padding: '5px' })]}
+      css={[handleStyle, !showHidden]}
       tabIndex={-1}
     >
       {showHidden ? <EyeLabel /> : <DragHandle />}
@@ -203,14 +214,14 @@ export const BlockDragHandle = ({
       css={plusStyle}
       data-testid="plus-block-button"
     >
-      <Plus />
+      <Add />
     </button>
   );
 
   const downloadMenuItem = <p>Download as CSV</p>;
 
   const aiButton = aiPanel ? (
-    <MenuItem icon={<Magic />} onSelect={aiPanel.toggle} isNew>
+    <MenuItem icon={<Sparkles />} onSelect={aiPanel.toggle} isNew>
       AI
     </MenuItem>
   ) : null;
@@ -273,7 +284,7 @@ export const BlockDragHandle = ({
           {onMoveToTab && tabs.length > 0 && (
             <MenuList
               itemTrigger={
-                <TriggerMenuItem icon={<Switch />}>Move to tab</TriggerMenuItem>
+                <TriggerMenuItem icon={<Move />}>Move to tab</TriggerMenuItem>
               }
             >
               {tabs.map((t, i) => {
@@ -313,7 +324,7 @@ export const BlockDragHandle = ({
           {children}
           {!isMultipleSelection ? aiButton : null}
           {isFlagEnabled('ENABLE_COMMENTS') && (
-            <MenuItem icon={<Comments />} onSelect={onAnnotation}>
+            <MenuItem icon={<Chat />} onSelect={onAnnotation}>
               Comment
             </MenuItem>
           )}
@@ -327,7 +338,7 @@ export const BlockDragHandle = ({
               onSelect={typeof onDelete === 'function' ? onDelete : noop}
             />
           ) : typeof onDelete === 'function' ? ( // dependency graph
-            <MenuItem icon={<Delete />} onSelect={onDelete}>
+            <MenuItem icon={<Trash />} onSelect={onDelete}>
               Delete
             </MenuItem>
           ) : null}

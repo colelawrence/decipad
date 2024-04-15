@@ -1,4 +1,18 @@
+const t = require('@babel/types');
+
 const template = (variables, { tpl }) => {
+  const titleElement = t.jsxElement(
+    t.jsxOpeningElement(t.jsxIdentifier('title'), [], false),
+    t.jsxClosingElement(t.jsxIdentifier('title')),
+    [t.jsxText(variables.componentName.slice(3))],
+    false
+  );
+
+  // Insert the title element at the beginning of the SVG element's children
+  if (variables.jsx.openingElement.name.name === 'svg') {
+    variables.jsx.children.unshift(titleElement);
+  }
+
   // eslint-disable-next-line no-param-reassign
   variables.componentName = `${variables.componentName.slice(3)}`;
 

@@ -5,11 +5,18 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { create } from 'zustand';
 import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
-import * as icons from '../../../icons';
+
 import { tabletScreenQuery } from '../../../primitives';
 import { AvailableColorStatus, ColorStatusNames } from '../../../utils';
 import { FilterBubbles } from '../FilterBubbles/FilterBubbles';
 import { MenuList } from '../MenuList/MenuList';
+import {
+  CaretDown,
+  Close,
+  Globe,
+  Lock,
+  MagnifyingGlass,
+} from 'libs/ui/src/icons';
 
 type SearchBarProps = {
   compact?: boolean;
@@ -59,7 +66,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
     <div css={wrapperStyles}>
       <div css={inputStyles}>
         <span css={{ height: '18px', width: '18px' }}>
-          <icons.Search />
+          <MagnifyingGlass />
         </span>
         <span css={css({ width: '100%' })} data-testid="search-bar">
           <InputField
@@ -87,7 +94,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
                     ? 'Filter by visibility'
                     : capitalize(visibility)
                 }
-                icon={<icons.Caret variant="down" />}
+                icon={<CaretDown />}
               />
             </div>
           }
@@ -95,7 +102,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
           {visibility === '' ? null : (
             <MenuItem
               key={'clear-status'}
-              icon={<icons.Close />}
+              icon={<Close />}
               onSelect={() => {
                 setVisibility('');
                 setVisibilityOpen(!visibilityOpen);
@@ -106,7 +113,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
           )}
 
           <MenuItem
-            icon={<icons.Globe />}
+            icon={<Globe />}
             onSelect={() => {
               setVisibility('public');
               setVisibilityOpen(!visibilityOpen);
@@ -116,7 +123,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
             <span>Public</span>
           </MenuItem>
           <MenuItem
-            icon={<icons.Hide />}
+            icon={<Lock />}
             onSelect={() => {
               setVisibility('private');
               setVisibilityOpen(!visibilityOpen);
@@ -142,7 +149,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
                     ? noNulls.map((s) => capitalize(s)).join(', ')
                     : 'Filter by status'
                 }
-                icon={<icons.Caret variant="down" />}
+                icon={<CaretDown />}
               />
             </div>
           }
@@ -150,7 +157,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
           {noNulls.length > 0 ? (
             <MenuItem
               key={'clear-status'}
-              icon={<icons.Close />}
+              icon={<Close />}
               onSelect={() => {
                 setStatus([]);
                 setStatusOpen(!statusOpen);

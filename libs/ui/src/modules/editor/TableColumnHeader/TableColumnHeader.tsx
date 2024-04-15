@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { TableColumnMenu } from '../TableColumnMenu/TableColumnMenu';
 import { TableHeader } from '../TableHeader/TableHeader';
-import { Caret } from '../../../icons';
+import { CaretDown } from '../../../icons';
 import { getStringType } from '../../../utils';
 
 const rightSlotStyles = css({
@@ -103,7 +103,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
                 className="table-caret"
                 css={rightSlotStyles}
               >
-                <Caret variant="down" />
+                <CaretDown />
               </button>
             }
             open={isMenuOpen}

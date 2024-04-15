@@ -18,7 +18,7 @@ import { useLocalStorage, useStripePlans } from '@decipad/react-utils';
 import { WorkspaceNavigation } from '../WorkspaceNavigation/WorkspaceNavigation';
 import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
 import { useLocation } from 'react-router-dom';
-import { SidebarOpen } from 'libs/ui/src/icons';
+import { Sidebar } from 'libs/ui/src/icons';
 import { SectionRecord } from 'libs/ui/src/types/workspaces';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { workspaces as workspaceRouting } from '@decipad/routing';
@@ -119,7 +119,7 @@ export const DashboardSidebar = ({
       >
         <Drawer.Trigger asChild>
           <Styled.ToggleButton>
-            <SidebarOpen />
+            <Sidebar />
           </Styled.ToggleButton>
         </Drawer.Trigger>
         <Drawer.Portal>

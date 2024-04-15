@@ -4,7 +4,6 @@ import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { MenuList } from '../../../shared/molecules';
 import { MenuItem, TextAndIconButton } from '../../../shared/atoms';
-import { Caret } from '../../../icons/Caret/Caret';
 import {
   cssVar,
   p12Medium,
@@ -14,6 +13,7 @@ import {
   red500,
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
+import { CaretDown } from 'libs/ui/src/icons';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -62,7 +62,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         onClick={noop}
         color={isInvitationPicker ? 'transparent' : 'default'}
       >
-        {caret && <Caret variant="down" />}
+        {caret && <CaretDown />}
       </TextAndIconButton>
     </div>
   );

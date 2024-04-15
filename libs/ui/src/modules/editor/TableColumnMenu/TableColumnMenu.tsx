@@ -21,20 +21,20 @@ import {
   useState,
 } from 'react';
 import {
-  AddToWorkspace,
   AlignArrowLeft,
   AlignArrowRight,
   All,
-  BulletList,
+  ListBulleted,
   Calendar,
   CheckboxSelected,
-  Delete,
-  DollarCircle,
+  Dollar,
   Formula,
-  Magic,
+  Sparkles,
   Number,
-  NumberedList,
+  ListNumbered,
   Text,
+  Category,
+  Trash,
 } from '../../../icons';
 import { MenuItem, MenuList, TriggerMenuItem } from '../../../shared';
 import {
@@ -174,7 +174,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               key="currency"
               itemTrigger={
                 <TriggerMenuItem
-                  icon={<DollarCircle />}
+                  icon={<Dollar />}
                   selected={type.kind === 'number' && type.unit != null}
                 >
                   <div css={{ minWidth: '132px' }}>Currency</div>
@@ -212,7 +212,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuList>
             {!isForImportedColumn && (
               <MenuItem
-                icon={<NumberedList />}
+                icon={<ListNumbered />}
                 onSelect={() => onChangeColumnType(getSeriesType('number'))}
                 selected={
                   type.kind === 'series' && type.seriesType === 'number'
@@ -243,7 +243,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuItem
               key="category"
-              icon={<BulletList />}
+              icon={<Category />}
               onSelect={() => onChangeColumnType({ kind: 'category' })}
               selected={type.kind === 'category'}
             >
@@ -322,7 +322,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               key="dropdown-tables"
               itemTrigger={
                 <TriggerMenuItem
-                  icon={<AddToWorkspace />}
+                  icon={<ListBulleted />}
                   selected={type.kind === 'date'}
                 >
                   <div css={{ minWidth: '116px' }}>From Dropdown</div>
@@ -334,7 +334,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               {dropdownNames.map((d, index) => (
                 <MenuItem
                   key={index}
-                  icon={<AddToWorkspace />}
+                  icon={<ListBulleted />}
                   onSelect={() =>
                     onChangeColumnType({
                       kind: 'dropdown',
@@ -378,7 +378,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               <h3 css={dividerLabel}>Column Actions</h3>
               <MenuItem
                 key="populate-column"
-                icon={<Magic />}
+                icon={<Sparkles />}
                 onSelect={onPopulateColumn}
                 disabled={shouldDisableAI}
               >
@@ -400,7 +400,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               </MenuItem>
               <MenuItem
                 key="remove-column"
-                icon={<Delete />}
+                icon={<Trash />}
                 onSelect={onRemoveColumn}
               >
                 Remove column

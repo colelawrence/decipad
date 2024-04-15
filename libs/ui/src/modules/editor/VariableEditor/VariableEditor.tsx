@@ -17,7 +17,7 @@ import {
 } from 'react';
 import { useSelected } from 'slate-react';
 import { VariableEditorMenu } from '../VariableEditorMenu/VariableEditorMenu';
-import { Ellipsis, Virus } from '../../../icons';
+import { All, Ellipsis } from '../../../icons';
 import { DatePickerWrapper, Toggle } from '../../../shared';
 import {
   cssVar,
@@ -180,7 +180,7 @@ export const VariableEditor = ({
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
 
-  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
+  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? All, [type]);
   const selected = useSelected();
 
   const resultType = lineResult?.result?.type;

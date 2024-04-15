@@ -62,7 +62,7 @@ export class Notebook {
     this.duplicateNotebook = page.getByRole('menuitem', { name: 'Duplicate' });
     this.topRightDuplicateNotebook = page.getByTestId('duplicate-button');
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
-      name: 'Folder Open Unarchive',
+      name: 'FolderOpen Unarchive',
     });
     this.resultWidget = page.getByTestId('result-widget');
     this.republishNotification = page.getByTestId('publish-notification');
@@ -397,12 +397,12 @@ export class Notebook {
    * **Usage**
    *
    * ```js
-   * await notebook.moveTab('Tab 4', 'Left');
+   * await notebook.moveTab('Tab 4', 'To the left');
    * ```
    */
   async moveTab(
     selector: string | number,
-    option: 'Left' | 'Right' | 'To the start' | 'To the end'
+    option: 'To the left' | 'To the right' | 'To the start' | 'To the end'
   ) {
     await this.getTab(selector).getByTestId('tab-options-button').click();
     await this.page
@@ -411,6 +411,7 @@ export class Notebook {
       .hover();
     await this.page
       .getByRole('menuitem', { name: new RegExp(`${option}$`) })
+      .first()
       .click();
   }
 

@@ -7,7 +7,7 @@ import {
   p12Medium,
   p13Medium,
 } from '../../../primitives';
-import { Close, Magic } from '../../../icons';
+import { Close, Sparkles } from '../../../icons';
 import { Button, Tooltip } from '../../../shared';
 import { useCallback } from 'react';
 import {
@@ -213,7 +213,7 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
     <div css={wrapperStyles}>
       <div css={headingStyles}>
         <div css={iconStyles}>
-          <Magic />
+          <Sparkles />
         </div>
         <p css={titleStyles}>Talk and build with AI</p>
         <Tooltip

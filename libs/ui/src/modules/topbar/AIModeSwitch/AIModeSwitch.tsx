@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Magic } from '../../../icons';
+import { Sparkles } from '../../../icons';
 import { componentCssVars, cssVar, p13Bold } from '../../../primitives';
 
 import * as Switch from '@radix-ui/react-switch';
@@ -78,7 +78,7 @@ export const AIModeSwitch: React.FC<AIModeSwitchProps> = ({
     <div css={switchWrapperStyles}>
       <label css={labelStyles} htmlFor="ai-mode">
         <div css={switchIconStyles}>
-          <Magic />
+          <Sparkles />
         </div>
         AI
       </label>

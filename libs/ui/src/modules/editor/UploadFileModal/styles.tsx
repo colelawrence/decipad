@@ -194,7 +194,7 @@ export const iconContainerStyle = css({
 });
 
 export const selectedFileStylez = css({
-  svg: { width: 32, height: 32 },
+  svg: { width: 16, height: 16 },
   padding: 0,
   borderRadius: 6,
 });

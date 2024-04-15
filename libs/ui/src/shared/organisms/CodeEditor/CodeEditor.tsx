@@ -21,7 +21,7 @@ import {
   useState,
 } from 'react';
 import { Tooltip } from '../../atoms';
-import { Code, Copy } from '../../../icons';
+import { Code, Duplicate } from '../../../icons';
 import {
   codeLog,
   cssVar,
@@ -144,7 +144,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
                 setTimeout(() => setUserCopyPastedCode(false), 1000);
               }}
             >
-              <Copy />
+              <Duplicate />
             </div>
           }
         >

@@ -2,7 +2,7 @@
 import type { Result } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { Caret } from '../../../icons';
+import { CaretDown, CaretUp } from '../../../icons';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { cssVar, p24Medium } from '../../../primitives';
 
@@ -70,7 +70,7 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
       {showMenu && (
         <div css={{ width: '20px' }}>
           <div css={{ width: 20, height: 20 }}>
-            <Caret variant={openMenu ? 'up' : 'down'} color="normal" />
+            {openMenu ? <CaretUp /> : <CaretDown />}
           </div>
         </div>
       )}

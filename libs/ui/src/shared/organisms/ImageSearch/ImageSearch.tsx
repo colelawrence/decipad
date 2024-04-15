@@ -2,7 +2,7 @@
 import { ReplicateModels } from '@decipad/shared-config';
 import { css } from '@emotion/react';
 import axios from 'axios';
-import { Search } from 'libs/ui/src/icons';
+import { MagnifyingGlass } from 'libs/ui/src/icons';
 import { useState } from 'react';
 import { JellyBeans } from '../../atoms';
 import { ImageGallery, ImageUrlWithMetadata } from './ImageGallery';
@@ -103,7 +103,7 @@ export const ImageSearch = ({
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         label={apiSource === 'replicate' ? 'Generate' : 'Search'}
-        icon={apiSource === 'replicate' ? null : <Search />}
+        icon={apiSource === 'replicate' ? null : <MagnifyingGlass />}
         showButton={!beans}
         variant={apiSource === 'replicate'}
         dropdownChoices={

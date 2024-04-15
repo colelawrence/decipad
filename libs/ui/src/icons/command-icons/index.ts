@@ -27,3 +27,7 @@ export { CommandSlider } from './CommandSlider';
 export { CommandSubmit } from './CommandSubmit';
 export { CommandTable } from './CommandTable';
 export { CommandToggle } from './CommandToggle';
+export { CommandConnectSource } from './CommandConnectSource';
+export { CommandConnectRanges } from './CommandConnectRanges';
+export { CommandImportCopy } from './CommandImportCopy';
+export { CommandImportRangeCopies } from './CommandImportRangeCopies';

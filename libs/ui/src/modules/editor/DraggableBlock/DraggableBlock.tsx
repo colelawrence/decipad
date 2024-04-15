@@ -6,7 +6,7 @@ import { ConnectDragSource } from 'react-dnd';
 
 import { MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
 import { NewElementLine } from '../NewElementLine/NewElementLine';
-import { CircularArrow } from '../../../icons';
+import { Rotate } from '../../../icons';
 import {
   cssVar,
   largestDesktop,
@@ -258,7 +258,7 @@ export const DraggableBlock = ({
                 turnInto.length > 0 && (
                   <MenuList
                     itemTrigger={
-                      <TriggerMenuItem icon={<CircularArrow />}>
+                      <TriggerMenuItem icon={<Rotate />}>
                         Turn into
                       </TriggerMenuItem>
                     }

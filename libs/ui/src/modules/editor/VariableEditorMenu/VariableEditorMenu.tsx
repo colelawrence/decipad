@@ -11,16 +11,16 @@ import {
 } from '../../../shared';
 import {
   Calendar,
-  DollarCircle,
   Move,
   Number as NumberIcon,
   Shapes,
   TableSmall,
-  Telescope,
+  Pyramid,
   Text,
+  MagnifyingGlass,
+  Dollar,
 } from '../../../icons';
 import { getDateType, getNumberType, getStringType } from '../../../utils';
-import { MagnifyingGlass } from '../../../icons/MagnifyingGlass/MagnifyingGlass';
 import type {
   IdentifiedError,
   IdentifiedResult,
@@ -278,7 +278,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
             </div>
           </MenuItem>
           <MenuItem
-            icon={<DollarCircle />}
+            icon={<Dollar />}
             onSelect={() =>
               typeof onChangeFormatting === 'function' &&
               onChangeFormatting('financial')
@@ -297,7 +297,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
             </div>
           </MenuItem>
           <MenuItem
-            icon={<Telescope />}
+            icon={<Pyramid />}
             onSelect={() =>
               typeof onChangeFormatting === 'function' &&
               onChangeFormatting('scientific')

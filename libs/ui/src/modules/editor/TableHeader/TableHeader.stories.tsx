@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Caret } from '../../../icons';
+import { CaretDown } from '../../../icons';
 import { getNumberType } from '../../../utils';
 import { TableHeader } from './TableHeader';
 
@@ -27,7 +27,7 @@ export const WithRightSlotIcon: StoryFn<typeof args> = (props) => (
     {...props}
     menu={
       <div style={{ width: '16px', height: '16px' }}>
-        <Caret variant="down" />
+        <CaretDown />
       </div>
     }
   />

@@ -32,7 +32,7 @@ const toolTipMarks: TooltipMark[] = [
     type: MARK_BOLD,
     icon: (
       <div css={iconWrapper}>
-        <icons.Bold />
+        <icons.StyleBold />
       </div>
     ),
     divider: false,
@@ -41,7 +41,7 @@ const toolTipMarks: TooltipMark[] = [
     type: MARK_ITALIC,
     icon: (
       <div css={iconWrapper}>
-        <icons.Italic />
+        <icons.StyleItalic />
       </div>
     ),
     divider: false,

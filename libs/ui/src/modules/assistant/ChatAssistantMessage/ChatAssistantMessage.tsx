@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
 import {
-  DeciAI,
+  DeciAi,
   Duplicate,
-  Feedback,
+  Chat,
   Refresh,
   ThumbsDown,
   ThumbsUp,
@@ -160,7 +160,7 @@ export const ChatAssistantMessage: React.FC<Props> = ({
   return (
     <div css={wrapperStyles}>
       <div css={avatarStyles}>
-        <DeciAI />
+        <DeciAi />
       </div>
       <div css={contentStyles}>
         <ChatMarkdownRenderer content={content} />
@@ -213,7 +213,7 @@ export const ChatAssistantMessage: React.FC<Props> = ({
                   disabled={hasSubmittedFeedback}
                   data-testid="feedback-button"
                 >
-                  <Feedback />
+                  <Chat />
                 </button>
               }
             />

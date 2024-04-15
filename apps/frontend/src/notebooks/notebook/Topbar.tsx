@@ -30,7 +30,7 @@ import {
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
-import { Caret } from 'libs/ui/src/icons';
+import { CaretDown } from 'libs/ui/src/icons';
 import { useSession } from 'next-auth/react';
 import { ClientEventsContext } from '@decipad/client-events';
 
@@ -152,7 +152,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
               isReadOnly={isReadOnly}
             >
               <NotebookPath concatName notebookName={notebookName} />
-              {showTrigger && <Caret variant="down" />}
+              {showTrigger && <CaretDown />}
             </MenuItemButton>
           }
           notebookStatus={

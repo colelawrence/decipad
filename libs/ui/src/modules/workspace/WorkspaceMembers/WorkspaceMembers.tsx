@@ -9,10 +9,11 @@ import {
   Button,
   CollabMember,
   InputField,
+  Loading,
   MenuItem,
   MenuList,
 } from '../../../shared';
-import { Check, Ellipsis, Loading } from '../../../icons';
+import { Check, Ellipsis } from '../../../icons';
 
 import {
   cssVar,

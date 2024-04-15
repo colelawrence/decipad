@@ -1,4 +1,4 @@
-import { CircularArrow, CurvedArrow } from '../../../icons';
+import { Redo, Refresh, Undo } from '../../../icons';
 import { p12Bold } from '../../../primitives';
 import * as Styled from './styles';
 
@@ -29,7 +29,7 @@ export const UndoButtons: React.FC<UndoButtonsProps> = ({
         onClick={onUndo}
         disabled={!canUndo}
       >
-        <CurvedArrow direction="left" active={canUndo} />
+        <Undo />
       </button>
       <button
         data-testid="redo-button"
@@ -37,12 +37,12 @@ export const UndoButtons: React.FC<UndoButtonsProps> = ({
         onClick={onRedo}
         disabled={!canRedo}
       >
-        <CurvedArrow direction="right" active={canRedo} />
+        <Redo />
       </button>
     </div>
     {isEmbed && (
       <button type="button" onClick={onRevertChanges}>
-        <CircularArrow />
+        <Refresh />
         <span css={p12Bold}>Clear Changes</span>
       </button>
     )}

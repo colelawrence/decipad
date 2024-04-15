@@ -6,7 +6,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { NavigationList } from '../NavigationList/NavigationList';
 import * as Styled from './styles';
-import { Caret } from 'libs/ui/src/icons';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 
 export type NavigationItemProps = {
   readonly children: ReactNode | ReactNode[];
@@ -54,7 +54,7 @@ export const NavigationItem = ({
                 {children}
 
                 <Styled.CollapsibleIcon>
-                  <Caret variant={open ? 'up' : 'down'} />
+                  {open ? <CaretUp /> : <CaretDown />}
                 </Styled.CollapsibleIcon>
               </Styled.ItemButton>
             ) : (
@@ -66,7 +66,7 @@ export const NavigationItem = ({
               >
                 {children}
                 <Styled.CollapsibleIcon>
-                  <Caret variant={open ? 'up' : 'down'} />
+                  {open ? <CaretUp /> : <CaretDown />}
                 </Styled.CollapsibleIcon>
               </Styled.ItemAnchor>
             )}

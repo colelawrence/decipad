@@ -2,8 +2,8 @@
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { FC, useCallback, useState } from 'react';
-import { Button, InputField } from '../../../shared';
-import { Check, Loading } from '../../../icons';
+import { Button, InputField, Loading } from '../../../shared';
+import { Check } from '../../../icons';
 import { CollabAccessDropdown } from '../CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../CollabMembersRights/CollabMembersRights';
 import { cssVar, p14Medium, p14Regular } from '../../../primitives';

@@ -68,7 +68,7 @@ function CustomDragLayer() {
                 justifyContent: 'center',
               }}
             >
-              <Icon title={item.icon} />
+              <Icon />
             </span>
             <span
               css={{

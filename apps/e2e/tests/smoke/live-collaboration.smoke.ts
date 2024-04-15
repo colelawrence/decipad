@@ -233,14 +233,14 @@ smoketest(
     });
 
     await smoketest.step('move tab 4', async () => {
-      await userANotebook.moveTab('Tab 4', 'Left');
+      await userANotebook.moveTab('Tab 4', 'To the left');
       expect(await userANotebook.getTabNames()).toEqual([
         'Tab 1',
         'Tab 2',
         'Tab 4',
         'Tab 3',
       ]);
-      await userANotebook.moveTab('Tab 4', 'Right');
+      await userANotebook.moveTab('Tab 4', 'To the right');
       expect(await userANotebook.getTabNames()).toEqual([
         'Tab 1',
         'Tab 2',

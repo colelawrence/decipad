@@ -15,17 +15,18 @@ import {
   type MouseEventHandler,
 } from 'react';
 import {
+  Add,
   AlignArrowLeftAlt,
   AlignArrowRightAlt,
-  ArrowLeft,
+  ArrowBack,
   ArrowRight,
   Brush,
-  Caret,
+  CaretDown,
+  CaretUp,
   Edit,
   Hide,
-  Plus,
   Show,
-  Switch,
+  Move,
   Trash,
 } from '../../../icons';
 import { cssVar, p13Bold, p13Medium } from '../../../primitives';
@@ -366,7 +367,7 @@ export const NotebookTabs: FC<TabsProps> = ({
             onClick={handleAddTab}
             data-testid="add-tab-button"
           >
-            <Plus />
+            <Add />
             Add tab
           </NewTabButton>
         </TabsContainer>
@@ -450,7 +451,7 @@ const Tab: FC<TabProps> = ({
       <TabContent>
         {isReadOnly ? (
           <TabIcon data-testid="tab-icon">
-            <Icon title={icon} />
+            <Icon />
           </TabIcon>
         ) : isHidden ? (
           <TabIcon data-testid="tab-hidden">
@@ -462,7 +463,7 @@ const Tab: FC<TabProps> = ({
             color="Catskill"
             trigger={
               <TabIcon data-testid="tab-icon" ref={iconRef}>
-                <Icon title={icon} />
+                <Icon />
               </TabIcon>
             }
             onChangeIcon={onChangeIcon}
@@ -477,7 +478,7 @@ const Tab: FC<TabProps> = ({
           dropdown
           trigger={
             <IconWrapper data-testid="tab-options-button">
-              <Caret variant={open ? 'up' : 'down'} />
+              {open ? <CaretUp /> : <CaretDown />}
             </IconWrapper>
           }
           open={open}
@@ -492,25 +493,25 @@ const Tab: FC<TabProps> = ({
             itemTrigger={
               <TriggerMenuItem
                 disabled={!(canMove('left') || canMove('right'))}
-                icon={<Switch />}
+                icon={<Move />}
               >
                 Move tab
               </TriggerMenuItem>
             }
           >
             <MenuItem
-              icon={<ArrowLeft />}
+              icon={<ArrowBack />}
               onSelect={() => onMove('left')}
               disabled={!canMove('left')}
             >
-              <div css={{ minWidth: '64px' }}>Left</div>
+              <div css={{ minWidth: '64px' }}>To the left</div>
             </MenuItem>
             <MenuItem
               icon={<ArrowRight />}
               onSelect={() => onMove('right')}
               disabled={!canMove('right')}
             >
-              <div css={{ minWidth: '64px' }}>Right</div>
+              <div css={{ minWidth: '64px' }}>To the right</div>
             </MenuItem>
             <MenuItem
               icon={<AlignArrowLeftAlt />}
@@ -796,26 +797,17 @@ const NewTabButton = styled.button({
   color: cssVar('textSubdued'),
   whiteSpace: 'nowrap',
   cursor: 'pointer',
+  gap: '2px',
   boxShadow: `inset 0px 0px 0px 1px ${cssVar('backgroundHeavy')}`,
 
   svg: {
-    width: '18px',
-    height: '18px',
-    marginBottom: '2px',
-
-    path: {
-      stroke: cssVar('textSubdued'),
-    },
+    width: '16px',
+    height: '16px',
+    marginBottom: '1px',
   },
 
   '&:hover': {
     backgroundColor: cssVar('backgroundDefault'),
     color: cssVar('textHeavy'),
-
-    svg: {
-      path: {
-        stroke: cssVar('textHeavy'),
-      },
-    },
   },
 });

@@ -21,7 +21,7 @@ it('renders the right caret icon', () => {
   render(<TriggerMenuItem>Text</TriggerMenuItem>, {
     wrapper,
   });
-  expect(screen.getByTitle(/caret right/i)).toBeInTheDocument();
+  expect(screen.getByTitle(/CaretRight/i)).toBeInTheDocument();
 });
 
 it('renders an optional icon', () => {

@@ -274,14 +274,14 @@ test('basic tabs funcionality @tabs', async ({ testUser }) => {
   });
 
   await test.step('move tab 4', async () => {
-    await notebook.moveTab('Tab 4', 'Left');
+    await notebook.moveTab('Tab 4', 'To the left');
     expect(await notebook.getTabNames()).toEqual([
       'Tab 1',
       'Tab 2',
       'Tab 4',
       'Tab 3',
     ]);
-    await notebook.moveTab('Tab 4', 'Right');
+    await notebook.moveTab('Tab 4', 'To the right');
     expect(await notebook.getTabNames()).toEqual([
       'Tab 1',
       'Tab 2',

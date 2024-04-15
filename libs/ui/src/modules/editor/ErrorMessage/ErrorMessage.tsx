@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Warning } from '../../../icons/Warning/Warning';
+import { Warning } from '../../../icons';
 import { p16Medium } from '../../../primitives';
 import { CodeError } from '../CodeError/CodeError';
 

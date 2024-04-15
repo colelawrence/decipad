@@ -1,6 +1,6 @@
 // JellyBeans.stories.tsx
 import { Meta, StoryFn } from '@storybook/react';
-import { Formula, Home, Magic, Settings } from 'libs/ui/src/icons';
+import { Formula, Home, Sparkles, Settings } from 'libs/ui/src/icons';
 import { JellyBeans, JellyBrainsProps } from './Jellybeans';
 
 const args: JellyBrainsProps = {
@@ -67,7 +67,7 @@ MixedStates.args = {
     },
     {
       text: 'With Icon',
-      icon: <Magic />,
+      icon: <Sparkles />,
     },
     {
       text: 'Disabled & Icon',

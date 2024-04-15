@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import capitalize from 'lodash.capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Divider, MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
-import { Aggregate, Caret, Cluster, Trash } from '../../../icons';
+import { Aggregate, CaretDown, Cluster, Trash } from '../../../icons';
 import { cssVar } from '../../../primitives';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { DataViewFilter, TableCellType } from '@decipad/editor-types';
@@ -82,7 +82,7 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
           onClick={onTriggerClick}
           data-testid={`data-view-options-menu-${columnName}`}
         >
-          <Caret color="normal" variant="down" />
+          <CaretDown />
         </button>
       }
     >

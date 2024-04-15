@@ -335,13 +335,8 @@ const dragHandleStyles = css({
   width: 16,
 
   svg: {
-    width: 9,
-    height: 9,
-    margin: 'auto',
-    transform: 'translateY(45%)',
-  },
-  'svg > rect': {
-    fill: 'transparent',
+    height: '100%',
+    width: '100%',
   },
 });
 

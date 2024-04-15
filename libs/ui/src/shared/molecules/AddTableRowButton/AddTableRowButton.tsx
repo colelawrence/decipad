@@ -2,7 +2,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Create } from '../../../icons';
+import { Add } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
 import { table } from '../../../styles';
 
@@ -47,7 +47,7 @@ export const AddTableRowButton = ({
           data-testid="editor-table-add-row"
         >
           <span css={iconWrapperStyles}>
-            <Create />
+            <Add />
           </span>
           <span>Add row</span>
         </button>

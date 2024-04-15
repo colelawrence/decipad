@@ -9,12 +9,12 @@ import {
   HelpMenu,
 } from '../../../shared';
 import {
-  Cards,
-  Chat,
+  Templates,
   Deci,
-  LeftArrowShort,
+  ArrowBack,
   Show,
-  SidebarOpen,
+  Sidebar,
+  Chat,
 } from '../../../icons';
 
 import { p13Bold } from '../../../primitives';
@@ -31,7 +31,7 @@ import { NotebookAvatars } from '../NotebookAvatars/NotebookAvatars';
 import { NotebookPath } from '../NotebookPath/NotebookPath';
 import { isFlagEnabled } from '@decipad/feature-flags';
 
-const Templates: FC<TopbarActions> = ({ onGalleryClick }) => (
+const TemplatesLink: FC<TopbarActions> = ({ onGalleryClick }) => (
   <Styled.TemplateWrapper>
     <em css={p13Bold}>
       <Anchor
@@ -40,7 +40,7 @@ const Templates: FC<TopbarActions> = ({ onGalleryClick }) => (
         onClick={onGalleryClick}
       >
         <Styled.TemplatesText>
-          <Cards />
+          <Templates />
           Templates
         </Styled.TemplatesText>
       </Anchor>
@@ -69,7 +69,7 @@ const SidebarToggle: FC<TopbarActions> = ({
         {
           children: (
             <Styled.SidebarToggleTrigger>
-              <SidebarOpen />
+              <Sidebar />
             </Styled.SidebarToggleTrigger>
           ),
           onClick: onToggleSidebar,
@@ -168,7 +168,7 @@ const BackButton: FC<AccessInfo & TopbarActions> = ({
     return (
       <Styled.IconWrap>
         <IconButton onClick={onBack} testId="go-to-workspace">
-          <LeftArrowShort />
+          <ArrowBack />
         </IconButton>
       </Styled.IconWrap>
     );
@@ -358,7 +358,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           {isFlagEnabled('ENABLE_COMMENTS') && (
             <AnnotationsToggle {...actions} />
           )}
-          <Templates {...actions} />
+          <TemplatesLink {...actions} />
           <Help />
           <SidebarToggle {...actions} />
           <NotebookAuthors {...authors} />

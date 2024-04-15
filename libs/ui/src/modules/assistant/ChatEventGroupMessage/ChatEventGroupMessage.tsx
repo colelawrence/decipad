@@ -4,8 +4,9 @@ import { MessageStatus, SingleEvent } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLayoutEffect, useState } from 'react';
-import { Caret, Check, Spinner, Warning } from '../../../icons';
+import { CaretDown, CaretUp, Check, Warning } from '../../../icons';
 import { cssVar, p12Bold, p13Medium, p13Regular } from '../../../primitives';
+import { Spinner } from 'libs/ui/src/shared';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -264,7 +265,7 @@ export const ChatEventGroupMessage: React.FC<Props> = ({ status, events }) => {
           >
             <span>{collapsed ? 'Open' : 'Collapse'}</span>
             <span css={collapseButtonIconStyles}>
-              <Caret variant={collapsed ? 'down' : 'up'} />
+              {collapsed ? <CaretDown /> : <CaretUp />}
             </span>
           </button>
         )}

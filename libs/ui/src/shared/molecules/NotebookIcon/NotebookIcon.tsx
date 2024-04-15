@@ -31,7 +31,7 @@ export const NotebookIcon = ({
         },
       ]}
     >
-      <Icon title={icon} />
+      <Icon />
     </div>
   );
 };

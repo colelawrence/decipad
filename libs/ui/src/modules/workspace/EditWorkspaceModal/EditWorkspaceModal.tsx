@@ -4,7 +4,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import React, { useCallback, useState } from 'react';
 import { Button, InputField } from '../../../shared/atoms';
-import { People } from '../../../icons';
+import { Users } from '../../../icons';
 
 import { Modal } from '../../../shared';
 import { p13Medium, p13Regular } from '../../../primitives';
@@ -89,7 +89,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
           <h3 css={headingStyles}>Workspace members</h3>
           <Button type="tertiaryAlt" href={membersHref}>
             <span css={buttonIconStyle}>
-              <People />
+              <Users />
             </span>
             Manage members
           </Button>

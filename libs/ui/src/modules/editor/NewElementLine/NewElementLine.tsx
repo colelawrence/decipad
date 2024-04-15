@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
-import { Create } from '../../../icons';
+import { Add } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
 
 const parentWrapper = css({
@@ -156,8 +156,8 @@ export const NewElementLine = ({
                 if (onAdd !== undefined) onAdd();
               }}
             >
-              <span css={iconWrapperStyles}>
-                <Create />
+              <span css={iconWrapperStyles} data-testid="add-new-line-button">
+                <Add />
               </span>
             </button>
             <span css={addElementLine} />

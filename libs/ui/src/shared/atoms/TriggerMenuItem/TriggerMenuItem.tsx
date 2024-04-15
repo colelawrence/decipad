@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { FC, ReactNode, useContext } from 'react';
-import { Caret } from '../../../icons';
+import { CaretRight } from '../../../icons';
 import { Depth } from '../../molecules/MenuList/MenuList';
 import { grey400, p12Medium } from '../../../primitives';
 import { menu } from '../../../styles';
@@ -61,7 +61,7 @@ export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
         <span css={selectedPreviewStyles}>{selectedPreview}</span>
       )}
       <span css={caretRightWrapper}>
-        <Caret variant="right" />
+        <CaretRight />
       </span>
     </DropdownMenuTriggerElement>
   );

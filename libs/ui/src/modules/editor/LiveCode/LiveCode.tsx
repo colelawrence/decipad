@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
-import { Tooltip } from '../../../shared/atoms';
+import { Loading, Tooltip } from '../../../shared/atoms';
 import {
   Bolt,
   Calendar,
   CheckboxSelected,
-  Loading,
   Number,
   TableSmall,
   Text,

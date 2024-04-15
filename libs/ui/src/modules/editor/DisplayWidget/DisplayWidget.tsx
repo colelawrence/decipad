@@ -7,7 +7,7 @@ import type {
 } from '@decipad/remote-computer';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
-import { Caret } from '../../../icons';
+import { CaretDown, CaretUp } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import { cssVar, p14Regular, p24Medium } from '../../../primitives';
 import { ResultFormatting } from '../../../types';
@@ -124,14 +124,14 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       <div css={wrapperStyles}>
         {useIsEditorReadOnly() ? (
           <span css={iconWrapperStyles}>
-            <Icon title={icon} />
+            <Icon />
           </span>
         ) : (
           <IconPopover
             color={color}
             trigger={
               <div css={iconWrapperStyles}>
-                <Icon title={icon} />
+                <Icon />
               </div>
             }
             onChangeIcon={saveIcon}
@@ -169,7 +169,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           </span>
           {!readOnly && (
             <div css={{ width: 20, height: 20 }}>
-              <Caret variant={openMenu ? 'up' : 'down'} color="normal" />
+              {openMenu ? <CaretUp /> : <CaretDown />}
             </div>
           )}
         </div>

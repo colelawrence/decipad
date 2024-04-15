@@ -1,7 +1,7 @@
 import { pluralize } from '@decipad/language-utils';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { Avatar, Tooltip } from '../../../shared/atoms';
-import { Caret } from '../../../icons';
+import { CaretDown, CaretUp } from '../../../icons';
 import * as Popover from '@radix-ui/react-popover';
 import * as Styled from './styles';
 
@@ -55,7 +55,7 @@ export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
           </Styled.Profile>
 
           <Styled.ToggleButton>
-            {open ? <Caret variant="up" /> : <Caret variant="down" />}
+            {open ? <CaretUp /> : <CaretDown />}
           </Styled.ToggleButton>
         </Styled.SelectorButton>
       </Popover.Trigger>

@@ -140,7 +140,7 @@ export class AiAssistant {
   constructor(page: Page) {
     this.page = page;
     this.messageInput = this.page.getByTestId('message-input');
-    this.chatToggle = this.page.getByLabel('MagicAI');
+    this.chatToggle = this.page.getByLabel('Sparkles');
     this.sendMessage = this.page.getByRole('button', { name: 'Send' });
   }
 

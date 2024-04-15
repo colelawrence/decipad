@@ -3,7 +3,7 @@ import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowDiagonalTopRight, Caret } from '../../../icons';
+import { ArrowDiagonalTopRight, CaretDown } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
 import { editorLayout } from '../../../styles';
 import { Divider, MenuItem } from '../../atoms';
@@ -56,7 +56,7 @@ export const ConnectionsMenu: FC<ConnectionMenuProps> = ({
               {selectedDataSource ?? 'Add SQL Connection'}
             </span>
             <span css={iconStyles} data-testid="insert-data-connections-button">
-              <Caret variant="down" />
+              <CaretDown />
             </span>
           </span>
         }

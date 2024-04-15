@@ -4,59 +4,46 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import {
-  BooleanCheckboxSelected,
-  BooleanCheckboxUnselected,
-} from '../../../icons';
+import { Check } from '../../../icons';
 import {
   componentCssVars,
   cssVar,
   shortAnimationDuration,
 } from '../../../primitives';
 
-const BooleanCheckboxSelectedsvgString = encodeURIComponent(
-  renderToStaticMarkup(<BooleanCheckboxSelected />)
+const CheckSVGString = encodeURIComponent(
+  renderToStaticMarkup(<Check color={cssVar('iconColorMain')} />)
 );
 
-const BooleanCheckboxSelectedsvgStringdataUri = `url("data:image/svg+xml,${BooleanCheckboxSelectedsvgString}")`;
-
-const BooleanCheckboxUnselectedsvgString = encodeURIComponent(
-  renderToStaticMarkup(<BooleanCheckboxUnselected />)
-);
-const BooleanCheckboxUnselectedsvgStringdataUri = `url("data:image/svg+xml,${BooleanCheckboxUnselectedsvgString}")`;
+const CheckSVGStringDataURI = `url("data:image/svg+xml,${CheckSVGString}")`;
 
 const makeCheckbox = css({
-  background: BooleanCheckboxUnselectedsvgStringdataUri,
+  backgroundColor: cssVar('backgroundSubdued'),
+  border: `1px solid ${cssVar('borderDefault')}`,
   width: '16px',
   height: '16px',
   display: 'flex',
+  borderRadius: '4px',
   alignItems: 'center',
   position: 'relative',
   backgroundRepeat: 'no-repeat',
   '&[aria-checked="true"]': {
-    background: BooleanCheckboxUnselectedsvgStringdataUri,
-    width: '16px',
-    height: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative',
+    backgroundColor: cssVar('iconColorHeavy'),
+    borderColor: cssVar('iconColorHeavy'),
+  },
+  '&[aria-disabled="true"]': {
+    backgroundColor: cssVar('backgroundDefault'),
+    borderColor: cssVar('borderDefault'),
   },
   span: {
-    background: BooleanCheckboxUnselectedsvgStringdataUri,
-    width: '16px',
-    height: '16px',
+    width: '14px',
+    height: '14px',
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
     backgroundRepeat: 'no-repeat',
     '&[aria-checked="true"]': {
-      background: BooleanCheckboxSelectedsvgStringdataUri,
-      width: '16px',
-      height: '16px',
-      display: 'flex',
-      alignItems: 'center',
-      position: 'relative',
-      backgroundRepeat: 'no-repeat',
+      background: CheckSVGStringDataURI,
     },
   },
 });

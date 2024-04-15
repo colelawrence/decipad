@@ -8,13 +8,12 @@ import format from 'date-fns/format';
 import { FC, ReactNode, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
 import {
-  AddToWorkspace,
   Archive,
-  Copy,
+  Duplicate,
   Download,
   FolderOpen,
   GitBranch,
-  Switch,
+  Move,
   Trash,
 } from '../../../icons';
 import { MenuList } from '../../../shared/molecules';
@@ -85,7 +84,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
           (workspaces.length > 1 ? (
             <MenuList
               itemTrigger={
-                <TriggerMenuItem icon={<Copy />}>
+                <TriggerMenuItem icon={<Duplicate />}>
                   <MinDiv>Duplicate in</MinDiv>
                 </TriggerMenuItem>
               }
@@ -104,7 +103,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             </MenuList>
           ) : (
             <MenuItem
-              icon={<Copy />}
+              icon={<Duplicate />}
               onSelect={() => {
                 onDuplicate(workspaceForDuplicate ?? workspaceId);
                 setIsOpen(false);
@@ -117,7 +116,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         {permissionType === 'ADMIN' && workspaces.length > 1 && (
           <MenuList
             itemTrigger={
-              <TriggerMenuItem icon={<Switch />}>
+              <TriggerMenuItem icon={<Move />}>
                 <MinDiv>Move to workspace</MinDiv>
               </TriggerMenuItem>
             }
@@ -125,7 +124,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             {workspaces.map((workspace) => (
               <MenuItem
                 key={workspace.id}
-                icon={<AddToWorkspace />}
+                icon={<Move />}
                 onSelect={() => {
                   actions.onMoveToWorkspace(id, workspace.id, workspaceId);
                   setIsOpen(false);

@@ -7,8 +7,8 @@ import isEmpty from 'lodash.isempty';
 import md5 from 'md5';
 import { FormEvent, useCallback } from 'react';
 import Gravatar from 'react-gravatar';
-import { Button, TextareaField } from '../../shared';
-import { Date, Loading, Sheet } from '../../icons';
+import { Button, Loading, TextareaField } from '../../shared';
+import { Calendar, Sheet } from '../../icons';
 import {
   cssVar,
   h1,
@@ -331,7 +331,7 @@ export const AccountSetupFlow3 = ({
               </div>
               <div css={frontCardBottomStyles}>
                 <span css={iconWrapperStyles}>
-                  <Date />
+                  <Calendar />
                 </span>{' '}
                 Member since today 🎉
               </div>

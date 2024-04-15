@@ -4,7 +4,7 @@ import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { MenuList } from '../../molecules';
-import { ArrowDiagonalTopRight, Caret } from '../../../icons';
+import { ArrowDiagonalTopRight, CaretDown } from '../../../icons';
 import { editorLayout } from '../../../styles';
 import {
   componentCssVars,
@@ -56,7 +56,7 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
               Insert Secret
             </span>
             <span css={iconStyles} data-testid="insert-secret-button">
-              <Caret variant="down" />
+              <CaretDown />
             </span>
           </span>
         }

@@ -3,10 +3,10 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useParams } from 'react-router-dom';
 import { Button, SearchBar } from '../../../shared';
-import { Plus } from '../../../icons';
 
 import { cssVar, smallScreenQuery } from '../../../primitives';
 import { dashboard, notebookList } from '../../../styles';
+import { Add } from 'libs/ui/src/icons';
 
 const ROUTES_WHITELIST = ['', 'edit', 'members', 'connections'];
 
@@ -69,7 +69,7 @@ export const DashboardTopbar = ({
               }}
             >
               <span css={{ height: '18px', width: '18px' }}>
-                <Plus />
+                <Add />
               </span>
               <span>New Notebook</span>
             </div>

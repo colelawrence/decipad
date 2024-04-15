@@ -28,7 +28,6 @@ import type { MarkType } from '@decipad/ui';
 import {
   ImportTableFirstRowControls,
   IntegrationBlock as UIIntegrationBlock,
-  icons,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
@@ -37,9 +36,9 @@ import {
   getNodeString,
   isElement,
 } from '@udecode/plate-common';
-import { Hide, Show } from 'libs/ui/src/icons';
-import type { ComponentProps } from 'react';
+import { Hide, Show, TableSmall } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
+import type { ComponentProps } from 'react';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
 import { useComputer } from '@decipad/react-contexts';
@@ -210,7 +209,7 @@ export const RealLiveConnectionVarName: PlateComponent = ({
             type: 'button',
             text: 'Pivot view',
             onClick: onAddDataViewButtonPress,
-            icon: <icons.TableRows />,
+            icon: <TableSmall />,
           },
           {
             type: 'chart',

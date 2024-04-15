@@ -128,7 +128,6 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
           <Select
             key="selectaggregation"
             variant="transparent"
-            caretColor="weak"
             label={
               <span key="name">
                 {(selectedAggregationType &&

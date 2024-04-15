@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import {
   cssVar,
-  darkenHex,
   easingTiming,
   p14Medium,
   transparencyHex,
@@ -51,12 +50,7 @@ export const IconWrapper = styled.div<IconWrapperProps>((props) => [
     },
   },
   props.color && {
-    '& > svg': {
-      '& > path': {
-        fill: transparencyHex(props.color, 0.4),
-        stroke: darkenHex(props.color, 0.4),
-      },
-    },
+    color: props.color,
     '&[type="button"]': {
       cursor: 'pointer',
 
@@ -67,13 +61,6 @@ export const IconWrapper = styled.div<IconWrapperProps>((props) => [
       '&:hover': {
         transition: `all 150ms ${easingTiming.easeOut}`,
         backgroundColor: transparencyHex(props.color, 0.2),
-      },
-
-      '& > svg': {
-        '& > path': {
-          fill: darkenHex(props.color, 0.4),
-          stroke: darkenHex(props.color, 0.4),
-        },
       },
     },
   },
@@ -90,7 +77,8 @@ export const TextWrapper = styled.span(p14Medium, {
   paddingTop: 0.5,
 
   '& > svg': {
-    width: 12,
-    height: 12,
+    width: 16,
+    height: 16,
+    color: cssVar('textSubdued'),
   },
 });

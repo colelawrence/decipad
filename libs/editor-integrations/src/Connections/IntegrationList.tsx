@@ -1,7 +1,13 @@
 import type { ComponentProps } from 'react';
 import { useConnectionStore } from '@decipad/react-contexts';
 import type { SelectIntegration } from '@decipad/ui';
-import { GoogleSheet, MongoDb, OtherSql, WebApi, icons } from '@decipad/ui';
+import {
+  ThumbnailCode,
+  ThumbnailGoogleSheet,
+  ThumbnailMongoDb,
+  ThumbnailNotion,
+  ThumbnailSql,
+} from '@decipad/ui/src/icons/thumbnail-icons';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 
@@ -10,7 +16,7 @@ export const IntegrationList: ComponentProps<
   typeof SelectIntegration
 >['integrations'] = [
   {
-    icon: <img alt="Code Connection" src={WebApi} />,
+    icon: <ThumbnailCode />,
     title: 'Code',
     description:
       'Harness the power of JavaScript to manipulate data from web APIs.',
@@ -21,7 +27,7 @@ export const IntegrationList: ComponentProps<
     enabled: true,
   },
   {
-    icon: <img alt="SQL" src={OtherSql} />,
+    icon: <ThumbnailSql />,
     title: 'SQL',
     description:
       'Effortlessly access data from SQL databases through simple queries.',
@@ -35,7 +41,7 @@ export const IntegrationList: ComponentProps<
     ? []
     : [
         {
-          icon: <icons.Notion />,
+          icon: <ThumbnailNotion />,
           title: 'Notion',
           description: 'Connect your notion databases to decipad.',
           onClick: () => {
@@ -46,14 +52,14 @@ export const IntegrationList: ComponentProps<
         },
       ]),
   {
-    icon: <img alt="Google Sheet" src={GoogleSheet} />,
+    icon: <ThumbnailGoogleSheet />,
     title: 'Google sheet',
     description: 'Import, collaborate, and analyze Google Sheets data.',
     onClick: noop,
     enabled: false,
   },
   {
-    icon: <img alt="MongoDB" src={MongoDb} />,
+    icon: <ThumbnailMongoDb />,
     title: 'MongoDB',
     description: 'Easily retrieve your documents by connecting to MongoDB.',
     onClick: noop,

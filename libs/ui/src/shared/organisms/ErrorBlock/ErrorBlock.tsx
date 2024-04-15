@@ -68,7 +68,7 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
   <div css={errorBlock} contentEditable={false} data-testid="error-block">
     <div css={textRow}>
       <span>
-        <Warning variant="warning" />
+        <Warning />
         Oops something is broken, and that's on us.
       </span>
       {getText(type, message)}

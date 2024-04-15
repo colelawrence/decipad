@@ -294,7 +294,9 @@ export class Workspace {
   async duplicatePad(index = 0, workspace = '') {
     const padstart = await this.getPadList();
     await this.page.click(this.ellipsisSelector(index));
-    await this.page.getByText('Duplicate').click();
+    await this.page
+      .getByRole('menuitem', { name: 'Duplicate Duplicate' })
+      .click();
     // accounts with multiple workspaces have an extra menu to select where to copy
     if (workspace !== '') {
       const selectDuplicateWorkspace = this.page

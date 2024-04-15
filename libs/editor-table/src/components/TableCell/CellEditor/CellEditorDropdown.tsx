@@ -1,10 +1,11 @@
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
+import { DropdownMenu, CodeResult } from '@decipad/ui';
 import type { SelectItems } from '@decipad/ui';
-import { DropdownMenu, CodeResult, icons as Icons } from '@decipad/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDropdownConsumer } from '@decipad/editor-hooks';
 import { focusEditor, useEditorRef } from '@udecode/plate-common';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 
 export const CellEditorDropdown = (cellProps: CellProps) => {
   const { cellType, onChange, value } = cellProps;
@@ -66,7 +67,7 @@ export const CellEditorDropdown = (cellProps: CellProps) => {
             />
           )}
           <div css={{ width: 16, height: 16, marginLeft: 'auto' }}>
-            <Icons.Caret variant={open ? 'up' : 'down'} />
+            {open ? <CaretUp /> : <CaretDown />}
           </div>
         </div>
       </DropdownMenu>

@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC } from 'react';
-import { Loading } from '../../../icons';
+import { Loading } from '../../atoms';
 
 export const LoadingIndicator: FC = () => {
   return (

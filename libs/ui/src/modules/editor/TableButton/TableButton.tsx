@@ -2,8 +2,7 @@
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { TextAndIconButton } from '../../../shared';
-import { Chevron, Show } from '../../../icons';
-import { shortAnimationDuration } from '../../../primitives';
+import { CaretDown, CaretUp, Show } from '../../../icons';
 import { hideOnPrint } from '../../../styles/editor-layout';
 
 const showMoreButtonWrapperStyles = css({
@@ -59,9 +58,7 @@ export const TableButton: FC<TableButtonProps> = ({
       >
         {isExpandButton ? (
           <div css={chevronStyles}>
-            <Chevron
-              type={isInState && isExpandButton ? 'expand' : 'collapse'}
-            />
+            {isInState && isExpandButton ? <CaretUp /> : <CaretDown />}
           </div>
         ) : (
           <Show />
@@ -72,9 +69,6 @@ export const TableButton: FC<TableButtonProps> = ({
 };
 
 const chevronStyles = css({
-  width: '8px',
-  transition: `padding-top ease-in-out ${shortAnimationDuration}`,
-  [`:hover &`]: {
-    paddingTop: '4px',
-  },
+  width: '12px',
+  height: '12px',
 });

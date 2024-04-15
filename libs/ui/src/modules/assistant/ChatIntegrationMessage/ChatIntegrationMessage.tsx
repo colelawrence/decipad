@@ -10,8 +10,8 @@ import { css } from '@emotion/react';
 import { EElementOrText } from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
-import { Fragment, useCallback, useContext, useEffect, useState } from 'react';
-import { Chevron, Code, DeciAI, Duplicate } from '../../../icons';
+import { Fragment, useCallback, useContext, useState, useEffect } from 'react';
+import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';
 import {
   componentCssVars,
   cssVar,
@@ -324,7 +324,7 @@ const Integration = ({
             css={showCodeButtonStyles}
           >
             {showCode ? 'Hide' : 'Show'}
-            <Chevron type={showCode ? 'collapse' : 'expand'} />
+            {showCode ? <CaretUp /> : <CaretDown />}
           </button>
         </div>
         {showCode && (
@@ -438,7 +438,7 @@ export const ChatIntegrationMessage: React.FC<Props> = ({
   return (
     <div css={wrapperStyles}>
       <div css={avatarStyles}>
-        <DeciAI />
+        <DeciAi />
       </div>
       <div css={contentStyles}>
         <ChatMarkdownRenderer content={content} />

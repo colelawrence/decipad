@@ -23,7 +23,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Close, Magic, Play } from '../../../icons';
+import { Close, Sparkles, Play } from '../../../icons';
 import {
   cssVar,
   mobileQuery,
@@ -229,7 +229,7 @@ export const WrapperIntegrationModalDialog: FC<
                     codeStore.toggleShowAi();
                   }}
                 >
-                  <Magic />
+                  <Sparkles />
                 </TextAndIconButton>
               )}
             </>
@@ -312,7 +312,7 @@ export const WrapperIntegrationModalDialog: FC<
               onClick={execSource}
               disabled={runButtonDisabled}
             >
-              <Play variant="black" />
+              <Play />
             </TextAndIconButton>
           )}
         </div>

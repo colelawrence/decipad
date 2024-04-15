@@ -129,7 +129,7 @@ export const IconPopover = ({
                     }}
                     color={themeColor.Background.Subdued}
                   >
-                    <Icon title={choice} />
+                    <Icon />
                   </NotebookIconButton>
                 </Popover.Close>
               );

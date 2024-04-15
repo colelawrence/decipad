@@ -58,6 +58,14 @@ export const IconWrap = styled.div({
   height: '32px',
 
   display: 'grid',
+
+  '& > a': {
+    color: cssVar('textDefault'),
+
+    '&:hover': {
+      color: cssVar('textDefault'),
+    },
+  },
 });
 
 export const TitleContainer = styled.div({
@@ -117,8 +125,14 @@ export const ActionButtons = styled.div({
     padding: '8px',
     borderRadius: '6px',
     backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+    color: componentCssVars('ButtonTertiaryAltDefaultText'),
     ':not(:disabled):hover': {
       backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+      color: componentCssVars('ButtonTertiaryAltHoverText'),
+    },
+    '&:disabled': {
+      backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+      color: componentCssVars('ButtonTertiaryAltDisabledText'),
     },
   },
   'button:last-of-type': {

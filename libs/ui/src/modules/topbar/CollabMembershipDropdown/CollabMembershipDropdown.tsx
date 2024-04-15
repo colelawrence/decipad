@@ -10,10 +10,10 @@ import {
   cssVar,
   p13Medium,
 } from '../../../primitives';
-import { Caret } from '../../../icons/Caret/Caret';
 import { MenuList } from '../../../shared/molecules';
 import { PermissionType } from '../../../types';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { CaretDown } from 'libs/ui/src/icons';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -63,7 +63,7 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
         onClick={noop}
         color={isInvitationPicker ? 'transparent' : 'default'}
       >
-        <Caret variant="down" />
+        <CaretDown />
       </TextAndIconButton>
     </div>
   );

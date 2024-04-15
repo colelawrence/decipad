@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /* eslint-disable decipad/css-prop-named-variable */
 /* eslint-disable camelcase */
-import { Caret, Check, Link, Lock, World } from '../../../icons';
+import { CaretDown, Check, Link, Lock, World } from '../../../icons';
 import { Button, Dot, Tooltip } from '../../../shared';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FC, ReactNode, useContext, useState } from 'react';
@@ -67,7 +67,7 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                     {PublishingIconMap[publishingState]}
                     {PublishingTextMap[publishingState]}
                   </div>
-                  {isAdmin && <Caret variant="down" />}
+                  {isAdmin && <CaretDown />}
                 </div>
               </Popover.Trigger>
               <Popover.Content>

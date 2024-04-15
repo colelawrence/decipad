@@ -82,7 +82,7 @@ export async function removePad(page: Page, index = 0) {
 
 export async function duplicatePad(page: Page, index = 0, workspace = '') {
   await page.click(ellipsisSelector(index));
-  await page.getByText('Duplicate').click();
+  await page.getByRole('menuitem', { name: 'Duplicate Duplicate' }).click();
   // accounts with multiple workspaces have an extra menu to select where to copy
   if (workspace !== '') {
     const selectDuplicateWorkspace = page

@@ -35,9 +35,9 @@ const sidebarIconWrapperStyles = css({
   padding: '1px 0',
   gap: '2px',
   flexShrink: 0,
+
   '& svg': {
-    width: '24px',
-    height: '24px',
-    stroke: 'currentColor',
+    width: '20px',
+    height: '20px',
   },
 });

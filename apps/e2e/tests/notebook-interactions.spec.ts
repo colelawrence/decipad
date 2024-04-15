@@ -133,7 +133,6 @@ test('writing in the editor', async ({ testUser }) => {
     // get stroke width of an unclicked button.
     const unclickedButtonStroke = await page
       .locator('button:has-text("Underline") div svg path')
-      .nth(1)
       .evaluate((e) =>
         window.getComputedStyle(e).getPropertyValue('stroke-width')
       );

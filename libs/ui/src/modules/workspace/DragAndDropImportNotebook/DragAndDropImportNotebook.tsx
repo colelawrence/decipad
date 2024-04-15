@@ -4,9 +4,10 @@ import { MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { GenericTable } from '../../../icons';
+
 import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
 import { cssVar } from '../../../primitives';
+import { Table } from 'libs/ui/src/icons';
 
 const acceptableFileTypes = ['application/json', 'application/zip'];
 
@@ -108,7 +109,7 @@ export const DragAndDropImportNotebook = ({
       {isOver ? (
         <div css={dndAreaStyles}>
           <DashboardDialogCTA
-            icon={<GenericTable />}
+            icon={<Table />}
             primaryText="Drag and drop your notebooks here"
             secondaryText="Quickly import decipad notebooks, csv, and other files..."
           />

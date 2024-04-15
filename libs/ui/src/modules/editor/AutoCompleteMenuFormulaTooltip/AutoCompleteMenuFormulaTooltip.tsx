@@ -88,7 +88,7 @@ export const AutoCompleteMenuFormulaTooltip = ({
             }}
           >
             <span css={iconStyles}>
-              <Formula strokeColor={cssVar('textSubdued')} />
+              <Formula />
             </span>
             <span css={[explanationTextStyles, titleTextStyles, maxSpace]}>
               Function for {formulaGroup}

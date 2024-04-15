@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Rocket } from '../../../icons';
+import { Rocket } from '../../../icons/user-icons';
 import { NotebookIconButton } from './NotebookIconButton';
 
 const args: ComponentProps<typeof NotebookIconButton> = {

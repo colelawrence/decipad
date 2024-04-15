@@ -1,9 +1,9 @@
 import type { CellProps } from './types';
 import { assertCellType } from './assertCellType';
-import type { FC } from 'react';
 import { useState, useEffect, useCallback } from 'react';
+import { DropdownMenu, CodeResult } from '@decipad/ui';
+import type { FC } from 'react';
 import type { SelectItems } from '@decipad/ui';
-import { DropdownMenu, CodeResult, icons as Icons } from '@decipad/ui';
 
 import { getNode, setNodes } from '@udecode/plate-common';
 import type { TableHeaderElement } from '@decipad/editor-types';
@@ -11,6 +11,7 @@ import { useMyEditorRef } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 
 const outterCellStyles = css({
   display: 'flex',
@@ -124,9 +125,7 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
           {result?.result != null && (
             <CodeResult value={result.result.value} type={result.result.type} />
           )}
-          <div css={caretStyles}>
-            <Icons.Caret variant={open ? 'up' : 'down'} />
-          </div>
+          <div css={caretStyles}>{open ? <CaretUp /> : <CaretDown />}</div>
         </div>
       </DropdownMenu>
     </div>

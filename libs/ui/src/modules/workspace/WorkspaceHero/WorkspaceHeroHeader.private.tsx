@@ -3,7 +3,7 @@ import { docs } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
 import { Button, SearchBar, HelpMenu } from '../../../shared';
-import { Plus, Users } from '../../../icons';
+import { Add, Users } from '../../../icons';
 
 import { cssVar } from '../../../primitives';
 
@@ -47,7 +47,7 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
           testId="new-notebook"
         >
           <TextWithIcon>
-            <Plus variant="black" />
+            <Add />
             <span>New Notebook</span>
           </TextWithIcon>
         </Button>

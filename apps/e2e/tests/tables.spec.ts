@@ -599,7 +599,7 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
     await updateDataType(page, 3, 'Table', 'Date', 'Year');
     await updateDataType(page, 4, 'Table', 'Checkbox');
     await page
-      .getByRole('row', { name: 'Drag Handle 2 Lewis Hamilton' })
+      .getByRole('row', { name: 'DragHandle 2 Lewis Hamilton' })
       .getByRole('checkbox')
       .click();
   });

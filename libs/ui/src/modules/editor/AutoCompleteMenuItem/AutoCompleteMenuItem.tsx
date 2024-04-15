@@ -79,7 +79,7 @@ const getAutocompleteIconFor = (type: ACItemType) => {
     date: <Calendar />,
     table: <TableSmall />,
     column: <TableSmall />,
-    function: <Formula strokeColor={cssVar('textDisabled')} />,
+    function: <Formula />,
   };
   const selected = icons[type] || <Number />;
   return selected;

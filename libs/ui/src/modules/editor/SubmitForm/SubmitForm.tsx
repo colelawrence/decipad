@@ -22,12 +22,13 @@ import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Close, Create, Email, Send, Spinner } from '../../../icons';
-import { brand200, cssVar, p13Medium, white } from '../../../primitives';
+import { Close, Add, Email, Send } from '../../../icons';
+import { brand200, cssVar, p13Medium } from '../../../primitives';
 import {
   IconButton,
   InputField,
   SelectInput,
+  Spinner,
   TextAndIconButton,
   Tooltip,
 } from '../../../shared';
@@ -91,7 +92,7 @@ const Config = ({
             data-testid="add-webhook"
           >
             <span css={iconWrapperStyles}>
-              <Create />
+              <Add />
             </span>
           </button>
         }
@@ -245,11 +246,7 @@ const Form = ({
             iconPosition="left"
             color={formStatus.status === 'loading' ? 'grey' : 'black'}
           >
-            {formStatus.status === 'loading' ? (
-              <Spinner />
-            ) : (
-              <Send fill={white.rgb} />
-            )}
+            {formStatus.status === 'loading' ? <Spinner /> : <Send />}
           </TextAndIconButton>
         </div>
       </form>

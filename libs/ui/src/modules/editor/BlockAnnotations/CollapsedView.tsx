@@ -2,7 +2,7 @@ import { Avatar } from 'libs/ui/src/shared';
 import { GetNotebookAnnotationsQuery } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Chevron } from 'libs/ui/src/icons';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 import { tabletScreenQuery } from 'libs/ui/src/primitives';
 import { SIDEBAR_WIDTH } from 'libs/ui/src/pages/NotebookPage/styles';
 import { useMemo } from 'react';
@@ -123,7 +123,7 @@ export const CollapsedView = ({
           </>
         )}
         <div css={chevronContainerStyles}>
-          <Chevron type={collapsed ? 'expand' : 'collapse'} />
+          {collapsed ? <CaretUp /> : <CaretDown />}
         </div>
       </Header>
       <TabletHeader
@@ -156,7 +156,7 @@ export const CollapsedView = ({
         )}
         {!collapsed && (
           <div css={chevronContainerStyles}>
-            <Chevron type={collapsed ? 'expand' : 'collapse'} />
+            {collapsed ? <CaretUp /> : <CaretDown />}
           </div>
         )}
       </TabletHeader>

@@ -2,10 +2,9 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { FC, useState } from 'react';
 import * as Styled from './styles';
-import { Button, Link } from '../../atoms';
+import { Button, Link, Loading } from '../../atoms';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
-import { Loading } from 'libs/ui/src/icons/Loading/Loading';
 
 interface SubscriptionPlansListProps {
   plans: (SubscriptionPlan | null)[];

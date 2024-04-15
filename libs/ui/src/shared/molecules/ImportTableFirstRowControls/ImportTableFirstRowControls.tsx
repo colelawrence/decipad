@@ -3,7 +3,7 @@ import { once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
-import { Heading1 } from '../../../icons/index';
+import { Heading } from '../../../icons/index';
 import {
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
@@ -44,7 +44,7 @@ export const ImportTableFirstRowControls: FC<
       onClick={() => toggleFirstRowIsHeader(true)}
       css={importTableDragHandleStyles}
     >
-      <Heading1 />
+      <Heading />
     </button>
   );
 

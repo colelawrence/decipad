@@ -138,7 +138,7 @@ it('can delete the block', async () => {
   await userEvent.click(secondDragHandle);
 
   expect(editor.children).toHaveChildrenText(['first', 'second']);
-  await userEvent.click(getByTitle(/delete/i));
+  await userEvent.click(getByTitle(/trash/i));
   expect(editor.children).toHaveChildrenText(['first']);
 });
 

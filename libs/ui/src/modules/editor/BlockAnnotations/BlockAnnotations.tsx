@@ -56,13 +56,13 @@ const avatarContainerStyles = css(`
   width: 28px;
   height: 28px;
   grid-column: 1 / 2;
-  grid-row: 1 / 3; 
+  grid-row: 1 / 3;
 `);
 
 const usernameStyles = css(`
   font-weight: bold;
   grid-column: 2 / 3;
-  grid-row: 1 / 2; 
+  grid-row: 1 / 2;
 
 `);
 

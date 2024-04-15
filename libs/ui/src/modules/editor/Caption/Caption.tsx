@@ -27,7 +27,7 @@ import {
 } from '../../../primitives';
 import { IconPopover } from '../../../shared';
 import { AvailableSwatchColor } from '../../../utils';
-import { Close, Magic } from '../../../icons';
+import { Close, Sparkles } from '../../../icons';
 
 interface CaptionProps
   extends Pick<
@@ -222,7 +222,7 @@ export const Caption: FC<CaptionProps> = ({
     <div css={nameWrapperStyles}>
       {useIsEditorReadOnly() ? (
         <span contentEditable={false} css={iconWrapperStyles}>
-          <Icon title={icon} />
+          <Icon />
         </span>
       ) : (
         <IconPopover
@@ -231,7 +231,7 @@ export const Caption: FC<CaptionProps> = ({
           color={color}
           trigger={
             <button contentEditable={false} css={iconWrapperStyles}>
-              <Icon title={icon} />
+              <Icon />
             </button>
           }
         />
@@ -257,7 +257,7 @@ export const Caption: FC<CaptionProps> = ({
               css={aiButtonWrapperStyles}
               onClick={handleGenerateName}
             >
-              <Magic />
+              <Sparkles />
               <span>Rename</span>
             </button>
           ) : (

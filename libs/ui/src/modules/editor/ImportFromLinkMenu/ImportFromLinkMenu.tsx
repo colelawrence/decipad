@@ -2,11 +2,11 @@ import { ImportElementSource } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { ComponentProps, FC } from 'react';
 import {
-  ConnectRanges,
-  ConnectTable,
-  ImportRangeCopies,
-  ImportTable,
-} from '../../../icons';
+  CommandConnectRanges,
+  CommandConnectSource,
+  CommandImportCopy,
+  CommandImportRangeCopies,
+} from '../../../icons/command-icons';
 import { InlineMenu } from '../InlineMenu/InlineMenu';
 
 const sourceToName: Record<ImportElementSource, string> = {
@@ -49,7 +49,7 @@ const groups = (
               command: 'connect-all',
               title: `Connect to ${sourceName}`,
               description: `Connect to database ${sourceName}`,
-              icon: <ConnectTable />,
+              icon: <CommandConnectSource />,
               enabled: true,
               extraSearchTerms: ['connect', 'live'],
             },
@@ -59,7 +59,7 @@ const groups = (
               command: 'connect-all',
               title: `${sourceName} Integration`,
               description: `Live data integration from ${sourceName}. You cannot edit the data.`,
-              icon: <ConnectTable />,
+              icon: <CommandConnectSource />,
               enabled: true,
               extraSearchTerms: ['connect', 'live'],
             },
@@ -69,7 +69,7 @@ const groups = (
                     command: 'import-all',
                     title: `Paste from ${sourceName}`,
                     description: `Make a copy from ${sourceName} and edit in Decipad. Edits are allowed.`,
-                    icon: <ImportTable />,
+                    icon: <CommandImportCopy />,
                     enabled: true,
                     extraSearchTerms: ['import', 'google', 'sheets'],
                   },
@@ -80,7 +80,7 @@ const groups = (
                 command: 'connect-islands',
                 title: 'Connect to table ranges',
                 description: `Tries to find tables in your google sheets and create a live connection`,
-                icon: <ConnectRanges />,
+                icon: <CommandConnectRanges />,
                 enabled: true,
                 extraSearchTerms: ['connect', 'live'],
               },
@@ -89,7 +89,7 @@ const groups = (
                 command: 'import-islands',
                 title: 'Import table ranges',
                 description: `Tries to find tables in your google sheets and import them`,
-                icon: <ImportRangeCopies />,
+                icon: <CommandImportRangeCopies />,
                 enabled: true,
                 extraSearchTerms: ['import', 'google', 'sheets'],
               },

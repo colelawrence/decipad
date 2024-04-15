@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
-import { Caret } from '../../../icons';
+import { CaretDown } from '../../../icons';
 import { UndoButtons } from './UndoButtons';
 import { NotebookOptions } from '../NotebookOptions/NotebookOptions';
 import { NotebookPath } from '../NotebookPath/NotebookPath';
@@ -39,7 +39,7 @@ const args: ComponentProps<typeof NotebookTopbar> = {
           }}
         >
           <NotebookPath concatName notebookName={notebookName} />
-          <Caret variant="down" />
+          <CaretDown />
         </div>
       }
       notebookStatus={

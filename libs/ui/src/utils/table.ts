@@ -15,7 +15,7 @@ import {
   All,
   Calendar,
   CheckboxSelected,
-  DollarCircle,
+  Dollar,
   Formula,
   Number,
   Text,
@@ -38,7 +38,7 @@ export function getTypeIcon(
       return type.unit == null
         ? Number
         : isCurrencyUnit(type.unit)
-        ? DollarCircle
+        ? Dollar
         : All;
     case 'table-formula':
       return Formula;

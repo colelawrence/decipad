@@ -4,7 +4,7 @@ import { AnyElement } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { Loading } from '../../../icons';
+
 import { CodeResult } from '../CodeResult/CodeResult';
 import { cssVar } from '../../../primitives';
 import {
@@ -12,7 +12,7 @@ import {
   resultLoadingIconStyles,
 } from '../../../styles/results';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
-import { Tooltip } from '../../../shared';
+import { Loading, Tooltip } from '../../../shared';
 
 type MagicNumberProps = {
   readonly tempId?: string;

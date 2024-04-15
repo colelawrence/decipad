@@ -19,7 +19,7 @@ import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 import { markTypes } from '../PlotParams/PlotParams';
-import { Formula, Hide, Show, Source, TableRows } from 'libs/ui/src/icons';
+import { Formula, Hide, Show, Source, Table } from 'libs/ui/src/icons';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -92,7 +92,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           iconPosition="left"
           onClick={onPivotViewButtonPress}
         >
-          <TableRows />
+          <Table />
         </TextAndIconButton>
       )}
       {!readOnly && onAddChartViewButtonPress && (

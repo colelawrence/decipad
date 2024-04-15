@@ -16,6 +16,6 @@ describe('Auth Content Molecule', () => {
       <AuthContent title="My Title" description="This is a description" />
     );
 
-    expect(screen.getByTitle(/decipad logo/i)).toBeInTheDocument();
+    expect(screen.getByTitle(/deci/i)).toBeInTheDocument();
   });
 });

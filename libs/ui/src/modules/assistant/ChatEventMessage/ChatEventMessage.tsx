@@ -4,9 +4,9 @@ import { EventMessage, MessageStatus } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useCallback, useState } from 'react';
-import { Feedback, Magic, Refresh, Spinner, Warning } from '../../../icons';
+import { Chat, Sparkles, Refresh, Warning } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
-import { Tooltip } from '../../../shared';
+import { Spinner, Tooltip } from '../../../shared';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
 
 const wrapperStyles = css({
@@ -102,7 +102,7 @@ const messageMeta = (status: MessageStatus) => {
       };
     case 'success':
       return {
-        icon: <Magic />,
+        icon: <Sparkles />,
       };
     default:
       return {
@@ -146,7 +146,7 @@ export const ChatEventMessage: React.FC<Props> = ({
                 disabled={hasReported}
                 data-testid="report-button"
               >
-                <Feedback />
+                <Chat />
               </button>
             }
           />

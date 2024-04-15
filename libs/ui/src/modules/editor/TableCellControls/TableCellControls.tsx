@@ -3,7 +3,7 @@ import { once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip, MenuList } from '../../../shared';
-import { DownArrow, DragHandle, Trash, UpArrow } from '../../../icons/index';
+import { ArrowDown, DragHandle, Trash, ArrowUp } from '../../../icons/index';
 import {
   mouseMovingOverTransitionDelay,
   p12Medium,
@@ -83,14 +83,14 @@ export const TableCellControls = forwardRef<
             dropdown
           >
             <MenuItem
-              icon={<UpArrow />}
+              icon={<ArrowUp />}
               onSelect={onAddRowAbove}
               testid="insert-row-above"
             >
               Insert Above
             </MenuItem>
             <MenuItem
-              icon={<DownArrow />}
+              icon={<ArrowDown />}
               onSelect={onAddRowBelow}
               testid="insert-row-below"
             >

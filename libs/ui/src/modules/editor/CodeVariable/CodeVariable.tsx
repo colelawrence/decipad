@@ -4,10 +4,11 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
 import { CodeVariableTooltip } from '../CodeVariableTooltip/CodeVariableTooltip';
-import { List, Loading } from '../../../icons';
+import { List } from '../../../icons';
 import { cssVar } from '../../../primitives';
 import { codeBlock, results } from '../../../styles';
 import { getTypeIcon } from '../../../utils';
+import { Loading } from 'libs/ui/src/shared';
 
 interface CodeVariableProps {
   readonly children?: ReactNode;

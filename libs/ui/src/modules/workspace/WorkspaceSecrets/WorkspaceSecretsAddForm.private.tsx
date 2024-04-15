@@ -1,9 +1,9 @@
 import { SecretInput } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import React, { FormEvent, useCallback, useState } from 'react';
-import { Check, Loading } from '../../../icons';
+import { Check } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
-import { Button, InputField } from '../../../shared';
+import { Button, InputField, Loading } from '../../../shared';
 
 type AddFormProps = {
   onAdd: (secret: SecretInput) => Promise<void>;

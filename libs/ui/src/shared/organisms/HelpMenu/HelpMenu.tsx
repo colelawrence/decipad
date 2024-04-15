@@ -9,11 +9,12 @@ import {
   Chat,
   Discord,
   Docs,
-  LightBulb,
+  Bulb,
   QuestionMark,
 } from '../../../icons';
 import { MenuList } from '../../molecules';
 import {
+  cssVar,
   offBlack,
   p12Regular,
   p14Medium,
@@ -23,15 +24,15 @@ import {
 import { noop } from '@decipad/utils';
 
 const buttonStyles = css({
-  width: '20px',
+  width: '22px',
   height: '22px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 
   '> svg': {
-    width: '12px',
-    height: '12px',
+    width: '18px',
+    height: '18px',
   },
 });
 
@@ -43,6 +44,7 @@ const menuItemWrapperStyles = css({
   minWidth: '170px',
   padding: '0px',
   alignItems: 'center',
+  color: cssVar('textDefault'),
 });
 
 const menuItemSmallTextStyles = css(p12Regular);
@@ -80,6 +82,7 @@ const statusIcon = (
 
 const linkStyles = css({
   textDecoration: 'none',
+  color: cssVar('textDefault'),
 });
 
 interface CustomMenuItemProps
@@ -124,7 +127,12 @@ const CustomMenuItem = ({
         <span
           css={[
             p14Medium,
-            { display: 'flex', alignItems: 'center', gap: '8px' },
+
+            {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            },
           ]}
         >
           {title}
@@ -136,6 +144,7 @@ const CustomMenuItem = ({
                 alignItems: 'center',
                 float: 'right',
                 backgroundColor: transparency(offBlack, weakOpacity).rgba,
+
                 borderRadius: '4px',
                 height: '20px',
                 width: '20px',
@@ -264,7 +273,7 @@ export const HelpMenu = ({
         to={releaseUrl}
         external
         title="What's New"
-        icon={<LightBulb background />}
+        icon={<Bulb />}
         onClick={() =>
           clientEvent({
             segmentEvent: {

@@ -66,8 +66,10 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --title-prop --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/user-icons/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons/user-icons --out-dir ./src/icons/user-icons && eslint --fix ./src/icons/user-icons/*.tsx",
-          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --title-prop --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/command-icons/themed/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons/command-icons/themed && eslint --fix ./src/icons/command-icons/themed/*.tsx"
+          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/user-icons/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons/user-icons --out-dir ./src/icons/user-icons && eslint --fix ./src/icons/user-icons/*.tsx",
+          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/command-icons/themed/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons/command-icons/themed && eslint --fix ./src/icons/command-icons/themed/*.tsx",
+          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/thumbnail-icons/themed/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons/thumbnail-icons/themed && eslint --fix ./src/icons/thumbnail-icons/themed/*.tsx",
+          "npx @svgr/cli --jsx-runtime automatic --typescript --no-dimensions --memo --ext tsx --replace-attr-values '#000=currentColor' --svg-props role=img ./src/icons/assets --template ./src/icons/template-svg.js --index-template ./src/icons/template-imports.js --out-dir ./src/icons && eslint --fix ./src/icons/*.tsx"
         ],
         "cwd": "libs/ui"
       }
