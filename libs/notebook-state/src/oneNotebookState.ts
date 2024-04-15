@@ -9,15 +9,13 @@ import { isServerSideRendering } from '@decipad/support';
 import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import type { EnhancedPromise, NotebookState } from './state';
 import { isNewNotebook } from './isNewNotebook';
-import { CursorAwarenessSchedule } from './cursors';
+import { cursorAwareness } from './cursors';
 import debounce from 'lodash.debounce';
 import * as idb from 'lib0/indexeddb';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 const COMPUTER_DEBOUNCE = 100;
-
-let interval: NodeJS.Timer | null;
 
 const initialState = (): Omit<
   NotebookState,
@@ -161,14 +159,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
 
       // ==== Cursor awareness ====
 
-      if (interval != null) {
-        clearInterval(interval);
-      }
-
-      interval = setInterval(
-        () => CursorAwarenessSchedule(docSyncEditor),
-        1000
-      );
+      cursorAwareness(docSyncEditor);
 
       // ==== End Cursor awareness ====
 

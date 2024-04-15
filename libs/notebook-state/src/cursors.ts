@@ -37,7 +37,6 @@ function cursorColor(clientID: number): OpaqueColor {
   return colors[clientID % colors.length];
 }
 
-const RETRY_INTERVAL_MS = 1000;
 const DEBOUNCE_MS = 1000;
 
 function getCursorData(
@@ -79,20 +78,20 @@ function getCursorData(
     .filter((cursor) => cursor.selection.anchor && cursor.selection.focus);
 }
 
-export function CursorAwarenessSchedule(editor: TCursorEditor & TYjsEditor) {
-  setTimeout(() => {
-    editor.awareness.on(
-      'update',
-      debounce(() => {
-        const newCursorData = getCursorData(
-          editor.awareness.getStates(),
-          editor.sharedType.doc?.clientID ?? 0
-        );
-
-        if (!dequal(cursorStore.get.userCursors(), newCursorData)) {
-          cursorStore.set.userCursors(newCursorData);
-        }
-      }, DEBOUNCE_MS)
+export function cursorAwareness(editor: TCursorEditor & TYjsEditor) {
+  const awarenessHandler = debounce(() => {
+    const newCursorData = getCursorData(
+      editor.awareness.getStates(),
+      editor.sharedType.doc?.clientID ?? 0
     );
-  }, RETRY_INTERVAL_MS);
+
+    if (!dequal(cursorStore.get.userCursors(), newCursorData)) {
+      cursorStore.set.userCursors(newCursorData);
+    }
+  }, DEBOUNCE_MS);
+
+  editor.awareness.on('update', awarenessHandler);
+  editor.awareness.once('destroy', () => {
+    editor.awareness.off('update', awarenessHandler);
+  });
 }
