@@ -9,6 +9,7 @@
   "references": [
     { "path": "../ui" },
     { "path": "../react-contexts" },
+    { "path": "../editor-utils" },
     { "path": "../editor" },
     { "path": "../editor-config" },
     { "path": "../editor-plugins" },

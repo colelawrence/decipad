@@ -177,7 +177,7 @@ export const processInvoiceCreated = async (event: Stripe.Event) => {
 
     if (workspaceSubscription) {
       await resourceusage.resetQueryCount(workspaceSubscription.workspace_id);
-      await resourceusage.resetAiUsage(workspaceSubscription.workspace_id);
+      await resourceusage.ai.reset(workspaceSubscription.workspace_id);
 
       return {
         statusCode: 200,

@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 import { resource } from '@decipad/backend-resources';
 import type { ID, PadRecord } from '@decipad/backendtypes';
 import type { Pad, PadInput } from '@decipad/graphqlserver-types';
+import { deleteAttachments } from './deleteAttachments';
 
 const workspaces = resource('workspace');
 
@@ -75,6 +76,8 @@ export const padResource = Resource<
       minimumPermissionType: 'READ',
     });
   },
+
+  afterDeletion: deleteAttachments,
 
   parentResourceUriFromCreateInput: ({ workspaceId }) =>
     workspaceId && `/workspaces/${workspaceId}`,

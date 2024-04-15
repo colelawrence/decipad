@@ -197,7 +197,10 @@ export function useNotebookMetaActions(
 
       if (res.error || !res.data?.duplicatePad) {
         console.error(res.error);
-        toast('Unable to duplicate notebook.', 'error');
+        toast(
+          res.error?.graphQLErrors[0].message ?? 'Unable to duplicate pad',
+          'error'
+        );
         return false;
       }
 

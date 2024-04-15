@@ -1,10 +1,16 @@
 /* eslint-disable jest/no-disabled-tests */
 import { limits } from '@decipad/backend-config';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import * as resourceusage from '../../../libs/services/src/resource-usage';
+import { getUsageRecord } from '../../../libs/services/src/resource-usage/common';
+import {
+  AiResourceTracker,
+  getPreviousAiUsageRecord,
+} from '../../../libs/services/src/resource-usage/ai';
 import { create } from '../../../libs/services/src/workspaces/create';
 import { getDefined } from '@decipad/utils';
 import type { WorkspaceRecord } from '@decipad/backendtypes';
+
+const ai = new AiResourceTracker();
 
 // Otherwise debugging becomes very strange.
 jest.retryTimes(1);
@@ -36,24 +42,19 @@ test('AI Usage', (ctx) => {
   });
 
   it('returns an empty record for user with no usage', async () => {
-    await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(0);
+    await expect(ai.getUsage(workspace.id)).resolves.toBe(0);
   });
 
   it('returns 0 remaining credits if no extra credits were purchased', async () => {
-    await expect(
-      resourceusage.getRemainingExtraCredits(workspace.id)
-    ).resolves.toBe(0);
+    await expect(ai.getRemainingExtraCredits(workspace.id)).resolves.toBe(0);
   });
 
   it('returns correct limits for workspace', async () => {
-    await expect(resourceusage.getLimit(workspace.id)).resolves.toMatchObject({
-      openai: 50,
-      storage: 10,
-    });
+    await expect(ai.getLimit(workspace.id)).resolves.toBe(50);
   });
 
   it('returns correct usage after inserting', async () => {
-    await resourceusage.updateWorkspaceAndUserAi({
+    await ai.updateWorkspaceAndUser({
       workspaceId: workspace.id,
       usage: {
         completion_tokens: 2000,
@@ -62,7 +63,7 @@ test('AI Usage', (ctx) => {
       },
     });
 
-    await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(
+    await expect(ai.getUsage(workspace.id)).resolves.toBe(
       (2000 + 3000) / limits().tokensToCredits
     );
   });
@@ -72,33 +73,22 @@ test('AI Usage', (ctx) => {
     but user being unable to use the last 0.1`, async () => {
     // This is exageratted, but technically possible.
     // In reality the overflow would never be this big.
-    await resourceusage.upsertAi(
-      workspace.id,
-      'completionTokensUsed',
-      100000000
-    );
+    await ai.upsert(workspace.id, 'completionTokensUsed', 100000000);
 
-    await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(50);
+    await expect(ai.getUsage(workspace.id)).resolves.toBe(50);
 
-    await expect(
-      resourceusage.hasReachedLimit('openai', workspace.id)
-    ).resolves.toBeTruthy();
+    await expect(ai.hasReachedLimit(workspace.id)).resolves.toBeTruthy();
   });
 
   it('returns 0 for extra AI credits, if user has purchased none', async () => {
-    await expect(
-      resourceusage.getRemainingExtraCredits(workspace.id)
-    ).resolves.toBe(0);
+    await expect(ai.getRemainingExtraCredits(workspace.id)).resolves.toBe(0);
   });
 
   it('allows user to spend more credits if they buy credits', async () => {
-    await resourceusage.insertExtraAi(workspace.id, 50);
+    await ai.upsertExtra(workspace.id, 50);
 
     await expect(
-      resourceusage.getUsageRecord(
-        'openai/extra-credits/null/workspaces',
-        workspace.id
-      )
+      getUsageRecord('openai/extra-credits/null/workspaces', workspace.id)
     ).resolves.toMatchObject({
       createdAt: expect.any(Number),
       id: expect.any(String),
@@ -106,44 +96,36 @@ test('AI Usage', (ctx) => {
       originalAmount: 50,
     });
 
-    await expect(
-      resourceusage.hasReachedLimit('openai', workspace.id)
-    ).resolves.toBeFalsy();
+    await expect(ai.hasReachedLimit(workspace.id)).resolves.toBeFalsy();
 
-    await expect(
-      resourceusage.getRemainingExtraCredits(workspace.id)
-    ).resolves.toBe(50);
+    await expect(ai.getRemainingExtraCredits(workspace.id)).resolves.toBe(50);
   });
 
   it('Allows user to spend their extra credits', async () => {
-    await resourceusage.upsertAi(
+    await ai.upsert(
       workspace.id,
       'promptTokensUsed',
       25 * limits().tokensToCredits
     );
 
-    await expect(
-      resourceusage.getRemainingExtraCredits(workspace.id)
-    ).resolves.toBe(25);
-    await expect(resourceusage.getAiUsage(workspace.id)).resolves.toBe(75);
+    await expect(ai.getRemainingExtraCredits(workspace.id)).resolves.toBe(25);
+    await expect(ai.getUsage(workspace.id)).resolves.toBe(75);
   });
 
   it('Edge case: Can buy multiple extra AI credits', async () => {
-    await resourceusage.insertExtraAi(secondWorkspace.id, 50);
-    await resourceusage.insertExtraAi(secondWorkspace.id, 25);
+    await ai.upsertExtra(secondWorkspace.id, 50);
+    await ai.upsertExtra(secondWorkspace.id, 25);
 
-    await expect(
-      resourceusage.getLimit(secondWorkspace.id)
-    ).resolves.toMatchObject({
-      openai: 50 + 50 + 25,
-      openaiExtraCredits: 75,
-    });
+    await expect(ai.getLimit(secondWorkspace.id)).resolves.toBe(50 + 50 + 25);
+    await expect(ai.getRemainingExtraCredits(secondWorkspace.id)).resolves.toBe(
+      75
+    );
 
-    await expect(resourceusage.getAiUsage(secondWorkspace.id)).resolves.toBe(0);
+    await expect(ai.getUsage(secondWorkspace.id)).resolves.toBe(0);
   });
 
   it('Edge case: Can spend multiple AI credits', async () => {
-    await resourceusage.upsertAi(
+    await ai.upsert(
       secondWorkspace.id,
       'promptTokensUsed',
       60 * limits().tokensToCredits
@@ -152,47 +134,39 @@ test('AI Usage', (ctx) => {
     // note how we dont dip into extra credits,
     // because we dont count the usage overflow (this is very small usually)
 
-    await expect(resourceusage.getAiUsage(secondWorkspace.id)).resolves.toBe(
-      50
+    await expect(ai.getUsage(secondWorkspace.id)).resolves.toBe(50);
+    await expect(ai.getRemainingExtraCredits(secondWorkspace.id)).resolves.toBe(
+      75
     );
-    await expect(
-      resourceusage.getRemainingExtraCredits(secondWorkspace.id)
-    ).resolves.toBe(75);
 
-    await resourceusage.upsertAi(
+    await ai.upsert(
       secondWorkspace.id,
       'completionTokensUsed',
       80 * limits().tokensToCredits
     );
 
-    await expect(
-      resourceusage.hasReachedLimit('openai', secondWorkspace.id)
-    ).resolves.toBeTruthy();
-    await expect(
-      resourceusage.getRemainingExtraCredits(secondWorkspace.id)
-    ).resolves.toBe(0);
+    await expect(ai.hasReachedLimit(secondWorkspace.id)).resolves.toBeTruthy();
+    await expect(ai.getRemainingExtraCredits(secondWorkspace.id)).resolves.toBe(
+      0
+    );
   });
 
   it('Resets usage', async () => {
-    await resourceusage.upsertAi(
+    await ai.upsert(
       thirdWorkspace.id,
       'promptTokensUsed',
       60 * limits().tokensToCredits
     );
 
-    await expect(
-      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
-    ).resolves.toBeTruthy();
+    await expect(ai.hasReachedLimit(thirdWorkspace.id)).resolves.toBeTruthy();
 
-    await resourceusage.resetAiUsage(thirdWorkspace.id);
+    await ai.reset(thirdWorkspace.id);
 
-    await expect(resourceusage.getAiUsage(thirdWorkspace.id)).resolves.toBe(0);
-    await expect(
-      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
-    ).resolves.toBeFalsy();
+    await expect(ai.getUsage(thirdWorkspace.id)).resolves.toBe(0);
+    await expect(ai.hasReachedLimit(thirdWorkspace.id)).resolves.toBeFalsy();
 
     await expect(
-      resourceusage.getPreviousAiUsageRecord(thirdWorkspace.id)
+      getPreviousAiUsageRecord(thirdWorkspace.id)
     ).resolves.toMatchObject([
       {
         createdAt: expect.any(Number),
@@ -206,22 +180,18 @@ test('AI Usage', (ctx) => {
   });
 
   it('Can reset multiple times', async () => {
-    await resourceusage.upsertAi(
+    await ai.upsert(
       thirdWorkspace.id,
       'completionTokensUsed',
       70 * limits().tokensToCredits
     );
 
-    await expect(
-      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
-    ).resolves.toBeTruthy();
-    await resourceusage.resetAiUsage(thirdWorkspace.id);
-    await expect(
-      resourceusage.hasReachedLimit('openai', thirdWorkspace.id)
-    ).resolves.toBeFalsy();
+    await expect(ai.hasReachedLimit(thirdWorkspace.id)).resolves.toBeTruthy();
+    await ai.reset(thirdWorkspace.id);
+    await expect(ai.hasReachedLimit(thirdWorkspace.id)).resolves.toBeFalsy();
 
     await expect(
-      resourceusage.getPreviousAiUsageRecord(thirdWorkspace.id)
+      getPreviousAiUsageRecord(thirdWorkspace.id)
     ).resolves.toMatchObject(
       expect.arrayContaining([
         {

@@ -1,4 +1,9 @@
-import type { EElement, ENode, TEditor } from '@udecode/plate-common';
+import type {
+  EElement,
+  ENode,
+  TEditor,
+  TOperation,
+} from '@udecode/plate-common';
 import type {
   MyEditor,
   NotebookValue,
@@ -12,6 +17,7 @@ export interface ObservableRootEditorNewTabEvent {
 }
 export interface ObservableRootEditorAnyChangeEvent {
   type: 'any-change';
+  op?: TOperation;
 }
 export interface ObservableRootEditorRemoveTabEvent {
   type: 'remove-tab';
@@ -54,6 +60,9 @@ interface TabEditable {
   getTabEditorAt: (tabIndex: number) => MyEditor;
   getAllTabEditors: () => Array<MyEditor>;
   moveTabs: (fromTabId: string, toTabId: string) => void;
+
+  isMoving: boolean;
+  whileMoving: (callback: () => void) => void;
 }
 
 interface TitleEditable {

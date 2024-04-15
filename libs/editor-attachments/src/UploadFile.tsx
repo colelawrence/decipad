@@ -92,8 +92,20 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
             setUploadProgress(percentCompleted);
           },
         });
-        if (response.status >= 400) {
+
+        if (response.data.status === 429) {
+          toast.warning(
+            "You've reached your storage limit. Upgrade to get more."
+          );
+          setUploading(false);
+          setUploadProgress(0);
+          return;
+        }
+
+        if (response.data.status >= 400) {
           toast.warning('There was an error uploading your file');
+          setUploading(false);
+          setUploadProgress(0);
           return;
         }
         const url = response.data;
@@ -129,7 +141,8 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
     async (handle: string) => {
       const resp = await attachFileToNotebook({ handle });
       if (resp.error) {
-        throw new Error(resp.error.message);
+        toast(resp.error.graphQLErrors[0].message, 'warning');
+        return;
       }
       const urlString = resp.data?.attachFileToPad?.url;
       if (!urlString) {
@@ -140,7 +153,7 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
         url,
       };
     },
-    [attachFileToNotebook]
+    [toast, attachFileToNotebook]
   );
 
   const uploadFile = useCallback(
@@ -190,13 +203,10 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
             };
             attachGenericFile(fileInfo, () => noop, form, onAttached)
               .then((response) => {
-                if (!response?.url) {
-                  toast(
-                    'We had a server error processing your file',
-                    'warning'
-                  );
+                if (!response) {
                   return;
                 }
+
                 insertByUrl(response.url, fileInfo.name);
               })
               .catch((err) => {

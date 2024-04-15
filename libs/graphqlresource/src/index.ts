@@ -1,4 +1,5 @@
-import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
+import type { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
+import type { Resource, ResourceResolvers } from './types';
 import { identity } from '@decipad/utils';
 import { access } from './access';
 import { create } from './create';
@@ -13,7 +14,6 @@ import { unshareWithRole } from './unshare-with-role';
 import { unshareWithSecret } from './unshare-with-secret';
 import { unshareWithUser } from './unshare-with-user';
 import { update } from './update';
-import { Resource, ResourceResolvers } from './types';
 
 export { maximumPermissionType } from './maximumPermissionType';
 

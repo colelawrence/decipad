@@ -109,6 +109,7 @@ export interface Resource<
     args: CreateInputType
   ) => string | undefined;
   parentResourceUriFromRecord?: (args: DataTableType) => string | undefined;
+  afterDeletion?: (d: DataTableType) => Promise<void>;
   pubSubChangeTopic?: string;
   skipPermissions?: boolean;
   delegateAccessToParentResource?: boolean;

@@ -244,6 +244,7 @@ export type Mutation = {
   sharePadWithUser?: Maybe<Pad>;
   shareWorkspaceWithEmail: Workspace;
   syncWorkspaceSeats: WorkspaceSubscription;
+  undeleteAttachment?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
   unshareNotebookWithSecret?: Maybe<Scalars['Boolean']['output']>;
@@ -529,6 +530,11 @@ export type MutationShareWorkspaceWithEmailArgs = {
 
 export type MutationSyncWorkspaceSeatsArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUndeleteAttachmentArgs = {
+  attachmentId: Scalars['ID']['input'];
 };
 
 
@@ -1590,6 +1596,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   sharePadWithUser?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationSharePadWithUserArgs, 'canComment' | 'id' | 'permissionType' | 'userId'>>;
   shareWorkspaceWithEmail?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationShareWorkspaceWithEmailArgs, 'canComment' | 'email' | 'id' | 'permissionType'>>;
   syncWorkspaceSeats?: Resolver<ResolversTypes['WorkspaceSubscription'], ParentType, ContextType, RequireFields<MutationSyncWorkspaceSeatsArgs, 'id'>>;
+  undeleteAttachment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUndeleteAttachmentArgs, 'attachmentId'>>;
   unshareExternalDataSourceWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithRoleArgs, 'id' | 'roleId'>>;
   unshareExternalDataSourceWithUser?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithUserArgs, 'id' | 'userId'>>;
   unshareNotebookWithSecret?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareNotebookWithSecretArgs, 'id' | 'secret'>>;

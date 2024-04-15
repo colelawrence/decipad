@@ -57,6 +57,13 @@ fragment EditorNotebook on Pad {
     token
   }
   initialState
+  attachments {
+    id
+    fileName
+    fileType
+    fileSize
+    url
+  }
 }
 
 query GetNotebookById($id: ID!, $snapshotName: String) {

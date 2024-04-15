@@ -97,7 +97,7 @@ export const handler = handle(async (event) => {
     max_tokens: 150,
   });
 
-  await resourceusage.updateWorkspaceAndUserAi({
+  await resourceusage.ai.updateWorkspaceAndUser({
     userId: user.id,
     workspaceId,
     usage: completion.usage,

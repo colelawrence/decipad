@@ -258,12 +258,15 @@ const resolvers: Resolvers = {
 
       maybeThrowForbidden({ isInternal, hasFreeWorkspace });
 
-      const newWorkspace = WorkspaceRecordToWorkspace(
-        await createWorkspace2(workspace, user)
-      );
+      const dbRecord = await createWorkspace2(workspace, user);
+      const newWorkspace = WorkspaceRecordToWorkspace(dbRecord);
 
       if (isLocalOrDev() && newWorkspace.name.includes('@n1n.co')) {
         newWorkspace.isPremium = true;
+        dbRecord.isPremium = true;
+
+        const data = await tables();
+        await data.workspaces.put(dbRecord);
 
         if (
           newWorkspace.name.includes('team') ||

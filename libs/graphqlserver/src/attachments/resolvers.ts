@@ -19,12 +19,10 @@ import type {
 } from '@decipad/graphqlserver-types';
 import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import Boom from '@hapi/boom';
-import { resourceusage, subscriptions } from '@decipad/services';
-import { limits } from '@decipad/backend-config';
+import { resourceusage } from '@decipad/services';
 import { getDefined } from '@decipad/utils';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
-const MEGABYTE = 1_000_000;
 
 const notebooks = resource('notebook');
 
@@ -33,6 +31,9 @@ export interface ICreateAttachmentFormParams {
   fileName: string;
   fileType: string;
 }
+
+// const ONE_MONTH = 30 * 24 * 60 * 60;
+const ONE_MONTH = 10 * 60;
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -107,30 +108,7 @@ const resolvers: Resolvers = {
         );
       }
 
-      const wsPlan = await subscriptions.getWsSubscription(workspaceId);
-      const isPremium = await subscriptions.isPremiumWorkspace(workspaceId);
-
-      const storageMegabytesUsed = await resourceusage.getStorageUsage(
-        workspaceId
-      );
-
-      //
-      // Some legacy stuff. Our old `pro` plans didnt have `workspacesubscriptions`,
-      // and used a `isPremium` flag.
-      //
-      // TODO: Remove this check when `pro` gets phased out.
-      //
-      const limit =
-        wsPlan == null
-          ? limits().storage[isPremium ? 'pro' : 'free']
-          : getDefined(
-              wsPlan.storage,
-              'Subscription should always have storage set'
-            );
-
-      const filesizeMegabytes = filesize / MEGABYTE;
-
-      if (storageMegabytesUsed + filesizeMegabytes > limit) {
+      if (await resourceusage.storage.hasReachedLimit(workspaceId)) {
         throw Boom.tooManyRequests("You've exceeded your quota limit");
       }
 
@@ -142,11 +120,15 @@ const resolvers: Resolvers = {
       await data.fileattachments.create(newFileAttachment);
       await data.futurefileattachments.delete({ id: handle });
 
-      await resourceusage.upsertStorage(
+      await resourceusage.storage.updateWorkspaceAndUser({
         workspaceId,
-        'files',
-        filesizeMegabytes
-      );
+        userId: context.user?.id,
+        padId: pad?.id,
+        usage: {
+          type: 'files',
+          consumption: newFileAttachment.filesize,
+        },
+      });
 
       return {
         id: newFileAttachment.id,
@@ -173,7 +155,63 @@ const resolvers: Resolvers = {
         minimumPermissionType: 'WRITE',
       });
 
-      await data.fileattachments.delete({ id: attachmentId });
+      const pad = await data.pads.get({
+        id: attachment.resource_uri.split('/').at(-1)!,
+      });
+      if (pad == null) {
+        throw new Error('Pad could not be found');
+      }
+
+      attachment.toBeDeleted = timestamp() + ONE_MONTH;
+      await data.fileattachments.put(attachment);
+
+      await resourceusage.storage.updateWorkspaceAndUser({
+        workspaceId: getDefined(pad.workspace_id),
+        userId: context.user?.id,
+        padId: pad?.id,
+        usage: {
+          type: 'files',
+          consumption: -attachment.filesize,
+        },
+      });
+
+      return true;
+    },
+
+    async undeleteAttachment(_, { attachmentId }, context) {
+      const data = await tables();
+      const attachment = await data.fileattachments.get({ id: attachmentId });
+      if (!attachment) return false;
+
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
+
+      const pad = await data.pads.get({
+        id: attachment.resource_uri.split('/').at(-1)!,
+      });
+      if (pad == null) {
+        throw new Error('Pad could not be found');
+      }
+
+      if (attachment.toBeDeleted == null) {
+        return false;
+      }
+
+      delete attachment.toBeDeleted;
+      await data.fileattachments.put(attachment);
+
+      await resourceusage.storage.updateWorkspaceAndUser({
+        workspaceId: getDefined(pad.workspace_id),
+        userId: context.user?.id,
+        padId: pad?.id,
+        usage: {
+          type: 'files',
+          consumption: -attachment.filesize,
+        },
+      });
 
       return true;
     },
@@ -192,21 +230,21 @@ const resolvers: Resolvers = {
       const data = await tables();
 
       const attachments: Attachment[] = [];
-      for await (const attachment of allPages<FileAttachmentRecord, Attachment>(
-        data.fileattachments,
-        query,
-        (fileAttachment) => ({
-          id: fileAttachment.id,
-          fileName: fileAttachment.user_filename,
-          fileType: fileAttachment.filetype,
-          fileSize: fileAttachment.filesize,
-          userId: fileAttachment.user_id,
-          createdAt: fileAttachment.createdAt,
-          url: fileAttachment.resource_uri,
-          padId: pad.id,
-        })
-      )) {
-        if (attachment) {
+      for await (const attachment of allPages<
+        FileAttachmentRecord,
+        Attachment & { toBeDeleted?: number }
+      >(data.fileattachments, query, (fileAttachment) => ({
+        id: fileAttachment.id,
+        fileName: fileAttachment.user_filename,
+        fileType: fileAttachment.filetype,
+        fileSize: fileAttachment.filesize,
+        userId: fileAttachment.user_id,
+        createdAt: fileAttachment.createdAt,
+        url: fileAttachment.resource_uri,
+        padId: pad.id,
+        toBeDeleted: fileAttachment.toBeDeleted,
+      }))) {
+        if (attachment && attachment.toBeDeleted == null) {
           attachments.push(attachment);
         }
       }

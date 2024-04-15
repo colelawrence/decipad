@@ -94,6 +94,7 @@ export class OutOfSyncError extends Error {
 export class EditorController implements RootEditorController {
   public id: string;
   public events: RootEditorController['events'];
+  public isMoving: boolean;
 
   private titleEditor: BaseEditor;
   private tabEditors: Array<MyTabEditor> = [];
@@ -107,6 +108,7 @@ export class EditorController implements RootEditorController {
    */
   constructor(id: string, editorPlugins: Array<MyPlatePlugin> = []) {
     this.id = id;
+    this.isMoving = false;
 
     this.editorPlugins = editorPlugins;
     this.events = new Subject();
@@ -646,11 +648,15 @@ export class EditorController implements RootEditorController {
       throw new Error('Should only get a tab element');
     }
 
-    this.apply({
+    const op = {
       type: 'remove_node',
       path: [index],
       node: tab,
-    } as unknown as TOperation);
+    } as unknown as TOperation;
+
+    this.apply(op);
+
+    this.events.next({ type: 'any-change', op });
   }
 
   public renameTab(id: string, name: string): void {
@@ -784,7 +790,7 @@ export class EditorController implements RootEditorController {
 
     editor.apply = (op) => {
       if (op.FROM_ROOT) {
-        this.events.next({ type: 'any-change' });
+        this.events.next({ type: 'any-change', op });
         apply(op);
         return;
       }
@@ -814,5 +820,11 @@ export class EditorController implements RootEditorController {
   // for tests only
   public forceNormalize() {
     this.mirrorEditor.normalize();
+  }
+
+  public whileMoving(callback: () => void): void {
+    this.isMoving = true;
+    callback();
+    this.isMoving = false;
   }
 }

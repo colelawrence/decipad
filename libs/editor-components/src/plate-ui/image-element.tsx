@@ -21,6 +21,7 @@ import {
   ResizeHandle,
 } from './resizable';
 import { Caption, CaptionTextarea } from './caption';
+import { assertElementType } from '@decipad/editor-utils';
 
 export const draggableStyles = css({
   paddingTop: 8,
@@ -72,6 +73,7 @@ export const ImageElement: ImageComponent = withHOC(
     ...props
   }) => {
     const { children, element } = props;
+    assertElementType(element, ELEMENT_IMAGE);
 
     const { focused, selected, align = 'center' } = useMediaState();
     const width = useResizableStore().get.width();
@@ -87,6 +89,7 @@ export const ImageElement: ImageComponent = withHOC(
             accept={accept}
             getAxis={getAxis}
             onDrop={onDrop}
+            onDelete={() => {}}
           >
             <figure
               className="block-figure group relative m-0"

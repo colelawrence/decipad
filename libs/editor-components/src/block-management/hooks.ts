@@ -25,9 +25,9 @@ import {
   blockSelectionSelectors,
   blockSelectionStore,
 } from '@udecode/plate-selection';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import utils from './utils';
-import { useComputer } from '@decipad/react-contexts';
+import { ControllerProvider, useComputer } from '@decipad/react-contexts';
 
 type OnDelete = (() => void) | 'none' | undefined;
 
@@ -92,17 +92,23 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
   );
 
   const moveTab = useMoveToTab();
+  const controller = useContext(ControllerProvider);
 
   const onMoveTab = useCallback(
     (tabId: string) =>
       withoutNormalizing(editor, () => {
         if (!nodePath) return;
+        if (!controller) {
+          throw new Error('cannot find editor controller');
+        }
 
         const [isMultipleSelection, blockSelectedIds] = getSelection();
 
         if (!isMultipleSelection) {
-          onDelete();
-          moveTab(tabId, element as TopLevelValue);
+          controller.whileMoving(() => {
+            onDelete();
+            moveTab(tabId, element as TopLevelValue);
+          });
           return;
         }
 
@@ -120,14 +126,17 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
         for (let i = 0; i < entries.length; i += 1) {
           // entry = [node, path]
           // so we are selecting the first number, of the path, of the first entry.
-          removeNodes(editor, { at: [entries[0][1][0]] });
-          moveTab(tabId, entries[i][0]);
+
+          controller.whileMoving(() => {
+            removeNodes(editor, { at: [entries[0][1][0]] });
+            moveTab(tabId, entries[i][0]);
+          });
         }
 
         // Reset the selection
         blockSelectionStore.set.selectedIds(new Set());
       }),
-    [editor, nodePath, onDelete, moveTab, element]
+    [editor, nodePath, controller, onDelete, moveTab, element]
   );
 
   const onDuplicate = useCallback(() => {

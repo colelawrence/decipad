@@ -86,6 +86,9 @@ interface WithTabs {
   getTabEditor: (tabId?: string) => MyEditor;
   getTabEditorIndex: (tabId?: string) => number;
   getTabEditorAt: (tabIndex: number) => MyEditor;
+
+  isMoving: boolean;
+  whileMoving: (callback: () => void) => void;
 }
 
 export interface ObservableRootEditorNewTabEvent {
@@ -93,6 +96,7 @@ export interface ObservableRootEditorNewTabEvent {
 }
 export interface ObservableRootEditorAnyChangeEvent {
   type: 'any-change';
+  op?: TOperation;
 }
 export interface ObservableRootEditorRemoveTabEvent {
   type: 'remove-tab';

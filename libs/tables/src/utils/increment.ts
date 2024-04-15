@@ -1,4 +1,4 @@
-import { DataTable, TableRecordBase } from '@decipad/backendtypes';
+import type { DataTable, TableRecordBase } from '@decipad/backendtypes';
 
 /**
  * Increments the `value` field by `increment`.

@@ -1,6 +1,6 @@
 import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
-import tables from '@decipad/tables';
+import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import {
   duplicate as duplicateFile,
@@ -44,10 +44,35 @@ const duplicateAttachment = async (
   return newAttachment;
 };
 
+const MEGABYTE = 1_000_000;
+export const getPadAttachmentSize = async (padId: string): Promise<number> => {
+  const data = await tables();
+
+  const attachments = allPages(data.fileattachments, {
+    IndexName: 'byResource',
+    KeyConditionExpression: 'resource_uri = :resource_uri',
+    ExpressionAttributeValues: {
+      ':resource_uri': `/pads/${padId}`,
+    },
+  });
+
+  let usage = 0;
+
+  for await (const attachment of attachments) {
+    if (attachment == null) {
+      continue;
+    }
+
+    usage += attachment.filesize;
+  }
+
+  return usage / MEGABYTE;
+};
+
 export const duplicateNotebookAttachments = async (
   sourceNotebookId: string,
   targetNotebookId: string
-): Promise<ReplaceList> => {
+): Promise<[ReplaceList, number]> => {
   const data = await tables();
 
   const sourceNoteBookResource = `/pads/${sourceNotebookId}`;
@@ -62,6 +87,8 @@ export const duplicateNotebookAttachments = async (
     })
   ).Items;
 
+  let storageUsed = 0;
+
   const replacements: ReplaceList = {
     [sourceNoteBookResource]: `/pads/${targetNotebookId}`,
   };
@@ -72,6 +99,9 @@ export const duplicateNotebookAttachments = async (
         targetNotebookId,
         attachment
       );
+
+      storageUsed += attachment.filesize;
+
       replacements[
         `/attachments/${attachment.id}`
       ] = `/attachments/${newAttachment.id}`;
@@ -81,5 +111,5 @@ export const duplicateNotebookAttachments = async (
     }
   }
 
-  return replacements;
+  return [replacements, storageUsed];
 };

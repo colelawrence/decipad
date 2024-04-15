@@ -11,13 +11,13 @@ import handle from '../handle';
 import tables from '@decipad/tables';
 
 const notebooks = resource('notebook');
-const MEGABYTE = 1_000_000;
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const [{ user }] = await expectAuthenticated(event);
   if (!event.pathParameters) {
     throw Boom.notAcceptable('missing parameters');
   }
+
   const padId = getDefined(event.pathParameters.padid);
   await notebooks.expectAuthorized({
     user,
@@ -37,13 +37,15 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
     throw new Error('WorkspaceID doesnt exist on this notebook, cannot attach');
   }
 
-  const hasReachedLimit = await resourceusage.hasReachedLimit(
-    'storage',
+  const hasReachedLimit = await resourceusage.storage.hasReachedLimit(
     workspaceId
   );
 
   if (hasReachedLimit) {
-    throw Boom.tooManyRequests("You've exceeded your storage quota");
+    return {
+      status: 429,
+      body: 'You have reached your storage limit.',
+    };
   }
 
   const attachment = await createImageAttachment(user.id, padId, {
@@ -51,11 +53,12 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
     body: event.body,
   });
 
-  await resourceusage.upsertStorage(
+  await resourceusage.storage.updateWorkspaceAndUser({
     workspaceId,
-    'images',
-    attachment.filesize / MEGABYTE
-  );
+    padId,
+    userId: user.id,
+    usage: { type: 'files', consumption: attachment.filesize },
+  });
 
   return {
     statusCode: 200,

@@ -1,0 +1,18 @@
+mutation AttachFileToNotebook($handle: ID!) {
+  attachFileToPad(handle: $handle) {
+    id
+    padId
+    fileName
+    fileType
+    fileSize
+    url
+  }
+}
+
+mutation RemoveFileFromNotebook($attachmentId: ID!) {
+  removeAttachmentFromPad(attachmentId: $attachmentId)
+}
+
+mutation UndeleteFileFromNotebook($attachmentId: ID!) {
+  undeleteAttachment(attachmentId: $attachmentId)
+}

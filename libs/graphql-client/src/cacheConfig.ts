@@ -18,6 +18,8 @@ import type {
   GetWorkspaceNotebooksQuery,
   GetWorkspaceNotebooksQueryVariables,
   WorkspaceNotebookFragment,
+  GetNotebookByIdQuery,
+  GetNotebookByIdQueryVariables,
 } from './generated';
 import {
   GetExternalDataSourcesWorkspaceDocument,
@@ -26,6 +28,7 @@ import {
   GetWorkspacesWithSharedNotebooksDocument,
   UserDocument,
   GetWorkspaceNotebooksDocument,
+  GetNotebookByIdDocument,
 } from './generated';
 import * as schema from './schema.generated.json';
 import { nanoid } from 'nanoid';
@@ -432,6 +435,34 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
             }
           `,
           { id: args.notebookId, sectionId: args.sectionId }
+        );
+      },
+      attachFileToPad(result, _args, cache) {
+        const attachment = result.attachFileToPad!;
+        if (attachment == null || attachment.padId == null) {
+          return;
+        }
+
+        cache.updateQuery<GetNotebookByIdQuery, GetNotebookByIdQueryVariables>(
+          {
+            query: GetNotebookByIdDocument,
+            variables: { id: attachment.padId },
+          },
+          (data) => {
+            if (data?.getPadById == null) {
+              throw new Error('GetPadById query is missing');
+            }
+
+            data.getPadById.attachments.push({
+              id: attachment.id!,
+              fileName: attachment.fileName!,
+              fileType: attachment.fileType!,
+              fileSize: attachment.fileSize!,
+              url: attachment.url!,
+            });
+
+            return data;
+          }
         );
       },
       removeSectionFromWorkspace: (_result, args, cache) => {

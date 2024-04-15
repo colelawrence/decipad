@@ -17,6 +17,7 @@ import { TabEditorComponent } from '@decipad/editor';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { OutsideTabHiddenLanguageElements } from './OutsideTabHiddenLanguageElements';
+import { useEditorEvents } from './useEditorEvents';
 
 type NotebookLoaderProps = Omit<
   NotebookProps,
@@ -56,6 +57,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     readOnly,
     interactions,
   });
+
+  useEditorEvents(editor);
 
   const init = useCallback(() => {
     if (notebookMetaLoaded && plugins) {

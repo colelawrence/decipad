@@ -81,10 +81,7 @@ export const engageAssistant = async ({
   const isN1NEmail = user.email && getEmailDomain(user.email) === 'n1n.co';
   const internalEmail = isInternalEmail(user.email);
 
-  const hasReachedLimit = await resourceusage.hasReachedLimit(
-    'openai',
-    workspaceId
-  );
+  const hasReachedLimit = await resourceusage.ai.hasReachedLimit(workspaceId);
 
   //
   // Lets not have limits for dev/staging with n1n.co workspace names.
@@ -148,7 +145,7 @@ export const engageAssistant = async ({
       max_tokens: 100,
     });
 
-    await resourceusage.updateWorkspaceAndUserAi({
+    await resourceusage.ai.updateWorkspaceAndUser({
       userId: user.id,
       workspaceId,
       usage: modeCompletion.usage,
@@ -213,7 +210,7 @@ export const engageAssistant = async ({
       max_tokens: 1200,
     });
 
-    await resourceusage.updateWorkspaceAndUserAi({
+    await resourceusage.ai.updateWorkspaceAndUser({
       userId: user.id,
       workspaceId,
       usage: completion.usage,
@@ -246,7 +243,7 @@ export const engageAssistant = async ({
       stop: `\`\`\`\n`,
     });
 
-    await resourceusage.updateWorkspaceAndUserAi({
+    await resourceusage.ai.updateWorkspaceAndUser({
       userId: user.id,
       workspaceId,
       usage: completion.usage,
@@ -285,7 +282,7 @@ export const engageAssistant = async ({
       max_tokens: 800,
     });
 
-    await resourceusage.updateWorkspaceAndUserAi({
+    await resourceusage.ai.updateWorkspaceAndUser({
       userId: user.id,
       workspaceId,
       usage: completion.usage,

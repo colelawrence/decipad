@@ -67,7 +67,7 @@ export const handler = handle(async (event) => {
 
   const tokenPrice = model ? model.tokenPrice : 10_000;
 
-  await resourceusage.updateWorkspaceAndUserAi({
+  await resourceusage.ai.updateWorkspaceAndUser({
     userId: user?.id,
     workspaceId,
     usage: {
@@ -77,10 +77,7 @@ export const handler = handle(async (event) => {
     },
   });
 
-  const hasReachedLimit = await resourceusage.hasReachedLimit(
-    'openai', // @pgte code review here, should this be a new table?
-    workspaceId
-  );
+  const hasReachedLimit = await resourceusage.ai.hasReachedLimit(workspaceId);
 
   if (hasReachedLimit) {
     throw Boom.paymentRequired('You are out of AI credits');

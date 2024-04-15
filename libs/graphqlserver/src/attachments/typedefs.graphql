@@ -30,6 +30,7 @@ extend type Mutation {
   ): CreateAttachmentForm!
   attachFileToPad(handle: ID!): Attachment
   removeAttachmentFromPad(attachmentId: ID!): Boolean
+  undeleteAttachment(attachmentId: ID!): Boolean
 }
 
 extend type Pad {

@@ -12,6 +12,7 @@ export const handler = handle(async (event, user) => {
   if (!padId) {
     throw Boom.notAcceptable('missing parameters');
   }
+
   await notebooks.expectAuthorized({
     user,
     recordId: padId,
@@ -25,14 +26,26 @@ export const handler = handle(async (event, user) => {
       body: 'Missing parameters',
     };
   }
+
   const data = await tables();
+
+  const pad = await data.pads.get({ id: padId });
+  if (!pad) {
+    return {
+      statusCode: 400,
+      body: 'Could not find notebook',
+    };
+  }
+
   const attachment = await data.fileattachments.get({ id: attachmentId });
+
   if (!attachment) {
     throw Boom.notFound('No such attachment');
   }
   if (attachment.resource_uri !== `/pads/${padId}`) {
     throw Boom.forbidden('Forbidden');
   }
+
   const url = await getURL(attachment.filename);
   return {
     statusCode: 302,

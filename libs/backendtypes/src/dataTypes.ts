@@ -526,6 +526,8 @@ interface FutureFileAttachmentRecord extends TableRecordBase {
 
 export interface FileAttachmentRecord extends FutureFileAttachmentRecord {
   filesize: number;
+  // When are we going to delete this attachment?
+  toBeDeleted?: number;
 }
 
 export interface VerificationRequestRecord extends TableRecordBase {
@@ -843,8 +845,8 @@ export interface ResourceUsageHistoryRecord extends TableRecordBase {
 
 // =================    RESOURCE USAGE    =================
 
-export type ResourceConsumer = 'users' | 'workspaces';
-export type StorageSubtypes = 'images' | 'files';
+export type ResourceConsumer = 'users' | 'workspaces' | 'pads';
+export type StorageSubtypes = 'files';
 export type AiSubtypes = 'gpt-4-1106-preview';
 export type AiFields = 'promptTokensUsed' | 'completionTokensUsed';
 

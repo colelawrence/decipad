@@ -43,14 +43,15 @@ export const getAiUsage = async (
 export const getStorageUsage = async (
   workspaceId: string
 ): Promise<Array<FrontendResourceUsageRecord>> => {
-  const records = await Promise.all([
-    resourceusage.getUsageRecord('storage/files/null/workspaces', workspaceId),
-    resourceusage.getUsageRecord('storage/images/null/workspaces', workspaceId),
-  ]);
+  const usage = await resourceusage.storage.getUsage(workspaceId);
 
-  return records
-    .filter((r): r is ResourceUsageRecord => r != null)
-    .map((r) => ({ ...r, resourceType: 'storage' }));
+  return [
+    {
+      id: `storage-${workspaceId}`,
+      consumption: usage,
+      resourceType: 'storage',
+    },
+  ];
 };
 
 export const updateExtraAiAllowance = async (
@@ -101,7 +102,7 @@ export const updateExtraAiAllowance = async (
     },
   });
 
-  await resourceusage.insertExtraAi(workspaceId, credits);
+  await resourceusage.ai.upsertExtra(workspaceId, credits);
 
   return {
     newQuotaLimit: credits,

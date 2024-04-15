@@ -7,6 +7,7 @@ import {
   snapshot,
   getStoredSnapshot,
   canPublicDuplicatePad,
+  getPadAttachmentSize,
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
@@ -24,6 +25,7 @@ import type {
 } from '@decipad/graphqlserver-types';
 import { padResource } from './padResource';
 import { PublishedVersionName } from '@decipad/interfaces';
+import { resourceusage } from '@decipad/services';
 
 const notebooks = resource('notebook');
 const PUBLISHED_SNAPSHOT_NAME = PublishedVersionName.Published;
@@ -197,6 +199,18 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
     throw Boom.forbidden('You cannot duplicate this pad');
   }
 
+  const padStorage = await getPadAttachmentSize(previousPad.id);
+  const [usage, limit] = await Promise.all([
+    resourceusage.storage.getUsage(workspaceId),
+    resourceusage.storage.getLimit(workspaceId),
+  ]);
+
+  if (usage + padStorage > limit) {
+    throw Boom.forbidden(
+      'The attachments are too big to duplicate, free up some storage.'
+    );
+  }
+
   const [doc, name] = await getNotebookContent(user.id, id);
 
   const newName = `Copy of ${name}`;
@@ -210,10 +224,15 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
 
   // TODO: If duplicating a published notebook, we shouldn't duplicate
   // ALL attachments, only the ones saved before the time of publishing.
-  const replaceList = await duplicateNotebookAttachments(
+  const [replaceList, storageUsed] = await duplicateNotebookAttachments(
     previousPad.id,
     clonedPad.id
   );
+
+  await resourceusage.storage.updateWorkspaceAndUser({
+    workspaceId,
+    usage: { consumption: storageUsed, type: 'files' },
+  });
 
   const document = _document != null ? _document : stringify(doc);
 

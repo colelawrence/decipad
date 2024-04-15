@@ -1,4 +1,5 @@
 import { maybeBackup } from './backup';
+import { checkAttachments } from './checkAttachments';
 import { compact } from './compact';
 import { maybeRemoveOldBackups } from './removeOldBackups';
 // import { maybeUpdateSearchIndex } from './searchIndex';
@@ -30,6 +31,7 @@ const cleanUp = () => {
 /* eslint-disable no-console */
 export const notebookMaintenance = async (resourceId: string) => {
   const notebookId = parseId(resourceId);
+
   if (!shouldProcessNotebook(notebookId)) {
     return;
   }
@@ -37,6 +39,7 @@ export const notebookMaintenance = async (resourceId: string) => {
   console.log('starting maintenance on notebook', notebookId);
   const start = Date.now();
   try {
+    await checkAttachments(notebookId);
     await maybeBackup(notebookId);
     await compact(resourceId);
     await maybeRemoveOldBackups(notebookId);
