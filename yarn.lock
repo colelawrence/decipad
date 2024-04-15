@@ -8769,10 +8769,10 @@
   dependencies:
     tslib "^2.4.1"
 
-"@segment/analytics-next@1.66.0":
-  version "1.66.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.66.0.tgz#2a863f5c3af6eb4232a9170b026aaed49d9259b0"
-  integrity sha512-euCOLXUAAfcd/kI5FkCrOJ+Sp3QuCn3f9/1U5J+rly+lfqczKqw4x7A5aon6X3ncBJjfEP3gt9OZdcmgco18Ow==
+"@segment/analytics-next@1.67.0":
+  version "1.67.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.67.0.tgz#5b4b35bc856720ade7bd29317908e636ecc80be9"
+  integrity sha512-57sugvZFDOgFH4yajiganNQjFo5zWP5JqAkt9lDwCfDMhYn5xlvdjO8ahcdug2waouQw2c9vA8a5yVFWVIjWJw==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics-core" "1.5.0"
@@ -16218,10 +16218,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1598.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1598.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1598.0.tgz#da81c4b2e453da70717fad0631394cfa7c023e8e"
-  integrity sha512-/oPetmY5v62lAt2jTRfIEHrdrg8hfz5KI8qvvP/jhFdNJfLZ85nsn3+fSS8i3FgfeWXIS5yv4ZPpA+JNAnBwdQ==
+aws-sdk@2.1599.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1599.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1599.0.tgz#701850e6baabf6e796169e0894f062eee4509fba"
+  integrity sha512-jPb1LAN+s1TLTK+VR3TTJLr//sb3AhhT60Bm9jxB5G/fVeeRczXtBtixNpQ00gksQdkstILYLc9S6MuKMsksxA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
