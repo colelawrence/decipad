@@ -32653,10 +32653,10 @@ react-tweet@^3.1.1:
     date-fns "^2.30.0"
     swr "^2.2.0"
 
-react-use-intercom@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-5.3.0.tgz#bf86b277f0f0656fa8952c9a02a20017101fe786"
-  integrity sha512-sS93lEe4lpDl8DrLdLbqocOJOm2AjQzoq0KR2L8pCU5pXVUhr8C4yzNR4ek4pIvPrLGW7BFz1rOlRYHAcHL+UA==
+react-use-intercom@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-5.4.0.tgz#9e2287470a3bba83fe4d9ec9991314bdc999fcb6"
+  integrity sha512-fMOfylJoFQbXdVNbsXbNZrK+Qwc45AqjZFzkq8gclxiK72FcZl7IUKbm3g+EVKd6QoNX2AHpDD7sqAEwMvzFaQ==
 
 react-vega@7.6.0:
   version "7.6.0"
