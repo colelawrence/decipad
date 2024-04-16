@@ -475,4 +475,17 @@ test('workspace editor checks @workspace @roles', async ({
       'workspace editors shoudnt be able to access workspace settings'
     ).toBeHidden();
   });
+
+  await test.step('editor can duplicate notebook', async () => {
+    await randomFreeUser.workspace.duplicatePad(0, '@n1n.co team');
+
+    await expect(async () => {
+      const pads = await randomFreeUser.workspace.getPadList();
+      await expect(pads).toHaveLength(2);
+      const copyIndex = pads.findIndex((pad) =>
+        pad.name?.startsWith('Copy of')
+      );
+      expect(copyIndex).toBeGreaterThanOrEqual(0);
+    }, "Workspace editor wasn't able to duplicate unpublished notebook").toPass();
+  });
 });
