@@ -39,35 +39,10 @@ const PUBLISHED_SNAPSHOT_NAME = PublishedVersionName.Published;
  * the published snapshot is, including title.
  */
 async function getNotebookContent(
-  userId: string,
-  notebookId: string
+  notebookId: string,
+  content: 'snapshot' | 'content'
 ): Promise<[RootDocument, string]> {
-  const data = await tables();
-
-  /**
-   * Lets check the user actually has permissions for this notebook
-   * Or if the notebook is just published.
-   */
-  const notebookPermission = (
-    await data.permissions.query({
-      IndexName: 'byUserId',
-      KeyConditionExpression:
-        'user_id = :user_id and resource_type = :resource_type',
-      FilterExpression: 'resource_id = :resource_id',
-      ExpressionAttributeValues: {
-        ':user_id': userId,
-        ':resource_type': 'pads',
-        ':resource_id': notebookId,
-      },
-    })
-  ).Items;
-
-  // Can the user duplicate the original notebook
-  // Or should they just be able to duplicate the
-  // published version.
-  const isUserPermitted = notebookPermission.length > 0;
-
-  if (isUserPermitted) {
+  if (content === 'content') {
     const doc = (await snapshot(notebookId)).value;
     if (!doc.children[0]) {
       doc.children[0] = {
@@ -77,6 +52,17 @@ async function getNotebookContent(
       };
     }
     return [doc, getNodeString(doc.children[0])];
+  }
+
+  const data = await tables();
+
+  const notebook = await data.pads.get({ id: notebookId });
+  if (notebook == null) {
+    throw Boom.notAcceptable('Could not find this notebook.');
+  }
+
+  if (!notebook.isPublic) {
+    throw Boom.forbidden('You do not have permission to duplica this notebook');
   }
 
   const publishedDoc = await getStoredSnapshot(
@@ -105,18 +91,31 @@ async function getNotebookContent(
 async function canUserDuplicate(
   padId: string,
   context: GraphqlContext
-): Promise<boolean> {
+): Promise<'snapshot' | 'content' | 'none'> {
   try {
     await notebooks.expectAuthorizedForGraphql({
       context,
       recordId: padId,
-      minimumPermissionType: 'READ',
+      minimumPermissionType: 'WRITE',
       ignorePadPublic: true,
     });
-
-    return true;
+    return 'content';
   } catch (e) {
-    return canPublicDuplicatePad(padId);
+    try {
+      // We cannot write to the notebook.
+      // So we should be able to at least read it.
+
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        recordId: padId,
+        minimumPermissionType: 'READ',
+        ignorePadPublic: true,
+      });
+
+      return 'snapshot';
+    } catch (otherE) {
+      return (await canPublicDuplicatePad(padId)) ? 'snapshot' : 'none';
+    }
   }
 }
 
@@ -195,7 +194,7 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
 
   const isUserAllowedToDuplicate = await canUserDuplicate(id, context);
 
-  if (!isUserAllowedToDuplicate) {
+  if (isUserAllowedToDuplicate === 'none') {
     throw Boom.forbidden('You cannot duplicate this pad');
   }
 
@@ -211,7 +210,7 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
     );
   }
 
-  const [doc, name] = await getNotebookContent(user.id, id);
+  const [doc, name] = await getNotebookContent(id, isUserAllowedToDuplicate);
 
   const newName = `Copy of ${name}`;
   previousPad.name = newName;
