@@ -7,5 +7,6 @@ export { parseSeriesStart } from './parseSeriesStart';
 export { seriesIterator } from './seriesIterator';
 export * from './inferNumber';
 export * from './inferBoolean';
+export * from './inferDate';
 export * from './parseDate';
 export * from './textify';

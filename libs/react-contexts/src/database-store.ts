@@ -336,7 +336,8 @@ function getProcessedResult(
 ): string {
   switch (type) {
     case 'notion':
-      return JSON.stringify(importFromNotion(JSON.parse(rawResult)));
+      const [res] = importFromNotion(JSON.parse(rawResult));
+      return JSON.stringify(res);
     default:
       return rawResult;
   }

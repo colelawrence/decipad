@@ -49,11 +49,12 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
+        latestResult: codeStore.latestResult,
+        timeOfLastRun: codeStore.timeOfLastRun,
+
         integrationType: {
           type: 'codeconnection',
           code: codeStore.code,
-          latestResult: codeStore.latestResult,
-          timeOfLastRun: codeStore.timeOfLastRun,
         },
       };
     }
@@ -66,11 +67,11 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
+        latestResult: sqlStore.latestResult,
+        timeOfLastRun: null,
         integrationType: {
           type: 'mysql',
           query: sqlStore.Query,
-          latestResult: sqlStore.latestResult,
-          timeOfLastRun: null,
           externalDataUrl: getDefined(sqlStore.ExternalDataId),
           externalDataName: getDefined(sqlStore.ExternalDataName),
         },
@@ -86,10 +87,10 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
+        latestResult: notionStore.latestResult,
+        timeOfLastRun: null,
         integrationType: {
           type: 'notion',
-          latestResult: notionStore.latestResult,
-          timeOfLastRun: null,
           notionUrl: notionStore.NotionDatabaseUrl!,
           externalDataId: notionStore.ExternalDataId!,
           externalDataName: notionStore.ExternalDataName!,

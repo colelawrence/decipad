@@ -5,24 +5,19 @@ import type {
   ELEMENT_INTEGRATION,
 } from '.';
 
-interface BlockIntegration {
-  latestResult: string;
-  timeOfLastRun: string | null;
-}
-
-export interface CodeBlockIntegration extends BlockIntegration {
+export interface CodeBlockIntegration {
   type: 'codeconnection';
   code: string;
 }
 
-export interface SQLBlockIntegration extends BlockIntegration {
+export interface SQLBlockIntegration {
   type: 'mysql';
   query: string;
   externalDataUrl: string;
   externalDataName: string;
 }
 
-export interface NotionBlockIntegration extends BlockIntegration {
+export interface NotionBlockIntegration {
   type: 'notion';
   notionUrl: string;
 
@@ -36,19 +31,17 @@ type IntegrationTypes =
   | SQLBlockIntegration
   | NotionBlockIntegration;
 
-export interface IntegrationBlock extends BaseElement {
+export interface IntegrationBlock<
+  T extends IntegrationTypes['type'] = IntegrationTypes['type']
+> extends BaseElement {
   type: typeof ELEMENT_INTEGRATION;
   children: [PlainText];
 
   // Keeps the users desired result mappings.
   typeMappings: Array<SimpleTableCellType | undefined>;
 
-  integrationType: IntegrationTypes;
-}
+  latestResult: string;
+  timeOfLastRun: string | null;
 
-export type ConcreteIntegrationBlock<T extends IntegrationTypes['type']> = {
-  id: string;
-  varName: string;
-  typeMappings: IntegrationBlock['typeMappings'];
-  blockOptions: Extract<IntegrationTypes, { type: T }>;
-};
+  integrationType: Extract<IntegrationTypes, { type: T }>;
+}

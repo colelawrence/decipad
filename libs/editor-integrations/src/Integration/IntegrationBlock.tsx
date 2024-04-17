@@ -48,37 +48,41 @@ import { SQLIntegration } from './SQLIntegration';
 import { useClientEvents } from '@decipad/client-events';
 
 function getIntegrationComponent(
-  id: string,
-  varName: string,
-  typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'],
-  blockOptions: IntegrationTypes.IntegrationBlock['integrationType']
+  element: IntegrationTypes.IntegrationBlock
 ): ReactNode {
-  switch (blockOptions.type) {
+  //
+  // Ok, its a little big cursed.
+  //
+  // We can spread the element as long as we specify `integrationType`,
+  // but we also want access to the `raw` element. This is just a way to
+  // prevent type casting.
+  //
+  // TypeScript cannot narrow unions based on children type unfortuntely :(
+  //
+
+  switch (element.integrationType.type) {
     case 'codeconnection':
       return (
         <CodeIntegration
-          id={id}
-          varName={varName}
-          typeMappings={typeMappings}
-          blockOptions={blockOptions}
+          {...element}
+          element={element}
+          integrationType={element.integrationType}
         />
       );
     case 'mysql':
       return (
         <SQLIntegration
-          id={id}
-          varName={varName}
-          typeMappings={typeMappings}
-          blockOptions={blockOptions}
+          {...element}
+          element={element}
+          integrationType={element.integrationType}
         />
       );
     case 'notion':
       return (
         <NotionIntegration
-          id={id}
-          varName={varName}
-          typeMappings={typeMappings}
-          blockOptions={blockOptions}
+          {...element}
+          element={element}
+          integrationType={element.integrationType}
         />
       );
     default:
@@ -126,28 +130,14 @@ export const IntegrationBlock: PlateComponent = ({
     });
   }, [id, updateQueryExecCount]);
 
-  const specificIntegration = useMemo(
-    () =>
-      getIntegrationComponent(
-        element.id,
-        element.children[0].text,
-        element.typeMappings,
-        element.integrationType
-      ),
-    [
-      element.children,
-      element.id,
-      element.integrationType,
-      element.typeMappings,
-    ]
-  );
+  const specificIntegration = getIntegrationComponent(element);
 
   const computer = useComputer();
   const blockResult = computer.getBlockIdResult$.use(element.id);
 
   const readOnly = useIsEditorReadOnly();
 
-  const { timeOfLastRun } = element.integrationType;
+  const { timeOfLastRun } = element;
 
   const [showData, setShowData] = useState(false);
 

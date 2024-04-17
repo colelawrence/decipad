@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect } from 'react';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
@@ -8,24 +7,33 @@ import {
 } from '@decipad/react-contexts';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { fetchQuery } from '../utils';
-import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
+import { findNodePath, getNodeString, setNodes } from '@udecode/plate-common';
+import { useMyEditorRef, type IntegrationTypes } from '@decipad/editor-types';
+import type { FC } from 'react';
 
-export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
+export const SQLIntegration: FC<
+  IntegrationTypes.IntegrationBlock<'mysql'> & {
+    element: IntegrationTypes.IntegrationBlock;
+  }
+> = ({
   typeMappings,
-  blockOptions,
+  integrationType,
+  latestResult,
   id,
-  varName,
-}): null => {
+  children,
+  element,
+}) => {
   const computer = useComputer();
-
   const store = useConnectionStore();
   const sqlStore = useSQLConnectionStore();
+  const varName = getNodeString(children[0]);
+  const editor = useMyEditorRef();
 
   useEffect(() => {
     async function getResult() {
       const result = await importFromJSONAndCoercions(
-        blockOptions.latestResult,
+        latestResult,
         typeMappings
       );
 
@@ -35,11 +43,11 @@ export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
     }
 
     getResult();
-  }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
+  }, [computer, id, varName, typeMappings, latestResult]);
 
   useIntegrationOptions({
     onRefresh() {
-      fetchQuery(blockOptions.externalDataUrl, blockOptions.query).then(
+      fetchQuery(integrationType.externalDataUrl, integrationType.query).then(
         async (res) => {
           if (res?.type !== 'success') {
             return;
@@ -51,36 +59,47 @@ export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
           );
           if (!result) return;
           pushResultToComputer(computer, id, varName, result);
+
+          const path = findNodePath(editor, element);
+          if (path == null) {
+            return;
+          }
+
+          setNodes(
+            editor,
+            {
+              latestResult: JSON.stringify(res.data),
+            } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+            { at: path }
+          );
         }
       );
     },
     onShowSource() {
       store.abort();
 
-      importFromJSONAndCoercions(blockOptions.latestResult, typeMappings).then(
-        (res) => {
-          if (res) {
-            store.Set({ resultPreview: res });
-          }
-
-          store.Set({
-            connectionType: 'mysql',
-            stage: 'connect',
-            existingIntegration: id,
-            varName,
-          });
-
-          store.setAllTypeMapping(typeMappings);
-          store.changeOpen(true);
-
-          sqlStore.Set({
-            Query: blockOptions.query,
-            latestResult: blockOptions.latestResult,
-            ExternalDataName: blockOptions.externalDataName,
-            ExternalDataId: blockOptions.externalDataUrl,
-          });
+      importFromJSONAndCoercions(latestResult, typeMappings).then((res) => {
+        if (res) {
+          store.Set({ resultPreview: res });
         }
-      );
+
+        store.Set({
+          connectionType: 'mysql',
+          stage: 'connect',
+          existingIntegration: id,
+          varName,
+        });
+
+        store.setAllTypeMapping(typeMappings);
+        store.changeOpen(true);
+
+        sqlStore.Set({
+          Query: integrationType.query,
+          ExternalDataName: integrationType.externalDataName,
+          ExternalDataId: integrationType.externalDataUrl,
+          latestResult,
+        });
+      });
     },
     onDelete() {
       pushResultToComputer(computer, id, varName, undefined);

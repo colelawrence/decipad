@@ -10,34 +10,48 @@ import {
   columnTypeCoercionsToRec,
 } from '@decipad/import';
 import { useEffect } from 'react';
-import type { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 import { useIntegrationOptions } from '../hooks';
+import { findNodePath, getNodeString, setNodes } from '@udecode/plate-common';
+import type { FC } from 'react';
+import { useMyEditorRef, type IntegrationTypes } from '@decipad/editor-types';
+import { merge } from '@decipad/utils';
 
-export const NotionIntegration = function CodeIntegration({
-  blockOptions,
+export const NotionIntegration: FC<
+  IntegrationTypes.IntegrationBlock<'notion'> & {
+    element: IntegrationTypes.IntegrationBlock;
+  }
+> = ({
+  integrationType,
   typeMappings,
   id,
-  varName,
-}: ConcreteIntegrationBlock<'notion'>): null {
+  children,
+  latestResult,
+  element,
+}) => {
   const computer = useComputer();
+  const varName = getNodeString(children[0]);
+  const editor = useMyEditorRef();
 
   useEffect(() => {
-    const res = JSON.parse(blockOptions.latestResult);
+    const res = JSON.parse(latestResult);
     if (!res) return;
 
     async function getResult() {
-      const notionResult = await importFromUnknownJson(importFromNotion(res), {
-        columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
+      const [notionRes, cohersions] = importFromNotion(res);
+      const mergedTypeMappings = merge(typeMappings, cohersions);
+
+      const notionResult = await importFromUnknownJson(notionRes, {
+        columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
       });
       pushResultToComputer(computer, id, varName, notionResult);
     }
 
     getResult();
-  }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
+  }, [computer, id, varName, typeMappings, latestResult]);
 
   useIntegrationOptions({
     onRefresh() {
-      fetch(blockOptions.notionUrl)
+      fetch(integrationType.notionUrl)
         .then((res) => res.json())
         .then(async (res) => {
           const notionImported = importFromNotion(res);
@@ -45,6 +59,19 @@ export const NotionIntegration = function CodeIntegration({
             columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
           });
           pushResultToComputer(computer, id, varName, result);
+
+          const path = findNodePath(editor, element);
+          if (path == null) {
+            return;
+          }
+
+          setNodes(
+            editor,
+            {
+              latestResult: JSON.stringify(res),
+            } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+            { at: path }
+          );
         });
     },
     onShowSource() {
@@ -53,12 +80,9 @@ export const NotionIntegration = function CodeIntegration({
 
       store.abort();
 
-      importFromUnknownJson(
-        importFromNotion(JSON.parse(blockOptions.latestResult)),
-        {
-          columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
-        }
-      ).then((notionResult) => {
+      importFromUnknownJson(importFromNotion(JSON.parse(latestResult)), {
+        columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
+      }).then((notionResult) => {
         if (notionResult) {
           store.Set({ resultPreview: notionResult });
         }
@@ -67,7 +91,7 @@ export const NotionIntegration = function CodeIntegration({
           connectionType: 'notion',
           stage: 'connect',
           existingIntegration: id,
-          rawResult: blockOptions.latestResult,
+          rawResult: latestResult,
           varName,
         });
 
@@ -75,13 +99,13 @@ export const NotionIntegration = function CodeIntegration({
         store.changeOpen(true);
 
         notionStore.Set({
-          latestResult: blockOptions.latestResult,
-          timeOfLastRun: blockOptions.timeOfLastRun,
-          NotionDatabaseUrl: blockOptions.notionUrl,
+          NotionDatabaseUrl: integrationType.notionUrl,
 
-          ExternalDataId: blockOptions.externalDataId,
-          ExternalDataName: blockOptions.externalDataName,
-          DatabaseName: blockOptions.databaseName,
+          ExternalDataId: integrationType.externalDataId,
+          ExternalDataName: integrationType.externalDataName,
+          DatabaseName: integrationType.databaseName,
+
+          latestResult,
         });
       });
     },

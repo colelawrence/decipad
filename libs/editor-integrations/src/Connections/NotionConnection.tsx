@@ -23,6 +23,7 @@ import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
+import { merge } from '@decipad/utils';
 
 const Styles = {
   OuterWrapper: styled.div({
@@ -267,10 +268,13 @@ async function notionResponseToDeciResult(
   const state = useNotionConnectionStore.getState();
   const notionResult = await notionResponse.json();
 
-  const importedNotion = importFromNotion(notionResult);
+  const [importedNotion, cohersions] = importFromNotion(notionResult);
   const rawStringResult = JSON.stringify(notionResult);
+
+  const mergedTypeMappings = merge(props.typeMapping, cohersions);
+
   importFromUnknownJson(importedNotion, {
-    columnTypeCoercions: columnTypeCoercionsToRec(props.typeMapping),
+    columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
   }).then((deciRes) => {
     props.setRawResult(rawStringResult);
     state.Set({ latestResult: rawStringResult });

@@ -36,6 +36,37 @@ describe('Import notion databases', () => {
   });
 });
 
+describe('notion type cohersion', () => {
+  it('coherses phone numbers', () => {
+    const res = importFromNotion({
+      object: 'list',
+      results: [
+        {
+          object: 'page',
+          properties: {
+            PhoneNumber: {
+              type: 'phone_number',
+              phone_number: '0123456',
+              id: 'id',
+            },
+          },
+        },
+      ],
+    } as any);
+
+    expect(res).toMatchObject([
+      {
+        PhoneNumber: ['0123456'],
+      },
+      [
+        {
+          kind: 'string',
+        },
+      ],
+    ]);
+  });
+});
+
 const SUBSCRIPTION_DATABASE = {
   object: 'list',
   results: [
@@ -3253,8 +3284,8 @@ const SUBSCRIPTION_DATABASE = {
 
 describe('Import data from notion database', () => {
   it('can import long database', () => {
-    expect(importFromNotion(SUBSCRIPTION_DATABASE as any))
-      .toMatchInlineSnapshot(`
+    const [value] = importFromNotion(SUBSCRIPTION_DATABASE as any);
+    expect(value).toMatchInlineSnapshot(`
       {
         "Area": [
           "",

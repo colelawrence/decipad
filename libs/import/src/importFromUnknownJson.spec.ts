@@ -277,37 +277,28 @@ describe('Nested objects', () => {
 
 describe('edge cases', () => {
   it('doesnt infer number on non-number', async () => {
-    await expect(importFromUnknownJson('a1', {})).resolves
+    await expect(importFromUnknownJson('aaa55ff', {})).resolves
       .toMatchInlineSnapshot(`
       {
         "type": {
-          "kind": "number",
-          "unit": [
-            {
-              "aliasFor": undefined,
-              "exp": DeciNumber {
-                "d": 1n,
-                "infinite": false,
-                "n": 1n,
-                "s": 1n,
-              },
-              "known": false,
-              "multiplier": DeciNumber {
-                "d": 1n,
-                "infinite": false,
-                "n": 1n,
-                "s": 1n,
-              },
-              "unit": "a1",
-            },
-          ],
+          "kind": "string",
         },
-        "value": DeciNumber {
-          "d": 1n,
-          "infinite": false,
-          "n": 1n,
-          "s": 1n,
+        "value": "aaa55ff",
+      }
+    `);
+  });
+});
+
+describe('Infers dates', () => {
+  it('Simple date', async () => {
+    await expect(importFromUnknownJson('2024-04-16', {})).resolves
+      .toMatchInlineSnapshot(`
+      {
+        "type": {
+          "date": "day",
+          "kind": "date",
         },
+        "value": 1713225600000n,
       }
     `);
   });

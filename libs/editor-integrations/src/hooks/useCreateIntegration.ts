@@ -110,10 +110,10 @@ export const useCreateIntegration = () => {
             {
               ...node,
               typeMappings: store.resultTypeMapping,
+              latestResult: codeStore.latestResult,
+              timeOfLastRun: codeStore.timeOfLastRun,
               integrationType: {
                 code: codeStore.code,
-                latestResult: codeStore.latestResult,
-                timeOfLastRun: codeStore.timeOfLastRun,
                 type: 'codeconnection',
               } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
             },
@@ -126,10 +126,10 @@ export const useCreateIntegration = () => {
             {
               ...node,
               typeMappings: store.resultTypeMapping,
+              latestResult: sqlStore.latestResult,
+              timeOfLastRun: sqlStore.timeOfLastRun,
               integrationType: {
                 query: sqlStore.Query,
-                latestResult: sqlStore.latestResult,
-                timeOfLastRun: sqlStore.timeOfLastRun,
                 type: 'mysql',
                 externalDataName: getDefined(sqlStore.ExternalDataName),
                 externalDataUrl: getDefined(sqlStore.ExternalDataId),
@@ -145,10 +145,10 @@ export const useCreateIntegration = () => {
             {
               ...node,
               typeMappings: store.resultTypeMapping,
+              latestResult: notionStore.latestResult,
+              timeOfLastRun: notionStore.timeOfLastRun,
               integrationType: {
                 type: 'notion',
-                latestResult: notionStore.latestResult,
-                timeOfLastRun: notionStore.timeOfLastRun,
                 notionUrl: notionStore.NotionDatabaseUrl!,
                 externalDataId: notionStore.ExternalDataId!,
                 externalDataName: notionStore.ExternalDataName!,

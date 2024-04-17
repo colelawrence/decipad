@@ -1,3 +1,4 @@
+import type { TableCellType } from '@decipad/editor-types';
 import type {
   UserObjectResponse,
   PageObjectResponse,
@@ -8,11 +9,13 @@ import type {
 
 export function importFromNotion(
   source: QueryDatabaseResponse
-): Record<string, Array<string>> {
+): [Record<string, Array<string>>, Array<TableCellType | undefined>] {
   const cleanResponse = filterNotionQuery(source);
 
   // Turns a parsed notion response into a json object
   const data: Record<string, Array<string>> = {};
+  const cohersingTypes: Array<TableCellType | undefined> = [];
+
   // Iterate through first row of json to get column names
   for (const column of cleanResponse[0]) {
     data[column.column_name] = [];
@@ -21,9 +24,11 @@ export function importFromNotion(
   for (const row of cleanResponse) {
     for (const column of row) {
       data[column.column_name].push(column.value);
+      cohersingTypes.push(column.cohersion);
     }
   }
-  return data;
+
+  return [data, cohersingTypes];
 }
 
 interface ImportDatabaseResult {
@@ -99,6 +104,7 @@ export interface NotionResponse {
   type: string;
   column_name: string;
   value: string;
+  cohersion: TableCellType | undefined;
 }
 
 type ExtractRecord<R> = R extends Record<string, infer T> ? T : never;
@@ -109,54 +115,57 @@ type ExtractRecord<R> = R extends Record<string, infer T> ? T : never;
 // eslint-disable-next-line complexity
 function getValue(
   object: ExtractRecord<PageObjectResponse['properties']>
-): string {
+): [string, TableCellType | undefined] {
   switch (object.type) {
     case 'title':
-      return richTextToString(object.title);
+      return [richTextToString(object.title), undefined];
     case 'number':
-      return object.number?.toString() ?? '0';
+      return [object.number?.toString() ?? '0', undefined];
     case 'checkbox':
-      return String(object.checkbox);
+      return [String(object.checkbox), undefined];
     case 'rich_text':
-      return richTextToString(object.rich_text);
+      return [richTextToString(object.rich_text), undefined];
     case 'select':
-      return object.select?.name ?? '';
+      return [object.select?.name ?? '', undefined];
     case 'status':
-      return object.status?.name ?? '';
+      return [object.status?.name ?? '', undefined];
     case 'date':
-      return object.date?.start ?? '';
+      return [object.date?.start ?? '', undefined];
     case 'url':
-      return object.url ?? '';
+      return [object.url ?? '', undefined];
     case 'email':
-      return object.email ?? '';
+      return [object.email ?? '', undefined];
     case 'phone_number':
-      return object.phone_number ?? '';
+      return [object.phone_number ?? '', { kind: 'string' }];
     case 'created_time':
-      return object.created_time;
+      return [object.created_time, undefined];
     case 'created_by':
-      return object.created_by.id;
+      return [object.created_by.id, undefined];
     case 'last_edited_time':
-      return object.last_edited_time;
+      return [object.last_edited_time, undefined];
     case 'unique_id':
-      return `${object.unique_id.prefix ?? ''}${object.unique_id.number ?? ''}`;
+      return [
+        `${object.unique_id.prefix ?? ''}${object.unique_id.number ?? ''}`,
+        undefined,
+      ];
     // TODO: What to do with types below.
     case 'formula':
     case 'files':
-      return '';
+      return ['', undefined];
     case 'people':
-      return usersToString(object.people);
+      return [usersToString(object.people), undefined];
     case 'rollup':
     case 'relation':
-      return '';
+      return ['', undefined];
     case 'multi_select':
       let value = '';
       object.multi_select.sort((a, b) => (a.name < b.name ? 1 : -1));
       for (const select of object.multi_select) {
         value += select.name;
       }
-      return value;
+      return [value, undefined];
     case 'last_edited_by':
-      return userToString(object.last_edited_by);
+      return [userToString(object.last_edited_by), undefined];
 
     //
     // Future proofing
@@ -165,7 +174,7 @@ function getValue(
     // let's handle them.
     //
     default:
-      return '';
+      return ['', undefined];
   }
 }
 
@@ -180,10 +189,12 @@ function filterNotionQuery(
       const page = res as PageObjectResponse;
       const pageRow = [];
       for (const property of Object.keys(page.properties)) {
+        const [value, cohersion] = getValue(page.properties[property]);
         pageRow.push({
           type: page.properties[property].type,
           column_name: property,
-          value: getValue(page.properties[property]),
+          value,
+          cohersion,
         });
       }
       pageTable.push(pageRow);

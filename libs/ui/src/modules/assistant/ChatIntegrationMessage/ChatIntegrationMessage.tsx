@@ -278,11 +278,11 @@ const Integration = ({
       type: ELEMENT_INTEGRATION,
       children: [{ text: fnName }],
       typeMappings: [],
+      latestResult: resultJSON.result,
+      timeOfLastRun,
       integrationType: {
         type: 'codeconnection',
         code,
-        latestResult: resultJSON.result,
-        timeOfLastRun,
       },
     };
     insertNodes([newIntegration]);

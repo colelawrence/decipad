@@ -12,6 +12,7 @@ import { setNodes } from '@udecode/plate-common';
 import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories';
 import { getNotionDataLink, getNotionDbLink } from '../utils';
 import type { DeepPartial } from 'utility-types';
+import { omit } from 'lodash';
 
 function isValidURL(stringUrl: string): boolean {
   try {
@@ -50,6 +51,34 @@ export const createNormalizeIntegrationBlock = createNormalizerPlugin({
             {
               at: path,
             }
+          );
+      }
+
+      if ('latestResult' in element.integrationType) {
+        return () =>
+          setNodes(
+            editor,
+            {
+              latestResult: (element.integrationType as any).latestResult,
+              integrationType: omit(element.integrationType, [
+                'latestResult',
+              ]) as any,
+            } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+            { at: path }
+          );
+      }
+
+      if ('timeOfLastRun' in element.integrationType) {
+        return () =>
+          setNodes(
+            editor,
+            {
+              timeOfLastRun: (element.integrationType as any).timeOfLastRun,
+              integrationType: omit(element.integrationType, [
+                'timeOfLastRun',
+              ]) as any,
+            } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+            { at: path }
           );
       }
 

@@ -1,4 +1,5 @@
-import type { Result } from '@decipad/remote-computer';
+/* eslint-disable no-restricted-globals */
+import type { Result, SerializedTypes } from '@decipad/remote-computer';
 import {
   isColumn,
   Unknown,
@@ -7,7 +8,12 @@ import {
   hydrateResult,
 } from '@decipad/remote-computer';
 import type { ColIndex, TableCellType } from '@decipad/editor-types';
-import { columnNameFromIndex, inferBoolean, inferNumber } from '@decipad/parse';
+import {
+  columnNameFromIndex,
+  inferBoolean,
+  inferDate,
+  inferNumber,
+} from '@decipad/parse';
 import stringify from 'json-stringify-safe';
 import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
@@ -16,6 +22,7 @@ import { rowsToColumns } from './utils/rowsToColumns';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
 import omit from 'lodash.omit';
+import { isValid, parseISO } from 'date-fns';
 
 const importTableFromArray = async (
   arr: Array<unknown>,
@@ -214,18 +221,7 @@ const importSingleValue = async (
         value: Boolean(value),
       };
     case 'string': {
-      const inferredBoolean = inferBoolean(value);
-
-      if (inferredBoolean != null) {
-        return {
-          type: inferredBoolean.type,
-          value: Boolean(value.toLowerCase()),
-        };
-      }
-
-      const inferredType = await inferNumber(getRemoteComputer(), value);
-
-      if (inferredType == null) {
+      if (value.length === 0) {
         return {
           type: {
             kind: 'string',
@@ -234,9 +230,73 @@ const importSingleValue = async (
         };
       }
 
+      const inferredDate = inferDate(value, 'month') ?? inferDate(value, 'day');
+      if (inferredDate != null) {
+        const date = new Date(value);
+        return {
+          type: inferredDate.type,
+          value: BigInt(date.getTime()),
+        };
+      }
+
+      const parsedDate = parseISO(value);
+      if (isValid(parsedDate)) {
+        return {
+          type: {
+            kind: 'date',
+            date: 'second',
+          },
+          value: BigInt(parsedDate.getTime()),
+        };
+      }
+
+      const inferredBoolean = inferBoolean(value);
+      if (inferredBoolean != null) {
+        return {
+          type: inferredBoolean.type,
+          value: Boolean(value.toLowerCase()),
+        };
+      }
+
+      const inferredType = await inferNumber(getRemoteComputer(), value);
+      const numberType = inferredType?.type as SerializedTypes.Number;
+
+      //
+      // The language parses things such as: 'aaa1' as:
+      // 1 with unit aaa1
+      //
+      // So, we just check that.
+      // - If the unit is not null.
+      // - That the first unit item is not identical to the string.
+      //
+      // Because if it was, we'd be parsing a weird numbernon.
+      //
+
+      if (
+        inferredType != null &&
+        (numberType.unit == null ||
+          (numberType.unit != null && numberType.unit?.at(0)?.unit !== value))
+      ) {
+        return {
+          type: inferredType.type,
+          value: value.replaceAll(/[^0-9.]*/g, ''),
+        };
+      }
+
+      const generalInferredDate = inferDate(value);
+      if (generalInferredDate != null) {
+        return {
+          type: generalInferredDate.type,
+          value: BigInt(new Date(value).getTime()),
+        };
+      }
+
       return {
-        type: inferredType.type,
-        value: value.replaceAll(/[^0-9.]*/g, ''),
+        type: {
+          kind: 'string',
+        },
+
+        value,
       };
     }
     default: {
