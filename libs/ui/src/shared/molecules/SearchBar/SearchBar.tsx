@@ -91,7 +91,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
               <FilterBubbles
                 description={
                   visibility === ''
-                    ? 'Filter by vizzzzibility'
+                    ? 'Filter by visibility'
                     : capitalize(visibility)
                 }
                 icon={<CaretDown />}
