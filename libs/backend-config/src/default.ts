@@ -83,7 +83,7 @@ const defaultEnvValues = {
   WORKSPACE_PRO_PLAN: 'pro',
   WORKSPACE_FREE_PLAN_NAME: 'Free',
   OPENAI_DECIPAD_GPT_BEARER_KEY: '',
-  SENDGRID_API_KEY: '',
+  MAILERSEND_API_KEY: '',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

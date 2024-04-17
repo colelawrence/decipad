@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import sgMail from '@sendgrid/mail';
+import { Recipient, EmailParams, MailerSend, Sender } from 'mailersend';
 import { email as emailConfig } from '@decipad/backend-config';
 import { debug } from './debug';
 
-const { apiKey, senderEmailAddress } = emailConfig();
-sgMail.setApiKey(apiKey);
+const { apiKey } = emailConfig();
+const sender = new MailerSend({ apiKey });
 
 type SendEmailParams = {
   to: string;
@@ -22,15 +22,16 @@ export async function sendEmail({
     console.log('skipping email send because no api key');
     return;
   }
-  debug('will send email', { to, body, subject });
-  const params = {
-    html: body,
-    subject,
-    to,
-    from: senderEmailAddress,
-  };
-  debug('send email params', params);
-  const [result] = await sgMail.send(params);
+  // eslint-disable-next-line no-console
+  console.log('will send email', { to, body, subject });
+  const params = new EmailParams()
+    .setHtml(body)
+    .setSubject(subject)
+    .setTo([new Recipient(to)])
+    .setFrom(new Sender('info@decipad.com', 'Decipad'));
+  // eslint-disable-next-line no-console
+  console.log('send email params', params);
+  const result = await sender.email.send(params);
   if (result.statusCode >= 300) {
     throw new Error(`Error sending email: ${result.body}`);
   }

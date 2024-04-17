@@ -58,7 +58,7 @@ arc env staging OPENAI_API_KEY "$OPENAI_API_KEY"
 arc env staging GIPHY_API_KEY "$GIPHY_API_KEY"
 arc env staging UNSPLASH_API_KEY "$UNSPLASH_API_KEY"
 arc env staging REPLICATE_API_KEY "$REPLICATE_API_KEY"
-arc env staging SENDGRID_API_KEY "$SENDGRID_API_KEY"
+arc env staging MAILERSEND_API_KEY "$MAILERSEND_API_KEY"
 arc env staging DECI_SES_SECRET_ACCESS_KEY "$DECI_SES_SECRET_ACCESS_KEY"
 arc env staging DECI_S3_ENDPOINT s3.eu-west-2.amazonaws.com
 arc env staging DECI_S3_ACCESS_KEY_ID "$DECI_S3_ACCESS_KEY_ID"

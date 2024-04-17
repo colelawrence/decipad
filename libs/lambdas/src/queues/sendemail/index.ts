@@ -23,6 +23,8 @@ async function handleSendEmail(
     return;
   }
 
+  console.log('send email', { templateName, params });
+
   const template = templates[templateName];
   if (!template) {
     throw new Error(`Could not find template with name ${templateName}`);
@@ -39,8 +41,8 @@ async function handleSendEmail(
     debug('email sent', params);
     await track(event, { event: 'email sent', properties: params });
   } catch (err) {
-    await captureException(err as Error);
     console.error('Error sending email', err);
+    await captureException(err as Error);
   }
 }
 

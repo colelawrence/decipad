@@ -21388,7 +21388,7 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@^3.0.0:
+extend@^3.0.0, extend@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
@@ -22256,6 +22256,16 @@ gauge@^3.0.0:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
     wide-align "^1.1.2"
+
+gaxios@^5.0.1:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/gaxios/-/gaxios-5.1.3.tgz#f7fa92da0fe197c846441e5ead2573d4979e9013"
+  integrity sha512-95hVgBRgEIRQQQHIbnxBXeHbW4TqFk4ZDJW7wmVtvYar72FdhRIo1UGOLS2eRAKCPEdPBWu+M7+A33D9CdX9rA==
+  dependencies:
+    extend "^3.0.2"
+    https-proxy-agent "^5.0.0"
+    is-stream "^2.0.0"
+    node-fetch "^2.6.9"
 
 gensync@^1.0.0-beta.1, gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -27149,6 +27159,15 @@ magic-string@^0.30.0, magic-string@^0.30.5:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
+mailersend@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/mailersend/-/mailersend-2.2.0.tgz#faab708e95cfee9ea0e905e0f6024cb72b44fdd6"
+  integrity sha512-U5d2RseMDm7oQIXqvMo1Xfvimh2k4O+nC27TA2tR4cwMDoAiZ9e0JpnbQ8mbT7gJoNdUittLs3n/kfRapu5tZg==
+  dependencies:
+    gaxios "^5.0.1"
+    isomorphic-unfetch "^3.1.0"
+    qs "^6.11.0"
+
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-2.1.0.tgz#5f0310e18b8be898cc07009295a30ae41e91e6f5"
@@ -29245,7 +29264,7 @@ node-fetch@3.3.0:
     fetch-blob "^3.1.4"
     formdata-polyfill "^4.0.10"
 
-node-fetch@^2.0.0, node-fetch@^2.6.0, node-fetch@^2.6.1, node-fetch@^2.6.11, node-fetch@^2.6.12, node-fetch@^2.6.7:
+node-fetch@^2.0.0, node-fetch@^2.6.0, node-fetch@^2.6.1, node-fetch@^2.6.11, node-fetch@^2.6.12, node-fetch@^2.6.7, node-fetch@^2.6.9:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==

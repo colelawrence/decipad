@@ -144,8 +144,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.WORKSPACE_FREE_PLAN_NAME);
     case 'OPENAI_DECIPAD_GPT_BEARER_KEY':
       return valueOrDefault(name, process.env.OPENAI_DECIPAD_GPT_BEARER_KEY);
-    case 'SENDGRID_API_KEY':
-      return valueOrDefault(name, process.env.SENDGRID_API_KEY);
+    case 'MAILERSEND_API_KEY':
+      return valueOrDefault(name, process.env.MAILERSEND_API_KEY);
   }
 }
 
@@ -299,7 +299,7 @@ export interface EmailConfig {
 export function email(): EmailConfig {
   return {
     senderEmailAddress: env('DECI_FROM_EMAIL_ADDRESS'),
-    apiKey: env('SENDGRID_API_KEY'),
+    apiKey: env('MAILERSEND_API_KEY'),
   };
 }
 
