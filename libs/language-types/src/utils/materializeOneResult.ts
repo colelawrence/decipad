@@ -2,7 +2,6 @@
 import { all, map } from '@decipad/generator-utils';
 import type { PromiseOrType } from '@decipad/utils';
 import type { OneResult, ResultGenerator } from '../Result';
-import pSeries from 'p-series';
 
 export const materializeOneResult = async (
   _immatResult: PromiseOrType<OneResult>
@@ -14,9 +13,8 @@ export const materializeOneResult = async (
     return result;
   }
   if (Array.isArray(immatResult)) {
-    // TODO: we need to make materialization serial because the language does not yet support concurrency
-    const arrayResult = await pSeries(
-      immatResult.map((r) => () => materializeOneResult(r))
+    const arrayResult = await Promise.all(
+      immatResult.map((r) => materializeOneResult(r))
     );
 
     return arrayResult;

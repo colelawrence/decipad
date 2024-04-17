@@ -13,14 +13,15 @@ import { fnQueue } from '@decipad/fnqueue';
 import type {
   AutocompleteName,
   ExternalDataMap,
-  AST,
   Result,
   SerializedType,
   SerializedTypes,
   Unit,
+  AST,
 } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import {
+  getOfType,
   evaluateStatement,
   inferExpression,
   parseExpression,
@@ -118,7 +119,6 @@ export class Computer {
   >(new Map());
   private resultStreams = new ResultStreams(this);
   public results = this.resultStreams.global;
-  public stats = this.computationRealm.stats;
 
   private flushedSubject = new BehaviorSubject<boolean>(true);
 
@@ -208,10 +208,7 @@ export class Computer {
         // Compute me some computes!
         dropWhileComputing(
           async (req) => {
-            const start = Date.now();
             const result = await this.computeRequest(req);
-            const fullRequestElapsedTimeMs = Date.now() - start;
-            this.stats.pushComputerRequestStat({ fullRequestElapsedTimeMs });
             return { ...result, results: req.results };
           },
           (pendingCount) => this.flushedSubject.next(pendingCount === 0)
@@ -405,7 +402,10 @@ export class Computer {
   getFunctionDefinition(_funcName: string): AST.FunctionDefinition | undefined {
     const blockId = this.latestVarNameToBlockMap.get(_funcName)?.id;
     const funcName = blockId ? getExprRef(blockId) : _funcName;
-    return this.computationRealm.inferContext.functionDefinitions.get(funcName);
+    const node = this.computationRealm.inferContext.stack.get(funcName)?.node;
+    return node
+      ? getOfType('function-definition', getDefined(node))
+      : undefined;
   }
 
   getFunctionDefinition$ = listenerHelper(this.results, (_, funcName: string) =>
@@ -723,7 +723,6 @@ export class Computer {
         _expression,
         this.latestVarNameToBlockMap
       );
-      const start = Date.now();
       const type = await inferExpression(
         this.computationRealm.interpreterRealm,
         expression
@@ -755,11 +754,6 @@ export class Computer {
             },
           },
         };
-      } finally {
-        const elapsedMs = Date.now() - start;
-        this.stats.pushComputerExpressionResultStat({
-          expressionResultElapsedTimeMs: elapsedMs,
-        });
       }
     });
   }

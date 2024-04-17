@@ -1,4 +1,4 @@
-import type { AnyMapping, PromiseOrType } from '@decipad/utils';
+import type { AnyMapping } from '@decipad/utils';
 
 /** Take a mapping of keys to values and join it. Used to join tables */
 export type StackNamespaceJoiner<T> = (
@@ -20,20 +20,14 @@ export type StackNamespaceRetrieverHackForTypesystemTables<T> = (
   container: T
 ) => T;
 
-export interface Stack<T> {
-  isInGlobalScope: boolean;
-  depth: number;
-  scopedToDepth(depth: number): Stack<T>;
+export interface TStackFrame<T> {
   isNameGlobal([ns, name]: readonly [string, string]): boolean;
   globalVariables: ReadonlyMap<string, T>;
-
-  availableVariables: ReadonlyMap<string, T>;
-
-  namespaces: Iterable<[string, ReadonlyMap<string, T>]>;
 
   getNamespace(ns: string): Map<string, T> | undefined;
   getNsNameFromId(id: string): readonly [string, string] | undefined;
   createNamespace(ns: string): void;
+  namespaces: Iterable<[string, ReadonlyMap<string, T>]>;
 
   set(varName: string, value: T | undefined, id?: string | undefined): void;
 
@@ -60,5 +54,7 @@ export interface Stack<T> {
     name: string
   ]): void;
 
-  withPush<T>(wrapper: () => PromiseOrType<T>): Promise<T>;
+  push(): TStackFrame<T>;
+
+  getVisibleScopes(): Generator<Map<string, Map<string, T>>>;
 }

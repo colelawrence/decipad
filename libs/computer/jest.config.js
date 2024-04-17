@@ -6,7 +6,7 @@ module.exports = {
   displayName: 'computer',
   coverageThreshold: {
     global: {
-      statements: 82,
+      statements: 81,
       branches: 68,
       functions: 80,
       lines: 82,

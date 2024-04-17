@@ -6,15 +6,15 @@ import { Value, InferError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin } from '@decipad/language-builtins';
 import { getIdentifierString } from '../utils';
-import type { Realm } from './Realm';
 import { getOfType } from '../parser/getOfType';
+import type { TRealm } from '../scopedRealm';
 
 // Gets a single value from a simple expression (literals and
 // zero-dimension builtin functions only) expanded AST.
 
 // eslint-disable-next-line consistent-return
 export async function simpleExpressionEvaluate(
-  realm: Realm,
+  realm: TRealm,
   node: AST.Statement
 ): Promise<Value.NumberValue> {
   switch (node.type) {

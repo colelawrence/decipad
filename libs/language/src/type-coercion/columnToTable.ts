@@ -8,10 +8,10 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import type { Realm } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
 const getColumnDimensionTypes = (
-  realm: Realm,
+  realm: TRealm,
   columnType: Type
 ): Array<[string, Type]> => {
   const { indexedBy } = columnType;
@@ -30,7 +30,7 @@ const getColumnDimensionTypes = (
 };
 
 const getColumnDimensions = (
-  realm: Realm,
+  realm: TRealm,
   columnType: Type
 ): Array<[string, Value.ColumnLikeValue]> => {
   const { indexedBy } = columnType;
@@ -50,7 +50,7 @@ const getColumnDimensions = (
   return [[sortedTable.columnNames[0], sortedTable.columns[0]]];
 };
 
-const columnToTableType = (realm: Realm, source: Type): Type => {
+const columnToTableType = (realm: TRealm, source: Type): Type => {
   const dimensions = getColumnDimensionTypes(realm, source);
   const columnNames = dimensions.map(([name]) => name);
   let columnName = 'Value';
@@ -68,7 +68,7 @@ const columnToTableType = (realm: Realm, source: Type): Type => {
 };
 
 const columnToTableValue = (
-  realm: Realm,
+  realm: TRealm,
   sourceType: Type,
   sourceValue: Value.Value
 ): Value.Table => {

@@ -5,8 +5,7 @@ import { c, col, l, U, u, ne, r, n, sortedTable, prop } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
-import { makeContext } from '../infer';
-import { Realm, runASTAndGetContext } from '..';
+import { ScopedRealm, makeInferContext, runASTAndGetContext } from '..';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -46,14 +45,14 @@ describe('getType', () => {
   });
 
   it('assigns the ref name as the target unit', async () => {
-    const ctx = makeContext();
+    const ctx = makeInferContext();
     ctx.stack.set(
       'nuno',
       t.number(U('g', { known: true, multiplier: N(1000) }))
     );
     const quantity = ne(2, 'ton');
     const ref = r('nuno');
-    const realm = new Realm(ctx);
+    const realm = new ScopedRealm(undefined, ctx);
     expect(await testGetType(getType, realm, quantity, ref)).toMatchObject(
       t.number(
         U(

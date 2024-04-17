@@ -181,7 +181,6 @@ export interface RemoteComputer {
   ): Promise<NotebookResults | null>;
 
   getUnitFromText(text: string): Promise<Unit.Unit[] | null>;
-  stats: ComputerStats;
 
   // flush
   flush(): Promise<void>;

@@ -5,13 +5,13 @@ import { RuntimeError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { singular } from '@decipad/language-utils';
 import { columnToTable } from './columnToTable';
-import type { Realm } from '../interpreter';
 import { treeToTable } from './treeToTable';
+import type { TRealm } from '../scopedRealm';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());
 
 export const coerceValue = async (
-  realm: Realm,
+  realm: TRealm,
   sourceType: Type,
   sourceValue: Value.Value,
   _target: string

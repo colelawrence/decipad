@@ -1,28 +1,15 @@
-import type { AnyReadonlyMapping, PromiseOrType } from '@decipad/utils';
+import type { AnyReadonlyMapping } from '@decipad/utils';
 import { anyMappingToMap, getDefined, identity } from '@decipad/utils';
 import type {
-  Stack,
   StackNamespaceJoiner,
   StackNamespaceRetrieverHackForTypesystemTables,
   StackNamespaceSplitter,
+  TStackFrame,
 } from './types';
 
-/**
- * Holds scopes, which are maps of variable names to things like Type,
- * Value or whatever!
- *
- * Split into a global scope (always present and visible) and temporary scopes,
- * which you can .push and .pop from as you go into and out of tables or
- * other places where names are temporarily defined.
- *
- * When calling a function, use .pushFunction and .popFunction to replace the
- * temporary scopes and leave only the global variables and a local scope available.
- */
-export class StackImpl<T> {
-  private globalScope: Map<string, Map<string, T>>;
-
-  /** Non-call scopes that can be pushed and popped. Used within tables for storing column names */
-  private temporaryScopes: Map<string, Map<string, T>>[];
+export class StackFrame<T> implements TStackFrame<T> {
+  private parent?: TStackFrame<T>;
+  private bindings: Map<string, Map<string, T>>;
   private namespaceJoiner: StackNamespaceJoiner<T>;
   private namespaceSplitter: StackNamespaceSplitter<T>;
   private namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T>;
@@ -30,52 +17,45 @@ export class StackImpl<T> {
   private idMap = new Map<string, readonly [string, string]>();
 
   constructor(
-    initialGlobalScope: AnyReadonlyMapping<T> | undefined,
+    parent: TStackFrame<T> | undefined,
+    initialBindings: AnyReadonlyMapping<T> | undefined,
     namespaceJoiner: StackNamespaceJoiner<T>,
     namespaceSplitter: StackNamespaceSplitter<T>,
-    namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T> = identity,
-    temporaryScopes: Map<string, Map<string, T>>[] = []
+    namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T> = identity
   ) {
-    this.globalScope = new Map([
-      ['', anyMappingToMap(initialGlobalScope ?? new Map())],
+    this.parent = parent;
+    this.bindings = new Map([
+      ['', anyMappingToMap(initialBindings ?? new Map())],
     ]);
-    this.temporaryScopes = temporaryScopes;
     this.namespaceJoiner = namespaceJoiner;
     this.namespaceSplitter = namespaceSplitter;
     this.namespaceRetriever = namespaceRetriever;
   }
 
-  private *getVisibleScopes() {
-    for (let i = this.temporaryScopes.length - 1; i >= 0; i--) {
-      yield this.temporaryScopes[i];
+  *getVisibleScopes(): Generator<Map<string, Map<string, T>>> {
+    yield this.bindings;
+    if (this.parent) {
+      yield* this.parent.getVisibleScopes();
     }
-    yield this.globalScope;
   }
 
-  private getAssignmentScope() {
-    if (this.temporaryScopes.length) {
-      return this.temporaryScopes[this.temporaryScopes.length - 1];
+  isNameGlobal(fullName: readonly [string, string]): boolean {
+    if (!this.hasNamespaced(fullName)) {
+      return false;
     }
-    return this.globalScope;
-  }
-
-  get isInGlobalScope() {
-    return !this.temporaryScopes.length;
-  }
-
-  isNameGlobal([ns, name]: readonly [string, string]) {
-    for (const scope of this.getVisibleScopes()) {
-      if ((ns === '' && scope.has(name)) || scope.get(ns)?.has(name)) {
-        return scope === this.globalScope;
-      }
+    if (!this.parent) {
+      return true;
     }
-    return false;
+    return !this.hasNamespacedLocalOnly(fullName);
   }
 
   get globalVariables(): ReadonlyMap<string, T> {
+    if (this.parent) {
+      return this.parent.globalVariables;
+    }
     const out = new Map<string, T>();
 
-    for (const [ns, scope] of this.globalScope.entries()) {
+    for (const [ns, scope] of this.bindings.entries()) {
       if (ns !== '') out.set(ns, this.namespaceJoiner(scope, ns));
       else {
         for (const [key, val] of scope.entries()) {
@@ -103,28 +83,6 @@ export class StackImpl<T> {
     return out;
   }
 
-  get depth(): number {
-    return this.temporaryScopes.length;
-  }
-
-  scopedToDepth(depth: number) {
-    return new StackImpl(
-      this.globalVariables,
-      this.namespaceJoiner as StackNamespaceJoiner<T>,
-      this.namespaceSplitter,
-      this.namespaceRetriever,
-      this.temporaryScopes.slice(0, depth)
-    );
-  }
-
-  get namespaces(): Iterable<[string, ReadonlyMap<string, T>]> {
-    return (function* getNs(globals) {
-      for (const [ns, items] of globals.entries()) {
-        if (ns !== '') yield [ns, items];
-      }
-    })(this.globalScope);
-  }
-
   getNamespace(ns: string) {
     for (const scope of this.getVisibleScopes()) {
       const namespace = scope.get(ns);
@@ -139,11 +97,18 @@ export class StackImpl<T> {
   }
 
   createNamespace(ns: string) {
-    const scope = this.getAssignmentScope();
-    if (scope.get('')?.get(ns)) {
-      throw new Error(`panic: cannot create the namespace ${ns}`);
+    if (!this.bindings.has(ns)) this.bindings.set(ns, new Map());
+  }
+
+  get namespaces(): Iterable<[string, ReadonlyMap<string, T>]> {
+    if (this.parent) {
+      return this.parent.namespaces;
     }
-    if (!scope.has(ns)) scope.set(ns, new Map());
+    return (function* getNs(globals) {
+      for (const [ns, items] of globals.entries()) {
+        if (ns !== '') yield [ns, items];
+      }
+    })(this.bindings);
   }
 
   set(
@@ -172,14 +137,14 @@ export class StackImpl<T> {
       return;
     }
 
-    if (id && this.isInGlobalScope && !this.temporaryScopes.length) {
+    if (id && this.parent == null) {
       // Only set the ID if we're not in a global scope
       if (ns || name !== id) {
         this.idMap.set(id, [ns, name]);
       }
     }
 
-    const map = this.getAssignmentScope();
+    const map = this.bindings;
 
     let subMap = map.get(ns);
     if (!subMap) {
@@ -198,12 +163,22 @@ export class StackImpl<T> {
     return this.hasNamespaced(['', varName]);
   }
 
-  hasNamespaced([ns, name]: [namespace: string, name: string]) {
+  hasNamespaced([ns, name]: readonly [namespace: string, name: string]) {
     for (const scope of this.getVisibleScopes()) {
       if (ns === '' && scope.has(name)) return true;
       if (scope.get(ns)?.has(name)) return true;
     }
     return false;
+  }
+
+  hasNamespacedLocalOnly([ns, name]: readonly [
+    namespace: string,
+    name: string
+  ]) {
+    return (
+      (ns === '' && this.bindings.has(name)) ||
+      (this.bindings.get(ns)?.has(name) ?? false)
+    );
   }
 
   get(varName: string, depth = 0) {
@@ -257,14 +232,14 @@ export class StackImpl<T> {
     }
   }
 
-  async withPush<T>(wrapper: () => PromiseOrType<T>): Promise<T> {
-    this.temporaryScopes.push(new Map());
-
-    try {
-      return await wrapper();
-    } finally {
-      getDefined(this.temporaryScopes.pop());
-    }
+  push(): TStackFrame<T> {
+    return new StackFrame(
+      this,
+      undefined,
+      this.namespaceJoiner,
+      this.namespaceSplitter,
+      this.namespaceRetriever
+    );
   }
 }
 
@@ -272,9 +247,13 @@ export const createStack = <T>(
   initialGlobalScope: AnyReadonlyMapping<T> | undefined,
   namespaceJoiner: StackNamespaceJoiner<T>,
   namespaceSplitter: StackNamespaceSplitter<T>,
-  namespaceRetriever?: StackNamespaceRetrieverHackForTypesystemTables<T>
-): Stack<T> =>
-  new StackImpl(
+  namespaceRetriever?:
+    | StackNamespaceRetrieverHackForTypesystemTables<T>
+    | undefined,
+  parentStack?: TStackFrame<T> | undefined
+): StackFrame<T> =>
+  new StackFrame(
+    parentStack,
     initialGlobalScope,
     namespaceJoiner,
     namespaceSplitter,

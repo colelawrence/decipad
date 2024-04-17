@@ -1,8 +1,9 @@
 import stringify from 'json-stringify-safe';
-import type { Stack } from './index';
+import type { TStackFrame } from './index';
 import { createStack } from './index';
+import type { StackFrame } from './Stack';
 
-let stack: Stack<string>;
+let stack: StackFrame<string>;
 beforeEach(() => {
   stack = createStack(
     undefined,
@@ -20,11 +21,9 @@ beforeEach(() => {
 });
 
 it('can push and pop contexts', async () => {
-  await stack.withPush(() => {
-    stack.set('variable', '1');
-    expect(stack.get('variable')).toEqual('1');
-  });
-
+  const stack2 = stack.push();
+  stack2.set('variable', '1');
+  expect(stack2.get('variable')).toEqual('1');
   expect(stack.get('variable')).toEqual(null);
 });
 
@@ -33,19 +32,18 @@ it('can check if names are global', async () => {
   stack.set('globalVariable', '1');
   stack.setNamespaced(['Table', 'Column'], '1');
 
-  await stack.withPush(() => {
-    expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
-    expect(stack.isNameGlobal(['', 'globalVariable'])).toEqual(true);
-    expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(true);
-    expect(stack.isNameGlobal(['', 'Table'])).toEqual(true);
+  const stack2 = stack.push();
+  expect(stack2.isNameGlobal(['', 'variable'])).toEqual(true);
+  expect(stack2.isNameGlobal(['', 'globalVariable'])).toEqual(true);
+  expect(stack2.isNameGlobal(['Table', 'Column'])).toEqual(true);
+  expect(stack2.isNameGlobal(['', 'Table'])).toEqual(true);
 
-    stack.set('variable', '1');
-    stack.setNamespaced(['Table', 'Column'], '1', 'lexical');
+  stack2.set('variable', '1');
+  stack2.setNamespaced(['Table', 'Column'], '1', 'lexical');
 
-    expect(stack.isNameGlobal(['', 'variable'])).toEqual(false);
-    expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(false);
-    expect(stack.isNameGlobal(['', 'Table'])).toEqual(false);
-  });
+  expect(stack2.isNameGlobal(['', 'variable'])).toEqual(false);
+  expect(stack2.isNameGlobal(['Table', 'Column'])).toEqual(false);
+  expect(stack2.isNameGlobal(['', 'Table'])).toEqual(false);
 
   expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
   expect(stack.isNameGlobal(['', 'Table'])).toEqual(true);
@@ -58,29 +56,26 @@ it('can delete variables', () => {
   expect(stack.get('someVar')).toEqual(null);
 });
 
-it('checks for the presence of a variable', async () => {
+it('checks for the presence of a variable', () => {
   stack.set('GlobalScope', '1');
-  await stack.withPush(() => {
-    stack.set('InnerScope', '2');
+  const stack2 = stack.push();
+  stack2.set('InnerScope', '2');
 
-    expect(stack.has('InnerScope')).toEqual(true);
-    expect(stack.has('GlobalScope')).toEqual(true);
-    expect(stack.has('MissingVar')).toEqual(false);
-  });
+  expect(stack2.has('InnerScope')).toEqual(true);
+  expect(stack2.has('GlobalScope')).toEqual(true);
+  expect(stack2.has('MissingVar')).toEqual(false);
 });
 
 it('can push a function call', async () => {
   stack.set('name', 'value1');
 
-  await stack.withPush(async () => {
-    stack.set('name', 'value2');
+  const stack2 = stack.push();
+  stack2.set('name', 'value2');
 
-    await stack.withPush(() => {
-      expect(stack.get('name')).toEqual('value2');
-    });
+  const stack3 = await stack2.push();
+  expect(stack3.get('name')).toEqual('value2');
 
-    expect(stack.get('name')).toEqual('value2');
-  });
+  expect(stack2.get('name')).toEqual('value2');
   expect(stack.get('name')).toEqual('value1');
 });
 
@@ -125,9 +120,9 @@ it('can expand an empty namespace', () => {
 });
 
 describe('scope modifiers', () => {
-  const getHas = (name: string) => {
-    const has = stack.has(name);
-    const val = stack.get(name);
+  const getHas = (stackFrame: TStackFrame<string>, name: string) => {
+    const has = stackFrame.has(name);
+    const val = stackFrame.get(name);
 
     // Existence should equal .has() return
     expect(has).toEqual(val != null);
@@ -135,47 +130,42 @@ describe('scope modifiers', () => {
     return val;
   };
 
-  it('can have a duplicate variable at multiple scopes', async () => {
+  it('can have a duplicate variable at multiple scopes', () => {
     stack.set('Duplicate', 'Global', 'global');
 
-    expect(getHas('Duplicate')).toEqual('Global');
+    expect(getHas(stack, 'Duplicate')).toEqual('Global');
 
-    await stack.withPush(() => {
-      stack.set('Duplicate', 'lexical', 'lexical');
+    const stack2 = stack.push();
+    stack2.set('Duplicate', 'lexical', 'lexical');
 
-      expect(getHas('Duplicate')).toEqual('lexical');
-    });
+    expect(getHas(stack2, 'Duplicate')).toEqual('lexical');
 
-    await stack.withPush(async () => {
-      stack.set('Duplicate', 'Function', 'lexical');
+    const stack3 = stack.push();
+    stack3.set('Duplicate', 'Function', 'lexical');
 
-      expect(getHas('Duplicate')).toEqual('Function');
+    expect(getHas(stack3, 'Duplicate')).toEqual('Function');
 
-      await stack.withPush(() => {
-        stack.set('Duplicate', 'lexical', 'lexical');
+    const stack4 = stack.push();
+    stack4.set('Duplicate', 'lexical', 'lexical');
 
-        expect(getHas('Duplicate')).toEqual('lexical');
-      });
-    });
+    expect(getHas(stack4, 'Duplicate')).toEqual('lexical');
 
-    expect(getHas('Duplicate')).toEqual('Global');
+    expect(getHas(stack, 'Duplicate')).toEqual('Global');
   });
 
-  it('can set variables into other scopes', async () => {
-    await stack.withPush(async () => {
-      await stack.withPush(() => {
-        stack.set('Global', 'Global', 'global');
-        stack.set('Lexical', 'Lexical', 'lexical');
-      });
+  it('can set variables into other scopes', () => {
+    const stack2 = stack.push();
+    const stack3 = stack2.push();
+    stack3.set('Global', 'Global', 'global');
+    stack3.set('Lexical', 'Lexical', 'lexical');
 
-      expect(getHas('Lexical')).toEqual(null);
-      expect(getHas('Global')).toEqual(null);
-    });
+    expect(getHas(stack2, 'Lexical')).toEqual(null);
+    expect(getHas(stack2, 'Global')).toEqual(null);
 
     // Cleaned up
-    expect(getHas('lexical')).toEqual(null);
-    expect(getHas('Function')).toEqual(null);
-    expect(getHas('Function')).toEqual(null);
+    expect(getHas(stack, 'lexical')).toEqual(null);
+    expect(getHas(stack, 'Function')).toEqual(null);
+    expect(getHas(stack, 'Function')).toEqual(null);
   });
 });
 

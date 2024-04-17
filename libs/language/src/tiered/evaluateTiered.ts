@@ -9,12 +9,13 @@ import {
   Value,
   convertBetweenUnits,
 } from '@decipad/language-types';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { predicateSymbols } from './inferTiered';
 import { cleanInferred } from './cleanInferred';
 import { getDefined, getInstanceof } from '@decipad/utils';
+import { withPush, type TRealm } from '../scopedRealm';
+import { prettyPrintAST } from '../parser/utils';
 
 const maybeConvertBetweenUnits = (
   f: DeciNumber,
@@ -73,24 +74,29 @@ const collectDefs = (tierDefs: AST.TieredDef[]) => {
 };
 
 const evaluateTier = async (
-  realm: Realm,
+  _realm: TRealm,
   tierValueExp: AST.Expression,
   tierSize: DeciNumber,
   tierResultType: Type
-): Promise<DeciNumber> => {
-  const tierValueType = cleanInferred(getDefined(tierValueExp.inferredType));
-  const tierSizeValue = Value.NumberValue.fromValue(tierSize);
-  const tierValue = await realm.withPush(async () => {
-    realm.stack.set('tier', tierSizeValue);
-    realm.stack.set('slice', tierSizeValue);
-    return evaluate(realm, tierValueExp);
-  });
-  return maybeConvertBetweenUnits(
-    getInstanceof(await tierValue.getData(), DeciNumber),
-    tierValueType.unit,
-    tierResultType.unit
+): Promise<DeciNumber> =>
+  withPush(
+    _realm,
+    async (realm) => {
+      const tierValueType = cleanInferred(
+        getDefined(tierValueExp.inferredType)
+      );
+      const tierSizeValue = Value.NumberValue.fromValue(tierSize);
+      realm.stack.set('tier', tierSizeValue);
+      realm.stack.set('slice', tierSizeValue);
+      const tierValue = await evaluate(realm, tierValueExp);
+      return maybeConvertBetweenUnits(
+        getInstanceof(await tierValue.getData(), DeciNumber),
+        tierValueType.unit,
+        tierResultType.unit
+      );
+    },
+    `evaluate tier ${prettyPrintAST(tierValueExp)}`
   );
-};
 
 interface IterateTierResult {
   slice: DeciNumber;
@@ -99,7 +105,7 @@ interface IterateTierResult {
 }
 
 const iterateTier = async (
-  realm: Realm,
+  realm: TRealm,
   globalTierSizeType: Type,
   tierResultType: Type,
   tier: Tier,
@@ -136,7 +142,7 @@ const iterateTier = async (
 };
 
 export const evaluateTiered = async (
-  realm: Realm,
+  realm: TRealm,
   node: AST.Tiered
 ): Promise<Value.Value> => {
   const [initial, ...tierDefs] = node.args;

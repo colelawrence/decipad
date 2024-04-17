@@ -6,12 +6,12 @@ import { serializeType, buildType as t } from '@decipad/language-types';
 import { singular } from '@decipad/language-utils';
 import { columnToTable } from './columnToTable';
 import { treeToTable } from './treeToTable';
-import type { Realm } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());
 
 export const coerceType = async (
-  realm: Realm,
+  realm: TRealm,
   source: Type,
   _target: string
 ): Promise<Type> => {

@@ -1,4 +1,3 @@
-import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
 import {
   type Result,
@@ -30,10 +29,9 @@ export const makeRecursiveTreeValue = async (
   // calculate the sort map for the first column
   const firstColumnSortMap = await sortMap(firstColumn, compare);
   // apply this sort map to all the columns
-  const sortedColumns = await pSeries(
-    table.columns.map(
-      (column) => () =>
-        Value.MappedColumn.fromColumnValueAndMap(column, firstColumnSortMap)
+  const sortedColumns = await Promise.all(
+    table.columns.map((column) =>
+      Value.MappedColumn.fromColumnValueAndMap(column, firstColumnSortMap)
     )
   );
   const [firstSortedColumn, ...restSortedColumns] = sortedColumns;
@@ -46,8 +44,8 @@ export const makeRecursiveTreeValue = async (
   const firstColumnName = getDefined(tableType.columnNames)[0];
 
   // create all the children slices, which will later constitute the children nodes
-  const childrenSlices = await pSeries(
-    slicesMap.map(([start, end]) => async () => {
+  const childrenSlices = await Promise.all(
+    slicesMap.map(async ([start, end]) => {
       const slicedFirstColumn = Value.Column.fromGenerator(() =>
         firstColumn.values(start, end + 1)
       );
@@ -72,25 +70,24 @@ export const makeRecursiveTreeValue = async (
 
   const childrenColumnNames = table.columnNames.slice(1);
   // children nodes, one for each slice
-  const children = await pSeries(
+  const children = await Promise.all(
     childrenSlices.map(
-      ({ root, childColumns, originalCardinality, rootAggregation }) =>
-        async () =>
-          makeRecursiveTreeValue(
-            fullTable,
-            await root.getData(),
-            rootAggregation,
-            originalCardinality,
-            Value.Table.fromNamedColumns(childColumns, childrenColumnNames),
-            // create a new table type for the children so that we can recurse into them
-            buildType.table({
-              indexName: tableType.indexName,
-              columnNames: childrenColumnNames,
-              columnTypes: getDefined(tableType.columnTypes).slice(1),
-            }),
-            aggregations,
-            ctx
-          )
+      async ({ root, childColumns, originalCardinality, rootAggregation }) =>
+        makeRecursiveTreeValue(
+          fullTable,
+          await root.getData(),
+          rootAggregation,
+          originalCardinality,
+          Value.Table.fromNamedColumns(childColumns, childrenColumnNames),
+          // create a new table type for the children so that we can recurse into them
+          buildType.table({
+            indexName: tableType.indexName,
+            columnNames: childrenColumnNames,
+            columnTypes: getDefined(tableType.columnTypes).slice(1),
+          }),
+          aggregations,
+          ctx
+        )
     )
   );
 
@@ -99,24 +96,18 @@ export const makeRecursiveTreeValue = async (
     rootAggregation,
     children,
     // each tree contains the column values (properly sliced) and their aggregation
-    await pSeries(
-      table.columnNames.map(
-        (columnName, columnIndex) =>
-          async (): Promise<{
-            name: string;
-            aggregation: Result.Result | undefined;
-          }> => ({
-            name: columnName,
-            aggregation: await maybeAggregateColumn(
-              ctx,
-              fullTable,
-              columnName,
-              sortedColumns[columnIndex],
-              tableType?.columnTypes?.[columnIndex],
-              aggregations
-            ),
-          })
-      )
+    await Promise.all(
+      table.columnNames.map(async (columnName, columnIndex) => ({
+        name: columnName,
+        aggregation: await maybeAggregateColumn(
+          ctx,
+          fullTable,
+          columnName,
+          sortedColumns[columnIndex],
+          tableType?.columnTypes?.[columnIndex],
+          aggregations
+        ),
+      }))
     ),
     originalCardinality
   );

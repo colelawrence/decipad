@@ -7,9 +7,9 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import { type Realm } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
-const treeToTableType = (_realm: Realm, source: Type): Type => {
+const treeToTableType = (_realm: TRealm, source: Type): Type => {
   const columnTypes = getDefined(source.tree);
   const columnNames = fixColumnNames(getDefined(source.columnNames));
   return t.table({
@@ -108,7 +108,7 @@ const treeToColumnsValue = async (
 };
 
 const treeToTableValue = async (
-  _realm: Realm,
+  _realm: TRealm,
   sourceType: Type,
   sourceValue: Value.Value
 ): Promise<Value.Table> => {

@@ -3,7 +3,6 @@ import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate-common';
-import { editorStatsStore } from '@decipad/react-contexts';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
 
@@ -169,14 +168,6 @@ export const withUpdateComputerOverride =
       maybeCompute();
       onChange();
     };
-
-    // push statistics from computer into the notebook state
-    computer.stats.computerRequestStat$.subscribe((newStats) => {
-      editorStatsStore.getState().pushComputerRequestStat(newStats);
-    });
-    computer.stats.computerExpressionResultStat$.subscribe((newStats) => {
-      editorStatsStore.getState().pushComputerExpressionResultStat(newStats);
-    });
 
     maybeCompute();
 

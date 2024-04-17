@@ -2,16 +2,16 @@
 import type { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
-import { inferStatement, makeContext } from '../infer';
+import { inferStatement } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
 import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
-import { Realm } from '../interpreter';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 
-const nilCtx = makeContext({
+const nilCtx = makeInferContext({
   initialGlobalScope: new Map([['SomeCol', t.column(t.number())]]),
 });
-const nilRealm = new Realm(nilCtx);
+const nilRealm = new ScopedRealm(undefined, nilCtx);
 nilCtx.stack.setNamespaced(
   ['SomeExistingTable', 'Col'],
   t.column(t.number(), 'SomeExistingTable'),
@@ -23,8 +23,8 @@ it('puts column types in ether', async () => {
   const col2 = n('table-column', n('coldef', 'ColA'), col(3, 4));
   const tbl = n('table', n('tabledef', 'tbl'), col1, col2);
 
-  const ctx = makeContext();
-  const realm = new Realm(ctx);
+  const ctx = makeInferContext();
+  const realm = new ScopedRealm(undefined, ctx);
   await inferStatement(realm, tbl);
   expect(col1.inferredType).toBeDefined();
   expect(col2.inferredType).toBeDefined();
@@ -41,7 +41,7 @@ it('allows empty tables', async () => {
 describe('table with formulae', () => {
   const testComputed = async (expression: AST.Expression) =>
     inferTableColumnPerCell(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       objectToMap({ OtherColumn: t.number() }),
       expression
     );

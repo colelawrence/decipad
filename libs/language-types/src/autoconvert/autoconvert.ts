@@ -1,5 +1,4 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
-import pSeries from 'p-series';
 import { ONE } from '@decipad/number';
 import type { Unit } from '@decipad/language-units';
 import {
@@ -45,8 +44,8 @@ const crossBaseConvert = async (
   typeAndValues: Array<TypeAndValue>
 ): Promise<Value[]> => {
   const consumedUnits = new Set<Unit.Unit>();
-  return pSeries(
-    typeAndValues.map(([sourceType, value]) => async () => {
+  return Promise.all(
+    typeAndValues.map(async ([sourceType, value]) => {
       const { unit: sourceUnits } = sourceType;
       if (sourceUnits == null) {
         return value;

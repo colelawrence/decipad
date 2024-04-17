@@ -12,17 +12,16 @@ import {
   inferMatrixRef,
   inferMatrixAssign,
 } from '.';
-import type { Context } from '..';
-import { makeContext } from '..';
-import { Realm } from '../interpreter';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
+import type { ScopedInferContext } from '../scopedRealm';
+import { makeInferContext, ScopedRealm } from '../scopedRealm';
 
 setupDeciNumberSnapshotSerializer();
 
-let testRealm: Realm;
-let testContext: Context;
+let testRealm: ScopedRealm;
+let testContext: ScopedInferContext;
 beforeEach(() => {
-  testContext = makeContext({
+  testContext = makeInferContext({
     initialGlobalScope: {
       City: t.column(t.string(), 'City'),
       OtherDimension: t.column(t.string(), 'OtherDimension'),
@@ -30,7 +29,7 @@ beforeEach(() => {
     },
   });
 
-  testRealm = new Realm(testContext);
+  testRealm = new ScopedRealm(undefined, testContext);
   testRealm.stack.set('City', Value.fromJS(['Lisbon', 'Faro']));
   testRealm.stack.set('CoffeePrice', Value.fromJS([70, 90]));
 });

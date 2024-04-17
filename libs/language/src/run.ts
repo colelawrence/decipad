@@ -1,13 +1,18 @@
 import stringify from 'json-stringify-safe';
-import type { AnyMapping } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { AST, Result, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult } from '@decipad/language-types';
-import { isExpression, prettyPrintAST, validateResult } from '.';
-import type { Context } from './infer';
-import { inferBlock, makeContext } from './infer';
-import { Realm, run } from './interpreter';
+import type { ExternalDataMap, TRealm, TScopedInferContext } from '.';
+import {
+  ScopedRealm,
+  isExpression,
+  makeInferContext,
+  prettyPrintAST,
+  validateResult,
+} from '.';
+import { inferBlock } from './infer';
+import { run } from './interpreter';
 import { parseBlock } from './parser';
 
 export const parseBlockOrThrow = (
@@ -55,9 +60,9 @@ export const parseExpressionOrThrow = (
 };
 
 interface RunAstOptions {
-  externalData?: AnyMapping<Result.Result>;
-  ctx?: Context;
-  realm?: Realm;
+  externalData?: ExternalDataMap;
+  ctx?: TScopedInferContext;
+  realm?: TRealm;
   throwOnError?: boolean;
   doNotValidateResults?: boolean;
   doNotMaterialiseResults?: boolean;
@@ -68,22 +73,22 @@ export interface RunAstResult {
   value: Result.OneResult;
 }
 export type RunAstAndGetContextResult = RunAstResult & {
-  context: Context;
-  realm: Realm;
+  context: TScopedInferContext;
+  realm: TRealm;
 };
 
 export const runASTAndGetContext = async (
   block: AST.Block,
   {
     externalData,
-    ctx = makeContext({ externalData }),
+    ctx = makeInferContext({ externalData }),
     realm: _realm,
     throwOnError,
     doNotValidateResults,
     doNotMaterialiseResults,
   }: RunAstOptions = {}
 ): Promise<RunAstAndGetContextResult> => {
-  const realm = _realm || new Realm(ctx);
+  const realm = _realm || new ScopedRealm(undefined, ctx);
   const type = await inferBlock(block, realm);
 
   const erroredType = type.errorCause != null ? type : null;

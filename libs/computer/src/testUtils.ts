@@ -112,17 +112,6 @@ export const program = testBlocks(
 
 export const deeperProgram = testBlocks(...program, 'C = B1', 'D = C');
 
-export const implicitDepProgram = testBlocks(
-  'A = 1',
-  'Unused = 123',
-  '1',
-  '_ + B1',
-  'C = _',
-  'D = _',
-  'E = C',
-  'F = A'
-);
-
 export const pillProgram = testBlocks('A = 1', 'exprRef_block_0');
 
 export const programContainingReassign = testBlocks('A = 1', 'A = 2');

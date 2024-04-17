@@ -11,10 +11,10 @@ import {
   Time,
   Value,
 } from '@decipad/language-types';
-import type { Realm } from '..';
 import { getIdentifierString } from '../utils';
 import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
 import { getOfType } from '../parser/getOfType';
+import type { TRealm } from '../scopedRealm';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 
@@ -138,9 +138,9 @@ export const getDateSequenceIncrement = (
 
 // eslint-disable-next-line complexity
 export const inferSequence = async (
-  realm: Realm,
+  realm: TRealm,
   expr: AST.Sequence,
-  inferExpression: (realm: Realm, expr: AST.Expression) => Promise<Type>
+  inferExpression: (realm: TRealm, expr: AST.Expression) => Promise<Type>
 ): Promise<Type> => {
   const [startN, endN, byN] = expr.args;
   const startType = await inferExpression(realm, startN);

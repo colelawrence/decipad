@@ -2,7 +2,6 @@ import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { materializeOneResult } from '@decipad/language-types';
 import { runAST } from '..';
 import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
 
@@ -29,11 +28,8 @@ describe('evaluateTableColumn', () => {
       prop('Table', 'theTestColumn')
     );
 
-    return (await materializeOneResult(
-      (
-        await runAST(testBlock, { doNotValidateResults: false })
-      ).value
-    )) as Array<unknown>;
+    return (await runAST(testBlock, { doNotValidateResults: false }))
+      .value as Array<unknown>;
   };
 
   it('can emulate a quadratic function', async () => {

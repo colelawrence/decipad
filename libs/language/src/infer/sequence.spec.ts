@@ -3,12 +3,11 @@ import { buildType as t } from '@decipad/language-types';
 import { inferExpression } from '.';
 import { l, n, seq, date } from '../utils';
 
-import { makeContext } from './context';
 import { inferSequence } from './sequence';
-import { Realm } from '../interpreter/Realm';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 
-const nilCtx = makeContext();
-const nilRealm = new Realm(nilCtx);
+const nilCtx = makeInferContext();
+const nilRealm = new ScopedRealm(undefined, nilCtx);
 
 it('infers sequences of numbers', async () => {
   expect(

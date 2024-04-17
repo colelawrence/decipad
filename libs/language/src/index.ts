@@ -24,17 +24,16 @@ export {
   inferExpression,
   inferProgram,
   inferStatement,
-  makeContext,
   initialInferStats,
 } from './infer';
-export type { Context, ContextStats } from './infer';
 export { tableValueToTableResultValue } from './value';
 export {
   evaluateStatement,
-  Realm,
   runBlock,
   initialInterpreterStats,
+  functionCallValue,
 } from './interpreter';
+export * from './scopedRealm';
 export type { InterpreterStats } from './interpreter';
 export {
   parse,
@@ -43,10 +42,10 @@ export {
   parseStatement,
   parseExpression,
   Parser,
+  getOfType,
   SyntaxError,
 } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export { previousRefSymbols } from './previous-ref';
 export { serializeResult } from './result';
 export { validateResult } from './validateResult';
 export * from './run';
@@ -63,7 +62,7 @@ export { buildResult } from './utils/buildResult';
 export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';
 
-export type ExternalDataMap = Map<string, Result.Result>;
+export type ExternalDataMap = ReadonlyMap<string, Result.Result>;
 
 export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';

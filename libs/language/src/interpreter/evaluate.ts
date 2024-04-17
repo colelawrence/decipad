@@ -1,12 +1,12 @@
-import pSeries from 'p-series';
+/* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { RuntimeError, Unit, Value } from '@decipad/language-types';
+import { Unit, Value } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
-import { type TRealm } from './types';
+import type { TRealm, TScopedRealm } from '..';
 import { prettyPrintAST } from '..';
 import { getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
@@ -14,7 +14,6 @@ import { expandDirectiveToValue } from '../directives';
 import { columnFromDateSequence, columnFromSequence } from '../value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { getDateSequenceIncrement } from '../infer/sequence';
-import { isPreviousRef } from '../previous-ref';
 import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
 import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
@@ -25,6 +24,7 @@ import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';
+import { scopedToDepthAndWithPush } from '../scopedRealm/ScopedRealm';
 
 // Gets a single value from an expanded AST.
 
@@ -68,12 +68,6 @@ async function internalEvaluate(
     }
     case 'ref': {
       const identifier = getIdentifierString(node);
-      if (isPreviousRef(identifier)) {
-        if (realm.previousStatementValue == null) {
-          throw new RuntimeError('No previous value');
-        }
-        return realm.previousStatementValue;
-      }
       const c = getConstantByName(identifier);
       if (c) {
         return c.value;
@@ -99,53 +93,56 @@ async function internalEvaluate(
 
       if (isPrevious(funcName)) {
         const defaultValue = await evaluate(realm, funcArgs[0]);
-        if (realm.previousRow === null) {
+        if (realm.previousRow == null) {
           return defaultValue;
         }
 
         if (funcArgs.length < 2) {
-          return getDefined(
-            realm.previousRow.get(CURRENT_COLUMN_SYMBOL),
-            'no previous value'
-          );
+          return realm.previousRow.get(CURRENT_COLUMN_SYMBOL) ?? defaultValue;
         }
         const previousExpression: AST.Expression = funcArgs[1];
 
         return usingPrevious(realm, previousExpression, evaluate);
-      } else if (realm.functions.has(funcName)) {
-        const args = await pSeries(
-          funcArgs.map((arg) => async () => evaluate(realm, arg))
+      } else if (realm.inferContext.stack.has(funcName)) {
+        const args = await Promise.all(
+          funcArgs.map(async (arg) => evaluate(realm, arg))
         );
-        const customFunc = getDefined(realm.functions.get(funcName));
-        const functionType = realm.getTypeAt(customFunc);
-        return realm.scopedToDepth(
+        const functionType = getDefined(realm.inferContext.stack.get(funcName));
+        const customFunc = getOfType(
+          'function-definition',
+          getDefined(
+            functionType?.node,
+            `could not find function definition node for function "${funcName}"`
+          )
+        );
+        return scopedToDepthAndWithPush(
+          realm,
           functionType.functionScopeDepth ?? 0,
-          async () => {
-            return realm.withPush(async () => {
-              for (let i = 0; i < args.length; i++) {
-                const argName = getIdentifierString(customFunc.args[1].args[i]);
+          `function call ${funcName}`,
+          async (newRealm) => {
+            for (let i = 0; i < args.length; i++) {
+              const argName = getIdentifierString(customFunc.args[1].args[i]);
 
-                realm.stack.set(argName, args[i]);
+              newRealm.stack.set(argName, args[i]);
+            }
+
+            const funcBody: AST.Block = customFunc.args[2];
+
+            for (let i = 0; i < funcBody.args.length; i++) {
+              // eslint-disable-next-line no-await-in-loop
+              const value = await evaluate(newRealm, funcBody.args[i]);
+
+              if (i === funcBody.args.length - 1) {
+                return value;
               }
+            }
 
-              const funcBody: AST.Block = customFunc.args[2];
-
-              for (let i = 0; i < funcBody.args.length; i++) {
-                // eslint-disable-next-line no-await-in-loop
-                const value = await evaluate(realm, funcBody.args[i]);
-
-                if (i === funcBody.args.length - 1) {
-                  return value;
-                }
-              }
-
-              throw new Error('function is empty');
-            });
+            throw new Error('function is empty');
           }
         );
       } else {
-        const args = await pSeries(
-          funcArgs.map((arg) => async () => evaluate(realm, arg))
+        const args = await Promise.all(
+          funcArgs.map(async (arg) => evaluate(realm, arg))
         );
         const argTypes = funcArgs.map((arg) =>
           getDefined(
@@ -158,8 +155,8 @@ async function internalEvaluate(
       }
     }
     case 'range': {
-      const [start, end] = await pSeries(
-        node.args.map((arg) => async () => evaluate(realm, getDefined(arg)))
+      const [start, end] = await Promise.all(
+        node.args.map(async (arg) => evaluate(realm, getDefined(arg)))
       );
 
       return Value.Range.fromBounds(start, end);
@@ -200,8 +197,8 @@ async function internalEvaluate(
       return Value.DateValue.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
-      const values: Value.Value[] = await pSeries(
-        node.args[0].args.map((v) => async () => evaluate(realm, v))
+      const values: Value.Value[] = await Promise.all(
+        node.args[0].args.map(async (v) => evaluate(realm, v))
       );
 
       return Value.Column.fromValues(
@@ -231,9 +228,6 @@ async function internalEvaluate(
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
-      if (funcName) {
-        realm.functions.set(funcName, node);
-      }
       const value = Value.FunctionValue.from(
         getDefined(getDefined(node.inferredType).functionArgNames),
         node.args[2]
@@ -255,11 +249,17 @@ async function internalEvaluate(
   }
 }
 
+const loggedError = Symbol('loggedError');
+type ErrorWithLoggedError = Error & { [loggedError]?: boolean };
+
+const shouldOutputDebugInfo =
+  !!process.env.DEBUG ||
+  (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID);
+
 export async function evaluate(
   realm: TRealm,
   node: AST.Statement
 ): Promise<Value.Value> {
-  realm.incrementStatsCounter('evaluateCount');
   const cachedValue = node.cacheKey
     ? realm.expressionCache.getCacheResult(node.cacheKey)
     : undefined;
@@ -267,21 +267,37 @@ export async function evaluate(
     return cachedValue;
   }
 
-  const value = await internalEvaluate(realm, node);
-  if (node.cacheKey) {
-    const dependencies = getDependencies(node);
-    realm.expressionCache.putCacheResult(node.cacheKey, dependencies, value);
+  try {
+    const value = await internalEvaluate(realm, node);
+    if (node.cacheKey) {
+      const dependencies = getDependencies(node);
+      realm.expressionCache.putCacheResult(node.cacheKey, dependencies, value);
+    }
+    return value;
+  } catch (err) {
+    if (!(err as ErrorWithLoggedError)[loggedError]) {
+      if (shouldOutputDebugInfo) {
+        let info = `Error evaluating \`${prettyPrintAST(node)}\`: ${
+          (err as Error).message
+        }`;
+        let _realm: TScopedRealm | undefined = realm;
+        while (_realm) {
+          info += `\n  ${_realm.depth}: in realm "${_realm.name}"`;
+          info += `\n    ${realm.toString()}`;
+          _realm = _realm.parent;
+        }
+
+        console.warn(info);
+        console.error(err);
+      }
+
+      (err as ErrorWithLoggedError)[loggedError] = true;
+    }
+    throw err;
   }
-  return value;
 }
 
-export async function evaluateStatement(
-  realm: TRealm,
-  statement: AST.Statement
-) {
-  realm.incrementStatsCounter('evaluateStatementCount');
-  return evaluate(realm, statement);
-}
+export const evaluateStatement = evaluate;
 
 export async function evaluateBlock(
   realm: TRealm,

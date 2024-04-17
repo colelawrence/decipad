@@ -6,11 +6,12 @@ import { RuntimeError, Value } from '@decipad/language-types';
 import { refersToOtherColumnsByName } from './inference';
 import { mapWithPrevious } from '../interpreter/previous';
 import { walkAst, getIdentifierString, isExpression } from '../utils';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { requiresWholeColumn } from './requiresWholeColumn';
 import { isPrevious } from '../utils/isPrevious';
+import { withPush, type TRealm } from '../scopedRealm';
+import { prettyPrintAST } from '../parser/utils';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -38,8 +39,43 @@ const usesOrdinalReference = (expr: AST.Expression): boolean => {
   return result;
 };
 
+export const evaluateTableColumnIteratively = async (
+  _realm: TRealm,
+  otherColumns: Map<string, Value.ColumnLikeValue>,
+  column: AST.Expression,
+  rowCount: number
+): Promise<Value.ColumnLikeValue> =>
+  withPush(
+    _realm,
+    async (realm) => {
+      const cells = await mapWithPrevious(
+        realm,
+        otherColumns,
+        async function* mapper() {
+          for (let index = 0; index < rowCount; index++) {
+            // Make other cells available
+            for (const [otherColName, otherCol] of otherColumns) {
+              // eslint-disable-next-line no-await-in-loop
+              realm.stack.set(otherColName, await otherCol.atIndex(index));
+            }
+            // make ordinal references available
+            realm.stack.set('first', Value.Scalar.fromValue(index === 0));
+            // eslint-disable-next-line no-await-in-loop
+            yield evaluate(realm, column);
+          }
+        }
+      );
+
+      return Value.Column.fromValues(
+        cells,
+        Value.defaultValue(getDefined(column.inferredType))
+      );
+    },
+    `evaluate column iteratively \`${prettyPrintAST(column)}\``
+  );
+
 export const evaluateTableColumn = async (
-  realm: Realm,
+  realm: TRealm,
   tableColumns: Map<string, Value.ColumnLikeValue>,
   column: AST.Expression,
   indexName: string,
@@ -68,39 +104,8 @@ export const evaluateTableColumn = async (
   );
 };
 
-export const evaluateTableColumnIteratively = async (
-  realm: Realm,
-  otherColumns: Map<string, Value.ColumnLikeValue>,
-  column: AST.Expression,
-  rowCount: number
-): Promise<Value.ColumnLikeValue> =>
-  realm.withPush(async () => {
-    const cells = await mapWithPrevious(
-      realm,
-      otherColumns,
-      async function* mapper() {
-        for (let index = 0; index < rowCount; index++) {
-          // Make other cells available
-          for (const [otherColName, otherCol] of otherColumns) {
-            // eslint-disable-next-line no-await-in-loop
-            realm.stack.set(otherColName, await otherCol.atIndex(index));
-          }
-          // make ordinal references available
-          realm.stack.set('first', Value.Scalar.fromValue(index === 0));
-          // eslint-disable-next-line no-await-in-loop
-          yield evaluate(realm, column);
-        }
-      }
-    );
-
-    return Value.Column.fromValues(
-      cells,
-      Value.defaultValue(getDefined(column.inferredType))
-    );
-  });
-
 export const evaluateTable = async (
-  realm: Realm,
+  realm: TRealm,
   table: AST.Table
 ): Promise<Value.Table> => {
   const tableColumns = new Map<string, Value.ColumnLikeValue>();

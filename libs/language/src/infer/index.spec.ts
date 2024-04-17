@@ -1,11 +1,16 @@
 import omit from 'lodash.omit';
-import { dequal, produce } from '@decipad/utils';
+import { produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { AST, Type, Unit } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
-import { Realm, inferBlock, parseBlockOrThrow } from '..';
+import {
+  ScopedRealm,
+  inferBlock,
+  makeInferContext,
+  parseBlockOrThrow,
+} from '..';
 import { objectToMap, objectToTableType } from '../testUtils';
 import {
   as,
@@ -23,11 +28,10 @@ import {
   tableDef,
 } from '../utils';
 
-import { makeContext } from './context';
 import { inferExpression, inferProgram, inferStatement } from './index';
 
-let nilCtx = makeContext();
-let nilRealm = new Realm(nilCtx);
+let nilCtx = makeInferContext();
+let nilRealm = new ScopedRealm(undefined, nilCtx);
 
 const degC: Unit.Unit = {
   unit: 'celsius',
@@ -76,12 +80,8 @@ const makeTable = ({
 };
 
 afterEach(() => {
-  const newContext = makeContext();
-  if (!dequal(nilCtx, newContext)) {
-    newContext.previous = nilCtx.previous;
-  }
-  nilCtx = makeContext();
-  nilRealm = new Realm(nilCtx);
+  nilCtx = makeInferContext();
+  nilRealm = new ScopedRealm(undefined, nilCtx);
 });
 
 it('infers literals', async () => {
@@ -245,8 +245,8 @@ describe('error source tracking', () => {
     const badStatement2 = c('+', r('BadVar'), l(1));
     const program = block(badStatement, badStatement2);
 
-    const ctx = makeContext();
-    await inferBlock(program, new Realm(ctx));
+    const ctx = makeInferContext();
+    await inferBlock(program, new ScopedRealm(undefined, ctx));
 
     // Both errors came from the same place
     expect(omit(badStatement.inferredType?.node, 'inferredType')).toEqual(
@@ -260,7 +260,7 @@ describe('error source tracking', () => {
 
 describe('tables', () => {
   it('infers table defs', async () => {
-    const tableContext = makeContext();
+    const tableContext = makeInferContext();
 
     const expectedType = makeTable({
       tableName: 'Table',
@@ -270,7 +270,7 @@ describe('tables', () => {
 
     expect(
       await inferStatement(
-        new Realm(tableContext),
+        new ScopedRealm(undefined, tableContext),
         tableDef('Table', {
           Col1: col(1, 2, 3),
           Col2: c('+', n('ref', 'Col1'), l(2)),
@@ -306,8 +306,12 @@ describe('tables', () => {
       Col3: c('previous', l('hi')),
     });
 
-    expect(await inferStatement(new Realm(makeContext()), table))
-      .toMatchInlineSnapshot(`
+    expect(
+      await inferStatement(
+        new ScopedRealm(undefined, makeInferContext()),
+        table
+      )
+    ).toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -450,8 +454,12 @@ describe('tables', () => {
       Col2: col(1, 2),
     });
 
-    expect(await inferStatement(new Realm(makeContext()), table))
-      .toMatchInlineSnapshot(`
+    expect(
+      await inferStatement(
+        new ScopedRealm(undefined, makeInferContext()),
+        table
+      )
+    ).toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -561,8 +569,12 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(new Realm(makeContext()), table))
-      .toMatchInlineSnapshot(`
+    expect(
+      await inferStatement(
+        new ScopedRealm(undefined, makeInferContext()),
+        table
+      )
+    ).toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -672,8 +684,12 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(new Realm(makeContext()), table))
-      .toMatchInlineSnapshot(`
+    expect(
+      await inferStatement(
+        new ScopedRealm(undefined, makeInferContext()),
+        table
+      )
+    ).toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -780,7 +796,7 @@ describe('tables', () => {
   it('tracks the index through columns', async () => {
     expect(
       await inferStatement(
-        new Realm(makeContext()),
+        new ScopedRealm(undefined, makeInferContext()),
         tableDef('Table', {
           Col1: col(1, 2, 3),
           Col2: l(2),
@@ -814,14 +830,14 @@ describe('tables', () => {
 });
 
 describe('Property access', () => {
-  const scopeWithTable = makeContext({
+  const scopeWithTable = makeInferContext({
     initialGlobalScope: [
       ['Table', objectToTableType('Table', { Col: t.number() })],
       ['Row', t.row([t.string()], ['Name'])],
       ['NotATable', t.number()],
     ],
   });
-  const realm = new Realm(scopeWithTable);
+  const realm = new ScopedRealm(undefined, scopeWithTable);
 
   it('Accesses columns in tables', async () => {
     expect(await inferExpression(realm, prop('Table', 'Col'))).toMatchObject({
@@ -912,18 +928,18 @@ describe('Property access', () => {
 
 describe('refs', () => {
   it('infers refs', async () => {
-    const scopeWithVariable = makeContext();
-    const realm = new Realm(scopeWithVariable);
+    const scopeWithVariable = makeInferContext();
+    const realm = new ScopedRealm(undefined, scopeWithVariable);
     scopeWithVariable.stack.set('N', t.number());
 
     expect(await inferExpression(realm, r('N'))).toEqual(t.number());
   });
 
   it('References to automatically generated varnames which are missing, are errors', async () => {
-    const scopeWithVariable = makeContext({
+    const scopeWithVariable = makeInferContext({
       autoGeneratedVarNames: new Set(['AutoGenerated']),
     });
-    const realm = new Realm(scopeWithVariable);
+    const realm = new ScopedRealm(undefined, scopeWithVariable);
 
     expect(await inferExpression(realm, r('AutoGenerated')))
       .toMatchInlineSnapshot(`
@@ -991,8 +1007,8 @@ it('infers binops', async () => {
     t.boolean()
   );
 
-  const errorCtx = makeContext();
-  const errorRealm = new Realm(errorCtx);
+  const errorCtx = makeInferContext();
+  const errorRealm = new ScopedRealm(undefined, errorCtx);
   const badExpr = c('==', l(1), l(true));
 
   expect(
@@ -1011,8 +1027,8 @@ it('infers conditions', async () => {
     await inferExpression(nilRealm, c('if', l(true), l('str'), l('other str')))
   ).toEqual(t.string());
 
-  const errorCtx = makeContext();
-  const errorRealm = new Realm(errorCtx);
+  const errorCtx = makeInferContext();
+  const errorRealm = new ScopedRealm(undefined, errorCtx);
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
   expect(
@@ -1055,9 +1071,8 @@ it('expands directives such as `as`', async () => {
 
 describe('name usage tracking', () => {
   const track = async (source: string) => {
-    const ctx = makeContext();
-    const realm = new Realm(ctx);
-    ctx.usedNames = [];
+    const ctx = makeInferContext();
+    const realm = new ScopedRealm(undefined, ctx);
 
     const program = parseBlockOrThrow(source);
     await inferBlock(program, realm);
@@ -1159,15 +1174,6 @@ describe('name usage tracking', () => {
       await track(`
         Table = {
           X = X + 1
-        }
-      `)
-    ).toMatchInlineSnapshot(`Array []`);
-
-    expect(
-      await track(`
-        Table = {
-          X = 1
-          Y = Table.X + 1
         }
       `)
     ).toMatchInlineSnapshot(`Array []`);

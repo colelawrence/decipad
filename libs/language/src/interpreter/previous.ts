@@ -1,7 +1,8 @@
 import { getDefined } from '@decipad/utils';
-import { type TRealm } from './types';
 // eslint-disable-next-line no-restricted-imports
 import { type AST, type Value } from '@decipad/language-types';
+import { withPush, type TRealm } from '../scopedRealm';
+import { prettyPrintAST } from '../parser/utils';
 
 type Evaluate = (realm: TRealm, block: AST.Statement) => Promise<Value.Value>;
 
@@ -19,7 +20,7 @@ export const mapWithPrevious = async (
   // mapWithPrevious can be called again during iter()
   // For example with nested `given`
   const savedPreviousRow = realm.previousRow;
-  realm.previousRow = null;
+  realm.previousRow = undefined;
 
   for await (const result of iter()) {
     const previousRow = new Map<string | symbol, Value.Value>();
@@ -48,12 +49,16 @@ export const usingPrevious = async (
   evaluate: Evaluate
 ): Promise<Value.Value> => {
   const previousRow = getDefined(realm.previousRow, 'no previous row');
-  return realm.stack.withPush(async () => {
-    for (const [columnName, columnValue] of previousRow) {
-      if (typeof columnName === 'string') {
-        realm.stack.set(columnName, columnValue);
+  return withPush(
+    realm,
+    async (newRealm) => {
+      for (const [columnName, columnValue] of previousRow) {
+        if (typeof columnName === 'string') {
+          newRealm.stack.set(columnName, columnValue);
+        }
       }
-    }
-    return evaluate(realm, expression);
-  });
+      return evaluate(newRealm, expression);
+    },
+    `usingPrevious(${prettyPrintAST(expression)})`
+  );
 };

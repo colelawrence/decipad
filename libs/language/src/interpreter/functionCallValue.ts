@@ -1,16 +1,17 @@
 // eslint-disable-next-line no-restricted-imports
 import { type AST, type Value } from '@decipad/language-types';
-import { type TRealm } from './types';
 import { evaluate } from './evaluate';
+import { withPush, type TRealm } from '../scopedRealm';
 
 export const functionCallValue = async (
-  realm: TRealm,
+  _realm: TRealm,
   functionBody: AST.Block,
   argNames: string[],
   args: Value.Value[]
-): Promise<Value.Value> => {
-  return realm.scopedToDepth(0, async () => {
-    return realm.withPush(async () => {
+): Promise<Value.Value> =>
+  withPush(
+    _realm,
+    async (realm) => {
       for (let i = 0; i < args.length; i++) {
         const argName = argNames[i];
 
@@ -27,6 +28,6 @@ export const functionCallValue = async (
       }
 
       throw new Error('function is empty');
-    });
-  });
-};
+    },
+    `function call value`
+  );

@@ -1,4 +1,3 @@
-import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
 import { type Type, Value } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
@@ -10,8 +9,8 @@ export const applyTableFunctions = async (
   functions: Type
 ) =>
   Value.Table.fromNamedColumns(
-    await pSeries(
-      table.columns.map((column, index) => async () => {
+    await Promise.all(
+      table.columns.map(async (column, index) => {
         const functionColumnIndex = getDefined(
           functions.columnNames,
           'functions should be a table'

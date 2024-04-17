@@ -267,42 +267,6 @@ it('creates new, unused identifiers', async () => {
   ).toMatchInlineSnapshot(`"AlreadyUsed1"`);
 });
 
-describe('uses previous value', () => {
-  it('works the first and second time', async () => {
-    expect(
-      await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 3', 'previous'),
-      })
-    ).toMatchInlineSnapshot(`
-      Array [
-        "block-0 -> 3",
-        "block-1 -> 3",
-      ]
-    `);
-
-    expect(
-      await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 4'),
-      })
-    ).toMatchInlineSnapshot(`
-      Array [
-        "block-0 -> 4",
-      ]
-    `);
-
-    expect(
-      await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 5', 'previous'),
-      })
-    ).toMatchInlineSnapshot(`
-      Array [
-        "block-0 -> 5",
-        "block-1 -> 5",
-      ]
-    `);
-  });
-});
-
 it('can reset itself', async () => {
   // Make the cache dirty
   await computer.pushCompute({ program: testProgram });

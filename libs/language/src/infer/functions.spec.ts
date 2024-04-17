@@ -1,21 +1,22 @@
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
-import { Realm, inferBlock } from '..';
+import { ScopedRealm, inferBlock, makeInferContext } from '..';
 import { getErrSpec } from '../type';
 import { assign, block, c, funcDef, l, r, U } from '../utils';
-import { makeContext } from './context';
 import { inferFunction } from './functions';
 import { inferProgram } from '.';
 
 describe('function inference', () => {
   it('Accepts arguments types and returns a return type', async () => {
-    const ctx = makeContext();
+    const ctx = makeInferContext();
     const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
     expect(
-      await inferFunction(new Realm(ctx), functionWithSpecificTypes, [
-        t.boolean(),
-      ])
+      await inferFunction(
+        new ScopedRealm(undefined, ctx),
+        functionWithSpecificTypes,
+        [t.boolean()]
+      )
     ).toEqual(t.boolean());
   });
 
@@ -48,16 +49,17 @@ describe('function inference', () => {
   it('disallows wrong argument count', async () => {
     const unaryFn = funcDef('Fn', ['A'], r('A'));
 
-    let errorCtx = makeContext();
+    let errorCtx = makeInferContext();
     expect(
-      (await inferFunction(new Realm(errorCtx), unaryFn, [])).errorCause
+      (await inferFunction(new ScopedRealm(undefined, errorCtx), unaryFn, []))
+        .errorCause
     ).toEqual(InferError.expectedArgCount('Fn', 1, 0));
 
-    errorCtx = makeContext();
+    errorCtx = makeInferContext();
     const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
     expect(
       (
-        await inferFunction(new Realm(errorCtx), unaryFn, [
+        await inferFunction(new ScopedRealm(undefined, errorCtx), unaryFn, [
           t.boolean(),
           t.string(),
         ])
@@ -72,8 +74,9 @@ describe('function inference', () => {
       c('Func', l('string'))
     );
 
-    const ctx = makeContext();
-    expect(await inferBlock(funcs, new Realm(ctx))).toMatchObject({
+    expect(
+      await inferBlock(funcs, new ScopedRealm(undefined, makeInferContext()))
+    ).toMatchObject({
       type: 'number',
       unit: U('OtherFunctionsArgument', { known: false }),
     });
@@ -91,8 +94,10 @@ describe('function inference', () => {
       c('Function', l(true))
     );
 
-    const ctx = makeContext();
-    expect(await inferBlock(funcs, new Realm(ctx))).toMatchObject({
+    const ctx = makeInferContext();
+    expect(
+      await inferBlock(funcs, new ScopedRealm(undefined, ctx))
+    ).toMatchObject({
       errorCause: null,
       type: 'boolean',
     });

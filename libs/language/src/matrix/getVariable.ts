@@ -7,15 +7,14 @@ import {
   Value,
   RuntimeError,
 } from '@decipad/language-types';
-import { type Context } from '..';
-import { type Realm } from '../interpreter/Realm';
 import { getIdentifierString } from '../utils';
+import type { TRealm, TScopedInferContext } from '../scopedRealm';
 
 export const getIndexName = (type: Type) =>
   type.indexedBy ?? type.indexName ?? null;
 
 export const inferVariable = async (
-  context: Context,
+  context: TScopedInferContext,
   varName: RefLike,
   expectedDim?: string | null
 ) => {
@@ -35,7 +34,7 @@ export const inferVariable = async (
   }
 };
 
-export const evaluateVariable = (realm: Realm, varName: RefLike) => {
+export const evaluateVariable = (realm: TRealm, varName: RefLike) => {
   const variable = realm.stack.get(refName(varName));
 
   if (!variable) {

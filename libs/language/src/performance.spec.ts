@@ -3,6 +3,7 @@ import { N } from '@decipad/number';
 import type { AST, Result } from '@decipad/language-types';
 import { serializeResult } from './result';
 import { runAST } from '.';
+import { anyMappingToMap } from '@decipad/utils';
 
 const TEST_COLUMN_LENGTH = 10_000;
 const OPS = ['+', '-', '/', '*', 'mod', '^'] as const;
@@ -105,7 +106,7 @@ describe.skip('language performance', () => {
       const program = createProgram(op);
       const startTime = Date.now();
       const r = await runAST(program, {
-        externalData,
+        externalData: anyMappingToMap(externalData),
         doNotMaterialiseResults: true,
         doNotValidateResults: true,
       });

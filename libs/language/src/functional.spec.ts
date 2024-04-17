@@ -12,6 +12,24 @@ import {
 } from './testUtils';
 import { runCode } from './run';
 
+test('function declaration', async () => {
+  expect(
+    (
+      await runCode(`
+    F(x) = x + 1
+    A = F(10)
+    `)
+    ).value
+  ).toMatchInlineSnapshot(`
+    DeciNumber {
+      "d": 1n,
+      "infinite": false,
+      "n": 11n,
+      "s": 1n,
+    }
+  `);
+});
+
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
   it('Can MVP the use of funds document', async () => {

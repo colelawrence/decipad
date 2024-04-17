@@ -3,11 +3,11 @@
 import type { AST, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError } from '@decipad/language-types';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
 const evaluateMatchDef = async (
-  realm: Realm,
+  realm: TRealm,
   def: AST.MatchDef
 ): Promise<Value.Value | undefined> => {
   const [condition, result] = def.args;
@@ -19,7 +19,7 @@ const evaluateMatchDef = async (
 };
 
 export const evaluateMatch = async (
-  realm: Realm,
+  realm: TRealm,
   node: AST.Match
 ): Promise<Value.Value> => {
   for (const matchDef of node.args) {

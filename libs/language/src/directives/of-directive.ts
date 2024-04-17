@@ -7,13 +7,14 @@ import {
   type Type,
   buildType as t,
 } from '@decipad/language-types';
+import type { TRealm } from '..';
 import { inferExpression } from '..';
-import { evaluate, type Realm } from '../interpreter';
+import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { type DirectiveImpl } from './types';
 
 export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
-  realm: Realm,
+  realm: TRealm,
   { args: [, expr, quality] }
 ) => {
   const expressionType = await inferExpression(realm, expr);
@@ -42,7 +43,7 @@ export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
 };
 
 export const getValue: DirectiveImpl<AST.OfDirective>['getValue'] = async (
-  realm: Realm,
+  realm: TRealm,
   { args: [, expr] }
 ) => evaluate(realm, expr);
 

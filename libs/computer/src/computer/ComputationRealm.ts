@@ -4,8 +4,9 @@ import type * as language from '@decipad/language';
 import {
   Time,
   Value,
-  makeContext as makeInferContext,
-  Realm,
+  makeInferContext,
+  ScopedRealm,
+  functionCallValue,
 } from '@decipad/language';
 import { all, map } from '@decipad/generator-utils';
 import type { GetStatementsToEvictArgs } from '../caching/getStatementsToEvict';
@@ -13,7 +14,6 @@ import { getStatementsToEvict } from '../caching/getStatementsToEvict';
 import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
-import { createComputerStats } from './computerStats';
 import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
@@ -22,16 +22,22 @@ export type CacheContents = {
 };
 
 export class ComputationRealm {
-  inferContext = makeInferContext();
-  interpreterRealm = new Realm(this.inferContext);
+  inferContext: language.TScopedInferContext = makeInferContext();
+  interpreterRealm: language.TScopedRealm = new ScopedRealm(
+    undefined,
+    this.inferContext,
+    'interpreter',
+    {
+      callValue: async (...args) =>
+        functionCallValue(this.interpreterRealm, ...args),
+    }
+  );
   locCache = new Map<string, CacheContents>();
   errorLocs = new Set<string>();
   epoch = 0n;
-  stats = createComputerStats(this.inferContext, this.interpreterRealm);
 
   setExternalData(externalData: language.ExternalDataMap) {
-    this.interpreterRealm.externalData = externalData;
-    this.inferContext.externalData = externalData;
+    this.interpreterRealm.setExternalData(externalData);
   }
 
   evictCache({ oldProgram, ...rest }: GetStatementsToEvictArgs) {
@@ -54,9 +60,7 @@ export class ComputationRealm {
       if (sym) {
         this.interpreterRealm.stack.delete(sym);
         this.inferContext.stack.delete(sym);
-        this.interpreterRealm.functions.delete(sym);
         this.interpreterRealm.clearCacheForSymbols([sym]);
-        this.inferContext.functionDefinitions.delete(sym);
       }
     }
   }

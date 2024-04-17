@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-import pSeries from 'p-series';
 import type { Writable } from 'utility-types';
 // eslint-disable-next-line no-restricted-imports
 import { getConstantByName } from '@decipad/language-builtins';
@@ -20,40 +19,40 @@ import { getDateFromAstForm } from '../date';
 import { expandDirectiveToType } from '../directives';
 import { inferTable } from '../tables/inference';
 import { inferColumnAssign } from '../tables/column-assign';
-
-import type { Context } from './context';
-import { makeContext, logRetrievedName } from './context';
+import { logRetrievedName } from './logRetrievedName';
 import { inferSequence } from './sequence';
-import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
 import { inferFunctionDefinition, inferFunctionCall } from './functions';
 import { inferMatch } from '../match/inferMatch';
 import { inferTiered } from '../tiered/inferTiered';
 import { sortType } from './sortType';
-import { Realm } from '../interpreter/Realm';
 import { getDefined } from '@decipad/utils';
+import type { TScopedInferContext, TRealm, TScopedRealm } from '../scopedRealm';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 
-export { makeContext, logRetrievedName };
-export type { Context };
+export { logRetrievedName };
 export type { ContextStats } from './inferStats';
 export { initialInferStats } from './inferStats';
 
 export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
+  // here we mutate the AST to add the inferred type so that it can be accessible to
+  // other stages of the pipeline
   node.inferredType = type;
 
   if (type.errorCause != null && type.node == null) {
+    // here we return a new type based on the inferred one but with the node set to the current node
     return type.inNode(node);
   } else {
     return type;
   }
 };
 
-const wrap =
+const linkingToAST =
   <T extends AST.Node>(
-    fn: (realm: Realm, node: T, coercingTo?: Type) => Promise<Type>
+    fn: (realm: TRealm, node: T, coercingTo?: Type) => Promise<Type>
   ) =>
-  async (realm: Realm, node: T, coercingTo?: Type): Promise<Type> => {
+  async (realm: TRealm, node: T, coercingTo?: Type): Promise<Type> => {
     let type = await fn(realm, node);
     if (coercingTo) {
       type = await type.sameAs(coercingTo);
@@ -70,24 +69,17 @@ const wrap =
 
  AST.Assign is special-cased by looking at its expression and returning just that
 */
-export const inferExpression = wrap(
+export const inferExpression = linkingToAST(
   // exhaustive switch
   // eslint-disable-next-line consistent-return, complexity
-  async (realm: Realm, expr: Writable<AST.Expression>): Promise<Type> => {
+  async (realm: TRealm, expr: Writable<AST.Expression>): Promise<Type> => {
     const { inferContext: ctx } = realm;
-    ctx.incrementStatsCounter('inferExpressionCount');
     switch (expr.type) {
       case 'noop': {
         return t.nothing();
       }
       case 'ref': {
         const name = getIdentifierString(expr);
-        if (isPreviousRef(name)) {
-          return (
-            (ctx.previousStatement && deserializeType(ctx.previousStatement)) ||
-            t.impossible(InferError.noPreviousStatement())
-          );
-        }
         const c = getConstantByName(name);
         if (c) {
           return c.type;
@@ -133,9 +125,9 @@ export const inferExpression = wrap(
         return t[litType]();
       }
       case 'range': {
-        const [start, end] = await pSeries(
-          expr.args.map(
-            (expr) => async () => inferExpression(realm, getDefined(expr))
+        const [start, end] = await Promise.all(
+          expr.args.map(async (expr) =>
+            inferExpression(realm, getDefined(expr))
           )
         );
         const pending = [start, end].find(typeIsPending);
@@ -165,9 +157,9 @@ export const inferExpression = wrap(
         }
         const [firstCellNode, ...restCellNodes] = columnItems.args;
         const firstCellType = await inferExpression(realm, firstCellNode);
-        const restCellTypes = await pSeries(
-          restCellNodes.map(
-            (a) => async () => inferExpression(realm, a, firstCellType)
+        const restCellTypes = await Promise.all(
+          restCellNodes.map(async (a) =>
+            inferExpression(realm, a, firstCellType)
           )
         );
 
@@ -276,25 +268,19 @@ export const inferExpression = wrap(
         return inferTiered(realm, expr);
       case 'function-definition': {
         const [fName] = expr.args;
-        const functionType = inferFunctionDefinition(ctx, expr);
-        ctx.stack.set(
-          getIdentifierString(fName),
-          functionType,
-          ctx.statementId
-        );
+        const functionName = getIdentifierString(fName);
+        const functionType = inferFunctionDefinition(realm, expr).inNode(expr);
+
+        ctx.stack.set(functionName, functionType, realm.statementId);
         return functionType;
       }
     }
   }
 );
 
-const inferStatementInternal = wrap(
-  async (
-    /* Mutable! */ realm: Realm,
-    statement: AST.Statement
-  ): Promise<Type> => {
+const inferStatementInternal = linkingToAST(
+  async (realm: TRealm, statement: AST.Statement): Promise<Type> => {
     const { inferContext: ctx } = realm;
-    ctx.incrementStatsCounter('inferStatementCount');
     switch (statement.type) {
       case 'assign': {
         const [nName, nValue] = statement.args;
@@ -307,7 +293,7 @@ const inferStatementInternal = wrap(
             ? t.impossible(InferError.duplicatedName(varName))
             : await inferExpression(realm, nValue);
 
-        ctx.stack.set(varName, type, ctx.statementId);
+        ctx.stack.set(varName, type, realm.statementId);
         return type;
       }
       case 'table': {
@@ -350,7 +336,7 @@ export const inferStatement = async (
 
 export const inferBlock = async (
   block: AST.Block,
-  realm = new Realm(makeContext())
+  realm: TScopedRealm = new ScopedRealm(undefined, makeInferContext())
 ): Promise<Type> => {
   if (block.hasDuplicateName) {
     return t.impossible(InferError.duplicatedName(block.hasDuplicateName));
@@ -366,15 +352,12 @@ export const inferBlock = async (
 
 export const inferProgram = async (
   program: AST.Block[],
-  realm = new Realm(makeContext())
-): Promise<Context> => {
-  const start = Date.now();
+  realm: TScopedRealm = new ScopedRealm(undefined, makeInferContext())
+): Promise<TScopedInferContext> => {
   for (const block of program) {
     // eslint-disable-next-line no-await-in-loop
     await inferBlock(block, realm);
   }
-  const elapsed = Date.now() - start;
   const { inferContext: ctx } = realm;
-  ctx.incrementStatsCounter('totalInferProgramTimeMs', elapsed);
   return ctx;
 };

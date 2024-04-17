@@ -4,11 +4,11 @@ import type { PromiseOrType } from '@decipad/utils';
 import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
-import pSeries from 'p-series';
 import { inferExpression } from '../infer';
 import { getIdentifierString } from '../utils';
 import { cleanInferred } from './cleanInferred';
-import type { Realm } from '../interpreter';
+import { withPush, type TRealm } from '../scopedRealm';
+import { prettyPrintAST } from '../parser/utils';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);
 
@@ -21,30 +21,33 @@ const isPredicate = (exp: AST.Expression): boolean => {
 
 const inferTieredDef = async (
   initialType: Type,
-  realm: Realm,
+  _realm: TRealm,
   def: AST.TieredDef
-): Promise<Type> => {
-  const { inferContext: ctx } = realm;
-  return ctx.stack.withPush(async () => {
-    ctx.stack.set('tier', initialType);
-    ctx.stack.set('slice', initialType);
+): Promise<Type> =>
+  withPush(
+    _realm,
+    async (realm) => {
+      const { inferContext: ctx } = realm;
+      ctx.stack.set('tier', initialType);
+      ctx.stack.set('slice', initialType);
 
-    const [condition, result] = def.args;
-    let conditionType: Type | undefined;
-    if (!isPredicate(condition)) {
-      conditionType = await (
-        await (await inferExpression(realm, condition)).isScalar('number')
-      ).sameAs(initialType);
-    }
-    if (conditionType?.errorCause) {
-      return conditionType;
-    }
-    return cleanInferred(await inferExpression(realm, result));
-  });
-};
+      const [condition, result] = def.args;
+      let conditionType: Type | undefined;
+      if (!isPredicate(condition)) {
+        conditionType = await (
+          await (await inferExpression(realm, condition)).isScalar('number')
+        ).sameAs(initialType);
+      }
+      if (conditionType?.errorCause) {
+        return conditionType;
+      }
+      return cleanInferred(await inferExpression(realm, result));
+    },
+    `infer tiered def ${prettyPrintAST(def)}`
+  );
 
 export const inferTiered = async (
-  realm: Realm,
+  realm: TRealm,
   node: AST.Tiered
 ): Promise<Type> => {
   const [initial, ...tieredDefs] = node.args;
@@ -60,10 +63,8 @@ export const inferTiered = async (
   if (!tieredDefs.length) {
     return t.impossible('tiered definitions are empty');
   }
-  const types = await pSeries(
-    tieredDefs.map(
-      (def) => async () => inferTieredDef(argTypeNumber, realm, def)
-    )
+  const types = await Promise.all(
+    tieredDefs.map(async (def) => inferTieredDef(argTypeNumber, realm, def))
   );
   return cleanInferred(
     await types.reduce<PromiseOrType<Type>>(

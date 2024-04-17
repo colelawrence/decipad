@@ -1,17 +1,16 @@
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as T } from '@decipad/language-types';
-import { makeContext } from '../infer';
 import { c, n, r, tiered, tieredDef, U } from '../utils';
 import { inferTiered } from './inferTiered';
-import { Realm } from '../interpreter/Realm';
+import { makeInferContext, ScopedRealm } from '../scopedRealm';
 
 describe('inferTiered', () => {
   it('infers to error if empty', async () => {
     expect(
       (
         await inferTiered(
-          new Realm(makeContext()),
+          new ScopedRealm(undefined, makeInferContext()),
           tiered(n('literal', 'number', N(1)))
         )
       ).errorCause
@@ -22,7 +21,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          new Realm(makeContext()),
+          new ScopedRealm(undefined, makeInferContext()),
           tiered(n('literal', 'boolean', true))
         )
       ).errorCause
@@ -33,7 +32,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          new Realm(makeContext()),
+          new ScopedRealm(undefined, makeInferContext()),
           tiered(
             tiered(
               n('literal', 'number', N(1)),
@@ -52,7 +51,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          new Realm(makeContext()),
+          new ScopedRealm(undefined, makeInferContext()),
           tiered(
             tiered(
               n('literal', 'number', N(1)),
@@ -70,7 +69,7 @@ describe('inferTiered', () => {
   it('infers to type of value', async () => {
     expect(
       await inferTiered(
-        new Realm(makeContext()),
+        new ScopedRealm(undefined, makeInferContext()),
         tiered(
           n('literal', 'number', N(1)),
           tieredDef(
@@ -90,7 +89,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          new Realm(makeContext()),
+          new ScopedRealm(undefined, makeInferContext()),
           tiered(
             n('literal', 'number', N(1)),
             tieredDef(

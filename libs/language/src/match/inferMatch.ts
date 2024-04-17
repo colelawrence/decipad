@@ -5,10 +5,10 @@ import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
 import { inferExpression } from '../infer';
-import type { Realm } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
 const inferMatchDef = async (
-  realm: Realm,
+  realm: TRealm,
   def: AST.MatchDef
 ): Promise<Type> => {
   const [condition, result] = def.args;
@@ -22,7 +22,7 @@ const inferMatchDef = async (
 };
 
 export const inferMatch = async (
-  realm: Realm,
+  realm: TRealm,
   node: AST.Match
 ): Promise<Type> => {
   if (node.args.length < 1) {

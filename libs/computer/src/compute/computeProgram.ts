@@ -1,5 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Context, Realm } from '@decipad/language';
+import type {
+  AST,
+  TScopedInferContext,
+  TScopedRealm,
+  Type,
+} from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import {
   buildType as t,
@@ -50,7 +55,7 @@ const internalComputeStatement = async (
 
   const statement = block.args[0];
 
-  realm.inferContext.statementId = getExprRef(blockId);
+  realm.interpreterRealm.statementId = getExprRef(blockId);
   const [_valueType, usedNames] = await inferWhileRetrievingNames(
     realm.interpreterRealm,
     block
@@ -176,8 +181,6 @@ export const computeProgram = async (
   computer: Computer
 ): Promise<IdentifiedResult[]> => {
   const realm = computer.computationRealm;
-  realm.inferContext.previousStatement = undefined;
-  realm.interpreterRealm.previousStatementValue = undefined;
 
   let resultsToCache: CacheContents[] = [];
   for (const block of program.asSequence) {
@@ -189,17 +192,12 @@ export const computeProgram = async (
         computer
       );
 
-      realm.inferContext.previousStatement = result.result.type;
-      realm.interpreterRealm.previousStatementValue = value;
-
       resultsToCache.push({ result, value });
     } catch (err) {
       console.error(err);
       resultsToCache.push({
         result: resultFromError(err as Error, block.id, realm),
       });
-      realm.inferContext.previousStatement = undefined;
-      realm.interpreterRealm.previousStatementValue = undefined;
     }
   }
 
@@ -219,9 +217,9 @@ export const computeProgram = async (
 };
 
 const inferWhileRetrievingNames = async (
-  realm: Realm,
+  realm: TScopedRealm,
   block: AST.Block
-): Promise<[Type, Context['usedNames']]> => {
+): Promise<[Type, TScopedInferContext['usedNames']]> => {
   const { inferContext: ctx } = realm;
   try {
     ctx.usedNames = [];
@@ -229,6 +227,6 @@ const inferWhileRetrievingNames = async (
     const { usedNames } = ctx;
     return [valueType, usedNames];
   } finally {
-    ctx.usedNames = undefined;
+    ctx.usedNames = [];
   }
 };

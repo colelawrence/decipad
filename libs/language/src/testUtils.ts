@@ -2,7 +2,7 @@ import stringify from 'json-stringify-safe';
 import pTime from 'p-time';
 import DeciNumber, { N } from '@decipad/number';
 import type { AnyMapping } from '@decipad/utils';
-import { getDefined, zip, produce } from '@decipad/utils';
+import { getDefined, zip, produce, anyMappingToMap } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
   type AST,
@@ -15,26 +15,29 @@ import {
   serializeType,
   buildType as t,
 } from '@decipad/language-types';
-import { parseBlockOrThrow } from '.';
-import { inferBlock, inferProgram, makeContext } from './infer';
-import { Realm, run } from './interpreter';
+import type { TScopedRealm } from '.';
+import { ScopedRealm, makeInferContext, parseBlockOrThrow } from '.';
+import { inferBlock, inferProgram } from './infer';
 import { getErrSpec } from './type/getErrorSpec';
 import type { FromJSArg } from '../../language-types/src/Value';
 import { fromJS, getColumnLike } from '../../language-types/src/Value';
+import { functionCallValue, run } from './interpreter';
 
 export const runAST = async (
   block: AST.Block,
   { externalData }: { externalData?: AnyMapping<Result.Result> } = {}
 ) => {
-  const ctx = makeContext({ externalData });
-  const realm = new Realm(ctx);
+  const ctx = makeInferContext({
+    externalData: anyMappingToMap(externalData ?? {}),
+  });
+  const realm = new ScopedRealm(undefined, ctx);
 
   const inferResult = await inferBlock(block, realm);
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
 
-  const [value] = await run([block], [0], new Realm(ctx));
+  const [value] = await run([block], [0], new ScopedRealm(undefined, ctx));
 
   return {
     value: await materializeOneResult(value),
@@ -48,7 +51,15 @@ export const runCodeForVariables = async (
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = await inferProgram(program);
+  const realm: TScopedRealm = new ScopedRealm(
+    undefined,
+    makeInferContext(),
+    'runCode',
+    {
+      callValue: async (...args) => functionCallValue(realm, ...args),
+    }
+  );
+  const inferResult = await inferProgram(program, realm);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
@@ -63,7 +74,7 @@ export const runCodeForVariables = async (
     );
   }
 
-  const variables = await run(program, wantedVariables);
+  const variables = await run(program, wantedVariables, realm);
 
   return {
     types,

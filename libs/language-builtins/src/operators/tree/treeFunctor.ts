@@ -1,4 +1,3 @@
-import pSeries from 'p-series';
 // eslint-disable-next-line no-restricted-imports
 import { buildType } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
@@ -19,8 +18,8 @@ export const treeFunctor: FullBuiltinSpec['functorNoAutomap'] = async (
         return filters;
       }
 
-      const filteredColumnTypes = await pSeries(
-        columnTypes.map((type, index) => async () => {
+      const filteredColumnTypes = await Promise.all(
+        columnTypes.map(async (type, index) => {
           const columnName = columnNames[index];
           const columnIndex = getDefined(
             filters.columnNames,
@@ -58,8 +57,8 @@ export const treeFunctor: FullBuiltinSpec['functorNoAutomap'] = async (
       if (roundings.errorCause) {
         return roundings;
       }
-      columnTypes = await pSeries(
-        columnTypes.map((type, index) => async () => {
+      columnTypes = await Promise.all(
+        columnTypes.map(async (type, index) => {
           const columnName = columnNames[index];
           const columnIndex = getDefined(roundings.columnNames).indexOf(
             columnName

@@ -9,17 +9,19 @@ import {
   compare,
   buildType as t,
 } from '@decipad/language-types';
-import type { Context } from '..';
 import { inferExpression, logRetrievedName } from '../infer';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { evaluateVariable, getIndexName } from './getVariable';
 import { generatorOfPromisesToGenerator } from '../../../generator-utils/src/generatorOfPromisesToGenerator';
 import { getOfType } from '../parser/getOfType';
+import type { TRealm, TScopedInferContext } from '../scopedRealm';
 
 /** Read inside the square brackets */
-export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {
+export const readSimpleMatchers = (
+  ctx: TScopedInferContext,
+  matcher: AST.Expression
+) => {
   if (matcher.type === 'ref') {
     const dimensionName = getIdentifierString(matcher);
     // VariableName[DimensionName]
@@ -36,12 +38,11 @@ export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {
 };
 
 export const matchTargets = async (
-  ctx: Context,
-  realm: Realm,
+  realm: TRealm,
   matchers: AST.MatrixMatchers
 ): Promise<[number, boolean[]]> => {
   const matcher = getOnly(matchers.args);
-  const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
+  const [dimName, needleExp] = readSimpleMatchers(realm.inferContext, matcher);
   const dimension = evaluateVariable(realm, dimName);
 
   if (needleExp == null) {
@@ -82,7 +83,7 @@ export const matchTargets = async (
 };
 
 export const inferMatchers = async (
-  realm: Realm,
+  realm: TRealm,
   matchers: AST.MatrixMatchers
 ): Promise<Type> => {
   const { inferContext: ctx } = realm;

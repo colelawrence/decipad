@@ -1,8 +1,8 @@
-import type { Realm } from '../interpreter';
+import type { TRealm } from '../scopedRealm';
 
 /** If the typecheck failed, we don't execute */
 export const shouldEvaluate = (
-  realm: Realm,
+  realm: TRealm,
   tableName: string,
   columnName: string
 ) => {

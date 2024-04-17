@@ -2,20 +2,24 @@ import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { InferError, buildType as t } from '@decipad/language-types';
+import {
+  InferError,
+  Value,
+  buildType,
+  buildType as t,
+} from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
 import { getIdentifierString, walkAst, mutateAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
-import { pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 import { sortType } from '../infer/sortType';
 import { fakeFunctionCall, requiresWholeColumn } from './requiresWholeColumn';
-import type { Realm } from '../interpreter';
+import { withPush, type TRealm } from '../scopedRealm';
 
-export const inferTable = async (realm: Realm, table: AST.Table) => {
+export const inferTable = async (realm: TRealm, table: AST.Table) => {
   const { inferContext: ctx } = realm;
 
   const tableDef = table.args[0];
@@ -24,32 +28,40 @@ export const inferTable = async (realm: Realm, table: AST.Table) => {
     return t.impossible(InferError.duplicatedName(tableName));
   }
 
-  const tableType = await pushTableContext(ctx, tableName, async () => {
-    ctx.stack.createNamespace(tableName);
+  ctx.stack.createNamespace(tableName);
+  const type = await withPush(
+    realm,
+    async (tableRealm) => {
+      tableRealm.inferContext.stack.set('first', buildType.boolean());
+      tableRealm.stack.set('first', Value.Scalar.fromValue(false));
 
-    for (const tableItem of table.args.slice(1)) {
-      if (tableItem.type === 'table-column') {
-        // eslint-disable-next-line no-await-in-loop
-        await inferTableColumn(realm, {
-          tableName,
-          columnAst: tableItem,
-          columnName: getIdentifierString(tableItem.args[0]),
-        });
-      } else {
-        throw new Error('panic: unreachable');
+      for (const tableItem of table.args.slice(1)) {
+        if (tableItem.type === 'table-column') {
+          // eslint-disable-next-line no-await-in-loop
+          await inferTableColumn(tableRealm, {
+            tableName,
+            columnAst: tableItem,
+            columnName: getIdentifierString(tableItem.args[0]),
+          });
+        } else {
+          throw new Error('panic: unreachable');
+        }
       }
-    }
 
-    return sortType(getDefined(ctx.stack.get(tableName)));
-  });
+      const tableType = sortType(
+        getDefined(tableRealm.inferContext.stack.get(tableName))
+      );
 
-  const tableFinalType = produce(tableType, (type) => {
-    [, type.rowCount] = tableDef.args;
-  });
+      return produce(tableType, (type) => {
+        [, type.rowCount] = tableDef.args;
+      });
+    },
+    `table ${tableName}`
+  );
 
-  ctx.stack.set(tableName, tableFinalType);
+  realm.inferContext.stack.set(tableName, type);
 
-  return tableFinalType;
+  return type;
 };
 
 const fixColumnExp = (
@@ -120,7 +132,7 @@ const fixColumnExp = (
 };
 
 export async function inferTableColumn(
-  realm: Realm,
+  realm: TRealm,
   {
     columnAst,
     tableName,
@@ -139,17 +151,23 @@ export async function inferTableColumn(
   const _exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
-  let type = await pushTableContext(ctx, tableName, async () => {
-    const exp = fixColumnExp(_exp, tableName, otherColumns);
-    if (refersToOtherColumnsByName(exp, otherColumns)) {
-      return inferTableColumnPerCell(realm, otherColumns, exp);
-    } else {
-      return coerceTableColumnTypeIndices(
-        await inferExpression(realm, exp),
-        tableName
-      );
-    }
-  });
+  let type = await withPush(
+    realm,
+    async (columnRealm) => {
+      columnRealm.inferContext.stack.set('first', buildType.boolean());
+      columnRealm.stack.set('first', Value.Scalar.fromValue(false));
+      const exp = fixColumnExp(_exp, tableName, otherColumns);
+      if (refersToOtherColumnsByName(exp, otherColumns)) {
+        return inferTableColumnPerCell(columnRealm, otherColumns, exp);
+      } else {
+        return coerceTableColumnTypeIndices(
+          await inferExpression(columnRealm, exp),
+          tableName
+        );
+      }
+    },
+    `column ${columnName}`
+  );
 
   if (columnAst.type === 'table-column-assign') {
     type = produce(type, (t: Type) => {
@@ -168,17 +186,13 @@ export async function inferTableColumn(
 
   linkToAST(columnAst, type);
 
-  ctx.stack.setNamespaced([tableName, columnName], type, ctx.statementId);
-
-  if (type.errorCause) {
-    return type;
-  }
+  ctx.stack.setNamespaced([tableName, columnName], type, realm.statementId);
 
   return type;
 }
 
 export async function inferTableColumnPerCell(
-  realm: Realm,
+  realm: TRealm,
   otherColumns: Map<string, Type>,
   columnAst: AST.Expression
 ) {

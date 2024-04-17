@@ -4,17 +4,17 @@ import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
-import type { Realm } from '../interpreter';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';
+import type { TRealm } from '../scopedRealm';
 
 export const inferColumnAssign = async (
-  realm: Realm,
+  realm: TRealm,
   assign: AST.TableColumnAssign
 ): Promise<Type> => {
   const { inferContext: ctx } = realm;
-  if (!ctx.stack.isInGlobalScope) {
+  if (realm.depth !== 0) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
@@ -49,7 +49,7 @@ export const inferColumnAssign = async (
 };
 
 export async function evaluateColumnAssign(
-  realm: Realm,
+  realm: TRealm,
   assign: AST.TableColumnAssign
 ): Promise<Value.Value> {
   const [tableNameAst, tableColAst, expAst] = assign.args;

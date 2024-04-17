@@ -165,14 +165,14 @@ describe('basic code', () => {
       await runCode(`
         Variable = "expect this"
 
-        Function(Arg) = Variable == "expect this"
+        Function(Arg) = Variable
         OnceRemoved(Variable) = Function(1)
 
-        [Variable == "expect this", OnceRemoved("do not expect this")]
+        [Variable, OnceRemoved("do not expect this")]
       `)
     ).toMatchObject({
-      type: { cellType: { type: 'boolean' } },
-      value: [true, true],
+      type: { cellType: { type: 'string' } },
+      value: ['expect this', 'expect this'],
     });
   });
 
@@ -4242,164 +4242,59 @@ describe('first in column formula', () => {
           B1 = if first then 10 else previous(0) + 1
         }
     `)
-    ).toMatchInlineSnapshot(`
-      Object {
-        "type": Type {
-          "anythingness": false,
-          "atParentIndex": null,
-          "cellType": null,
-          "columnNames": Array [
-            "A1",
-            "B1",
-          ],
-          "columnTypes": Array [
-            Type {
-              "anythingness": false,
-              "atParentIndex": null,
-              "cellType": null,
-              "columnNames": null,
-              "columnTypes": null,
-              "date": null,
-              "delegatesIndexTo": undefined,
-              "errorCause": null,
-              "functionArgNames": undefined,
-              "functionBody": undefined,
-              "functionName": undefined,
-              "functionScopeDepth": undefined,
-              "functionness": false,
-              "indexName": null,
-              "indexedBy": "T1",
-              "node": null,
-              "nothingness": false,
-              "numberError": null,
-              "numberFormat": null,
-              "pending": false,
-              "rangeOf": null,
-              "rowCellNames": null,
-              "rowCellTypes": null,
-              "rowCount": undefined,
-              "rowIndexName": null,
-              "symbol": null,
-              "tree": undefined,
-              "type": "number",
-              "unit": null,
-              Symbol(immer-draftable): true,
-            },
-            Type {
-              "anythingness": false,
-              "atParentIndex": null,
-              "cellType": null,
-              "columnNames": null,
-              "columnTypes": null,
-              "date": null,
-              "delegatesIndexTo": undefined,
-              "errorCause": null,
-              "functionArgNames": undefined,
-              "functionBody": undefined,
-              "functionName": undefined,
-              "functionScopeDepth": undefined,
-              "functionness": false,
-              "indexName": null,
-              "indexedBy": "T1",
-              "node": null,
-              "nothingness": false,
-              "numberError": null,
-              "numberFormat": null,
-              "pending": false,
-              "rangeOf": null,
-              "rowCellNames": null,
-              "rowCellTypes": null,
-              "rowCount": undefined,
-              "rowIndexName": null,
-              "symbol": null,
-              "tree": undefined,
-              "type": "number",
-              "unit": null,
-              Symbol(immer-draftable): true,
-            },
-          ],
-          "date": null,
-          "delegatesIndexTo": "T1",
-          "errorCause": null,
-          "functionArgNames": undefined,
-          "functionBody": undefined,
-          "functionName": undefined,
-          "functionScopeDepth": undefined,
-          "functionness": false,
-          "indexName": "T1",
-          "indexedBy": null,
-          "node": null,
-          "nothingness": false,
-          "numberError": null,
-          "numberFormat": null,
-          "pending": false,
-          "rangeOf": null,
-          "rowCellNames": null,
-          "rowCellTypes": null,
-          "rowCount": undefined,
-          "rowIndexName": null,
-          "symbol": null,
-          "tree": undefined,
-          "type": null,
-          "unit": null,
-          Symbol(immer-draftable): true,
-        },
-        "value": Array [
-          Array [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 2n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 3n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 4n,
-              "s": 1n,
-            },
-          ],
-          Array [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 10n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 11n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 12n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 13n,
-              "s": 1n,
-            },
-          ],
+    ).toMatchObject({
+      type: {
+        columnNames: ['A1', 'B1'],
+        columnTypes: [
+          {
+            type: 'number',
+            errorCause: null,
+          },
+          {
+            type: 'number',
+            errorCause: null,
+          },
         ],
-      }
-    `);
+        delegatesIndexTo: 'T1',
+        indexName: 'T1',
+      },
+      value: [
+        [N(1), N(2), N(3), N(4)],
+        [N(10), N(11), N(12), N(13)],
+      ],
+    });
+  });
+
+  it('first works 2', async () => {
+    expect(
+      await runCode(`
+      Initial = 7
+
+      Table = {
+        Id = [1 .. 10]
+        Total = if first then Initial else previous(0) + Initial
+      }`)
+    ).toMatchObject({
+      type: {
+        columnNames: ['Id', 'Total'],
+        columnTypes: [
+          {
+            type: 'number',
+            unit: null,
+          },
+          {
+            type: 'number',
+            unit: null,
+          },
+        ],
+        delegatesIndexTo: 'Table',
+        indexName: 'Table',
+      },
+      value: [
+        [N(1), N(2), N(3), N(4), N(5), N(6), N(7), N(8), N(9), N(10)],
+        [N(7), N(14), N(21), N(28), N(35), N(42), N(49), N(56), N(63), N(70)],
+      ],
+    });
   });
 });
 

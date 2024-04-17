@@ -1,6 +1,8 @@
 import { getDefined } from '@decipad/utils';
 import { Computer } from './computer';
 import { getIdentifiedBlocks } from './testUtils';
+import { materializeResult } from '.';
+import { N } from '@decipad/number';
 
 describe('cache', () => {
   it('epoch starts in 1', async () => {
@@ -65,5 +67,96 @@ describe('cache', () => {
         3n,
       ]
     `);
+  });
+});
+
+describe('first works', () => {
+  it('works', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      'Initial = 7',
+      `Table = {
+        Id = [1 .. 10]
+        Total = if first then Initial else previous(0) + Initial
+      }`
+    );
+    const results = getDefined(await computer.computeRequest({ program }));
+    expect(Object.keys(results.blockResults)).toMatchInlineSnapshot(`
+      Array [
+        "block-0",
+        "block-1",
+        "block-1_0",
+        "block-1_1",
+      ]
+    `);
+    const matResults = await Promise.all(
+      Array.from(Object.values(results.blockResults)).map(async (result) =>
+        materializeResult(getDefined(result.result))
+      )
+    );
+    expect(matResults).toMatchObject([
+      {
+        type: {
+          kind: 'number',
+          unit: null,
+        },
+        value: N(7),
+      },
+      {
+        type: {
+          columnNames: ['Id', 'Total'],
+          columnTypes: [
+            {
+              kind: 'number',
+              unit: null,
+            },
+            {
+              kind: 'number',
+              unit: null,
+            },
+          ],
+          delegatesIndexTo: 'exprRef_block_1',
+          indexName: 'exprRef_block_1',
+          kind: 'table',
+        },
+        value: [
+          [N(1), N(2), N(3), N(4), N(5), N(6), N(7), N(8), N(9), N(10)],
+          [N(7), N(14), N(21), N(28), N(35), N(42), N(49), N(56), N(63), N(70)],
+        ],
+      },
+      {
+        type: {
+          cellType: {
+            kind: 'number',
+            unit: null,
+          },
+          indexedBy: 'exprRef_block_1',
+          kind: 'column',
+        },
+        value: [N(1), N(2), N(3), N(4), N(5), N(6), N(7), N(8), N(9), N(10)],
+      },
+      {
+        type: {
+          cellType: {
+            kind: 'number',
+            unit: null,
+          },
+          indexedBy: 'exprRef_block_1',
+          kind: 'column',
+        },
+        value: [
+          N(7),
+          N(14),
+          N(21),
+          N(28),
+          N(35),
+          N(42),
+          N(49),
+          N(56),
+          N(63),
+          N(70),
+        ],
+      },
+    ]);
   });
 });

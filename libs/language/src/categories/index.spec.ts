@@ -2,14 +2,13 @@
 import { Value, buildType as t } from '@decipad/language-types';
 import { col, categories } from '../utils';
 import { inferCategories } from '.';
-import { Realm } from '../interpreter';
-import type { Context } from '..';
-import { makeContext } from '..';
+import type { ScopedInferContext, TRealm } from '../scopedRealm';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 
-let testRealm: Realm;
-let testContext: Context;
+let testRealm: TRealm;
+let testContext: ScopedInferContext;
 beforeEach(() => {
-  testContext = makeContext({
+  testContext = makeInferContext({
     initialGlobalScope: {
       City: t.column(t.string(), 'City'),
       OtherDimension: t.column(t.string(), 'OtherDimension'),
@@ -17,7 +16,7 @@ beforeEach(() => {
     },
   });
 
-  testRealm = new Realm(testContext);
+  testRealm = new ScopedRealm(undefined, testContext);
   testRealm.stack.set('City', Value.fromJS(['Lisbon', 'Faro']));
   testRealm.stack.set('CoffeePrice', Value.fromJS([70, 90]));
 });
@@ -35,12 +34,11 @@ it('infers sets', async () => {
 });
 
 it('does not infer inside functions', async () => {
-  await testContext.stack.withPush(async () => {
-    expect(
-      (await inferCategories(testRealm, categories('Name', col(1, 2))))
-        .errorCause?.spec?.errType
-    ).toMatchInlineSnapshot(`"forbidden-inside-function"`);
-  });
+  const scopedRealm = testRealm.push('categories test');
+  expect(
+    (await inferCategories(scopedRealm, categories('Name', col(1, 2))))
+      .errorCause?.spec?.errType
+  ).toMatchInlineSnapshot(`"forbidden-inside-function"`);
 });
 
 it('does not accept already-existing variable names', async () => {

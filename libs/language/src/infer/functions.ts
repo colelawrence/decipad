@@ -1,4 +1,3 @@
-import pSeries from 'p-series';
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
@@ -12,57 +11,51 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltinFunctor } from '@decipad/language-builtins';
 import { inferExpression, inferStatement } from '.';
-import type { Realm } from '..';
 import { getIdentifierString } from '../utils';
-import type { Context } from './context';
-import { logRetrievedFunctionName } from './context';
+import { logRetrievedName } from './logRetrievedName';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';
+import { scopedToDepthAndWithPush, type TRealm } from '../scopedRealm';
 
 export function inferFunctionDefinition(
-  ctx: Context,
+  realm: TRealm,
   statement: AST.FunctionDefinition
 ): Type {
   const [name, args] = statement.args;
   const fName = getIdentifierString(name);
 
-  ctx.functionDefinitions.set(fName, statement);
-
   return t.functionPlaceholder(
     fName,
     args.args.map((a) => a.args[0]),
     getOfType('block', statement.args[2]),
-    ctx.stack.depth
+    realm.depth
   );
 }
 
 export const internalInferFunction = async (
-  realm: Realm,
+  _realm: TRealm,
   funcBody: AST.Block,
   argNames: string[],
   args: Type[],
   depth = 0
-) => {
-  const { inferContext: ctx } = realm;
-  return ctx.scopedToDepth(depth, async () =>
-    ctx.stack.withPush(async () => {
-      for (const [argDef, arg] of zip(argNames, args)) {
-        ctx.stack.set(argDef, arg);
-      }
+) =>
+  scopedToDepthAndWithPush(_realm, depth, 'infer function', async (realm) => {
+    const { inferContext: ctx } = realm;
+    for (const [argDef, arg] of zip(argNames, args)) {
+      ctx.stack.set(argDef, arg);
+    }
 
-      let returned;
-      for (const statement of funcBody.args) {
-        // eslint-disable-next-line no-await-in-loop
-        returned = await inferStatement(realm, statement);
-      }
+    let returned;
+    for (const statement of funcBody.args) {
+      // eslint-disable-next-line no-await-in-loop
+      returned = await inferStatement(realm, statement);
+    }
 
-      return getDefined(returned, 'panic: function did not return');
-    })
-  );
-};
+    return getDefined(returned, 'panic: function did not return');
+  });
 
 export const inferFunction = async (
-  realm: Realm,
+  realm: TRealm,
   func: AST.FunctionDefinition,
   givenArguments: Type[],
   depth = 0
@@ -87,13 +80,13 @@ export const inferFunction = async (
 };
 
 const continueInferFunctionCall = async (
-  realm: Realm,
+  realm: TRealm,
   expr: AST.FunctionCall
 ): Promise<Type> => {
   const fName = getIdentifierString(expr.args[0]);
   const fArgs = getOfType('argument-list', expr.args[1]).args;
-  const givenArguments = await pSeries(
-    fArgs.map((arg) => async () => inferExpression(realm, arg))
+  const givenArguments = await Promise.all(
+    fArgs.map(async (arg) => inferExpression(realm, arg))
   );
   if (isPrevious(fName)) {
     return givenArguments[0];
@@ -107,16 +100,17 @@ const continueInferFunctionCall = async (
 
   const { inferContext: ctx } = realm;
 
-  logRetrievedFunctionName(ctx, fName);
+  logRetrievedName(ctx, fName);
 
-  const functionDefinition = ctx.functionDefinitions.get(fName);
+  const functionType = ctx.stack.get(fName);
+  const functionDefinition = functionType?.node;
 
   if (functionDefinition != null) {
     return inferFunction(
       realm,
-      functionDefinition,
+      getOfType('function-definition', functionDefinition),
       givenArguments,
-      functionDefinition.inferredType?.functionScopeDepth ?? 0
+      functionType!.functionScopeDepth ?? 0
     );
   } else {
     return callBuiltinFunctor(realm.utils, fName, givenArguments, fArgs);
@@ -126,27 +120,25 @@ const continueInferFunctionCall = async (
 // IMPORTANT: keep this function below synchronous, otherwise the guard is not guaranteed.
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const guardFunctionCallInfer = (
-  realm: Realm,
+  realm: TRealm,
   expr: AST.FunctionCall
   // eslint-disable-next-line @typescript-eslint/promise-function-async
 ): Promise<Type> => {
   const fName = getIdentifierString(expr.args[0]);
   const { inferContext: ctx } = realm;
-  const functionDefinition = ctx.functionDefinitions.get(fName);
-  if (functionDefinition != null) {
-    if (ctx.onGoingFunctionCalls.has(fName)) {
-      return Promise.resolve(
-        t.impossible(InferError.formulaCannotCallItself(fName))
-      );
-    }
+  const functionDefinition = ctx.stack.get(fName);
+  if (functionDefinition != null && ctx.onGoingFunctionCalls.has(fName)) {
+    return Promise.resolve(
+      t.impossible(InferError.formulaCannotCallItself(fName))
+    );
   }
-  ctx.onGoingFunctionCalls.add(fName);
+  ctx.addOngoingFunctionCall(fName);
   return continueInferFunctionCall(realm, expr).finally(() => {
-    ctx.onGoingFunctionCalls.delete(fName);
+    ctx.removeOngoingFunctionCall(fName);
   });
 };
 
 export const inferFunctionCall = (
-  realm: Realm,
+  realm: TRealm,
   expr: AST.FunctionCall
 ): PromiseOrType<Type> => guardFunctionCallInfer(realm, expr);

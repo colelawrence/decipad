@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Context } from '@decipad/language';
+import type { TScopedInferContext } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
@@ -14,7 +14,7 @@ export interface VisibleVariables {
 export const getVisibleVariables = (
   _program: ComputerProgram,
   blockId: string,
-  inferContext: Context,
+  inferContext: TScopedInferContext,
   exprRefToVarNameMap: ExprRefToVarNameMap = new Map()
 ): VisibleVariables => {
   const program = getGoodBlocks(_program.asSequence);

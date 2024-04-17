@@ -1,13 +1,11 @@
 import { N } from '@decipad/number';
-import { Unknown, Value, buildType } from '..';
-import { makeContext } from '../infer';
-import { Realm } from '../interpreter';
+import { ScopedRealm, Unknown, Value, buildType, makeInferContext } from '..';
 import { treeToTable } from './treeToTable';
 
 describe('treeToTable value', () => {
   it('works on empty tree value', async () => {
     const tableValue = await treeToTable.value(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       buildType.tree({
         columnNames: [],
         columnTypes: [],
@@ -24,7 +22,7 @@ describe('treeToTable value', () => {
 
   it('works on a one column one value tree value', async () => {
     const tableValue = await treeToTable.value(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       buildType.tree({
         columnNames: ['Col1'],
         columnTypes: [buildType.number()],
@@ -67,7 +65,7 @@ describe('treeToTable value', () => {
 
   it('works on a one column 3 value tree value', async () => {
     const tableValue = await treeToTable.value(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       buildType.tree({
         columnNames: ['Col1'],
         columnTypes: [buildType.number()],
@@ -155,7 +153,7 @@ describe('treeToTable value', () => {
 
   it('works on a two column 1 row tree value', async () => {
     const tableValue = await treeToTable.value(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       buildType.tree({
         columnNames: ['Col1', 'Col2'],
         columnTypes: [buildType.number(), buildType.string()],
@@ -235,7 +233,7 @@ describe('treeToTable value', () => {
 
   it('works on a two column 3 rows tree value', async () => {
     const tableValue = await treeToTable.value(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       buildType.tree({
         columnNames: ['Col1', 'Col2'],
         columnTypes: [buildType.number(), buildType.string()],

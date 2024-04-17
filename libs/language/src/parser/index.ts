@@ -9,6 +9,7 @@ import * as Parser from './parser-types';
 
 export { decilang } from './decilang-tag';
 export { Parser, n, SyntaxError };
+export { getOfType } from './getOfType';
 
 export function parseBlock(
   source: string,

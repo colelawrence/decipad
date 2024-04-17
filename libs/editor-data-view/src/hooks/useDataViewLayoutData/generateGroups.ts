@@ -1,4 +1,3 @@
-import pSeries from 'p-series';
 import { type Result, Value, buildResult } from '@decipad/remote-computer';
 import { generateHash } from '@decipad/editor-utils';
 import { type DataGroup } from '../../types';
@@ -40,8 +39,8 @@ export const generateGroups = async ({
     tree.type.columnTypes[0],
   ];
   const nextPreviousFilters = [...previousFilters, filters[0]];
-  const dataGroups = await pSeries(
-    tree.value.children.map((child) => async (): Promise<DataGroup> => {
+  const dataGroups = await Promise.all(
+    tree.value.children.map(async (child) => {
       const groupId = `${parentGroupId}/${await generateHash(child)}`;
       const isExpanded = expandedGroups.includes(groupId);
       const hideSmartRow = child.columns.every(

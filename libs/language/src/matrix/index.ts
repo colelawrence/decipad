@@ -6,7 +6,6 @@ import { Type, typeIsPending } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { valueTransforms } from '@decipad/language-builtins';
 import { inferExpression } from '../infer';
-import type { Realm } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import {
   evaluateMultidimAssignment,
@@ -14,9 +13,10 @@ import {
 } from './assignMultidim';
 import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
+import type { TRealm } from '../scopedRealm';
 
 export async function inferMatrixRef(
-  realm: Realm,
+  realm: TRealm,
   ref: AST.MatrixRef
 ): Promise<Type> {
   const [varExp, matchersExp] = ref.args;
@@ -35,7 +35,7 @@ export async function inferMatrixRef(
 }
 
 export async function evaluateMatrixRef(
-  realm: Realm,
+  realm: TRealm,
   ref: AST.MatrixRef
 ): Promise<Value.ColumnLikeValue> {
   const {
@@ -44,14 +44,14 @@ export async function evaluateMatrixRef(
 
   // variable[dimname == needle]
   const variable = evaluateVariable(realm, getIdentifierString(varName));
-  const [, matches] = await matchTargets(realm.inferContext, realm, matchers);
+  const [, matches] = await matchTargets(realm, matchers);
 
   // Let's run the matcher against every item in Column
   return valueTransforms.applyFilterMap(variable, matches);
 }
 
 export async function inferMatrixAssign(
-  realm: Realm,
+  realm: TRealm,
   assign: AST.MatrixAssign
 ): Promise<Type> {
   const {
@@ -88,12 +88,12 @@ export async function inferMatrixAssign(
     ).mapType(async (newMatrix: Type) => dimension.sameAs(newMatrix));
   }
 
-  context.stack.set(varName, newMatrix, context.statementId);
+  context.stack.set(varName, newMatrix, realm.statementId);
   return newMatrix;
 }
 
 export async function evaluateMatrixAssign(
-  realm: Realm,
+  realm: TRealm,
   assign: AST.MatrixAssign
 ): Promise<Value.ColumnLikeValue> {
   const [varRef, matchers] = assign.args;

@@ -9,10 +9,10 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
+import type { TRealm } from '../scopedRealm';
 
 export async function inferMultidimAssignment(
   dimension: Type,
@@ -29,16 +29,12 @@ export async function inferMultidimAssignment(
 }
 
 export async function evaluateMultidimAssignment(
-  realm: Realm,
+  realm: TRealm,
   node: AST.MatrixAssign,
   dimension: Value.ColumnLikeValue
 ): Promise<Value.ColumnLikeValue> {
   const [, matchers, assigneeExp] = node.args;
-  const [matchCount, matches] = await matchTargets(
-    realm.inferContext,
-    realm,
-    matchers
-  );
+  const [matchCount, matches] = await matchTargets(realm, matchers);
 
   const assignee = await evaluate(realm, assigneeExp);
 

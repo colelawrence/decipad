@@ -1,12 +1,11 @@
-import { makeContext } from '../infer';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 import { CURRENT_COLUMN_SYMBOL, mapWithPrevious } from './previous';
-import { Realm } from './Realm';
 
 describe('mapWithPrevious', () => {
   const rows = [1, 2, 4];
   const foundPrevious = [];
   let rollySum;
-  const realm = new Realm(makeContext());
+  const realm = new ScopedRealm(makeInferContext());
 
   beforeAll(async () => {
     rollySum = await mapWithPrevious(
@@ -25,7 +24,7 @@ describe('mapWithPrevious', () => {
   });
 
   test('realm.previousRow should be set to null at the end', () => {
-    expect(realm.previousRow).toEqual(null);
+    expect(realm.previousRow).toBeUndefined();
   });
 
   test('accumulator should work', () => {

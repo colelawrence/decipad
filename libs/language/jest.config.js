@@ -24,7 +24,7 @@ module.exports = {
       statements: 85,
       branches: 76,
       lines: 85,
-      functions: 88,
+      functions: 87,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

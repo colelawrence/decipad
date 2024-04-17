@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
-import { inferStatement, makeContext } from './infer';
-import { Realm, evaluateStatement } from './interpreter';
+import { inferStatement } from './infer';
+import { evaluateStatement } from './interpreter';
 import { N } from '@decipad/number';
+import { ScopedRealm, makeInferContext } from './scopedRealm';
 
 describe('lambdas', () => {
   const anonymousFunction: AST.FunctionDefinition = {
@@ -29,7 +30,7 @@ describe('lambdas', () => {
 
   it('infers the type of a lambda', async () => {
     const type = await inferStatement(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       anonymousFunction
     );
     expect(type).toMatchObject({
@@ -43,7 +44,7 @@ describe('lambdas', () => {
 
   it('evaluates a lambda', async () => {
     const value = await evaluateStatement(
-      new Realm(makeContext()),
+      new ScopedRealm(undefined, makeInferContext()),
       anonymousFunction
     );
 

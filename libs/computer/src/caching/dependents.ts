@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { previousRefSymbols, type AST } from '@decipad/language';
+import { type AST } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import {
   iterProgram,
@@ -36,9 +36,6 @@ export const getDependents = (
       if (sym != null) {
         dependencySymbols.add(sym);
       }
-    }
-    for (const s of previousRefSymbols) {
-      dependencySymbols.add(s);
     }
   });
 

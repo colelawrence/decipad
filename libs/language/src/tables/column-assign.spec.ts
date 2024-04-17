@@ -2,19 +2,18 @@
 import type { AST, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult, buildType as t } from '@decipad/language-types';
-import type { Context } from '../infer';
-import { inferStatement, makeContext } from '../infer';
+import { inferStatement } from '../infer';
 import { c, col, l, r, tableColAssign } from '../utils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';
-import { Realm } from '../interpreter';
-import { parseExpressionOrThrow } from '..';
+import type { ScopedInferContext, TRealm } from '..';
+import { ScopedRealm, makeInferContext, parseExpressionOrThrow } from '..';
 import { jsCol } from '../testUtils';
 
-let ctx: Context;
-let realm: Realm;
+let ctx: ScopedInferContext;
+let realm: TRealm;
 beforeEach(() => {
-  ctx = makeContext();
-  realm = new Realm(ctx);
+  ctx = makeInferContext();
+  realm = new ScopedRealm(undefined, ctx);
   ctx.stack.setNamespaced(['Table', 'Col1'], t.number());
   ctx.stack.set('ColumnOfUnknownLength', t.column(t.number()));
   ctx.stack.createNamespace('Empty');
@@ -334,12 +333,12 @@ describe('Column assignment inference', () => {
 });
 
 describe('Column assignment evaluation', () => {
-  let realm = new Realm(ctx);
+  let realm = new ScopedRealm(undefined, ctx);
   const columnFormula = c('+', r('Col1'), l(2));
   const columnFormulaWithPrevious = c('+', c('previous', l(2)), l(1));
 
   beforeEach(async () => {
-    realm = new Realm(ctx);
+    realm = new ScopedRealm(undefined, ctx);
     realm.stack.createNamespace('Table');
     realm.stack.setNamespaced(['Table', 'Col1'], jsCol([1, 2]));
     await inferStatement(realm, columnFormula);

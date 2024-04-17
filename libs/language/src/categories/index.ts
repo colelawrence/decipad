@@ -3,16 +3,16 @@ import type { AST, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
 import { inferExpression } from '../infer';
-import type { Realm } from '../interpreter';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
+import type { TRealm } from '../scopedRealm';
 
 export const inferCategories = async (
-  realm: Realm,
+  realm: TRealm,
   category: AST.Categories
 ): Promise<Type> => {
   const { inferContext: ctx } = realm;
-  if (!ctx.stack.isInGlobalScope) {
+  if (realm.depth !== 0) {
     return t.impossible(InferError.forbiddenInsideFunction('category'));
   }
 
@@ -30,12 +30,12 @@ export const inferCategories = async (
     return t.column(await setCell, name);
   });
 
-  ctx.stack.set(name, theSet, ctx.statementId);
+  ctx.stack.set(name, theSet, realm.statementId);
   return theSet;
 };
 
 export const evaluateCategories = async (
-  realm: Realm,
+  realm: TRealm,
   category: AST.Categories
 ): Promise<Value.ColumnLikeValue> => {
   const [nameExp, contentsExp] = category.args;

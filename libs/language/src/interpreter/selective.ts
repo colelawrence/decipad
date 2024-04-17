@@ -5,8 +5,8 @@ import type { AST } from '@decipad/language-types';
 import { Value } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
 import { evaluateStatement } from './evaluate';
-import type { Realm } from './Realm';
 import { getDefined } from '@decipad/utils';
+import type { TRealm } from '../scopedRealm';
 
 // (object identity equality) of the returned statements.
 const desiredTargetsToStatements = (
@@ -50,7 +50,7 @@ export async function evaluateTargets(
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
   >,
-  realm: Realm
+  realm: TRealm
 ): Promise<Value.Value[]> {
   const targetSet: Map<unknown, Value.Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [

@@ -14,8 +14,8 @@ import { areProgramBlocksEqual } from './areBlocksEqual';
 import type { ComputerProgram } from '../types';
 
 export const getChangedMapKeys = <T>(
-  oldMap: Map<string, T>,
-  newMap: Map<string, T>,
+  oldMap: ReadonlyMap<string, T>,
+  newMap: ReadonlyMap<string, T>,
   equals: (a: T | undefined, b: T | undefined) => boolean
 ): string[] => {
   const allKeys = new Set(

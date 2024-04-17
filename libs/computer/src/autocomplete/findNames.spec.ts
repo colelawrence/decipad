@@ -84,7 +84,168 @@ it('finds names', async () => {
           "argNames": Array [
             "x",
           ],
-          "ast": null,
+          "ast": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "exprRef_block_4",
+                ],
+                "end": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "funcdef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "x",
+                    ],
+                    "end": Object {
+                      "char": 2,
+                      "column": 3,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 2,
+                      "column": 3,
+                      "line": 1,
+                    },
+                    "type": "def",
+                  },
+                ],
+                "end": Object {
+                  "char": 3,
+                  "column": 4,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 1,
+                  "column": 2,
+                  "line": 1,
+                },
+                "type": "argument-names",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "+",
+                        ],
+                        "end": Object {
+                          "char": 9,
+                          "column": 10,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 9,
+                          "column": 10,
+                          "line": 1,
+                        },
+                        "type": "funcref",
+                      },
+                      Object {
+                        "args": Array [
+                          Object {
+                            "args": Array [
+                              "x",
+                            ],
+                            "end": Object {
+                              "char": 7,
+                              "column": 8,
+                              "line": 1,
+                            },
+                            "isMissing": false,
+                            "start": Object {
+                              "char": 7,
+                              "column": 8,
+                              "line": 1,
+                            },
+                            "type": "ref",
+                          },
+                          Object {
+                            "args": Array [
+                              "number",
+                              DeciNumber {
+                                "d": 1n,
+                                "infinite": false,
+                                "n": 1n,
+                                "s": 1n,
+                              },
+                            ],
+                            "end": Object {
+                              "char": 11,
+                              "column": 12,
+                              "line": 1,
+                            },
+                            "start": Object {
+                              "char": 11,
+                              "column": 12,
+                              "line": 1,
+                            },
+                            "type": "literal",
+                          },
+                        ],
+                        "end": Object {
+                          "char": 11,
+                          "column": 12,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 7,
+                          "column": 8,
+                          "line": 1,
+                        },
+                        "type": "argument-list",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 11,
+                      "column": 12,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 7,
+                      "column": 8,
+                      "line": 1,
+                    },
+                    "type": "function-call",
+                  },
+                ],
+                "end": Object {
+                  "char": 11,
+                  "column": 12,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 7,
+                  "column": 8,
+                  "line": 1,
+                },
+                "type": "block",
+              },
+            ],
+            "end": Object {
+              "char": 11,
+              "column": 12,
+              "line": 1,
+            },
+            "start": Object {
+              "char": 0,
+              "column": 1,
+              "line": 1,
+            },
+            "type": "function-definition",
+          },
           "body": Object {
             "args": Array [
               Object {

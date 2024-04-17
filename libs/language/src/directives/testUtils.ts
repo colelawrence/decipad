@@ -3,9 +3,10 @@ import type { AST, Type, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
 import { isExpression, isNode } from '../utils';
-import { Realm } from '../interpreter';
-import { inferExpression, makeContext } from '../infer';
+import { inferExpression } from '../infer';
 import type { DirectiveImpl } from './types';
+import type { TRealm } from '../scopedRealm';
+import { ScopedRealm, makeInferContext } from '../scopedRealm';
 
 export const directiveFor = (args: AST.Node[]): AST.Directive => {
   return {
@@ -17,9 +18,9 @@ export const directiveFor = (args: AST.Node[]): AST.Directive => {
 export const testGetValue = async (
   getValue: DirectiveImpl['getValue'],
   args: AST.Node[],
-  _realm?: Realm
+  _realm?: TRealm
 ): Promise<Value.Value> => {
-  const realm = _realm || new Realm(makeContext());
+  const realm = _realm || new ScopedRealm(undefined, makeInferContext());
   const root = directiveFor(args);
   root.inferredType = t.number();
 
@@ -36,11 +37,13 @@ export const testGetValue = async (
 
 export const testGetType = async (
   getType: DirectiveImpl['getType'],
-  ...args: [Realm | AST.Node, ...AST.Node[]]
+  ...args: [TRealm | AST.Node, ...AST.Node[]]
 ): Promise<Type> => {
   // Allow passing a context along with the args, it's useful for testing
   const [firstArg, ...restArgs] = args;
-  const realm = isNode(firstArg) ? new Realm(makeContext()) : firstArg;
+  const realm = isNode(firstArg)
+    ? new ScopedRealm(undefined, makeInferContext())
+    : firstArg;
   const argsWithoutCtx = isNode(firstArg) ? [firstArg, ...restArgs] : restArgs;
 
   return getType(realm, directiveFor(argsWithoutCtx));

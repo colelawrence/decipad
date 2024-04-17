@@ -7,21 +7,21 @@ import {
   type AST,
   runBlock,
   inferBlock,
-  Realm,
-  makeContext,
+  ScopedRealm,
+  makeInferContext,
 } from '@decipad/remote-computer';
 import { formatError, formatResult } from '@decipad/format';
 
 const DEFAULT_LOCALE = 'en-US';
 
 let accumulatedSource = '';
-let inferContext = makeContext();
-let realm = new Realm(inferContext);
+let inferContext = makeInferContext();
+let realm = new ScopedRealm(undefined, inferContext);
 
 export const reset = () => {
   accumulatedSource = '';
-  inferContext = makeContext();
-  realm = new Realm(inferContext);
+  inferContext = makeInferContext();
+  realm = new ScopedRealm(undefined, inferContext);
 };
 
 async function execDeci(ast: AST.Block) {
