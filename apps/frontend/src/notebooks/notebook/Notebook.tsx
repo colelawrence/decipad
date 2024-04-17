@@ -26,7 +26,7 @@ import {
   useSetCssVarWidth,
 } from '@decipad/ui';
 import type { FC } from 'react';
-import { Suspense, createContext, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -121,74 +121,67 @@ export const Notebook: FC = () => {
 
   return (
     <EditorChangeContextProvider changeSubject={changeSubject}>
-      <DocsyncEditorProvider.Provider value={docsync} key={notebookId}>
-        <ControllerProvider.Provider value={docsync}>
-          <ComputerContextProvider computer={computer}>
-            <AnnotationsContext.Provider
-              value={{
-                annotations:
-                  annotations.data?.getAnnotationsByPadId || undefined,
-                articleRef,
-                scenarioId: scenarioId || null,
-                expandedBlockId,
-                setExpandedBlockId,
-              }}
-            >
-              <NotebookPage
-                notebook={
-                  <Suspense fallback={<EditorPlaceholder />}>
-                    <Editor
-                      notebookId={notebookId}
-                      docsync={docsync}
-                      setDocsync={setDocsync}
-                      setComputer={setComputer}
-                      setError={setError}
-                    />
-                  </Suspense>
-                }
-                topbar={
-                  <Suspense fallback={<TopbarPlaceholder />}>
-                    <Topbar {...props} />
-                  </Suspense>
-                }
-                articleRef={articleRef}
-                sidebar={
-                  <Suspense>
-                    <Sidebar {...props} />
-                  </Suspense>
-                }
-                tabs={
-                  !isEmbed && docsync ? (
-                    <Tabs
-                      notebookId={notebookId}
-                      controller={docsync}
-                      docsync={docsync}
-                    />
-                  ) : null
-                }
-                isEmbed={isEmbed}
-                isReadOnly={docsync?.isReadOnly}
-              />
-              <Suspense>
-                {isBuyCreditsModalOpen && (
-                  <AddCreditsModal
-                    closeAction={() => setIsBuyCreditsModalOpen(false)}
+      <ControllerProvider.Provider value={docsync}>
+        <ComputerContextProvider computer={computer}>
+          <AnnotationsContext.Provider
+            value={{
+              annotations: annotations.data?.getAnnotationsByPadId || undefined,
+              articleRef,
+              scenarioId: scenarioId || null,
+              expandedBlockId,
+              setExpandedBlockId,
+            }}
+          >
+            <NotebookPage
+              notebook={
+                <Suspense fallback={<EditorPlaceholder />}>
+                  <Editor
+                    notebookId={notebookId}
+                    docsync={docsync}
+                    setDocsync={setDocsync}
+                    setComputer={setComputer}
+                    setError={setError}
                   />
-                )}
-              </Suspense>
-            </AnnotationsContext.Provider>
-          </ComputerContextProvider>
-        </ControllerProvider.Provider>
-      </DocsyncEditorProvider.Provider>
+                </Suspense>
+              }
+              topbar={
+                <Suspense fallback={<TopbarPlaceholder />}>
+                  <Topbar {...props} />
+                </Suspense>
+              }
+              articleRef={articleRef}
+              sidebar={
+                <Suspense>
+                  <Sidebar {...props} />
+                </Suspense>
+              }
+              tabs={
+                !isEmbed && docsync ? (
+                  <Tabs
+                    notebookId={notebookId}
+                    controller={docsync}
+                    docsync={docsync}
+                  />
+                ) : null
+              }
+              isEmbed={isEmbed}
+              isReadOnly={docsync?.isReadOnly}
+            />
+            <Suspense>
+              {isBuyCreditsModalOpen && (
+                <AddCreditsModal
+                  closeAction={() => setIsBuyCreditsModalOpen(false)}
+                />
+              )}
+            </Suspense>
+          </AnnotationsContext.Provider>
+        </ComputerContextProvider>
+      </ControllerProvider.Provider>
     </EditorChangeContextProvider>
   );
 };
 
 export default Notebook;
-
-const DocsyncEditorProvider = createContext<DocSyncEditor | undefined>(
-  undefined
-);
 
 export function getNotebookError(error: Error | undefined): JSX.Element | null {
   if (error) {
