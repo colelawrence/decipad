@@ -21,7 +21,11 @@ export const run = async (
 
   return Promise.all(
     (await evaluateTargets(program, desiredTargets, realm)).map(async (v) =>
-      doNotMaterialiseResults ? v.getData() : materializeOneResult(v.getData())
+      v != null
+        ? doNotMaterialiseResults
+          ? v.getData()
+          : materializeOneResult(v.getData())
+        : undefined
     )
   );
 };

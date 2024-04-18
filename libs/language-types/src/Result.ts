@@ -2,6 +2,11 @@ import type DeciNumber from '@decipad/number';
 import type { SerializedType, SerializedTypeKind } from './SerializedType';
 import type { Value } from '.';
 
+export type GenericResultGenerator<T> = (
+  start?: number,
+  end?: number
+) => AsyncGenerator<T>;
+
 export type ResultGenerator = (
   start?: number,
   end?: number

@@ -39,15 +39,15 @@ export class FilteredColumn
     }
   }
 
+  async indexToLabelIndex(filteredIndex: number) {
+    const sourceIndex = this.getSourceIndex(filteredIndex);
+    return getLabelIndex(this.sourceColumn2, sourceIndex);
+  }
+
   static fromColumnValueAndMap(
     column: ColumnLikeValue,
     map: boolean[]
   ): FilteredColumn {
     return new FilteredColumn(column, map);
-  }
-
-  async indexToLabelIndex(filteredIndex: number) {
-    const sourceIndex = this.getSourceIndex(filteredIndex);
-    return getLabelIndex(this.sourceColumn2, sourceIndex);
   }
 }

@@ -4,5 +4,5 @@ import type { Result, Value } from '@decipad/language-types';
 import { columnValueToResultValue } from '@decipad/language-types';
 
 export const tableValueToTableResultValue = (
-  v: Value.Table
+  v: Value.TableValue
 ): Result.ResultTable => v.columns.map(columnValueToResultValue);

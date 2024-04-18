@@ -2,7 +2,13 @@ import stringify from 'json-stringify-safe';
 import pTime from 'p-time';
 import DeciNumber, { N } from '@decipad/number';
 import type { AnyMapping } from '@decipad/utils';
-import { getDefined, zip, produce, anyMappingToMap } from '@decipad/utils';
+import {
+  getDefined,
+  zip,
+  produce,
+  anyMappingToMap,
+  identity,
+} from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
   type AST,
@@ -91,14 +97,15 @@ const userValue = (type: Type, value: Result.OneResult): Result.OneResult => {
 };
 
 interface TypeAndValuePair {
-  type: Type;
+  type: Type | SerializedType;
   value: Result.OneResult;
 }
 
 const typeAndValuePairs = (
   types: Record<string, Type>,
   values: Record<string, Result.OneResult>,
-  asUser = true
+  valueAsUser = true,
+  typeAsUser = false
 ): Record<string, TypeAndValuePair> => {
   const keys = new Set(Object.keys(types));
   for (const key of Object.keys(values)) {
@@ -111,8 +118,8 @@ const typeAndValuePairs = (
     pairs.push([
       key,
       {
-        type,
-        value: asUser ? userValue(type, value) : value,
+        type: typeAsUser ? serializeType(type) : type,
+        value: valueAsUser ? userValue(type, value) : value,
       },
     ]);
   }
@@ -120,34 +127,46 @@ const typeAndValuePairs = (
   return Object.fromEntries(pairs);
 };
 
+interface EvaluateForVariablesOptions {
+  valuesAsUser?: boolean;
+  typesAsUser?: boolean;
+}
+
 export const evaluateForVariables = async (
   source: string,
   wantedVariables: string[],
-  asUser = true
+  { valuesAsUser = true, typesAsUser = false }: EvaluateForVariablesOptions = {}
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = await inferProgram(program);
+  const realm = new ScopedRealm(
+    undefined,
+    makeInferContext(),
+    'evaluateForVariables',
+    {
+      retrieveHumanVariableNameByGlobalVariableName: identity,
+    }
+  );
+  const inferResult = await inferProgram(program, realm);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${stringify(
-        erroredType,
-        null,
-        '\t'
-      )}`
+      `evaluateForVariables found an error ${
+        erroredType.errorCause?.spec.errType
+      } \n${stringify(erroredType.errorCause, null, '\t')}`
     );
   }
 
-  const variables = await run(program, wantedVariables);
+  const variables = await run(program, wantedVariables, realm);
 
   return typeAndValuePairs(
     types,
     Object.fromEntries(zip(wantedVariables, variables)),
-    asUser
+    valuesAsUser,
+    typesAsUser
   );
 };
 

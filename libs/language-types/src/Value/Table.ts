@@ -3,11 +3,18 @@ import { isColumnLike } from './ColumnLike';
 import type { Value } from './Value';
 import { EmptyColumn } from './EmptyColumn';
 import type { AnyMapping } from '@decipad/utils';
-import { anyMappingToMap, filterUnzipped, unzip } from '@decipad/utils';
+import {
+  anyMappingToMap,
+  filterUnzipped,
+  getInstanceof,
+  unzip,
+} from '@decipad/utils';
 import { RuntimeError } from '../RuntimeError';
 import type { OneResult } from '../Result';
+import type { TableValue } from './TableValue';
+import { GeneratorTable } from './GeneratorTable';
 
-export class Table implements Value {
+export class Table implements TableValue {
   columns: ColumnLikeValue[];
   columnNames: string[];
 
@@ -23,13 +30,13 @@ export class Table implements Value {
     );
   }
 
-  async tableRowCount(): Promise<number | undefined> {
-    return this.columns.at(0)?.rowCount();
-  }
-
   static fromMapping(mapping: AnyMapping<ColumnLikeValue>) {
     const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
+  }
+
+  async tableRowCount(): Promise<number | undefined> {
+    return this.columns.at(0)?.rowCount();
   }
 
   getColumn(name: string) {
@@ -63,5 +70,14 @@ export class Table implements Value {
   }
 }
 
-export const isTableValue = (v: Value | undefined | null): v is Table =>
-  v instanceof Table && v.columnNames != null && v.columns != null;
+export const isTableValue = (
+  v: Value | undefined | null
+): v is Table | GeneratorTable =>
+  (v instanceof Table || v instanceof GeneratorTable) &&
+  v.columnNames != null &&
+  v.columns != null;
+
+export const getTableValue = (v: Value): Table | GeneratorTable =>
+  v instanceof Table
+    ? getInstanceof(v, Table)
+    : getInstanceof(v, GeneratorTable);

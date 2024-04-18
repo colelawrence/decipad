@@ -14,6 +14,13 @@
         "maxWarnings": 0
       }
     },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/generator-utils"],
+      "options": {
+        "jestConfig": "libs/generator-utils/jest.config.js"
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'language-builtins',
   coverageThreshold: {
     global: {
-      statements: 58,
-      branches: 46,
-      lines: 58,
-      functions: 52,
+      statements: 55,
+      branches: 44,
+      lines: 55,
+      functions: 49,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

@@ -126,9 +126,10 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     if (n.temporaryMark) {
       // Circular dep
       if (!isTesting) {
-        console.error('node has a dependency cycle', n.value.id);
+        console.error('node %s has a dependency cycle', n.value.id);
         console.error(
-          'node depends on',
+          'node %s depends on',
+          n.value.id,
           Array.from(n.edges ?? []).map((edge) => [
             Array.from(edge.edges ?? []).map((edge) => edge.value.id),
           ])
@@ -209,35 +210,76 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     }
   }
 
-  const nodeIsTable = (node: Node): [string, Node[]] | undefined => {
+  const nodeIsTable = (node: Node): [string[], Node[]] | undefined => {
     for (const entity of node.entities) {
-      const table = tables[entity];
-      if (table) {
-        return [entity, table];
+      const tableColumns = tables[entity];
+      if (tableColumns) {
+        return [Array.from(node.entities), tableColumns];
       }
     }
     return undefined;
   };
 
-  // if some node A has a table as a dep, and A is not a property of that table, add all the table's columns as a dep
+  const nodeIsTableColumn = (node: Node): [string[], Node[]] | undefined => {
+    if (node.value.definesTableColumn) {
+      const [tableName] = node.value.definesTableColumn;
+      const tableNodes = identifiersToNode.get(tableName);
+      if (tableNodes) {
+        const tableEntities = tableNodes.flatMap((tableNode) =>
+          Array.from(tableNode.entities)
+        );
+        const tableColumnNodes = tableEntities.flatMap(
+          (tableNodeEntity) => tables[tableNodeEntity] ?? []
+        );
+        if (tableColumnNodes) {
+          return [tableEntities, tableColumnNodes];
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const nodeIsTableOrTableColumn = (
+    node: Node,
+    tryTableColumns: boolean
+  ): [string[], Node[]] | undefined => {
+    return (
+      nodeIsTable(node) ??
+      (tryTableColumns ? nodeIsTableColumn(node) : undefined)
+    );
+  };
+
+  // if some node A has a table as a dep, and A is not a property of that table, add all the table's columns as deps
   for (const node of nodes) {
-    if (!node.edges) continue;
+    if (!node.edges) {
+      continue;
+    }
     for (const edge of node.edges) {
-      const pointsToTable = nodeIsTable(edge);
+      const pointsToTable = nodeIsTableOrTableColumn(
+        edge,
+        // skip table columns if node defines a table
+        // column. This allows different tables to
+        // depend on each other.
+        !node.value.definesTableColumn
+      );
       if (!pointsToTable) {
         continue;
       }
-      const [table, columns] = pointsToTable;
+      const [tables, columns] = pointsToTable;
       const tableOrColumnEntities: Set<string> = new Set([
-        table,
+        ...tables,
         ...columns.flatMap((n) => Array.from(n.entities)),
       ]);
       if (
-        node.entities.size > 0 &&
-        Array.from(node.entities).every(
-          (nodeEnt) => !tableOrColumnEntities.has(nodeEnt)
+        !Array.from(node.entities).some((nodeEnt) =>
+          tableOrColumnEntities.has(nodeEnt)
         )
       ) {
+        // console.log(
+        //   'adding edges',
+        //   node.value.id,
+        //   columns.map((c) => c.value.id)
+        // );
         for (const col of columns) {
           node.edges.add(col);
         }

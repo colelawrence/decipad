@@ -6,12 +6,12 @@ import { cssVar } from '../../../primitives';
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
 import { useSimplePagination } from '../../../utils/usePagination';
-import { useMaterializedOneResult } from '../../../hooks';
 import { Table } from '../Table/Table';
 import { TableRow } from '../TableRow/TableRow';
 import { TableData } from '../TableData/TableData';
 import { CodeResult } from '..';
 import { PaginationControl } from 'libs/ui/src/shared';
+import { useMaterializedOneResult } from 'libs/ui/src/hooks';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
   color: cssVar('textDefault'),

@@ -4,7 +4,7 @@ import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { Unit, Value } from '@decipad/language-types';
+import { Unit, Value, resultToValue } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
 import type { TRealm, TScopedRealm } from '..';
 import { prettyPrintAST } from '..';
@@ -19,7 +19,6 @@ import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
-import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { isPrevious } from '../utils/isPrevious';

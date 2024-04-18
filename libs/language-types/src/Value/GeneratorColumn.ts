@@ -2,6 +2,7 @@ import {
   count,
   firstOrUndefined,
   from,
+  fromGeneratorPromise,
   memoizing,
   slice,
 } from '@decipad/generator-utils';
@@ -12,21 +13,22 @@ import type { ValueGeneratorFunction } from './ValueGenerator';
 import type { Dimension } from '../Dimension';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { lowLevelGet } from './lowLevelGet';
+import type { PromiseOrType } from '@decipad/utils';
 import { getDefined } from '@decipad/utils';
 
 const MAX_GENERATOR_MEMO_ELEMENTS = 10_000;
 
 export class GeneratorColumn implements ColumnLikeValue {
-  private gen: ValueGeneratorFunction;
+  private gen: PromiseOrType<ValueGeneratorFunction>;
   private memo: undefined | Array<Value>;
   private partialMemo: undefined | boolean;
 
-  constructor(gen: ValueGeneratorFunction) {
+  constructor(gen: PromiseOrType<ValueGeneratorFunction>) {
     this.gen = gen;
   }
   indexToLabelIndex?: ((index: number) => Promise<number>) | undefined;
   async dimensions(): Promise<Dimension[]> {
-    const contents = await firstOrUndefined(this.gen());
+    const contents = await firstOrUndefined((await this.gen)());
 
     if (isColumnLike(contents)) {
       return [
@@ -62,6 +64,10 @@ export class GeneratorColumn implements ColumnLikeValue {
   }
 
   values(start = 0, end = Infinity) {
+    return fromGeneratorPromise(this.asyncValues(start, end));
+  }
+
+  private async asyncValues(start = 0, end = Infinity) {
     if (
       this.memo != null &&
       (end < this.memo.length || !getDefined(this.partialMemo))
@@ -70,7 +76,7 @@ export class GeneratorColumn implements ColumnLikeValue {
     }
     return slice(
       memoizing(
-        this.gen(),
+        (await this.gen)(),
         (all, partial) => {
           this.memo = all;
           this.partialMemo = partial;

@@ -5,8 +5,9 @@ import type { Value } from './Value';
 import zip from 'lodash.zip';
 import unzip from 'lodash.unzip';
 import { produce } from '@decipad/utils';
+import type { TableValue } from './TableValue';
 
-const sortTableByType = (table: Table, type: Type): Table => {
+const sortTableByType = (table: TableValue, type: Type): Table => {
   const sorted = zip(table.columnNames, table.columns).sort(
     ([name1], [name2]) =>
       (type.columnNames?.indexOf(name1 as string) ?? 0) -

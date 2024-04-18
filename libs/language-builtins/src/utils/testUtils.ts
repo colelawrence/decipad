@@ -6,6 +6,7 @@ import DeciNumber, { N } from '@decipad/number';
 import type { BuiltinContextUtils } from '../types';
 import { callBuiltinFunctor } from '../callBuiltinFunctor';
 import { callBuiltin } from '../callBuiltin';
+import { identity } from '@decipad/utils';
 
 export const makeContext = (
   u?: Partial<BuiltinContextUtils>
@@ -13,8 +14,9 @@ export const makeContext = (
   ...u,
   retrieveIndexByName: () => null,
   retrieveVariableTypeByGlobalVariableName: () => null,
-  simpleExpressionEvaluate: async () => Promise.resolve(Value.UnknownValue),
+  retrieveHumanVariableNameByGlobalVariableName: identity,
   retrieveVariableValueByGlobalVariableName: () => null,
+  simpleExpressionEvaluate: async () => Promise.resolve(Value.UnknownValue),
   callBuiltinFunctor,
   callBuiltin,
   callFunctor: async () => {

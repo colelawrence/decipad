@@ -2,6 +2,7 @@ export * from './ColumnLike';
 export * from './Column';
 export * from './MappedColumn';
 export * from './FilteredColumn';
+export * from './FilteredColumnStream';
 export * from './ColumnSlice';
 export * from './SlicesMap';
 export * from './isColumnLike';

@@ -29,6 +29,7 @@ module.exports = {
     '<rootDir>/libs/editor-integrations',
     '<rootDir>/libs/y-websocket',
     '<rootDir>/libs/format',
+    '<rootDir>/libs/generator-utils',
     '<rootDir>/libs/repl',
     '<rootDir>/libs/computer',
     '<rootDir>/libs/parse',

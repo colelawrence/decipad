@@ -98,6 +98,7 @@
       "@decipad/fraction": ["libs/fraction/src/index.ts"],
       "@decipad/frontend": ["apps/frontend/src/index.tsx"],
       "@decipad/frontend-config": ["libs/frontend-config/src/index.ts"],
+      "@decipad/frontend-env": ["libs/frontend-env/src/index.ts"],
       "@decipad/generator-utils": ["libs/generator-utils/src/index.ts"],
       "@decipad/graphql-client": ["libs/graphql-client/src/index.ts"],
       "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],

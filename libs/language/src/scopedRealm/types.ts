@@ -8,6 +8,7 @@ export type InferContextUtils = Omit<
   ContextUtils,
   | 'simpleExpressionEvaluate'
   | 'retrieveVariableValueByGlobalVariableName'
+  | 'retrieveHumanVariableNameByGlobalVariableName'
   | 'callValue'
   | 'callFunctor'
 >;

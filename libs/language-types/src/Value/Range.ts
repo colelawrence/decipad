@@ -11,11 +11,11 @@ export class Range implements Value {
     this.end = end;
   }
 
-  static async fromBounds(start: Value, end: Value): Promise<Range> {
+  static fromBounds(start: Value, end: Value): Range {
     if (start instanceof DateValue && end instanceof DateValue) {
       return new Range({
         start,
-        end: await end.getEndDate(),
+        end: end.getEndDate(),
       });
     } else if (start instanceof NumberValue && end instanceof NumberValue) {
       return new Range({ start, end });

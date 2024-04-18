@@ -20,6 +20,7 @@ export * from './get-defined';
 export * from './get-defined-promise';
 export * from './get-only';
 export * from './getInstanceOf';
+export * from './getTrue';
 export * from './identity';
 export * from './isTableIdentifier';
 export * from './last';

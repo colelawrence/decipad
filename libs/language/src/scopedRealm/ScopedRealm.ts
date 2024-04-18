@@ -121,6 +121,13 @@ const tableItemsToTable: StackNamespaceJoiner<Value.Value> = (tableItems) => {
 
 const tableToTableItems: StackNamespaceSplitter<Value.Value> = (table) => {
   if (table instanceof Value.Table) {
+    if (table.columnNames.length !== table.columns.length) {
+      console.error(
+        'table has inconsistent number of columns',
+        table.columnNames,
+        table.columns
+      );
+    }
     return zip(table.columnNames, table.columns);
   }
   return undefined;

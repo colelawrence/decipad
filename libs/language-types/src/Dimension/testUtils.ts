@@ -3,6 +3,7 @@ import { UnknownValue, fromJS, getColumnLike } from '../Value';
 import type { HypercubeArg } from './LazyOperation';
 import type { DimensionId } from './types';
 import type { ContextUtils } from '../ContextUtils';
+import { identity } from '@decipad/utils';
 
 export const jsCol = (items: FromJSArg) => getColumnLike(fromJS(items));
 
@@ -28,4 +29,5 @@ export const makeContext = (): ContextUtils => ({
   callValue: async () => {
     throw new Error('Not implemented');
   },
+  retrieveHumanVariableNameByGlobalVariableName: identity,
 });

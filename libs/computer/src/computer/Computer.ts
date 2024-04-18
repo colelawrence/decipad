@@ -103,7 +103,10 @@ export interface IngestComputeRequestResponse {
 export class Computer {
   private latestProgram: ComputerProgram = emptyComputerProgram();
   private latestExternalData: ExternalDataMap = new Map();
-  computationRealm = new ComputationRealm();
+  computationRealm = new ComputationRealm({
+    retrieveHumanVariableNameByGlobalVariableName: (varName) =>
+      this.latestExprRefToVarNameMap.get(varName) ?? varName,
+  });
   private externalData = new BehaviorSubject<
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());

@@ -16,7 +16,4 @@ export type CallBuiltin = (
   returnType: Type
 ) => Promise<Value.Value>;
 
-export type BuiltinContextUtils = ContextUtils & {
-  callBuiltinFunctor: CallBuiltinFunctor;
-  callBuiltin: CallBuiltin;
-};
+export type BuiltinContextUtils = ContextUtils;

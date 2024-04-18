@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { buildResult } from '@decipad/language';
-import { all } from '@decipad/generator-utils';
+import type { Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { materializeResult } from '@decipad/language';
 import type { ColumnDesc, MaterializedColumnDesc } from '../types';
 
 export const materializeColumnDesc = async (
@@ -8,12 +9,8 @@ export const materializeColumnDesc = async (
 ): Promise<MaterializedColumnDesc> => {
   return {
     ...columnDesc,
-    result: buildResult(
-      {
-        ...columnDesc.result.type,
-        kind: 'materialized-column',
-      },
-      await all(columnDesc.result.value())
-    ),
+    result: (await materializeResult(
+      columnDesc.result
+    )) as Result.Result<'materialized-column'>,
   };
 };

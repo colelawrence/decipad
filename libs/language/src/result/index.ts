@@ -4,7 +4,6 @@ import type { Result, SerializedTypeKind, Type } from '@decipad/language-types';
 import { serializeType } from '@decipad/language-types';
 import { validateResult } from '../validateResult';
 
-export * from './resultToValue';
 export { Column } from './Column';
 export type { ColumnLikeResult } from './Column';
 

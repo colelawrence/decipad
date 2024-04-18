@@ -34,6 +34,7 @@ export interface ContextUtils {
   retrieveIndexByName: (indexName: string) => Type | null;
   retrieveVariableTypeByGlobalVariableName: (varName: string) => Type | null;
   retrieveVariableValueByGlobalVariableName: (varName: string) => Value | null;
+  retrieveHumanVariableNameByGlobalVariableName: (varName: string) => string;
   simpleExpressionEvaluate: (s: Statement) => Promise<Value>;
   callBuiltinFunctor: CallBuiltinFunctor;
   callBuiltin: CallBuiltin;

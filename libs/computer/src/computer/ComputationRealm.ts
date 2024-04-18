@@ -22,19 +22,26 @@ export type CacheContents = {
 };
 
 export class ComputationRealm {
-  inferContext: language.TScopedInferContext = makeInferContext();
-  interpreterRealm: language.TScopedRealm = new ScopedRealm(
-    undefined,
-    this.inferContext,
-    'interpreter',
-    {
-      callValue: async (...args) =>
-        functionCallValue(this.interpreterRealm, ...args),
-    }
-  );
+  inferContext: language.TScopedInferContext;
+  interpreterRealm: language.TScopedRealm;
   locCache = new Map<string, CacheContents>();
   errorLocs = new Set<string>();
   epoch = 0n;
+
+  constructor(contextUtils: Partial<language.ContextUtils> = {}) {
+    this.inferContext = makeInferContext({
+      contextUtils,
+    });
+    this.interpreterRealm = new ScopedRealm(
+      undefined,
+      this.inferContext,
+      'interpreter',
+      {
+        callValue: async (...args) =>
+          functionCallValue(this.interpreterRealm, ...args),
+      }
+    );
+  }
 
   setExternalData(externalData: language.ExternalDataMap) {
     this.interpreterRealm.setExternalData(externalData);
