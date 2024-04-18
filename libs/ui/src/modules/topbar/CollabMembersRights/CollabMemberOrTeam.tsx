@@ -17,6 +17,8 @@ type CollabMemberUserProps = {
     permission: PermissionType
   ) => void;
   readonly disabled: boolean;
+  readonly canInviteReaders?: boolean;
+  readonly canInviteEditors?: boolean;
 };
 
 type CollabMemberTeamProps = {
@@ -53,6 +55,8 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
       onRemoveCollaborator = noop,
       onChangePermission = noop,
       disabled = false,
+      canInviteReaders,
+      canInviteEditors,
     } = props;
     const { user, permission } = info;
     const { name, id, email, image } = user || {};
@@ -88,6 +92,8 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
           onChange={(newPerm) =>
             user?.id ? onChangePermission(user.id, newPerm) : noop
           }
+          canInviteReaders={canInviteReaders}
+          canInviteEditors={canInviteEditors}
         />
       </div>
     );

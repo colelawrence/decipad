@@ -138,12 +138,29 @@ const resolvers: Resolvers = {
     sharePadWithUser: padResource.shareWithUser,
     unsharePadWithUser: padResource.unshareWithUser,
     sharePadWithEmail: async (parent, args, context) => {
+      // marta
+
+      const data = await tables();
+      const pad = await data.pads.get({ id: args.id });
+
+      if (!pad) {
+        throw new Error(`Pad ${args.id} does not exist`);
+      }
+
+      const accessList = await padResource.access(pad as Pad, args, context);
+
       if (
-        !(await subscriptions.isTeamOrEnterpriseWs(args.id)) &&
-        NEW_PAYMENTS
+        !(await subscriptions.canUserBeInvitedWithPermission(
+          args.id,
+          args.permissionType,
+          accessList.users,
+          NEW_PAYMENTS
+        ))
       ) {
+        const humanWordingCollaborators =
+          args.permissionType === 'READ' ? 'readers' : 'editors';
         throw new Error(
-          "You cannot share notebook if you aren't on team or enterprise plan"
+          `You have reached your limit of notebook ${humanWordingCollaborators} for your current plan`
         );
       }
 

@@ -446,6 +446,7 @@ const Workspace: FC = () => {
                   <EditMembersModal
                     onClose={() => navigate(currentWorkspaceRoute.$)}
                     currentWorkspace={currentWorkspace}
+                    currentSubscriptionPlan={currentSubscriptionPlan}
                   />
                 </LazyRoute>
               </RequirePaidPlanRoute>

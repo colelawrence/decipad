@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { Button, InputField, Loading } from '../../../shared';
 import { Check } from '../../../icons';
 import { CollabAccessDropdown } from '../CollabAccessDropdown/CollabAccessDropdown';
@@ -80,6 +80,8 @@ interface NotebookCollaborateTabProps {
   readonly nrOfTeamMembers?: number | null;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
+  readonly canInviteEditors?: boolean;
+  readonly canInviteReaders?: boolean;
 
   readonly notebookId: string;
   readonly onRemove: NotebookAccessActionsReturn['onRemoveAccess'];
@@ -101,6 +103,8 @@ export const NotebookCollaborateTab = ({
   manageTeamURL,
   isAdmin,
   notebookId,
+  canInviteEditors,
+  canInviteReaders,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
@@ -110,6 +114,16 @@ export const NotebookCollaborateTab = ({
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [permission, setPermission] = useState<PermissionType>('WRITE');
+
+  useEffect(() => {
+    if (
+      !canInviteEditors &&
+      permission === 'WRITE' &&
+      isFlagEnabled('NEW_PAYMENTS')
+    ) {
+      setPermission('READ');
+    }
+  }, [canInviteEditors, permission]);
 
   const navigate = useNavigate();
 
@@ -178,8 +192,7 @@ export const NotebookCollaborateTab = ({
               : 'Invitees of this notebook'}
           </p>
           <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
-            To invite users to the notebook you must have a team or enterprise
-            plan.
+            To invite more users to the notebook you must upgrade plan.
           </p>
         </div>
 
@@ -191,6 +204,8 @@ export const NotebookCollaborateTab = ({
           onRemoveCollaborator={handleRemoveCollaborator}
           onChangePermission={handleChangePermission}
           disabled={!isAdmin}
+          canInviteReaders={canInviteReaders}
+          canInviteEditors={canInviteEditors}
         />
       </div>
     );
@@ -221,12 +236,13 @@ export const NotebookCollaborateTab = ({
               onChange={setEmail}
               onEnter={handleAddCollaborator}
             />
-
             <span data-testid="select-share-permission">
               <CollabAccessDropdown
                 isInvitationPicker
                 currentPermission={permission}
                 onChange={setPermission}
+                canInviteEditors={canInviteEditors}
+                canInviteReaders={canInviteReaders}
               />
             </span>
           </div>
@@ -258,6 +274,8 @@ export const NotebookCollaborateTab = ({
         onRemoveCollaborator={handleRemoveCollaborator}
         onChangePermission={handleChangePermission}
         disabled={!isAdmin}
+        canInviteReaders={canInviteReaders}
+        canInviteEditors={canInviteEditors}
       />
     </div>
   );

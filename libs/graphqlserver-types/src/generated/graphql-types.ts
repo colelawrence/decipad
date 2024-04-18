@@ -1034,12 +1034,14 @@ export type SubscriptionPlan = {
   credits?: Maybe<Scalars['Int']['output']>;
   currency?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  editors?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   isDefault?: Maybe<Scalars['Boolean']['output']>;
   key: Scalars['String']['output'];
   paymentLink?: Maybe<Scalars['String']['output']>;
   price?: Maybe<Scalars['Int']['output']>;
   queries?: Maybe<Scalars['Int']['output']>;
+  readers?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   storage?: Maybe<Scalars['Int']['output']>;
   title?: Maybe<Scalars['String']['output']>;
@@ -1180,9 +1182,11 @@ export type WorkspaceInput = {
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
   credits?: Maybe<Scalars['Int']['output']>;
+  editors?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
   queries?: Maybe<Scalars['Int']['output']>;
+  readers?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<SubscriptionStatus>;
   storage?: Maybe<Scalars['Int']['output']>;
@@ -1877,12 +1881,14 @@ export type SubscriptionPlanResolvers<ContextType = GraphqlContext, ParentType e
   credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  editors?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   price?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  readers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1986,9 +1992,11 @@ export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, Parent
 
 export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
   credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  editors?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
   queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  readers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['SubscriptionStatus']>, ParentType, ContextType>;
   storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;

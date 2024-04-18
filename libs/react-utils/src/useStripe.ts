@@ -9,6 +9,16 @@ type NotebookAvatarTrait = {
   permission: string;
 };
 
+type WorkspaceData = {
+  workspaceSubscription?: {
+    readers?: number | null;
+    editors?: number | null;
+  } | null;
+  access?: {
+    users?: NotebookAvatarTrait[] | null;
+  } | null;
+};
+
 const MAX_NOTEBOOK_COLLABORATORS = 3;
 
 export type UseStripePlansReturn = SubPlansFragment & {
@@ -60,16 +70,41 @@ export const useStripePlans = (): Array<UseStripePlansReturn> => {
 };
 
 export const useStripeCollaborationRules = (
-  usersWithAccess: NotebookAvatarTrait[] = [],
-  usersFromTeam: NotebookAvatarTrait[] = []
+  workspace?: WorkspaceData | null,
+  usersWithAccess: NotebookAvatarTrait[] = []
 ) => {
+  const usersFromTeam: NotebookAvatarTrait[] = workspace?.access?.users || [];
   const teamExcludingAdmins = usersFromTeam.filter(
     (member) => member.permission !== 'ADMIN'
   );
 
+  const maxCollabReaders = workspace?.workspaceSubscription?.readers || 0;
+  const maxCollabEditors = workspace?.workspaceSubscription?.editors || 0;
+
+  const editorsWithAccess = usersWithAccess.filter(
+    (user) => user.permission === 'WRITE'
+  );
+
+  const readersWithAccess = usersWithAccess.filter(
+    (user) => user.permission === 'READ'
+  );
+
   if (isFlagEnabled('NEW_PAYMENTS')) {
+    let canInviteReaders = true;
+    let canInviteEditors = true;
+
+    // According to requirements, the admin is also considered an editor
+    if (editorsWithAccess.length >= maxCollabEditors - 1) {
+      canInviteEditors = false;
+    }
+
+    if (readersWithAccess.length >= maxCollabReaders) {
+      canInviteReaders = false;
+    }
+
     return {
-      canInvite: true,
+      canInviteReaders,
+      canInviteEditors,
       canRemove: true,
     };
   }

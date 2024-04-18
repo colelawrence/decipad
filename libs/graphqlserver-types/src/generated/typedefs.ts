@@ -476,6 +476,8 @@ type SubscriptionPlan {
   credits: Int
   queries: Int
   seats: Int
+  editors: Int
+  readers: Int
   storage: Int
   description: String
   price: Int
@@ -839,6 +841,8 @@ type WorkspaceSubscription {
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int
+  editors: Int
+  readers: Int
   credits: Int
   queries: Int
   storage: Int

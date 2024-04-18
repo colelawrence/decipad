@@ -38,7 +38,7 @@ import type { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
-import { maybeThrowForbidden } from './helpers';
+import { getPlanInfoFromStripe, maybeThrowForbidden } from './helpers';
 
 const workspaces = resource('workspace');
 
@@ -205,11 +205,30 @@ const resolvers: Resolvers = {
         throw Boom.unauthorized('Cannot share in a free workspace');
       }
 
-      if (args.permissionType === 'READ') {
-        // Readers do not count towards workspace seats.
-        return WorkspaceRecordToWorkspace(
-          await workspaceResource.shareWithEmail(parent, args, context)
+      if (!['WRITE', 'ADMIN'].includes(args.permissionType)) {
+        Boom.unauthorized(
+          'To be part of a workspace, the invited members need to be an editor or admin'
         );
+      }
+
+      const workspace = await getWorkspaceById(
+        parent,
+        args,
+        context,
+        {} as any
+      );
+
+      if (!workspace?.plan || workspace?.plan === 'free') {
+        throw Boom.unauthorized('Cannot invite editors to a free workspace');
+      }
+      const wsMembersCount = await getWorkspaceMembersCount(args.id);
+      // we cannot rely on the nr of editors from `sub` because legacy subscriptions won't have this info
+      const stripePlan = await getPlanInfoFromStripe(workspace?.plan || '');
+
+      const nrOfEditorSeats = Number(stripePlan.metadata.editors);
+
+      if (wsMembersCount >= nrOfEditorSeats) {
+        throw Boom.unauthorized('Cannot invite more editors to the workspace');
       }
 
       return WorkspaceRecordToWorkspace(

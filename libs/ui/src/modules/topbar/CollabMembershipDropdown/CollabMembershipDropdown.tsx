@@ -12,7 +12,6 @@ import {
 } from '../../../primitives';
 import { MenuList } from '../../../shared/molecules';
 import { PermissionType } from '../../../types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { CaretDown } from 'libs/ui/src/icons';
 
 type CollabAccessDropdownProps = {
@@ -90,19 +89,6 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
         </p>
         <p css={dropDownItemStyles}>Can edit any notebook in this workspace</p>
       </MenuItem>
-      {isFlagEnabled('WORKSPACE_READERS') && (
-        <MenuItem
-          onSelect={() => onChange('READ')}
-          selected={currentPermission === 'READ'}
-        >
-          <p css={p14Medium} data-testId="collab-member-reader">
-            Reader
-          </p>
-          <p css={dropDownItemStyles}>
-            Can read any notebook in this workspace
-          </p>
-        </MenuItem>
-      )}
 
       {onRemove && (
         <MenuItem onSelect={onRemove}>

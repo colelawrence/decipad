@@ -88,6 +88,8 @@ export type NotebookSharingPopUpProps = Pick<
 
     readonly selectedTab: SidebarPublishingTab;
     readonly onChangeSelectedTab: (tab: SidebarPublishingTab) => void;
+    readonly canInviteReaders?: boolean;
+    readonly canInviteEditors?: boolean;
   };
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
@@ -124,6 +126,8 @@ export const NotebookPublishingPopUp = ({
   selectedTab,
   onChangeSelectedTab,
   onUpdateAllowDuplicate,
+  canInviteEditors,
+  canInviteReaders,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const activeTabId = useActiveTabId();
 
@@ -199,6 +203,8 @@ export const NotebookPublishingPopUp = ({
                   onRemove={onRemove}
                   onInvite={onInvite}
                   onChange={onChange}
+                  canInviteEditors={canInviteEditors}
+                  canInviteReaders={canInviteReaders}
                 />
               </div>
             </TabsContent>

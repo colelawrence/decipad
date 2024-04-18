@@ -593,6 +593,8 @@ export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   queries?: number;
   storage?: number;
   seats?: number;
+  editors?: number;
+  readers?: number;
 }
 
 export interface WorkspaceExecutedQueryRecord extends TableRecordBase {

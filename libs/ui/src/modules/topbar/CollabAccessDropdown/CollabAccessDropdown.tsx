@@ -3,8 +3,9 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { MenuList } from '../../../shared/molecules';
-import { MenuItem, TextAndIconButton } from '../../../shared/atoms';
+import { MenuItem, TextAndIconButton, Tooltip } from '../../../shared/atoms';
 import {
+  componentCssVars,
   cssVar,
   p12Medium,
   p12Regular,
@@ -13,7 +14,8 @@ import {
   red500,
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
-import { CaretDown } from 'libs/ui/src/icons';
+import { CaretDown, WarningCircle } from 'libs/ui/src/icons';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -23,6 +25,8 @@ type CollabAccessDropdownProps = {
   disable?: boolean;
   onRemove?: () => void;
   onChange?: (newPermission: PermissionType) => void;
+  canInviteEditors?: boolean;
+  canInviteReaders?: boolean;
 };
 
 const HumanReadablePermission: Record<PermissionType, string> = {
@@ -37,8 +41,12 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   onRemove,
   onChange,
   disable,
+  canInviteReaders,
+  canInviteEditors,
 }) => {
   const permissionLabel = HumanReadablePermission[currentPermission];
+
+  const isNewPayments = isFlagEnabled('NEW_PAYMENTS');
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');
@@ -67,6 +75,44 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     </div>
   );
 
+  const tooltipContentEditor = (
+    <>
+      <p css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
+        <strong>Unlock invite editors</strong>
+      </p>
+      <p
+        css={[
+          p12Regular,
+          {
+            color: componentCssVars('TooltipTextSecondary'),
+            textAlign: 'center',
+          },
+        ]}
+      >
+        Upgrade your plan to invite more editors.
+      </p>
+    </>
+  );
+
+  const tooltipContentReader = (
+    <>
+      <p css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
+        <strong>Unlock invite readers</strong>
+      </p>
+      <p
+        css={[
+          p12Regular,
+          {
+            color: componentCssVars('TooltipTextSecondary'),
+            textAlign: 'center',
+          },
+        ]}
+      >
+        Upgrade your plan to invite more readers.
+      </p>
+    </>
+  );
+
   return currentPermission === 'ADMIN' ? (
     triggerElement(false)
   ) : (
@@ -82,19 +128,49 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         onSelect={onCollaboratorSelected}
         selected={currentPermission === 'WRITE'}
         testid="notebook-editor"
+        disabled={!canInviteEditors && isNewPayments}
       >
         <p css={p13Medium}>Notebook editor</p>
-        <p css={dropDownItemStyles}>Can edit only this notebook</p>
+        <div css={warningWrapperStyles}>
+          <p css={dropDownItemStyles}>Can edit only this notebook</p>
+          {!canInviteEditors && isNewPayments && (
+            <Tooltip
+              side="top"
+              trigger={
+                <div>
+                  <WarningCircle />
+                </div>
+              }
+            >
+              {tooltipContentEditor}
+            </Tooltip>
+          )}
+        </div>
       </MenuItem>
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
+        disabled={!canInviteReaders && isNewPayments}
         testid="notebook-reader"
       >
         <p css={p13Medium}>Notebook reader</p>
-        <p css={dropDownItemStyles}>
-          Can read and interact only with this notebook
-        </p>
+        <div css={warningWrapperStyles}>
+          <p css={dropDownItemStyles}>
+            Can read and interact only with this notebook
+          </p>
+          {!canInviteReaders && isNewPayments && (
+            <Tooltip
+              side="top"
+              trigger={
+                <div>
+                  <WarningCircle />
+                </div>
+              }
+            >
+              {tooltipContentReader}
+            </Tooltip>
+          )}
+        </div>
       </MenuItem>
 
       {onRemove && (
@@ -114,4 +190,12 @@ const dropDownItemStyles = css(p12Regular, {
 
 const dangerOptionStyles = css(p14Medium, {
   color: red500.rgb,
+});
+
+const warningWrapperStyles = css({
+  display: 'flex',
+  justifyContent: 'space-between',
+  '& > div': {
+    width: '16px',
+  },
 });

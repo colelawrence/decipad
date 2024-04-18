@@ -35,6 +35,8 @@ export const getWorkspaceSubscription = async (
       paymentStatus: 'unpaid',
       queries: limits().maxQueries.free,
       credits: limits().maxCredits.free,
+      readers: limits().maxCollabReaders.free,
+      editors: 0,
     };
   }
 

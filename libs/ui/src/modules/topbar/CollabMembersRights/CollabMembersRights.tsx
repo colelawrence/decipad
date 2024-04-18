@@ -18,6 +18,8 @@ type CollabMembersRightsProps = {
     permission: PermissionType
   ) => void;
   readonly disabled: boolean;
+  readonly canInviteReaders?: boolean;
+  readonly canInviteEditors?: boolean;
 };
 
 const groupStyles = css({
@@ -34,6 +36,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   onRemoveCollaborator = noop,
   onChangePermission = noop,
   disabled = false,
+  canInviteReaders,
+  canInviteEditors,
 }) => {
   if (nrOfTeamMembers == null) {
     nrOfTeamMembers = 0;
@@ -58,6 +62,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               disabled={disabled}
               onRemoveCollaborator={onRemoveCollaborator}
               onChangePermission={onChangePermission}
+              canInviteReaders={canInviteReaders}
+              canInviteEditors={canInviteEditors}
             />
           ) : null
         )}
@@ -69,6 +75,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               disabled={disabled}
               teamMembers={nrOfTeamMembers}
               manageTeamURL={manageTeamURL}
+              canInviteReaders={canInviteReaders}
+              canInviteEditors={canInviteEditors}
             />
           )}
       </div>

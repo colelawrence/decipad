@@ -31,6 +31,8 @@ type WorkspaceSubscription {
   status: SubscriptionStatus
   workspace: Workspace
   seats: Int
+  editors: Int
+  readers: Int
   credits: Int
   queries: Int
   storage: Int

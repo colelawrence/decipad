@@ -33,6 +33,8 @@ fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
   credits
   queries
   seats
+  editors
+  readers
   storage
 }
 

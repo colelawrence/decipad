@@ -21,6 +21,8 @@ type SubscriptionPlan {
   credits: Int
   queries: Int
   seats: Int
+  editors: Int
+  readers: Int
   storage: Int
   description: String
   price: Int

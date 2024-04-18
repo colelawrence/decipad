@@ -152,10 +152,8 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
         .members({}).$
     : workspaces({}).$;
 
-  const { canInvite } = useStripeCollaborationRules(
-    data?.access.users,
-    data?.workspace?.access?.users ?? []
-  );
+  const { canInvite, canInviteEditors, canInviteReaders } =
+    useStripeCollaborationRules(data?.workspace, data?.access.users);
 
   if (meta.data == null || meta.data.getPadById == null) {
     return null;
@@ -165,7 +163,7 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
   const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
 
   const allowInviting = isFlagEnabled('NEW_PAYMENTS')
-    ? data?.workspace?.plan === 'team' || data?.workspace?.plan === 'enterprise'
+    ? canInviteEditors || canInviteReaders
     : data?.workspace?.isPremium || canInvite;
 
   const publishingState =
@@ -195,6 +193,8 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
       allowDuplicate={data?.canPublicDuplicate ?? true}
       onChangeSelectedTab={onChangeSelectedTab}
       onUpdateAllowDuplicate={actions.onUpdateAllowDuplicate}
+      canInviteReaders={canInviteReaders}
+      canInviteEditors={canInviteEditors}
     />
   );
 };

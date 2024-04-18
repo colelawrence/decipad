@@ -12,6 +12,7 @@ import {
   Loading,
   MenuItem,
   MenuList,
+  Tooltip,
 } from '../../../shared';
 import { Check, Ellipsis } from '../../../icons';
 
@@ -26,11 +27,13 @@ import {
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { CollabMembershipDropdown } from '../../topbar/CollabMembershipDropdown/CollabMembershipDropdown';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export type WorkspaceMembersProps = {
   workspaceId: string;
   workspaceMembers: UserAccessMetaFragment[];
   currentUserId?: string;
+  canInviteEditors?: boolean;
 };
 
 const CheckMark = () => <Check width="16px" style={{ marginRight: '6px' }} />;
@@ -42,6 +45,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
   workspaceId,
   workspaceMembers,
   currentUserId,
+  canInviteEditors = true,
 }) => {
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
@@ -82,6 +86,32 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
     [changePermission, workspaceId]
   );
 
+  const tooltipContentEditor = (
+    <>
+      <p css={tooltipTitleStyles}>
+        <strong>Unlock invite more members</strong>
+      </p>
+      <p css={tooltipBodyStyles}>Upgrade your plan to invite more members.</p>
+    </>
+  );
+
+  const tooltTipTrigger = (
+    <div css={sendInvitationButtonStyles}>
+      <Button
+        size="extraSlim"
+        testId="send-invitation"
+        onClick={handleAddCollaborator}
+        disabled={!canInviteEditors}
+      >
+        <div css={invitationButtonContentStyles}>
+          {success && <CheckMark />}
+          {loading && <LoadingDots />}
+          Send invitation
+        </div>
+      </Button>
+    </div>
+  );
+
   return (
     <div css={membersWrapperStyle}>
       <p css={pricingWrapper}>
@@ -110,20 +140,27 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
             />
           </span>
         </div>
-
-        <div css={sendInvitationButtonStyles}>
-          <Button
-            size="extraSlim"
-            testId="send-invitation"
-            onClick={handleAddCollaborator}
-          >
-            <div css={invitationButtonContentStyles}>
-              {success && <CheckMark />}
-              {loading && <LoadingDots />}
-              Send invitation
-            </div>
-          </Button>
-        </div>
+        {isFlagEnabled('NEW_PAYMENTS') && !canInviteEditors && (
+          <Tooltip side="top" trigger={tooltTipTrigger}>
+            {tooltipContentEditor}
+          </Tooltip>
+        )}
+        {(!isFlagEnabled('NEW_PAYMENTS') ||
+          (isFlagEnabled('NEW_PAYMENTS') && canInviteEditors)) && (
+          <div css={sendInvitationButtonStyles}>
+            <Button
+              size="extraSlim"
+              testId="send-invitation"
+              onClick={handleAddCollaborator}
+            >
+              <div css={invitationButtonContentStyles}>
+                {success && <CheckMark />}
+                {loading && <LoadingDots />}
+                Send invitation
+              </div>
+            </Button>
+          </div>
+        )}
       </div>
 
       <div css={membersTableStyles}>
@@ -310,3 +347,12 @@ const sendInvitationButtonStyles = css({
 });
 
 const revokeInviteButtonStyles = css(p14Medium, { color: red500.rgb });
+
+const tooltipTitleStyles = css(p12Medium, {
+  color: componentCssVars('TooltipText'),
+});
+
+const tooltipBodyStyles = css(p12Medium, {
+  color: componentCssVars('TooltipTextSecondary'),
+  textAlign: 'center',
+});

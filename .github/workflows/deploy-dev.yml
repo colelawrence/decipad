@@ -88,6 +88,7 @@ jobs:
           DECI_MAX_CREDITS_PRO: '${{secrets.DECI_MAX_CREDITS_PRO}}'
           DECI_MAX_QUERIES_FREE: '${{secrets.DECI_MAX_QUERIES_FREE}}'
           DECI_MAX_QUERIES_PRO: '${{secrets.DECI_MAX_QUERIES_PRO}}'
+          DECI_MAX_COLLAB_READERS_FREE_PLAN: '${{vars.DECI_MAX_NOTEBOOK_COLLAB_FREE_PLAN}}'
           DISCORD_PUBLIC_KEY: '${{secrets.DEV_DISCORD_PUBLIC_KEY}}'
           DISCORD_APP_ID: '${{secrets.DEV_DISCORD_APP_ID}}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=32768'

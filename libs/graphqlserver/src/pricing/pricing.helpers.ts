@@ -78,6 +78,8 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
         const { id, metadata, unit_amount, currency } = p;
         const {
           seats,
+          readers,
+          editors,
           credits,
           queries,
           description,
@@ -94,6 +96,8 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
           // eslint-disable-next-line camelcase
           price: unit_amount ?? 0,
           seats: Number(seats) || 0,
+          editors: Number(editors) || 0,
+          readers: Number(readers) || 0,
           credits: Number(credits) || 0,
           queries: Number(queries) || 0,
           description,

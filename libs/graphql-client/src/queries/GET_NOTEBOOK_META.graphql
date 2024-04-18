@@ -9,6 +9,17 @@ fragment UserAccessMeta on UserAccess {
   canComment
 }
 
+fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
+  id
+  paymentStatus
+  credits
+  queries
+  seats
+  editors
+  readers
+  storage
+}
+
 fragment NotebookMetaData on Pad {
   id
   name
@@ -37,6 +48,9 @@ fragment NotebookMetaData on Pad {
       id
       resourceType
       consumption
+    }
+    workspaceSubscription {
+      ...WorkspaceSubscriptionWithData
     }
   }
   snapshots {

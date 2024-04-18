@@ -81,6 +81,8 @@ test('Subscription edges', (ctx) => {
         queries: 10,
         storage: 10,
         seats: 10,
+        editors: 3,
+        readers: 10,
       }),
     });
 

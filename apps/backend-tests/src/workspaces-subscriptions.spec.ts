@@ -113,6 +113,8 @@ test('workspaces', (ctx) => {
             credits: '500',
             queries: '500',
             seats: '1',
+            editors: '3',
+            readers: '10',
             key: 'personal',
             storage: '10',
           },

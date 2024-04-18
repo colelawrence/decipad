@@ -3,6 +3,8 @@ fragment SubPlans on SubscriptionPlan {
   credits
   queries
   seats
+  editors
+  readers
   storage
   description
   price

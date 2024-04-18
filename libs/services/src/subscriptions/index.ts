@@ -1,14 +1,24 @@
 /* eslint-disable camelcase */
+import { thirdParty, limits } from '@decipad/backend-config';
 import type {
+  PermissionType,
   WorkspaceRecord,
   WorkspaceSubscriptionRecord,
 } from '@decipad/backendtypes';
-import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
+import type {
+  SubscriptionPlansNames,
+  UserAccess,
+} from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { type Stripe } from 'stripe';
+import { Stripe } from 'stripe';
 import { z } from 'zod';
 import { create } from '../workspaces/create';
+
+const { secretKey, apiVersion, subscriptionsProdId } = thirdParty().stripe;
+const stripe = new Stripe(secretKey, {
+  apiVersion,
+});
 
 const PLANS: Record<SubscriptionPlansNames, number> = {
   free: 0,
@@ -127,14 +137,66 @@ export async function isWsPlan(
  *
  * @throws If pad/workspace are not found.
  */
-export async function isTeamOrEnterpriseWs(padId: string): Promise<boolean> {
+export async function canUserBeInvitedWithPermission(
+  padId: string,
+  permissionType: PermissionType,
+  accessList: UserAccess[],
+  isNewPaymentsEnabled = false
+): Promise<boolean> {
+  const maxEditorFreePlan = limits().maxCollabReaders.free;
   const wsPlan = await getWsPlanFromPad(padId);
 
-  return PLANS[wsPlan] >= PLANS.team;
+  const nrOfCollaborators = accessList.filter(
+    (accessUser) => accessUser.permission === permissionType
+  ).length;
+
+  if (isNewPaymentsEnabled) {
+    if (permissionType === 'READ' && PLANS[wsPlan] >= PLANS.team) {
+      return true;
+    }
+
+    /*
+     * some workspaces in production don't have a plan name, it means it is a free
+     * subscription but we haven't had time to migrate these workspaces
+     */
+    if (!wsPlan || wsPlan === 'free') {
+      if (permissionType !== 'READ') {
+        return false;
+      }
+
+      return nrOfCollaborators < maxEditorFreePlan;
+    }
+
+    const subsPlan = (
+      await stripe.prices.list({
+        product: subscriptionsProdId,
+        active: true,
+        type: 'recurring',
+      })
+    ).data.find((plan) => plan.metadata.key === wsPlan);
+
+    // if it is a free subscription, no need to throw an error if the plan doesn't exist
+    if (!subsPlan) {
+      return false;
+    }
+
+    if (permissionType === 'WRITE') {
+      // according to requirements, the owner of the notebook counts as an editor
+      return nrOfCollaborators < Number(subsPlan.metadata.editors) - 1;
+    }
+
+    return nrOfCollaborators < Number(subsPlan.metadata.readers);
+  }
+
+  if (!wsPlan || wsPlan === 'free') {
+    return nrOfCollaborators < maxEditorFreePlan;
+  }
+
+  return true;
 }
 
 /**
- * Retusn the subscription for a specific workspace
+ * Return the subscription for a specific workspace
  *
  * @note it can also return `undefined`, which means no subscription is found.
  * This means its free or legacy pro.
@@ -195,6 +257,8 @@ const metadataValidator = z.object({
   seats: nonNegativeString,
   storage: nonNegativeString,
   queries: nonNegativeString,
+  readers: nonNegativeString,
+  editors: nonNegativeString,
 });
 
 type StripeOptions = {
@@ -270,6 +334,9 @@ export async function createWorkspaceSubscription({
     paymentStatus: payment_status,
     credits: validMetadata.credits,
     queries: validMetadata.queries,
+    editors: validMetadata.editors,
+    readers: validMetadata.readers,
+    // TODO: remove this field - deprecated
     seats: validMetadata.seats,
     storage: validMetadata.storage,
     email,
