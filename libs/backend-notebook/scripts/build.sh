@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-npx esbuild --bundle --target=node18 --platform=node --format=cjs --outdir=build src/apiSpec/index.ts
+npx esbuild --bundle --target=node18 --platform=node --format=cjs --outdir=build src/apiSpec/index.ts --external:aws-sdk --external:@aws-sdk
 
 if [[ -z "${DECI_DOMAIN:-}" ]]; then
     echo "Must provide DECI_DOMAIN in environment"

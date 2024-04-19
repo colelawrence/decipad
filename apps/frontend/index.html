@@ -61,9 +61,18 @@
     <script defer>
       if ('serviceWorker' in navigator) {
         console.debug('registering service worker...');
-        navigator.serviceWorker.register('/service-worker.js').catch((err) => {
-          console.error('error registering service worker:', err);
-        });
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then((registration) => {
+            if (registration.waiting && registration.active) {
+              setTimeout(() => {
+                document.location.reload();
+              }, 100);
+            }
+          })
+          .catch((err) => {
+            console.error('error registering service worker:', err);
+          });
       }
     </script>
   </body>

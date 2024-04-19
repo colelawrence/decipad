@@ -26,8 +26,14 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
       setUserId(session.user.id);
       setUserEmail(session.user.email);
       console.debug('analytics: identifying user with id', userId);
-      analytics.then(({ identify }) => {
-        identify(userId, {
+      analytics.then((v) => {
+        //
+        // Null check because sometimes (in staging),
+        // This value can be null, causing uncaugh errors.
+        //
+
+        if (v != null && typeof v.identify !== 'function') return;
+        v.identify(userId, {
           email: userEmail,
         });
       });

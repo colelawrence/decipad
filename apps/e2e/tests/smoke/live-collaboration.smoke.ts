@@ -167,9 +167,9 @@ smoketest(
         await userANotebook.selectTab('Tab 4');
         await userANotebook.addAdvancedFormula('num1 = 10');
         await userAPage.keyboard.press('Shift+Enter');
-        await userAPage.keyboard.type('num2 = 20');
+        await userAPage.keyboard.type('num2 = 20', { delay: 100 });
         await userAPage.keyboard.press('Shift+Enter');
-        await userAPage.keyboard.type('num1 + num2');
+        await userAPage.keyboard.type('num1 + num2', { delay: 100 });
         await userANotebook.moveToTab(2, 'Tab 5');
 
         await expect(

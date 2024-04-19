@@ -13,6 +13,7 @@ import AppLoader from './AppLoader';
 import { requiresHydration } from './utils/requiresHydration';
 import { loadCrucialDependencies } from './loadCrucialDependencies';
 import { Buffer } from 'buffer';
+// import { registerSW } from 'virtual:pwa-register';
 
 suppressWarnings();
 
