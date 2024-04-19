@@ -2,7 +2,7 @@ import type { PlotElement } from '@decipad/editor-types';
 import { ELEMENT_PLOT } from '@decipad/editor-types';
 import type { NotebookResults, SerializedType } from '@decipad/remote-computer';
 import {
-  AnnotationsContext,
+  AnnotationsProvider,
   ComputerContextProvider,
   TestResultsProvider,
 } from '@decipad/react-contexts';
@@ -105,36 +105,40 @@ const PlotWithProviders = ({
 
 it('shows nothing if no var has been selected', async () => {
   const { queryByRole } = render(
-    <AnnotationsContext.Provider
+    <AnnotationsProvider
       value={{
         annotations: [],
+        setAnnotations: () => {},
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
         setExpandedBlockId: () => {},
+        canDeleteComments: true,
       }}
     >
       <PlotWithProviders />
-    </AnnotationsContext.Provider>
+    </AnnotationsProvider>
   );
   expect(await queryByRole('graphics-document')).toBeNull();
 });
 
 it('shows nothing if var has been selected but no data', async () => {
   const { queryByRole } = render(
-    <AnnotationsContext.Provider
+    <AnnotationsProvider
       value={{
         annotations: [],
+        setAnnotations: () => {},
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
         setExpandedBlockId: () => {},
+        canDeleteComments: true,
       }}
     >
       <PlotWithProviders
         element={{ sourceVarName: 'varName' }}
       ></PlotWithProviders>
-    </AnnotationsContext.Provider>
+    </AnnotationsProvider>
   );
   expect(await queryByRole('graphics-document')).toBeNull();
 });
@@ -142,13 +146,15 @@ it('shows nothing if var has been selected but no data', async () => {
 it('shows a plot if has data and options', async () => {
   const blockId = 'block-id';
   const { queryByRole } = render(
-    <AnnotationsContext.Provider
+    <AnnotationsProvider
       value={{
         annotations: [],
+        setAnnotations: () => {},
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
         setExpandedBlockId: () => {},
+        canDeleteComments: true,
       }}
     >
       <PlotWithProviders
@@ -165,7 +171,7 @@ it('shows a plot if has data and options', async () => {
           },
         }}
       />
-    </AnnotationsContext.Provider>
+    </AnnotationsProvider>
   );
   expect(await queryByRole('graphics-document')).toBeDefined();
 });

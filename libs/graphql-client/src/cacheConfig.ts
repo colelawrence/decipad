@@ -146,10 +146,12 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
       },
       createAnnotation: (result, args, cache) => {
         // result.createAnnotation?.user is never defined, so we're stealing the user from the session
+
         const user = session?.user;
         if (!result.createAnnotation || !user) {
           return;
         }
+
         cache.updateQuery<
           GetNotebookAnnotationsQuery,
           GetNotebookAnnotationsQueryVariables

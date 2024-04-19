@@ -59,7 +59,7 @@ export const IconWrap = styled.div({
 
   display: 'grid',
 
-  '& > a': {
+  '& > svg': {
     color: cssVar('textDefault'),
 
     '&:hover': {

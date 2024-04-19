@@ -21,7 +21,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VariableDef } from './VariableDef';
 import { BrowserRouter } from 'react-router-dom';
-import { AnnotationsContext } from '@decipad/react-contexts';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 
 describe('Variable def expression element', () => {
   let plateProps: Omit<PlateProps, 'children'>;
@@ -64,19 +64,21 @@ describe('Variable def expression element', () => {
     });
 
     wrapper = ({ children }) => (
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <DndProvider backend={HTML5Backend}>
           <BrowserRouter>{children}</BrowserRouter>
         </DndProvider>
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
   });
 
@@ -140,19 +142,21 @@ describe('Variable def slider element', () => {
     });
 
     wrapper = ({ children }) => (
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <DndProvider backend={HTML5Backend}>
           <BrowserRouter>{children}</BrowserRouter>
         </DndProvider>
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
   });
 

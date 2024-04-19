@@ -1,47 +1,44 @@
-import { AnnotationsContext } from '@decipad/react-contexts';
-import { tabletScreenQuery } from '@decipad/ui';
-import { css } from '@emotion/react';
-import { useContext } from 'react';
+import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
+import { useNotebookMetaData } from '@decipad/react-contexts';
+import { Annotations as UIAnnotations } from '@decipad/ui';
+import { useSession } from 'next-auth/react';
 
-const containerStyles = css({
-  width: '100%',
-  position: 'relative',
-});
+type AnnotationsProps = {
+  notebookId: string;
+};
 
-const noCommentsStyles = css({
-  padding: 16,
-  textAlign: 'center',
-  height: 'calc(100vh - 81px)',
-  display: 'flex',
-  alignItems: 'center',
-  [tabletScreenQuery]: {
-    display: 'none',
-  },
-});
+const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
+  // All of this code prevents the user from seeing the annotations sidebar if they are not a member of the notebook.
+  // This fix is a little hacky, and is in place to get comments ready for release.
+  // Linear ticker to remove this:
+  // https://linear.app/decipad/issue/ENG-3203/refactor-logic-to-guard-comments-tab-from-from-opening-for-public
+  const [notebook] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
 
-const Annotations = () => {
-  const ctx = useContext(AnnotationsContext);
-  if (ctx?.annotations === undefined) {
+  const [setSidebar] = useNotebookMetaData((s) => [s.setSidebar]);
+  const session = useSession();
+  const id = session.data?.user?.id;
+  if (!id) {
+    setSidebar('closed');
     return null;
   }
 
-  return (
-    <div
-      css={containerStyles}
-      id="annotations-container"
-      onClick={() => {
-        ctx?.setExpandedBlockId(null);
-      }}
-    >
-      {(!ctx || ctx.annotations.length === 0) &&
-        // Hide message if user is in the process of creating the first comment.
-        ctx?.expandedBlockId === null && (
-          <div css={noCommentsStyles}>
-            This document doesn't have any comments yet.
-          </div>
-        )}
-    </div>
-  );
+  const currentUserPermission = notebook.data?.getPadById?.access.users.find(
+    (user) => {
+      return user.user?.id === id;
+    }
+  )?.permission;
+
+  const isWriter =
+    currentUserPermission === 'WRITE' || currentUserPermission === 'ADMIN';
+
+  if (!isWriter) {
+    setSidebar('closed');
+    return null;
+  }
+
+  return <UIAnnotations notebookId={notebookId} />;
 };
 
 export default Annotations;

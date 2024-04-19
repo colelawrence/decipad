@@ -255,11 +255,11 @@ const NoAccessReaderTopbar: FC<TopbarGenericProps> = ({
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
-          <Styled.IconWrap>
-            <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+          <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+            <Styled.IconWrap>
               <Deci />
-            </Link>
-          </Styled.IconWrap>
+            </Styled.IconWrap>
+          </Link>
 
           <NotebookPath
             notebookName="Decipad — smart document"
@@ -301,6 +301,7 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
         <Styled.RightContainer>
           <ReadOnlyWriting />
           <NotebookAuthors {...authors} />
+
           <Help />
         </Styled.RightContainer>
       </Styled.InnerStyles>
@@ -313,11 +314,11 @@ const EmbedTopbar: FC<TopbarGenericProps> = ({ UndoButtons }) => {
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
-          <Styled.IconWrap>
-            <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+          <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+            <Styled.IconWrap>
               <Deci />
-            </Link>
-          </Styled.IconWrap>
+            </Styled.IconWrap>
+          </Link>
 
           <NotebookPath
             notebookName="Decipad — smart document"
@@ -340,6 +341,8 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
   authors,
   status,
 }) => {
+  const canAccessComments =
+    access.permissionType === 'WRITE' || access.permissionType === 'ADMIN';
   return (
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
@@ -355,9 +358,10 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           {AiModeSwitch}
         </Styled.LeftContainer>
         <Styled.RightContainer>
-          {isFlagEnabled('ENABLE_COMMENTS') && (
+          {isFlagEnabled('ENABLE_COMMENTS') && canAccessComments && (
             <AnnotationsToggle {...actions} />
           )}
+
           <TemplatesLink {...actions} />
           <Help />
           <SidebarToggle {...actions} />
@@ -375,11 +379,11 @@ const AiGeneratedTopbar: FC<TopbarGenericProps> = ({ access, actions }) => {
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
-          <Styled.IconWrap>
-            <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+          <Link target="_blank" rel="noreferrer" href="https://decipad.com">
+            <Styled.IconWrap>
               <Deci />
-            </Link>
-          </Styled.IconWrap>
+            </Styled.IconWrap>
+          </Link>
 
           <NotebookPath
             notebookName="Decipad — smart document"

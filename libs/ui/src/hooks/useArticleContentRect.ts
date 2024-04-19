@@ -1,11 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useContext, useEffect, useState } from 'react';
-import { AnnotationsContext } from '@decipad/react-contexts';
+import { useAnnotations } from '@decipad/react-contexts';
+import { useEffect, useState } from 'react';
 
 export const useArticleContentRect = () => {
   // This is hacky, but it's a consequence of the least-hacky way we can get comments to float alongside their blocks.
-  const ctx = useContext(AnnotationsContext);
-  const articleRef = ctx?.articleRef;
+  const { articleRef } = useAnnotations();
+
   const [contentRect, setContentRect] = useState<DOMRectReadOnly | null>(null);
 
   useEffect(() => {

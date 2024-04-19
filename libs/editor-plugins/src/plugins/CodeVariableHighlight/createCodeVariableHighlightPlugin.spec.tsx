@@ -15,7 +15,7 @@ import type { RemoteComputer } from '@decipad/remote-computer';
 import { getRemoteComputer, parseBlock } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
 import {
-  AnnotationsContext,
+  AnnotationsProvider,
   ComputerContextProvider,
 } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
@@ -72,17 +72,19 @@ describe('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
     cleanup = await applyCssVars();
     const bubbleBackgroundColor = findParentWithStyle(
@@ -122,17 +124,19 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
@@ -179,17 +183,19 @@ describe('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
 
     cleanup = await applyCssVars();
@@ -231,17 +237,19 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
 
     // first element resolves to <Add /> icon
@@ -277,17 +285,19 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
 
     const [colDecl, colUsage] = getAllByText(/A/);
@@ -372,17 +382,19 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <AnnotationsContext.Provider
+      <AnnotationsProvider
         value={{
           annotations: [],
+          setAnnotations: () => {},
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           setExpandedBlockId: () => {},
+          canDeleteComments: true,
         }}
       >
         <PlateWrapper children={children} computer={computer} />
-      </AnnotationsContext.Provider>
+      </AnnotationsProvider>
     );
 
     const [xDecl, xUsage] = getAllByText(/X/);

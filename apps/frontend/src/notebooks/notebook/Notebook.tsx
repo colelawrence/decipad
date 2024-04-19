@@ -6,15 +6,15 @@ import {
 import type { DocSyncEditor } from '@decipad/docsync';
 import {
   useFinishOnboarding,
-  useGetNotebookAnnotationsQuery,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
+import type { AnnotationArray } from '@decipad/react-contexts';
 import {
   ComputerContextProvider,
   ControllerProvider,
   EditorChangeContextProvider,
   useAiCreditsStore,
-  AnnotationsContext,
+  AnnotationsProvider,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
@@ -26,7 +26,7 @@ import {
   useSetCssVarWidth,
 } from '@decipad/ui';
 import type { FC } from 'react';
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useMemo } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -79,41 +79,15 @@ export const Notebook: FC = () => {
     notebookId,
     docsync,
   };
-  const [annotations, refetch] = useGetNotebookAnnotationsQuery({
-    variables: {
-      notebookId,
-    },
-  });
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (!docsync || docsync.isReadOnly) {
-      return;
-    }
-    refetch({
-      requestPolicy: 'network-only',
-      variables: {
-        notebookId,
-      },
-    });
-    clearInterval(intervalRef.current ?? undefined);
-    intervalRef.current = setInterval(() => {
-      refetch({
-        requestPolicy: 'network-only',
-        variables: {
-          notebookId,
-        },
-      });
-    }, 5000);
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [refetch, notebookId, docsync]);
+  const canDeleteComments = useMemo(() => {
+    return notebookMetadaData?.getPadById?.myPermissionType === 'ADMIN';
+  }, [notebookMetadaData?.getPadById?.myPermissionType]);
 
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null);
+  const [annotations, setAnnotations] = useState<AnnotationArray | undefined>(
+    undefined
+  );
 
   if (error) {
     return getNotebookError(error);
@@ -123,13 +97,15 @@ export const Notebook: FC = () => {
     <EditorChangeContextProvider changeSubject={changeSubject}>
       <ControllerProvider.Provider value={docsync}>
         <ComputerContextProvider computer={computer}>
-          <AnnotationsContext.Provider
+          <AnnotationsProvider
             value={{
-              annotations: annotations.data?.getAnnotationsByPadId || undefined,
+              annotations,
+              setAnnotations,
               articleRef,
               scenarioId: scenarioId || null,
               expandedBlockId,
               setExpandedBlockId,
+              canDeleteComments,
             }}
           >
             <NotebookPage
@@ -174,7 +150,7 @@ export const Notebook: FC = () => {
                 />
               )}
             </Suspense>
-          </AnnotationsContext.Provider>
+          </AnnotationsProvider>
         </ComputerContextProvider>
       </ControllerProvider.Provider>
     </EditorChangeContextProvider>

@@ -18,38 +18,13 @@ const resolvers: Resolvers = {
           ':padId': padId,
         },
       };
-      const res = await data.annotations.query(query);
+      const annotations = await data.annotations.query(query);
 
-      const usersIds = res.Items.map((item) => item.user_id);
-      const users = await data.users.batchGet(usersIds);
-      const anonUsers = await data.anonusers.batchGet(usersIds);
-
-      const annotations = res.Items.map((annotation) => {
-        const user =
-          users.find(({ id }) => id === annotation.user_id) ||
-          anonUsers.find(({ id }) => id === annotation.user_id);
-
-        return user
-          ? {
-              ...annotation,
-              user: {
-                id: user.id,
-                username: user.name,
-                avatar: user.image || undefined,
-              },
-            }
-          : annotation;
-      });
-
-      return annotations;
+      return annotations.Items;
     },
   },
   Mutation: {
-    createAnnotation: async (
-      _,
-      { padId, content, blockId },
-      context
-    ): Promise<AnnotationRecord> => {
+    createAnnotation: async (_, { padId, content, blockId }, context) => {
       const data = await tables();
       const { user } = context;
 
@@ -69,7 +44,7 @@ const resolvers: Resolvers = {
       await data.annotations.put(annotation);
       return annotation;
     },
-    deleteAnnotation: async (_, { id }, context): Promise<AnnotationRecord> => {
+    deleteAnnotation: async (_, { id }, context) => {
       // check whether user is allowed to delete an annotation
       const { user } = context;
       if (!user) {
@@ -84,7 +59,22 @@ const resolvers: Resolvers = {
         throw new Error('User not allowed to delete annotation');
       }
       await data.annotations.delete({ id });
+
       return annotation;
+    },
+  },
+  Annotation: {
+    user: async (annotation) => {
+      const data = await tables();
+      const user = await data.users.get({ id: annotation.user_id });
+      if (!user) {
+        return null;
+      }
+      return {
+        id: user.id,
+        username: user.name,
+        avatar: user.image || undefined,
+      };
     },
   },
 };

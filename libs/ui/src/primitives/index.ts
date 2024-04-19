@@ -7,3 +7,4 @@ export * from './themes/code';
 export * from './var';
 export * from './viewport';
 export * from './Style';
+export * from './shadow';

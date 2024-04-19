@@ -108,7 +108,7 @@ const editorBlockOffset = 30;
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
->(({ blockKind, children, isHidden, annotationsHovered, ...props }, ref) => {
+>(({ blockKind, children, isHidden, ...props }, ref) => {
   const readOnly = useIsEditorReadOnly();
   const [, setShowCommentButton] = useState(false);
 
@@ -123,7 +123,7 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
           position: 'relative',
           marginLeft: -editorBlockOffset,
           paddingLeft: editorBlockOffset,
-          border: annotationsHovered ? 'solid 1px red' : 'none',
+          transition: 'all 0.2s ease-out',
         },
         spacingStyles,
       ]}

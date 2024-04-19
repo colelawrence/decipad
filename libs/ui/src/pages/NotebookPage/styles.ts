@@ -198,16 +198,7 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => {
       '& > :first-child': {
         position: 'static',
       },
-      ...(props.sidebarComponent === 'annotations' && {
-        left: -60,
-        position: 'relative',
-        '& > :first-child': {
-          position: 'fixed',
-          right: -30,
-          width: 'fit-content',
-        },
-      }),
-      // this is an offset to account for the header and bottom margin
+
       height:
         props.sidebarComponent === 'publishing' ||
         props.sidebarComponent === 'annotations'

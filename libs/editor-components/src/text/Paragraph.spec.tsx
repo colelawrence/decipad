@@ -18,22 +18,24 @@ import type { PropsWithChildren } from 'react';
 import { timeout } from '@decipad/utils';
 import { Paragraph } from './Paragraph';
 import { BrowserRouter } from 'react-router-dom';
-import { AnnotationsContext } from '@decipad/react-contexts';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 
 const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
-  <AnnotationsContext.Provider
+  <AnnotationsProvider
     value={{
       annotations: [],
+      setAnnotations: () => {},
       articleRef: { current: null },
       scenarioId: null,
       expandedBlockId: null,
       setExpandedBlockId: () => {},
+      canDeleteComments: true,
     }}
   >
     <DndProvider backend={HTML5Backend}>
       <BrowserRouter>{children}</BrowserRouter>
     </DndProvider>
-  </AnnotationsContext.Provider>
+  </AnnotationsProvider>
 );
 
 let plateProps: Omit<PlateProps, 'children'>;

@@ -20,8 +20,8 @@ import {
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
-  AnnotationsContext,
   dndPreviewActions,
+  useAnnotations,
   useComputer,
   useIsEditorReadOnly,
   useNotebookMetaData,
@@ -32,6 +32,7 @@ import {
   EditorBlock,
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
+  BlockAnnotations,
 } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
 import styled from '@emotion/styled';
@@ -64,27 +65,26 @@ import type { UseDndNodeOptions } from '../utils/useDnd';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { useBlockActions } from './hooks';
 import { createPortal } from 'react-dom';
-import { BlockAnnotations } from 'libs/ui/src/modules/editor/BlockAnnotations/BlockAnnotations';
 
-const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(
-  ({ blockHighlighted }) => ({
-    '> div': {
-      borderRadius: 8,
-      ...(blockHighlighted
-        ? {
-            '&:before': {
-              content: '""',
-              position: 'absolute',
-              width: 5,
-              height: '100%',
-              background: '#FFD700',
-              left: -5,
-            },
-          }
-        : {}),
-    },
-  })
-);
+const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
+  '> div': {
+    position: 'relative',
+    borderRadius: 8,
+    // comment this out for now, because it's causing issues
+    // ...(blockHighlighted
+    //   ? {
+    //       '&:before': {
+    //         content: '""',
+    //         position: 'absolute',
+    //         width: 4,
+    //         height: '100%',
+    //         left: -16,
+    //         background: componentCssVars('ButtonPrimaryDefaultBackground'),
+    //       },
+    //     }
+    //   : {}),
+  },
+}));
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -139,12 +139,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const tabs = useFilteredTabs();
 
     const event = useContext(ClientEventsContext);
-    const annotationsContext = useContext(AnnotationsContext);
-    if (!annotationsContext) {
-      throw new Error('AnnotationsContext is not defined');
-    }
 
-    const { setExpandedBlockId } = annotationsContext;
+    const { setExpandedBlockId } = useAnnotations();
 
     const dependencyArray = Array.isArray(dependencyId)
       ? dependencyId

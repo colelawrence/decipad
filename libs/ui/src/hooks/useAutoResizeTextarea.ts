@@ -15,13 +15,13 @@ export const useAutoResizeTextarea =
         textarea.style.height = `${textarea.scrollHeight}px`;
       };
 
-      textarea.addEventListener('input', adjustHeight);
+      textarea.addEventListener('keypress', adjustHeight);
 
       // Initial height adjustment
       adjustHeight();
 
       return () => {
-        textarea.removeEventListener('input', adjustHeight);
+        textarea.removeEventListener('keypress', adjustHeight);
       };
     }, [textareaRef]);
 

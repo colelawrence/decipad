@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { lazyLoad } from '@decipad/react-utils';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
-import { AnnotationsContext } from '@decipad/react-contexts';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 
 const loadEditor = () =>
   import(/* webpackChunkName: "playground-editor" */ './Editor');
@@ -29,13 +29,15 @@ const Playground: React.FC = () => {
   const articleRef = useSetCssVarWidth('editorWidth');
 
   return (
-    <AnnotationsContext.Provider
+    <AnnotationsProvider
       value={{
-        annotations: undefined,
-        articleRef,
+        annotations: [],
+        setAnnotations: () => {},
+        articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
         setExpandedBlockId: () => {},
+        canDeleteComments: true,
       }}
     >
       <NotebookPage
@@ -64,7 +66,7 @@ const Playground: React.FC = () => {
         isEmbed={false}
         isReadOnly={false}
       />
-    </AnnotationsContext.Provider>
+    </AnnotationsProvider>
   );
 };
 export default Playground;

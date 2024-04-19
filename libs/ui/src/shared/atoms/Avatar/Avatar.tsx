@@ -5,21 +5,23 @@ import Gravatar from 'react-gravatar';
 import {
   cssVar,
   grey200,
+  p10Medium,
   p12Medium,
+  p13Medium,
   shortAnimationDuration,
   transparency,
 } from '../../../primitives';
 import { OpaqueColor } from '@decipad/utils';
 import { avatarColor } from '../../../utils';
 
-const containerStyles = (variant: boolean) =>
+const containerStyles = (variant: boolean, size: number) =>
   css([
     p12Medium,
     variant && { cursor: 'pointer' },
     {
       aspectRatio: '1 / 1',
-      minWidth: '28px',
-      minHeight: '28px',
+      minWidth: size,
+      minHeight: size,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -84,9 +86,20 @@ type AvatarProps = {
     | ComponentProps<typeof Gravatar>['default']
     | 'robohash';
   readonly imageHash?: string | null;
+  readonly size?: number;
 };
 
 const DEFAULT_WORD = 'Abacus';
+
+const getTextSize = (size: number) => {
+  if (size < 24) {
+    return p10Medium;
+  }
+  if (size < 32) {
+    return p12Medium;
+  }
+  return p13Medium;
+};
 
 export const Avatar = ({
   name,
@@ -100,6 +113,7 @@ export const Avatar = ({
   useSecondLetter = true,
   gravatarBackdrop = 'blank',
   imageHash,
+  size = 28,
 }: AvatarProps): ReturnType<FC> => {
   const selectedWord = name || DEFAULT_WORD;
 
@@ -123,7 +137,7 @@ export const Avatar = ({
     <div
       role="img"
       aria-label={title ?? `Avatar of user ${name}`}
-      css={containerStyles(variant)}
+      css={containerStyles(variant, size)}
       onClick={onClick}
     >
       <div css={{ display: 'flex', height: '100%', width: '100%' }}>
@@ -158,7 +172,7 @@ export const Avatar = ({
                 hoverSelector,
               })}
             />
-            <text x="50%" y="50%" css={[p12Medium, initialTextStyles]}>
+            <text x="50%" y="50%" css={[getTextSize(size), initialTextStyles]}>
               {gravatarBackdrop === 'blank' && displayName}
             </text>
           </svg>
