@@ -10,15 +10,21 @@ const checkForUpdatesIntervalMs = 60_000;
 export const UpdatesHandler: FC<PropsWithChildren> = ({ children }) => {
   const toast = useToast();
   const [foundUpdate, setFoundUpdate] = useState(false);
-  const onReload = useCallback(() => window.location.reload(), []);
-  const onUpdateFound = useCallback(() => setFoundUpdate(true), []);
+  const onReload = useCallback(() => {
+    console.warn('SW: reloading location');
+    window.location.reload();
+  }, []);
+  const onUpdateFound = useCallback(() => {
+    console.warn('SW: found update');
+    setFoundUpdate(true);
+  }, []);
   const reloading = useRef(false);
 
   useEffect(() => {
     if (foundUpdate && !reloading.current) {
       reloading.current = true;
       toast(<UpdatePrompt onReload={onReload} />, 'info', {
-        autoDismiss: true,
+        autoDismiss: false,
       });
     }
   }, [foundUpdate, onReload, toast]);
@@ -47,7 +53,7 @@ export const UpdatesHandler: FC<PropsWithChildren> = ({ children }) => {
       try {
         await registration.update();
       } catch (err) {
-        // ignore
+        console.error('SW: failed to update', err);
       }
     }
   }, []);
