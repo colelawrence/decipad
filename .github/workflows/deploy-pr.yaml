@@ -58,7 +58,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
           DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2'
         run: yarn install --ignore-engines
-        # if: steps.cache-check.outputs.restored != 'true'
+        if: steps.cache-check.outputs.restored != 'true'
 
       # - name: Install sharp
       #   run: yarn add @img/sharp-linux-x64 --force -W

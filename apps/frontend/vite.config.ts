@@ -1,10 +1,9 @@
 import type { UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import dotenv from 'dotenv';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import { VitePWA } from 'vite-plugin-pwa';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -41,88 +40,7 @@ const plugins = [
     plugins: [['@swc/plugin-emotion', {}]],
   }),
   tsconfigPaths(),
-  VitePWA({
-    filename: 'service-worker.js',
-    registerType: null,
-    injectRegister: null,
-    workbox: {
-      skipWaiting: true,
-      clientsClaim: false,
-      inlineWorkboxRuntime: true,
-      cleanupOutdatedCaches: true,
-      globPatterns: ['**/*.{js,html,css,ico,png,svg,woff2}'],
-      navigateFallbackDenylist: [/^\/api/, /^\/graphql/],
-      runtimeCaching: [
-        {
-          urlPattern: ({ request }) =>
-            ['script', 'font', 'image', 'manifest', 'style', 'worker'].includes(
-              request.destination
-            ),
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'immutable-assets-cache',
-            expiration: {
-              maxAgeSeconds: 60 * 70 * 24 * 30, // 1 month
-            },
-            matchOptions: {
-              ignoreVary: true,
-            },
-          },
-        },
-        {
-          urlPattern: ({ request }) => request.destination === 'document',
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'index-cache',
-            expiration: {
-              maxAgeSeconds: 60, // 1 minute
-            },
-          },
-        },
-        {
-          urlPattern: ({ url }) =>
-            url.pathname.startsWith('/api') ||
-            url.pathname.startsWith('/graphql'),
-          handler: 'NetworkOnly',
-        },
-      ],
-    },
-    devOptions: {
-      enabled: process.env.NODE_ENV !== 'production',
-    },
-    manifest: {
-      short_name: 'Decipad',
-      name: 'Decipad — Make sense of numbers',
-      theme_color: '#C1FA6B',
-      background_color: '#F5F7FA',
-      icons: [
-        {
-          src: 'pwa-64x64.png',
-          sizes: '64x64',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          src: 'maskable-icon-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'maskable',
-        },
-      ],
-    },
-  }),
 ];
-
-// todo: add the manifest!
 
 if (process.env.SENTRY_AUTH_TOKEN) {
   plugins.push(

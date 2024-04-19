@@ -26,19 +26,6 @@ index 7abedfd..3e9ef91 100644
    }
  
    if (eject) {
-diff --git a/node_modules/@architect/deploy/src/static/publish/filter-files.js b/node_modules/@architect/deploy/src/static/publish/filter-files.js
-index 791e0e3..82a2db6 100644
---- a/node_modules/@architect/deploy/src/static/publish/filter-files.js
-+++ b/node_modules/@architect/deploy/src/static/publish/filter-files.js
-@@ -22,7 +22,7 @@ module.exports = function filterFiles (params, callback) {
-   filtered = sort(filtered)
- 
-   // Sort again to ensure index.html files publish last
--  let index = /(index\.html?)$/
-+  let index = /(index\.html?|service-worker\.js)$/
-   filtered = filtered.sort((fileA, fileB) => {
-     if (fileA.match(index) &&
-         fileB.match(index)) return fileB.length - fileA.length
 diff --git a/node_modules/@architect/deploy/src/static/publish/s3/put-files/index.js b/node_modules/@architect/deploy/src/static/publish/s3/put-files/index.js
 index 97a2a9c..cc2cfa9 100644
 --- a/node_modules/@architect/deploy/src/static/publish/s3/put-files/index.js
