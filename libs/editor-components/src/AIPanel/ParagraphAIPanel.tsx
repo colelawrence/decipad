@@ -78,8 +78,8 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   const editor = useMyEditorRef();
 
   const handleSubmit = async () => {
-    getAnalytics().then(({ track }) =>
-      track('submit AI paragraph rewrite', { prompt })
+    getAnalytics().then((analytics) =>
+      analytics?.track('submit AI paragraph rewrite', { prompt })
     );
     const result = await updateQueryExecutionCount();
     const newExecutedQueryData = result.data?.incrementQueryCount;

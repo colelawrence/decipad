@@ -103,8 +103,8 @@ export const createAutoFormatCodeLinePlugin = <
           if (nodeText.trim() === '=') {
             event.preventDefault();
 
-            getAnalytics().then(({ track }) =>
-              track('convert paragraph to code line because =')
+            getAnalytics().then((analytics) =>
+              analytics?.track('convert paragraph to code line because =')
             );
 
             const autoVarName = computer.getAvailableIdentifier(

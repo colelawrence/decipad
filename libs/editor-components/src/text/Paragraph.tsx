@@ -83,7 +83,9 @@ export const Paragraph: PlateComponent = ({
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = () => {
-    getAnalytics().then(({ track }) => track('Opening paragraph AI panel'));
+    getAnalytics().then((analytics) =>
+      analytics?.track('Opening paragraph AI panel')
+    );
     setShowAiPanel((t) => !t);
   };
 

@@ -296,7 +296,7 @@ export const defaultMoveNode = (
         to,
       });
 
-      getAnalytics().then(({ track }) => track('move block'));
+      getAnalytics().then((analytics) => analytics?.track('move block'));
     });
   });
 };

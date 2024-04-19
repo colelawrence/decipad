@@ -138,7 +138,9 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   }, [element, runQuery, store]);
 
   const onRunQuery = async () => {
-    getAnalytics().then(({ track }) => track('run live query', { prompt }));
+    getAnalytics().then((analytics) =>
+      analytics?.track('run live query', { prompt })
+    );
     const result = await updateQueryExecutionCount();
     const newExecutedQueryData = result.data?.incrementQueryCount;
     const errors = result.error?.graphQLErrors;

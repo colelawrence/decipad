@@ -19,7 +19,9 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
   const parent = useParentNode<LiveDataSetElement>(element);
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = useCallback(() => {
-    getAnalytics().then(({ track }) => track('Opening live query AI panel'));
+    getAnalytics().then((analytics) =>
+      analytics?.track('Opening live query AI panel')
+    );
     setShowAiPanel((t) => !t);
   }, [setShowAiPanel]);
 

@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
-import type { HandleClientEventArgs } from '@decipad/client-events';
-import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
+import { useCallback, useEffect, useState } from 'react';
+import type { FC, PropsWithChildren, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
 import ReactGA from 'react-ga';
+import type { HandleClientEventArgs } from '@decipad/client-events';
+import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
 
-const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+const IdentifyUserAnalytics: FC<PropsWithChildren> = ({ children }) => {
   const analytics = getAnalytics();
   const { data: session } = useSession();
   const [userId, setUserId] = useState<string | undefined>();
@@ -27,13 +25,7 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
       setUserEmail(session.user.email);
       console.debug('analytics: identifying user with id', userId);
       analytics.then((v) => {
-        //
-        // Null check because sometimes (in staging),
-        // This value can be null, causing uncaugh errors.
-        //
-
-        if (v != null && typeof v.identify !== 'function') return;
-        v.identify(userId, {
+        v?.identify(userId, {
           email: userEmail,
         });
       });
@@ -52,31 +44,33 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
   return <>{children}</>;
 };
 
-const ClientEventsAnalytics: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const handleClientEvent = async (clientEvent: HandleClientEventArgs) => {
-    const [analytics] = await getAnalytics();
-    if (!analytics) {
-      return;
-    }
-    if ('segmentEvent' in clientEvent) {
-      const { segmentEvent } = clientEvent;
-      switch (segmentEvent.type) {
-        case 'page': {
-          await analytics.page(segmentEvent.category);
-          break;
+const ClientEventsAnalytics: FC<PropsWithChildren> = ({ children }) => {
+  const handleClientEvent = useCallback(
+    async (clientEvent: HandleClientEventArgs) => {
+      await getAnalytics().then(async (analytics) => {
+        if (!analytics) {
+          return;
         }
-        case 'action': {
-          await analytics.track(segmentEvent.action, segmentEvent.props);
+        if ('segmentEvent' in clientEvent) {
+          const { segmentEvent } = clientEvent;
+          switch (segmentEvent.type) {
+            case 'page': {
+              await analytics.page(segmentEvent.category);
+              break;
+            }
+            case 'action': {
+              await analytics.track(segmentEvent.action, segmentEvent.props);
+            }
+          }
         }
-      }
-    }
+      });
 
-    if ('gaEvent' in clientEvent) {
-      ReactGA.event(clientEvent.gaEvent);
-    }
-  };
+      if ('gaEvent' in clientEvent) {
+        ReactGA.event(clientEvent.gaEvent);
+      }
+    },
+    []
+  );
 
   return (
     <ClientEventsContext.Provider value={handleClientEvent}>

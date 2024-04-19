@@ -21,7 +21,7 @@ export type HandleClientEventArgs =
 
 export type ClientEventContextType = (
   arg0: HandleClientEventArgs
-) => Promise<void>;
+) => Promise<unknown>;
 
 const noop = () => Promise.resolve();
 

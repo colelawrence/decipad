@@ -16,6 +16,9 @@
     },
     {
       "path": "../client-env"
+    },
+    {
+      "path": "../react-utils"
     }
   ]
 }

@@ -23,8 +23,8 @@ type InsertNodes = <N extends EElementOrText<V>, V extends Value = Value>(
 export const insertNodes: InsertNodes = (editor, options, ...args) => {
   setTimeout(() => {
     for (const el of elementsFrom(options)) {
-      getAnalytics().then(({ track }) =>
-        track('create notebook element', { type: el.type })
+      getAnalytics().then((analytics) =>
+        analytics?.track('create notebook element', { type: el.type })
       );
     }
   }, 0);

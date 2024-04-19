@@ -84,8 +84,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const trackAnalytics = useCallback(
     ({ planName, planKey }: PaymentAnalyticsProps) => {
       if (paymentStatus === 'success') {
-        getAnalytics().then(({ track }) =>
-          track('Purchase', {
+        getAnalytics().then((analytics) =>
+          analytics?.track('Purchase', {
             category: 'Subscription',
             subCategory: 'Plan',
             resource: {
@@ -96,8 +96,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           })
         );
       } else {
-        getAnalytics().then(({ track }) =>
-          track('Purchase', {
+        getAnalytics().then((analytics) =>
+          analytics?.track('Purchase', {
             category: 'Subscription',
             subCategory: 'Plan',
             resource: {

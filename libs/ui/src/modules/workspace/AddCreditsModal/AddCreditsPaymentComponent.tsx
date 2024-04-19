@@ -57,8 +57,8 @@ export const AddCreditsPaymentComponent: React.FC<
       });
 
       if (result.error) {
-        getAnalytics().then(({ track }) =>
-          track('Purchase', {
+        getAnalytics().then((analytics) =>
+          analytics?.track('Purchase', {
             category: 'Credits',
             subCategory: 'AI',
             resource: {
@@ -79,8 +79,8 @@ export const AddCreditsPaymentComponent: React.FC<
           result.paymentMethod.id
         );
         if (newCreditsLimitResult.data) {
-          getAnalytics().then(({ track }) =>
-            track('Purchase', {
+          getAnalytics().then((analytics) =>
+            analytics?.track('Purchase', {
               category: 'Credits',
               subCategory: 'AI',
               resource: {

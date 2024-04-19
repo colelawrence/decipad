@@ -65,8 +65,8 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
 
   const handleSubmit = useCallback(async () => {
     const promptText = prompt.prompt;
-    getAnalytics().then(({ track }) => {
-      track('submit AI live query', { promptText });
+    getAnalytics().then((analytics) => {
+      analytics?.track('submit AI live query', { promptText });
     });
     const result = await updateQueryExecutionCount();
     const newExecutedQueryData = result.data?.incrementQueryCount;
