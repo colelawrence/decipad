@@ -46,7 +46,8 @@ const getPlanTitle =
   (workspace: ShallowWorkspaceFragment): string => {
     const title = stripePlans.find((p) => p?.key === workspace.plan);
 
-    return title?.title ?? 'Free';
+    // small hack to support the old plan name
+    return title?.title ?? (workspace.isPremium ? 'Pro' : 'Free');
   };
 
 export const DashboardSidebar = ({
