@@ -1,0 +1,13 @@
+diff --git a/node_modules/slate/dist/index.es.js b/node_modules/slate/dist/index.es.js
+index c9b05a3..f1f1e65 100644
+--- a/node_modules/slate/dist/index.es.js
++++ b/node_modules/slate/dist/index.es.js
+@@ -2440,7 +2440,7 @@ var normalizeNode = (editor, entry) => {
+       // To prevent slate from breaking, we can add the `children` field,
+       // and now that it is valid, we can to many more operations easily,
+       // such as extend normalizers to fix erronous structure.
+-      if (!Text.isText(_child) && !('children' in _child)) {
++      if (!Text.isText(_child) && !('children' in _child) && _child != null && typeof _child === 'object') {
+         var elementChild = _child;
+         elementChild.children = [];
+       }
