@@ -76,7 +76,8 @@ export const getQueryStringOverrides = (): Flags => {
 let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
-
+  NEW_PAYMENTS: true,
+  ENABLE_COMMENTS: true,
   NOTION_CONNECTIONS: true,
 };
 
