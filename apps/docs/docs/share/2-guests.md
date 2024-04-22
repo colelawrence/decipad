@@ -14,20 +14,16 @@ sidebar_class_name: new
 
 There are two roles you can assign to your teammate:
 
-- `Collaborator`: can make changes to your notebook.
+- `Editor`: can make changes to your notebook.
 - `Reader`: has access to read your notebook.
 
 Note: Notebook guests can't publish new changes. Only workspace admins are able to publish new changes to notebooks they didn't author. [Learn more about workspaces →](/share/workspaces)
 
-## Change Access Permissions
+## Manage Access to Your Notebook
 
-1.  Click the `Share` button on the top bar and select `Collaborate`.
-2.  Use the role dropdown next to each person's name to update the permissions.
-
-## Remove Access to Your Notebook
-
-1.  Click the `Share` button on the top bar and select `Collaborate`.
-2.  Press the role dropdown next to each person's name and choose `Remove`.
+1. Click the `Share` button located on the top bar and choose `Collaborate`.
+2. Utilize the role dropdown next to each person's name to adjust permissions.
+3. To remove access, press the role dropdown next to the respective person's name and select `Remove`.
 
 **Note**: If your notebook has been published, users with the link will still be able to access your notebook as a reader. <br /> [Learn more about publishing Notebooks →](/docs/share/publish).
 

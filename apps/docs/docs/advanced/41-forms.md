@@ -4,16 +4,18 @@ title: Submit Forms
 ---
 
 import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-# Submit Form Block
+# Submit Form Block (Team Plan Feature)
 
 Effortlessly capture leads and their scenarios from your notebook using Decipad's submit button. This feature gathers data from input widgets like sliders and collects user emails, forwarding all information to any webhook of your choice.
 
+This feature is only available on the Team plan.
+For more information on each plan, please visit our [pricing page](https://www.decipad.com/pricing).
+
 ## How Decipad's Submit Button Works
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/cebd0b65f75447cfb1ea44395be858f8?sid=d3956e08-af44-43ef-a5fe-42827ecad20e?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+ <YouTubePlayer videoId="SNJqHiV2oD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-forms.png" />
 
 ### Getting Started
 

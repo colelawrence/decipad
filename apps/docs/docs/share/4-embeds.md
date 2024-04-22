@@ -6,9 +6,9 @@ sidebar_class_name: new
 
 Add data insights or calculations to any webpage with Decipad embeds.
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/a24d7196e9f2443bbaa1788a5ee4546e?sid=aa1855d9-f4a8-4a91-80f9-37b9634b0a2d?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
+
+ <YouTubePlayer videoId="JGfDMgo4FUA" thumbnailUrl="/docs/img/thumbnails/thumbnail-embeds.png" />
 
 <br />
 

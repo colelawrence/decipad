@@ -68,7 +68,6 @@ export const FancyTitle = ({ children, icon }) => {
         </div>
         {children}
       </span>
-      <br />
     </>
   );
 };

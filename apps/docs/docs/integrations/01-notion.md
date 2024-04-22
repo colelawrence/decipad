@@ -7,9 +7,9 @@ sidebar_class_name: new
 
 Easily import your Notion databases into Decipad.
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/d57a3e652979402ab08f5d0c1b3e2691?sid=e6e3b0da-2d96-418f-ba60-125bcc5eaf47?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
+
+ <YouTubePlayer videoId="KojMxUd0Z6w" thumbnailUrl="/docs/img/thumbnails/thumbnail-notion.png" />
 
 ## Connecting Notion to Decipad
 

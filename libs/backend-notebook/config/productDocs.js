@@ -52,7 +52,7 @@ const languageDocs = [
   'docs/help/help.mdx',
 
   'docs/integrations/01-notion.md',
-  'docs/integrations/11-code.md',
+  'docs/integrations/11-code.mdx',
   'docs/integrations/21-SQL.md',
 
   'docs/quick-start/charts.md',

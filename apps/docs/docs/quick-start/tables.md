@@ -7,9 +7,9 @@ toc_min_heading_level: 2
 
 Tables help you organize data, making it easier to read and understand. You can also use tables to perform calculations using formulas.
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9?sid=90c61f2e-95f0-426c-8fb1-920a3adc5c20?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
+
+ <YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png" />
 
 ## Creating a Table
 
@@ -106,6 +106,16 @@ Within the same table, it is easy to reference other columns and reuse their val
 Let's continue with the example of a sales table. If you want to calculate the tax per item instead of the tax for all sales, you can add a new formula column and write `SalesData.SalesPrice + tax`. This calculation will determine the tax for each individual item based on its row.
 
 Since you are working within the same table, you can use the compact format that only requires a reference to the column name: `SalesPrice + tax`. Decipad will automatically calculate the tax for each row, considering the values from the respective rows in the table.
+
+## Exporting Table as CSV (Plus & Team Plan Feature)
+
+This functionality is exclusively accessible to Plus and Team plans subscribers. For detailed information regarding each plan, kindly refer to our [pricing page](https://www.decipad.com/pricing).
+
+To export any table within your Notebook as a CSV file:
+
+1. Click on the table options button (`⸬`) located next to the table name.
+2. Select `Download as CSV`.
+3. Depending on your browser settings, you might be prompted to grant permissions for app.decipad.com to download files to your device.
 
 ## Code Tables (Legacy)
 

@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 /* eslint-env jest */
-
 import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
 import type { User } from '@decipad/backendtypes';

@@ -4,60 +4,22 @@ sidebar_position: 2
 
 # Upgrading Plans
 
-Invite your team to collaborate, expand data imports and schedule query executions.
-
-## Plans
-
-|                                          | **Starter**        | **Professional (Pro)** | **Team**                              |
-| ---------------------------------------- | ------------------ | ---------------------- | ------------------------------------- |
-| Natural language formulas                | Yes                | Yes                    | Yes                                   |
-| Tables & Pivot Tables                    | Yes                | Yes                    | Yes                                   |
-| Widgets, Charts, and Data Visualizations | Yes                | Yes                    | Yes                                   |
-| Unit Conversions                         | Yes                | Yes                    | Yes                                   |
-| Dimensions                               | Yes                | Yes                    | Yes                                   |
-| CSV Uploads                              | 500kB              | 500kB                  | Custom                                |
-| Image Uploads                            | up to 5MB per file | up to 5MB per file     | Unlimited                             |
-| Live Connections                         | 50 queries / month | 500 queries/month      | Custom                                |
-| Query scheduling                         | No                 | Yes                    | Yes                                   |
-| Unlimited Notebooks                      | Yes                | Yes                    | Yes                                   |
-| Unlimited Publishing                     | Yes                | Yes                    | Yes                                   |
-| Shared Workspace                         | 1 seat             | Unlimited              | Unlimited                             |
-| Guest Collaborators                      | 3x per notebook    | 10x per notebook       | Custom                                |
-| Custom Integrations                      | No                 | No                     | Yes                                   |
-| Dedicated Customer Support               | No                 | No                     | Yes                                   |
-| Security Requirements                    | No                 | No                     | Yes                                   |
-| **Price**                                | Free               | $15 per seat/month     | [Contact](mailto:support@decipad.com) |
+Invite your team to collaborate, expand data imports and schedule query executions. <br/>
+For information on each plan, please visit our [pricing page](https://www.decipad.com/pricing).
 
 ## Upgrading Your Plan
 
-You can upgrade or downgrade your workspace plan at any time. Follow these steps to upgrade from a the Starter plan to the Pro plan:
+1. Go to your workspace.
+2. Click the "Upgrade workspace" button in the sidebar.
 
-1.  Click the "Upgrade workspace" button in the sidebar of your workspace to see what is included.
-2.  Click the "Upgrade workspace" button inside the new modal and you will be redirected our payments portal.
-3.  Enter your email (we recommend using the same email you used to log in to Decipad).
-4.  Provide your card information, including card name and country/region.
-5.  Review and agree to Decipad's Terms of Service and Privacy Policy.
-6.  Click the "Subscribe" button. If the payment is successful, you will be redirected back to Decipad.
-
-Please note that by upgrading your workspace, you authorize Decipad to charge your card for the current and future payments. You can cancel your subscription/plan at any time. To manage your billing information or downgrade your plan, see [Billing & Payments](/account/billing).
+Please note: By upgrading, you authorize Decipad to charge your card for current and future payments. You can cancel anytime. Manage billing or downgrade your plan under [Billing & Payments](/account/billing).
 
 ## Managing Workspace Seats
 
-Admins on Pro workspaces can add and remove members (seats) at any time. Keep in mind that you will be billed for each seat invited to your workspace.
+Admins can easily adjust the number of members in the workspace. Please note that adding or removing admins or member seats will affect your billing.
 
-To manage your workspace seats:
+To manage seats in your workspace:
 
-1.  Make sure you are in the correct workspace.
-2.  Click on "Manage members."
-
-To **add** a new seat:
-
-1.  Enter their email address.
-2.  Select the access role ("member" or "admin") from the dropdown.
-3.  Click "Send invitation."
-
-To **remove** existing seats or revoke an invite:
-
-1.  In the "User" section, you'll see the list of seats in your workspace.
-2.  Click the "..." button on the right of a member you wish to remove.
-3.  Click "Revoke invite."
+1. Ensure you're in the correct workspace, then click on "Manage members."
+2. To add a seat, enter the email address and select the access role (either "reader", "editor" or "admin") from the dropdown, then click "Send invitation."
+3. To remove a seat or revoke an invite, go to the "Users" section, where you can see the list of seats, click the "..." button next to the member you wish to remove, and choose "Revoke invite."

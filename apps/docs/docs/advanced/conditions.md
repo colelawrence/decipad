@@ -27,37 +27,39 @@ These are the key concepts to understand when working with conditions in Decipad
 
 Combining comparison and logical operators allows you to create conditions that evaluate to either `true` or `false`. They can be used to control your calculations based on their outcome,
 
+Here's a simplified version:
+
+---
+
 ## If-Then-Else Conditions
 
-:::tip Syntax
+The `if-then-else` statement allows you to create conditional calculations. It evaluates a condition, then returns one of two specified results based on whether the condition is true or false. It's crucial that both results have the same data type or unit to prevent errors.
 
-` if [Condition] then [Calculation when Condition is True] else [Calculation when Condition is False]`
+### Syntax
 
-:::
+```
+if [Condition] then [Result if True] else [Result if False]
+```
 
-The `if [Condition] then ... else ...` statement lets you to create calculations conditionally. It takes your condition, check wether it is true or false, and performs a calculation based on that.
+### Examples
 
-:::note Examples
+In this example, if the condition `Item > $200` is true, "Overpriced" is returned; otherwise, "Underpriced" is returned.
 
-Let's consider a scenario where we have a condition `Item > $200` . We want to determine if a certain item is overpriced or underpriced.
+```
+if Item > $200 then "Overpriced" else "Underpriced"
+```
 
-`if Item > $200 then "Overpriced" else "Underpriced"`
+Additionally, you can use the keyword `first` in tables to check if it's the first row:
 
-In this example, the condition `Item > $200` is evaluated. If it is `true`, the value "Overpriced" is returned; otherwise, the value "Underpriced" is returned. It's important to ensure that the expressions in the "then" and "else" parts return the same data type. Mixing different types can lead to errors.
+```
+if first then "I am the first row" else "I am not the first row"
+```
 
-:::
+You can also compute income increases based on a slider value:
 
-Additionally, in tables, you can use the keyword `first` with the If-Then-Else statement to check for the first row.
-
-:::note Examples
-
-Showcase a different message on the first row: <br />
-`if first then "I am the first row" else "I am not the first row"`
-
-Compute income increases based on a set value from a slider: <br />
-`if first then IncomeSlider else previous(0) + 5%`
-
-:::
+```
+if first then IncomeSlider else previous(0) + 5%
+```
 
 ## Verification Conditions
 

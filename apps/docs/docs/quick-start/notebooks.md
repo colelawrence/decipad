@@ -7,9 +7,9 @@ sidebar_position: 0
 Decipad Notebooks combine numbers and narrative to share insights on data. <br />
 Create a new notebook by clicking `+ New Notebook` on the top right of your [workspace](http://app.decipad.com/).
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/e18301fb8aa748eca8f7be0ce38c9e6a?sid=726a1216-91e3-4c61-9f55-8190c2ffa632?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
+
+ <YouTubePlayer videoId="HgonzbhFWLA" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
 
 ## Notebook Features
 
@@ -67,13 +67,11 @@ On Decipad everything is a block, that you can combine to present and analyze yo
 
 ---
 
+<YouTubePlayer videoId="LtMIT095exc" thumbnailUrl="/docs/img/thumbnails/thumbnail-tabs.png" />
+
+<br/>
+
 Organize your notebook blocks into separate tabs.
-
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/14016c3eead24523ac0b123dc9411627?sid=54999995-483b-4968-9158-0059631b86a7?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
-
-<br />
 
 1.  **Add Tabs:**
     Click the `Add tab` button at the bottom of your notebooks. Choose a new name for your tab and press enter to confirm. To delete a tab, select it, click the dropdown next to its name, and choose `Delete tab`. To update the tab's icon, click on it and choose a new one. You can also reorder your tabs using `Move tab` in the dropdown menu.
@@ -84,9 +82,13 @@ Organize your notebook blocks into separate tabs.
 3.  **Hide Tabs from Notebooks Readers**
     Select the tab you want to hide. Click the dropdown next to its name. Choose `Hide from readers`. This will hide the tab for collaborators with the "Reader" role, the published view, and when the document is embedded.
 
-## Upload Files: Images & CSVs
+## Add Notebook Images
 
 ---
 
-1.  **Upload .CSV files**: Drag and drop your .CSV files directly into a notebook or use the slash command "/csv" on an empty paragraph.
-2.  **Upload images**: Add visual elements and context to your notebooks by dragging and dropping image files or using the slash command "/image" on an empty paragraph.
+1. To add images to your notebook, simply type "/image" in an empty paragraph and select "Image" from the menu that appears. This will open the image uploader.
+
+2. From there, you have several options:
+   - Upload an image directly from your computer.
+   - Paste a link to an image from the web.
+   - Select GIFs from Giphy, Unsplash images, or generate AI images.

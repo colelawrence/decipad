@@ -6,8 +6,10 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const playerId = `youtube-player-${videoId}`;
+
     const onYouTubePlayerAPIReady = () => {
-      playerRef.current = new window.YT.Player('youtube-player', {
+      playerRef.current = new window.YT.Player(playerId, {
         videoId,
         playerVars: {
           autoplay: 0,
@@ -21,22 +23,18 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
       });
     };
 
-    // Check if the YouTube Player API script is already loaded
     if (window.YT && typeof window.YT.Player === 'function') {
       onYouTubePlayerAPIReady();
     } else {
-      // Load the YouTube Player API script
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/player_api';
 
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-      // Assign a global function for the YouTube Player API to call
       window.onYouTubePlayerAPIReady = onYouTubePlayerAPIReady;
     }
 
-    // Clean up the global function when the component is unmounted
     return () => {
       delete window.onYouTubePlayerAPIReady;
     };
@@ -46,8 +44,8 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
     if (playerRef.current) {
       playerRef.current.playVideo();
 
-      const thumbnail = document.getElementById('youtube-thumbnail');
-      const player = document.getElementById('youtube-player');
+      const thumbnail = document.getElementById(`youtube-thumbnail-${videoId}`);
+      const player = document.getElementById(`youtube-player-${videoId}`);
 
       if (thumbnail && player) {
         thumbnail.style.display = 'none';
@@ -86,7 +84,7 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
       }}
     >
       <div
-        id="youtube-thumbnail"
+        id={`youtube-thumbnail-${videoId}`}
         onClick={playVideo}
         style={{
           position: 'absolute',
@@ -101,7 +99,7 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
         }}
       />
       <div
-        id="youtube-player"
+        id={`youtube-player-${videoId}`}
         style={{
           position: 'absolute',
           top: '0',
@@ -115,7 +113,7 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
       <div className="triangle"></div>
       <style>
         {`
-#youtube-thumbnail::after {
+#youtube-thumbnail-${videoId}::after {
   content: "";
   display: block;
   position: absolute;
@@ -132,7 +130,7 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
   transition: transform 0.3s;
 }
 
-#youtube-thumbnail:hover::after {
+#youtube-thumbnail-${videoId}:hover::after {
   transform: translate(-50%, -50%) scale(1.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
