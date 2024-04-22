@@ -8,6 +8,8 @@ input UserInput {
 type UserAccess {
   # Helps with resolvers
   userId: ID
+  resourceId: ID
+
   user: User
   permission: PermissionType!
   canComment: Boolean!

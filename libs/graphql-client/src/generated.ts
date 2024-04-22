@@ -882,6 +882,7 @@ export type RoleAccess = {
   __typename?: 'RoleAccess';
   canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
+  resourceId?: Maybe<Scalars['ID']['output']>;
   role: Role;
   roleId: Scalars['ID']['output'];
 };
@@ -1120,6 +1121,7 @@ export type UserAccess = {
   __typename?: 'UserAccess';
   canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
+  resourceId?: Maybe<Scalars['ID']['output']>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['ID']['output']>;
 };
@@ -3099,6 +3101,7 @@ export type GraphCacheResolvers = {
   RoleAccess?: {
     canComment?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, PermissionType | string>,
+    resourceId?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, Scalars['ID'] | string>,
     role?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, WithTypename<Role> | string>,
     roleId?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, Scalars['ID'] | string>
   },
@@ -3229,6 +3232,7 @@ export type GraphCacheResolvers = {
   UserAccess?: {
     canComment?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, PermissionType | string>,
+    resourceId?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['ID'] | string>,
     user?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, WithTypename<User> | string>,
     userId?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['ID'] | string>
   },
@@ -3619,6 +3623,7 @@ export type GraphCacheUpdaters = {
   RoleAccess?: {
     canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
     permission?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
+    resourceId?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
     role?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
     roleId?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>
   },
@@ -3749,6 +3754,7 @@ export type GraphCacheUpdaters = {
   UserAccess?: {
     canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
     permission?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
+    resourceId?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
     user?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
     userId?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>
   },

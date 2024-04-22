@@ -22,6 +22,8 @@ type RoleInvitation {
 
 type RoleAccess {
   roleId: ID!
+  resourceId: ID
+
   role: Role!
   permission: PermissionType!
   canComment: Boolean!

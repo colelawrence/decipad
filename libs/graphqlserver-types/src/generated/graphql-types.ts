@@ -881,6 +881,7 @@ export type RoleAccess = {
   __typename?: 'RoleAccess';
   canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
+  resourceId?: Maybe<Scalars['ID']['output']>;
   role: Role;
   roleId: Scalars['ID']['output'];
 };
@@ -1119,6 +1120,7 @@ export type UserAccess = {
   __typename?: 'UserAccess';
   canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
+  resourceId?: Maybe<Scalars['ID']['output']>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['ID']['output']>;
 };
@@ -1764,6 +1766,7 @@ export type RoleResolvers<ContextType = GraphqlContext, ParentType extends Resol
 export type RoleAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['RoleAccess'] = ResolversParentTypes['RoleAccess']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
+  resourceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   roleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1949,6 +1952,7 @@ export type UserResolvers<ContextType = GraphqlContext, ParentType extends Resol
 export type UserAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['UserAccess'] = ResolversParentTypes['UserAccess']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
+  resourceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

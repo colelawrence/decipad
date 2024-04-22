@@ -71,13 +71,29 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
   schema: schema as GraphCacheConfig['schema'],
   keys: {
     UserAccess(data) {
-      return data.user?.id ?? null;
+      // Needs to be composite of userId + padId
+      //
+      // Because UserAccess needs to be uniquely identified,
+      // And userId is not enough, because the same user
+      // can be on multiple notebooks (think shared notebooks).
+      //
+      // So we must include both userId and the parent resourceId.
+      if (data.userId == null || data.resourceId == null) {
+        return null;
+      }
+
+      return `${data.userId}-${data.resourceId}`;
+    },
+    RoleAccess(data) {
+      // Same comment as the UserAccess
+      if (data.roleId == null || data.resourceId == null) {
+        return null;
+      }
+
+      return `${data.roleId}-${data.resourceId}`;
     },
     PadConnectionParams(data) {
       return data.url ?? null;
-    },
-    RoleAccess(data) {
-      return data.role?.id ?? null;
     },
     PadSnapshot(data) {
       return data.snapshotName ?? null;

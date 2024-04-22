@@ -1,9 +1,13 @@
-import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
+import type { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
+import type { Resource, ResourceResolvers } from './types';
+import type {
+  ResourceAccess,
+  RoleAccess,
+  UserAccess,
+} from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import by from './utils/by';
-import { Resource, ResourceResolvers } from './types';
-import { ResourceAccess } from '@decipad/graphqlserver-types';
 
 export function access<
   RecordT extends ConcreteRecord,
@@ -14,8 +18,10 @@ export function access<
   resourceType: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): ResourceResolvers<RecordT, GraphqlT, CreateT, UpdateT>['access'] {
   return async (parent) => {
+    const parentId = (parent as { id: string }).id;
+
     const resource = `/${resourceType.resourceTypeName}/${getDefined(
-      (parent as { id: string }).id
+      parentId
     )}`;
     const data = await tables();
     const permissions = (
@@ -30,22 +36,30 @@ export function access<
 
     const roleAccesses = permissions
       .filter((p) => p.role_id !== 'null')
-      .map((p) => ({
-        role_id: p.role_id,
-        permission: p.type,
-        canComment: p.can_comment,
-        createdAt: p.createdAt,
-      }))
+      .map(
+        (p): RoleAccess => ({
+          roleId: p.role_id,
+          resourceId: parentId,
+          permission: p.type,
+          canComment: p.can_comment,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          role: {} as any, // Picked up by sub resolvers
+        })
+      )
       .sort(by('permission'));
 
     const userAccesses = permissions
       .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
-      .map((p) => ({
-        userId: p.user_id,
-        permission: p.type,
-        canComment: p.can_comment,
-        createdAt: p.createdAt,
-      }))
+      .map(
+        (p): UserAccess => ({
+          userId: p.user_id,
+          resourceId: parentId,
+          permission: p.type,
+          canComment: p.can_comment,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          user: {} as any, // Picked up by sub resolvers
+        })
+      )
       .sort(by('permission'));
 
     const secretAccesses = permissions
@@ -62,7 +76,7 @@ export function access<
       .sort(by('permission'));
 
     return {
-      id: getDefined((parent as { id: string }).id),
+      id: parentId,
       roles: roleAccesses,
       users: userAccesses,
       secrets: secretAccesses,
