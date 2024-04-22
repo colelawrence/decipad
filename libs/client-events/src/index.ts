@@ -7,17 +7,14 @@ import type { EventArgs } from 'react-ga';
 export type ClientEvent = PageEvent | ActionEvent | ChecklistEvent;
 
 export type SegmentEventArgs = {
-  segmentEvent: ClientEvent;
+  segmentEvent?: ClientEvent;
 };
 
 export type GaEventArgs = {
-  gaEvent: EventArgs;
+  gaEvent?: EventArgs;
 };
 
-export type HandleClientEventArgs =
-  | SegmentEventArgs
-  | GaEventArgs
-  | (SegmentEventArgs & GaEventArgs);
+export type HandleClientEventArgs = SegmentEventArgs & GaEventArgs;
 
 export type ClientEventContextType = (
   arg0: HandleClientEventArgs

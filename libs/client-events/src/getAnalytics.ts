@@ -1,17 +1,18 @@
 /* eslint-disable no-console */
 import { env } from '@decipad/client-env';
+import type { Analytics } from '@segment/analytics-next';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import { isServerSideRendering } from '@decipad/support';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import ReactGA from 'react-ga';
+import * as Sentry from '@sentry/react';
 
-let globalAnalytics: AnalyticsBrowser | undefined;
+let globalAnalytics: Analytics | undefined;
 
 const isTesting = !!process.env.JEST_WORKER_ID;
 
-export const getAnalytics = async (): Promise<AnalyticsBrowser | undefined> => {
+export const getAnalytics = async (): Promise<Analytics | undefined> => {
   if (isTesting) {
     return undefined;
   }
@@ -21,14 +22,24 @@ export const getAnalytics = async (): Promise<AnalyticsBrowser | undefined> => {
   if (isServerSideRendering()) {
     return undefined;
   }
-  const loggedIn = (await getSession()) !== null;
-  if (!loggedIn) {
+  const session = await getSession();
+  if (!session || !session.user) {
+    console.log('NOT LOGGED IN');
     return undefined;
   }
   const writeKey = env.VITE_ANALYTICS_WRITE_KEY;
   if (writeKey) {
     try {
-      globalAnalytics = AnalyticsBrowser.load({ writeKey });
+      globalAnalytics = (await AnalyticsBrowser.load({ writeKey }))?.[0];
+      const userId = (session.user as { id: string }).id;
+      console.debug('analytics: identifying user with id', userId);
+      globalAnalytics.identify(userId, {
+        email: session.user.email,
+      });
+      Sentry.setUser({
+        id: userId,
+        email: session.user.email ?? undefined,
+      });
     } catch (err) {
       console.error('Error loading analytics', err);
       throw new Error('Error loading analytics');
@@ -38,16 +49,16 @@ export const getAnalytics = async (): Promise<AnalyticsBrowser | undefined> => {
   return globalAnalytics;
 };
 
-if (!isTesting) {
-  ReactGA.initialize(env.VITE_GOOGLE_ANALYTICS_ID);
-}
-
 export const useGAPageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isTesting) {
-      ReactGA.pageview(window.location.pathname + window.location.search);
-    }
+    (async () => {
+      if (!isTesting && env.VITE_GOOGLE_ANALYTICS_ID) {
+        const ReactGA = await import('react-ga');
+        ReactGA.initialize(env.VITE_GOOGLE_ANALYTICS_ID);
+        ReactGA.pageview(window.location.pathname + window.location.search);
+      }
+    })();
   }, [location]);
 };
