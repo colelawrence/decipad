@@ -138,8 +138,6 @@ const resolvers: Resolvers = {
     sharePadWithUser: padResource.shareWithUser,
     unsharePadWithUser: padResource.unshareWithUser,
     sharePadWithEmail: async (parent, args, context) => {
-      // marta
-
       const data = await tables();
       const pad = await data.pads.get({ id: args.id });
 

@@ -113,7 +113,9 @@ type Action =
       action: 'Integration: Notebook Integration added';
       props: { type: TrackedIntegrations };
     }
-  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } };
+  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } }
+  // Pricing
+  | { action: 'Pricing Modal Viewed'; props: { url: string } };
 
 export type ActionEvent = {
   type: 'action';

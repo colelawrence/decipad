@@ -188,10 +188,6 @@ export async function canUserBeInvitedWithPermission(
     return nrOfCollaborators < Number(subsPlan.metadata.readers);
   }
 
-  if (!wsPlan || wsPlan === 'free') {
-    return nrOfCollaborators < maxEditorFreePlan;
-  }
-
   return true;
 }
 

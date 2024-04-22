@@ -38,6 +38,7 @@ export const processSessionComplete = async (
       id: subscriptionId,
       workspaceId,
       billingEmail: customer_details?.email || '',
+      plan: metadata?.title,
     },
   });
 

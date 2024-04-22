@@ -1,10 +1,11 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import * as Styled from './styles';
 import { Button, Link, Loading } from '../../atoms';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
+import { useClientEvents } from '@decipad/client-events';
 
 interface SubscriptionPlansListProps {
   plans: (SubscriptionPlan | null)[];
@@ -49,11 +50,27 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
   workspaceId,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const track = useClientEvents();
 
   const [isStripeInfoLoading, setStripeInfoLoading] = useState(false);
   const [billingButtonTitle, setBillingButtonTitle] = useState(
     'Continue to billing'
   );
+  const hasFiredRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasFiredRef.current) {
+      track({
+        segmentEvent: {
+          type: 'action',
+          action: 'Pricing Modal Viewed',
+          props: { url: location.pathname },
+        },
+      });
+      hasFiredRef.current = true;
+    }
+  }, [location.pathname, track]);
 
   return (
     <>
