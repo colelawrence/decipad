@@ -72,10 +72,23 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
     await unpublishSnapshots(pad.id);
   }
 
-  const event = isPublic ? 'notebook published' : 'notebook unpublished';
+  const event = isPublic ? 'Notebook Published' : 'Notebook Unpublished';
+
   await track(
     context.event,
-    { userId: user?.id, event, properties: { notebookdId: id } },
+    {
+      userId: user?.id,
+      event,
+      properties: {
+        notebookdId: id,
+        type:
+          publishState === 'PUBLIC'
+            ? 'Private URL'
+            : publishState === 'PUBLICLY_HIGHLIGHTED'
+            ? 'Public URL'
+            : 'Unpublished',
+      },
+    },
     context
   );
 
