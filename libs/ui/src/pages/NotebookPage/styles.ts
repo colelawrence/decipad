@@ -98,7 +98,8 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   minWidth: '0px',
   // min-width: 0 is very important
   // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
-  backgroundColor: cssVar('backgroundHeavy'),
+  backgroundColor: cssVar('backgroundMain'),
+  paddingBottom: '56px',
   height: '100%',
   width: '100%',
   borderRadius: '16px',
