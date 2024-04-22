@@ -28,7 +28,7 @@ export const Placeholder = styled.div({
   padding: '32px 48px 64px',
   border: `1px solid ${cssVar('borderSubdued')}`,
   [tabletScreenQuery]: {
-    position: 'fixed',
+    display: 'none',
   },
 });
 
