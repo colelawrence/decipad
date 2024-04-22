@@ -115,7 +115,10 @@ type Action =
     }
   | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } }
   // Pricing
-  | { action: 'Pricing Modal Viewed'; props: { url: string } };
+  | {
+      action: 'Pricing Modal Viewed';
+      props: { url: string; analytics_source: 'frontend' | 'backend' };
+    };
 
 export type ActionEvent = {
   type: 'action';

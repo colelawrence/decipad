@@ -117,7 +117,7 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
         seats: 1,
         queries: limits().maxQueries.free,
         description:
-          'The perfect starting point. All the good data modeling stuff, no fluff.',
+          'The perfect starting point. All our unique modeling features, free forever.',
       });
 
       return allPlans;

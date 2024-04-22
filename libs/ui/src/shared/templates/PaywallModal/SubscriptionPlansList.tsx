@@ -65,7 +65,7 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
         segmentEvent: {
           type: 'action',
           action: 'Pricing Modal Viewed',
-          props: { url: location.pathname },
+          props: { url: location.pathname, analytics_source: 'frontend' },
         },
       });
       hasFiredRef.current = true;
