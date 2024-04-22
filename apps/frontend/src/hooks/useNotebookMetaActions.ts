@@ -28,6 +28,7 @@ import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { Doc, applyUpdate } from 'yjs';
 import { toSlateDoc } from '@decipad/slate-yjs';
+import { useClientEvents } from '@decipad/client-events';
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
 
@@ -41,6 +42,7 @@ export function useNotebookMetaActions(
 ): NotebookMetaActionsReturn {
   const nav = useNavigate();
   const toast = useToast();
+  const analytics = useClientEvents();
 
   const deleteNotebook = useMutationResultHandler(
     useUpdateNotebookArchiveMutation()[1],
@@ -260,8 +262,30 @@ export function useNotebookMetaActions(
         id: notebookId,
         publishState,
       });
+
+      if (publishState === 'PRIVATE') {
+        await analytics({
+          segmentEvent: {
+            type: 'action',
+            action: 'unpublish notebook',
+            props: { id: notebookId },
+          },
+        });
+        return;
+      }
+
+      await analytics({
+        segmentEvent: {
+          type: 'action',
+          action: 'publish notebook',
+          props: {
+            id: notebookId,
+            type: publishState === 'PUBLIC' ? 'private-url' : 'public',
+          },
+        },
+      });
     },
-    [remoteUpdateNotebookPublishState]
+    [analytics, remoteUpdateNotebookPublishState]
   );
 
   const onUpdateAllowDuplicate = useCallback<

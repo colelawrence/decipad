@@ -10,7 +10,6 @@ import type {
   PermissionType,
 } from '@decipad/graphql-client';
 import {
-  useCreateOrUpdateNotebookSnapshotMutation,
   useGetNotebookByIdQuery,
   useUpdateNotebookIconMutation,
   useAttachFileToNotebookMutation,
@@ -29,9 +28,6 @@ import {
 } from 'apps/frontend/src/utils';
 import { useExternalDataSources } from './useExternalDataSources';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
-import { PublishedVersionName } from '@decipad/interfaces';
-
-const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -65,7 +61,6 @@ interface UseNotebookStateAndActionsResult {
   notebook: Notebook | undefined;
   isReadOnly: boolean;
   isPublic: boolean;
-  isPublishing?: boolean;
   icon: Icon | undefined;
   iconColor: IconColor;
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
@@ -82,8 +77,6 @@ interface UseNotebookStateAndActionsResult {
   updateIcon: (icon: Icon) => void;
   updateIconColor: (icon: IconColor) => void;
   setNotebookPublic: (isPublic: boolean) => void;
-  publishNotebook: () => void;
-  unpublishNotebook: () => void;
   inviteEditorByEmail: (
     email: string,
     permission: PermissionTypeStr
@@ -99,8 +92,6 @@ interface UseNotebookStateAndActionsResult {
   onAttached: (handle: string) => Promise<undefined | { url: URL }>;
   onCreateSnapshot: () => void;
 }
-
-const SNAPSHOT_NAME = PublishedVersionName.Published;
 
 export const useNotebookStateAndActions = ({
   notebookId,
@@ -154,9 +145,6 @@ export const useNotebookStateAndActions = ({
   const [, updatePadPermission] = useUpdatePadPermissionMutation();
   const [, unsharePadWithUser] = useUnsharePadWithUserMutation();
   const [, createSnapshot] = useCreateNotebookSnapshotMutation();
-
-  const [, createOrUpdateSnapshot] =
-    useCreateOrUpdateNotebookSnapshotMutation();
 
   const onCreateSnapshot = useCallback(() => {
     createSnapshot({
@@ -296,56 +284,6 @@ export const useNotebookStateAndActions = ({
     [notebookId, remoteUpdateNotebookPublishState]
   );
 
-  const [isPublishing, setIsPublishing] = useState(false);
-
-  const publishNotebook = useCallback(() => {
-    setIsPublishing(true);
-    // TODO: this must invalidate the Pad since snapshots are a property of Pad. One way to do
-    // this is if the mutation returns a Pad instead of a PadSnapshot. Another way to do it is to
-    // programmatically invalidate/update cache, either here or in the urql config.
-    createOrUpdateSnapshot({
-      params: { notebookId, snapshotName: SNAPSHOT_NAME },
-    })
-      .then((ret) => {
-        if (ret.error) {
-          console.error(`Error publishing notebook: ${ret.error.message}`);
-          toast('Error publishing notebook', 'error');
-          return;
-        }
-        return setNotebookPublic(true).then(() => {
-          event({
-            segmentEvent: {
-              type: 'action',
-              action: 'publish notebook',
-              props: { id: notebookId },
-            },
-          });
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        toast('Error publishing notebook', 'error');
-      })
-      .finally(() => {
-        setTimeout(
-          () => setIsPublishing(false),
-          DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS * 2
-        );
-      });
-  }, [createOrUpdateSnapshot, event, notebookId, setNotebookPublic, toast]);
-
-  const unpublishNotebook = useCallback(() => {
-    setNotebookPublic(false).then(() => {
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'unpublish notebook',
-          props: { id: notebookId },
-        },
-      });
-    });
-  }, [event, notebookId, setNotebookPublic]);
-
   const inviteEditorByEmail = useCallback(
     (email: string, permission: PermissionTypeStr): Promise<void> => {
       // TODO: return a correct type instead of void
@@ -394,7 +332,6 @@ export const useNotebookStateAndActions = ({
     notebook,
     isReadOnly,
     isPublic,
-    isPublishing,
     icon: cacheIcon,
     iconColor: cacheIconColor,
     hasLocalChanges,
@@ -409,8 +346,6 @@ export const useNotebookStateAndActions = ({
     updateIcon,
     updateIconColor,
     createdAt: new Date(notebook?.createdAt),
-    publishNotebook,
-    unpublishNotebook,
     changeEditorAccess,
     inviteEditorByEmail,
     removeEditorById,

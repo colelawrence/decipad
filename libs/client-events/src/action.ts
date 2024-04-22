@@ -17,6 +17,7 @@ type Action =
       action: 'publish notebook';
       props: {
         id: string;
+        type: 'public' | 'private-url';
       };
     }
   | {
