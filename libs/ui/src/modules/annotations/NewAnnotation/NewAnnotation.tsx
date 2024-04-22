@@ -1,6 +1,17 @@
-import { useCreateAnnotationMutation } from '@decipad/graphql-client';
+import { ClientEventsContext } from '@decipad/client-events';
+import {
+  useGetNotebookMetaQuery,
+  useCreateAnnotationMutation,
+} from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import * as Styled from './styles';
 import { Send } from 'libs/ui/src/icons';
 
@@ -22,6 +33,14 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
   const [annotation, setAnnotation] = useState<string>('');
   const [, createAnnotation] = useCreateAnnotationMutation();
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
+
+  const userEvents = useContext(ClientEventsContext);
+
+  const [meta] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
+
+  const data = meta.data?.getPadById;
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -60,15 +79,29 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
       return;
     }
 
+    userEvents({
+      segmentEvent: {
+        type: 'action',
+        action: 'Comment Submitted',
+        props: {
+          notebook_id: notebookId,
+          permissions_type: data?.myPermissionType,
+          analytics_source: 'frontend',
+        },
+      },
+    });
+
     closeAnnotation();
   }, [
+    isDisabled,
     createAnnotation,
     annotation,
     blockId,
     notebookId,
-    toast,
-    isDisabled,
+    userEvents,
+    data?.myPermissionType,
     closeAnnotation,
+    toast,
   ]);
 
   const handleForm = useCallback(

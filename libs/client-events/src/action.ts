@@ -1,4 +1,5 @@
 import type { AnyElement, ElementVariants } from '@decipad/editor-types';
+import type { PermissionType } from '@decipad/graphql-client';
 
 type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql';
 
@@ -25,6 +26,14 @@ type Action =
       };
     }
   | { action: 'clear all'; props?: undefined }
+  | {
+      action: 'Comment Submitted';
+      props: {
+        notebook_id: string;
+        permissions_type: PermissionType | null | undefined;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
   // Visitor
   | { action: 'try decipad'; props?: undefined }
   // Editor actions
