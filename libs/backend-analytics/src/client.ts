@@ -43,7 +43,6 @@ const clientForEvent = new WeakMap<APIGatewayProxyEventV2, MyAnalyticsClient>();
 
 const analyticsSettings = (): AnalyticsSettings => ({
   writeKey: secretKey,
-  host: 'https://events.eu1.segmentapis.com',
   maxEventsInBatch: 1,
   maxRetries: 1,
 });
@@ -54,7 +53,9 @@ export const analyticsClient = (event: APIGatewayProxyEventV2) => {
   }
   let client = clientForEvent.get(event);
   if (!client) {
-    client = new MyAnalyticsClient(analyticsSettings());
+    const settings = analyticsSettings();
+    console.log('using analytics settings', settings);
+    client = new MyAnalyticsClient(settings);
     if (event && typeof event === 'object') {
       clientForEvent.set(event, client);
       client.once('deregister', () => clientForEvent.delete(event));

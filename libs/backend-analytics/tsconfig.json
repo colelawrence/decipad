@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src"],
-  "references": [{ "path": "../backend-config" }, { "path": "../utils" }]
+  "references": [
+    { "path": "../backend-config" },
+    { "path": "../utils" },
+    { "path": "../backend-trace" }
+  ]
 }
