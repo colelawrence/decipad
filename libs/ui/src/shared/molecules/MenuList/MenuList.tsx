@@ -33,6 +33,7 @@ const defaultStyles = css(
     border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: '8px',
     maxHeight: 'min(480px, 50vh)',
+    overflowX: 'hidden', // safariiiii
   },
   deciOverflowYStyles
 );
