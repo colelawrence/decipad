@@ -123,7 +123,10 @@ export const Draw: DrawComponent = ({
       draggableCss={drawStyles}
       {...attributes}
     >
-      <div className={'block-figure'} onClick={stopClickPropagation}>
+      <div
+        className="block-figure [&_.App-toolbar-content>button:first-child]:!hidden"
+        onClick={stopClickPropagation}
+      >
         <ExcalidrawElementWithRef
           css={[
             excalidrawContainerStyles,

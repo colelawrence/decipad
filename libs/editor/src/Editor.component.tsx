@@ -18,7 +18,7 @@ import { Plate, PlateContent } from '@udecode/plate-common';
 import type { FC, PropsWithChildren, ReactNode, RefObject } from 'react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { BaseEditor } from 'slate';
-import { Scrubber, Editor as SlateEditor } from 'slate';
+import { Editor as SlateEditor, Scrubber } from 'slate';
 import type { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { EditorChangeContext } from '../../react-contexts/src/editor-change';
@@ -144,7 +144,7 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
           <CategoriesContextProvider>
             <EditorLayout>
               {props.titleEditor}
-              <div ref={containerRef}>
+              <div ref={containerRef} className="relative">
                 <BlockLengthSynchronizationProvider editor={editor}>
                   <TeleportEditor editor={editor}>
                     <Plate<MyValue>

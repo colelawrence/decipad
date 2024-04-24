@@ -10,6 +10,7 @@ import { Draw as UIDraw } from '../../editor-components/src/plate-ui/draw';
 import cloneDeep from 'lodash.clonedeep';
 import type { MutableRefObject } from 'react';
 import { useCallback, useRef, useState } from 'react';
+import type { ExcalidrawRef as TExcalidrawRef } from '@decipad/editor-components';
 import { DraggableBlock } from '@decipad/editor-components';
 import { dequal } from '@decipad/utils';
 import { unfixElements } from './fixElement';
@@ -59,7 +60,7 @@ export const Draw: PlateComponent = ({ element, attributes, className }) => {
   return (
     <UIDraw
       className={className}
-      excalidrawRef={excalidrawRef}
+      excalidrawRef={excalidrawRef as TExcalidrawRef}
       draggableBlock={DraggableBlock}
       readOnly={readOnly}
       elements={cloneDeep(previousElements.current)}

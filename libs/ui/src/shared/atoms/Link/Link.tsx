@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css, SerializedStyles } from '@emotion/react';
-import { createSlotComponent } from '@udecode/plate-common';
+import { createPrimitiveElement } from '@udecode/plate-common';
 import { Anchor } from '../../../utils';
 import { componentCssVars } from '../../../primitives';
 import { ComponentProps } from 'react';
@@ -40,11 +40,13 @@ const styleColors: Record<LinkColor, SerializedStyles> = {
   }),
 };
 
-const LinkSlot = createSlotComponent('a');
+const LinkSlot = createPrimitiveElement('a');
 
-interface LinkProps extends ComponentProps<typeof LinkSlot> {
+interface LinkProps
+  extends Omit<ComponentProps<typeof LinkSlot>, 'contentEditable'> {
   color?: LinkColor;
   noUnderline?: boolean;
+  children: React.ReactNode;
 }
 
 export const Link = ({
@@ -52,7 +54,7 @@ export const Link = ({
   color = 'default',
   noUnderline,
   ...props
-}: LinkProps): ReturnType<React.FC> => {
+}: LinkProps) => {
   const paint = styleColors[color];
   const underline = noUnderline ? undefined : underlineStyles;
   return (
