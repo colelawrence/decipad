@@ -51,6 +51,7 @@ const plugins = [
       inlineWorkboxRuntime: true,
       cleanupOutdatedCaches: true,
       globPatterns: ['**/*.{js,html,css,ico,png,svg,woff2}'],
+      navigateFallback: null,
       navigateFallbackDenylist: [/^\/api/, /^\/graphql/, /^\/docs/],
       runtimeCaching: [
         {
