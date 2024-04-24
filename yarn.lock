@@ -12845,10 +12845,10 @@
     "@jest/create-cache-key-function" "^29.7.0"
     jsonc-parser "^3.2.0"
 
-"@swc/plugin-emotion@^2.5.119":
-  version "2.5.119"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-emotion/-/plugin-emotion-2.5.119.tgz#f520d8be75dccf7f44826d379aa666323c8b671f"
-  integrity sha512-ZkLyPIwoUXzK0TJexc+n18heezni1puNuDs+ipPa0csY5zJ0MPHk0rZSF4ieBU2uIwItOkaP4xNDg/KwOUfrFQ==
+"@swc/plugin-emotion@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-emotion/-/plugin-emotion-3.0.0.tgz#acfc81dc05230e119cd458a03516bc311d200a57"
+  integrity sha512-qQZVW6vxQo5Ckzs7GS4qlC7r9jFaJ1dBvAcLbtPkdvvo68vJgWrvJIorFTOZ59NwQql7YXf2NMSLnUN2Zv4q8g==
   dependencies:
     "@swc/counter" "^0.1.3"
 
@@ -16225,10 +16225,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1603.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1603.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1603.0.tgz#81fd7e76502d46acf06c726a3dc547bdee9d3e5e"
-  integrity sha512-AB54LyTODyiTKdtUzE0LzhnPbumYH3KhDstje8i4KfeBSGCeszTgq89YfOVpSy5twfu9WpsJ2cHOxlrlXn9cpg==
+aws-sdk@2.1605.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1605.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1605.0.tgz#8ba2c5bd4b43c9b95dd63d6916916a2dcd92abbd"
+  integrity sha512-/wtOuF7WgkbN6YL3xJ+FB54kvIAfnP/DQVDaE6rSYv6ft0xr01Si94NgQWhb5OcFkFfRAC4auZX8PiFNtOi9xQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
