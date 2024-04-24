@@ -24,7 +24,6 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
       sections: [],
     },
   ],
-  hasFreeWorkspaceSlot: true,
   onCreateWorkspace: noop,
   onSelectWorkspace: noop,
   getPlanTitle: () => 'bruh',

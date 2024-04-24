@@ -285,7 +285,6 @@ const Workspace: FC = () => {
         name={session?.user?.name}
         email={session.user?.email}
         workspaces={allWorkspaces}
-        hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
         onCreateWorkspace={() => {
           if (
             isFlagEnabled('NEW_PAYMENTS') &&

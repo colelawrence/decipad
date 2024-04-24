@@ -9,7 +9,6 @@ export default {
 
 export const Normal: StoryFn = () => (
   <WorkspaceMenu
-    hasFreeWorkspaceSlot={true}
     getPlanTitle={() => 'bruh'}
     workspaces={[
       {

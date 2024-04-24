@@ -287,7 +287,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           workspaceId={workspaceId}
         />
       );
-      paywallTitle = 'Choose a plan';
+      paywallTitle = `Choose a plan ${
+        isCreatingNewWorkspace ? 'for your new workspace' : ''
+      }`;
       break;
     }
     case 'make-payment': {
