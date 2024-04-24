@@ -30,8 +30,15 @@ const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
     }
   )?.permission;
 
+  // another sort of hacky fix, will update all of this in next PR
+  // we should probably add permissions to comment for readers too
+  const hasWorkspaceAccess =
+    notebook.data?.getPadById?.workspace?.myPermissionType != null;
+
   const isWriter =
-    currentUserPermission === 'WRITE' || currentUserPermission === 'ADMIN';
+    currentUserPermission === 'WRITE' ||
+    currentUserPermission === 'ADMIN' ||
+    hasWorkspaceAccess;
 
   if (!isWriter) {
     setSidebar('closed');
