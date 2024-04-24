@@ -15,7 +15,7 @@
     "@docusaurus/utils-validation": "3.1.1",
     "@docusaurus/theme-common": "3.1.1",
     "docusaurus-plugin-segment": "1.0.4",
-    "@sindresorhus/is": "6.2.0"
+    "@sindresorhus/is": "6.3.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.1.1",
@@ -26,6 +26,6 @@
     "node": ">=18.0"
   },
   "resolutions": {
-    "@sindresorhus/is": "6.2.0"
+    "@sindresorhus/is": "6.3.0"
   }
 }
