@@ -51,7 +51,7 @@ const plugins = [
       inlineWorkboxRuntime: true,
       cleanupOutdatedCaches: true,
       globPatterns: ['**/*.{js,html,css,ico,png,svg,woff2}'],
-      navigateFallbackDenylist: [/^\/api/, /^\/graphql/],
+      navigateFallbackDenylist: [/^\/api/, /^\/graphql/, /^\/docs/],
       runtimeCaching: [
         {
           urlPattern: ({ request }) =>
@@ -82,7 +82,8 @@ const plugins = [
         {
           urlPattern: ({ url }) =>
             url.pathname.startsWith('/api') ||
-            url.pathname.startsWith('/graphql'),
+            url.pathname.startsWith('/graphql') ||
+            url.pathname.startsWith('/docs'),
           handler: 'NetworkOnly',
         },
       ],
