@@ -35474,10 +35474,10 @@ swc-loader@^0.2.3:
   resolved "https://registry.yarnpkg.com/swc-loader/-/swc-loader-0.2.3.tgz#6792f1c2e4c9ae9bf9b933b3e010210e270c186d"
   integrity sha512-D1p6XXURfSPleZZA/Lipb3A8pZ17fP4NObZvFCDjK/OKljroqDpPmsBdTraWhVBqUNpcWBQY1imWdoPScRlQ7A==
 
-swc-plugin-import-meta-env@^1.4.8:
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/swc-plugin-import-meta-env/-/swc-plugin-import-meta-env-1.4.8.tgz#d61aa064119e12b7ae9946a68f8853c521128f63"
-  integrity sha512-E6rCH9fE4BQdL0YQIMsfawZVqqA7yrZRgnqJ0KgoNJ0gEr1PM0A9Le7SMQNLx7yCccEq9H+aT/OwznTpS7Ir4Q==
+swc-plugin-import-meta-env@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/swc-plugin-import-meta-env/-/swc-plugin-import-meta-env-1.5.0.tgz#eea76f7a93262905c8c8246fc4185c7cc74acdcb"
+  integrity sha512-+wTerBMYcXH9wku1UO+5STtgm8cFuXYC1GGi0c/fiaOQhcHZGU3tAHyWmkJ2mZdjBlo0I05IYuICbfC5VzG+DA==
 
 swr@^2.2.0:
   version "2.2.4"
