@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
+import { resourceusage } from '@decipad/services';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -12,25 +13,11 @@ type RequestBody = {
   url: string;
   exampleRes: string;
   prompt: string;
-};
-
-const createPrompt = ({ url, exampleRes, prompt }: RequestBody): string => {
-  return `Example response from ${url}:
-\`\`\`
-${exampleRes}
-\`\`\`
-
-JavaScript:
-\`\`\`
-const fetchFn = async () => {
-  // fetch from ${url}, return an array of objects of the form { property_name: value }[]${
-    prompt ? `, ${prompt}` : ``
-  }
-  `; // Indenting here should force prompt completion to indent code so we can use `\n}` as a terminator
+  workspaceId: string;
 };
 
 export const handler = handle(async (event) => {
-  await expectAuthenticated(event);
+  const [{ user }] = await expectAuthenticated(event);
 
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
@@ -56,12 +43,52 @@ export const handler = handle(async (event) => {
   ) {
     throw Boom.badData('Request body has wrong format');
   }
+  const { workspaceId } = requestBody;
 
-  const prompt = createPrompt(requestBody);
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4-turbo',
+    messages: [
+      {
+        role: 'system',
+        content: `You generate JavaScript code to fetch data from an API, taking into account the user's request. The user may also provide a response example and a URL to fetch data from. If the user doesn't provide a URL or response example, just consider only the user prompt. Your response is JavaScript code without formatting. For example...
+User message:
+"""
+User prompt: list all dogs that don't have regional breeds
 
-  const completion = await openai.completions.create({
-    model: 'gpt-3.5-turbo-instruct',
-    prompt,
+User url: https://dog.ceo/api/breeds/list/all
+
+User response example: [ {
+  "name": "affenpinscher",
+  "hasBreeds": false
+},  {
+  "name": "appenzeller",
+  "hasBreeds": false
+}]
+"""
+
+Your response:
+const res = await fetch('https://dog.ceo/api/breeds/list/all');
+const data = await res.json();
+const message = data.message;
+const dogsNoSubsbreeds = Object.keys(message).map((breed) => {
+  return {
+    name: breed,
+    hasBreeds: message[breed].length > 0
+  }
+}).filter((breed) => !breed.hasBreeds)
+return dogsNoSubsbreeds;
+`,
+      },
+      {
+        role: 'user',
+        content: `User prompt: ${requestBody.prompt}
+
+User url: ${requestBody.url}
+
+User response example: ${requestBody.exampleRes}
+`,
+      },
+    ],
     temperature: 0,
     max_tokens: 1000,
     top_p: 1.0,
@@ -70,10 +97,21 @@ export const handler = handle(async (event) => {
     stop: [`\n}`],
   });
 
-  const newParagraph = completion.choices[0].text;
+  const newParagraph = completion.choices[0].message.content;
   if (!newParagraph) {
     throw Boom.internal(`Failed to generate code.`);
   }
+
+  await resourceusage.ai.updateWorkspaceAndUser({
+    userId: user.id,
+    workspaceId,
+    usage: completion.usage,
+  });
+
+  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
+    'workspaces',
+    workspaceId
+  );
 
   return {
     statusCode: 200,
@@ -82,6 +120,10 @@ export const handler = handle(async (event) => {
     },
     body: JSON.stringify({
       completion: newParagraph.trim(),
+      usage: {
+        completionTokensUsed: newCompletion,
+        promptTokensUsed: newPrompt,
+      },
     }),
   };
 });

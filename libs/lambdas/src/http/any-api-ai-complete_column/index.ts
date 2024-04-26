@@ -5,6 +5,7 @@ import zip from 'lodash.zip';
 import handle from '../handle';
 import { captureException } from '@decipad/backend-trace';
 import { expectAuthenticated } from '@decipad/services/authentication';
+import { resourceusage } from '@decipad/services';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -24,10 +25,11 @@ type RequestBody = {
   headerArray: string[];
   columnName: string;
   columnIndex: number;
+  workspaceId: string;
 };
 
 export const handler = handle(async (event) => {
-  await expectAuthenticated(event);
+  const [{ user }] = await expectAuthenticated(event);
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
 
@@ -65,6 +67,14 @@ export const handler = handle(async (event) => {
     throw Boom.badData('Request body has wrong format');
   }
 
+  const { workspaceId } = requestBody;
+
+  const hasReachedLimit = await resourceusage.ai.hasReachedLimit(workspaceId);
+
+  if (hasReachedLimit) {
+    throw Boom.paymentRequired('You are out of AI credits');
+  }
+
   const { table, columnName, headerArray } = requestBody;
 
   // convert table into string
@@ -94,7 +104,7 @@ export const handler = handle(async (event) => {
   const userMessageContent = createUserMessageContent(tableString, columnName);
 
   const completion = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo-0613',
+    model: 'gpt-4-turbo',
     messages: [
       {
         role: 'system',
@@ -186,11 +196,28 @@ export const handler = handle(async (event) => {
       };
     });
 
+  await resourceusage.ai.updateWorkspaceAndUser({
+    userId: user.id,
+    workspaceId,
+    usage: completion.usage,
+  });
+
+  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
+    'workspaces',
+    workspaceId
+  );
+
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(indexedSuggestions),
+    body: JSON.stringify({
+      content: indexedSuggestions,
+      usage: {
+        completionTokensUsed: newCompletion,
+        promptTokensUsed: newPrompt,
+      },
+    }),
   };
 });

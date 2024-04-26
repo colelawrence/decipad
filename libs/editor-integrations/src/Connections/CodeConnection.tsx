@@ -3,13 +3,14 @@ import {
   importFromUnknownJson,
   tableFlip,
 } from '@decipad/import';
-import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
   useCodeConnectionStore,
   useConnectionStore,
   useCurrentWorkspaceStore,
   useNotebookId,
+  useAiUsage,
+  type TExecution,
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import type { FC } from 'react';
@@ -23,7 +24,6 @@ import {
   componentCssVars,
   cssVar,
 } from '@decipad/ui';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import type { RemoteData } from 'libs/editor-components/src/AIPanel/hooks';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
@@ -204,15 +204,8 @@ export const CodeConnection: FC<ConnectionProps> = ({
   const { onExecute, info } = useContext(ExecutionContext);
   const [log, setLog] = useState<TExecution<boolean>[]>([]);
 
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount, id } = workspaceInfo;
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: id || '',
-    });
-  }, [id, updateQueryExecCount]);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const { hasReachedLimit, updateUsage } = useAiUsage();
 
   useEffect(() => {
     if (stage === 'connect') {
@@ -220,12 +213,6 @@ export const CodeConnection: FC<ConnectionProps> = ({
       setLog([]);
     }
   }, [onExecute, stage]);
-
-  useEffect(() => {
-    setMaxQueryExecution(
-      !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-    );
-  }, [quotaLimit, queryCount]);
 
   const deciVariables = useDeciVariables();
 
@@ -351,32 +338,21 @@ export const CodeConnection: FC<ConnectionProps> = ({
       case 'success': {
         toggleShowAi(false);
         setCode(rd.result?.completion?.replace(/\n {2}/g, '\n'));
+
+        if (rd.result.usage) {
+          updateUsage(rd.result.usage);
+        }
       }
     }
-  }, [rd, setCode, toggleShowAi]);
+  }, [rd, setCode, toggleShowAi, updateUsage]);
 
   const onSubmitAi = async () => {
-    const result = await updateQueryExecutionCount();
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
-    );
-
-    if (newExecutedQueryData) {
-      fetchRd({
-        url,
-        exampleRes,
-        prompt,
-      });
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
-    }
+    fetchRd({
+      url,
+      exampleRes,
+      prompt,
+      workspaceId: workspaceInfo.id ?? '',
+    });
   };
 
   return (
@@ -391,7 +367,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
           setPrompt={setPrompt}
           onSubmit={onSubmitAi}
           generationRD={rd}
-          maxQueryExecution={maxQueryExecution}
+          maxQueryExecution={hasReachedLimit ?? false}
         />
       ) : (
         <CodeEditor

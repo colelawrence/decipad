@@ -25,6 +25,7 @@ import {
   withPath,
 } from '@decipad/editor-utils';
 import {
+  useAiUsage,
   useComputer,
   useCurrentWorkspaceStore,
   useEditorTableContext,
@@ -40,7 +41,6 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
@@ -422,14 +422,8 @@ export const useTableActions = (
 
   const [rd, fetchRd] = useRdFetch('complete-column');
   const toast = useToast();
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: workspaceInfo.id || '',
-    });
-  }, [workspaceInfo.id, updateQueryExecCount]);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const { updateUsage } = useAiUsage();
 
   const { setTableFrozen } = useEditorTableContext();
   // populate column
@@ -446,7 +440,7 @@ export const useTableActions = (
         }
         case 'success': {
           setTableFrozen(false);
-          const suggestions = rd.result;
+          const suggestions = rd.result.content;
 
           const isValid =
             Array.isArray(suggestions) &&
@@ -472,6 +466,9 @@ export const useTableActions = (
               setCellText(editor, columnCellPath, suggestion.suggestion);
             }
           });
+          if (rd.result.usage) {
+            updateUsage(rd.result.usage);
+          }
           return;
         }
         default: {
@@ -488,7 +485,7 @@ export const useTableActions = (
         extra: { data: rd },
       });
     }
-  }, [rd, setTableFrozen, editor, path, toast]);
+  }, [rd, setTableFrozen, editor, path, toast, updateUsage]);
 
   const onPopulateColumn = useCallback(
     async (columnHeaderId: string) => {
@@ -528,32 +525,16 @@ export const useTableActions = (
       const rearranged = unpopulated;
 
       const body = {
+        workspaceId: workspaceInfo.id ?? '',
         columnName,
         headerArray,
         columnIndex,
         table: rearranged,
       };
 
-      const result = await updateQueryExecutionCount();
-      const newExecutedQueryData = result.data?.incrementQueryCount;
-      if (newExecutedQueryData) {
-        fetchRd(body);
-        setCurrentWorkspaceInfo({
-          ...workspaceInfo,
-          queryCount: newExecutedQueryData.queryCount,
-          quotaLimit: newExecutedQueryData.quotaLimit,
-        });
-      }
+      fetchRd(body);
     },
-    [
-      path,
-      editor,
-      updateQueryExecutionCount,
-      toast,
-      fetchRd,
-      setCurrentWorkspaceInfo,
-      workspaceInfo,
-    ]
+    [path, editor, toast, fetchRd, workspaceInfo]
   );
 
   const onMoveColumn = useCallback(

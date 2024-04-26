@@ -16,6 +16,7 @@ export type RemoteData<T> =
   | {
       status: 'error';
       error: string;
+      code?: number;
     };
 
 export type RemoteDataStatus = RemoteData<any>['status'];
@@ -23,11 +24,16 @@ export type RemoteDataStatus = RemoteData<any>['status'];
 export type Endpoints = {
   'generate-sql': {
     body: {
+      workspaceId: string;
       externalDataSourceId: string;
       prompt: string;
     };
     response: {
       completion: string;
+      usage: {
+        promptTokensUsed?: number;
+        completionTokensUsed?: number;
+      };
     };
   };
   chat: {
@@ -38,23 +44,34 @@ export type Endpoints = {
     body: {
       prompt: string;
       paragraph: string;
+      workspaceId: string;
     };
     response: {
       completion: string;
+      usage: {
+        promptTokensUsed?: number;
+        completionTokensUsed?: number;
+      };
     };
   };
   'generate-fetch-js': {
     body: {
+      workspaceId: string;
       url: string;
       exampleRes: string;
       prompt: string;
     };
     response: {
       completion: string;
+      usage: {
+        promptTokensUsed?: number;
+        completionTokensUsed?: number;
+      };
     };
   };
   'complete-column': {
     body: {
+      workspaceId: string;
       columnName: string;
       columnIndex: number;
       headerArray: string[];
@@ -64,10 +81,16 @@ export type Endpoints = {
       }[];
     };
     response: {
-      id: string;
-      columnIndex: number;
-      suggestion: string;
-    }[];
+      content: {
+        id: string;
+        columnIndex: number;
+        suggestion: string;
+      }[];
+      usage: {
+        promptTokensUsed?: number;
+        completionTokensUsed?: number;
+      };
+    };
   };
 };
 const notAsked = Symbol('not asked');
@@ -111,7 +134,11 @@ export const useRdFetch = <Name extends keyof Endpoints>(endpoint: Name) => {
       .then(async (res) => {
         if (res.status !== 200) {
           console.error(`Request failed (${res.status})`, res);
-          setRd({ status: 'error', error: 'Request failed.' });
+          setRd({
+            status: 'error',
+            error: 'Request failed.',
+            code: res.status,
+          });
           return;
         }
 

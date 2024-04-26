@@ -11,6 +11,7 @@ const AiUsageContext = createContext<AiUsageActions>({
   promptTokensUsed: 0,
   completionTokensUsed: 0,
   tokensQuotaLimit: 0,
+  hasReachedLimit: false,
   updateUsage: () => {},
   increaseQuotaLimit: () => {},
 });
@@ -19,22 +20,30 @@ export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [promptTokensUsed, setPromptTokensUsed] = useState(0);
   const [completionTokensUsed, setCompletionTokensUsed] = useState(0);
   const [quotaLimit, setQuotaLimit] = useState(0);
+  const [hasReachedLimit, setHasReachedLimit] = useState(false);
 
   // TODO: maybe get rid of this completely, and rely purely on graphql.
 
-  const updateUsage = useCallback<AiUsageActions['updateUsage']>((usage) => {
-    if (usage.promptTokensUsed != null) {
-      setPromptTokensUsed(usage.promptTokensUsed);
-    }
+  const updateUsage = useCallback<AiUsageActions['updateUsage']>(
+    (usage) => {
+      if (usage.promptTokensUsed != null) {
+        setPromptTokensUsed(usage.promptTokensUsed);
+      }
 
-    if (usage.completionTokensUsed != null) {
-      setCompletionTokensUsed(usage.completionTokensUsed);
-    }
+      if (usage.completionTokensUsed != null) {
+        setCompletionTokensUsed(usage.completionTokensUsed);
+      }
 
-    if (usage.tokensQuotaLimit != null) {
-      setQuotaLimit(usage.tokensQuotaLimit);
-    }
-  }, []);
+      if (usage.tokensQuotaLimit != null) {
+        setQuotaLimit(usage.tokensQuotaLimit);
+      }
+
+      if (completionTokensUsed + promptTokensUsed >= quotaLimit) {
+        setHasReachedLimit(true);
+      }
+    },
+    [completionTokensUsed, promptTokensUsed, quotaLimit]
+  );
 
   const increaseQuotaLimit = useCallback<AiUsageActions['increaseQuotaLimit']>(
     (limit) => {
@@ -49,6 +58,7 @@ export const AiUsageProvider: FC<{ children: ReactNode }> = ({ children }) => {
         promptTokensUsed,
         completionTokensUsed,
         tokensQuotaLimit: quotaLimit,
+        hasReachedLimit,
         updateUsage,
         increaseQuotaLimit,
       }}

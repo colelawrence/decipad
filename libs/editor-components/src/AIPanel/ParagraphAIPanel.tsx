@@ -1,14 +1,12 @@
 import { getAnalytics } from '@decipad/client-events';
 import type { MyEditor } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
+import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { UpgradePlanWarning } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { getNodeString } from '@udecode/plate-common';
 import { blockSelectionStore } from '@udecode/plate-selection';
-import type { FC } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import {
   AIPanelContainer,
   AIPanelForm,
@@ -53,27 +51,8 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   const [prompt, setPrompt] = useState<PromptSuggestion>(DefaultPrompt);
   const [rd, fetch] = useRdFetch('rewrite-paragraph');
 
-  const {
-    workspaceInfo,
-    setCurrentWorkspaceInfo,
-    nrQueriesLeft,
-    isQuotaLimitBeingReached,
-  } = useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount, id } = workspaceInfo;
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
-
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: id || '',
-    });
-  }, [id, updateQueryExecCount]);
-
-  useEffect(() => {
-    if (queryCount && quotaLimit) {
-      setMaxQueryExecution(quotaLimit <= queryCount);
-    }
-  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const { tokensQuotaLimit, updateUsage } = useAiUsage();
 
   const editor = useMyEditorRef();
 
@@ -81,34 +60,25 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
     getAnalytics().then((analytics) =>
       analytics?.track('submit AI paragraph rewrite', { prompt })
     );
-    const result = await updateQueryExecutionCount();
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
-    );
-
-    if (newExecutedQueryData) {
-      fetch({
-        prompt: prompt.prompt,
-        paragraph: getTextFromSelectParagraphs(editor, paragraph),
-      });
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
-    }
+    fetch({
+      prompt: prompt.prompt,
+      paragraph: getTextFromSelectParagraphs(editor, paragraph),
+      workspaceId: workspaceInfo.id ?? '',
+    });
   };
+
+  useEffect(() => {
+    if (rd.status === 'success' && rd.result.usage) {
+      updateUsage(rd.result.usage);
+    }
+  }, [updateUsage, rd]);
 
   return (
     <AIPanelContainer toggle={toggle}>
       <AIPanelTitle>Write with AI</AIPanelTitle>
       <PromptSuggestions
         prompts={promptSuggestions}
-        disabled={rd.status === 'loading' || maxQueryExecution}
+        disabled={rd.status === 'loading'}
         runPrompt={(props) => {
           setPrompt(props);
           handleSubmit();
@@ -119,7 +89,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
         prompt={prompt}
         setPrompt={setPrompt}
         status={rd.status}
-        disableSubmitButton={maxQueryExecution}
+        disableSubmitButton={rd.status === 'error' && rd.code === 402}
       />
       <AIPanelSuggestion
         completionRd={rd}
@@ -127,33 +97,19 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
         makeUseOfSuggestion={updateParagraph}
         regenerate={handleSubmit}
       />
-      {(isQuotaLimitBeingReached || maxQueryExecution) &&
-        workspaceInfo.id &&
-        quotaLimit && (
-          <div css={upgradePlanWarningWrapper}>
-            <UpgradePlanWarning
-              workspaceId={workspaceInfo.id}
-              showQueryQuotaLimit={isQuotaLimitBeingReached}
-              maxQueryExecution={maxQueryExecution}
-              quotaLimit={quotaLimit}
-            />
-          </div>
-        )}
-
-      <p css={queriesLeftStyles} contentEditable={false}>
-        {nrQueriesLeft && quotaLimit
-          ? `${nrQueriesLeft} of ${quotaLimit} credits left`
-          : ''}
-      </p>
+      {rd.status === 'error' && rd.code === 402 && (
+        <div css={upgradePlanWarningWrapper}>
+          <UpgradePlanWarning
+            workspaceId={workspaceInfo.id ?? ''}
+            showQueryQuotaLimit={false}
+            maxQueryExecution={true}
+            quotaLimit={tokensQuotaLimit ?? 0}
+          />
+        </div>
+      )}
     </AIPanelContainer>
   );
 };
-
-const queriesLeftStyles = css(p13Regular, {
-  marginTop: '10px',
-  paddingLeft: '5px',
-  cursor: 'default',
-});
 
 const upgradePlanWarningWrapper = css({
   marginTop: '10px',

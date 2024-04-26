@@ -1,10 +1,8 @@
 import { getAnalytics } from '@decipad/client-events';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { UpgradePlanWarning, p13Regular } from '@decipad/ui';
-import { css } from '@emotion/react';
+import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { UpgradePlanWarning } from '@decipad/ui';
 import type { FC } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   AIPanelContainer,
   AIPanelForm,
@@ -41,58 +39,26 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
 }) => {
   const [prompt, setPrompt] = useState(makePrompt('SELECT * FROM fishes'));
   const [rd, fetch] = useRdFetch(`generate-sql`);
-  const {
-    workspaceInfo,
-    setCurrentWorkspaceInfo,
-    isQuotaLimitBeingReached,
-    nrQueriesLeft,
-  } = useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount } = workspaceInfo;
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
 
-  useEffect(() => {
-    if (queryCount && quotaLimit) {
-      setMaxQueryExecution(quotaLimit <= queryCount);
-    }
-  }, [quotaLimit, queryCount]);
-
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: workspaceInfo.id || '',
-    });
-  }, [workspaceInfo.id, updateQueryExecCount]);
+  const { tokensQuotaLimit, hasReachedLimit, updateUsage } = useAiUsage();
 
   const handleSubmit = useCallback(async () => {
     const promptText = prompt.prompt;
     getAnalytics().then((analytics) => {
       analytics?.track('submit AI live query', { promptText });
     });
-    const result = await updateQueryExecutionCount();
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
-    );
 
-    if (newExecutedQueryData) {
-      fetch({ externalDataSourceId: id, prompt: promptText });
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
+    fetch({
+      externalDataSourceId: id,
+      prompt: promptText,
+      workspaceId: workspaceInfo.id ?? '',
+    });
+
+    if (rd.status === 'success' && rd.result.usage) {
+      updateUsage(rd.result.usage);
     }
-  }, [
-    fetch,
-    prompt,
-    setCurrentWorkspaceInfo,
-    updateQueryExecutionCount,
-    workspaceInfo,
-    id,
-  ]);
+  }, [fetch, prompt, workspaceInfo, id, updateUsage, rd]);
   const makeUseOfSuggestion = useCallback(
     (s: string) => {
       toggle();
@@ -112,32 +78,21 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
         handleSubmit={handleSubmit}
         prompt={prompt}
         setPrompt={setPrompt}
-        disableSubmitButton={maxQueryExecution}
+        disableSubmitButton={hasReachedLimit ?? false}
       />
       <AIPanelSuggestion
         completionRd={rd}
         makeUseOfSuggestion={makeUseOfSuggestion}
         prompt={prompt}
       />
-      {(maxQueryExecution || isQuotaLimitBeingReached) &&
-        workspaceInfo.id &&
-        quotaLimit && (
-          <UpgradePlanWarning
-            workspaceId={workspaceInfo.id}
-            showQueryQuotaLimit={isQuotaLimitBeingReached}
-            maxQueryExecution={maxQueryExecution}
-            quotaLimit={quotaLimit}
-          />
-        )}
-      {isQuotaLimitBeingReached && (
-        <p css={queriesLeftStyles}>
-          {nrQueriesLeft} of {quotaLimit} credits left
-        </p>
+      {hasReachedLimit && workspaceInfo.id && tokensQuotaLimit && (
+        <UpgradePlanWarning
+          workspaceId={workspaceInfo.id}
+          showQueryQuotaLimit={false}
+          maxQueryExecution={hasReachedLimit}
+          quotaLimit={tokensQuotaLimit}
+        />
       )}
     </AIPanelContainer>
   );
 };
-
-const queriesLeftStyles = css(p13Regular, {
-  paddingLeft: '5px',
-});

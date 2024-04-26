@@ -8,6 +8,7 @@ import { thirdParty } from '@decipad/backend-config';
 import handle from '../handle';
 import type { ExternalDataSourceRecord } from '../../types';
 import { getSchemaString } from './getSchemaString';
+import { resourceusage } from '@decipad/services';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -22,21 +23,11 @@ const fetchExternalDataSource = async (
   return data.externaldatasources.get({ id });
 };
 
-const createPrompt = (schemaString: string, prompt: string): string => {
-  const commentedSchemaString = schemaString
-    .split('\n')
-    .map((l) => `# ${l}`)
-    .join('\n');
-  return `### MySQL tables, with their properties
-#
-${commentedSchemaString}
-#
-### A query to ${prompt}
-SELECT
-`;
+type Body = {
+  externalDataSourceId: string;
+  prompt: string;
+  workspaceId: string;
 };
-
-type Body = { externalDataSourceId: string; prompt: string };
 
 export const handler = handle(async (event) => {
   const rawRequestBody = event.body;
@@ -61,19 +52,46 @@ export const handler = handle(async (event) => {
     );
   }
 
+  const user = await getAuthenticatedUser(event);
+
   await notebook.expectAuthorized({
     minimumPermissionType: 'READ',
     recordId: getDefined(externalDataSource?.padId),
-    user: await getAuthenticatedUser(event),
+    user,
   });
+
+  const { workspaceId } = requestBody;
 
   const schemaString = await getSchemaString(externalDataSource.externalId);
 
-  const prompt = createPrompt(schemaString, requestBody.prompt);
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4-turbo',
+    messages: [
+      {
+        role: 'system',
+        content: `You generate SQL code based on a given schema, taking into account the user's request. Your response is SQL code with the schema commented. For example...
+User message:
+"""
+User prompt: list all dogs from the UK
 
-  const completion = await openai.completions.create({
-    model: 'gpt-3.5-turbo-instruct',
-    prompt,
+User schema: mysql
+"""
+
+Your response:
+### MySQL tables, with their properties
+### A query to ${prompt}
+
+SELECT * FROM dogs WHERE dogs.country = "UK"
+`,
+      },
+      {
+        role: 'user',
+        content: `User prompt: ${requestBody.prompt}
+
+User schema: ${schemaString}
+`,
+      },
+    ],
     temperature: 0,
     max_tokens: 150,
     top_p: 1.0,
@@ -81,10 +99,21 @@ export const handler = handle(async (event) => {
     presence_penalty: 0.0,
     stop: ['#', ';'],
   });
-  const sqlQuery = completion.choices[0].text;
+  const sqlQuery = completion.choices[0].message.content;
   if (!sqlQuery) {
     throw Boom.internal(`Could not complete query`);
   }
+
+  await resourceusage.ai.updateWorkspaceAndUser({
+    userId: user?.id,
+    workspaceId,
+    usage: completion.usage,
+  });
+
+  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
+    'workspaces',
+    workspaceId
+  );
 
   return {
     statusCode: 200,
@@ -93,6 +122,10 @@ export const handler = handle(async (event) => {
     },
     body: JSON.stringify({
       completion: `# ${requestBody}\nSELECT\n${sqlQuery};`,
+      usage: {
+        completionTokensUsed: newCompletion,
+        promptTokensUsed: newPrompt,
+      },
     }),
   };
 });

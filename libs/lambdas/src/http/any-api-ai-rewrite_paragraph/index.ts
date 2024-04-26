@@ -3,7 +3,8 @@ import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
-import type { Completion } from 'openai/resources';
+import type { ChatCompletion } from 'openai/resources';
+import { resourceusage } from '@decipad/services';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -12,18 +13,11 @@ const openai = new OpenAI({
 type RequestBody = {
   paragraph: string;
   prompt: string;
-};
-
-const createPrompt = ({ paragraph, prompt }: RequestBody) => {
-  return `Original paragraph:
-
-${paragraph}
-
-Paragraph rewritten ${prompt}:`;
+  workspaceId: string;
 };
 
 export const handler = handle(async (event) => {
-  await expectAuthenticated(event);
+  const [{ user }] = await expectAuthenticated(event);
 
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
@@ -44,19 +38,48 @@ export const handler = handle(async (event) => {
   }
   if (
     typeof requestBody.paragraph !== 'string' ||
-    typeof requestBody.prompt !== 'string'
+    typeof requestBody.prompt !== 'string' ||
+    typeof requestBody.workspaceId !== 'string'
   ) {
     throw Boom.badData('Request body has wrong format');
   }
 
-  const prompt = createPrompt(requestBody);
+  const { workspaceId } = requestBody;
 
-  let completion: Completion;
+  const hasReachedLimit = await resourceusage.ai.hasReachedLimit(workspaceId);
+
+  if (hasReachedLimit) {
+    throw Boom.paymentRequired('You are out of AI credits');
+  }
+
+  let completion: ChatCompletion;
 
   try {
-    completion = await openai.completions.create({
-      model: 'gpt-3.5-turbo-instruct',
-      prompt,
+    completion = await openai.chat.completions.create({
+      model: 'gpt-4-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: `You rewrite paragraphs for the user, taking into account the user's request. For example...
+User message:
+"""
+User prompt: rewrite this paragraph in French
+
+User paragraph: I like chocolate. Especially chocolate from Switzerland!
+"""
+
+Your response:
+"""
+J'aime le chocolat. Surtout le chocolat de Suisse!
+"""`,
+        },
+        {
+          role: 'user',
+          content: `User prompt: ${requestBody.prompt}
+
+User paragraph: ${requestBody.paragraph}`,
+        },
+      ],
       temperature: 0.75,
       max_tokens: 300,
       top_p: 1.0,
@@ -66,10 +89,21 @@ export const handler = handle(async (event) => {
   } catch (e) {
     throw Boom.internal('OpenAI request failed', e);
   }
-  const newParagraph = completion.choices[0].text;
+  const newParagraph = completion.choices[0].message.content;
   if (!newParagraph) {
     throw Boom.internal(`Could not rewrite paragraph`);
   }
+
+  await resourceusage.ai.updateWorkspaceAndUser({
+    userId: user.id,
+    workspaceId,
+    usage: completion.usage,
+  });
+
+  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
+    'workspaces',
+    workspaceId
+  );
 
   return {
     statusCode: 200,
@@ -78,6 +112,10 @@ export const handler = handle(async (event) => {
     },
     body: JSON.stringify({
       completion: newParagraph.trim(),
+      usage: {
+        completionTokensUsed: newCompletion,
+        promptTokensUsed: newPrompt,
+      },
     }),
   };
 });
