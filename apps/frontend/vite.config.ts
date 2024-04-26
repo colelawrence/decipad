@@ -9,6 +9,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 dotenv.config();
 
 const isForTests = !!process.env.CI || !!process.env.DECI_E2E;
+
+const isForProduction = process.env.NODE_ENV === 'production';
+
 // eslint-disable-next-line no-console
 console.log(
   `Vite config: Running in ${isForTests ? 'test or production' : 'dev'} mode`
@@ -140,8 +143,7 @@ if (process.env.SENTRY_AUTH_TOKEN) {
   );
 }
 
-// https://vitejs.dev/config/
-export default defineConfig({
+const viteConfig: UserConfig = {
   plugins,
   build: {
     sourcemap: true,
@@ -156,4 +158,13 @@ export default defineConfig({
   worker: {
     plugins: () => [tsconfigPaths()],
   },
-});
+};
+
+if (isForProduction) {
+  viteConfig.optimizeDeps = {
+    exclude: ['*'],
+  };
+}
+
+// https://vitejs.dev/config/
+export default defineConfig(viteConfig);

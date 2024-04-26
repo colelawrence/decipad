@@ -42,7 +42,7 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
         const refName = toUserlandRef(originalRef);
         const definedInBlock =
           varNameToBlockMap.get(originalRef) ?? varNameToBlockMap.get(refName);
-        if (definedInBlock) {
+        if (definedInBlock && !localIdentifiers.has(refName)) {
           blockDependencies.push(definedInBlock.id);
           if (definedInBlock.definesVariable && !node.previousVarName) {
             node.previousVarName = definedInBlock.definesVariable;

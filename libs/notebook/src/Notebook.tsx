@@ -4,9 +4,6 @@ import {
   EditorUserInteractionsProvider,
 } from '@decipad/react-contexts';
 import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { EditorStats } from '@decipad/editor-stats';
-import { useCanUseDom } from '@decipad/react-utils';
 import { NotebookLoader } from './NotebookLoader';
 import { NotebookLogs } from './NotebookLogs';
 import type { NotebookProps } from './types';
@@ -20,7 +17,6 @@ export const Notebook: FC<NotebookProps> = ({
   ...rest
 }) => {
   const { notebookId } = rest;
-  const canUseDom = useCanUseDom();
 
   return (
     <EditorUserInteractionsProvider>
@@ -34,7 +30,6 @@ export const Notebook: FC<NotebookProps> = ({
         {!rest.readOnly && !inLocalDev && (
           <NotebookLogs notebookId={notebookId} />
         )}
-        {isFlagEnabled('COMPUTER_STATS') && canUseDom && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>
   );
