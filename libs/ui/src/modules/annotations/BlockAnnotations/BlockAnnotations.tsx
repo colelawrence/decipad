@@ -13,6 +13,7 @@ import * as Styled from './styles';
 import { AnimatePresence } from 'framer-motion';
 import { useActiveElement } from '@decipad/react-utils';
 import { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -56,17 +57,32 @@ export const BlockAnnotations = ({
     [deleteAnnotation]
   );
 
+  const updateScrollPosition = debounce((scrollValue: number) => {
+    setScrollY(scrollValue);
+  }, 50);
+
   useEffect(() => {
+    let requestID: number | null = null;
+
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (requestID !== null) {
+        cancelAnimationFrame(requestID);
+      }
+
+      requestID = requestAnimationFrame(() => {
+        updateScrollPosition(window.scrollY);
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      if (requestID !== null) {
+        cancelAnimationFrame(requestID);
+      }
     };
-  }, []);
+  }, [updateScrollPosition]);
 
   const collapsed = expandedBlockId !== blockId;
 
@@ -86,6 +102,7 @@ export const BlockAnnotations = ({
     return (
       <AnimatePresence>
         <Styled.Annotation
+          layoutScroll
           initial={{
             opacity: 0,
             y: 10,
@@ -136,6 +153,7 @@ export const BlockAnnotations = ({
   return (
     <AnimatePresence>
       <Styled.Annotation
+        layoutScroll
         scroll={scrollY}
         collapsed={collapsed}
         offset={offset}
@@ -147,6 +165,7 @@ export const BlockAnnotations = ({
         animate={{
           opacity: 1,
           y: 0,
+          maxHeight: `calc(100vh - ${offset}px + ${scrollY}px - 96px)`,
         }}
         exit={{
           opacity: 0,
