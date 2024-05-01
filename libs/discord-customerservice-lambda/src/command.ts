@@ -241,6 +241,16 @@ export type NotebooksBanAddApplicationCommandDataOption = {
   ];
 };
 
+export type NotebooksCopyApplicationCommandDataOption = {
+  name: 'copy';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
 export type NotebooksUnbanAddApplicationCommandDataOption = {
   name: 'unban';
   options: [
@@ -264,7 +274,8 @@ export type NotebooksIsBannedRemoveApplicationCommandDataOption = {
 export type NotebooksApplicationCommandDataOption =
   | NotebooksBanAddApplicationCommandDataOption
   | NotebooksUnbanAddApplicationCommandDataOption
-  | NotebooksIsBannedRemoveApplicationCommandDataOption;
+  | NotebooksIsBannedRemoveApplicationCommandDataOption
+  | NotebooksCopyApplicationCommandDataOption;
 
 export type NotebooksCommandData = {
   name: 'notebooks';

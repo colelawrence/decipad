@@ -281,6 +281,19 @@ process.on('unhandledRejection', (err) => {
             },
           ],
         },
+        {
+          name: 'copy',
+          description: 'copies a notebook',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description: 'The url of the notebook to copy',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
       ],
     },
   ];

@@ -1,15 +1,61 @@
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
+import { parseNotebookUrl } from '@decipad/backend-utils';
+import { ensurePrivateWorkspaceForUser } from '@decipad/services/workspaces';
+import {
+  create as createNotebook,
+  duplicate as duplicateNotebook,
+} from '@decipad/services/notebooks';
 import type {
   TemplatesApplicationCommandDataOption,
   NotebooksApplicationCommandDataOption,
   NotebooksBanAddApplicationCommandDataOption,
   NotebooksUnbanAddApplicationCommandDataOption,
   NotebooksIsBannedRemoveApplicationCommandDataOption,
+  NotebooksCopyApplicationCommandDataOption,
 } from '../command';
 import type { CommandContext } from '../types';
-import { parseNotebookUrl } from '@decipad/backend-utils';
+import { createNotebookUrl } from '../utils/createNotebookUrl';
+
+async function copy(
+  options: NotebooksCopyApplicationCommandDataOption['options'],
+  context: CommandContext
+): Promise<string> {
+  const option = getDefined(
+    options.find((o) => o.name === 'url'),
+    'no option named url'
+  );
+  const { notebookId } = parseNotebookUrl(option.value);
+
+  const data = await tables();
+  const notebook = await data.pads.get({ id: notebookId });
+  if (!notebook) {
+    return 'Could not find notebook with that URL';
+  }
+
+  const actorUser = getDefined(
+    await data.users.get({ id: context.actorUserId })
+  );
+
+  const targetWorkspace = await ensurePrivateWorkspaceForUser(actorUser);
+  const newNotebook = await createNotebook(
+    targetWorkspace.id,
+    {
+      name: notebook.name,
+      isPublic: false,
+    },
+    actorUser
+  );
+
+  await duplicateNotebook(
+    notebookId,
+    newNotebook.id,
+    `Copy of ${notebook.name}`
+  );
+
+  return `Notebook copied to ${createNotebookUrl(newNotebook)}`;
+}
 
 async function banban(
   options: NotebooksBanAddApplicationCommandDataOption['options'],
@@ -112,6 +158,9 @@ export default function notebooks(
   }
   const option = options[0];
   switch (option.name) {
+    case 'copy': {
+      return copy(option.options, context);
+    }
     case 'ban': {
       return banban(option.options, context);
     }
