@@ -12,12 +12,20 @@ import { TableResult } from './TableResult';
 const code = 'my_table = { H1 = [1, 2], H2 = ["A", "B"]}';
 it('renders an empty table', async () => {
   expect(
-    render(<TableResult {...await runCode<'table'>('empty_table = {}')} />)
+    render(
+      <TableResult
+        {...await runCode<'table'>('empty_table = {}', {
+          doNotMaterialiseResults: true,
+        })}
+      />
+    )
   ).toBeDefined();
 });
 it('renders a table', async () => {
   const { getAllByRole } = render(
-    <TableResult {...await runCode<'table'>(code)} />
+    <TableResult
+      {...await runCode<'table'>(code, { doNotMaterialiseResults: true })}
+    />
   );
   await act(() => timeout(2000));
 
@@ -36,7 +44,9 @@ it('renders a table', async () => {
 
 it('render side padding on cells with non-tabular content', async () => {
   const { getByText } = render(
-    <TableResult {...await runCode<'table'>(code)} />
+    <TableResult
+      {...await runCode<'table'>(code, { doNotMaterialiseResults: true })}
+    />
   );
 
   await act(() => timeout(2000));
@@ -62,7 +72,11 @@ describe('dimensions', () => {
 
   it('renders tables inside tables', async () => {
     const { container } = render(
-      <TableResult {...await runCode<'table'>(dimensionalCode)} />
+      <TableResult
+        {...await runCode<'table'>(dimensionalCode, {
+          doNotMaterialiseResults: true,
+        })}
+      />
     );
 
     await act(() => timeout(2000));

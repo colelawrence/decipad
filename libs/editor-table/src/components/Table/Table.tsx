@@ -1,12 +1,8 @@
-import { type Result } from '@decipad/remote-computer';
 import { DraggableBlock } from '@decipad/editor-components';
 import { useNodePath } from '@decipad/editor-hooks';
 import type { PlateComponent, UserIconKey } from '@decipad/editor-types';
 import { ELEMENT_TABLE, useMyEditorRef } from '@decipad/editor-types';
-import {
-  assertElementType,
-  useMaterializedResult,
-} from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
 import type { EditorTableContextValue } from '@decipad/react-contexts';
 import {
   EditorTableContext,
@@ -70,10 +66,6 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     ),
     blockId
   );
-  const materializedTableResult = useMaterializedResult(
-    tableResult as Result.AnyResult
-  ) as Result.Result<'materialized-table'>;
-
   const tablePath = useNodePath(element);
 
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
@@ -97,7 +89,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     >
       <EditorTableContext.Provider value={contextValue}>
         <EditorTableResultContext.Provider
-          value={materializedTableResult ?? defaultTableResultValue}
+          value={tableResult ?? defaultTableResultValue}
         >
           <TableDndProvider editor={editor} table={element}>
             <EditorTable

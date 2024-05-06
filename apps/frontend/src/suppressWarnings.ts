@@ -6,6 +6,8 @@ const suppressMessagesBeginnings = [
   'Warning: React does not recognize the',
   'Warning: Unknown event handler property',
   'Warning: Using UNSAFE_componentWillMount in strict mode is not recommended',
+  'Warning: validateDOMNesting',
+  'The pseudo class ":first-child" is potentially unsafe when doing server-side rendering',
 ];
 
 const suppress = (s: string): boolean => {

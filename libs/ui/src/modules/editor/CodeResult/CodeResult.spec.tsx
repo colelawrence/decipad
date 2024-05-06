@@ -1,5 +1,5 @@
 import { timeout } from '@decipad/utils';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { runCode } from '../../../test-utils';
 import { CodeResult } from './CodeResult';
 
@@ -42,9 +42,12 @@ it.each(['block', 'inline'] as const)(
   'renders a %s column result',
   async (variant) => {
     const { container } = render(
-      <CodeResult {...await runCode('[1, 2, 3]')} variant={variant} />
+      <CodeResult
+        {...await runCode('[1, 2, 3]', { doNotMaterialiseResults: true })}
+        variant={variant}
+      />
     );
-    await timeout(2000);
+    await act(() => timeout(2000));
     expect(container.textContent).toContain('1');
   }
 );
@@ -54,11 +57,13 @@ it.each(['block', 'inline'] as const)(
   async (variant) => {
     const { container } = render(
       <CodeResult
-        {...await runCode('table = {A = ["A"], B = [1]}')}
+        {...await runCode('table = {A = ["A"], B = [1]}', {
+          doNotMaterialiseResults: true,
+        })}
         variant={variant}
       />
     );
-    await timeout(1000);
+    await act(() => timeout(1000));
     expect(container.textContent).toMatch(/Table|A/);
   }
 );

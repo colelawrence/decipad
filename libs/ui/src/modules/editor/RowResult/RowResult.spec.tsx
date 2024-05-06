@@ -1,11 +1,13 @@
 import {
   render,
   getAllByRole as getAllDescendantsByRole,
+  act,
 } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { runCode } from '../../../test-utils';
 
 import { RowResult } from './RowResult';
+import { timeout } from '@decipad/utils';
 
 const code = `
   Table = {
@@ -55,6 +57,9 @@ describe('dimensions', () => {
       <RowResult {...await runCode(dimensionalCode)} />
     );
 
+    // wait for the table to render
+    await act(() => timeout(1000));
+
     const dimensions = getAllDescendantsByRole(
       container.querySelector('table')!,
       'table'
@@ -68,6 +73,8 @@ describe('dimensions', () => {
       <RowResult {...await runCode(dimensionalCode)} />
     );
 
+    // wait for the table to render
+    await act(() => timeout(1000));
     const dimensions = getAllDescendantsByRole(
       container.querySelector('table')!,
       'table'

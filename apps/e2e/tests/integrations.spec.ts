@@ -7,6 +7,7 @@ import {
   snapshot,
 } from '../utils/src';
 import { ControlPlus } from '../utils/page/Editor';
+import os from 'node:os';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
@@ -176,8 +177,11 @@ return this.${generatedVarName};`;
     await expect(page.getByTestId('number-result:100')).toBeVisible();
 
     await page.getByRole('textbox').click();
-    await page.keyboard.press('Control+a', { delay: Timeouts.typing });
-    await page.keyboard.press('Backspace');
+    await page.keyboard.press(
+      os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
+      { delay: Timeouts.typing }
+    );
+    await page.keyboard.press('Backspace', { delay: Timeouts.typing });
     await page.keyboard.type('MyCode', { delay: Timeouts.typing });
 
     await page.getByTestId('integration-modal-continue').click();

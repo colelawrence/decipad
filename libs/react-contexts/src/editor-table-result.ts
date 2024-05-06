@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 import { type Result, Unknown } from '@decipad/remote-computer';
 
-export type EditorTableResultContextValue =
-  | Result.Result<'materialized-table'>
-  | Result.Result<'pending'>;
+export type EditorTableResultContextValue = Result.Result<
+  'table' | 'materialized-table' | 'pending' | 'type-error'
+>;
 
 export const defaultTableResultValue: Result.Result<'pending'> = {
   type: {

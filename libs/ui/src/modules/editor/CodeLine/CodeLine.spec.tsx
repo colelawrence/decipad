@@ -1,9 +1,10 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import fetch from 'jest-fetch-mock';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps } from 'react';
 import { runCode } from '../../../test-utils';
 import { CodeLine } from './CodeLine';
+import { timeout } from '@decipad/testutils';
 
 let tabularProps: ComponentProps<typeof CodeLine>;
 let typeErrorProps: ComponentProps<typeof CodeLine>;
@@ -44,8 +45,10 @@ describe('CodeLine', () => {
   });
 
   describe('when result is tabular', () => {
-    it('should render the expanded result', () => {
+    it('should render the expanded result', async () => {
       const { getByRole } = render(<CodeLine {...tabularProps} highlight />);
+      // wait for the table to render
+      await timeout(1000);
       expect(getByRole('table')).toBeVisible();
     });
 
@@ -55,6 +58,8 @@ describe('CodeLine', () => {
           <CodeLine {...tabularProps} highlight />
         </SessionProvider>
       );
+      // wait for the table to render
+      await act(() => timeout(1000));
 
       const queryInlineResultElement = async () =>
         (await findAllByRole('status')).find(

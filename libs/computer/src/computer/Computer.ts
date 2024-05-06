@@ -29,7 +29,6 @@ import {
   runCode,
   serializeResult,
   deserializeType,
-  materializeOneResult,
   serializeType,
   buildResult,
   Unknown,
@@ -72,6 +71,7 @@ import {
   getDefinedSymbol,
   getGoodBlocks,
   getIdentifierString,
+  isResultGenerator,
   isTableResult,
 } from '../utils';
 import { isColumn } from '../utils/isColumn';
@@ -89,6 +89,7 @@ import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import { statementToML } from '../mathML/statementToML';
 import omit from 'lodash.omit';
+import { count, first } from '@decipad/generator-utils';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -444,19 +445,21 @@ export class Computer {
     this.results,
     async (
       results,
-      result: Result.Result<'materialized-column'>
+      result: Result.Result<'materialized-column'> | Result.Result<'column'>
     ): Promise<DimensionExplanation[] | undefined> => {
       // We now have a column or matrix
 
       const getDeepLengths = async (
         value: Result.OneResult
       ): Promise<number[]> => {
-        const materializedResult = await materializeOneResult(value);
-        return Array.isArray(materializedResult)
-          ? [
-              materializedResult.length,
-              ...(await getDeepLengths(materializedResult[0])),
-            ]
+        if (isResultGenerator(value)) {
+          return [
+            await count(value()),
+            ...(await getDeepLengths(await first(value()))),
+          ];
+        }
+        return Array.isArray(value)
+          ? [value.length, ...(await getDeepLengths(value[0]))]
           : [];
       };
 

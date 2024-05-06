@@ -88,7 +88,7 @@ it('can push a new table into the computer', async () => {
 
   // Garbage collect
   pushResultToComputer(computer, 'blockid', 'Table1', undefined);
-  await timeout(100);
+  await timeout(1000);
 
   // Assert on the computer's internal state to make sure we've GC'd the things we need to
   expect(

@@ -1,17 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { Result } from '@decipad/remote-computer';
+import { useResolved, useSimplePagination } from '@decipad/react-utils';
+import { from, all as allEntries, count } from '@decipad/generator-utils';
 import { cssVar } from '../../../primitives';
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
-import { useSimplePagination } from '../../../utils/usePagination';
 import { Table } from '../Table/Table';
 import { TableRow } from '../TableRow/TableRow';
 import { TableData } from '../TableData/TableData';
 import { CodeResult } from '..';
-import { PaginationControl } from 'libs/ui/src/shared';
-import { useMaterializedOneResult } from 'libs/ui/src/hooks';
+import { PaginationControl, Spinner } from '../../../shared';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
   color: cssVar('textDefault'),
@@ -28,24 +28,55 @@ const footerRowStyles = css({
   backgroundColor: cssVar('backgroundDefault'),
 });
 
+const spinnerCss = css({
+  width: 24,
+  height: 24,
+  padding: 0,
+  marginRight: 8,
+  borderRadius: 4,
+  display: 'grid',
+  placeItems: 'center',
+});
+
 const MAX_CELLS_PER_PAGE = 10;
 
-export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
-  type,
-  value,
-  element,
-}) => {
-  const { page, valuesForPage, setPage } = useSimplePagination({
-    all: useMaterializedOneResult(value) as Result.OneResult[] | undefined,
-    maxRowsPerPage: MAX_CELLS_PER_PAGE,
-  });
+export const SimpleColumnResult: FC<
+  CodeResultProps<'column'> | CodeResultProps<'materialized-column'>
+> = ({ type, value, element }) => {
+  const all = useMemo(
+    (): Result.ResultColumn =>
+      Array.isArray(value) ? () => from(value) : value,
+    [value]
+  );
+  const totalCount = useResolved(useMemo(() => count(all()), [all])) ?? 0;
+  const { page, valuesForPage, setPage } = useSimplePagination(
+    useMemo(
+      () => ({
+        all,
+        maxRowsPerPage: MAX_CELLS_PER_PAGE,
+      }),
+      [all]
+    )
+  );
+
+  const materializedResultsForPage = useResolved(
+    useMemo(() => allEntries(valuesForPage()), [valuesForPage])
+  );
+
+  if (!materializedResultsForPage) {
+    return (
+      <div css={spinnerCss}>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <Table
       isReadOnly={true}
       body={
         <>
-          {valuesForPage.map((oneValue, index) => {
+          {materializedResultsForPage.map((oneValue, index) => {
             return (
               <TableRow readOnly key={index}>
                 <TableData as="td" showPlaceholder={false}>
@@ -70,7 +101,7 @@ export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
                 page={page}
                 onPageChange={setPage}
                 startAt={1}
-                maxPages={Math.ceil(value.length / MAX_CELLS_PER_PAGE)}
+                maxPages={Math.ceil(totalCount / MAX_CELLS_PER_PAGE)}
               />
             </td>
           </TableRow>

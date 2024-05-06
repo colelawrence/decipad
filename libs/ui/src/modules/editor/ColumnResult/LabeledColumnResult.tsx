@@ -5,20 +5,21 @@ import {
   unnestTableRows,
   type DimensionExplanation,
   ResultAndLabelInfo,
+  buildResult,
+  Result,
 } from '@decipad/remote-computer';
-import { all as allElements } from '@decipad/generator-utils';
-import { useResolved } from '@decipad/react-utils';
-import { cssVar } from '../../../primitives';
+import { all as allElements, count } from '@decipad/generator-utils';
+import { useResolved, useSimplePagination } from '@decipad/react-utils';
+import { componentCssVars, cssVar } from '../../../primitives';
 
 import { table } from '../../../styles';
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
-import { useSimplePagination } from '../../../utils/usePagination';
 import { Table } from '../Table/Table';
 import { TableRow } from '../TableRow/TableRow';
 import { TableData } from '../TableData/TableData';
 import { CodeResult } from '..';
-import { PaginationControl } from 'libs/ui/src/shared';
+import { PaginationControl, Spinner } from '../../../shared';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
   color: cssVar('textDefault'),
@@ -35,9 +36,23 @@ const footerRowStyles = css({
   backgroundColor: cssVar('backgroundDefault'),
 });
 
+const spinnerCss = css({
+  width: 24,
+  height: 24,
+  padding: 0,
+  background: componentCssVars('AiSendButtonBgColor'),
+  marginRight: 8,
+  borderRadius: 4,
+  display: 'grid',
+  placeItems: 'center',
+});
+
 const MAX_CELLS_PER_PAGE = 10;
 
-type LabeledColumnResultProps = CodeResultProps<'materialized-column'> & {
+type LabeledColumnResultProps = (
+  | CodeResultProps<'materialized-column'>
+  | CodeResultProps<'column'>
+) & {
   labels: DimensionExplanation[];
 };
 
@@ -53,29 +68,50 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
   element,
   labels,
 }) => {
-  const pageSize = targetPageSize(labels);
-  const all =
-    useResolved<ResultAndLabelInfo[]>(
-      useMemo<Promise<ResultAndLabelInfo[]>>(
-        async () =>
-          Array.from(
-            await allElements(unnestTableRows(labels, { type, value }))
-          ),
-        [labels, type, value]
-      )
-    ) ?? [];
+  const pageSize = useMemo(() => targetPageSize(labels), [labels]);
 
-  const { page, setPage, valuesForPage } = useSimplePagination({
-    all,
-    maxRowsPerPage: pageSize,
-  });
+  const all = useMemo(
+    () => () =>
+      unnestTableRows(
+        labels,
+        buildResult(type, value) as
+          | Result.Result<'materialized-column'>
+          | Result.Result<'column'>
+      ),
+    [labels, type, value]
+  );
+
+  const total = useResolved(useMemo(() => count(all()), [all])) ?? 0;
+
+  const { page, setPage, valuesForPage } =
+    useSimplePagination<ResultAndLabelInfo>(
+      useMemo(
+        () => ({
+          all,
+          maxRowsPerPage: pageSize,
+        }),
+        [all, pageSize]
+      )
+    );
+
+  const materializedValuesForPage = useResolved(
+    useMemo(() => allElements(valuesForPage()), [valuesForPage])
+  );
+
+  if (!materializedValuesForPage) {
+    return (
+      <div css={spinnerCss}>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <Table
       isReadOnly={true}
       body={
         <>
-          {valuesForPage.map((matrixValue, index) => {
+          {materializedValuesForPage?.map((matrixValue, index) => {
             return (
               <TableRow readOnly key={index}>
                 {matrixValue.labelInfo.map((labelInfo, i) => {
@@ -117,17 +153,17 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
         </>
       }
       footer={
-        all.length > pageSize && (
+        total > pageSize && (
           <TableRow key="pagination" readOnly={true} tableCellControls={false}>
             <td
-              colSpan={all.length}
+              colSpan={total}
               css={[paginationControlWrapperTdStyles, footerRowStyles]}
             >
               <PaginationControl
                 page={page}
                 onPageChange={setPage}
                 startAt={1}
-                maxPages={Math.ceil(all.length / pageSize)}
+                maxPages={Math.ceil(total / pageSize)}
               />
             </td>
           </TableRow>

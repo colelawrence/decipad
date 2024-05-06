@@ -166,7 +166,7 @@ export interface RemoteComputer {
     [string, string | null] | undefined
   >;
   explainDimensions$: ListenerHelper<
-    [result: Result.Result<'materialized-column'>],
+    [result: Result.Result<'materialized-column'> | Result.Result<'column'>],
     Promise<DimensionExplanation[] | undefined>
   >;
   getSymbolOrTableDotColumn$: ListenerHelper<

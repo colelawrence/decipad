@@ -13,6 +13,9 @@
     },
     {
       "path": "../frontend-config"
+    },
+    {
+      "path": "../generator-utils"
     }
   ]
 }

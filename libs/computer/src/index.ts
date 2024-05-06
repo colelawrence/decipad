@@ -36,6 +36,7 @@ export {
   parseSimpleValueUnit,
   parseUnit,
   runCode,
+  type RunAstOptions,
   STATEMENT_SEP_TOKEN_TYPE,
   prettyPrintAST,
   serializeResult,
@@ -77,6 +78,7 @@ export {
   isTableColumn,
   isTableResult,
   getResultGenerator,
+  isResultGenerator,
   selectErrorFromResult,
   hydrateResult,
 } from './utils';

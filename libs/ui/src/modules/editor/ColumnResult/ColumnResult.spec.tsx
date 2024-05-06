@@ -1,11 +1,12 @@
 import { FC } from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { TestResultsProvider } from '@decipad/react-contexts';
 import type { NotebookResults } from '@decipad/remote-computer';
 
 import { runCode } from '../../../test-utils';
 import { ColumnResult } from './ColumnResult';
+import { timeout } from '@decipad/utils';
 
 function withResultContextWrapper(
   value: Partial<NotebookResults>
@@ -16,10 +17,17 @@ function withResultContextWrapper(
 }
 
 // eslint-disable-next-line jest/no-disabled-tests
-it.skip('renders a single column table', async () => {
+it('renders a single column table', async () => {
   const { getAllByRole } = render(
-    <ColumnResult {...await runCode('[1, 2, 3]')} />
+    <ColumnResult
+      {...((await runCode('[1, 2, 3]', {
+        doNotMaterialiseResults: true,
+      })) as any)}
+    />
   );
+
+  // time to stream columns
+  await act(() => timeout(1000));
 
   const rows = getAllByRole('row');
   const cells = getAllByRole('cell');
@@ -30,10 +38,13 @@ it.skip('renders a single column table', async () => {
 });
 
 // eslint-disable-next-line jest/no-disabled-tests
-it.skip('renders padding on cells contents', async () => {
+it('renders padding on cells contents', async () => {
   const { getByText } = render(
-    <ColumnResult {...await runCode('[10, 20, 30]')} />
+    <ColumnResult {...((await runCode('[10, 20, 30]')) as any)} />
   );
+
+  // time to stream columns
+  await act(() => timeout(1000));
 
   const cellPaddings = ['10', '20', '30']
     .map((text) => getByText(text))
@@ -57,10 +68,18 @@ describe('dimensions', () => {
   const indexLabels = new Map([['table', ['A', 'B', 'C']]]);
 
   // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('renders a bidimensional column', async () => {
-    const { container } = render(<ColumnResult {...await runCode(code)} />, {
-      wrapper: withResultContextWrapper({ indexLabels }),
-    });
+  it('renders a bidimensional column', async () => {
+    const { container } = render(
+      <ColumnResult
+        {...((await runCode(code, { doNotMaterialiseResults: true })) as any)}
+      />,
+      {
+        wrapper: withResultContextWrapper({ indexLabels }),
+      }
+    );
+
+    // time to stream columns
+    await act(() => timeout(1000));
 
     const rows = [...container.querySelectorAll('tbody > tr')];
 

@@ -1,12 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SimpleTableCellType } from '@decipad/editor-types';
+import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import pluralize from 'pluralize';
-import { FC, useMemo } from 'react';
+import { SimpleTableCellType } from '@decipad/editor-types';
+import { usePagination, useResolved } from '@decipad/react-utils';
+import { Result, isResultGenerator } from '@decipad/remote-computer';
+import {
+  all as allElements,
+  count,
+  from,
+  slice,
+} from '@decipad/generator-utils';
 import { PaginationControl } from '../../../shared';
 import { Table } from '../Table/Table';
 import { TableHeader } from '../TableHeader/TableHeader';
-import { useMaterializedOneResult } from '../../../hooks/useMaterializedOneResult';
 import { TableHeaderRow } from '../TableHeaderRow/TableHeaderRow';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableRow } from '../TableRow/TableRow';
@@ -15,7 +22,6 @@ import { deciOverflowStyles } from '../../../styles/scrollbars';
 import { tableControlWidth } from '../../../styles/table';
 import { CodeResultProps } from '../../../types';
 import { isTabularType, toTableHeaderType } from '../../../utils';
-import { usePagination } from '../../../utils/usePagination';
 import {
   tableOverflowStyles,
   tableWrapperStyles,
@@ -56,6 +62,19 @@ type TableResultProps =
   | CodeResultProps<'table'>
   | CodeResultProps<'materialized-table'>;
 
+const isTableValue = (
+  value: Result.OneResult
+): value is Result.ResultTable | Result.ResultMaterializedTable =>
+  Array.isArray(value) &&
+  (value as Array<Result.OneResult>).every(
+    (column) => Array.isArray(column) || isResultGenerator(column)
+  );
+
+const isMaterializedTableValue = (
+  value: Result.OneResult
+): value is Result.ResultTable =>
+  Array.isArray(value) && value.every((column) => Array.isArray(column));
+
 export const TableResult: FC<TableResultProps> = ({
   parentType,
   type,
@@ -64,40 +83,64 @@ export const TableResult: FC<TableResultProps> = ({
   onDragEnd,
   tooltip = true,
   isLiveResult = false,
-  // isNotEditable = false,
   firstTableRowControls,
   onChangeColumnType,
   isResultPreview,
   element,
 }) => {
-  let value = useMaterializedOneResult(_value) as
-    | undefined
-    | CodeResultProps<'materialized-table'>['value'];
-
   const allowsForLookup =
     type.columnTypes && type.columnTypes[0]?.kind === 'string';
 
-  const tableLength = Array.isArray(value) ? value?.at(0)?.length : 0;
+  const isExpectedValueType = useMemo(
+    () => isTableValue(_value) && _value.length > 0,
+    [_value]
+  );
+  const isMaterializedTable = useMemo(
+    () => isMaterializedTableValue(_value),
+    [_value]
+  );
 
+  const all = useMemo(
+    () =>
+      (isExpectedValueType
+        ? isMaterializedTable
+          ? (_value as Result.ResultMaterializedTable).map(
+              (col) =>
+                (start = 0, end = Infinity) =>
+                  slice(from(col), start, end)
+            )
+          : _value
+        : []) as Result.ResultTable,
+    [_value, isExpectedValueType, isMaterializedTable]
+  );
+
+  const tableLength =
+    useResolved(
+      useMemo(
+        () => (isExpectedValueType ? count(all[0]()) : Promise.resolve(0)),
+        [isExpectedValueType, all]
+      )
+    ) ?? 0;
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
-  if (
-    value &&
-    (!Array.isArray(value) ||
-      !(value as Array<unknown>).every((col: unknown) => Array.isArray(col)))
-  ) {
-    value = undefined;
-  }
-
   const { page, offset, presentRowCount, valuesForPage, setPage } =
-    usePagination({
-      all: value,
-      maxRowsPerPage: MAX_ROWS_PER_PAGE,
-    });
+    usePagination<Result.OneResult>(
+      useMemo(
+        () => ({
+          all,
+          totalRowCount: tableLength ?? 0,
+          maxRowsPerPage: MAX_ROWS_PER_PAGE,
+        }),
+        [tableLength, all]
+      )
+    );
 
-  if (tableLength == null) {
-    return null;
-  }
+  const materializedValuesForPage = useResolved(
+    useMemo(
+      () => Promise.all(valuesForPage.map((col) => allElements(col()))),
+      [valuesForPage]
+    )
+  );
 
   return (
     <div
@@ -154,7 +197,7 @@ export const TableResult: FC<TableResultProps> = ({
         }
         body={
           <>
-            {value &&
+            {materializedValuesForPage &&
               Array.from({ length: presentRowCount }, (_, rowIndex) => (
                 <TableRow
                   key={rowIndex}
@@ -168,7 +211,7 @@ export const TableResult: FC<TableResultProps> = ({
                   {isLiveResult && rowIndex > 0 && (
                     <th css={liveTableEmptyCellStyles}></th>
                   )}
-                  {valuesForPage.map((column, colIndex) => (
+                  {materializedValuesForPage.map((column, colIndex) => (
                     <TableResultCell
                       key={colIndex}
                       cellValue={column[rowIndex]}
@@ -180,7 +223,10 @@ export const TableResult: FC<TableResultProps> = ({
                       tableType={type}
                       columnName={type.columnNames[colIndex]}
                       columnType={type.columnTypes[colIndex]}
-                      value={(value?.[0][rowIndex] as string | undefined) ?? ''}
+                      value={
+                        materializedValuesForPage?.[0][rowIndex]?.toString() ??
+                        ''
+                      }
                       element={element}
                       tooltip={tooltip}
                     />

@@ -59,7 +59,7 @@ export const parseExpressionOrThrow = (
   return item;
 };
 
-interface RunAstOptions {
+export interface RunAstOptions {
   externalData?: ExternalDataMap;
   ctx?: TScopedInferContext;
   realm?: TRealm;
