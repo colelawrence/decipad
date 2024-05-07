@@ -16,9 +16,9 @@ Retrieves the units of a given number.
 
 ### Examples
 
-`getunit(10$)` will return `$`.
+On this example, when you remove the units from `$20 per meal` you get `20`.
 
 ```deci live
-getunit($10)
-==> 1 $
+stripunit($20 per meal)
+==> 20
 ```

@@ -17,7 +17,6 @@ export const useAutoResizeTextarea =
 
       textarea.addEventListener('keypress', adjustHeight);
 
-      // Initial height adjustment
       adjustHeight();
 
       return () => {

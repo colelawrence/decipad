@@ -16,9 +16,9 @@ Removes the units from a number, allowing you to work with the numbers alone.
 
 ### Examples
 
-On this example, when you remove the units from `$20 per meal` you get `20`.
+`getunit(10$)` will return `$`.
 
 ```deci live
-stripunit($20 per meal)
-==> 20
+getunit($10)
+==> 1 $
 ```
