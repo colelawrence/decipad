@@ -2,9 +2,10 @@ import { useCanUseDom } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
+import { useContext } from 'react';
 import { Button, SearchBar, HelpMenu } from '../../../shared';
 import { Add, Users } from '../../../icons';
-
+import { ClientEventsContext } from '@decipad/client-events';
 import { cssVar } from '../../../primitives';
 
 type WorkspaceHeroHeaderProps = {
@@ -18,6 +19,7 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
 }) => {
   const { status: sessionStatus } = useSession();
   const canUseDom = useCanUseDom();
+  const clientEvent = useContext(ClientEventsContext);
   return (
     <Container>
       <SearchBarRestyle>
@@ -34,7 +36,21 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
             />
           </div>
         )}
-        <Button href={membersHref} type="tertiaryAlt">
+        <Button
+          href={membersHref}
+          type="tertiaryAlt"
+          onClick={() => {
+            clientEvent({
+              segmentEvent: {
+                type: 'action',
+                action: 'Invite Team Button Clicked',
+                props: {
+                  analytics_source: 'frontend',
+                },
+              },
+            });
+          }}
+        >
           <TextWithIcon>
             <Users />
             <span>Invite team</span>

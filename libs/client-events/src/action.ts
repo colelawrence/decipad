@@ -28,9 +28,29 @@ type Action =
       };
     }
   | {
+      action: 'Tab Hidden';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Tab Deleted';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Notebook Share Link Copied';
       props: {
         notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Invite Team Button Clicked';
+      props: {
         analytics_source: 'frontend' | 'backend';
       };
     }

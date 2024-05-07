@@ -416,6 +416,7 @@ const Tab: FC<TabProps> = ({
   const iconRef = useRef<HTMLDivElement>(null);
 
   const Icon = userIcons[icon];
+  const clientEvent = useContext(ClientEventsContext);
 
   const handleClickRename: MouseEventHandler<HTMLButtonElement> =
     useCancelingEvent<MouseEvent<HTMLButtonElement>>(
@@ -544,6 +545,19 @@ const Tab: FC<TabProps> = ({
             icon={isHidden ? <Show /> : <Hide />}
             onSelect={onToggleShowHide}
             disabled={!canHideDelete}
+            onClick={() => {
+              if (!isHidden) {
+                clientEvent({
+                  segmentEvent: {
+                    type: 'action',
+                    action: 'Tab Hidden',
+                    props: {
+                      analytics_source: 'frontend',
+                    },
+                  },
+                });
+              }
+            }}
           >
             {isHidden ? 'Show to reader' : 'Hide from reader'}
           </MenuItem>
@@ -554,7 +568,18 @@ const Tab: FC<TabProps> = ({
             icon={<Trash />}
             onSelect={onDelete}
             disabled={!canHideDelete}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              clientEvent({
+                segmentEvent: {
+                  type: 'action',
+                  action: 'Tab Deleted',
+                  props: {
+                    analytics_source: 'frontend',
+                  },
+                },
+              });
+            }}
           >
             Delete Tab
           </MenuItem>
