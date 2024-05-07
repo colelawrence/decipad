@@ -143,7 +143,7 @@
     "@react-email/render": "0.0.5",
     "@react-email/section": "0.0.2",
     "@react-email/text": "^0.0.2",
-    "@segment/analytics-next": "1.68.0",
+    "@segment/analytics-next": "1.69.0",
     "@segment/analytics-node": "^2.1.0",
     "@sendgrid/mail": "^8.1.0",
     "@sentry/browser": "7.112.1",
