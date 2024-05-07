@@ -160,7 +160,10 @@ export const NotebookEmbedTab = ({
                         clientEvent({
                           segmentEvent: {
                             type: 'action',
-                            action: 'notebook embed link copied',
+                            action: 'Notebook Embed Link Copied',
+                            props: {
+                              analytics_source: 'frontend',
+                            },
                           },
                         });
                       }}

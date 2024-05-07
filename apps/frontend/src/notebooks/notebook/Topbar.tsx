@@ -225,7 +225,10 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           clientEvent({
             segmentEvent: {
               type: 'action',
-              action: 'notebook templates clicked',
+              action: 'Templates Button Clicked',
+              props: {
+                analytics_source: 'frontend',
+              },
             },
           });
         },

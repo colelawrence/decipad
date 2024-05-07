@@ -209,7 +209,10 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                             clientEvent({
                               segmentEvent: {
                                 type: 'action',
-                                action: 'notebook share link copied',
+                                action: 'Notebook Share Link Copied',
+                                props: {
+                                  analytics_source: 'frontend',
+                                },
                               },
                             });
                           }}

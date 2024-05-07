@@ -130,19 +130,21 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         fullName: message.user.name,
       });
       await track(event, {
-        event: 'sign in',
+        event: 'Signed In',
         userId: message.user.id,
         properties: {
-          isNewUser: message.isNewUser,
+          new_account: message.isNewUser,
+          analytics_source: 'backend',
         },
       });
     },
 
     signOut: async (message) => {
       await track(event, {
-        event: 'sign out',
+        event: 'Signed Out',
         properties: {
           email: message.session?.user?.email,
+          analytics_source: 'backend',
         },
       });
     },

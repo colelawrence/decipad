@@ -38,12 +38,19 @@ export function create<
       await createPermission(permission);
     }
 
-    await track(
-      context.event,
-      { userId: user.id, event: `${resourceType.humanName} created` },
-      context
-    );
-
+    if (resourceType.humanName === "notebook") {
+      await track(
+          context.event,
+          { 
+              userId: user.id, 
+              event: "Notebook Created", 
+              properties: {
+                  analytics_source: 'backend'
+              },
+          },
+          context
+      );
+  }
     return resourceType.toGraphql(newRecord);
   };
 }

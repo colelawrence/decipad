@@ -326,7 +326,10 @@ export const WorkspaceNavigation = ({
             clientEvent({
               segmentEvent: {
                 type: 'action',
-                action: 'send feedback',
+                action: 'Feedback Button Clicked',
+                props: {
+                  analytics_source: 'frontend',
+                },
               },
             });
             onShowFeedback();

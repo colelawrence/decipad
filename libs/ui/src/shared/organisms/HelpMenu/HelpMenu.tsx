@@ -293,9 +293,9 @@ export const HelpMenu = ({
           clientEvent({
             segmentEvent: {
               type: 'action',
-              action: 'visit docs',
+              action: 'Documentation Button Clicked',
               props: {
-                source: 'Help Button',
+                analytics_source: 'frontend',
               },
             },
           })
@@ -310,7 +310,10 @@ export const HelpMenu = ({
           clientEvent({
             segmentEvent: {
               type: 'action',
-              action: 'send feedback',
+              action: 'Feedback Button Clicked',
+              props: {
+                analytics_source: 'frontend',
+              },
             },
           });
         }}

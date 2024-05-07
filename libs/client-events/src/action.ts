@@ -4,28 +4,14 @@ import type { PermissionType } from '@decipad/graphql-client';
 type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql';
 
 type Action =
-  // Notebook operations
-  | { action: 'notebook duplicated'; props?: undefined }
-  | { action: 'notebook shared'; props?: undefined }
-  | { action: 'notebook deleted'; props?: undefined }
-  | { action: 'notebook created'; props?: undefined }
-  | { action: 'notebook duplicated'; props?: undefined }
-  | { action: 'notebook icon changed'; props?: undefined }
-  | { action: 'notebook icon color changed'; props?: undefined }
-  | { action: 'notebook local changes removed'; props?: undefined }
+  // NEW TRACKERS
   | {
-      action: 'publish notebook';
+      action: 'Pricing Modal Viewed';
       props: {
-        id: string;
+        url: string;
+        analytics_source: 'frontend' | 'backend';
       };
     }
-  | {
-      action: 'unpublish notebook';
-      props: {
-        id: string;
-      };
-    }
-  | { action: 'clear all'; props?: undefined }
   | {
       action: 'Comment Submitted';
       props: {
@@ -34,13 +20,58 @@ type Action =
         analytics_source: 'frontend' | 'backend';
       };
     }
+  | {
+      action: 'Tab Created';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Notebook Share Link Copied';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Feedback Button Clicked';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Templates Button Clicked';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Documentation Button Clicked';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Notebook Embed Link Copied';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+
+  // OLD TRACKER MIGHT GET DEPRECATED IN THE FUTURE
+  // Notebook operations
+  | { action: 'notebook duplicated'; props?: undefined }
+  | { action: 'notebook shared'; props?: undefined }
+  | { action: 'notebook deleted'; props?: undefined }
+  | { action: 'notebook created'; props?: undefined }
+  | { action: 'notebook icon changed'; props?: undefined }
+  | { action: 'notebook icon color changed'; props?: undefined }
+  | { action: 'notebook local changes removed'; props?: undefined }
   // Visitor
   | { action: 'try decipad'; props?: undefined }
   // Editor actions
   | { action: 'number field updated'; props: { isReadOnly: boolean } }
-  | { action: 'notebook share link copied'; props?: undefined }
-  | { action: 'notebook embed link copied'; props?: undefined }
-  | { action: 'notebook templates clicked'; props?: undefined }
   | { action: 'notebook code error docs link clicked'; props?: undefined }
   | { action: 'slash command'; props: { command: string } }
   | { action: 'block duplicated'; props: { blockType: string } }
@@ -73,8 +104,6 @@ type Action =
   | { action: 'click invite button'; props?: undefined }
   // Customer Support
   | { action: 'contact live support'; props?: undefined }
-  | { action: 'send feedback'; props?: undefined }
-  | { action: 'visit docs'; props?: { source: string } }
   | { action: 'visit releases'; props?: undefined }
   | { action: 'help button clicked'; props?: undefined }
   | { action: 'join discord'; props?: undefined }
@@ -97,8 +126,6 @@ type Action =
       action: 'widget renamed';
       props: { variant: ElementVariants };
     }
-  // Tabs actions
-  | { action: 'create new tab'; props?: undefined }
   // AI chat assistant actions
   | { action: 'ai chat send message'; props: { isSuggested: boolean } }
   | {
@@ -113,12 +140,7 @@ type Action =
       action: 'Integration: Notebook Integration added';
       props: { type: TrackedIntegrations };
     }
-  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } }
-  // Pricing
-  | {
-      action: 'Pricing Modal Viewed';
-      props: { url: string; analytics_source: 'frontend' | 'backend' };
-    };
+  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } };
 
 export type ActionEvent = {
   type: 'action';

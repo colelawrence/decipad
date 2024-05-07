@@ -268,7 +268,10 @@ export const NotebookTabs: FC<TabsProps> = ({
       clientEvent({
         segmentEvent: {
           type: 'action',
-          action: 'create new tab',
+          action: 'Tab Created',
+          props: {
+            analytics_source: 'frontend',
+          },
         },
       });
       const id = onCreateTab();

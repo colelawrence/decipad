@@ -129,9 +129,9 @@ export const AutoCompleteMenu = ({
     clientEvent({
       segmentEvent: {
         type: 'action',
-        action: 'visit docs',
+        action: 'Documentation Button Clicked',
         props: {
-          source: 'Autocomplete Menu',
+          analytics_source: 'frontend',
         },
       },
     });
