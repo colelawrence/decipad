@@ -112,18 +112,32 @@ export const shareWithEmail = <
       email: actingUser.email,
       fullName: actingUser.name,
     });
-    await track(context.event, {
-      event: 'share with email',
-      properties: {
-        email,
+    if (resourceType.humanName === 'workspace') {
+      await track(context.event, {
+        event: 'Invited Workspace Seat',
         userId: actingUser.id,
-        resourceType: resourceType.humanName,
-        resourceId: args.id,
-        permissionType: args.permissionType,
-        isRegistered: registeredUserId != null,
-      },
-    });
-
+        properties: {
+          workspace_id: args.id,
+          invited_email: email,
+          permission_type: args.permissionType,
+          invited_userId: registeredUserId,
+          new_account: !(registeredUserId != null),
+        },
+      });
+    }
+    if (resourceType.humanName === 'notebook') {
+      await track(context.event, {
+        event: 'Invited Notebook Collaborator',
+        userId: actingUser.id,
+        properties: {
+          notebook_id: args.id,
+          invited_email: email,
+          permission_type: args.permissionType,
+          invited_userId: registeredUserId,
+          new_account: !(registeredUserId != null),
+        },
+      });
+    }
     return resourceType.toGraphql(record);
   };
 };

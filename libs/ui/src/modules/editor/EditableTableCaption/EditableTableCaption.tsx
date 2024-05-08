@@ -20,6 +20,7 @@ import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 import { markTypes } from '../PlotParams/PlotParams';
 import { Formula, Hide, Show, Source, Table } from 'libs/ui/src/icons';
+import { ClientEventsContext } from '@decipad/client-events';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -79,6 +80,8 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   const Icon = userIcons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
+  const clientEvent = useContext(ClientEventsContext);
+
   const onPivotViewButtonPress = useCallback(
     () => onAddDataViewButtonPress(),
     [onAddDataViewButtonPress]
@@ -117,10 +120,22 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               {
                 children: <Formula />,
                 tooltip: `${hideFormulas ? 'Show' : 'Hide'} column formulas`,
-                onClick: () =>
-                  tableFormulaEditors.length !== 0
-                    ? setHideFormulas(!hideFormulas)
-                    : null,
+                onClick: () => {
+                  if (tableFormulaEditors.length !== 0) {
+                    setHideFormulas(!hideFormulas);
+                    clientEvent({
+                      segmentEvent: {
+                        type: 'action',
+                        action: hideFormulas
+                          ? 'Show Table Formulas Button Clicked'
+                          : 'Hide Table Formulas Button Clicked',
+                        props: {
+                          analytics_source: 'frontend',
+                        },
+                      },
+                    });
+                  }
+                },
                 testId: 'formula',
               },
               {

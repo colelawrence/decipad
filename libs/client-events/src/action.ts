@@ -35,6 +35,20 @@ type Action =
       };
     }
   | {
+      action: 'Show Table Formulas Button Clicked';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Hide Table Formulas Button Clicked';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Tab Deleted';
       props: {
         notebook_id?: string;
