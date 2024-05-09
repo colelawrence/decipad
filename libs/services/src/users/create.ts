@@ -120,9 +120,12 @@ export async function create(
   );
 
   await track(event, {
-    event: 'user created',
+    event: 'Account Created',
     userId: newUser.id,
-    properties: { email, firstName },
+    properties: {
+      user_email: email,
+      analytics_source: 'backend',
+    },
   });
 
   return {
