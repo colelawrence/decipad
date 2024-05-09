@@ -26,6 +26,7 @@ import type {
 import { padResource } from './padResource';
 import { PublishedVersionName } from '@decipad/interfaces';
 import { resourceusage } from '@decipad/services';
+import { track } from '@decipad/backend-analytics';
 
 const notebooks = resource('notebook');
 const PUBLISHED_SNAPSHOT_NAME = PublishedVersionName.Published;
@@ -242,6 +243,20 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
     pad: clonedPad,
     replaceList,
   });
+
+  await track(
+    context.event,
+    {
+      userId: user.id,
+      event: 'Notebook Duplicated',
+      properties: {
+        notebook_id: importedNotebook.id,
+        original_notebookId: previousPad.id,
+        analytics_source: 'backend',
+      },
+    },
+    context
+  );
 
   // Graphql types mismatch the DB types here.
   // But the mismatch happens because of nested properties
