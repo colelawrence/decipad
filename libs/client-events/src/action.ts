@@ -92,6 +92,20 @@ type Action =
         analytics_source: 'frontend' | 'backend';
       };
     }
+  | {
+      action: 'AI Chat Message Submitted';
+      props: {
+        ai_message: string;
+        analytics_source: 'frontend';
+      };
+    }
+  | {
+      action: 'AI Chat Suggestion Clicked';
+      props: {
+        picked_suggestion: string;
+        analytics_source: 'frontend';
+      };
+    }
 
   // OLD TRACKER MIGHT GET DEPRECATED IN THE FUTURE
   // Notebook operations
@@ -161,7 +175,6 @@ type Action =
       props: { variant: ElementVariants };
     }
   // AI chat assistant actions
-  | { action: 'ai chat send message'; props: { isSuggested: boolean } }
   | {
       action: 'Integration: Notebook viewed';
       props: { type: TrackedIntegrations };

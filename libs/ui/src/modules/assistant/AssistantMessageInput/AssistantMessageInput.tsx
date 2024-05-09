@@ -164,9 +164,10 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
     clientEvent({
       segmentEvent: {
         type: 'action',
-        action: 'ai chat send message',
+        action: 'AI Chat Message Submitted',
         props: {
-          isSuggested: false,
+          ai_message: value,
+          analytics_source: 'frontend',
         },
       },
     });
