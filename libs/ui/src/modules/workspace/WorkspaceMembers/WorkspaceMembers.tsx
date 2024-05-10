@@ -27,7 +27,6 @@ import {
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { CollabMembershipDropdown } from '../../topbar/CollabMembershipDropdown/CollabMembershipDropdown';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 export type WorkspaceMembersProps = {
   workspaceId: string;
@@ -140,13 +139,12 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
             />
           </span>
         </div>
-        {isFlagEnabled('NEW_PAYMENTS') && !canInviteEditors && (
+        {!canInviteEditors && (
           <Tooltip side="top" trigger={tooltTipTrigger}>
             {tooltipContentEditor}
           </Tooltip>
         )}
-        {(!isFlagEnabled('NEW_PAYMENTS') ||
-          (isFlagEnabled('NEW_PAYMENTS') && canInviteEditors)) && (
+        {canInviteEditors && (
           <div css={sendInvitationButtonStyles}>
             <Button
               size="extraSlim"

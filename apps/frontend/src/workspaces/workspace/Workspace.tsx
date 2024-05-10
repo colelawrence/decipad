@@ -286,10 +286,7 @@ const Workspace: FC = () => {
         email={session.user?.email}
         workspaces={allWorkspaces}
         onCreateWorkspace={() => {
-          if (
-            isFlagEnabled('NEW_PAYMENTS') &&
-            !isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
-          ) {
+          if (!isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
             navigate(
               currentWorkspaceRoute.upgrade({ newWorkspace: 'newWorkspace' }).$
             );

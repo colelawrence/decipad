@@ -15,7 +15,6 @@ import {
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { CaretDown, WarningCircle } from 'libs/ui/src/icons';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -45,8 +44,6 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   canInviteEditors,
 }) => {
   const permissionLabel = HumanReadablePermission[currentPermission];
-
-  const isNewPayments = isFlagEnabled('NEW_PAYMENTS');
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');
@@ -128,12 +125,12 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         onSelect={onCollaboratorSelected}
         selected={currentPermission === 'WRITE'}
         testid="notebook-editor"
-        disabled={!canInviteEditors && isNewPayments}
+        disabled={!canInviteEditors}
       >
         <p css={p13Medium}>Notebook editor</p>
         <div css={warningWrapperStyles}>
           <p css={dropDownItemStyles}>Can edit only this notebook</p>
-          {!canInviteEditors && isNewPayments && (
+          {!canInviteEditors && (
             <Tooltip
               side="top"
               trigger={
@@ -150,7 +147,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
-        disabled={!canInviteReaders && isNewPayments}
+        disabled={!canInviteReaders}
         testid="notebook-reader"
       >
         <p css={p13Medium}>Notebook reader</p>
@@ -158,7 +155,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
           <p css={dropDownItemStyles}>
             Can read and interact only with this notebook
           </p>
-          {!canInviteReaders && isNewPayments && (
+          {!canInviteReaders && (
             <Tooltip
               side="top"
               trigger={

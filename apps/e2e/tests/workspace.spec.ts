@@ -253,7 +253,7 @@ test('workspace permissions @workspace', async ({
   await test.step('premium user is premium', async () => {
     await testUser.goToWorkspace();
     premiumWorkspaceId = (
-      await testUser.workspace.newWorkspace('Premium Workspace@n1n.co team')
+      await testUser.workspace.newWorkspace('Premium Workspace@n1n.co business')
     )
       .split('/')
       .at(-1)!;

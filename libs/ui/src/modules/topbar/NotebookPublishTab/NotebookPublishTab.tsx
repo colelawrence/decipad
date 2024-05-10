@@ -9,12 +9,11 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { Publish_State } from '@decipad/graphql-client';
 import * as Popover from '@radix-ui/react-popover';
 import * as S from './styles';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { PublishControls } from './PublishControls';
 
 const PublishingTextMap: Record<Publish_State, string> = {
   PUBLICLY_HIGHLIGHTED: 'Public on the web',
-  PUBLIC: isFlagEnabled('NEW_PAYMENTS') ? 'Private URL' : 'Published',
+  PUBLIC: 'Private URL',
   PRIVATE: 'Not Published',
 };
 
@@ -36,15 +35,12 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
   publishedVersionState,
   currentSnapshot,
   link,
-  isPremium,
   onUpdatePublish,
   onPublish,
   onUpdateAllowDuplicate,
   allowDuplicate,
 }) => {
   const isPublished = publishingState !== 'PRIVATE';
-  const disablePubliclyHighlighted =
-    !isPremium && isFlagEnabled('NEW_PAYMENTS');
 
   const clientEvent = useContext(ClientEventsContext);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -93,38 +89,34 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                     {publishingState === 'PRIVATE' && <Check />}
                   </div>
 
-                  {isFlagEnabled('NEW_PAYMENTS') && (
-                    <div
-                      css={S.publishMode}
-                      aria-selected={publishingState === 'PUBLICLY_HIGHLIGHTED'}
-                      onClick={() => {
-                        setOpen(false);
-                        onUpdatePublish(notebookId, 'PUBLICLY_HIGHLIGHTED');
-                      }}
-                      data-testid="publish-public"
-                    >
-                      <div>
-                        <p>
-                          {PublishingIconMap.PUBLICLY_HIGHLIGHTED}
-                          {PublishingTextMap.PUBLICLY_HIGHLIGHTED}
-                        </p>
-                        <span>
-                          Anyone can view this notebook. It will show up in
-                          search engines, on your profile and in the notebook
-                          gallery on our website.
-                        </span>
-                      </div>
-                      {publishingState === 'PUBLICLY_HIGHLIGHTED' && <Check />}
+                  <div
+                    css={S.publishMode}
+                    aria-selected={publishingState === 'PUBLICLY_HIGHLIGHTED'}
+                    onClick={() => {
+                      setOpen(false);
+                      onUpdatePublish(notebookId, 'PUBLICLY_HIGHLIGHTED');
+                    }}
+                    data-testid="publish-public"
+                  >
+                    <div>
+                      <p>
+                        {PublishingIconMap.PUBLICLY_HIGHLIGHTED}
+                        {PublishingTextMap.PUBLICLY_HIGHLIGHTED}
+                      </p>
+                      <span>
+                        Anyone can view this notebook. It will show up in search
+                        engines, on your profile and in the notebook gallery on
+                        our website.
+                      </span>
                     </div>
-                  )}
+                    {publishingState === 'PUBLICLY_HIGHLIGHTED' && <Check />}
+                  </div>
 
                   <div
                     css={S.publishMode}
                     aria-selected={publishingState === 'PUBLIC'}
-                    aria-disabled={disablePubliclyHighlighted}
                     data-testid="publish-private-url"
                     onClick={() => {
-                      if (disablePubliclyHighlighted) return;
                       setOpen(false);
                       onUpdatePublish(notebookId, 'PUBLIC');
                     }}
@@ -133,14 +125,11 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                       <p>
                         {PublishingIconMap.PUBLIC}
                         {PublishingTextMap.PUBLIC}
-                        {disablePubliclyHighlighted && <S.RequiresUpgrade />}
                       </p>
                       <span>
-                        {isFlagEnabled('NEW_PAYMENTS')
-                          ? `Only people you share the link with can view this
-                      document. It will not show up in search engines or on your
-                      profile, or in the notebook gallery on our website.`
-                          : 'Make your notebook accessable by a URL'}
+                        Only people you share the link with can view this
+                        document. It will not show up in search engines or on
+                        your profile, or in the notebook gallery on our website.{' '}
                       </span>
                     </div>
                     {publishingState === 'PUBLIC' && <Check />}

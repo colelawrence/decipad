@@ -1,6 +1,5 @@
 import type { SubPlansFragment } from '@decipad/graphql-client';
 import { useGetSubscriptionsPlansQuery } from '@decipad/graphql-client';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useMemo } from 'react';
 
 /* istanbul ignore file */
@@ -19,8 +18,6 @@ type WorkspaceData = {
   } | null;
 };
 
-const MAX_NOTEBOOK_COLLABORATORS = 3;
-
 export type UseStripePlansReturn = SubPlansFragment & {
   price: number;
   description: string;
@@ -33,21 +30,8 @@ export const useStripePlans = (): Array<UseStripePlansReturn> => {
     return subscriptionPlans.data?.getSubscriptionsPlans ?? [];
   }, [subscriptionPlans]);
 
-  // return only free + correct plan based on feature flag
-  const availablePlans = useMemo(
-    () =>
-      plans.filter((plan) => {
-        return (
-          (isFlagEnabled('NEW_PAYMENTS')
-            ? !plan?.isDefault
-            : plan?.isDefault) || plan?.key === 'free'
-        );
-      }),
-    [plans]
-  );
-
   const linkedPlans = useMemo(() => {
-    return availablePlans.map((plan) => {
+    return plans.map((plan) => {
       if (plan) {
         return {
           ...plan,
@@ -58,7 +42,7 @@ export const useStripePlans = (): Array<UseStripePlansReturn> => {
       }
       return null;
     });
-  }, [availablePlans]);
+  }, [plans]);
 
   const sortedPlans = useMemo(() => {
     return linkedPlans
@@ -73,11 +57,6 @@ export const useStripeCollaborationRules = (
   workspace?: WorkspaceData | null,
   usersWithAccess: NotebookAvatarTrait[] = []
 ) => {
-  const usersFromTeam: NotebookAvatarTrait[] = workspace?.access?.users || [];
-  const teamExcludingAdmins = usersFromTeam.filter(
-    (member) => member.permission !== 'ADMIN'
-  );
-
   const maxCollabReaders = workspace?.workspaceSubscription?.readers || 0;
   const maxCollabEditors = workspace?.workspaceSubscription?.editors || 0;
 
@@ -89,42 +68,21 @@ export const useStripeCollaborationRules = (
     (user) => user.permission === 'READ'
   );
 
-  if (isFlagEnabled('NEW_PAYMENTS')) {
-    let canInviteReaders = true;
-    let canInviteEditors = true;
+  let canInviteReaders = true;
+  let canInviteEditors = true;
 
-    // According to requirements, the admin is also considered an editor
-    if (editorsWithAccess.length >= maxCollabEditors - 1) {
-      canInviteEditors = false;
-    }
-
-    if (readersWithAccess.length >= maxCollabReaders) {
-      canInviteReaders = false;
-    }
-
-    return {
-      canInviteReaders,
-      canInviteEditors,
-      canRemove: true,
-    };
+  // According to requirements, the admin is also considered an editor
+  if (editorsWithAccess.length >= maxCollabEditors - 1) {
+    canInviteEditors = false;
   }
 
-  if (teamExcludingAdmins.length > 0) {
-    return {
-      canInvite: true,
-      canRemove: true,
-    };
-  }
-
-  if (usersWithAccess.length >= MAX_NOTEBOOK_COLLABORATORS) {
-    return {
-      canInvite: false,
-      canRemove: true,
-    };
+  if (readersWithAccess.length >= maxCollabReaders) {
+    canInviteReaders = false;
   }
 
   return {
-    canInvite: true,
+    canInviteReaders,
+    canInviteEditors,
     canRemove: true,
   };
 };

@@ -38,7 +38,11 @@ import type { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
-import { getPlanInfoFromStripe, maybeThrowForbidden } from './helpers';
+import {
+  createTestWorkspaceSubscription,
+  getPlanInfoFromStripe,
+  maybeThrowForbidden,
+} from './helpers';
 
 const workspaces = resource('workspace');
 
@@ -147,7 +151,7 @@ const resolvers: Resolvers = {
   Query: {
     getWorkspaceById,
 
-    async workspaces(_, __, context) {
+    async workspaces(_, __, context, info) {
       const user = loadUser(context);
       if (!user) {
         return [];
@@ -169,24 +173,12 @@ const resolvers: Resolvers = {
       const myWorkspaces = (
         await Promise.all(
           permissions.map((p) =>
-            getWorkspaceById({}, { id: p.resource_id }, context, {} as any)
+            getWorkspaceById({}, { id: p.resource_id }, context, info)
           )
         )
       )
         .filter((w): w is Workspace => w != null)
         .map((w) => {
-          if (isLocalOrDev() && w.name.includes('@n1n.co')) {
-            w.isPremium = true;
-
-            if (w.name.includes('team') || w.name.includes('business')) {
-              w.plan = 'team';
-            } else if (w.name.includes('enterprise')) {
-              w.plan = 'enterprise';
-            } else {
-              w.plan = 'personal';
-            }
-          }
-
           // small hack to handle existing workspaces
           if (!w.plan) {
             w.plan = w.isPremium ? 'pro' : 'free';
@@ -274,32 +266,27 @@ const resolvers: Resolvers = {
       );
 
       const isInternal = isInternalEmail(user.email);
-
       maybeThrowForbidden({ isInternal, hasFreeWorkspace });
 
       const dbRecord = await createWorkspace2(workspace, user);
-      const newWorkspace = WorkspaceRecordToWorkspace(dbRecord);
 
-      if (isLocalOrDev() && newWorkspace.name.includes('@n1n.co')) {
-        newWorkspace.isPremium = true;
-        dbRecord.isPremium = true;
-
-        const data = await tables();
-        await data.workspaces.put(dbRecord);
-
+      if (isLocalOrDev() && workspace.name.includes('@n1n.co')) {
         if (
-          newWorkspace.name.includes('team') ||
-          newWorkspace.name.includes('business')
+          workspace.name.includes('plus') ||
+          workspace.name.includes('personal')
         ) {
-          newWorkspace.plan = 'team';
-        } else if (newWorkspace.name.includes('enterprise')) {
-          newWorkspace.plan = 'enterprise';
-        } else {
-          newWorkspace.plan = 'personal';
+          dbRecord.isPremium = true;
+          await createTestWorkspaceSubscription(user, dbRecord.id, 'personal');
+        } else if (
+          workspace.name.includes('business') ||
+          workspace.name.includes('team')
+        ) {
+          dbRecord.isPremium = true;
+          await createTestWorkspaceSubscription(user, dbRecord.id, 'team');
         }
       }
 
-      return newWorkspace;
+      return WorkspaceRecordToWorkspace(dbRecord);
     },
 
     async updateWorkspace(_, { id, workspace }, context) {
@@ -503,14 +490,6 @@ const resolvers: Resolvers = {
         return (maximumPermissionType(permissions) as PermissionType) ?? null;
       }
       return undefined;
-    },
-
-    async isPremium(workspace) {
-      if (isLocalOrDev() && workspace.name.includes('@n1n.co')) {
-        return true;
-      }
-
-      return !!workspace.isPremium;
     },
 
     async pads(workspace, { page }) {

@@ -10,7 +10,6 @@ import { cssVar, p14Medium, p14Regular } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { NotebookAccessActionsReturn } from '@decipad/interfaces';
 import { UserAccessMetaFragment } from '@decipad/graphql-client';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { workspaces } from '@decipad/routing';
 import { useNavigate } from 'react-router-dom';
 
@@ -116,11 +115,7 @@ export const NotebookCollaborateTab = ({
   const [permission, setPermission] = useState<PermissionType>('WRITE');
 
   useEffect(() => {
-    if (
-      !canInviteEditors &&
-      permission === 'WRITE' &&
-      isFlagEnabled('NEW_PAYMENTS')
-    ) {
+    if (!canInviteEditors && permission === 'WRITE') {
       setPermission('READ');
     }
   }, [canInviteEditors, permission]);
@@ -182,7 +177,7 @@ export const NotebookCollaborateTab = ({
     [loading, notebookId, onChange]
   );
 
-  if (hasPaywall && isFlagEnabled('NEW_PAYMENTS')) {
+  if (hasPaywall) {
     return (
       <div css={innerPopUpStyles}>
         <div css={titleStyles}>

@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type {
   NotebookMetaDataFragment,
   Publish_State,
@@ -152,8 +151,10 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
         .members({}).$
     : workspaces({}).$;
 
-  const { canInvite, canInviteEditors, canInviteReaders } =
-    useStripeCollaborationRules(data?.workspace, data?.access.users);
+  const { canInviteEditors, canInviteReaders } = useStripeCollaborationRules(
+    data?.workspace,
+    data?.access.users
+  );
 
   if (meta.data == null || meta.data.getPadById == null) {
     return null;
@@ -162,9 +163,7 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
   const notebookName = data?.name ?? 'My Notebook';
   const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
 
-  const allowInviting = isFlagEnabled('NEW_PAYMENTS')
-    ? canInviteEditors || canInviteReaders
-    : data?.workspace?.isPremium || canInvite;
+  const allowInviting = canInviteEditors || canInviteReaders;
 
   const publishingState =
     localPublish.localPublishState ?? getPublishingState(data);

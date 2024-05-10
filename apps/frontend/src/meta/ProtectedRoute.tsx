@@ -59,11 +59,7 @@ export const RequireFreePlanSlotRoute: React.FC<
     workspaceId,
   });
 
-  if (
-    isFlagEnabled('NEW_PAYMENTS') &&
-    !hasFreeWorkspaceSlot &&
-    !isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')
-  ) {
+  if (!hasFreeWorkspaceSlot && !isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
     return <Navigate to={currentWorkspaceRoute.upgrade({}).$} />;
   }
 

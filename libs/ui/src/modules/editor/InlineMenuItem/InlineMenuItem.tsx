@@ -2,7 +2,6 @@
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
 import { Tooltip } from 'libs/ui/src/shared';
 import { FC, ReactNode, useCallback, useRef } from 'react';
@@ -99,12 +98,11 @@ export const InlineMenuItem = ({
 
   const { workspacePlan } = useNotebookMetaData();
 
-  const isFeatureAvailableForCurrentPlan = !isFlagEnabled('NEW_PAYMENTS')
-    ? true
-    : !restrictToPlans ||
-      (workspacePlan &&
-        restrictToPlans &&
-        restrictToPlans.includes(workspacePlan));
+  const isFeatureAvailableForCurrentPlan =
+    !restrictToPlans ||
+    (workspacePlan &&
+      restrictToPlans &&
+      restrictToPlans.includes(workspacePlan));
 
   const menuItem = (
     <button

@@ -18,7 +18,6 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
-  'NEW_PAYMENTS',
   'WORKSPACE_READERS',
 
   // Allow create workspaces
@@ -76,7 +75,6 @@ export const getQueryStringOverrides = (): Flags => {
 let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
-  NEW_PAYMENTS: true,
   ENABLE_COMMENTS: true,
   NOTION_CONNECTIONS: true,
 };

@@ -257,6 +257,8 @@ const metadataValidator = z.object({
   editors: nonNegativeString,
 });
 
+export type StripeMetadata = z.infer<typeof metadataValidator>;
+
 type StripeOptions = {
   metadata: unknown;
 } & Pick<

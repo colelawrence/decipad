@@ -9,7 +9,6 @@ import {
 } from 'react';
 import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { workspaces } from '@decipad/routing';
 import { SubscriptionPlansList } from './SubscriptionPlansList';
@@ -39,9 +38,7 @@ type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   onClose: () => void;
 };
 
-const DEFAULT_SELECTED_PLAN = isFlagEnabled('NEW_PAYMENTS')
-  ? 'personal'
-  : 'pro';
+const DEFAULT_SELECTED_PLAN = 'personal';
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   onClose,

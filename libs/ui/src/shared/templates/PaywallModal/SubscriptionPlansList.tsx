@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { FC, useEffect, useRef, useState } from 'react';
 import * as Styled from './styles';
@@ -121,18 +120,16 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
           )}
         </Styled.PlanContainer>
       </ToggleGroup.Root>
-      {isFlagEnabled('NEW_PAYMENTS') && (
-        <Styled.FakePlanItem>
-          <Styled.PlanTitle>{'Enterprise'}</Styled.PlanTitle>
-          <Styled.PlanDescription>
-            <p>Need more credits? More control? More everything? </p>
-            <Link href="mailto:info@decipad.com" color="plain">
-              Get in touch
-            </Link>{' '}
-            and we'll figure it out!
-          </Styled.PlanDescription>
-        </Styled.FakePlanItem>
-      )}
+      <Styled.FakePlanItem>
+        <Styled.PlanTitle>{'Enterprise'}</Styled.PlanTitle>
+        <Styled.PlanDescription>
+          <p>Need more credits? More control? More everything? </p>
+          <Link href="mailto:info@decipad.com" color="plain">
+            Get in touch
+          </Link>{' '}
+          and we'll figure it out!
+        </Styled.PlanDescription>
+      </Styled.FakePlanItem>
       <Styled.PaywallText>
         You can compare all the details on our{' '}
         <Link color="plain" href="https://www.decipad.com/pricing">

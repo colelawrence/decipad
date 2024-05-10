@@ -267,24 +267,48 @@ export function plans() {
 }
 
 export function limits() {
+  //
+  // Test values are used when creating test workspaces,
+  // All other values should come from stripe.
+  //
+
   const maxCredits = {
     free: Number(env('DECI_MAX_CREDITS_FREE')),
     pro: Number(env('DECI_MAX_CREDITS_PRO')),
+
+    testPlus: 500,
+    testBusiness: 2000,
   };
 
   const maxStorage = {
     free: 10,
     pro: 50,
+
+    testPlus: 50,
+    testBusiness: 200,
   };
 
   const maxCollabReaders = {
     free: Number(env('DECI_MAX_COLLAB_READERS_FREE_PLAN')),
+
+    testPlus: 10,
+    testBusiness: 999,
+  };
+
+  const maxCollabEditors = {
+    free: 1,
+
+    testPlus: 3,
+    testBusiness: 5,
   };
 
   // please don't remove those as they are not the same as AI Credits
   const maxQueries = {
     free: Number(env('DECI_MAX_QUERIES_FREE')),
     pro: Number(env('DECI_MAX_QUERIES_PRO')),
+
+    testPlus: 500,
+    testBusiness: 2000,
   };
 
   const TOKENS_TO_CREDITS = Number(env('DECI_TOKENS_TO_CREDITS'));
@@ -292,9 +316,13 @@ export function limits() {
     maxCollabReaders,
     maxCredits,
     maxQueries,
+    maxCollabEditors,
     openAiTokensLimit: {
       free: maxCredits.free * TOKENS_TO_CREDITS,
       pro: maxCredits.pro * TOKENS_TO_CREDITS,
+
+      testPlus: maxCredits.testPlus * TOKENS_TO_CREDITS,
+      testBusiness: maxCredits.testBusiness * TOKENS_TO_CREDITS,
     },
     tokensToCredits: TOKENS_TO_CREDITS,
     storage: maxStorage,
