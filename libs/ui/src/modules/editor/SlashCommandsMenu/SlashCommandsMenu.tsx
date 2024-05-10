@@ -134,7 +134,7 @@ const submitFormItems = [
     description: 'Make document submittable to readers',
     icon: <CommandSubmit />,
     enabled: true,
-    restrictToPlans: ['team'],
+    restrictToPlans: ['pro', 'personal', 'team'],
     extraSearchTerms: [
       'submit',
       'zappier',

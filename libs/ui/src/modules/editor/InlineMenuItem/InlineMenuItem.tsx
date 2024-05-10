@@ -49,6 +49,12 @@ const inlineStyles = css({
 const titleStyles = css(p14Medium, { color: cssVar('textTitle') });
 const descriptionStyles = css(p12Regular);
 
+const PLAN_MAP: Record<string, string> = {
+  pro: 'plus',
+  personal: 'plus',
+  team: 'business',
+};
+
 interface InlineMenuItemProps {
   readonly icon: ReactNode;
   readonly title: string;
@@ -141,8 +147,13 @@ export const InlineMenuItem = ({
       <div css={{ width: '140px' }}>
         <p css={toolTipTitle}>Unlock submit form</p>
         <p css={tooltipContent}>
-          Upgrade your current plan to {(restrictToPlans ?? []).join(', ')} to
-          use this feature
+          Upgrade your current plan to{' '}
+          {(
+            restrictToPlans
+              .filter((r) => r !== 'pro')
+              .map((r) => PLAN_MAP[r]) ?? []
+          ).join(' or ')}{' '}
+          to use this feature
         </p>
       </div>
     </Tooltip>
