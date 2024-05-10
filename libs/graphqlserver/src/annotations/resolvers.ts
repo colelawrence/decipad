@@ -1,7 +1,10 @@
+import { resource } from '@decipad/backend-resources';
 import type { AnnotationRecord } from '@decipad/backendtypes';
 import type { Resolvers } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
+
+const notebooks = resource('notebook');
 
 const resolvers: Resolvers = {
   Query: {
@@ -45,19 +48,28 @@ const resolvers: Resolvers = {
       return annotation;
     },
     deleteAnnotation: async (_, { id }, context) => {
-      // check whether user is allowed to delete an annotation
       const { user } = context;
       if (!user) {
         throw new Error('User not authenticated');
       }
       const data = await tables();
       const annotation = await data.annotations.get({ id });
+
       if (!annotation) {
         throw new Error('Annotation not found');
       }
+
       if (annotation.user_id !== user.id) {
-        throw new Error('User not allowed to delete annotation');
+        const padId = annotation.pad_id;
+
+        // only allow admins to delete annotations from other users
+        await notebooks.expectAuthorizedForGraphql({
+          context,
+          recordId: padId,
+          minimumPermissionType: 'ADMIN',
+        });
       }
+
       await data.annotations.delete({ id });
 
       return annotation;

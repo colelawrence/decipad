@@ -24,7 +24,7 @@ export const Avatar = styled.div({
   width: 20,
   height: 20,
   ':not(:first-child)': {
-    marginRight: -4,
+    marginLeft: -12,
   },
 });
 

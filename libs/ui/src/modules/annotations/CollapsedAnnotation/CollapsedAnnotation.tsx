@@ -17,11 +17,11 @@ type User = Annotation['user'];
 
 export const CollapsedAnnotation = ({
   collapsed,
-  setCollapsed,
+  expandAnnotation,
   annotations,
 }: {
   collapsed: boolean;
-  setCollapsed: (value: boolean) => void;
+  expandAnnotation: () => void;
   annotations: AnnotationArray;
 }) => {
   const users = useMemo(() => {
@@ -39,15 +39,7 @@ export const CollapsedAnnotation = ({
   }, [annotations]);
 
   return (
-    <Styled.Wrapper
-      onClick={() => {
-        if (collapsed) {
-          setCollapsed(false);
-        } else {
-          setCollapsed(true);
-        }
-      }}
-    >
+    <Styled.Wrapper onClick={expandAnnotation}>
       {collapsed && (
         <>
           <Styled.AvatarStack>

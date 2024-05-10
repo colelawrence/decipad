@@ -79,8 +79,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />
@@ -131,8 +131,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />
@@ -190,8 +190,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />
@@ -244,8 +244,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />
@@ -292,8 +292,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />
@@ -389,8 +389,8 @@ describe('variable highlights', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <PlateWrapper children={children} computer={computer} />

@@ -50,6 +50,7 @@ beforeEach(() => {
     plugins,
   };
   editor = createPlateEditor({ plugins });
+
   wrapper = ({ children }) => (
     <AnnotationsProvider
       value={{
@@ -58,8 +59,8 @@ beforeEach(() => {
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
-        setExpandedBlockId: () => {},
-        canDeleteComments: true,
+        handleExpandedBlockId: () => {},
+        permission: 'WRITE',
       }}
     >
       <DndProvider backend={HTML5Backend}>

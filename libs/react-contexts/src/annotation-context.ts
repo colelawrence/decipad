@@ -1,4 +1,7 @@
-import { type GetNotebookAnnotationsQuery } from '@decipad/graphql-client';
+import {
+  type PermissionType,
+  type GetNotebookAnnotationsQuery,
+} from '@decipad/graphql-client';
 import { createContext, useContext } from 'react';
 
 export type AnnotationArray = NonNullable<
@@ -10,8 +13,8 @@ type AnnotationsContextValue = {
   articleRef: React.RefObject<HTMLElement>;
   scenarioId: string | null;
   expandedBlockId: string | null;
-  setExpandedBlockId: (id: string | null) => void;
-  canDeleteComments: boolean;
+  handleExpandedBlockId: (id: string | null) => void;
+  permission: PermissionType | null;
 };
 
 const AnnotationsContext = createContext<AnnotationsContextValue | null>(null);

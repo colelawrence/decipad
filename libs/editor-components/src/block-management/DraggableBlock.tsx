@@ -24,7 +24,6 @@ import {
   useAnnotations,
   useComputer,
   useIsEditorReadOnly,
-  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { parseSimpleValue } from '@decipad/remote-computer';
@@ -33,6 +32,7 @@ import {
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
   BlockAnnotations,
+  BlockCommentButton,
 } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
 import styled from '@emotion/styled';
@@ -127,6 +127,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       hasPreviousSibling,
       isCentered,
       dependencyId,
+      disableDrag,
       ...props
     },
     forwardedRef
@@ -140,7 +141,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const event = useContext(ClientEventsContext);
 
-    const { setExpandedBlockId } = useAnnotations();
+    const { handleExpandedBlockId, permission } = useAnnotations();
 
     const dependencyArray = Array.isArray(dependencyId)
       ? dependencyId
@@ -213,21 +214,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       onceDeleted();
     }, [parentOnDelete, event, element, onDelete, onceDeleted]);
 
-    const { setSidebar } = useNotebookMetaData((state) => ({
-      setSidebar: state.setSidebar,
-    }));
-    const [showNewAnnotation, setShowNewAnnotation] = useState<boolean>(false);
     const handleAnnotation = useCallback(() => {
-      setSidebar('annotations');
-
-      // TODO: reveal the relevant block!
-      setExpandedBlockId(element.id);
-
-      // TODO if I don't do this, then creating a new annotation with the sidebar closed never brings up new annotation. Come back and fix this properly.
-      setTimeout(() => {
-        setShowNewAnnotation(true);
-      }, 250);
-    }, [element.id, setExpandedBlockId, setSidebar]);
+      handleExpandedBlockId(element.id);
+    }, [element.id, handleExpandedBlockId]);
 
     const handleDuplicate = useCallback(() => {
       event({
@@ -337,15 +326,20 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           suppressContentEditableWarning
           annotationsHovered={blockHighlighted}
         >
-          <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
+          <BlockCommentButton
+            canComment={!!permission && !disableDrag}
+            onComment={handleAnnotation}
+          >
+            <BlockErrorBoundary element={element}>
+              {children}
+            </BlockErrorBoundary>
+          </BlockCommentButton>
 
           {document.getElementById('annotations-container') &&
             createPortal(
               <BlockAnnotations
                 blockId={element.id}
                 blockRef={blockRef}
-                showNewAnnotation={showNewAnnotation}
-                setShowNewAnnotation={setShowNewAnnotation}
                 setBlockHighlighted={setBlockHighlighted}
               />,
               document.getElementById('annotations-container')!
@@ -380,15 +374,21 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}
         path={path}
+        disableDrag={disableDrag}
       >
         <DraggableBlockStyled
           blockHighlighted={blockHighlighted}
           data-testid="draggable-block"
         >
           <BlockSelectable element={element}>
-            <BlockErrorBoundary element={element}>
-              {children}
-            </BlockErrorBoundary>
+            <BlockCommentButton
+              canComment={!!permission && !disableDrag}
+              onComment={handleAnnotation}
+            >
+              <BlockErrorBoundary element={element}>
+                {children}
+              </BlockErrorBoundary>
+            </BlockCommentButton>
           </BlockSelectable>
         </DraggableBlockStyled>
 
@@ -397,8 +397,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
             <BlockAnnotations
               blockId={element.id}
               blockRef={blockRef}
-              showNewAnnotation={showNewAnnotation}
-              setShowNewAnnotation={setShowNewAnnotation}
               setBlockHighlighted={setBlockHighlighted}
             />,
             document.getElementById('annotations-container')!

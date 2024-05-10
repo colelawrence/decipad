@@ -6,6 +6,7 @@ import {
 } from '../../hooks';
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
 import * as S from './styles';
+import { PermissionType } from '../../types';
 
 interface NotebookPageProps {
   readonly notebook: ReactNode;
@@ -15,8 +16,11 @@ interface NotebookPageProps {
   readonly isEmbed: boolean;
   // Undefined means we haven't loaded yet
   readonly isReadOnly: boolean | undefined;
+  readonly permission?: PermissionType | null | undefined;
   readonly articleRef: React.RefObject<HTMLElement>;
 }
+
+const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent[] = ['annotations'];
 
 /**
  * Documentation function
@@ -27,12 +31,14 @@ function getShowSidebar(
   props: NotebookPageProps,
   sidebarComponent: SidebarComponent
 ) {
+  if (props.permission == null) return false;
+
   if (props.isEmbed) return false;
   if (props.sidebar == null) return false;
 
   if (
     (props.isReadOnly == null || props.isReadOnly) &&
-    sidebarComponent !== 'annotations'
+    !ALLOWED_READER_SIDEBAR_COMPONENTS.includes(sidebarComponent)
   )
     return false;
 

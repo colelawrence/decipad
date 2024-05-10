@@ -81,30 +81,8 @@ const PlotWithProviders = ({
     ],
     ..._element,
   };
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>
-        <TestResultsProvider blockResults={blockResults}>
-          <ComputerContextProvider>
-            <Plate>
-              <PlateContent />
-              <Plot
-                attributes={{
-                  'data-slate-node': 'element',
-                  ref: createRef(),
-                }}
-                element={element}
-              />
-            </Plate>
-          </ComputerContextProvider>
-        </TestResultsProvider>
-      </BrowserRouter>
-    </DndProvider>
-  );
-};
 
-it('shows nothing if no var has been selected', async () => {
-  const { queryByRole } = render(
+  return (
     <AnnotationsProvider
       value={{
         annotations: [],
@@ -112,33 +90,42 @@ it('shows nothing if no var has been selected', async () => {
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
-        setExpandedBlockId: () => {},
-        canDeleteComments: true,
+        handleExpandedBlockId: () => {},
+        permission: 'WRITE',
       }}
     >
-      <PlotWithProviders />
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>
+          <TestResultsProvider blockResults={blockResults}>
+            <ComputerContextProvider>
+              <Plate>
+                <PlateContent />
+                <Plot
+                  attributes={{
+                    'data-slate-node': 'element',
+                    ref: createRef(),
+                  }}
+                  element={element}
+                />
+              </Plate>
+            </ComputerContextProvider>
+          </TestResultsProvider>
+        </BrowserRouter>
+      </DndProvider>
     </AnnotationsProvider>
   );
+};
+
+it('shows nothing if no var has been selected', async () => {
+  const { queryByRole } = render(<PlotWithProviders />);
   expect(await queryByRole('graphics-document')).toBeNull();
 });
 
 it('shows nothing if var has been selected but no data', async () => {
   const { queryByRole } = render(
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        articleRef: { current: null },
-        scenarioId: null,
-        expandedBlockId: null,
-        setExpandedBlockId: () => {},
-        canDeleteComments: true,
-      }}
-    >
-      <PlotWithProviders
-        element={{ sourceVarName: 'varName' }}
-      ></PlotWithProviders>
-    </AnnotationsProvider>
+    <PlotWithProviders
+      element={{ sourceVarName: 'varName' }}
+    ></PlotWithProviders>
   );
   expect(await queryByRole('graphics-document')).toBeNull();
 });
@@ -146,32 +133,20 @@ it('shows nothing if var has been selected but no data', async () => {
 it('shows a plot if has data and options', async () => {
   const blockId = 'block-id';
   const { queryByRole } = render(
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        articleRef: { current: null },
-        scenarioId: null,
-        expandedBlockId: null,
-        setExpandedBlockId: () => {},
-        canDeleteComments: true,
-      }}
-    >
-      <PlotWithProviders
-        element={{ sourceVarName: 'varName' }}
-        blockResults={{
-          [blockId]: {
-            type: 'computer-result',
-            id: blockId,
-            result: {
-              type: tableType,
-              value: tableData,
-            },
-            epoch: 1n,
+    <PlotWithProviders
+      element={{ sourceVarName: 'varName' }}
+      blockResults={{
+        [blockId]: {
+          type: 'computer-result',
+          id: blockId,
+          result: {
+            type: tableType,
+            value: tableData,
           },
-        }}
-      />
-    </AnnotationsProvider>
+          epoch: 1n,
+        },
+      }}
+    />
   );
   expect(await queryByRole('graphics-document')).toBeDefined();
 });

@@ -24,27 +24,37 @@ export type Annotation = NonNullable<AnnotationArray[number]>;
 export const BlockAnnotations = ({
   blockId,
   blockRef,
-  showNewAnnotation,
-  setShowNewAnnotation,
   setBlockHighlighted,
 }: {
   blockId: string;
   blockRef: React.RefObject<HTMLElement>;
-  showNewAnnotation: boolean;
-  setShowNewAnnotation: (value: boolean) => void;
   setBlockHighlighted: (value: boolean) => void;
 }) => {
   const {
     annotations,
     articleRef,
     expandedBlockId,
-    setExpandedBlockId,
+    handleExpandedBlockId,
     scenarioId,
   } = useAnnotations();
   const notbeookId = useNotebookId();
 
+  const collapseAnnotation = useCallback(() => {
+    if (blockId === expandedBlockId) {
+      handleExpandedBlockId(null);
+    }
+  }, [handleExpandedBlockId, blockId, expandedBlockId]);
+
+  const expandAnnotation = useCallback(() => {
+    if (blockId !== expandedBlockId) {
+      handleExpandedBlockId(blockId);
+    }
+  }, [handleExpandedBlockId, blockId, expandedBlockId]);
+
   const [, deleteAnnotation] = useDeleteAnnotationMutation();
-  const containerRef = useActiveElement(() => setCollapsed(true));
+  const containerRef = useActiveElement(() => {
+    collapseAnnotation();
+  });
 
   const offset = useVerticalOffset(articleRef, blockRef);
 
@@ -86,10 +96,6 @@ export const BlockAnnotations = ({
 
   const collapsed = expandedBlockId !== blockId;
 
-  const setCollapsed = (isCollapsed: boolean) => {
-    setExpandedBlockId(isCollapsed ? null : blockId);
-  };
-
   if (annotations === undefined) {
     return null;
   }
@@ -98,7 +104,7 @@ export const BlockAnnotations = ({
     (annotation): annotation is Annotation => annotation?.block_id === blockId
   );
 
-  if (blockAnnotations.length === 0 && showNewAnnotation) {
+  if (blockAnnotations.length === 0 && expandedBlockId === blockId) {
     return (
       <AnimatePresence>
         <Styled.Annotation
@@ -118,12 +124,12 @@ export const BlockAnnotations = ({
           collapsed={false}
           offset={offset}
           scroll={scrollY}
+          ref={containerRef}
         >
           <NewAnnotation
             isReply={true}
             blockId={blockId}
             notebookId={notbeookId}
-            closeAnnotation={() => setShowNewAnnotation(false)}
             scenarioId={scenarioId}
           />
         </Styled.Annotation>
@@ -144,8 +150,7 @@ export const BlockAnnotations = ({
   if (
     blockAnnotations.every(
       (annotation) => annotation.scenario_id !== scenarioId
-    ) &&
-    !showNewAnnotation
+    )
   ) {
     return null;
   }
@@ -153,7 +158,6 @@ export const BlockAnnotations = ({
   return (
     <AnimatePresence>
       <Styled.Annotation
-        layoutScroll
         scroll={scrollY}
         collapsed={collapsed}
         offset={offset}
@@ -177,7 +181,7 @@ export const BlockAnnotations = ({
         {collapsed ? (
           <CollapsedAnnotation
             collapsed={collapsed}
-            setCollapsed={setCollapsed}
+            expandAnnotation={expandAnnotation}
             annotations={blockAnnotations}
           />
         ) : (
@@ -199,7 +203,6 @@ export const BlockAnnotations = ({
               isReply={false}
               blockId={blockId}
               notebookId={notbeookId}
-              closeAnnotation={() => setShowNewAnnotation(false)}
               scenarioId={scenarioId}
             />
           </>

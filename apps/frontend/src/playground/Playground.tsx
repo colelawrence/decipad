@@ -36,8 +36,8 @@ const Playground: React.FC = () => {
         articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
-        setExpandedBlockId: () => {},
-        canDeleteComments: true,
+        handleExpandedBlockId: () => {},
+        permission: 'WRITE',
       }}
     >
       <NotebookPage

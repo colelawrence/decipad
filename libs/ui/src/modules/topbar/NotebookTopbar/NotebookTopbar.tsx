@@ -175,11 +175,11 @@ const BackButton: FC<AccessInfo & TopbarActions> = ({
   }
 
   return (
-    <Styled.IconWrap>
-      <Link href="https://decipad.com">
+    <Link href="https://decipad.com">
+      <Styled.IconWrap>
         <Deci />
-      </Link>
-    </Styled.IconWrap>
+      </Styled.IconWrap>
+    </Link>
   );
 };
 
@@ -301,7 +301,9 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
         <Styled.RightContainer>
           <ReadOnlyWriting />
           <NotebookAuthors {...authors} />
-
+          {isFlagEnabled('ENABLE_COMMENTS') && (
+            <AnnotationsToggle {...actions} />
+          )}
           <Help />
         </Styled.RightContainer>
       </Styled.InnerStyles>
@@ -341,8 +343,6 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
   authors,
   status,
 }) => {
-  const canAccessComments =
-    access.permissionType === 'WRITE' || access.permissionType === 'ADMIN';
   return (
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
@@ -358,10 +358,9 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           {AiModeSwitch}
         </Styled.LeftContainer>
         <Styled.RightContainer>
-          {isFlagEnabled('ENABLE_COMMENTS') && canAccessComments && (
+          {isFlagEnabled('ENABLE_COMMENTS') && (
             <AnnotationsToggle {...actions} />
           )}
-
           <TemplatesLink {...actions} />
           <Help />
           <SidebarToggle {...actions} />
@@ -411,12 +410,11 @@ export const NotebookTopbar: FC<TopbarGenericProps> = (props) => {
 
   switch (props.access.permissionType) {
     case undefined:
-    case null:
-    case 'READ': {
-      if (props.access.hasWorkspaceAccess) {
-        return <ReaderTopbar {...props} />;
-      }
+    case null: {
       return <NoAccessReaderTopbar {...props} />;
+    }
+    case 'READ': {
+      return <ReaderTopbar {...props} />;
     }
     case 'WRITE':
     case 'ADMIN':

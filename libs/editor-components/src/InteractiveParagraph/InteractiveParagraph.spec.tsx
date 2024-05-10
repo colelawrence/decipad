@@ -62,8 +62,8 @@ beforeEach(() => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <ToastDisplay>

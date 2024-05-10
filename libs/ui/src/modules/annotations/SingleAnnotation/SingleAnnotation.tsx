@@ -37,14 +37,14 @@ export const SingleAnnotation = ({
 }: Annotation & {
   deleteAnnotation: (annotationId: string) => void;
 }) => {
-  const { canDeleteComments } = useAnnotations();
+  const { permission } = useAnnotations();
   const { data: session } = useSession();
   const currentUser = session?.user as User;
   const currentUserId = currentUser?.id;
 
   const isOwner = user?.id === currentUserId;
 
-  const canDelete = isOwner || canDeleteComments;
+  const canDelete = isOwner || permission === 'ADMIN';
 
   const handleDelete = useCallback(
     (annotationId: string) => {

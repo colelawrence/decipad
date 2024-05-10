@@ -52,7 +52,7 @@ test('check inviting readers stay in reading mode', async ({
     // check test user two has read permissions only
     await anotherTestUser.page.goto(notebookURL);
     await expect(
-      anotherTestUser.page.getByText('You are in reading mode')
+      anotherTestUser.page.getByText('You have view-only access')
     ).toBeVisible();
 
     const titleElementPage1 = testUser.page.getByTestId('editor-title');

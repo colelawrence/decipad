@@ -8,6 +8,7 @@ import {
   GetNotebookAnnotationsQuery,
   useGetNotebookAnnotationsQuery,
 } from '@decipad/graphql-client';
+import { useActiveElement } from '@decipad/react-utils';
 
 type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -20,8 +21,14 @@ type AnnotationsProps = {
 };
 
 export const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
-  const { annotations, setAnnotations, expandedBlockId, setExpandedBlockId } =
-    useAnnotations();
+  const {
+    annotations,
+    setAnnotations,
+    expandedBlockId,
+    handleExpandedBlockId,
+  } = useAnnotations();
+
+  const containerRef = useActiveElement(() => handleExpandedBlockId(null));
 
   const [annotationData] = useGetNotebookAnnotationsQuery({
     variables: {
@@ -46,12 +53,7 @@ export const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
   );
 
   return (
-    <Styled.Container
-      id="annotations-container"
-      onClick={() => {
-        setExpandedBlockId(null);
-      }}
-    >
+    <Styled.Container id="annotations-container" ref={containerRef}>
       {showPlaceholder && (
         <Styled.Placeholder>
           <Styled.PlaceholderIcon>

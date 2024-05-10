@@ -23,35 +23,35 @@ describe('Placeholders', () => {
 
   it('should hide if there are content', () => {
     render(
-      <AnnotationsProvider
-        value={{
-          annotations: [],
-          setAnnotations: () => {},
-          articleRef: { current: null },
-          scenarioId: null,
-          expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
-        }}
-      >
-        <TestProvider>
-          <CodeLine element={dumbElement} attributes={attributes}>
-            Some text inside
-          </CodeLine>
-        </TestProvider>
-      </AnnotationsProvider>
+      <TestProvider>
+        <CodeLine element={dumbElement} attributes={attributes}>
+          Some text inside
+        </CodeLine>
+      </TestProvider>
     );
     expect(screen.queryByText('Distance = 42 km')).toBeNull();
   });
 });
 
 const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
-  <DndProvider backend={HTML5Backend}>
-    <BrowserRouter>
-      <Plate>
-        <PlateContent />
-        {children}
-      </Plate>
-    </BrowserRouter>
-  </DndProvider>
+  <AnnotationsProvider
+    value={{
+      annotations: [],
+      setAnnotations: () => {},
+      articleRef: { current: null },
+      scenarioId: null,
+      expandedBlockId: null,
+      handleExpandedBlockId: () => {},
+      permission: 'WRITE',
+    }}
+  >
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>
+        <Plate>
+          <PlateContent />
+          {children}
+        </Plate>
+      </BrowserRouter>
+    </DndProvider>
+  </AnnotationsProvider>
 );

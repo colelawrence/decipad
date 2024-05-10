@@ -79,3 +79,4 @@ export * from './SmartCell/SmartCell';
 export * from './DataViewTableHeader/DataViewTableHeader';
 export * from './ColumnDndPreview/ColumnDndPreview';
 export * from './EditorIcon/EditorIcon';
+export * from './BlockCommentButton/BlockCommentButton';

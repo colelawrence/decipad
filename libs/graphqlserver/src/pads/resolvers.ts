@@ -228,17 +228,9 @@ const resolvers: Resolvers = {
         ) as Array<PermissionType>
       );
 
-      // allow the user to have read permission if the notebook is public
-      const effectivePermission =
-        maxPermission ??
-        (parent.isPublic
-          ? (parent as PadRecord).isPublicWritable
-            ? 'WRITE'
-            : 'READ'
-          : undefined);
+      context.readingModePermission = !maxPermission;
 
-      context.readingModePermission = effectivePermission === 'READ';
-      return effectivePermission;
+      return maxPermission;
     },
 
     async workspace(pad, _, context) {

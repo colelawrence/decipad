@@ -20,26 +20,9 @@ import { Paragraph } from './Paragraph';
 import { BrowserRouter } from 'react-router-dom';
 import { AnnotationsProvider } from '@decipad/react-contexts';
 
-const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
-  <AnnotationsProvider
-    value={{
-      annotations: [],
-      setAnnotations: () => {},
-      articleRef: { current: null },
-      scenarioId: null,
-      expandedBlockId: null,
-      setExpandedBlockId: () => {},
-      canDeleteComments: true,
-    }}
-  >
-    <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>{children}</BrowserRouter>
-    </DndProvider>
-  </AnnotationsProvider>
-);
-
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
+let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {
@@ -51,6 +34,24 @@ beforeEach(() => {
     plugins,
   };
   editor = createPlateEditor({ plugins });
+
+  wrapper = ({ children }) => (
+    <AnnotationsProvider
+      value={{
+        annotations: [],
+        setAnnotations: () => {},
+        articleRef: { current: null },
+        scenarioId: null,
+        expandedBlockId: null,
+        handleExpandedBlockId: () => {},
+        permission: 'WRITE',
+      }}
+    >
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
+    </AnnotationsProvider>
+  );
 });
 
 it('shows a placeholder when notebook empty and not selected', async () => {

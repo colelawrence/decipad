@@ -124,7 +124,10 @@ export const useNotebookStateAndActions = ({
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(
-    () => (notebook ? notebook.myPermissionType === 'READ' : true),
+    () =>
+      notebook
+        ? !notebook.myPermissionType || notebook.myPermissionType === 'READ'
+        : true,
     [notebook]
   );
   const isPublic = useMemo(

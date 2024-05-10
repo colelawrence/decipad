@@ -56,10 +56,17 @@ import { getNode } from '@udecode/plate-common';
 const gridStyles = once(() =>
   css({
     display: 'grid',
-    gridTemplate: `
-      ".                          plus handle                             " ${editorLayout.gutterHandleHeight()}
-      "menu                       .    .                                  " auto
-      /minmax(max-content, 144px) ${editorLayout.gutterHandleWidth()}
+    gridTemplateAreas: `
+      ". plus handle"
+      "menu . ."
+    `,
+    gridTemplateRows: `
+      ${editorLayout.gutterHandleHeight()}
+      auto
+    `,
+    gridTemplateColumns: `
+      minmax(max-content, 144px)
+      ${editorLayout.gutterHandleWidth()}
     `,
     justifyContent: 'end',
   })
@@ -372,6 +379,7 @@ const toolTipTitle = css(p12Medium, {
   textAlign: 'center',
   color: componentCssVars('TooltipText'),
 });
+
 const tooltipContent = css(p12Regular, {
   marginTop: '6px',
   color: componentCssVars('TooltipTextSecondary'),

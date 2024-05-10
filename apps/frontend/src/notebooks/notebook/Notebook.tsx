@@ -26,7 +26,7 @@ import {
   useSetCssVarWidth,
 } from '@decipad/ui';
 import type { FC } from 'react';
-import { Suspense, useState, useEffect, useMemo } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -82,11 +82,23 @@ export const Notebook: FC = () => {
     docsync,
   };
 
-  const canDeleteComments = useMemo(() => {
-    return notebookMetadaData?.getPadById?.myPermissionType === 'ADMIN';
-  }, [notebookMetadaData?.getPadById?.myPermissionType]);
-
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null);
+
+  const { setSidebar, sidebar } = useNotebookMetaData((state) => ({
+    setSidebar: state.setSidebar,
+    sidebar: state.sidebarComponent,
+  }));
+
+  const handleExpandedBlockId = useCallback(
+    (blockId: string | null) => {
+      if (sidebar !== 'annotations') {
+        setSidebar('annotations');
+      }
+      setExpandedBlockId(blockId);
+    },
+    [setExpandedBlockId, setSidebar, sidebar]
+  );
+
   const [annotations, setAnnotations] = useState<AnnotationArray | undefined>(
     undefined
   );
@@ -109,8 +121,9 @@ export const Notebook: FC = () => {
                 articleRef,
                 scenarioId: scenarioId || null,
                 expandedBlockId,
-                setExpandedBlockId,
-                canDeleteComments,
+                handleExpandedBlockId,
+                permission:
+                  notebookMetadaData?.getPadById?.myPermissionType ?? null,
               }}
             >
               <NotebookPage
@@ -147,6 +160,7 @@ export const Notebook: FC = () => {
                 }
                 isEmbed={isEmbed}
                 isReadOnly={docsync?.isReadOnly}
+                permission={notebookMetadaData?.getPadById?.myPermissionType}
               />
               <Suspense>
                 {isBuyCreditsModalOpen && (

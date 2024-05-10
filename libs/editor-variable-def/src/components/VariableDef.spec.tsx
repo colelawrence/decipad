@@ -71,8 +71,8 @@ describe('Variable def expression element', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <DndProvider backend={HTML5Backend}>
@@ -149,8 +149,8 @@ describe('Variable def slider element', () => {
           articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
-          setExpandedBlockId: () => {},
-          canDeleteComments: true,
+          handleExpandedBlockId: () => {},
+          permission: 'WRITE',
         }}
       >
         <DndProvider backend={HTML5Backend}>

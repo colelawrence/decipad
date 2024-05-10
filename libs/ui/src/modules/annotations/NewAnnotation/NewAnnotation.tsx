@@ -1,8 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import {
-  useGetNotebookMetaQuery,
-  useCreateAnnotationMutation,
-} from '@decipad/graphql-client';
+import { useCreateAnnotationMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import {
   useCallback,
@@ -14,11 +11,12 @@ import {
 } from 'react';
 import * as Styled from './styles';
 import { Send } from 'libs/ui/src/icons';
+import { useAnnotations } from '@decipad/react-contexts';
 
 type NewAnnotationProps = {
   blockId: string;
   notebookId: string;
-  closeAnnotation: () => void;
+
   scenarioId: string | null;
   isReply: boolean;
 };
@@ -26,7 +24,7 @@ type NewAnnotationProps = {
 export const NewAnnotation: React.FC<NewAnnotationProps> = ({
   blockId,
   notebookId,
-  closeAnnotation,
+
   isReply,
 }) => {
   const toast = useToast();
@@ -36,11 +34,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
 
   const userEvents = useContext(ClientEventsContext);
 
-  const [meta] = useGetNotebookMetaQuery({
-    variables: { id: notebookId },
-  });
-
-  const data = meta.data?.getPadById;
+  const { permission } = useAnnotations();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -85,13 +79,11 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
         action: 'Comment Submitted',
         props: {
           notebook_id: notebookId,
-          permissions_type: data?.myPermissionType,
+          permissions_type: permission,
           analytics_source: 'frontend',
         },
       },
     });
-
-    closeAnnotation();
   }, [
     isDisabled,
     createAnnotation,
@@ -99,8 +91,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
     blockId,
     notebookId,
     userEvents,
-    data?.myPermissionType,
-    closeAnnotation,
+    permission,
     toast,
   ]);
 
@@ -120,14 +111,13 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
 
         handleSubmit();
       }
-      if (event.key === 'Esc') {
+      if (event.key === 'Escape') {
         event.preventDefault();
 
         setAnnotation('');
-        closeAnnotation();
       }
     },
-    [handleSubmit, closeAnnotation]
+    [handleSubmit]
   );
 
   return (
