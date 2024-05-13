@@ -324,9 +324,7 @@ test('workspace permissions @workspace', async ({
   });
 });
 
-// We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-// Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
-test.skip('notebook reader and editor permissions', async ({
+test('notebook reader and editor permissions', async ({
   testUser,
   randomFreeUser,
   anotherRandomFreeUser,
@@ -336,7 +334,7 @@ test.skip('notebook reader and editor permissions', async ({
 
   await test.step('invite reader and editor to notebook', async () => {
     await testUser.goToWorkspace();
-    await testUser.workspace.newWorkspaceWithPlan('team');
+    await testUser.workspace.newWorkspaceWithPlan('plus');
 
     await testUser.workspace.newNotebook.click();
     await testUser.notebook.inviteUser(randomFreeUser.email, 'reader');
@@ -348,7 +346,7 @@ test.skip('notebook reader and editor permissions', async ({
     await randomFreeUser.page.goto(notebook);
     await randomFreeUser.notebook.waitForEditorToLoad();
     await expect(
-      randomFreeUser.page.getByText('You are in reading mode')
+      randomFreeUser.page.getByText('You have view-only access')
     ).toBeVisible();
 
     expect(
@@ -369,14 +367,12 @@ test.skip('notebook reader and editor permissions', async ({
     await anotherRandomFreeUser.notebook.waitForEditorToLoad();
 
     await expect(
-      anotherRandomFreeUser.page.getByText('You are in reading mode')
+      anotherRandomFreeUser.page.getByText('You have view-only access')
     ).toBeHidden();
 
     await anotherRandomFreeUser.page.getByTestId('publish-button').click();
     await expect(
-      anotherRandomFreeUser.page.getByText(
-        'To invite users to the notebook you must have a team or enterprise plan'
-      )
+      anotherRandomFreeUser.page.getByText('Request access to have more')
     ).toBeVisible();
     await anotherRandomFreeUser.notebook.focusOnBody();
     await anotherRandomFreeUser.notebook.addParagraph('I am editing');
@@ -392,14 +388,13 @@ test.skip('notebook reader and editor permissions', async ({
   });
 });
 
-// We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-// Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
+// workspace readers don't exist right now
 test.skip('workspace reader checks @workspace @roles', async ({
   testUser,
   randomFreeUser,
 }) => {
   await testUser.goToWorkspace();
-  await testUser.workspace.newWorkspaceWithPlan('team');
+  await testUser.workspace.newWorkspaceWithPlan('plus');
   const teamWorkspaceURL = testUser.page.url();
 
   await testUser.workspace.checkWorkspaceMember(testUser.email);
@@ -463,7 +458,7 @@ test('workspace editor checks @workspace @roles', async ({
   randomFreeUser,
 }) => {
   await testUser.goToWorkspace();
-  await testUser.workspace.newWorkspaceWithPlan('team');
+  await testUser.workspace.newWorkspaceWithPlan('plus');
   const teamWorkspaceURL = testUser.page.url();
 
   await testUser.workspace.checkWorkspaceMember(testUser.email);
@@ -482,7 +477,7 @@ test('workspace editor checks @workspace @roles', async ({
   });
 
   await test.step('editor can duplicate notebook', async () => {
-    await randomFreeUser.workspace.duplicatePad(0, '@n1n.co team');
+    await randomFreeUser.workspace.duplicatePad(0, '@n1n.co plus');
 
     await expect(async () => {
       const pads = await randomFreeUser.workspace.getPadList();

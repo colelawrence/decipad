@@ -112,7 +112,7 @@ test('slider Widget', async ({ testUser }) => {
 test('dropdown widget', async ({ randomFreeUser }) => {
   const { page, notebook, workspace } = randomFreeUser;
   await test.step('creates an empty dropdown widget', async () => {
-    await workspace.newWorkspaceWithPlan('team');
+    await workspace.newWorkspaceWithPlan('plus');
     await workspace.createNewNotebook();
     await randomFreeUser.aiAssistant.closePannel();
     await notebook.waitForEditorToLoad();

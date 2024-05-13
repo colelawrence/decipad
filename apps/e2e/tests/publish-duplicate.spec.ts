@@ -500,9 +500,7 @@ test('duplicate inside notebook with multiple workspaces', async ({
   });
 });
 
-// We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-// Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
-test.skip('check collaborator duplicate single workspace', async ({
+test('check collaborator duplicate single workspace', async ({
   testUser,
   randomFreeUser,
 }) => {
@@ -521,7 +519,7 @@ test.skip('check collaborator duplicate single workspace', async ({
 
   await test.step('create team workspace, so you can invite collaborators', async () => {
     await testUserPage.goto('/');
-    await testUserWorkspace.newWorkspaceWithPlan('team');
+    await testUserWorkspace.newWorkspaceWithPlan('plus');
     await testUserWorkspace.clickNewPadButton();
   });
 
@@ -550,9 +548,7 @@ test.skip('check collaborator duplicate single workspace', async ({
   });
 });
 
-// We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-// Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
-test.skip('check collaborator duplicate multiple workspaces', async ({
+test('check collaborator duplicate multiple workspaces', async ({
   testUser,
   anotherTestUser,
 }) => {
@@ -576,7 +572,7 @@ test.skip('check collaborator duplicate multiple workspaces', async ({
 
   await test.step('create team workspace, so you can invite collaborators', async () => {
     await testUserPage.goto('/');
-    await testUserWorkspace.newWorkspaceWithPlan('team');
+    await testUserWorkspace.newWorkspaceWithPlan('plus');
     await testUserWorkspace.clickNewPadButton();
   });
 

@@ -81,16 +81,16 @@ export class Workspace {
   /**
    * Create a new workspace with the specified plan type.
    *
-   * @param {string} type - The type of plan for the workspace ('free', 'pro', 'personal', 'team', or 'enterprise').
+   * @param {string} type - The type of plan for the workspace ('free', 'plus', 'business',or 'enterprise').
    * @returns {string} The URL of the newly created workspace.
    *
    * @example
    * ```js
-   * const newWorkspaceURL = workspace.newWorkspaceWithPlan('pro');
+   * const newWorkspaceURL = workspace.newWorkspaceWithPlan('plus');
    * ```
    */
   async newWorkspaceWithPlan(
-    type: 'free' | 'pro' | 'personal' | 'team' | 'enterprise' = 'free'
+    type: 'free' | 'plus' | 'buiness' | 'enterprise' = 'free'
   ) {
     const workspaceURL = await this.newWorkspace(`@n1n.co ${type}`);
     return workspaceURL;

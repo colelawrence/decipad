@@ -4,7 +4,7 @@ import { expect, test } from './manager/decipad-tests';
 let teamWorkspaceURL: string;
 test.beforeAll(async ({ testUser }) => {
   await testUser.goToWorkspace();
-  await testUser.workspace.newWorkspaceWithPlan('team');
+  await testUser.workspace.newWorkspaceWithPlan('plus');
   teamWorkspaceURL = testUser.page.url();
 });
 
@@ -69,9 +69,7 @@ test('check inviting readers stay in reading mode', async ({
   });
 });
 
-// We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-// Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
-test.skip('check invited collaborators can edit notebook', async ({
+test('check invited collaborators can edit notebook', async ({
   testUser,
   anotherTestUser,
 }) => {

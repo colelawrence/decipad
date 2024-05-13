@@ -19,9 +19,6 @@ on:
 jobs:
   build:
     name: 🔬 Run Smoke Tests
-    # We need to update our hack to be able to update this test, skipping for now and testing manually for the release
-    # Ticket: https://linear.app/decipad/issue/ENG-3181/update-upgrade-workspace-hack-to-actually-create-a-subscription
-    if: false
     timeout-minutes: 25
     runs-on: buildjet-4vcpu-ubuntu-2204
     concurrency:

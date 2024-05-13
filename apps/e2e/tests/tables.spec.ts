@@ -569,7 +569,7 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
   });
 
   await test.step('paste table', async () => {
-    await workspace.newWorkspaceWithPlan('team');
+    await workspace.newWorkspaceWithPlan('plus');
     await workspace.createNewNotebook();
     await randomFreeUser.aiAssistant.closePannel();
     await notebook.waitForEditorToLoad();

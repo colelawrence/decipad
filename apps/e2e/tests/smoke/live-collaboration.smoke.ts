@@ -19,7 +19,7 @@ smoketest(
 
     await smoketest.step('create team workspace', async () => {
       await userA.goToWorkspace();
-      await userA.workspace.newWorkspaceWithPlan('team');
+      await userA.workspace.newWorkspaceWithPlan('plus');
     });
 
     await smoketest.step(

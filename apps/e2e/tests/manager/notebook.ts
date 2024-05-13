@@ -1627,6 +1627,7 @@ export class Notebook {
     }
 
     await this.page.getByTestId('send-invitation').click();
+    await expect(this.page.getByText(email)).toBeVisible();
     await this.focusOnBody();
   }
 

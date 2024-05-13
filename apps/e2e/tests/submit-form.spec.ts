@@ -89,7 +89,7 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
   const originalSliderValue = '5';
   const newSliderValue = '6';
 
-  await workspace.newWorkspaceWithPlan('team');
+  await workspace.newWorkspaceWithPlan('plus');
   await workspace.createNewNotebook();
   await randomFreeUser.aiAssistant.closePannel();
   await notebook.waitForEditorToLoad();
