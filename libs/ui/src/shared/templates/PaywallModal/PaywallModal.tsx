@@ -55,7 +55,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   let modalContent: JSX.Element;
   let paywallTitle: string;
 
-  const plans = useStripePlans();
+  // this is needed while we still have active subscription on the old Pro plan
+  const plans = useStripePlans().filter((plan) => !plan.isDefault);
 
   const filteredPlans = useMemo(() => {
     return hideFreePlan ? plans.filter((plan) => plan?.key !== 'free') : plans;
