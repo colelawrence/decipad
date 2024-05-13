@@ -299,6 +299,18 @@ export const WorkspaceNavigation = ({
         <NavigationItem
           href={'http://www.decipad.com/templates'}
           key="templates"
+          onClick={() => {
+            clientEvent({
+              segmentEvent: {
+                type: 'action',
+                action: 'Templates Button Clicked',
+                props: {
+                  analytics_source: 'frontend',
+                },
+              },
+            });
+            onShowFeedback();
+          }}
         >
           <Styled.ItemWrapper>
             <Styled.IconWrapper>

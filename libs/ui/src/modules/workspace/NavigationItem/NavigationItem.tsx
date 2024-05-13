@@ -16,7 +16,7 @@ export type NavigationItemProps = {
       readonly items?: never;
       readonly isActive?: boolean;
       readonly href: string;
-      readonly onClick?: never;
+      readonly onClick?: () => void;
     }
   | {
       readonly items?: never;
