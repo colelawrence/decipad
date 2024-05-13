@@ -102,7 +102,9 @@ describe('automapTypes', () => {
   const typeId = (t: Type[]) => t[0];
 
   it('ensures that cardinality is high enough for the expectedCardinality array', async () => {
-    const error = await automapTypes(makeContext(), [t.number()], typeId, [2]);
+    const error = await automapTypes(makeContext(), [t.number()], typeId, [
+      [2],
+    ]);
     expect(error.errorCause?.spec).toMatchObject({
       errType: 'expected-but-got',
       expectedButGot: [t.column(t.anything()), t.number()],
@@ -114,11 +116,11 @@ describe('automapTypes', () => {
     const total = async ([a]: Type[]) => a.reduced();
 
     expect(
-      await automapTypes(makeContext(), [t.column(num)], total, [2])
+      await automapTypes(makeContext(), [t.column(num)], total, [[2]])
     ).toEqual(num);
 
     expect(
-      await automapTypes(makeContext(), [t.column(t.column(num))], total, [2])
+      await automapTypes(makeContext(), [t.column(t.column(num))], total, [[2]])
     ).toEqual(t.column(num));
 
     expect(
@@ -127,11 +129,11 @@ describe('automapTypes', () => {
         [t.column(num), t.column(num)],
         async ([scalar, col]: Type[]) =>
           Type.combine(scalar.isScalar('number'), col.isColumn(), str),
-        [1, 2]
+        [[1, 2]]
       )
     ).toEqual(t.column(str));
 
-    expect(automapTypes(makeContext(), [num], total, [2])).toEqual(
+    expect(automapTypes(makeContext(), [num], total, [[2]])).toEqual(
       t.impossible('A column is required')
     );
   });
@@ -139,7 +141,7 @@ describe('automapTypes', () => {
   it('Propagates errors from mapFn', async () => {
     const cond = async ([a, b, c]: Type[]) =>
       Type.combine(a.isScalar('boolean'), c.sameAs(b));
-    const card = [1, 1, 1];
+    const card = [[1, 1, 1]];
 
     expect(
       (
@@ -434,7 +436,7 @@ describe('automapValues', () => {
         [t.number(), t.number()],
         [fromJS(10), fromJS(1)],
         combine,
-        [1, 1]
+        [[1, 1]]
       );
 
       expect(await materializeOneResult(result.getData())).toEqual('101');
@@ -448,7 +450,7 @@ describe('automapValues', () => {
         [t.column(t.number())],
         [values],
         sumOne,
-        [2]
+        [[2]]
       );
 
       expect(await materializeOneResult(result.getData())).toEqual(N(7));
@@ -466,7 +468,7 @@ describe('automapValues', () => {
         [t.column(t.column(t.number()))],
         [deepValues],
         sumOne,
-        [2]
+        [[2]]
       );
 
       expect(await materializeOneResult(result.getData())).toEqual([7, 56]);
@@ -489,7 +491,7 @@ describe('automapValues', () => {
 
           return fromJS(v2.map((v) => v.add(v1)));
         },
-        [1, 2]
+        [[1, 2]]
       );
 
       expect(calls).toEqual([
@@ -534,7 +536,7 @@ describe('automapValues', () => {
                 [t.column(t.string(), 'Dimone'), t.column(t.number())],
                 [fromJS(['A', 'B']), fromJS([1, 2, 3])],
                 combine,
-                [1, 1]
+                [[1, 1]]
               )
             ).getData()
           )
@@ -567,7 +569,7 @@ describe('automapValues', () => {
                 ],
                 [fromJS(['A', 'B']), fromJS('-'), fromJS([1, 2, 3])],
                 combine,
-                [1, 1, 1]
+                [[1, 1, 1]]
               )
             ).getData()
           )
@@ -600,7 +602,7 @@ describe('automapValues', () => {
                 ],
                 [fromJS(['A']), fromJS([1, 2]), fromJS(['a', 'b', 'c'])],
                 combine,
-                [1, 1, 1]
+                [[1, 1, 1]]
               )
             ).getData()
           )
@@ -635,7 +637,7 @@ describe('automapValues', () => {
                 ],
                 [fromJS(['A', 'B']), fromJS([',', ';']), fromJS([1, 2])],
                 combine,
-                [1, 1, 1]
+                [[1, 1, 1]]
               )
             ).getData()
           )
@@ -676,7 +678,7 @@ describe('automapValues', () => {
                 ]),
               ],
               combine,
-              [1, 1]
+              [[1, 1]]
             )
           ).getData()
         )
@@ -752,7 +754,7 @@ describe('automapValues', () => {
     const ctx = makeContext();
     const hc = await automapValues(ctx, [type], [value], mapFn);
 
-    await hc.getData(); // trigger lazy execution
+    await materializeOneResult(hc.getData()); // trigger lazy execution
 
     expect(mapFn).toHaveBeenCalledWith([reducedValue], [reducedType], ctx);
   });

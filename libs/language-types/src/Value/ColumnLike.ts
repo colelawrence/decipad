@@ -24,6 +24,7 @@ export const getColumnLike = (
   message = 'panic: expected column-like value'
 ): ColumnLikeValue => {
   if (!isColumnLike(thing)) {
+    console.error('expected column-like value', thing);
     throw new Error(message);
   }
   return thing;

@@ -749,6 +749,79 @@ ${'' /* Get capital needed */}
     expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 
+  test('Works with one table dimensions', async () => {
+    const [result, time] = await runAndMeasure(async () =>
+      runCode(
+        `
+          Cars = {}
+          Cars.Type = ["Electric", "Hybrid"]
+
+          Purchase = {}
+          Purchase.CarType = Cars.Type
+          Purchase.Cost = [100, 200]
+
+          Maintenance = {}
+          Maintenance.CarType = Cars.Type
+          Maintenance.Cost = [10, 20]
+
+          Purchase.Cost + Maintenance.Cost
+        `
+      )
+    );
+
+    expect(result).toMatchObject({
+      value: [N(110), N(220)],
+      type: {
+        indexedBy: 'Purchase',
+        cellType: {
+          indexedBy: 'Maintenance',
+          type: 'number',
+        },
+      },
+    });
+
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+  });
+
+  test('Simpler version of cars with table column assigns', async () => {
+    const [result, time] = await runAndMeasure(async () =>
+      runCode(
+        `
+          Cars = {}
+          Cars.Type = ["Electric", "Hybrid"]
+
+          Countries = {}
+          Countries.Name = ["Atlantis", "Wakanda"]
+          Countries.Tax = [1, 2]
+
+          Purchase = {}
+          Purchase.CarType = Cars.Type
+          Purchase.Cost = [100, 200]
+
+          Purchase.Cost + Countries.Tax
+        `
+      )
+    );
+
+    expect(result).toMatchObject({
+      value: [
+        [N(101), N(102)],
+        [N(201), N(202)],
+      ],
+      type: {
+        indexedBy: 'Purchase',
+        cellType: {
+          indexedBy: 'Countries',
+          cellType: {
+            type: 'number',
+          },
+        },
+      },
+    });
+
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+  });
+
   test('Cars with table column assigns', async () => {
     const [result, time] = await runAndMeasure(async () =>
       runCode(
@@ -1811,6 +1884,397 @@ describe('previous', () => {
             "n": 50n,
             "s": 1n,
           },
+        ],
+      }
+    `);
+  });
+});
+
+describe('multi-dim ops', () => {
+  it('works with multi-dim ops (1)', async () => {
+    const result = await runCode(`
+      Table = {
+        A = [1, 2, 3] bananas
+        B = [4, 5, 6] oranges
+      }
+      
+      Table.A / Table.B`);
+
+    expect(result).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": Array [
+              Object {
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": false,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "bananas",
+              },
+              Object {
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": -1n,
+                },
+                "known": false,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "oranges",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgNames": undefined,
+          "functionBody": undefined,
+          "functionName": undefined,
+          "functionScopeDepth": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Table",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "tree": undefined,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 4n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 5n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 2n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('works with multi-dim ops (2)', async () => {
+    const result = await runCode(`
+      Cars = {
+        Type = ["suv", "hybrid", "standard"],
+        FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
+      }
+      BaseFuelPrice = 4 USD/gallon
+      Fuel = {
+        Year = [date(2020) .. date(2025) by year],
+        InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
+        Price = round(BaseFuelPrice * InterestRateFromYear, 2)
+      }
+      EstimatedUsage = 100000 miles
+      GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage
+      DollarsSpentPerYear = Fuel.Price * GallonsSpent
+      `);
+
+    expect(result).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": 2,
+          "cellType": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgNames": undefined,
+              "functionBody": undefined,
+              "functionName": undefined,
+              "functionScopeDepth": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "Fuel",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "tree": undefined,
+              "type": "number",
+              "unit": Array [
+                Object {
+                  "baseQuantity": "USD",
+                  "baseSuperQuantity": "currency",
+                  "exp": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
+                  "known": true,
+                  "multiplier": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
+                  "unit": "USD",
+                },
+              ],
+              Symbol(immer-draftable): true,
+            },
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Cars",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": null,
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgNames": undefined,
+          "functionBody": undefined,
+          "functionName": undefined,
+          "functionScopeDepth": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Fuel",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "tree": undefined,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 400000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 9n,
+              "infinite": false,
+              "n": 80000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 7n,
+              "infinite": false,
+              "n": 100000n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 432000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 9600n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 7n,
+              "infinite": false,
+              "n": 108000n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 467000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 9n,
+              "infinite": false,
+              "n": 93400n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 7n,
+              "infinite": false,
+              "n": 116750n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 504000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 11200n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 18000n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 544000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 9n,
+              "infinite": false,
+              "n": 108800n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 7n,
+              "infinite": false,
+              "n": 136000n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 23n,
+              "infinite": false,
+              "n": 588000n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 3n,
+              "infinite": false,
+              "n": 39200n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 21000n,
+              "s": 1n,
+            },
+          ],
         ],
       }
     `);

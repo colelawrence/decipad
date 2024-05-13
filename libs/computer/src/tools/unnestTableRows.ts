@@ -1,10 +1,14 @@
 // eslint-disable-next-line no-restricted-imports
 import type { Result } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
-import { deserializeType, serializeType, Dimension } from '@decipad/language';
+import {
+  deserializeType,
+  serializeType,
+  Dimension,
+  getResultGenerator,
+} from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
-import { getResultGenerator } from '../utils';
 import type { DimensionExplanation } from '../types';
 
 export type LabelInfo = {

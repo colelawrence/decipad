@@ -46,8 +46,9 @@ export const makeRecursiveTreeValue = async (
   // create all the children slices, which will later constitute the children nodes
   const childrenSlices = await Promise.all(
     slicesMap.map(async ([start, end]) => {
-      const slicedFirstColumn = Value.Column.fromGenerator(() =>
-        firstColumn.values(start, end + 1)
+      const slicedFirstColumn = Value.Column.fromGenerator(
+        () => firstColumn.values(start, end + 1),
+        'makeRecursiveTreeValue'
       );
       return {
         root: (await firstSortedColumn.atIndex(start)) ?? Value.UnknownValue,
@@ -61,7 +62,10 @@ export const makeRecursiveTreeValue = async (
         ),
         // slices each column to the corresponding slice in the first column:
         childColumns: restSortedColumns.map((column) =>
-          Value.Column.fromGenerator(() => column.values(start, end + 1))
+          Value.Column.fromGenerator(
+            () => column.values(start, end + 1),
+            'makeRecursiveTreeValue'
+          )
         ),
         originalCardinality: end - start + 1,
       };

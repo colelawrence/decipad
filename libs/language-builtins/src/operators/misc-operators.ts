@@ -28,7 +28,8 @@ export const miscOperators: Record<string, BuiltinSpec> = {
   contains: {
     ...overloadBuiltin('contains', 2, [
       {
-        argTypes: ['range', 'number'],
+        argCount: 2,
+        argCardinalities: [[1, 1]],
         fnValues: async ([a, b]) => {
           const [aStart, aEnd] = (await a.getData()) as DeciNumber[];
           const bNumber = getInstanceof(await b.getData(), DeciNumber);
@@ -45,7 +46,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
           ),
       },
       {
-        argTypes: ['date', 'date'],
+        argCount: 2,
         fnValues: async ([a, b]) => {
           const [[aDate, aEndDate], [bDate, bEndDate]] = await Promise.all(
             [a, b].map(extractDateValues)
@@ -63,7 +64,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
           Type.combine(a.isDate(), b.isDate(), t.boolean()),
       },
       {
-        argTypes: ['range', 'date'],
+        argCount: 2,
         fnValues: async ([rangeV, dateD]) => {
           const { start, end } = getInstanceof(rangeV, Value.Range);
           const [[startDate], [endDate]] = await Promise.all(

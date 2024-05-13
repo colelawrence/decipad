@@ -8,7 +8,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {
     noAutoconvert: true,
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: async ([nums]) => {
       let acc = 0;
@@ -39,7 +39,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   sumif: {
     argCount: 2,
     noAutoconvert: true,
-    argCardinalities: [2, 2],
+    argCardinalities: [[2, 2]],
     fnValues: async ([numbers, bools]: Value.Value[]) => {
       if (!Value.isColumnLike(numbers)) {
         return numbers;

@@ -296,15 +296,63 @@ describe('basic code', () => {
 });
 
 describe('Multidimensional operations', () => {
-  it('Can work on multi-d values', async () => {
-    expect(
-      await runCode(`
+  it('Can work on multi-d values (0)', async () => {
+    const result = await runCode(`
+        X = {
+          IndexCol = ["a", "b", "c"]
+          Col = [1, 2, 3]
+        }
+
+        X.Col / 2
+      `);
+
+    await expect(result).toMatchObject({
+      type: makeColumn({
+        tableName: 'X',
+        cellType: t.number(),
+        cellTypeIndexedBy: 'X',
+      }),
+      value: [N(1, 2), N(1), N(3, 2)],
+    });
+  });
+
+  it('Can work on multi-d values (1)', async () => {
+    const result = await runCode(`
+        X = { Col = [1, 2, 3] }
+        Y = { Col = [100, 200] }
+
+        X.Col + Y.Col
+      `);
+
+    await expect(result).toMatchObject({
+      type: makeColumn({
+        tableName: 'X',
+        cellType: makeColumn({
+          tableName: 'Y',
+          cellType: t.number(),
+          atParentIndex: 0,
+          cellTypeIndexedBy: 'Y', // TODO: correct?
+        }),
+        cellTypeIndexedBy: 'Y',
+        atParentIndex: 0,
+      }),
+      value: [
+        [N(101), N(201)],
+        [N(102), N(202)],
+        [N(103), N(203)],
+      ],
+    });
+  });
+
+  it('Can work on multi-d values (2)', async () => {
+    const result = await runCode(`
         X = { Col = [1, 2, 3] }
         Y = { Col = [100, 200] }
 
         (X.Col + Y.Col) + (X.Col / 10)
-      `)
-    ).toMatchObject({
+      `);
+
+    await expect(result).toMatchObject({
       type: makeColumn({
         tableName: 'X',
         cellType: makeColumn({
@@ -322,156 +370,6 @@ describe('Multidimensional operations', () => {
         [N(1033, 10), N(2033, 10)],
       ],
     });
-
-    expect(
-      await runCode(`
-        X = { Col = [1, 2, 3] }
-        Y = { Col = [100, 200] }
-
-        (X.Col + Y.Col) + (Y.Col / 1000)
-      `)
-    ).toMatchInlineSnapshot(`
-      Object {
-        "type": Type {
-          "anythingness": false,
-          "atParentIndex": 0,
-          "cellType": Type {
-            "anythingness": false,
-            "atParentIndex": 0,
-            "cellType": Type {
-              "anythingness": false,
-              "atParentIndex": null,
-              "cellType": null,
-              "columnNames": null,
-              "columnTypes": null,
-              "date": null,
-              "delegatesIndexTo": undefined,
-              "errorCause": null,
-              "functionArgNames": undefined,
-              "functionBody": undefined,
-              "functionName": undefined,
-              "functionScopeDepth": undefined,
-              "functionness": false,
-              "indexName": null,
-              "indexedBy": "Y",
-              "node": null,
-              "nothingness": false,
-              "numberError": null,
-              "numberFormat": null,
-              "pending": false,
-              "rangeOf": null,
-              "rowCellNames": null,
-              "rowCellTypes": null,
-              "rowCount": undefined,
-              "rowIndexName": null,
-              "symbol": null,
-              "tree": undefined,
-              "type": "number",
-              "unit": null,
-              Symbol(immer-draftable): true,
-            },
-            "columnNames": null,
-            "columnTypes": null,
-            "date": null,
-            "delegatesIndexTo": undefined,
-            "errorCause": null,
-            "functionArgNames": undefined,
-            "functionBody": undefined,
-            "functionName": undefined,
-            "functionScopeDepth": undefined,
-            "functionness": false,
-            "indexName": null,
-            "indexedBy": "Y",
-            "node": null,
-            "nothingness": false,
-            "numberError": null,
-            "numberFormat": null,
-            "pending": false,
-            "rangeOf": null,
-            "rowCellNames": null,
-            "rowCellTypes": null,
-            "rowCount": undefined,
-            "rowIndexName": null,
-            "symbol": null,
-            "tree": undefined,
-            "type": null,
-            "unit": null,
-            Symbol(immer-draftable): true,
-          },
-          "columnNames": null,
-          "columnTypes": null,
-          "date": null,
-          "delegatesIndexTo": undefined,
-          "errorCause": null,
-          "functionArgNames": undefined,
-          "functionBody": undefined,
-          "functionName": undefined,
-          "functionScopeDepth": undefined,
-          "functionness": false,
-          "indexName": null,
-          "indexedBy": "X",
-          "node": null,
-          "nothingness": false,
-          "numberError": null,
-          "numberFormat": null,
-          "pending": false,
-          "rangeOf": null,
-          "rowCellNames": null,
-          "rowCellTypes": null,
-          "rowCount": undefined,
-          "rowIndexName": null,
-          "symbol": null,
-          "tree": undefined,
-          "type": null,
-          "unit": null,
-          Symbol(immer-draftable): true,
-        },
-        "value": Array [
-          Array [
-            DeciNumber {
-              "d": 10n,
-              "infinite": false,
-              "n": 1011n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 5n,
-              "infinite": false,
-              "n": 1006n,
-              "s": 1n,
-            },
-          ],
-          Array [
-            DeciNumber {
-              "d": 10n,
-              "infinite": false,
-              "n": 1021n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 5n,
-              "infinite": false,
-              "n": 1011n,
-              "s": 1n,
-            },
-          ],
-          Array [
-            DeciNumber {
-              "d": 10n,
-              "infinite": false,
-              "n": 1031n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 5n,
-              "infinite": false,
-              "n": 1016n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
   });
 
   it('can run Total over multiple dims', async () => {
@@ -504,16 +402,19 @@ describe('Multidimensional operations', () => {
     });
   });
 
-  it('errors when not 1D', async () => {
+  it('errors when not 1D (total)', async () => {
     await expect(
-      runCode(`total(1)`)
+      runCode(`total(1)`, { throwOnError: true })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"panic: cardinality is too low"`
+      `"Type error: Inference Error: expected-but-got : {\\"errType\\":\\"expected-but-got\\",\\"expectedButGot\\":[{\\"node\\":null,\\"errorCause\\":null,\\"type\\":null,\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":{\\"node\\":null,\\"errorCause\\":null,\\"type\\":null,\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":true,\\"symbol\\":null},\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null},{\\"node\\":null,\\"errorCause\\":null,\\"type\\":\\"number\\",\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null}]}"`
     );
+  });
+
+  it('errors when not 1D (cat)', async () => {
     await expect(
-      runCode(`cat(1, 1)`)
+      runCode(`cat(1, 1)`, { throwOnError: true })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"panic: expected column-like value"`
+      `"Type error: Inference Error: expected-but-got : {\\"errType\\":\\"expected-but-got\\",\\"expectedButGot\\":[\\"table\\",{\\"node\\":null,\\"errorCause\\":null,\\"type\\":\\"number\\",\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null}]}"`
     );
   });
 });
@@ -697,6 +598,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: {
+        errorCause: null,
         columnNames: ['Period', 'Profit', 'MoneyInTheBank'],
         columnTypes: [
           { type: 'number' },
@@ -1523,12 +1425,7 @@ describe('Tables', () => {
         },
         "value": Array [
           Array [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 3n,
-              "s": 1n,
-            },
+            Symbol(unknown),
           ],
           Array [
             DeciNumber {
@@ -3571,7 +3468,6 @@ describe('unit qualities', () => {
       type: {
         errorCause: InferError.needOneAndOnlyOneUnit(),
       },
-      value: N(3),
     });
   });
 

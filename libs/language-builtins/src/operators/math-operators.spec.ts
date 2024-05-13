@@ -13,7 +13,8 @@ describe('math operators', () => {
       await (operators.max as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toEqual(Value.fromJS(4));
   });
@@ -23,7 +24,8 @@ describe('math operators', () => {
       await (operators.min as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toEqual(Value.fromJS(2));
   });
@@ -33,7 +35,8 @@ describe('math operators', () => {
       await (operators.average as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toEqual(Value.fromJS(3));
   });
@@ -51,7 +54,8 @@ describe('math operators', () => {
       await (operators.averageif as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([1, 2, 3]), Value.fromJS([true, false, true])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toMatchInlineSnapshot(`
       NumberValue {
@@ -70,14 +74,16 @@ describe('math operators', () => {
       await (operators.median as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([3, 4, 2])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toEqual(Value.fromJS(3));
     expect(
       await (operators.median as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([3, 4, 2, 5])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toEqual(Value.fromJS(3.5));
   });

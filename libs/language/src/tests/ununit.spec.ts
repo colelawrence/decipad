@@ -306,7 +306,7 @@ it('should throw error when un-uniting non numbers', async () => {
         "unit": null,
         Symbol(immer-draftable): true,
       },
-      "value": "not a number",
+      "value": Symbol(unknown),
     }
   `);
 });

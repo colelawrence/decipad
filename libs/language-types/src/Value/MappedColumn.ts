@@ -8,6 +8,7 @@ import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { columnValueToValueGeneratorFunction } from './columnValueToValueGeneratorFunction';
 import { lowLevelGet } from './lowLevelGet';
+import { once } from '@decipad/utils';
 
 export class MappedColumn
   extends MappedColumnBase<Value>
@@ -30,14 +31,10 @@ export class MappedColumn
   async dimensions() {
     const contents = first(this.values());
 
-    if (isColumnLike(contents)) {
-      return [
-        { dimensionLength: await this.rowCount() },
-        ...(await contents.dimensions()),
-      ];
-    } else {
-      return [{ dimensionLength: await this.rowCount() }];
-    }
+    return [
+      { dimensionLength: once(async () => this.rowCount()) },
+      ...(isColumnLike(contents) ? await contents.dimensions() : []),
+    ];
   }
 
   static fromColumnValueAndMap(
@@ -45,7 +42,10 @@ export class MappedColumn
     map: number[]
   ): MappedColumn {
     return new MappedColumn(
-      Column.fromGenerator(columnValueToValueGeneratorFunction(column)),
+      Column.fromGenerator(
+        columnValueToValueGeneratorFunction(column),
+        `MappedColumn`
+      ),
       map
     );
   }

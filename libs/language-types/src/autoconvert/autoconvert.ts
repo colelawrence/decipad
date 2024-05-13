@@ -1,5 +1,5 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
-import { ONE } from '@decipad/number';
+import DeciNumber, { ONE } from '@decipad/number';
 import type { Unit } from '@decipad/language-units';
 import {
   contractUnits,
@@ -8,9 +8,12 @@ import {
 } from '@decipad/language-units';
 import type { ContextUtils } from '../ContextUtils';
 import type { Value } from '../Value';
-import { NumberValue } from '../Value';
-import { type Type } from '../Type';
+import { FMappedColumn, NumberValue } from '../Value';
+import { serializeType, type Type } from '../Type';
 import { automapValues } from '../Dimension';
+import { isColumnLike } from '@decipad/column';
+import { getResultGenerator } from '../utils';
+import stringify from 'json-stringify-safe';
 
 type TypeAndValue = [Type, Value];
 
@@ -27,12 +30,22 @@ async function autoconvertArgument(
       ctx,
       [type],
       [value],
-      ([value]) => {
-        if (value instanceof NumberValue) {
-          return NumberValue.fromValue(expander(value.value));
+      async ([value], [type]) => {
+        if (isColumnLike(value)) {
+          return FMappedColumn.fromGeneratorAndType(
+            getResultGenerator(await value.getData()),
+            serializeType(await type.reduced()),
+            async (value) => expander(getInstanceof(value, DeciNumber)),
+            `autoconvertArgument<${stringify(serializeType(type))}>`
+          );
+        } else if (value instanceof NumberValue) {
+          const n = value.value;
+          const expanded = expander(n);
+          return NumberValue.fromValue(expanded);
         }
-        return value;
-      }
+        throw new Error('panic: unreachable');
+      },
+      [[1]]
     );
     return [type, expandedValues];
   }
@@ -109,17 +122,33 @@ const crossBaseConvert = async (
 export async function autoconvertResult(
   ctx: ContextUtils,
   value: Value,
-  type: Type
+  type: Type,
+  fName: string
 ): Promise<Value> {
   const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, contractor] = contractUnits(getDefined(typeLowestDims.unit));
-    return automapValues(ctx, [type], [value], ([value]) => {
-      if (value instanceof NumberValue) {
-        return NumberValue.fromValue(contractor(value.value));
-      }
-      return value;
-    });
+    return automapValues(
+      ctx,
+      [type],
+      [value],
+      async ([value], [type]) => {
+        if (isColumnLike(value)) {
+          return FMappedColumn.fromGeneratorAndType(
+            getResultGenerator(await value.getData()),
+            serializeType(await type.reduced()),
+            async (value) => contractor(getInstanceof(value, DeciNumber)),
+            `autoconvertResult<${fName}(type: ${stringify(
+              serializeType(type)
+            )}, value: ${stringify(value)})>`
+          );
+        } else if (value instanceof NumberValue) {
+          return NumberValue.fromValue(contractor(value.value));
+        }
+        throw new Error('panic: unreachable');
+      },
+      [[1]]
+    );
   }
   return value;
 }

@@ -41,7 +41,10 @@ export const fromJS = (thing: FromJSArg, defaultValue?: Value): Value => {
     throw new TypeError(`invalid result ${thing?.toString()}`);
   }
   if (typeof thing === 'function') {
-    return Column.fromGenerator(thing as ValueGeneratorFunction);
+    return Column.fromGenerator(
+      thing as ValueGeneratorFunction,
+      `fromJS(${thing.toString()})`
+    );
   }
   if (thing instanceof FunctionValue) {
     return thing;

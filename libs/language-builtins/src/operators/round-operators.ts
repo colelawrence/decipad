@@ -12,28 +12,28 @@ import {
   Value,
 } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
-import type { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, Evaluator, FullBuiltinSpec } from '../interfaces';
 
 const roundNumberFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));
 
 const roundDateFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
-  (await Type.combine(precision.isScalar('number'), n.isDate())).mapType(
-    (t) => {
-      if (!precision.unit || precision.unit.length !== 1) {
-        return t.withErrorCause(`round: invalid time unit`);
-      }
-      const unitName = singular(precision.unit[0].unit.toLocaleLowerCase());
-      if (!Time.isTimeSpecificity(unitName)) {
-        return t.withErrorCause(`round: invalid time unit ${unitName}`);
-      }
-
-      return produce(t, (time) => {
-        time.date = unitName;
-        return time;
-      });
+  (
+    await Type.combine(precision?.isScalar('number') ?? n.isDate(), n.isDate())
+  ).mapType((t) => {
+    if (!precision.unit || precision.unit.length !== 1) {
+      return t.withErrorCause(`round: invalid time unit`);
     }
-  );
+    const unitName = singular(precision.unit[0].unit.toLocaleLowerCase());
+    if (!Time.isTimeSpecificity(unitName)) {
+      return t.withErrorCause(`round: invalid time unit ${unitName}`);
+    }
+
+    return produce(t, (time) => {
+      time.date = unitName;
+      return time;
+    });
+  });
 
 const roundWrap = (
   round: (f: DeciNumber, decimalPrecisionValue: DeciNumber) => DeciNumber
@@ -59,6 +59,23 @@ const roundWrap = (
   };
 };
 
+const roundDateFnValues: Evaluator = async ([date], types) => {
+  const d = await date.getData();
+  if (typeof d !== 'bigint' && typeof d !== 'number') {
+    throw new Error(`Expected date to be number or bigint and was ${typeof d}`);
+  }
+  const [, precision] = types ?? [];
+  const unitName = singular(
+    precision?.unit?.[0]?.unit?.toLocaleLowerCase() ?? ''
+  );
+  if (!Time.isTimeSpecificity(unitName)) {
+    throw new Error(
+      `Expected unit name to be time precision and was ${unitName}`
+    );
+  }
+  return Value.DateValue.fromDateAndSpecificity(d, unitName);
+};
+
 const roundNumber = (n: DeciNumber, decimalPlaces: DeciNumber) =>
   n.round(decimalPlaces);
 
@@ -69,36 +86,28 @@ export const roundOperators: Record<string, BuiltinSpec> = {
       [1, 2],
       [
         {
-          argTypes: ['number', 'number'],
+          argCount: 1,
+          argCardinalities: [[1]],
           functor: roundNumberFunctor,
           fnValues: roundWrap(roundNumber),
         },
         {
-          argTypes: ['number'],
+          argCount: 2,
+          argCardinalities: [[1, 1]],
           functor: roundNumberFunctor,
           fnValues: roundWrap(roundNumber),
         },
         {
-          argTypes: ['date', 'number'],
+          argCount: 1,
+          argCardinalities: [[1]],
           functor: roundDateFunctor,
-          fnValues: async ([date], types) => {
-            const d = await date.getData();
-            if (typeof d !== 'bigint' && typeof d !== 'number') {
-              throw new Error(
-                `Expected date to be number or bigint and was ${typeof d}`
-              );
-            }
-            const [, precision] = types ?? [];
-            const unitName = singular(
-              precision?.unit?.[0]?.unit?.toLocaleLowerCase() ?? ''
-            );
-            if (!Time.isTimeSpecificity(unitName)) {
-              throw new Error(
-                `Expected unit name to be time precision and was ${unitName}`
-              );
-            }
-            return Value.DateValue.fromDateAndSpecificity(d, unitName);
-          },
+          fnValuesNoAutomap: roundDateFnValues,
+        },
+        {
+          argCount: 2,
+          argCardinalities: [[1, 1]],
+          functor: roundDateFunctor,
+          fnValuesNoAutomap: roundDateFnValues,
         },
       ]
     ),

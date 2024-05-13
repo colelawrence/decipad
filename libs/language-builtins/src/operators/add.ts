@@ -1,0 +1,50 @@
+import type DeciNumber from '@decipad/number';
+import { ONE } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import type { Result } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Type, Value } from '@decipad/language-types';
+import { overloadBuiltin } from '../overloadBuiltin';
+import { dateOverloads } from '../dateOverloads';
+import { coherceToFraction } from '../utils/coherceToFraction';
+import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
+import type { FullBuiltinSpec } from '../interfaces';
+import { binopBuiltin } from '../utils/binopBuiltin';
+import { binopFunctor } from '../utils/binopFunctor';
+
+const addPrimitive = async (
+  n1: Result.OneResult,
+  n2: Result.OneResult,
+  types: Type[]
+): Promise<DeciNumber> => {
+  if (secondArgIsPercentage(types)) {
+    return coherceToFraction(n1).mul(coherceToFraction(n2).add(ONE));
+  }
+
+  return coherceToFraction(n1).add(coherceToFraction(n2));
+};
+
+export const add: FullBuiltinSpec = overloadBuiltin(
+  '+',
+  2,
+  [
+    ...binopBuiltin('+', {
+      primitiveFunctor: binopFunctor,
+      primitiveReverseFunctor: binopFunctor,
+      primitiveEval: addPrimitive,
+      primitiveReverseEval: addPrimitive,
+    }),
+    {
+      argCount: 2,
+      argCardinalities: [[1, 1]],
+      fnValues: async ([n1, n2]) =>
+        Value.Scalar.fromValue(
+          String(await n1.getData()) + String(await n2.getData())
+        ),
+      functor: async ([a, b]) =>
+        Type.combine(a.isScalar('string'), b.isScalar('string')),
+    },
+    ...dateOverloads['+'],
+  ],
+  'infix'
+);

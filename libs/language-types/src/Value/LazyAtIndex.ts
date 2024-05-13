@@ -1,9 +1,14 @@
 import { getDefined } from '@decipad/utils';
-import { materialize } from '../utils/materialize';
 import type { ColumnLikeValue } from './ColumnLike';
 import { values } from '../utils/values';
 import type { Value } from './Value';
 import type { OneResult } from '../Result';
+import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
+import { isLowLevelMinimalTensor } from '../utils/isLowLevelMinimalTensor';
+import { getDimensionLength } from '../utils/getDimensionLength';
+import { projectHypercube } from '../utils/projectHypercube';
+
+type TLazyAtIndex = ColumnLikeValue & LowLevelMinimalTensor;
 
 /**
  * Used to lazily lookup into a hypercube
@@ -15,7 +20,7 @@ import type { OneResult } from '../Result';
  *
  * new LazyAtIndex(hc, 1) // -> [69, 420]
  */
-class LazyAtIndex implements ColumnLikeValue {
+class LazyAtIndex implements TLazyAtIndex {
   index: number;
   innerHC: ColumnLikeValue;
 
@@ -36,6 +41,12 @@ class LazyAtIndex implements ColumnLikeValue {
     return this.innerHC.lowLevelGet(this.index, ...indices);
   }
 
+  async lowLowLevelGet(...indices: number[]): Promise<OneResult> {
+    return isLowLevelMinimalTensor(this.innerHC)
+      ? this.innerHC.lowLowLevelGet(this.index, ...indices)
+      : (await this.innerHC.lowLevelGet(this.index, ...indices)).getData();
+  }
+
   values(start = 0, end = Infinity): AsyncGenerator<Value> {
     return values(this, start, end);
   }
@@ -45,7 +56,7 @@ class LazyAtIndex implements ColumnLikeValue {
       (await this.dimensions())[0],
       'panic: getting row count from non-dimensional value'
     );
-    return firstDim.dimensionLength;
+    return getDimensionLength(firstDim.dimensionLength);
   }
 
   async atIndex(i: number): Promise<Value> {
@@ -57,7 +68,7 @@ class LazyAtIndex implements ColumnLikeValue {
   }
 
   async getData(): Promise<OneResult> {
-    return materialize(this);
+    return projectHypercube(this);
   }
 }
 

@@ -16,6 +16,7 @@ export * from './memoizing';
 export * from './observe';
 export * from './one';
 export * from './queuedGen';
+export * from './trace';
 export * from './transform';
 export * from './unzip';
 export * from './skip';

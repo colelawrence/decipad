@@ -8,7 +8,7 @@ import { tree } from './tree';
 describe('tree', () => {
   it('needs a table as first arg', async () => {
     await expect(
-      tree.fnValuesNoAutomap?.([], [], makeContext())
+      tree.fnValuesNoAutomap?.([], [], makeContext(), [])
     ).rejects.toThrow(
       'panic: getInstanceof expected an instance of Table and got undefined'
     );
@@ -19,7 +19,8 @@ describe('tree', () => {
       tree.fnValuesNoAutomap?.(
         [Value.BooleanValue.fromValue(true)],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).rejects.toThrow(
       'panic: getInstanceof expected an instance of Table and got BooleanValue'
@@ -31,7 +32,8 @@ describe('tree', () => {
       await tree.fnValuesNoAutomap?.(
         [Value.Table.fromMapping({})],
         [],
-        makeContext()
+        makeContext(),
+        []
       ),
       Value.Tree
     );
@@ -56,7 +58,8 @@ describe('tree', () => {
             columnNames: ['a'],
           }),
         ],
-        makeContext()
+        makeContext(),
+        []
       ),
       Value.Tree
     );
@@ -94,7 +97,8 @@ describe('tree', () => {
             columnNames: ['a'],
           }),
         ],
-        makeContext()
+        makeContext(),
+        []
       ),
       Value.Tree
     );
@@ -135,7 +139,8 @@ describe('tree', () => {
             columnNames: ['a', 'b'],
           }),
         ],
-        makeContext()
+        makeContext(),
+        []
       ),
       Value.Tree
     );
@@ -200,7 +205,8 @@ describe('tree', () => {
             columnNames: ['a', 'b', 'c'],
           }),
         ],
-        makeContext()
+        makeContext(),
+        []
       ),
       Value.Tree
     );

@@ -4,6 +4,8 @@ import { implementColumnLike } from '../utils';
 import type { ColumnLikeValue, MinimalTensor } from '../Value';
 import type { Dimension } from './Dimension';
 import { chooseFirst, undoChooseFirst } from './chooseFirst';
+import type { LowLevelMinimalTensor } from '../Value/LowLevelMinimalTensor';
+import { isLowLevelMinimalTensor } from '../utils/isLowLevelMinimalTensor';
 
 /**
  * Swaps a dimension like so (pseudocode):
@@ -23,7 +25,7 @@ import { chooseFirst, undoChooseFirst } from './chooseFirst';
  * ]
  */
 const SwappedDimensions = implementColumnLike(
-  class SwappedDimensions implements MinimalTensor {
+  class SwappedDimensions implements LowLevelMinimalTensor {
     unswappedHC: ColumnLikeValue;
 
     _dimensions: Dimension[] | undefined;
@@ -47,6 +49,18 @@ const SwappedDimensions = implementColumnLike(
       return this.unswappedHC.lowLevelGet(
         ...undoChooseFirst(this.dominantDimensionIndex, indices)
       );
+    }
+
+    async lowLowLevelGet(...indices: number[]) {
+      return isLowLevelMinimalTensor(this.unswappedHC)
+        ? this.unswappedHC.lowLowLevelGet(
+            ...undoChooseFirst(this.dominantDimensionIndex, indices)
+          )
+        : (
+            await this.unswappedHC.lowLevelGet(
+              ...undoChooseFirst(this.dominantDimensionIndex, indices)
+            )
+          ).getData();
     }
   }
 );

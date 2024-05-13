@@ -135,7 +135,7 @@ describe('contract operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": true,
+        "value": Symbol(unknown),
       }
     `);
   });

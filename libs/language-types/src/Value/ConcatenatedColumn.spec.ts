@@ -4,6 +4,7 @@ import { createConcatenatedColumn } from './ConcatenatedColumn';
 import { jsCol } from '../Dimension/testUtils';
 import { FilteredColumn } from './FilteredColumn';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
+import { getDimensionLength } from '../utils/getDimensionLength';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -40,11 +41,17 @@ describe('ConcatenatedColumn', () => {
       ]
     `);
 
-    expect((await (await concatenated).dimensions())[0]).toMatchInlineSnapshot(`
-          Object {
-            "dimensionLength": 3,
-          }
-      `);
+    expect(
+      await Promise.all(
+        (
+          await (await concatenated).dimensions()
+        ).map(async (d) => getDimensionLength(d.dimensionLength))
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        3,
+      ]
+    `);
   });
 
   it('can map the index to the source index', async () => {

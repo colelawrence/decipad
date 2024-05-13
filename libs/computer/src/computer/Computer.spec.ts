@@ -7,6 +7,7 @@ import {
   buildType as t,
   astNode,
   parseBlockOrThrow,
+  getResultGenerator,
 } from '@decipad/language';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { AnyMapping } from '@decipad/utils';
@@ -20,7 +21,6 @@ import {
   simplifyComputeResponse,
 } from '../testUtils';
 import type { ColumnDesc, ComputeRequestWithExternalData } from '../types';
-import { getResultGenerator } from '../utils';
 import { Computer } from './Computer';
 
 setupDeciNumberSnapshotSerializer();

@@ -7,9 +7,10 @@ import {
   Type,
   Unknown,
   buildType as t,
+  isDateType,
 } from '@decipad/language-types';
-import type { OverloadedBuiltinSpec } from './overloadBuiltin';
 import { getDefined, getInstanceof } from '@decipad/utils';
+import type { OverloadSpec } from './overloadBuiltin';
 
 export const addDateAndTimeQuantity = async (
   date: Value.DateValue,
@@ -47,27 +48,29 @@ export const dateAndTimeQuantityFunctor = async ([
   );
 
 export const subtractDatesFunctor = async ([t1, t2]: Type[]) => {
-  const d1Specificity = getDefined(t1.date);
-  const d2Specificity = getDefined(t2.date);
+  if (isDateType(t1) && isDateType(t2)) {
+    const d1Specificity = getDefined(t1.date);
+    const d2Specificity = getDefined(t2.date);
 
-  if (Time.cmpSpecificities(d1Specificity, d2Specificity) !== 0) {
-    return t.impossible(
-      InferError.mismatchedSpecificity(d1Specificity, d2Specificity)
+    if (Time.cmpSpecificities(d1Specificity, d2Specificity) !== 0) {
+      return t.impossible(
+        InferError.mismatchedSpecificity(d1Specificity, d2Specificity)
+      );
+    }
+    return Type.combine(
+      t1.isDate(),
+      t2.isDate(),
+      t.number([
+        {
+          unit: d1Specificity,
+          exp: N(1),
+          multiplier: N(1),
+          known: true,
+        },
+      ])
     );
   }
-
-  return Type.combine(
-    t1.isDate(),
-    t2.isDate(),
-    t.number([
-      {
-        unit: d1Specificity,
-        exp: N(1),
-        multiplier: N(1),
-        known: true,
-      },
-    ])
-  );
+  return Type.combine(t1.isDate(), t2.isDate());
 };
 
 const dateAndNumberFnValues = async (
@@ -85,10 +88,10 @@ const dateAndNumberFnValues = async (
   );
 };
 
-export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
+export const dateOverloads: Record<string, OverloadSpec[]> = {
   '+': [
     {
-      argTypes: ['date', 'number'],
+      argCount: 2,
       fnValues: dateAndNumberFnValues,
       functor: async ([t1, t2]) =>
         Type.combine(t2.isTimeQuantity(), async () =>
@@ -96,7 +99,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
         ),
     },
     {
-      argTypes: ['number', 'date'],
+      argCount: 2,
       fnValues: async (values, types = []) =>
         dateAndNumberFnValues(values.reverse(), types.reverse()),
       functor: async ([t1, t2]) =>
@@ -107,7 +110,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
   ],
   '-': [
     {
-      argTypes: ['date', 'number'],
+      argCount: 2,
       fnValues: async ([v1, v2], [, t2] = []) => {
         const number = getInstanceof(v2, Value.NumberValue);
 
@@ -124,7 +127,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
       functor: dateAndTimeQuantityFunctor,
     },
     {
-      argTypes: ['date', 'date'],
+      argCount: 2,
       fnValues: async ([v1, v2]) => {
         const d1 = getInstanceof(v1, Value.DateValue);
         const d2 = getInstanceof(v2, Value.DateValue);

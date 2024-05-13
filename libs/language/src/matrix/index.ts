@@ -2,7 +2,7 @@ import { getOnly } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { AST, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { Type, typeIsPending } from '@decipad/language-types';
+import { Type, isPendingType } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { valueTransforms } from '@decipad/language-builtins';
 import { inferExpression } from '../infer';
@@ -26,7 +26,7 @@ export async function inferMatrixRef(
   const matchers = await inferMatchers(realm, matchersExp);
 
   // pending is contagious
-  const pending = [variable, matchers].find(typeIsPending);
+  const pending = [variable, matchers].find(isPendingType);
   if (pending) {
     return pending;
   }

@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
+import { once } from '@decipad/utils';
 import type { Dimension } from '../Dimension';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
+import { getDimensionLength } from '../utils/getDimensionLength';
 import { implementColumnLike } from '../utils/implementColumnLike';
 import type { ColumnLikeValue } from './ColumnLike';
 import type { MinimalTensor } from './MinimalTensor';
@@ -58,9 +60,15 @@ export const createConcatenatedColumn = async (
 ): Promise<ColumnLikeValue> => {
   const [firstDim, ...restDims] = await column1.dimensions();
   const concatenatedDim = {
-    dimensionLength:
-      firstDim.dimensionLength +
-      (await column2.dimensions())[0].dimensionLength,
+    dimensionLength: once(
+      async () =>
+        (await getDimensionLength(firstDim.dimensionLength)) +
+        (await getDimensionLength(
+          (
+            await column2.dimensions()
+          )[0].dimensionLength
+        ))
+    ),
   };
   const dimensions = [concatenatedDim, ...restDims];
 

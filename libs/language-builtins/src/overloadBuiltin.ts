@@ -1,104 +1,150 @@
-import { getDefined } from '@decipad/utils';
-import type { PromiseOrType } from '@decipad/utils';
+import uniqWith from 'lodash.uniqwith';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
-  type Type,
   Value,
-  buildType as t,
+  buildType,
+  isDateType,
+  isErrorType,
+  isNumberType,
+  type Type,
 } from '@decipad/language-types';
-import { type FullBuiltinSpec, type Functor } from './interfaces';
-import { parseFunctor } from './parseFunctor';
-import { type BuiltinContextUtils } from './types';
+import type { FullBuiltinSpec, Functor, Evaluator } from './interfaces';
+import { dequal } from '@decipad/utils';
 
-export type OverloadTypeName =
-  | 'number'
-  | 'string'
-  | 'boolean'
-  | 'unit'
-  | 'date'
-  | 'range';
+const selectMostSpecificErrorForTypes = (
+  previousErrorType: Type | undefined,
+  errorType: Type,
+  argTypes: Type[]
+): Type => {
+  if (!previousErrorType) {
+    return errorType;
+  }
+  const selectableErrorTypes = [previousErrorType, errorType];
+  const errorsWithNonGenericErrorType = selectableErrorTypes.filter(
+    (err) =>
+      isErrorType(err) && err.errorCause.spec.errType !== 'expected-but-got'
+  );
+  if (errorsWithNonGenericErrorType.length === 1) {
+    return errorsWithNonGenericErrorType[0];
+  }
+  if (argTypes.some(isDateType)) {
+    return (
+      selectableErrorTypes.find(
+        (err) =>
+          isErrorType(err) &&
+          err.errorCause.spec.errType === 'mismatched-specificity'
+      ) ?? errorType
+    );
+  }
+  if (argTypes.some(isNumberType)) {
+    return (
+      selectableErrorTypes.find(
+        (err) =>
+          isErrorType(err) &&
+          (err.errorCause.spec.errType === 'cannot-convert-between-units' ||
+            err.errorCause.spec.errType === 'cannot-convert-to-unit' ||
+            err.errorCause.spec.errType === 'expected-unit')
+      ) ?? errorType
+    );
+  }
+  return errorType;
+};
 
-export type OverloadedBuiltinSpec =
-  | {
-      argTypes: OverloadTypeName[];
-      fnValues: (
-        values: Value.Value[],
-        types: Type[],
-        utils: BuiltinContextUtils
-      ) => PromiseOrType<Value.Value>;
-      functor: Functor;
-      functionSignature?: undefined;
-    }
-  | {
-      argTypes: OverloadTypeName[];
-      fnValues: (
-        values: Value.Value[],
-        types: Type[],
-        utils: BuiltinContextUtils
-      ) => PromiseOrType<Value.Value>;
-      functor?: undefined;
-      functionSignature: string;
-    };
+const gatherOverloadCardinalities = (overloads: OverloadSpec[]): number[][] =>
+  uniqWith(
+    overloads
+      .map((o) => o.argCardinalities)
+      .filter(Boolean)
+      .flat() as number[][],
+    dequal
+  );
+
+export type OverloadSpec = FullBuiltinSpec;
 
 export const overloadBuiltin = (
   fName: string,
   argCount: number | number[],
-  overloads: OverloadedBuiltinSpec[],
+  overloads: OverloadSpec[],
   operatorKind?: 'prefix' | 'infix'
 ): FullBuiltinSpec => {
-  const byArgTypes = new Map(
-    overloads.map((o) => [argTypesKey(o.argTypes), o])
-  );
+  const functorNoAutomap: Functor = async (types, values, context) => {
+    let lastError: Type | undefined;
+    for (const overload of overloads) {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await context.callBuiltinFunctor(
+        context,
+        fName,
+        types,
+        values,
+        overload
+      );
+      // the first to not have an errorCause is the one we want
+      if (!isErrorType(result)) {
+        return result;
+      }
+      lastError = selectMostSpecificErrorForTypes(lastError, result, types);
+    }
+    return selectMostSpecificErrorForTypes(
+      lastError,
+      buildType.impossible(InferError.badOverloadedBuiltinCall(fName, types)),
+      types
+    );
+  };
 
-  const getArgTypeKey = (types: Type[]): string =>
-    argTypesKey(types.map(getOverloadedTypeFromType));
-
-  const getOverload = (types: Type[]): OverloadedBuiltinSpec | undefined =>
-    byArgTypes.get(getArgTypeKey(types));
-
-  const fnValues = async (
-    values: Value.Value[],
-    types: Type[],
-    utils: BuiltinContextUtils
-  ): Promise<Value.Value> => {
+  const fnValuesNoAutomap: Evaluator = async (
+    values,
+    argTypes,
+    utils,
+    valueNodes
+  ) => {
     if (values.find(Value.isUnknownValue)) {
       return Value.UnknownValue;
     }
-    const overload = getOverload(getDefined(types));
-    if (!overload) {
+    let selectedOverload: FullBuiltinSpec | undefined;
+    let returnType: Type | undefined;
+    for (const overload of overloads) {
+      // eslint-disable-next-line no-await-in-loop
+      returnType = await utils.callBuiltinFunctor(
+        utils,
+        fName,
+        argTypes,
+        valueNodes,
+        overload
+      );
+      if (!isErrorType(returnType)) {
+        selectedOverload = overload;
+        break;
+      }
+    }
+    if (!selectedOverload || !returnType) {
       throw new Error(
         `panic: could not find overload for ${fName}(${getArgTypeKey(
-          getDefined(types)
+          argTypes
         )})`
       );
     }
-    return overload.fnValues(values, types, utils);
-  };
 
-  const functor: Functor = async (types, values, context): Promise<Type> => {
-    const argTypeNames = types.map(getOverloadedTypeFromType);
-    const overload = byArgTypes.get(argTypesKey(argTypeNames));
-
-    if (overload == null) {
-      return t.impossible(InferError.badOverloadedBuiltinCall(fName, types));
-    } else {
-      const resolvedFunctor =
-        overload.functor ?? parseFunctor(overload.functionSignature);
-      return resolvedFunctor(types, values, context);
-    }
+    return utils.callBuiltin(
+      utils,
+      fName,
+      values,
+      argTypes,
+      returnType,
+      valueNodes,
+      selectedOverload
+    );
   };
 
   return {
     argCount,
-    fnValues,
-    functor,
+    fnValuesNoAutomap,
+    functorNoAutomap,
+    noAutoconvert: true,
     operatorKind,
+    argCardinalities: gatherOverloadCardinalities(overloads),
   };
 };
-
-// for string Maps
-const argTypesKey = (types: (OverloadTypeName | null)[]) => types.join(';');
 
 export const getOverloadedTypeFromValue = (
   val: Value.Value
@@ -117,9 +163,12 @@ export const getOverloadedTypeFromValue = (
     return null;
   }
 };
-
 export const getOverloadedTypeFromType = (t: Type): OverloadTypeName | null => {
-  if (t.type != null) {
+  if (t.cellType != null) {
+    return `column<${getOverloadedTypeFromType(t.cellType)}>`;
+  } else if (t.rowCellTypes != null) {
+    return `row`;
+  } else if (t.type != null) {
     return t.type;
   } else if (t.date != null) {
     return 'date';
@@ -129,3 +178,11 @@ export const getOverloadedTypeFromType = (t: Type): OverloadTypeName | null => {
     return null;
   }
 };
+
+export type OverloadTypeName = string;
+
+// for string Maps
+const argTypesKey = (types: (OverloadTypeName | null)[]) => types.join(';');
+
+const getArgTypeKey = (types: Type[]): string =>
+  argTypesKey(types.map(getOverloadedTypeFromType));

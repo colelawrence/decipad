@@ -110,7 +110,7 @@ describe('date overloads', () => {
   it('date + number', async () => {
     expect(
       (
-        await plus.functor!(
+        await plus.functorNoAutomap!(
           [t.date('month'), t.number(U('day'))],
           [],
           makeContext()
@@ -121,7 +121,7 @@ describe('date overloads', () => {
     );
     expect(
       (
-        await plus.functor!(
+        await plus.functorNoAutomap!(
           [t.date('month'), t.number(U('year'))],
           [],
           makeContext()
@@ -130,7 +130,7 @@ describe('date overloads', () => {
     ).toMatchInlineSnapshot(`"month"`);
     expect(
       (
-        await plus.functor!(
+        await plus.functorNoAutomap!(
           [t.date('day'), t.number(U('year'))],
           [],
           makeContext()
@@ -139,7 +139,7 @@ describe('date overloads', () => {
     ).toMatchInlineSnapshot(`"day"`);
 
     expect(
-      await plus.fnValues?.(
+      await plus.fnValuesNoAutomap?.(
         [
           Value.DateValue.fromDateAndSpecificity(
             BigInt(Number(new Date('2020-01-01'))),
@@ -149,7 +149,8 @@ describe('date overloads', () => {
         ],
 
         [t.date('day'), t.number(U('month'))],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toMatchInlineSnapshot(`
       DateValue {
@@ -162,7 +163,7 @@ describe('date overloads', () => {
   it('date - number', async () => {
     expect(
       (
-        await minus.functor!(
+        await minus.functorNoAutomap!(
           [t.date('day'), t.number(U('day'))],
           [],
           makeContext()
@@ -171,7 +172,7 @@ describe('date overloads', () => {
     ).toMatchInlineSnapshot(`"day"`);
 
     expect(
-      await minus.fnValues?.(
+      await minus.fnValuesNoAutomap?.(
         [
           Value.DateValue.fromDateAndSpecificity(
             Time.parseUTCDate('2020-01-01T10:30'),
@@ -181,7 +182,8 @@ describe('date overloads', () => {
         ],
 
         [t.date('minute'), t.number(U('minute'))],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toMatchInlineSnapshot(`
       DateValue {
@@ -193,8 +195,13 @@ describe('date overloads', () => {
 
   it('date - date => time-quantity', async () => {
     expect(
-      (await minus.functor!([t.date('day'), t.date('day')], [], makeContext()))
-        .unit
+      (
+        await minus.functorNoAutomap!(
+          [t.date('day'), t.date('day')],
+          [],
+          makeContext()
+        )
+      ).unit
     ).toMatchInlineSnapshot(`
       Array [
         Object {
@@ -217,7 +224,7 @@ describe('date overloads', () => {
     `);
     expect(
       (
-        await minus.functor!(
+        await minus.functorNoAutomap!(
           [t.date('minute'), t.date('minute')],
           [],
           makeContext()
@@ -252,7 +259,7 @@ describe('date overloads', () => {
     ) =>
       materializeOneResult(
         (
-          await minus.fnValues?.(
+          await minus.fnValuesNoAutomap?.(
             [
               Value.DateValue.fromDateAndSpecificity(
                 Time.parseUTCDate(date1),
@@ -264,7 +271,8 @@ describe('date overloads', () => {
               ),
             ],
             [t.date(date1Specificity), t.date(date2Specificity)],
-            makeContext()
+            makeContext(),
+            []
           )
         )?.getData()
       );
@@ -314,7 +322,7 @@ describe('date overloads', () => {
       DeciNumber {
         "d": 1n,
         "infinite": false,
-        "n": 2678400n,
+        "n": 31n,
         "s": 1n,
       }
     `);
@@ -324,7 +332,7 @@ describe('date overloads', () => {
       DeciNumber {
         "d": 1n,
         "infinite": false,
-        "n": 28857600n,
+        "n": 334n,
         "s": -1n,
       }
     `);
@@ -340,7 +348,7 @@ describe('date overloads', () => {
       DeciNumber {
         "d": 1n,
         "infinite": false,
-        "n": 60n,
+        "n": 60000n,
         "s": -1n,
       }
     `);

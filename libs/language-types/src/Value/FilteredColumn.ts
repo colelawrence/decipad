@@ -6,6 +6,7 @@ import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { lowLevelGet } from './lowLevelGet';
 import type { OneResult } from '../Result';
+import { once } from '@decipad/utils';
 
 export class FilteredColumn
   extends FilteredColumnBase<Value>
@@ -29,14 +30,10 @@ export class FilteredColumn
   async dimensions() {
     const contents = first(this.values());
 
-    if (isColumnLike(contents)) {
-      return [
-        { dimensionLength: await this.rowCount() },
-        ...(await contents.dimensions()),
-      ];
-    } else {
-      return [{ dimensionLength: await this.rowCount() }];
-    }
+    return [
+      { dimensionLength: once(async () => this.rowCount()) },
+      ...(isColumnLike(contents) ? await contents.dimensions() : []),
+    ];
   }
 
   async indexToLabelIndex(filteredIndex: number) {

@@ -7,7 +7,7 @@ export type CallBuiltinFunctor = (
   ctx: ContextUtils,
   funcName: string,
   argTypes: Type[],
-  node?: Expression[]
+  node: Expression[]
 ) => Promise<Type>;
 
 export type CallBuiltin = (
@@ -15,7 +15,8 @@ export type CallBuiltin = (
   funcName: string,
   argsBeforeConvert: Value[],
   argTypes: Type[],
-  returnType: Type
+  returnType: Type,
+  node: AST.Expression[]
 ) => Promise<Value>;
 
 export type CallFunctor = (

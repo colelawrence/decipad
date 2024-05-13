@@ -11,6 +11,7 @@ import {
   Value,
   areUnitsConvertible,
   convertBetweenUnits,
+  isErrorType,
   parseUnit,
   buildType as t,
 } from '@decipad/language-types';
@@ -183,7 +184,7 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
     await inferExpression(realm, unitsExpression)
   ).isScalar('number');
   const { unit: targetUnit } =
-    (targetUnitExpressionType.errorCause == null &&
+    (!isErrorType(targetUnitExpressionType) &&
       (await targetUnitExpressionType.reducedToLowest())) ||
     {};
 

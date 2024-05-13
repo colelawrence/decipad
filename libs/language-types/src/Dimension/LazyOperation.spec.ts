@@ -1,6 +1,5 @@
 import type DeciNumber from '@decipad/number';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import type { HypercubeArg } from './LazyOperation';
 import { createLazyOperationBase } from './LazyOperation';
 import { uniqDimensions } from './uniqDimensions';
 import { materializeOneResult } from '../utils/materializeOneResult';
@@ -8,6 +7,7 @@ import type { Value } from '../Value';
 import { NumberValue, fromJS, getColumnLike } from '../Value';
 import { getInstanceof } from '@decipad/utils';
 import { hcArg } from './testUtils';
+import type { HypercubeArg } from './types';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -93,18 +93,25 @@ describe('nesting', () => {
   });
 
   it('uniqDimensions can find out what dimensions are involved and give them to ya', async () => {
-    expect(await uniqDimensions(await getArgs(multiDimX))).toEqual([
-      ['X'],
-      [{ dimensionLength: 3 }],
-    ]);
-    expect(await uniqDimensions(await getArgs(multiDimXTwice))).toEqual([
-      ['X'],
-      [{ dimensionLength: 3 }],
-    ]);
-    expect(await uniqDimensions(await getArgs(multidimDivision))).toEqual([
-      ['X', 'Y'],
-      [{ dimensionLength: 3 }, { dimensionLength: 3 }],
-    ]);
+    expect(await uniqDimensions(await getArgs(multiDimX)))
+      .toMatchInlineSnapshot(`
+      Array [
+        "X",
+      ]
+    `);
+    expect(await uniqDimensions(await getArgs(multiDimXTwice)))
+      .toMatchInlineSnapshot(`
+      Array [
+        "X",
+      ]
+    `);
+    expect(await uniqDimensions(await getArgs(multidimDivision)))
+      .toMatchInlineSnapshot(`
+      Array [
+        "X",
+        "Y",
+      ]
+    `);
   });
 
   it('can operate with one column', async () => {

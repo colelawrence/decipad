@@ -1,11 +1,12 @@
 import { map } from '@decipad/generator-utils';
-import type { PromiseOrType } from '@decipad/utils';
+import { getDefined, type PromiseOrType } from '@decipad/utils';
 import type { ContextUtils } from '../ContextUtils';
 import type { Type } from '../Type';
-import { buildType as t, typeIsPending } from '../Type';
+import { serializeType, buildType as t } from '../Type';
 import {
   arrayOfOnes,
-  findInvalidCardinality,
+  findFirstInValidCardinality,
+  findFirstValidCardinality,
   getCardinality,
 } from './cardinality';
 import { deLinearizeType, linearizeType } from './linearizeType';
@@ -13,8 +14,12 @@ import { groupTypesByDimension } from './groupTypesByDimension';
 import type { Value } from '../Value/Value';
 import { createLazyOperation } from './LazyOperation';
 import { getReductionPlan } from './getReductionPlan';
-import { getColumnLike } from '../Value/ColumnLike';
-import { Column } from '../Value';
+import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
+import { Column, FMappedColumn } from '../Value';
+import { isPendingType } from '../Type/checks';
+import { buildResult } from '../utils/buildResult';
+import { getResultGenerator } from '../utils/getResultGenerator';
+import { resultToValue } from '../utils/resultToValue';
 
 // Minor hack: use the automaptypes function to retrieve the arg types
 // Better solution: Make Hypercube type-aware and pass the types from there.
@@ -33,7 +38,7 @@ const hackilyReduceArgTypes = async (
       // Just satisfying mapFn protocol, nothing to see here
       return t.nothing();
     },
-    expectedCardinalities
+    [expectedCardinalities]
   );
 
   return argTypesLowerDims;
@@ -53,32 +58,36 @@ export const automapTypes = async (
   ctx: ContextUtils,
   argTypes: Type[],
   mapFn: (types: Type[]) => Type | Promise<Type>,
-  expectedCardinalities = arrayOfOnes(argTypes.length)
+  availableCardinalities = [arrayOfOnes(argTypes.length)]
 ): Promise<Type> => {
   // pending is contagious
   {
-    const pending = argTypes.find(typeIsPending);
+    const pending = argTypes.find(isPendingType);
     if (pending) {
       return pending;
     }
   }
-  const invalidCardinality = findInvalidCardinality(
+
+  const matchedCardinality = findFirstValidCardinality(
     argTypes,
-    expectedCardinalities
+    availableCardinalities
   );
 
-  if (invalidCardinality) {
-    return invalidCardinality.expected(t.column(t.anything()));
+  if (!matchedCardinality) {
+    return getDefined(
+      findFirstInValidCardinality(argTypes, availableCardinalities)
+    ).expected(t.column(t.anything()));
   }
 
-  if (expectedCardinalities.every((c) => c === 1)) {
+  if (matchedCardinality.every((c) => c === 1)) {
+    // all cardinalities are the same
     // Expand dimensions by returning the union of all arguments' dims
-    const linearTypedArgs = argTypes.map((t) => linearizeType(t));
+    const linearTypedArgs = argTypes.map(linearizeType);
     const scalarArgs = linearTypedArgs.map((types) => types[types.length - 1]);
 
     // pending is contagious
     {
-      const pending = scalarArgs.find(typeIsPending);
+      const pending = scalarArgs.find(isPendingType);
       if (pending) {
         return pending;
       }
@@ -89,12 +98,14 @@ export const automapTypes = async (
       ...linearTypedArgs.map((item) => item.slice(0, -1))
     );
 
-    return deLinearizeType([
+    const composedType = deLinearizeType([
       ...allDimensions.map((t) => t[0]),
       await mapFn(scalarArgs),
     ]);
+
+    return composedType;
   } else {
-    const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
+    const whichToReduce = getReductionPlan(argTypes, matchedCardinality);
 
     if (whichToReduce.every((w) => w === false)) {
       // Reduce nothing -- input dimensions are correct
@@ -107,7 +118,6 @@ export const automapTypes = async (
   }
 };
 
-// Extremely symmetrical with the above function
 export const automapValues = async (
   ctx: ContextUtils,
   argTypes: Type[],
@@ -117,29 +127,59 @@ export const automapValues = async (
     types: Type[],
     ctx: ContextUtils
   ) => PromiseOrType<Value>,
-  expectedCardinalities = arrayOfOnes(argValues.length)
+  availableCardinalities = [arrayOfOnes(argValues.length)]
 ): Promise<Value> => {
-  if (findInvalidCardinality(argTypes, expectedCardinalities)) {
+  const matchedCardinality = findFirstValidCardinality(
+    argTypes,
+    availableCardinalities
+  );
+
+  if (!matchedCardinality) {
     throw new Error('panic: one or more cardinalities are too low');
   }
 
-  if (expectedCardinalities.every((c) => c === 1)) {
+  if (matchedCardinality.every((c) => c === 1)) {
     const reducedArgTypes = await hackilyReduceArgTypes(
       ctx,
       argTypes,
-      expectedCardinalities
+      matchedCardinality
     );
-    const mapFnAndTypes = async (values: Value[]) =>
-      mapFn(values, reducedArgTypes, ctx);
+    const mapFnAndTypes = async (values: Value[]) => {
+      return mapFn(values, reducedArgTypes, ctx);
+    };
 
     return createLazyOperation(ctx, mapFnAndTypes, argValues, argTypes);
   } else {
-    const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
+    const whichToReduce = getReductionPlan(argTypes, matchedCardinality);
 
     if (whichToReduce.every((doReduce) => doReduce === false)) {
       // Reduce nothing -- input dimensions are correct
       return mapFn(argValues, argTypes, ctx);
     } else {
+      const [argValue] = argValues;
+      if (argTypes.length === 1 && isColumnLike(argValue)) {
+        const [argType] = argTypes;
+        const reducedArgType = await argType.reduced();
+        const serializedReducedArgType = serializeType(reducedArgType);
+        return FMappedColumn.fromGeneratorAndType(
+          getResultGenerator(await argValue.getData()),
+          serializedReducedArgType,
+          async (value) =>
+            (
+              await automapValues(
+                ctx,
+                [reducedArgType],
+                [resultToValue(buildResult(serializedReducedArgType, value))],
+                mapFn
+              )
+            ).getData(),
+          `automapValues`
+        );
+      }
+      console.error(
+        'Operating upon multiple dimensional values is not supported yet',
+        argTypes
+      );
       throw new Error(
         'panic: Operating upon multiple dimensional values is not supported yet'
       );
@@ -151,9 +191,11 @@ export const automapTypesForReducer = async (
   argType: Type,
   mapFn: (types: Type[]) => Type | Promise<Type>
 ): Promise<Type> => {
-  const invalidCardinality = findInvalidCardinality([argType], [2]);
-  if (invalidCardinality) {
-    return invalidCardinality.expected(t.column(t.anything()));
+  const matchedCardinality = findFirstValidCardinality([argType], [[2]]);
+  if (!matchedCardinality) {
+    return getDefined(findFirstInValidCardinality([argType], [[2]])).expected(
+      t.column(t.anything())
+    );
   }
 
   if (getCardinality(argType) === 2) {
@@ -178,7 +220,8 @@ export const automapValuesForReducer = async (
     utils: ContextUtils
   ) => PromiseOrType<Value>
 ): Promise<Value> => {
-  if (findInvalidCardinality([argType], [2])) {
+  const matchedCardinality = findFirstValidCardinality([argType], [[2]]);
+  if (!matchedCardinality) {
     throw new Error('panic: cardinality is too low');
   }
 
@@ -190,6 +233,7 @@ export const automapValuesForReducer = async (
       argValue,
       'reducers always take columnar arguments'
     );
+    // TODO: replace with a more efficient implementation that uses OneResult results
     return Column.fromGenerator((start?: number, end?: number) => {
       return map(argCol.values(start, end), async (v) => {
         return automapValuesForReducer(
@@ -199,6 +243,6 @@ export const automapValuesForReducer = async (
           mapFn
         );
       });
-    });
+    }, `automapValuesForReducer<${serializeType(argType).kind}>`);
   }
 };

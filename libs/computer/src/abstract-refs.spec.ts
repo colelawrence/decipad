@@ -555,10 +555,10 @@ describe('abstract refs', () => {
     );
 
     const results = getDefined(await computer.computeRequest({ program }));
-    const result = await materializeResult(
+    const totalResult = await materializeResult(
       getDefined(results.blockResults['block-6']?.result)
     );
-    expect(result).toMatchInlineSnapshot(`
+    expect(totalResult).toMatchInlineSnapshot(`
       Object {
         "type": Object {
           "cellType": Object {

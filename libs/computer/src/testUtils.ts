@@ -4,6 +4,7 @@ import type { AST, Result } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import {
   astNode,
+  getResultGenerator,
   parseBlock,
   parseStatementOrThrow,
   validateResult,
@@ -21,11 +22,7 @@ import type {
   NotebookResults,
   ProgramBlock,
 } from './types';
-import {
-  getDefinedSymbol,
-  getIdentifierString,
-  getResultGenerator,
-} from './utils';
+import { getDefinedSymbol, getIdentifierString } from './utils';
 import { programToComputerProgram } from './utils/programToComputerProgram';
 import type { Unit } from '@decipad/language-units';
 import { formatError } from './format/formatError';

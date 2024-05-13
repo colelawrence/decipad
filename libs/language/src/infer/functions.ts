@@ -6,7 +6,7 @@ import type { Type, AST } from '@decipad/language-types';
 import {
   buildType as t,
   InferError,
-  typeIsPending,
+  isPendingType,
 } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltinFunctor } from '@decipad/language-builtins';
@@ -93,7 +93,7 @@ const continueInferFunctionCall = async (
   }
 
   // pending is contagious
-  const pending = givenArguments.find(typeIsPending);
+  const pending = givenArguments.find(isPendingType);
   if (pending) {
     return pending;
   }

@@ -1,6 +1,6 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import { buildType as t } from '@decipad/language-types';
+import { materializeOneResult, buildType as t } from '@decipad/language-types';
 import { c, col, l, U, u, ne, r, n, sortedTable, prop } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
@@ -240,7 +240,11 @@ describe('getValue', () => {
     const quantity = col(l(1), l(2), l(3));
 
     expect(
-      await (await testGetValue(getValue, [quantity, ne(1, 'watts')])).getData()
+      await materializeOneResult(
+        await (
+          await testGetValue(getValue, [quantity, ne(1, 'watts')])
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber {
@@ -279,9 +283,11 @@ describe('getValue', () => {
     });
 
     expect(
-      await (
-        await testGetValue(getValue, [quantity, n('generic-identifier', '%')])
-      ).getData()
+      await materializeOneResult(
+        await (
+          await testGetValue(getValue, [quantity, n('generic-identifier', '%')])
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber {
@@ -310,7 +316,11 @@ describe('getValue', () => {
     const quantity = col(ne(1, 'kmeter'), ne(2, 'kmeter'), ne(3, 'kmeter'));
 
     expect(
-      await (await testGetValue(getValue, [quantity, ne(1, 'miles')])).getData()
+      await materializeOneResult(
+        await (
+          await testGetValue(getValue, [quantity, ne(1, 'miles')])
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber {
@@ -385,13 +395,18 @@ describe('getValue', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": ColumnLikeMixin {
               "_dimensions": Array [
                 Object {
                   "dimensionLength": 0,
                 },
               ],
+              "dataCache": undefined,
+              "rowCountCache": undefined,
             },
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
         ],
       }
@@ -433,13 +448,18 @@ describe('getValue', () => {
                 "value": "c",
               },
             ],
+            "dataCache": Promise {},
             "defaultValue": ColumnLikeMixin {
               "_dimensions": Array [
                 Object {
                   "dimensionLength": 0,
                 },
               ],
+              "dataCache": undefined,
+              "rowCountCache": undefined,
             },
+            "dimensionsCache": undefined,
+            "rowCountCache": 3,
           },
           Column {
             "_values": Array [
@@ -468,13 +488,18 @@ describe('getValue', () => {
                 },
               },
             ],
+            "dataCache": Promise {},
             "defaultValue": ColumnLikeMixin {
               "_dimensions": Array [
                 Object {
                   "dimensionLength": 0,
                 },
               ],
+              "dataCache": undefined,
+              "rowCountCache": undefined,
             },
+            "dimensionsCache": undefined,
+            "rowCountCache": 3,
           },
         ],
       }

@@ -7,13 +7,13 @@ import {
   makeInferContext,
   ScopedRealm,
   functionCallValue,
+  getResultGenerator,
 } from '@decipad/language';
 import { all, map } from '@decipad/generator-utils';
 import type { GetStatementsToEvictArgs } from '../caching/getStatementsToEvict';
 import { getStatementsToEvict } from '../caching/getStatementsToEvict';
 import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
-import { getResultGenerator } from '../utils/getResultGenerator';
 import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {

@@ -32,6 +32,7 @@ import {
   serializeType,
   buildResult,
   Unknown,
+  isResultGenerator,
 } from '@decipad/language';
 import {
   anyMappingToMap,
@@ -71,7 +72,6 @@ import {
   getDefinedSymbol,
   getGoodBlocks,
   getIdentifierString,
-  isResultGenerator,
   isTableResult,
 } from '../utils';
 import { isColumn } from '../utils/isColumn';

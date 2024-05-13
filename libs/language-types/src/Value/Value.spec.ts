@@ -90,7 +90,7 @@ it('can create column from generator', async () => {
     yield Scalar.fromValue(N(1));
     yield Scalar.fromValue(N(2));
     yield Scalar.fromValue(N(3));
-  });
+  }, 'test');
   expect(await all(col.values())).toEqual([
     Scalar.fromValue(N(1)),
     Scalar.fromValue(N(2)),

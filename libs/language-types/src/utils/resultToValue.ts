@@ -1,12 +1,12 @@
 import { N } from '@decipad/number';
-import { from, map } from '@decipad/generator-utils';
+import { from, slice } from '@decipad/generator-utils';
 import { getInstanceof } from '@decipad/utils';
 import type {
-  OneResult,
   Result,
   ResultBoolean,
   ResultColumn,
   ResultDate,
+  ResultGenerator,
   ResultMaterializedColumn,
   ResultMaterializedTable,
   ResultNumber,
@@ -77,24 +77,21 @@ export const resultToValue = (result: Result): Value.Value => {
         return Value.Column.fromValues([Value.fromJS(0, defaultV)], defaultV);
       }
       const columnType = type as SerializedTypes.Column;
-      let columnGen: Value.ValueGeneratorFunction;
+      let columnGen: ResultGenerator;
       if (typeof columnValue === 'function') {
-        columnGen = (start?: number, end?: number) =>
-          map(columnValue(start, end), async (cell: OneResult) =>
-            resultToValue(buildResult(columnType.cellType, cell))
-          );
+        columnGen = (start = 0, end = Infinity) => columnValue(start, end);
       } else if (Array.isArray(columnValue)) {
-        columnGen = () =>
-          map(from(columnValue.slice()), async (cell: OneResult) =>
-            resultToValue({
-              type: columnType.cellType,
-              value: cell,
-            } as Result)
-          );
+        columnGen = (start = 0, end = Infinity) =>
+          slice(from(columnValue.slice()), start, end);
       } else {
+        console.error('got invalid column:', value);
         throw new Error(`panic: got invalid column: ${typeof value}`);
       }
-      return Value.Column.fromGenerator(columnGen);
+      return Value.LeanColumn.fromGeneratorAndType(
+        columnGen,
+        columnType.cellType,
+        `resultToValue<column<${columnType.cellType}>>`
+      );
     }
 
     case 'number': {

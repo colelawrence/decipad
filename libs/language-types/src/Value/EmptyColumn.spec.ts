@@ -5,6 +5,7 @@ import { EmptyColumn } from './EmptyColumn';
 import { fromJS } from './fromJS';
 import { buildType } from '../Type';
 import { createLazyOperation } from '../Dimension/LazyOperation';
+import { getDimensionLength } from '../utils/getDimensionLength';
 
 it('forbids access into it', async () => {
   await expect(async () =>
@@ -68,14 +69,16 @@ it('can be the arg of a lazy operation', async () => {
       ]
     )
   );
-  expect(await lazyOp2D.dimensions()).toMatchInlineSnapshot(`
+  expect(
+    await Promise.all(
+      (
+        await lazyOp2D.dimensions()
+      ).map(async (d) => getDimensionLength(d.dimensionLength))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
-      Object {
-        "dimensionLength": 2,
-      },
-      Object {
-        "dimensionLength": 0,
-      },
+      2,
+      0,
     ]
   `);
   expect(await materializeOneResult(await lazyOp2D.getData())).toEqual([]);

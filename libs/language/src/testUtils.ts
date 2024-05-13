@@ -20,6 +20,7 @@ import {
   materializeOneResult,
   serializeType,
   buildType as t,
+  isErrorType,
 } from '@decipad/language-types';
 import type { TScopedRealm } from '.';
 import { ScopedRealm, makeInferContext, parseBlockOrThrow } from '.';
@@ -40,7 +41,7 @@ export const runAST = async (
 
   const inferResult = await inferBlock(block, realm);
 
-  const erroredType = inferResult.errorCause != null ? inferResult : null;
+  const erroredType = isErrorType(inferResult) ? inferResult : null;
   expect(erroredType).toEqual(null);
 
   const [value] = await run([block], [0], new ScopedRealm(undefined, ctx));

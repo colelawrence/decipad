@@ -5,6 +5,8 @@
   "cSpell.userWords": ["decipad"],
   "explorer.compactFolders": false,
   "cSpell.words": [
+    "Autoconvert",
+    "automap",
     "backendtypes",
     "boomify",
     "Buildable",
@@ -56,6 +58,7 @@
     "tweakable",
     "typecheck",
     "udecode",
+    "unitful",
     "urql",
     "wsconnected",
     "wsconnecting"

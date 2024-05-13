@@ -11,13 +11,13 @@ import {
   compare,
   buildType as t,
 } from '@decipad/language-types';
-import { overloadBuiltin } from '../overloadBuiltin';
-import { dateOverloads } from '../dateOverloads';
 import { type BuiltinSpec, type Functor } from '../interfaces';
 import { coherceToFraction } from '../utils/coherceToFraction';
-
-const binopFunctor = async ([a, b]: Type[]) =>
-  Type.combine(a.isScalar('number'), b.sameAs(a));
+import { binopFunctor } from '../utils/binopFunctor';
+import { add } from './add';
+import { subtract } from './subtract';
+import { mult } from './mult';
+import { div } from './div';
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
@@ -152,9 +152,6 @@ const stddev = async ([value]: Value.Value[]): Promise<Value.Value> => {
   return Value.fromJS(acc.div(N(count)));
 };
 
-const secondArgIsPercentage = (types?: Type[]) =>
-  types?.[0].numberFormat == null && types?.[1].numberFormat === 'percentage';
-
 export const mathOperators: Record<string, BuiltinSpec> = {
   abs: {
     argCount: 1,
@@ -170,7 +167,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   max: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: max,
@@ -181,7 +178,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   min: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: min,
@@ -192,7 +189,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   average: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: average,
     functionSignature: 'column<R> -> R',
@@ -218,7 +215,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   averageif: {
     argCount: 2,
     noAutoconvert: true,
-    argCardinalities: [2, 2],
+    argCardinalities: [[2, 2]],
     fnValues: async ([numbers, bools]: Value.Value[]) => {
       let acc = ZERO;
       if (!Value.isColumnLike(numbers)) {
@@ -255,7 +252,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   meanif: { aliasFor: 'averageif' },
   median: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: median,
     functionSignature: 'column<R> -> R',
@@ -266,7 +263,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   stddev: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: stddev,
     functionSignature: 'column<R> -> R',
@@ -369,72 +366,11 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     formulaGroup: 'Numbers',
   },
   '+': {
-    ...overloadBuiltin(
-      '+',
-      2,
-      [
-        {
-          argTypes: ['number', 'number'],
-          fnValues: async ([n1, n2], types) => {
-            if (secondArgIsPercentage(types)) {
-              return Value.Scalar.fromValue(
-                coherceToFraction(await n1.getData()).mul(
-                  coherceToFraction(await n2.getData()).add(ONE)
-                )
-              );
-            }
-
-            return Value.Scalar.fromValue(
-              coherceToFraction(await n1.getData()).add(
-                coherceToFraction(await n2.getData())
-              )
-            );
-          },
-          functor: binopFunctor,
-        },
-        {
-          argTypes: ['string', 'string'],
-          fnValues: async ([n1, n2]) =>
-            Value.Scalar.fromValue(
-              String(await n1.getData()) + String(await n2.getData())
-            ),
-          functor: async ([a, b]) =>
-            Type.combine(a.isScalar('string'), b.isScalar('string')),
-        },
-        ...dateOverloads['+'],
-      ],
-      'infix'
-    ),
+    ...add,
     toMathML: ([a, b]) => `<mo>(</mo>${a}<mo>+</mo>${b}<mo>)</mo>`,
   },
   '-': {
-    ...overloadBuiltin(
-      '-',
-      2,
-      [
-        {
-          argTypes: ['number', 'number'],
-          fnValues: async ([a, b], types) => {
-            if (secondArgIsPercentage(types)) {
-              return Value.Scalar.fromValue(
-                coherceToFraction(await a.getData()).mul(
-                  ONE.sub((await b.getData()) as DeciNumber)
-                )
-              );
-            }
-
-            return Value.Scalar.fromValue(
-              coherceToFraction(await a.getData()).sub(
-                (await b.getData()) as DeciNumber
-              )
-            );
-          },
-          functor: binopFunctor,
-        },
-        ...dateOverloads['-'],
-      ],
-      'infix'
-    ),
+    ...subtract,
     toMathML: ([a, b]) => `<mo>(</mo>${a}<mo>-</mo>${b}<mo>)</mo>`,
   },
   'unary-': {
@@ -445,15 +381,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     operatorKind: 'prefix',
   },
   '*': {
-    argCount: 2,
-    fn: ([a, b]) => getInstanceof(a, DeciNumber).mul(b),
-    functor: async ([a, b]) =>
-      Type.combine(
-        a.isScalar('number'),
-        b.isScalar('number'),
-        (await a.sharePercentage(b)).multiplyUnit(b.unit)
-      ),
-    operatorKind: 'infix',
+    ...mult,
     toMathML: ([a, b]) => `${a}<mo>*</mo>${b}`,
   },
   // this is added when we use implicit multiplication instead of '*'
@@ -467,15 +395,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     operatorKind: 'infix',
   },
   '/': {
-    argCount: 2,
-    fn: ([a, b]) => getInstanceof(a, DeciNumber).div(b),
-    functor: async ([a, b]) =>
-      Type.combine(
-        a.isScalar('number'),
-        b.isScalar('number'),
-        (await a.sharePercentage(b)).divideUnit(b.unit)
-      ),
-    operatorKind: 'infix',
+    ...div,
     toMathML: ([a, b]) => `<mfrac>
       <mrow>${a}</mrow>
       <mrow>${b}</mrow>

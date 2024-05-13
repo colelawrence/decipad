@@ -15,6 +15,8 @@ import {
   inferBlock,
   serializeResult,
   validateResult,
+  isErrorType,
+  isFunctionType,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
@@ -56,11 +58,10 @@ const internalComputeStatement = async (
   const statement = block.args[0];
 
   realm.interpreterRealm.statementId = getExprRef(blockId);
-  const [_valueType, usedNames] = await inferWhileRetrievingNames(
+  const [valueType, usedNames] = await inferWhileRetrievingNames(
     realm.interpreterRealm,
     block
   );
-  const valueType = _valueType;
 
   const getUsedNames = (): (readonly [string, string])[] | undefined =>
     usedNames?.map(
@@ -72,7 +73,7 @@ const internalComputeStatement = async (
 
   if (valueType.pending) {
     value = Value.UnknownValue;
-  } else if (valueType.errorCause == null || valueType.functionness) {
+  } else if (!isErrorType(valueType) || isFunctionType(valueType)) {
     realm.interpreterRealm.statementId = getExprRef(blockId);
     try {
       value = await evaluateStatement(realm.interpreterRealm, statement);

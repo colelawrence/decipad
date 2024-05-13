@@ -1,18 +1,19 @@
 import { type PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { Value, Type, AST, ContextUtils } from '@decipad/language-types';
+import type { Value, Type, AST } from '@decipad/language-types';
 import { type BuiltinContextUtils } from './types';
 
 export type Functor = (
   types: Type[],
   values: AST.Expression[],
-  utils: ContextUtils
+  utils: BuiltinContextUtils
 ) => Type | Promise<Type>;
 
 export type Evaluator = (
   args: Value.Value[],
   argTypes: Type[],
-  utils: BuiltinContextUtils
+  utils: BuiltinContextUtils,
+  valueNodes: AST.Expression[]
 ) => PromiseOrType<Value.Value>;
 
 export interface GenericBuiltinSpec {
@@ -35,7 +36,7 @@ export interface FullBuiltinSpec extends GenericBuiltinSpec {
    * Use this to indicate desired cardinality per argument (1 for 1D, 2 for 2D, etc.)
    * The cardinality of the corresponding args passed to fn and functor will be raised from the default 1.
    */
-  argCardinalities?: number[];
+  argCardinalities?: Array<number[]>;
   isReducer?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (args: any[], types?: Type[]) => any;

@@ -1,7 +1,6 @@
 import type { FromJSArg } from '../Value';
 import { UnknownValue, fromJS, getColumnLike } from '../Value';
-import type { HypercubeArg } from './LazyOperation';
-import type { DimensionId } from './types';
+import type { DimensionId, HypercubeArg } from './types';
 import type { ContextUtils } from '../ContextUtils';
 import { identity } from '@decipad/utils';
 

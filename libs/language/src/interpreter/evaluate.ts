@@ -4,7 +4,12 @@ import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import type { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { Unit, Value, resultToValue } from '@decipad/language-types';
+import {
+  Unit,
+  Value,
+  isErrorType,
+  resultToValue,
+} from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
 import type { TRealm, TScopedRealm } from '..';
 import { prettyPrintAST } from '..';
@@ -150,7 +155,17 @@ async function internalEvaluate(
           )
         );
         const returnType = getDefined(node.inferredType);
-        return callBuiltin(realm.utils, funcName, args, argTypes, returnType);
+        if (isErrorType(returnType)) {
+          return Value.UnknownValue;
+        }
+        return callBuiltin(
+          realm.utils,
+          funcName,
+          args,
+          argTypes,
+          returnType,
+          funcArgs
+        );
       }
     }
     case 'range': {

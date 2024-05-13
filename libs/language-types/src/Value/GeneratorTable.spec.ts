@@ -93,7 +93,6 @@ describe('GeneratorTable', () => {
       [buildType.number(), buildType.string()]
     ) as TableValue;
     const column = table.getColumn('A');
-    console.log('column', column);
     expect(isColumnLike(column)).toBe(true);
     expect(await materializeOneResult(column.getData())).toMatchInlineSnapshot(`
       Array [
@@ -128,7 +127,6 @@ describe('GeneratorTable', () => {
     for (const col of columns) {
       expect(isColumnLike(col)).toBe(true);
     }
-    console.log('columns', columns);
     expect(
       await Promise.all(
         columns.map(async (col) => materializeOneResult(await col.getData()))

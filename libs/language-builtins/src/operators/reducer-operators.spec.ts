@@ -19,7 +19,8 @@ describe('reducer operators', () => {
       await (operators.total as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 1.3, 2.75, 0, 3.1, 5])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toMatchInlineSnapshot(`
       NumberValue {
@@ -42,7 +43,8 @@ describe('reducer operators', () => {
       await (operators.sumif as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([1, 2, 3]), Value.fromJS([true, false, true])],
         [],
-        makeContext()
+        makeContext(),
+        []
       )
     ).toMatchInlineSnapshot(`
       NumberValue {

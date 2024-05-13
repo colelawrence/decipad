@@ -18,37 +18,40 @@ setupDeciNumberSnapshotSerializer();
 describe('table operators', () => {
   it('concatenates tables', async () => {
     expect(
-      await (
-        await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
-          [
-            Value.Table.fromNamedColumns(
-              [
-                Value.fromJS([1, 2, 3]),
-                Value.fromJS(['Hello', 'World', 'Sup']),
-              ],
-              ['Numbers', 'Strings']
-            ),
+      await materializeOneResult(
+        await (
+          await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
+            [
+              Value.Table.fromNamedColumns(
+                [
+                  Value.fromJS([1, 2, 3]),
+                  Value.fromJS(['Hello', 'World', 'Sup']),
+                ],
+                ['Numbers', 'Strings']
+              ),
 
-            Value.Table.fromNamedColumns(
-              [Value.fromJS([4]), Value.fromJS(['Mate'])],
-              ['Numbers', 'Strings']
-            ),
-          ],
-          [
-            t.table({
-              indexName: 'Numbers',
-              columnTypes: [t.number(), t.string()],
-              columnNames: ['Numbers', 'Strings'],
-            }),
-            t.table({
-              indexName: 'Numbers',
-              columnTypes: [t.number(), t.string()],
-              columnNames: ['Numbers', 'Strings'],
-            }),
-          ],
-          makeContext()
-        )
-      )?.getData()
+              Value.Table.fromNamedColumns(
+                [Value.fromJS([4]), Value.fromJS(['Mate'])],
+                ['Numbers', 'Strings']
+              ),
+            ],
+            [
+              t.table({
+                indexName: 'Numbers',
+                columnTypes: [t.number(), t.string()],
+                columnNames: ['Numbers', 'Strings'],
+              }),
+              t.table({
+                indexName: 'Numbers',
+                columnTypes: [t.number(), t.string()],
+                columnNames: ['Numbers', 'Strings'],
+              }),
+            ],
+            makeContext(),
+            []
+          )
+        )?.getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         Array [
@@ -109,15 +112,18 @@ describe('table operators', () => {
       columnNames: ['numbers', 'strings'],
     });
 
-    const result = (
-      await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
-        [t1, t2],
-        [t1Type, t2Type],
-        makeContext()
-      )
-    )?.getData();
+    const result = await materializeOneResult(
+      (
+        await (miscOperators.concat as FullBuiltinSpec).fnValuesNoAutomap?.(
+          [t1, t2],
+          [t1Type, t2Type],
+          makeContext(),
+          []
+        )
+      )?.getData()
+    );
 
-    expect(await result).toMatchInlineSnapshot(`
+    expect(result).toMatchInlineSnapshot(`
       Array [
         Array [
           DeciNumber {
@@ -234,7 +240,8 @@ describe('table operators', () => {
           await (operators.sortby as FullBuiltinSpec).fnValues!(
             [tableValue, columnValue],
             [],
-            makeContext()
+            makeContext(),
+            []
           )
         ).getData()
       )
@@ -317,7 +324,8 @@ describe('table operators', () => {
           await (operators.filter as FullBuiltinSpec).fnValuesNoAutomap!(
             [tableValue, columnValue],
             [],
-            makeContext()
+            makeContext(),
+            []
           )
         ).getData()
       )
@@ -375,7 +383,8 @@ describe('table operators', () => {
         await fnValues!(
           [tableValue, Value.fromJS('The Thing')],
           [tableType],
-          makeContext()
+          makeContext(),
+          []
         )
       ).getData()
     ).toEqual(['The Thing', N(12345)]);
@@ -383,7 +392,8 @@ describe('table operators', () => {
       fnValues!(
         [tableValue, Value.fromJS('Not found')],
         [tableType],
-        makeContext()
+        makeContext(),
+        []
       )
     ).rejects.toThrow(`Could not find a row with the given condition`);
   });
@@ -419,7 +429,8 @@ describe('table operators', () => {
         await fnValues!(
           [tableValue, Value.fromJS('The Thing')],
           [tableType],
-          makeContext()
+          makeContext(),
+          []
         )
       ).getData()
     ).toEqual(['The Thing', BigInt(new Date('2022-03-01').getTime())]);
@@ -427,7 +438,8 @@ describe('table operators', () => {
       fnValues?.(
         [tableValue, Value.fromJS('Not found')],
         [tableType],
-        makeContext()
+        makeContext(),
+        []
       )
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Could not find a row with the given condition"`
@@ -476,7 +488,8 @@ describe('table operators', () => {
         await (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap!(
           [columnValue, Value.fromJS(3)],
           [column],
-          ctx
+          ctx,
+          []
         )
       ).getData()
     ).toMatchInlineSnapshot(`true`);
@@ -485,7 +498,8 @@ describe('table operators', () => {
       (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap?.(
         [columnValue, Value.fromJS(404)],
         [column],
-        ctx
+        ctx,
+        []
       )
     ).rejects.toThrow(RuntimeError);
   });
@@ -514,7 +528,12 @@ describe('table operators', () => {
     });
     expect(
       await (
-        await fnValues!([tableValue, conditionColumnValue], [], makeContext())
+        await fnValues!(
+          [tableValue, conditionColumnValue],
+          [],
+          makeContext(),
+          []
+        )
       ).getData()
     ).toEqual(['b', N(2)]);
   });

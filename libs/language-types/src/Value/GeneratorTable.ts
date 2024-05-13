@@ -61,7 +61,8 @@ export class GeneratorTable implements TableValue {
       async (value) => this.getColumnOneResultGenFunction(index, value)
     );
     return GeneratorColumn.fromGenerator(
-      fromGeneratorFunctionPromiseToGeneratorFunction(colGenPromise)
+      fromGeneratorFunctionPromiseToGeneratorFunction(colGenPromise),
+      `GeneratorTable<${this.columnNames.join(',')}>`
     );
   }
 
@@ -78,7 +79,10 @@ export class GeneratorTable implements TableValue {
       throw new RuntimeError('Column count mismatch');
     }
     return this.columnTypes.map((_, index) =>
-      GeneratorColumn.fromGenerator(generators[index])
+      GeneratorColumn.fromGenerator(
+        generators[index],
+        `GeneratorTable<${this.columnNames.join(',')}>`
+      )
     );
   }
 

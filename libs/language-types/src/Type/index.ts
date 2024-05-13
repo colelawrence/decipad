@@ -3,4 +3,10 @@ export * from './Type';
 export * from './serialization';
 export * from './percentages';
 export * from './units';
-export * from './typeIsPending';
+export {
+  isDateType,
+  isErrorType,
+  isFunctionType,
+  isPendingType,
+  isNumberType,
+} from './checks';

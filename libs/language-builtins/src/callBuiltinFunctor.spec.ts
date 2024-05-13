@@ -27,98 +27,136 @@ const nilCtx = makeContext();
 describe('callBuiltin', () => {
   it('dateCmpFunctor', async () => {
     expect(
-      await callBuiltinFunctor(nilCtx, '==', [t.date('month'), t.date('month')])
+      await callBuiltinFunctor(
+        nilCtx,
+        '==',
+        [t.date('month'), t.date('month')],
+        []
+      )
     ).toEqual(t.boolean());
 
     expect(
-      (await callBuiltinFunctor(nilCtx, '>=', [t.date('day'), t.date('month')]))
-        .errorCause
+      (
+        await callBuiltinFunctor(
+          nilCtx,
+          '>=',
+          [t.date('day'), t.date('month')],
+          []
+        )
+      ).errorCause
     ).not.toBeNull();
   });
 
   it('contains', async () => {
     expect(
-      await callBuiltinFunctor(nilCtx, 'contains', [
-        t.range(t.number([meter])),
-        t.number(),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'contains',
+        [t.range(t.number([meter])), t.number()],
+        []
+      )
     ).toEqual(t.boolean());
 
     expect(
-      await callBuiltinFunctor(nilCtx, 'contains', [
-        t.range(t.number([meter])),
-        t.number([meter]),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'contains',
+        [t.range(t.number([meter])), t.number([meter])],
+        []
+      )
     ).toEqual(t.boolean());
 
     expect(
-      await callBuiltinFunctor(nilCtx, 'contains', [
-        t.column(t.range(t.number([meter]))),
-        t.number([meter]),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'contains',
+        [t.column(t.range(t.number([meter]))), t.number([meter])],
+        []
+      )
     ).toEqual(t.column(t.boolean()));
 
     expect(
-      await callBuiltinFunctor(nilCtx, 'contains', [
-        t.range(t.number([meter])),
-        t.column(t.number([meter])),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'contains',
+        [t.range(t.number([meter])), t.column(t.number([meter]))],
+        []
+      )
     ).toEqual(t.column(t.boolean()));
 
     expect(
       (
-        await callBuiltinFunctor(nilCtx, 'contains', [
-          t.range(t.number([meter])),
-          t.number([second]),
-        ])
+        await callBuiltinFunctor(
+          nilCtx,
+          'contains',
+          [t.range(t.number([meter])), t.number([second])],
+          []
+        )
       ).errorCause
     ).not.toBeNull();
 
     expect(
-      await callBuiltinFunctor(nilCtx, 'contains', [
-        t.date('month'),
-        t.date('day'),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'contains',
+        [t.date('month'), t.date('day')],
+        []
+      )
     ).toEqual(t.boolean());
 
     expect(
       (
-        await callBuiltinFunctor(nilCtx, 'contains', [
-          t.number([meter]),
-          t.range(t.number([meter])),
-        ])
+        await callBuiltinFunctor(
+          nilCtx,
+          'contains',
+          [t.number([meter]), t.range(t.number([meter]))],
+          []
+        )
       ).errorCause
     ).not.toBeNull();
   });
 
   it('cat', async () => {
     expect(
-      await callBuiltinFunctor(nilCtx, 'cat', [
-        t.column(t.number([meter])),
-        t.column(t.number([meter])),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'cat',
+        [t.column(t.number([meter])), t.column(t.number([meter]))],
+        []
+      )
     ).toEqual(t.column(t.number([meter])));
   });
 
   it('first', async () => {
     expect(
-      await callBuiltinFunctor(nilCtx, 'first', [t.column(t.number([meter]))])
+      await callBuiltinFunctor(
+        nilCtx,
+        'first',
+        [t.column(t.number([meter]))],
+        []
+      )
     ).toEqual(t.number([meter]));
   });
 
   it('last', async () => {
     expect(
-      await callBuiltinFunctor(nilCtx, 'last', [t.column(t.number([meter]))])
+      await callBuiltinFunctor(
+        nilCtx,
+        'last',
+        [t.column(t.number([meter]))],
+        []
+      )
     ).toEqual(t.number([meter]));
   });
 
   it('errors', async () => {
     expect(
-      (await callBuiltinFunctor(nilCtx, 'unknownFn', [t.number()])).errorCause
+      (await callBuiltinFunctor(nilCtx, 'unknownFn', [t.number()], []))
+        .errorCause
     ).not.toBeNull();
 
     expect(
-      (await callBuiltinFunctor(nilCtx, 'if', [t.number()])).errorCause
+      (await callBuiltinFunctor(nilCtx, 'if', [t.number()], [])).errorCause
     ).not.toBeNull();
   });
 });
@@ -142,100 +180,149 @@ const typeDimTests: Record<string, Test> = {
     const n2 = await build2({ type: 'number' });
     const out = await buildOut({ type: 'number' });
 
-    expect(await callBuiltinFunctor(nilCtx, '+', [n, n2])).toEqual(out);
+    expect(await callBuiltinFunctor(nilCtx, '+', [n, n2], [])).toEqual(out);
   },
   cmpFunctor: async (build, build2, _, buildOut) => {
     const n = await build({ type: 'number' });
     const n2 = await build2({ type: 'number' });
     const out = await buildOut({ type: 'boolean' });
 
-    expect(await callBuiltinFunctor(nilCtx, '>', [n, n2])).toEqual(out);
+    expect(await callBuiltinFunctor(nilCtx, '>', [n, n2], [])).toEqual(out);
 
     expect(
-      await callBuiltinFunctor(nilCtx, '>', [
-        await build({ type: 'number', unit: [meter] }),
-        await build2({ type: 'number', unit: [meter] }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '>',
+        [
+          await build({ type: 'number', unit: [meter] }),
+          await build2({ type: 'number', unit: [meter] }),
+        ],
+        []
+      )
     ).toEqual(out);
 
     expect(
-      await callBuiltinFunctor(nilCtx, '>', [
-        await build({ type: 'number', unit: [meter] }),
-        await build2({ type: 'number', unit: null }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '>',
+        [
+          await build({ type: 'number', unit: [meter] }),
+          await build2({ type: 'number', unit: null }),
+        ],
+        []
+      )
     ).toEqual(out);
 
     expect(
       (
-        await callBuiltinFunctor(nilCtx, '>', [
-          await build({ type: 'number', unit: [meter] }),
-          await build2({ type: 'number', unit: [second] }),
-        ])
+        await callBuiltinFunctor(
+          nilCtx,
+          '>',
+          [
+            await build({ type: 'number', unit: [meter] }),
+            await build2({ type: 'number', unit: [second] }),
+          ],
+          []
+        )
       ).errorCause?.spec
     ).toHaveProperty('expectedUnit', [[meter], [second]]);
   },
   if: async (build, build2, build3, buildOut) => {
     expect(
-      await callBuiltinFunctor(nilCtx, 'if', [
-        await build({ type: 'boolean' }),
-        await build2({ type: 'number' }),
-        await build3({ type: 'number' }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        'if',
+        [
+          await build({ type: 'boolean' }),
+          await build2({ type: 'number' }),
+          await build3({ type: 'number' }),
+        ],
+        []
+      )
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
       (
-        await callBuiltinFunctor(nilCtx, 'if', [
-          await build({ type: 'boolean' }),
-          await build2({ type: 'string' }),
-          await build3({ type: 'number' }),
-        ])
+        await callBuiltinFunctor(
+          nilCtx,
+          'if',
+          [
+            await build({ type: 'boolean' }),
+            await build2({ type: 'string' }),
+            await build3({ type: 'number' }),
+          ],
+          []
+        )
       ).errorCause
     ).not.toBeNull();
   },
   '+': async (build, build2, _, buildOut) => {
     expect(
-      await callBuiltinFunctor(nilCtx, '+', [
-        await build({ type: 'number' }),
-        await build2({ type: 'number' }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '+',
+        [await build({ type: 'number' }), await build2({ type: 'number' })],
+        []
+      )
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      await callBuiltinFunctor(nilCtx, '+', [
-        await build({ type: 'month' }),
-        await build2({ type: 'number', unit: U('month') }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '+',
+        [
+          await build({ type: 'month' }),
+          await build2({ type: 'number', unit: U('month') }),
+        ],
+        []
+      )
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
-      await callBuiltinFunctor(nilCtx, '+', [
-        await build2({ type: 'number', unit: U('month') }),
-        await build({ type: 'month' }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '+',
+        [
+          await build2({ type: 'number', unit: U('month') }),
+          await build({ type: 'month' }),
+        ],
+        []
+      )
     ).toEqual(buildOut({ type: 'month' }));
   },
   '-': async (build, build2, _, buildOut) => {
     expect(
-      await callBuiltinFunctor(nilCtx, '-', [
-        await build({ type: 'number' }),
-        await build2({ type: 'number' }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '-',
+        [await build({ type: 'number' }), await build2({ type: 'number' })],
+        []
+      )
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      await callBuiltinFunctor(nilCtx, '-', [
-        await build({ type: 'month' }),
-        await build2({ type: 'number', unit: U('month') }),
-      ])
+      await callBuiltinFunctor(
+        nilCtx,
+        '-',
+        [
+          await build({ type: 'month' }),
+          await build2({ type: 'number', unit: U('month') }),
+        ],
+        []
+      )
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
       (
-        await callBuiltinFunctor(nilCtx, '-', [
-          await build2({ type: 'number', unit: U('month') }),
-          await build({ type: 'month' }),
-        ])
+        await callBuiltinFunctor(
+          nilCtx,
+          '-',
+          [
+            await build2({ type: 'number', unit: U('month') }),
+            await build({ type: 'month' }),
+          ],
+          []
+        )
       ).errorCause
     ).not.toBeNull();
   },

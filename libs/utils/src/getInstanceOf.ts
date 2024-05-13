@@ -8,6 +8,8 @@ export const getInstanceof = <T>(
   if (thing instanceof cls) {
     return thing as T;
   }
+  // eslint-disable-next-line no-console
+  console.warn('getInstanceof failed', thing);
   throw new Error(
     `panic: ${
       message ??

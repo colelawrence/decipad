@@ -7,34 +7,24 @@ import {
   Type,
   serializeType,
   buildType as t,
-  typeIsPending,
+  isPendingType,
 } from '@decipad/language-types';
 import { getOperatorByName } from './operators';
 import type { FullBuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
 import { type BuiltinContextUtils, type CallBuiltinFunctor } from './types';
 
-type CallBuiltinFunctorParams =
-  | [BuiltinContextUtils, string, Type[]]
-  | [BuiltinContextUtils, string, Type[], AST.Expression[]];
-
 const internalCallBuiltinFunctor = async (
   context: BuiltinContextUtils,
   opName: string,
   givenArguments: Type[],
-  givenValues: AST.Expression[]
+  givenValues: AST.Expression[],
+  op: FullBuiltinSpec | undefined = getOperatorByName(opName) ?? undefined
 ): Promise<Promise<Type> | Type> => {
-  // console.log(
-  //   `builtin functor ${opName}`,
-  //   givenArguments.map((t) => t.unit),
-  //   givenArguments.map((t) => t.cellType?.unit)
-  // );
   const error = givenArguments.find(typeHasError);
   if (error) {
     return error;
   }
-
-  const op = getOperatorByName(opName);
 
   if (op == null) {
     return t.impossible(InferError.missingFormula(opName));
@@ -50,9 +40,13 @@ const internalCallBuiltinFunctor = async (
   }
 
   // any pending argument yields a pending type (contagious)
-  const pending = givenArguments.find(typeIsPending);
+  const pending = givenArguments.find(isPendingType);
   if (pending) {
     return pending;
+  }
+
+  if (op.functorNoAutomap != null) {
+    return op.functorNoAutomap(givenArguments, givenValues, context);
   }
 
   if (op.isReducer) {
@@ -64,10 +58,6 @@ const internalCallBuiltinFunctor = async (
     return Dimension.automapTypesForReducer(onlyArg, async (types: Type[]) =>
       lowerDimFunctor(types, givenValues, context)
     );
-  }
-
-  if (op.functorNoAutomap != null) {
-    return op.functorNoAutomap(givenArguments, givenValues, context);
   }
 
   const resultTypes = await Dimension.automapTypes(
@@ -82,11 +72,6 @@ const internalCallBuiltinFunctor = async (
     op.argCardinalities
   );
 
-  // console.log(
-  //   `builtin functor ${opName} result units:`,
-  //   resultTypes.unit,
-  //   resultTypes.cellType?.unit
-  // );
   return resultTypes;
 };
 
@@ -94,7 +79,8 @@ const formatTypes = (types: Type[]): string =>
   types.map((t) => serializeType(t).kind).join(', ');
 
 const enrichErrorType = (
-  [, opName, argumentTypes]: CallBuiltinFunctorParams,
+  opName: string,
+  argumentTypes: Type[],
   type: Type
 ): Type => {
   if (!type.errorCause) {
@@ -119,15 +105,21 @@ const enrichErrorType = (
 };
 
 export const callBuiltinFunctor: CallBuiltinFunctor = async (
-  ...[utils, ...params]
+  ctx,
+  funcName,
+  argTypes,
+  params,
+  op
 ): Promise<Type> => {
-  const internalParams: CallBuiltinFunctorParams = [
-    utils,
-    ...(params as [string, Type[], AST.Expression[]]),
-  ];
-  const returnType = await internalCallBuiltinFunctor(...internalParams);
+  const returnType = await internalCallBuiltinFunctor(
+    ctx,
+    funcName,
+    argTypes,
+    params,
+    op
+  );
   if (typeHasError(returnType)) {
-    return enrichErrorType(internalParams, returnType);
+    return enrichErrorType(funcName, argTypes, returnType);
   }
   return returnType;
 };

@@ -10,27 +10,26 @@ import { lowLevelGet } from './lowLevelGet';
 import { UnknownValue } from './Unknown';
 import type { OneResult } from '../Result';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
+import { once } from '@decipad/utils';
+import { ColumnBase } from './ColumnBase';
 
-export class Column implements ColumnLikeValue {
+export class Column extends ColumnBase {
   readonly _values: ReadonlyArray<Value>;
   private defaultValue?: Value;
 
   constructor(values: ReadonlyArray<Value>, defaultValue?: Value) {
+    super();
     this._values = values;
     this.defaultValue = defaultValue;
   }
 
-  async dimensions() {
+  async getDimensions() {
     const contents = this._values[0];
 
-    if (isColumnLike(contents)) {
-      return [
-        { dimensionLength: await this.rowCount() },
-        ...(await contents.dimensions()),
-      ];
-    } else {
-      return [{ dimensionLength: await this.rowCount() }];
-    }
+    return [
+      { dimensionLength: once(async () => this.rowCount()) },
+      ...(isColumnLike(contents) ? await contents.dimensions() : []),
+    ];
   }
 
   async lowLevelGet(...keys: number[]) {
@@ -55,15 +54,18 @@ export class Column implements ColumnLikeValue {
     return new Column(values, defaultValue);
   }
 
-  static fromGenerator(gen: ValueGeneratorFunction): ColumnLikeValue {
-    return GeneratorColumn.fromGenerator(gen);
+  static fromGenerator(
+    gen: ValueGeneratorFunction,
+    desc = `Column.fromGenerator(${gen.name})`
+  ): ColumnLikeValue {
+    return GeneratorColumn.fromGenerator(gen, desc);
   }
 
   values(start = 0, end = Infinity) {
     return from(this._values.slice(start, end));
   }
 
-  async rowCount() {
+  async getRowCount() {
     return Promise.resolve(this._values.length);
   }
 
@@ -71,7 +73,7 @@ export class Column implements ColumnLikeValue {
     return this._values[i] ?? this.defaultValue ?? UnknownValue;
   }
 
-  async getData(): Promise<OneResult> {
+  async getGetData(): Promise<OneResult> {
     return Promise.resolve(columnValueToResultValue(this));
   }
 }

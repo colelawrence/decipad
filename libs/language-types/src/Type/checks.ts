@@ -210,8 +210,7 @@ export const sameTablenessAs = checker(async (me: Type, other: Type) => {
       (
         await Promise.all(
           zip(me.columnTypes, other.columnTypes).map(
-            async ([myT, otherT]) =>
-              (await myT.sameAs(otherT)).errorCause == null
+            async ([myT, otherT]) => !isErrorType(await myT.sameAs(otherT))
           )
         )
       ).every(Boolean)
@@ -318,3 +317,26 @@ export const isPrimitive = checker(async (me: Type) => {
     return me;
   }
 });
+
+// Boolean checks
+export const isDateType = (t: Type): t is Type & { date: Time.Specificity } => {
+  return t.date != null;
+};
+
+export const isErrorType = (
+  t: Type
+): t is Type & { errorCause: InferError } => {
+  return t.errorCause != null;
+};
+
+export const isFunctionType = (t: Type): t is Type & { functionness: true } => {
+  return t.functionness;
+};
+
+export const isPendingType = (t: Type): t is Type & { pending: true } => {
+  return t.pending;
+};
+
+export const isNumberType = (t: Type): t is Type & { type: 'number' } => {
+  return t.type === 'number';
+};

@@ -5,6 +5,7 @@ import {
   fromGeneratorPromise,
   memoizing,
   slice,
+  trace,
 } from '@decipad/generator-utils';
 import type { OneResult } from '../Result';
 import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
@@ -14,43 +15,53 @@ import type { Dimension } from '../Dimension';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
-import { getDefined } from '@decipad/utils';
+import { getDefined, once } from '@decipad/utils';
+import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
+import { getResultGenerator } from '../utils/getResultGenerator';
+import { lowLowLevelGet } from './lowLowLevelGet';
+import { ColumnBase } from './ColumnBase';
 
-const MAX_GENERATOR_MEMO_ELEMENTS = 10_000;
+type TGeneratorColumn = ColumnLikeValue & LowLevelMinimalTensor;
 
-export class GeneratorColumn implements ColumnLikeValue {
+const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
+
+export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   private gen: PromiseOrType<ValueGeneratorFunction>;
   private memo: undefined | Array<Value>;
   private partialMemo: undefined | boolean;
+  private desc: string;
 
-  constructor(gen: PromiseOrType<ValueGeneratorFunction>) {
+  constructor(gen: PromiseOrType<ValueGeneratorFunction>, desc: string) {
+    super();
     this.gen = gen;
+    this.desc = desc;
   }
-  indexToLabelIndex?: ((index: number) => Promise<number>) | undefined;
-  async dimensions(): Promise<Dimension[]> {
+
+  async getDimensions(): Promise<Dimension[]> {
     const contents = await firstOrUndefined((await this.gen)());
 
-    if (isColumnLike(contents)) {
-      return [
-        { dimensionLength: await this.rowCount() },
-        ...(await contents.dimensions()),
-      ];
-    } else {
-      return [{ dimensionLength: await this.rowCount() }];
-    }
+    return [
+      { dimensionLength: once(async () => this.rowCount()) },
+      ...(isColumnLike(contents) ? await contents.dimensions() : []),
+    ];
   }
 
-  async getData(): Promise<OneResult> {
+  async getGetData(): Promise<OneResult> {
     return columnValueToResultValue(this);
   }
 
-  async lowLevelGet(...keys: number[]) {
-    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1)).catch(
-      (err) => {
-        console.error('GeneratorColumn lowLevelGet error', err, this.gen);
-        throw err;
-      }
+  private async at(index: number): Promise<OneResult | undefined> {
+    return firstOrUndefined(
+      getResultGenerator(await this.getData())(index, index + 1)
     );
+  }
+
+  async lowLowLevelGet(...keys: number[]) {
+    return lowLowLevelGet(await this.at(keys[0]), keys.slice(1));
+  }
+
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
   async atIndex(i: number): Promise<Value | undefined> {
@@ -59,7 +70,7 @@ export class GeneratorColumn implements ColumnLikeValue {
     }
     return firstOrUndefined(this.values(i, i + 1));
   }
-  async rowCount(): Promise<number> {
+  async getRowCount(): Promise<number> {
     return count(this.values());
   }
 
@@ -72,25 +83,29 @@ export class GeneratorColumn implements ColumnLikeValue {
       this.memo != null &&
       (end < this.memo.length || !getDefined(this.partialMemo))
     ) {
-      return slice(from(this.memo), start, end);
+      return trace(slice(from(this.memo), start, end), this.desc);
     }
-    return slice(
-      memoizing(
-        (await this.gen)(),
-        (all, partial) => {
-          this.memo = all;
-          this.partialMemo = partial;
-        },
-        MAX_GENERATOR_MEMO_ELEMENTS
+    return trace(
+      slice(
+        memoizing(
+          (await this.gen)(),
+          (all, partial) => {
+            this.memo = all;
+            this.partialMemo = partial;
+          },
+          MAX_GENERATOR_MEMO_ELEMENTS
+        ),
+        start,
+        end
       ),
-      start,
-      end
+      this.desc
     );
   }
 
   static fromGenerator(
-    gen: (start?: number, end?: number) => AsyncGenerator<Value>
+    gen: (start?: number, end?: number) => AsyncGenerator<Value>,
+    desc: string
   ) {
-    return new GeneratorColumn(gen);
+    return new GeneratorColumn(gen, desc);
   }
 }

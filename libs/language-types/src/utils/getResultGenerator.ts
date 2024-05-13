@@ -1,11 +1,9 @@
 import { from, slice } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import { type Result } from '@decipad/language';
 import { isResultGenerator } from './isResultGenerator';
+import type { OneResult, ResultGenerator } from '../Result';
 
-export const getResultGenerator = (
-  v: Result.OneResult
-): Result.ResultGenerator => {
+export const getResultGenerator = (v: OneResult): ResultGenerator => {
   if (!isResultGenerator(v)) {
     if (Array.isArray(v)) {
       return (start = 0, end = Infinity) => slice(from(v), start, end);

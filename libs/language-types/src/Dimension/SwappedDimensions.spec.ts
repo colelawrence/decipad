@@ -1,7 +1,8 @@
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createSwappedDimensions } from './SwappedDimensions';
-import { materialize } from '../utils/materialize';
+import { projectHypercube } from '../utils/projectHypercube';
 import { jsCol } from './testUtils';
+import { materializeOneResult } from '../utils';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -17,8 +18,11 @@ const threeAnonDims = jsCol([
 ]);
 
 it('can swap dimensions of a hypercube', async () => {
-  expect(await materialize(createSwappedDimensions(twoAnonDims, 1)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(twoAnonDims, 1))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         DeciNumber {
@@ -39,8 +43,11 @@ it('can swap dimensions of a hypercube', async () => {
 });
 
 it('or left alone', async () => {
-  expect(await materialize(createSwappedDimensions(twoAnonDims, 0)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(twoAnonDims, 0))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         DeciNumber {
@@ -63,8 +70,11 @@ it('or left alone', async () => {
 });
 
 it('can swap nothing if the dimension is 1D', async () => {
-  expect(await materialize(createSwappedDimensions(multiDimX, 0)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(multiDimX, 0))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       DeciNumber {
         "d": 1n,
@@ -89,8 +99,11 @@ it('can swap nothing if the dimension is 1D', async () => {
 });
 
 it('can work with 3d', async () => {
-  expect(await materialize(createSwappedDimensions(threeAnonDims, 0)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(threeAnonDims, 0))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         Array [
@@ -137,8 +150,11 @@ it('can work with 3d', async () => {
     ]
   `);
 
-  expect(await materialize(createSwappedDimensions(threeAnonDims, 1)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(threeAnonDims, 1))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         Array [
@@ -187,8 +203,11 @@ it('can work with 3d', async () => {
     ]
   `);
 
-  expect(await materialize(createSwappedDimensions(threeAnonDims, 2)))
-    .toMatchInlineSnapshot(`
+  expect(
+    await materializeOneResult(
+      projectHypercube(createSwappedDimensions(threeAnonDims, 2))
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         Array [

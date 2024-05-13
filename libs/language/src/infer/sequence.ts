@@ -6,7 +6,7 @@ import type { Type, AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
-  typeIsPending,
+  isPendingType,
   buildType as t,
   Time,
   Value,
@@ -147,7 +147,7 @@ export const inferSequence = async (
   const endType = await inferExpression(realm, endN);
 
   // pending is contagious
-  const pending = [startType, endType].find(typeIsPending);
+  const pending = [startType, endType].find(isPendingType);
   if (pending) {
     return pending;
   }

@@ -43,7 +43,8 @@ export async function simpleExpressionEvaluate(
         funcName,
         args,
         argTypes,
-        returnType
+        returnType,
+        funcArgs
       );
       if (!(res instanceof Value.NumberValue)) {
         throw InferError.complexExpressionExponent();

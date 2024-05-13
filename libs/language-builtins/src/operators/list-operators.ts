@@ -1,22 +1,25 @@
 import { getDefined, getInstanceof } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
-import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
+import DeciNumber, { N, ZERO, ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
   Value,
   Type,
   buildType as t,
+  getResultGenerator,
+  serializeType,
 } from '@decipad/language-types';
 import type { BuiltinSpec } from '../interfaces';
 import { reverse, sort, unique } from '../utils/valueTransforms';
+import { coherceToFraction } from '../utils/coherceToFraction';
 
 export const listOperators: Record<string, BuiltinSpec> = {
   len: {
     argCount: 1,
     isReducer: true,
     noAutoconvert: true,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     fnValues: async ([col]: Value.Value[], [type]: Type[] = []) =>
       Value.fromJS(
         await Value.getColumnLike(col).rowCount(),
@@ -30,7 +33,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   first: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: async ([arg]: Value.Value[]) =>
       getDefined(
@@ -45,7 +48,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   last: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: async ([arg]: Value.Value[]) => {
       const col = Value.getColumnLike(arg);
@@ -76,7 +79,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   countif: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     isReducer: true,
     fnValues: async ([a]: Value.Value[]) => {
       let count = 0;
@@ -95,20 +98,31 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   stepgrowth: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     noAutoconvert: true,
     coerceToColumn: true,
-    fnValues: ([a]) =>
-      Value.Column.fromGenerator(() => {
-        let previous = ZERO;
-        return map(Value.getColumnLike(a).values(), async (item) => {
-          const current = getInstanceof(await item.getData(), DeciNumber);
-          const next = current.sub(previous);
-          previous = current;
-          return Value.Scalar.fromValue(next);
-        });
-      }),
-    functionSignature: 'column<number>:A -> A',
+    fnValues: async ([a], [aType]) => {
+      return Value.FMappedColumn.fromGeneratorAndType(
+        getResultGenerator(await a.getData()),
+        serializeType(await aType.reduced()),
+        (current, _, previous) => {
+          const next = coherceToFraction(current).sub(
+            coherceToFraction(previous ?? ZERO)
+          );
+          previous = next;
+          return next;
+        },
+        `stepgrowth fnValues<${serializeType(aType).kind}>`
+      );
+    },
+    functor: async ([a]) => {
+      const result = Type.combine(
+        (await (await a.isColumn()).reduced()).isScalar('number'),
+        a
+      );
+
+      return result;
+    },
     explanation:
       'Calculates the increments between consecutive values in a column.',
     syntax: 'stepgrowth(Table.Column)',
@@ -117,7 +131,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   grow: {
     argCount: 3,
-    argCardinalities: [1, 1, 2],
+    argCardinalities: [[1, 1, 2]],
     noAutoconvert: true,
     fnValues: async ([_initial, _growthRate, it]) => {
       const initial = getInstanceof(await _initial.getData(), DeciNumber);
@@ -125,22 +139,25 @@ export const listOperators: Record<string, BuiltinSpec> = {
         await _growthRate.getData(),
         DeciNumber
       ).add(ONE);
-      return Value.Column.fromGenerator(() =>
-        map(Value.getColumnLike(it).values(), (_v, i) => {
-          const growth = growthRate.pow(N(i));
-          const grown = initial.mul(growth);
-          return Value.Scalar.fromValue(grown);
-        })
+      return Value.Column.fromGenerator(
+        () =>
+          map(Value.getColumnLike(it).values(), (_v, i) => {
+            const growth = growthRate.pow(N(i));
+            const grown = initial.mul(growth);
+            return Value.Scalar.fromValue(grown);
+          }),
+        `grow fnValues`
       );
     },
-    functor: async ([initial, growthRate, period]) =>
-      (
+    functor: async ([initial, growthRate, period]) => {
+      return (
         await Type.combine(
           initial.isScalar('number'),
           growthRate.isScalar('number'),
           period.isColumn()
         )
-      ).mapType(() => t.column(initial, period.indexedBy)),
+      ).mapType(() => t.column(initial, period.indexedBy));
+    },
     explanation: 'Compounds a value by a specific rate.',
     syntax: 'grow(Initial, Rate, Table.Column)',
     example: 'grow($10k, 5%, Investment.Years)',
@@ -148,7 +165,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   transpose: {
     argCount: 1,
-    argCardinalities: [3],
+    argCardinalities: [[3]],
     fnValues: async ([matrix]) =>
       Dimension.createSwappedDimensions(Value.getColumnLike(matrix), 1),
     functor: async ([matrix]) =>
@@ -173,7 +190,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
 
   sort: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     fnValues: async ([column]) => sort(Value.getColumnLike(column)),
     functionSignature: 'column<A>:R -> R',
     explanation: 'Sorts a column.',
@@ -184,7 +201,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
 
   unique: {
     argCount: 1,
-    argCardinalities: [2],
+    argCardinalities: [[2]],
     fnValues: async ([column]) => unique(Value.getColumnLike(column)),
     functionSignature: 'column<A> -> column<A>',
     explanation: 'Extracts the unique values of a column.',

@@ -1,3 +1,3 @@
 export interface Dimension {
-  dimensionLength: number;
+  dimensionLength: number | (() => Promise<number>);
 }

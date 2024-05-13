@@ -64,13 +64,18 @@ describe('autoconvert arguments', () => {
 describe('autoconvert result', () => {
   it('autoconverts unitless result', async () => {
     expect(
-      await autoconvertResult(makeContext(), fromJS(N(2)), number())
+      await autoconvertResult(makeContext(), fromJS(N(2)), number(), 'test')
     ).toMatchObject(fromJS(N(2)));
   });
 
   it('autoconverts unitful (standard unit) argument', async () => {
     expect(
-      await autoconvertResult(makeContext(), fromJS(N(2)), number(U('meter')))
+      await autoconvertResult(
+        makeContext(),
+        fromJS(N(2)),
+        number(U('meter')),
+        'test'
+      )
     ).toMatchObject(fromJS(N(2)));
   });
 
@@ -79,7 +84,8 @@ describe('autoconvert result', () => {
       await autoconvertResult(
         makeContext(),
         fromJS(200_000_000),
-        number(U('bar'))
+        number(U('bar')),
+        'test'
       )
     ).toMatchObject(fromJS(N(2)));
   });
@@ -89,7 +95,8 @@ describe('autoconvert result', () => {
       await autoconvertResult(
         makeContext(),
         fromJS(N(27515, 100)),
-        number(U('celsius'))
+        number(U('celsius')),
+        'test'
       )
     ).toMatchObject(fromJS(N(2)));
   });

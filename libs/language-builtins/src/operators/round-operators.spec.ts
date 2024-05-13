@@ -9,15 +9,20 @@ describe('round', () => {
   const round = operators.round as FullBuiltinSpec;
   it('rounds a number', async () => {
     expect(
-      await round.functor?.([t.number(U('bananas'))], [], makeContext())
+      await round.functorNoAutomap?.(
+        [t.number(U('bananas'))],
+        [],
+        makeContext()
+      )
     ).toEqual(t.number(U('bananas')));
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(1127, 1000)), Value.fromJS(N(2))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -25,10 +30,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(1127, 10)), Value.fromJS(N(0))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -39,10 +45,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(1127, 10))],
             [t.number()],
-            makeContext()
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -53,10 +60,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(1))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -67,10 +75,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(0))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -81,10 +90,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(-2))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -95,10 +105,11 @@ describe('round', () => {
     expect(
       (
         await (
-          await round.fnValues!(
+          await round.fnValuesNoAutomap!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(-5))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -111,8 +122,9 @@ describe('round', () => {
         await (
           await (operators.rounddown as FullBuiltinSpec).fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(1))],
-            [t.number()],
-            makeContext()
+            [t.number(), t.number()],
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()
@@ -126,7 +138,8 @@ describe('round', () => {
           await (operators.rounddown as FullBuiltinSpec).fnValues!(
             [Value.fromJS(N(1127, 10))],
             [t.number()],
-            makeContext()
+            makeContext(),
+            []
           )
         ).getData()
       )?.valueOf()

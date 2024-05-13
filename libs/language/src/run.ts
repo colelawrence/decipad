@@ -1,8 +1,11 @@
-import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports
 import type { AST, Result, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { materializeOneResult } from '@decipad/language-types';
+import {
+  Unknown,
+  isErrorType,
+  materializeOneResult,
+} from '@decipad/language-types';
 import type { ExternalDataMap, TRealm, TScopedInferContext } from '.';
 import {
   ScopedRealm,
@@ -91,9 +94,11 @@ export const runASTAndGetContext = async (
   const realm = _realm || new ScopedRealm(undefined, ctx);
   const type = await inferBlock(block, realm);
 
-  const erroredType = type.errorCause != null ? type : null;
-  if (erroredType && throwOnError) {
-    throw new TypeError(`Type error: ${stringify(erroredType)}`);
+  if (isErrorType(type)) {
+    if (throwOnError) {
+      throw new TypeError(`Type error: ${type.errorCause.message}`);
+    }
+    return { type, value: Unknown, context: ctx, realm };
   }
 
   const results = await run([block], [0], realm, doNotMaterialiseResults);

@@ -56,7 +56,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
         ],
       }
@@ -144,7 +147,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
         ],
       }
@@ -211,7 +217,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
           Column {
             "_values": Array [
@@ -224,7 +233,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
         ],
       }
@@ -361,7 +373,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
           Column {
             "_values": Array [
@@ -390,7 +405,10 @@ describe('treeToTable value', () => {
                 },
               },
             ],
+            "dataCache": undefined,
             "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
           },
         ],
       }

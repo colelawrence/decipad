@@ -15,6 +15,7 @@ import { createSwappedDimensions } from './SwappedDimensions';
 import * as t from '../Type/Type';
 import type { OneResult } from '../Result';
 import type { Column, Value } from '../Value';
+import { getDimensionLength } from '../utils/getDimensionLength';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));
@@ -97,9 +98,13 @@ describe.each(
   });
 
   it('contains a .dimensions property', async () => {
-    expect(await getColumnLike(await lazyThing).dimensions()).toEqual([
-      { dimensionLength: 3 },
-    ]);
+    expect(
+      await Promise.all(
+        (
+          await getColumnLike(await lazyThing).dimensions()
+        ).map(async (d) => getDimensionLength(d.dimensionLength))
+      )
+    ).toEqual([3]);
   });
 
   it('contains .rowCount', async () => {
@@ -230,10 +235,13 @@ describe.each(
   });
 
   it('contains a .dimensions property', async () => {
-    expect(await getColumnLike(await lazyThing).dimensions()).toEqual([
-      { dimensionLength: 2 },
-      { dimensionLength: 3 },
-    ]);
+    expect(
+      await Promise.all(
+        (
+          await getColumnLike(await lazyThing).dimensions()
+        ).map(async (d) => getDimensionLength(d.dimensionLength))
+      )
+    ).toEqual([2, 3]);
   });
 
   it('contains .rowCount', async () => {

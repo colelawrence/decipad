@@ -57,7 +57,7 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   },
   netpresentvalue: {
     argCount: 2,
-    argCardinalities: [1, 2],
+    argCardinalities: [[1, 2]],
     functor: async ([rate, values]) =>
       Type.combine(
         rate.isScalar('number'),
@@ -96,7 +96,7 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   paymentamounts: {
     argCount: 3,
     noAutoconvert: true,
-    argCardinalities: [1, 1, 1],
+    argCardinalities: [[1, 1, 1]],
     functor: async ([rate, numberOfPayments, loanAmount]) =>
       Type.combine(
         rate.isScalar('number'),

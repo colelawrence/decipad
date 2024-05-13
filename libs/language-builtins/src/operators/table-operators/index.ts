@@ -20,7 +20,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
   sortby: {
     argCount: 2,
-    argCardinalities: [1, 2],
+    argCardinalities: [[1, 2]],
     functor: sortByFunctorNoAutomap,
     fnValues: sortyByValuesNoAutomap,
     explanation: 'Reorder table rows based on a column.',

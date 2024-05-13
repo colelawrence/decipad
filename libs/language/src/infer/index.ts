@@ -12,7 +12,8 @@ import {
   Unit,
   parseUnit,
   buildType as t,
-  typeIsPending,
+  isPendingType,
+  isErrorType,
 } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
@@ -40,7 +41,7 @@ export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
   // other stages of the pipeline
   node.inferredType = type;
 
-  if (type.errorCause != null && type.node == null) {
+  if (isErrorType(type) && type.node == null) {
     // here we return a new type based on the inferred one but with the node set to the current node
     return type.inNode(node);
   } else {
@@ -130,7 +131,7 @@ export const inferExpression = linkingToAST(
             inferExpression(realm, getDefined(expr))
           )
         );
-        const pending = [start, end].find(typeIsPending);
+        const pending = [start, end].find(isPendingType);
         if (pending) {
           return pending;
         }
@@ -164,14 +165,12 @@ export const inferExpression = linkingToAST(
         );
 
         // pending type is contagious
-        const pending = [firstCellType, ...restCellTypes].find(typeIsPending);
+        const pending = [firstCellType, ...restCellTypes].find(isPendingType);
         if (pending) {
           return pending;
         }
 
-        const erroredCell = [firstCellType, ...restCellTypes].find(
-          (cell) => cell.errorCause != null
-        );
+        const erroredCell = [firstCellType, ...restCellTypes].find(isErrorType);
 
         if (erroredCell != null) {
           if (erroredCell.errorCause?.spec.errType === 'expected-but-got') {

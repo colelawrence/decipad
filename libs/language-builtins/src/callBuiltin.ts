@@ -1,19 +1,18 @@
 import DeciNumber from '@decipad/number';
 import { getDefined, getOnly } from '@decipad/utils';
-import { getOperatorByName } from './operators';
-import { type FullBuiltinSpec } from './interfaces';
+// eslint-disable-next-line no-restricted-imports
+import type { AST, ContextUtils, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
-  type ContextUtils,
-  type Type,
   Dimension,
   RuntimeError,
   Unit,
-  Unknown,
   Value,
   autoconvertArguments,
   autoconvertResult,
 } from '@decipad/language-types';
+import { getOperatorByName } from './operators';
+import { type FullBuiltinSpec } from './interfaces';
 import { type BuiltinContextUtils, type CallBuiltin } from './types';
 
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
@@ -36,52 +35,44 @@ async function shouldAutoconvert(types: Type[]): Promise<boolean> {
   return true;
 }
 
-async function callBuiltinAfterAutoconvert(
-  context: BuiltinContextUtils,
-  funcName: string,
-  builtin: FullBuiltinSpec,
-  args: Value.Value[],
-  argTypes: Type[]
-): Promise<Value.Value> {
-  if (builtin.fnValuesNoAutomap) {
-    return builtin.fnValuesNoAutomap(args, argTypes, context);
-  }
-
-  const lowerDimFn = async (
+const createLowerDimFn =
+  (builtin: FullBuiltinSpec, argNodes: AST.Expression[]) =>
+  async (
     argsLowerDims: Value.Value[],
     typesLowerDims: Type[],
     context: ContextUtils
   ): Promise<Value.Value> => {
+    if (
+      !builtin.likesUnknowns &&
+      argsLowerDims.some((d) => d === Value.UnknownValue)
+    ) {
+      return Value.UnknownValue;
+    }
     if (builtin.fn != null) {
       const argData = await Promise.all(
         argsLowerDims.map(async (a) => a.getData())
       );
-      if (argData.some((d) => d === Unknown) && !builtin.likesUnknowns) {
-        return Value.UnknownValue;
-      }
-      try {
-        return Value.fromJS(builtin.fn(argData, typesLowerDims));
-      } catch (err) {
-        if (err instanceof RuntimeError) {
-          throw err;
-        }
-        console.error('Error calling fromJS with ', argData, typesLowerDims);
-        console.error(err);
-        throw new TypeError(
-          `Error calling builtin ${funcName}: ${(err as Error).message}`
-        );
-      }
+      return Value.fromJS(builtin.fn(argData, typesLowerDims));
     } else if (builtin.fnValues != null) {
-      return builtin.fnValues(
-        argsLowerDims as Value.Value[],
-        typesLowerDims,
-        context
-      );
+      return builtin.fnValues(argsLowerDims, typesLowerDims, context, argNodes);
     } else {
       /* istanbul ignore next */
       throw new Error('unreachable');
     }
   };
+
+async function callBuiltinAfterAutoconvert(
+  context: BuiltinContextUtils,
+  builtin: FullBuiltinSpec,
+  args: Value.Value[],
+  argTypes: Type[],
+  argNodes: AST.Expression[]
+): Promise<Value.Value> {
+  if (builtin.fnValuesNoAutomap) {
+    return builtin.fnValuesNoAutomap(args, argTypes, context, argNodes);
+  }
+
+  const lowerDimFn = createLowerDimFn(builtin, argNodes);
 
   if (builtin.isReducer) {
     const onlyArgType = getOnly(
@@ -101,14 +92,37 @@ async function callBuiltinAfterAutoconvert(
     );
   }
 
-  return Dimension.automapValues(
+  const autoMappedResult = await Dimension.automapValues(
     context,
     argTypes,
     args,
     lowerDimFn,
     builtin.argCardinalities
   );
+
+  return autoMappedResult;
 }
+
+const maybeFixArgs = async (
+  args: Value.Value[],
+  argTypes: Type[]
+): Promise<Value.Value[]> => {
+  return Promise.all(
+    args.map(async (value, index) => {
+      const type = argTypes[index];
+      if (type.type === 'number') {
+        const data = await value.getData();
+        if (data instanceof DeciNumber) {
+          return Value.fromJS(
+            Unit.convertToMultiplierUnit(data, type.unit),
+            Value.defaultValue('number')
+          );
+        }
+      }
+      return value;
+    })
+  );
+};
 
 const stages = ['autoConvertArguments', 'callBuiltin', 'autoConvertResult'];
 
@@ -118,12 +132,11 @@ export const callBuiltin: CallBuiltin = async (
   funcName,
   argsBeforeConvert,
   argTypes,
-  returnType
+  returnType,
+  argNodes,
+  _op: FullBuiltinSpec | undefined = getOperatorByName(funcName) ?? undefined
 ) => {
-  const op = getDefined(
-    getOperatorByName(funcName),
-    `panic: builtin not found: ${funcName}`
-  );
+  const op = getDefined(_op, `panic: builtin not found: ${funcName}`);
 
   let stage = 0;
   try {
@@ -135,35 +148,21 @@ export const callBuiltin: CallBuiltin = async (
       : argsBeforeConvert;
 
     if (op.absoluteNumberInput && !returnType.unit) {
-      args = await Promise.all(
-        args.map(async (value, index) => {
-          const type = argTypes[index];
-          if (type.type === 'number') {
-            const data = await value.getData();
-            if (data instanceof DeciNumber) {
-              return Value.fromJS(
-                Unit.convertToMultiplierUnit(data, type.unit),
-                Value.defaultValue('number')
-              );
-            }
-          }
-          return value;
-        })
-      );
+      args = await maybeFixArgs(args, argTypes);
     }
 
     stage += 1;
     const resultBeforeConvertingBack = await callBuiltinAfterAutoconvert(
       ctx,
-      funcName,
       op,
       args,
-      argTypes
+      argTypes,
+      argNodes
     );
 
     stage += 1;
     return autoConvert
-      ? autoconvertResult(ctx, resultBeforeConvertingBack, returnType)
+      ? autoconvertResult(ctx, resultBeforeConvertingBack, returnType, funcName)
       : resultBeforeConvertingBack;
   } catch (err) {
     if (
@@ -175,6 +174,14 @@ export const callBuiltin: CallBuiltin = async (
         `callBuiltin "${funcName}": Error at stage ${stage} (${stages[stage]})`
       );
       console.error(err);
+      console.error('arguments to callBuiltin:', {
+        funcName,
+        argsBeforeConvert,
+        argTypes,
+        returnType,
+        argNodes,
+        op,
+      });
     }
     throw new RuntimeError((err as Error)?.message || 'Unknown error');
   }

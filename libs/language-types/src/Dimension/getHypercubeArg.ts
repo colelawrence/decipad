@@ -1,4 +1,4 @@
-import type { HypercubeArg, HypercubeArgLoose } from './LazyOperation';
+import type { HypercubeArg, HypercubeArgLoose } from './types';
 import { typeToDimensionIds } from './typeToDimensionId';
 import type { ContextUtils } from '../ContextUtils';
 
