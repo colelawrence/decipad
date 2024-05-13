@@ -1,7 +1,7 @@
 type WorkspacePageEvent = {
   type: 'page';
   url: string;
-  category: 'workspace';
+  category: 'Workspace Loaded';
   props?: {
     title: string;
   };
@@ -9,7 +9,7 @@ type WorkspacePageEvent = {
 type NotebookPageEvent = {
   type: 'page';
   url: string;
-  category: 'notebook';
+  category: 'Notebook Loaded';
   props?: {
     title: string;
   };
@@ -17,7 +17,7 @@ type NotebookPageEvent = {
 type PlaygroundPageEvent = {
   type: 'page';
   url: string;
-  category: 'playground';
+  category: 'Playground Loaded';
   props?: {
     title: string;
   };

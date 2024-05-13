@@ -55,7 +55,7 @@ export const App: FC = () => {
           path={`${workspaces.template}/*`}
           element={
             <RequireSession>
-              <RouteEvents category="workspace">
+              <RouteEvents category="Workspace Loaded">
                 <LazyRoute>
                   <RequireOnboard>
                     <Workspaces />
@@ -77,7 +77,7 @@ export const App: FC = () => {
         <Route
           path={playground.template}
           element={
-            <RouteEvents category="playground">
+            <RouteEvents category="Playground Loaded">
               <LazyRoute>
                 <Playground />
               </LazyRoute>

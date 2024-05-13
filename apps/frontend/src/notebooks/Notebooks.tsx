@@ -13,7 +13,7 @@ const Notebooks: React.FC = () => {
       <Route
         path="/:notebook/:tab?"
         element={
-          <RouteEvents category="notebook">
+          <RouteEvents category="Notebook Loaded">
             <Notebook />
             <Outlet />
           </RouteEvents>
@@ -22,7 +22,7 @@ const Notebooks: React.FC = () => {
       <Route
         path={routeDefs.acceptInvite.template}
         element={
-          <RouteEvents category="notebook">
+          <RouteEvents category="Notebook Loaded">
             <RequireSession>
               <NotebookInvite />
             </RequireSession>
