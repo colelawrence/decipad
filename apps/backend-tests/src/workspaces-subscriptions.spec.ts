@@ -86,7 +86,7 @@ test('workspaces', (ctx) => {
             submit: null,
             terms_of_service_acceptance: null,
           },
-          customer: '456',
+          customer: 'cus_PmNLVNAj0ksMFU',
           customer_creation: 'if_required',
           customer_details: {
             address: {
@@ -97,7 +97,7 @@ test('workspaces', (ctx) => {
               postal_code: '123',
               state: null,
             },
-            email: 'test@n1n.co',
+            email: 'test@decipad.com',
             name: 'test user',
             phone: null,
             tax_exempt: 'none',

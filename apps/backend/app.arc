@@ -337,6 +337,10 @@ users
   secret *String
   name bySecret
 
+users
+  email *String
+  name byEmail
+
 anonusers
   secret *String
   name bySecret

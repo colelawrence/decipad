@@ -1,15 +1,20 @@
 /* eslint-disable camelcase */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import type { Stripe } from 'stripe';
+import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { tables } from '@decipad/tables';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { resourceusage, subscriptions } from '@decipad/services';
-import { limits } from '@decipad/backend-config';
+import { limits, thirdParty } from '@decipad/backend-config';
+import { getDefined } from '@decipad/utils';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
+const { secretKey, apiVersion } = thirdParty().stripe;
+const stripe = new Stripe(secretKey, {
+  apiVersion,
+});
 
 export const processSessionComplete = async (
   req: APIGatewayProxyEventV2,
@@ -22,6 +27,7 @@ export const processSessionComplete = async (
     subscription,
     metadata,
   } = event.data.object as Stripe.Checkout.Session;
+  const data = await tables();
 
   const { subscriptionId, workspaceId } =
     await subscriptions.createWorkspaceSubscription({
@@ -32,13 +38,36 @@ export const processSessionComplete = async (
       metadata,
     });
 
+  const customerList = (
+    await stripe.customers.list({ email: getDefined(customer_details?.email) })
+  ).data;
+  const [firstCustomer] = customerList;
+
+  let userId = firstCustomer?.metadata?.userId;
+
+  // to handle existing users without userId, maybe we can get rid of this in the future
+  if (!userId && customer_details?.email) {
+    const users = (
+      await data.users.query({
+        IndexName: 'byEmail',
+        KeyConditionExpression: 'email = :email',
+        ExpressionAttributeValues: {
+          ':email': customer_details?.email,
+        },
+      })
+    ).Items;
+
+    userId = users[0].id;
+  }
+
   await track(req, {
-    event: 'Stripe subscription created',
+    event: 'Workspace Upgraded',
+    userId,
     properties: {
-      id: subscriptionId,
-      workspaceId,
-      billingEmail: customer_details?.email || '',
-      plan: metadata?.title,
+      subscription_id: subscriptionId,
+      workspace_id: workspaceId,
+      billing_email: customer_details?.email || '',
+      workspace_plan: metadata?.title,
     },
   });
 
@@ -52,7 +81,7 @@ export const processSubscriptionDeleted = async (
   req: APIGatewayProxyEventV2,
   event: Stripe.Event
 ) => {
-  const { id, status } = event.data.object as Stripe.Subscription;
+  const { id, status, customer } = event.data.object as Stripe.Subscription;
   const data = await tables();
 
   const wsSubscription = await data.workspacesubscriptions.get({
@@ -84,12 +113,18 @@ export const processSubscriptionDeleted = async (
       limits().maxQueries.free
     );
 
+    const userId = (
+      (await stripe.customers.retrieve(customer.toString())) as Stripe.Customer
+    ).metadata?.userId;
+
     await track(req, {
-      event: 'Stripe subscription immediately cancelled',
+      event: 'Workspace Plan Cancelled',
+      userId,
       properties: {
-        id,
-        workspaceId: wsSubscription.workspace_id,
-        billingEmail: wsSubscription.email,
+        cancelation_type: 'cancelled immediately',
+        subscription_id: id,
+        workspace_id: wsSubscription.workspace_id,
+        billing_email: wsSubscription.email,
       },
     });
   }
@@ -104,7 +139,7 @@ export const processSubscriptionUpdated = async (
   req: APIGatewayProxyEventV2,
   event: Stripe.Event
 ) => {
-  const { id, status, cancel_at_period_end } = event.data
+  const { id, status, cancel_at_period_end, customer } = event.data
     .object as Stripe.Subscription;
   const data = await tables();
   let isPremium = false;
@@ -133,13 +168,19 @@ export const processSubscriptionUpdated = async (
     plan = workspace.plan ?? 'pro';
   }
 
+  const userId = (
+    (await stripe.customers.retrieve(customer.toString())) as Stripe.Customer
+  ).metadata?.userId;
+
   if (cancel_at_period_end) {
     await track(req, {
-      event: 'Stripe subscription to be cancelled at period end',
+      event: 'Workspace Plan Cancelled',
+      userId,
       properties: {
-        id: wsSubscription.workspace_id,
-        workspaceId: workspace.id,
-        billingEmail: wsSubscription.email,
+        cancelation_type: 'cancelled at the end of the billing cycle',
+        subscription_id: wsSubscription.workspace_id,
+        workspace_id: workspace.id,
+        billing_email: wsSubscription.email,
       },
     });
   }

@@ -133,8 +133,11 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
           track({
             segmentEvent: {
               type: 'action',
-              action: 'Integration: Workspace Integration connection added',
-              props: { type: 'notion' },
+              action: 'Integration Set Up',
+              props: {
+                integration_type: 'notion',
+                analytics_source: 'frontend',
+              },
             },
           });
           OnConnectNotion();

@@ -128,7 +128,7 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
 
 export const getStripeCheckoutSession: QueryResolvers['getStripeCheckoutSessionInfo'] =
   async (_, { priceId, workspaceId }, ctx) => {
-    const { email, name } = ctx.user ?? {};
+    const { email, name, id } = ctx.user ?? {};
     const priceObject = await stripe.prices.retrieve(priceId);
     let customer: Stripe.Customer;
 
@@ -153,12 +153,21 @@ export const getStripeCheckoutSession: QueryResolvers['getStripeCheckoutSessionI
       customer = await stripe.customers.create({
         email: getDefined(email),
         name,
+        metadata: {
+          userId: id || '',
+        },
       });
     } else {
       // if there is more than one customer with the same email,
       // we retrieve the most recent one - check https://docs.stripe.com/api/customers/list
       const [firstCustomer] = customerListPerEmail;
       customer = firstCustomer;
+
+      if (!customer.metadata.id) {
+        await stripe.customers.update(firstCustomer.id, {
+          metadata: { ...firstCustomer.metadata, userId: id || '' },
+        });
+      }
     }
 
     const checkoutSession: Stripe.Checkout.Session =

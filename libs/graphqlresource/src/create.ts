@@ -38,19 +38,19 @@ export function create<
       await createPermission(permission);
     }
 
-    if (resourceType.humanName === "notebook") {
+    if (resourceType.humanName === 'notebook') {
       await track(
-          context.event,
-          { 
-              userId: user.id, 
-              event: "Notebook Created", 
-              properties: {
-                  analytics_source: 'backend'
-              },
+        context.event,
+        {
+          userId: user.id,
+          event: 'Notebook Created',
+          properties: {
+            analytics_source: 'backend',
           },
-          context
+        },
+        context
       );
-  }
+    }
     return resourceType.toGraphql(newRecord);
   };
 }

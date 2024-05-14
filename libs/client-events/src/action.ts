@@ -93,6 +93,13 @@ type Action =
       };
     }
   | {
+      action: 'Integration Set Up';
+      props: {
+        integration_type: TrackedIntegrations;
+        analytics_source: 'backend' | 'frontend';
+      };
+    }
+  | {
       action: 'AI Chat Message Submitted';
       props: {
         ai_message: string;
@@ -177,10 +184,6 @@ type Action =
   // AI chat assistant actions
   | {
       action: 'Integration: Notebook viewed';
-      props: { type: TrackedIntegrations };
-    }
-  | {
-      action: 'Integration: Workspace Integration connection added';
       props: { type: TrackedIntegrations };
     }
   | {
