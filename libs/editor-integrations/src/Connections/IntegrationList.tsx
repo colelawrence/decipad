@@ -37,26 +37,24 @@ export const IntegrationList: ComponentProps<
     },
     enabled: true,
   },
-  ...(!isFlagEnabled('NOTION_CONNECTIONS')
-    ? []
-    : [
-        {
-          icon: <ThumbnailNotion />,
-          title: 'Notion',
-          description: 'Connect your notion databases to decipad.',
-          onClick: () => {
-            store.Set({ connectionType: 'notion' });
-            store.Set({ stage: 'connect' });
-          },
-          enabled: isFlagEnabled('NOTION_CONNECTIONS'),
-        },
-      ]),
+  {
+    icon: <ThumbnailNotion />,
+    title: 'Notion',
+    description: 'Connect your notion databases to decipad.',
+    onClick: () => {
+      store.Set({ connectionType: 'notion' });
+      store.Set({ stage: 'connect' });
+    },
+    enabled: isFlagEnabled('NOTION_CONNECTIONS'),
+  },
   {
     icon: <ThumbnailGoogleSheet />,
     title: 'Google sheet',
     description: 'Import, collaborate, and analyze Google Sheets data.',
-    onClick: noop,
-    enabled: false,
+    onClick: () => {
+      store.Set({ connectionType: 'gsheets', stage: 'connect' });
+    },
+    enabled: isFlagEnabled('GOOGLE_SHEET_INTEGRATION'),
   },
   {
     icon: <ThumbnailMongoDb />,

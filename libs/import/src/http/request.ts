@@ -14,10 +14,33 @@ interface RequestResponse {
   body: string | JSON;
 }
 
+interface RequestOptions {
+  proxy?: URL;
+}
+
+function getFetchUrl(url: URL, proxy?: URL, externalDataLinkId?: string): URL {
+  if (proxy == null) {
+    return url;
+  }
+
+  if (externalDataLinkId != null && externalDataLinkId.length > 0) {
+    const proxyUrl = new URL(proxy);
+
+    proxyUrl.searchParams.set('externalDataLinkId', externalDataLinkId);
+
+    return proxyUrl;
+  }
+
+  const proxyUrl = new URL(proxy);
+  proxyUrl.searchParams.set('url', url.toString());
+  return proxyUrl;
+}
+
 export async function request(
   url: URL,
   json = false,
-  { proxy }: { proxy?: URL } = {}
+  options: RequestOptions = {},
+  externalDataLinkId: string = ''
 ): Promise<RequestResponse> {
   const fetchOptions = {
     method: 'GET',
@@ -25,9 +48,9 @@ export async function request(
       Referer: global.location.toString(),
     },
   };
-  const fetchUrl = proxy
-    ? `${proxy.toString()}?url=${encodeURIComponent(url.toString())}`
-    : url.toString();
+
+  const fetchUrl = getFetchUrl(url, options.proxy, externalDataLinkId);
+
   const response = await fetch(fetchUrl, fetchOptions);
 
   if (!response.ok) {

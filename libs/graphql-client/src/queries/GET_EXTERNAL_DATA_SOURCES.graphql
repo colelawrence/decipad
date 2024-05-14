@@ -10,16 +10,11 @@ fragment ExternalDataSourceFragment on ExternalDataSource {
   externalId
   keys {
     id
+    access
     lastError
     createdAt
     expiresAt
     lastUsedAt
-  }
-  dataLinks {
-    id
-    name
-    url
-    method
   }
 }
 

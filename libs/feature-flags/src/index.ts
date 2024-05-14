@@ -16,6 +16,7 @@ export const availableFlags = [
   'SILLY_NAMES',
   // Notion Connections in-notebook
   'NOTION_CONNECTIONS',
+  'GOOGLE_SHEET_INTEGRATION',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
   'WORKSPACE_READERS',

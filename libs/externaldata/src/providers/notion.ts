@@ -1,14 +1,15 @@
 import { app, thirdParty } from '@decipad/backend-config';
 import fetch from 'node-fetch';
 import type { NotionProvider } from './types';
+import { z } from 'zod';
 
-type NotionAccessTokenResponse = {
-  access_token: string;
-  bot_id: string;
-  workspace_icon: string;
-  workspace_id: string;
-  workspace_name: string;
-};
+const notionAccessTokenResValidator = z.object({
+  access_token: z.string(),
+  bot_id: z.string(),
+  workspace_icon: z.string().or(z.null()),
+  workspace_id: z.string(),
+  workspace_name: z.string(),
+});
 
 type NotionSearchResponse = {
   next_cursor: string | null;
@@ -82,12 +83,18 @@ export const notion = (): NotionProvider => {
         }),
       });
 
-      const jsonRes = (await res.json()) as NotionAccessTokenResponse;
+      const validatedRes = notionAccessTokenResValidator.parse(
+        await res.json()
+      );
 
       return {
-        accessToken: jsonRes.access_token,
-        resourceName: jsonRes.workspace_name,
-        workspaceId: jsonRes.workspace_id,
+        accessToken: validatedRes.access_token,
+        tokenType: 'Bearer',
+        resourceId: validatedRes.workspace_id,
+        resourceName: validatedRes.workspace_name,
+
+        refreshToken: undefined,
+        scope: undefined,
       };
     },
 

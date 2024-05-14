@@ -2,10 +2,7 @@ import type { PromiseOrType } from '@decipad/utils';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import type { OBSERVED } from './constants';
-import type {
-  HttpMethods,
-  SubscriptionPlansNames,
-} from '@decipad/graphqlserver-types';
+import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import type { ArcTable } from '@architect/functions/types/tables';
 import type { DynamoDB } from 'aws-sdk';
 
@@ -230,13 +227,6 @@ export interface ExternalDataSourceCreateInput
 export interface ExternalDataSource extends ExternalDataSourceCreateInput {
   dataUrl: string;
   authUrl: string;
-}
-
-export interface ExternalDataSourceDataLinks extends TableRecordIdentifier {
-  resource_uri: string;
-  name: string;
-  url: string;
-  method?: HttpMethods;
 }
 
 export type ExternalDataSourceProvider =
@@ -570,12 +560,7 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   provider: ExternalDataSourceProvider;
   externalId: string;
   dataSourceName?: string;
-
-  //
-  // We create the external data source before finishing its completion
-  // So, we must keep track of whether it is currently being processed or not.
-  //
-  isProcessing?: boolean;
+  expires_at?: number;
 }
 
 export interface SecretRecord extends TableRecordBase {
@@ -619,6 +604,9 @@ export interface SetUsernameInput {
 export interface ExternalKeyRecord extends TableRecordBase {
   resource_uri: string;
   access_token: string;
+  createdBy: ID;
+  provider: ExternalDataSourceProvider;
+  createdAt: number;
 
   /**
    * Some OAuth providers don't issue refresh_tokens
@@ -628,16 +616,14 @@ export interface ExternalKeyRecord extends TableRecordBase {
 
   /**
    * Optional, because some access_tokens don't expire
+   * This is also a TTL record, so be careful.
    */
   expiresAt?: number;
 
   token_type?: string;
   scope?: string;
   lastError?: string;
-  createdAt: number;
   lastUsedAt?: number;
-  createdBy: ID;
-  provider: ExternalDataSourceProvider;
 }
 
 export interface AnnotationRecord extends TableRecordBase {
@@ -719,7 +705,6 @@ export interface EnhancedDataTables {
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
-  externaldatasourcedatalinks: DataTable<ExternalDataSourceDataLinks>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;

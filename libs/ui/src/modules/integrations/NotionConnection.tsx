@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { InputField } from '../../atoms';
+import { InputField } from '../../shared';
 import { FC } from 'react';
-import { p14Bold } from '../../../primitives';
+import { p14Bold } from '../../primitives';
 
 interface NotionConnectionProps {
   readonly notionUrl: string;

@@ -20,6 +20,12 @@ export interface ImportOptions {
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
   doNotTryExpressionNumbersParse?: boolean;
   maxCellCount?: number;
+  subId?: number | string;
+
+  // Potentially tidy these up.
+  useRawResult?: string;
+  externalDataLinkId?: string;
+
   jsonPath?: string;
   delimiter?: string;
   provider?: ImportElementSource;

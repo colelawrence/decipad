@@ -198,7 +198,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
 }) => {
   const { stage } = useConnectionStore();
 
-  const { setCode, setLatestResult, code, showAi, toggleShowAi, onReset } =
+  const { setCode, code, showAi, toggleShowAi, onReset } =
     useCodeConnectionStore();
 
   const { onExecute, info } = useContext(ExecutionContext);
@@ -236,7 +236,6 @@ export const CodeConnection: FC<ConnectionProps> = ({
       }
 
       setRawResult(msg.result);
-      setLatestResult(msg.result);
       try {
         let jsonMsg = JSON.parse(msg.result);
 
@@ -270,7 +269,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
         });
       }
     },
-    [onExecute, setLatestResult, setRawResult, setResultPreview, typeMapping]
+    [onExecute, setRawResult, setResultPreview, typeMapping]
   );
 
   const errorStream = useCallback(

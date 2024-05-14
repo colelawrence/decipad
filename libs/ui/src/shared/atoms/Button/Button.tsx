@@ -213,7 +213,7 @@ type ButtonProps = {
   readonly autoFocus?: boolean;
   readonly onClick?: () => void;
   readonly submit?: boolean;
-  readonly styles?: SerializedStyles;
+  readonly styles?: SerializedStyles | Parameters<typeof css>[0];
   readonly sameTab?: boolean;
 };
 

@@ -8,4 +8,6 @@ export interface ConnectionProps {
 
   setResultPreview: (res: Result.Result | undefined) => void;
   setRawResult: (res: string) => void;
+
+  getConnState: () => string;
 }

@@ -15,7 +15,12 @@ import { useSearchParams } from 'react-router-dom';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { IntegrationActionItem, IntegrationItem } from './IntegrationStyles';
 import { ClientEventsContext } from '@decipad/client-events';
-import { ThumbnailNotion } from '../../../icons/thumbnail-icons';
+import {
+  ThumbnailGoogleSheet,
+  ThumbnailNotion,
+} from '../../icons/thumbnail-icons';
+import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const Wrapper = css({
   display: 'flex',
@@ -30,6 +35,7 @@ interface ServicesProps {
 
 const IconMap: Partial<Record<ExternalProvider, ReactNode>> = {
   notion: <ThumbnailNotion />,
+  gsheets: <ThumbnailGoogleSheet />,
 };
 
 function OnAuth(externalData: ExternalDataSourceFragmentFragment) {
@@ -47,7 +53,7 @@ const ExistingServices: FC<ServicesProps> = ({ workspaceId }) => {
 
   const filteredDataSources =
     data?.getExternalDataSourcesWorkspace.filter(
-      (e) => e.name !== 'TEMP_CONNECTION' && e.provider === 'notion'
+      (e) => e.provider === 'notion' || e.provider === 'gsheets'
     ) ?? [];
 
   if (filteredDataSources.length === 0) {
@@ -96,14 +102,14 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
     }
   }, [connected, setQueryParams, toast]);
 
-  async function OnConnectNotion() {
+  async function OnConnectIntegration(provider: ExternalProvider) {
     const res = await createDataSource({
       dataSource: {
         externalId: nanoid(),
         workspaceId,
-        provider: 'notion',
+        provider,
 
-        name: 'TEMP_CONNECTION',
+        name: TEMP_CONNECTION_NAME,
       },
     });
 
@@ -140,9 +146,19 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
               },
             },
           });
-          OnConnectNotion();
+          OnConnectIntegration('notion');
         }}
       />
+      {isFlagEnabled('GOOGLE_SHEET_INTEGRATION') && (
+        <IntegrationItem
+          icon={<ThumbnailGoogleSheet />}
+          title="Google Sheets"
+          description="Effortlessly use your spreadsheet inside Decipad!"
+          onClick={() => {
+            OnConnectIntegration('gsheets');
+          }}
+        />
+      )}
     </div>
   );
 };

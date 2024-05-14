@@ -8,19 +8,20 @@ import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageBlock } from '.';
-import { CaretDown, Warning } from '../../../icons';
-import { cssVar, p13Bold, p14Medium } from '../../../primitives';
-import { useCancelingEvent } from '../../../utils';
-import { Button, MenuItem } from '../../atoms';
 import {
   MenuList,
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
-} from '../../molecules';
+  Button,
+  MenuItem,
+} from '../../shared';
 import { IntegrationActionItem } from './IntegrationStyles';
-import { ThumbnailSql } from 'libs/ui/src/icons/thumbnail-icons';
+import { cssVar, p13Bold, p14Medium } from '../../primitives';
+import { ThumbnailSql } from '../../icons/thumbnail-icons';
+import { useCancelingEvent } from '../../utils';
+import { CaretDown, Warning } from '../../icons';
 
 interface DatabaseConnectionProps {
   workspaceId: string;

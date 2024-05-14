@@ -1,3 +1,5 @@
+import { getGsheetMeta } from './providers/gsheets/importGsheet';
+
 export * from './types';
 export * from './isImportUrl';
 export * from './import';
@@ -10,3 +12,5 @@ export * from './importFromNotion';
 export * from './utils/tableFlip';
 export * from './utils/importFromJSONAndCoercions';
 export * from './utils/columnTypeCoersionsToRec';
+
+export { getGsheetMeta };

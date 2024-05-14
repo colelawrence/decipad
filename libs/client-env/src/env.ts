@@ -8,6 +8,6 @@
 // But this doesnt work for now :(
 //
 
-export const env = {
+export const env: ImportMetaEnv = {
   ...import.meta.env,
-} as ImportMetaEnv;
+};

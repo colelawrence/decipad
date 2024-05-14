@@ -127,6 +127,7 @@ jobs:
           GIT_COMMIT_HASH: '${{github.sha}}'
           VITE_STRIPE_CUSTOMER_PORTAL_LINK: '${{vars.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           VITE_STRIPE_API_KEY: '${{secrets.DEV_STRIPE_API_KEY}}'
+          VITE_GOOGLESHEETS_API_KEY: '${{secrets.DECI_GOOGLESHEETS_API_KEY}}'
           NOTION_CLIENT_ID: '${{secrets.NOTION_CLIENT_ID}}'
           NOTION_CLIENT_SECRET: '${{secrets.NOTION_CLIENT_SECRET}}'
           WORKSPACE_PRO_PLAN: '${{vars.WORKSPACE_PRO_PLAN}}'

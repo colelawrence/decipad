@@ -1,26 +1,43 @@
 import { useEffect } from 'react';
 import { useIntegrationContext } from '.';
+import { IntegrationTypes, useMyEditorRef } from '@decipad/editor-types';
+import { findNodePath, setNodes } from '@udecode/plate-common';
 
 interface IntegrationOptionActions {
-  onRefresh: () => void;
+  onRefresh: () => Promise<string | undefined>;
   onShowSource: () => void;
-  onDelete: () => void;
 }
 
-export function useIntegrationOptions({
-  onRefresh,
-  onShowSource,
-  onDelete,
-}: IntegrationOptionActions): void {
+export function useIntegrationOptions(
+  element: IntegrationTypes.IntegrationBlock,
+  { onRefresh, onShowSource }: IntegrationOptionActions
+): void {
   const observable = useIntegrationContext();
+  const editor = useMyEditorRef();
+
   useEffect(() => {
     const sub = observable?.subscribe((action) => {
       switch (action) {
-        case 'delete-block':
-          onDelete();
-          break;
         case 'refresh':
-          onRefresh();
+          onRefresh().then((latestResult) => {
+            if (latestResult == null) {
+              return;
+            }
+
+            const path = findNodePath(editor, element);
+            if (path == null) {
+              return;
+            }
+
+            setNodes(
+              editor,
+              {
+                latestResult,
+              } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+              { at: path }
+            );
+          });
+
           break;
         case 'show-source': {
           onShowSource();
@@ -31,5 +48,5 @@ export function useIntegrationOptions({
     return () => {
       sub?.unsubscribe();
     };
-  }, [observable, onDelete, onRefresh, onShowSource]);
+  }, [editor, element, observable, onRefresh, onShowSource]);
 }

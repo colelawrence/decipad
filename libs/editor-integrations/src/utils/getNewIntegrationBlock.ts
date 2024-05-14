@@ -6,6 +6,7 @@ import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
 import {
   useCodeConnectionStore,
   useConnectionStore,
+  useGSheetConnectionStore,
   useNotionConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
@@ -49,8 +50,8 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
-        latestResult: codeStore.latestResult,
-        timeOfLastRun: codeStore.timeOfLastRun,
+        latestResult: store.rawResult!,
+        timeOfLastRun: store.timeOfLastRun,
 
         integrationType: {
           type: 'codeconnection',
@@ -67,8 +68,8 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
-        latestResult: sqlStore.latestResult,
-        timeOfLastRun: null,
+        latestResult: store.rawResult!,
+        timeOfLastRun: store.timeOfLastRun,
         integrationType: {
           type: 'mysql',
           query: sqlStore.Query,
@@ -87,8 +88,8 @@ export function getNewIntegration(
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
         typeMappings: store.resultTypeMapping,
-        latestResult: notionStore.latestResult,
-        timeOfLastRun: null,
+        latestResult: store.rawResult!,
+        timeOfLastRun: store.timeOfLastRun,
         integrationType: {
           type: 'notion',
           notionUrl: notionStore.NotionDatabaseUrl!,
@@ -99,6 +100,29 @@ export function getNewIntegration(
       };
 
       return notionIntegration;
+    }
+
+    case 'gsheets': {
+      const gsheetStore = useGSheetConnectionStore.getState();
+      const store = useConnectionStore.getState();
+
+      const gsheetIntegration: IntegrationTypes.IntegrationBlock = {
+        id: nanoid(),
+        type: ELEMENT_INTEGRATION,
+        children: [{ text: varName }],
+        typeMappings: store.resultTypeMapping,
+        latestResult: store.rawResult!,
+        timeOfLastRun: store.timeOfLastRun,
+        integrationType: {
+          type: 'gsheets',
+          externalDataId: gsheetStore.ExternalDataId!,
+          externalDataName: gsheetStore.ExternalDataName!,
+          spreadsheetUrl: gsheetStore.SpreadsheetURL!,
+          selectedSubsheet: gsheetStore.SelectedSubsheet,
+        },
+      };
+
+      return gsheetIntegration;
     }
 
     default: {

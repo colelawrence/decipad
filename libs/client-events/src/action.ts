@@ -1,7 +1,7 @@
 import type { AnyElement, ElementVariants } from '@decipad/editor-types';
 import type { PermissionType } from '@decipad/graphql-client';
 
-type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql';
+type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql' | 'gsheets';
 
 type Action =
   // NEW TRACKERS

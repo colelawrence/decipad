@@ -65,3 +65,10 @@ export function codePlaceholder() {
     codePlaceholders[Math.floor(Math.random() * codePlaceholders.length)];
   return `${source}${maybeEaster}`;
 }
+
+/**
+ * Use this when you are creating a connection but don't yet know the name
+ * We do this when using OAuth, because we must create the external data before.
+ * And only then update the name
+ */
+export const TEMP_CONNECTION_NAME = 'TEMP_CONNECTION';

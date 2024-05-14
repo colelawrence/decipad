@@ -1,31 +1,28 @@
-import { thirdParty } from '@decipad/backend-config';
 import type {
   ExternalDataSourceRecord,
   ExternalKeyRecord,
-  User,
 } from '@decipad/backendtypes';
 import tables, { timestamp } from '@decipad/tables';
 import { nanoid } from 'nanoid';
 
 type SaveExternalKeyOptions = {
   externalDataSource: ExternalDataSourceRecord;
-  user: User;
-  tokenType: 'Bearer';
+  userId: string;
   accessToken: string;
 
+  tokenType?: string;
   scope?: string;
   refreshToken?: string;
-  expiredAt?: string;
+  expiresIn?: string;
 };
 
 export async function saveExternalKey({
   externalDataSource,
-  user,
+  userId,
   tokenType,
   scope,
   accessToken,
   refreshToken,
-  expiredAt,
 }: SaveExternalKeyOptions) {
   const data = await tables();
 
@@ -37,16 +34,12 @@ export async function saveExternalKey({
 
     provider: externalDataSource.provider,
     token_type: tokenType,
-    createdBy: user.id,
+    createdBy: userId,
     access_token: accessToken,
     refresh_token: refreshToken,
 
     scope,
   };
-
-  keyRecord.expiresAt =
-    timestamp() +
-    (Number(expiredAt) || thirdParty().defaultTokenExpirationSeconds);
 
   await data.externaldatasourcekeys.create(keyRecord);
 }

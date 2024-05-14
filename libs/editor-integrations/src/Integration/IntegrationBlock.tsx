@@ -46,6 +46,8 @@ import { CodeIntegration } from './CodeIntegration';
 import { NotionIntegration } from './NotionIntegration';
 import { SQLIntegration } from './SQLIntegration';
 import { useClientEvents } from '@decipad/client-events';
+import { GoogleSheetIntegration } from './GoogleSheetIntegration';
+import { pushResultToComputer } from '@decipad/live-connect';
 
 function getIntegrationComponent(
   element: IntegrationTypes.IntegrationBlock
@@ -85,6 +87,14 @@ function getIntegrationComponent(
           integrationType={element.integrationType}
         />
       );
+    case 'gsheets':
+      return (
+        <GoogleSheetIntegration
+          {...element}
+          element={element}
+          integrationType={element.integrationType}
+        />
+      );
     default:
       return null;
   }
@@ -114,6 +124,15 @@ export const IntegrationBlock: PlateComponent = ({
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
   const [maxQueryExecution, setMaxQueryExecution] = useState(false);
   const { setAllTypeMapping } = useConnectionStore();
+  const computer = useComputer();
+
+  useEffect(() => {
+    return () => {
+      const varName = getNodeString(element.children[0]);
+
+      pushResultToComputer(computer, element.id, varName, undefined);
+    };
+  }, [computer, element.children, element.id]);
 
   useEffect(() => {
     setAllTypeMapping(element.typeMappings);
@@ -131,8 +150,6 @@ export const IntegrationBlock: PlateComponent = ({
   }, [id, updateQueryExecCount]);
 
   const specificIntegration = getIntegrationComponent(element);
-
-  const computer = useComputer();
   const blockResult = computer.getBlockIdResult$.use(element.id);
 
   const readOnly = useIsEditorReadOnly();

@@ -6,7 +6,7 @@ import {
   cssVar,
   p12Bold,
   p12Regular,
-} from '../../../primitives';
+} from '../../primitives';
 
 interface MessageBlockProps {
   type: 'success' | 'warning' | 'error' | 'annotationWarning';

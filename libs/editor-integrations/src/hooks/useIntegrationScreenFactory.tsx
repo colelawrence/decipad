@@ -14,7 +14,7 @@ import { useToast } from '@decipad/toast';
  * Used to abstract away the selection of integration screens.
  */
 export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
-  const { warning, Set, ...store } = useConnectionStore();
+  const { warning, Set, Stringify, ...store } = useConnectionStore();
   const toast = useToast();
 
   useEffect(() => {
@@ -34,6 +34,7 @@ export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
           typeMapping={store.resultTypeMapping}
           setResultPreview={(r) => Set({ resultPreview: r })}
           setRawResult={(r) => Set({ rawResult: r })}
+          getConnState={Stringify}
         />
       ),
       map: (
@@ -42,16 +43,19 @@ export const useIntegrationScreenFactory = (workspaceId: string): ReactNode => {
           name={store.varName || ''}
           setName={(name) => Set({ varName: name })}
           setTypeMapping={store.setResultTypeMapping}
+          timeOfLastRun={store.timeOfLastRun}
         />
       ),
     }),
     [
       Set,
+      Stringify,
       store.connectionType,
       store.rawResult,
       store.resultPreview,
       store.resultTypeMapping,
       store.setResultTypeMapping,
+      store.timeOfLastRun,
       store.varName,
       workspaceId,
     ]

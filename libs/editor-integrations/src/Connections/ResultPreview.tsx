@@ -2,7 +2,6 @@ import type { ErrSpec, Result } from '@decipad/remote-computer';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { IntegrationStore } from '@decipad/react-contexts';
-import { useCodeConnectionStore } from '@decipad/react-contexts';
 import {
   CodeResult,
   ContentEditableInput,
@@ -25,6 +24,7 @@ interface ResultPreviewProps {
   name: string;
   setName: (n: string) => void;
   setTypeMapping: IntegrationStore['setResultTypeMapping'];
+  timeOfLastRun: IntegrationStore['timeOfLastRun'];
 }
 
 export const ResultPreview: FC<ResultPreviewProps> = ({
@@ -32,6 +32,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
   name,
   setName,
   setTypeMapping,
+  timeOfLastRun,
 }) => {
   const [foundError, setFoundError] = useState<ErrSpec | null>(null);
   const foundErrorOnce = useCallback(
@@ -59,8 +60,6 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
     [onChangeColumnType]
   );
 
-  const { timeOfLastRun } = useCodeConnectionStore();
-
   const [open, setOpen] = useState(false);
 
   // happens when you return a list of different deci results
@@ -80,7 +79,10 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
   }
 
   const shouldDisplayPreview = !foundError && result;
-  const isVariableResult = result && result.type.kind !== 'materialized-table';
+  const isVariableResult =
+    result &&
+    result.type.kind !== 'materialized-table' &&
+    result.type.kind !== 'table';
 
   return (
     <div css={resultPreviewWrapperStyles(!!isVariableResult)}>

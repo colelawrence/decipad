@@ -24,6 +24,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 import { merge } from '@decipad/utils';
+import { getExternalDataReqUrl, getExternalDataUrl } from '../utils';
 
 const Styles = {
   OuterWrapper: styled.div({
@@ -131,35 +132,45 @@ const WorkspaceNotionConnections: FC<ConnectionProps> = ({ workspaceId }) => {
         >
           + Add new connection
         </MenuItem>
-        {notionConnections
-          .filter((c) => c.name !== 'TEMP_CONNECTION')
-          .map((conn) => (
-            <MenuItem
-              css={{ minWidth: '240px' }}
-              key={conn.id}
-              onSelect={() =>
-                setter({
-                  ExternalDataId: conn.id,
-                  ExternalDataName: conn.name,
-                })
-              }
-            >
-              {conn.name}
-            </MenuItem>
-          ))}
+        {notionConnections.map((conn) => (
+          <MenuItem
+            css={{ minWidth: '240px' }}
+            key={conn.id}
+            onSelect={() =>
+              setter({
+                ExternalDataId: conn.id,
+                ExternalDataName: conn.name,
+              })
+            }
+          >
+            {conn.name}
+          </MenuItem>
+        ))}
       </MenuList>
     </>
   );
 };
 
-const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
-  onRun,
-}) => {
+const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = (
+  props
+) => {
+  const externalDataId = useNotionConnectionStore((s) => s.ExternalDataId);
+
+  if (externalDataId == null) {
+    return null;
+  }
+
+  return <NotionPrivateDatabasesSelector {...props} />;
+};
+
+const NotionPrivateDatabasesSelector: FC<
+  ConnectionProps & { onRun: () => void }
+> = ({ onRun }) => {
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
   const [
-    externalDataId,
+    _externalDataId,
     databaseName,
     availableDatabases,
     lastFetched,
@@ -172,25 +183,27 @@ const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
     s.Set,
   ]);
 
+  if (_externalDataId == null) {
+    throw new Error('Should be checked in parent component');
+  }
+
+  const externalDataId = _externalDataId;
+
   useEffect(() => {
     async function getDatabases() {
       setIsFetching(true);
 
-      const myFetch = await fetch(
-        `${window.location.origin}/api/externaldatasources/${externalDataId}/data?url=getAllDatabases`
+      const notionDatabaseResponse = await fetch(
+        getExternalDataReqUrl(externalDataId, 'getAllDatabases')
       );
 
-      const jsonRes = await myFetch.json();
+      const notionDatabases = await notionDatabaseResponse.json();
       setter({
-        AvailableDatabases: importDatabases(jsonRes),
+        AvailableDatabases: importDatabases(notionDatabases),
         lastFetchedDatabasesFor: externalDataId,
       });
 
       setIsFetching(false);
-    }
-
-    if (externalDataId == null) {
-      return;
     }
 
     const hasFetchedForExternalData =
@@ -201,7 +214,7 @@ const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
     }
   }, [setter, externalDataId, lastFetched, isFetching]);
 
-  function getTriggerChildren() {
+  const getTriggerChildren = () => {
     if (isFetching) {
       return <LoadingIndicator />;
     }
@@ -215,11 +228,7 @@ const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
     }
 
     return databaseName;
-  }
-
-  if (externalDataId == null) {
-    return null;
-  }
+  };
 
   if (availableDatabases.length === 0 && !isFetching) {
     return <p>No databases found.</p>;
@@ -250,6 +259,10 @@ const NotionPrivateDatabases: FC<ConnectionProps & { onRun: () => void }> = ({
             setter({
               DatabaseId: db.id,
               DatabaseName: db.name,
+              NotionDatabaseUrl: getExternalDataUrl(externalDataId, {
+                url: encodeURI(getNotionQueryDbLink(db.id)),
+                method: 'POST',
+              }),
             });
             onRun();
           }}
@@ -265,7 +278,6 @@ async function notionResponseToDeciResult(
   notionResponse: Response,
   props: ConnectionProps
 ) {
-  const state = useNotionConnectionStore.getState();
   const notionResult = await notionResponse.json();
 
   const [importedNotion, cohersions] = importFromNotion(notionResult);
@@ -277,23 +289,17 @@ async function notionResponseToDeciResult(
     columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
   }).then((deciRes) => {
     props.setRawResult(rawStringResult);
-    state.Set({ latestResult: rawStringResult });
     props.setResultPreview(deciRes);
   });
 }
 
 async function runPrivateIntegration(props: ConnectionProps) {
-  const state = useNotionConnectionStore.getState();
-
-  if (state.ExternalDataId == null || state.DatabaseId == null) {
-    throw new Error('You must select a data source and a database');
+  const url = useNotionConnectionStore.getState().NotionDatabaseUrl;
+  if (url == null) {
+    throw new Error('Cannot run private integration if DB URL is not set');
   }
 
-  const notionQuery = await fetch(
-    `${window.location.origin}/api/externaldatasources/${
-      state.ExternalDataId
-    }/data?url=${getNotionQueryDbLink(state.DatabaseId)}&method=POST`
-  );
+  const notionQuery = await fetch(url);
 
   notionResponseToDeciResult(notionQuery, props);
 }

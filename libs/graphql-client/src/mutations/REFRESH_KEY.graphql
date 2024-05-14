@@ -1,0 +1,3 @@
+mutation RefreshKey($id: ID!) {
+  refreshExternalDataToken(id: $id)
+}

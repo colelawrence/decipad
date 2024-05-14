@@ -6,9 +6,11 @@ import type {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';
-import { generateVarName } from '@decipad/utils';
+import { type Prettify, generateVarName } from '@decipad/utils';
 import { importFromJSONAndCoercions, importFromNotion } from '@decipad/import';
 import { Subject } from 'rxjs';
+import omit from 'lodash.omit';
+import pick from 'lodash.pick';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -35,6 +37,7 @@ export interface IntegrationStore {
   rawResult: string | undefined;
   resultPreview: Result.Result | undefined;
   resultTypeMapping: Array<SimpleTableCellType | undefined>;
+  timeOfLastRun: string | null;
 
   // Index is the index of the column (or if not a column, then defaults to 0)
   setResultTypeMapping: (index: number, type: SimpleTableCellType) => void;
@@ -55,6 +58,8 @@ export interface IntegrationStore {
   // Send warnings to components about various things that can go wrong
   // 'types' = User tried to select a type that is not compatible.
   warning: 'types' | undefined;
+
+  Stringify: () => string;
 
   Set: (
     state: Partial<
@@ -92,6 +97,11 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
     set(() => state);
   },
 
+  Stringify() {
+    const selectedState = pick(get(), 'connectionType', 'open');
+    return Buffer.from(JSON.stringify(selectedState)).toString('base64');
+  },
+
   open: false,
   changeOpen(v) {
     set(() => ({ open: v }));
@@ -100,6 +110,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
     }
   },
 
+  timeOfLastRun: null,
   connectionType: undefined,
   stage: 'pick-integration',
   varName: generateVarName(true),
@@ -190,18 +201,11 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   warning: undefined,
 }));
 
-interface ConnectionStore {
-  /* Latest result from the connection, so we can fallback on it. */
-  latestResult: string;
-  timeOfLastRun: string | null;
-}
-
 // ------ CODE ------
 
-interface CodeConnectionStore extends ConnectionStore {
+interface CodeConnectionStore {
   code: string;
   setCode: (newCode: string) => void;
-  setLatestResult: (newResult: string) => void;
 
   reset: () => void;
   onReset: Subject<undefined>;
@@ -214,20 +218,10 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
   code: codePlaceholder(),
   setCode: (v) => set(() => ({ code: v })),
 
-  latestResult: '',
-  setLatestResult: (v) =>
-    set(() => {
-      return { latestResult: v, timeOfLastRun: new Date().toISOString() };
-    }),
-
-  timeOfLastRun: null,
-
   onReset: new Subject<undefined>(),
   reset: () =>
     set(() => ({
       code: codePlaceholder(),
-      latestResult: '',
-      timeOfLastRun: null,
     })),
 
   showAi: false,
@@ -237,7 +231,7 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
 
 // ------ SQL ------
 
-interface SQLConnectionStore extends ConnectionStore {
+interface SQLConnectionStore {
   ExternalDataId: string | undefined;
   ExternalDataName: string | undefined;
   Query: string;
@@ -247,10 +241,6 @@ interface SQLConnectionStore extends ConnectionStore {
 }
 
 export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
-  /* Generic Connection Fields */
-  latestResult: '',
-  timeOfLastRun: null,
-
   /* SQL Specific Fields */
   ExternalDataId: undefined,
   ExternalDataName: undefined,
@@ -259,8 +249,6 @@ export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
   reset() {
     set(() => ({
       Query: '',
-      latestResult: '',
-      timeOfLastRun: null,
       ExternalDataId: undefined,
       ExternalDataName: undefined,
     }));
@@ -273,7 +261,7 @@ export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
 
 // ------ NOTION ------
 
-interface NotionConnectionStore extends ConnectionStore {
+interface NotionConnectionStore {
   NotionDatabaseUrl: string | undefined;
   AvailableDatabases: Array<{ id: string; name: string }>;
 
@@ -291,10 +279,6 @@ interface NotionConnectionStore extends ConnectionStore {
 
 export const useNotionConnectionStore = create<NotionConnectionStore>(
   (set) => ({
-    /* Generic Connection Fields */
-    latestResult: '',
-    timeOfLastRun: null,
-
     ExternalDataId: undefined,
     ExternalDataName: undefined,
 
@@ -303,22 +287,61 @@ export const useNotionConnectionStore = create<NotionConnectionStore>(
 
     lastFetchedDatabasesFor: undefined,
 
-    /* Notion Specific Fields */
     NotionDatabaseUrl: undefined,
     Reset() {
       set(() => ({
         NotionDatabaseUrl: undefined,
-        latestResult: '',
-        timeOfLastRun: null,
         ExternalDataId: undefined,
         ExternalDataName: undefined,
         DatabaseId: undefined,
         DatabaseName: undefined,
-        mode: undefined,
       }));
     },
 
     AvailableDatabases: [],
+
+    Set(NewState) {
+      set(() => NewState);
+    },
+  })
+);
+
+interface GSheetConnectionStore {
+  ExternalDataId: string | undefined;
+  ExternalDataName: string | undefined;
+
+  SpreadsheetURL: string | undefined;
+  OriginalUrl: string | undefined;
+
+  SelectedSheetName: string | undefined;
+  SpreeadsheetSubsheets: Array<{ id: number; name: string }>;
+  SelectedSubsheet: { id: number; name: string } | undefined;
+
+  Stringify: () => string;
+
+  Set: (
+    NewState: Prettify<Omit<Partial<GSheetConnectionStore>, 'Set'>>
+  ) => void;
+}
+
+export const useGSheetConnectionStore = create<GSheetConnectionStore>(
+  (set, get) => ({
+    ExternalDataId: undefined,
+    ExternalDataName: undefined,
+    ExternalDataLinkId: undefined,
+    ExternalDataLink: undefined,
+
+    SelectedSheetName: undefined,
+    OriginalUrl: undefined,
+    SpreadsheetURL: undefined,
+
+    SpreeadsheetSubsheets: [],
+    SelectedSubsheet: undefined,
+
+    Stringify() {
+      const state = omit(get(), 'Set', 'Stringify');
+      return Buffer.from(JSON.stringify(state)).toString('base64');
+    },
 
     Set(NewState) {
       set(() => NewState);

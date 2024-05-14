@@ -1,5 +1,3 @@
-export * from './DataIntegration';
-
 export { PaginationControl } from '../../modules/editor/PaginationControl/PaginationControl';
 export * from './CodeEditor/CodeEditor';
 export { DropdownMenu } from './DropdownMenu/DropdownMenu';

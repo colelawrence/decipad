@@ -38,7 +38,7 @@ export function authUrlFor(externalDataSource: ExternalDataSource): string {
 export const externalDataResource = Resource<
   ExternalDataSourceRecord,
   ExternalDataSource,
-  ExternalDataSourceCreateInput & { isProcessing?: boolean },
+  ExternalDataSourceCreateInput & { expires_at?: number },
   { dataSource: ExternalDataSourceUpdateInput }
 >({
   resourceTypeName: 'externaldatasources',
@@ -76,7 +76,13 @@ export const externalDataResource = Resource<
     throw new Error('Impossible branch');
   },
   newRecordFrom: (record) => {
-    const { name, provider, externalId, dataSourceName } = record;
+    const {
+      name,
+      provider,
+      externalId,
+      dataSourceName,
+      expires_at: expiresAt,
+    } = record;
 
     const eds: ExternalDataSourceRecord = {
       id: nanoid(),
@@ -86,6 +92,7 @@ export const externalDataResource = Resource<
       provider: provider as ExternalDataSourceRecord['provider'],
       externalId,
       dataSourceName,
+      expires_at: expiresAt,
     };
 
     //

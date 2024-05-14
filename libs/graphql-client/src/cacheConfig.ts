@@ -3,7 +3,6 @@
 /* eslint-disable no-param-reassign */
 import type { Cache } from '@urql/exchange-graphcache';
 import type {
-  ExternalDataSource,
   GetExternalDataSourcesWorkspaceQuery,
   GetExternalDataSourcesWorkspaceQueryVariables,
   GetNotebookAnnotationsQuery,
@@ -20,6 +19,7 @@ import type {
   WorkspaceNotebookFragment,
   GetNotebookByIdQuery,
   GetNotebookByIdQueryVariables,
+  ExternalDataSourceFragmentFragment,
 } from './generated';
 import {
   GetExternalDataSourcesWorkspaceDocument,
@@ -35,6 +35,7 @@ import { nanoid } from 'nanoid';
 import { PublishedVersionName } from './PublishedStates';
 import { gql } from 'urql';
 import type { Session } from 'next-auth';
+import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
 
 const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 
@@ -271,6 +272,8 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
       },
       createExternalDataSource: (_result, args, cache) => {
         if (typeof args.dataSource.workspaceId !== 'string') return;
+        if (args.dataSource.name === TEMP_CONNECTION_NAME) return;
+
         cache.updateQuery<GetExternalDataSourcesWorkspaceQuery>(
           {
             query: GetExternalDataSourcesWorkspaceDocument,
@@ -281,9 +284,14 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           (data) => {
             if (!data?.getExternalDataSourcesWorkspace) return data;
 
-            data.getExternalDataSourcesWorkspace.push(
-              args.dataSource as ExternalDataSource
-            );
+            data.getExternalDataSourcesWorkspace.push({
+              ...args.dataSource,
+              __typename: 'ExternalDataSource',
+              ownerId: args.dataSource.workspaceId!,
+              owner: 'WORKSPACE',
+              id: nanoid(),
+              keys: [],
+            } satisfies ExternalDataSourceFragmentFragment);
 
             return data;
           }

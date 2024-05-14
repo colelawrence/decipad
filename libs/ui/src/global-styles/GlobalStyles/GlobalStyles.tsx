@@ -226,6 +226,14 @@ const DatePickerStyles: FC = () => {
             },
           },
         },
+
+        //
+        // Google Picker API
+        // - Allows it to be inside of a modal.
+        //
+        '.picker-dialog': {
+          pointerEvents: 'all',
+        },
       }}
     />
   );

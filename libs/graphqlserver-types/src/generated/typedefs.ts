@@ -120,6 +120,7 @@ enum HTTPMethods {
 
 type ExternalKey {
   id: ID!
+  access: String
   lastError: String
   createdAt: DateTime!
   expiresAt: DateTime
@@ -142,14 +143,6 @@ input ExternalDataSourceUpdateInput {
   externalId: String
 }
 
-type ExternalDataSourceDataLink {
-  id: ID!
-  name: String!
-  url: String!
-
-  method: HTTPMethods
-}
-
 enum ExternalDataSourceOwnership {
   PAD
   WORKSPACE
@@ -169,8 +162,6 @@ type ExternalDataSource {
 
   access: ResourceAccess!
   keys: [ExternalKey!]!
-
-  dataLinks: [ExternalDataSourceDataLink!]!
 }
 
 extend type Query {
@@ -184,13 +175,6 @@ extend type Mutation {
   createExternalDataSource(
     dataSource: ExternalDataSourceCreateInput!
   ): ExternalDataSource
-
-  createExternalDataLink(
-    externalDataId: String!
-    name: String!
-    url: String!
-    method: HTTPMethods
-  ): ExternalDataSourceDataLink
 
   # WorkspaceID used for caching on frontend, not used in backend.
   removeExternalDataSource(id: ID!, workspaceId: ID): Boolean
@@ -221,6 +205,8 @@ extend type Mutation {
     email: String!
     permissionType: PermissionType!
   ): ExternalDataSource
+
+  refreshExternalDataToken(id: ID!): String!
 }
 type User {
   id: ID!

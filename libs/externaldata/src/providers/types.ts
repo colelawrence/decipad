@@ -12,26 +12,37 @@ interface BaseProvider {
    * Extra headers to send to OAuth provider during data fetching stage.
    */
   dataHeaders?: Record<string, string>;
+
+  getAccessToken: (code: string) => Promise<{
+    accessToken: string;
+    tokenType: string;
+
+    resourceName: string;
+    resourceId: string;
+
+    scope?: string;
+    refreshToken?: string;
+    expiresIn?: string;
+  }>;
 }
 
-export interface NotionProvider extends BaseProvider {
+interface WithRefreshAccessToken {
+  refreshAccessToken: (refreshToken: string) => Promise<{
+    accessToken: string;
+    expiresIn?: string;
+    tokenType: string;
+    scope?: string;
+  }>;
+}
+
+export type NotionProvider = BaseProvider & {
   type: 'notion';
   getAllDatabases: (
     authHeaders: Record<string, string>
   ) => Promise<Array<object>>;
+};
 
-  /**
-   * Some OAuth2 providers are different enough such that `oauth` library cannot handle the.
-   *
-   * In these cases, it is easier for us to make the request ourselves.
-   */
-  getAccessToken: (code: string) => Promise<{
-    workspaceId: string;
-    accessToken: string;
-    resourceName: string;
-  }>;
-}
-
-export interface GoogleSheetProvider extends BaseProvider {
-  type: 'gsheets';
-}
+export type GoogleSheetProvider = BaseProvider &
+  WithRefreshAccessToken & {
+    type: 'gsheets';
+  };

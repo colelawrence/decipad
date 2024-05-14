@@ -234,13 +234,7 @@ fileattachments
 
 externaldatasources
   id *String
-  encrypt true
-
-externaldatasourcedatalinks
-  id *String
-  name String
-  resource_uri String
-  url String
+  expires_at TTL
   encrypt true
 
 externaldatasourcekeys
@@ -478,16 +472,7 @@ externaldatasources
   workspace_id *String
   name byWorkspace
 
-externaldatasources
-  externalId *String
-  workspace_id **String
-  name byExternalId
-
 externaldatasourcekeys
-  resource_uri *String
-  name byResource
-
-externaldatasourcedatalinks
   resource_uri *String
   name byResource
 

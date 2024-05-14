@@ -11,9 +11,9 @@ import {
 } from '@decipad/import';
 import { useEffect } from 'react';
 import { useIntegrationOptions } from '../hooks';
-import { findNodePath, getNodeString, setNodes } from '@udecode/plate-common';
+import { getNodeString } from '@udecode/plate-common';
 import type { FC } from 'react';
-import { useMyEditorRef, type IntegrationTypes } from '@decipad/editor-types';
+import { type IntegrationTypes } from '@decipad/editor-types';
 import { merge } from '@decipad/utils';
 
 export const NotionIntegration: FC<
@@ -30,7 +30,6 @@ export const NotionIntegration: FC<
 }) => {
   const computer = useComputer();
   const varName = getNodeString(children[0]);
-  const editor = useMyEditorRef();
 
   useEffect(() => {
     const res = JSON.parse(latestResult);
@@ -49,30 +48,20 @@ export const NotionIntegration: FC<
     getResult();
   }, [computer, id, varName, typeMappings, latestResult]);
 
-  useIntegrationOptions({
-    onRefresh() {
-      fetch(integrationType.notionUrl)
-        .then((res) => res.json())
-        .then(async (res) => {
-          const notionImported = importFromNotion(res);
-          const result = await importFromUnknownJson(notionImported, {
-            columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
-          });
-          pushResultToComputer(computer, id, varName, result);
+  useIntegrationOptions(element, {
+    async onRefresh() {
+      const fetchResponse = await fetch(integrationType.notionUrl);
+      const res = await fetchResponse.json();
 
-          const path = findNodePath(editor, element);
-          if (path == null) {
-            return;
-          }
+      const [notionImported, cohersions] = importFromNotion(res);
+      const mergedTypeMappings = merge(typeMappings, cohersions);
 
-          setNodes(
-            editor,
-            {
-              latestResult: JSON.stringify(res),
-            } satisfies Partial<IntegrationTypes.IntegrationBlock>,
-            { at: path }
-          );
-        });
+      const result = await importFromUnknownJson(notionImported, {
+        columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
+      });
+
+      pushResultToComputer(computer, id, varName, result);
+      return JSON.stringify(res);
     },
     onShowSource() {
       const store = useConnectionStore.getState();
@@ -83,15 +72,12 @@ export const NotionIntegration: FC<
       importFromUnknownJson(importFromNotion(JSON.parse(latestResult)), {
         columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
       }).then((notionResult) => {
-        if (notionResult) {
-          store.Set({ resultPreview: notionResult });
-        }
-
         store.Set({
           connectionType: 'notion',
           stage: 'connect',
           existingIntegration: id,
           rawResult: latestResult,
+          resultPreview: notionResult,
           varName,
         });
 
@@ -100,17 +86,11 @@ export const NotionIntegration: FC<
 
         notionStore.Set({
           NotionDatabaseUrl: integrationType.notionUrl,
-
           ExternalDataId: integrationType.externalDataId,
           ExternalDataName: integrationType.externalDataName,
           DatabaseName: integrationType.databaseName,
-
-          latestResult,
         });
       });
-    },
-    onDelete() {
-      pushResultToComputer(computer, id, varName, undefined);
     },
   });
 

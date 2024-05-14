@@ -23,7 +23,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Close, Sparkles, Play } from '../../../icons';
+import { Close, Sparkles, Play } from '../../icons';
 import {
   cssVar,
   mobileQuery,
@@ -31,10 +31,16 @@ import {
   p15Medium,
   p16Medium,
   smallestMobile,
-} from '../../../primitives';
-import { closeButtonStyles } from '../../../styles/buttons';
-import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
-import { TabsList, TabsRoot, TabsTrigger } from '../../molecules';
+} from '../../primitives';
+import { closeButtonStyles } from '../../styles/buttons';
+import {
+  Button,
+  TextAndIconButton,
+  UpgradePlanWarning,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '../../shared';
 
 type Stages = 'pick-integration' | 'connect' | 'map';
 

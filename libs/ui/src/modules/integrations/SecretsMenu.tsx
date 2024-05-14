@@ -3,18 +3,17 @@ import { css } from '@emotion/react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
-import { MenuList } from '../../molecules';
-import { ArrowDiagonalTopRight, CaretDown } from '../../../icons';
-import { editorLayout } from '../../../styles';
+import { MenuList, Divider, MenuItem } from '../../shared';
+import { ArrowDiagonalTopRight, CaretDown } from '../../icons';
+import { editorLayout } from '../../styles';
 import {
   componentCssVars,
   cssVar,
   p12Bold,
   p12Medium,
   p13Medium,
-} from '../../../primitives';
-import { Divider, MenuItem } from '../../atoms';
-import { Anchor } from '../../../utils';
+} from '../../primitives';
+import { Anchor } from '../../utils';
 
 interface SecretsMenuProps {
   workspaceId: string;

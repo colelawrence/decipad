@@ -1,5 +1,4 @@
 import type {
-  ExternalDataSourceDataLinks,
   ExternalDataSourceRecord,
   ExternalKeyRecord,
   Handler,
@@ -22,13 +21,6 @@ const fetchExternalDataSource = async (
 
 const byLastError = (a: ExternalKeyRecord, b: ExternalKeyRecord) => {
   return (a.lastError ? 1 : 0) - (b.lastError ? 1 : 0);
-};
-
-const getDataLink = async (
-  id: string
-): Promise<ExternalDataSourceDataLinks | undefined> => {
-  const data = await tables();
-  return data.externaldatasourcedatalinks.get({ id });
 };
 
 const getAccessKey = async (
@@ -58,42 +50,6 @@ const markKeyAsErrored = async (key: ExternalKeyRecord, error: string) => {
 // ---------------------------------------
 // HTTP Methods
 // ---------------------------------------
-
-async function proxyDataLink(
-  dataSource: ExternalDataSourceRecord,
-  key: ExternalKeyRecord,
-  dataSourceLink: ExternalDataSourceDataLinks
-): Promise<APIGatewayProxyResultV2> {
-  const provider = getDefined(
-    externalDataProvider(dataSource.provider),
-    `no such provider: ${dataSource.provider}`
-  );
-
-  const reqHeaders: RequestInit['headers'] = {
-    Authorization: `${key.token_type} ${key.access_token}`,
-    ...(provider.dataHeaders ?? {}),
-  };
-
-  const resp = await fetch(dataSourceLink.url, {
-    method: dataSourceLink.method,
-    headers: reqHeaders,
-  });
-
-  if (resp == null) {
-    throw Boom.internal();
-  }
-
-  const body = Buffer.from(await resp.arrayBuffer());
-  if (resp.status >= 300) {
-    await markKeyAsErrored(key, body.toString('utf-8'));
-  }
-
-  return {
-    statusCode: resp.status,
-    body: body.toString('base64'),
-    isBase64Encoded: true,
-  };
-}
 
 const proxy = async (
   dataSource: ExternalDataSourceRecord,
@@ -175,18 +131,6 @@ export const data: Handler = async (event) => {
 
   const url = event.queryStringParameters?.url;
   const method = event.queryStringParameters?.method;
-
-  const externalDataLinkId = event.queryStringParameters?.externalDataLinkId;
-
-  if (externalDataLinkId != null) {
-    const dataLink = await getDataLink(externalDataLinkId);
-
-    if (!dataLink) {
-      throw Boom.forbidden('Selected datalink does not exist');
-    }
-
-    return proxyDataLink(externalDataSource, key, dataLink);
-  }
 
   return proxy(externalDataSource, key, url, method);
 };

@@ -36,7 +36,6 @@ export const SQLConnection: FC<ConnectionProps> = ({
       }
 
       if (queryExec.type === 'success') {
-        sqlStore.Set({ latestResult: JSON.stringify(queryExec.data) });
         importFromUnknownJson(queryExec.data, {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
         }).then((res) => {

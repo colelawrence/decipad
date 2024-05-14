@@ -99,7 +99,6 @@ export type ExternalDataSource = {
   __typename?: 'ExternalDataSource';
   access: ResourceAccess;
   authUrl?: Maybe<Scalars['String']['output']>;
-  dataLinks: Array<ExternalDataSourceDataLink>;
   dataSourceName?: Maybe<Scalars['String']['output']>;
   dataUrl?: Maybe<Scalars['String']['output']>;
   externalId?: Maybe<Scalars['String']['output']>;
@@ -120,14 +119,6 @@ export type ExternalDataSourceCreateInput = {
   workspaceId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type ExternalDataSourceDataLink = {
-  __typename?: 'ExternalDataSourceDataLink';
-  id: Scalars['ID']['output'];
-  method?: Maybe<HttpMethods>;
-  name: Scalars['String']['output'];
-  url: Scalars['String']['output'];
-};
-
 export type ExternalDataSourceOwnership =
   | 'PAD'
   | 'WORKSPACE';
@@ -140,6 +131,7 @@ export type ExternalDataSourceUpdateInput = {
 
 export type ExternalKey = {
   __typename?: 'ExternalKey';
+  access?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   expiresAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -204,7 +196,6 @@ export type Mutation = {
   attachFileToPad?: Maybe<Attachment>;
   claimNotebook?: Maybe<Pad>;
   createAnnotation?: Maybe<Annotation>;
-  createExternalDataLink?: Maybe<ExternalDataSourceDataLink>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
   createLogs?: Maybe<Scalars['Boolean']['output']>;
   createOrUpdateSnapshot: Scalars['Boolean']['output'];
@@ -222,6 +213,7 @@ export type Mutation = {
   incrementQueryCount: WorkspaceExecutedQuery;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
+  refreshExternalDataToken: Scalars['String']['output'];
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
   removePad?: Maybe<Scalars['Boolean']['output']>;
@@ -295,14 +287,6 @@ export type MutationCreateAnnotationArgs = {
   content: Scalars['String']['input'];
   padId: Scalars['String']['input'];
   scenarioId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type MutationCreateExternalDataLinkArgs = {
-  externalDataId: Scalars['String']['input'];
-  method?: InputMaybe<HttpMethods>;
-  name: Scalars['String']['input'];
-  url: Scalars['String']['input'];
 };
 
 
@@ -395,6 +379,11 @@ export type MutationMovePadArgs = {
   fromWorkspaceId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRefreshExternalDataTokenArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1289,7 +1278,6 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ExternalDataSource: ResolverTypeWrapper<ExternalDataSource>;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
-  ExternalDataSourceDataLink: ResolverTypeWrapper<ExternalDataSourceDataLink>;
   ExternalDataSourceOwnership: ExternalDataSourceOwnership;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ResolverTypeWrapper<ExternalKey>;
@@ -1379,7 +1367,6 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   ExternalDataSource: ExternalDataSource;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
-  ExternalDataSourceDataLink: ExternalDataSourceDataLink;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ExternalKey;
   Float: Scalars['Float']['output'];
@@ -1519,7 +1506,6 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type ExternalDataSourceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ExternalDataSource'] = ResolversParentTypes['ExternalDataSource']> = {
   access?: Resolver<ResolversTypes['ResourceAccess'], ParentType, ContextType>;
   authUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dataLinks?: Resolver<Array<ResolversTypes['ExternalDataSourceDataLink']>, ParentType, ContextType>;
   dataSourceName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   dataUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   externalId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1532,15 +1518,8 @@ export type ExternalDataSourceResolvers<ContextType = GraphqlContext, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ExternalDataSourceDataLinkResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ExternalDataSourceDataLink'] = ResolversParentTypes['ExternalDataSourceDataLink']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  method?: Resolver<Maybe<ResolversTypes['HTTPMethods']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type ExternalKeyResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ExternalKey'] = ResolversParentTypes['ExternalKey']> = {
+  access?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   expiresAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -1562,7 +1541,6 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
   claimNotebook?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
   createAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationCreateAnnotationArgs, 'blockId' | 'content' | 'padId'>>;
-  createExternalDataLink?: Resolver<Maybe<ResolversTypes['ExternalDataSourceDataLink']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataLinkArgs, 'externalDataId' | 'name' | 'url'>>;
   createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
   createLogs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateLogsArgs, 'input'>>;
   createOrUpdateSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>>;
@@ -1580,6 +1558,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
+  refreshExternalDataToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>>;
   removeAttachmentFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>>;
   removeExternalDataSource?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>>;
   removePad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemovePadArgs, 'id'>>;
@@ -2025,7 +2004,6 @@ export type Resolvers<ContextType = GraphqlContext> = {
   CreditsPlan?: CreditsPlanResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   ExternalDataSource?: ExternalDataSourceResolvers<ContextType>;
-  ExternalDataSourceDataLink?: ExternalDataSourceDataLinkResolvers<ContextType>;
   ExternalKey?: ExternalKeyResolvers<ContextType>;
   KeyValue?: KeyValueResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

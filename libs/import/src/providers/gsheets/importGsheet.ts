@@ -137,32 +137,83 @@ const importGsheetIslands = async (
   );
 };
 
+const importOneGsheetFromResponse = async (
+  resp: Awaited<ReturnType<typeof request>>,
+  title: string,
+  params: ImportParams,
+  options: ImportOptions,
+  sourceUrl?: URL
+): Promise<ImportResult[]> => {
+  const result = await handleGsheetsResponse(params.computer, resp, options);
+
+  const importResult: ImportResult = {
+    meta: {
+      title,
+      importedAt: new Date(),
+    },
+    result,
+    loading: false,
+    rawResult: resp.body as string,
+  };
+
+  if (sourceUrl != null) {
+    importResult.meta!.sourceUrl = sourceUrl;
+  }
+  return [importResult];
+};
+
 const importOneGsheet = async (
   params: ImportParams,
   options: ImportOptions
 ): Promise<ImportResult[]> => {
+  if (options.useRawResult != null) {
+    const respResult = JSON.parse(options.useRawResult) as Awaited<
+      ReturnType<typeof request>
+    >;
+
+    return importOneGsheetFromResponse(
+      respResult,
+      'not requesting',
+      params,
+      options
+    );
+  }
+
   const { sheetId, gid } = getSheetRequestDataFromUrl(params.url);
   const meta = await getSheetMeta(sheetId, params);
-  const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
+  const url = getDataUrlFromSheetMeta(sheetId, options.subId ?? gid, meta);
   try {
-    const resp = await request(url, true, params);
-    const result = await handleGsheetsResponse(params.computer, resp, options);
-
-    const importResult = {
-      meta: {
-        title: meta.properties.title,
-        importedAt: new Date(),
-      },
-      result,
-      loading: false,
-    };
-    return [importResult];
+    const resp = await request(url, true, params, options.externalDataLinkId);
+    return importOneGsheetFromResponse(
+      resp,
+      meta.properties.title,
+      params,
+      options,
+      url
+    );
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error importing one Gsheet', err);
     captureException(err as Error);
     return [errorResult((err as Error).message)];
   }
+};
+
+export interface GoogleSheetMeta {
+  sheetId: number;
+  sheetName: string;
+}
+
+export const getGsheetMeta = async (
+  params: ImportParams
+): Promise<Array<GoogleSheetMeta>> => {
+  const { sheetId } = getSheetRequestDataFromUrl(params.url);
+  const meta = await getSheetMeta(sheetId, params);
+
+  return meta.sheets.map((s) => ({
+    sheetId: s.properties.sheetId,
+    sheetName: s.properties.title,
+  }));
 };
 
 export const importGsheet = (

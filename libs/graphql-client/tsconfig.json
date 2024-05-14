@@ -7,7 +7,8 @@
   "references": [
     { "path": "../toast" },
     { "path": "../utils" },
-    { "path": "../fetch" }
+    { "path": "../fetch" },
+    { "path": "../frontend-config" }
   ],
   "include": ["src", "src/**/*.json"]
 }

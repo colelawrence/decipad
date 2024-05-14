@@ -19,6 +19,7 @@
     { "path": "../backend-notebook-content" },
     { "path": "../backend-notebook-assistant" },
     { "path": "../notebook-maintenance" },
-    { "path": "../graphqlserver-types" }
+    { "path": "../graphqlserver-types" },
+    { "path": "../externaldata" }
   ]
 }

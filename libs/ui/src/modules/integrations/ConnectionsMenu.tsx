@@ -3,11 +3,10 @@ import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowDiagonalTopRight, CaretDown } from '../../../icons';
-import { cssVar, p13Medium } from '../../../primitives';
-import { editorLayout } from '../../../styles';
-import { Divider, MenuItem } from '../../atoms';
-import { MenuList } from '../../molecules';
+import { ArrowDiagonalTopRight, CaretDown } from '../../icons';
+import { cssVar, p13Medium } from '../../primitives';
+import { editorLayout } from '../../styles';
+import { Divider, MenuItem, MenuList } from '../../shared';
 
 interface ConnectionMenuProps {
   workspaceId: string;

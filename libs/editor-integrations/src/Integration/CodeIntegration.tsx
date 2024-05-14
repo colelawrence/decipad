@@ -32,8 +32,6 @@ export const CodeIntegration: FC<
   element,
 }) => {
   const computer = useComputer();
-  const store = useConnectionStore();
-  const codeStore = useCodeConnectionStore();
   const deciVars = useDeciVariables();
   const varName = getNodeString(children[0]);
   const editor = useMyEditorRef();
@@ -89,11 +87,20 @@ export const CodeIntegration: FC<
     notebookId
   );
 
-  useIntegrationOptions({
-    onRefresh() {
-      worker?.execute(integrationType.code, deciVars);
+  useIntegrationOptions(element, {
+    async onRefresh() {
+      const res = await worker?.execute(integrationType.code, deciVars);
+
+      if (res == null || res instanceof Error) {
+        return;
+      }
+
+      return res;
     },
     onShowSource() {
+      const store = useConnectionStore.getState();
+      const codeStore = useCodeConnectionStore.getState();
+
       store.abort();
 
       importFromJSONAndCoercions(latestResult, store.resultTypeMapping).then(
@@ -106,6 +113,7 @@ export const CodeIntegration: FC<
             connectionType: 'codeconnection',
             stage: 'connect',
             existingIntegration: id,
+            rawResult: latestResult,
             varName,
           });
 
@@ -113,12 +121,8 @@ export const CodeIntegration: FC<
           store.changeOpen(true);
 
           codeStore.setCode(integrationType.code);
-          codeStore.setLatestResult(latestResult);
         }
       );
-    },
-    onDelete() {
-      pushResultToComputer(computer, id, varName, undefined);
     },
   });
 

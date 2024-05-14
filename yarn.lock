@@ -4402,9 +4402,9 @@
     kuler "^2.0.0"
 
 "@decipad/safejs@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@decipad/safejs/-/safejs-1.0.2.tgz#5e443a4087689d52bacf8ed9f5aeaf1213aa0180"
-  integrity sha512-AH9/8MBtgYGSE9i0fe6GAeFPFMSlMCxSPNiwLo+56ouR55YLvJdzs9IjiNQPL8a9IbqV8jRuNQtzHc4OILEU7g==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@decipad/safejs/-/safejs-1.1.0.tgz#3e403d05f380f0718ac2b876cd17dfcbdbe1f00e"
+  integrity sha512-v7eWdbtJenpOw9x0zhcfKSDHAqtc6PfA8Y5UYMNAP4k4k0WV1mX6bgshjEkZZ7LBnJKM0G0dB1sZ88e+pouwmg==
 
 "@dependents/detective-less@^3.0.1":
   version "3.0.2"
@@ -13201,6 +13201,11 @@
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@types/find-cache-dir/-/find-cache-dir-3.2.1.tgz#7b959a4b9643a1e6a1a5fe49032693cc36773501"
   integrity sha512-frsJrz2t/CeGifcu/6uRo4b+SzAwT4NYCVPu1GN8IB9XTzrpPkGuV0tmh9mN+/L0PklAlsC3u5Fxt0ju00LXIw==
+
+"@types/gapi@^0.0.47":
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.47.tgz#3cef0a6a2accf4fc1405d08e2e001759cf440f56"
+  integrity sha512-/ZsLuq6BffMgbKMtZyDZ8vwQvTyKhKQ1G2K6VyWCgtHHhfSSXbk4+4JwImZiTjWNXfI2q1ZStAwFFHSkNoTkHA==
 
 "@types/geojson@7946.0.4":
   version "7946.0.4"

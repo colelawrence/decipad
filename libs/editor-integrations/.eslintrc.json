@@ -1,4 +1,7 @@
 {
   "extends": ["../../libs/eslint-config-decipad/editor"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "off"
+  }
 }

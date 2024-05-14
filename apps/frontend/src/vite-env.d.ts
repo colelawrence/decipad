@@ -11,7 +11,7 @@ interface ImportMetaEnv {
   readonly VITE_SENTRY_ENVIRONMENT: string;
   readonly VITE_ANALYTICS_WRITE_KEY: string;
   readonly VITE_GOOGLE_ANALYTICS_ID: string;
-  readonly VITE_GOOGLE_SHEETS_KEY: string;
+  readonly VITE_GOOGLESHEETS_API_KEY: string;
   readonly VITE_STRIPE_CUSTOMER_PORTAL_LINK: string;
   readonly VITE_STRIPE_API_KEY: string;
   readonly VITE_MAX_CREDITS_PRO: string;

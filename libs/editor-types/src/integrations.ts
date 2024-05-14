@@ -20,16 +20,27 @@ export interface SQLBlockIntegration {
 export interface NotionBlockIntegration {
   type: 'notion';
   notionUrl: string;
+  databaseName: string;
 
   externalDataId: string;
   externalDataName: string;
-  databaseName: string;
+}
+
+export interface GoogleSheetIntegration {
+  type: 'gsheets';
+  spreadsheetUrl: string;
+
+  externalDataId: string;
+  externalDataName: string;
+
+  selectedSubsheet: { id: number; name: string } | undefined;
 }
 
 type IntegrationTypes =
   | CodeBlockIntegration
   | SQLBlockIntegration
-  | NotionBlockIntegration;
+  | NotionBlockIntegration
+  | GoogleSheetIntegration;
 
 export interface IntegrationBlock<
   T extends IntegrationTypes['type'] = IntegrationTypes['type']

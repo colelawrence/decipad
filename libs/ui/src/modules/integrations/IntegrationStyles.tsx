@@ -7,9 +7,9 @@ import {
   p12Regular,
   p14Medium,
   p8Medium,
-} from 'libs/ui/src/primitives';
+} from '../../primitives';
 import { FC, ReactNode, useState } from 'react';
-import { Button } from '../../atoms';
+import { Button } from '../../shared';
 
 type IntegrationItemProps = Readonly<{
   icon: ReactNode;
