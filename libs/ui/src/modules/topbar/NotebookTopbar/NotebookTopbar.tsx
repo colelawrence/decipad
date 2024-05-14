@@ -355,7 +355,9 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
             </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
-          {AiModeSwitch}
+          <Styled.HiddenFromSmallScreens>
+            {AiModeSwitch}
+          </Styled.HiddenFromSmallScreens>
         </Styled.LeftContainer>
         <Styled.RightContainer>
           {isFlagEnabled('ENABLE_COMMENTS') && (
