@@ -297,7 +297,6 @@ export const WorkspaceNavigation = ({
       </NavigationList>
       <NavigationList>
         <NavigationItem
-          href={'http://www.decipad.com/templates'}
           key="templates"
           onClick={() => {
             clientEvent({
@@ -309,7 +308,7 @@ export const WorkspaceNavigation = ({
                 },
               },
             });
-            onShowFeedback();
+            window.open('http://www.decipad.com/templates', '_blank');
           }}
         >
           <Styled.ItemWrapper>
@@ -317,7 +316,8 @@ export const WorkspaceNavigation = ({
               <Templates />
             </Styled.IconWrapper>
             <Styled.TextWrapper>
-              Templates <ArrowDiagonalTopRight />
+              Templates
+              <ArrowDiagonalTopRight />
             </Styled.TextWrapper>
           </Styled.ItemWrapper>
         </NavigationItem>
