@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import { Children, ComponentProps, FC, ReactNode } from 'react';
-import { List, Info } from '../../../icons';
+import { Info } from '../../../icons';
 import { cssVar, smallScreenQuery } from '../../../primitives';
 import { dashboard, notebookList } from '../../../styles';
 import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
 import { DragAndDropImportNotebook } from '../DragAndDropImportNotebook/DragAndDropImportNotebook';
+import { ThumbnailNotebooks } from 'libs/ui/src/icons/thumbnail-icons';
 
 type UINotebookListProps = NonNullable<
   Pick<ComponentProps<typeof DragAndDropImportNotebook>, 'onImport'>
@@ -40,7 +41,7 @@ export const UINotebookList: FC<UINotebookListProps> = ({
         ) : (
           <DashboardCTAWrapper>
             <DashboardDialogCTA
-              icon={<List />}
+              icon={<ThumbnailNotebooks />}
               primaryText="No documents to list"
               secondaryText="When you create a document they will show up here"
             />

@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageBlock } from '.';
-import { CaretDown, Graph, Warning } from '../../../icons';
+import { CaretDown, Warning } from '../../../icons';
 import { cssVar, p13Bold, p14Medium } from '../../../primitives';
 import { useCancelingEvent } from '../../../utils';
 import { Button, MenuItem } from '../../atoms';
@@ -20,6 +20,7 @@ import {
   TabsTrigger,
 } from '../../molecules';
 import { IntegrationActionItem } from './IntegrationStyles';
+import { ThumbnailSql } from 'libs/ui/src/icons/thumbnail-icons';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -93,7 +94,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
         .map((externalData) => {
           return (
             <IntegrationActionItem
-              icon={<Graph />}
+              icon={<ThumbnailSql />}
               title={externalData.dataSourceName ?? ''}
               description=""
               onEdit={() => {
