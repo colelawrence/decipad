@@ -2,14 +2,15 @@
 import { once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Tooltip } from '../../atoms';
-import { Heading } from '../../../icons/index';
+import { ArrowUp } from '../../../icons/index';
 import {
+  cssVar,
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../../primitives';
 import { editorLayout } from '../../../styles';
 import { importTableDragHandleStyles } from '../../../styles/table';
+import { Tooltip } from '../../atoms';
 
 export interface ImportTableFirstRowControlsProps {
   readonly isFirstRow?: boolean;
@@ -44,14 +45,24 @@ export const ImportTableFirstRowControls: FC<
       onClick={() => toggleFirstRowIsHeader(true)}
       css={importTableDragHandleStyles}
     >
-      <Heading />
+      <ArrowUp />
     </button>
   );
 
   return (
     <th contentEditable={false} css={importTableRowControlsWrapperStyles}>
       {isFirstRow && (
-        <div css={gridStyles()}>
+        <div
+          css={[
+            gridStyles(),
+            {
+              backgroundColor: cssVar('stateNeutralIconBackground'),
+              borderTopLeftRadius: 8,
+              WebkitBorderBottomLeftRadius: 8,
+              padding: 2,
+            },
+          ]}
+        >
           <Tooltip trigger={menuButton}>Make this the header row</Tooltip>
         </div>
       )}
