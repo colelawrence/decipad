@@ -1,5 +1,7 @@
-export const isFatalError = (err: string) => {
+export const isFatalError = (err?: string) => {
   return (
-    !err.includes('querySelectorAll is not a') && !err.includes('Uncaught')
+    err != null &&
+    !err.includes('querySelectorAll is not a') &&
+    !err.includes('Uncaught')
   );
 };
