@@ -296,6 +296,13 @@ Some important back-end debug modules are:
 - `@decipad/tables`
 - `@decipad/backend-auth`
 
+## Adding and bulding icons in the UI
+
+The icons are stored in `libs/ui/src/icons/assets`. You can add new icons by adding an SVG file to this directory.
+In order for icon to correctly inherit the color of the parent component, you need to keep the asset colored "#000".
+
+Once added, to build the icons into React components, run `nx run ui:build-icons`.
+
 ## Software Stack
 
 ![Software Architecture](docs/software_architecture.png)
