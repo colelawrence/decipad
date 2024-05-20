@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { UserIconKey } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import type { AutocompleteName } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
@@ -146,32 +145,29 @@ export const DataView: FC<DataViewProps> = ({
                 />
               )}
               {!readOnly && (
-                <>
-                  {isFlagEnabled('ROTATED_DATA_VIEW') &&
-                    isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
-                      <SegmentButtons
-                        border
-                        variant="default"
-                        iconSize="integrations"
-                        padding="skinny"
-                        buttons={[
-                          {
-                            children: <Transpose />,
-                            tooltip: `Flip`,
-                            onClick: () => onRotated(!rotate),
-                            testId: 'formula',
-                          },
-                          {
-                            children: <Move />,
-                            tooltip: `Drilldown`,
-                            onClick: () =>
-                              onChangeAlternateRotation(!alternateRotation),
-                            testId: 'table',
-                          },
-                        ]}
-                      />
-                    )}
-                </>
+                <SegmentButtons
+                  border
+                  variant="default"
+                  iconSize="integrations"
+                  padding="skinny"
+                  buttons={[
+                    {
+                      experimentalTooltip: true,
+                      tooltip: 'Flip',
+                      children: <Transpose />,
+                      onClick: () => onRotated(!rotate),
+                      testId: 'formula',
+                    },
+                    {
+                      experimentalTooltip: true,
+                      children: <Move />,
+                      tooltip: `Drilldown`,
+                      onClick: () =>
+                        onChangeAlternateRotation(!alternateRotation),
+                      testId: 'table',
+                    },
+                  ]}
+                />
               )}
             </>
           }

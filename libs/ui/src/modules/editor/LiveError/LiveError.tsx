@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { ComponentProps, FC } from 'react';
 import { CodeError } from '../CodeError/CodeError';
@@ -64,8 +63,7 @@ export const LiveError: FC<LiveErrorProps> = ({
   onRetry = noop,
   onAuthenticate = noop,
 }) => {
-  const isFailedAuth =
-    isFlagEnabled('INTEGRATIONS_AUTH') && isPermissionError(error);
+  const isFailedAuth = isPermissionError(error);
 
   const action = isFailedAuth ? onAuthenticate : onRetry;
 

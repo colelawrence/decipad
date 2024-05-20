@@ -18,15 +18,13 @@ import {
   ELEMENT_TR,
 } from '@decipad/editor-types';
 import {
+  generateColumnName,
+  generateTableName,
   insertNodes,
   isElementOfType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
-import {
-  enumerate,
-  generateColumnName,
-  generateTableName,
-} from '@decipad/utils';
+import { enumerate } from '@decipad/utils';
 import type {
   ChildOf,
   EElement,

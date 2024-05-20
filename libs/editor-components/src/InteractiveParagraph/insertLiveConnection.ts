@@ -10,16 +10,16 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import {
+  generateVarName,
   getNotebook,
   getURLComponents,
   insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
 import type { RemoteComputer } from '@decipad/remote-computer';
-import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
+import { getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
@@ -91,7 +91,7 @@ const justInsertLiveConnection = async ({
   const name = computer.getAvailableIdentifier(
     fileName
       ? fileName.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 10)
-      : generateVarName(isFlagEnabled('SILLY_NAMES'))
+      : generateVarName()
   );
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),

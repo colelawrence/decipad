@@ -15,10 +15,10 @@ import {
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
+  generateVarName,
   getCodeLineSource,
   insertNodes,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   dndPreviewActions,
   useAnnotations,
@@ -34,7 +34,7 @@ import {
   BlockAnnotations,
   BlockCommentButton,
 } from '@decipad/ui';
-import { generateVarName, noop } from '@decipad/utils';
+import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
 import {
   findNodePath,
@@ -416,9 +416,7 @@ const insertSameNodeType = (
     case ELEMENT_CODE_LINE_V2: {
       const prevNodeText = getCodeLineSource(prevNode.children[1]);
       const isSimpleValue = !!parseSimpleValue(prevNodeText);
-      const autoVarName = computer.getAvailableIdentifier(
-        generateVarName(isFlagEnabled('SILLY_NAMES'))
-      );
+      const autoVarName = computer.getAvailableIdentifier(generateVarName());
       return createStructuredCodeLine({
         id,
         varName: autoVarName,

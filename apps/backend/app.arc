@@ -58,6 +58,9 @@ any /api/ai/complete-column
 post /api/ai/feedback
 post /api/ai/names/:padid
 
+# Feature Feedback
+post /api/feature/feedback
+
 # Image endpoints
 any /api/image/generate
 any /api/image/gif

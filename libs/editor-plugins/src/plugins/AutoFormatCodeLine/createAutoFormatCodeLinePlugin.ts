@@ -17,14 +17,13 @@ import {
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
+  generateVarName,
   getAboveNodeSafe,
   insertNodes,
   isElementOfType,
   pluginStore,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type { ShadowCalcReference } from '@decipad/react-contexts';
-import { generateVarName } from '@decipad/utils';
 import type {
   EElement,
   EElementOrText,
@@ -108,7 +107,7 @@ export const createAutoFormatCodeLinePlugin = <
             );
 
             const autoVarName = computer.getAvailableIdentifier(
-              generateVarName(isFlagEnabled('SILLY_NAMES'))
+              generateVarName()
             );
             const newCodeLine = createStructuredCodeLine({
               varName: autoVarName,
@@ -210,9 +209,7 @@ const commitPotentialFormula = <
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier(
-      generateVarName(isFlagEnabled('SILLY_NAMES'))
-    ),
+    varName: computer.getAvailableIdentifier(generateVarName()),
     code: '100$',
   }) as EElementOrText<TV>;
 

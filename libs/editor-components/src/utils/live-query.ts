@@ -5,8 +5,11 @@ import {
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
 } from '@decipad/editor-types';
-import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { generateVarName } from '@decipad/utils';
+import {
+  generateVarName,
+  insertNodes,
+  requirePathBelowBlock,
+} from '@decipad/editor-utils';
 import type { TEditor } from '@udecode/plate-common';
 import { findNode, focusEditor, nanoid } from '@udecode/plate-common';
 import clone from 'lodash.clonedeep';
@@ -44,7 +47,7 @@ export const insertLiveQueryBelow = (
   connectionBlockId?: string,
   query?: string
 ): void => {
-  const varName = getAvailableIdentifier(generateVarName(true));
+  const varName = getAvailableIdentifier(generateVarName());
   const liveQuery = clone(
     getInitialLiveQueryElement(connectionBlockId, varName)
   );

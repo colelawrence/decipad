@@ -44,16 +44,3 @@ export const generatedNames = () => {
   const wI = Math.floor(Math.random() * PositiveWords.length);
   return `${Math.random() > 0.5 ? PositiveWords[wI] : ''}${Everything[tI]}`;
 };
-
-export const generateVarName = (isFlagEnabled = false) => {
-  return isFlagEnabled ? generatedNames() : 'Variable';
-};
-
-export const generateTableName = (prefix = '') => {
-  return `${prefix}Table`;
-};
-
-export const generateInputName = () => 'Input';
-export const generateSliderName = () => 'Slider';
-export const generateDropdownName = () => 'Dropdown';
-export const generateColumnName = () => 'Column';

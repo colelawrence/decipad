@@ -10,13 +10,8 @@ import {
 describe('generateBlockNames', () => {
   describe('generateVarName', () => {
     it('should return "Variable" when isFlagEnabled is false', () => {
-      const result = generateVarName(false);
+      const result = generateVarName();
       expect(result).toEqual('Variable');
-    });
-
-    it('should return a generated name when isFlagEnabled is true', () => {
-      const result = generateVarName(true);
-      expect(result).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
     });
   });
 

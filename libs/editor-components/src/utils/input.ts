@@ -20,15 +20,13 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import {
+  generateDropdownName,
+  generateInputName,
+  generateSliderName,
   insertNodes,
   requirePathBelowBlock,
   setSelection,
 } from '@decipad/editor-utils';
-import {
-  generateDropdownName,
-  generateInputName,
-  generateSliderName,
-} from '@decipad/utils';
 import { getEndPoint, getStartPoint } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';

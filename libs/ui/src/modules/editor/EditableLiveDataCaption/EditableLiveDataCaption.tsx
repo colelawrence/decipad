@@ -1,6 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { generateVarName } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
@@ -15,6 +13,7 @@ import {
   yellow800,
 } from '../../../primitives';
 import { slimBlockWidth } from '../../../styles/editor-layout';
+import { generateVarName } from '@decipad/editor-utils';
 
 const editableLiveCaptionStyles = css({
   maxWidth: `${slimBlockWidth}px`,
@@ -97,9 +96,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
         </div>
         <div
           role="textbox"
-          aria-placeholder={
-            empty ? generateVarName(isFlagEnabled('SILLY_NAMES')) : ''
-          }
+          aria-placeholder={empty ? generateVarName() : ''}
           css={[editableTableCaptionStyles, !selected && notSelectedAriaStyles]}
         >
           {caption}

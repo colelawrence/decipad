@@ -4,7 +4,6 @@ import {
   TriggerMenuItem,
   MenuList,
 } from '../../../../shared';
-import { Graph } from '../../../../icons';
 import { FC, useState } from 'react';
 import {
   DataViewDateOperation,
@@ -12,11 +11,9 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { FilterInput } from './FilterInput';
-import { Column, SubMenu } from '../common';
+import { Column } from '../common';
 
 type DateFilterProps = {
-  subMenuOpened: SubMenu | false;
-  setSubMenuOpened: (subMenu: SubMenu | false) => void;
   selectedFilter?: DataViewFilter;
   type: TableCellType;
   columns: Column[] | undefined;
@@ -25,8 +22,6 @@ type DateFilterProps = {
 };
 
 export const DateFilter: FC<DateFilterProps> = ({
-  subMenuOpened,
-  setSubMenuOpened,
   selectedFilter,
   onFilterChange,
 }) => {
@@ -77,16 +72,7 @@ export const DateFilter: FC<DateFilterProps> = ({
   };
 
   return (
-    <MenuList
-      key="filter"
-      open={subMenuOpened === 'filter'}
-      onChangeOpen={(o) => {
-        if (o) {
-          setSubMenuOpened('filter');
-        }
-      }}
-      itemTrigger={<TriggerMenuItem icon={<Graph />}>Filter</TriggerMenuItem>}
-    >
+    <>
       <MenuList
         key="filter-date-type"
         open={open}
@@ -159,6 +145,6 @@ export const DateFilter: FC<DateFilterProps> = ({
           />
         </>
       ) : null}
-    </MenuList>
+    </>
   );
 };

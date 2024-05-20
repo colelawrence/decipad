@@ -15,7 +15,7 @@ import { componentCssVars, cssVar, p12Medium } from '../../../primitives';
 import { useIsDragging } from './useIsDragging';
 
 const contentWrapperStyles = css({
-  borderRadius: '6px',
+  borderRadius: '12px',
 
   maxWidth: '300px',
   padding: '12px 16px',
@@ -82,6 +82,8 @@ interface TooltipProps {
   readonly wrapperStyles?: SerializedStyles;
 
   readonly usePortal?: boolean;
+
+  readonly offset?: number;
 }
 
 export const Tooltip = ({
@@ -98,6 +100,7 @@ export const Tooltip = ({
   align,
   wrapperStyles = css(),
   usePortal = true,
+  offset = 0,
 }: TooltipProps): ReturnType<FC> => {
   const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
@@ -118,6 +121,7 @@ export const Tooltip = ({
 
   const content = (
     <Content
+      sideOffset={offset}
       side={side}
       align={align}
       css={[

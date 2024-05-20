@@ -4,7 +4,6 @@ import {
   TriggerMenuItem,
   MenuList,
 } from '../../../../shared';
-import { Graph } from '../../../../icons';
 import { FC, useState } from 'react';
 import {
   DataViewFilter,
@@ -12,11 +11,9 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { FilterInput } from './FilterInput';
-import { Column, SubMenu } from '../common';
+import { Column } from '../common';
 
 type NumberFilterProps = {
-  subMenuOpened: SubMenu | false;
-  setSubMenuOpened: (subMenu: SubMenu | false) => void;
   selectedFilter?: DataViewFilter;
   type: TableCellType;
   columns: Column[] | undefined;
@@ -25,8 +22,6 @@ type NumberFilterProps = {
 };
 
 export const NumberFilter: FC<NumberFilterProps> = ({
-  subMenuOpened,
-  setSubMenuOpened,
   selectedFilter,
   onFilterChange,
 }) => {
@@ -73,16 +68,7 @@ export const NumberFilter: FC<NumberFilterProps> = ({
   };
 
   return (
-    <MenuList
-      key="filter"
-      open={subMenuOpened === 'filter'}
-      onChangeOpen={(o) => {
-        if (o) {
-          setSubMenuOpened('filter');
-        }
-      }}
-      itemTrigger={<TriggerMenuItem icon={<Graph />}>Filter</TriggerMenuItem>}
-    >
+    <>
       <MenuList
         key="filter-number-type"
         open={open}
@@ -156,6 +142,6 @@ export const NumberFilter: FC<NumberFilterProps> = ({
           />
         </>
       ) : null}
-    </MenuList>
+    </>
   );
 };

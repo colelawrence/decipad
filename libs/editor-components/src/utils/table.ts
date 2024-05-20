@@ -7,8 +7,11 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { generateTableName } from '@decipad/utils';
+import {
+  generateTableName,
+  insertNodes,
+  requirePathBelowBlock,
+} from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
 import type { GetAvailableIdentifier } from './slashCommands';

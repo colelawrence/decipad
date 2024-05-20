@@ -5,11 +5,13 @@ import { FC, ReactNode } from 'react';
 import { componentCssVars, cssVar } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { ExperimentalTooltip } from '../ExperimentalTooltip/ExperimentalTooltip';
 
 export interface SegmentButton {
   readonly children: ReactNode;
   readonly onClick: (event: React.MouseEvent<HTMLElement>) => void;
   readonly tooltip?: string | ReactNode;
+  readonly experimentalTooltip?: boolean;
   readonly testId?: string;
   readonly visible?: boolean;
   readonly disabled?: boolean;
@@ -45,6 +47,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
           visible = true,
           disabled = false,
           selected = false,
+          experimentalTooltip = false,
         } = button;
 
         const hasTooltip = !!tooltip;
@@ -66,13 +69,21 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
 
         return visible ? (
           hasTooltip && !disabled ? (
-            <Tooltip
-              side={variant === 'darker' ? 'bottom' : 'top'}
-              key={`figure-segment-tooltip-${i}`}
-              trigger={trigger}
-            >
-              {tooltip}
-            </Tooltip>
+            experimentalTooltip ? (
+              <ExperimentalTooltip
+                title={typeof tooltip === 'string' ? tooltip : ''}
+                trigger={trigger}
+                side="top"
+              />
+            ) : (
+              <Tooltip
+                side={variant === 'darker' ? 'bottom' : 'top'}
+                key={`figure-segment-tooltip-${i}`}
+                trigger={trigger}
+              >
+                {tooltip}
+              </Tooltip>
+            )
           ) : (
             trigger
           )

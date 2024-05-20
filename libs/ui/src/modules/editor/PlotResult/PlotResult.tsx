@@ -1,9 +1,8 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useRef } from 'react';
 import { VegaLite } from 'react-vega';
-import { TextAndIconButton } from '../../../shared';
+import { ExperimentalTooltip, TextAndIconButton } from '../../../shared';
 import { mobileQuery } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { PlotResultProps } from './PlotResult.types';
@@ -50,13 +49,16 @@ export const PlotResult = ({
           actions={false}
           config={usePlotTheme()}
         />
-        {isFlagEnabled('DOWNLOAD_CHART') && (
-          <button css={hideOnPrint} onClick={handleExportPNG}>
-            <TextAndIconButton text="Download chart" iconPosition="left">
-              <Download />
-            </TextAndIconButton>
-          </button>
-        )}
+        <ExperimentalTooltip
+          trigger={
+            <button css={hideOnPrint} onClick={handleExportPNG}>
+              <TextAndIconButton text="Download chart" iconPosition="left">
+                <Download />
+              </TextAndIconButton>
+            </button>
+          }
+          title="Download Chart"
+        />
       </div>
     </>
   );

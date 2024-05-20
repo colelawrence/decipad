@@ -62,3 +62,4 @@ export * from './useMaterializedResult';
 export * from './useDeleteAttachment';
 export * from './valuesToMarkdown';
 export * from './withPath';
+export * from './generateBlockNames';

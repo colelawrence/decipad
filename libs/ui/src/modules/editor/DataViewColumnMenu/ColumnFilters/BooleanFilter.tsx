@@ -1,12 +1,9 @@
-import { MenuItem, TriggerMenuItem, MenuList } from '../../../../shared';
-import { Graph } from '../../../../icons';
+import { MenuItem } from '../../../../shared';
 import { FC } from 'react';
-import { SubMenu, Column } from '../common';
+import { Column } from '../common';
 import { DataViewFilter, TableCellType } from '@decipad/editor-types';
 
 type BooleanFilterProps = {
-  subMenuOpened: SubMenu | false;
-  setSubMenuOpened: (subMenu: SubMenu | false) => void;
   selectedFilter?: DataViewFilter;
   type: TableCellType;
   columns: Column[] | undefined;
@@ -14,22 +11,11 @@ type BooleanFilterProps = {
   onFilterChange: (filter: DataViewFilter | undefined) => void;
 };
 export const BooleanFilter: FC<BooleanFilterProps> = ({
-  subMenuOpened,
-  setSubMenuOpened,
   selectedFilter,
   onFilterChange,
 }) => {
   return (
-    <MenuList
-      key="filter"
-      open={subMenuOpened === 'filter'}
-      onChangeOpen={(open) => {
-        if (open) {
-          setSubMenuOpened('filter');
-        }
-      }}
-      itemTrigger={<TriggerMenuItem icon={<Graph />}>Filter</TriggerMenuItem>}
-    >
+    <>
       <MenuItem
         onSelect={(e) => {
           e.preventDefault();
@@ -70,6 +56,6 @@ export const BooleanFilter: FC<BooleanFilterProps> = ({
       >
         Is False
       </MenuItem>
-    </MenuList>
+    </>
   );
 };

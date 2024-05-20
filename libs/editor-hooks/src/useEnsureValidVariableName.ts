@@ -2,15 +2,15 @@ import type { RemoteComputer } from '@decipad/remote-computer';
 import { identifierRegExpGlobal } from '@decipad/remote-computer';
 import type { MyElement, PlainText } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
-import { generateVarName, timeout } from '@decipad/utils';
+import { timeout } from '@decipad/utils';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { useSelected } from 'slate-react';
+import { generateVarName } from '@decipad/editor-utils';
 
 /**
  * Makes sure a variable name is not empty or duplicate
@@ -26,7 +26,7 @@ import { useSelected } from 'slate-react';
 export function useEnsureValidVariableName(
   element: MyElement & { children: [PlainText] },
   blockIds: Array<string | undefined> = [],
-  defaultVarName = generateVarName(isFlagEnabled('SILLY_NAMES'))
+  defaultVarName = generateVarName()
 ): string | undefined {
   const editor = useMyEditorRef();
   const computer = useComputer();

@@ -1,33 +1,30 @@
 export const availableFlags = [
-  // Allows user to copy reference from block, and use it in others.
-  'COPY_HREF',
-  // allows the user to download a chart as a PNG image
-  'DOWNLOAD_CHART',
+  //
+  // Dev feature flags
+  //
+
+  // Bottom bar showing FPS, feature flags, css, etc...
   'DEVELOPER_TOOLBAR',
-  'POPULATED_NEW_NOTEBOOK',
-  'ROTATED_DATA_VIEW',
-  'ALTERNATE_ROTATION_DATA_VIEW',
-  'INTEGRATIONS_AUTH',
-  'LIVE_CONN_OPTIONS',
-  'SHEETS_ISLANDS',
-  'ENABLE_SCENARIOS',
+
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
-  'SILLY_NAMES',
-  // Notion Connections in-notebook
-  'NOTION_CONNECTIONS',
-  'GOOGLE_SHEET_INTEGRATION',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
-  'WORKSPACE_READERS',
 
   // Allow create workspaces
   // This will not be enabled in production but must remain a feature flag
   // because we need it easily test stuff by creating workspaces.
   'ALLOW_CREATE_NEW_WORKSPACE',
+
+  //
+  // Feature feature flags
+  //
+
+  'ENABLE_SCENARIOS',
+  'POPULATED_NEW_NOTEBOOK',
+  'NOTION_CONNECTIONS',
   'ENABLE_COMMENTS',
-  // Data views filtering
-  'DATA_VIEWS_FILTER',
+  'GOOGLE_SHEET_INTEGRATION',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
@@ -75,7 +72,6 @@ export const getQueryStringOverrides = (): Flags => {
 // Overrides will always have the highest priority
 let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
-  SILLY_NAMES: false,
   ENABLE_COMMENTS: true,
   NOTION_CONNECTIONS: true,
 };

@@ -8,7 +8,6 @@ import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { DataViewFilter, TableCellType } from '@decipad/editor-types';
 import { DataViewColumnMenuFilter } from './ColumnFilters/DataViewColumnMenuFilter';
 import { Column, SubMenu } from './common';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 interface Rounding {
   id: string;
@@ -151,17 +150,15 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
         </MenuList>
       ) : null}
 
-      {isFlagEnabled('DATA_VIEWS_FILTER') && (
-        <DataViewColumnMenuFilter
-          subMenuOpened={subMenuOpened}
-          setSubMenuOpened={setSubMenuOpened}
-          onFilterChange={onFilterChange}
-          selectedFilter={selectedFilter}
-          type={type}
-          columns={columns}
-          columnIndex={columnIndex}
-        />
-      )}
+      <DataViewColumnMenuFilter
+        subMenuOpened={subMenuOpened}
+        setSubMenuOpened={setSubMenuOpened}
+        onFilterChange={onFilterChange}
+        selectedFilter={selectedFilter}
+        type={type}
+        columns={columns}
+        columnIndex={columnIndex}
+      />
 
       <div role="presentation" css={hrStyles}>
         <Divider />

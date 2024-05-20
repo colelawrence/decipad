@@ -24,9 +24,9 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { insertNodes } from '@decipad/editor-utils';
+import { generateTableName, insertNodes } from '@decipad/editor-utils';
 import type { ImportResult } from '@decipad/import';
-import { generateTableName, getDefined, varNamify } from '@decipad/utils';
+import { getDefined, varNamify } from '@decipad/utils';
 import { format } from 'date-fns';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';

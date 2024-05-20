@@ -15,7 +15,7 @@ export * from './enumerate';
 export * from './filteredUnzip';
 export * from './first';
 export * from './formatUTCDate';
-export * from './generateBlockNames';
+export * from './generateRandomNames';
 export * from './get-defined';
 export * from './get-defined-promise';
 export * from './get-only';

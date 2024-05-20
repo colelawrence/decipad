@@ -40,6 +40,7 @@ export { Chat } from './Chat';
 export { Check } from './Check';
 export { CheckboxSelected } from './CheckboxSelected';
 export { CheckboxUnselected } from './CheckboxUnselected';
+export { ChemicalTube } from './ChemicalTube';
 export { Close } from './Close';
 export { Cloud } from './Cloud';
 export { Cluster } from './Cluster';

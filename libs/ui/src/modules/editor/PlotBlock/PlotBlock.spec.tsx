@@ -3,9 +3,27 @@ import { ComponentProps } from 'react';
 import { MarkType } from '../PlotParams/PlotParams';
 import { PlotBlock } from './PlotBlock';
 
+import { ToastDisplay } from 'libs/ui/src/shared';
+import { SessionProvider } from 'next-auth/react';
+
 let props: Record<string, string>;
+let wrapper: React.FC<React.PropsWithChildren<unknown>>;
 beforeEach(() => {
   props = {};
+
+  wrapper = ({ children }) => (
+    <SessionProvider
+      session={{
+        expires: new Date(Date.now() + 1000000).toISOString(),
+        user: {
+          name: 'userName',
+          email: 'user@email.com',
+        },
+      }}
+    >
+      <ToastDisplay>{children}</ToastDisplay>
+    </SessionProvider>
+  );
 });
 
 const firstDataLabel = 'label 1';
@@ -97,7 +115,8 @@ const plotProps: (
 
 it('displays the "Select a table" component if no table selected', () => {
   const { queryByText } = render(
-    <PlotBlock {...plotProps('arc', '')} readOnly={false} />
+    <PlotBlock {...plotProps('arc', '')} readOnly={false} />,
+    { wrapper }
   );
 
   expect(queryByText(/select a table/i)).toBeInTheDocument();
@@ -105,7 +124,8 @@ it('displays the "Select a table" component if no table selected', () => {
 
 it('displays the plot settings for a line plot unless readonly', async () => {
   const { queryAllByText, rerender } = render(
-    <PlotBlock {...plotProps('line')} readOnly={false} />
+    <PlotBlock {...plotProps('line')} readOnly={false} />,
+    { wrapper }
   );
   expect(queryAllByText('Settings')).not.toHaveLength(0);
 
@@ -115,7 +135,8 @@ it('displays the plot settings for a line plot unless readonly', async () => {
 
 it('displays the plot settings for a pie chart unless readonly', async () => {
   const { queryAllByText, rerender } = render(
-    <PlotBlock {...plotProps('arc')} readOnly={false} />
+    <PlotBlock {...plotProps('arc')} readOnly={false} />,
+    { wrapper }
   );
   expect(queryAllByText('Settings')).not.toHaveLength(0);
 
@@ -125,7 +146,8 @@ it('displays the plot settings for a pie chart unless readonly', async () => {
 
 it('displays the plot settings for an area chart unless readonly', async () => {
   const { queryAllByText, rerender } = render(
-    <PlotBlock {...plotProps('area')} readOnly={false} />
+    <PlotBlock {...plotProps('area')} readOnly={false} />,
+    { wrapper }
   );
   expect(queryAllByText('Settings')).not.toHaveLength(0);
 
@@ -135,7 +157,8 @@ it('displays the plot settings for an area chart unless readonly', async () => {
 
 it('displays the plot settings for a scatter plot unless readonly', async () => {
   const { queryAllByText, rerender } = render(
-    <PlotBlock {...plotProps('point')} readOnly={false} />
+    <PlotBlock {...plotProps('point')} readOnly={false} />,
+    { wrapper }
   );
   expect(queryAllByText('Settings')).not.toHaveLength(0);
 

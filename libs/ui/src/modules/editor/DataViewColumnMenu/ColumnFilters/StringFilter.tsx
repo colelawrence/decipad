@@ -1,18 +1,10 @@
-import {
-  Divider,
-  MenuItem,
-  TriggerMenuItem,
-  MenuList,
-} from '../../../../shared';
-import { Graph } from '../../../../icons';
+import { Divider, MenuItem } from '../../../../shared';
 import { CodeResult } from '../../CodeResult/CodeResult';
-import { FC, useMemo } from 'react';
-import { Column, SubMenu } from '../common';
-import { DataViewFilter, TableCellType } from '@decipad/editor-types';
+import { type FC, useMemo } from 'react';
+import type { Column } from '../common';
+import type { DataViewFilter, TableCellType } from '@decipad/editor-types';
 
 type StringFilterProps = {
-  subMenuOpened: SubMenu | false;
-  setSubMenuOpened: (subMenu: SubMenu | false) => void;
   selectedFilter?: DataViewFilter;
   type: TableCellType;
   columns: Column[] | undefined;
@@ -21,8 +13,6 @@ type StringFilterProps = {
 };
 
 export const StringFilter: FC<StringFilterProps> = ({
-  subMenuOpened,
-  setSubMenuOpened,
   selectedFilter,
   columns,
   columnIndex,
@@ -64,16 +54,7 @@ export const StringFilter: FC<StringFilterProps> = ({
   }, [columnIndex, columns, selectedFilter]);
 
   return (
-    <MenuList
-      key="filter"
-      open={subMenuOpened === 'filter'}
-      onChangeOpen={(open) => {
-        if (open) {
-          setSubMenuOpened('filter');
-        }
-      }}
-      itemTrigger={<TriggerMenuItem icon={<Graph />}>Filter</TriggerMenuItem>}
-    >
+    <>
       <MenuItem
         onSelect={(e) => {
           e.preventDefault();
@@ -101,6 +82,6 @@ export const StringFilter: FC<StringFilterProps> = ({
           <CodeResult value={value} type={type as any} />
         </MenuItem>
       ))}
-    </MenuList>
+    </>
   );
 };

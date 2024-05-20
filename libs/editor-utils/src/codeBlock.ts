@@ -1,8 +1,6 @@
 import { type RemoteComputer } from '@decipad/remote-computer';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { generateVarName } from '@decipad/utils';
 import type { EElementOrText, PlateEditor, Value } from '@udecode/plate-common';
 import { deleteText, getEditorString } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -11,6 +9,7 @@ import { Transforms } from 'slate';
 import { createCodeLine, createStructuredCodeLine } from './createCodeLine';
 import { insertNodes } from './insertNodes';
 import { requireBlockParentPath, requirePathBelowBlock } from './path';
+import { generateVarName } from './generateBlockNames';
 
 export const insertCodeLineBelow = (
   editor: MyEditor,
@@ -46,10 +45,7 @@ export const insertStructuredCodeLineBelow = <
   const newId = nanoid();
   const elm = createStructuredCodeLine({
     id: newId,
-    varName: getAvailableIdentifier(
-      varName ?? generateVarName(isFlagEnabled('SILLY_NAMES')),
-      1
-    ),
+    varName: getAvailableIdentifier(varName ?? generateVarName(), 1),
     code,
   }) as EElementOrText<TV>;
 

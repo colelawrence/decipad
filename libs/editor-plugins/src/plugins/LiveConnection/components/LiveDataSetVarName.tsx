@@ -8,7 +8,6 @@ import {
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type { SourceUrlParseResponse } from '@decipad/import';
 import { parseSourceUrl } from '@decipad/import';
 import { useConnectionStore } from '@decipad/react-contexts';
@@ -106,11 +105,9 @@ export const LiveDataSetVarName: PlateComponent = ({
         <LiveDataSetCaption source={sourceName} />
       </div>
 
-      {isFlagEnabled('LIVE_CONN_OPTIONS') && (
-        <div contentEditable={false}>
-          <LiveDataSetParams onClick={onOptionsPress} />
-        </div>
-      )}
+      <div contentEditable={false}>
+        <LiveDataSetParams onClick={onOptionsPress} />
+      </div>
     </div>
   );
 

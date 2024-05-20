@@ -1,5 +1,4 @@
 import { ImportElementSource } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { ComponentProps, FC } from 'react';
 import {
   CommandConnectRanges,
@@ -75,24 +74,22 @@ const groups = (
                   },
                 ]
               : []),
-            isFlagEnabled('SHEETS_ISLANDS') &&
-              source === 'gsheets' && {
-                command: 'connect-islands',
-                title: 'Connect to table ranges',
-                description: `Tries to find tables in your google sheets and create a live connection`,
-                icon: <CommandConnectRanges />,
-                enabled: true,
-                extraSearchTerms: ['connect', 'live'],
-              },
-            isFlagEnabled('SHEETS_ISLANDS') &&
-              source === 'gsheets' && {
-                command: 'import-islands',
-                title: 'Import table ranges',
-                description: `Tries to find tables in your google sheets and import them`,
-                icon: <CommandImportRangeCopies />,
-                enabled: true,
-                extraSearchTerms: ['import', 'google', 'sheets'],
-              },
+            source === 'gsheets' && {
+              command: 'connect-islands',
+              title: 'Connect to table ranges',
+              description: `Tries to find tables in your google sheets and create a live connection`,
+              icon: <CommandConnectRanges />,
+              enabled: true,
+              extraSearchTerms: ['connect', 'live'],
+            },
+            source === 'gsheets' && {
+              command: 'import-islands',
+              title: 'Import table ranges',
+              description: `Tries to find tables in your google sheets and import them`,
+              icon: <CommandImportRangeCopies />,
+              enabled: true,
+              extraSearchTerms: ['import', 'google', 'sheets'],
+            },
           ].filter(Boolean),
     },
   ] as ComponentProps<typeof InlineMenu>['groups'];

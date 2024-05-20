@@ -6,7 +6,7 @@ import type {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';
-import { type Prettify, generateVarName } from '@decipad/utils';
+import { type Prettify, generatedNames } from '@decipad/utils';
 import { importFromJSONAndCoercions, importFromNotion } from '@decipad/import';
 import { Subject } from 'rxjs';
 import omit from 'lodash.omit';
@@ -113,7 +113,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   timeOfLastRun: null,
   connectionType: undefined,
   stage: 'pick-integration',
-  varName: generateVarName(true),
+  varName: generatedNames(),
   rawResult: undefined,
   resultPreview: undefined,
   resultTypeMapping: [],
@@ -183,7 +183,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
       open: keepOpen,
       connectionType: undefined,
       createIntegration: false,
-      varName: generateVarName(true),
+      varName: generatedNames(),
       resultPreview: undefined,
       existingIntegration: undefined,
       resultTypeMapping: [],

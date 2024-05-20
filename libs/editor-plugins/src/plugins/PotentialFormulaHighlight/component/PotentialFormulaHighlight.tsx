@@ -15,16 +15,16 @@ import {
 } from '@decipad/editor-types';
 import {
   createStructuredCodeLine,
+  generateVarName,
   getAboveNodeSafe,
   insertNodes,
   isElementOfType,
   magicNumberId,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type { ShadowCalcReference } from '@decipad/react-contexts';
 import { useComputer, useEditorTeleportContext } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
-import { generateVarName, noop } from '@decipad/utils';
+import { noop } from '@decipad/utils';
 import {
   findNodePath,
   getEndPoint,
@@ -114,9 +114,7 @@ export const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier(
-      generateVarName(isFlagEnabled('SILLY_NAMES'))
-    ),
+    varName: computer.getAvailableIdentifier(generateVarName()),
     code: getNodeString(leaf as RichText),
   });
 
