@@ -572,7 +572,9 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
     await workspace.newWorkspaceWithPlan('plus');
     await workspace.createNewNotebook();
     await randomFreeUser.aiAssistant.closePannel();
+
     await notebook.waitForEditorToLoad();
+    await randomFreeUser.notebook.closeSidebar();
     await notebook.focusOnBody();
 
     await page.keyboard.press(
@@ -843,7 +845,7 @@ test('table categories', async ({ testUser }) => {
   // check new table with categories was added
   await page.reload();
   await notebook.waitForEditorToLoad();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
 
   // check both tables still have categories
   for (const option of dropdownOptions) {

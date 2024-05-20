@@ -93,6 +93,7 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
   await workspace.createNewNotebook();
   await randomFreeUser.aiAssistant.closePannel();
   await notebook.waitForEditorToLoad();
+  await randomFreeUser.notebook.closeSidebar();
   await notebook.focusOnBody();
   const notebookURL = page.url();
 

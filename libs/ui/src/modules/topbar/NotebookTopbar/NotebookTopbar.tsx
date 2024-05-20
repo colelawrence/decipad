@@ -356,7 +356,10 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
           </Styled.TitleContainer>
           {UndoButtons}
           <Styled.HiddenFromSmallScreens>
-            {AiModeSwitch}
+            <Styled.AiContainer>
+              {AiModeSwitch}
+              <Styled.Status>Beta</Styled.Status>
+            </Styled.AiContainer>
           </Styled.HiddenFromSmallScreens>
         </Styled.LeftContainer>
         <Styled.RightContainer>

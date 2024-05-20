@@ -10,6 +10,7 @@ import {
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
 } from '@decipad/graphql-client';
+import { useNotebookMetaData, useResourceUsage } from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
@@ -52,7 +53,6 @@ import { initNewDocument } from '@decipad/docsync';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { NotebookList } from './NotebookList';
 import { useInitializeResourceUsage } from '../../hooks';
-import { useResourceUsage } from '@decipad/react-contexts';
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
@@ -196,11 +196,17 @@ const Workspace: FC = () => {
       const initResult = await initNewDocument(
         createdNotebookData.createPad.id
       );
+
+      const { sidebarComponent, toggleSidebar } =
+        useNotebookMetaData.getState();
+      if (sidebarComponent !== 'default-sidebar') {
+        toggleSidebar('default-sidebar');
+      }
+
       navigate(
         notebooks({}).notebook({
           notebook: initResult,
           tab: initResult.tabId,
-          openAiPanel: true,
         }).$
       );
     } catch (e) {

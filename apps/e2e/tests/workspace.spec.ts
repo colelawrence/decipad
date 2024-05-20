@@ -400,7 +400,7 @@ test.skip('workspace reader checks @workspace @roles', async ({
   await testUser.workspace.checkWorkspaceMember(testUser.email);
   await testUser.workspace.addWorkspaceMember(randomFreeUser.email, 'Reader');
   await testUser.workspace.createNewNotebook();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
   await testUser.notebook.waitForEditorToLoad();
 
   await test.step('standard member checks', async () => {
@@ -464,7 +464,7 @@ test('workspace editor checks @workspace @roles', async ({
   await testUser.workspace.checkWorkspaceMember(testUser.email);
   await testUser.workspace.addWorkspaceMember(randomFreeUser.email, 'Editor');
   await testUser.workspace.createNewNotebook();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
   await testUser.notebook.waitForEditorToLoad();
 
   await test.step('standard editor member checks', async () => {

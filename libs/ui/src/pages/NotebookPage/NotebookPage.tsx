@@ -57,9 +57,9 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     articleRef,
   } = props;
 
-  const [sidebarComponent] = useNotebookMetaData((state) => [
-    state.sidebarComponent,
-  ]);
+  const sidebarComponent = useNotebookMetaData(
+    (state) => state.sidebarComponent
+  );
 
   const scrollToRef = useScrollToHash();
   const {

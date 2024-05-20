@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 import type { DocSyncEditor } from '@decipad/docsync';
 import type { FC } from 'react';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useContext, useMemo } from 'react';
 import { useNotebookMetaActions } from '../../hooks';
 import {
   useClaimNotebookMutation,
@@ -59,14 +58,7 @@ export const MenuItemButton = styled.div<{ isReadOnly?: boolean }>(
  * Responsible for loading topbar dependencies, and all its elements.
  */
 const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
-  const [searchParams] = useSearchParams();
-
   const actions = useNotebookMetaActions();
-
-  const [isNotebookCreated, setIsNotebookCreated] = useState(
-    searchParams.get('openAiPanel') === 'true'
-  );
-  const isNotebookCreatedRef = useRef(false);
 
   const sidebarData = useNotebookMetaData((state) => ({
     isSidebarOpen: state.isSidebarOpen,
@@ -74,16 +66,6 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     component: state.sidebarComponent,
     setPublishingTab: state.setPublishingTab,
   }));
-
-  useEffect(() => {
-    if (isNotebookCreated && !isNotebookCreatedRef.current) {
-      setIsNotebookCreated(false);
-      if (sidebarData.component !== 'ai') {
-        sidebarData.toggleSidebar('ai');
-      }
-      isNotebookCreatedRef.current = true;
-    }
-  }, [isNotebookCreated, sidebarData]);
 
   const [canUndo, canRedo] = useEditorUndoState(docsync);
 

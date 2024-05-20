@@ -232,7 +232,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
 
   await test.step('reload notebook and switch fast between tabs to see if calculation gets stuck', async () => {
     await page.reload();
-    await testUser.aiAssistant.closePannel();
+    await testUser.notebook.closeSidebar();
     await notebook.selectTab('New Tab');
     await notebook.selectTab('Another Tab');
     await notebook.selectTab('New Tab');

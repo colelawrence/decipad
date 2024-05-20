@@ -93,6 +93,8 @@ test('Make sure our js code templates work', async ({ randomFreeUser }) => {
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
 
+  await randomFreeUser.notebook.closeSidebar();
+
   await test.step('Checks all the files', async () => {
     const allSources = codePlaceholders;
 
@@ -124,6 +126,7 @@ test('More JS codeblock checks', async ({ randomFreeUser }) => {
   await randomFreeUser.aiAssistant.closePannel();
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
+  await randomFreeUser.notebook.closeSidebar();
 
   let generatedVarName: string;
 
@@ -205,6 +208,7 @@ test('screenshots the import menu', async ({ randomFreeUser }) => {
   await randomFreeUser.aiAssistant.closePannel();
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
+  await randomFreeUser.notebook.closeSidebar();
 
   await page.getByTestId('paragraph-content').last().click();
   await page.keyboard.type('hello world');
@@ -230,8 +234,11 @@ test('Checks the ability to change the unit of a response', async ({
 
   await workspace.createNewNotebook();
   await randomFreeUser.aiAssistant.closePannel();
+
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
+
+  await randomFreeUser.notebook.closeSidebar();
 
   await notebook.addBlockSlashCommand('open-integration');
   await await page.getByTestId('select-integration:Code').click();
@@ -415,7 +422,7 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
   await test.step('checks can add reference to formula in another notebook', async () => {
     await page.getByTestId('go-to-workspace').click();
     await workspace.createNewNotebook();
-    await testUser.aiAssistant.closePannel();
+    await testUser.notebook.closeSidebar();
     await notebook.waitForEditorToLoad();
     IntegrationNotebookURL = page.url();
     await notebook.selectLastParagraph();
@@ -453,7 +460,7 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
     await page.goto(IntegrationNotebookURL);
-    await testUser.aiAssistant.closePannel();
+    await testUser.notebook.closeSidebar();
     await notebook.waitForEditorToLoad();
 
     await notebook.focusOnBody();
@@ -474,7 +481,7 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
 
   await test.step('checks connection doesnt have retry error after notebook refresh', async () => {
     await page.reload();
-    await testUser.aiAssistant.closePannel();
+    await testUser.notebook.closeSidebar();
     await notebook.waitForEditorToLoad();
     await expect(async () => {
       await expect(

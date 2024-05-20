@@ -19,8 +19,8 @@ const switchWrapperStyles = css({
 
 const switchIconStyles = css({
   display: 'flex',
-  height: '16px',
-  width: '16px',
+  height: '24px',
+  width: '24px',
 
   '& svg': {
     width: '16px',
@@ -58,11 +58,9 @@ const switchThumbStyles = css({
   boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
 });
 
-const labelStyles = css({
-  ...p13Bold,
+const labelStyles = css(p13Bold, {
   display: 'flex',
   alignItems: 'center',
-  gap: '4px',
 });
 
 type AIModeSwitchProps = {

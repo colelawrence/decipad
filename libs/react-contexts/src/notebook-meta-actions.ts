@@ -83,7 +83,13 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
       partialize(state) {
         return Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !['hasPublished', 'canEdit', 'setCanEdit'].includes(key)
+            ([key]) =>
+              ![
+                'hasPublished',
+                'canEdit',
+                'setCanEdit',
+                'isNewNotebook',
+              ].includes(key)
           )
         );
       },

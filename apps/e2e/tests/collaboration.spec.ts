@@ -14,7 +14,7 @@ test('check notebooks stay private for other logged in users', async ({
 }) => {
   await testUser.page.goto(teamWorkspaceURL);
   await testUser.workspace.createNewNotebook();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
   await testUser.notebook.waitForEditorToLoad();
   const notebookURL = testUser.page.url();
 
@@ -33,7 +33,7 @@ test('check inviting readers stay in reading mode', async ({
 }) => {
   await testUser.page.goto(teamWorkspaceURL);
   await testUser.workspace.createNewNotebook();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
   await testUser.notebook.waitForEditorToLoad();
   const notebookURL = testUser.page.url();
 
@@ -75,7 +75,7 @@ test('check invited collaborators can edit notebook', async ({
 }) => {
   await testUser.page.goto(teamWorkspaceURL);
   await testUser.workspace.createNewNotebook();
-  await testUser.aiAssistant.closePannel();
+  await testUser.notebook.closeSidebar();
   await testUser.notebook.waitForEditorToLoad();
   const notebookURL = testUser.page.url();
 

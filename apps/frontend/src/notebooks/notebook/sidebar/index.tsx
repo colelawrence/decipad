@@ -28,7 +28,8 @@ const SidebarComponents: Record<
  * Deciding which one to show to the user.
  */
 const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
-  const [component] = useNotebookMetaData((s) => [s.sidebarComponent]);
+  const component = useNotebookMetaData((s) => s.sidebarComponent);
+
   const editor = useActiveEditor(props.docsync);
   if (component === 'closed' || editor == null) {
     return null;

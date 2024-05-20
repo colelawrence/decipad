@@ -140,7 +140,7 @@ export class AiAssistant {
   constructor(page: Page) {
     this.page = page;
     this.messageInput = this.page.getByTestId('message-input');
-    this.chatToggle = this.page.getByLabel('Sparkles');
+    this.chatToggle = this.page.getByTestId('ai-switch');
     this.sendMessage = this.page.getByRole('button', { name: 'Send' });
   }
 
@@ -285,7 +285,8 @@ export class AiAssistant {
   async closePannel() {
     // Check if the ai-switch component is disabled
     const aiSwitch = this.page.getByTestId('ai-switch');
-    const isAiSwitchChecked = await aiSwitch.getAttribute('aria-checked');
+    const isAiSwitchChecked =
+      (await aiSwitch.getAttribute('data-state')) === 'checked';
 
     if (!isAiSwitchChecked) {
       return;

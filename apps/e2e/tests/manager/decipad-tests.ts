@@ -17,6 +17,7 @@ export const test = base.extend<DecipadFixtures>({
     const userPage = new User(context, await context.newPage());
     userPage.email = genericTestEmail();
     await userPage.createAndNavNewNotebook();
+    await userPage.notebook.closeSidebar();
     await use(userPage);
     await context.close();
   },

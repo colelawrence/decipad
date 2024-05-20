@@ -116,6 +116,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await workspace.createNewNotebook();
     await randomFreeUser.aiAssistant.closePannel();
     await notebook.waitForEditorToLoad();
+    await randomFreeUser.notebook.closeSidebar();
     await notebook.focusOnBody();
     await createDropdownBelow(page, 'Dropdown');
     expect(await page.getByText('Dropdown').count()).toBe(1);
@@ -173,7 +174,6 @@ test('dropdown widget', async ({ randomFreeUser }) => {
 
   await test.step('refresh notebook and see it still can edit', async () => {
     await page.reload();
-    await page.locator('[id="ai-mode"]').click();
     await page.getByText('55%').click();
     await page.getByTestId('dropdown-option').getByText('55%').hover();
     await page
