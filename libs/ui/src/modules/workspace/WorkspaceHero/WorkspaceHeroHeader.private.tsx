@@ -7,15 +7,18 @@ import { Button, SearchBar, HelpMenu } from '../../../shared';
 import { Add, Users } from '../../../icons';
 import { ClientEventsContext } from '@decipad/client-events';
 import { cssVar } from '../../../primitives';
+import { PermissionType } from 'libs/ui/src/types';
 
 type WorkspaceHeroHeaderProps = {
   membersHref?: string;
   onCreateNotebook?: () => void;
+  permissionType?: PermissionType | null;
 };
 
 export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
   membersHref,
   onCreateNotebook,
+  permissionType,
 }) => {
   const { status: sessionStatus } = useSession();
   const canUseDom = useCanUseDom();
@@ -36,26 +39,28 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
             />
           </div>
         )}
-        <Button
-          href={membersHref}
-          type="tertiaryAlt"
-          onClick={() => {
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'Invite Team Button Clicked',
-                props: {
-                  analytics_source: 'frontend',
+        {permissionType === 'ADMIN' && (
+          <Button
+            href={membersHref}
+            type="tertiaryAlt"
+            onClick={() => {
+              clientEvent({
+                segmentEvent: {
+                  type: 'action',
+                  action: 'Invite Team Button Clicked',
+                  props: {
+                    analytics_source: 'frontend',
+                  },
                 },
-              },
-            });
-          }}
-        >
-          <TextWithIcon>
-            <Users />
-            <span>Invite team</span>
-          </TextWithIcon>
-        </Button>
+              });
+            }}
+          >
+            <TextWithIcon>
+              <Users />
+              <span>Invite team</span>
+            </TextWithIcon>
+          </Button>
+        )}
 
         <Button
           type="primaryBrand"

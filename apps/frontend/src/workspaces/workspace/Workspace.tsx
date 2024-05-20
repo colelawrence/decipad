@@ -278,6 +278,7 @@ const Workspace: FC = () => {
                     hasReachedAiLimit={ai.hasReachedLimit}
                     membersHref={currentWorkspaceRoute.members({}).$}
                     creditsHref={currentWorkspaceRoute.addcredits({}).$}
+                    permissionType={currentWorkspace.myPermissionType}
                   />
                   <Frame
                     Heading="h1"

@@ -11,6 +11,7 @@ import {
 } from '../../../primitives';
 import { RainbowText } from '../../../styles/card';
 import { WorkspaceHeroHeader } from './WorkspaceHeroHeader.private';
+import { PermissionType } from 'libs/ui/src/types';
 
 type WorkspaceHeroProps = {
   name: string;
@@ -19,6 +20,7 @@ type WorkspaceHeroProps = {
   membersCount: number;
   membersHref?: string;
   creditsHref?: string;
+  permissionType?: PermissionType | null;
   onCreateNotebook?: () => void;
 
   hasReachedAiLimit: boolean;
@@ -33,6 +35,7 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   membersHref,
   creditsHref,
   onCreateNotebook,
+  permissionType,
 
   hasReachedAiLimit,
   aiCreditsLeft,
@@ -66,6 +69,7 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
       <WorkspaceHeroHeader
         membersHref={membersHref}
         onCreateNotebook={onCreateNotebook}
+        permissionType={permissionType}
       />
       <DeciLogo children={<Deci />} />
       <div data-testid="workspace-hero-title">
