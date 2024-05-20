@@ -101,13 +101,13 @@ export const roundOperators: Record<string, BuiltinSpec> = {
           argCount: 1,
           argCardinalities: [[1]],
           functor: roundDateFunctor,
-          fnValuesNoAutomap: roundDateFnValues,
+          fnValues: roundDateFnValues,
         },
         {
           argCount: 2,
           argCardinalities: [[1, 1]],
           functor: roundDateFunctor,
-          fnValuesNoAutomap: roundDateFnValues,
+          fnValues: roundDateFnValues,
         },
       ]
     ),
