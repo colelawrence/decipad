@@ -1,32 +1,26 @@
 import { useState, useMemo } from 'react';
 import { slice, empty } from '@decipad/generator-utils';
+import { type Result } from '@decipad/remote-computer';
 
-interface UsePaginationResult<T> {
+interface UsePaginationResult {
   page: number;
   offset: number;
   presentRowCount: number;
-  valuesForPage: Array<() => AsyncGenerator<T>>;
+  valuesForPage: Array<() => AsyncGenerator<Result.OneResult>>;
   setPage: (page: number) => void;
 }
 
-type UseSimplePaginationResult<T> = Omit<
-  UsePaginationResult<T>,
-  'presentRowCount' | 'valuesForPage'
-> & {
-  valuesForPage: () => AsyncGenerator<T>;
-};
-
-interface UsePaginationProps<T> {
-  all?: Array<() => AsyncGenerator<T>>;
+interface UsePaginationProps {
+  all?: Array<Result.ResultColumn>;
   totalRowCount: number;
   maxRowsPerPage: number;
 }
 
-export const usePagination = <T>({
+export const usePagination = ({
   all,
   totalRowCount,
   maxRowsPerPage,
-}: UsePaginationProps<T>): UsePaginationResult<T> => {
+}: UsePaginationProps): UsePaginationResult => {
   const [page, setPage] = useState(1);
   const offset = useMemo(
     () => (page - 1) * maxRowsPerPage,
@@ -35,7 +29,7 @@ export const usePagination = <T>({
   const valuesForPage = useMemo(
     () =>
       all != null
-        ? all.map((col) => () => slice(col(), offset, offset + maxRowsPerPage))
+        ? all.map((col) => () => col(offset, offset + maxRowsPerPage))
         : [],
     [all, maxRowsPerPage, offset]
   );
@@ -56,6 +50,13 @@ interface UseSimplePaginationProps<T> {
   all?: () => AsyncGenerator<T>;
   maxRowsPerPage: number;
 }
+
+type UseSimplePaginationResult<T> = Omit<
+  UsePaginationResult,
+  'presentRowCount' | 'valuesForPage'
+> & {
+  valuesForPage: () => AsyncGenerator<T>;
+};
 
 export const useSimplePagination = <T>({
   all,

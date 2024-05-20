@@ -57,5 +57,4 @@ export class Tree implements Value {
   }
 }
 
-export const isTreeValue = (v: Value | undefined | null): v is Tree =>
-  v instanceof Tree;
+export const isTreeValue = (v: unknown): v is Tree => v instanceof Tree;

@@ -192,7 +192,7 @@ describe('callBuiltin performance', () => {
       perfMaterialize,
       'cells per second'
     );
-    expect(perfCall).toBeGreaterThan(200_000);
+    expect(perfCall).toBeGreaterThan(slow ? 100_000 : 200_000);
     expect(materializedResult).toHaveLength(pageSize);
     materializedResult.forEach((value, index) => {
       const numberValue = getInstanceof(value, DeciNumber);

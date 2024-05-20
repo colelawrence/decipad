@@ -1,14 +1,12 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
+import { nanoid } from 'nanoid';
 import type { ImportResult } from '@decipad/import';
 import { tryImport } from '@decipad/import';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { getRemoteComputer, setErrorReporter } from '@decipad/remote-computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
-import { RPC } from '@mixer/postmessage-rpc';
-import { nanoid } from 'nanoid';
-import { dequal } from '@decipad/utils';
-import { createRPCResponse } from './createResponse';
+import { createWorkerWorker } from '@decipad/remote-computer-worker/worker';
 import type {
   Observe,
   SubscribeParams,
@@ -16,55 +14,28 @@ import type {
   SubscriptionId,
 } from './types';
 import type { StartNotebook } from './notebook';
-import { materializeImportResult } from './utils/materializeImportResult';
 
 setErrorReporter((err) => {
   console.error('Error caught on computer', err);
 });
 
-const rpc = new RPC({
-  target: {
-    postMessage: (data) => {
-      self.postMessage(data);
-    },
-  },
-  receiver: {
-    readMessages: (cb) => {
-      const listener = (ev: MessageEvent) => {
-        cb(ev);
-      };
-      self.addEventListener('message', listener);
-      return () => self.removeEventListener('message', listener);
-    },
-  },
-  serviceId: 'live-connect',
-});
+const subscriptions = new Map<SubscriptionId, Subscription>();
 
 const reply = async (
   subscriptionId: string,
   error?: Error,
   newResponse?: ImportResult
 ) => {
-  // eslint-disable-next-line no-console
-  console.debug('Live connect worker replying', { error, newResponse });
+  const sub = subscriptions.get(subscriptionId);
+  if (!sub) {
+    return;
+  }
   if (error) {
-    await rpc.call('notify', {
-      subscriptionId,
-      error: error?.message,
-    });
-  } else {
-    await rpc.call('notify', {
-      subscriptionId,
-      newResponse: newResponse && (await materializeImportResult(newResponse)),
-    });
+    await sub.notify({ error: error?.message, loading: false });
+  } else if (newResponse) {
+    await sub.notify(newResponse);
   }
 };
-
-interface UnsubscribeParams {
-  subscriptionId: SubscriptionId;
-}
-
-const subscriptions = new Map<SubscriptionId, Subscription>();
 
 const tryImportHere = async (
   computer: RemoteComputer,
@@ -112,17 +83,6 @@ const schedule = (computer: RemoteComputer, subscriptionId: SubscriptionId) => {
       (sub.params.pollIntervalSeconds || 60) * 1000
     );
   }
-};
-
-const notify = (subscriptionId: string) => {
-  let lastResult: ImportResult | undefined;
-  return async (result: ImportResult) => {
-    if (!dequal(lastResult, result)) {
-      lastResult = result;
-      const newResponse = createRPCResponse(result);
-      await reply(subscriptionId, undefined, newResponse);
-    }
-  };
 };
 
 const unsubscribe = (subscriptionId: string) => {
@@ -240,18 +200,39 @@ const subscribeInternal = async (
   }
 };
 
-const subscribe = async (params: SubscribeParams) => {
+const subscribe = async (
+  params: SubscribeParams,
+  notify: (result: ImportResult) => void | Promise<void>
+) => {
   const subscriptionId = nanoid();
-  const subscription: Subscription = { params, notify: notify(subscriptionId) };
+  const subscription: Subscription = { params, notify };
   await subscribeInternal(subscriptionId, subscription);
 
   return subscriptionId;
 };
 
-rpc.expose<SubscribeParams>('subscribe', subscribe);
-
-rpc.expose<UnsubscribeParams>('unsubscribe', ({ subscriptionId }) => {
-  unsubscribe(subscriptionId);
+createWorkerWorker({
+  postMessage: (message) => {
+    try {
+      self.postMessage(message);
+    } catch (err) {
+      console.error('Error posting message', message);
+      throw err;
+    }
+  },
+  readMessages: (cb) => {
+    self.addEventListener('message', cb);
+    return () => self.removeEventListener('message', cb);
+  },
+  subscribe: async (params, notify) => {
+    const subscriptionId = await subscribe(
+      params as SubscribeParams,
+      notify as (result: ImportResult) => void | Promise<void>
+    );
+    return () => {
+      unsubscribe(subscriptionId);
+    };
+  },
 });
 
 export {};

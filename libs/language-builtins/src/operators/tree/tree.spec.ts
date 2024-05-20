@@ -232,7 +232,6 @@ describe('tree', () => {
     let i = 0;
     for (const child of treeValue.children) {
       i += 1;
-      // eslint-disable-next-line no-await-in-loop
       expect(child.root).toEqual(N(i));
       expect(child.columns).toEqual([{ name: 'b' }, { name: 'c' }]);
       const { children: subChildren } = child;

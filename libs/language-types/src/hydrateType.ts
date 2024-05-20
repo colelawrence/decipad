@@ -1,0 +1,49 @@
+import type { Unit } from '@decipad/language-units';
+import type { SerializedType } from './SerializedType';
+import { N } from '@decipad/number';
+
+const hydrateUnit = (u: Unit.Unit): Unit.Unit => ({
+  ...u,
+  exp: N(u.exp),
+  multiplier: N(u.multiplier),
+});
+
+export const hydrateType = (type: SerializedType): SerializedType => {
+  switch (type.kind) {
+    case 'number': {
+      return {
+        ...type,
+        unit: type.unit?.map(hydrateUnit) ?? null,
+      } as SerializedType;
+    }
+    case 'column':
+    case 'materialized-column':
+      return {
+        ...type,
+        cellType: hydrateType(type.cellType),
+      };
+    case 'table':
+    case 'materialized-table':
+      return {
+        ...type,
+        columnTypes: type.columnTypes.map(hydrateType),
+      };
+    case 'tree':
+      return {
+        ...type,
+        columnTypes: type.columnTypes.map(hydrateType),
+      };
+    case 'row':
+      return {
+        ...type,
+        rowCellTypes: type.rowCellTypes.map(hydrateType),
+      };
+    case 'range':
+      return {
+        ...type,
+        rangeOf: hydrateType(type.rangeOf),
+      };
+    default:
+      return type;
+  }
+};

@@ -22,6 +22,8 @@ const unnestOneColumnOneCellIfNecessary = (
   return result;
 };
 
+export type RawResult = JSON | string;
+
 const importFromUnknownResponse = async (
   computer: RemoteComputer,
   resp: Response,
@@ -34,7 +36,7 @@ const importFromUnknownResponse = async (
     );
   }
   const contentType = resp.headers.get('content-type');
-  let rawResult: ImportResult['rawResult'] | undefined;
+  let rawResult: RawResult | undefined;
   let result: Result.Result;
   if (contentType?.startsWith('application/json')) {
     if (options.provider && options.provider !== 'json') {
@@ -42,9 +44,7 @@ const importFromUnknownResponse = async (
         `expected provider to be 'json' when content type is application/json, but got ${options.provider}`
       );
     }
-    rawResult = sanitizeRawResult(await resp.json()) as
-      | ImportResult['rawResult']
-      | undefined;
+    rawResult = sanitizeRawResult(await resp.json()) as RawResult | undefined;
     result = await importFromUnknownJson(rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
     if (options.provider && options.provider !== 'csv') {
@@ -67,7 +67,7 @@ const importFromUnknownResponse = async (
   return [
     {
       meta: {
-        sourceUrl: url,
+        sourceUrl: url?.toString(),
       },
       result: unnestOneColumnOneCellIfNecessary(result),
       rawResult,

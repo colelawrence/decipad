@@ -1,82 +1,12 @@
-import { RPC } from '@mixer/postmessage-rpc';
-import { createResponse } from './createResponse';
-import type {
-  LiveConnectionWorker,
-  RPCResponse,
-  SubscriptionId,
-  SubscriptionListener,
-} from './types';
+import { createWorkerClient } from '@decipad/remote-computer-worker/client';
+import { captureException } from '@sentry/browser';
+import type { SubscribeParams } from './types';
 
-interface StartWorkerResult {
-  worker: Worker;
-  rpc: RPC;
-}
-
-const createRPCWorker = async (): Promise<StartWorkerResult> => {
+export const createWorker = () => {
   const worker = new Worker(
-    new URL('./LiveConnect.worker.bundle.js', import.meta.url),
+    new URL('./LiveConnect-2.worker.bundle.js', import.meta.url),
     { type: 'module' }
   );
-
-  const rpc = new RPC({
-    target: {
-      postMessage: (data) => {
-        worker.postMessage(data);
-      },
-    },
-    receiver: {
-      readMessages: (cb) => {
-        worker.addEventListener('message', cb);
-
-        return () => worker.removeEventListener('message', cb);
-      },
-    },
-    serviceId: 'live-connect',
-  });
-
-  await rpc.isReady;
-
-  return { worker, rpc };
-};
-
-type Notification = {
-  subscriptionId: SubscriptionId;
-  newResponse?: RPCResponse;
-  error?: string;
-};
-
-export const createWorker = async (): Promise<LiveConnectionWorker> => {
-  const listeners = new Map<SubscriptionId, SubscriptionListener>();
-  const { worker, rpc } = await createRPCWorker();
-
-  rpc.expose<Notification>(
-    'notify',
-    ({ subscriptionId, error, newResponse }) => {
-      const listener = listeners.get(subscriptionId);
-      if (listener) {
-        const response = newResponse && createResponse(newResponse);
-        try {
-          listener((error != null && new Error(error)) || undefined, response);
-        } catch (err) {
-          console.error('Error caught while notifying subscriber', err);
-        }
-      }
-    }
-  );
-
-  return {
-    subscribe: async (params, listener) => {
-      const subscriptionId = await rpc.call<string>('subscribe', params);
-      listeners.set(subscriptionId, listener);
-      return async () => {
-        listeners.delete(subscriptionId);
-        await rpc.call('unsubscribe', { subscriptionId });
-      };
-    },
-    terminate: () => {
-      listeners.clear();
-      worker.terminate();
-    },
-    worker,
-  };
+  worker.onerror = captureException;
+  return createWorkerClient<SubscribeParams>(worker);
 };

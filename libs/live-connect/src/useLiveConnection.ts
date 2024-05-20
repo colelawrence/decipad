@@ -4,10 +4,8 @@ import {
   astNode,
   buildType,
   deserializeType,
-  materializeResult,
   serializeType,
   isTableResult,
-  hydrateResult,
   Unknown,
 } from '@decipad/remote-computer';
 import type {
@@ -24,7 +22,6 @@ import type {
   TableCellType,
 } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
-import { useCache } from '@decipad/editor-utils';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
@@ -115,28 +112,7 @@ export const useLiveConnection = (
     liveQuery,
   });
 
-  const [result, clearCache] = useCache<ImportResult | undefined>({
-    blockId,
-    deleted,
-    value: liveConnectionResult,
-    serialize: useCallback(
-      async (importRes: ImportResult | undefined) =>
-        importRes && {
-          ...importRes,
-          result:
-            importRes.result && (await materializeResult(importRes.result)),
-        },
-      []
-    ),
-    deserialize: useCallback(
-      (importRes: ImportResult | undefined) =>
-        importRes && {
-          ...importRes,
-          result: hydrateResult(importRes.result),
-        },
-      []
-    ),
-  });
+  const result = liveConnectionResult;
 
   useEffect(() => {
     const computerResult = result?.result;
@@ -153,11 +129,10 @@ export const useLiveConnection = (
     }
   }, [blockId, computer, deleted, variableName]);
 
-  const clearCacheAndRetry = useCallback(() => {
+  const doRetry = useCallback(() => {
     setTimedout(false);
-    clearCache();
     retry();
-  }, [clearCache, retry]);
+  }, [retry]);
 
   // Authentication
   const { authenticate } = useLiveConnectionAuth({
@@ -186,7 +161,7 @@ export const useLiveConnection = (
           : undefined,
       loading: liveConnectionResult?.loading || result?.loading || false,
     },
-    retry: clearCacheAndRetry,
+    retry: doRetry,
     authenticate,
   };
 };

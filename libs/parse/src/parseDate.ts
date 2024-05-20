@@ -140,13 +140,17 @@ export const parseDate = (
   for (const spec of Object.keys(formats) as Array<Time.Specificity>) {
     const formatStrings = formats[spec] ?? [];
     for (const format of formatStrings) {
-      const date = globalParseDate(value, format);
-      if (date) {
-        return {
-          format,
-          specificity: spec,
-          date,
-        };
+      try {
+        const date = globalParseDate(value, format);
+        if (date) {
+          return {
+            format,
+            specificity: spec,
+            date,
+          };
+        }
+      } catch (err) {
+        // do nothing
       }
     }
   }

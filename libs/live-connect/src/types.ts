@@ -7,25 +7,15 @@ import type {
   TableCellType,
 } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
+import type { RemoteWorker } from '@decipad/remote-computer-worker/client';
 
 export type SubscriptionId = string;
 
-export type RPCResponse = ImportResult;
+export type RPCResponse = ImportResult & {
+  error?: string;
+};
 
-export type SubscriptionListener = (
-  error: Error | undefined,
-  newResponse?: ImportResult
-) => void;
 export type Unsubscribe = () => void;
-
-export interface LiveConnectionWorker {
-  subscribe: (
-    props: Omit<SubscribeParams, 'pollIntervalSeconds'>,
-    listener: SubscriptionListener
-  ) => Promise<Unsubscribe>;
-  terminate: () => void;
-  worker: Worker;
-}
 
 export interface SubscribeParams {
   url: string;
@@ -45,7 +35,7 @@ export interface Subscription {
   params: SubscribeParams;
   timer?: ReturnType<typeof setTimeout>;
   subscription?: SubscriptionLike;
-  notify: (result: ImportResult) => void | Promise<void>;
+  notify: (result: RPCResponse) => void | Promise<void>;
 }
 
 export type Observe = (
@@ -57,3 +47,5 @@ export type ConnectionResult = {
   source: LiveConnectionElement | LiveDataSetElement;
   result: ImportResult;
 };
+
+export type LiveConnectionWorker = RemoteWorker<SubscribeParams, RPCResponse>;

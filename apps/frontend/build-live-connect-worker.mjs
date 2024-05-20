@@ -17,11 +17,11 @@ await build({
 
 // Important that this one comes second.
 await build({
-  entryPoints: ['../../libs/live-connect/src/LiveConnect.worker.ts'],
+  entryPoints: ['../../libs/live-connect/src/LiveConnect-2.worker.ts'],
   bundle: true,
-  outfile: '../../libs/live-connect/src/LiveConnect.worker.bundle.js',
+  outfile: '../../libs/live-connect/src/LiveConnect-2.worker.bundle.js',
   treeShaking: true,
-  minify: false,
+  minify: true,
   metafile: true,
   format: 'esm',
   logLevel: 'info',

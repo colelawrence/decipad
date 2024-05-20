@@ -1,0 +1,32 @@
+diff --git a/node_modules/@mixer/postmessage-rpc/dist/rpc.js b/node_modules/@mixer/postmessage-rpc/dist/rpc.js
+index 4b452f8..8e0c67d 100644
+--- a/node_modules/@mixer/postmessage-rpc/dist/rpc.js
++++ b/node_modules/@mixer/postmessage-rpc/dist/rpc.js
+@@ -50,16 +50,12 @@ var RPC = /** @class */ (function (_super) {
+             // If we got data that wasn't a string or could not be parsed, or was
+             // from a different remote, it's not for us.
+             if (_this.options.origin && _this.options.origin !== '*' && ev.origin !== _this.options.origin) {
++                console.warn('rejected because of origin')
+                 return;
+             }
+-            var packet;
+-            try {
+-                packet = JSON.parse(ev.data);
+-            }
+-            catch (e) {
+-                return;
+-            }
++            var packet = ev.data;
+             if (!types_1.isRPCMessage(packet) || packet.serviceID !== _this.options.serviceId) {
++                console.warn('rejected because of serviceId mismatch', packet.serviceID,  _this.options.serviceId)
+                 return;
+             }
+             // postMessage does not guarantee message order, reorder messages as needed.
+@@ -249,6 +245,7 @@ var RPC = /** @class */ (function (_super) {
+                 break;
+             default:
+             // Ignore
++            console.warn('message ignored:', packet)
+         }
+     };
+     return RPC;

@@ -84,7 +84,7 @@ export const LiveDataSetVarName: PlateComponent = ({
       return;
     }
     const sub = result$
-      .pipe(map((r) => r.result.loading))
+      .pipe(map((r) => r.result.loading ?? false))
       .subscribe(setLoading);
 
     return () => sub.unsubscribe();

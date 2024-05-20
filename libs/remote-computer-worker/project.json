@@ -1,0 +1,38 @@
+{
+  "name": "remote-computer-worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/remote-computer-worker/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/remote-computer-worker/**/*.ts",
+          "libs/remote-computer-worker/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/remote-computer-worker"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/remote-computer-worker"],
+      "options": {
+        "jestConfig": "libs/remote-computer-worker/jest.config.js"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/remote-computer-worker"
+      }
+    }
+  }
+}

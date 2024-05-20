@@ -4,13 +4,12 @@ import { css } from '@emotion/react';
 import pluralize from 'pluralize';
 import { SimpleTableCellType } from '@decipad/editor-types';
 import { usePagination, useResolved } from '@decipad/react-utils';
-import { Result, isResultGenerator } from '@decipad/remote-computer';
 import {
-  all as allElements,
-  count,
-  from,
-  slice,
-} from '@decipad/generator-utils';
+  Result,
+  getResultGenerator,
+  isResultGenerator,
+} from '@decipad/remote-computer';
+import { all as allElements, count } from '@decipad/generator-utils';
 import { PaginationControl } from '../../../shared';
 import { Table } from '../Table/Table';
 import { TableHeader } from '../TableHeader/TableHeader';
@@ -70,11 +69,6 @@ const isTableValue = (
     (column) => Array.isArray(column) || isResultGenerator(column)
   );
 
-const isMaterializedTableValue = (
-  value: Result.OneResult
-): value is Result.ResultTable =>
-  Array.isArray(value) && value.every((column) => Array.isArray(column));
-
 export const TableResult: FC<TableResultProps> = ({
   parentType,
   type,
@@ -95,23 +89,13 @@ export const TableResult: FC<TableResultProps> = ({
     () => isTableValue(_value) && _value.length > 0,
     [_value]
   );
-  const isMaterializedTable = useMemo(
-    () => isMaterializedTableValue(_value),
-    [_value]
-  );
 
   const all = useMemo(
     () =>
       (isExpectedValueType
-        ? isMaterializedTable
-          ? (_value as Result.ResultMaterializedTable).map(
-              (col) =>
-                (start = 0, end = Infinity) =>
-                  slice(from(col), start, end)
-            )
-          : _value
+        ? (_value as Result.ResultMaterializedTable).map(getResultGenerator)
         : []) as Result.ResultTable,
-    [_value, isExpectedValueType, isMaterializedTable]
+    [_value, isExpectedValueType]
   );
 
   const tableLength =
@@ -124,7 +108,7 @@ export const TableResult: FC<TableResultProps> = ({
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
   const { page, offset, presentRowCount, valuesForPage, setPage } =
-    usePagination<Result.OneResult>(
+    usePagination(
       useMemo(
         () => ({
           all,

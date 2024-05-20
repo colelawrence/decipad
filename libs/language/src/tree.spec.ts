@@ -32,7 +32,6 @@ describe('tree builtin', () => {
     expect(treeResultType.kind).toBe('tree');
     expect(treeResultType.columnNames).toHaveLength(3);
     expect(treeResultType.columnTypes).toHaveLength(3);
-
     expect(treeResultValue.root).toMatchInlineSnapshot(`Symbol(unknown)`);
     expect(treeResultValue.rootAggregation).toBe(undefined);
     expect(treeResultValue.columns).toHaveLength(3);

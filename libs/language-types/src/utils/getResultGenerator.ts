@@ -1,5 +1,4 @@
 import { from, slice } from '@decipad/generator-utils';
-// eslint-disable-next-line no-restricted-imports
 import { isResultGenerator } from './isResultGenerator';
 import type { OneResult, ResultGenerator } from '../Result';
 

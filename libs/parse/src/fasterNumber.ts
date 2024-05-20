@@ -9,8 +9,6 @@ const toIntegerNumber = (
   }
   const res = Number(n.replaceAll(/[^.0-9]/g, ''));
   if (Number.isNaN(res)) {
-    // eslint-disable-next-line no-console
-    console.warn(`"${res}" was not parsable to a number`);
     return undefined;
   }
   return res;
@@ -58,6 +56,6 @@ export const fasterNumber = (n: number | string): DeciNumber => {
       [decimalCount, fullNumber],
       err
     );
-    throw err;
+    return N(undefined);
   }
 };

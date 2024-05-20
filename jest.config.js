@@ -32,6 +32,7 @@ module.exports = {
     '<rootDir>/libs/generator-utils',
     '<rootDir>/libs/repl',
     '<rootDir>/libs/computer',
+    '<rootDir>/libs/remote-computer-worker',
     '<rootDir>/libs/parse',
     '<rootDir>/libs/import',
     '<rootDir>/libs/notebook-tabs',

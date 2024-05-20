@@ -18,3 +18,6 @@ export class FunctionValue implements Value {
     return Promise.resolve(this);
   }
 }
+
+export const isFunctionValue = (value: unknown): value is FunctionValue =>
+  value instanceof FunctionValue;

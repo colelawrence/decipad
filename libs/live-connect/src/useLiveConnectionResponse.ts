@@ -7,10 +7,10 @@ import type {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
+import { hydrateType } from '@decipad/remote-computer';
 import type { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
-import { hydrateResult } from '@decipad/remote-computer';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
@@ -84,7 +84,10 @@ export const useLiveConnectionResponse = ({
                   } else if (res.result) {
                     setResult({
                       ...res,
-                      result: hydrateResult(res.result),
+                      result: {
+                        ...res.result,
+                        type: hydrateType(res.result.type),
+                      },
                     });
                   }
                   if (res.loading != null) {

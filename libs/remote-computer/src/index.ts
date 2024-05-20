@@ -60,6 +60,7 @@ export {
   parseUnit,
   walkAst,
   hydrateResult,
+  hydrateType,
   CurrencyUnits,
   type AutocompleteName,
   type BlockDependents,

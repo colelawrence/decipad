@@ -180,7 +180,7 @@ const partition = (
           island.sheetName,
           getDefined(meta.sourceMeta),
           island
-        ),
+        ).toString(),
       },
       loading: false,
     };

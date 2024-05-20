@@ -111,7 +111,7 @@ const loadAllSubsheets = async (
       const subMeta: ImportResult['meta'] = {
         title: subsheet.properties.title,
         importedAt: new Date(),
-        sourceUrl: url,
+        sourceUrl: url.toString(),
         sheetId,
         gid: subsheet.properties.sheetId,
         sourceMeta: meta,
@@ -157,7 +157,7 @@ const importOneGsheetFromResponse = async (
   };
 
   if (sourceUrl != null) {
-    importResult.meta!.sourceUrl = sourceUrl;
+    importResult.meta!.sourceUrl = sourceUrl.toString();
   }
   return [importResult];
 };

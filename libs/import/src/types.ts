@@ -32,20 +32,18 @@ export interface Sheet {
 
 export interface ImportResultMeta {
   title?: string;
-  sourceUrl?: URL;
+  sourceUrl?: string;
   importedAt?: Date;
   sheetId?: string | number;
   gid?: number | string;
   sourceMeta?: SheetMeta;
 }
 
-type JSON = Record<string, unknown>;
-
 export interface ImportResult {
   meta?: ImportResultMeta;
   result?: Result.AnyResult;
   rawResult?: string | JSON;
-  loading: boolean;
+  loading?: boolean;
 }
 
 export type ImportResultWithMandatoryResult = ImportResult & {

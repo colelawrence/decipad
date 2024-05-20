@@ -1,0 +1,106 @@
+/* eslint-disable no-underscore-dangle */
+import {
+  count,
+  firstOrUndefined,
+  from,
+  fromGeneratorPromise,
+  map,
+  memoizing,
+  slice,
+} from '@decipad/generator-utils';
+import type { Dimension } from '../Dimension';
+import type { GenericResultGenerator, OneResult } from '../Result';
+import type { ColumnLikeValue } from './ColumnLike';
+import type { Value } from './Value';
+import type { SerializedType } from '../SerializedType';
+import { typedResultToValue } from '../utils/typedResultToValue';
+import { deserializeType } from '../Type';
+import { lowLevelGet } from './lowLevelGet';
+import { getResultGenerator } from '../utils/getResultGenerator';
+import type { PromiseOrType } from '@decipad/utils';
+
+export type ReadSerializedColumnDecoder<T extends OneResult = OneResult> = (
+  buffer: DataView,
+  offset: number
+) => PromiseOrType<[T, number]>; // returns the decoded value and the next offset
+
+export class ReadSerializedColumn<T extends OneResult>
+  implements ColumnLikeValue
+{
+  private typedResultToValue: Promise<(result: OneResult) => Value>;
+  private decode: ReadSerializedColumnDecoder<T>;
+  private buffer: DataView;
+  private _dimensions: Dimension[];
+  private _allData: T[] | undefined;
+
+  constructor(
+    type: SerializedType,
+    decode: ReadSerializedColumnDecoder<T>,
+    buffer: DataView,
+    dimensions: Dimension[]
+  ) {
+    this.typedResultToValue = typedResultToValue(deserializeType(type));
+    this.decode = decode;
+    this.buffer = buffer;
+    this._dimensions = dimensions;
+  }
+  async getData(): Promise<GenericResultGenerator<T>> {
+    return (start = 0, end = Infinity) => {
+      return slice(this.allDataNow(), start, end);
+    };
+  }
+
+  private allDataNow(): AsyncGenerator<T> {
+    const { buffer, decode } = this;
+    if (this._allData) {
+      return from(this._allData);
+    }
+    return memoizing(
+      (async function* serializedColumnAllData() {
+        let offset = 0;
+        while (offset < buffer.byteLength) {
+          // eslint-disable-next-line no-await-in-loop
+          const [value, bytesRead] = await decode(buffer, offset);
+          offset = bytesRead;
+          yield value;
+        }
+      })(),
+      (all) => {
+        this._allData = all;
+      }
+    );
+  }
+
+  async lowLevelGet(...keys: number[]): Promise<Value> {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  async dimensions(): Promise<Dimension[]> {
+    return Promise.resolve(this._dimensions);
+  }
+
+  values(
+    start?: number | undefined,
+    end?: number | undefined
+  ): AsyncGenerator<Value> {
+    return fromGeneratorPromise(
+      (async () =>
+        map(
+          await getResultGenerator(await this.getData())(start, end),
+          await this.typedResultToValue
+        ))()
+    );
+  }
+
+  async atIndex(i: number): Promise<Value | undefined> {
+    const v = await firstOrUndefined(slice(this.allDataNow(), i, i + 1));
+    if (v != null) {
+      return (await this.typedResultToValue)(v);
+    }
+    return v;
+  }
+
+  rowCount(): number | Promise<number> {
+    return count(this.allDataNow());
+  }
+}

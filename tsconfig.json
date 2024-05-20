@@ -138,6 +138,12 @@
       "@decipad/react-contexts": ["libs/react-contexts/src/index.ts"],
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
       "@decipad/remote-computer": ["libs/remote-computer/src/index.ts"],
+      "@decipad/remote-computer-worker/worker": [
+        "libs/remote-computer-worker/src/worker/index.ts"
+      ],
+      "@decipad/remote-computer-worker/client": [
+        "libs/remote-computer-worker/src/client/index.ts"
+      ],
       "@decipad/retry": ["libs/retry/src/index.ts"],
       "@decipad/routing": ["libs/routing/src/index.ts"],
       "@decipad/server-side-rendering": [

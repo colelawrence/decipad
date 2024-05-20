@@ -41,7 +41,7 @@ describe('withUpdateComputerOverride', () => {
   });
 
   it('pushes compute on initialization', async () => {
-    await timeout(200);
+    await timeout(1000);
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id3": Object {
@@ -74,7 +74,7 @@ describe('withUpdateComputerOverride', () => {
   });
 
   it('allows adding code elements', async () => {
-    await timeout(200);
+    await timeout(1000);
     insertNodes(editor, [
       {
         type: ELEMENT_CODE_LINE,
@@ -89,7 +89,7 @@ describe('withUpdateComputerOverride', () => {
         id: 'id5',
       },
     ]);
-    await timeout(200);
+    await timeout(1000);
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id3": Object {

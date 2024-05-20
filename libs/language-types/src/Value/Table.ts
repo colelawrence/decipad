@@ -77,7 +77,7 @@ export const isTableValue = (
   v.columnNames != null &&
   v.columns != null;
 
-export const getTableValue = (v: Value): Table | GeneratorTable =>
+export const getTableValue = (v: unknown): Table | GeneratorTable =>
   v instanceof Table
     ? getInstanceof(v, Table)
     : getInstanceof(v, GeneratorTable);

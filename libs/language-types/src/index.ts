@@ -25,3 +25,4 @@ export * as Dimension from './Dimension';
 export * from './utils';
 export { type ContextUtils } from './ContextUtils';
 export * from './autoconvert/autoconvert';
+export * from './hydrateType';

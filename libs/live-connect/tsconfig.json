@@ -16,6 +16,7 @@
     { "path": "../editor-utils" },
     { "path": "../toast" },
     { "path": "../interfaces" },
-    { "path": "../notebook-tabs" }
+    { "path": "../notebook-tabs" },
+    { "path": "../remote-computer-worker" }
   ]
 }

@@ -53,6 +53,7 @@ export {
   tokenRules,
   walkAst,
   isResultGenerator,
+  hydrateType,
   type AutocompleteName,
   type BracketError,
   type Constant,
