@@ -47,15 +47,10 @@ export interface EngageAssistantParams {
   forceMode: string;
 }
 
-export interface ChatUsage {
-  promptTokensUsed: number;
-  completionTokensUsed: number;
-}
-
 export interface EngageAssistantResponse {
   mode: string;
   message: ChatCompletionMessage;
-  usage: ChatUsage;
+  usage: number;
 }
 
 // eslint-disable-next-line complexity
@@ -300,17 +295,11 @@ export const engageAssistant = async ({
     message = completion.choices[0].message;
   }
 
-  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
-    'workspaces',
-    workspaceId
-  );
+  const usage = await resourceusage.ai.getUsage(workspaceId);
 
   return {
     mode,
     message,
-    usage: {
-      promptTokensUsed: newPrompt,
-      completionTokensUsed: newCompletion,
-    },
+    usage,
   };
 };

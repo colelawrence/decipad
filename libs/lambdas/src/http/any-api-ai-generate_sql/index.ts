@@ -110,10 +110,7 @@ User schema: ${schemaString}
     usage: completion.usage,
   });
 
-  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
-    'workspaces',
-    workspaceId
-  );
+  const usage = await resourceusage.ai.getUsage(workspaceId);
 
   return {
     statusCode: 200,
@@ -122,10 +119,7 @@ User schema: ${schemaString}
     },
     body: JSON.stringify({
       completion: `# ${requestBody}\nSELECT\n${sqlQuery};`,
-      usage: {
-        completionTokensUsed: newCompletion,
-        promptTokensUsed: newPrompt,
-      },
+      usage,
     }),
   };
 });

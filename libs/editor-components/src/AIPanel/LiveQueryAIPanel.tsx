@@ -1,6 +1,8 @@
 import { getAnalytics } from '@decipad/client-events';
-import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { UpgradePlanWarning } from '@decipad/ui';
+import {
+  useResourceUsage,
+  useCurrentWorkspaceStore,
+} from '@decipad/react-contexts';
 import type { FC } from 'react';
 import { useCallback, useState } from 'react';
 import {
@@ -11,6 +13,7 @@ import {
 } from './components';
 import type { PromptSuggestion } from './components/PromptSuggestions';
 import { useRdFetch } from './hooks';
+import { UpgradeWarningBlock } from '../Integrations';
 
 type LiveQueryAIPanelProps = {
   id: string;
@@ -41,7 +44,7 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
   const [rd, fetch] = useRdFetch(`generate-sql`);
   const { workspaceInfo } = useCurrentWorkspaceStore();
 
-  const { tokensQuotaLimit, hasReachedLimit, updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   const handleSubmit = useCallback(async () => {
     const promptText = prompt.prompt;
@@ -56,9 +59,10 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
     });
 
     if (rd.status === 'success' && rd.result.usage) {
-      updateUsage(rd.result.usage);
+      ai.updateUsage({ usage: rd.result.usage });
     }
-  }, [fetch, prompt, workspaceInfo, id, updateUsage, rd]);
+  }, [prompt.prompt, fetch, id, workspaceInfo.id, rd, ai]);
+
   const makeUseOfSuggestion = useCallback(
     (s: string) => {
       toggle();
@@ -78,21 +82,18 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
         handleSubmit={handleSubmit}
         prompt={prompt}
         setPrompt={setPrompt}
-        disableSubmitButton={hasReachedLimit ?? false}
+        disableSubmitButton={ai.hasReachedLimit}
       />
       <AIPanelSuggestion
         completionRd={rd}
         makeUseOfSuggestion={makeUseOfSuggestion}
         prompt={prompt}
       />
-      {hasReachedLimit && workspaceInfo.id && tokensQuotaLimit && (
-        <UpgradePlanWarning
-          workspaceId={workspaceInfo.id}
-          showQueryQuotaLimit={false}
-          maxQueryExecution={hasReachedLimit}
-          quotaLimit={tokensQuotaLimit}
-        />
-      )}
+      <UpgradeWarningBlock
+        type="ai"
+        variant="block"
+        workspaceId={workspaceInfo.id ?? ''}
+      />
     </AIPanelContainer>
   );
 };

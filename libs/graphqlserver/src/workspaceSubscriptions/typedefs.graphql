@@ -33,9 +33,9 @@ type WorkspaceSubscription {
   seats: Int
   editors: Int
   readers: Int
-  credits: Int
-  queries: Int
-  storage: Int
+  credits: Int!
+  queries: Int!
+  storage: Int!
 }
 
 extend type Mutation {

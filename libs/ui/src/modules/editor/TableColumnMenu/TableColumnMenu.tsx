@@ -8,7 +8,7 @@ import type {
 import { formatUnit } from '@decipad/format';
 import { commonCurrencies } from '@decipad/language-units';
 import { N, ONE } from '@decipad/number';
-import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { Unit, UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -68,6 +68,7 @@ interface TableColumnMenuProps
   readonly type: CellValueType;
   readonly isForImportedColumn?: boolean;
   readonly isLiveResult?: boolean;
+  readonly isAiEnabled?: boolean;
   readonly dropdownNames?: ColumnMenuDropdown[];
   readonly onRemoveColumn?: () => void;
   readonly onAddColRight?: () => void;
@@ -106,6 +107,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   type,
   isForImportedColumn = false,
   isLiveResult = false,
+  isAiEnabled = true,
   dropdownNames = [],
   onAddColLeft,
   onAddColRight,
@@ -131,12 +133,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
     () => onChangeOpen?.(true),
     [onChangeOpen]
   );
-  const {
-    workspaceInfo: { queryCount, quotaLimit },
-  } = useCurrentWorkspaceStore();
-  const shouldDisableAI = useMemo(() => {
-    return !!quotaLimit && !!queryCount && queryCount >= quotaLimit;
-  }, [quotaLimit, queryCount]);
+
   return (
     <div contentEditable={false} css={tableColumnMenuStyles}>
       {open ? (
@@ -380,7 +377,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 key="populate-column"
                 icon={<Sparkles />}
                 onSelect={onPopulateColumn}
-                disabled={shouldDisableAI}
+                disabled={!isAiEnabled}
               >
                 Populate with AI
               </MenuItem>

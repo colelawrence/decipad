@@ -4,76 +4,22 @@ import {
   useCodeConnectionStore,
   useConnectionStore,
   TExecution,
+  useResourceUsage,
 } from '@decipad/react-contexts';
 import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
+  useAnalytics,
   useConnectionActionMenu,
   useCreateIntegration,
   useIntegrationScreenFactory,
+  useResetState,
 } from '../hooks';
-import { useClientEvents } from '@decipad/client-events';
+import { UpgradeWarningBlock } from '@decipad/editor-components';
 
 interface IntegrationProps {
   readonly workspaceId?: string;
-}
-
-/**
- * When you navigate to the workspace, you might `leave` the store open.
- * So we need to clean up after the user.
- */
-function useResetState() {
-  const [abort] = useConnectionStore((store) => [store.abort]);
-
-  useEffect(() => {
-    abort();
-
-    return () => {
-      abort();
-    };
-  }, [abort]);
-}
-
-function useAnalytics() {
-  const [stage, connectionType, createIntegration] = useConnectionStore((s) => [
-    s.stage,
-    s.connectionType,
-    s.createIntegration,
-  ]);
-
-  const track = useClientEvents();
-
-  useEffect(() => {
-    if (
-      connectionType !== 'notion' &&
-      connectionType !== 'codeconnection' &&
-      connectionType !== 'mysql' &&
-      connectionType !== 'gsheets'
-    ) {
-      return;
-    }
-
-    if (stage === 'connect') {
-      track({
-        segmentEvent: {
-          type: 'action',
-          action: 'Integration: Notebook viewed',
-          props: { type: connectionType },
-        },
-      });
-    }
-
-    if (createIntegration) {
-      track({
-        segmentEvent: {
-          type: 'action',
-          action: 'Integration: Notebook Integration added',
-          props: { type: connectionType },
-        },
-      });
-    }
-  }, [connectionType, stage, track, createIntegration]);
 }
 
 export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
@@ -98,8 +44,6 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   ]);
   const codeStoreReset = useCodeConnectionStore((s) => s.reset);
 
-  useResetState();
-
   const [info, onExecute] = useState<TExecution<boolean>>({
     status: 'unset',
   });
@@ -107,21 +51,37 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   const screen = useIntegrationScreenFactory(workspaceId);
   const actionMenu = useConnectionActionMenu(workspaceId, onExecute);
 
+  const { queries } = useResourceUsage();
+
   useCreateIntegration();
   useAnalytics();
+  useResetState();
 
   return (
     <ExecutionContext.Provider value={{ info, onExecute }}>
       <Dialog open={open} setOpen={changeOpen}>
         <WrapperIntegrationModalDialog
           title="Connect to your data"
-          workspaceId={workspaceId}
           tabStage={stage}
           connectionTabLabel={getConnectionDisplayLabel(connectionType)}
           showTabs={stage !== 'pick-integration'}
           onTabClick={(s) => setter({ stage: s })}
           onBack={back}
           onReset={codeStoreReset}
+          onRun={() => {
+            if (queries.hasReachedLimit) return;
+
+            onExecute({ status: 'run' });
+            queries.incrementUsageWithBackend(workspaceId);
+          }}
+          disableRunButton={info.status === 'run' || queries.hasReachedLimit}
+          infoPanel={
+            <UpgradeWarningBlock
+              type="queries"
+              variant="block"
+              workspaceId={workspaceId}
+            />
+          }
           onContinue={next}
           setOpen={changeOpen}
           isEditing={!!existingIntegration}

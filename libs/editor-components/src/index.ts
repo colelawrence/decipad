@@ -13,6 +13,7 @@ export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './SubmitForm/SubmitForm';
 export * from './TeleportEditor';
+export * from './Integrations';
 export * from './block-management';
 export * from './plate-ui';
 export * from './hooks';

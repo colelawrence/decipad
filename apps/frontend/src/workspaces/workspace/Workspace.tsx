@@ -10,7 +10,6 @@ import {
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
 } from '@decipad/graphql-client';
-import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
@@ -30,7 +29,7 @@ import {
 import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
 import type { FC } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   Outlet,
   Route,
@@ -50,13 +49,13 @@ import {
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { initNewDocument } from '@decipad/docsync';
-import { getDefined } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { NotebookList } from './NotebookList';
+import { useInitializeResourceUsage } from '../../hooks';
+import { useResourceUsage } from '@decipad/react-contexts';
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
-  const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
   const showFeedback = useCallback(() => {
     show();
@@ -164,75 +163,9 @@ const Workspace: FC = () => {
     [allWorkspaces]
   );
 
-  const {
-    updateUsage,
-    promptTokensUsed,
-    tokensQuotaLimit,
-    completionTokensUsed,
-  } = useAiUsage();
+  useInitializeResourceUsage(currentWorkspace);
 
-  // hack to check if the workspace Id has changed
-  const [prevWorkspaceId, setPrevWorkspaceId] = useState(currentWorkspace?.id);
-
-  useEffect(() => {
-    let quotaLimit = currentWorkspace?.workspaceSubscription?.credits || 0;
-    let pTokens = 0;
-    let cTokens = 0;
-
-    (currentWorkspace?.resourceUsages || [])
-      .filter((u) => u?.resourceType === 'openai')
-      .forEach((u) => {
-        if (u?.id.includes('prompt')) {
-          pTokens = u.consumption;
-        }
-
-        if (u?.id.includes('completion')) {
-          cTokens = u.consumption;
-        }
-
-        if (u?.id.includes('extra-credits')) {
-          quotaLimit += getDefined(
-            u.originalAmount,
-            'extra credit records always have `originalAmount`'
-          );
-        }
-      });
-
-    /* we only want to update the usage with the DB values when the user refreshes the page OR
-     * if the workspace Id has changed
-     */
-    if (
-      (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) ||
-      prevWorkspaceId !== currentWorkspace?.id
-    ) {
-      updateUsage({
-        promptTokensUsed: pTokens,
-        completionTokensUsed: cTokens,
-        tokensQuotaLimit: quotaLimit,
-      });
-      setPrevWorkspaceId(currentWorkspace?.id);
-    }
-  }, [
-    updateUsage,
-    currentWorkspace?.isPremium,
-    currentWorkspace?.resourceUsages,
-    promptTokensUsed,
-    completionTokensUsed,
-    tokensQuotaLimit,
-    currentWorkspace?.id,
-    prevWorkspaceId,
-    currentWorkspace?.workspaceSubscription?.credits,
-  ]);
-
-  useEffect(() => {
-    setCurrentWorkspaceInfo({
-      id: currentWorkspace?.id,
-      isPremium: !!currentWorkspace?.isPremium,
-      quotaLimit: currentWorkspace?.workspaceExecutedQuery?.quotaLimit,
-      queryCount: currentWorkspace?.workspaceExecutedQuery?.queryCount,
-      plan: currentWorkspace?.plan || undefined,
-    });
-  }, [currentWorkspace, setCurrentWorkspaceInfo]);
+  const { ai } = useResourceUsage();
 
   const pageInfo = useMemo(() => {
     if (isArchivePage) return 'archived';
@@ -333,9 +266,10 @@ const Workspace: FC = () => {
                     name={currentWorkspace.name}
                     isPremium={!!currentWorkspace.isPremium}
                     planName={currentSubscriptionPlan?.title ?? ''}
-                    creditsPlan={currentSubscriptionPlan?.credits ?? 0}
                     membersCount={currentWorkspace.membersCount ?? 1}
                     onCreateNotebook={handleCreateNotebook}
+                    aiCreditsLeft={ai.quotaLimit - ai.usage}
+                    hasReachedAiLimit={ai.hasReachedLimit}
                     membersHref={currentWorkspaceRoute.members({}).$}
                     creditsHref={currentWorkspaceRoute.addcredits({}).$}
                   />

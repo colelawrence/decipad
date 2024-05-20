@@ -30,10 +30,7 @@ export type Endpoints = {
     };
     response: {
       completion: string;
-      usage: {
-        promptTokensUsed?: number;
-        completionTokensUsed?: number;
-      };
+      usage: number;
     };
   };
   chat: {
@@ -48,10 +45,7 @@ export type Endpoints = {
     };
     response: {
       completion: string;
-      usage: {
-        promptTokensUsed?: number;
-        completionTokensUsed?: number;
-      };
+      usage: number;
     };
   };
   'generate-fetch-js': {
@@ -63,10 +57,7 @@ export type Endpoints = {
     };
     response: {
       completion: string;
-      usage: {
-        promptTokensUsed?: number;
-        completionTokensUsed?: number;
-      };
+      usage: number;
     };
   };
   'complete-column': {
@@ -86,10 +77,7 @@ export type Endpoints = {
         columnIndex: number;
         suggestion: string;
       }[];
-      usage: {
-        promptTokensUsed?: number;
-        completionTokensUsed?: number;
-      };
+      usage: number;
     };
   };
 };

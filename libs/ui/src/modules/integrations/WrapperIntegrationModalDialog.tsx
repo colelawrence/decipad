@@ -1,13 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import {
-  useIncrementQueryCountMutation,
-  useWorkspaceSecrets,
-} from '@decipad/graphql-client';
-import {
-  ExecutionContext,
   useCodeConnectionStore,
   useConnectionStore,
-  useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import {
   removeFocusFromAllBecauseSlate,
@@ -15,19 +9,11 @@ import {
 } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import {
-  FC,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { FC, ReactNode } from 'react';
 import { Close, Sparkles, Play } from '../../icons';
 import {
   cssVar,
   mobileQuery,
-  p13Regular,
   p15Medium,
   p16Medium,
   smallestMobile,
@@ -36,7 +22,6 @@ import { closeButtonStyles } from '../../styles/buttons';
 import {
   Button,
   TextAndIconButton,
-  UpgradePlanWarning,
   TabsList,
   TabsRoot,
   TabsTrigger,
@@ -48,7 +33,6 @@ interface WrapperIntegrationModalDialogProps {
   readonly children: ReactNode;
 
   readonly title: string;
-  readonly workspaceId?: string;
 
   readonly connectionTabLabel?: string;
 
@@ -59,6 +43,8 @@ interface WrapperIntegrationModalDialogProps {
   readonly onBack: () => void;
   readonly onReset?: () => void;
   readonly onContinue: () => void;
+  readonly onRun: () => void;
+
   readonly setOpen: (open: boolean) => void;
 
   readonly isEditing?: boolean;
@@ -68,10 +54,17 @@ interface WrapperIntegrationModalDialogProps {
 
   readonly hideRunButton?: boolean;
 
-  /** Display custom react component to perform some actions
-   * Currently being used for SecretsMenu or ConnectionsMenu
+  readonly disableRunButton?: boolean;
+
+  /**
+   * Display custom react component to perform some actions
    */
   readonly actionMenu: ReactNode;
+
+  /**
+   * Display above the run and back button to show some extra information.
+   */
+  readonly infoPanel: ReactNode;
 }
 
 export const WrapperIntegrationModalDialog: FC<
@@ -86,43 +79,21 @@ export const WrapperIntegrationModalDialog: FC<
   tabStage = 'pick-source' as Stages,
   onTabClick = noop,
   setOpen = noop,
+  onRun,
   isEditing = false,
   children,
-  workspaceId,
   isCode,
   connectionTabLabel = 'Code',
 
   hideRunButton = false,
+  disableRunButton = false,
 
   actionMenu,
+  infoPanel,
 }) => {
-  const { onExecute } = useContext(ExecutionContext);
   const { resultPreview, stage, connectionType } = useConnectionStore();
   const codeStore = useCodeConnectionStore();
   const hasDataPreview = !!resultPreview;
-  const {
-    workspaceInfo,
-    setCurrentWorkspaceInfo,
-    nrQueriesLeft,
-    isQuotaLimitBeingReached,
-  } = useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount } = workspaceInfo;
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
-  const [runButtonDisabled, setRunButtonDisabled] = useState(maxQueryExecution);
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-
-  useEffect(() => {
-    if (queryCount && quotaLimit) {
-      setMaxQueryExecution(quotaLimit <= queryCount);
-      setRunButtonDisabled(quotaLimit <= queryCount);
-    }
-  }, [quotaLimit, queryCount]);
-
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: workspaceId || '',
-    });
-  }, [workspaceId, updateQueryExecCount]);
 
   const showAiButton =
     stage === 'connect' &&
@@ -134,42 +105,10 @@ export const WrapperIntegrationModalDialog: FC<
     removeFocusFromAllBecauseSlate();
   };
 
-  let { secrets } = useWorkspaceSecrets(workspaceId || '');
-
-  if (!secrets) {
-    secrets = [];
-  }
-
-  const execSource = async () => {
-    setRunButtonDisabled(true);
-    const result = await updateQueryExecutionCount();
-
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
-    );
-
-    if (newExecutedQueryData) {
-      onExecute({ status: 'run' });
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-      setRunButtonDisabled(false);
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
-      setRunButtonDisabled(true);
-    } else {
-      setRunButtonDisabled(false);
-    }
-  };
-
   useEnterListener(() => {
     switch (tabStage) {
       case 'connect':
-        execSource();
+        onRun();
         return;
       case 'map':
         insertIntoNotebook();
@@ -180,11 +119,7 @@ export const WrapperIntegrationModalDialog: FC<
     <TabsRoot
       defaultValue={tabStage}
       onValueChange={(newValue) => {
-        if (['pick-integration', 'connect', 'map'].includes(newValue)) {
-          onTabClick(newValue as Stages);
-        } else {
-          console.warn(`invalid tab ${newValue}`);
-        }
+        onTabClick(newValue as Stages);
       }}
     >
       <TabsList>
@@ -244,16 +179,7 @@ export const WrapperIntegrationModalDialog: FC<
         </div>
       </div>
       <div css={allChildrenStyles(tabStage)}>{children}</div>
-      {(isQuotaLimitBeingReached || maxQueryExecution) &&
-        workspaceId &&
-        quotaLimit && (
-          <UpgradePlanWarning
-            workspaceId={workspaceId}
-            showQueryQuotaLimit={isQuotaLimitBeingReached}
-            maxQueryExecution={maxQueryExecution}
-            quotaLimit={quotaLimit}
-          />
-        )}
+      <section>{infoPanel}</section>
       {showTabs && (
         <div css={bottomBarStyles}>
           {isEditing ? (
@@ -302,11 +228,6 @@ export const WrapperIntegrationModalDialog: FC<
                     : 'Reset'}
                 </Button>
               </div>
-              {isQuotaLimitBeingReached && (
-                <p css={queriesLeftStyles}>
-                  {nrQueriesLeft} of {quotaLimit} credits left
-                </p>
-              )}
             </>
           )}
           {!hideRunButton && (
@@ -315,8 +236,8 @@ export const WrapperIntegrationModalDialog: FC<
               size="normal"
               iconPosition="left"
               color="brand"
-              onClick={execSource}
-              disabled={runButtonDisabled}
+              onClick={onRun}
+              disabled={disableRunButton}
             >
               <Play />
             </TextAndIconButton>
@@ -331,10 +252,6 @@ const buttonWrapperStyles = css({
   button: {
     height: '32px',
   },
-});
-
-const queriesLeftStyles = css(p13Regular, {
-  width: '100%',
 });
 
 const intWrapperStyles = css({
@@ -352,6 +269,10 @@ const intWrapperStyles = css({
 
   backgroundColor: cssVar('backgroundMain'),
   [mobileQuery]: { width: smallestMobile.landscape.width },
+
+  section: {
+    width: '100%',
+  },
 });
 
 const titleWrapperStyles = css(p15Medium, {

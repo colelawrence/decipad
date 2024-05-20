@@ -1,26 +1,23 @@
 /* eslint-disable no-underscore-dangle */
 import { AssistantChat } from '@decipad/ui';
 import { useAssistantChat } from './useAssistantChat';
-import { useAiUsage } from '@decipad/react-contexts';
+import { useResourceUsage } from '@decipad/react-contexts';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
 import type { EElementOrText } from '@udecode/plate-common';
 import { insertNodes } from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
-import { TOKENS_TO_CREDITS } from './limits';
 
 type EditorAssistantChatProps = {
   notebookId: string;
   workspaceId: string;
   editor: MyEditor;
-  limitPerPlan: number;
 };
 
 export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   notebookId,
   workspaceId,
   editor,
-  limitPerPlan,
 }) => {
   const {
     messages,
@@ -33,13 +30,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
     currentUserMessage,
   } = useAssistantChat(notebookId);
 
-  const { promptTokensUsed, completionTokensUsed, tokensQuotaLimit } =
-    useAiUsage();
-
-  const limit = tokensQuotaLimit ?? limitPerPlan;
-  const creditsUsed = Math.floor(
-    (promptTokensUsed + completionTokensUsed) / TOKENS_TO_CREDITS
-  );
+  const { ai } = useResourceUsage();
 
   // eslint-disable-next-line no-underscore-dangle
   const _insertNodes = useCallback(
@@ -66,8 +57,8 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       isGenerating={isGeneratingResponse}
       currentUserMessage={currentUserMessage}
       insertNodes={_insertNodes}
-      aiCreditsUsed={creditsUsed}
-      aiQuotaLimit={limit}
+      aiCreditsUsed={ai.usage}
+      aiQuotaLimit={ai.quotaLimit}
       isFirstInteraction={isFirstInteraction}
     />
   );

@@ -41,7 +41,11 @@ type TableColumnHeaderProps = PropsWithChildren<
   > &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
-      'onChangeColumnType' | 'parseUnit' | 'isFirst' | 'dropdownNames'
+      | 'onChangeColumnType'
+      | 'parseUnit'
+      | 'isFirst'
+      | 'dropdownNames'
+      | 'isAiEnabled'
     > & {
       readonly as?: ElementType;
       readonly empty?: boolean;
@@ -77,6 +81,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
   children,
   dropdownNames,
   isLiveResult = false,
+  isAiEnabled,
   error,
   ...props
 }) => {
@@ -112,6 +117,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
             parseUnit={parseUnit}
             isFirst={isFirst}
             isLiveResult={isLiveResult}
+            isAiEnabled={isAiEnabled}
             type={type}
             isForImportedColumn={isForImportedColumn}
             dropdownNames={dropdownNames}

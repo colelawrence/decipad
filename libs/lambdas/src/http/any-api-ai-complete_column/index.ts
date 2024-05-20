@@ -202,10 +202,7 @@ export const handler = handle(async (event) => {
     usage: completion.usage,
   });
 
-  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
-    'workspaces',
-    workspaceId
-  );
+  const usage = await resourceusage.ai.getUsage(workspaceId);
 
   return {
     statusCode: 200,
@@ -214,10 +211,7 @@ export const handler = handle(async (event) => {
     },
     body: JSON.stringify({
       content: indexedSuggestions,
-      usage: {
-        completionTokensUsed: newCompletion,
-        promptTokensUsed: newPrompt,
-      },
+      usage,
     }),
   };
 });

@@ -7,7 +7,7 @@ import type {
 import {
   ControllerProvider,
   useAIChatHistory,
-  useAiUsage,
+  useResourceUsage,
   useComputer,
 } from '@decipad/react-contexts';
 import * as Sentry from '@sentry/react';
@@ -50,7 +50,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
 
   const subEditor = useActiveEditor(controller);
 
-  const { updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   const abortController = useRef(new AbortController());
 
@@ -82,7 +82,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           },
           signal
         );
-        updateUsage(usage);
+        ai.updateUsage({ usage });
 
         if (mode === 'creation') {
           if (message.function_call) {
@@ -344,14 +344,14 @@ export const useAgent = ({ notebookId }: AgentParams) => {
     [
       remoteAgent,
       signal,
-      updateUsage,
+      ai,
+      handleUpdateMessageStatus,
       controller,
+      subEditor,
       computer,
       handleAddEventToMessage,
       handleAddMessage,
       handleDeleteMessage,
-      handleUpdateMessageStatus,
-      subEditor,
     ]
   );
 

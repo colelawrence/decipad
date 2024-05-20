@@ -1,57 +1,63 @@
 import { thirdParty } from '@decipad/backend-config';
-import {
-  type ResourceUsageRecord,
-  type User,
-  type ResourceConsumer,
-} from '@decipad/backendtypes';
+import { type ResourceUsageRecord, type User } from '@decipad/backendtypes';
 import type { ResourceTypes } from '@decipad/graphqlserver-types';
 import { resourceusage } from '@decipad/services';
+import Boom from '@hapi/boom';
 import Stripe from 'stripe';
 
 export type FrontendResourceUsageRecord = ResourceUsageRecord & {
   resourceType: ResourceTypes;
 };
 
-//
-// TODO: Frontend doesnt need raw UsageRecords, nor does it need individual tokens.
-//
-
-export const getAiUsage = async (
-  consumer: ResourceConsumer,
-  consumerId: string
-): Promise<Array<FrontendResourceUsageRecord>> => {
-  const records = await Promise.all([
-    resourceusage.getUsageRecord(
-      `openai/gpt-4-1106-preview/promptTokensUsed/${consumer}`,
-      consumerId
-    ),
-    resourceusage.getUsageRecord(
-      `openai/gpt-4-1106-preview/completionTokensUsed/${consumer}`,
-      consumerId
-    ),
-    resourceusage.getUsageRecord(
-      'openai/extra-credits/null/workspaces',
-      consumerId
-    ),
-  ]);
-
-  return records
-    .filter((r): r is ResourceUsageRecord => r != null)
-    .map((r) => ({ ...r, resourceType: 'openai' }));
+const getResourceTracker = (
+  type: ResourceTypes
+): resourceusage.ResourceTracker => {
+  switch (type) {
+    case 'openai':
+      return resourceusage.ai;
+    case 'queries':
+      return resourceusage.queries;
+    case 'storage':
+      return resourceusage.storage;
+  }
 };
 
-export const getStorageUsage = async (
+export const getResourceUsage = async (
+  resourceType: ResourceTypes,
   workspaceId: string
-): Promise<Array<FrontendResourceUsageRecord>> => {
-  const usage = await resourceusage.storage.getUsage(workspaceId);
+): Promise<FrontendResourceUsageRecord> => {
+  const tracker = getResourceTracker(resourceType);
+  const usage = await tracker.getUsage(workspaceId);
 
-  return [
-    {
-      id: `storage-${workspaceId}`,
-      consumption: usage,
-      resourceType: 'storage',
-    },
-  ];
+  return {
+    id: `${resourceType}-${workspaceId}`,
+    consumption: usage,
+    resourceType,
+  };
+};
+
+export const incrementResourceUsage = async (
+  resourceType: ResourceTypes,
+  workspaceId: string,
+  amount: number
+): Promise<FrontendResourceUsageRecord> => {
+  if (amount < 0) {
+    throw Boom.badRequest('Cannot increment by a negative number');
+  }
+
+  if (resourceType === 'storage' || resourceType === 'openai') {
+    throw Boom.badRequest(`${resourceType} does not support incrementing`);
+  }
+
+  await resourceusage.queries.upsert(workspaceId, 'queries', amount);
+
+  const usage = await resourceusage.queries.getUsage(workspaceId);
+
+  return {
+    id: `${resourceType}-${workspaceId}`,
+    consumption: usage,
+    resourceType,
+  };
 };
 
 export const updateExtraAiAllowance = async (

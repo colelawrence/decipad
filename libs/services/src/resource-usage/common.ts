@@ -1,5 +1,6 @@
 import type {
   AiResourceUsageKeyWithoutID,
+  QueryResourceUsageKeyWithoutId,
   ResourceUsageKeys,
   ResourceUsageRecord,
   StorageResourceUsageKeyWithoutID,
@@ -8,7 +9,8 @@ import tables, { incrementTableField, timestamp } from '@decipad/tables';
 
 type ResourceKeyWithoutID =
   | AiResourceUsageKeyWithoutID
-  | StorageResourceUsageKeyWithoutID;
+  | StorageResourceUsageKeyWithoutID
+  | QueryResourceUsageKeyWithoutId;
 
 export const CONSUMPTION = 'consumption';
 export const ORIGINAL_AMOUNT = 'originalAmount';
@@ -72,20 +74,4 @@ export async function upsertResourceUsage(
   }
 
   await incrementTableField(data.resourceusages, key, CONSUMPTION, consumption);
-}
-
-export async function resetQueryCount(workspaceId: string): Promise<void> {
-  const data = await tables();
-
-  const queryExecutionRecord = await data.workspacexecutedqueries.get({
-    id: workspaceId,
-  });
-
-  if (queryExecutionRecord) {
-    await data.workspacexecutedqueries.put({
-      ...queryExecutionRecord,
-      query_reset_date: timestamp(),
-      queryCount: 0,
-    });
-  }
 }

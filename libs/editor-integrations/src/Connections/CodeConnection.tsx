@@ -9,7 +9,7 @@ import {
   useConnectionStore,
   useCurrentWorkspaceStore,
   useNotebookId,
-  useAiUsage,
+  useResourceUsage,
   type TExecution,
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
@@ -201,11 +201,11 @@ export const CodeConnection: FC<ConnectionProps> = ({
   const { setCode, code, showAi, toggleShowAi, onReset } =
     useCodeConnectionStore();
 
-  const { onExecute, info } = useContext(ExecutionContext);
+  const { info, onExecute } = useContext(ExecutionContext);
   const [log, setLog] = useState<TExecution<boolean>[]>([]);
 
   const { workspaceInfo } = useCurrentWorkspaceStore();
-  const { hasReachedLimit, updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   useEffect(() => {
     if (stage === 'connect') {
@@ -338,12 +338,12 @@ export const CodeConnection: FC<ConnectionProps> = ({
         toggleShowAi(false);
         setCode(rd.result?.completion?.replace(/\n {2}/g, '\n'));
 
-        if (rd.result.usage) {
-          updateUsage(rd.result.usage);
+        if (rd.result.usage != null) {
+          ai.updateUsage({ usage: rd.result.usage });
         }
       }
     }
-  }, [rd, setCode, toggleShowAi, updateUsage]);
+  }, [ai, rd, setCode, toggleShowAi]);
 
   const onSubmitAi = async () => {
     fetchRd({
@@ -366,7 +366,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
           setPrompt={setPrompt}
           onSubmit={onSubmitAi}
           generationRD={rd}
-          maxQueryExecution={hasReachedLimit ?? false}
+          maxQueryExecution={ai.hasReachedLimit}
         />
       ) : (
         <CodeEditor

@@ -150,7 +150,7 @@ const Credits: React.FC<{
   creditsQuota: number;
 }> = ({ creditsUsed, creditsQuota }) => {
   const { setIsBuyCreditsModalOpen } = useAiCreditsStore();
-  const creditsLeft = Math.max(0, creditsQuota - creditsUsed);
+  const creditsLeft = Math.ceil(Math.max(0, creditsQuota - creditsUsed));
   return (
     <Tooltip
       trigger={
@@ -172,7 +172,7 @@ const Credits: React.FC<{
       variant="small"
     >
       <div css={tooltipTitleStyles}>
-        {Math.min(creditsQuota, creditsUsed)}/{creditsQuota} used
+        {Math.floor(Math.min(creditsQuota, creditsUsed))}/{creditsQuota} used
       </div>
     </Tooltip>
   );

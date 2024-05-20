@@ -1,6 +1,7 @@
 enum ResourceTypes {
   openai
   storage
+  queries
 }
 
 type ResourceUsage {
@@ -20,6 +21,12 @@ extend type Mutation {
     resourceId: String!
     paymentMethodId: String!
   ): NewResourceQuotaLimit
+
+  incrementResourceUsage(
+    resourceType: ResourceTypes!
+    workspaceId: String!
+    amount: Int!
+  ): ResourceUsage
 }
 
 extend type User {

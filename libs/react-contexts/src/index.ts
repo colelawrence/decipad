@@ -24,6 +24,6 @@ export * from './tab-editor';
 export * from './theme';
 export * from './notebook-meta-actions';
 export * from './editor-controller';
-export * from './ai-usage';
+export * from './resource-usage';
 export * from './ai-credits';
 export * from './annotation-context';

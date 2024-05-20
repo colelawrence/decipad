@@ -115,17 +115,11 @@ export const handler = handle(async (event) => {
 
   const { message } = completion.choices[0];
 
-  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
-    'workspaces',
-    workspaceId
-  );
+  const usage = await resourceusage.ai.getUsage(workspaceId);
 
   const response = {
     message,
-    usage: {
-      promptTokensUsed: newPrompt,
-      completionTokensUsed: newCompletion,
-    },
+    usage,
   };
 
   return {

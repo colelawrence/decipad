@@ -1,4 +1,3 @@
-import { useAiUsage } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
@@ -17,11 +16,13 @@ type WorkspaceHeroProps = {
   name: string;
   isPremium: boolean;
   planName: string;
-  creditsPlan: number;
   membersCount: number;
   membersHref?: string;
   creditsHref?: string;
   onCreateNotebook?: () => void;
+
+  hasReachedAiLimit: boolean;
+  aiCreditsLeft: number;
 };
 
 export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
@@ -29,22 +30,16 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   isPremium,
   membersCount,
   planName,
-  creditsPlan,
   membersHref,
   creditsHref,
   onCreateNotebook,
+
+  hasReachedAiLimit,
+  aiCreditsLeft,
 }) => {
   const plan = isPremium ? <span css={RainbowText}>{planName}</span> : planName;
   const members = <MembersCounter number={membersCount} />;
   const navigate = useNavigate();
-  const { promptTokensUsed, completionTokensUsed, tokensQuotaLimit } =
-    useAiUsage();
-
-  const limit = tokensQuotaLimit ?? creditsPlan;
-  const creditsUsed = Math.floor(
-    (promptTokensUsed + completionTokensUsed) / 2_000
-  );
-  const creditsLeft = Math.max(0, limit - creditsUsed);
 
   const credits = (
     <>
@@ -52,8 +47,8 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
       •{' '}
       <span>
         <CreditsLabel>Credits</CreditsLabel>
-        <CreditsLeft noCreditsLeft={creditsLeft === 0}>
-          {isNaN(creditsLeft) ? '∞' : creditsLeft}
+        <CreditsLeft noCreditsLeft={hasReachedAiLimit}>
+          {isNaN(aiCreditsLeft) ? '∞' : Math.ceil(aiCreditsLeft)}
         </CreditsLeft>
         <Button
           type="secondary"

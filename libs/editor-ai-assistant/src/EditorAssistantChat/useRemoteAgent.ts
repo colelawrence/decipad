@@ -1,4 +1,3 @@
-import type { AiUsage } from '@decipad/interfaces';
 import type { Message } from '@decipad/react-contexts';
 import type { Payload } from '@hapi/boom';
 import stringify from 'json-stringify-safe';
@@ -18,7 +17,7 @@ export interface RemoteAgentParams {
 export interface RemoteAgentResponse {
   mode: 'conversation' | 'creation' | 'fetch_data';
   message: ChatCompletionMessage;
-  usage: AiUsage;
+  usage: number;
 }
 
 type ConnectState = 'disconnected' | 'connecting' | 'connected';

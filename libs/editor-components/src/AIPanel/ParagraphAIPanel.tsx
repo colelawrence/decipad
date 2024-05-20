@@ -1,7 +1,10 @@
 import { getAnalytics } from '@decipad/client-events';
 import type { MyEditor } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import {
+  useResourceUsage,
+  useCurrentWorkspaceStore,
+} from '@decipad/react-contexts';
 import { UpgradePlanWarning } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { getNodeString } from '@udecode/plate-common';
@@ -52,7 +55,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   const [rd, fetch] = useRdFetch('rewrite-paragraph');
 
   const { workspaceInfo } = useCurrentWorkspaceStore();
-  const { tokensQuotaLimit, updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   const editor = useMyEditorRef();
 
@@ -69,9 +72,9 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
 
   useEffect(() => {
     if (rd.status === 'success' && rd.result.usage) {
-      updateUsage(rd.result.usage);
+      ai.updateUsage({ usage: rd.result.usage });
     }
-  }, [updateUsage, rd]);
+  }, [rd, ai]);
 
   return (
     <AIPanelContainer toggle={toggle}>
@@ -103,7 +106,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
             workspaceId={workspaceInfo.id ?? ''}
             showQueryQuotaLimit={false}
             maxQueryExecution={true}
-            quotaLimit={tokensQuotaLimit ?? 0}
+            quotaLimit={ai.quotaLimit}
           />
         </div>
       )}

@@ -1,6 +1,6 @@
 import {
-  getAiUsage,
-  getStorageUsage,
+  getResourceUsage,
+  incrementResourceUsage,
   updateExtraAiAllowance,
 } from './queries.helpers';
 import type { Resolvers } from '@decipad/graphqlserver-types';
@@ -28,20 +28,17 @@ const resolvers: Resolvers = {
         ctx.user
       );
     },
-  },
-  User: {
-    async resourceUsages(user) {
-      return getAiUsage('users', user.id);
+    async incrementResourceUsage(_, { resourceType, workspaceId, amount }) {
+      return incrementResourceUsage(resourceType, workspaceId, amount);
     },
   },
   Workspace: {
     async resourceUsages(workspace) {
-      const usages = await Promise.all([
-        getAiUsage('workspaces', workspace.id),
-        getStorageUsage(workspace.id),
+      return Promise.all([
+        getResourceUsage('openai', workspace.id),
+        getResourceUsage('storage', workspace.id),
+        getResourceUsage('queries', workspace.id),
       ]);
-
-      return usages.flat();
     },
   },
 };

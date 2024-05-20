@@ -13,5 +13,6 @@ module.exports = {
       // 'error',
       // { packageDir: [__dirname, require('path').resolve(__dirname, '../..')] },
     ],
+    '@typescript-eslint/consistent-type-imports': 'off',
   },
 };

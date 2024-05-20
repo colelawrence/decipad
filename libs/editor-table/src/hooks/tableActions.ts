@@ -25,7 +25,7 @@ import {
   withPath,
 } from '@decipad/editor-utils';
 import {
-  useAiUsage,
+  useResourceUsage,
   useComputer,
   useCurrentWorkspaceStore,
   useEditorTableContext,
@@ -423,7 +423,7 @@ export const useTableActions = (
   const [rd, fetchRd] = useRdFetch('complete-column');
   const toast = useToast();
   const { workspaceInfo } = useCurrentWorkspaceStore();
-  const { updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   const { setTableFrozen } = useEditorTableContext();
   // populate column
@@ -466,8 +466,8 @@ export const useTableActions = (
               setCellText(editor, columnCellPath, suggestion.suggestion);
             }
           });
-          if (rd.result.usage) {
-            updateUsage(rd.result.usage);
+          if (rd.result.usage != null) {
+            ai.updateUsage({ usage: rd.result.usage });
           }
           return;
         }
@@ -485,7 +485,7 @@ export const useTableActions = (
         extra: { data: rd },
       });
     }
-  }, [rd, setTableFrozen, editor, path, toast, updateUsage]);
+  }, [rd, setTableFrozen, editor, path, toast, ai]);
 
   const onPopulateColumn = useCallback(
     async (columnHeaderId: string) => {

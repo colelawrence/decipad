@@ -44,6 +44,7 @@ const AppEditor: FC<EditorProps> = ({
       setError(actions.error);
     }
   }, [actions.error, setError]);
+
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
   const { onNotebookTitleChange } = useNotebookTitleChange(

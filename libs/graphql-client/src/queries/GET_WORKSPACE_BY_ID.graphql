@@ -6,9 +6,6 @@ query GetWorkspaceById($workspaceId: ID!) {
     workspaceSubscription {
       ...WorkspaceSubscriptionWithData
     }
-    workspaceExecutedQuery {
-      ...WorkspaceExecutedQueryData
-    }
     resourceUsages {
       id
       resourceType

@@ -27,7 +27,7 @@ import { getDefined } from '@decipad/utils';
 import { useUserId } from './useUserId';
 import { useToast } from '@decipad/toast';
 import { PaymentAnalyticsProps, getLatestWorkspace } from './helpers';
-import { useAiUsage } from '@decipad/react-contexts';
+import { useResourceUsage } from '@decipad/react-contexts';
 import { getAnalytics } from '@decipad/client-events';
 import { useNavigate } from 'react-router-dom';
 
@@ -67,7 +67,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const client = useClient();
 
   const toast = useToast();
-  const { tokensQuotaLimit, increaseQuotaLimit } = useAiUsage();
+  const { ai } = useResourceUsage();
   const navigate = useNavigate();
   const userId = useUserId();
   const [currentStage, setCurrentStage] = useState('choose-plan');
@@ -120,10 +120,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const updateAiCredits = useCallback(() => {
     const aiCreditsPlan = selectPlanInfo.credits ?? 0;
-    if ((tokensQuotaLimit || 0) < aiCreditsPlan) {
-      increaseQuotaLimit(aiCreditsPlan);
+    if ((ai.quotaLimit || 0) < aiCreditsPlan) {
+      ai.increaseQuotaLimit(aiCreditsPlan);
     }
-  }, [increaseQuotaLimit, selectPlanInfo.credits, tokensQuotaLimit]);
+  }, [ai, selectPlanInfo.credits]);
 
   const fetchBillingInfo = async (pId: string, resourceId: string) => {
     try {

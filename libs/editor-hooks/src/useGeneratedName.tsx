@@ -1,6 +1,6 @@
 import type { AnyElement, UserIconKey } from '@decipad/editor-types';
 import { userIconKeys } from '@decipad/editor-types';
-import { useAiUsage, useNotebookId } from '@decipad/react-contexts';
+import { useResourceUsage, useNotebookId } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useCallback, useRef } from 'react';
 
@@ -24,7 +24,7 @@ export const useGeneratedName = ({
   const toast = useToast();
   const abortController = useRef(new AbortController());
 
-  const { updateUsage } = useAiUsage();
+  const { ai } = useResourceUsage();
 
   const generate = useCallback(async () => {
     const body = {
@@ -49,7 +49,7 @@ export const useGeneratedName = ({
 
     const { content } = message;
 
-    updateUsage(usage);
+    ai.updateUsage(usage);
 
     try {
       const generated: GeneratedName = JSON.parse(content);
@@ -61,7 +61,7 @@ export const useGeneratedName = ({
     } catch (e) {
       toast.error('Failed to generate a name');
     }
-  }, [notebookId, element.children, setIcon, setLabel, toast, updateUsage]);
+  }, [element.children, notebookId, ai, toast, setLabel, setIcon]);
 
   const cancel = useCallback(() => {
     abortController.current.abort();

@@ -7,7 +7,7 @@ import { tables } from '@decipad/tables';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import type { SubscriptionPlansNames } from '@decipad/graphqlserver-types';
 import { resourceusage, subscriptions } from '@decipad/services';
-import { limits, thirdParty } from '@decipad/backend-config';
+import { thirdParty } from '@decipad/backend-config';
 import { getDefined } from '@decipad/utils';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
@@ -108,10 +108,6 @@ export const processSubscriptionDeleted = async (
       isPremium: false,
       plan: 'free',
     });
-    subscriptions.updateQueryExecutionTable(
-      workspace.id,
-      limits().maxQueries.free
-    );
 
     const userId = (
       (await stripe.customers.retrieve(customer.toString())) as Stripe.Customer
@@ -190,10 +186,6 @@ export const processSubscriptionUpdated = async (
     isPremium,
     plan,
   });
-  subscriptions.updateQueryExecutionTable(
-    workspace.id,
-    wsSubscription.queries ?? limits().maxQueries.pro
-  );
 
   return {
     statusCode: 200,
@@ -218,7 +210,7 @@ export const processInvoiceCreated = async (event: Stripe.Event) => {
     });
 
     if (workspaceSubscription) {
-      await resourceusage.resetQueryCount(workspaceSubscription.workspace_id);
+      await resourceusage.queries.reset(workspaceSubscription.workspace_id);
       await resourceusage.ai.reset(workspaceSubscription.workspace_id);
 
       return {

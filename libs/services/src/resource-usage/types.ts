@@ -29,7 +29,12 @@ export interface ResourceTrackerInserter<TFields extends string, TUsage>
   }) => Promise<void>;
 }
 
+export type ResourceTrackerInserterWithReset<
+  TFields extends string,
+  TUsage
+> = ResourceTrackerInserter<TFields, TUsage> & WithReset;
+
 export type ResourceTrackerInserterWithCreditsAndReset<
   TFields extends string,
   TUsage
-> = ResourceTrackerInserter<TFields, TUsage> & WithExtraCredits & WithReset;
+> = ResourceTrackerInserterWithReset<TFields, TUsage> & WithExtraCredits;

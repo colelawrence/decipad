@@ -74,23 +74,6 @@ async function getWorkspaceSubscription(
     .then((c) => c.Items);
 }
 
-export const updateQueryExecutionTable = async (
-  workspaceId: string,
-  quotaLimit: number
-) => {
-  const data = await tables();
-  const queryExecutionRecord = await data.workspacexecutedqueries.get({
-    id: workspaceId,
-  });
-
-  if (queryExecutionRecord) {
-    await data.workspacexecutedqueries.put({
-      ...queryExecutionRecord,
-      quotaLimit,
-    });
-  }
-};
-
 export async function getWsPlan(
   workspaceId: string
 ): Promise<SubscriptionPlansNames> {
@@ -345,8 +328,6 @@ export async function createWorkspaceSubscription({
     isPremium: payment_status === 'paid',
     plan,
   });
-
-  await updateQueryExecutionTable(workspace.id, validMetadata.queries);
 
   return { workspaceId: workspace.id, subscriptionId };
 }

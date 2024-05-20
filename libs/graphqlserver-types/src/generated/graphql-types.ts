@@ -211,6 +211,7 @@ export type Mutation = {
   getCreateAttachmentForm: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
+  incrementResourceUsage?: Maybe<ResourceUsage>;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
   refreshExternalDataToken: Scalars['String']['output'];
@@ -365,6 +366,13 @@ export type MutationImportPadArgs = {
 
 export type MutationIncrementQueryCountArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationIncrementResourceUsageArgs = {
+  amount: Scalars['Int']['input'];
+  resourceType: ResourceTypes;
+  workspaceId: Scalars['String']['input'];
 };
 
 
@@ -846,6 +854,7 @@ export type ResourceAccess = {
 
 export type ResourceTypes =
   | 'openai'
+  | 'queries'
   | 'storage';
 
 export type ResourceUsage = {
@@ -1172,15 +1181,15 @@ export type WorkspaceInput = {
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
-  credits?: Maybe<Scalars['Int']['output']>;
+  credits: Scalars['Int']['output'];
   editors?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
-  queries?: Maybe<Scalars['Int']['output']>;
+  queries: Scalars['Int']['output'];
   readers?: Maybe<Scalars['Int']['output']>;
   seats?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<SubscriptionStatus>;
-  storage?: Maybe<Scalars['Int']['output']>;
+  storage: Scalars['Int']['output'];
   workspace?: Maybe<Workspace>;
 };
 
@@ -1556,6 +1565,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   getCreateAttachmentForm?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormArgs, 'fileName' | 'fileType' | 'padId'>>;
   importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
   incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
+  incrementResourceUsage?: Resolver<Maybe<ResolversTypes['ResourceUsage']>, ParentType, ContextType, RequireFields<MutationIncrementResourceUsageArgs, 'amount' | 'resourceType' | 'workspaceId'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
   refreshExternalDataToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>>;
@@ -1974,15 +1984,15 @@ export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, Parent
 };
 
 export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
-  credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  credits?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   editors?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
-  queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  queries?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   readers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['SubscriptionStatus']>, ParentType, ContextType>;
-  storage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  storage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

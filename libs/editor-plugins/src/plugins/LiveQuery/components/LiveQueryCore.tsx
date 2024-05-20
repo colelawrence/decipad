@@ -9,8 +9,6 @@ import type {
 } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import {
   componentCssVars,
   grey700,
@@ -18,15 +16,18 @@ import {
   LiveError,
   p13Bold,
   Spinner,
-  Tooltip,
   transparency,
-  UpgradePlanWarningTooltip,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { setNodes } from '@udecode/plate-common';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
+import { UpgradeWarningBlock } from '@decipad/editor-components';
+import {
+  useCurrentWorkspaceStore,
+  useResourceUsage,
+} from '@decipad/react-contexts';
 
 export interface LiveConnectionCoreProps {
   element: LiveQueryElement;
@@ -86,23 +87,6 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   );
 
   const [, setVersion] = useState(0);
-  const { workspaceInfo, setCurrentWorkspaceInfo, isQuotaLimitBeingReached } =
-    useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount } = workspaceInfo;
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
-
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: workspaceInfo.id || '',
-    });
-  }, [workspaceInfo.id, updateQueryExecCount]);
-
-  useEffect(() => {
-    if (quotaLimit && queryCount) {
-      setMaxQueryExecution(quotaLimit <= queryCount);
-    }
-  }, [queryCount, quotaLimit]);
 
   useEffect(() => {
     const { error, result } = liveQuery;
@@ -137,54 +121,37 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
     runQuery();
   }, [element, runQuery, store]);
 
+  const { queries } = useResourceUsage();
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+
   const onRunQuery = async () => {
+    if (queries.hasReachedLimit) return;
+
     getAnalytics().then((analytics) =>
       analytics?.track('run live query', { prompt })
     );
-    const result = await updateQueryExecutionCount();
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
-    );
 
-    if (newExecutedQueryData) {
-      runQuery();
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
+    if (workspaceInfo.id) {
+      queries.incrementUsageWithBackend(workspaceInfo.id);
     }
   };
 
-  const runQueryButton = (
-    <button
-      onClick={onRunQuery}
-      css={buttonStyles}
-      disabled={maxQueryExecution}
-    >
-      Run Query
-    </button>
-  );
-
   return (
     <div contentEditable={false}>
-      {maxQueryExecution || isQuotaLimitBeingReached ? (
-        <Tooltip trigger={runQueryButton} side="top">
-          <UpgradePlanWarningTooltip
-            workspaceId={workspaceInfo.id}
-            quotaLimit={quotaLimit}
-            maxQueryExecution={maxQueryExecution}
-            showQueryQuotaLimit={isQuotaLimitBeingReached}
-            featureCustomText="Unlock this feature"
-          ></UpgradePlanWarningTooltip>
-        </Tooltip>
-      ) : (
-        runQueryButton
-      )}
+      <UpgradeWarningBlock
+        type="queries"
+        variant="tooltip"
+        featureText="Unlock Refresh Data"
+        fallback={
+          <button
+            onClick={onRunQuery}
+            css={buttonStyles}
+            disabled={queries.hasReachedLimit}
+          >
+            Run Query
+          </button>
+        }
+      />
       {persistedResult && (
         <LiveConnectionResult
           result={persistedResult}

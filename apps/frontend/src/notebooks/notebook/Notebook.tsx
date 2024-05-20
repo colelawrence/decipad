@@ -34,6 +34,7 @@ import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
 import { useScenarioNavigate } from './hooks/useScenarioNavigate';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { ClientEventsContext } from '@decipad/client-events';
+import { useInitializeResourceUsage } from '../../hooks';
 
 /**
  * Entire Application Wrapper.
@@ -60,6 +61,8 @@ export const Notebook: FC = () => {
   const [{ data: notebookMetadaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+
+  useInitializeResourceUsage(notebookMetadaData?.getPadById?.workspace);
 
   useEffect(() => {
     setWorkspacePlan(notebookMetadaData?.getPadById?.workspace?.plan || 'free');

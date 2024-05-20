@@ -3,7 +3,7 @@ import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { Button, LoadingIndicator } from '../../../shared';
 import { useUpdateResourceQuotaLimitMutation } from '@decipad/graphql-client';
 import { FormEventHandler, useCallback, useState } from 'react';
-import { useAiUsage } from '@decipad/react-contexts';
+import { useResourceUsage } from '@decipad/react-contexts';
 import { getAnalytics } from '@decipad/client-events';
 import { cssVarHex } from 'libs/ui/src/primitives';
 
@@ -39,7 +39,7 @@ export const AddCreditsPaymentComponent: React.FC<
     [resourceId, UpdateResourceQuotaLimit]
   );
 
-  const { increaseQuotaLimit } = useAiUsage();
+  const { ai } = useResourceUsage();
   const [loading, setLoadingState] = useState(false);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -94,7 +94,7 @@ export const AddCreditsPaymentComponent: React.FC<
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
             0;
-          increaseQuotaLimit(newLimit);
+          ai.increaseQuotaLimit(newLimit);
           setLoadingState(false);
           closeAction();
         }

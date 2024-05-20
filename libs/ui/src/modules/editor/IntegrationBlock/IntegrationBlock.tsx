@@ -56,7 +56,6 @@ type SegmentButtonsProps = Pick<
 export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   children,
   meta,
-  integrationChildren,
   type,
   error,
   text,
@@ -84,7 +83,6 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
         >
           {children}
         </LiveCode>
-        <div contentEditable={false}>{integrationChildren}</div>
 
         <div contentEditable={false} css={controlStyles}>
           {readOnly || actionButtons.length === 0 ? (

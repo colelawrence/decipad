@@ -1,5 +1,6 @@
 import {
   DraggableBlock,
+  UpgradeWarningBlock,
   insertDataViewBelow,
   insertPlotBelow,
 } from '@decipad/editor-components';
@@ -16,12 +17,11 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
-import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import {
   useComputer,
-  useConnectionStore,
   useCurrentWorkspaceStore,
   useIsEditorReadOnly,
+  useResourceUsage,
 } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
@@ -29,7 +29,6 @@ import type { MarkType } from '@decipad/ui';
 import {
   AnimatedIcon,
   IntegrationBlock as UIIntegrationBlock,
-  UpgradePlanWarningTooltip,
   icons,
 } from '@decipad/ui';
 import {
@@ -38,7 +37,7 @@ import {
   setNodes,
 } from '@udecode/plate-common';
 import type { ComponentProps, ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import type { ContextActions } from '../hooks';
 import { IntegrationBlockContext } from '../hooks';
@@ -112,18 +111,15 @@ export const IntegrationBlock: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_INTEGRATION);
 
-  const observable = useRef(new Subject<ContextActions>());
+  const [observable] = useState(() => new Subject<ContextActions>());
   const [animated, setAnimated] = useState(false);
+
+  const workspaceId = useCurrentWorkspaceStore((w) => w.workspaceInfo.id);
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
-  const { workspaceInfo, setCurrentWorkspaceInfo, isQuotaLimitBeingReached } =
-    useCurrentWorkspaceStore();
-  const { quotaLimit, queryCount, id } = workspaceInfo;
-  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
-  const { setAllTypeMapping } = useConnectionStore();
+
   const computer = useComputer();
 
   useEffect(() => {
@@ -133,21 +129,6 @@ export const IntegrationBlock: PlateComponent = ({
       pushResultToComputer(computer, element.id, varName, undefined);
     };
   }, [computer, element.children, element.id]);
-
-  useEffect(() => {
-    setAllTypeMapping(element.typeMappings);
-  }, [element.typeMappings, setAllTypeMapping]);
-
-  useEffect(() => {
-    if (queryCount && quotaLimit) {
-      setMaxQueryExecution(quotaLimit <= queryCount);
-    }
-  }, [quotaLimit, queryCount]);
-  const updateQueryExecutionCount = useCallback(async () => {
-    return updateQueryExecCount({
-      id: id || '',
-    });
-  }, [id, updateQueryExecCount]);
 
   const specificIntegration = getIntegrationComponent(element);
   const blockResult = computer.getBlockIdResult$.use(element.id);
@@ -223,7 +204,7 @@ export const IntegrationBlock: PlateComponent = ({
     type: 'button' as 'button',
     text: 'Edit source',
     onClick: () => {
-      observable.current.next('show-source');
+      observable.next('show-source');
       removeFocusFromAllBecauseSlate();
     },
     icon: <icons.Source />,
@@ -247,63 +228,42 @@ export const IntegrationBlock: PlateComponent = ({
   };
 
   const track = useClientEvents();
+  const { queries } = useResourceUsage();
 
   const handleClick = async () => {
+    if (queries.hasReachedLimit) return;
+
+    if (workspaceId) {
+      //
+      // Potentially undefined because we could be in the Playground
+      // And there we don't want to increment usage.
+      //
+      queries.incrementUsageWithBackend(workspaceId);
+    }
+
     setAnimated(true);
-    const result = await updateQueryExecutionCount();
-    const newExecutedQueryData = result.data?.incrementQueryCount;
-    const errors = result.error?.graphQLErrors;
-    const limitExceededError = errors?.find(
-      (error) => error.extensions.code === 'LIMIT_EXCEEDED'
-    );
     setTimeout(() => {
       setAnimated(false);
     }, 1000);
-    setAnimated(true);
 
-    if (newExecutedQueryData) {
-      observable.current.next('refresh');
+    observable.next('refresh');
 
-      track({
-        segmentEvent: {
-          type: 'action',
-          action: 'Integration: Query sent',
-          props: { type: element.integrationType.type },
-        },
-      });
-
-      setCurrentWorkspaceInfo({
-        ...workspaceInfo,
-        queryCount: newExecutedQueryData.queryCount,
-        quotaLimit: newExecutedQueryData.quotaLimit,
-      });
-    } else if (limitExceededError) {
-      setMaxQueryExecution(true);
-    }
-    removeFocusFromAllBecauseSlate();
+    track({
+      segmentEvent: {
+        type: 'action',
+        action: 'Integration: Query sent',
+        props: { type: element.integrationType.type },
+      },
+    });
   };
 
-  const tooltipContent =
-    isQuotaLimitBeingReached || maxQueryExecution ? (
-      <UpgradePlanWarningTooltip
-        maxQueryExecution={maxQueryExecution}
-        quotaLimit={quotaLimit}
-        showQueryQuotaLimit={isQuotaLimitBeingReached}
-        workspaceId={workspaceInfo.id}
-        featureCustomText="Unlock refresh data"
-      />
-    ) : (
-      'Refresh data'
-    );
-
   return (
-    <IntegrationBlockContext.Provider value={observable.current}>
+    <IntegrationBlockContext.Provider value={observable}>
       <DraggableBlock
         {...attributes}
         element={element}
         blockKind="live"
         hasPreviousSibling={isStructuredElement(prevElement?.[0])}
-        onDelete={() => observable.current.next('delete-block')}
       >
         <UIIntegrationBlock
           meta={
@@ -312,9 +272,7 @@ export const IntegrationBlock: PlateComponent = ({
           error={err && new Error(errCause)}
           type={blockType}
           text={liveText}
-          children={children} // text input
           onChangeColumnType={onChangeColumnType}
-          integrationChildren={specificIntegration}
           actionButtons={actionButtons}
           buttons={[
             {
@@ -322,9 +280,16 @@ export const IntegrationBlock: PlateComponent = ({
                 <AnimatedIcon icon={<icons.Refresh />} animated={animated} />
               ),
               onClick: handleClick,
-              tooltip: tooltipContent,
+              tooltip: (
+                <UpgradeWarningBlock
+                  type="queries"
+                  variant="tooltip"
+                  fallback="Refresh Data"
+                  featureText="Unlock Refresh Data"
+                />
+              ),
               visible: !readOnly,
-              disabled: maxQueryExecution,
+              disabled: queries.hasReachedLimit,
             },
             {
               children: showData ? <icons.Hide /> : <icons.Show />,
@@ -337,7 +302,10 @@ export const IntegrationBlock: PlateComponent = ({
           ]}
           displayResults={showData}
           result={blockResult?.result}
-        />
+        >
+          {children}
+          {specificIntegration}
+        </UIIntegrationBlock>
       </DraggableBlock>
     </IntegrationBlockContext.Provider>
   );

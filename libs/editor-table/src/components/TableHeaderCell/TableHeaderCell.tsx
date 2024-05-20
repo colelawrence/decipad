@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate-common';
 import { selectErrorFromResult } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useResourceUsage } from '@decipad/react-contexts';
 import { useSelection } from '@decipad/editor-hooks';
 import { selectColumn } from '../../utils/selectColumn';
 import { useTableHeaderCell } from '../../hooks/useTableHeaderCell';
@@ -32,6 +32,7 @@ export const TableHeaderCell: PlateComponent = ({
 
   const formulaIsSelected = useIsFormulaSelected(element.id);
   const isHeaderSelected = useSelection();
+  const { ai } = useResourceUsage();
 
   const {
     readOnly,
@@ -63,6 +64,7 @@ export const TableHeaderCell: PlateComponent = ({
       empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={columnIndex === 0}
+      isAiEnabled={!ai.hasReachedLimit}
       onChangeColumnType={useCallback(
         (newType?: TableCellType) =>
           columnIndex != null && onChangeColumnType?.(columnIndex, newType),

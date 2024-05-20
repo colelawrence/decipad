@@ -80,9 +80,6 @@ spa true
 workspacesubscriptions
   id *String # Stripe's subscription id
 
-workspacexecutedqueries
-  id *String
-
 users
   id *String
   name String
@@ -323,9 +320,6 @@ resourceusagehistory
 workspacesubscriptions
   workspace_id *String
   name byWorkspace
-
-workspacexecutedqueries
-  id *String
 
 users
   secret *String

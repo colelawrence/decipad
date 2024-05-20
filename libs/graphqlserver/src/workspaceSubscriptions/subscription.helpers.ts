@@ -36,6 +36,7 @@ export const getWorkspaceSubscription = async (
       queries: limits().maxQueries.free,
       credits: limits().maxCredits.free,
       readers: limits().maxCollabReaders.free,
+      storage: limits().storage.free,
       editors: 0,
     };
   }
@@ -61,11 +62,26 @@ export const getWorkspaceSubscription = async (
     workspaceSubs.queries = Number(proPlan?.metadata.queries) || 0;
   }
 
+  if (!workspaceSubs.storage && isProPlan) {
+    workspaceSubs.storage = Number(proPlan?.metadata.storage) || 0;
+  }
+
+  // Just in case.
+  if (workspaceSubs.credits == null) {
+    workspaceSubs.credits = limits().maxCredits.free;
+  }
+  if (workspaceSubs.queries == null) {
+    workspaceSubs.queries = limits().maxQueries.free;
+  }
+  if (workspaceSubs.storage == null) {
+    workspaceSubs.storage = limits().storage.free;
+  }
+
   // Cast because the _technical_ type is an enum.
   return {
     ...workspaceSubs,
     paymentStatus: workspaceSubs.paymentStatus as SubscriptionPaymentStatus,
-  };
+  } as WorkspaceSubscription;
 };
 
 export const findSubscriptionByWorkspaceId = async (
@@ -91,7 +107,7 @@ export const findSubscriptionByWorkspaceId = async (
   return {
     ...sub,
     paymentStatus: sub.paymentStatus as SubscriptionPaymentStatus,
-  };
+  } as WorkspaceSubscription;
 };
 
 export const updateStripeIfNeeded = async (

@@ -100,10 +100,7 @@ User paragraph: ${requestBody.paragraph}`,
     usage: completion.usage,
   });
 
-  const [newPrompt, newCompletion] = await resourceusage.getAiTokens(
-    'workspaces',
-    workspaceId
-  );
+  const usage = await resourceusage.ai.getUsage(workspaceId);
 
   return {
     statusCode: 200,
@@ -112,10 +109,7 @@ User paragraph: ${requestBody.paragraph}`,
     },
     body: JSON.stringify({
       completion: newParagraph.trim(),
-      usage: {
-        completionTokensUsed: newCompletion,
-        promptTokensUsed: newPrompt,
-      },
+      usage,
     }),
   };
 });

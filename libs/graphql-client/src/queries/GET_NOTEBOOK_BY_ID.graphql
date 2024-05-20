@@ -16,11 +16,6 @@ fragment Collaborator on User {
   emailValidatedAt
 }
 
-fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
-  queryCount
-  quotaLimit
-}
-
 fragment WorkspaceSubscriptionData on WorkspaceSubscription {
   id
   credits
@@ -45,9 +40,6 @@ fragment EditorNotebook on Pad {
     name
     isPremium
     plan
-    workspaceExecutedQuery {
-      ...WorkspaceExecutedQueryData
-    }
     workspaceSubscription {
       ...WorkspaceSubscriptionData
     }

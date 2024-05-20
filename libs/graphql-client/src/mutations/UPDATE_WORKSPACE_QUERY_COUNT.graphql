@@ -1,6 +1,15 @@
-mutation IncrementQueryCount($id: ID!) {
-  incrementQueryCount(id: $id) {
-    queryCount
-    quotaLimit
+mutation IncrementResourceUsage(
+  $resourceType: ResourceTypes!
+  $workspaceId: String!
+  $amount: Int!
+) {
+  incrementResourceUsage(
+    resourceType: $resourceType
+    workspaceId: $workspaceId
+    amount: $amount
+  ) {
+    id
+    resourceType
+    consumption
   }
 }

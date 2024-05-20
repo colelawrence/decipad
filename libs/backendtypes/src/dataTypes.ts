@@ -582,12 +582,6 @@ export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   readers?: number;
 }
 
-export interface WorkspaceExecutedQueryRecord extends TableRecordBase {
-  queryCount: number;
-  query_reset_date?: number;
-  quotaLimit: number;
-}
-
 export interface SecretInput {
   name: string;
   secret: string;
@@ -707,7 +701,6 @@ export interface EnhancedDataTables {
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
-  workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;
   resourceusages: EnhancedDataTable<ResourceUsageRecord>;
   annotations: EnhancedDataTable<AnnotationRecord>;
   scenarios: EnhancedDataTable<ScenarioRecord>;
@@ -754,7 +747,6 @@ export type ConcreteRecord =
   | LogRecord
   | SecretRecord
   | WorkspaceSubscriptionRecord
-  | WorkspaceExecutedQueryRecord
   | ResourceUsageRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
@@ -836,8 +828,9 @@ export type ResourceConsumer = 'users' | 'workspaces' | 'pads';
 export type StorageSubtypes = 'files';
 export type AiSubtypes = 'gpt-4-1106-preview';
 export type AiFields = 'promptTokensUsed' | 'completionTokensUsed';
+export type QuerySubtypes = 'queries';
 
-export type ResourceTypes = 'openai' | 'storage';
+export type ResourceTypes = 'openai' | 'storage' | 'queries';
 
 type AiExtraCreditsKeyWithoutID = `openai/extra-credits/null/workspaces`;
 
@@ -853,7 +846,16 @@ export type StorageResourceUsageKeyWithoutID =
 export type StorageResourceUsageKey =
   `${StorageResourceUsageKeyWithoutID}/${string}`;
 
-export type ResourceUsageKeys = AiResourceUsageKey | StorageResourceUsageKey;
+export type QueryResourceUsageKeyWithoutId =
+  `queries/${QuerySubtypes}/null/${ResourceConsumer}`;
+
+export type QueryResourceUsageKey =
+  `${QueryResourceUsageKeyWithoutId}/${string}`;
+
+export type ResourceUsageKeys =
+  | AiResourceUsageKey
+  | StorageResourceUsageKey
+  | QueryResourceUsageKey;
 
 // =============== END RESOURCE USAGE =====================
 

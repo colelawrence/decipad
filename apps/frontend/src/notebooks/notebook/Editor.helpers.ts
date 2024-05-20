@@ -17,8 +17,6 @@ export function useSetWorkspaceQuota(
       id: workspace?.id,
       isPremium: Boolean(workspace?.isPremium),
       plan: workspace?.plan || undefined,
-      quotaLimit: workspace?.workspaceExecutedQuery?.quotaLimit,
-      queryCount: workspace?.workspaceExecutedQuery?.queryCount,
     });
   }, [workspace, setCurrentWorkspaceInfo]);
 }

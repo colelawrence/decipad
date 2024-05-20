@@ -1,32 +1,39 @@
-import type { WorkspaceExecutedQueryRecord } from '@decipad/backendtypes';
 import {
-  incrementQueryCount,
-  getWorkspaceExecutedQuery,
-} from './queries.helpers';
-import type {
-  Resolvers,
-  WorkspaceExecutedQuery,
-} from '@decipad/graphqlserver-types';
+  getResourceUsage,
+  incrementResourceUsage,
+} from '../resource-usage/queries.helpers';
+import { resourceusage } from '@decipad/services';
+import type { Resolvers } from '@decipad/graphqlserver-types';
 
-function workspaceExecutedQueryRecordToGraphql(
-  record: WorkspaceExecutedQueryRecord | undefined
-): WorkspaceExecutedQuery | null {
-  if (!record) return null;
-  return record as WorkspaceExecutedQuery;
-}
-
+/**
+ * @deprecated in favour of the 'resource-usage'.
+ *
+ * TODO: in about 2 weeks or so -> Delete this (because people don't refresh tabs)
+ */
 const resolvers: Resolvers = {
   Workspace: {
     async workspaceExecutedQuery(workspace) {
-      return workspaceExecutedQueryRecordToGraphql(
-        await getWorkspaceExecutedQuery(workspace.id)
-      );
+      const usage = await getResourceUsage('queries', workspace.id);
+      const limit = await resourceusage.queries.getLimit(workspace.id);
+
+      return {
+        id: usage.id,
+        queryCount: usage.consumption,
+        quotaLimit: limit,
+      };
     },
   },
 
   Mutation: {
-    incrementQueryCount: async (_, { id }, context) => {
-      return incrementQueryCount(context.event, id);
+    async incrementQueryCount(_, { id }) {
+      const usage = await incrementResourceUsage('queries', id, 1);
+      const limit = await resourceusage.queries.getLimit(id);
+
+      return {
+        id: usage.id,
+        queryCount: usage.consumption,
+        quotaLimit: limit,
+      };
     },
   },
 };

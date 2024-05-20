@@ -38,11 +38,6 @@ fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
   storage
 }
 
-fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
-  queryCount
-  quotaLimit
-}
-
 fragment ShallowWorkspace on Workspace {
   id
   name
@@ -51,9 +46,6 @@ fragment ShallowWorkspace on Workspace {
   createdAt
   workspaceSubscription {
     ...WorkspaceSubscriptionWithData
-  }
-  workspaceExecutedQuery {
-    ...WorkspaceExecutedQueryData
   }
   membersCount
   sections {
