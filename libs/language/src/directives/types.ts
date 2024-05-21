@@ -1,6 +1,7 @@
 import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Value } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import type { TRealm } from '../scopedRealm';
 
 /**
@@ -10,5 +11,5 @@ import type { TRealm } from '../scopedRealm';
  */
 export interface DirectiveImpl<D extends AST.Directive = AST.Directive> {
   getType(ctx: TRealm, root: D): PromiseOrType<Type>;
-  getValue(ctx: TRealm, root: D): PromiseOrType<Value.Value>;
+  getValue(ctx: TRealm, root: D): PromiseOrType<ValueTypes.Value>;
 }

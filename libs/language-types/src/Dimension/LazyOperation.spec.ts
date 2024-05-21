@@ -3,11 +3,11 @@ import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createLazyOperationBase } from './LazyOperation';
 import { uniqDimensions } from './uniqDimensions';
 import { materializeOneResult } from '../utils/materializeOneResult';
-import type { Value } from '../Value';
 import { NumberValue, fromJS, getColumnLike } from '../Value';
 import { getInstanceof } from '@decipad/utils';
 import { hcArg } from './testUtils';
 import type { HypercubeArg } from './types';
+import type { Value } from '@decipad/language-interfaces';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -16,7 +16,7 @@ type WithLazyOperationArgs = {
 };
 
 const getArgs = async (
-  val: Value | Promise<Value>
+  val: Value.Value | Promise<Value.Value>
 ): Promise<HypercubeArg[]> => {
   return ((await val) as unknown as WithLazyOperationArgs).args;
 };
@@ -24,7 +24,7 @@ const getArgs = async (
 describe('nesting', () => {
   const op =
     (simpleCallback: (...args: DeciNumber[]) => DeciNumber) =>
-    async (args: Value[]) =>
+    async (args: Value.Value[]) =>
       fromJS(
         simpleCallback(
           ...(await Promise.all(

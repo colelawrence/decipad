@@ -1,15 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Value, buildType as t } from '@decipad/language-types';
 import { N } from '@decipad/number';
 import { once } from '@decipad/utils';
-
-export interface Constant {
-  name: string;
-  type: Type;
-  value: Value.Value;
-}
+import type { Constant } from '@decipad/language-interfaces';
 
 const builtinConstants = once((): Record<string, Constant> => {
   const pi = {

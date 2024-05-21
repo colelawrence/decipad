@@ -1,4 +1,4 @@
-import { Result, SerializedType } from '@decipad/language-types';
+import type { Result, SerializedType } from '@decipad/remote-computer';
 
 export interface Column {
   name: string;

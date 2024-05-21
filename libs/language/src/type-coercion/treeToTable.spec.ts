@@ -1,5 +1,6 @@
 import { N } from '@decipad/number';
-import { ScopedRealm, Unknown, Value, buildType, makeInferContext } from '..';
+import { Unknown } from '@decipad/language-interfaces';
+import { ScopedRealm, Value, buildType, makeInferContext } from '..';
 import { treeToTable } from './treeToTable';
 
 describe('treeToTable value', () => {

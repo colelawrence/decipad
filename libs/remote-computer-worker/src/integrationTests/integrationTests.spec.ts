@@ -1,6 +1,5 @@
 import { noop } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language-types';
+import type { Result } from '@decipad/language-interfaces';
 import { createMockWorkerPair } from './createMockWorkerPair';
 import { createWorkerWorker } from '../worker/createWorkerWorker';
 import { createWorkerClient } from '../client/createWorkerClient';

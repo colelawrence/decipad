@@ -2,6 +2,7 @@
 import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Dimension, Value } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 
 /**
@@ -38,10 +39,10 @@ export const coerceTableColumnTypeIndices = async (
 
 export const coerceTableColumnIndices = async (
   type: Type,
-  value: Value.ColumnLikeValue | Value.Value,
+  value: ValueTypes.ColumnLikeValue | ValueTypes.Value,
   indexName: string,
   tableLength?: number
-): Promise<Value.ColumnLikeValue> => {
+): Promise<ValueTypes.ColumnLikeValue> => {
   if (!Value.isColumnLike(value)) {
     return Value.Column.fromValues(
       repeat(value, tableLength ?? 1),

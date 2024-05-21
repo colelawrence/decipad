@@ -1,6 +1,5 @@
 import { getDefined, getInstanceof } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError, Value } from '@decipad/language-types';
 import { refersToOtherColumnsByName } from './inference';
@@ -41,10 +40,10 @@ const usesOrdinalReference = (expr: AST.Expression): boolean => {
 
 export const evaluateTableColumnIteratively = async (
   _realm: TRealm,
-  otherColumns: Map<string, Value.ColumnLikeValue>,
+  otherColumns: Map<string, ValueTypes.ColumnLikeValue>,
   column: AST.Expression,
   rowCount: number
-): Promise<Value.ColumnLikeValue> =>
+): Promise<ValueTypes.ColumnLikeValue> =>
   withPush(
     _realm,
     async (realm) => {
@@ -76,11 +75,11 @@ export const evaluateTableColumnIteratively = async (
 
 export const evaluateTableColumn = async (
   realm: TRealm,
-  tableColumns: Map<string, Value.ColumnLikeValue>,
+  tableColumns: Map<string, ValueTypes.ColumnLikeValue>,
   column: AST.Expression,
   indexName: string,
   rowCount?: number
-): Promise<Value.ColumnLikeValue> => {
+): Promise<ValueTypes.ColumnLikeValue> => {
   if (
     (refersToOtherColumnsByName(column, tableColumns) ||
       usesRecursion(column) ||
@@ -108,7 +107,7 @@ export const evaluateTable = async (
   realm: TRealm,
   table: AST.Table
 ): Promise<Value.Table> => {
-  const tableColumns = new Map<string, Value.ColumnLikeValue>();
+  const tableColumns = new Map<string, ValueTypes.ColumnLikeValue>();
   const {
     args: [tName, ...items],
   } = table;
@@ -120,7 +119,7 @@ export const evaluateTable = async (
 
   const tableDef = table.args[0];
   let tableLength: number | undefined = tableDef.args[1];
-  const addColumn = async (name: string, value: Value.ColumnLikeValue) => {
+  const addColumn = async (name: string, value: ValueTypes.ColumnLikeValue) => {
     const valueCount = await value.rowCount();
     if (tableLength != null && valueCount !== tableLength) {
       throw new RuntimeError(
@@ -162,9 +161,9 @@ export const evaluateTable = async (
 };
 
 export const getProperty = (
-  object: Value.Value,
+  object: ValueTypes.Value,
   property: string
-): Value.Value => {
+): ValueTypes.Value => {
   if (object instanceof Value.Row) {
     return object.getCell(property);
   } else {

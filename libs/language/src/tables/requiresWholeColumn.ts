@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports

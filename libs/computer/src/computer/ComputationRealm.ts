@@ -1,3 +1,4 @@
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type * as language from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
@@ -10,15 +11,18 @@ import {
   getResultGenerator,
 } from '@decipad/language';
 import { all, map } from '@decipad/generator-utils';
+import type {
+  ComputerProgram,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 import type { GetStatementsToEvictArgs } from '../caching/getStatementsToEvict';
 import { getStatementsToEvict } from '../caching/getStatementsToEvict';
-import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
   result: IdentifiedResult;
-  value?: Value.Value;
+  value?: ValueTypes.Value;
 };
 
 export class ComputationRealm {
@@ -84,7 +88,7 @@ export class ComputationRealm {
 
     const addLabels = async (
       _name: string,
-      column?: Value.ColumnLikeValue,
+      column?: ValueTypes.ColumnLikeValue,
       cellType?: language.Type
     ) => {
       if (!column || !cellType) {

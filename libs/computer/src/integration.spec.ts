@@ -1,8 +1,9 @@
 import { getDefined } from '@decipad/utils';
+import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { materializeResult } from '@decipad/language';
 import { Computer } from './computer';
 import { getIdentifiedBlocks } from './testUtils';
-import { materializeResult } from '.';
-import { N } from '@decipad/number';
 
 describe('cache', () => {
   it('epoch starts in 1', async () => {

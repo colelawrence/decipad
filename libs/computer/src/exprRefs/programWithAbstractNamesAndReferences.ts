@@ -1,12 +1,11 @@
+import uniq from 'lodash.uniq';
 // eslint-disable-next-line no-restricted-imports
 import { isAssignment } from '@decipad/language';
-import uniq from 'lodash.uniq';
-import {
-  getExprRef,
-  type IdentifiedBlock,
-  type Program,
-  type ProgramBlock,
-} from '..';
+import type {
+  IdentifiedBlock,
+  Program,
+  ProgramBlock,
+} from '@decipad/computer-interfaces';
 import { getIdentifierString } from '../utils';
 import { statementWithAbstractRefs } from './statementWithAbstractRefs';
 import type {
@@ -15,6 +14,7 @@ import type {
 } from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';
 import { programToVarNameToBlockMap } from './programToVarNameToBlockMap';
+import { getExprRef } from './exprRef';
 
 const identifiedBlockWithAbstractNamesAndReferences = (
   varNameToBlockMap: ReadOnlyVarNameToBlockMap,

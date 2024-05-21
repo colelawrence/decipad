@@ -1,7 +1,9 @@
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { materializeResult } from '@decipad/language';
 import { Computer } from './computer';
 import { getIdentifiedBlocks } from './testUtils';
-import { getExprRef, materializeResult } from '.';
+import { getExprRef } from './exprRefs';
 
 describe('abstract refs', () => {
   it('no ref works', async () => {

@@ -1,7 +1,7 @@
-import type { ColumnLikeValue } from './ColumnLike';
+import type { Value } from '@decipad/language-interfaces';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 
 export const columnValueToValueGeneratorFunction =
-  (column: ColumnLikeValue): ValueGeneratorFunction =>
+  (column: Value.ColumnLikeValue): ValueGeneratorFunction =>
   (start?: number, end?: number) =>
     column.values(start, end);

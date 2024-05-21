@@ -1,23 +1,21 @@
 /* eslint-disable no-underscore-dangle */
 import { from } from '@decipad/generator-utils';
-import type { Dimension } from '../Dimension';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
+import type { Dimension, Result, Value } from '@decipad/language-interfaces';
+import { isColumnLike } from './ColumnLike';
 import { EmptyColumn } from './EmptyColumn';
 import { GeneratorColumn } from './GeneratorColumn';
-import type { Value } from './Value';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { lowLevelGet } from './lowLevelGet';
 import { UnknownValue } from './Unknown';
-import type { OneResult } from '../Result';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { once } from '@decipad/utils';
 import { ColumnBase } from './ColumnBase';
 
 export class Column extends ColumnBase {
-  readonly _values: ReadonlyArray<Value>;
-  private defaultValue?: Value;
+  readonly _values: ReadonlyArray<Value.Value>;
+  private defaultValue?: Value.Value;
 
-  constructor(values: ReadonlyArray<Value>, defaultValue?: Value) {
+  constructor(values: ReadonlyArray<Value.Value>, defaultValue?: Value.Value) {
     super();
     this._values = values;
     this.defaultValue = defaultValue;
@@ -40,10 +38,10 @@ export class Column extends ColumnBase {
    * Create a column from the values inside. Empty columns return a special value.
    */
   static fromValues(
-    values: ReadonlyArray<Value>,
-    defaultValue?: Value,
+    values: ReadonlyArray<Value.Value>,
+    defaultValue?: Value.Value,
     innerDimensions?: Dimension[]
-  ): ColumnLikeValue {
+  ): Value.ColumnLikeValue {
     if (values.length === 0) {
       if (innerDimensions) {
         // We can create a column with no values
@@ -57,7 +55,7 @@ export class Column extends ColumnBase {
   static fromGenerator(
     gen: ValueGeneratorFunction,
     desc = `Column.fromGenerator(${gen.name})`
-  ): ColumnLikeValue {
+  ): Value.ColumnLikeValue {
     return GeneratorColumn.fromGenerator(gen, desc);
   }
 
@@ -69,11 +67,11 @@ export class Column extends ColumnBase {
     return Promise.resolve(this._values.length);
   }
 
-  async atIndex(i: number): Promise<Value> {
+  async atIndex(i: number): Promise<Value.Value> {
     return this._values[i] ?? this.defaultValue ?? UnknownValue;
   }
 
-  async getGetData(): Promise<OneResult> {
+  async getGetData(): Promise<Result.OneResult> {
     return Promise.resolve(columnValueToResultValue(this));
   }
 }

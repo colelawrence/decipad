@@ -1,6 +1,5 @@
 import stringify from 'json-stringify-safe';
-// eslint-disable-next-line no-restricted-imports
-import type { SerializedType } from '@decipad/language-types';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { encodeString } from './encodeString';
 
 export const encodeType = (

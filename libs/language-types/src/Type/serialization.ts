@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { Type } from './Type';
-import type { SerializedType } from '../SerializedType';
+import type { SerializedType } from '@decipad/language-interfaces';
 import * as t from './Type';
 import { InferError } from '../InferError';
 

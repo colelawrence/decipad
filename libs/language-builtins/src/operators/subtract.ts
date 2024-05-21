@@ -1,7 +1,8 @@
 import type DeciNumber from '@decipad/number';
 import { ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import type { Result, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+import type { Result } from '@decipad/language-interfaces';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';

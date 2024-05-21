@@ -1,4 +1,5 @@
-import { type Result, Value, buildResult } from '@decipad/remote-computer';
+import { type Result, buildResult } from '@decipad/remote-computer';
+import { Value } from '@decipad/language-types';
 import { generateHash } from '@decipad/editor-utils';
 import { type DataGroup } from '../../types';
 import { sliceToGroup } from './sliceToGroup';

@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import {
   unnestTableRows,
   type DimensionExplanation,
-  ResultAndLabelInfo,
+  type ResultAndLabelInfo,
   buildResult,
   Result,
 } from '@decipad/remote-computer';

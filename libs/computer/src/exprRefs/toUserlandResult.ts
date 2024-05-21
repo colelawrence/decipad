@@ -1,6 +1,6 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result, Unit, ErrSpec } from '@decipad/language';
-import type { Computer, IdentifiedResult } from '..';
+import type { Result, Unit, ErrSpec } from '@decipad/language-interfaces';
+import type { IdentifiedResult } from '@decipad/computer-interfaces';
+import type { Computer } from '../computer';
 
 const translateIdentifier = (
   identifier: string,

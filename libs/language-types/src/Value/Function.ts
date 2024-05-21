@@ -1,7 +1,6 @@
-import type { AST } from '..';
-import type { Value } from './Value';
+import type { AST, Value } from '@decipad/language-interfaces';
 
-export class FunctionValue implements Value {
+export class FunctionValue implements Value.Value {
   argumentNames: string[];
   body: AST.Block;
 

@@ -1,12 +1,11 @@
 import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  type Result,
-  RuntimeError,
-  type Type,
-  Value,
-  buildType as t,
-} from '@decipad/language-types';
+import { RuntimeError, Value, buildType as t } from '@decipad/language-types';
+import type {
+  Result,
+  Type,
+  Value as ValueTypes,
+} from '@decipad/language-interfaces';
 import type { TRealm } from '../scopedRealm';
 
 const treeToTableType = (_realm: TRealm, source: Type): Type => {
@@ -118,7 +117,7 @@ const treeToColumnsValue = async (
 const treeToTableValue = async (
   _realm: TRealm,
   sourceType: Type,
-  sourceValue: Value.Value
+  sourceValue: ValueTypes.Value
 ): Promise<Value.Table> => {
   if (!Value.isTreeValue(sourceValue)) {
     throw new RuntimeError('Expected tree value');

@@ -3,6 +3,7 @@
   "include": ["src"],
   "references": [
     { "path": "../language-types" },
+    { "path": "../language-interfaces" },
     { "path": "../utils" },
     { "path": "../number" },
     { "path": "../generator-utils" }

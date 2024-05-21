@@ -1,9 +1,10 @@
 /* eslint-disable no-await-in-loop */
 import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { inferExpression } from '../infer';
 import { getIdentifierString } from '../utils';
 import { cleanInferred } from './cleanInferred';

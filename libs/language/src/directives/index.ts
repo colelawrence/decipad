@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Value } from '@decipad/language-types';
+import type { AST, Type, Value } from '@decipad/language-interfaces';
 import { directives } from './directives';
 import type { TRealm } from '../scopedRealm';
 

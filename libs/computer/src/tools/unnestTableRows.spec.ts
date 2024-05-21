@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildResult } from '@decipad/language';
 import { getDefined, timeout } from '@decipad/utils';

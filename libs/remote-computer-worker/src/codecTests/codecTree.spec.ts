@@ -1,7 +1,10 @@
+import {
+  type SerializedType,
+  type Result,
+  Unknown,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { SerializedType, Result } from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
-import { Unknown, Value } from '@decipad/language-types';
+import { Value } from '@decipad/language-types';
 import { valueEncoder } from '../worker/valueEncoder';
 import { valueDecoder } from '../client/valueDecoder';
 import { N } from '@decipad/number';

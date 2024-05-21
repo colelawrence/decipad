@@ -1,11 +1,12 @@
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+  type SerializedTypes,
+  type Value as ValueTypes,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type {
-  Result,
-  SerializedType,
-  SerializedTypes,
-} from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
-import { Value, Unknown } from '@decipad/language-types';
+import { Value } from '@decipad/language-types';
 import type { RecursiveDecoder } from './valueDecoder';
 import { decodeString } from './decodeString';
 import { decodeResult } from './decodeResult';
@@ -25,7 +26,7 @@ export const decodeTree: RecursiveDecoder = async (
   const recursiveTreeDecode = async (
     currentRootType: SerializedType,
     type: SerializedTypes.Tree
-  ): Promise<Value.Tree> => {
+  ): Promise<ValueTypes.Tree> => {
     if (type.kind !== 'tree') {
       throw new TypeError('Tree: Expected tree type');
     }
@@ -90,7 +91,7 @@ export const decodeTree: RecursiveDecoder = async (
     const childCount = buffer.getUint32(offset);
     offset += 4;
     const childRootType = type.columnTypes[0];
-    const children: Value.Tree[] = [];
+    const children: ValueTypes.Tree[] = [];
     for (let childIndex = 0; childIndex < childCount; childIndex += 1) {
       const childTreeType: SerializedType = {
         kind: 'tree',

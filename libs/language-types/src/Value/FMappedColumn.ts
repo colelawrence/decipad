@@ -8,43 +8,44 @@ import {
   slice,
   trace,
 } from '@decipad/generator-utils';
-import type { GenericResultGenerator, OneResult } from '../Result';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
-import type { Dimension } from '../Dimension';
+import type {
+  Dimension,
+  Result,
+  SerializedType,
+  Value,
+} from '@decipad/language-interfaces';
+import { isColumnLike } from './ColumnLike';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, once } from '@decipad/utils';
 import { getResultGenerator, resultToValue } from '../utils';
-import type { SerializedType } from '../SerializedType';
 import { buildResult } from '../utils/buildResult';
-import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
 
-type TFMappedColumn = ColumnLikeValue & LowLevelMinimalTensor;
+type TFMappedColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
-type MapFunction<T = OneResult> = (
+type MapFunction<T = Result.OneResult> = (
   value: T,
   index: number,
   previous?: T
-) => PromiseOrType<OneResult>;
+) => PromiseOrType<Result.OneResult>;
 
 const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 
-export class FMappedColumn<T = OneResult>
+export class FMappedColumn<T = Result.OneResult>
   extends ColumnBase
   implements TFMappedColumn
 {
-  private gen: PromiseOrType<GenericResultGenerator<T>>;
+  private gen: PromiseOrType<Result.GenericResultGenerator<T>>;
   private map: MapFunction<T>;
   private type: SerializedType;
-  private memo: undefined | Array<Value>;
+  private memo: undefined | Array<Value.Value>;
   private partialMemo: undefined | boolean;
   private desc: string;
 
   constructor(
-    gen: PromiseOrType<GenericResultGenerator<T>>,
+    gen: PromiseOrType<Result.GenericResultGenerator<T>>,
     type: SerializedType,
     map: MapFunction<T>,
     desc: string
@@ -67,13 +68,13 @@ export class FMappedColumn<T = OneResult>
     ];
   }
 
-  async getGetData(): Promise<OneResult> {
+  async getGetData(): Promise<Result.OneResult> {
     const gen = await this.gen;
     return (start = 0, end = Infinity) =>
       trace(map(gen(start, end), this.map), this.desc);
   }
 
-  private async at(index: number): Promise<OneResult | undefined> {
+  private async at(index: number): Promise<Result.OneResult | undefined> {
     return firstOrUndefined(
       getResultGenerator(await this.getData())(index, index + 1)
     );
@@ -87,7 +88,7 @@ export class FMappedColumn<T = OneResult>
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
-  async atIndex(i: number): Promise<Value | undefined> {
+  async atIndex(i: number): Promise<Value.Value | undefined> {
     if (this.memo && i < this.memo.length) {
       return this.memo[i];
     }
@@ -105,7 +106,7 @@ export class FMappedColumn<T = OneResult>
   private async asyncValues(
     start = 0,
     end = Infinity
-  ): Promise<AsyncGenerator<Value>> {
+  ): Promise<AsyncGenerator<Value.Value>> {
     if (
       this.memo != null &&
       (end < this.memo.length || !getDefined(this.partialMemo))
@@ -134,7 +135,7 @@ export class FMappedColumn<T = OneResult>
   }
 
   static fromGeneratorAndType(
-    gen: (start?: number, end?: number) => AsyncGenerator<OneResult>,
+    gen: (start?: number, end?: number) => AsyncGenerator<Result.OneResult>,
     type: SerializedType,
     mapFn: MapFunction,
     desc: string

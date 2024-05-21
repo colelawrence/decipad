@@ -1,17 +1,17 @@
+import type { Value } from '@decipad/language-interfaces';
 import { DateValue } from './Date';
 import { NumberValue } from './Number';
-import type { Value } from './Value';
 
-export class Range implements Value {
-  start: Value;
-  end: Value;
+export class Range implements Value.Value {
+  start: Value.Value;
+  end: Value.Value;
 
   constructor({ start, end }: Pick<Range, 'start' | 'end'>) {
     this.start = start;
     this.end = end;
   }
 
-  static fromBounds(start: Value, end: Value): Range {
+  static fromBounds(start: Value.Value, end: Value.Value): Range {
     if (start instanceof DateValue && end instanceof DateValue) {
       return new Range({
         start,

@@ -5,20 +5,20 @@ import type DeciNumber from '@decipad/number';
 import { N, isDeciNumberInput } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import type { DeepReadonly } from 'utility-types';
+import type { Value } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 import { UnknownValue } from '../Value/Unknown';
-import { Unknown } from '../Unknown';
 import { NumberValue } from '../Value/Number';
 import { StringValue } from '../Value/String';
 import { BooleanValue } from '../Value/Boolean';
 import { DateValue } from '../Value/Date';
 import { Column } from '../Value/Column';
 import { RuntimeError } from '../RuntimeError';
-import type { Value } from '../Value/Value';
 
 export type CompareResult = -1 | 0 | 1;
 
 export type Comparable =
-  | DeepReadonly<Value>
+  | DeepReadonly<Value.Value>
   | string
   | boolean
   | number
@@ -26,7 +26,7 @@ export type Comparable =
   | symbol
   | DeciNumber
   | DeciNumberInput
-  | Value
+  | Value.Value
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */

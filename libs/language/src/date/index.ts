@@ -1,9 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Unit } from '@decipad/language-types';
+import type { Unit } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Time } from '@decipad/language-types';
 import { n, pairwise } from '../utils';
 import { getDefined } from '@decipad/utils';
+import type { AST } from '@decipad/language-interfaces';
 
 export { Time };
 

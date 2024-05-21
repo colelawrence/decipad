@@ -6,8 +6,8 @@ import {
   expandUnits,
   getUnitByName,
 } from '@decipad/language-units';
+import type { Value } from '@decipad/language-interfaces';
 import type { ContextUtils } from '../ContextUtils';
-import type { Value } from '../Value';
 import { FMappedColumn, NumberValue } from '../Value';
 import { serializeType, type Type } from '../Type';
 import { automapValues } from '../Dimension';
@@ -15,13 +15,13 @@ import { isColumnLike } from '@decipad/column';
 import { getResultGenerator } from '../utils';
 import stringify from 'json-stringify-safe';
 
-type TypeAndValue = [Type, Value];
+type TypeAndValue = [Type, Value.Value];
 
 async function autoconvertArgument(
   ctx: ContextUtils,
-  value: Value,
+  value: Value.Value,
   type: Type
-): Promise<[Type, Value]> {
+): Promise<[Type, Value.Value]> {
   const typeLowestDims = await type.reducedToLowest();
   const { unit: typeLowestDimsUnit } = typeLowestDims;
   if (typeLowestDimsUnit) {
@@ -55,7 +55,7 @@ async function autoconvertArgument(
 const crossBaseConvert = async (
   ctx: ContextUtils,
   typeAndValues: Array<TypeAndValue>
-): Promise<Value[]> => {
+): Promise<Value.Value[]> => {
   const consumedUnits = new Set<Unit.Unit>();
   return Promise.all(
     typeAndValues.map(async ([sourceType, value]) => {
@@ -121,10 +121,10 @@ const crossBaseConvert = async (
 
 export async function autoconvertResult(
   ctx: ContextUtils,
-  value: Value,
+  value: Value.Value,
   type: Type,
   fName: string
-): Promise<Value> {
+): Promise<Value.Value> {
   const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, contractor] = contractUnits(getDefined(typeLowestDims.unit));
@@ -155,9 +155,9 @@ export async function autoconvertResult(
 
 export async function autoconvertArguments(
   ctx: ContextUtils,
-  values: Value[],
+  values: Value.Value[],
   types: Type[]
-): Promise<Value[]> {
+): Promise<Value.Value[]> {
   const autoConverted = await Promise.all(
     zip(values, types).map(async ([value, type]) =>
       autoconvertArgument(ctx, value, type)

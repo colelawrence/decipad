@@ -9,33 +9,34 @@ import {
   slice,
   trace,
 } from '@decipad/generator-utils';
-import type { OneResult, ResultGenerator } from '../Result';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
-import type { Dimension } from '../Dimension';
+import type {
+  Dimension,
+  Result,
+  SerializedType,
+  Value,
+} from '@decipad/language-interfaces';
+import { isColumnLike } from './ColumnLike';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, once } from '@decipad/utils';
 import { resultToValue } from '../utils';
-import type { SerializedType } from '../SerializedType';
 import { buildResult } from '../utils/buildResult';
-import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
 
-type TLeanColumn = ColumnLikeValue & LowLevelMinimalTensor;
+type TLeanColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
 const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 
 export class LeanColumn extends ColumnBase implements TLeanColumn {
-  private gen: PromiseOrType<ResultGenerator>;
+  private gen: PromiseOrType<Result.ResultGenerator>;
   private type: SerializedType;
-  private memo: undefined | Array<Value>;
+  private memo: undefined | Array<Value.Value>;
   private partialMemo: undefined | boolean;
   private desc: string;
 
   constructor(
-    gen: PromiseOrType<ResultGenerator>,
+    gen: PromiseOrType<Result.ResultGenerator>,
     type: SerializedType,
     desc: string
   ) {
@@ -57,15 +58,15 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
     }
   }
 
-  async getGetData(): Promise<OneResult> {
+  async getGetData(): Promise<Result.OneResult> {
     return this.gen;
   }
 
-  async lowLowLevelGet(...keys: number[]): Promise<OneResult> {
+  async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
     return lowLowLevelGet(await this.at(keys[0]), keys.slice(1));
   }
 
-  private async at(index: number): Promise<OneResult | undefined> {
+  private async at(index: number): Promise<Result.OneResult | undefined> {
     return first((await this.gen)(index, index + 1));
   }
 
@@ -73,7 +74,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
-  async atIndex(i: number): Promise<Value | undefined> {
+  async atIndex(i: number): Promise<Value.Value | undefined> {
     if (this.memo && i < this.memo.length) {
       return this.memo[i];
     }
@@ -90,7 +91,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
   private async asyncValues(
     start = 0,
     end = Infinity
-  ): Promise<AsyncGenerator<Value>> {
+  ): Promise<AsyncGenerator<Value.Value>> {
     if (
       this.memo != null &&
       (end < this.memo.length || !getDefined(this.partialMemo))
@@ -117,7 +118,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
   }
 
   static fromGeneratorAndType(
-    gen: (start?: number, end?: number) => AsyncGenerator<OneResult>,
+    gen: (start?: number, end?: number) => AsyncGenerator<Result.OneResult>,
     type: SerializedType,
     desc = `LeanColumn.fromGeneratorAndType(${gen.name}, ${type.kind})`
   ) {

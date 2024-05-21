@@ -1,9 +1,8 @@
-import type { ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 
-export interface TableValue extends Value {
-  columns: ColumnLikeValue[];
+export interface TableValue extends Value.Value {
+  columns: Value.ColumnLikeValue[];
   columnNames: string[];
   tableRowCount(): Promise<number | undefined>;
-  getColumn(name: string): ColumnLikeValue;
+  getColumn(name: string): Value.ColumnLikeValue;
 }

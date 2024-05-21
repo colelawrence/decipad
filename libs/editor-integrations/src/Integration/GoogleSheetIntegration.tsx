@@ -1,5 +1,5 @@
 import type { IntegrationTypes } from '@decipad/editor-types';
-import { Result, materializeResult } from '@decipad/computer';
+import { Result, materializeResult } from '@decipad/remote-computer';
 import { tryImport } from '@decipad/import';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {

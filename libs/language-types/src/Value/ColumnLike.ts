@@ -1,28 +1,15 @@
-import type { ColumnLike } from '@decipad/column';
-import type { Value } from './Value';
-import type { OneResult } from '../Result';
-import type { Dimension } from '../Dimension';
-
-export interface ColumnLikeValue extends Value, ColumnLike<Value> {
-  getData(): Promise<OneResult>;
-  lowLevelGet(...keys: number[]): Promise<Value>;
-
-  /** Useful when filtering or sorting.
-   * By default the identity function is used and no index changes are assumed to exist */
-  indexToLabelIndex?: (index: number) => number | Promise<number>;
-  dimensions(): Promise<Dimension[]>;
-}
+import type { Value } from '@decipad/language-interfaces';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isColumnLike = (thing: any): thing is ColumnLikeValue => {
-  const col = thing as ColumnLikeValue;
+export const isColumnLike = (thing: any): thing is Value.ColumnLikeValue => {
+  const col = thing as Value.ColumnLikeValue;
   return typeof col === 'object' && typeof col?.lowLevelGet === 'function';
 };
 
 export const getColumnLike = (
-  thing: Value | undefined,
+  thing: Value.Value | undefined,
   message = 'panic: expected column-like value'
-): ColumnLikeValue => {
+): Value.ColumnLikeValue => {
   if (!isColumnLike(thing)) {
     console.error('expected column-like value', thing);
     throw new Error(message);

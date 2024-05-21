@@ -2,17 +2,17 @@ import DeciNumber from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { empty } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import type {
-  Result,
-  SerializedType,
-  SerializedTypeKind,
-} from '@decipad/language-types';
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+  type SerializedTypeKind,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   EMPTY,
   Time,
   Type,
-  Unknown,
   Value,
   serializeType,
 } from '@decipad/language-types';

@@ -1,4 +1,4 @@
-import type { ColumnDesc } from '../types';
+import type { ColumnDesc } from '@decipad/computer-interfaces';
 
 export const deduplicateColumnResults = (
   acc: ColumnDesc[],

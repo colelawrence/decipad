@@ -1,8 +1,8 @@
 import {
-  Result,
+  type Result,
   runCode as run,
-  RunAstOptions,
-  SerializedTypeKind,
+  type RunAstOptions,
+  type SerializedTypeKind,
   serializeResult,
 } from '@decipad/remote-computer';
 

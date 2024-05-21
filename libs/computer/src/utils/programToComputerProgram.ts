@@ -1,5 +1,4 @@
-import type { Program } from '..';
-import type { ComputerProgram } from '../types';
+import type { ComputerProgram, Program } from '@decipad/computer-interfaces';
 import { mapifyProgram } from './mapifyProgram';
 
 export const programToComputerProgram = (

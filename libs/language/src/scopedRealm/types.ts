@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, ContextUtils, Type, Value } from '@decipad/language-types';
+import type { ContextUtils, Type } from '@decipad/language-types';
+import type { AST, Value } from '@decipad/language-interfaces';
 import type { ExternalDataMap } from '..';
 import type { ExpressionCache } from '../expression-cache';
 import type { TStackFrame } from './stack';

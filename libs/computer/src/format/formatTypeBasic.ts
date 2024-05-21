@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { SerializedType } from '@decipad/language';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { formatUnit } from './formatUnit';
 
 export const formatTypeToBasicString = (

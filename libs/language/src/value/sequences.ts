@@ -1,16 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError, Time, Value } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import DeciNumber, { N } from '@decipad/number';
 import { getDefined, getInstanceof } from '@decipad/utils';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
 export async function columnFromSequence(
-  startV: Value.Value,
-  endV: Value.Value,
-  byV?: Value.Value
-): Promise<Value.ColumnLikeValue> {
+  startV: ValueTypes.Value,
+  endV: ValueTypes.Value,
+  byV?: ValueTypes.Value
+): Promise<ValueTypes.ColumnLikeValue> {
   const [start, end] = await Promise.all(
     [startV, endV].map(async (val) =>
       getInstanceof(await val.getData(), DeciNumber)
@@ -53,7 +54,7 @@ export async function columnFromDateSequence(
   startD: Value.DateValue,
   endD: Value.DateValue,
   by: Time.TimeUnit
-): Promise<Value.ColumnLikeValue | undefined> {
+): Promise<ValueTypes.ColumnLikeValue | undefined> {
   let start = await startD.getData();
   let end = await endD.getData();
   if (start == null || end == null) {

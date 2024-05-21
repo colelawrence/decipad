@@ -1,6 +1,6 @@
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 
-export class BooleanValue implements Value {
+export class BooleanValue implements Value.Value {
   value: boolean;
   constructor(value: boolean) {
     this.value = value;

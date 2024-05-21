@@ -36,7 +36,6 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   creditsHref,
   onCreateNotebook,
   permissionType,
-
   hasReachedAiLimit,
   aiCreditsLeft,
 }) => {

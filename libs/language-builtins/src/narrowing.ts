@@ -2,12 +2,12 @@
 import {
   onlyOneIsPercentage,
   propagateTypeUnits,
-  type SerializedTypes,
   serializeType,
   type Type,
   deserializeType,
 } from '@decipad/language-types';
 import { getDefined, zip, produce, equalOrUndefined } from '@decipad/utils';
+import type { SerializedTypes } from '@decipad/language-interfaces';
 import { traverseType } from './utils/traverseType';
 
 export interface FunctionSignature {

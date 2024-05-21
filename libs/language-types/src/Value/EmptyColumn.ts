@@ -1,12 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-
-import type { Dimension } from '../Dimension';
+import type { Result, Value, Dimension } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 import { UnknownValue } from './Unknown';
-import type { Value } from './Value';
 import { implementColumnLike } from '../utils/implementColumnLike';
-import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
-import type { OneResult } from '../Result';
-import { Unknown } from '../Unknown';
 
 /**
  * Sometimes we may access `.values[0]` of a column to figure out its dimensionality.
@@ -16,7 +12,7 @@ import { Unknown } from '../Unknown';
  * Column.fromValues() returns this when given dimension information and zero values
  */
 export const EmptyColumn = implementColumnLike(
-  class EmptyColumn implements LowLevelMinimalTensor {
+  class EmptyColumn implements Value.LowLevelMinimalTensor {
     _dimensions: Dimension[];
 
     constructor(dimensions: Dimension[]) {
@@ -31,11 +27,11 @@ export const EmptyColumn = implementColumnLike(
       throw new Error('not implemented');
     }
 
-    async lowLevelGet(): Promise<Value> {
+    async lowLevelGet(): Promise<Value.Value> {
       return UnknownValue;
     }
 
-    async lowLowLevelGet(): Promise<OneResult> {
+    async lowLowLevelGet(): Promise<Result.OneResult> {
       return Unknown;
     }
 

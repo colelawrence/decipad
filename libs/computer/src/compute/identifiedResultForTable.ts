@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Result } from '@decipad/language';
+import type { AST, Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   Value,

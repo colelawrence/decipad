@@ -1,5 +1,5 @@
+import type { Program } from '@decipad/computer-interfaces';
 import { createProgramFromMultipleStatements } from './parseUtils';
-import type { Program } from '../types';
 import { prettyPrintProgramBlock } from '../testUtils';
 
 it('creates multiple statements for legacy multi-statement usage', () => {

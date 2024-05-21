@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { inferStatement } from './infer';
 import { evaluateStatement } from './interpreter';
 import { N } from '@decipad/number';

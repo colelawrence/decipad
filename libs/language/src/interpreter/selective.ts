@@ -1,6 +1,5 @@
 import stringify from 'json-stringify-safe';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
@@ -51,8 +50,8 @@ export async function evaluateTargets(
     string | number | [blockIdx: number, statementIdx: number]
   >,
   realm: TRealm
-): Promise<Value.Value[]> {
-  const targetSet: Map<unknown, Value.Value> = new Map(
+): Promise<ValueTypes.Value[]> {
+  const targetSet: Map<unknown, ValueTypes.Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
       Value.UnknownValue,
@@ -62,7 +61,7 @@ export async function evaluateTargets(
   for (const block of program) {
     for (const statement of block.args) {
       // eslint-disable-next-line no-await-in-loop
-      const value: Value.Value = await evaluateStatement(realm, statement);
+      const value: ValueTypes.Value = await evaluateStatement(realm, statement);
 
       if (targetSet.has(statement)) {
         targetSet.set(statement, value);

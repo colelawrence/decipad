@@ -1,17 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  type Result,
-  type Type,
-  type Value,
-  buildType,
-  serializeType,
-} from '@decipad/language-types';
+import { type Type, buildType, serializeType } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
+import type { Result, Value } from '@decipad/language-interfaces';
 import { type BuiltinContextUtils } from '../../types';
 
 export const maybeAggregateColumn = async (
   ctx: BuiltinContextUtils,
-  fullTable: Value.Table,
+  fullTable: Value.TableValue,
   columnName: string,
   columnValue: Value.ColumnLikeValue,
   columnType?: Type,

@@ -8,26 +8,28 @@ import {
   memoizing,
   slice,
 } from '@decipad/generator-utils';
-import type { Dimension } from '../Dimension';
-import type { GenericResultGenerator, OneResult } from '../Result';
-import type { ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
-import type { SerializedType } from '../SerializedType';
+import type { PromiseOrType } from '@decipad/utils';
+import type {
+  Dimension,
+  Result,
+  SerializedType,
+  Value,
+} from '@decipad/language-interfaces';
 import { typedResultToValue } from '../utils/typedResultToValue';
 import { deserializeType } from '../Type';
 import { lowLevelGet } from './lowLevelGet';
 import { getResultGenerator } from '../utils/getResultGenerator';
-import type { PromiseOrType } from '@decipad/utils';
 
-export type ReadSerializedColumnDecoder<T extends OneResult = OneResult> = (
-  buffer: DataView,
-  offset: number
-) => PromiseOrType<[T, number]>; // returns the decoded value and the next offset
+export type ReadSerializedColumnDecoder<
+  T extends Result.OneResult = Result.OneResult
+> = (buffer: DataView, offset: number) => PromiseOrType<[T, number]>; // returns the decoded value and the next offset
 
-export class ReadSerializedColumn<T extends OneResult>
-  implements ColumnLikeValue
+export class ReadSerializedColumn<T extends Result.OneResult>
+  implements Value.ColumnLikeValue
 {
-  private typedResultToValue: Promise<(result: OneResult) => Value>;
+  private typedResultToValue: Promise<
+    (result: Result.OneResult) => Value.Value
+  >;
   private decode: ReadSerializedColumnDecoder<T>;
   private buffer: DataView;
   private _dimensions: Dimension[];
@@ -44,7 +46,7 @@ export class ReadSerializedColumn<T extends OneResult>
     this.buffer = buffer;
     this._dimensions = dimensions;
   }
-  async getData(): Promise<GenericResultGenerator<T>> {
+  async getData(): Promise<Result.GenericResultGenerator<T>> {
     return (start = 0, end = Infinity) => {
       return slice(this.allDataNow(), start, end);
     };
@@ -71,7 +73,7 @@ export class ReadSerializedColumn<T extends OneResult>
     );
   }
 
-  async lowLevelGet(...keys: number[]): Promise<Value> {
+  async lowLevelGet(...keys: number[]): Promise<Value.Value> {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
@@ -82,7 +84,7 @@ export class ReadSerializedColumn<T extends OneResult>
   values(
     start?: number | undefined,
     end?: number | undefined
-  ): AsyncGenerator<Value> {
+  ): AsyncGenerator<Value.Value> {
     return fromGeneratorPromise(
       (async () =>
         map(
@@ -92,7 +94,7 @@ export class ReadSerializedColumn<T extends OneResult>
     );
   }
 
-  async atIndex(i: number): Promise<Value | undefined> {
+  async atIndex(i: number): Promise<Value.Value | undefined> {
     const v = await firstOrUndefined(slice(this.allDataNow(), i, i + 1));
     if (v != null) {
       return (await this.typedResultToValue)(v);

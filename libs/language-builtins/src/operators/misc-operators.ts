@@ -1,12 +1,13 @@
 import DeciNumber from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, compare, buildType as t } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
+import { getDefined, getInstanceof } from '@decipad/utils';
 import { overloadBuiltin } from '../overloadBuiltin';
 import type { BuiltinSpec } from '../interfaces';
-import { getDefined, getInstanceof } from '@decipad/utils';
 import { concat } from './concat';
 
-const extractDateValues = async (a: Value.Value) => {
+const extractDateValues = async (a: ValueTypes.Value) => {
   const aVal = getInstanceof(a, Value.DateValue);
   return [await aVal.getData(), aVal.getEnd()];
 };

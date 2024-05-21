@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
 import type {
   SerializedType,
   SerializedTypes,
   Result,
-} from '@decipad/language-types';
+} from '@decipad/language-interfaces';
 import type { SharedRPC } from '../utils/SharedRPC';
 import type { RecursiveDecoder } from './valueDecoder';
 

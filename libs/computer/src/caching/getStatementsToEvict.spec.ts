@@ -1,8 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { astNode } from '@decipad/language';
 import { anyMappingToMap } from '@decipad/utils';
+import type { ComputerProgram } from '@decipad/computer-interfaces';
 import type { GetStatementsToEvictArgs } from './getStatementsToEvict';
 import {
   findSymbolErrors,
@@ -11,7 +11,6 @@ import {
   getStatementsToEvict,
 } from './getStatementsToEvict';
 import { testBlocks, testProgramBlocks } from '../testUtils';
-import type { ComputerProgram } from '../types';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 
 describe('findSymbolErrors', () => {

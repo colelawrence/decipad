@@ -2,7 +2,7 @@ import type DeciNumber from '@decipad/number';
 import { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { Type, AST } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
@@ -15,6 +15,7 @@ import { getIdentifierString } from '../utils';
 import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
 import { getOfType } from '../parser/getOfType';
 import type { TRealm } from '../scopedRealm';
+import type { AST } from '@decipad/language-interfaces';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 

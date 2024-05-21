@@ -11,6 +11,7 @@ import {
   compare,
   buildType as t,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { type BuiltinSpec, type Functor } from '../interfaces';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { binopFunctor } from '../utils/binopFunctor';
@@ -53,8 +54,8 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
 
 const firstArgumentReducedFunctor = async ([t]: Type[]) => t.reduced();
 
-const max = async ([value]: Value.Value[]): Promise<Value.Value> => {
-  let max: Value.Value | undefined;
+const max = async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
+  let max: ValueTypes.Value | undefined;
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(value);
   }
@@ -74,8 +75,8 @@ const max = async ([value]: Value.Value[]): Promise<Value.Value> => {
   return max;
 };
 
-const min = async ([value]: Value.Value[]): Promise<Value.Value> => {
-  let min: Value.Value | undefined;
+const min = async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
+  let min: ValueTypes.Value | undefined;
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(value);
   }
@@ -94,7 +95,9 @@ const min = async ([value]: Value.Value[]): Promise<Value.Value> => {
   return min;
 };
 
-const average = async ([value]: Value.Value[]): Promise<Value.Value> => {
+const average = async ([
+  value,
+]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
   let acc = ZERO;
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(value);
@@ -108,9 +111,9 @@ const average = async ([value]: Value.Value[]): Promise<Value.Value> => {
 };
 
 const median = async (
-  [value]: Value.Value[],
+  [value]: ValueTypes.Value[],
   [type]: Type[] = []
-): Promise<Value.Value> => {
+): Promise<ValueTypes.Value> => {
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(value);
   }
@@ -136,7 +139,9 @@ const median = async (
   );
 };
 
-const stddev = async ([value]: Value.Value[]): Promise<Value.Value> => {
+const stddev = async ([
+  value,
+]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(Value.NumberValue.fromValue(ZERO));
   }
@@ -216,7 +221,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     noAutoconvert: true,
     argCardinalities: [[2, 2]],
-    fnValues: async ([numbers, bools]: Value.Value[]) => {
+    fnValues: async ([numbers, bools]: ValueTypes.Value[]) => {
       let acc = ZERO;
       if (!Value.isColumnLike(numbers)) {
         return numbers;

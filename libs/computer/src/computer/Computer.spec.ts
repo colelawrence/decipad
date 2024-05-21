@@ -1,6 +1,6 @@
+import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   serializeType,
@@ -9,10 +9,13 @@ import {
   parseBlockOrThrow,
   getResultGenerator,
 } from '@decipad/language';
+import type {
+  ColumnDesc,
+  ComputeRequestWithExternalData,
+} from '@decipad/computer-interfaces';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { AnyMapping } from '@decipad/utils';
 import { produce, timeout } from '@decipad/utils';
-import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
   getIdentifiedBlock,
@@ -20,7 +23,6 @@ import {
   testProgram as makeTestProgram,
   simplifyComputeResponse,
 } from '../testUtils';
-import type { ColumnDesc, ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
 
 setupDeciNumberSnapshotSerializer();

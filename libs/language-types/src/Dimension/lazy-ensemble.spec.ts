@@ -13,9 +13,9 @@ import { materializeOneResult } from '../utils';
 import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
 import { createSwappedDimensions } from './SwappedDimensions';
 import * as t from '../Type/Type';
-import type { OneResult } from '../Result';
-import type { Column, Value } from '../Value';
+import type { Column } from '../Value';
 import { getDimensionLength } from '../utils/getDimensionLength';
+import type { Result, Value } from '@decipad/language-interfaces';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));
@@ -121,7 +121,7 @@ describe.each(
   });
 });
 
-type NumsArgValue = PromiseOrType<OneResult | Value | undefined>;
+type NumsArgValue = PromiseOrType<Result.OneResult | Value.Value | undefined>;
 
 const nums = async (
   _values: NumsArgValue | Array<NumsArgValue>
@@ -133,7 +133,7 @@ const nums = async (
   if (Array.isArray(values)) {
     return Promise.all(values.map(nums));
   } else if (values instanceof NumberValue || isColumnLike(values as Column)) {
-    return nums(materializeOneResult(await (values as Value).getData()));
+    return nums(materializeOneResult(await (values as Value.Value).getData()));
   } else {
     return values.valueOf();
   }

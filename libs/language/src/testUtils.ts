@@ -11,9 +11,6 @@ import {
 } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
-  type AST,
-  type Result,
-  type SerializedType,
   Type,
   Unit,
   Value,
@@ -22,6 +19,7 @@ import {
   buildType as t,
   isErrorType,
 } from '@decipad/language-types';
+import type { AST, Result, SerializedType } from '@decipad/language-interfaces';
 import type { TScopedRealm } from '.';
 import { ScopedRealm, makeInferContext, parseBlockOrThrow } from '.';
 import { inferBlock, inferProgram } from './infer';

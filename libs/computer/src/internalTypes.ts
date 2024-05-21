@@ -1,4 +1,4 @@
-import type { ProgramBlock } from './types';
+import type { ProgramBlock } from '@decipad/computer-interfaces';
 
 export type ExprRefToVarNameMap = Map<string, string>;
 export type VarNameToBlockMap = Map<string, ProgramBlock>;

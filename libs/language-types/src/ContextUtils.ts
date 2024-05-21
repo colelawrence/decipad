@@ -1,23 +1,21 @@
-import { type AST } from '.';
-import { type Statement, type Expression } from './AST';
+import type { AST, Value } from '@decipad/language-interfaces';
 import type { Type } from './Type/Type';
-import { type Value } from './Value/Value';
 
 export type CallBuiltinFunctor = (
   ctx: ContextUtils,
   funcName: string,
   argTypes: Type[],
-  node: Expression[]
+  node: AST.Expression[]
 ) => Promise<Type>;
 
 export type CallBuiltin = (
   ctx: ContextUtils,
   funcName: string,
-  argsBeforeConvert: Value[],
+  argsBeforeConvert: Value.Value[],
   argTypes: Type[],
   returnType: Type,
   node: AST.Expression[]
-) => Promise<Value>;
+) => Promise<Value.Value>;
 
 export type CallFunctor = (
   body: AST.Block,
@@ -28,15 +26,17 @@ export type CallFunctor = (
 export type CallValue = (
   body: AST.Block,
   argNames: string[],
-  args: Value[]
-) => Promise<Value>;
+  args: Value.Value[]
+) => Promise<Value.Value>;
 
 export interface ContextUtils {
   retrieveIndexByName: (indexName: string) => Type | null;
   retrieveVariableTypeByGlobalVariableName: (varName: string) => Type | null;
-  retrieveVariableValueByGlobalVariableName: (varName: string) => Value | null;
+  retrieveVariableValueByGlobalVariableName: (
+    varName: string
+  ) => Value.Value | null;
   retrieveHumanVariableNameByGlobalVariableName: (varName: string) => string;
-  simpleExpressionEvaluate: (s: Statement) => Promise<Value>;
+  simpleExpressionEvaluate: (s: AST.Statement) => Promise<Value.Value>;
   callBuiltinFunctor: CallBuiltinFunctor;
   callBuiltin: CallBuiltin;
   callFunctor: CallFunctor;

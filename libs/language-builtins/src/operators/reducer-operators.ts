@@ -1,6 +1,7 @@
 /* eslint-disable no-bitwise */
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { BuiltinSpec } from '../interfaces';
 import { coherceToFraction } from '../utils/coherceToFraction';
 
@@ -40,7 +41,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     noAutoconvert: true,
     argCardinalities: [[2, 2]],
-    fnValues: async ([numbers, bools]: Value.Value[]) => {
+    fnValues: async ([numbers, bools]: ValueTypes.Value[]) => {
       if (!Value.isColumnLike(numbers)) {
         return numbers;
       }

@@ -1,4 +1,4 @@
-import type { ColumnLikeValue } from '../Value';
+import type { Value } from '@decipad/language-interfaces';
 
 /**
  * Turns an output index (IE an index in a Interpreter.Result array) into an index of a label
@@ -6,7 +6,7 @@ import type { ColumnLikeValue } from '../Value';
  * ColumnLike values which transform the order or arity of indices supply an .indexToLabelIndex method
  */
 export async function getLabelIndex(
-  column: ColumnLikeValue,
+  column: Value.ColumnLikeValue,
   index: number
 ): Promise<number> {
   getPositive(index);

@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import { type AST, type Value } from '@decipad/language-types';
+import { type AST, type Value } from '@decipad/language-interfaces';
 import { evaluate } from './evaluate';
 import { withPush, type TRealm } from '../scopedRealm';
 

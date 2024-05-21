@@ -1,5 +1,6 @@
 import type moo from 'moo';
 import { getDefined } from '@decipad/utils';
+import type { Parser } from '@decipad/language-interfaces';
 
 const parenTypes = ['Paren', 'SquareBracket', 'CurlyBracket', 'PartialIf'];
 
@@ -19,18 +20,13 @@ const closersToTypes: Record<string, ParenType> = {
   'else keyword': 'PartialIf',
 };
 
-export type BracketError =
-  | { type: 'never-opened'; close: moo.Token }
-  | { type: 'mismatched-brackets'; open: moo.Token; close: moo.Token }
-  | { type: 'never-closed'; open: moo.Token };
-
 /**
  * Keeps track of open ([{}])
  * Helps implement https://xkcd.com/859/
  */
 export class BracketCounter {
   openStack: moo.Token[] = [];
-  validationError?: BracketError;
+  validationError?: Parser.BracketError;
   get isValid() {
     return !this.validationError;
   }

@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Type, Value } from '@decipad/language-types';
+import type { Type, Value } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports

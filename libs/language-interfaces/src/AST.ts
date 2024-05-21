@@ -2,17 +2,17 @@ import type DeciNumber from '@decipad/number';
 import type { Type } from './Type';
 import type * as Time from './Time';
 
+export interface Pos {
+  line: number;
+  column: number;
+  char: number;
+}
+
 interface BasicNode {
   cacheKey?: string;
   start?: Pos;
   end?: Pos;
   inferredType?: Type;
-}
-
-export interface Pos {
-  line: number;
-  column: number;
-  char: number;
 }
 
 export interface Noop extends BasicNode {

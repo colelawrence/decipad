@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
 import type {
   SerializedType,
   Result,
   SerializedTypes,
-} from '@decipad/language-types';
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
 import type { ClientWorkerContext } from './types';

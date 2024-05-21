@@ -1,4 +1,4 @@
-import { Format, type DeciNumberRep } from '@decipad/remote-computer';
+import { Format } from '@decipad/remote-computer';
 
 export * from './formatResult';
 export * from './formatType';
@@ -8,4 +8,5 @@ const { simpleFormatUnit, formatUnit, formatError, formatNumber } = Format;
 
 export { simpleFormatUnit, formatUnit, formatError, formatNumber };
 
-export { DeciNumberRep };
+type DeciNumberRep = Format.DeciNumberRep;
+export type { DeciNumberRep };

@@ -7,27 +7,24 @@ import {
   slice,
   trace,
 } from '@decipad/generator-utils';
-import type { OneResult } from '../Result';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
+import { isColumnLike } from './ColumnLike';
 import type { ValueGeneratorFunction } from './ValueGenerator';
-import type { Dimension } from '../Dimension';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, once } from '@decipad/utils';
-import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
+import type { Dimension, Result, Value } from '@decipad/language-interfaces';
 
-type TGeneratorColumn = ColumnLikeValue & LowLevelMinimalTensor;
+type TGeneratorColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
 const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 
 export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   private gen: PromiseOrType<ValueGeneratorFunction>;
-  private memo: undefined | Array<Value>;
+  private memo: undefined | Array<Value.Value>;
   private partialMemo: undefined | boolean;
   private desc: string;
 
@@ -46,11 +43,11 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
     ];
   }
 
-  async getGetData(): Promise<OneResult> {
+  async getGetData(): Promise<Result.OneResult> {
     return columnValueToResultValue(this);
   }
 
-  private async at(index: number): Promise<OneResult | undefined> {
+  private async at(index: number): Promise<Result.OneResult | undefined> {
     return firstOrUndefined(
       getResultGenerator(await this.getData())(index, index + 1)
     );
@@ -64,7 +61,7 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
-  async atIndex(i: number): Promise<Value | undefined> {
+  async atIndex(i: number): Promise<Value.Value | undefined> {
     if (this.memo && i < this.memo.length) {
       return this.memo[i];
     }
@@ -103,7 +100,7 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   }
 
   static fromGenerator(
-    gen: (start?: number, end?: number) => AsyncGenerator<Value>,
+    gen: (start?: number, end?: number) => AsyncGenerator<Value.Value>,
     desc: string
   ) {
     return new GeneratorColumn(gen, desc);

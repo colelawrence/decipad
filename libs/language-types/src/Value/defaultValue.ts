@@ -2,8 +2,6 @@ import DeciNumber from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import type { Type } from '../Type';
 import { serializeType } from '../Type';
-import type { SerializedType, SerializedTypes } from '../SerializedType';
-import type { Value } from './Value';
 import { UnknownValue } from './Unknown';
 import { Scalar } from './Scalar';
 import { EmptyColumn } from './EmptyColumn';
@@ -12,11 +10,16 @@ import { Table } from './Table';
 import { NumberValue } from './Number';
 import { Range } from './Range';
 import { Row } from './Row';
+import type {
+  SerializedType,
+  SerializedTypes,
+  Value,
+} from '@decipad/language-interfaces';
 
 // eslint-disable-next-line complexity
 export const defaultValue = (
   type: Type | SerializedType | SerializedType['kind'] | undefined
-): Value => {
+): Value.Value => {
   if (type == null) {
     return UnknownValue;
   }

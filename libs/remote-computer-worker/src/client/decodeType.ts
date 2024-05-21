@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import { hydrateType, type SerializedType } from '@decipad/language-types';
+import { hydrateType } from '@decipad/language-types';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { decodeString } from './decodeString';
 
 export const decodeType = (

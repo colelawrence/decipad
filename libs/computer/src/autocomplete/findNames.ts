@@ -1,10 +1,10 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AutocompleteName, AST } from '@decipad/language';
+import type { AST, AutocompleteName } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { serializeType } from '@decipad/language';
+import type { Program } from '@decipad/computer-interfaces';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { getExprRef, isExprRef } from '../exprRefs';
-import type { Computer, Program } from '..';
+import type { Computer } from '../computer';
 
 export function* findNames(
   computer: Computer,

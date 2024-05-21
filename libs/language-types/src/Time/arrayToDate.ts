@@ -1,4 +1,4 @@
-import type * as AST from '../AST';
+import type { AST } from '@decipad/language-interfaces';
 import { getDateSegment } from './getDateSegment';
 
 export function arrayToDate(

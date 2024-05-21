@@ -1,26 +1,25 @@
 import { first } from '@decipad/generator-utils';
 import { MappedColumn as MappedColumnBase } from '@decipad/column';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
+import { once } from '@decipad/utils';
+import type { Result, Value } from '@decipad/language-interfaces';
+import { isColumnLike } from './ColumnLike';
 import { Column } from './Column';
-import type { OneResult } from '../Result';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { columnValueToValueGeneratorFunction } from './columnValueToValueGeneratorFunction';
 import { lowLevelGet } from './lowLevelGet';
-import { once } from '@decipad/utils';
 
 export class MappedColumn
-  extends MappedColumnBase<Value>
-  implements ColumnLikeValue
+  extends MappedColumnBase<Value.Value>
+  implements Value.ColumnLikeValue
 {
-  private sourceColumn: ColumnLikeValue;
+  private sourceColumn: Value.ColumnLikeValue;
 
-  constructor(source: ColumnLikeValue, map: number[]) {
+  constructor(source: Value.ColumnLikeValue, map: number[]) {
     super(source, map);
     this.sourceColumn = source;
   }
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return columnValueToResultValue(this);
   }
 
@@ -38,7 +37,7 @@ export class MappedColumn
   }
 
   static fromColumnValueAndMap(
-    column: ColumnLikeValue,
+    column: Value.ColumnLikeValue,
     map: number[]
   ): MappedColumn {
     return new MappedColumn(

@@ -1,8 +1,4 @@
-import type {
-  RemoteComputer,
-  Parseable,
-  ParseableDate,
-} from '@decipad/remote-computer';
+import type { Parser, RemoteComputer } from '@decipad/remote-computer';
 import type {
   MyElement,
   VariableDefinitionElement,
@@ -107,7 +103,9 @@ export const useTurnIntoProps = (
   };
 };
 
-const getWidgetOptionByType = (type: Parseable | ParseableDate) => {
+const getWidgetOptionByType = (
+  type: Parser.Parseable | Parser.ParseableDate
+) => {
   switch (type?.kind) {
     case 'boolean':
       return [{ title: 'Toggle Widget', value: 'toggle' }];

@@ -1,6 +1,4 @@
-import type { ColumnLikeValue } from './ColumnLike';
 import { isColumnLike } from './ColumnLike';
-import type { Value } from './Value';
 import { EmptyColumn } from './EmptyColumn';
 import type { AnyMapping } from '@decipad/utils';
 import {
@@ -9,28 +7,31 @@ import {
   getInstanceof,
   unzip,
 } from '@decipad/utils';
+import type { Result, Value } from '@decipad/language-interfaces';
 import { RuntimeError } from '../RuntimeError';
-import type { OneResult } from '../Result';
 import type { TableValue } from './TableValue';
 import { GeneratorTable } from './GeneratorTable';
 
 export class Table implements TableValue {
-  columns: ColumnLikeValue[];
+  columns: Value.ColumnLikeValue[];
   columnNames: string[];
 
-  constructor(columns: ColumnLikeValue[], columnNames: string[]) {
+  constructor(columns: Value.ColumnLikeValue[], columnNames: string[]) {
     this.columns = columns;
     this.columnNames = columnNames;
   }
 
-  static fromNamedColumns(columns: Value[] = [], columnNames: string[] = []) {
+  static fromNamedColumns(
+    columns: Value.Value[] = [],
+    columnNames: string[] = []
+  ) {
     return new Table(
       columns.map((c) => (isColumnLike(c) ? c : new EmptyColumn([]))),
       columnNames
     );
   }
 
-  static fromMapping(mapping: AnyMapping<ColumnLikeValue>) {
+  static fromMapping(mapping: AnyMapping<Value.ColumnLikeValue>) {
     const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
   }
@@ -47,15 +48,15 @@ export class Table implements TableValue {
     return this.columns[index];
   }
 
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return Promise.all(this.columns.map(async (column) => column.getData()));
   }
 
   async mapColumns(
     mapFn: (
-      col: ColumnLikeValue,
+      col: Value.ColumnLikeValue,
       index: number
-    ) => Promise<ColumnLikeValue> | ColumnLikeValue
+    ) => Promise<Value.ColumnLikeValue> | Value.ColumnLikeValue
   ): Promise<Table> {
     return Table.fromNamedColumns(
       await Promise.all(this.columns.map(mapFn)),
@@ -63,7 +64,9 @@ export class Table implements TableValue {
     );
   }
 
-  filterColumns(fn: (colName: string, col: ColumnLikeValue) => boolean): Table {
+  filterColumns(
+    fn: (colName: string, col: Value.ColumnLikeValue) => boolean
+  ): Table {
     const [names, columns] = filterUnzipped(this.columnNames, this.columns, fn);
 
     return Table.fromNamedColumns(columns, names);
@@ -71,7 +74,7 @@ export class Table implements TableValue {
 }
 
 export const isTableValue = (
-  v: Value | undefined | null
+  v: Value.Value | undefined | null
 ): v is Table | GeneratorTable =>
   (v instanceof Table || v instanceof GeneratorTable) &&
   v.columnNames != null &&

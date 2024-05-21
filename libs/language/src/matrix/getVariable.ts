@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Type, AST } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
@@ -9,6 +9,7 @@ import {
 } from '@decipad/language-types';
 import { getIdentifierString } from '../utils';
 import type { TRealm, TScopedInferContext } from '../scopedRealm';
+import type { AST } from '@decipad/language-interfaces';
 
 export const getIndexName = (type: Type) =>
   type.indexedBy ?? type.indexName ?? null;

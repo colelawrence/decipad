@@ -2,13 +2,14 @@
 /* eslint-disable no-await-in-loop */
 import DeciNumber, { min, max, ZERO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Unit } from '@decipad/language-types';
+import type { Type, Unit } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   RuntimeError,
   Value,
   convertBetweenUnits,
 } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
 import { predicateSymbols } from './inferTiered';
@@ -144,7 +145,7 @@ const iterateTier = async (
 export const evaluateTiered = async (
   realm: TRealm,
   node: AST.Tiered
-): Promise<Value.Value> => {
+): Promise<ValueTypes.Value> => {
   const [initial, ...tierDefs] = node.args;
   const initialNumber = getInstanceof(
     await (await evaluate(realm, initial)).getData(),

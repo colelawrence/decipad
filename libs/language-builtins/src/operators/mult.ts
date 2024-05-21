@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language-types';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Type } from '@decipad/language-types';
 import { coherceToFraction } from '../utils/coherceToFraction';

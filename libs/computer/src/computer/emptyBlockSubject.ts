@@ -1,7 +1,10 @@
-import { once } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
+import { once } from '@decipad/utils';
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 import { defaultBlockResults } from '../resultStreams/defaultBlockResults';
-import type { IdentifiedError, IdentifiedResult } from '../types';
 
 export const emptyBlockResultSubject = once(
   () =>

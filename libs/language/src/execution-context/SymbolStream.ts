@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import type { Type, Value } from '..';
+import type { Type, Value } from '@decipad/language-interfaces';
 import type { SymbolStream } from './ExecutionContextType';
 
 export const createSymbolStream = (

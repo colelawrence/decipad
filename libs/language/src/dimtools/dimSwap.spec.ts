@@ -5,6 +5,7 @@ import {
   buildType as t,
   Value,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
 setupDeciNumberSnapshotSerializer();
@@ -14,7 +15,7 @@ const twoDColumnVal = Value.fromJS([
   [1n, 2n],
   [3n, 4n],
   [5n, 6n],
-]) as Value.ColumnLikeValue;
+]) as ValueTypes.ColumnLikeValue;
 
 it('does nothing if wanted dimension is already dominant', async () => {
   expect(await dimSwapTypes('Y', twoDColumn)).toEqual(

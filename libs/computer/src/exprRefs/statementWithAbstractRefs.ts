@@ -1,10 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
-import { type AST, walkAst } from '@decipad/language';
+import { walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
+import type { AST } from '@decipad/language-interfaces';
 import { getIdentifierString } from '../utils';
 import type { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';
-import { isExprRef } from '.';
+import { isExprRef } from './exprRef';
 
 export const statementWithAbstractRefs = <T extends AST.Statement>(
   stmt: T,

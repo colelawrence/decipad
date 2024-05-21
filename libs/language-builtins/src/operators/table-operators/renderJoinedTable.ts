@@ -7,13 +7,18 @@ import {
   zip,
 } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import type { Result, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+import {
+  Unknown,
+  type Result,
+  type Value as ValueTypes,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { Unknown, Value } from '@decipad/language-types';
+import { Value } from '@decipad/language-types';
 import { getDefined, getInstanceof, getTrue } from '@decipad/utils';
 
 const validateRenderJoinedTableParams = (
-  sourceTables: Value.Value[],
+  sourceTables: ValueTypes.Value[],
   sourceTableTypes: Type[]
 ) => {
   const expectedLength = sourceTables.length;
@@ -35,7 +40,7 @@ const toGen = (result: Result.OneResult): AsyncGenerator<Result.OneResult> => {
 };
 
 const valueToGen = async (
-  value: Value.Value
+  value: ValueTypes.Value
 ): Promise<AsyncGenerator<Result.OneResult>> => {
   return toGen(await value.getData());
 };
@@ -113,10 +118,10 @@ const renderJoinedColumns = async (
   })();
 };
 export const joinedTable = async (
-  sourceTables: Value.Value[],
+  sourceTables: ValueTypes.Value[],
   sourceTableTypes: Type[],
   targetColumnType: Type,
-  condition: Value.ColumnLikeValue
+  condition: ValueTypes.ColumnLikeValue
 ): Promise<Value.TableValue> => {
   validateRenderJoinedTableParams(sourceTables, sourceTableTypes);
 

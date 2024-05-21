@@ -3,8 +3,8 @@ import type { Unit } from '@decipad/language-units';
 import { deserializeType, serializeType } from './serialization';
 import { InferError } from '../InferError';
 import * as t from './Type';
-import type { SerializedType } from '../SerializedType';
 import { U } from '../testUtils';
+import type { SerializedType } from '@decipad/language-interfaces';
 
 setupDeciNumberSnapshotSerializer();
 

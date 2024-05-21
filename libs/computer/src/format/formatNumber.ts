@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language';
+import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Unit } from '@decipad/language';
 import type DeciNumber from '@decipad/number';

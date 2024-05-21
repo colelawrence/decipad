@@ -1,10 +1,10 @@
 import { getOnly } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Type, isPendingType } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { valueTransforms } from '@decipad/language-builtins';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { inferExpression } from '../infer';
 import { getIdentifierString } from '../utils';
 import {
@@ -37,7 +37,7 @@ export async function inferMatrixRef(
 export async function evaluateMatrixRef(
   realm: TRealm,
   ref: AST.MatrixRef
-): Promise<Value.ColumnLikeValue> {
+): Promise<ValueTypes.ColumnLikeValue> {
   const {
     args: [varName, matchers],
   } = ref;
@@ -95,7 +95,7 @@ export async function inferMatrixAssign(
 export async function evaluateMatrixAssign(
   realm: TRealm,
   assign: AST.MatrixAssign
-): Promise<Value.ColumnLikeValue> {
+): Promise<ValueTypes.ColumnLikeValue> {
   const [varRef, matchers] = assign.args;
 
   const varName = getIdentifierString(varRef);

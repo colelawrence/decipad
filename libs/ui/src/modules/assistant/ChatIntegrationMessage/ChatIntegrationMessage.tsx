@@ -1,16 +1,16 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
+import { Fragment, useCallback, useContext, useState, useEffect } from 'react';
+import { css } from '@emotion/react';
+import { EElementOrText } from '@udecode/plate-common';
+import copyToClipboard from 'copy-to-clipboard';
+import { nanoid } from 'nanoid';
 import { useWorker } from '@decipad/editor-hooks';
 import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { EElementOrText } from '@udecode/plate-common';
-import copyToClipboard from 'copy-to-clipboard';
-import { nanoid } from 'nanoid';
-import { Fragment, useCallback, useContext, useState, useEffect } from 'react';
 import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';
 import {
   componentCssVars,
@@ -24,11 +24,11 @@ import {
   importFromUnknownJson,
 } from '@decipad/import';
 import { useToast } from '@decipad/toast';
+import type { Result } from '@decipad/remote-computer';
 import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { ResultPreview } from './ResultPreview';
 import { SecretInput } from './SecretInput';
-import { Result } from '@decipad/computer';
 
 const wrapperStyles = css({
   display: 'flex',

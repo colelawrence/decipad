@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { BracketError } from '@decipad/remote-computer';
+import type { Parser } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { FC, useContext } from 'react';
 import { Tooltip } from '../../../shared';
@@ -42,13 +42,13 @@ interface CodeErrorProps {
   message: string;
   url?: string;
   detailMessage?: string;
-  bracketError?: BracketError;
+  bracketError?: Parser.BracketError;
   defaultDocsMessage?: string;
   isEmptyExpressionError?: boolean;
   variant?: 'default' | 'smol';
 }
 
-const bracketErrorMessage = (err: BracketError) => {
+const bracketErrorMessage = (err: Parser.BracketError) => {
   switch (err.type) {
     case 'never-opened':
       return `Closed a bracket "${err.close.text}" that was never opened`;

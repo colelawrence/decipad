@@ -1,8 +1,7 @@
 import stringify from 'json-stringify-safe';
 import nearley, { Parser as NearleyParser } from 'nearley';
 import { getDefined } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { compiledGrammar, tokenize } from '../grammar';
 import type { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';

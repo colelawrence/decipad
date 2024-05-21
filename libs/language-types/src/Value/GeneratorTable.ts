@@ -1,9 +1,5 @@
+import type { Result } from '@decipad/language-interfaces';
 import { RuntimeError } from '../RuntimeError';
-import type {
-  GenericResultGenerator,
-  OneResult,
-  ResultGenerator,
-} from '../Result';
 import type { TableValue } from './TableValue';
 import { count, first, map, slice, unzip } from '@decipad/generator-utils';
 import { GeneratorColumn } from './GeneratorColumn';
@@ -17,7 +13,7 @@ import {
 type TableRowGenerator = (
   start?: number,
   end?: number
-) => AsyncGenerator<OneResult[]>;
+) => AsyncGenerator<Result.OneResult[]>;
 
 export class GeneratorTable implements TableValue {
   generateRows: TableRowGenerator;
@@ -87,7 +83,7 @@ export class GeneratorTable implements TableValue {
   }
 
   private async getColumnsOneResultGenFunctions<T>(
-    mapFns: ((result: OneResult) => T)[]
+    mapFns: ((result: Result.OneResult) => T)[]
   ) {
     return first(unzip(this.generateRows(), this.columnNames.length)).then(
       (colGens) =>
@@ -101,8 +97,8 @@ export class GeneratorTable implements TableValue {
 
   private async getColumnOneResultGenFunction<T>(
     index: number,
-    mapFn: (result: OneResult) => T
-  ): Promise<GenericResultGenerator<T>> {
+    mapFn: (result: Result.OneResult) => T
+  ): Promise<Result.GenericResultGenerator<T>> {
     return first(unzip(this.generateRows(), this.columnNames.length)).then(
       (colGens) => {
         const colGen = colGens[index];
@@ -115,13 +111,13 @@ export class GeneratorTable implements TableValue {
     );
   }
 
-  async getData(): Promise<ResultGenerator[]> {
+  async getData(): Promise<Result.ResultGenerator[]> {
     // we need to transform the data from row-oriented to column-oriented
     // here, unzip emits an array of generators as its first and sole value, each of which emits a column
     return first(unzip(this.generateRows(), this.columnNames.length)).then(
       (colGens) =>
         colGens.map(
-          (colGen): ResultGenerator =>
+          (colGen): Result.ResultGenerator =>
             (start = 0, end = Infinity) =>
               slice(colGen, start, end)
         )

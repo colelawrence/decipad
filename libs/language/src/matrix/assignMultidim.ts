@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
@@ -9,6 +9,11 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
+import type {
+  AST,
+  Value as ValueType,
+  Value as ValueTypes,
+} from '@decipad/language-interfaces';
 import { evaluate } from '../interpreter';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
@@ -31,14 +36,15 @@ export async function inferMultidimAssignment(
 export async function evaluateMultidimAssignment(
   realm: TRealm,
   node: AST.MatrixAssign,
-  dimension: Value.ColumnLikeValue
-): Promise<Value.ColumnLikeValue> {
+  dimension: ValueTypes.ColumnLikeValue
+): Promise<ValueTypes.ColumnLikeValue> {
   const [, matchers, assigneeExp] = node.args;
   const [matchCount, matches] = await matchTargets(realm, matchers);
 
   const assignee = await evaluate(realm, assigneeExp);
 
-  let getAssignee = async (): Promise<Value.Value> => Promise.resolve(assignee);
+  let getAssignee = async (): Promise<ValueType.Value> =>
+    Promise.resolve(assignee);
   if (Value.isColumnLike(assignee)) {
     // There must be one item for each match
     if ((await assignee.rowCount()) !== matchCount) {

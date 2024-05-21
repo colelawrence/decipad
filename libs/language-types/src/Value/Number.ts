@@ -1,8 +1,8 @@
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 
-export class NumberValue implements Value {
+export class NumberValue implements Value.Value {
   readonly value: DeciNumber;
 
   constructor(varValue: number | bigint | DeciNumber) {

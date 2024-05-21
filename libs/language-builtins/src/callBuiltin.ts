@@ -1,7 +1,7 @@
 import DeciNumber from '@decipad/number';
 import { getDefined, getOnly } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, ContextUtils, Type } from '@decipad/language-types';
+import type { ContextUtils, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
@@ -11,6 +11,7 @@ import {
   autoconvertArguments,
   autoconvertResult,
 } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { getOperatorByName } from './operators';
 import { type FullBuiltinSpec } from './interfaces';
 import { type BuiltinContextUtils, type CallBuiltin } from './types';
@@ -38,10 +39,10 @@ async function shouldAutoconvert(types: Type[]): Promise<boolean> {
 const createLowerDimFn =
   (builtin: FullBuiltinSpec, argNodes: AST.Expression[]) =>
   async (
-    argsLowerDims: Value.Value[],
+    argsLowerDims: ValueTypes.Value[],
     typesLowerDims: Type[],
     context: ContextUtils
-  ): Promise<Value.Value> => {
+  ): Promise<ValueTypes.Value> => {
     if (
       !builtin.likesUnknowns &&
       argsLowerDims.some((d) => d === Value.UnknownValue)
@@ -64,10 +65,10 @@ const createLowerDimFn =
 async function callBuiltinAfterAutoconvert(
   context: BuiltinContextUtils,
   builtin: FullBuiltinSpec,
-  args: Value.Value[],
+  args: ValueTypes.Value[],
   argTypes: Type[],
   argNodes: AST.Expression[]
-): Promise<Value.Value> {
+): Promise<ValueTypes.Value> {
   if (builtin.fnValuesNoAutomap) {
     return builtin.fnValuesNoAutomap(args, argTypes, context, argNodes);
   }
@@ -104,9 +105,9 @@ async function callBuiltinAfterAutoconvert(
 }
 
 const maybeFixArgs = async (
-  args: Value.Value[],
+  args: ValueTypes.Value[],
   argTypes: Type[]
-): Promise<Value.Value[]> => {
+): Promise<ValueTypes.Value[]> => {
   return Promise.all(
     args.map(async (value, index) => {
       const type = argTypes[index];

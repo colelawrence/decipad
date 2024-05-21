@@ -1,12 +1,12 @@
 import { getDefined } from '@decipad/utils';
-import type { OneResult } from '../Result';
-import { isResultGenerator } from '../utils';
 import { firstOrUndefined } from '@decipad/generator-utils';
+import type { Result } from '@decipad/language-interfaces';
+import { isResultGenerator } from '../utils';
 
 export async function lowLowLevelGet(
-  valueHere: OneResult | undefined,
+  valueHere: Result.OneResult | undefined,
   keys: number[]
-): Promise<OneResult> {
+): Promise<Result.OneResult> {
   if (isResultGenerator(valueHere)) {
     const [index, ...rest] = keys;
     return lowLowLevelGet(

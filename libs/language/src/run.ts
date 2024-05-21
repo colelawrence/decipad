@@ -1,11 +1,11 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Result, Type } from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
 import {
   Unknown,
-  isErrorType,
-  materializeOneResult,
-} from '@decipad/language-types';
+  type AST,
+  type Result,
+  type Type,
+} from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { isErrorType, materializeOneResult } from '@decipad/language-types';
 import type { ExternalDataMap, TRealm, TScopedInferContext } from '.';
 import {
   ScopedRealm,

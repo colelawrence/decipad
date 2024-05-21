@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Result, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   Value,
@@ -9,10 +9,12 @@ import {
 } from '@decipad/language-types';
 import type DeciNumber from '@decipad/number';
 import type { PromiseOrType } from '@decipad/utils';
+import { zip } from '@decipad/generator-utils';
+import type { Result, Value as ValueTypes } from '@decipad/language-interfaces';
+
 import type { Evaluator, FullBuiltinSpec, Functor } from '../interfaces';
 import { reverseFunctor } from './reverseFunctor';
 import { reverseEvaluator } from './reverseEvaluator';
-import { zip } from '@decipad/generator-utils';
 
 export type BinopPrimitiveEval = (
   n1: Result.OneResult,
@@ -117,9 +119,9 @@ export const binopBuiltin = (
   }: BinopNumericBuiltinProps
 ): FullBuiltinSpec[] => {
   const applyValues = async (
-    [n1, n2]: Value.Value[],
+    [n1, n2]: ValueTypes.Value[],
     types: Type[]
-  ): Promise<Value.Value> =>
+  ): Promise<ValueTypes.Value> =>
     Value.Scalar.fromValue(
       await primitiveEval(await n1.getData(), await n2.getData(), types)
     );

@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
 import type {
   Result,
   SerializedType,
   SerializedTypeKind,
-} from '@decipad/language-types';
+} from '@decipad/language-interfaces';
 import { validateResult } from '../validateResult';
 
 const VALIDATION_DISABLED_MESSAGE =

@@ -1,6 +1,5 @@
 import { getDefined } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import { type AST, type Value } from '@decipad/language-types';
+import { type AST, type Value } from '@decipad/language-interfaces';
 import { withPush, type TRealm } from '../scopedRealm';
 import { prettyPrintAST } from '../parser/utils';
 

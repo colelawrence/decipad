@@ -1,20 +1,18 @@
-import { type Result } from '..';
-import { type OneResult } from '../Result';
-import { type Value } from './Value';
+import type { Result, Value } from '@decipad/language-interfaces';
 
 export interface TreeColumn {
   name: string;
   aggregation?: Result.Result | undefined;
 }
-export class Tree implements Value {
-  root: OneResult;
+export class Tree implements Value.Value {
+  root: Result.OneResult;
   rootAggregation: Result.Result | undefined;
   originalCardinality: number;
   children: Tree[];
   columns: TreeColumn[];
 
   constructor(
-    root: OneResult,
+    root: Result.OneResult,
     rootAggregation: Result.Result | undefined,
     children: Tree[],
     columns: TreeColumn[],
@@ -32,16 +30,16 @@ export class Tree implements Value {
     this.columns = columns;
     this.originalCardinality = originalCardinality;
   }
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return this;
   }
 
-  static empty(root: OneResult) {
+  static empty(root: Result.OneResult) {
     return new Tree(root, undefined, [], []);
   }
 
   static from(
-    root: OneResult,
+    root: Result.OneResult,
     rootAggregation: Result.Result | undefined,
     children: Tree[],
     columns: TreeColumn[],

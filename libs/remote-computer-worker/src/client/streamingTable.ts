@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
 import type {
   SerializedType,
   Result,
   SerializedTypes,
-} from '@decipad/language-types';
+} from '@decipad/language-interfaces';
 import { decodeString } from './decodeString';
 import type { ClientWorkerContext, StreamingValue } from './types';
 import type { RecursiveDecoder } from './valueDecoder';

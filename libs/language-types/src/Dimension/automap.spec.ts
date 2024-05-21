@@ -8,9 +8,9 @@ import {
   automapValuesForReducer,
 } from './automap';
 import { materializeOneResult } from '../utils/materializeOneResult';
-import type { Value } from '../Value';
 import { Column, Scalar, Table, fromJS, getColumnLike } from '../Value';
 import { makeContext } from './testUtils';
+import type { Value } from '@decipad/language-interfaces';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -24,7 +24,7 @@ const bool = t.boolean();
 const num = t.number();
 const str = t.string();
 
-const sumOne = async ([val]: Value[]): Promise<Value> => {
+const sumOne = async ([val]: Value.Value[]): Promise<Value.Value> => {
   let sum = ZERO;
   for await (const v of getColumnLike(val).values()) {
     sum = sum.add((await v.getData()) as DeciNumber);
@@ -265,7 +265,7 @@ describe('automapValues', () => {
 
     const scalar = fromJS(2);
 
-    const calledOnValues: Value[] = [];
+    const calledOnValues: Value.Value[] = [];
     const result = await automapValues(
       makeContext(),
       [t.column(t.column(t.column(t.number()))), t.number()],
@@ -423,7 +423,7 @@ describe('automapValues', () => {
   });
 
   describe('automapping', () => {
-    const combine = async (values: Value[]) =>
+    const combine = async (values: Value.Value[]) =>
       fromJS(
         (await Promise.all(values.map(async (v) => v.getData())))
           .map(String)
@@ -483,7 +483,7 @@ describe('automapValues', () => {
         makeContext(),
         [t.column(t.number()), t.column(t.number())],
         args,
-        async ([a1, a2]: Value[]) => {
+        async ([a1, a2]: Value.Value[]) => {
           const v1 = (await a1.getData()) as DeciNumber;
           const v2 = (await a2.getData()) as DeciNumber[];
 

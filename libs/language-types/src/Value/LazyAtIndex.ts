@@ -1,14 +1,11 @@
 import { getDefined } from '@decipad/utils';
-import type { ColumnLikeValue } from './ColumnLike';
+import type { Result, Value } from '@decipad/language-interfaces';
 import { values } from '../utils/values';
-import type { Value } from './Value';
-import type { OneResult } from '../Result';
-import type { LowLevelMinimalTensor } from './LowLevelMinimalTensor';
 import { isLowLevelMinimalTensor } from '../utils/isLowLevelMinimalTensor';
 import { getDimensionLength } from '../utils/getDimensionLength';
 import { projectHypercube } from '../utils/projectHypercube';
 
-type TLazyAtIndex = ColumnLikeValue & LowLevelMinimalTensor;
+type TLazyAtIndex = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
 /**
  * Used to lazily lookup into a hypercube
@@ -22,9 +19,9 @@ type TLazyAtIndex = ColumnLikeValue & LowLevelMinimalTensor;
  */
 class LazyAtIndex implements TLazyAtIndex {
   index: number;
-  innerHC: ColumnLikeValue;
+  innerHC: Value.ColumnLikeValue;
 
-  constructor(innerHC: ColumnLikeValue, index: number) {
+  constructor(innerHC: Value.ColumnLikeValue, index: number) {
     this.innerHC = innerHC;
     this.index = index;
   }
@@ -41,13 +38,13 @@ class LazyAtIndex implements TLazyAtIndex {
     return this.innerHC.lowLevelGet(this.index, ...indices);
   }
 
-  async lowLowLevelGet(...indices: number[]): Promise<OneResult> {
+  async lowLowLevelGet(...indices: number[]): Promise<Result.OneResult> {
     return isLowLevelMinimalTensor(this.innerHC)
       ? this.innerHC.lowLowLevelGet(this.index, ...indices)
       : (await this.innerHC.lowLevelGet(this.index, ...indices)).getData();
   }
 
-  values(start = 0, end = Infinity): AsyncGenerator<Value> {
+  values(start = 0, end = Infinity): AsyncGenerator<Value.Value> {
     return values(this, start, end);
   }
 
@@ -59,7 +56,7 @@ class LazyAtIndex implements TLazyAtIndex {
     return getDimensionLength(firstDim.dimensionLength);
   }
 
-  async atIndex(i: number): Promise<Value> {
+  async atIndex(i: number): Promise<Value.Value> {
     if ((await this.dimensions()).length === 1) {
       return this.lowLevelGet(i);
     } else {
@@ -67,17 +64,17 @@ class LazyAtIndex implements TLazyAtIndex {
     }
   }
 
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return projectHypercube(this);
   }
 }
 
 export const createLazyAtIndex = async (
-  innerHC: ColumnLikeValue,
+  innerHC: Value.ColumnLikeValue,
   index: number
-): Promise<ColumnLikeValue> => {
+): Promise<Value.ColumnLikeValue> => {
   const { dimensionLength } = (await innerHC.dimensions())[0];
-  if (index < 0 || index >= dimensionLength) {
+  if (index < 0 || index >= (await getDimensionLength(dimensionLength))) {
     throw new Error(`panic: index ${index} out of bounds`);
   }
   return new LazyAtIndex(innerHC, index);

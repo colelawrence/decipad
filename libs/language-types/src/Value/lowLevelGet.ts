@@ -1,12 +1,12 @@
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined } from '@decipad/utils';
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 import { isColumnLike } from './ColumnLike';
 
 export function lowLevelGet(
-  valueHere: Value | undefined,
+  valueHere: Value.Value | undefined,
   keys: number[]
-): PromiseOrType<Value> {
+): PromiseOrType<Value.Value> {
   if (isColumnLike(valueHere)) {
     return valueHere.lowLevelGet(...keys);
   } else if (keys.length) {

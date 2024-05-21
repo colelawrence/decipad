@@ -1,19 +1,17 @@
 import stringify from 'json-stringify-safe';
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Result } from '@decipad/language';
+import type { AST, Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   astNode,
   getResultGenerator,
   parseBlock,
   parseStatementOrThrow,
+  prettyPrintAST,
   validateResult,
 } from '@decipad/language';
 import DeciNumber, { N } from '@decipad/number';
 import { getOnly, timeout } from '@decipad/utils';
 import { all } from '@decipad/generator-utils';
-import type { Program } from '.';
-import { Computer, prettyPrintAST } from '.';
 import type {
   ComputerProgram,
   IdentifiedBlock,
@@ -21,7 +19,9 @@ import type {
   IdentifiedResult,
   NotebookResults,
   ProgramBlock,
-} from './types';
+  Program,
+} from '@decipad/computer-interfaces';
+import { Computer } from '.';
 import { getDefinedSymbol, getIdentifierString } from './utils';
 import { programToComputerProgram } from './utils/programToComputerProgram';
 import type { Unit } from '@decipad/language-units';

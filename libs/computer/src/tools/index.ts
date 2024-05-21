@@ -1,1 +1,1 @@
-export { unnestTableRows, type ResultAndLabelInfo } from './unnestTableRows';
+export { unnestTableRows } from './unnestTableRows';

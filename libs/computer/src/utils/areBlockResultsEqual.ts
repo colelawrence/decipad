@@ -1,5 +1,8 @@
 import { dequal } from '@decipad/utils';
-import type { IdentifiedResult, IdentifiedError } from '../types';
+import type {
+  IdentifiedResult,
+  IdentifiedError,
+} from '@decipad/computer-interfaces';
 
 type BlockResult = IdentifiedResult | IdentifiedError;
 

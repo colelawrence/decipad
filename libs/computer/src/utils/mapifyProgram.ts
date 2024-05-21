@@ -1,5 +1,7 @@
-import type { ProgramBlock } from '..';
-import type { ComputerProgram } from '../types';
+import type {
+  ComputerProgram,
+  ProgramBlock,
+} from '@decipad/computer-interfaces';
 
 export const mapifyProgram = (
   blocks: ProgramBlock[]

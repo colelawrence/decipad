@@ -1,25 +1,24 @@
 import { first } from '@decipad/generator-utils';
 import { FilteredColumn as FilteredColumnBase } from '@decipad/column';
-import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
+import { once } from '@decipad/utils';
+import type { Result, Value } from '@decipad/language-interfaces';
+import { isColumnLike } from './ColumnLike';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { lowLevelGet } from './lowLevelGet';
-import type { OneResult } from '../Result';
-import { once } from '@decipad/utils';
 
 export class FilteredColumn
-  extends FilteredColumnBase<Value>
-  implements ColumnLikeValue
+  extends FilteredColumnBase<Value.Value>
+  implements Value.ColumnLikeValue
 {
-  private sourceColumn2: ColumnLikeValue;
+  private sourceColumn2: Value.ColumnLikeValue;
 
-  constructor(column: ColumnLikeValue, map: boolean[]) {
+  constructor(column: Value.ColumnLikeValue, map: boolean[]) {
     super(column, map);
     this.sourceColumn2 = column;
   }
 
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return columnValueToResultValue(this);
   }
 
@@ -42,7 +41,7 @@ export class FilteredColumn
   }
 
   static fromColumnValueAndMap(
-    column: ColumnLikeValue,
+    column: Value.ColumnLikeValue,
     map: boolean[]
   ): FilteredColumn {
     return new FilteredColumn(column, map);

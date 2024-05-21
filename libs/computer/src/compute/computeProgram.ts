@@ -1,6 +1,7 @@
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type {
-  AST,
   TScopedInferContext,
   TScopedRealm,
   Type,
@@ -10,7 +11,6 @@ import {
   buildType as t,
   RuntimeError,
   Value,
-  Unknown,
   evaluateStatement,
   inferBlock,
   serializeResult,
@@ -19,8 +19,11 @@ import {
   isFunctionType,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
+import type {
+  ComputerProgram,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 import { captureException } from '../reporting';
-import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getBlockFromProgram } from '../utils';
 import type {
   CacheContents,
@@ -41,10 +44,10 @@ const internalComputeStatement = async (
   program: ComputerProgram,
   blockId: string,
   computer: Computer
-): Promise<[IdentifiedResult, Value.Value | undefined]> => {
+): Promise<[IdentifiedResult, ValueTypes.Value | undefined]> => {
   const realm = computer.computationRealm;
   const cachedResult = realm.getFromCache(blockId);
-  let value: Value.Value | undefined;
+  let value: ValueTypes.Value | undefined;
 
   const block = getBlockFromProgram(program, blockId);
   if (block && cachedResult) {
@@ -142,7 +145,7 @@ const computeStatement = async (
   program: ComputerProgram,
   blockId: string,
   computer: Computer
-): Promise<[IdentifiedResult, Value.Value | undefined]> => {
+): Promise<[IdentifiedResult, ValueTypes.Value | undefined]> => {
   const [resultWithAbstractRefs, value] = await internalComputeStatement(
     program,
     blockId,

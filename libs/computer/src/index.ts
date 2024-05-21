@@ -1,107 +1,72 @@
+export * from './computer';
 // eslint-disable-next-line no-restricted-imports
 export {
-  AST,
-  CurrencyUnits,
-  InferError,
-  type TRealm,
-  ScopedRealm,
-  Result,
-  getResultGenerator,
-  RuntimeError,
-  Time,
-  Type,
-  Unit,
-  Unknown,
-  Value,
   areUnitsConvertible,
-  buildType,
-  buildResult,
-  convertBetweenUnits,
-  currencyUnits,
-  deserializeType,
-  getUnitByName,
-  materializeOneResult,
-  serializeType,
   astNode,
-  identifierRegExpGlobal,
-  isExpression,
+  buildResult,
+  buildType,
+  currencyUnits,
+  convertBetweenUnits,
+  decilang,
+  deserializeType,
   getBuiltinsForAutocomplete,
   getConstantByName,
-  parseBlockOrThrow,
-  parseStatementOrThrow,
-  parseExpressionOrThrow,
-  parseStatement,
-  parseExpression,
+  getResultGenerator,
+  getUnitByName,
+  hydrateType,
+  identifierRegExpGlobal,
+  inferBlock,
+  InferError,
+  isExpression,
+  isResultGenerator,
+  makeInferContext,
+  materializeOneResult,
+  materializeResult,
   parseBlock,
+  parseBlockOrThrow,
+  parseExpression,
+  parseExpressionOrThrow,
   parseSimpleValue,
   parseSimpleValueUnit,
+  parseStatement,
   parseUnit,
-  runCode,
-  type RunAstOptions,
-  STATEMENT_SEP_TOKEN_TYPE,
   prettyPrintAST,
-  serializeResult,
-  tokenize,
-  decilang,
-  inferBlock,
-  isStatement,
-  makeInferContext,
   runBlock,
-  simpleValueUnitToString,
+  runCode,
+  RuntimeError,
+  ScopedRealm,
+  serializeType,
+  serializeResult,
   simpleValueToString,
-  materializeResult,
+  STATEMENT_SEP_TOKEN_TYPE,
+  Time,
+  tokenize,
   tokenRules,
-  walkAst,
+  Unit,
   walkAstAsync,
-  isResultGenerator,
-  hydrateType,
-  type AutocompleteName,
-  type BracketError,
-  type Constant,
-  type ErrSpec,
-  type Parser,
-  type SerializedType,
-  type SerializedTypes,
-  type SerializedTypeKind,
-  type SimpleValueAST,
-  type SimpleValue,
-  type Token,
-  type UnitOfMeasure,
 } from '@decipad/language';
-
+// eslint-disable-next-line no-restricted-imports
+export type {
+  RunAstOptions,
+  SimpleValue,
+  SimpleValueAST,
+  Token,
+} from '@decipad/language';
+export * as Format from './format';
+export { materializeColumnDesc, memoizedColumnResultGenerator } from './result';
+export { getExprRef, isExprRef, shadowExprRef } from './exprRefs';
 export {
-  isSyntaxError,
-  isBracketError,
   hasBracketError,
-  identifiedErrorToMessage,
-  isTypeError,
-  getDefinedSymbol,
-  statementToIdentifiedBlock,
+  hydrateResult,
   isColumn,
+  identifiedErrorToMessage,
+  isBracketError,
   isTable,
   isTableColumn,
   isTableResult,
+  isSyntaxError,
   selectErrorFromResult,
-  hydrateResult,
+  statementToIdentifiedBlock,
 } from './utils';
-
-export { unnestTableRows, type ResultAndLabelInfo } from './tools';
-
-export * from './computer';
-
-export * from './reporting';
-
-export { getExprRef, isExprRef, shadowExprRef } from './exprRefs';
-export type {
-  IdentifiedBlock,
-  BlockDependents,
-  DimensionExplanation,
-  ColumnDesc,
-  ComputeRequestWithExternalData,
-  MaterializedColumnDesc,
-} from './types';
-
-export * from './result';
-
-export * as Format from './format';
-export { type DeciNumberRep } from './format';
+export { unnestTableRows } from './tools/unnestTableRows';
+export { captureException, setErrorReporter } from './reporting';

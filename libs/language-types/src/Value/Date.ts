@@ -1,9 +1,9 @@
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 import type * as Time from '../Time';
 import { cleanDate } from '../Time/cleanDate';
 import { addTime } from '../Time/addTime';
 
-export class DateValue implements Value {
+export class DateValue implements Value.Value {
   specificity: Time.Specificity;
   moment: bigint | undefined;
 

@@ -1,9 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
-import { Unknown, Value, buildType } from '@decipad/language-types';
+import { Value, buildType } from '@decipad/language-types';
 import { makeContext } from '../../utils/testUtils';
 import { getInstanceof } from '@decipad/utils';
 import { N } from '@decipad/number';
 import { tree } from './tree';
+import { Unknown } from '@decipad/language-interfaces';
 
 describe('tree', () => {
   it('needs a table as first arg', async () => {

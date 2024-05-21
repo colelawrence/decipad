@@ -1,9 +1,6 @@
+import type { Result, SerializedType } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import {
-  Value,
-  type Result,
-  type SerializedType,
-} from '@decipad/language-types';
+import { Value } from '@decipad/language-types';
 import { N } from '@decipad/number';
 import stringify from 'json-stringify-safe';
 import type { PromiseOrType } from '@decipad/utils';

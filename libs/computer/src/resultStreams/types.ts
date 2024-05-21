@@ -1,5 +1,8 @@
 import type { BehaviorSubject, Observable } from 'rxjs';
-import type { IdentifiedError, IdentifiedResult } from '../types';
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 
 export type BlockResultStream = BehaviorSubject<
   IdentifiedResult | IdentifiedError

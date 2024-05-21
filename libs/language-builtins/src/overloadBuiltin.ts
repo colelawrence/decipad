@@ -9,6 +9,7 @@ import {
   isNumberType,
   type Type,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { FullBuiltinSpec, Functor, Evaluator } from './interfaces';
 import { dequal } from '@decipad/utils';
 
@@ -147,7 +148,7 @@ export const overloadBuiltin = (
 };
 
 export const getOverloadedTypeFromValue = (
-  val: Value.Value
+  val: ValueTypes.Value
 ): OverloadTypeName | null => {
   if (val instanceof Value.StringValue) {
     return 'string';

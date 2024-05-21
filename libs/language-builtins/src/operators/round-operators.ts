@@ -3,14 +3,8 @@ import DeciNumber, { N, ZERO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { singular } from '@decipad/language-utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  RuntimeError,
-  Time,
-  Type,
-  Unit,
-  Unknown,
-  Value,
-} from '@decipad/language-types';
+import { RuntimeError, Time, Type, Unit, Value } from '@decipad/language-types';
+import { Unknown } from '@decipad/language-interfaces';
 import { overloadBuiltin } from '../overloadBuiltin';
 import type { BuiltinSpec, Evaluator, FullBuiltinSpec } from '../interfaces';
 

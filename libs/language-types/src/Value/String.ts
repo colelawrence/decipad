@@ -1,6 +1,6 @@
-import type { Value } from './Value';
+import type { Value } from '@decipad/language-interfaces';
 
-export class StringValue implements Value {
+export class StringValue implements Value.Value {
   value: string;
   constructor(value: string) {
     this.value = value;

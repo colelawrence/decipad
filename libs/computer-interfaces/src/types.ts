@@ -1,8 +1,11 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Result, SerializedType, Parser } from '@decipad/language';
-import type { AnyMapping } from '@decipad/utils';
 import type { BehaviorSubject } from 'rxjs';
-import type { VisibleVariables } from './computer/getVisibleVariables';
+import type {
+  AST,
+  Result,
+  SerializedType,
+  Parser,
+} from '@decipad/language-interfaces';
+import type { AnyMapping } from '@decipad/utils';
 
 export type IdentifiedBlock = {
   type: 'identified-block';
@@ -120,3 +123,22 @@ export interface DimensionExplanation {
   labels: readonly string[] | undefined;
   dimensionLength: number;
 }
+
+export interface VisibleVariables {
+  global: ReadonlySet<string>;
+  local: ReadonlySet<string>;
+}
+
+export type LabelInfo = {
+  indexName?: string;
+  label?: string;
+  indexAtThisDimension: number;
+  lengthAtThisDimension: number;
+  productOfRemainingLengths?: number;
+  indexesOfRemainingLengthsAreZero?: boolean;
+};
+
+export type ResultAndLabelInfo = {
+  result: Result.Result;
+  labelInfo: LabelInfo[];
+};

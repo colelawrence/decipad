@@ -1,8 +1,10 @@
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
-import type * as Value from '../Value';
+// eslint-disable-next-line no-restricted-imports
+import type { Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { Unknown } from '@decipad/language-interfaces';
 import type { Specificity } from './Time';
-import { Unknown } from '../Unknown';
 import { toLuxonUTC } from './toLuxonUTC';
 
 export const subtractDates = async (

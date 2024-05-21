@@ -1,6 +1,6 @@
 import { produce } from '@decipad/utils';
-import type { AST } from '..';
-import type { Type } from '.';
+import type { AST } from '@decipad/language-interfaces';
+import type { Type } from './Type';
 
 export const onlyOneIsPercentage = (
   me: AST.NumberFormat | null,

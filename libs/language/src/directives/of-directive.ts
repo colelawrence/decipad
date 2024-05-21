@@ -1,12 +1,7 @@
 import { produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import {
-  type AST,
-  Dimension,
-  InferError,
-  type Type,
-  buildType as t,
-} from '@decipad/language-types';
+import { Dimension, InferError, buildType as t } from '@decipad/language-types';
+import type { AST, Type } from '@decipad/language-interfaces';
 import type { TRealm } from '..';
 import { inferExpression } from '..';
 import { evaluate } from '../interpreter';

@@ -1,11 +1,8 @@
-import type { Value } from '..';
-import type { Dimension } from '../Dimension/Dimension';
-import type { OneResult } from '../Result';
-import type { ColumnLikeValue } from './ColumnLike';
+import type { Result, Value, Dimension } from '@decipad/language-interfaces';
 
-export abstract class ColumnBase implements ColumnLikeValue {
+export abstract class ColumnBase implements Value.ColumnLikeValue {
   private dimensionsCache: undefined | Dimension[];
-  private dataCache: undefined | Promise<OneResult>;
+  private dataCache: undefined | Promise<Result.OneResult>;
   private rowCountCache: undefined | number;
 
   abstract getDimensions(): Promise<Dimension[]>;
@@ -16,8 +13,8 @@ export abstract class ColumnBase implements ColumnLikeValue {
     return this.dimensionsCache;
   }
 
-  abstract getGetData(): Promise<OneResult>;
-  async getData(): Promise<OneResult> {
+  abstract getGetData(): Promise<Result.OneResult>;
+  async getData(): Promise<Result.OneResult> {
     if (!this.dataCache) {
       this.dataCache = this.getGetData();
     }

@@ -1,7 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import { getDefined } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../../utils';
 import { parseBlock } from '../index';
 

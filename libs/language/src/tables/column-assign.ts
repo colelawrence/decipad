@@ -1,8 +1,9 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { getIdentifierString } from '../utils';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
@@ -51,7 +52,7 @@ export const inferColumnAssign = async (
 export async function evaluateColumnAssign(
   realm: TRealm,
   assign: AST.TableColumnAssign
-): Promise<Value.Value> {
+): Promise<ValueTypes.Value> {
   const [tableNameAst, tableColAst, expAst] = assign.args;
 
   const tableName = getIdentifierString(tableNameAst);

@@ -1,5 +1,4 @@
 export * from './ColumnSlice';
-export * from './Dimension';
 export * from './SwappedDimensions';
 export * from './chooseFirst';
 export * from './linearizeType';

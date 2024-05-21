@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
-// eslint-disable-next-line no-restricted-imports
-import type { Result, SerializedTypeKind } from '@decipad/language-types';
+import type { Result, SerializedTypeKind } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult } from '@decipad/language-types';
 import type { PromiseOrType } from '@decipad/utils';

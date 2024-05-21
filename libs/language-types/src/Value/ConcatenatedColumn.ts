@@ -1,23 +1,22 @@
 /* eslint-disable no-underscore-dangle */
 import { once } from '@decipad/utils';
-import type { Dimension } from '../Dimension';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { getDimensionLength } from '../utils/getDimensionLength';
 import { implementColumnLike } from '../utils/implementColumnLike';
-import type { ColumnLikeValue } from './ColumnLike';
 import type { MinimalTensor } from './MinimalTensor';
 import { lowLevelGet } from './lowLevelGet';
+import type { Dimension, Value } from '@decipad/language-interfaces';
 
 const ConcatenatedColumn = implementColumnLike(
   class ConcatenatedColumn implements MinimalTensor {
     readonly _dimensions: Dimension[];
-    readonly column1: ColumnLikeValue;
-    readonly column2: ColumnLikeValue;
+    readonly column1: Value.ColumnLikeValue;
+    readonly column2: Value.ColumnLikeValue;
 
     /** Construct a column that concatenates the values of 2 columns. */
     constructor(
-      column1: ColumnLikeValue,
-      column2: ColumnLikeValue,
+      column1: Value.ColumnLikeValue,
+      column2: Value.ColumnLikeValue,
       dimensions: Dimension[]
     ) {
       this._dimensions = dimensions;
@@ -55,9 +54,9 @@ const ConcatenatedColumn = implementColumnLike(
 );
 
 export const createConcatenatedColumn = async (
-  column1: ColumnLikeValue,
-  column2: ColumnLikeValue
-): Promise<ColumnLikeValue> => {
+  column1: Value.ColumnLikeValue,
+  column2: Value.ColumnLikeValue
+): Promise<Value.ColumnLikeValue> => {
   const [firstDim, ...restDims] = await column1.dimensions();
   const concatenatedDim = {
     dimensionLength: once(

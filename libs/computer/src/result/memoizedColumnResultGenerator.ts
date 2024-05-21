@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language';
+import type { Result } from '@decipad/language-interfaces';
 import { getDefined } from '@decipad/utils';
 
 const keyOf = (start: number, end: number) =>

@@ -1,22 +1,23 @@
 /* eslint-disable no-underscore-dangle */
-import type { Dimension } from '..';
-import type { ColumnLikeValue, MinimalTensor } from '../Value';
+import type { Value, Dimension } from '@decipad/language-interfaces';
+import type { MinimalTensor } from '../Value';
 import { lowLevelGet } from '../Value/lowLevelGet';
 import { implementColumnLike } from '../utils';
 import { getLabelIndex } from './getLabelIndex';
+import { getDimensionLength } from '../utils/getDimensionLength';
 
 const ColumnSlice = implementColumnLike(
   class _ColumnSlice implements MinimalTensor {
     readonly begin: number;
     readonly end: number;
-    readonly sourceColumn: ColumnLikeValue;
-    readonly _dimensions: Dimension.Dimension[];
+    readonly sourceColumn: Value.ColumnLikeValue;
+    readonly _dimensions: Dimension[];
 
     constructor(
-      sourceColumn: ColumnLikeValue,
+      sourceColumn: Value.ColumnLikeValue,
       begin: number,
       end: number,
-      dimensions: Dimension.Dimension[]
+      dimensions: Dimension[]
     ) {
       this.sourceColumn = sourceColumn;
       this.begin = begin;
@@ -40,7 +41,8 @@ const ColumnSlice = implementColumnLike(
 
       if (
         firstKey < 0 ||
-        firstKey > (await this.dimensions())[0].dimensionLength
+        firstKey >
+          (await getDimensionLength(this._dimensions[0].dimensionLength))
       ) {
         throw new Error(`panic: index ${firstKey} out of bounds`);
       }
@@ -57,10 +59,10 @@ const ColumnSlice = implementColumnLike(
 );
 
 export const createColumnSlice = async (
-  sourceColumn: ColumnLikeValue,
+  sourceColumn: Value.ColumnLikeValue,
   begin: number,
   end: number
-): Promise<ColumnLikeValue> => {
+): Promise<Value.ColumnLikeValue> => {
   const dimensions = (await sourceColumn.dimensions()).slice(1);
   return new ColumnSlice(sourceColumn, begin, end, dimensions);
 };

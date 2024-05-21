@@ -1,11 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  type Result,
-  type Type,
-  Unknown,
-  Value,
-} from '@decipad/language-types';
+import { type Type, Value } from '@decipad/language-types';
 import { getInstanceof } from '@decipad/utils';
+import type { Result } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 import { type FullBuiltinSpec } from '../../interfaces';
 import { type BuiltinContextUtils } from '../../types';
 import { applyTableFilters } from './applyTableFilters';

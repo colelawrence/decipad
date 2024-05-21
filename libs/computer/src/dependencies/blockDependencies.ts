@@ -1,5 +1,8 @@
+import type {
+  BlockDependents,
+  ComputerProgram,
+} from '@decipad/computer-interfaces';
 import type { Computer } from '../computer/Computer';
-import type { BlockDependents, ComputerProgram } from '../types';
 
 const blockDependents =
   (computer: Computer, program: ComputerProgram) =>

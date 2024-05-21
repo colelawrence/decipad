@@ -4,7 +4,12 @@ import omit from 'lodash.omit';
 import type { PromiseOrType } from '@decipad/utils';
 import { produce, getDefined } from '@decipad/utils';
 import type { Unit } from '@decipad/language-units';
-import type { AST, Time } from '..';
+import type {
+  AST,
+  IInferError,
+  Time,
+  Type as TypeInterface,
+} from '@decipad/language-interfaces';
 import {
   divideUnit,
   getRangeOf,
@@ -36,11 +41,11 @@ export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 
 type CombineArg = PromiseOrType<Type> | ((t: Type) => PromiseOrType<Type>);
 
-export class Type {
+export class Type implements TypeInterface {
   [immerable] = true;
 
   node: AST.Node | null = null;
-  errorCause: InferError | null = null;
+  errorCause: IInferError | null = null;
 
   type: PrimitiveTypeName | null = null;
   unit: Unit.Unit[] | null = null;
@@ -135,7 +140,7 @@ export class Type {
     });
   }
 
-  withErrorCause(error: InferError | string): Type {
+  withErrorCause(error: IInferError | string): Type {
     const { node, errorCause } = this;
 
     if (errorCause) {

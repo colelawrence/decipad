@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
+import type { Dimension, Value } from '@decipad/language-interfaces';
 import { getDefined, zip } from '@decipad/utils';
-import type { MinimalTensor, Value } from '../Value';
+import type { MinimalTensor } from '../Value';
 import { isColumnLike } from '../Value';
 import type { Type } from '../Type';
 import { implementColumnLike } from '../utils/implementColumnLike';
 import type { DimensionId, HypercubeArg, OperationFunction } from './types';
 import { uniqDimensions } from './uniqDimensions';
-import type { Dimension } from './Dimension';
 import type { ContextUtils } from '../ContextUtils';
 import { getHypercubeArg } from './getHypercubeArg';
 
@@ -63,7 +63,7 @@ const LazyOperation = implementColumnLike(
       throw new Error('not implemented');
     }
 
-    async lowLevelGet(...keys: number[]): Promise<Value> {
+    async lowLevelGet(...keys: number[]): Promise<Value.Value> {
       if ((await this.dimensions()).length !== keys.length) {
         throw new Error('panic: mismatched dimensions in core lazy operation');
       }
@@ -71,7 +71,7 @@ const LazyOperation = implementColumnLike(
       const dimensionIds = await this.dimensionIds();
 
       const operationArgs = await Promise.all(
-        this.args.map(async ([arg, argDimIds]): Promise<Value> => {
+        this.args.map(async ([arg, argDimIds]): Promise<Value.Value> => {
           if (isColumnLike(arg)) {
             // Key indices match dimensions indices
             const keysForThisArg = await Promise.all(
@@ -105,7 +105,7 @@ const LazyOperation = implementColumnLike(
 export const createLazyOperationBase = async (
   op: OperationFunction,
   args: HypercubeArg[]
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const lazyOperation = new LazyOperation(op, args);
   const dimensionCount = (await lazyOperation.dimensions()).length;
   if (dimensionCount > 0) {
@@ -118,7 +118,7 @@ export const createLazyOperationBase = async (
 export const createLazyOperation = async (
   utils: ContextUtils,
   op: OperationFunction,
-  argValues: Value[],
+  argValues: Value.Value[],
   argTypes: Type[]
 ) => {
   const args = zip(argValues, argTypes).map(getHypercubeArg(utils));

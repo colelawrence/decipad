@@ -1,18 +1,14 @@
 // eslint-disable-next-line no-restricted-imports
-import {
-  walkAst,
-  type SyntaxError,
-  type BracketError,
-  type AST,
-} from '@decipad/language';
+import { walkAst, type SyntaxError } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
+import type { AST, Parser } from '@decipad/language-interfaces';
 import type {
   ComputerProgram,
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
   Program,
-} from '../types';
+} from '@decipad/computer-interfaces';
 
 export const getBlockFromProgram = (
   program: ComputerProgram,
@@ -147,7 +143,9 @@ export const isSyntaxError = (error: unknown): error is SyntaxError =>
   'message' in error &&
   ('token' in error || 'isEmptyExpressionError' in error);
 
-export const isBracketError = (error: unknown): error is BracketError => {
+export const isBracketError = (
+  error: unknown
+): error is Parser.BracketError => {
   return (
     error instanceof Object &&
     'type' in error &&
@@ -169,11 +167,13 @@ export const isTypeError = (
 
 export const hasBracketError = (
   error: unknown
-): error is { bracketError: BracketError } => {
+): error is { bracketError: Parser.BracketError } => {
   return (
     error instanceof Object &&
     'bracketError' in error &&
-    isBracketError((error as { bracketError: BracketError }).bracketError)
+    isBracketError(
+      (error as { bracketError: Parser.BracketError }).bracketError
+    )
   );
 };
 

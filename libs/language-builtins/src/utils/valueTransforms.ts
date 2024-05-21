@@ -1,15 +1,16 @@
 import { contiguousSlices, reverseMap, sortMap } from '@decipad/column';
 // eslint-disable-next-line no-restricted-imports
 import { Dimension, Value, compare } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 
 export const sort = async (
-  col: Value.ColumnLikeValue
-): Promise<Value.ColumnLikeValue> =>
+  col: ValueTypes.ColumnLikeValue
+): Promise<ValueTypes.ColumnLikeValue> =>
   Value.MappedColumn.fromColumnValueAndMap(col, await sortMap(col, compare));
 
 export const unique = async (
-  col: Value.ColumnLikeValue
-): Promise<Value.ColumnLikeValue> => {
+  col: ValueTypes.ColumnLikeValue
+): Promise<ValueTypes.ColumnLikeValue> => {
   const sorted = await sort(col);
   const slices = (await contiguousSlices(sorted, compare)).map(
     ([index]) => index
@@ -18,24 +19,25 @@ export const unique = async (
 };
 
 export const reverse = async (
-  col: Value.ColumnLikeValue
-): Promise<Value.ColumnLikeValue> =>
+  col: ValueTypes.ColumnLikeValue
+): Promise<ValueTypes.ColumnLikeValue> =>
   Value.MappedColumn.fromColumnValueAndMap(col, await reverseMap(col));
 
 export const slice = async (
-  col: Value.ColumnLikeValue,
+  col: ValueTypes.ColumnLikeValue,
   begin: number,
   end: number
-): Promise<Value.ColumnLikeValue> =>
+): Promise<ValueTypes.ColumnLikeValue> =>
   Dimension.createColumnSlice(col, begin, end);
 
 export const applyMap = (
-  col: Value.ColumnLikeValue,
+  col: ValueTypes.ColumnLikeValue,
   map: number[]
-): Value.ColumnLikeValue => Value.MappedColumn.fromColumnValueAndMap(col, map);
+): ValueTypes.ColumnLikeValue =>
+  Value.MappedColumn.fromColumnValueAndMap(col, map);
 
 export const applyFilterMap = (
-  col: Value.ColumnLikeValue,
+  col: ValueTypes.ColumnLikeValue,
   map: boolean[]
-): Value.ColumnLikeValue =>
+): ValueTypes.ColumnLikeValue =>
   Value.FilteredColumn.fromColumnValueAndMap(col, map);

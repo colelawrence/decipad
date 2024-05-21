@@ -1,5 +1,5 @@
+import type { SerializedType } from '@decipad/language-interfaces';
 import type { Unit } from '@decipad/language-units';
-import type { SerializedType } from './SerializedType';
 import { N } from '@decipad/number';
 
 const hydrateUnit = (u: Unit.Unit): Unit.Unit => ({

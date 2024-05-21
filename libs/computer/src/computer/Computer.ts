@@ -8,17 +8,17 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { fnQueue } from '@decipad/fnqueue';
-
-// eslint-disable-next-line no-restricted-imports
 import type {
-  AutocompleteName,
-  ExternalDataMap,
+  AST,
   Result,
   SerializedType,
   SerializedTypes,
   Unit,
-  AST,
-} from '@decipad/language';
+  AutocompleteName,
+} from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import type { ExternalDataMap } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import {
   getOfType,
@@ -31,7 +31,6 @@ import {
   deserializeType,
   serializeType,
   buildResult,
-  Unknown,
   isResultGenerator,
 } from '@decipad/language';
 import {
@@ -41,18 +40,6 @@ import {
   identity,
   zip,
 } from '@decipad/utils';
-import { findNames } from '../autocomplete';
-import { computeProgram } from '../compute/computeProgram';
-import { blocksInUse, isInUse, programDependencies } from '../dependencies';
-import {
-  getExprRef,
-  programWithAbstractNamesAndReferences,
-  statementWithAbstractRefs,
-} from '../exprRefs';
-import { listenerHelper } from '../hooks';
-import { captureException } from '../reporting';
-import { ResultStreams } from '../resultStreams';
-import { dropWhileComputing } from '../tools/dropWhileComputing';
 import type {
   BlockResult,
   ComputeRequest,
@@ -67,7 +54,19 @@ import type {
   ColumnDesc,
   DimensionExplanation,
   TableDesc,
-} from '../types';
+} from '@decipad/computer-interfaces';
+import { findNames } from '../autocomplete';
+import { computeProgram } from '../compute/computeProgram';
+import { blocksInUse, isInUse, programDependencies } from '../dependencies';
+import {
+  getExprRef,
+  programWithAbstractNamesAndReferences,
+  statementWithAbstractRefs,
+} from '../exprRefs';
+import { listenerHelper } from '../hooks';
+import { captureException } from '../reporting';
+import { ResultStreams } from '../resultStreams';
+import { dropWhileComputing } from '../tools/dropWhileComputing';
 import {
   getDefinedSymbol,
   getGoodBlocks,

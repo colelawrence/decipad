@@ -2,6 +2,11 @@
 import type {
   AST,
   AutocompleteName,
+  Result,
+  Unit,
+  Parser,
+} from '@decipad/language-interfaces';
+import type {
   BlockDependents,
   ColumnDesc,
   ComputeRequest,
@@ -10,12 +15,8 @@ import type {
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
-  Parseable,
-  ParseableDate,
   ProgramBlock,
-  Result,
-  Unit,
-} from '@decipad/computer';
+} from '@decipad/computer-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Computer } from '@decipad/computer';
 import type {
@@ -32,7 +33,7 @@ export class RemoteComputer implements IRemoteComputer {
   results$: ListenerHelper<[], NotebookResults>;
   getParseableTypeInBlock$: ListenerHelper<
     [blockId: string],
-    Parseable | ParseableDate | null | undefined
+    Parser.Parseable | Parser.ParseableDate | null | undefined
   >;
   getBlockIdResult$: ListenerHelper<
     [_blockId?: string | null | undefined],

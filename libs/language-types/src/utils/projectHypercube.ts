@@ -1,9 +1,8 @@
 import { empty } from '@decipad/generator-utils';
 import type { PromiseOrType } from '@decipad/utils';
+import type { Dimension, Result } from '@decipad/language-interfaces';
 import { materializeOneResult } from './materializeOneResult';
-import type { Dimension } from '../Dimension';
 import type { MinimalTensor } from '../Value/MinimalTensor';
-import type { OneResult } from '../Result';
 import { isLowLevelMinimalTensor } from './isLowLevelMinimalTensor';
 import { getDimensionLength } from './getDimensionLength';
 
@@ -12,13 +11,13 @@ const recurseProjection = async (
   currentDepth: number,
   _currentCoordinates: number[],
   hc: MinimalTensor
-): Promise<OneResult> => {
+): Promise<Result.OneResult> => {
   if (dims.length > 0) {
     const [firstDim, ...restDims] = dims;
     return async function* materializeGen(
       start = 0,
       _end = Infinity
-    ): AsyncGenerator<OneResult> {
+    ): AsyncGenerator<Result.OneResult> {
       const dimLength = await getDimensionLength(firstDim.dimensionLength);
       const end = Math.min(dimLength, _end);
       for (let i = start; i < end; i++) {
@@ -41,7 +40,7 @@ const recurseProjection = async (
   }
 };
 
-export const EMPTY: OneResult = () => empty();
+export const EMPTY: Result.OneResult = () => empty();
 
 /**
  * Come up with all possible .lowLevelGet arg combinations and call
@@ -49,7 +48,7 @@ export const EMPTY: OneResult = () => empty();
  * */
 export const projectHypercube = async (
   _hc: PromiseOrType<MinimalTensor>
-): Promise<OneResult> => {
+): Promise<Result.OneResult> => {
   const hc = await _hc;
   const dimensions = await hc.dimensions();
   if (dimensions.some((dim) => dim.dimensionLength === 0)) {

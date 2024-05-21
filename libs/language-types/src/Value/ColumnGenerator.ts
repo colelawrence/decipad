@@ -1,27 +1,26 @@
 /* eslint-disable no-underscore-dangle */
-import type { Dimension } from '../Dimension';
-import type { OneResult } from '../Result';
-import { getResultGenerator } from '../utils/getResultGenerator';
-import type { ColumnLikeValue } from './ColumnLike';
-import type { Value } from './Value';
 import {
   count,
   firstOrUndefined,
   fromGeneratorPromise,
   map,
 } from '@decipad/generator-utils';
+import type { Dimension, Result, Value } from '@decipad/language-interfaces';
+import { getResultGenerator } from '../utils/getResultGenerator';
 import { lowLevelGet } from './lowLevelGet';
 import { typedResultToValue } from '../utils/typedResultToValue';
 import type { Type } from '../Type/Type';
 
-export class ColumnGenerator implements ColumnLikeValue {
-  private _typedResultToValue: Promise<(result: OneResult) => Value>;
-  private gen: () => AsyncGenerator<ColumnLikeValue>;
+export class ColumnGenerator implements Value.ColumnLikeValue {
+  private _typedResultToValue: Promise<
+    (result: Result.OneResult) => Value.Value
+  >;
+  private gen: () => AsyncGenerator<Value.ColumnLikeValue>;
   private _dimensions: Dimension[];
 
   constructor(
     type: Type,
-    gen: () => AsyncGenerator<ColumnLikeValue>,
+    gen: () => AsyncGenerator<Value.ColumnLikeValue>,
     dimensions: Dimension[]
   ) {
     this._typedResultToValue = typedResultToValue(type);
@@ -29,7 +28,7 @@ export class ColumnGenerator implements ColumnLikeValue {
     this._dimensions = dimensions;
   }
 
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     const { gen } = this;
     return async function* generateData(start = 0, end = Infinity) {
       let index = -1;
@@ -45,7 +44,7 @@ export class ColumnGenerator implements ColumnLikeValue {
     };
   }
 
-  async lowLevelGet(...keys: number[]): Promise<Value> {
+  async lowLevelGet(...keys: number[]): Promise<Value.Value> {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
@@ -53,7 +52,7 @@ export class ColumnGenerator implements ColumnLikeValue {
     return this._dimensions;
   }
 
-  values(start = 0, end = Infinity): AsyncGenerator<Value> {
+  values(start = 0, end = Infinity): AsyncGenerator<Value.Value> {
     return fromGeneratorPromise(
       (async () =>
         map(

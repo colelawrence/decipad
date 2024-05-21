@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import { type AST, type Type, type Value } from '@decipad/language-types';
+import { type Type, type Value } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { getDefined } from '@decipad/utils';
 
 export type GetAggregationDefResult = {

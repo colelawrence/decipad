@@ -1,5 +1,5 @@
-import type { OneResult } from '../Result';
-import type { Value } from '../Value';
+import type { Value, Result } from '@decipad/language-interfaces';
 
-export const valueToResultValue = async (value: Value): Promise<OneResult> =>
-  value.getData();
+export const valueToResultValue = async (
+  value: Value.Value
+): Promise<Result.OneResult> => value.getData();

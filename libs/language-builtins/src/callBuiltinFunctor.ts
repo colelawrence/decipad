@@ -1,7 +1,6 @@
 import { getOnly, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
-  type AST,
   Dimension,
   InferError,
   Type,
@@ -9,6 +8,7 @@ import {
   buildType as t,
   isPendingType,
 } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { getOperatorByName } from './operators';
 import type { FullBuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';

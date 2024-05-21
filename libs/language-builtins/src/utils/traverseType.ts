@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { type SerializedType } from '@decipad/language-types';
+import { type SerializedType } from '@decipad/language-interfaces';
 import { produce } from '@decipad/utils';
 
 // eslint-disable-next-line complexity

@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { ErrSpec } from '@decipad/language';
+import type { ErrSpec } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language';
 import { formatError } from './formatError';

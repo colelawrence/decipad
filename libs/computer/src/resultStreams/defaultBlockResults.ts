@@ -1,6 +1,5 @@
-// eslint-disable-next-line no-restricted-imports
-import { Unknown } from '@decipad/language';
-import type { IdentifiedResult } from '../types';
+import { Unknown } from '@decipad/language-interfaces';
+import type { IdentifiedResult } from '@decipad/computer-interfaces';
 
 export const defaultBlockResults = (
   blockId: string,

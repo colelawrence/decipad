@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src"],
-  "references": [{ "path": "../computer" }, { "path": "../utils" }]
+  "references": [
+    { "path": "../computer" },
+    { "path": "../computer-interfaces" },
+    { "path": "../utils" }
+  ]
 }

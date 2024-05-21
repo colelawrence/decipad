@@ -5,10 +5,13 @@ import {
   Value,
   Time,
   Type,
-  Unknown,
   buildType as t,
   isDateType,
 } from '@decipad/language-types';
+import {
+  Unknown,
+  type Value as ValueTypes,
+} from '@decipad/language-interfaces';
 import { getDefined, getInstanceof } from '@decipad/utils';
 import type { OverloadSpec } from './overloadBuiltin';
 
@@ -74,7 +77,7 @@ export const subtractDatesFunctor = async ([t1, t2]: Type[]) => {
 };
 
 const dateAndNumberFnValues = async (
-  [v1, v2]: Value.Value[],
+  [v1, v2]: ValueTypes.Value[],
   [, t2]: Type[] = []
 ) => {
   const amount = (

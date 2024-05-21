@@ -1,7 +1,7 @@
 import permutations from 'just-permutations';
+import type { ComputeRequest } from '@decipad/computer-interfaces';
 import { simplifyComputeResponse, getIdentifiedBlocks } from '../testUtils';
 import { Computer } from './Computer';
-import type { ComputeRequest } from '../types';
 
 let computer: Computer;
 beforeEach(() => {

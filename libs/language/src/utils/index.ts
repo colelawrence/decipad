@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Unit } from '@decipad/language-types';
+import type { Unit } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import DeciNumber, { N } from '@decipad/number';
 
 export { date } from '../date';

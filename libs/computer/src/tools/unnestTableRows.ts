@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   deserializeType,
@@ -9,21 +8,11 @@ import {
 } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
-import type { DimensionExplanation } from '../types';
-
-export type LabelInfo = {
-  indexName?: string;
-  label?: string;
-  indexAtThisDimension: number;
-  lengthAtThisDimension: number;
-  productOfRemainingLengths?: number;
-  indexesOfRemainingLengthsAreZero?: boolean;
-};
-
-export type ResultAndLabelInfo = {
-  result: Result.Result;
-  labelInfo: LabelInfo[];
-};
+import type {
+  DimensionExplanation,
+  LabelInfo,
+  ResultAndLabelInfo,
+} from '@decipad/computer-interfaces';
 
 /**
  * Un-nests the rows table structure, while providing labels to use in each row.

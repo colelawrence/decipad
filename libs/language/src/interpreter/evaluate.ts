@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   Unit,
@@ -37,7 +36,7 @@ import { scopedToDepthAndWithPush } from '../scopedRealm/ScopedRealm';
 async function internalEvaluate(
   realm: TRealm,
   node: AST.Statement
-): Promise<Value.Value> {
+): Promise<ValueTypes.Value> {
   switch (node.type) {
     case 'noop': {
       return Value.UnknownValue;
@@ -211,7 +210,7 @@ async function internalEvaluate(
       return Value.DateValue.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
-      const values: Value.Value[] = await Promise.all(
+      const values: ValueTypes.Value[] = await Promise.all(
         node.args[0].args.map(async (v) => evaluate(realm, v))
       );
 
@@ -273,7 +272,7 @@ const shouldOutputDebugInfo =
 export async function evaluate(
   realm: TRealm,
   node: AST.Statement
-): Promise<Value.Value> {
+): Promise<ValueTypes.Value> {
   const cachedValue = node.cacheKey
     ? realm.expressionCache.getCacheResult(node.cacheKey)
     : undefined;
@@ -316,7 +315,7 @@ export const evaluateStatement = evaluate;
 export async function evaluateBlock(
   realm: TRealm,
   block: AST.Block
-): Promise<Value.Value> {
+): Promise<ValueTypes.Value> {
   let previous;
   for (const statement of block.args) {
     // eslint-disable-next-line no-await-in-loop

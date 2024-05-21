@@ -1,4 +1,4 @@
-import type { Program, ProgramBlock } from '../types';
+import type { Program, ProgramBlock } from '@decipad/computer-interfaces';
 
 const programBlockToProgramBlockMap = (
   pb: ProgramBlock

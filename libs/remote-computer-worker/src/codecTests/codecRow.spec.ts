@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { SerializedTypes } from '@decipad/language-types';
+import type { SerializedTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import { valueEncoder } from '../worker/valueEncoder';

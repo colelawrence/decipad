@@ -1,7 +1,7 @@
 import DeciNumber from '@decipad/number';
-import type { Result } from '.';
 import { serializeType } from '.';
 import { runCodeForVariables } from './testUtils';
+import type { Result } from '@decipad/language-interfaces';
 
 describe('tree builtin', () => {
   it('works with aggregations', async () => {

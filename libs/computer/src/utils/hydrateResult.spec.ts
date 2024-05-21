@@ -1,4 +1,4 @@
-import type { Result, Unit } from '..';
+import type { Result, Unit } from '@decipad/language-interfaces';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { hydrateResult } from './hydrateResult';
 

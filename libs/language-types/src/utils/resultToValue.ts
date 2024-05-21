@@ -2,27 +2,28 @@ import { N } from '@decipad/number';
 import { from, slice } from '@decipad/generator-utils';
 import { getInstanceof } from '@decipad/utils';
 import type {
+  MaterializedTable,
   Result,
-  ResultBoolean,
-  ResultColumn,
-  ResultDate,
-  ResultGenerator,
-  ResultMaterializedColumn,
-  ResultMaterializedTable,
-  ResultNumber,
-  ResultRange,
-  ResultRow,
-  ResultString,
-  ResultTable,
-} from '../Result';
+  SerializedTypes,
+  Value,
+} from '@decipad/language-interfaces';
 import { UnknownValue } from '../Value/Unknown';
-import type { MaterializedTable } from '../SerializedTypes';
-import type { SerializedTypes } from '../SerializedType';
-import { Value } from '..';
 import { buildResult } from './buildResult';
+import {
+  Column,
+  DateValue,
+  LeanColumn,
+  Scalar,
+  Table,
+  Range,
+  defaultValue,
+  fromJS,
+  Row,
+  Tree,
+} from '../Value';
 
 // eslint-disable-next-line complexity
-export const resultToValue = (result: Result): Value.Value => {
+export const resultToValue = (result: Result.Result): Value.Value => {
   const { type, value } = result;
 
   if (typeof value === 'symbol') {
@@ -38,7 +39,7 @@ export const resultToValue = (result: Result): Value.Value => {
       return UnknownValue;
 
     case 'materialized-table': {
-      const tableValue = value as ResultMaterializedTable;
+      const tableValue = value as Result.ResultMaterializedTable;
       const tableType = type as MaterializedTable;
       const columns = tableType.columnTypes.map((columnType, index) => {
         return resultToValue({
@@ -50,11 +51,11 @@ export const resultToValue = (result: Result): Value.Value => {
           value: tableValue[index],
         });
       });
-      return Value.Table.fromNamedColumns(columns, tableType.columnNames);
+      return Table.fromNamedColumns(columns, tableType.columnNames);
     }
 
     case 'table': {
-      const tableValue = value as ResultTable;
+      const tableValue = value as Result.ResultTable;
       const tableType = type as SerializedTypes.Table;
       const columns = tableType.columnTypes.map((columnType, index) => {
         return resultToValue({
@@ -66,18 +67,20 @@ export const resultToValue = (result: Result): Value.Value => {
           value: tableValue[index],
         });
       });
-      return Value.Table.fromNamedColumns(columns, tableType.columnNames);
+      return Table.fromNamedColumns(columns, tableType.columnNames);
     }
 
     case 'column':
     case 'materialized-column': {
-      const columnValue = value as ResultColumn | ResultMaterializedColumn;
+      const columnValue = value as
+        | Result.ResultColumn
+        | Result.ResultMaterializedColumn;
       if (columnValue == null) {
-        const defaultV = Value.defaultValue(type);
-        return Value.Column.fromValues([Value.fromJS(0, defaultV)], defaultV);
+        const defaultV = defaultValue(type);
+        return Column.fromValues([fromJS(0, defaultV)], defaultV);
       }
       const columnType = type as SerializedTypes.Column;
-      let columnGen: ResultGenerator;
+      let columnGen: Result.ResultGenerator;
       if (typeof columnValue === 'function') {
         columnGen = (start = 0, end = Infinity) => columnValue(start, end);
       } else if (Array.isArray(columnValue)) {
@@ -87,7 +90,7 @@ export const resultToValue = (result: Result): Value.Value => {
         console.error('got invalid column:', value);
         throw new Error(`panic: got invalid column: ${typeof value}`);
       }
-      return Value.LeanColumn.fromGeneratorAndType(
+      return LeanColumn.fromGeneratorAndType(
         columnGen,
         columnType.cellType,
         `resultToValue<column<${columnType.cellType}>>`
@@ -95,13 +98,13 @@ export const resultToValue = (result: Result): Value.Value => {
     }
 
     case 'number': {
-      return Value.Scalar.fromValue(N(value as ResultNumber));
+      return Scalar.fromValue(N(value as Result.ResultNumber));
     }
 
     case 'date': {
-      let dateValue = value as ResultDate;
+      let dateValue = value as Result.ResultDate;
       if (dateValue == null || typeof dateValue === 'symbol') {
-        return Value.UnknownValue;
+        return UnknownValue;
       }
       if (typeof dateValue !== 'bigint') {
         try {
@@ -111,27 +114,27 @@ export const resultToValue = (result: Result): Value.Value => {
           throw err;
         }
       }
-      return Value.DateValue.fromDateAndSpecificity(
+      return DateValue.fromDateAndSpecificity(
         dateValue,
         (result.type as SerializedTypes.Date).date
       );
     }
 
     case 'boolean':
-      return Value.Scalar.fromValue(value as ResultBoolean);
+      return Scalar.fromValue(value as Result.ResultBoolean);
 
     case 'string':
-      return Value.Scalar.fromValue((value as ResultString).toString());
+      return Scalar.fromValue((value as Result.ResultString).toString());
 
     case 'range':
-      const rangeValue = value as ResultRange;
-      const [start, end] = rangeValue.map(Value.Scalar.fromValue);
-      return Value.Range.fromBounds(start, end);
+      const rangeValue = value as Result.ResultRange;
+      const [start, end] = rangeValue.map(Scalar.fromValue);
+      return Range.fromBounds(start, end);
 
     case 'row':
-      const rowValue = value as ResultRow;
+      const rowValue = value as Result.ResultRow;
       const rowType = type as SerializedTypes.Row;
-      return Value.Row.fromNamedCells(
+      return Row.fromNamedCells(
         rowValue.map((cell, index) =>
           resultToValue(buildResult(rowType.rowCellTypes[index], cell))
         ),
@@ -139,6 +142,6 @@ export const resultToValue = (result: Result): Value.Value => {
       );
 
     case 'tree':
-      return getInstanceof(value, Value.Tree);
+      return getInstanceof(value, Tree);
   }
 };

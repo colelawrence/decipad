@@ -1,3 +1,4 @@
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type * as languageTypes from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
@@ -32,8 +33,8 @@ export const dimSwapTypes = async (
 export const dimSwapValues = async (
   dominantIndexName: string,
   type: languageTypes.Type,
-  value: Value.ColumnLikeValue
-): Promise<Value.ColumnLikeValue> => {
+  value: ValueTypes.ColumnLikeValue
+): Promise<ValueTypes.ColumnLikeValue> => {
   const linear = Dimension.linearizeType(type).slice(0, -1);
 
   if (linear.length !== (await value.dimensions()).length) {

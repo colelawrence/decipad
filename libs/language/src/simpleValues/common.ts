@@ -1,7 +1,6 @@
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST } from '@decipad/language-interfaces';
 import { prefixCurrencies } from '../grammar/tokenizer';
 
 export const simplisticFunctions = [

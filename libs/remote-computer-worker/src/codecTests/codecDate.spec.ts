@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import { Unknown, Value } from '@decipad/language-types';
+import { Value } from '@decipad/language-types';
 import { valueDecoder } from '../client/valueDecoder';
 import { valueEncoder } from '../worker/valueEncoder';
-import type { OneResult } from 'libs/language-types/src/Result';
+import type { Result } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 
 describe('encodes and decodes dates', () => {
   const encodeDate = valueEncoder({ kind: 'date', date: 'day' });
@@ -46,7 +47,7 @@ describe('encodes and decodes dates', () => {
     // decode
     offset = 0;
     for (const date of dates) {
-      let decoded: OneResult;
+      let decoded: Result.OneResult;
       // eslint-disable-next-line no-await-in-loop
       [decoded, offset] = await decodeDate(view, offset);
       expect(decoded).toStrictEqual(date ?? Unknown);

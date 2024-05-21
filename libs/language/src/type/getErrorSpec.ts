@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { ErrSpec, SerializedType } from '@decipad/language-types';
+import type { ErrSpec, SerializedType } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Type } from '@decipad/language-types';
 

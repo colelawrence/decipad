@@ -1,5 +1,6 @@
 import { N } from '@decipad/number';
-import { Unknown, Value } from '@decipad/remote-computer';
+import { Unknown } from '@decipad/remote-computer';
+import { Value } from '@decipad/language-types';
 import { layoutPowerData } from './useDataViewLayoutData';
 
 describe('layoutPowerData', () => {

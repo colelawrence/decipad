@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Value } from '@decipad/language-types';
+import type { AST, Type, Value } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
 import { isExpression, isNode } from '../utils';

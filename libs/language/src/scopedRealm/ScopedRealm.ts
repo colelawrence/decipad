@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
-import type { AST, ContextUtils } from '@decipad/language-types';
+import type { ContextUtils } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { zip, getDefined } from '@decipad/utils';
 import type {
   StackNamespaceJoiner,
@@ -20,12 +21,12 @@ export class ScopedRealm implements TScopedRealm {
   name: string;
   parent?: TScopedRealm;
 
-  stack: TStackFrame<Value.Value>;
-  previousRow: ReadonlyMap<string | symbol, Value.Value> | undefined =
+  stack: TStackFrame<ValueTypes.Value>;
+  previousRow: ReadonlyMap<string | symbol, ValueTypes.Value> | undefined =
     undefined;
   inferContext: TScopedInferContext;
   private _statementId?: string;
-  expressionCache: ExpressionCache<Value.Value>;
+  expressionCache: ExpressionCache<ValueTypes.Value>;
   utils: ContextUtils;
 
   constructor(
@@ -37,10 +38,10 @@ export class ScopedRealm implements TScopedRealm {
     this.name = name;
     this.parent = parent;
     this.inferContext = inferContext;
-    this.expressionCache = new ExpressionCache<Value.Value>(
+    this.expressionCache = new ExpressionCache<ValueTypes.Value>(
       this.parent?.expressionCache
     );
-    this.stack = createStack<Value.Value>(
+    this.stack = createStack<ValueTypes.Value>(
       undefined,
       tableItemsToTable,
       tableToTableItems,
@@ -110,16 +111,18 @@ export class ScopedRealm implements TScopedRealm {
   }
 }
 
-const tableItemsToTable: StackNamespaceJoiner<Value.Value> = (tableItems) => {
+const tableItemsToTable: StackNamespaceJoiner<ValueTypes.Value> = (
+  tableItems
+) => {
   for (const v of tableItems.values()) {
     if (!Value.isColumnLike(v)) throw new Error('expected column-like');
   }
   return Value.Table.fromMapping(
-    tableItems as Map<string, Value.ColumnLikeValue>
+    tableItems as Map<string, ValueTypes.ColumnLikeValue>
   );
 };
 
-const tableToTableItems: StackNamespaceSplitter<Value.Value> = (table) => {
+const tableToTableItems: StackNamespaceSplitter<ValueTypes.Value> = (table) => {
   if (table instanceof Value.Table) {
     if (table.columnNames.length !== table.columns.length) {
       console.error(

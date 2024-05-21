@@ -1,4 +1,4 @@
-import type { NotebookResults } from '../types';
+import type { NotebookResults } from '@decipad/computer-interfaces';
 
 export const defaultComputerResults: NotebookResults = {
   blockResults: {},

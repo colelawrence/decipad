@@ -2,10 +2,14 @@
 /* eslint-disable no-restricted-globals */
 import '../utils/workerPolyfills';
 import { nanoid } from 'nanoid';
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+  type Value as ValueTypes,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { Result, SerializedType } from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
-import { Unknown, Value, getResultGenerator } from '@decipad/language-types';
+import { Value, getResultGenerator } from '@decipad/language-types';
 import type {
   TBaseNotificationParams,
   TSerializedNotificationParams,
@@ -170,7 +174,7 @@ export const createWorkerWorker = <
     if (type.kind !== 'column' && type.kind !== 'materialized-column') {
       throw new TypeError(`Expected column-like type and got ${type.kind}`);
     }
-    const colValue: Value.ColumnLikeValue =
+    const colValue: ValueTypes.ColumnLikeValue =
       Value.LeanColumn.fromGeneratorAndType(
         getResultGenerator(value ?? Unknown),
         type

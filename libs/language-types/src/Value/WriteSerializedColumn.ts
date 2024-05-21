@@ -1,23 +1,20 @@
 import type { PromiseOrType } from '@decipad/utils';
-import type { OneResult } from '../Result';
+import type { Result, Value } from '@decipad/language-interfaces';
 import { getResultGenerator } from '../utils/getResultGenerator';
-import type { ColumnLikeValue } from './ColumnLike';
 
-export type WriteSerializedColumnEncoder<T extends OneResult = OneResult> = (
-  buffer: DataView,
-  offset: number,
-  value: T
-) => PromiseOrType<number>; // returns the number of bytes written
+export type WriteSerializedColumnEncoder<
+  T extends Result.OneResult = Result.OneResult
+> = (buffer: DataView, offset: number, value: T) => PromiseOrType<number>; // returns the number of bytes written
 
-export class WriteSerializedColumn<T extends OneResult>
-  implements ColumnLikeValue
+export class WriteSerializedColumn<T extends Result.OneResult>
+  implements Value.ColumnLikeValue
 {
   private encoder: WriteSerializedColumnEncoder<T>;
-  private source: ColumnLikeValue;
+  private source: Value.ColumnLikeValue;
 
   constructor(
     encoder: WriteSerializedColumnEncoder<T>,
-    source: ColumnLikeValue
+    source: Value.ColumnLikeValue
   ) {
     this.encoder = encoder;
     this.source = source;
@@ -31,7 +28,7 @@ export class WriteSerializedColumn<T extends OneResult>
   async rowCount() {
     return this.source.rowCount();
   }
-  async getData(): Promise<OneResult> {
+  async getData(): Promise<Result.OneResult> {
     return this.source.getData();
   }
   async lowLevelGet(...keys: number[]) {

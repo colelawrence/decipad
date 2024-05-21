@@ -1,14 +1,15 @@
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { InferError, Unknown } from '@decipad/language';
-import type { Computer } from '..';
-import { defaultComputerResults } from '../computer/defaultComputerResults';
+import { InferError } from '@decipad/language';
 import type {
   IdentifiedError,
   IdentifiedResult,
   NotebookResultStream,
   NotebookResults,
-} from '../types';
+} from '@decipad/computer-interfaces';
+import type { Computer } from '..';
+import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type { BlockResultObservableStream, BlockResultStream } from './types';
 import { defaultBlockResults } from './defaultBlockResults';
 import { areBlockResultsEqual } from '../utils/areBlockResultsEqual';

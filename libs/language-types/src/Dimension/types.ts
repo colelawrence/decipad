@@ -1,13 +1,15 @@
 import type { PromiseOrType } from '@decipad/utils';
-import type { Value } from '../Value/Value';
 import type { Type } from '../Type/Type';
+import type { Value } from '@decipad/language-interfaces';
 
 export type DimensionId = string | number;
 
-export type OperationFunction = (values: Value[]) => PromiseOrType<Value>;
+export type OperationFunction = (
+  values: Value.Value[]
+) => PromiseOrType<Value.Value>;
 
-export type HypercubeArg = [arg: Value, argDimensionIds: DimensionId[]];
+export type HypercubeArg = [arg: Value.Value, argDimensionIds: DimensionId[]];
 export type HypercubeArgLoose = [
-  arg: Value,
+  arg: Value.Value,
   dimensionLike: DimensionId[] | Type
 ];

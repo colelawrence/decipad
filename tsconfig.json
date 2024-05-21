@@ -58,6 +58,7 @@
       "@decipad/client-env": ["libs/client-env/src/index.ts"],
       "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
+      "@decipad/computer-interfaces": ["libs/computer-interfaces/src/index.ts"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
@@ -115,6 +116,7 @@
       "@decipad/lambdas": ["libs/lambdas/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/language-builtins": ["libs/language-builtins/src/index.ts"],
+      "@decipad/language-interfaces": ["libs/language-interfaces/src/index.ts"],
       "@decipad/language-types": ["libs/language-types/src/index.ts"],
       "@decipad/language-units": ["libs/language-units/src/index.ts"],
       "@decipad/language-utils": ["libs/language-utils/src/index.ts"],

@@ -1,8 +1,8 @@
 import groupBy from 'lodash.groupby';
+import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { type AST } from '@decipad/language';
-import type { ProgramBlock } from '../types';
-import { decilang } from '..';
+import { decilang } from '@decipad/language';
+import type { ProgramBlock } from '@decipad/computer-interfaces';
 import { statementToIdentifiedBlock } from '../utils';
 
 /** Takes a list of programs, finds columns defined inside tables, pulls them out and inlines them.

@@ -1,15 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import type { TScopedInferContext } from '@decipad/language';
+import type {
+  VisibleVariables,
+  ComputerProgram,
+} from '@decipad/computer-interfaces';
 import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import type { ExprRefToVarNameMap } from '../internalTypes';
-import type { ComputerProgram } from '../types';
-
-export interface VisibleVariables {
-  global: ReadonlySet<string>;
-  local: ReadonlySet<string>;
-}
 
 export const getVisibleVariables = (
   _program: ComputerProgram,

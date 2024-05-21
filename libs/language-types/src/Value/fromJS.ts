@@ -1,9 +1,9 @@
 import type DeciNumber from '@decipad/number';
-import type { Value } from './Value';
 import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { Scalar } from './Scalar';
 import { FunctionValue } from './Function';
+import type { Value } from '@decipad/language-interfaces';
 
 type ValidFromJSArg =
   | string
@@ -35,7 +35,10 @@ const validateFromJsArg = (thing: FromJSArg): thing is ValidFromJSArg => {
   return true;
 };
 
-export const fromJS = (thing: FromJSArg, defaultValue?: Value): Value => {
+export const fromJS = (
+  thing: FromJSArg,
+  defaultValue?: Value.Value
+): Value.Value => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
   if (!validateFromJsArg(thing)) {
     throw new TypeError(`invalid result ${thing?.toString()}`);

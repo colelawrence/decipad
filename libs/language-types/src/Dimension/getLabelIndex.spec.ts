@@ -1,4 +1,4 @@
-import type { ColumnLikeValue } from '../Value';
+import type { Value } from '@decipad/language-interfaces';
 import { getLabelIndex } from './getLabelIndex';
 import { jsCol } from './testUtils';
 
@@ -19,7 +19,7 @@ it('gets .indexToLabelIndex from the ColumnLike interface, if it exists', async 
   const column = {
     indexToLabelIndex: (i) => i + 1,
     rowCount: () => 3,
-  } as ColumnLikeValue;
+  } as Value.ColumnLikeValue;
   expect(await getLabelIndex(column, 0)).toEqual(1);
   expect(await getLabelIndex(column, 1)).toEqual(2);
 });

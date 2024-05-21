@@ -1,14 +1,12 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST } from '@decipad/language-types';
+import type { AST, Parser } from '@decipad/language-interfaces';
 import { BracketCounter, tokenizer } from '../grammar/tokenizer';
 import { isExpression, n } from '../utils';
 import { SyntaxError } from './SyntaxError';
 import { annotateWithCacheKeys } from './annotateWithCacheKeys';
 import { parse as languageParse } from './parser';
-import * as Parser from './parser-types';
 
 export { decilang } from './decilang-tag';
-export { Parser, n, SyntaxError };
+export { n, SyntaxError };
 export { getOfType } from './getOfType';
 
 export function parseBlock(

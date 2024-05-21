@@ -8,6 +8,7 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { TRealm } from '../scopedRealm';
 
 const getColumnDimensionTypes = (
@@ -32,7 +33,7 @@ const getColumnDimensionTypes = (
 const getColumnDimensions = (
   realm: TRealm,
   columnType: Type
-): Array<[string, Value.ColumnLikeValue]> => {
+): Array<[string, ValueTypes.ColumnLikeValue]> => {
   const { indexedBy } = columnType;
   if (!indexedBy) {
     return [];
@@ -70,7 +71,7 @@ const columnToTableType = (realm: TRealm, source: Type): Type => {
 const columnToTableValue = (
   realm: TRealm,
   sourceType: Type,
-  sourceValue: Value.Value
+  sourceValue: ValueTypes.Value
 ): Value.Table => {
   if (!Value.isColumnLike(sourceValue)) {
     throw new RuntimeError('Expected column');

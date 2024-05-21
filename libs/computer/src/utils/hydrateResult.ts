@@ -1,7 +1,14 @@
-import type { SerializedTypes, Unit, Result } from '..';
-import { isColumn, Unknown, buildResult } from '..';
+import {
+  type SerializedTypes,
+  type Unit,
+  type Result,
+  Unknown,
+} from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { buildResult } from '@decipad/language';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
+import { isColumn } from './isColumn';
 
 const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
   unit?.map(

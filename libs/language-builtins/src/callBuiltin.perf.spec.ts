@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports
-import type { Result, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   Value,
@@ -13,6 +13,7 @@ import {
 import { all, slice } from '@decipad/generator-utils';
 import DeciNumber, { N } from '@decipad/number';
 import { getInstanceof } from '@decipad/utils';
+import type { Result, Value as ValueTypes } from '@decipad/language-interfaces';
 import { callBuiltin } from './callBuiltin';
 import { U, makeContext } from './utils/testUtils';
 import { callBuiltinFunctor } from './callBuiltinFunctor';
@@ -23,7 +24,7 @@ interface TestSpec {
   name: string;
   cellCount: number;
   pageSize: number;
-  args: Value.Value[];
+  args: ValueTypes.Value[];
   argTypes: Type[];
   builtInName: string;
 }
@@ -40,7 +41,7 @@ interface TestResult {
 type SubTestDesc = [
   name: string,
   op: string,
-  args: Value.Value[],
+  args: ValueTypes.Value[],
   argTypes: Type[],
   expects: (n: DeciNumber) => DeciNumber,
   expectedResultColumnCellCount?: number,
@@ -168,7 +169,7 @@ describe('callBuiltin performance', () => {
   const testThis = async (
     name: string,
     op: string,
-    args: Value.Value[],
+    args: ValueTypes.Value[],
     argTypes: Type[],
     expects: (n: DeciNumber) => DeciNumber,
     expectedResultColumnCellCount = count,

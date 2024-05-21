@@ -1,7 +1,7 @@
 import { getOnly } from '@decipad/utils';
 import { all, map } from '@decipad/generator-utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Value } from '@decipad/language-types';
+import type { Type, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
@@ -9,6 +9,7 @@ import {
   compare,
   buildType as t,
 } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
@@ -53,7 +54,7 @@ export const matchTargets = async (
     // VariableName[DimensionName == "Dimension item"]
 
     // We know these are comparable
-    const compareScalars = async (a: Value.Value, b: Value.Value) =>
+    const compareScalars = async (a: ValueTypes.Value, b: ValueTypes.Value) =>
       compare(
         await (a as Value.NumberValue).getData(),
         await (b as Value.NumberValue).getData()
@@ -61,7 +62,7 @@ export const matchTargets = async (
 
     let length = 0;
     const matcher = generatorOfPromisesToGenerator(
-      map<Value.Value, Promise<boolean>>(
+      map<ValueTypes.Value, Promise<boolean>>(
         dimension.values(),
         async (dimItem) => {
           const result =

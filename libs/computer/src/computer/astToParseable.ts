@@ -1,19 +1,6 @@
-// eslint-disable-next-line no-restricted-imports
-import type { AST, SerializedType } from '@decipad/language';
+import type { AST, Parser } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Time, getDateFromAstForm } from '@decipad/language';
-
-export interface Parseable {
-  varName?: string;
-  kind: Exclude<SerializedType['kind'], 'date'>;
-}
-
-export interface ParseableDate {
-  varName?: string;
-  kind: 'date';
-  dateStr: string;
-  dateGranularity: Time.Specificity;
-}
 
 /**
  * Given an AST assignment Statement, it returns the type of the value being assigned. For now it
@@ -23,7 +10,7 @@ export interface ParseableDate {
 export function astToParseable(
   ast: AST.Statement,
   depth = 0
-): Parseable | ParseableDate | undefined {
+): Parser.Parseable | Parser.ParseableDate | undefined {
   if (ast.type === 'assign') {
     const [ident, exp] = ast.args;
     const ret = astToParseable(exp);

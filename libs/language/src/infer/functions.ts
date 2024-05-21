@@ -1,7 +1,7 @@
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { Type, AST } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   buildType as t,
@@ -10,6 +10,7 @@ import {
 } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltinFunctor } from '@decipad/language-builtins';
+import type { AST } from '@decipad/language-interfaces';
 import { inferExpression, inferStatement } from '.';
 import { getIdentifierString } from '../utils';
 import { logRetrievedName } from './logRetrievedName';

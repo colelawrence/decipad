@@ -10,6 +10,7 @@ import {
   compare,
   RuntimeError,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { FullBuiltinSpec } from '../../interfaces';
 import { findIndex, map } from '@decipad/generator-utils';
 
@@ -44,7 +45,7 @@ export const lookupValuesNoAutomap: FullBuiltinSpec['fnValuesNoAutomap'] =
     // eslint-disable-next-line default-param-last
     [tableType] = [],
     ctx
-  ): Promise<Value.Value> => {
+  ): Promise<ValueTypes.Value> => {
     const needleVal = await needle.getData();
     const getNeedleIndexAtTable = async (
       table: Value.Table

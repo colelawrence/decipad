@@ -1,8 +1,10 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Result, SerializedType } from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
 import {
   Unknown,
+  type Result,
+  type SerializedType,
+} from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import {
   Value,
   buildType,
   deserializeType,

@@ -1,6 +1,6 @@
 import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
@@ -12,6 +12,7 @@ import {
 import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
+import type { AST } from '@decipad/language-interfaces';
 import { getIdentifierString, walkAst, mutateAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';

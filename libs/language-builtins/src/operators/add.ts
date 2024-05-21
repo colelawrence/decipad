@@ -1,7 +1,6 @@
 import type DeciNumber from '@decipad/number';
 import { ONE } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import type { Result } from '@decipad/language-types';
+import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';

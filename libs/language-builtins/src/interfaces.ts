@@ -1,6 +1,7 @@
 import { type PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import type { Value, Type, AST } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
+import type { AST, Value } from '@decipad/language-interfaces';
 import { type BuiltinContextUtils } from './types';
 
 export type Functor = (

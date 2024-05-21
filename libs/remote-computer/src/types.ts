@@ -1,24 +1,26 @@
 import type { Observable, BehaviorSubject } from 'rxjs';
 // eslint-disable-next-line no-restricted-imports
 import type {
-  IdentifiedError,
-  IdentifiedResult,
   AutocompleteName,
-  BlockDependents,
-  ColumnDesc,
-  NotebookResults,
-  ComputeRequest,
-  DimensionExplanation,
-  Parseable,
-  ParseableDate,
   ErrSpec,
   SerializedType,
   Result,
   Unit,
   AST,
+  Parser,
+} from '@decipad/language-interfaces';
+
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+  BlockDependents,
+  ColumnDesc,
+  NotebookResults,
+  ComputeRequest,
+  DimensionExplanation,
   ProgramBlock,
   ComputeRequestWithExternalData,
-} from '@decipad/computer';
+} from '@decipad/computer-interfaces';
 
 export type { ErrSpec };
 
@@ -110,7 +112,7 @@ export interface IRemoteComputer {
   ): string;
   getParseableTypeInBlock$: ListenerHelper<
     [blockId: string],
-    Parseable | ParseableDate | null | undefined
+    Parser.Parseable | Parser.ParseableDate | null | undefined
   >;
   getVarBlockId(varName: string): string | undefined;
 

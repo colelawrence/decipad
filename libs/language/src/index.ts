@@ -2,13 +2,9 @@
 
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
+import type { AutocompleteName, Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import {
-  serializeType,
-  type Result,
-  type SerializedType,
-  buildType as t,
-} from '@decipad/language-types';
+import { serializeType, buildType as t } from '@decipad/language-types';
 
 export { Time, getDateFromAstForm } from './date';
 export {
@@ -41,7 +37,6 @@ export {
   parseBlock,
   parseStatement,
   parseExpression,
-  Parser,
   getOfType,
   SyntaxError,
 } from './parser';
@@ -64,20 +59,6 @@ export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';
 
 export type ExternalDataMap = ReadonlyMap<string, Result.Result>;
-
-export interface AutocompleteName {
-  kind: 'function' | 'variable' | 'column';
-  syntax?: string;
-  example?: string;
-  formulaGroup?: string;
-  type: SerializedType;
-  name: string;
-  inTable?: string;
-  explanation?: string;
-  blockId?: string;
-  columnId?: string;
-  isLocal?: boolean;
-}
 
 let cachedBuiltins: AutocompleteName[] | null = null;
 /* Always returns the same array. It's a function, so as to avoid an import cycle */
@@ -106,7 +87,6 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
 // eslint-disable-next-line no-restricted-imports
 export {
   getConstantByName,
-  type Constant,
   type BuiltinSpec,
   type FullBuiltinSpec,
 } from '@decipad/language-builtins';

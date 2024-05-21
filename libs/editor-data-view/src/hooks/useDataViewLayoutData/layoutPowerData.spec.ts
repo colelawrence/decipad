@@ -6,11 +6,11 @@ import type {
 } from '@decipad/remote-computer';
 import {
   Unknown,
-  Value,
   buildResult,
   decilang,
   getRemoteComputer,
 } from '@decipad/remote-computer';
+import { Value } from '@decipad/language-types';
 import { layoutPowerData } from './layoutPowerData';
 import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';

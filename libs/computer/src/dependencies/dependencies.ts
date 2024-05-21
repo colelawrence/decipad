@@ -1,8 +1,7 @@
 import { unique } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import { type AST } from '@decipad/language';
-import { isExprRef } from '..';
+import { type AST } from '@decipad/language-interfaces';
 import { getIdentifierString } from '../utils';
+import { isExprRef } from '../exprRefs';
 
 export type TableNamespaces = Map<string, Set<string>>;
 

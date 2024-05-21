@@ -1,4 +1,5 @@
-import type { OneResult, ResultGenerator } from '../Result';
+import type { Result } from '@decipad/language-interfaces';
 
-export const isResultGenerator = (v: OneResult): v is ResultGenerator =>
-  typeof v === 'function';
+export const isResultGenerator = (
+  v: Result.OneResult
+): v is Result.ResultGenerator => typeof v === 'function';

@@ -1,6 +1,7 @@
 import { escape } from 'html-escaper';
+import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, FullBuiltinSpec, Time } from '@decipad/language';
+import type { FullBuiltinSpec, Time } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import { getDateFromAstForm, operators } from '@decipad/language';
 import { formatDate } from '@decipad/utils';

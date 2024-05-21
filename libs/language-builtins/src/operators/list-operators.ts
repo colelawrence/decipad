@@ -10,6 +10,7 @@ import {
   getResultGenerator,
   serializeType,
 } from '@decipad/language-types';
+import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { BuiltinSpec } from '../interfaces';
 import { reverse, sort, unique } from '../utils/valueTransforms';
 import { coherceToFraction } from '../utils/coherceToFraction';
@@ -20,7 +21,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     noAutoconvert: true,
     argCardinalities: [[2]],
-    fnValues: async ([col]: Value.Value[], [type]: Type[] = []) =>
+    fnValues: async ([col]: ValueTypes.Value[], [type]: Type[] = []) =>
       Value.fromJS(
         await Value.getColumnLike(col).rowCount(),
         Value.defaultValue(type)
@@ -35,7 +36,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [[2]],
     isReducer: true,
-    fnValues: async ([arg]: Value.Value[]) =>
+    fnValues: async ([arg]: ValueTypes.Value[]) =>
       getDefined(
         await Value.getColumnLike(arg).atIndex(0),
         'could not find first element'
@@ -50,7 +51,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [[2]],
     isReducer: true,
-    fnValues: async ([arg]: Value.Value[]) => {
+    fnValues: async ([arg]: ValueTypes.Value[]) => {
       const col = Value.getColumnLike(arg);
       return getDefined(
         await col.atIndex((await col.rowCount()) - 1),
@@ -81,7 +82,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [[2]],
     isReducer: true,
-    fnValues: async ([a]: Value.Value[]) => {
+    fnValues: async ([a]: ValueTypes.Value[]) => {
       let count = 0;
       for await (const elem of Value.getColumnLike(a).values()) {
         if (await elem.getData()) {

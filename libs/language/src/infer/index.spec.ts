@@ -1,8 +1,7 @@
 import omit from 'lodash.omit';
 import { produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import type { AST, Type, Unit } from '@decipad/language-types';
+import type { AST, Type, Unit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
 import {

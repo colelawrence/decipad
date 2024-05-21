@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Type } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { inferExpression } from '../infer';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
@@ -37,7 +38,7 @@ export const inferCategories = async (
 export const evaluateCategories = async (
   realm: TRealm,
   category: AST.Categories
-): Promise<Value.ColumnLikeValue> => {
+): Promise<ValueTypes.ColumnLikeValue> => {
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);

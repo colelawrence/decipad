@@ -1,5 +1,5 @@
+import type { Dimension } from '@decipad/language-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
-import type { Dimension } from '../Dimension/Dimension';
 
 export const getDimensionLength = (
   d: Dimension['dimensionLength']

@@ -1,4 +1,3 @@
-export * from './Value';
 export * from './Boolean';
 export * from './Column';
 export * from './ColumnLike';

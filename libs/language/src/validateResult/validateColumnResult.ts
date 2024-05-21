@@ -1,6 +1,5 @@
 import { getDefined } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { Result, SerializedTypes } from '@decipad/language-types';
+import type { Result, SerializedTypes } from '@decipad/language-interfaces';
 import type { Validate } from './types';
 
 export const validateColumnResult = (

@@ -1,5 +1,5 @@
 import type { BehaviorSubject } from 'rxjs';
-import type { Type, Value } from '..';
+import type { Type, Value } from '@decipad/language-interfaces';
 
 export interface SymbolStream {
   typeStream: BehaviorSubject<Type>;

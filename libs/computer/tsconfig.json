@@ -12,6 +12,9 @@
       "path": "../language"
     },
     {
+      "path": "../language-interfaces"
+    },
+    {
       "path": "../number"
     },
     {
@@ -19,6 +22,9 @@
     },
     {
       "path": "../fnqueue"
+    },
+    {
+      "path": "../computer-interfaces"
     }
   ]
 }

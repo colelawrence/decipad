@@ -1,7 +1,8 @@
 import { getDefined, produce } from '@decipad/utils';
 import { Unit } from '@decipad/language-units';
-import { InferError, type Type } from '..';
 import { propagatePercentage } from './percentages';
+import { InferError } from '../InferError';
+import type { Type } from './Type';
 
 export const removeSingleUnitless = (a: Type, b: Type) => {
   const bothNumbers = a.type === 'number' && b.type === 'number';

@@ -1,5 +1,6 @@
+import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { AST, Value } from '@decipad/language-types';
+import type { Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult, buildType as t } from '@decipad/language-types';
 import { inferStatement } from '../infer';

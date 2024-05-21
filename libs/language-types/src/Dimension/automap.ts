@@ -11,7 +11,6 @@ import {
 } from './cardinality';
 import { deLinearizeType, linearizeType } from './linearizeType';
 import { groupTypesByDimension } from './groupTypesByDimension';
-import type { Value } from '../Value/Value';
 import { createLazyOperation } from './LazyOperation';
 import { getReductionPlan } from './getReductionPlan';
 import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
@@ -20,6 +19,7 @@ import { isPendingType } from '../Type/checks';
 import { buildResult } from '../utils/buildResult';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { resultToValue } from '../utils/resultToValue';
+import type { Value } from '@decipad/language-interfaces';
 
 // Minor hack: use the automaptypes function to retrieve the arg types
 // Better solution: Make Hypercube type-aware and pass the types from there.
@@ -121,14 +121,14 @@ export const automapTypes = async (
 export const automapValues = async (
   ctx: ContextUtils,
   argTypes: Type[],
-  argValues: Value[],
+  argValues: Value.Value[],
   mapFn: (
-    values: Value[],
+    values: Value.Value[],
     types: Type[],
     ctx: ContextUtils
-  ) => PromiseOrType<Value>,
+  ) => PromiseOrType<Value.Value>,
   availableCardinalities = [arrayOfOnes(argValues.length)]
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const matchedCardinality = findFirstValidCardinality(
     argTypes,
     availableCardinalities
@@ -144,7 +144,7 @@ export const automapValues = async (
       argTypes,
       matchedCardinality
     );
-    const mapFnAndTypes = async (values: Value[]) => {
+    const mapFnAndTypes = async (values: Value.Value[]) => {
       return mapFn(values, reducedArgTypes, ctx);
     };
 
@@ -212,14 +212,14 @@ export const automapTypesForReducer = async (
 
 export const automapValuesForReducer = async (
   argType: Type,
-  argValue: Value,
+  argValue: Value.Value,
   utils: ContextUtils,
   mapFn: (
-    values: Value[],
+    values: Value.Value[],
     types: Type[],
     utils: ContextUtils
-  ) => PromiseOrType<Value>
-): Promise<Value> => {
+  ) => PromiseOrType<Value.Value>
+): Promise<Value.Value> => {
   const matchedCardinality = findFirstValidCardinality([argType], [[2]]);
   if (!matchedCardinality) {
     throw new Error('panic: cardinality is too low');
