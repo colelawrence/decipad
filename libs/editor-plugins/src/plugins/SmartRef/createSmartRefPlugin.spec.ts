@@ -81,9 +81,8 @@ it('can turn text into smartrefs', async () => {
   });
   await timeout(0);
 
-  const names = computer
-    .getNamesDefined()
-    .flatMap((n): [VarAndCol, VarAndCol][] => {
+  const names = (await computer.getNamesDefined()).flatMap(
+    (n): [VarAndCol, VarAndCol][] => {
       if (n.kind === 'variable' && n.blockId) {
         return [[[n.name], [n.blockId]]];
       }
@@ -93,7 +92,8 @@ it('can turn text into smartrefs', async () => {
         ];
       }
       return [];
-    });
+    }
+  );
   convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
@@ -122,9 +122,8 @@ it('can turn text into smartrefs (columns edition)', async () => {
   });
   await timeout(0);
 
-  const names = computer
-    .getNamesDefined()
-    .flatMap((n): [VarAndCol, VarAndCol][] => {
+  const names = (await computer.getNamesDefined()).flatMap(
+    (n): [VarAndCol, VarAndCol][] => {
       if (n.kind === 'variable' && n.blockId) {
         return [[[n.name], [n.blockId]]];
       }
@@ -134,7 +133,8 @@ it('can turn text into smartrefs (columns edition)', async () => {
         ];
       }
       return [];
-    });
+    }
+  );
   convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`

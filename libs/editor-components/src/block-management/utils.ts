@@ -10,8 +10,8 @@ const utils = {
    * add it onto this function,
    * otherwise the function `clone` is used.
    */
-  cloneProxy(computer: RemoteComputer, element: MyElement) {
-    const newElement = clone(computer, element);
+  async cloneProxy(computer: RemoteComputer, element: MyElement) {
+    const newElement = await clone(computer, element);
     switch (newElement.type) {
       case ELEMENT_VARIABLE_DEF: {
         if (newElement.variant === 'dropdown') {

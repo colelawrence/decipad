@@ -96,7 +96,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
   );
 };
 
-export const commitPotentialFormula = (
+export const commitPotentialFormula = async (
   editor: MyEditor,
   computer: RemoteComputer,
   path: Path,
@@ -114,7 +114,7 @@ export const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier(generateVarName()),
+    varName: await computer.getAvailableIdentifier(generateVarName()),
     code: getNodeString(leaf as RichText),
   });
 

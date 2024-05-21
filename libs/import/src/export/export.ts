@@ -6,6 +6,7 @@ import type {
   FormattedResult,
   VarnameExportedResult,
 } from './types';
+import type { PromiseOrType } from '@decipad/utils';
 
 async function getSingleResult(
   _value: Result.OneResult,
@@ -101,7 +102,7 @@ async function getSingleResult(
 //
 export async function exportProgram(
   results: NotebookResults,
-  getNamesCallback: (blockId: string) => string | undefined
+  getNamesCallback: (blockId: string) => PromiseOrType<string | undefined>
 ): Promise<Array<ExportedResult>> {
   const toExport: Array<ExportedResult | undefined> = await Promise.all(
     Object.entries(results.blockResults).map(async ([blockId, result]) => {
@@ -116,7 +117,7 @@ export async function exportProgram(
 
       return {
         id: blockId,
-        varName: getNamesCallback(blockId),
+        varName: await getNamesCallback(blockId),
         result: res,
       };
     })
@@ -127,7 +128,7 @@ export async function exportProgram(
 
 export async function exportProgramByVarname(
   results: NotebookResults,
-  getNamesCallback: (blockId: string) => string | undefined
+  getNamesCallback: (blockId: string) => PromiseOrType<string | undefined>
 ): Promise<VarnameExportedResult> {
   const values = await exportProgram(results, getNamesCallback);
 

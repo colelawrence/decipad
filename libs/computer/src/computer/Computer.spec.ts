@@ -321,7 +321,7 @@ it('can accept program bits', async () => {
   });
 
   expect(
-    computer.getBlockIdResult('block-0')?.result?.value
+    (await computer.getBlockIdResult('block-0'))?.result?.value
     // undefined
   ).toMatchInlineSnapshot(`
     DeciNumber {
@@ -342,7 +342,7 @@ it('can accept program bits', async () => {
   await timeout(0); // give time to compute
 
   expect(
-    computer.getBlockIdResult('block-0')?.result?.value
+    (await computer.getBlockIdResult('block-0'))?.result?.value
     // Var1 is defined now
   ).toMatchInlineSnapshot(`
     DeciNumber {
@@ -357,7 +357,7 @@ it('can accept program bits', async () => {
   await timeout(0); // give time to compute
 
   expect(
-    computer.getBlockIdResult('block-0')?.result?.value
+    (await computer.getBlockIdResult('block-0'))?.result?.value
     // undefined again
   ).toMatchInlineSnapshot(`Symbol(unknown)`);
 });
@@ -467,11 +467,11 @@ describe('tooling data', () => {
   it('can get a statement', async () => {
     await computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
 
-    expect(computer.getStatement('block-0')?.args[1]).toMatchObject({
+    expect((await computer.getStatement('block-0'))?.args[1]).toMatchObject({
       type: 'function-call',
     });
 
-    expect(computer.getStatement('block-1')).toEqual(undefined);
+    expect(await computer.getStatement('block-1')).toEqual(undefined);
   });
 });
 

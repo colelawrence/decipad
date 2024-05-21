@@ -4,6 +4,7 @@ import { createMyPlateEditor } from '@decipad/editor-types';
 import { reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 import { getSmartRef, getStructuredCalc } from './test_utils';
+import { timeout } from '@decipad/utils';
 
 describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
@@ -194,7 +195,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     `);
   });
 
-  it('regression: Creates a new structured codeline and moves to its value part', () => {
+  it('regression: Creates a new structured codeline and moves to its value part', async () => {
     const event = new KeyboardEvent('keydown', {
       key: 'Enter',
       shiftKey: true,
@@ -203,6 +204,7 @@ describe('Structured input basic keyboard shortcuts', () => {
       computer
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
+    await timeout(100);
     expect(editor.selection).toMatchInlineSnapshot(`
       Object {
         "anchor": Object {

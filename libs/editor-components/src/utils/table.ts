@@ -93,13 +93,13 @@ const initialTableElement = () => {
   } as TableElement;
 };
 
-export const insertTableBelow = (
+export const insertTableBelow = async (
   editor: MyEditor,
   path: Path,
   getAvailableIdentifier: GetAvailableIdentifier
-): void => {
+): Promise<void> => {
   const table = initialTableElement();
-  table.children[0].children[0].children[0].text = getAvailableIdentifier(
+  table.children[0].children[0].children[0].text = await getAvailableIdentifier(
     generateTableName()
   );
   insertNodes(editor, [table], {

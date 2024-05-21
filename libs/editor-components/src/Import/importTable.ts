@@ -139,11 +139,11 @@ const dataRows = (
   return rows;
 };
 
-const tableElement = (
+const tableElement = async (
   computer: RemoteComputer,
   table: Result.Result<'materialized-table'>,
   meta?: ImportResult['meta']
-): TableElement => {
+): Promise<TableElement> => {
   return {
     id: nanoid(),
     type: ELEMENT_TABLE,
@@ -159,7 +159,7 @@ const tableElement = (
               {
                 text: meta?.title
                   ? varNamify(meta.title)
-                  : computer.getAvailableIdentifier(
+                  : await computer.getAvailableIdentifier(
                       generateTableName('Imported')
                     ),
               },
@@ -194,7 +194,7 @@ export const importTable = async ({
 }: ImportTableProps): Promise<void> => {
   const tableResult = result.result;
   if (isTableResult(tableResult)) {
-    const t = tableElement(
+    const t = await tableElement(
       computer,
       getDefined(
         await materializeResult(tableResult)

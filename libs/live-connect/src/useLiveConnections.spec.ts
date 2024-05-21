@@ -5,7 +5,6 @@ import {
   serializeResult,
 } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
-import type { BehaviorSubject } from 'rxjs';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { pushResultToComputer } from './useLiveConnection';
 
@@ -91,12 +90,6 @@ it('can push a new table into the computer', async () => {
   await timeout(1000);
 
   // Assert on the computer's internal state to make sure we've GC'd the things we need to
-  expect(
-    (computer as unknown as { externalData: BehaviorSubject<unknown> })
-      .externalData.value
-  ).toEqual(new Map());
-  expect(
-    (computer as unknown as { extraProgramBlocks: BehaviorSubject<unknown> })
-      .extraProgramBlocks.value
-  ).toEqual(new Map());
+  expect(await computer.getExternalData()).toEqual(new Map());
+  expect(await computer.getExtraProgramBlocks()).toEqual(new Map());
 });

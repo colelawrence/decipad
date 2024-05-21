@@ -55,6 +55,7 @@ export {
   isIdentifier,
   n as astNode,
   walkAst,
+  walkAstAsync,
   mutateAst,
   isStatement,
 } from './utils';

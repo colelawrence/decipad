@@ -5,6 +5,7 @@ import DeciNumber, { N } from '@decipad/number';
 export { date } from '../date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
+type WalkAsyncFn = (node: AST.Node, path: number[]) => Promise<void>;
 type MutateFn = (node: AST.Node, path: number[]) => AST.Node;
 
 export const walkAst = (
@@ -19,6 +20,23 @@ export const walkAst = (
     const arg = node.args[index];
     if (isNode(arg)) {
       walkAst(arg, fn, [...path, index], [...parents, node]);
+    }
+  }
+};
+
+export const walkAstAsync = async (
+  node: AST.Node,
+  fn: WalkAsyncFn,
+  path: number[] = [],
+  parents: AST.Node[] = []
+) => {
+  await fn(node, path);
+
+  for (let index = 0; index < node.args.length; index++) {
+    const arg = node.args[index];
+    if (isNode(arg)) {
+      // eslint-disable-next-line no-await-in-loop
+      await walkAstAsync(arg, fn, [...path, index], [...parents, node]);
     }
   }
 };

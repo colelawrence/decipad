@@ -4,6 +4,7 @@ import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { MyElement, MyNode } from '@decipad/editor-types';
 import type { RemoteComputer } from '@decipad/remote-computer';
+import type { PromiseOrType } from '@decipad/utils';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 
@@ -22,8 +23,8 @@ const recReplaceIds = <T extends MyNode>(el: T): T => {
 
 const cloneAndReplaceElementIds = <T extends MyElement>(
   el: T,
-  transform: (e: T) => T = identity
-): T => {
+  transform: (e: T) => PromiseOrType<T> = identity
+): PromiseOrType<T> => {
   const clone = structuredClone(el);
   return transform(recReplaceIds(clone));
 };
@@ -31,13 +32,13 @@ const cloneAndReplaceElementIds = <T extends MyElement>(
 const cloneElement = <T extends MyElement>(
   computer: RemoteComputer,
   el: T
-): T =>
+): PromiseOrType<T> =>
   cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
 export const clone = <T extends MyNode>(
   computer: RemoteComputer,
   node: T
-): T => {
+): PromiseOrType<T> => {
   if (isElement(node)) {
     return cloneElement(computer, node) as T;
   }

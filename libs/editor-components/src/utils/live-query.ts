@@ -1,14 +1,14 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
 import type { LiveQueryElement, MyEditor } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
 } from '@decipad/editor-types';
+import type { GetAvailableIdentifier } from '@decipad/editor-utils';
 import {
-  generateVarName,
   insertNodes,
   requirePathBelowBlock,
+  generateVarName,
 } from '@decipad/editor-utils';
 import type { TEditor } from '@udecode/plate-common';
 import { findNode, focusEditor, nanoid } from '@udecode/plate-common';
@@ -40,14 +40,14 @@ const getInitialLiveQueryElement = (
   };
 };
 
-export const insertLiveQueryBelow = (
+export const insertLiveQueryBelow = async (
   editor: TEditor,
   path: Path,
-  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier'],
+  getAvailableIdentifier: GetAvailableIdentifier,
   connectionBlockId?: string,
   query?: string
-): void => {
-  const varName = getAvailableIdentifier(generateVarName());
+): Promise<void> => {
+  const varName = await getAvailableIdentifier(generateVarName());
   const liveQuery = clone(
     getInitialLiveQueryElement(connectionBlockId, varName)
   );

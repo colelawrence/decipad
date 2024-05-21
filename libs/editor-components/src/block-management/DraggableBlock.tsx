@@ -257,7 +257,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       [event, element, onShowHide]
     );
 
-    const onAdd = useCallback(() => {
+    const onAdd = useCallback(async () => {
       if (path == null) return;
       const entry = getPreviousNode(editor, {
         at: path,
@@ -265,7 +265,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       const [prevNode] = entry || [];
       insertNodes(
         editor,
-        [insertSameNodeType(prevNode as MyElement, computer)],
+        [await insertSameNodeType(prevNode as MyElement, computer)],
         {
           at: path,
         }
@@ -406,17 +406,19 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
   }
 );
 
-const insertSameNodeType = (
+const insertSameNodeType = async (
   prevNode: MyElement | undefined,
   computer: RemoteComputer
-): MyElementOrText => {
+): Promise<MyElementOrText> => {
   const id = nanoid();
   const { input, formula } = PLACEHOLDERS;
   switch (prevNode?.type) {
     case ELEMENT_CODE_LINE_V2: {
       const prevNodeText = getCodeLineSource(prevNode.children[1]);
       const isSimpleValue = !!parseSimpleValue(prevNodeText);
-      const autoVarName = computer.getAvailableIdentifier(generateVarName());
+      const autoVarName = await computer.getAvailableIdentifier(
+        generateVarName()
+      );
       return createStructuredCodeLine({
         id,
         varName: autoVarName,

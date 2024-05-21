@@ -19,13 +19,13 @@ describe('insertTableBelow', () => {
     ];
   });
 
-  it('inserts a table element below given block path', () => {
-    insertTableBelow(editor, [0], getAvailableIdentifier);
+  it('inserts a table element below given block path', async () => {
+    await insertTableBelow(editor, [0], getAvailableIdentifier);
     expect(editor).toHaveProperty('children.1.type', ELEMENT_TABLE);
   });
 
-  it('inserts a table element below the block containing given non-block path', () => {
-    insertTableBelow(editor, [0, 0], getAvailableIdentifier);
+  it('inserts a table element below the block containing given non-block path', async () => {
+    await insertTableBelow(editor, [0, 0], getAvailableIdentifier);
     expect(editor).toHaveProperty('children.1.type', ELEMENT_TABLE);
   });
 });

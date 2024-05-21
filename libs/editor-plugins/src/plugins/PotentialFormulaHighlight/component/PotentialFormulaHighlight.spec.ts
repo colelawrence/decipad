@@ -19,7 +19,7 @@ beforeEach(() => {
   computer = getRemoteComputer();
 });
 
-it('turns a decoration into a magic number and a code line', () => {
+it('turns a decoration into a magic number and a code line', async () => {
   editor.children = [
     {
       type: ELEMENT_PARAGRAPH,
@@ -27,7 +27,7 @@ it('turns a decoration into a magic number and a code line', () => {
     },
   ];
 
-  commitPotentialFormula(
+  await commitPotentialFormula(
     editor as any,
     computer,
     [0, 0],

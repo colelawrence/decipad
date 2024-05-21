@@ -1,3 +1,4 @@
+import type { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   createMyAutoformatPlugin,
   createMyPlateEditor,
@@ -6,12 +7,11 @@ import {
   ELEMENT_H3,
   ELEMENT_HR,
   ELEMENT_PARAGRAPH,
-  MyEditor,
-  MyValue,
 } from '@decipad/editor-types';
 import { select } from '@udecode/plate-common';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { autoformatRules } from './index';
+import { timeout } from '@decipad/utils';
 
 let editor: MyEditor;
 beforeEach(() => {
@@ -65,7 +65,7 @@ describe('a block', () => {
   });
 });
 describe('inserting a code block', () => {
-  it('does not delete existing text', () => {
+  it('does not delete existing text', async () => {
     editor.children = [
       { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
     ] as unknown as MyValue;
@@ -74,6 +74,8 @@ describe('inserting a code block', () => {
     editor.insertText('`');
     editor.insertText('`');
     editor.insertText('`');
+
+    await timeout(100);
 
     expect(editor.children).toMatchObject([
       {

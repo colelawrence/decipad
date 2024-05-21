@@ -91,7 +91,7 @@ export type ComputerStats = {
 
 export type NotebookResultStream = BehaviorSubject<NotebookResults>;
 
-export interface RemoteComputer {
+export interface IRemoteComputer {
   // --------------- results --------------//
   results: NotebookResultStream;
   getBlockIdResult(
@@ -100,9 +100,9 @@ export interface RemoteComputer {
   expressionResult(_expression: AST.Expression): Promise<Result.Result>;
 
   // --------------- symbols --------------//
-  getStatement(blockId: string): AST.Statement | undefined;
+  getStatement(blockId: string): Promise<AST.Statement | undefined>;
   getSymbolDefinedInBlock(blockId: string): string | undefined;
-  variableExists(name: string, inBlockIds?: string[]): boolean;
+  variableExists(name: string, inBlockIds?: string[]): Promise<boolean>;
   getAvailableIdentifier(
     prefix: string,
     start?: number,
@@ -118,11 +118,14 @@ export interface RemoteComputer {
   expressionType(expression: AST.Expression): Promise<SerializedType>;
 
   // --------------- push --------------//
-  pushExternalDataUpdate(key: string, values: [string, Result.Result][]): void;
-  pushExternalDataDelete(key: string): void;
+  pushExternalDataUpdate(
+    key: string,
+    values: [string, Result.Result][]
+  ): Promise<void>;
+  pushExternalDataDelete(key: string): Promise<void>;
   pushCompute(req: ComputeRequest): Promise<NotebookResults>;
-  pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): void;
-  pushExtraProgramBlocksDelete(id: string): void;
+  pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): Promise<void>;
+  pushExtraProgramBlocksDelete(id: string): Promise<void>;
 
   // --------------- streams --------------//
   // --- results
@@ -141,7 +144,7 @@ export interface RemoteComputer {
 
   // --- symbols
   getSetOfNamesDefined$: ListenerHelper<[], Set<string>>;
-  getNamesDefined(inBlockId?: string): AutocompleteName[];
+  getNamesDefined(inBlockId?: string): Promise<AutocompleteName[]>;
   getNamesDefined$: ListenerHelper<
     [inBlockId?: string | undefined],
     AutocompleteName[]
@@ -184,4 +187,11 @@ export interface RemoteComputer {
 
   // flush
   flush(): Promise<void>;
+
+  // --------------- weird stuff for tests --------------//
+  getExternalData(): Promise<
+    Map<string, [id: string, injectedResult: Result.Result][]>
+  >;
+
+  getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>>;
 }

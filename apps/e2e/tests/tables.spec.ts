@@ -79,9 +79,7 @@ test('Count how many times table cells render', async ({ testUser }) => {
      * If this fails with a number less than what's currently expected, reduce
      * the expected count. Congratulations, you've made tables more efficient!
      */
-    const cellCount = 9;
-    const expectedPerCell = 3;
-    expect(renderCount).toBe(cellCount * expectedPerCell);
+    expect(renderCount).toBe(21);
   });
 });
 
@@ -763,8 +761,12 @@ test('Variables in Table', async ({ testUser: { page, notebook } }) => {
   await page.keyboard.type('Col');
   await page.getByTestId('autocomplete-item:Column1').click();
 
-  expect(await getFromTable(page, 1, 1)).toBe('9');
-  expect(await getFromTable(page, 2, 1)).toBe('3');
+  await expect(async () => {
+    expect(await getFromTable(page, 1, 1)).toBe('9');
+    expect(await getFromTable(page, 2, 1)).toBe('3');
+  }).toPass({
+    timeout: Timeouts.computerDelay,
+  });
 });
 
 test('multiline table cells', async ({ testUser }) => {

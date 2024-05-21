@@ -19,16 +19,16 @@ import {
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 
-function deduplicateVarNameInDef(
+async function deduplicateVarNameInDef(
   computer: RemoteComputer,
   e: VariableDefinitionElement
 ) {
-  e.children[0].children[0].text = computer.getAvailableIdentifier(
+  e.children[0].children[0].text = await computer.getAvailableIdentifier(
     `${getNodeString(e.children[0])}Copy`
   );
 }
 
-function deduplicateAssignmentVarName(
+async function deduplicateAssignmentVarName(
   computer: RemoteComputer,
   e: CodeLineElement
 ) {
@@ -36,68 +36,70 @@ function deduplicateAssignmentVarName(
   const parsed = parseStatement(code);
   if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
     const varName = parsed.solution.args[0].args[0];
-    const newVarName = computer.getAvailableIdentifier(`${varName}Copy`);
+    const newVarName = await computer.getAvailableIdentifier(`${varName}Copy`);
     e.children[0].text = code.replace(varName, newVarName);
   }
 }
 
-function deduplicateVarNameInCodeLineV2(
+async function deduplicateVarNameInCodeLineV2(
   computer: RemoteComputer,
   e: CodeLineV2Element
 ) {
-  e.children[0].children[0].text = computer.getAvailableIdentifier(
+  e.children[0].children[0].text = await computer.getAvailableIdentifier(
     `${getNodeString(e.children[0])}Copy`
   );
 }
 
-function deduplicateVarNameInStructuredIn(
+async function deduplicateVarNameInStructuredIn(
   computer: RemoteComputer,
   e: StructuredInputElement
 ) {
-  e.children[0].children[0].text = computer.getAvailableIdentifier(
+  e.children[0].children[0].text = await computer.getAvailableIdentifier(
     `${getNodeString(e.children[0])}Copy`
   );
 }
 
-function deduplicateTableVarName(computer: RemoteComputer, e: TableElement) {
+async function deduplicateTableVarName(
+  computer: RemoteComputer,
+  e: TableElement
+) {
   const captionEl = e.children[0].children[0];
   const varName = getNodeString(captionEl);
-  e.children[0].children[0].children[0].text = computer.getAvailableIdentifier(
-    `${varName}Copy`
-  );
+  e.children[0].children[0].children[0].text =
+    await computer.getAvailableIdentifier(`${varName}Copy`);
 }
 
-function deduplicateIntegrationVarName(
+async function deduplicateIntegrationVarName(
   computer: RemoteComputer,
   e: IntegrationTypes.IntegrationBlock
-): void {
+): Promise<void> {
   const varName = getNodeString(e.children[0]);
 
-  e.children[0].text = computer.getAvailableIdentifier(`${varName}Copy`);
+  e.children[0].text = await computer.getAvailableIdentifier(`${varName}Copy`);
 }
 
-export const deduplicateVarNameInBlock = <T extends AnyElement>(
+export const deduplicateVarNameInBlock = async <T extends AnyElement>(
   computer: RemoteComputer,
   el: T
-): T => {
+): Promise<T> => {
   switch (el.type) {
     case ELEMENT_VARIABLE_DEF:
-      deduplicateVarNameInDef(computer, el);
+      await deduplicateVarNameInDef(computer, el);
       break;
     case ELEMENT_CODE_LINE:
-      deduplicateAssignmentVarName(computer, el);
+      await deduplicateAssignmentVarName(computer, el);
       break;
     case ELEMENT_CODE_LINE_V2:
-      deduplicateVarNameInCodeLineV2(computer, el);
+      await deduplicateVarNameInCodeLineV2(computer, el);
       break;
     case ELEMENT_STRUCTURED_IN:
-      deduplicateVarNameInStructuredIn(computer, el);
+      await deduplicateVarNameInStructuredIn(computer, el);
       break;
     case ELEMENT_TABLE:
-      deduplicateTableVarName(computer, el);
+      await deduplicateTableVarName(computer, el);
       break;
     case ELEMENT_INTEGRATION:
-      deduplicateIntegrationVarName(computer, el);
+      await deduplicateIntegrationVarName(computer, el);
       break;
   }
   return el;

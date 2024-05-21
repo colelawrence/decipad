@@ -62,8 +62,8 @@ const getInsertableValue = (
   return insertableName;
 };
 
-const getVariableName = (computer: RemoteComputer, elementId: string) => {
-  const res = computer.getStatement(elementId);
+const getVariableName = async (computer: RemoteComputer, elementId: string) => {
+  const res = await computer.getStatement(elementId);
   return res?.type === 'assign' ? res.args[0].args[0] : null;
 };
 

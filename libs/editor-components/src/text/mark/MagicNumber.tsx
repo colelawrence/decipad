@@ -83,12 +83,12 @@ const UnprotectedMagicNumber: PlateComponent = ({
     true
   );
 
-  const onCreateInput = useCallback(() => {
+  const onCreateInput = useCallback(async () => {
     if (!_text) return;
     const path = ReactEditor.findPath(editor as ReactEditor, _text);
     if (!path) return;
 
-    const newBlockId = insertStructuredCodeLineBelow({
+    const newBlockId = await insertStructuredCodeLineBelow({
       editor,
       path,
       select: true,

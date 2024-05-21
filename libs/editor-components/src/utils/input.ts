@@ -1,7 +1,4 @@
-import type {
-  SerializedTypeKind,
-  RemoteComputer,
-} from '@decipad/remote-computer';
+import type { SerializedTypeKind } from '@decipad/remote-computer';
 import type {
   DisplayElement,
   DropdownElement,
@@ -19,6 +16,7 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
+import type { GetAvailableIdentifier } from '@decipad/editor-utils';
 import {
   generateDropdownName,
   generateInputName,
@@ -78,14 +76,14 @@ const getVariantAndHolder = (
   return ['expression', DEFAULT_INPUT_VALUE];
 };
 
-export const insertInputBelow = (
+export const insertInputBelow = async (
   editor: MyEditor,
   path: Path,
   kind: SerializedTypeKind,
-  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
-): void => {
+  getAvailableIdentifier: GetAvailableIdentifier
+): Promise<void> => {
   const [variant, placeholder] = getVariantAndHolder(kind);
-  const name = getAvailableIdentifier(generateInputName());
+  const name = await getAvailableIdentifier(generateInputName());
 
   const input = getInitialInputElement({
     kind,
@@ -135,13 +133,13 @@ const getSliderInputElement = () => {
   };
 };
 
-export const insertSliderInputBelow = (
+export const insertSliderInputBelow = async (
   editor: MyEditor,
   path: Path,
-  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
-): void => {
+  getAvailableIdentifier: GetAvailableIdentifier
+): Promise<void> => {
   const input = getSliderInputElement();
-  input.children[0].children[0].text = getAvailableIdentifier(
+  input.children[0].children[0].text = await getAvailableIdentifier(
     generateSliderName()
   );
   insertNodes<VariableSliderElement>(
@@ -193,13 +191,13 @@ const getDropdownElement = () =>
     ],
   } as VariableDropdownElement);
 
-export const insertDropdownBelow = (
+export const insertDropdownBelow = async (
   editor: MyEditor,
   path: Path,
-  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
-): void => {
+  getAvailableIdentifier: GetAvailableIdentifier
+): Promise<void> => {
   const dropdown = getDropdownElement();
-  dropdown.children[0].children[0].text = getAvailableIdentifier(
+  dropdown.children[0].children[0].text = await getAvailableIdentifier(
     generateDropdownName(),
     1
   );

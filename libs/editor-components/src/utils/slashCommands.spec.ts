@@ -29,7 +29,7 @@ const getAvailableIdentifier = (prefix: string, start?: number) =>
 
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
   'command "%s" replaces the block with a "%s" block',
-  (command, expectedType) => {
+  async (command, expectedType) => {
     const editor = createMyPlateEditor({
       plugins: [createCodeBlockPlugin()],
     });
@@ -37,7 +37,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       { type: ELEMENT_PARAGRAPH, children: [{ text: '/cmd' }] } as never,
     ];
 
-    execute({
+    await execute({
       editor,
       computer: getRemoteComputer(),
       path: [0],

@@ -59,6 +59,7 @@ export {
   tokenRules,
   parseUnit,
   walkAst,
+  walkAstAsync,
   hydrateResult,
   hydrateType,
   CurrencyUnits,

@@ -12,11 +12,11 @@ import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
 import type { RemoteComputer } from '@decipad/remote-computer';
 
-const getInitialDataViewElement = (
+const getInitialDataViewElement = async (
   computer: RemoteComputer,
   blockId?: string,
   varName?: string
-): DataViewElement => {
+): Promise<DataViewElement> => {
   return {
     id: nanoid(),
     type: ELEMENT_DATA_VIEW,
@@ -32,7 +32,7 @@ const getInitialDataViewElement = (
             type: ELEMENT_DATA_VIEW_NAME,
             children: [
               {
-                text: computer?.getAvailableIdentifier(
+                text: await computer?.getAvailableIdentifier(
                   varName ? `${varName}Data` : 'DataView'
                 ),
               },
@@ -49,15 +49,15 @@ const getInitialDataViewElement = (
   };
 };
 
-export const insertDataViewBelow = (
+export const insertDataViewBelow = async (
   editor: TEditor,
   path: Path,
   computer: RemoteComputer,
   blockId?: string,
   varName?: string
-): void => {
+): Promise<void> => {
   const dataView = cloneDeep(
-    getInitialDataViewElement(computer, blockId, varName)
+    await getInitialDataViewElement(computer, blockId, varName)
   );
   insertNodes(editor, [dataView], { at: requirePathBelowBlock(editor, path) });
 };

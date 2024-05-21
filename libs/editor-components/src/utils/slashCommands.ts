@@ -13,17 +13,16 @@ import {
   insertCodeLineBelow,
   insertDividerBelow,
   insertStructuredCodeLineBelow,
+  withoutNormalizingAsync,
 } from '@decipad/editor-utils';
 import {
   useConnectionStore,
   useFileUploadStore,
 } from '@decipad/react-contexts';
-import {
-  deleteText,
-  removeNodes,
-  withoutNormalizing,
-} from '@udecode/plate-common';
+import { deleteText, removeNodes } from '@udecode/plate-common';
 import type { Location, Path } from 'slate';
+import type { RemoteComputer } from '@decipad/remote-computer';
+import type { PromiseOrType } from '@decipad/utils';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -35,9 +34,12 @@ import {
 import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
-export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
+export type GetAvailableIdentifier = (
+  prefix: string,
+  start?: number
+) => PromiseOrType<string>;
+
 export interface ExecuteProps {
   editor: MyEditor;
   computer: RemoteComputer;
@@ -48,7 +50,7 @@ export interface ExecuteProps {
   getAvailableIdentifier: GetAvailableIdentifier;
 }
 
-export const execute = ({
+export const execute = async ({
   command,
   computer,
   editor,
@@ -56,15 +58,15 @@ export const execute = ({
   getAvailableIdentifier,
   deleteFragment,
   deleteBlock = true,
-}: ExecuteProps): void => {
+}: ExecuteProps): Promise<void> => {
   const { changeOpen } = useConnectionStore.getState();
   const { setDialogOpen, setFileType } = useFileUploadStore.getState();
 
   // eslint-disable-next-line complexity
-  withoutNormalizing(editor, () => {
+  await withoutNormalizingAsync(editor, async () => {
     switch (command) {
       case 'structured-input':
-        insertStructuredCodeLineBelow({
+        await insertStructuredCodeLineBelow({
           editor,
           path,
           code: '100$',
@@ -72,7 +74,7 @@ export const execute = ({
         });
         break;
       case 'structured-code-line':
-        insertStructuredCodeLineBelow({
+        await insertStructuredCodeLineBelow({
           editor,
           path,
           code: '14 * 3',
@@ -80,76 +82,76 @@ export const execute = ({
         });
         break;
       case 'calculation-block':
-        insertCodeLineBelow(editor, path, false);
+        await insertCodeLineBelow(editor, path, false);
         break;
       case 'input':
-        insertInputBelow(editor, path, 'number', getAvailableIdentifier);
+        await insertInputBelow(editor, path, 'number', getAvailableIdentifier);
         break;
       case 'toggle':
-        insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
+        await insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
         break;
       case 'datepicker':
-        insertInputBelow(editor, path, 'date', getAvailableIdentifier);
+        await insertInputBelow(editor, path, 'date', getAvailableIdentifier);
         break;
       case 'slider':
-        insertSliderInputBelow(editor, path, getAvailableIdentifier);
+        await insertSliderInputBelow(editor, path, getAvailableIdentifier);
         break;
       case 'display':
-        insertDisplayBelow(editor, path);
+        await insertDisplayBelow(editor, path);
         break;
       case 'dropdown':
-        insertDropdownBelow(editor, path, getAvailableIdentifier);
+        await insertDropdownBelow(editor, path, getAvailableIdentifier);
         break;
       case 'table':
-        insertTableBelow(editor, path, getAvailableIdentifier);
+        await insertTableBelow(editor, path, getAvailableIdentifier);
         break;
       case 'data-view':
-        insertDataViewBelow(editor, path, computer);
+        await insertDataViewBelow(editor, path, computer);
         break;
       case 'open-integration':
         changeOpen(true);
         break;
       case 'live-query':
-        insertLiveQueryBelow(editor, path, getAvailableIdentifier);
+        await insertLiveQueryBelow(editor, path, getAvailableIdentifier);
         break;
       case 'pie-chart':
-        insertPlotBelow(editor, path, 'arc');
+        await insertPlotBelow(editor, path, 'arc');
         break;
       case 'line-chart':
-        insertPlotBelow(editor, path, 'line');
+        await insertPlotBelow(editor, path, 'line');
         break;
       case 'bar-chart':
-        insertPlotBelow(editor, path, 'bar');
+        await insertPlotBelow(editor, path, 'bar');
         break;
       case 'area-chart':
-        insertPlotBelow(editor, path, 'area');
+        await insertPlotBelow(editor, path, 'area');
         break;
       case 'scatter-plot':
-        insertPlotBelow(editor, path, 'point');
+        await insertPlotBelow(editor, path, 'point');
         break;
       case 'import':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);
         break;
       case 'submit-form':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_SUBMIT_FORM);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_SUBMIT_FORM);
         break;
       case 'heading1':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_H2);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_H2);
         break;
       case 'heading2':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
         break;
       case 'divider':
-        insertDividerBelow(editor, path, ELEMENT_HR);
+        await insertDividerBelow(editor, path, ELEMENT_HR);
         break;
       case 'callout':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
         break;
       case 'blockquote':
-        insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
+        await insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
         break;
       case 'sketch':
-        insertDrawBelow(editor, path);
+        await insertDrawBelow(editor, path);
         break;
       case 'upload-image':
         setFileType('image' as FileType);

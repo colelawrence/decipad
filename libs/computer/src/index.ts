@@ -52,6 +52,7 @@ export {
   materializeResult,
   tokenRules,
   walkAst,
+  walkAstAsync,
   isResultGenerator,
   hydrateType,
   type AutocompleteName,

@@ -139,7 +139,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     [editor, nodePath, controller, onDelete, moveTab, element]
   );
 
-  const onDuplicate = useCallback(() => {
+  const onDuplicate = useCallback(async () => {
     const [isMultipleSelection, blockSelectedIds] = getSelection();
 
     if (isMultipleSelection) {
@@ -149,7 +149,8 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
         const entry = findNode<MyElement>(editor, { match: { id } });
         if (!entry) continue;
         const [node, path] = entry;
-        nodes.push(utils.cloneProxy(computer, node));
+        // eslint-disable-next-line no-await-in-loop
+        nodes.push(await utils.cloneProxy(computer, node));
         if (path[0] > largestPath) {
           [largestPath] = path;
         }
@@ -164,7 +165,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     const path = findNodePath(editor, element);
     if (!path) return;
 
-    const newEl = utils.cloneProxy(computer, element);
+    const newEl = await utils.cloneProxy(computer, element);
     insertElements(editor, newEl, {
       at: requirePathBelowBlock(editor, path),
     });

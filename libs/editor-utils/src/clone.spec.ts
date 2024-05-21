@@ -16,9 +16,9 @@ beforeEach(() => {
   computer = getRemoteComputer();
 });
 
-it('clones and uses a new nanoid', () => {
+it('clones and uses a new nanoid', async () => {
   expect(
-    clone(computer, {
+    await clone(computer, {
       type: ELEMENT_PARAGRAPH,
       id: 'old-id',
       children: [{ text: 'hello' }],
@@ -36,9 +36,9 @@ it('clones and uses a new nanoid', () => {
   `);
 });
 
-it('clones while using a different varname', () => {
+it('clones while using a different varname', async () => {
   expect(
-    clone(computer, {
+    await clone(computer, {
       type: ELEMENT_CODE_LINE,
       id: 'old-id',
       children: [{ text: 'hello = "world"' }],
@@ -56,9 +56,9 @@ it('clones while using a different varname', () => {
   `);
 });
 
-it('clones while using a different varname (2)', () => {
+it('clones while using a different varname (2)', async () => {
   expect(
-    clone(computer, {
+    await clone(computer, {
       type: ELEMENT_CODE_LINE_V2,
       id: 'old-id',
       children: [
@@ -106,9 +106,9 @@ it('clones while using a different varname (2)', () => {
 //
 //
 
-it('only changes ID field', () => {
+it('only changes ID field', async () => {
   expect(
-    clone(computer, {
+    await clone(computer, {
       type: ELEMENT_CODE_LINE_V2,
       id: 'old-id',
       children: [

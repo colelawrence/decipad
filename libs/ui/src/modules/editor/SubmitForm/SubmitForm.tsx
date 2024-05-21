@@ -298,7 +298,7 @@ export const SubmitForm: PlateComponent<{}> = ({ ...props }) => {
 
     const exportedProgram = await exportProgramByVarname(
       computer.results.value,
-      computer.getSymbolDefinedInBlock.bind(computer)
+      await computer.getSymbolDefinedInBlock.bind(computer)
     );
 
     if (!email) {

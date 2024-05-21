@@ -108,7 +108,7 @@ export class Computer {
     retrieveHumanVariableNameByGlobalVariableName: (varName) =>
       this.latestExprRefToVarNameMap.get(varName) ?? varName,
   });
-  private externalData = new BehaviorSubject<
+  readonly externalData = new BehaviorSubject<
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
@@ -118,7 +118,7 @@ export class Computer {
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequestWithResults>();
-  private readonly extraProgramBlocks = new BehaviorSubject<
+  readonly extraProgramBlocks = new BehaviorSubject<
     Map<string, ProgramBlock[]>
   >(new Map());
   private resultStreams = new ResultStreams(this);

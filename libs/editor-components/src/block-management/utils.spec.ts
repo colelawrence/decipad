@@ -13,7 +13,7 @@ describe('Clone proxy', () => {
     computer = getRemoteComputer();
   });
 
-  it('deduplicates the IDs in category values in tables', () => {
+  it('deduplicates the IDs in category values in tables', async () => {
     const tableElement: TableElement = {
       type: 'table',
       id: '0',
@@ -54,7 +54,7 @@ describe('Clone proxy', () => {
       ],
     };
 
-    expect(utils.cloneProxy(computer, tableElement)).toMatchObject({
+    expect(await utils.cloneProxy(computer, tableElement)).toMatchObject({
       children: [
         {
           children: [

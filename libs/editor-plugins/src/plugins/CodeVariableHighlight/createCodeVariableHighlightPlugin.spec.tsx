@@ -8,7 +8,7 @@ import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import type { PlatePlugin } from '@udecode/plate-common';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import type { RemoteComputer } from '@decipad/remote-computer';
@@ -108,7 +108,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(0));
 
     const children = [
       {
@@ -162,7 +162,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(0));
 
     const children = [
       {
@@ -226,7 +226,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(0));
 
     const children = [
       {
@@ -274,7 +274,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(0));
 
     const children = [
       {
@@ -366,7 +366,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(0));
 
     const children = [
       {

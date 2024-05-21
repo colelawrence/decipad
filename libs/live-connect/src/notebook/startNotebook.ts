@@ -47,20 +47,22 @@ export const startNotebook: StartNotebook = (
       debounceTime(250),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     )
-    .subscribe((result: IdentifiedResult | IdentifiedError | undefined) => {
-      if (result) {
-        const identifier = computer.getSymbolDefinedInBlock(blockId);
-        if (result.type === 'identified-error') {
-          onError(new Error(identifiedErrorToMessage(result)));
-        } else if (result.type === 'computer-result') {
-          subscription.notify({
-            meta: { title: identifier },
-            result: result.result,
-            loading: false,
-          });
+    .subscribe(
+      async (result: IdentifiedResult | IdentifiedError | undefined) => {
+        if (result) {
+          const identifier = await computer.getSymbolDefinedInBlock(blockId);
+          if (result.type === 'identified-error') {
+            onError(new Error(identifiedErrorToMessage(result)));
+          } else if (result.type === 'computer-result') {
+            subscription.notify({
+              meta: { title: identifier },
+              result: result.result,
+              loading: false,
+            });
+          }
         }
       }
-    });
+    );
 
   const {
     update: updateLiveConnections,

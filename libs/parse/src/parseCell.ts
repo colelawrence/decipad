@@ -15,7 +15,7 @@ import {
   parseExpressionOrThrow,
   parseSimpleValue,
   Unit,
-  walkAst,
+  walkAstAsync,
 } from '@decipad/remote-computer';
 import { formatUnit, formatError } from '@decipad/format';
 import type { PromiseOrType } from '@decipad/utils';
@@ -130,14 +130,14 @@ export const parseCell = async (
     const exp = parseExpressionOrThrow(text);
     let allRefsExist = true;
 
-    walkAst(exp, (node) => {
+    await walkAstAsync(exp, async (node) => {
       if (node.type !== 'ref') {
         return;
       }
 
       if (allRefsExist) {
         // returning false;
-        allRefsExist = computer.variableExists(node.args[0]);
+        allRefsExist = await computer.variableExists(node.args[0]);
       }
     });
 
