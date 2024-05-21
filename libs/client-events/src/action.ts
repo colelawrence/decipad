@@ -127,6 +127,13 @@ type Action =
         analytics_source: 'frontend' | 'backend';
       };
     }
+  | {
+      action: 'Checkout Modal Viewed';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
 
   // OLD TRACKER MIGHT GET DEPRECATED IN THE FUTURE
   // Notebook operations

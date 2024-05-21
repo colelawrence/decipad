@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useContext,
 } from 'react';
 import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
@@ -28,7 +29,7 @@ import { useUserId } from './useUserId';
 import { useToast } from '@decipad/toast';
 import { PaymentAnalyticsProps, getLatestWorkspace } from './helpers';
 import { useResourceUsage } from '@decipad/react-contexts';
-import { getAnalytics } from '@decipad/client-events';
+import { getAnalytics, ClientEventsContext } from '@decipad/client-events';
 import { useNavigate } from 'react-router-dom';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
@@ -46,6 +47,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   hasFreeWorkspaceSlot,
   currentPlan,
 }) => {
+  const clientEvent = useContext(ClientEventsContext);
+
   const params = useRouteParams(
     workspaces({}).workspace({ workspaceId }).upgrade
   );
@@ -261,6 +264,21 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     setPaymentStatus(_paymentStatus);
     setIsPollingData(true);
   };
+
+  // to avoid analytics events being triggered multiple times
+  useEffect(() => {
+    if (currentStage === 'make-payment') {
+      clientEvent({
+        segmentEvent: {
+          type: 'action',
+          action: 'Checkout Modal Viewed',
+          props: {
+            analytics_source: 'frontend',
+          },
+        },
+      });
+    }
+  }, [clientEvent, currentStage]);
 
   switch (currentStage) {
     case 'choose-plan': {
