@@ -43,7 +43,7 @@ import {
 } from '@udecode/plate-common';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useContext } from 'react';
 import { type Path } from 'slate';
 import * as Sentry from '@sentry/react';
 import { exportCsv } from '@decipad/export';
@@ -52,6 +52,7 @@ import { materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
+import { ClientEventsContext } from '@decipad/client-events';
 
 export interface TableActions {
   onChangeColumnName: (columnIndex: number, newColumnName: string) => void;
@@ -195,6 +196,8 @@ export const useTableActions = (
   editor: MyEditor,
   element: TableElement | null | undefined
 ): TableActions => {
+  const clientEvent = useContext(ClientEventsContext);
+
   const onChangeColumnName = useCallback(
     (columnIndex: number, newColumnName: string) => {
       withPath(editor, element, (path) => {
@@ -588,8 +591,17 @@ export const useTableActions = (
       }
       const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
       forceDownload(`${tableName}.csv`, new Blob([csv]));
+      clientEvent({
+        segmentEvent: {
+          type: 'action',
+          action: 'Table CSV Downloaded',
+          props: {
+            analytics_source: 'frontend',
+          },
+        },
+      });
     }
-  }, [computer, element, toast]);
+  }, [clientEvent, computer, element, toast]);
 
   return {
     onChangeColumnName,

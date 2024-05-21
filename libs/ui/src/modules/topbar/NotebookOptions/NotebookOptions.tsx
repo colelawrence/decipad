@@ -5,7 +5,7 @@ import {
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import format from 'date-fns/format';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useState, useContext } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
 import {
   Archive,
@@ -24,6 +24,7 @@ import {
   shortAnimationDuration,
 } from '../../../primitives';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import { ClientEventsContext } from '@decipad/client-events';
 
 export interface NotebookOptionsProps {
   readonly notebookId: string;
@@ -61,6 +62,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   onDuplicate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const clientEvent = useContext(ClientEventsContext);
 
   return (
     <div css={menuActionsStyles}>
@@ -151,6 +153,15 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
               onSelect={() => {
                 actions.onDownloadNotebookHistory(id);
                 setIsOpen(false);
+                clientEvent({
+                  segmentEvent: {
+                    type: 'action',
+                    action: 'Exported Notebook History',
+                    props: {
+                      analytics_source: 'frontend',
+                    },
+                  },
+                });
               }}
             >
               Version History
