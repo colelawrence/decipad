@@ -5,6 +5,7 @@ import {
 } from '@decipad/remote-computer';
 import { type DataViewElement } from '@decipad/editor-types';
 import { getColumnRef } from './getColumnRef';
+import { isElement } from '@udecode/plate-common';
 
 export const generateAssembledTableDef = (
   dataView: DataViewElement
@@ -28,46 +29,48 @@ export const generateAssembledTableDef = (
     [dataView.id]
   );
 
-  const columnDefs = headerRow.children.flatMap((header, headerIndex) => {
-    const columnRef = getColumnRef(header);
-    return statementToIdentifiedBlock(
-      `${assembledTableBlockId}-column-${headerIndex}`,
-      {
-        type: 'table-column-assign',
-        args: [
-          {
-            type: 'tablepartialdef',
-            args: [tableName],
-          },
-          {
-            type: 'coldef',
-            args: [`${columnRef}_${headerIndex}`],
-          },
-          sourceVarName
-            ? {
-                type: 'property-access',
-                args: [
-                  {
-                    type: 'ref',
-                    args: [getExprRef(sourceVarName)],
-                  },
-                  {
-                    type: 'colref',
-                    args: [columnRef],
-                  },
-                ],
-              }
-            : {
-                type: 'noop',
-                args: [],
-              },
-          headerIndex,
-        ],
-      },
-      true,
-      [dataView.id]
-    );
-  });
+  const columnDefs = headerRow.children
+    .filter(isElement)
+    .flatMap((header, headerIndex) => {
+      const columnRef = getColumnRef(header);
+      return statementToIdentifiedBlock(
+        `${assembledTableBlockId}-column-${headerIndex}`,
+        {
+          type: 'table-column-assign',
+          args: [
+            {
+              type: 'tablepartialdef',
+              args: [tableName],
+            },
+            {
+              type: 'coldef',
+              args: [`${columnRef}_${headerIndex}`],
+            },
+            sourceVarName
+              ? {
+                  type: 'property-access',
+                  args: [
+                    {
+                      type: 'ref',
+                      args: [getExprRef(sourceVarName)],
+                    },
+                    {
+                      type: 'colref',
+                      args: [columnRef],
+                    },
+                  ],
+                }
+              : {
+                  type: 'noop',
+                  args: [],
+                },
+            headerIndex,
+          ],
+        },
+        true,
+        [dataView.id]
+      );
+    });
 
   return [emptyTable, ...columnDefs];
 };
