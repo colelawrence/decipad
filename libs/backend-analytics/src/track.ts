@@ -14,6 +14,8 @@ export const track = (
   event: AnalyticsEvent,
   context?: Record<string, unknown>
 ): Promise<void> => {
+  // eslint-disable-next-line no-console
+  console.log('track called', event);
   return new Promise((resolve) => {
     const client = analyticsClient(request);
     if (client) {

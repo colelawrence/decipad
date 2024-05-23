@@ -42,12 +42,15 @@ export async function signInEmail(
       });
       return false;
     }
+
     const userInput: Partial<UserInput> = {
       email: account.userId,
     };
     if (!existingUser.name) {
       userInput.name = userInput.email as string | undefined;
     }
+
+    userInput.previous_login = existingUser.last_login;
     userInput.last_login = timestamp();
     existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
@@ -65,6 +68,16 @@ export async function signInEmail(
         event
       )
     ).user;
+
+    await track(event, {
+      event: 'Signed Up',
+      userId: user.id,
+      properties: {
+        user_email: existingUser.email,
+        signup_source: event.queryStringParameters?.source ?? 'Sign up form',
+        analytics_source: 'backend',
+      },
+    });
   }
 
   // eslint-disable-next-line no-param-reassign

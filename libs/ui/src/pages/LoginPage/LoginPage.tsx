@@ -50,6 +50,7 @@ const LoginForm = ({ email: initialEmail, onSubmit }: LoginPageProps) => {
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      event.stopPropagation();
 
       if (signUpRedirect) {
         window.location.href = signUpRedirect;

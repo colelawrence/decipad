@@ -129,6 +129,23 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         email: message.user.email,
         fullName: message.user.name,
       });
+      // eslint-disable-next-line no-console
+      console.log('Sign in', { message, event });
+      const data = await tables();
+      const user = await data.users.get({ id: message.user.id });
+      if (message.isNewUser || user?.previous_login == null) {
+        // first time logging in
+        await track(event, {
+          event: 'Signed Up',
+          userId: message.user.id,
+          properties: {
+            user_email: message.user.email,
+            signup_source:
+              event.queryStringParameters?.source ?? 'Sign up form',
+            analytics_source: 'backend',
+          },
+        });
+      }
       await track(event, {
         event: 'Signed In',
         userId: message.user.id,

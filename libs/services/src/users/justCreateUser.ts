@@ -1,5 +1,5 @@
 import type { UserInput, UserWithSecret } from '@decipad/backendtypes';
-import tables, { timestamp } from '@decipad/tables';
+import tables from '@decipad/tables';
 import { forbidden, notAcceptable } from '@hapi/boom';
 import { isAllowedToLogIn } from './isAllowed';
 import { nanoid } from 'nanoid';
@@ -24,7 +24,6 @@ export async function justCreateUser(user: UserInput): Promise<UserWithSecret> {
     email,
     id: nanoid(),
     name: user.name,
-    last_login: timestamp(),
     image: user.image,
     secret: nanoid(),
   };

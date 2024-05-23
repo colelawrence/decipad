@@ -57,6 +57,7 @@ export const createVerifier = ({ secret, baseUrl, event }: AdapterOptions) => {
       email: string;
       resourceLink: string;
       expirationSeconds: number;
+      source?: string;
     }) {
       const { email, resourceLink, expirationSeconds } = verification;
       const token = randomString(32);
@@ -74,9 +75,12 @@ export const createVerifier = ({ secret, baseUrl, event }: AdapterOptions) => {
             }),
       });
 
-      const loginLink = `${baseUrl}/api/auth/callback/email?callbackUrl=${encodeURIComponent(
+      let loginLink = `${baseUrl}/api/auth/callback/email?callbackUrl=${encodeURIComponent(
         resourceLink
       )}&token=${token}&email=${encodeURIComponent(email)}`;
+      if (verification.source) {
+        loginLink += `&source=${encodeURIComponent(verification.source)}`;
+      }
 
       return {
         loginLink,

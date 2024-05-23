@@ -43,6 +43,7 @@ export interface UserInput {
   image?: string | null;
   provider?: string;
   providerId?: string;
+  previous_login?: number;
   last_login?: number;
   first_login?: number;
   hideChecklist?: boolean;
@@ -329,6 +330,7 @@ export type TableRecordChanges<T extends TableRecord> = (
 export interface UserRecord extends TableRecordBase {
   name: string;
   last_login?: number;
+  previous_login?: number;
   // image hash
   image?: string | null;
   email?: string | null;

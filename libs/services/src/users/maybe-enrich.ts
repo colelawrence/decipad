@@ -24,6 +24,10 @@ export async function maybeEnrich(
     update = true;
     updateUser.last_login = newUserProps.last_login;
   }
+  if (newUserProps.previous_login !== existingUser.previous_login) {
+    update = true;
+    updateUser.previous_login = newUserProps.previous_login;
+  }
 
   const data = await tables();
 

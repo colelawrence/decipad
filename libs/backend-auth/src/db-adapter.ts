@@ -10,6 +10,7 @@ import {
 import { createVerifier } from '@decipad/services/authentication';
 import pick from 'lodash.pick';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { track } from '@decipad/backend-analytics';
 
 // Next-Auth does not expose some types
 // So we have to help here.
@@ -71,6 +72,19 @@ export const adapter = (
             event
           )
         ).user;
+
+        if (!event.queryStringParameters?.source) {
+          // no source, so it's a direct login
+          await track(event, {
+            event: 'Signed Up',
+            userId: user.id,
+            properties: {
+              user_email: user.email,
+              signup_source: 'Sign up form',
+              analytics_source: 'backend',
+            },
+          });
+        }
       }
 
       return user;

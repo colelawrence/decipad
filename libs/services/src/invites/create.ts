@@ -107,10 +107,13 @@ export async function generateAuthLink(
     baseUrl: urlBase,
   });
 
+  const source = `Invited to ${args.resourceType.humanName}`;
+
   const { loginLink } = await verifier.createStandaloneVerificationToken({
     email: args.email,
     resourceLink: args.resourceLink,
     expirationSeconds: inviteExpirationSeconds,
+    source,
   });
 
   let signUpMessage;
@@ -126,6 +129,7 @@ export async function generateAuthLink(
     // invitedBy: args.invitedByUser.email || args.invitedByUser.name,
     message: signUpMessage,
     redirect: loginLink,
+    source,
   });
 
   return `${urlBase}/w?${params.toString()}`;
