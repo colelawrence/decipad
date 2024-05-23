@@ -251,8 +251,11 @@ export const IntegrationBlock: PlateComponent = ({
     track({
       segmentEvent: {
         type: 'action',
-        action: 'Integration: Query sent',
-        props: { type: element.integrationType.type },
+        action: 'Notebook Integration Query Submitted',
+        props: {
+          integration_type: element.integrationType.type,
+          analytics_source: 'frontend',
+        },
       },
     });
   };

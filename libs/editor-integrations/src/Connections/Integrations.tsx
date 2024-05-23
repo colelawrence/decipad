@@ -15,6 +15,7 @@ import {
   useCreateIntegration,
   useIntegrationScreenFactory,
   useResetState,
+  useTrackIntegrationRun,
 } from '../hooks';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
 
@@ -57,6 +58,8 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   useAnalytics();
   useResetState();
 
+  const onRun = useTrackIntegrationRun();
+
   return (
     <ExecutionContext.Provider value={{ info, onExecute }}>
       <Dialog open={open} setOpen={changeOpen}>
@@ -71,6 +74,7 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
           onRun={() => {
             if (queries.hasReachedLimit) return;
 
+            onRun(connectionType!);
             onExecute({ status: 'run' });
             queries.incrementUsageWithBackend(workspaceId);
           }}

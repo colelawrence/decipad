@@ -1,7 +1,11 @@
 import type { AnyElement, ElementVariants } from '@decipad/editor-types';
 import type { PermissionType } from '@decipad/graphql-client';
 
-type TrackedIntegrations = 'notion' | 'codeconnection' | 'mysql' | 'gsheets';
+export type TrackedIntegrations =
+  | 'notion'
+  | 'codeconnection'
+  | 'mysql'
+  | 'gsheets';
 
 type Action =
   // NEW TRACKERS
@@ -97,6 +101,27 @@ type Action =
       props: {
         integration_type: TrackedIntegrations;
         analytics_source: 'backend' | 'frontend';
+      };
+    }
+  | {
+      action: 'Notebook Integrations Modal Viewed'; // 'Integration: Notebook viewed';
+      props: {
+        integration_type: TrackedIntegrations;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Notebook Integration Created';
+      props: {
+        integration_type: TrackedIntegrations;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
+      action: 'Notebook Integration Query Submitted'; // 'Integration: Query sent';
+      props: {
+        integration_type: TrackedIntegrations;
+        analytics_source: 'frontend' | 'backend';
       };
     }
   | {
@@ -201,17 +226,7 @@ type Action =
   | {
       action: 'widget renamed';
       props: { variant: ElementVariants };
-    }
-  // AI chat assistant actions
-  | {
-      action: 'Integration: Notebook viewed';
-      props: { type: TrackedIntegrations };
-    }
-  | {
-      action: 'Integration: Notebook Integration added';
-      props: { type: TrackedIntegrations };
-    }
-  | { action: 'Integration: Query sent'; props: { type: TrackedIntegrations } };
+    };
 
 export type ActionEvent = {
   type: 'action';
