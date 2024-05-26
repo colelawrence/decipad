@@ -54,7 +54,9 @@ async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
   try {
     const program = createProgramFromMultipleStatements(codeExample);
     const computer = getRemoteComputer();
-    const result = await computer.computeRequest({ program });
+    const result = await computer.computeDeltaRequest({
+      program: { upsert: program },
+    });
     if (result == null) {
       throw new Error('compute panic');
     }

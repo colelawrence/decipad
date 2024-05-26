@@ -1,5 +1,5 @@
 import permutations from 'just-permutations';
-import type { ComputeRequest } from '@decipad/computer-interfaces';
+import type { ComputeDeltaRequest } from '@decipad/computer-interfaces';
 import { simplifyComputeResponse, getIdentifiedBlocks } from '../testUtils';
 import { Computer } from './Computer';
 
@@ -8,8 +8,8 @@ beforeEach(() => {
   computer = new Computer();
 });
 
-const computeOnTestComputer = async (req: ComputeRequest) => {
-  const res = await computer.computeRequest(req);
+const computeOnTestComputer = async (req: ComputeDeltaRequest) => {
+  const res = await computer.computeDeltaRequest(req);
   return simplifyComputeResponse(res);
 };
 
@@ -32,7 +32,7 @@ describe('computer is independent of block-order', () => {
     for (const program of permutations(blocks).slice(0, 1000)) {
       expect(
         // eslint-disable-next-line no-await-in-loop
-        (await computeOnTestComputer({ program })).sort()
+        (await computeOnTestComputer({ program: { upsert: program } })).sort()
       ).toMatchInlineSnapshot(`
         Array [
           "block-0 -> 130000",

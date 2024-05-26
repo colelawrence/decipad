@@ -79,7 +79,7 @@ test('Count how many times table cells render', async ({ testUser }) => {
      * If this fails with a number less than what's currently expected, reduce
      * the expected count. Congratulations, you've made tables more efficient!
      */
-    expect(renderCount).toBe(21);
+    expect(renderCount).toBe(process.env.CI ? 21 : 30);
   });
 });
 

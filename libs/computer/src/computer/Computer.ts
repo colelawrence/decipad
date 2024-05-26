@@ -1,15 +1,15 @@
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
-  combineLatestWith,
+  concatMap,
   distinctUntilChanged,
   map,
-  shareReplay,
   switchMap,
 } from 'rxjs/operators';
 import { fnQueue } from '@decipad/fnqueue';
 import type {
   AST,
+  ExternalDataMap,
   Result,
   SerializedType,
   SerializedTypes,
@@ -17,8 +17,6 @@ import type {
   AutocompleteName,
 } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
-// eslint-disable-next-line no-restricted-imports
-import type { ExternalDataMap } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import {
   getOfType,
@@ -42,9 +40,6 @@ import {
 } from '@decipad/utils';
 import type {
   BlockResult,
-  ComputeRequest,
-  ComputeRequestWithExternalData,
-  ComputeRequestWithResults,
   ComputerProgram,
   IdentifiedError,
   IdentifiedResult,
@@ -54,6 +49,7 @@ import type {
   ColumnDesc,
   DimensionExplanation,
   TableDesc,
+  ComputeDeltaRequest,
 } from '@decipad/computer-interfaces';
 import { findNames } from '../autocomplete';
 import { computeProgram } from '../compute/computeProgram';
@@ -66,7 +62,6 @@ import {
 import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
 import { ResultStreams } from '../resultStreams';
-import { dropWhileComputing } from '../tools/dropWhileComputing';
 import {
   getDefinedSymbol,
   getGoodBlocks,
@@ -80,15 +75,15 @@ import { astToParseable } from './astToParseable';
 import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
 import { emptyBlockResultSubject } from './emptyBlockSubject';
-import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from '../topological-sort';
 import { flattenTableDeclarations } from './transformTables';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import { statementToML } from '../mathML/statementToML';
-import omit from 'lodash.omit';
 import { count, first } from '@decipad/generator-utils';
+import { updateProgram } from './updateProgram';
+import type { ComputeDeltaRequestWithDone } from '../../../computer-interfaces/src/types';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -102,24 +97,18 @@ export interface IngestComputeRequestResponse {
 
 export class Computer {
   private latestProgram: ComputerProgram = emptyComputerProgram();
-  private latestExternalData: ExternalDataMap = new Map();
+  public latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm({
     retrieveHumanVariableNameByGlobalVariableName: (varName) =>
       this.latestExprRefToVarNameMap.get(varName) ?? varName,
   });
-  readonly externalData = new BehaviorSubject<
-    Map<string, [id: string, injectedResult: Result.Result][]>
-  >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
   public latestVarNameToBlockMap: ReadonlyMap<string, ProgramBlock> = new Map();
   public latestExprRefToVarNameMap = new Map<string, string>();
   public latestBlockDependents = new Map<string, string[]>();
 
   // streams
-  private readonly computeRequests = new Subject<ComputeRequestWithResults>();
-  readonly extraProgramBlocks = new BehaviorSubject<
-    Map<string, ProgramBlock[]>
-  >(new Map());
+  private readonly computeRequests = new Subject<ComputeDeltaRequestWithDone>();
   private resultStreams = new ResultStreams(this);
   public results = this.resultStreams.global;
 
@@ -128,104 +117,127 @@ export class Computer {
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
     if (initialProgram) {
-      void this.pushCompute({ program: initialProgram });
+      void this.pushComputeDelta({ program: { upsert: initialProgram } });
     }
   }
 
-  /**
-   * Push the entire program (all blocks), to the computer.
-   *
-   * @returns a promise to notify you when we are done
-   * processing these results. Often you don't need to await this.
-   * But it's useful.
-   *
-   * @see `BlockProcessor.ts`.
-   */
-  public async pushCompute(req: ComputeRequest): Promise<NotebookResults> {
-    return new Promise<NotebookResults>((resolve) => {
+  async getExternalData(): Promise<
+    Map<
+      string,
+      [
+        id: string,
+        injectedResult: Result.Result<
+          | 'string'
+          | 'number'
+          | 'boolean'
+          | 'function'
+          | 'column'
+          | 'materialized-column'
+          | 'table'
+          | 'tree'
+          | 'materialized-table'
+          | 'row'
+          | 'date'
+          | 'range'
+          | 'pending'
+          | 'nothing'
+          | 'anything'
+          | 'type-error'
+        >
+      ][]
+    >
+  > {
+    throw new Error('Method not implemented.');
+  }
+  async getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>> {
+    throw new Error('Method not implemented.');
+  }
+
+  public async pushComputeDelta(req: ComputeDeltaRequest): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (req.external?.upsert) {
+        // TODO: we need to update the external data map, for now...
+        this.latestExternalData = new Map([
+          ...this.latestExternalData,
+          ...anyMappingToMap(req.external.upsert),
+        ]);
+      }
+      if (req.external?.remove) {
+        // TODO: we need to update the external data map, for now...
+        for (const key of req.external.remove) {
+          this.latestExternalData = new Map(
+            Object.entries(this.latestExternalData).filter(([k]) => k !== key)
+          );
+        }
+      }
+
       this.computeRequests.next({
         ...req,
-        results: resolve,
+        done: resolve,
       });
     });
   }
 
-  public pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): void {
-    const newValue = new Map(this.extraProgramBlocks.value);
-
-    if (!dequal(blocks, this.extraProgramBlocks.value.get(id))) {
-      newValue.set(id, blocks);
-      this.extraProgramBlocks.next(newValue);
-    }
+  public async pushProgramBlocks(blocks: ProgramBlock[]): Promise<void> {
+    return this.pushComputeDelta({ program: { upsert: blocks } });
   }
 
-  public pushExtraProgramBlocksDelete(id: string): void {
-    const newValue = new Map(this.extraProgramBlocks.value);
-    const deleted = newValue.delete(id);
+  public async pushProgramBlocksDelete(blocksIds: string[]): Promise<void> {
+    return this.pushComputeDelta({ program: { remove: blocksIds } });
+  }
 
-    if (deleted) {
-      this.extraProgramBlocks.next(newValue);
-    }
+  public async pushExtraProgramBlocks(
+    id: string,
+    blocks: ProgramBlock[]
+  ): Promise<void> {
+    return this.pushComputeDelta({
+      extra: { upsert: new Map([[id, blocks]]) },
+    });
+  }
+
+  public async pushExtraProgramBlocksDelete(ids: string[]): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.computeRequests.next({ extra: { remove: ids }, done: resolve });
+    });
+  }
+
+  public async pushExternalDataUpdate(
+    values: Array<[string, Result.Result]>
+  ): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.computeRequests.next({
+        external: { upsert: new Map(values) },
+        done: resolve,
+      });
+    });
+  }
+
+  public async pushExternalDataDelete(key: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.computeRequests.next({
+        external: { remove: [key] },
+        done: resolve,
+      });
+    });
   }
 
   /**
    * Wire our computeRequests stream to the "results" stream.
-   * And the externalData stream (containing imports) is integrated here.
    */
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
-        combineLatestWith(this.externalData, this.extraProgramBlocks),
-        map(
-          ([
-            { program, results, ...computeReq },
-            externalData,
-            extraBlocks,
-          ]) => ({
-            ...computeReq,
-            program: [...program, ...[...extraBlocks.values()].flat()],
-            externalData: [...externalData.values()].flat(),
-            results,
-          })
-        ),
-        // Make sure the new request is actually different
-        distinctUntilChanged((prevReq, req) => {
-          const isSameAsLast = dequal(
-            omit(prevReq, ['results']),
-            omit(req, ['results'])
-          );
-
-          //
-          // Side-Effect
-          //
-          // If the current program is the same as the last one,
-          // we must still resolve the promise.
-          // Otherwise it will never resolve.
-          //
-          if (isSameAsLast) {
-            req.results(this.results.getValue());
-          }
-
-          return isSameAsLast;
-        }),
         // Compute me some computes!
-        dropWhileComputing(
-          async (req) => {
-            const result = await this.computeRequest(req);
-            return { ...result, results: req.results };
-          },
-          (pendingCount) => this.flushedSubject.next(pendingCount === 0)
-        ),
-        switchMap((item) => (item == null ? [] : [item])),
-        shareReplay(1)
+        concatMap(async ({ done, ...req }) => {
+          const result = await this.computeDeltaRequest(req);
+          return { result, done };
+        })
       )
-      .subscribe(({ results, ...rest }) => {
-        // Typescript cant figure out `blockResults` cannot be null.
-        // see `switchMap` above.
-        const notebookResults = getDefined(rest) as NotebookResults;
-
-        this.resultStreams.pushResults(notebookResults);
-        results(notebookResults);
+      .subscribe(({ done, result }) => {
+        if (result) {
+          this.resultStreams.pushResults(result);
+        }
+        done();
       });
   }
 
@@ -772,10 +784,14 @@ export class Computer {
   }
 
   /** Take stock of new program (came from editorToProgram) and update caching */
-  private ingestComputeRequest({
-    program,
-    externalData,
-  }: ComputeRequestWithExternalData): IngestComputeRequestResponse {
+  private ingestComputeRequest(
+    delta: ComputeDeltaRequest
+  ): IngestComputeRequestResponse {
+    const { program, externalData } = updateProgram(
+      this.latestProgram,
+      this.latestExternalData,
+      delta
+    );
     const {
       program: newProgram,
       varNameToBlockMap,
@@ -785,13 +801,7 @@ export class Computer {
       this.latestVarNameToBlockMap
     );
 
-    // console.log('newProgram', program);
-    const newParse = topologicalSort(
-      updateChangedProgramBlocks(
-        programToComputerProgram(newProgram),
-        this.latestProgram
-      )
-    );
+    const newParse = topologicalSort(newProgram);
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     const newComputerProgram = programToComputerProgram(newParse);
@@ -825,8 +835,8 @@ export class Computer {
     };
   }
 
-  public async computeRequest(
-    req: ComputeRequestWithExternalData
+  public async computeDeltaRequest(
+    req: ComputeDeltaRequest
   ): Promise<NotebookResults | null> {
     return this.enqueueComputation(async () => {
       this.computationRealm.epoch += 1n;
@@ -860,30 +870,14 @@ export class Computer {
         };
       } catch (error) {
         console.error(error);
-        this.reset();
         captureException(error as Error);
         return null;
       }
     }, true);
   }
 
-  public pushExternalDataUpdate(
-    key: string,
-    values: [string, Result.Result][]
-  ): void {
-    const newValue = new Map(this.externalData.getValue());
-    newValue.set(key, values);
-    this.externalData.next(newValue);
-  }
-
-  public pushExternalDataDelete(key: string): void {
-    const newValue = new Map(this.externalData.getValue());
-    newValue.delete(key);
-    this.externalData.next(newValue);
-  }
-
   /**
-   * Reset computer's state -- called when it panicks
+   * Reset computer's state
    */
   reset() {
     this.latestProgram = emptyComputerProgram();
@@ -971,3 +965,6 @@ export class Computer {
     });
   }
 }
+
+export const getComputer = (options?: ComputerOpts): Computer =>
+  new Computer(options);

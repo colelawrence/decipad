@@ -26,18 +26,10 @@ export const programToVarNameToBlockMap = (
     return ref;
   };
 
-  const addTableColumn = (
-    tableName: string,
-    columnName: string,
-    block: AST.Block
-  ) => {
+  const addTableColumn = (tableName: string, columnName: string) => {
     const tableColumns = tableToColumnsMap.get(tableName) ?? new Set<string>();
-    if (tableColumns.has(columnName)) {
-      block.hasDuplicateName = columnName;
-    } else {
-      tableColumns.add(columnName);
-      tableToColumnsMap.set(tableName, tableColumns);
-    }
+    tableColumns.add(columnName);
+    tableToColumnsMap.set(tableName, tableColumns);
   };
 
   const getDefinedName = (statement: AST.GenericAssignment): string => {
@@ -68,7 +60,7 @@ export const programToVarNameToBlockMap = (
         block.definesTableColumn = [tableName, columnName];
       }
 
-      addTableColumn(...block.definesTableColumn, block.block);
+      addTableColumn(...block.definesTableColumn);
       identifier = block.definesTableColumn.join('.');
     } else if (isAssignment(statement)) {
       if (block.definesVariable) {

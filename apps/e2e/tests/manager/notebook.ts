@@ -557,11 +557,11 @@ export class Notebook {
    */
   async addBlockSlashCommand(
     command: SlashCommand,
-    insertLastParagraph = true
+    selectLastParagraph = true
   ) {
     await expect(async () => {
-      if (insertLastParagraph) {
-        this.selectLastParagraph();
+      if (selectLastParagraph) {
+        await this.selectLastParagraph();
       }
       await expect(this.page.getByText('for new blocks')).toBeVisible();
       await this.page
@@ -725,7 +725,7 @@ export class Notebook {
    * ```
    */
   async addTable() {
-    this.addBlock('table');
+    return this.addBlock('table');
   }
 
   /**

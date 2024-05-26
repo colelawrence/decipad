@@ -1,6 +1,6 @@
 import { safeNumberForPrecision } from '@decipad/number';
 
-export { Computer, getUsedIdentifiers } from './Computer';
+export { Computer, getUsedIdentifiers, getComputer } from './Computer';
 export type { TokenPos } from './getUsedIdentifiers';
 
 export { defaultComputerResults } from './defaultComputerResults';

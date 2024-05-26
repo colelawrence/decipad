@@ -2,6 +2,7 @@
 import type {
   AST,
   AutocompleteName,
+  ExternalDataMap,
   Result,
   Unit,
   Parser,
@@ -9,8 +10,7 @@ import type {
 import type {
   BlockDependents,
   ColumnDesc,
-  ComputeRequest,
-  ComputeRequestWithExternalData,
+  ComputeDeltaRequest,
   DimensionExplanation,
   IdentifiedError,
   IdentifiedResult,
@@ -96,6 +96,9 @@ export class RemoteComputer implements IRemoteComputer {
     this.getSymbolOrTableDotColumn$ = computer.getSymbolOrTableDotColumn$;
     this.blockToMathML$ = computer.blockToMathML$;
   }
+  getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>> {
+    throw new Error('Method not implemented.');
+  }
   getBlockIdResult(
     blockId: string
   ): Readonly<IdentifiedError | IdentifiedResult> | undefined {
@@ -131,14 +134,20 @@ export class RemoteComputer implements IRemoteComputer {
   expressionType(expression: AST.Expression) {
     return this.computer.expressionType(expression);
   }
-  async pushExternalDataUpdate(key: string, values: [string, Result.Result][]) {
-    return this.computer.pushExternalDataUpdate(key, values);
+  async pushExternalDataUpdate(values: [string, Result.Result][]) {
+    return this.computer.pushExternalDataUpdate(values);
   }
   async pushExternalDataDelete(key: string): Promise<void> {
     return this.computer.pushExternalDataDelete(key);
   }
-  pushCompute(req: ComputeRequest): Promise<NotebookResults> {
-    return this.computer.pushCompute(req);
+  async pushProgramBlocks(blocks: ProgramBlock[]): Promise<void> {
+    return this.computer.pushProgramBlocks(blocks);
+  }
+  async pushProgramBlocksDelete(ids: string[]): Promise<void> {
+    return this.computer.pushProgramBlocksDelete(ids);
+  }
+  pushComputeDelta(req: ComputeDeltaRequest): Promise<void> {
+    return this.computer.pushComputeDelta(req);
   }
   async pushExtraProgramBlocks(
     id: string,
@@ -146,8 +155,8 @@ export class RemoteComputer implements IRemoteComputer {
   ): Promise<void> {
     return this.computer.pushExtraProgramBlocks(id, blocks);
   }
-  async pushExtraProgramBlocksDelete(id: string): Promise<void> {
-    return this.computer.pushExtraProgramBlocksDelete(id);
+  async pushExtraProgramBlocksDelete(ids: string[]): Promise<void> {
+    return this.computer.pushExtraProgramBlocksDelete(ids);
   }
   expressionResultFromText$(decilang: string): Observable<ResultType> {
     return this.computer.expressionResultFromText$(decilang);
@@ -162,10 +171,10 @@ export class RemoteComputer implements IRemoteComputer {
     return this.computer.getNamesDefined(inBlockId);
   }
 
-  computeRequest(
-    req: ComputeRequestWithExternalData
+  computeDeltaRequest(
+    req: ComputeDeltaRequest
   ): Promise<NotebookResults | null> {
-    return this.computer.computeRequest(req);
+    return this.computer.computeDeltaRequest(req);
   }
   getUnitFromText(text: string): Promise<Unit.Unit[] | null> {
     return this.computer.getUnitFromText(text);
@@ -174,14 +183,8 @@ export class RemoteComputer implements IRemoteComputer {
     return this.computer.flush();
   }
 
-  async getExternalData(): Promise<
-    Map<string, [id: string, injectedResult: Result.Result][]>
-  > {
-    return this.computer.externalData.value;
-  }
-
-  async getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>> {
-    return this.computer.extraProgramBlocks.value;
+  async getExternalData(): Promise<ExternalDataMap> {
+    return this.computer.latestExternalData;
   }
 }
 

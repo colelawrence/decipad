@@ -1,4 +1,7 @@
-import type { Value as ValueTypes } from '@decipad/language-interfaces';
+import type {
+  ExternalDataMap,
+  Value as ValueTypes,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type * as language from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
@@ -47,7 +50,7 @@ export class ComputationRealm {
     );
   }
 
-  setExternalData(externalData: language.ExternalDataMap) {
+  setExternalData(externalData: ExternalDataMap) {
     this.interpreterRealm.setExternalData(externalData);
   }
 

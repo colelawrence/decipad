@@ -50,32 +50,27 @@ export const generateAggregationDefs = (
         [
           `${columnRef}_${headerIndex}`,
           customFunctionName,
-          statementToIdentifiedBlock(
-            customFunctionBlockId,
-            {
-              type: 'function-definition',
-              args: [
-                {
-                  type: 'funcdef',
-                  args: [customFunctionName],
-                }, // lambda: empty function name
-                {
-                  type: 'argument-names',
-                  args: [
-                    { type: 'def', args: ['columnValue'] },
-                    { type: 'def', args: ['totalColumnValue'] },
-                  ],
-                },
-                {
-                  type: 'block',
-                  id: `${customFunctionBlockId}-body`,
-                  args: [parsedAggregationExpression.solution],
-                },
-              ],
-            },
-            true,
-            [dataView.id, dataView.varName ?? '']
-          ),
+          statementToIdentifiedBlock(customFunctionBlockId, {
+            type: 'function-definition',
+            args: [
+              {
+                type: 'funcdef',
+                args: [customFunctionName],
+              }, // lambda: empty function name
+              {
+                type: 'argument-names',
+                args: [
+                  { type: 'def', args: ['columnValue'] },
+                  { type: 'def', args: ['totalColumnValue'] },
+                ],
+              },
+              {
+                type: 'block',
+                id: `${customFunctionBlockId}-body`,
+                args: [parsedAggregationExpression.solution],
+              },
+            ],
+          }),
         ],
       ];
     });
@@ -146,9 +141,7 @@ export const generateAggregationDefs = (
           })
         ),
       ],
-    },
-    true,
-    [dataView.id]
+    }
   );
 
   return [

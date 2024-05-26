@@ -4,17 +4,13 @@ const {
 } = require('../../jest-dom.swc.config');
 
 module.exports = {
-  projects: [
-    {
-      ...domConfig,
-      rootDir: __dirname,
-      displayName: 'live-connect',
+  ...domConfig,
+  rootDir: __dirname,
+  displayName: 'live-connect',
 
-      coveragePathIgnorePatterns: [
-        ...coveragePathIgnorePatterns,
-        '<rootDir>/src/lib',
-      ],
-    },
+  coveragePathIgnorePatterns: [
+    ...coveragePathIgnorePatterns,
+    '<rootDir>/src/lib',
   ],
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats

@@ -7,6 +7,5 @@ export const syncComputer = async (
   computer: RemoteComputer
 ): Promise<void> => {
   const program = await fullRootEditorToProgram(editor, computer);
-  computer.pushCompute({ program });
-  await computer.flush();
+  await computer.pushProgramBlocks(program);
 };

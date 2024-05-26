@@ -8,6 +8,7 @@ import type {
   Unit,
   AST,
   Parser,
+  ExternalDataMap,
 } from '@decipad/language-interfaces';
 
 import type {
@@ -16,10 +17,9 @@ import type {
   BlockDependents,
   ColumnDesc,
   NotebookResults,
-  ComputeRequest,
+  ComputeDeltaRequest,
   DimensionExplanation,
   ProgramBlock,
-  ComputeRequestWithExternalData,
 } from '@decipad/computer-interfaces';
 
 export type { ErrSpec };
@@ -120,14 +120,13 @@ export interface IRemoteComputer {
   expressionType(expression: AST.Expression): Promise<SerializedType>;
 
   // --------------- push --------------//
-  pushExternalDataUpdate(
-    key: string,
-    values: [string, Result.Result][]
-  ): Promise<void>;
+  pushProgramBlocks(blocks: ProgramBlock[]): Promise<void>;
+  pushProgramBlocksDelete(ids: string[]): Promise<void>;
+  pushExternalDataUpdate(values: [string, Result.Result][]): Promise<void>;
   pushExternalDataDelete(key: string): Promise<void>;
-  pushCompute(req: ComputeRequest): Promise<NotebookResults>;
+  pushComputeDelta(req: ComputeDeltaRequest): Promise<void>;
   pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): Promise<void>;
-  pushExtraProgramBlocksDelete(id: string): Promise<void>;
+  pushExtraProgramBlocksDelete(id: string[]): Promise<void>;
 
   // --------------- streams --------------//
   // --- results
@@ -181,8 +180,8 @@ export interface IRemoteComputer {
   blockToMathML$: (blockId: string) => Observable<string>;
 
   // immediate compute
-  computeRequest(
-    req: ComputeRequestWithExternalData
+  computeDeltaRequest(
+    req: ComputeDeltaRequest
   ): Promise<NotebookResults | null>;
 
   getUnitFromText(text: string): Promise<Unit.Unit[] | null>;
@@ -191,9 +190,7 @@ export interface IRemoteComputer {
   flush(): Promise<void>;
 
   // --------------- weird stuff for tests --------------//
-  getExternalData(): Promise<
-    Map<string, [id: string, injectedResult: Result.Result][]>
-  >;
+  getExternalData(): Promise<ExternalDataMap>;
 
   getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>>;
 }

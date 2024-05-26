@@ -97,7 +97,7 @@ export class BlockProcessor {
       this.Computer
     );
 
-    await this.Computer.pushCompute({ program: wholeProgram });
+    await this.Computer.pushProgramBlocks(wholeProgram);
 
     wholeProgram = await editorToProgram(
       this.rootEditor,
@@ -105,7 +105,7 @@ export class BlockProcessor {
       this.Computer
     );
 
-    await this.Computer.pushCompute({ program: wholeProgram });
+    await this.Computer.pushProgramBlocks(wholeProgram);
 
     for (const update of wholeProgram) {
       this.ProgramCache.set(update.id, update);
@@ -136,21 +136,21 @@ export class BlockProcessor {
 
     this.RemoveDirtyBlocks();
 
-    const wholeProgram = await editorToProgram(
+    const changedProgram = await editorToProgram(
       this.rootEditor,
       this.DirtyBlocksSet.values() as Iterable<AnyElement>,
       this.Computer
     );
 
-    for (const update of wholeProgram) {
-      this.ProgramCache.set(update.id, update);
-    }
-
-    await this.Computer.pushCompute({
-      program: Array.from(this.ProgramCache.values()),
+    await this.Computer.pushComputeDelta({
+      program: {
+        upsert: changedProgram,
+        remove: this.RemovedNodes,
+      },
     });
 
     this.DirtyBlocksSet.clear();
+    this.RemovedNodes = [];
   }
 
   /**
@@ -193,11 +193,14 @@ export class BlockProcessor {
     }
   }
 
+  private RemovedNodes: string[] = [];
+
   public RemoveNode(id: string) {
     for (const editor of this.rootEditor.getAllTabEditors()) {
       for (const blockId of allBlockIds(editor, id)) {
         this.ProgramCache.delete(blockId);
         this.DirtyBlocksSet.delete(blockId);
+        this.RemovedNodes.push(blockId);
         for (const [nodeId, block] of this.ProgramCache.entries()) {
           if (
             block.type === 'identified-block' &&

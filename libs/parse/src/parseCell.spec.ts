@@ -22,14 +22,16 @@ const testParseCell = async (
 
 it('can parse cells with exprRefs', async () => {
   const computer = getRemoteComputer();
-  await computer.pushCompute({
-    program: [
-      {
-        type: 'identified-block',
-        id: '1',
-        block: parseBlockOrThrow('MyVarName = 5', '1'),
-      },
-    ],
+  await computer.pushComputeDelta({
+    program: {
+      upsert: [
+        {
+          type: 'identified-block',
+          id: '1',
+          block: parseBlockOrThrow('MyVarName = 5', '1'),
+        },
+      ],
+    },
   });
 
   expect(

@@ -60,12 +60,22 @@ export interface IdentifiedResult {
 export type ProgramBlock = IdentifiedBlock | IdentifiedError;
 export type Program = ProgramBlock[];
 
-export interface ComputeRequest {
-  program: Program;
-}
-
-export type ComputeRequestWithResults = ComputeRequest & {
-  results: (res: NotebookResults) => unknown;
+export type ComputeDeltaRequest = {
+  program?: {
+    upsert?: ProgramBlock[];
+    remove?: string[];
+  };
+  extra?: {
+    upsert?: Map<string, ProgramBlock[]>;
+    remove?: string[];
+  };
+  external?: {
+    upsert?: AnyMapping<Result.Result>;
+    remove?: string[];
+  };
+};
+export type ComputeDeltaRequestWithDone = ComputeDeltaRequest & {
+  done: () => unknown;
 };
 
 export interface ComputerProgram {
@@ -78,10 +88,6 @@ export interface BlockDependents {
   dependentBlockIds: string[];
   inBlockId?: string;
 }
-
-export type ComputeRequestWithExternalData = ComputeRequest & {
-  externalData?: AnyMapping<Result.Result>;
-};
 
 export type BlockResult = Readonly<IdentifiedResult | IdentifiedError>;
 

@@ -38,9 +38,7 @@ export const gatherNotebookErrors = async (
   computer: RemoteComputer
 ): Promise<Array<NotebookError>> => {
   const program = await fullRootEditorToProgram(editor, computer);
-  computer.pushCompute({
-    program,
-  });
+  await computer.pushProgramBlocks(program);
   await computer.flush();
   return Object.values(computer.results.getValue().blockResults)
     .filter(isErrorBlockResult)

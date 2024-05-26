@@ -90,7 +90,7 @@ export {
 } from '@decipad/computer';
 
 export type {
-  ComputeRequest,
+  ComputeDeltaRequest,
   DimensionExplanation,
   IdentifiedBlock,
   IdentifiedError,

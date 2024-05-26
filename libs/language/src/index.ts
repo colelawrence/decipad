@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
-import type { AutocompleteName, Result } from '@decipad/language-interfaces';
+import type { AutocompleteName } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { serializeType, buildType as t } from '@decipad/language-types';
 
@@ -57,8 +57,6 @@ export {
 export { buildResult } from './utils/buildResult';
 export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';
-
-export type ExternalDataMap = ReadonlyMap<string, Result.Result>;
 
 let cachedBuiltins: AutocompleteName[] | null = null;
 /* Always returns the same array. It's a function, so as to avoid an import cycle */

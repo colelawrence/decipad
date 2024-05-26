@@ -14,20 +14,15 @@ export const generateAssembledTableDef = (
   const [, headerRow] = dataView.children;
   const assembledTableBlockId = `${dataView.id}-assembledTable`;
   const tableName = getExprRef(assembledTableBlockId);
-  const emptyTable = statementToIdentifiedBlock(
-    assembledTableBlockId,
-    {
-      type: 'table',
-      args: [
-        {
-          type: 'tabledef',
-          args: [tableName],
-        },
-      ],
-    },
-    true,
-    [dataView.id]
-  );
+  const emptyTable = statementToIdentifiedBlock(assembledTableBlockId, {
+    type: 'table',
+    args: [
+      {
+        type: 'tabledef',
+        args: [tableName],
+      },
+    ],
+  });
 
   const columnDefs = headerRow.children
     .filter(isElement)
@@ -66,9 +61,7 @@ export const generateAssembledTableDef = (
                 },
             headerIndex,
           ],
-        },
-        true,
-        [dataView.id]
+        }
       );
     });
 

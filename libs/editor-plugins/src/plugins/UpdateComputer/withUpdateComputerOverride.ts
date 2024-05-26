@@ -24,6 +24,7 @@ export const withUpdateComputerOverride =
 
     const programCache = new Map<string, ProgramBlock>();
     let dirtyBlocksSet = new Map<string, MyElement>();
+    let removedBlockIds: string[] = [];
 
     const removeDirtyBlocks = () => {
       for (const el of dirtyBlocksSet.values()) {
@@ -53,10 +54,14 @@ export const withUpdateComputerOverride =
         dirty.values(),
         computer
       );
-      for (const update of programUpdates) {
-        programCache.set(update.id, update);
-      }
-      computer.pushCompute({ program: Array.from(programCache.values()) });
+      computer.pushComputeDelta({
+        program: {
+          upsert: programUpdates,
+          remove: removedBlockIds,
+        },
+      });
+
+      removedBlockIds = [];
     };
 
     let computing: Promise<void> | undefined;
@@ -87,6 +92,7 @@ export const withUpdateComputerOverride =
       for (const blockId of allBlockIds(editor, id)) {
         programCache.delete(blockId);
         dirtyBlocksSet.delete(blockId);
+        removedBlockIds.push(blockId);
         for (const [nodeId, block] of programCache.entries()) {
           if (
             block.type === 'identified-block' &&

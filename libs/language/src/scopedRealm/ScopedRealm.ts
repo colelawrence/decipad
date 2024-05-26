@@ -3,7 +3,11 @@
 import type { ContextUtils } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
+import type {
+  AST,
+  ExternalDataMap,
+  Value as ValueTypes,
+} from '@decipad/language-interfaces';
 import { zip, getDefined } from '@decipad/utils';
 import type {
   StackNamespaceJoiner,
@@ -15,7 +19,6 @@ import { ExpressionCache } from '../expression-cache';
 import type { TScopedRealm, TScopedInferContext } from './types';
 import { simpleExpressionEvaluate } from '../interpreter/simpleExpressionEvaluate';
 import { internalInferFunction } from '../infer/functions';
-import type { ExternalDataMap } from '..';
 
 export class ScopedRealm implements TScopedRealm {
   name: string;

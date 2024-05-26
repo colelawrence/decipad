@@ -9,7 +9,9 @@ describe('abstract refs', () => {
   it('no ref works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('2');
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult = results.blockResults['block-0']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
@@ -31,7 +33,9 @@ describe('abstract refs', () => {
   it('no ref operation works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('_A = 2', '_B = _A + 1');
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const result = results.blockResults['block-1']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
@@ -52,10 +56,14 @@ describe('abstract refs', () => {
   it('recompute with no ref works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('_A = 2', '_B = _A + 1');
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const result = results.blockResults['block-1']?.result;
 
-    const results2 = getDefined(await computer.computeRequest({ program: p1 }));
+    const results2 = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const result2 = results2.blockResults['block-1']?.result;
     expect(result2 && (await materializeResult(result2))).toEqual(result);
   });
@@ -63,11 +71,13 @@ describe('abstract refs', () => {
   it('recompute with new block with no ref works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('_A = 2', '_B = _A + 1');
-    await computer.computeRequest({ program: p1 });
+    await computer.computeDeltaRequest({ program: { upsert: p1 } });
 
     // add a block
     p1.push(getIdentifiedBlocks('_A = 2', '_B = _A + 1', '_C = _B + 2')[2]);
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
@@ -88,14 +98,19 @@ describe('abstract refs', () => {
   it('recompute with removed block with no ref works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('_A = 2', '_B = _A + 1');
-    await computer.computeRequest({ program: p1 });
+    await computer.computeDeltaRequest({ program: { upsert: p1 } });
 
     // add a block
-    p1.push(getIdentifiedBlocks('_A = 2', '_B = _A + 1', '_C = _B + 2')[2]);
-    await computer.computeRequest({ program: p1 });
+    const newBlock = getIdentifiedBlocks(
+      '_A = 2',
+      '_B = _A + 1',
+      '_C = _B + 2'
+    )[2];
+    await computer.computeDeltaRequest({ program: { upsert: [newBlock] } });
 
-    p1.splice(0, 1);
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { remove: [p1[0].id] } })
+    );
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
@@ -132,7 +147,9 @@ describe('abstract refs', () => {
       'T1.A1 = [1, 2, 3]',
       'T1.B1 = A1 + 10'
     );
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult = results.blockResults['block-3']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
@@ -177,7 +194,9 @@ describe('abstract refs', () => {
       'T1.A1 = [1, 2, 3]',
       `T1.B1 = ${getExprRef('block-2')} + ${getExprRef('block-0')}`
     );
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult1 = results.blockResults['block-3']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
@@ -221,7 +240,9 @@ describe('abstract refs', () => {
       'T1.A1 = [1, 2, 3]',
       `C2 = ${getExprRef('block-1')} + 10`
     );
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult1 = results.blockResults['block-2']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
@@ -261,7 +282,9 @@ describe('abstract refs', () => {
   it('expression ref to block with expression works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('123', `${getExprRef('block-0')} + 10`);
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult1 = results.blockResults['block-1']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
@@ -293,7 +316,9 @@ describe('abstract refs', () => {
   it('variable name equal to constant works', async () => {
     const computer = new Computer();
     const p1 = getIdentifiedBlocks('B = 2', 'B');
-    const results = getDefined(await computer.computeRequest({ program: p1 }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: p1 } })
+    );
     const columnResult = results.blockResults['block-1']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
@@ -318,7 +343,9 @@ describe('abstract refs', () => {
       T1 = [1, 2]
       T2 = T1 + 10
     }`);
-    const results = getDefined(await computer.computeRequest({ program }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
     const columnResult = results.blockResults['block-0']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
@@ -388,7 +415,9 @@ describe('abstract refs', () => {
       `T3`
     );
 
-    const results = getDefined(await computer.computeRequest({ program }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
     const columnResult = results.blockResults['block-6']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
@@ -482,7 +511,9 @@ describe('abstract refs', () => {
       'feather = 3 grams',
       '10 kg in feather'
     );
-    const results = getDefined(await computer.computeRequest({ program }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
     const result = results.blockResults['block-1']?.result;
     expect(result).toMatchInlineSnapshot(`
       Object {
@@ -556,7 +587,9 @@ describe('abstract refs', () => {
       `total(DollarsSpentPerYear over Cars)`
     );
 
-    const results = getDefined(await computer.computeRequest({ program }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
     const totalResult = await materializeResult(
       getDefined(results.blockResults['block-6']?.result)
     );
@@ -621,7 +654,9 @@ describe('abstract refs', () => {
       `ratio = butter / flour`
     );
 
-    const results = getDefined(await computer.computeRequest({ program }));
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
     const result = await materializeResult(
       getDefined(results.blockResults['block-2']?.result)
     );

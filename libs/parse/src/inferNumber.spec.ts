@@ -8,8 +8,10 @@ describe('infer number with expression ref', () => {
     const program = getIdentifiedBlocks('x = 5');
     const [id1] = program.map((p) => p.id);
 
-    await computer.computeRequest({
-      program,
+    await computer.computeDeltaRequest({
+      program: {
+        upsert: program,
+      },
     });
 
     await expect(inferNumber(computer, getExprRef(id1))).resolves.toMatchObject(

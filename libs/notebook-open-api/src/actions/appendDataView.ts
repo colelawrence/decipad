@@ -70,9 +70,7 @@ export const appendDataView: Action<'appendDataView'> = {
     const [table] = getTableById(editor, tableId);
     const computer = getRemoteComputer();
     const program = await editorToProgram(editor, editor.children, computer);
-    computer.pushCompute({
-      program,
-    });
+    await computer.pushProgramBlocks(program);
 
     const tableName = getNodeString(table.children[0].children[0]);
     const columns = _columns.map((column) => ({

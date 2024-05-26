@@ -166,46 +166,54 @@ export const useLiveConnection = (
   };
 };
 
-function pushPendingResultToComputer(
+async function pushPendingResultToComputer(
   computer: RemoteComputer,
   blockId: string,
   variableName: string
-) {
-  computer.pushExternalDataUpdate(blockId, [
-    [
-      blockId,
-      {
-        type: {
-          kind: 'pending',
+): Promise<void> {
+  return computer.pushComputeDelta({
+    external: {
+      upsert: {
+        [blockId]: {
+          type: {
+            kind: 'pending',
+          },
+          value: Unknown,
         },
-        value: Unknown,
-      },
-    ],
-  ]);
-  computer.pushExtraProgramBlocks(blockId, [
-    {
-      type: 'identified-block',
-      id: blockId,
-      block: {
-        id: blockId,
-        type: 'block',
-        args: [
-          astNode(
-            'assign',
-            astNode('def', variableName),
-            astNode('externalref', blockId)
-          ),
-        ],
       },
     },
-  ]);
+    extra: {
+      upsert: new Map([
+        [
+          blockId,
+          [
+            {
+              type: 'identified-block',
+              id: blockId,
+              block: {
+                id: blockId,
+                type: 'block',
+                args: [
+                  astNode(
+                    'assign',
+                    astNode('def', variableName),
+                    astNode('externalref', blockId)
+                  ),
+                ],
+              },
+            },
+          ],
+        ],
+      ]),
+    },
+  });
 }
 
 /**
  * Inject a table into the computer so the rest of the notebook can read isTableResult
  * Pass `computerResult` as `undefined` if you want to erase the result.
  */
-export function pushResultToComputer(
+export async function pushResultToComputer(
   computer: RemoteComputer,
   blockId: string,
   variableName: string,
@@ -221,20 +229,25 @@ export function pushResultToComputer(
         'table' | 'materialized-table'
       >;
 
-      const externalDatas = [] as [string, Result.Result][];
-      const programBlocks: ProgramBlock[] = [
-        // Table = {}
-        {
-          type: 'identified-block',
-          id: blockId,
-          block: {
-            id: blockId,
-            type: 'block',
-            args: [astNode('table', astNode('tabledef', variableName))],
-          },
-          definesVariable: variableName,
-        },
-      ];
+      const externalDatas: Map<string, Result.Result> = new Map();
+      const programBlocks: Map<string, ProgramBlock[]> = new Map([
+        [
+          blockId,
+          // Table = {}
+          [
+            {
+              type: 'identified-block',
+              id: blockId,
+              block: {
+                id: blockId,
+                type: 'block',
+                args: [astNode('table', astNode('tabledef', variableName))],
+              },
+              definesVariable: variableName,
+            },
+          ],
+        ],
+      ]);
 
       for (const [index, [colName, colType]] of zip(
         type.columnNames,
@@ -243,68 +256,79 @@ export function pushResultToComputer(
         const dataRef = `${blockId}--${index}`;
 
         // Table.Column = {Data}
-        programBlocks.push({
-          type: 'identified-block',
-          id: dataRef,
-          block: {
-            id: dataRef,
-            type: 'block',
-            args: [
-              astNode(
-                'table-column-assign',
-                astNode('tablepartialdef', variableName),
-                astNode('coldef', colName),
-                astNode('externalref', dataRef)
-              ),
-            ],
-          },
-          definesTableColumn: [variableName, colName],
-        });
-
-        // the {Data} for the thing above
-        externalDatas.push([
-          dataRef,
+        programBlocks.set(dataRef, [
           {
-            type: serializeType(
-              buildType.column(deserializeType(colType), variableName, index)
-            ),
-            value: value[index],
+            type: 'identified-block',
+            id: dataRef,
+            block: {
+              id: dataRef,
+              type: 'block',
+              args: [
+                astNode(
+                  'table-column-assign',
+                  astNode('tablepartialdef', variableName),
+                  astNode('coldef', colName),
+                  astNode('externalref', dataRef)
+                ),
+              ],
+            },
+            definesTableColumn: [variableName, colName],
           },
         ]);
+
+        // the {Data} for the thing above
+        externalDatas.set(dataRef, {
+          type: serializeType(
+            buildType.column(deserializeType(colType), variableName, index)
+          ),
+          value: value[index],
+        });
       }
 
-      computer.pushExternalDataUpdate(blockId, externalDatas);
-      computer.pushExtraProgramBlocks(blockId, programBlocks);
+      await computer.pushComputeDelta({
+        external: { upsert: externalDatas },
+        extra: { upsert: programBlocks },
+      });
     } else {
-      computer.pushExternalDataUpdate(blockId, [
-        [
-          blockId,
-          {
-            type: serializeType(computerResult.type),
-            value: computerResult.value,
-          },
-        ],
-      ]);
-      computer.pushExtraProgramBlocks(blockId, [
-        {
-          type: 'identified-block',
-          id: blockId,
-          block: {
-            id: blockId,
-            type: 'block',
-            args: [
-              astNode(
-                'assign',
-                astNode('def', variableName),
-                astNode('externalref', blockId)
-              ),
-            ],
+      await computer.pushComputeDelta({
+        external: {
+          upsert: {
+            [blockId]: {
+              type: serializeType(computerResult.type),
+              value: computerResult.value,
+            },
           },
         },
-      ]);
+        extra: {
+          upsert: new Map([
+            [
+              blockId,
+              [
+                {
+                  type: 'identified-block',
+                  id: blockId,
+                  block: {
+                    id: blockId,
+                    type: 'block',
+                    args: [
+                      astNode(
+                        'assign',
+                        astNode('def', variableName),
+                        astNode('externalref', blockId)
+                      ),
+                    ],
+                  },
+                },
+              ],
+            ],
+          ]),
+        },
+      });
     }
   } else {
-    computer.pushExternalDataDelete(blockId);
-    computer.pushExtraProgramBlocksDelete(blockId);
+    await computer.pushComputeDelta({
+      external: { remove: [blockId] },
+      extra: { remove: [blockId] },
+    });
   }
 }

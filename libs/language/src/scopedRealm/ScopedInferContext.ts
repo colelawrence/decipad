@@ -3,12 +3,12 @@
 import type { ContextUtils, Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
+import type { ExternalDataMap } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin, callBuiltinFunctor } from '@decipad/language-builtins';
 import type { AnyMapping } from '@decipad/utils';
 import { produce, zip } from '@decipad/utils';
 import type { InferContextUtils, TScopedInferContext } from './types';
-import type { ExternalDataMap } from '..';
 import type {
   StackNamespaceJoiner,
   StackNamespaceSplitter,

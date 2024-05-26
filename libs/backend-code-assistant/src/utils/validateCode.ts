@@ -13,8 +13,10 @@ export const validateCode = async (
 
   const program = await fullRootEditorToProgram(notebook, computer);
 
-  computer.pushCompute({
-    program,
+  computer.pushComputeDelta({
+    program: {
+      upsert: program,
+    },
   });
   return new Promise((resolve) => {
     const sub = computer.blockResultFromText$(code).subscribe((result) => {

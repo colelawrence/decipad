@@ -11,7 +11,7 @@ import {
 } from '@decipad/language';
 import type {
   ColumnDesc,
-  ComputeRequestWithExternalData,
+  ComputeDeltaRequest,
 } from '@decipad/computer-interfaces';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { AnyMapping } from '@decipad/utils';
@@ -39,14 +39,14 @@ beforeEach(() => {
 });
 
 const computeOnTestComputer = async (
-  req: ComputeRequestWithExternalData
+  req: ComputeDeltaRequest
 ): Promise<string[]> => {
-  const res = await computer.computeRequest(req);
+  const res = await computer.computeDeltaRequest(req);
   return simplifyComputeResponse(res);
 };
 
 it('computes a thing', async () => {
-  const res = await computeOnTestComputer({ program: testProgram });
+  const res = await computeOnTestComputer({ program: { upsert: testProgram } });
 
   expect(res).toMatchInlineSnapshot(`
     Array [
@@ -61,7 +61,9 @@ it('computes a thing', async () => {
 it('retrieves syntax errors', async () => {
   expect(
     await computeOnTestComputer({
-      program: getIdentifiedBlocks('Syntax //-// Error'),
+      program: {
+        upsert: getIdentifiedBlocks('Syntax //-// Error'),
+      },
     })
   ).toEqual(['block-0 -> Syntax Error']);
 });
@@ -69,13 +71,13 @@ it('retrieves syntax errors', async () => {
 describe('caching', () => {
   it('honours cache', async () => {
     // Fill in cache
-    await computeOnTestComputer({ program: testProgram });
+    await computeOnTestComputer({ program: { upsert: testProgram } });
 
     // Change C
     const changedC = produce(testProgram, (program) => {
       program[2] = getIdentifiedBlock('C = B1 + 10.1', 2);
     });
-    expect(await computeOnTestComputer({ program: changedC }))
+    expect(await computeOnTestComputer({ program: { upsert: changedC } }))
       .toMatchInlineSnapshot(`
         Array [
           "block-0 -> 0",
@@ -92,7 +94,7 @@ describe('caching', () => {
       program[0] = getIdentifiedBlock('A = 0.5', 0);
       program.splice(1, 1);
     });
-    expect(await computeOnTestComputer({ program: broken }))
+    expect(await computeOnTestComputer({ program: { upsert: broken } }))
       .toMatchInlineSnapshot(`
       Array [
         "block-0 -> 0.5",
@@ -104,7 +106,7 @@ describe('caching', () => {
     const noD = produce(testProgram, (program) => {
       program[3] = getIdentifiedBlock('', 3);
     });
-    expect(await computeOnTestComputer({ program: noD }))
+    expect(await computeOnTestComputer({ program: { upsert: noD } }))
       .toMatchInlineSnapshot(`
         Array [
           "block-0 -> 0",
@@ -118,13 +120,13 @@ describe('caching', () => {
   it('tricky caching problems', async () => {
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('= 1', 'A + 1'),
+        program: { upsert: getIdentifiedBlocks('= 1', 'A + 1') },
       })
     ).toContain('block-1 -> 2');
 
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 1', 'A + 1'),
+        program: { upsert: getIdentifiedBlocks('A = 1', 'A + 1') },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -138,7 +140,7 @@ describe('caching', () => {
     // Use a missing variable B
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + C'),
+        program: { upsert: getIdentifiedBlocks('A = 1', '', 'A + 1 + C') },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -151,7 +153,9 @@ describe('caching', () => {
     // Define it out of order
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + C', 'C = 1'),
+        program: {
+          upsert: getIdentifiedBlocks('A = 1', '', 'A + 1 + C', 'C = 1'),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -167,12 +171,14 @@ describe('caching', () => {
     // Use a missing variable B
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks(
-          'Table = {}',
-          'Table.A = [1]',
-          'Table.B = A + C',
-          'C = 1'
-        ),
+        program: {
+          upsert: getIdentifiedBlocks(
+            'Table = {}',
+            'Table.A = [1]',
+            'Table.B = A + C',
+            'C = 1'
+          ),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -186,12 +192,14 @@ describe('caching', () => {
     // Define it out of order
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks(
-          'Table = {}',
-          'Table.A = [1]',
-          'Table.B = A + C',
-          'C = 2'
-        ),
+        program: {
+          upsert: getIdentifiedBlocks(
+            'Table = {}',
+            'Table.A = [1]',
+            'Table.B = A + C',
+            'C = 2'
+          ),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -204,12 +212,14 @@ describe('caching', () => {
 
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks(
-          'Table = {}',
-          'Table.A = [1]',
-          'Table.B = A + C + 1',
-          'C = 2'
-        ),
+        program: {
+          upsert: getIdentifiedBlocks(
+            'Table = {}',
+            'Table.A = [1]',
+            'Table.B = A + C + 1',
+            'C = 2'
+          ),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -226,7 +236,9 @@ describe('expr refs', () => {
   it('supports expr refs', async () => {
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks(getExprRef('block-1'), '1 + 1'),
+        program: {
+          upsert: getIdentifiedBlocks(getExprRef('block-1'), '1 + 1'),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -239,11 +251,13 @@ describe('expr refs', () => {
   it('supports exprRefs for table columns', async () => {
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks(
-          'Table = {}',
-          'Table.A = [2]',
-          'C = exprRef_block_1'
-        ),
+        program: {
+          upsert: getIdentifiedBlocks(
+            'Table = {}',
+            'Table.A = [2]',
+            'C = exprRef_block_1'
+          ),
+        },
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -261,7 +275,7 @@ it('creates new, unused identifiers', async () => {
   );
 
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('AlreadyUsed = 1'),
+    program: { upsert: getIdentifiedBlocks('AlreadyUsed = 1') },
   });
 
   expect(
@@ -271,7 +285,7 @@ it('creates new, unused identifiers', async () => {
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  await computer.pushCompute({ program: testProgram });
+  await computer.pushComputeDelta({ program: { upsert: testProgram } });
   expect(computer.results.getValue().blockResults).not.toEqual({});
 
   computer.reset();
@@ -297,17 +311,20 @@ it('can pass on injected data', async () => {
   };
   expect(
     await computeOnTestComputer({
-      program: [
-        {
-          type: 'identified-block',
-          id: 'injectblock',
-          block: injectedBlock,
-        },
+      program: {
+        upsert: [
+          {
+            type: 'identified-block',
+            id: 'injectblock',
+            block: injectedBlock,
+          },
 
-        ...getIdentifiedBlocks('InjectedVar'),
-      ],
-
-      externalData,
+          ...getIdentifiedBlocks('InjectedVar'),
+        ],
+      },
+      external: {
+        upsert: externalData,
+      },
     })
   ).toMatchInlineSnapshot(`
     Array [
@@ -318,8 +335,10 @@ it('can pass on injected data', async () => {
 });
 
 it('can accept program bits', async () => {
-  await computer.pushCompute({
-    program: makeTestProgram('Var1'),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: makeTestProgram('Var1'),
+    },
   });
 
   expect(
@@ -334,14 +353,13 @@ it('can accept program bits', async () => {
     }
   `);
 
-  computer.pushExtraProgramBlocks('new-stuff', [
+  await computer.pushExtraProgramBlocks('new-stuff', [
     {
       type: 'identified-block',
       id: 'new-stuff-id',
       block: parseBlockOrThrow('Var1 = 42', 'new-stuff-id'),
     },
   ]);
-  await timeout(0); // give time to compute
 
   expect(
     (await computer.getBlockIdResult('block-0'))?.result?.value
@@ -355,8 +373,7 @@ it('can accept program bits', async () => {
     }
   `);
 
-  computer.pushExtraProgramBlocksDelete('new-stuff');
-  await timeout(0); // give time to compute
+  await computer.pushExtraProgramBlocksDelete(['new-stuff-id']);
 
   expect(
     (await computer.getBlockIdResult('block-0'))?.result?.value
@@ -367,73 +384,73 @@ it('can accept program bits', async () => {
 describe('It can resolve promise on `pushCompute`', () => {
   it('resolves', async () => {
     await expect(
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id',
-            block: parseBlockOrThrow('Var1 = 5', 'id'),
-          },
-        ],
+      computer.pushComputeDelta({
+        program: {
+          upsert: [
+            {
+              type: 'identified-block',
+              id: 'id',
+              block: parseBlockOrThrow('Var1 = 5', 'id'),
+            },
+          ],
+        },
       })
-    ).resolves.toBeDefined();
+    ).resolves.toBe(undefined);
   });
 
   it('can resolve various `pushCompute` calls', async () => {
     await expect(
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id2',
-            block: parseBlockOrThrow('Var1 = 5', 'id1'),
-          },
-        ],
+      computer.pushComputeDelta({
+        program: {
+          upsert: [
+            {
+              type: 'identified-block',
+              id: 'id2',
+              block: parseBlockOrThrow('Var1 = 5', 'id1'),
+            },
+          ],
+        },
       })
-    ).resolves.toBeDefined();
+    ).resolves.toBe(undefined);
 
     await expect(
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id2',
-            block: parseBlockOrThrow('Var2 = 10', 'id2'),
-          },
-        ],
+      computer.pushComputeDelta({
+        program: {
+          upsert: [
+            {
+              type: 'identified-block',
+              id: 'id2',
+              block: parseBlockOrThrow('Var2 = 10', 'id2'),
+            },
+          ],
+        },
       })
-    ).resolves.toBeDefined();
+    ).resolves.toBe(undefined);
   });
 
   it('can resolve for the same program, if not waited', async () => {
     const all = await Promise.all([
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id2',
-            block: parseBlockOrThrow('Var2 = 10', 'id2'),
-          },
-        ],
-      }),
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id2',
-            block: parseBlockOrThrow('Var2 = 10', 'id2'),
-          },
-        ],
-      }),
-      computer.pushCompute({
-        program: [
-          {
-            type: 'identified-block',
-            id: 'id2',
-            block: parseBlockOrThrow('Var2 = 10', 'id2'),
-          },
-        ],
-      }),
+      computer.pushProgramBlocks([
+        {
+          type: 'identified-block',
+          id: 'id2',
+          block: parseBlockOrThrow('Var2 = 10', 'id2'),
+        },
+      ]),
+      computer.pushProgramBlocks([
+        {
+          type: 'identified-block',
+          id: 'id2',
+          block: parseBlockOrThrow('Var2 = 10', 'id2'),
+        },
+      ]),
+      computer.pushProgramBlocks([
+        {
+          type: 'identified-block',
+          id: 'id2',
+          block: parseBlockOrThrow('Var2 = 10', 'id2'),
+        },
+      ]),
     ]);
 
     expect(all).toBeDefined();
@@ -443,7 +460,9 @@ describe('It can resolve promise on `pushCompute`', () => {
 describe('tooling data', () => {
   it('Can get variables and functions available', async () => {
     await computeOnTestComputer({
-      program: getIdentifiedBlocks('A = 1', 'f(x) = 1', 'C = 3'),
+      program: {
+        upsert: getIdentifiedBlocks('A = 1', 'f(x) = 1', 'C = 3'),
+      },
     });
 
     const names = computer.getNamesDefined();
@@ -467,7 +486,9 @@ describe('tooling data', () => {
   });
 
   it('can get a statement', async () => {
-    await computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
+    await computeOnTestComputer({
+      program: { upsert: getIdentifiedBlocks('1 + 1') },
+    });
 
     expect((await computer.getStatement('block-0'))?.args[1]).toMatchObject({
       type: 'function-call',
@@ -479,7 +500,9 @@ describe('tooling data', () => {
 
 it('can extract units from text', async () => {
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('Foo = 30cmeter', 'Bar = 30'),
+    program: {
+      upsert: getIdentifiedBlocks('Foo = 30cmeter', 'Bar = 30'),
+    },
   });
 
   // Internal units
@@ -504,7 +527,9 @@ it('can extract units from text', async () => {
 
 it('can get a expression from text in streaming mode', async () => {
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('Time = 120 minutes'),
+    program: {
+      upsert: getIdentifiedBlocks('Time = 120 minutes'),
+    },
   });
 
   const TimeStream = computer.expressionResultFromText$('Time in hours');
@@ -516,11 +541,13 @@ it('can get a expression from text in streaming mode', async () => {
 
 it('regression: can describe tables correctly', async () => {
   const res = await computeOnTestComputer({
-    program: getIdentifiedBlocks(
-      `Table = {}`,
-      `Table.One = ["A", "B"]`,
-      `Table.Two = ["c", "d"]`
-    ),
+    program: {
+      upsert: getIdentifiedBlocks(
+        `Table = {}`,
+        `Table.One = ["A", "B"]`,
+        `Table.Two = ["c", "d"]`
+      ),
+    },
   });
 
   expect(res).toMatchInlineSnapshot(`
@@ -534,11 +561,13 @@ it('regression: can describe tables correctly', async () => {
 
 it('regression: can describe partially good tables', async () => {
   const res = await computeOnTestComputer({
-    program: getIdentifiedBlocks(
-      `Table = {}`,
-      `Table.One = 1 + "a"`,
-      `Table.Two = ["c", "d"]`
-    ),
+    program: {
+      upsert: getIdentifiedBlocks(
+        `Table = {}`,
+        `Table.One = 1 + "a"`,
+        `Table.Two = ["c", "d"]`
+      ),
+    },
   });
 
   expect(res).toMatchInlineSnapshot(`
@@ -551,8 +580,10 @@ it('regression: can describe partially good tables', async () => {
 });
 
 it('getBlockIdResult$', async () => {
-  await computer.pushCompute({
-    program: getIdentifiedBlocks('123'),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: getIdentifiedBlocks('123'),
+    },
   });
 
   const x = await firstValueFrom(
@@ -565,8 +596,10 @@ it('getBlockIdResult$', async () => {
 });
 
 it('getFunctionDefinition$', async () => {
-  await computer.pushCompute({
-    program: getIdentifiedBlocks('f(x) = 2'),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: getIdentifiedBlocks('f(x) = 2'),
+    },
   });
 
   const x = await firstValueFrom(
@@ -581,7 +614,9 @@ it('getFunctionDefinition$', async () => {
 describe('getVarBlockId$', () => {
   it('can get a variable block id in streaming', async () => {
     await computeOnTestComputer({
-      program: getIdentifiedBlocks('Foo = 420'),
+      program: {
+        upsert: getIdentifiedBlocks('Foo = 420'),
+      },
     });
 
     const fooStream = computer.getVarBlockId$.observe('Foo');
@@ -593,7 +628,9 @@ describe('getVarBlockId$', () => {
 
   it('can get a variable block id from a table in streaming', async () => {
     await computeOnTestComputer({
-      program: getIdentifiedBlocks('C = 1', 'A = { B = 420 } '),
+      program: {
+        upsert: getIdentifiedBlocks('C = 1', 'A = { B = 420 } '),
+      },
     });
 
     const fooStream = computer.getVarBlockId$.observe('A.B');
@@ -605,7 +642,9 @@ describe('getVarBlockId$', () => {
 
   it('can find exprRefs', async () => {
     await computeOnTestComputer({
-      program: getIdentifiedBlocks('Foo = 420'),
+      program: {
+        upsert: getIdentifiedBlocks('Foo = 420'),
+      },
     });
 
     const fooStream = computer.getVarBlockId$.observe('exprRef_block_0');
@@ -757,8 +796,10 @@ it('can list tables and columns', async () => {
 });
 
 it('can get a result by var', async () => {
-  await computer.pushCompute({
-    program: getIdentifiedBlocks('Foo = 420'),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: getIdentifiedBlocks('Foo = 420'),
+    },
   });
 
   expect(computer.getVarResult$.get('Foo')?.id).toMatchInlineSnapshot(
@@ -768,7 +809,9 @@ it('can get a result by var', async () => {
 
 it('can get a defined symbol, in block', async () => {
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('C = 1', 'C + 2 + A'),
+    program: {
+      upsert: getIdentifiedBlocks('C = 1', 'C + 2 + A'),
+    },
   });
 
   expect(computer.getSymbolDefinedInBlock('block-0')).toEqual('C');
@@ -779,7 +822,9 @@ it('can get a defined symbol, in block', async () => {
 
 it('can get table/column data by block id', async () => {
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('Table = {}', 'Table.Xs = [10, 20, 30]'),
+    program: {
+      upsert: getIdentifiedBlocks('Table = {}', 'Table.Xs = [10, 20, 30]'),
+    },
   });
 
   expect(computer.getBlockIdAndColumnId$.get('block-0')).toMatchInlineSnapshot(`

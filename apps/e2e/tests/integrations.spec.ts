@@ -435,6 +435,8 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
     }).toPass({
       timeout: 1000,
     });
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.liveBlockDelay);
     await page
       .getByTestId('integration-block')
       .filter({ hasText: /Variable/ })

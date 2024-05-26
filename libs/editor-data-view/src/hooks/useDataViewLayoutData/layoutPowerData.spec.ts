@@ -58,13 +58,15 @@ describe('layoutPowerData', () => {
 
   it('works with one column one group tree', async () => {
     const computer = getRemoteComputer();
-    const results = await computer.computeRequest({
-      program: toProgram([
-        decilang`DataTable = {
+    const results = await computer.computeDeltaRequest({
+      program: {
+        upsert: toProgram([
+          decilang`DataTable = {
           Column1 = ["A"]
         }`,
-        decilang`Tree = tree(DataTable)`,
-      ]),
+          decilang`Tree = tree(DataTable)`,
+        ]),
+      },
     });
     const tree = getDefined(
       results?.blockResults['block-1']?.result,
@@ -144,18 +146,20 @@ describe('layoutPowerData', () => {
 
   it('works with one column one group tree and aggregation', async () => {
     const computer = getRemoteComputer();
-    const results = await computer.computeRequest({
-      program: toProgram([
-        decilang`DataTable = {
+    const results = await computer.computeDeltaRequest({
+      program: {
+        upsert: toProgram([
+          decilang`DataTable = {
           Column1 = ["A"]
         }`,
-        decilang`Empty = {}`,
-        decilang`Aggregate(x) = count(unique(x))`,
-        decilang`Aggregations = {
+          decilang`Empty = {}`,
+          decilang`Aggregate(x) = count(unique(x))`,
+          decilang`Aggregations = {
           Column1 = Aggregate
         }`,
-        decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
-      ]),
+          decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
+        ]),
+      },
     });
     const tree = getDefined(
       results?.blockResults['block-4']?.result,
@@ -254,21 +258,23 @@ describe('layoutPowerData', () => {
 
   it('works with two column two groups tree and aggregation', async () => {
     const computer = getRemoteComputer();
-    const results = await computer.computeRequest({
-      program: toProgram([
-        decilang`DataTable = {
+    const results = await computer.computeDeltaRequest({
+      program: {
+        upsert: toProgram([
+          decilang`DataTable = {
           Column1 = ["A", "B", "A"]
           Column2 = [3, 2, 1]
         }`,
-        decilang`Empty = {}`,
-        decilang`Aggregate1(x) = count(unique(x))`,
-        decilang`Aggregate2(x) = sum(x)`,
-        decilang`Aggregations = {
+          decilang`Empty = {}`,
+          decilang`Aggregate1(x) = count(unique(x))`,
+          decilang`Aggregate2(x) = sum(x)`,
+          decilang`Aggregations = {
           Column1 = Aggregate1
           Column2 = Aggregate2
         }`,
-        decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
-      ]),
+          decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
+        ]),
+      },
     });
     const tree = getDefined(
       results?.blockResults['block-5']?.result,

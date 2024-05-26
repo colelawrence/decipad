@@ -23,3 +23,4 @@ export {
 export * from './InferError';
 export * from './Unknown';
 export * from './Dimension';
+export * from './ExternalData';

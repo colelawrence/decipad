@@ -84,7 +84,7 @@ export const useLiveQuery = ({
       rd.result != null &&
       typeof rd.result.value !== 'string'
     ) {
-      computer.pushExternalDataUpdate(element.id, [[element.id, rd.result]]);
+      computer.pushExternalDataUpdate([[element.id, rd.result]]);
     } else {
       computer.pushExternalDataDelete(element.id);
     }

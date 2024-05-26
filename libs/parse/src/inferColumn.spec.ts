@@ -26,8 +26,10 @@ it('infers columns with references to other variables', async () => {
   const program = getIdentifiedBlocks('x = 1');
   const { id } = program[0];
 
-  await computer.computeRequest({
-    program,
+  await computer.computeDeltaRequest({
+    program: {
+      upsert: program,
+    },
   });
 
   await expect(inferColumn(computer, [getExprRef(id)])).resolves.toMatchObject({

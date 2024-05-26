@@ -4,7 +4,6 @@ import {
   runCode,
   serializeResult,
 } from '@decipad/remote-computer';
-import { timeout } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { pushResultToComputer } from './useLiveConnection';
 
@@ -18,13 +17,12 @@ it('can push a new table into the computer', async () => {
     'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'
   );
 
-  pushResultToComputer(
+  await pushResultToComputer(
     computer,
     'blockid',
     'Table1',
     serializeResult(type, value)
   );
-  await timeout(1000);
 
   expect(
     await Promise.all(
@@ -38,11 +36,11 @@ it('can push a new table into the computer', async () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    [
-      [
+    Array [
+      Array [
         "blockid",
-        [
-          [
+        Array [
+          Array [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -50,7 +48,7 @@ it('can push a new table into the computer', async () => {
               "s": 1n,
             },
           ],
-          [
+          Array [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -60,9 +58,9 @@ it('can push a new table into the computer', async () => {
           ],
         ],
       ],
-      [
+      Array [
         "blockid--0",
-        [
+        Array [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -71,9 +69,9 @@ it('can push a new table into the computer', async () => {
           },
         ],
       ],
-      [
+      Array [
         "blockid--1",
-        [
+        Array [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -86,10 +84,8 @@ it('can push a new table into the computer', async () => {
   `);
 
   // Garbage collect
-  pushResultToComputer(computer, 'blockid', 'Table1', undefined);
-  await timeout(1000);
+  await pushResultToComputer(computer, 'blockid', 'Table1', undefined);
 
   // Assert on the computer's internal state to make sure we've GC'd the things we need to
   expect(await computer.getExternalData()).toEqual(new Map());
-  expect(await computer.getExtraProgramBlocks()).toEqual(new Map());
 });

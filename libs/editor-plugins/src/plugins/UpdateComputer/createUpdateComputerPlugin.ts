@@ -1,10 +1,13 @@
 import type { Subject } from 'rxjs';
-import type { RemoteComputer, ComputeRequest } from '@decipad/remote-computer';
+import type {
+  RemoteComputer,
+  ComputeDeltaRequest,
+} from '@decipad/remote-computer';
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
 
 export interface UpdateComputerPluginProps {
-  computeRequests: Subject<ComputeRequest>;
+  computeRequests: Subject<ComputeDeltaRequest>;
 }
 
 export const createUpdateComputerPlugin = (

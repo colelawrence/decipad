@@ -18,7 +18,6 @@ import {
 } from '@decipad/editor-types';
 import { convertCodeSmartRefs, createCodeLine } from '@decipad/editor-utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import { timeout } from '@decipad/utils';
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
@@ -76,10 +75,11 @@ it('can turn text into smartrefs', async () => {
     ...editor.children,
     createCodeLine({ id: '2', code: 'var' }),
   ];
-  computer.pushCompute({
-    program: await editorToProgram(editor, editor.children, computer),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: await editorToProgram(editor, editor.children, computer),
+    },
   });
-  await timeout(0);
 
   const names = (await computer.getNamesDefined()).flatMap(
     (n): [VarAndCol, VarAndCol][] => {
@@ -117,10 +117,11 @@ it('can turn text into smartrefs (columns edition)', async () => {
     createCodeLine({ id: '2', code: 'Table1.Column1' }),
   ];
 
-  computer.pushCompute({
-    program: await editorToProgram(editor, editor.children, computer),
+  await computer.pushComputeDelta({
+    program: {
+      upsert: await editorToProgram(editor, editor.children, computer),
+    },
   });
-  await timeout(0);
 
   const names = (await computer.getNamesDefined()).flatMap(
     (n): [VarAndCol, VarAndCol][] => {

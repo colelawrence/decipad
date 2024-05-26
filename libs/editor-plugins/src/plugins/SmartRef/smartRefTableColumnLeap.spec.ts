@@ -40,7 +40,6 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { timeout } from '@decipad/utils';
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createCodeLine } from '@decipad/editor-utils';
@@ -758,8 +757,7 @@ const run = async (...elements: AnyElement[]) => {
   const computer = getRemoteComputer();
   const program = await editorToProgram(editor, editor.children, computer);
 
-  computer.pushCompute({ program });
-  await timeout(0);
+  await computer.pushProgramBlocks(program);
 
   const ret = computer.results$.get();
 

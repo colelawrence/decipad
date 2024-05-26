@@ -24,7 +24,7 @@ test('SmartRefs in low code tables', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await notebook.addTable();
   await notebook.selectLastParagraph();
-  await notebook.addAdvancedFormula('x = Table1.Column1');
+  await notebook.addAdvancedFormula('x = Table.Column1');
   await page.keyboard.press('Enter');
   await page.getByTestId('smart-ref').getByText('Column1').waitFor();
   const text = await page.getByTestId('smart-ref').textContent();

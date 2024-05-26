@@ -76,9 +76,7 @@ export const startNotebook: StartNotebook = (
       syncEditor.children.filter(Boolean),
       computer
     );
-    computer.pushCompute({
-      program,
-    });
+    await computer.pushProgramBlocks(program);
   }, debounceGetValueMs);
 
   const externalDataSubscription = getExternalData$.subscribe((data) => {

@@ -89,18 +89,20 @@ function LivePreviewOrError({ code: liveCode }: LivePreviewProps) {
   }, [code, liveCode]);
 
   useEffect(() => {
-    if (code && needsCompute) {
-      try {
-        setNeedsCompute(false);
-        computer.pushCompute({
-          program: createProgramFromMultipleStatements(code),
-        });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        setError(err as Error);
+    (async () => {
+      if (code && needsCompute) {
+        try {
+          setNeedsCompute(false);
+          await computer.pushProgramBlocks(
+            createProgramFromMultipleStatements(code)
+          );
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+          setError(err as Error);
+        }
       }
-    }
+    })();
   }, [code, computer, needsCompute]);
 
   useEffect(() => {
