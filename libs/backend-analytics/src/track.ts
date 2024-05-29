@@ -15,7 +15,6 @@ export const track = (
   context?: Record<string, unknown>
 ): Promise<void> => {
   // eslint-disable-next-line no-console
-  console.log('track called', event);
   return new Promise((resolve) => {
     const client = analyticsClient(request);
     if (client) {
@@ -26,7 +25,7 @@ export const track = (
       };
       // eslint-disable-next-line no-console
       console.log('analytics tracking', consumeEvent);
-      client.track(consumeEvent, async (err) => {
+      client.track(consumeEvent, async (err: Error) => {
         // eslint-disable-next-line no-console
         console.log('analytics tracking called back');
         if (err) {

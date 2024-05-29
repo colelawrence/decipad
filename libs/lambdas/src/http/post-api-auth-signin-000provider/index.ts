@@ -1,3 +1,4 @@
 import { createAuthHandler } from '@decipad/backend-auth';
+import { trackingUtmAndReferer } from '../handle';
 
-export const handler = createAuthHandler();
+export const handler = trackingUtmAndReferer(createAuthHandler());

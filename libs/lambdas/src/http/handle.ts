@@ -127,14 +127,15 @@ const utmKeys = [
   'utm_campaign',
   'utm_content',
   'utm_term',
+  'gclid',
 ] as const;
 
-const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
+export const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
   return async (event, ctx, cb) => {
     // track user id
     const user = await getAuthenticatedUser(event);
-    const client = user ? analyticsClient(event) : undefined;
-    if (user && client) {
+    const client = analyticsClient(event);
+    if (client) {
       // track UTM params
       const params = event.queryStringParameters ?? {};
       for (const utmKey of utmKeys) {
@@ -156,8 +157,10 @@ const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
         }
       }
 
-      client.myIdentify({ userId: user.id });
-      client.identify({ userId: user.id });
+      if (user) {
+        client.myIdentify({ userId: user.id });
+        client.identify({ userId: user.id });
+      }
     }
     return handler(event, ctx, cb);
   };

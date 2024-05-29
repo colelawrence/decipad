@@ -15,7 +15,7 @@ export const identify = (
   const client = analyticsClient(request);
   if (client) {
     return new Promise((resolve) => {
-      client.identify({ userId, traits: event }, (err) => {
+      client.identify({ userId, traits: event }, (err: Error) => {
         if (err) {
           console.error('Analytics: error identifying:', err);
         } else {
