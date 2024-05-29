@@ -73,6 +73,12 @@ type Action =
       };
     }
   | {
+      action: 'Duplicate Notebook Button Clicked';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Feedback Button Clicked';
       props: {
         analytics_source: 'frontend' | 'backend';

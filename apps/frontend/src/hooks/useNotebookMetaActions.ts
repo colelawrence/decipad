@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   useCreateOrUpdateNotebookSnapshotMutation,
@@ -28,6 +28,7 @@ import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { Doc, applyUpdate } from 'yjs';
 import { toSlateDoc } from '@decipad/slate-yjs';
+import { ClientEventsContext } from '@decipad/client-events';
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
 
@@ -186,6 +187,8 @@ export function useNotebookMetaActions(
     [changeNotebookStatus]
   );
 
+  const clientEvent = useContext(ClientEventsContext);
+
   const onDuplicateNotebook = useCallback<
     NotebookMetaActionsReturn['onDuplicateNotebook']
   >(
@@ -208,9 +211,19 @@ export function useNotebookMetaActions(
         nav(notebooks({}).notebook({ notebook: res.data.duplicatePad }).$);
       }
 
+      clientEvent({
+        segmentEvent: {
+          type: 'action',
+          action: 'Duplicate Notebook Button Clicked',
+          props: {
+            analytics_source: 'frontend',
+          },
+        },
+      });
+
       return true;
     },
-    [duplicateNotebook, nav, toast]
+    [clientEvent, duplicateNotebook, nav, toast]
   );
 
   /**
