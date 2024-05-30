@@ -1,4 +1,5 @@
 export * from './isColumn';
+export * from './isEmptyDelta';
 export * from './isTable';
 export * from './isTableColumn';
 export * from './isTableResult';

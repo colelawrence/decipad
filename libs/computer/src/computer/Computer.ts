@@ -67,6 +67,7 @@ import {
   getGoodBlocks,
   getIdentifierString,
   isTableResult,
+  isEmptyDelta,
 } from '../utils';
 import { isColumn } from '../utils/isColumn';
 import { isTable } from '../utils/isTable';
@@ -154,6 +155,10 @@ export class Computer {
   }
 
   public async pushComputeDelta(req: ComputeDeltaRequest): Promise<void> {
+    if (isEmptyDelta(req)) {
+      return Promise.resolve();
+    }
+
     return new Promise<void>((resolve) => {
       if (req.external?.upsert) {
         // TODO: we need to update the external data map, for now...

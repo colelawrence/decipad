@@ -16,3 +16,15 @@ export const anyMappingToMap = <T>(
   }
   return new Map(Object.entries(mapping));
 };
+
+export const anyMappingSize = <T>(mapping: AnyReadonlyMapping<T>): number => {
+  if (mapping instanceof Map) {
+    return mapping.size;
+  }
+
+  if (Array.isArray(mapping)) {
+    return mapping.length;
+  }
+
+  return Object.keys(mapping).length;
+};

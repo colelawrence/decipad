@@ -180,6 +180,16 @@ export const resultFromError = (
   };
 };
 
+/**
+ * Seperate function because of debugging reasons
+ */
+function resultsToCacheMap(result: CacheContents): CacheContents {
+  return {
+    result: { ...result.result },
+    value: result.value,
+  };
+}
+
 export const computeProgram = async (
   program: ComputerProgram,
   computer: Computer
@@ -208,10 +218,7 @@ export const computeProgram = async (
   // copying the result triggers the getter from the identified result,
   // ... effectively freezing the type
   // We can only do this after computing the whole program.
-  resultsToCache = resultsToCache.map((result) => ({
-    result: { ...result.result },
-    value: result.value,
-  }));
+  resultsToCache = resultsToCache.map(resultsToCacheMap);
 
   for (const [block, result] of zip(program.asSequence, resultsToCache)) {
     realm.addToCache(block.id, result);
