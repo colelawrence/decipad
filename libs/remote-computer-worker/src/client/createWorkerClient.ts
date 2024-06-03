@@ -1,4 +1,5 @@
 import type { Result, SerializedType } from '@decipad/language-interfaces';
+import { fnQueue } from '@decipad/fnqueue';
 import type {
   TBaseNotificationParams,
   TSerializedNotificationParams,
@@ -119,6 +120,13 @@ export const createWorkerClient = <
   >();
   const rpc = createRPCWorker(worker);
 
+  const queue = fnQueue({
+    onError: (err) => {
+      // eslint-disable-next-line no-console
+      console.error('Error caught in worker client queue', err);
+    },
+  });
+
   const ctx: ClientWorkerContext = {
     rpc,
     finalizationRegistry: new FinalizationRegistry((valueId: string) => {
@@ -138,29 +146,32 @@ export const createWorkerClient = <
       error?: string;
       subscriptionId: string;
     }
-  >('notify', async ({ error, subscriptionId, ...restParams }) => {
-    const listener = listeners.get(subscriptionId);
-    if (listener) {
-      listener(
-        (error != null && new Error(error)) || undefined,
-        await deserializeNotification(
-          ctx,
-          restParams as TSerializedNotificationParams<TMeta>
-        )
-      );
-    }
-  });
+  >('notify', async ({ error, subscriptionId, ...restParams }) =>
+    queue.push(async () => {
+      const listener = listeners.get(subscriptionId);
+      if (listener) {
+        listener(
+          (error != null && new Error(error)) || undefined,
+          await deserializeNotification(
+            ctx,
+            restParams as TSerializedNotificationParams<TMeta>
+          )
+        );
+      }
+    })
+  );
 
   return {
-    subscribe: async (params, listener) => {
-      await rpc.isReady;
-      const subscriptionId = await rpc.call<string>('subscribe', params);
-      listeners.set(subscriptionId, listener);
-      return async () => {
-        listeners.delete(subscriptionId);
-        await rpc.call('unsubscribe', { subscriptionId });
-      };
-    },
+    subscribe: async (params, listener) =>
+      queue.push(async () => {
+        await rpc.isReady;
+        const subscriptionId = await rpc.call<string>('subscribe', params);
+        listeners.set(subscriptionId, listener);
+        return async () => {
+          listeners.delete(subscriptionId);
+          await rpc.call('unsubscribe', { subscriptionId });
+        };
+      }),
     terminate: () => {
       listeners.clear();
       worker.terminate();

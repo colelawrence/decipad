@@ -6,6 +6,7 @@
     { "path": "../language-interfaces" },
     { "path": "../utils" },
     { "path": "../number" },
-    { "path": "../generator-utils" }
+    { "path": "../generator-utils" },
+    { "path": "../fnqueue" }
   ]
 }
