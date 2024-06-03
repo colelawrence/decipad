@@ -1,10 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import {
-  concatMap,
-  debounceTime,
-  distinctUntilChanged,
-  type Observable,
-} from 'rxjs';
+import { type Observable } from 'rxjs';
 import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
@@ -69,42 +64,6 @@ export function useEditorChange<T>(
   options?: UseEditorChangeOptions
 ): T {
   return useExternalEditorChange<T>(useMyEditorRef(), selector, options) as T;
-}
-
-export function useEditorChangePromise<T>(
-  selector: (editor: PlateEditor<MyValue>) => Promise<T>,
-  { debounceTimeMs = 100 }: UseEditorChangeOptions = {}
-): T | undefined {
-  const editor = useMyEditorRef();
-  const editorChanges = useContext(EditorChangeContext);
-  const [state, setState] = useState<T | undefined>();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (editor) {
-        selector(editor).then(setState);
-      }
-    }, debounceTimeMs);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [debounceTimeMs, editor, selector]);
-
-  useEffect(() => {
-    const sub = editorChanges
-      .pipe(
-        debounceTime(debounceTimeMs),
-        concatMap(() => selector(editor)),
-        distinctUntilChanged((a, b) => dequal(a, b))
-      )
-      .subscribe(setState);
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [debounceTimeMs, editor, editorChanges, selector]);
-
-  return state;
 }
 
 export function useEditorChangeCallback<T>(

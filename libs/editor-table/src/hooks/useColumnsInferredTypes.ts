@@ -1,15 +1,15 @@
-import { useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate-common';
-import type {
-  MyEditor,
-  TableCellElement,
-  CellValueType,
-  TableElement,
-  TableHeaderElement,
+import {
+  type MyEditor,
+  type TableCellElement,
+  type CellValueType,
+  type TableElement,
+  type TableHeaderElement,
+  useMyEditorRef,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
-import { useEditorChangePromise } from '@decipad/editor-hooks';
 
 const collectColumnData = (
   editor: MyEditor,
@@ -48,22 +48,24 @@ export const useColumnsInferredTypes = (
   element: TableElement
 ): CellValueType[] | undefined => {
   const computer = useComputer();
+  const editor = useMyEditorRef();
+  const [tableTypes, setTableTypes] = useState<CellValueType[] | undefined>();
 
-  return useEditorChangePromise(
-    useCallback(
-      (editor: MyEditor): Promise<CellValueType[]> => {
-        const columnsData = collectColumnsData(editor, element);
-        const headerCells = element.children[1].children;
-        return Promise.all(
-          columnsData.map((columnData, columnIndex) =>
-            inferColumn(computer, columnData, {
-              userType: headerCells[columnIndex]?.cellType,
-              doNotInferBoolean: true,
-            })
-          )
-        );
-      },
-      [computer, element]
-    )
-  );
+  useEffect(() => {
+    (async () => {
+      const columnsData = collectColumnsData(editor, element);
+      const headerCells = element.children[1].children;
+      const newTableTypes = await Promise.all(
+        columnsData.map((columnData, columnIndex) =>
+          inferColumn(computer, columnData, {
+            userType: headerCells[columnIndex]?.cellType,
+            doNotInferBoolean: true,
+          })
+        )
+      );
+      setTableTypes(newTableTypes);
+    })();
+  }, [computer, editor, element]);
+
+  return tableTypes;
 };
