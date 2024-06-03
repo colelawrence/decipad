@@ -102,6 +102,8 @@ const internalComputeStatement = async (
         undefined,
       ];
     }
+  } else {
+    value = Value.UnknownValue;
   }
 
   let data = await value?.getData();

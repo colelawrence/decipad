@@ -313,7 +313,7 @@ export class Computer {
   );
 
   getSymbolDefinedInBlock(blockId: string): string | undefined {
-    const parsed = this.latestProgram.asBlockIdMap.get(blockId);
+    const parsed = this.latestProgram?.asBlockIdMap.get(blockId);
     return parsed?.definesVariable;
   }
 
@@ -322,21 +322,21 @@ export class Computer {
     (_, blockId: string, columnId: string | null) => {
       // Find "Table.Column"
       if (columnId) {
-        const column = this.latestProgram.asBlockIdMap.get(columnId);
+        const column = this.latestProgram?.asBlockIdMap.get(columnId);
         if (column?.definesTableColumn) {
           return column.definesTableColumn.join('.');
         }
       }
 
       // Find just "Column" (or "Table.Column" when referred outside)
-      const column = this.latestProgram.asBlockIdMap.get(blockId);
+      const column = this.latestProgram?.asBlockIdMap.get(blockId);
       if (column?.definesTableColumn) {
         return columnId
           ? column.definesTableColumn.join('.')
           : column.definesTableColumn[1];
       }
 
-      const programBlock = this.latestProgram.asBlockIdMap.get(blockId);
+      const programBlock = this.latestProgram?.asBlockIdMap.get(blockId);
       return (
         programBlock?.definesVariable || this.getSymbolDefinedInBlock(blockId)
       );
@@ -347,7 +347,7 @@ export class Computer {
   getBlockIdAndColumnId$ = listenerHelper(
     this.results,
     (_, blockId: string): [string, string | null] | undefined => {
-      const programBlock = this.latestProgram.asBlockIdMap.get(blockId);
+      const programBlock = this.latestProgram?.asBlockIdMap.get(blockId);
 
       if (programBlock?.definesTableColumn) {
         const [tableName] = programBlock.definesTableColumn;
@@ -394,7 +394,7 @@ export class Computer {
   );
 
   getParseableTypeInBlock(blockId: string) {
-    const parsed = this.latestProgram.asBlockIdMap.get(blockId);
+    const parsed = this.latestProgram?.asBlockIdMap.get(blockId);
     if (parsed && parsed.type === 'identified-block') {
       return astToParseable(parsed.block.args[0]);
     }
@@ -573,7 +573,7 @@ export class Computer {
                   }
                 );
               } else {
-                const statement = this.latestProgram.asBlockIdMap.get(b.id)
+                const statement = this.latestProgram?.asBlockIdMap.get(b.id)
                   ?.block?.args[0];
                 if (
                   (statement?.type !== 'table' &&
@@ -613,8 +613,8 @@ export class Computer {
                 );
               }
             } else if (isColumn(b.result?.type)) {
-              const statement = this.latestProgram.asBlockIdMap.get(b.id)?.block
-                ?.args[0];
+              const statement = this.latestProgram?.asBlockIdMap.get(b.id)
+                ?.block?.args[0];
               if (statement?.type !== 'table-column-assign') {
                 return [];
               }
@@ -652,7 +652,7 @@ export class Computer {
     (blockId: string) => this.resultStreams.blockSubject(blockId),
     (block): string | undefined => {
       if (isColumn(block?.result?.type)) {
-        const statement = this.latestProgram.asBlockIdMap.get(block.id)?.block
+        const statement = this.latestProgram?.asBlockIdMap.get(block.id)?.block
           ?.args[0];
         if (statement?.type === 'table-column-assign') {
           return getIdentifierString(statement.args[1]);
@@ -696,7 +696,7 @@ export class Computer {
 
   blockToMathML$(blockId: string): Observable<string> {
     return this.results.pipe(
-      map(() => this.latestProgram.asBlockIdMap.get(blockId)?.block?.args[0]),
+      map(() => this.latestProgram?.asBlockIdMap.get(blockId)?.block?.args[0]),
       map((_statement) => {
         let statement = _statement;
         if (statement?.type === 'assign') {
@@ -885,6 +885,7 @@ export class Computer {
    * Reset computer's state
    */
   reset() {
+    console.debug('Computer was reset');
     this.latestProgram = emptyComputerProgram();
     this.latestExternalData = new Map();
     this.computationRealm = new ComputationRealm();
@@ -894,7 +895,7 @@ export class Computer {
   }
 
   getStatement(blockId: string): AST.Statement | undefined {
-    const block = this.latestProgram.asBlockIdMap.get(blockId)?.block;
+    const block = this.latestProgram?.asBlockIdMap.get(blockId)?.block;
 
     return block?.args[0];
   }
