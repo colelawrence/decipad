@@ -3,7 +3,10 @@ import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import type { TEditor } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';
-import type { DataViewElement } from '@decipad/editor-types';
+import type {
+  DataViewElement,
+  DataViewHeaderRowElement,
+} from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_TR,
@@ -43,8 +46,8 @@ const getInitialDataViewElement = async (
       {
         id: nanoid(),
         type: ELEMENT_DATA_VIEW_TR,
-        children: [],
-      },
+        children: [{ text: '' }],
+      } as unknown as DataViewHeaderRowElement,
     ],
   };
 };
