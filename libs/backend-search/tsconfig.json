@@ -10,6 +10,7 @@
     { "path": "../backend-config" },
     { "path": "../editor-types" },
     { "path": "../services" },
-    { "path": "../doc-verbalizer" }
+    { "path": "../doc-verbalizer" },
+    { "path": "../computer" }
   ]
 }

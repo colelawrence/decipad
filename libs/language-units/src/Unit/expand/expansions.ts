@@ -1,16 +1,16 @@
-import type DeciNumber from '@decipad/number';
+import type { BaseQuantity } from '@decipad/language-interfaces';
+import type { DeciNumberBase } from '@decipad/number';
 import { N, ONE } from '@decipad/number';
 import { identity } from '@decipad/utils';
-import type { BaseQuantity } from '..';
 
 export interface ExpandTo {
   baseQuantity: BaseQuantity;
-  exp: DeciNumber;
+  exp: DeciNumberBase;
 }
 
 export type BaseQuantityExpansion = {
   expandedUnits: ExpandTo[];
-  convertToExpanded: (n: DeciNumber) => DeciNumber;
+  convertToExpanded: (n: DeciNumberBase) => DeciNumberBase;
 };
 type Expansions = Record<BaseQuantity, BaseQuantityExpansion>;
 

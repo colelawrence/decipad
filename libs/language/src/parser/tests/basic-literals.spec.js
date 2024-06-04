@@ -1,5 +1,6 @@
 import { N } from '@decipad/number';
-import { c, l, r } from '../../utils';
+// eslint-disable-next-line no-restricted-imports
+import { c, l, r } from '@decipad/language-utils';
 import { runTests } from '../run-tests';
 
 runTests({

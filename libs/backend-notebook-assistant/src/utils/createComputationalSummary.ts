@@ -1,3 +1,4 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import type { VerbalizedElement } from '@decipad/doc-verbalizer';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import type { AnyElement, RootDocument } from '../../../editor-types/src';
@@ -7,7 +8,6 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from '../../../editor-types/src';
 import { debug } from '../debug';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 const computationalBlocks: Set<AnyElement['type']> = new Set([
   ELEMENT_CODE_LINE_V2,
@@ -20,7 +20,7 @@ const isComputationalBlock = (element: VerbalizedElement) =>
 
 export const createComputationalSummary = (
   content: RootDocument,
-  computer: RemoteComputer
+  computer: Computer
 ): string => {
   const summary = verbalizeDoc(content, computer)
     .verbalized.filter(isComputationalBlock)

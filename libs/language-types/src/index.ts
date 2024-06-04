@@ -11,7 +11,6 @@ export {
   prettyForSymbol,
   unitIsSymbol,
   currencyUnits,
-  type UnitOfMeasure,
 } from '@decipad/language-units';
 export * from './InferError';
 export * from './utils';

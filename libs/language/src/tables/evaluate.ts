@@ -2,9 +2,14 @@ import { getDefined, getInstanceof } from '@decipad/utils';
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError, Value } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import {
+  walkAst,
+  getIdentifierString,
+  isExpression,
+} from '@decipad/language-utils';
 import { refersToOtherColumnsByName } from './inference';
 import { mapWithPrevious } from '../interpreter/previous';
-import { walkAst, getIdentifierString, isExpression } from '../utils';
 import { evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { requiresWholeColumn } from './requiresWholeColumn';

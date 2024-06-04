@@ -1,10 +1,6 @@
-import {
-  type Result,
-  runCode as run,
-  type RunAstOptions,
-  type SerializedTypeKind,
-  serializeResult,
-} from '@decipad/remote-computer';
+import { serializeResult } from '@decipad/computer-utils';
+import type { Result, SerializedTypeKind } from '@decipad/language-interfaces';
+import { type RunAstOptions, runCode as run } from '@decipad/remote-computer';
 
 export async function runCode<T extends SerializedTypeKind>(
   code: string,

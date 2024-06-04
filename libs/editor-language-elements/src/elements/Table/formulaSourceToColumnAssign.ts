@@ -1,5 +1,5 @@
 import { parseExpression } from '@decipad/remote-computer';
-import type { ColumnParseReturn } from './headerToColumn';
+import type { ColumnParseReturn } from './types';
 
 export function formulaSourceToColumnAssign(
   columnName: string,

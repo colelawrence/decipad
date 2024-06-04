@@ -1,9 +1,9 @@
-import type DeciNumber from '@decipad/number';
+import type { Value } from '@decipad/language-interfaces';
+import type { DeciNumberBase } from '@decipad/number';
 import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { Scalar } from './Scalar';
 import { FunctionValue } from './Function';
-import type { Value } from '@decipad/language-interfaces';
 
 type ValidFromJSArg =
   | string
@@ -11,7 +11,7 @@ type ValidFromJSArg =
   | number
   | bigint
   | Date
-  | DeciNumber
+  | DeciNumberBase
   | FunctionValue
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function;

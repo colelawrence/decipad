@@ -1,10 +1,12 @@
-import type { Result } from '@decipad/remote-computer';
 import type { TableCellType } from '@decipad/editor-types';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { Result } from '@decipad/language-interfaces';
 import { columnTypeCoercionsToRec } from './columnTypeCoersionsToRec';
 import { tableFlip } from './tableFlip';
 import { importFromUnknownJson } from '../importFromUnknownJson';
 
 export const importFromJSONAndCoercions = async (
+  computer: Computer,
   msg: string,
   columnTypeCoercions: Array<TableCellType | undefined>
 ): Promise<Result.Result | undefined> => {
@@ -23,7 +25,7 @@ export const importFromJSONAndCoercions = async (
       parsedMsg = tableFlip(parsedMsg);
     }
 
-    return importFromUnknownJson(parsedMsg, {
+    return importFromUnknownJson(computer, parsedMsg, {
       columnTypeCoercions: columnTypeCoercionsToRec(columnTypeCoercions),
     });
   } catch (e) {

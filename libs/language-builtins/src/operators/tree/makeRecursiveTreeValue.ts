@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
 import { type Type, Value, buildType, compare } from '@decipad/language-types';
 import { sortMap, contiguousSlices } from '@decipad/column';
-import { type BuiltinContextUtils } from '../../types';
-import { maybeAggregateColumn } from './maybeAggregateColumn';
 import { getDefined } from '@decipad/utils';
 import type { Result } from '@decipad/language-interfaces';
+import { type BuiltinContextUtils } from '../../types';
+import { maybeAggregateColumn } from './maybeAggregateColumn';
 
 export const makeRecursiveTreeValue = async (
   fullTable: Value.Table,

@@ -11,6 +11,7 @@ import {
   serializeType,
 } from '@decipad/language-types';
 import { all, slice } from '@decipad/generator-utils';
+import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber, { N } from '@decipad/number';
 import { getInstanceof } from '@decipad/utils';
 import type { Result, Value as ValueTypes } from '@decipad/language-interfaces';
@@ -43,7 +44,7 @@ type SubTestDesc = [
   op: string,
   args: ValueTypes.Value[],
   argTypes: Type[],
-  expects: (n: DeciNumber) => DeciNumber,
+  expects: (n: DeciNumberBase) => DeciNumberBase,
   expectedResultColumnCellCount?: number,
   slow?: boolean
 ];
@@ -171,7 +172,7 @@ describe('callBuiltin performance', () => {
     op: string,
     args: ValueTypes.Value[],
     argTypes: Type[],
-    expects: (n: DeciNumber) => DeciNumber,
+    expects: (n: DeciNumberBase) => DeciNumberBase,
     expectedResultColumnCellCount = count,
     slow = false
   ) => {

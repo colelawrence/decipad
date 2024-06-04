@@ -4,7 +4,8 @@ import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';

@@ -148,3 +148,22 @@ export type ResultAndLabelInfo = {
   result: Result.Result;
   labelInfo: LabelInfo[];
 };
+
+export type ResultType = Result.Result<
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'function'
+  | 'column'
+  | 'materialized-column'
+  | 'table'
+  | 'materialized-table'
+  | 'tree'
+  | 'row'
+  | 'date'
+  | 'range'
+  | 'pending'
+  | 'nothing'
+  | 'anything'
+  | 'type-error'
+>;

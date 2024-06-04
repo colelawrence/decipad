@@ -11,7 +11,8 @@ import {
   Time,
   Value,
 } from '@decipad/language-types';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
 import { getOfType } from '../parser/getOfType';
 import type { TRealm } from '../scopedRealm';

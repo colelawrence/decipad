@@ -1,3 +1,4 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   Blockquote,
   Bold,
@@ -23,6 +24,11 @@ import {
   Underline,
   UnorderedList,
 } from '@decipad/editor-components';
+import type {
+  ElementKind,
+  MarkKind,
+  PlateComponent,
+} from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
@@ -41,23 +47,19 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_SUBMIT_FORM,
   ELEMENT_UL,
-  ElementKind,
   MARK_BOLD,
   MARK_CODE,
   MARK_HIGHLIGHT,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-  MarkKind,
-  PlateComponent,
 } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
 >;
 
-export const components = (computer: RemoteComputer): PlateComponents => ({
+export const components = (computer: Computer): PlateComponents => ({
   // Headings
   [ELEMENT_H1]: Title,
   [ELEMENT_H2]: Heading1,

@@ -3,14 +3,13 @@ import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
-import handle from '../handle';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import type { RootDocument } from '@decipad/editor-types';
-
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-
+import handle from '../handle';
 import { ASSISTANT_SYSTEM_PROMPT } from './constants';
-import { getRemoteComputer } from '@decipad/remote-computer';
 
 const notebooks = resource('notebook');
 
@@ -49,7 +48,7 @@ export const handler = handle(async (event) => {
   let verbalizedDoc: string;
 
   try {
-    const { verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { verbalized } = verbalizeDoc(doc, getComputer());
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
   } catch (e) {

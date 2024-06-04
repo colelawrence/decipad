@@ -39,7 +39,7 @@ export const NotionIntegration: FC<
       const [notionRes, cohersions] = importFromNotion(res);
       const mergedTypeMappings = merge(typeMappings, cohersions);
 
-      const notionResult = await importFromUnknownJson(notionRes, {
+      const notionResult = await importFromUnknownJson(computer, notionRes, {
         columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
       });
       pushResultToComputer(computer, id, varName, notionResult);
@@ -56,7 +56,7 @@ export const NotionIntegration: FC<
       const [notionImported, cohersions] = importFromNotion(res);
       const mergedTypeMappings = merge(typeMappings, cohersions);
 
-      const result = await importFromUnknownJson(notionImported, {
+      const result = await importFromUnknownJson(computer, notionImported, {
         columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
       });
 
@@ -69,9 +69,13 @@ export const NotionIntegration: FC<
 
       store.abort();
 
-      importFromUnknownJson(importFromNotion(JSON.parse(latestResult)), {
-        columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
-      }).then((notionResult) => {
+      importFromUnknownJson(
+        computer,
+        importFromNotion(JSON.parse(latestResult)),
+        {
+          columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
+        }
+      ).then((notionResult) => {
         store.Set({
           connectionType: 'notion',
           stage: 'connect',

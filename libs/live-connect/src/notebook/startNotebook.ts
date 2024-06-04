@@ -1,20 +1,20 @@
 /* eslint-disable no-await-in-loop */
-import { dequal, getDefined } from '@decipad/utils';
-import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { dequal, getDefined } from '@decipad/utils';
+import type {
+  Computer,
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 import { createDocSyncEditor } from '@decipad/docsync';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import {
-  getRemoteComputer,
-  type IdentifiedError,
-  type IdentifiedResult,
-  identifiedErrorToMessage,
-  type RemoteComputer,
-} from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { identifiedErrorToMessage, getComputer } from '@decipad/computer';
 import { getURLComponents } from '@decipad/editor-utils';
+import { EditorController } from '@decipad/notebook-tabs';
 import type { Observe, Subscription } from '../types';
 import { liveConnections } from './liveConnections';
-import { EditorController } from '@decipad/notebook-tabs';
 
 const debounceGetValueMs = 500;
 
@@ -24,7 +24,7 @@ export type StartNotebook = (
   subscription: Subscription,
   observeExternal: Observe,
   onError: OnErrorCallback
-) => RemoteComputer;
+) => Computer;
 
 export const startNotebook: StartNotebook = (
   subscription,
@@ -40,7 +40,7 @@ export const startNotebook: StartNotebook = (
     protocolVersion: 2,
   });
 
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const { unsubscribe } = computer.results
     .pipe(
       map((result) => result.blockResults[blockId]),

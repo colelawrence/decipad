@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ClientEventsContext } from '@decipad/client-events';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { Paragraph } from '@decipad/editor-components';
 import type { PlateComponent, SlashCommand } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, useMyEditorRef } from '@decipad/editor-types';
@@ -14,7 +14,7 @@ import { useInteractiveMenu } from './useInteractiveMenu';
 import { useSlashMenu } from './useSlashMenu';
 
 export const InteractiveParagraph =
-  (computer: RemoteComputer): PlateComponent =>
+  (computer: Computer): PlateComponent =>
   ({ children, ...props }) => {
     const paragraphElement = props.element;
     assertElementType(paragraphElement, ELEMENT_PARAGRAPH);

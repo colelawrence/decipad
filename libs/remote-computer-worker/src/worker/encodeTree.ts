@@ -11,7 +11,7 @@ import {
   serializeType,
 } from '@decipad/language-types';
 import { encodeString } from './encodeString';
-import type { RecursiveEncoder } from './valueEncoder';
+import type { RecursiveEncoder } from './types';
 import { encodeResult } from './encodeResult';
 
 const undefinedResult: Result.Result = {

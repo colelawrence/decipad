@@ -1,12 +1,9 @@
+import type { Unit as TUnit } from '@decipad/language-interfaces';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { CellValueType, TableCellType } from '@decipad/editor-types';
 import type DeciNumber from '@decipad/number';
 import { N, ZERO } from '@decipad/number';
-import type {
-  AST,
-  RemoteComputer,
-  SerializedType,
-  Result,
-} from '@decipad/remote-computer';
+import type { AST, SerializedType, Result } from '@decipad/remote-computer';
 import {
   areUnitsConvertible,
   convertBetweenUnits,
@@ -30,7 +27,7 @@ type ParseCellResult = AST.Expression | Error | null;
 const defaultLocale = 'en-US'; // TODO: make this dynamic
 
 const parsing = async (
-  computer: RemoteComputer,
+  computer: Computer,
   type: SerializedType,
   text: string,
   afterParse: (result: Result.Result) => PromiseOrType<ParseCellResult>
@@ -88,8 +85,8 @@ const parsing = async (
   }
 };
 
-const fixCellUnit = (unit: Unit.Unit[]): Unit.Unit[] => {
-  return unit.map((u): Unit.Unit => {
+const fixCellUnit = (unit: TUnit[]): TUnit[] => {
+  return unit.map((u): TUnit => {
     return {
       ...u,
       multiplier: N(u.multiplier),
@@ -108,7 +105,7 @@ export function assertCellType<Kind extends CellValueType['kind']>(
 }
 
 export const parseCell = async (
-  computer: RemoteComputer,
+  computer: Computer,
   _cellType: CellValueType,
   text: string
 ): Promise<AST.Expression | Error | null> => {

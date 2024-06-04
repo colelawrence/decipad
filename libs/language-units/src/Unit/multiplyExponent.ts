@@ -1,7 +1,7 @@
 import { produce } from '@decipad/utils';
-import type { Unit } from './Unit';
-import { normalizeUnits } from './normalizeUnits';
 import { N } from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
+import { normalizeUnits } from './normalizeUnits';
 
 export const multiplyExponent = (myUnits: Unit[], by: number): Unit[] | null =>
   normalizeUnits(

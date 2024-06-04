@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { Result, SerializedType } from '@decipad/language-interfaces';
-import type { RecursiveDecoder } from './valueDecoder';
+import type { RecursiveDecoder } from './types';
 import { decodeType } from './decodeType';
 
 export const decodeResult = async (

@@ -1,6 +1,6 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   type AutocompleteName,
-  type RemoteComputer,
   type SerializedType,
   getExprRef,
   isTable as isComputerTable,
@@ -55,7 +55,7 @@ type AutocompleteNameWithExpRef = AutocompleteName & {
 };
 
 const autocompleteNameToExprRef = (
-  computer: RemoteComputer,
+  computer: Computer,
   table: AutocompleteName
 ): AutocompleteNameWithExpRef => {
   return {

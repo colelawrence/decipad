@@ -1,11 +1,12 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { num } from '@decipad/language-utils';
 import { parseSimpleValue } from './parseSimpleValue';
 import { parseSimpleValueUnit } from './parseSimpleValueUnit';
 import {
   simpleValueToString,
   simpleValueUnitToString,
 } from './simpleValueToString';
-import { num } from '../utils';
 
 it('turns a simplistic value AST into a string', () => {
   expect(

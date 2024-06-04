@@ -1,4 +1,4 @@
-import type { ErrSpec } from '@decipad/remote-computer';
+import type { ErrSpec } from '@decipad/language-interfaces';
 import { buildType as t } from '@decipad/remote-computer';
 import { formatError } from './formatError';
 

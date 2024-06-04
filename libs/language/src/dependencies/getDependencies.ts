@@ -1,6 +1,7 @@
-import { getDefined } from '@decipad/utils';
 import type { AST } from '@decipad/language-interfaces';
-import { getIdentifierString, walkAst } from '../utils';
+import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString, walkAst } from '@decipad/language-utils';
 
 const getReferredSymbol = (node: AST.Node) => {
   switch (node.type) {

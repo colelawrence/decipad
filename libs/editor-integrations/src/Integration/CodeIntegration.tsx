@@ -40,6 +40,7 @@ export const CodeIntegration: FC<
     let canceled = false;
     (async () => {
       const result = await importFromJSONAndCoercions(
+        computer,
         latestResult,
         typeMappings
       );
@@ -60,6 +61,7 @@ export const CodeIntegration: FC<
       (msg: ResultMessageType) => {
         (async () => {
           const result = await importFromJSONAndCoercions(
+            computer,
             msg.result,
             typeMappings
           );
@@ -108,6 +110,7 @@ export const CodeIntegration: FC<
           store.abort();
 
           importFromJSONAndCoercions(
+            computer,
             latestResult,
             store.resultTypeMapping
           ).then((res) => {
@@ -131,6 +134,7 @@ export const CodeIntegration: FC<
         },
       }),
       [
+        computer,
         deciVars,
         id,
         integrationType.code,

@@ -1,7 +1,20 @@
-import { getDefined } from '@decipad/utils';
-import { Type } from './Type';
 import type { SerializedType } from '@decipad/language-interfaces';
-import * as t from './Type';
+import { getDefined } from '@decipad/utils';
+import {
+  Type,
+  boolean,
+  column,
+  date,
+  number,
+  range,
+  string,
+  table,
+  tree,
+  pending,
+  functionPlaceholder,
+  impossible,
+  row,
+} from './Type';
 import { InferError } from '../InferError';
 
 export function serializeType(type: Type | SerializedType): SerializedType {
@@ -139,22 +152,22 @@ export function deserializeType(type: Type | SerializedType): Type {
     (() => {
       switch (type.kind) {
         case 'number':
-          return t.number(type.unit, type.numberFormat, type.numberError);
+          return number(type.unit, type.numberFormat, type.numberError);
         case 'string':
-          return t.string();
+          return string();
         case 'boolean':
-          return t.boolean();
+          return boolean();
         case 'date':
-          return t.date(type.date);
+          return date(type.date);
         case 'range':
-          return t.range(deserializeType(type.rangeOf));
+          return range(deserializeType(type.rangeOf));
         case 'column':
         case 'materialized-column':
-          return t.column(deserializeType(type.cellType), type.indexedBy);
+          return column(deserializeType(type.cellType), type.indexedBy);
         case 'materialized-table':
         case 'table': {
           const { columnTypes, columnNames, delegatesIndexTo } = type;
-          return t.table({
+          return table({
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
             delegatesIndexTo,
@@ -162,27 +175,25 @@ export function deserializeType(type: Type | SerializedType): Type {
         }
         case 'tree': {
           const { columnTypes, columnNames } = type;
-          return t.tree({
+          return tree({
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
           });
         }
         case 'row':
-          return t.row(
+          return row(
             type.rowCellTypes.map((t) => deserializeType(t)),
             type.rowCellNames,
             type.rowIndexName
           );
         case 'pending':
-          return t.pending();
         case 'nothing':
-          return t.nothing();
         case 'anything':
-          return t.nothing();
+          return pending();
         case 'function':
-          return t.functionPlaceholder(type.name, type.argNames, type.body);
+          return functionPlaceholder(type.name, type.argNames, type.body);
         case 'type-error':
-          return t.impossible(new InferError(type.errorCause));
+          return impossible(new InferError(type.errorCause));
       }
     })()
   );

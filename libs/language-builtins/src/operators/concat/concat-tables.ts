@@ -1,7 +1,7 @@
 import { dequal, getDefined, getInstanceof, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, buildType as t, Value } from '@decipad/language-types';
-import type { Evaluator, Functor } from '../../interfaces';
+import type { Evaluator, Functor } from '../../types';
 
 export const concatTablesFunctor: Functor = async ([tab1, tab2]) =>
   (await Type.combine(tab1.isTable(), tab2.isTable())).mapType(() => {

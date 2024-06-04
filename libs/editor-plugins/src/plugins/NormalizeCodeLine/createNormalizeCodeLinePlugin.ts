@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   MyEditor,
   MyGenericEditor,
@@ -26,7 +26,7 @@ export const normalizeCodeChildren = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >(
-  _computer: RemoteComputer,
+  _computer: Computer,
   editor: TE,
   [_node, path]: ENodeEntry<TV>
 ): NormalizerReturnValue => {
@@ -123,7 +123,7 @@ export const normalizeCodeChildren = <
 };
 
 const normalizeCodeLine =
-  (computer: RemoteComputer) =>
+  (computer: Computer) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): NormalizerReturnValue => {
     assertElementType(entry[0], ELEMENT_CODE_LINE);
@@ -131,7 +131,7 @@ const normalizeCodeLine =
     return normalizeCodeChildren(computer, editor, entry);
   };
 
-export const createNormalizeCodeLinePlugin = (computer: RemoteComputer) =>
+export const createNormalizeCodeLinePlugin = (computer: Computer) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_CODE_LINE_PLUGIN',
     elementType: ELEMENT_CODE_LINE,

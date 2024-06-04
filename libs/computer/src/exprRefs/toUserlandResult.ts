@@ -35,7 +35,7 @@ const toUserlandError = (err: ErrSpec, computer: Computer): ErrSpec => {
   return err;
 };
 
-const toUserlandUnit = <T extends Unit.Unit[] | null | undefined>(
+const toUserlandUnit = <T extends Unit[] | null | undefined>(
   units: T,
   computer: Computer
 ): T => {

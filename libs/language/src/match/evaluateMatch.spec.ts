@@ -1,6 +1,7 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { n, block, match, matchDef } from '@decipad/language-utils';
 import { runAST } from '..';
-import { n, block, match, matchDef } from '../utils';
 
 describe('evaluateMatch', () => {
   it('errors if no match matches', async () => {

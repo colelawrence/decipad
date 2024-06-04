@@ -1,11 +1,11 @@
-import type DeciNumber from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
-import type { Unit } from './Unit';
 
 export function multiplyMultipliers(
   units: Unit[] | undefined | null,
-  start: DeciNumber = ONE
-): DeciNumber {
+  start: DeciNumberBase = ONE
+): DeciNumberBase {
   if (!units) {
     return start;
   }

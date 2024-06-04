@@ -6,6 +6,7 @@ import {
 import {
   ExecutionContext,
   useCodeConnectionStore,
+  useComputer,
   useConnectionStore,
   useCurrentWorkspaceStore,
   useNotebookId,
@@ -216,6 +217,8 @@ export const CodeConnection: FC<ConnectionProps> = ({
 
   const deciVariables = useDeciVariables();
 
+  const computer = useComputer();
+
   const msgStream = useCallback(
     (msg: WorkerMessageType) => {
       const logsFromWorker = msg.logs.map((logLine: string) => ({
@@ -253,7 +256,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
           jsonMsg = tableFlip(jsonMsg);
         }
 
-        importFromUnknownJson(jsonMsg, {
+        importFromUnknownJson(computer, jsonMsg, {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
         }).then((res) => {
           setResultPreview(res);
@@ -269,7 +272,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
         });
       }
     },
-    [onExecute, setRawResult, setResultPreview, typeMapping]
+    [computer, onExecute, setRawResult, setResultPreview, typeMapping]
   );
 
   const errorStream = useCallback(

@@ -1,6 +1,6 @@
 import type { SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, ELEMENT_SMART_REF } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { CellInputValue } from './serializeCellText';
 import { parseCellText, serializeCellText } from './serializeCellText';
 
@@ -8,8 +8,8 @@ const computerStub = {
   getVarBlockId: (varName: string) =>
     varName.slice('exprRef_'.length).replaceAll('_', '-'),
 } satisfies {
-  getVarBlockId: RemoteComputer['getVarBlockId'];
-} as RemoteComputer;
+  getVarBlockId: Computer['getVarBlockId'];
+} as Computer;
 
 it('should parse a cell text containing multiple refs', () => {
   const text = '1+exprRef_aA_0+2+exprRef_bB_1+3';

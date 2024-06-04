@@ -1,9 +1,9 @@
 /* eslint-disable no-loop-func */
-import type {
-  RemoteComputer,
-  Result,
-  SerializedType,
-} from '@decipad/remote-computer';
+import { format } from 'date-fns';
+import { nanoid } from 'nanoid';
+import type { Path } from 'slate';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { Result, SerializedType } from '@decipad/language-interfaces';
 import {
   buildResult,
   isTableResult,
@@ -27,15 +27,12 @@ import {
 import { generateTableName, insertNodes } from '@decipad/editor-utils';
 import type { ImportResult } from '@decipad/import';
 import { getDefined, varNamify } from '@decipad/utils';
-import { format } from 'date-fns';
-import { nanoid } from 'nanoid';
-import type { Path } from 'slate';
 
 interface ImportTableProps {
   editor: MyEditor;
   insertPath: Path;
   result: ImportResult;
-  computer: RemoteComputer;
+  computer: Computer;
 }
 
 const valueToString = (result: Result.Result): string => {
@@ -140,7 +137,7 @@ const dataRows = (
 };
 
 const tableElement = async (
-  computer: RemoteComputer,
+  computer: Computer,
   table: Result.Result<'materialized-table'>,
   meta?: ImportResult['meta']
 ): Promise<TableElement> => {

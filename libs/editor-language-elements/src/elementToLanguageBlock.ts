@@ -3,9 +3,8 @@ import type {
   MinimalRootEditor,
   MyEditor,
 } from '@decipad/editor-types';
-import type { Program, RemoteComputer } from '@decipad/remote-computer';
 import { isElement } from '@udecode/plate-common';
-
+import type { Computer, Program } from '@decipad/computer-interfaces';
 import * as interactiveLanguageElements from './elements';
 import type { InteractiveLanguageElement } from './types';
 
@@ -32,7 +31,7 @@ export const interactiveElementTypes = new Set(
  */
 export const elementToLanguageBlocks = async (
   editor: MinimalRootEditor | MyEditor,
-  computer: RemoteComputer,
+  computer: Computer,
   element: AnyElement
 ): Promise<Program | null> => {
   const interactiveElement = interactiveElementsByType.get(element.type);

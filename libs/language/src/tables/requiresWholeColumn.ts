@@ -4,7 +4,8 @@ import type { AST } from '@decipad/language-interfaces';
 import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
-import { walkAst, getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { walkAst, getIdentifierString } from '@decipad/language-utils';
 
 export const fakeFunctionCall = (
   fnCall: AST.FunctionCall,

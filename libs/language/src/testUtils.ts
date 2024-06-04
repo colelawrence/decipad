@@ -19,7 +19,12 @@ import {
   buildType as t,
   isErrorType,
 } from '@decipad/language-types';
-import type { AST, Result, SerializedType } from '@decipad/language-interfaces';
+import type {
+  AST,
+  Result,
+  SerializedType,
+  Unit as TUnit,
+} from '@decipad/language-interfaces';
 import type { TScopedRealm } from '.';
 import { ScopedRealm, makeInferContext, parseBlockOrThrow } from '.';
 import { inferBlock, inferProgram } from './infer';
@@ -206,7 +211,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 }
 
 /** Stringify units (for testing/snapshots ONLY) */
-export const snapshotUnit = (unit: Unit.Unit[]) => {
+export const snapshotUnit = (unit: TUnit[]) => {
   return unit
     .map((u) => {
       const exp = N(u.exp).valueOf();

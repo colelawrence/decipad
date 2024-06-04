@@ -10,7 +10,6 @@ export * from './editor-change';
 export * from './editor-external-data-sources';
 export * from './editor-paste-interaction-menu-provider';
 export * from './editor-info';
-export * from './editor-stats';
 export * from './editor-styles';
 export * from './editor-table';
 export * from './editor-table-result';

@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   ImportElement,
   ImportElementSource,
@@ -15,7 +15,7 @@ import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 
 export interface InsertImportProps {
-  computer: RemoteComputer;
+  computer: Computer;
   editor: MyEditor;
   createdByUserId: string;
   source?: ImportElementSource;

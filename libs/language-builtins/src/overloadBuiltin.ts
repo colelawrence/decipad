@@ -10,7 +10,7 @@ import {
   type Type,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
-import type { FullBuiltinSpec, Functor, Evaluator } from './interfaces';
+import type { FullBuiltinSpec, Functor, Evaluator } from './types';
 import { dequal } from '@decipad/utils';
 
 const selectMostSpecificErrorForTypes = (

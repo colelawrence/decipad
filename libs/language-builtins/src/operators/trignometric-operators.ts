@@ -4,7 +4,7 @@ import { once } from '@decipad/utils';
 import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
-import type { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../types';
 
 const radian = once(() =>
   t.number([

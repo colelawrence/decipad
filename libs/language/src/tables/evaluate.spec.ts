@@ -1,8 +1,19 @@
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
+import {
+  n,
+  c,
+  l,
+  block,
+  assign,
+  col,
+  r,
+  tableDef,
+  prop,
+} from '@decipad/language-utils';
+// eslint-disable-next-line no-restricted-imports
 import { runAST } from '..';
-import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
 
 import { usesRecursion } from './evaluate';
 

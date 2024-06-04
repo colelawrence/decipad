@@ -1,4 +1,4 @@
-import type { ImportElementSource, MyElement } from '@decipad/editor-types';
+import type { AnyElement, ImportElementSource } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import type { EditorPasteInteractionMenuContextValue } from '@decipad/react-contexts';
 import {
@@ -29,7 +29,7 @@ interface UseInteractiveMenuResult {
 }
 
 export const useInteractiveMenu = (
-  element: MyElement
+  element: AnyElement
 ): UseInteractiveMenuResult => {
   const editor = useMyEditorRef();
   const pasteContext = useEditorPasteInteractionMenuContext(element.id);

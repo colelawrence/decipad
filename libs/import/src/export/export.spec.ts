@@ -1,5 +1,6 @@
+import { serializeResult } from '@decipad/computer-utils';
 import type { IdentifiedResult } from '@decipad/remote-computer';
-import { runCode, serializeResult } from '@decipad/remote-computer';
+import { runCode } from '@decipad/remote-computer';
 import { exportProgram } from './export';
 
 function mockedVarName(blockId: string): string | undefined {

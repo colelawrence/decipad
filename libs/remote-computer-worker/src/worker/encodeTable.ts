@@ -1,6 +1,6 @@
 import type { Result, SerializedType } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { RecursiveEncoder } from './valueEncoder';
+import type { RecursiveEncoder } from './types';
 
 export const encodeTable = async (
   type: SerializedType,

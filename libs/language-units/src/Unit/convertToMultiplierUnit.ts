@@ -1,8 +1,8 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
-import type { Unit } from './Unit';
+import type { Unit } from '@decipad/language-interfaces';
 
-function multipliersFor(units: Unit[]): DeciNumber {
+function multipliersFor(units: Unit[]): DeciNumberBase {
   let acc = ONE;
   for (const unit of units) {
     acc = acc.mul(unit.multiplier.pow(unit.exp));
@@ -12,9 +12,9 @@ function multipliersFor(units: Unit[]): DeciNumber {
 }
 
 export function convertToMultiplierUnit(
-  n: DeciNumber,
+  n: DeciNumberBase,
   units?: Unit[] | null
-): DeciNumber {
+): DeciNumberBase {
   if (!units) {
     return n;
   }

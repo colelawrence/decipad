@@ -1,58 +1,52 @@
 // eslint-disable-next-line no-restricted-imports
-import type { FractionLike } from '@decipad/fraction';
-// eslint-disable-next-line no-restricted-imports
 import type Fraction from '@decipad/fraction';
+// eslint-disable-next-line no-restricted-imports
+import { type FractionLike } from '@decipad/fraction';
 
 export interface DeciNumberBase {
-  abs(): DeciNumber;
-  neg(): DeciNumber;
+  d: undefined | bigint;
+  n: undefined | bigint;
+  s: undefined | bigint;
+  infinite: boolean;
 
-  add: DeciNumber;
-  sub: DeciNumber;
-  mul: DeciNumber;
-  div: DeciNumber;
-  pow: DeciNumber;
-  gcd: DeciNumber;
-  lcm: DeciNumber;
+  abs(): DeciNumberBase;
+  neg(): DeciNumberBase;
 
-  mod(n?: number | string | DeciNumber): DeciNumber;
+  add(n: DeciNumberBase): DeciNumberBase;
+  sub(n: DeciNumberBase): DeciNumberBase;
+  mul(n: DeciNumberBase): DeciNumberBase;
+  div(n: DeciNumberBase): DeciNumberBase;
+  pow(n: DeciNumberBase): DeciNumberBase;
+  internalPow(b: DeciNumberBase): Fraction;
+  gcd(n: DeciNumberBase): DeciNumberBase;
+  lcm(n: DeciNumberBase): DeciNumberBase;
 
-  ceil(places?: number): DeciNumber;
-  floor(places?: number): DeciNumber;
-  round(places?: number): DeciNumber;
+  mod(n?: number | string | DeciNumberBase): DeciNumberBase;
 
-  inverse(): DeciNumber;
+  ceil(places?: number | DeciNumberBase): DeciNumberBase;
+  floor(places?: number | DeciNumberBase): DeciNumberBase;
+  round(places?: number | DeciNumberBase): DeciNumberBase;
+  excelLikeRound(places?: number): DeciNumberBase;
 
-  simplify(eps?: number): DeciNumber;
+  inverse(): DeciNumberBase;
 
-  equals(n: number | string | DeciNumber): boolean;
-  compare(n: number | string | DeciNumber): number;
-  divisible(n: number | string | DeciNumber): boolean;
+  simplify(eps?: number): DeciNumberBase;
+
+  equals(n: number | string | DeciNumberBase): boolean;
+  compare(n: number | string | DeciNumberBase): number;
+  divisible(n: number | string | DeciNumberBase): boolean;
 
   valueOf(): number;
   toString(decimalPlaces?: number): string;
   toLatex(excludeWhole?: boolean): string;
-  toDeciNumber(excludeWhole?: boolean): string;
+  toFraction(excludeWhole?: boolean): string;
   toContinued(): number[];
-  clone(): DeciNumber;
+  clone(): DeciNumberBase;
+
+  isZero(): boolean;
 }
 
-export type FiniteNumber = Fraction & DeciNumberBase;
-
-export type InfiniteNumber = DeciNumberBase & {
-  d: undefined;
-  n: undefined;
-  s: bigint;
-  infinite: true;
-};
-
-export type UndefinedNumber = DeciNumberBase & {
-  d: undefined;
-  n: undefined;
-  s: undefined;
-};
-
-export type DeciNumber = FiniteNumber | InfiniteNumber | UndefinedNumber;
+export type DeciNumber = DeciNumberBase;
 
 export interface DeciNumberInput {
   n?: FractionLike['n'];

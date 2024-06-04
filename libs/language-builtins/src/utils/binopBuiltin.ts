@@ -7,12 +7,12 @@ import {
   getResultGenerator,
   serializeType,
 } from '@decipad/language-types';
-import type DeciNumber from '@decipad/number';
 import type { PromiseOrType } from '@decipad/utils';
 import { zip } from '@decipad/generator-utils';
+import type { DeciNumberBase } from '@decipad/number';
 import type { Result, Value as ValueTypes } from '@decipad/language-interfaces';
 
-import type { Evaluator, FullBuiltinSpec, Functor } from '../interfaces';
+import type { Evaluator, FullBuiltinSpec, Functor } from '../types';
 import { reverseFunctor } from './reverseFunctor';
 import { reverseEvaluator } from './reverseEvaluator';
 
@@ -20,7 +20,7 @@ export type BinopPrimitiveEval = (
   n1: Result.OneResult,
   n2: Result.OneResult,
   types: Type[]
-) => PromiseOrType<DeciNumber | boolean | string>;
+) => PromiseOrType<DeciNumberBase | boolean | string>;
 
 interface BinopNumericBuiltinProps {
   primitiveEval: BinopPrimitiveEval;

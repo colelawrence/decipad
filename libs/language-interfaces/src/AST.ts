@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase as DeciNumber } from '@decipad/number';
 import type { Type } from './Type';
 import type * as Time from './Time';
 

@@ -3,8 +3,9 @@ import type { AST } from '@decipad/language-interfaces';
 import type { Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult, buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { c, col, l, r, tableColAssign } from '@decipad/language-utils';
 import { inferStatement } from '../infer';
-import { c, col, l, r, tableColAssign } from '../utils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';
 import type { ScopedInferContext, TRealm } from '..';
 import { ScopedRealm, makeInferContext, parseExpressionOrThrow } from '..';

@@ -8,6 +8,7 @@ import {
   type SerializedType,
   type Value as ValueTypes,
 } from '@decipad/language-interfaces';
+import type { PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
 import type {
@@ -17,7 +18,6 @@ import type {
 import { valueEncoder } from './valueEncoder';
 import { encodeString } from './encodeString';
 import { SharedRPC } from '../utils/SharedRPC';
-import type { PromiseOrType } from '@decipad/utils';
 
 export interface RemoteValueReference {
   type: 'remote-value-ref';

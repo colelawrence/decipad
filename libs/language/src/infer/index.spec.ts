@@ -4,20 +4,13 @@ import { ONE } from '@decipad/number';
 import type { AST, Type, Unit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
-import {
-  ScopedRealm,
-  inferBlock,
-  makeInferContext,
-  parseBlockOrThrow,
-} from '..';
-import { objectToMap, objectToTableType } from '../testUtils';
+// eslint-disable-next-line no-restricted-imports
 import {
   as,
   assign,
   block,
   c,
   col,
-  date,
   l,
   n,
   ne,
@@ -25,14 +18,22 @@ import {
   r,
   range,
   tableDef,
-} from '../utils';
+} from '@decipad/language-utils';
+import {
+  ScopedRealm,
+  inferBlock,
+  makeInferContext,
+  parseBlockOrThrow,
+} from '..';
+import { objectToMap, objectToTableType } from '../testUtils';
 
 import { inferExpression, inferProgram, inferStatement } from './index';
+import { date } from '../date';
 
 let nilCtx = makeInferContext();
 let nilRealm = new ScopedRealm(undefined, nilCtx);
 
-const degC: Unit.Unit = {
+const degC: Unit = {
   unit: 'celsius',
   exp: ONE,
   multiplier: ONE,

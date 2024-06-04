@@ -10,7 +10,7 @@ import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { isColumn } from './isColumn';
 
-const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
+const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
   unit?.map(
     (u) =>
       ({
@@ -18,7 +18,7 @@ const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
         exp: fromNumber(u.exp),
         multiplier: fromNumber(u.multiplier),
         aliasFor: u.aliasFor && fixUnit(u.aliasFor),
-      } as Unit.Unit)
+      } as Unit)
   ) ?? null;
 
 // eslint-disable-next-line complexity

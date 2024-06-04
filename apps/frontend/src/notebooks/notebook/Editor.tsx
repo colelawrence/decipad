@@ -1,24 +1,24 @@
-import type { DocSyncEditor } from '@decipad/docsync';
-import { Notebook as NotebookEditor } from '@decipad/notebook';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import type { FC } from 'react';
 import { useEffect, useMemo } from 'react';
-import { useNotebookStateAndActions } from './hooks';
-import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
 import { useRouteParams } from 'typesafe-routes/react-router';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { DocSyncEditor } from '@decipad/docsync';
+import { Notebook as NotebookEditor } from '@decipad/notebook';
 import { notebooks } from '@decipad/routing';
 import {
   EditorStylesContext,
   ExternalDataSourcesContextProvider,
 } from '@decipad/react-contexts';
 import { EditorIcon, GlobalThemeStyles } from '@decipad/ui';
+import { useNotebookStateAndActions } from './hooks';
+import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
 import { Frame } from '../../meta';
 
 export interface EditorProps {
   readonly notebookId: string;
   readonly docsync: DocSyncEditor | undefined;
   readonly setDocsync: (docsync: DocSyncEditor) => void;
-  readonly setComputer: (computer: RemoteComputer) => void;
+  readonly setComputer: (computer: Computer) => void;
   readonly setError: (error: Error | undefined) => void;
 }
 

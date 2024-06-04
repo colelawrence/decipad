@@ -1,9 +1,9 @@
 import { parse as parseCSV } from 'csv-parse/browser/esm';
-import type { RemoteComputer, Result } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { Result } from '@decipad/language-interfaces';
 import { pivot } from './utils/pivot';
-import type { Sheet, SpreadsheetValue } from './types';
-import type { ImportOptions } from './import';
+import type { ImportOptions, Sheet, SpreadsheetValue } from './types';
 import { trimSheet } from './utils/trimSheet';
 
 const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
@@ -13,7 +13,7 @@ const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
 };
 
 export const importFromCsv = (
-  computer: RemoteComputer,
+  computer: Computer,
   source: string,
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {

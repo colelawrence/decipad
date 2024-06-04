@@ -1,6 +1,7 @@
 import type { AST, Parser } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { isExpression, n } from '@decipad/language-utils';
 import { BracketCounter, tokenizer } from '../grammar/tokenizer';
-import { isExpression, n } from '../utils';
 import { SyntaxError } from './SyntaxError';
 import { annotateWithCacheKeys } from './annotateWithCacheKeys';
 import { parse as languageParse } from './parser';

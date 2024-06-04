@@ -1,11 +1,7 @@
 import DeciNumber, { N } from '@decipad/number';
-import type { Unit } from '@decipad/language-units';
-import type { AST } from '@decipad/language-interfaces';
+import type { Unit, AST } from '@decipad/language-interfaces';
 
-export function u(
-  unit: string | Unit.Unit,
-  opts: Partial<Unit.Unit> = {}
-): Unit.Unit {
+export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
@@ -17,10 +13,7 @@ export function u(
   return { ...unit, ...opts };
 }
 
-export function U(
-  units: string | Unit.Unit | Unit.Unit[],
-  opts?: Partial<Unit.Unit>
-): Unit.Unit[] {
+export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Unit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
   return unitsArr.map((unit) => u(unit, opts));
 }

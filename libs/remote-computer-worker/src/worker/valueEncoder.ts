@@ -9,6 +9,7 @@ import { encodeString } from './encodeString';
 import { encodeNumber } from './encodeNumber';
 import { encodeTable } from './encodeTable';
 import { encodeTree } from './encodeTree';
+import type { RecursiveEncoder } from './types';
 
 const recNoop = (
   _: SerializedType,
@@ -16,14 +17,6 @@ const recNoop = (
   ___: Result.OneResult,
   offset: number
 ) => offset;
-
-export type RecursiveEncoder = (
-  type: SerializedType,
-  buffer: DataView,
-  value: Result.OneResult,
-  offset: number,
-  encoders: Record<SerializedType['kind'], RecursiveEncoder>
-) => PromiseOrType<number>;
 
 const recursiveEncoders: Record<SerializedType['kind'], RecursiveEncoder> = {
   anything: recNoop,

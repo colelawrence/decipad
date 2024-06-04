@@ -9,20 +9,19 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import {
-  type RemoteComputer,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { plugins } from '../../../editor-config/src/configuration/plugins';
 import { fillRow } from './fillRow';
 
 describe('fillRow', () => {
   let editor: EditorController;
   let subEditor: MyEditor;
-  let computer: RemoteComputer;
+  let computer: Computer;
 
   beforeEach(() => {
-    computer = getRemoteComputer();
+    computer = getComputer();
     editor = new EditorController('id', plugins({ computer, readOnly: false }));
     editor.forceNormalize();
     subEditor = editor.getTabEditorAt(0);

@@ -8,11 +8,13 @@ import {
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
-import type { TableHeaderElement } from '@decipad/editor-types';
+import type {
+  TableColumnFormulaElement,
+  TableHeaderElement,
+} from '@decipad/editor-types';
 import type { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
-import type { TableColumnFormulaElement } from '../../../editor-types/src/table';
 import { replaceText } from './utils/replaceText';
 import { getDefined } from '@decipad/utils';
 

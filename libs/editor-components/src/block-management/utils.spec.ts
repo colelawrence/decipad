@@ -1,5 +1,5 @@
 import type { TableElement } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import utils from './utils';
 
 jest.mock('nanoid', () => ({
@@ -7,10 +7,10 @@ jest.mock('nanoid', () => ({
 }));
 
 describe('Clone proxy', () => {
-  let computer = getRemoteComputer();
+  let computer = getComputer();
 
   beforeEach(() => {
-    computer = getRemoteComputer();
+    computer = getComputer();
   });
 
   it('deduplicates the IDs in category values in tables', async () => {

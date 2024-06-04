@@ -7,7 +7,8 @@ import handle from '../handle';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import type { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-import { getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { track } from '@decipad/backend-analytics';
 import { DOC_FILTER_ITEMS, SYSTEM_PROMPT } from './constants';
 import { resourceusage } from '@decipad/services';
@@ -47,11 +48,7 @@ export const handler = handle(async (event) => {
   // We can be pretty sure this'll be RootDocument as Document is converted to RootDocument when a pad is opened
   const doc = await exportNotebookContent<RootDocument>(padId);
 
-  const { verbalized } = verbalizeDoc(
-    doc,
-    getRemoteComputer(),
-    DOC_FILTER_ITEMS
-  );
+  const { verbalized } = verbalizeDoc(doc, getComputer(), DOC_FILTER_ITEMS);
 
   const verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
 

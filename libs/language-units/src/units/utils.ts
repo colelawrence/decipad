@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import { singular, addIrregularRule } from '@decipad/language-utils';
+import { addIrregularRule, singular } from '../utils/langPluralize';
 
 export function normalizeUnitName(unit: string): string {
   return singular(unit.toLocaleLowerCase());

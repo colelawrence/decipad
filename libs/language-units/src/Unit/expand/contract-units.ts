@@ -1,9 +1,9 @@
 import { getDefined, identity } from '@decipad/utils';
 import { ONE } from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
 import type { Converter } from '.';
 import { expandUnits } from './expand-units';
 import { getUnitByName } from '../../units';
-import type { Unit } from '..';
 
 function scalarInversion(convert: Converter): Converter {
   return (n) => {

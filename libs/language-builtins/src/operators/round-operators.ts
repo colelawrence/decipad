@@ -1,12 +1,12 @@
 import { getInstanceof, produce } from '@decipad/utils';
+import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber, { N, ZERO } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import { singular } from '@decipad/language-utils';
+import { singular } from '@decipad/language-units';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError, Time, Type, Unit, Value } from '@decipad/language-types';
 import { Unknown } from '@decipad/language-interfaces';
 import { overloadBuiltin } from '../overloadBuiltin';
-import type { BuiltinSpec, Evaluator, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, Evaluator, FullBuiltinSpec } from '../types';
 
 const roundNumberFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));
@@ -30,7 +30,10 @@ const roundDateFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   });
 
 const roundWrap = (
-  round: (f: DeciNumber, decimalPrecisionValue: DeciNumber) => DeciNumber
+  round: (
+    f: DeciNumberBase,
+    decimalPrecisionValue: DeciNumberBase
+  ) => DeciNumberBase
 ): NonNullable<FullBuiltinSpec['fnValues']> => {
   return async ([nValue, decimalPrecisionValue], [type] = []) => {
     const nGeneric = await nValue.getData();
@@ -70,7 +73,7 @@ const roundDateFnValues: Evaluator = async ([date], types) => {
   return Value.DateValue.fromDateAndSpecificity(d, unitName);
 };
 
-const roundNumber = (n: DeciNumber, decimalPlaces: DeciNumber) =>
+const roundNumber = (n: DeciNumberBase, decimalPlaces: DeciNumberBase) =>
   n.round(decimalPlaces);
 
 export const roundOperators: Record<string, BuiltinSpec> = {
@@ -121,7 +124,7 @@ export const roundOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundNumberFunctor,
-    fnValues: roundWrap((n: DeciNumber, decimalPlaces: DeciNumber) =>
+    fnValues: roundWrap((n: DeciNumberBase, decimalPlaces: DeciNumberBase) =>
       n.ceil(decimalPlaces)
     ),
     explanation: 'Rounds a number up.',
@@ -140,7 +143,7 @@ export const roundOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundNumberFunctor,
-    fnValues: roundWrap((n: DeciNumber, decimalPlaces: DeciNumber) =>
+    fnValues: roundWrap((n: DeciNumberBase, decimalPlaces: DeciNumberBase) =>
       n.floor(decimalPlaces)
     ),
     explanation: 'Rounds a number down.',

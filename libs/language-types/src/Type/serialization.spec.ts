@@ -1,14 +1,13 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import type { Unit } from '@decipad/language-units';
+import type { Unit, SerializedType } from '@decipad/language-interfaces';
 import { deserializeType, serializeType } from './serialization';
 import { InferError } from '../InferError';
 import * as t from './Type';
 import { U } from '../testUtils';
-import type { SerializedType } from '@decipad/language-interfaces';
 
 setupDeciNumberSnapshotSerializer();
 
-const meter: Unit.Unit = {
+const meter: Unit = {
   unit: 'meter',
   exp: N(1),
   multiplier: N(1),

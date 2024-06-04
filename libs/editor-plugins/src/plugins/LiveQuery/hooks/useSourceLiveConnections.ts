@@ -1,14 +1,11 @@
-import type {
-  AutocompleteName,
-  RemoteComputer,
-  Result,
-} from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { AutocompleteName, Result } from '@decipad/remote-computer';
 import { isTable } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useState } from 'react';
 
 const isSourceLiveConnection = (
-  computer: RemoteComputer,
+  computer: Computer,
   autoCompleteName: AutocompleteName
 ): boolean => {
   if (autoCompleteName.blockId && isTable(autoCompleteName.type)) {

@@ -1,4 +1,5 @@
 import type DeciNumber from '@decipad/number';
+import type { Unit as TUnit } from '@decipad/language-interfaces';
 import { ONE, N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -11,14 +12,14 @@ import pluralize from 'pluralize';
 
 import type { Options } from './parseMs';
 import { prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
-import type { IntermediateDeciNumber } from './formatNumber';
+import type { IntermediateDeciNumber } from './types';
 
 import { once } from '@decipad/utils';
 
-const ms = once(() => [parseUnit('millisecond')] as Unit.Unit[]);
+const ms = once(() => [parseUnit('millisecond')] as TUnit[]);
 
 export function fromTimeUnitToTimeBase(
-  unit: Unit.Unit[],
+  unit: TUnit[],
   n: DeciNumber
 ): [DeciNumber, boolean] {
   const [firstUnit] = unit;
@@ -37,12 +38,12 @@ export function fromTimeUnitToTimeBase(
 
 export function formatTime(
   locale: string,
-  units: Unit.Unit[],
+  units: TUnit[],
   n: DeciNumber,
   args: Partial<Options>,
   formatAnyUnit: (
     loc: string,
-    un: Unit.Unit[],
+    un: TUnit[],
     nu: DeciNumber
   ) => IntermediateDeciNumber
 ): IntermediateDeciNumber {
@@ -71,7 +72,7 @@ export function formatTime(
   };
 }
 
-export function isTimeUnit(units: Unit.Unit[]): boolean {
+export function isTimeUnit(units: TUnit[]): boolean {
   const unit = units[0];
   return (
     units?.length === 1 &&

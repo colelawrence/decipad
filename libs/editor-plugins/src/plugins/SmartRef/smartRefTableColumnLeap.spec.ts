@@ -16,11 +16,6 @@
  * If they don't pass, then surely existing models will break
  */
 
-import {
-  getExprRef,
-  getRemoteComputer,
-  materializeResult,
-} from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import type {
   AnyElement,
@@ -43,6 +38,11 @@ import {
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createCodeLine } from '@decipad/editor-utils';
+import {
+  getRemoteComputer,
+  getExprRef,
+  materializeResult,
+} from '@decipad/remote-computer';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
 import { createTestEditorController } from '../../utils/createTestEditorController';
 
@@ -757,7 +757,7 @@ const run = async (...elements: AnyElement[]) => {
   const computer = getRemoteComputer();
   const program = await editorToProgram(editor, editor.children, computer);
 
-  await computer.pushProgramBlocks(program);
+  await computer.pushComputeDelta({ program: { upsert: program } });
 
   const ret = computer.results$.get();
 

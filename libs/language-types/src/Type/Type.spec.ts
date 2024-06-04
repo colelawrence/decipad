@@ -1,6 +1,7 @@
 import { produce } from '@decipad/utils';
 import { N } from '@decipad/number';
 import { Unit } from '@decipad/language-units';
+import type { Unit as TUnit } from '@decipad/language-interfaces';
 import { Type, buildType as t } from './index';
 import { U, u, l } from '../testUtils';
 import { InferError } from '../InferError';
@@ -8,8 +9,8 @@ import { InferError } from '../InferError';
 const meter = u('meters');
 const second = u('seconds');
 
-const invMeter: Unit.Unit = Unit.inverseExponent(meter);
-const invSecond: Unit.Unit = Unit.inverseExponent(second);
+const invMeter: TUnit = Unit.inverseExponent(meter);
+const invSecond: TUnit = Unit.inverseExponent(second);
 
 const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
@@ -43,7 +44,7 @@ describe('sameAs', () => {
     ).not.toBeNull();
   });
 
-  const n = (...units: Unit.Unit[]) => t.number(units);
+  const n = (...units: TUnit[]) => t.number(units);
 
   it('sameAs checks units', async () => {
     expect(n(meter)).toEqual(numberInMeter);

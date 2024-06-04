@@ -9,7 +9,7 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { select } from '@udecode/plate-common';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import { autoformatRules } from './index';
 import { timeout } from '@decipad/utils';
 
@@ -18,7 +18,7 @@ beforeEach(() => {
   editor = createMyPlateEditor({
     plugins: [
       createMyAutoformatPlugin({
-        options: { rules: autoformatRules(getRemoteComputer()) },
+        options: { rules: autoformatRules(getComputer()) },
       }),
     ],
   });

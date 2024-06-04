@@ -1,7 +1,19 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult, buildType as t } from '@decipad/language-types';
-import { c, col, l, U, u, ne, r, n, sortedTable, prop } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  c,
+  col,
+  l,
+  U,
+  u,
+  ne,
+  r,
+  n,
+  sortedTable,
+  prop,
+} from '@decipad/language-utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';

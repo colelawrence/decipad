@@ -8,6 +8,7 @@
   "references": [
     { "path": "../utils" },
     { "path": "../remote-computer" },
+    { "path": "../computer-interfaces" },
     { "path": "../import" },
     { "path": "../react-contexts" },
     { "path": "../docsync" },
@@ -17,6 +18,7 @@
     { "path": "../toast" },
     { "path": "../interfaces" },
     { "path": "../notebook-tabs" },
-    { "path": "../remote-computer-worker" }
+    { "path": "../remote-computer-worker" },
+    { "path": "../computer-utils" }
   ]
 }

@@ -3,7 +3,7 @@ import type { Result } from '@decipad/remote-computer';
 import { isTable } from '@decipad/remote-computer';
 import { getDefined, dequal } from '@decipad/utils';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
-import type { ImportResult } from '../types';
+import type { ImportResult, Island } from '../types';
 import { matrix } from './matrix';
 
 interface VisitStackElement {
@@ -23,14 +23,6 @@ const neighbourDiffs = [
   [0, 1],
   [1, 1],
 ] as const;
-
-export interface Island {
-  sheetName: string;
-  firstCol: number;
-  firstRow: number;
-  lastCol: number;
-  lastRow: number;
-}
 
 const makeIsland = (sheetName: string, col: number, row: number): Island => {
   return {

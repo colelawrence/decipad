@@ -2,7 +2,7 @@ import { map } from '@decipad/generator-utils';
 import { getDefined, type PromiseOrType } from '@decipad/utils';
 import type { ContextUtils } from '../ContextUtils';
 import type { Type } from '../Type';
-import { serializeType, buildType as t } from '../Type';
+import { isPendingType, serializeType, buildType as t } from '../Type';
 import {
   arrayOfOnes,
   findFirstInValidCardinality,
@@ -15,7 +15,6 @@ import { createLazyOperation } from './LazyOperation';
 import { getReductionPlan } from './getReductionPlan';
 import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
 import { Column, FMappedColumn } from '../Value';
-import { isPendingType } from '../Type/checks';
 import { buildResult } from '../utils/buildResult';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { resultToValue } from '../utils/resultToValue';

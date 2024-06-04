@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language';
+import type { Unit as TUnit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { CurrencyUnits, getUnitByName } from '@decipad/language';
 import { N, ONE } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 
-function isCurrencyUnit(unit: Unit.Unit | null): boolean {
+function isCurrencyUnit(unit: TUnit | null): boolean {
   return (
     unit != null &&
     unit.baseSuperQuantity === 'currency' &&
@@ -13,14 +13,14 @@ function isCurrencyUnit(unit: Unit.Unit | null): boolean {
   );
 }
 
-export function hasCurrency(unit: Unit.Unit[] | null): number {
+export function hasCurrency(unit: TUnit[] | null): number {
   if (!unit) {
     return -1;
   }
   return unit.findIndex((arg) => isCurrencyUnit(arg));
 }
 
-export function getCurrency(unit: Unit.Unit[]): Unit.Unit {
+export function getCurrency(unit: TUnit[]): TUnit {
   const currencyIndex = unit.findIndex(isCurrencyUnit);
   const currencyUnit = getDefined(
     (currencyIndex >= 0 && unit[currencyIndex]) || undefined

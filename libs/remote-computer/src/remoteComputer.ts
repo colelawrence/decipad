@@ -11,23 +11,21 @@ import type {
   BlockDependents,
   ColumnDesc,
   ComputeDeltaRequest,
+  Computer as ComputerInterface,
   DimensionExplanation,
   IdentifiedError,
   IdentifiedResult,
+  NotebookResultStream,
   NotebookResults,
   ProgramBlock,
+  ResultType,
 } from '@decipad/computer-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Computer } from '@decipad/computer';
-import type {
-  IRemoteComputer,
-  ListenerHelper,
-  NotebookResultStream,
-  ResultType,
-} from './types';
 import type { Observable } from 'rxjs';
+import type { ListenerHelper } from '@decipad/listener-helper';
 
-export class RemoteComputer implements IRemoteComputer {
+export class RemoteComputer implements ComputerInterface {
   computer: Computer;
   results: NotebookResultStream;
   results$: ListenerHelper<[], NotebookResults>;
@@ -96,6 +94,9 @@ export class RemoteComputer implements IRemoteComputer {
     this.getSymbolOrTableDotColumn$ = computer.getSymbolOrTableDotColumn$;
     this.blockToMathML$ = computer.blockToMathML$;
   }
+  get latestExprRefToVarNameMap(): Map<string, string> {
+    return this.computer.latestExprRefToVarNameMap;
+  }
   getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>> {
     throw new Error('Method not implemented.');
   }
@@ -137,8 +138,8 @@ export class RemoteComputer implements IRemoteComputer {
   async pushExternalDataUpdate(values: [string, Result.Result][]) {
     return this.computer.pushExternalDataUpdate(values);
   }
-  async pushExternalDataDelete(key: string): Promise<void> {
-    return this.computer.pushExternalDataDelete(key);
+  async pushExternalDataDelete(keys: string[]): Promise<void> {
+    return this.computer.pushExternalDataDelete(keys);
   }
   async pushProgramBlocks(blocks: ProgramBlock[]): Promise<void> {
     return this.computer.pushProgramBlocks(blocks);
@@ -176,7 +177,7 @@ export class RemoteComputer implements IRemoteComputer {
   ): Promise<NotebookResults | null> {
     return this.computer.computeDeltaRequest(req);
   }
-  getUnitFromText(text: string): Promise<Unit.Unit[] | null> {
+  getUnitFromText(text: string): Promise<Unit[] | null> {
     return this.computer.getUnitFromText(text);
   }
   flush(): Promise<void> {
@@ -189,5 +190,5 @@ export class RemoteComputer implements IRemoteComputer {
 }
 
 export const getRemoteComputer = (
-  ...args: ConstructorParameters<typeof Computer>
-): RemoteComputer => new RemoteComputer(...args);
+  ...args: ConstructorParameters<typeof RemoteComputer>
+): ComputerInterface => new RemoteComputer(...args);

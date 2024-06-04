@@ -1,10 +1,10 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
 import { produce, getDefined, zip } from '@decipad/utils';
+import type { Unit } from '@decipad/language-interfaces';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from '../Unit/expand';
 import { getImpreciseConversionFactor } from './imprecise-conversions';
-import type { Unit } from '../Unit';
 import { normalizeUnits } from '../Unit/normalizeUnits';
 import { simplifyUnits } from '../Unit/simplifyUnits';
 
@@ -76,7 +76,7 @@ function baseQuantityUnits(
 export function areUnitsConvertible(
   unitsA: Unit[],
   unitsB: Unit[],
-  { tolerateImprecision }: ImprecisionOpts = {}
+  options: ImprecisionOpts = {}
 ): boolean {
   const [sourceUnits] = expandUnits(unitsA);
   const [targetUnits] = expandUnits(unitsB);
@@ -98,9 +98,11 @@ export function areUnitsConvertible(
   for (const baseQuantitySourceUnit of baseQuantitySourceUnits ?? []) {
     for (const pendingMatchUnit of pendingMatchUnits) {
       if (
-        areQuantityUnitsCompatible(baseQuantitySourceUnit, pendingMatchUnit, {
-          tolerateImprecision,
-        })
+        areQuantityUnitsCompatible(
+          baseQuantitySourceUnit,
+          pendingMatchUnit,
+          options
+        )
       ) {
         pendingMatchUnits.delete(pendingMatchUnit);
         break;
@@ -111,27 +113,27 @@ export function areUnitsConvertible(
 }
 
 export function toExpandedBaseQuantity(
-  n: DeciNumber,
+  n: DeciNumberBase,
   sourceUnits: Unit[]
-): [Unit[] | null | undefined, DeciNumber] {
+): [Unit[] | null | undefined, DeciNumberBase] {
   const [expandedUnits, convert] = expandUnits(sourceUnits);
   return [expandedUnits, convert(n)];
 }
 
 export function fromExpandedBaseQuantity(
-  n: DeciNumber,
+  n: DeciNumberBase,
   targetUnits: Unit[]
-): [Unit[] | null, DeciNumber] {
+): [Unit[] | null, DeciNumberBase] {
   const [, convert] = contractUnits(targetUnits);
   return [targetUnits, convert(n)];
 }
 
 export function convertBetweenUnits(
-  _n: DeciNumber,
+  _n: DeciNumberBase,
   from: Unit[],
   to: Unit[],
   { tolerateImprecision }: ImprecisionOpts = {}
-): DeciNumber {
+): DeciNumberBase {
   let n = _n;
   if (!areUnitsConvertible(from, to, { tolerateImprecision })) {
     throw new TypeError('Cannot convert between units');
@@ -160,10 +162,10 @@ export function convertBetweenUnits(
 }
 
 function maybePreciselyConvertBetweenKnownUnits(
-  _n: DeciNumber,
+  _n: DeciNumberBase,
   _from: Unit[],
   _to: Unit[]
-): DeciNumber {
+): DeciNumberBase {
   let n = _n;
   const from = getDefined(normalizeUnits(_from), 'could not normalize units');
   const to = getDefined(normalizeUnits(_to), 'could not normalize units');
@@ -199,10 +201,10 @@ function maybePreciselyConvertBetweenKnownUnits(
 
 // eslint-disable-next-line complexity
 function impreciselyConvertBetweenUnits(
-  _n: DeciNumber,
+  _n: DeciNumberBase,
   _from: Unit[],
   _to: Unit[]
-): DeciNumber {
+): DeciNumberBase {
   let n = _n;
   const from = getDefined(normalizeUnits(_from), 'could not normalize units');
   const to = getDefined(normalizeUnits(_to), 'could not normalize units');

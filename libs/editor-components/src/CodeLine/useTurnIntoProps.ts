@@ -1,4 +1,5 @@
-import type { Parser, RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { Parser } from '@decipad/remote-computer';
 import type {
   MyElement,
   VariableDefinitionElement,
@@ -29,7 +30,7 @@ const getElementExpression = (element: MyElement): string => {
 
 export const useTurnIntoProps = (
   element: MyElement,
-  computer: RemoteComputer,
+  computer: Computer,
   lineId: string
 ) => {
   const editor = useMyEditorRef();

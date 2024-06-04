@@ -7,7 +7,8 @@ import {
   Value,
   RuntimeError,
 } from '@decipad/language-types';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import type { TRealm, TScopedInferContext } from '../scopedRealm';
 import type { AST } from '@decipad/language-interfaces';
 

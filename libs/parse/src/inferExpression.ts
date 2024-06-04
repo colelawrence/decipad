@@ -1,9 +1,9 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { parseExpressionOrThrow } from '@decipad/remote-computer';
 import type { CoercibleType } from './types';
 
 export const inferExpression = async (
-  computer: RemoteComputer,
+  computer: Computer,
   text: string
 ): Promise<CoercibleType | undefined> => {
   try {

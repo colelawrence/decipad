@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { slice, empty } from '@decipad/generator-utils';
-import { type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
 
 interface UsePaginationResult {
   page: number;

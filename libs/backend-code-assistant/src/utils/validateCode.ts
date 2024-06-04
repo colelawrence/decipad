@@ -1,5 +1,6 @@
 import type { RootDocument } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { fullRootEditorToProgram } from '@decipad/editor-language-elements';
 import { formatError } from '@decipad/format';
 
@@ -9,7 +10,7 @@ export const validateCode = async (
   code: string,
   notebook: RootDocument
 ): Promise<ValidateCodeResult> => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
 
   const program = await fullRootEditorToProgram(notebook, computer);
 

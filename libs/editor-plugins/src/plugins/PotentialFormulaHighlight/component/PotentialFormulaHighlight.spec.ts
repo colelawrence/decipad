@@ -1,4 +1,3 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   createMyPlateEditor,
@@ -7,11 +6,12 @@ import {
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import type { TEditor } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 
 let editor: TEditor;
-let computer: RemoteComputer;
+let computer: Computer;
 beforeEach(() => {
   editor = createMyPlateEditor({
     plugins: [createInlineNumberPlugin()],

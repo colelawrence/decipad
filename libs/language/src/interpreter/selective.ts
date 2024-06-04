@@ -2,7 +2,8 @@ import stringify from 'json-stringify-safe';
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { evaluateStatement } from './evaluate';
 import { getDefined } from '@decipad/utils';
 import type { TRealm } from '../scopedRealm';

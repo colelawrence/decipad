@@ -2,7 +2,7 @@ import DeciNumber, { ONE, ZERO } from '@decipad/number';
 import { getDefined, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value } from '@decipad/language-types';
-import type { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, FullBuiltinSpec } from '../types';
 
 export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   compoundrate: {

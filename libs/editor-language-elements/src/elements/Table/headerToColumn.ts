@@ -1,9 +1,8 @@
 import {
-  type AST,
-  type RemoteComputer,
+  type Computer,
   type IdentifiedError,
-  getExprRef,
-} from '@decipad/remote-computer';
+} from '@decipad/computer-interfaces';
+import { type AST } from '@decipad/language-interfaces';
 import type {
   TableElement,
   TableHeaderElement,
@@ -22,24 +21,19 @@ import {
 } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate-common';
 import type { PromiseOrType } from '@decipad/utils';
+import { getExprRef } from '@decipad/remote-computer';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
 import { simpleArtifficialError } from './common';
+import type { ColumnParseReturn } from './types';
 
 interface HeaderToColumnProps {
-  computer: RemoteComputer;
+  computer: Computer;
   tableName: string;
   table: TableElement;
   th: TableHeaderElement;
   columnIndex: number;
   dataRows: TableRowElement[];
-}
-
-export interface ColumnParseReturn {
-  errors: IdentifiedError[];
-  expression?: AST.Expression;
-  columnName: string;
-  elementId: string;
 }
 
 const tableFormulaColumnToColumn = ({

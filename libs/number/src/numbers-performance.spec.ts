@@ -1,3 +1,4 @@
+import type { DeciNumber as TDeciNumber } from './types';
 import { DeciNumber, N } from './DeciNumber';
 
 const TEST_COLUMN_LENGTH = 10_000;
@@ -33,7 +34,8 @@ describe.skip('numbers performance', () => {
       );
 
       const method = DeciNumber.prototype[operator];
-      const op = (n1: DeciNumber, n2: DeciNumber) => method.call(n1, n2);
+      const op = (n1: TDeciNumber, n2: TDeciNumber) =>
+        method.call(n1 as DeciNumber, n2 as DeciNumber);
       const startTime = Date.now();
       for (let i = 0; i < TEST_COLUMN_LENGTH; i += 1) {
         const [a, b] = columns.map((c) => c[i]);

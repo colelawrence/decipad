@@ -59,6 +59,7 @@
       "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
       "@decipad/computer-interfaces": ["libs/computer-interfaces/src/index.ts"],
+      "@decipad/computer-utils": ["libs/computer-utils/src/index.ts"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
@@ -79,7 +80,6 @@
         "libs/editor-language-elements/src/index.ts"
       ],
       "@decipad/editor-plugins": ["libs/editor-plugins/src/index.ts"],
-      "@decipad/editor-stats": ["libs/editor-stats/src/index.ts"],
       "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
@@ -124,6 +124,7 @@
         "libs/language-aggregations/src/index.ts"
       ],
       "@decipad/language-filters": ["libs/language-filters/src/index.ts"],
+      "@decipad/listener-helper": ["libs/listener-helper/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/message-packer": ["libs/message-packer/src/index.ts"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
@@ -139,6 +140,9 @@
       "@decipad/queries": ["libs/queries/src/index.ts"],
       "@decipad/react-contexts": ["libs/react-contexts/src/index.ts"],
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
+      "@decipad/remote-computer-codec": [
+        "libs/remote-computer-codec/src/index.ts"
+      ],
       "@decipad/remote-computer": ["libs/remote-computer/src/index.ts"],
       "@decipad/remote-computer-worker/worker": [
         "libs/remote-computer-worker/src/worker/index.ts"

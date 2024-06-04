@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getNodeString } from '@udecode/plate-common';
+import { getNodeString, isElement } from '@udecode/plate-common';
 import type { Result } from '@decipad/remote-computer';
 import type { LiveQueryElement } from '@decipad/editor-types';
 import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
@@ -85,10 +85,10 @@ export const useLiveQuery = ({
       typeof rd.result.value !== 'string'
     ) {
       computer.pushExternalDataUpdate([[element.id, rd.result]]);
-    } else {
-      computer.pushExternalDataDelete(element.id);
+    } else if (isElement(element)) {
+      computer.pushExternalDataDelete([element.id]);
     }
-  }, [computer, element.id, rd]);
+  }, [computer, element, rd]);
 
   return {
     ...rd,

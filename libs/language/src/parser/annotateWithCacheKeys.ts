@@ -2,7 +2,8 @@ import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
 import omit from 'lodash.omit';
 import type { AST } from '@decipad/language-interfaces';
-import { isNode, walkAst } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { isNode, walkAst } from '@decipad/language-utils';
 
 const annotateWithCacheKeyNodeTypes = new Set<AST.Node['type']>([
   'function-call',

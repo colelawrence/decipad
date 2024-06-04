@@ -1,18 +1,15 @@
 import type { ReactNode } from 'react';
 import React from 'react';
-
-import type { NotebookResults } from '@decipad/remote-computer';
-import {
-  defaultComputerResults,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
+import type { NotebookResults } from '@decipad/computer-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { defaultComputerResults, getComputer } from '@decipad/computer';
 import { ComputerContextProvider, useComputer } from './computer';
 
 /** A computer provider with a value for tests */
 export const TestResultsProvider: React.FC<
   Partial<NotebookResults> & { children?: ReactNode }
 > = ({ children, ...contextItem }) => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   computer.results.next({
     ...defaultComputerResults,
     ...contextItem,

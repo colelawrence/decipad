@@ -1,8 +1,4 @@
-import type {
-  RemoteComputer,
-  Result,
-  SerializedType,
-} from '@decipad/remote-computer';
+import type { Result, SerializedType } from '@decipad/remote-computer';
 import {
   memoizedColumnResultGenerator,
   Time,
@@ -16,6 +12,7 @@ import { parseDate } from './parseDate';
 import type { Sheet, SpreadsheetColumn, InferTableOptions } from './types';
 import { parseBoolean } from './inferBoolean';
 import { fasterNumber } from './fasterNumber';
+import type { Computer } from '@decipad/computer-interfaces';
 
 interface WithColumnNamesResult {
   columnNames: string[];
@@ -83,7 +80,7 @@ const tableToValue = (
 };
 
 export const inferTable = async (
-  computer: RemoteComputer,
+  computer: Computer,
   data: Sheet,
   options: InferTableOptions
 ): Promise<Result.Result<'table'>> => {

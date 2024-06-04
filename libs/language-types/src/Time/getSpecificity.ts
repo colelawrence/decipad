@@ -1,10 +1,9 @@
-import type { Unit } from '@decipad/language-units';
-// eslint-disable-next-line no-restricted-imports
-import { singular } from '@decipad/language-utils';
+import { singular } from '@decipad/language-units';
+import type { Unit } from '@decipad/language-interfaces';
 import type { Specificity } from './Time';
 import { allSpecificities } from './allSpecificities';
 
-export const getSpecificity = (thing?: string | Unit.Unit): Specificity => {
+export const getSpecificity = (thing?: string | Unit): Specificity => {
   let unit = typeof thing === 'string' ? thing : thing && thing.unit;
   if (unit) {
     unit = singular(unit);

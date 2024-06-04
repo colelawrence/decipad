@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { Value } from '@decipad/language-types';
@@ -11,7 +11,7 @@ export const subtractDates = async (
   d1: Value.DateValue,
   d2: Value.DateValue,
   specificity: Specificity
-): Promise<DeciNumber | typeof Unknown> => {
+): Promise<DeciNumberBase | typeof Unknown> => {
   const dd1 = await d1.getData();
   const dd2 = await d2.getData();
   if (dd1 == null || dd2 == null) {

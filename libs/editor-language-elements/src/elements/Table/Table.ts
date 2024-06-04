@@ -1,7 +1,8 @@
 import { getNodeString } from '@udecode/plate-common';
 import type { TableHeaderElement } from '@decipad/editor-types';
 import { ELEMENT_TABLE } from '@decipad/editor-types';
-import type { Program, AST, RemoteComputer } from '@decipad/remote-computer';
+import type { Program, Computer } from '@decipad/computer-interfaces';
+import type { AST } from '@decipad/language-interfaces';
 import {
   statementToIdentifiedBlock,
   getExprRef,
@@ -77,7 +78,7 @@ export const Table: InteractiveLanguageElement = {
 };
 
 async function parseCategoryOptions(
-  computer: RemoteComputer,
+  computer: Computer,
   element: TableHeaderElement
 ) {
   const dropdownOptions = await Promise.all(

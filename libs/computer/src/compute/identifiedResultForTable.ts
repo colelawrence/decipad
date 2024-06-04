@@ -3,10 +3,10 @@ import type { AST, Result } from '@decipad/language-interfaces';
 import {
   Value,
   buildType as t,
-  serializeResult,
   tableValueToTableResultValue,
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
+import { serializeResult } from '@decipad/computer-utils';
 import stringify from 'json-stringify-safe';
 import type { ComputationRealm } from '../computer/ComputationRealm';
 

@@ -1,1 +1,1 @@
-export * from './langPluralize';
+export * from './misc';

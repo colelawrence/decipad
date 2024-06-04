@@ -1,3 +1,4 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_CAPTION } from '@decipad/editor-types';
 import type { NormalizerReturnValue } from '@decipad/editor-plugins';
@@ -11,7 +12,6 @@ import {
   isText,
   unwrapNodes,
 } from '@udecode/plate-common';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import type { Path } from 'slate';
 
 /**
@@ -35,7 +35,7 @@ function getPrefixAndStart(path: Path): [string, number] {
 }
 
 const normalize =
-  (computer: RemoteComputer) =>
+  (computer: Computer) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
@@ -68,7 +68,7 @@ const normalize =
     );
   };
 
-export const createNormalizeCaptionPlugin = (computer: RemoteComputer) =>
+export const createNormalizeCaptionPlugin = (computer: Computer) =>
   createNormalizerPluginFactory({
     name: 'NORMALIZE_CAPTION_PLUGIN',
     elementType: ELEMENT_CAPTION,

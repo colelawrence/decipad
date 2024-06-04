@@ -1,3 +1,6 @@
+import { deleteText, removeNodes } from '@udecode/plate-common';
+import type { Location, Path } from 'slate';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { FileType, MyEditor, SlashCommand } from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -8,6 +11,7 @@ import {
   ELEMENT_HR,
   ELEMENT_SUBMIT_FORM,
 } from '@decipad/editor-types';
+import type { GetAvailableIdentifier } from '@decipad/editor-utils';
 import {
   insertBlockOfTypeBelow,
   insertCodeLineBelow,
@@ -19,10 +23,6 @@ import {
   useConnectionStore,
   useFileUploadStore,
 } from '@decipad/react-contexts';
-import { deleteText, removeNodes } from '@udecode/plate-common';
-import type { Location, Path } from 'slate';
-import type { RemoteComputer } from '@decipad/remote-computer';
-import type { PromiseOrType } from '@decipad/utils';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -35,14 +35,9 @@ import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
 
-export type GetAvailableIdentifier = (
-  prefix: string,
-  start?: number
-) => PromiseOrType<string>;
-
 export interface ExecuteProps {
   editor: MyEditor;
-  computer: RemoteComputer;
+  computer: Computer;
   path: Path;
   deleteFragment?: Location;
   deleteBlock?: boolean;

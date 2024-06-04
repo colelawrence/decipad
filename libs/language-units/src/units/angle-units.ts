@@ -1,12 +1,13 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N } from '@decipad/number';
 import { identity } from '@decipad/utils';
-import type { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from '@decipad/language-interfaces';
 import { invert } from '../utils/invert';
 
 const PI = N(3141592653589793, 10 ** 15);
 
-const degreeToRadian = (deg: DeciNumber): DeciNumber => deg.mul(PI).div(N(180));
+const degreeToRadian = (deg: DeciNumberBase): DeciNumberBase =>
+  deg.mul(PI).div(N(180));
 
 export const units: UnitOfMeasure[] = [
   {

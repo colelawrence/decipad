@@ -10,12 +10,13 @@ import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { insertNodes } from '@udecode/plate-common';
 import { extendZodWithOpenApi } from 'zod-openapi';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getTableById } from './utils/getTablebyId';
 import { fixColumnName } from './utils/fixColumnName';
 import { getColumnType } from './utils/getColumnType';
-import { getRemoteComputer } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { getNodeString } from '../utils/getNodeString';
 
@@ -68,7 +69,7 @@ export const appendDataView: Action<'appendDataView'> = {
     }),
   handler: async (editor, { tableId, columns: _columns }) => {
     const [table] = getTableById(editor, tableId);
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     const program = await editorToProgram(editor, editor.children, computer);
     await computer.pushProgramBlocks(program);
 

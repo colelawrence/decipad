@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import type { Action } from './types';
-import { getRemoteComputer } from '@decipad/remote-computer';
 
 export const describeAllNotebookElements: Action<'describeAllNotebookElements'> =
   {
@@ -46,7 +47,7 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
             },
           ],
         },
-        getRemoteComputer()
+        getComputer()
       ).verbalized.map((v) => ({
         elementId: v.element.id,
         type: v.element.type,

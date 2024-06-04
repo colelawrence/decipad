@@ -6,7 +6,7 @@ import {
 } from '@decipad/editor-hooks';
 import type {
   MyEditor,
-  MyElement,
+  AnyElement,
   ParagraphElement,
   PlateComponent,
 } from '@decipad/editor-types';
@@ -34,7 +34,7 @@ import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 
-const isSelected = (editor: MyEditor, element: MyElement) => {
+const isSelected = (editor: MyEditor, element: AnyElement) => {
   if (!editor.selection) {
     return false;
   }
@@ -80,7 +80,12 @@ export const Paragraph: PlateComponent = ({
   const path = useNodePath(element);
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });
-  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
+  const onDrop = useDragAndDropOnDrop({
+    editor,
+    element: element as AnyElement,
+    path,
+    isHorizontal,
+  });
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = () => {
     getAnalytics().then((analytics) =>

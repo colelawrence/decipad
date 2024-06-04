@@ -1,6 +1,6 @@
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
-import type { Identifier } from './AutoCompleteMenu';
+import { Identifier } from './types';
 
 export function groupIdentifiers(
   identifiers: Identifier[],

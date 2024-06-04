@@ -1,9 +1,8 @@
 /* eslint-disable no-await-in-loop */
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, buildType } from '@decipad/language-types';
-import type { FullBuiltinSpec } from '../../interfaces';
+import type { FullBuiltinSpec, BuiltinContextUtils } from '../../types';
 import { getDefined, produce, unique } from '@decipad/utils';
-import type { BuiltinContextUtils } from '../../types';
 import { joinedTable } from './renderJoinedTable';
 
 const gatherSourceTables = async (

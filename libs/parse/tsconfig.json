@@ -6,7 +6,13 @@
   "include": ["src"],
   "references": [
     {
+      "path": "../computer-interfaces"
+    },
+    {
       "path": "../remote-computer"
+    },
+    {
+      "path": "../computer"
     },
     {
       "path": "../utils"

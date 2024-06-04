@@ -1,4 +1,5 @@
-import { col, tableColAssign } from '../../utils';
+// eslint-disable-next-line no-restricted-imports
+import { col, tableColAssign } from '@decipad/language-utils';
 import { runTests } from '../run-tests';
 
 runTests({

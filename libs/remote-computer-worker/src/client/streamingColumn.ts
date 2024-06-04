@@ -5,8 +5,7 @@ import type {
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
-import type { ClientWorkerContext } from './types';
-import type { RecursiveDecoder } from './valueDecoder';
+import type { ClientWorkerContext, RecursiveDecoder } from './types';
 import type { ReadSerializedColumnDecoder } from 'libs/language-types/src/Value';
 import { getRemoteValue } from '../utils/getRemoteValue';
 

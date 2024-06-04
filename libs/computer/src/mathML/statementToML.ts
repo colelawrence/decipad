@@ -1,11 +1,11 @@
 import { escape } from 'html-escaper';
 import type { AST } from '@decipad/language-interfaces';
+import type { Computer } from '@decipad/computer-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type { FullBuiltinSpec, Time } from '@decipad/language';
 // eslint-disable-next-line no-restricted-imports
 import { getDateFromAstForm, operators } from '@decipad/language';
 import { formatDate } from '@decipad/utils';
-import type { Computer } from '../computer/Computer';
 import { getIdentifierString } from '../utils/many';
 
 const blockToML = async (

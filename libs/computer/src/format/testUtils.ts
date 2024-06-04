@@ -1,8 +1,7 @@
 import type { DeciNumberInputWithNumerator } from '@decipad/number';
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language';
+import type { Unit as TUnit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { parseUnit } from '@decipad/language';
 
@@ -19,10 +18,7 @@ export function F(
     : N(n as string | number | bigint);
 }
 
-export function u(
-  unit: string | Unit.Unit,
-  opts: Partial<Unit.Unit> = {}
-): Unit.Unit {
+export function u(unit: string | TUnit, opts: Partial<TUnit> = {}): TUnit {
   if (typeof unit === 'string') {
     // eslint-disable-next-line no-param-reassign
     unit = { unit, exp: F(1), multiplier: F(1), known: true };
@@ -31,49 +27,43 @@ export function u(
 }
 
 export function U(
-  units: string | Unit.Unit | Unit.Unit[],
-  opts?: Partial<Unit.Unit>
-): Unit.Unit[] {
+  units: string | TUnit | TUnit[],
+  opts?: Partial<TUnit>
+): TUnit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
   return unitsArr.map((unit) => u(unit, opts));
 }
 
 export const usd = U('USD', { baseSuperQuantity: 'currency' });
 export const usdShort = U('$', { baseSuperQuantity: 'currency' });
-export const usdPerDay: Unit.Unit[] = [
+export const usdPerDay: TUnit[] = [
   u('USD', { baseSuperQuantity: 'currency' }),
   u('days', { exp: N(-1) }),
 ];
-export const metersPerDay: Unit.Unit[] = [
-  u('meters'),
-  u('days', { exp: N(-1) }),
-];
+export const metersPerDay: TUnit[] = [u('meters'), u('days', { exp: N(-1) })];
 
-export const bananasPerDay: Unit.Unit[] = [
-  u('banana'),
-  u('days', { exp: N(-1) }),
-];
+export const bananasPerDay: TUnit[] = [u('banana'), u('days', { exp: N(-1) })];
 
-export const usdPerMonthPerWorker: Unit.Unit[] = [
+export const usdPerMonthPerWorker: TUnit[] = [
   ...usd,
   u('month', { exp: N(-1) }),
   u('worker', { exp: N(-1) }),
 ];
 
-export const perDay: Unit.Unit[] = [u('days', { exp: N(-1) })];
+export const perDay: TUnit[] = [u('days', { exp: N(-1) })];
 
-export const perBanana: Unit.Unit[] = [u('banana', { exp: N(-1) })];
+export const perBanana: TUnit[] = [u('banana', { exp: N(-1) })];
 
-export const perEuros: Unit.Unit[] = [u('euro', { exp: N(-1) })];
+export const perEuros: TUnit[] = [u('euro', { exp: N(-1) })];
 
-export const km: Unit.Unit[] = U(u('m', { multiplier: N(1000) }));
+export const km: TUnit[] = U(u('m', { multiplier: N(1000) }));
 
-export const kmPerSecond: Unit.Unit[] = [
+export const kmPerSecond: TUnit[] = [
   u('m', { multiplier: N(1000) }),
   u('second', { exp: N(-1) }),
 ];
 
-export const metersPerSecond: Unit.Unit[] = [
+export const metersPerSecond: TUnit[] = [
   u('meter'),
   u('second', { exp: N(-1) }),
 ];
@@ -81,7 +71,7 @@ export const metersPerSecond: Unit.Unit[] = [
 export function makeFractionUnitTuple(
   fraction: DeciNumber,
   unit: string
-): [DeciNumber, Unit.Unit[]] {
+): [DeciNumber, TUnit[]] {
   //
   // fraction 1/1000 km is 1/1000 m (displayed as km, multipliers are just pretty things)
   //

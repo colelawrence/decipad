@@ -13,7 +13,12 @@ import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
 import type { AST } from '@decipad/language-interfaces';
-import { getIdentifierString, walkAst, mutateAst } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  getIdentifierString,
+  walkAst,
+  mutateAst,
+} from '@decipad/language-utils';
 import { inferExpression, linkToAST } from '../infer';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 import { sortType } from '../infer/sortType';

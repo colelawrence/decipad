@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, compare } from '@decipad/language-types';
-import type { FullBuiltinSpec } from '../../interfaces';
 import { getInstanceof } from '@decipad/utils';
 import { sortMap } from '@decipad/column';
+import type { FullBuiltinSpec } from '../../types';
 import { applyMap } from '../../utils/valueTransforms';
 
 export const sortByFunctorNoAutomap: FullBuiltinSpec['functorNoAutomap'] =

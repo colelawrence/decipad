@@ -1,4 +1,4 @@
-import type { Functor } from '../interfaces';
+import type { Functor } from '../types';
 
 export const reverseFunctor =
   (functor: Functor): Functor =>

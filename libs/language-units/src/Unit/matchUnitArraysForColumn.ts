@@ -1,5 +1,5 @@
 import { lenientZip } from '@decipad/utils';
-import type { Unit } from './Unit';
+import type { Unit } from '@decipad/language-interfaces';
 import { normalizeUnits } from './normalizeUnits';
 
 export const matchUnitArraysForColumn = (

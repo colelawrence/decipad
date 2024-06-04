@@ -4,7 +4,6 @@ import {
   isColumn,
   Unknown,
   buildResult,
-  getRemoteComputer,
   hydrateResult,
 } from '@decipad/remote-computer';
 import type { ColIndex, TableCellType } from '@decipad/editor-types';
@@ -15,7 +14,6 @@ import {
   inferNumber,
 } from '@decipad/parse';
 import stringify from 'json-stringify-safe';
-import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
 import { normalizeColumnName } from './utils/normalizeColumnName';
 import { rowsToColumns } from './utils/rowsToColumns';
@@ -23,8 +21,11 @@ import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
 import omit from 'lodash.omit';
 import { isValid, parseISO } from 'date-fns';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { ImportOptions } from './types';
 
 const importTableFromArray = async (
+  computer: Computer,
   arr: Array<unknown>,
   options: ImportOptions
 ): Promise<Result.Result> => {
@@ -33,6 +34,7 @@ const importTableFromArray = async (
   }
 
   return importTableFromObject(
+    computer,
     Object.fromEntries(
       arr.map((elem, index) => [columnNameFromIndex(index), elem])
     ),
@@ -41,6 +43,7 @@ const importTableFromArray = async (
 };
 
 const importFromArray = async (
+  computer: Computer,
   arr: Array<unknown>,
   options: ImportOptions,
   cohersion?: TableCellType
@@ -55,11 +58,11 @@ const importFromArray = async (
   }
 
   if (arr.some((elem) => Array.isArray(elem))) {
-    return importTableFromArray(arr, options);
+    return importTableFromArray(computer, arr, options);
   }
 
   const results = await Promise.all(
-    arr.map((cell) => importFromUnknownJson(cell, options, cohersion))
+    arr.map((cell) => importFromUnknownJson(computer, cell, options, cohersion))
   );
 
   if (!sameType(results.map(({ type }) => type))) {
@@ -88,6 +91,7 @@ const importFromArray = async (
 };
 
 const importTableFromObject = async (
+  computer: Computer,
   obj: object,
   options: ImportOptions
 ): Promise<Result.AnyResult> => {
@@ -101,6 +105,7 @@ const importTableFromObject = async (
       .map((value, index) => [index, value])
       .map(([index, value]) =>
         importFromUnknownJson(
+          computer,
           value,
           options,
           options.columnTypeCoercions?.[index as ColIndex]
@@ -201,6 +206,7 @@ const importSingleValueWithCohersion = async (
 };
 
 const importSingleValue = async (
+  computer: Computer,
   value: bigint | number | boolean | string
 ): Promise<Result.Result> => {
   switch (typeof value) {
@@ -258,7 +264,7 @@ const importSingleValue = async (
         };
       }
 
-      const inferredType = await inferNumber(getRemoteComputer(), value);
+      const inferredType = await inferNumber(computer, value);
       const numberType = inferredType?.type as SerializedTypes.Number;
 
       //
@@ -306,6 +312,7 @@ const importSingleValue = async (
 };
 
 const internalImportFromUnknownJson = async (
+  computer: Computer,
   _json: unknown,
   options: ImportOptions,
   cohersion?: TableCellType
@@ -316,6 +323,7 @@ const internalImportFromUnknownJson = async (
 
   if (Array.isArray(json)) {
     return importFromArray(
+      computer,
       json,
       omit(options, 'columnTypeCoercions'),
       cohersion
@@ -334,13 +342,13 @@ const internalImportFromUnknownJson = async (
     if (json == null) {
       throw new Error("Don't know what to do with null");
     }
-    return importTableFromObject(json, options);
+    return importTableFromObject(computer, json, options);
   }
 
   const puntedJson = json as bigint | number | boolean | string;
 
   if (cohersion == null) {
-    return importSingleValue(puntedJson);
+    return importSingleValue(computer, puntedJson);
   }
 
   if (cohersion != null) {
@@ -351,12 +359,15 @@ const internalImportFromUnknownJson = async (
 };
 
 export const importFromUnknownJson = async (
+  computer: Computer,
   json: unknown,
   options: ImportOptions,
   cohersion?: TableCellType
 ): Promise<Result.Result> => {
   const hydratedResult = hydrateResult(
-    rowsToColumns(await internalImportFromUnknownJson(json, options, cohersion))
+    rowsToColumns(
+      await internalImportFromUnknownJson(computer, json, options, cohersion)
+    )
   );
 
   if (hydratedResult == null) {

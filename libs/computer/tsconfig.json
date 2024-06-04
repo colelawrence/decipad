@@ -25,6 +25,12 @@
     },
     {
       "path": "../computer-interfaces"
+    },
+    {
+      "path": "../listener-helper"
+    },
+    {
+      "path": "../computer-utils"
     }
   ]
 }

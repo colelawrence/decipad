@@ -1,13 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language-types';
+import type { AST, Unit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import DeciNumber, { N } from '@decipad/number';
+import { identity } from '@decipad/utils';
 import type { BuiltinContextUtils } from '../types';
 import { callBuiltinFunctor } from '../callBuiltinFunctor';
 import { callBuiltin } from '../callBuiltin';
-import { identity } from '@decipad/utils';
-import type { AST } from '@decipad/language-interfaces';
 
 export const makeContext = (
   u?: Partial<BuiltinContextUtils>
@@ -28,10 +27,7 @@ export const makeContext = (
   },
 });
 
-export function u(
-  unit: string | Unit.Unit,
-  opts: Partial<Unit.Unit> = {}
-): Unit.Unit {
+export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
@@ -43,10 +39,7 @@ export function u(
   return { ...unit, ...opts };
 }
 
-export function U(
-  units: string | Unit.Unit | Unit.Unit[],
-  opts?: Partial<Unit.Unit>
-): Unit.Unit[] {
+export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Unit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
   return unitsArr.map((unit) => u(unit, opts));
 }

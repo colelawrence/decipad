@@ -1,10 +1,11 @@
 /* eslint-disable no-await-in-loop */
-import type { RootDocument } from '@decipad/editor-types';
 import type {
   ChatCompletionAssistantMessageParam,
   ChatCompletionSystemMessageParam,
   ChatCompletionUserMessageParam,
 } from 'openai/resources/chat';
+import type { RootDocument } from '@decipad/editor-types';
+import type { Computer } from '@decipad/computer-interfaces';
 import { getDefined } from '@decipad/utils';
 import { getOpenAI } from '../utils/openAi';
 import { debug } from '../debug';
@@ -12,7 +13,6 @@ import { getCode } from '../utils/getCode';
 import { splitCode } from '../utils/splitCode';
 import { generateInitialMessages } from './generateInitialMessages';
 import type { SplitCodeResult } from '../types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 const fineTunedModelForDecilangCode =
   'ft:gpt-3.5-turbo-0613:team-n1n-co::8L7t8n9c';
@@ -20,7 +20,7 @@ const fineTunedModelForDecilangCode =
 export interface CodeAssistantOptions {
   summary?: string;
   notebook?: RootDocument;
-  computer: RemoteComputer;
+  computer: Computer;
   prompt: string;
   _messages?: (
     | ChatCompletionUserMessageParam

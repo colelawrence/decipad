@@ -1,6 +1,10 @@
 import type { PlotElement } from '@decipad/editor-types';
 import { ELEMENT_PLOT } from '@decipad/editor-types';
-import type { NotebookResults, SerializedType } from '@decipad/remote-computer';
+import {
+  getRemoteComputer,
+  type NotebookResults,
+  type SerializedType,
+} from '@decipad/remote-computer';
 import {
   AnnotationsProvider,
   ComputerContextProvider,
@@ -97,7 +101,7 @@ const PlotWithProviders = ({
       <DndProvider backend={HTML5Backend}>
         <BrowserRouter>
           <TestResultsProvider blockResults={blockResults}>
-            <ComputerContextProvider>
+            <ComputerContextProvider computer={getRemoteComputer()}>
               <Plate>
                 <PlateContent />
                 <Plot

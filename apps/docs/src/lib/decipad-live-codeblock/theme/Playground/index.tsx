@@ -93,9 +93,11 @@ function LivePreviewOrError({ code: liveCode }: LivePreviewProps) {
       if (code && needsCompute) {
         try {
           setNeedsCompute(false);
-          await computer.pushProgramBlocks(
-            createProgramFromMultipleStatements(code)
-          );
+          await computer.pushComputeDelta({
+            program: {
+              upsert: createProgramFromMultipleStatements(code),
+            },
+          });
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(err);

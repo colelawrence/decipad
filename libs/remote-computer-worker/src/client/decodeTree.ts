@@ -7,7 +7,7 @@ import {
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import type { RecursiveDecoder } from './valueDecoder';
+import type { RecursiveDecoder } from './types';
 import { decodeString } from './decodeString';
 import { decodeResult } from './decodeResult';
 

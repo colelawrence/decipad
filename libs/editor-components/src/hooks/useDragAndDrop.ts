@@ -1,6 +1,6 @@
 import type { DraggableBlock } from '@decipad/editor-components';
 import { defaultMoveNode } from '@decipad/editor-components';
-import type { MyEditor, MyElement } from '@decipad/editor-types';
+import type { AnyElement, MyEditor } from '@decipad/editor-types';
 import { COLUMN_KINDS } from '@decipad/editor-types';
 import { wrapIntoColumns } from '@decipad/editor-utils';
 import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate-common';
@@ -17,7 +17,7 @@ interface useDragAndDropOnDropProps {
   path?: Path;
   isHorizontal?: boolean;
   editor: MyEditor;
-  element: MyElement;
+  element: AnyElement;
 }
 
 export const useDragAndDropGetAxis = ({

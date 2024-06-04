@@ -7,6 +7,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
+import type { GetAvailableIdentifier } from '@decipad/editor-utils';
 import {
   generateTableName,
   insertNodes,
@@ -14,7 +15,6 @@ import {
 } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
-import type { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = () => {
   return {

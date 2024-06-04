@@ -1,8 +1,7 @@
-import type { SerializedType } from '@decipad/language-interfaces';
-import type { Unit } from '@decipad/language-units';
+import type { SerializedType, Unit } from '@decipad/language-interfaces';
 import { N } from '@decipad/number';
 
-const hydrateUnit = (u: Unit.Unit): Unit.Unit => ({
+const hydrateUnit = (u: Unit): Unit => ({
   ...u,
   exp: N(u.exp),
   multiplier: N(u.multiplier),

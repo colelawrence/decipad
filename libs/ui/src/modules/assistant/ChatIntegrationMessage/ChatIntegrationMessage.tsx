@@ -5,10 +5,15 @@ import { css } from '@emotion/react';
 import { EElementOrText } from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
+import { Computer } from '@decipad/computer-interfaces';
 import { useWorker } from '@decipad/editor-hooks';
 import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
+import {
+  AssistantMessage,
+  ExecutionContext,
+  useComputer,
+} from '@decipad/react-contexts';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
 import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';
@@ -163,8 +168,8 @@ const loadingContentStyles = css(p14Regular, {
   color: cssVar('textSubdued'),
 });
 
-const jsonToResult = (json: string) => {
-  return importFromUnknownJson(JSON.parse(json), {
+const jsonToResult = (computer: Computer, json: string) => {
+  return importFromUnknownJson(computer, JSON.parse(json), {
     columnTypeCoercions: columnTypeCoercionsToRec({}),
   });
 };
@@ -301,17 +306,19 @@ const Integration = ({
     undefined
   );
 
+  const computer = useComputer();
+
   useEffect(() => {
     async function getResult() {
       if (resultJSON.status !== 'success') {
         return;
       }
 
-      setDeciResult(await jsonToResult(resultJSON.result));
+      setDeciResult(await jsonToResult(computer, resultJSON.result));
     }
 
     getResult();
-  }, [resultJSON]);
+  }, [computer, resultJSON]);
 
   return (
     <div>

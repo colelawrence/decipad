@@ -1,4 +1,4 @@
-import type { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../types';
 
 export const enrichOperators = <T extends { [fname: string]: BuiltinSpec }>(
   operators: T

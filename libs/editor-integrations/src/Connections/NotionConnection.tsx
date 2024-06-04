@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import { Suspense, useEffect, useState } from 'react';
-import type { ConnectionProps } from './types';
+import { Computer } from '@decipad/computer-interfaces';
 import {
+  useComputer,
   useExecutionContext,
   useNotionConnectionStore,
 } from '@decipad/react-contexts';
@@ -24,6 +25,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 import { merge } from '@decipad/utils';
+import type { ConnectionProps } from './types';
 import { getExternalDataReqUrl, getExternalDataUrl } from '../utils';
 
 const Styles = {
@@ -275,6 +277,7 @@ const NotionPrivateDatabasesSelector: FC<
 };
 
 async function notionResponseToDeciResult(
+  computer: Computer,
   notionResponse: Response,
   props: ConnectionProps
 ) {
@@ -285,7 +288,7 @@ async function notionResponseToDeciResult(
 
   const mergedTypeMappings = merge(props.typeMapping, cohersions);
 
-  importFromUnknownJson(importedNotion, {
+  importFromUnknownJson(computer, importedNotion, {
     columnTypeCoercions: columnTypeCoercionsToRec(mergedTypeMappings),
   }).then((deciRes) => {
     props.setRawResult(rawStringResult);
@@ -293,7 +296,10 @@ async function notionResponseToDeciResult(
   });
 }
 
-async function runPrivateIntegration(props: ConnectionProps) {
+async function runPrivateIntegration(
+  computer: Computer,
+  props: ConnectionProps
+) {
   const url = useNotionConnectionStore.getState().NotionDatabaseUrl;
   if (url == null) {
     throw new Error('Cannot run private integration if DB URL is not set');
@@ -301,15 +307,16 @@ async function runPrivateIntegration(props: ConnectionProps) {
 
   const notionQuery = await fetch(url);
 
-  notionResponseToDeciResult(notionQuery, props);
+  notionResponseToDeciResult(computer, notionQuery, props);
 }
 
 export const NotionConnection: FC<ConnectionProps> = (props) => {
   const { onExecute, info } = useExecutionContext();
+  const computer = useComputer();
 
   const runCode = async () => {
     try {
-      await runPrivateIntegration(props);
+      await runPrivateIntegration(computer, props);
     } catch (e) {
       if (e instanceof Error) {
         onExecute({ status: 'error', err: e });

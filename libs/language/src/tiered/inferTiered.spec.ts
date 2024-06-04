@@ -1,7 +1,8 @@
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as T } from '@decipad/language-types';
-import { c, n, r, tiered, tieredDef, U } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { c, n, r, tiered, tieredDef, U } from '@decipad/language-utils';
 import { inferTiered } from './inferTiered';
 import { makeInferContext, ScopedRealm } from '../scopedRealm';
 

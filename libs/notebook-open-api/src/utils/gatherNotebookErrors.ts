@@ -1,12 +1,12 @@
-import type {
-  IdentifiedError,
-  IdentifiedResult,
-  RemoteComputer,
-} from '@decipad/remote-computer';
 import type { NotebookError } from '../types';
 import { formatError } from '@decipad/format';
 import { type RootEditorController } from '@decipad/notebook-tabs';
 import { fullRootEditorToProgram } from '@decipad/editor-language-elements';
+import type {
+  Computer,
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/computer-interfaces';
 
 const errorStringFromBlockResult = (
   blockResult: IdentifiedResult | IdentifiedError
@@ -35,10 +35,10 @@ const isErrorBlockResult = (blockResult: IdentifiedResult | IdentifiedError) =>
 
 export const gatherNotebookErrors = async (
   editor: RootEditorController,
-  computer: RemoteComputer
+  computer: Computer
 ): Promise<Array<NotebookError>> => {
   const program = await fullRootEditorToProgram(editor, computer);
-  await computer.pushProgramBlocks(program);
+  await computer.pushComputeDelta({ program: { upsert: program } });
   await computer.flush();
   return Object.values(computer.results.getValue().blockResults)
     .filter(isErrorBlockResult)

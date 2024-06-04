@@ -13,8 +13,11 @@ import {
 } from '@decipad/language-types';
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 import { getOperatorByName } from './operators';
-import { type FullBuiltinSpec } from './interfaces';
-import { type BuiltinContextUtils, type CallBuiltin } from './types';
+import {
+  type FullBuiltinSpec,
+  type BuiltinContextUtils,
+  type CallBuiltin,
+} from './types';
 
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
   // console.log(

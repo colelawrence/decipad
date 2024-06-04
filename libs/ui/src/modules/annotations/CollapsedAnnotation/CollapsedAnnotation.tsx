@@ -1,12 +1,12 @@
-import { Avatar } from 'libs/ui/src/shared';
+import { useMemo } from 'react';
 import { GetNotebookAnnotationsQuery } from '@decipad/graphql-client';
+import { pluralize } from '@decipad/language-units';
+
+import { Avatar } from 'libs/ui/src/shared';
 
 import { CaretDown } from 'libs/ui/src/icons';
 
-import { useMemo } from 'react';
-
 import * as Styled from './styles';
-import { pluralize } from '@decipad/language-utils';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']

@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { BaseQuantity, UnitOfMeasure } from '@decipad/language-interfaces';
 import * as AngleUnits from './angle-units';
 import * as AreaUnits from './area-units';
 import * as CurrencyUnits from './currency-units';
@@ -25,7 +25,6 @@ import * as TimeUnits from './time-units';
 import { doNotPluralize, normalizeUnitName } from './utils';
 import * as VoltageUnits from './voltage-units';
 import * as VolumeUnits from './volume-units';
-import type { BaseQuantity } from '../Unit';
 
 const baseQuantities: ReadonlyArray<BaseQuantity> = [
   'length',
@@ -98,20 +97,6 @@ const baseQuantitySet: ReadonlySet<string> = new Set(baseQuantities);
 
 export const isBaseQuantity = (unit: string): unit is BaseQuantity =>
   baseQuantitySet.has(unit);
-
-export type UnitOfMeasure = {
-  name: string;
-  baseQuantity: BaseQuantity;
-  canConvertTo?: (unit: BaseQuantity) => boolean;
-  convertTo?: (unit: BaseQuantity, n: DeciNumber) => DeciNumber;
-  symbols?: string[];
-  aliases?: string[];
-  pretty?: string;
-  doesNotScaleOnConversion?: true;
-  toBaseQuantity: (n: DeciNumber) => DeciNumber;
-  fromBaseQuantity: (n: DeciNumber) => DeciNumber;
-  superBaseQuantity?: 'currency';
-};
 
 const allUnitPackages = [
   LengthUnits,

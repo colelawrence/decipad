@@ -1,8 +1,8 @@
 import { produce } from '@decipad/utils';
 import { areUnitsCompatible } from '../units/known-units';
-import type { Unit } from './Unit';
 import { normalizeUnits } from './normalizeUnits';
 import { areUnitQualitiesCompatible } from './areUnitQualitiesCompatible';
+import type { Unit } from '@decipad/language-interfaces';
 
 export const combineUnits = (
   myUnitsObj: Unit[] | null,

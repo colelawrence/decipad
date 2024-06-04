@@ -1,7 +1,7 @@
 import { produce } from '@decipad/utils';
-import type { Unit } from './Unit';
-import { pluralizeUnit } from './pluralizeUnit';
+import type { Unit } from '@decipad/language-interfaces';
 import { N, ZERO } from '@decipad/number';
+import { pluralizeUnit } from './pluralizeUnit';
 import { areUnitQualitiesCompatible } from './areUnitQualitiesCompatible';
 
 export const simplifyUnits = (units: Unit[]): Unit[] =>

@@ -2,8 +2,8 @@ import {
   type SerializedType,
   type SerializedTypes,
   type Time,
-  Unit,
 } from '@decipad/remote-computer';
+import { type Unit } from '@decipad/language-interfaces';
 import type {
   CellValueType,
   SeriesType,
@@ -23,7 +23,7 @@ import {
 } from '../icons';
 import { AvailableSwatchColor } from './swatches';
 
-const isCurrencyUnit = (unit: Unit.Unit[] | null | undefined): boolean =>
+const isCurrencyUnit = (unit: Unit[] | null | undefined): boolean =>
   unit?.length === 1 && unit[0].baseSuperQuantity === 'currency';
 
 export function getTypeIcon(
@@ -63,7 +63,7 @@ export function getSeriesType(type: SeriesType): TableCellType {
   return { kind: 'series', seriesType: type };
 }
 
-export function getNumberType(unit?: Unit.Unit[]): SerializedTypes.Number {
+export function getNumberType(unit?: Unit[]): SerializedTypes.Number {
   return { kind: 'number', unit: unit ?? null };
 }
 

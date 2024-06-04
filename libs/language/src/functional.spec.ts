@@ -2,7 +2,8 @@ import { N } from '@decipad/number';
 import ptime from 'p-time';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t, Time } from '@decipad/language-types';
-import { u, U } from './utils';
+// eslint-disable-next-line no-restricted-imports
+import { u, U } from '@decipad/language-utils';
 import {
   runCodeForVariables,
   objectToTableType,
@@ -1897,7 +1898,7 @@ describe('multi-dim ops', () => {
         A = [1, 2, 3] bananas
         B = [4, 5, 6] oranges
       }
-      
+
       Table.A / Table.B`);
 
     expect(result).toMatchInlineSnapshot(`

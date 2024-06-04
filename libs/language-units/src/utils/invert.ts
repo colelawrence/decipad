@@ -1,9 +1,9 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
 
 export function invert(
-  f: (n: DeciNumber) => DeciNumber
-): (n: DeciNumber) => DeciNumber {
+  f: (n: DeciNumberBase) => DeciNumberBase
+): (n: DeciNumberBase) => DeciNumberBase {
   const reversingFactor = f(ONE).inverse();
   return (n) => n.mul(reversingFactor);
 }

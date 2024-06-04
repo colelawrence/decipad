@@ -1,12 +1,12 @@
 import { getOnly } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
+import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Type, isPendingType } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { valueTransforms } from '@decipad/language-builtins';
-import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { inferExpression } from '../infer';
-import { getIdentifierString } from '../utils';
 import {
   evaluateMultidimAssignment,
   inferMultidimAssignment,

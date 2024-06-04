@@ -1,3 +1,4 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import { ClientEventContextType } from '@decipad/client-events';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
@@ -73,7 +74,7 @@ import {
 import { noopPromise } from '@decipad/editor-utils';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import type { UserInteraction } from '@decipad/react-contexts';
-import type { RemoteComputer } from '@decipad/remote-computer';
+
 import { createDndPlugin } from '@udecode/plate-dnd';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
@@ -92,7 +93,7 @@ import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md';
 import { createCaptionPlugin } from '@udecode/plate-caption';
 
 interface PluginOptions {
-  computer: RemoteComputer;
+  computer: Computer;
   events?: ClientEventContextType;
   readOnly: boolean;
   interactions?: Subject<UserInteraction>;

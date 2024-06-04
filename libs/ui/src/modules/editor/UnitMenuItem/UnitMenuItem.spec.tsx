@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { U } from 'libs/language/src/utils';
+import { U } from '@decipad/language-utils';
 import { MenuWrapper as wrapper } from '../../../test-utils';
 import { UnitMenuItem } from './UnitMenuItem';
 

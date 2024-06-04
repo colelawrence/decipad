@@ -18,7 +18,6 @@
     { "path": "../toast" },
     { "path": "../notebook-state" },
     { "path": "../editor-attachments" },
-    { "path": "../editor-stats" },
     { "path": "../feature-flags" },
     { "path": "../notebook-tabs" }
   ]

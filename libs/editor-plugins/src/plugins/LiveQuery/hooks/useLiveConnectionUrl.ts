@@ -3,12 +3,12 @@ import type {
   LiveQueryElement,
   LiveQueryQueryElement,
 } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { getDatabaseUrl } from '../utils/getDatabaseUrl';
 
 export const useLiveConnectionUrl = (
   element: LiveQueryElement | LiveQueryQueryElement,
-  computer: RemoteComputer
+  computer: Computer
 ): string | undefined => {
   const databaseResult = computer.getBlockIdResult$.use(
     element.connectionBlockId

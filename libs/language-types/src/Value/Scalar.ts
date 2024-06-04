@@ -1,3 +1,4 @@
+import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber from '@decipad/number';
 import { DateValue } from './Date';
 import { NumberValue } from './Number';
@@ -7,7 +8,7 @@ import type { NonColumn } from './NonColumn';
 
 export class Scalar {
   static fromValue(
-    value: number | bigint | DeciNumber | boolean | string | symbol | Date
+    value: number | bigint | DeciNumberBase | boolean | string | symbol | Date
   ): NonColumn {
     if (value instanceof Date) {
       return DateValue.fromDateAndSpecificity(value.getTime(), 'millisecond');

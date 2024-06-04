@@ -1,9 +1,6 @@
 /* eslint-disable no-param-reassign */
-import {
-  type Constant,
-  type Unit,
-  getConstantByName,
-} from '@decipad/remote-computer';
+import { Unit } from '@decipad/language-interfaces';
+import { type Constant, getConstantByName } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useMemo, useReducer, useRef } from 'react';
@@ -47,12 +44,12 @@ const buttonStyles = css(p12Medium, {
 
 export type UnitsAction =
   | { type: 'text'; value: string }
-  | { type: 'unit'; value: Unit.Unit[] | null }
+  | { type: 'unit'; value: Unit[] | null }
   | { type: 'constant'; value: Constant };
 
 interface UnitsState {
   text: string;
-  unit: Unit.Unit[] | null;
+  unit: Unit[] | null;
   constant?: Constant;
 }
 
@@ -78,7 +75,7 @@ interface UnitMenuItemProps {
   readonly onSelect?: (unit: UnitsAction | undefined) => void;
   readonly parseUnit?: (
     value: string
-  ) => Promise<Unit.Unit[] | null> | Unit.Unit[] | null;
+  ) => Promise<Unit[] | null> | Unit[] | null;
   readonly placeholder?: string;
 }
 

@@ -1,11 +1,35 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import type { Unit } from '@decipad/language-units';
+import type { Unit } from './Unit';
 import type * as Time from './Time';
 import type * as AST from './AST';
 import type { ErrSpec } from './InferError';
-import type { SerializedType } from './SerializedType';
 
 type Common = { symbol?: string; node?: AST.Statement | AST.Expression };
+
+export type SerializedType =
+  // Groups
+  | Column
+  | MaterializedColumn
+  | Table
+  | Tree
+  | MaterializedTable
+  | Row
+
+  // Non-groups
+  | Number
+  | Boolean
+  | String
+  | Date
+  | Range
+
+  // Oddball
+  | Pending
+  | Nothing // No-op
+  | Anything
+  | Function
+  | TypeError;
+
+export type SerializedTypeKind = SerializedType['kind'];
 
 // Groups
 export type Column = {
@@ -48,7 +72,7 @@ export type Row = {
 export type Number =
   | ({
       readonly kind: 'number';
-      unit?: Unit.Unit[] | null;
+      unit?: Unit[] | null;
       readonly numberError?: 'month-day-conversion';
       readonly numberFormat?: null;
     } & Common)

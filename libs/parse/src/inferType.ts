@@ -1,4 +1,4 @@
-import type { RemoteComputer, SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import { containsNumber } from '@decipad/utils';
 import type { CoercibleType } from './types';
 import { inferBoolean } from './inferBoolean';
@@ -6,6 +6,7 @@ import { inferDate } from './inferDate';
 import { inferExpression } from './inferExpression';
 import { inferText } from './inferText';
 import { inferNumber } from './inferNumber';
+import type { Computer } from '@decipad/computer-interfaces';
 
 const inferParseError = (
   text: string,
@@ -29,7 +30,7 @@ interface InferTypeOptions {
 }
 
 const tryInferChain = async (
-  computer: RemoteComputer,
+  computer: Computer,
   text: string,
   options: InferTypeOptions
 ): Promise<CoercibleType> => {
@@ -55,7 +56,7 @@ const tryInferChain = async (
 };
 
 export const inferType = async (
-  computer: RemoteComputer,
+  computer: Computer,
   _text: string,
   options: InferTypeOptions = {}
 ): Promise<CoercibleType> => {

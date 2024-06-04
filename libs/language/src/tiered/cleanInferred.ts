@@ -1,5 +1,6 @@
+import type { Unit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import type { Type, Unit } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 import { produce } from '@decipad/utils';
 import { singular } from 'pluralize';
 
@@ -10,8 +11,8 @@ const isTierUnit = (unit: string) =>
 
 export const cleanInferred = produce<Type>((t) => {
   if (t.unit) {
-    t.unit = produce(t.unit, (units: Unit.Unit[]) =>
-      units.reduce((units: Unit.Unit[], other: Unit.Unit) => {
+    t.unit = produce(t.unit, (units: Unit[]) =>
+      units.reduce((units: Unit[], other: Unit) => {
         if (!isTierUnit(other.unit)) {
           units.push(other);
         }

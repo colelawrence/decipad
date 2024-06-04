@@ -1,4 +1,4 @@
-import type { SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';

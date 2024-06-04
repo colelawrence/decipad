@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { STATEMENT_SEP_TOKEN_TYPE, tokenize } from '@decipad/remote-computer';
 import type { PlateEditor, Value } from '@udecode/plate-common';
 import {
@@ -24,7 +24,7 @@ export const filterStatementSeparator = <
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
   editor: TE,
-  computer: RemoteComputer
+  computer: Computer
 ): boolean => {
   const anchor = editor.selection?.anchor?.offset ?? 0;
   const focus = editor.selection?.focus?.offset ?? 0;

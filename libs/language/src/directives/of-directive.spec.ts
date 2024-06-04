@@ -1,5 +1,6 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { l, genericIdent, ne, U, u } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { l, genericIdent, ne, U, u } from '@decipad/language-utils';
 import { getType, getValue } from './of-directive';
 import { testGetType, testGetValue } from './testUtils';
 

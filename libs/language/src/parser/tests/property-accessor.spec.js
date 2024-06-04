@@ -1,5 +1,6 @@
 import { runTests } from '../run-tests';
-import { c, l, prop } from '../../utils';
+// eslint-disable-next-line no-restricted-imports
+import { c, l, prop } from '@decipad/language-utils';
 
 runTests({
   'property accessor': {

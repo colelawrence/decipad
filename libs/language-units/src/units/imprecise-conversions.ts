@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N } from '@decipad/number';
 
 const dayInSeconds = 86400;
@@ -23,7 +23,7 @@ export const impreciseConversions: ImpreciseConversions = {
 
 interface ImpreciseConversions {
   [baseQuantity: string]: {
-    [desiredQuantity: string]: DeciNumber;
+    [desiredQuantity: string]: DeciNumberBase;
   };
 }
 

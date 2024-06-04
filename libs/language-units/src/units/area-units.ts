@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import type { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from '@decipad/language-interfaces';
 import { oneMile, oneYard, oneFoot, oneInch } from './length-units';
 import { identity } from '@decipad/utils';
 import { invert } from '../utils/invert';

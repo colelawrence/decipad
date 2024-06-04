@@ -1,16 +1,17 @@
 /* eslint-disable no-irregular-whitespace */
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { verbalizeDoc } from './verbalizeDoc';
 import textOnly from './__fixtures__/text-only.json';
 import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
 import mostComponents from './__fixtures__/most-components.json';
 import type { ElementKind, RootDocument } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('verbalizeDoc', () => {
   it('verbalizes text documents into the text itself', () => {
     const doc = textOnly as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { document, verbalized } = verbalizeDoc(doc, getComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
@@ -24,7 +25,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes code lines', () => {
     const doc = someCode as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { document, verbalized } = verbalizeDoc(doc, getComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -83,7 +84,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes some simple UI components', () => {
     const doc = uiComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { document, verbalized } = verbalizeDoc(doc, getComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -181,7 +182,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes most components', () => {
     const doc = mostComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { document, verbalized } = verbalizeDoc(doc, getComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -414,7 +415,7 @@ it('can filter elements paragraph elements', () => {
 
   const elementType = new Set<ElementKind>(['p', 'tab', 'columns']);
 
-  const { verbalized } = verbalizeDoc(doc, getRemoteComputer(), elementType);
+  const { verbalized } = verbalizeDoc(doc, getComputer(), elementType);
 
   expect(
     verbalized.filter((el) => !elementType.has(el.element.type))
@@ -433,7 +434,7 @@ it('can filter for code lines', () => {
 
   const elementType = new Set<ElementKind>(['code_line_v2']);
 
-  const { verbalized } = verbalizeDoc(doc, getRemoteComputer(), elementType);
+  const { verbalized } = verbalizeDoc(doc, getComputer(), elementType);
 
   expect(
     verbalized.filter((el) => !elementType.has(el.element.type))

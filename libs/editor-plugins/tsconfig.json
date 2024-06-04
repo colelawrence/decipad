@@ -14,6 +14,9 @@
       "path": "../remote-computer"
     },
     {
+      "path": "../computer-interfaces"
+    },
+    {
       "path": "../docsync"
     },
     {
@@ -57,9 +60,6 @@
     },
     {
       "path": "../number"
-    },
-    {
-      "path": "../editor-stats"
     },
     {
       "path": "../support"

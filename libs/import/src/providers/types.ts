@@ -1,5 +1,9 @@
-import type { ImportOptions, ImportParams } from '../import';
-import type { ImportResult, SourceUrlParseResponse } from '../types';
+import type {
+  ImportOptions,
+  ImportParams,
+  ImportResult,
+  SourceUrlParseResponse,
+} from '../types';
 
 export interface Provider {
   name: string;

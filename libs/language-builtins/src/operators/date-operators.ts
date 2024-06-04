@@ -8,7 +8,7 @@ import {
   Type,
   Value,
 } from '@decipad/language-types';
-import type { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, FullBuiltinSpec } from '../types';
 
 const extractFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   (await Type.combine(precision.isTimeQuantity(), n.isDate())).mapType((t) => {

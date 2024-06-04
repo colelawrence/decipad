@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type DeciNumber from '@decipad/number';
+import type { Unit as TUnit } from '@decipad/language-interfaces';
 import { N, ONE, TWO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -8,10 +9,9 @@ import {
   Unit,
   unitIsSymbol,
 } from '@decipad/language';
-// eslint-disable-next-line no-restricted-imports
-import { singular } from '@decipad/language-utils';
+import { singular } from '@decipad/language-units';
 import { produce } from '@decipad/utils';
-import type { DeciNumberPart } from './formatNumber';
+import type { DeciNumberPart, UnitPart } from './types';
 
 const numberToSubOrSuperscript: Record<string, string[]> = {
   '0': ['₀', '⁰'], // subscript not used for now
@@ -64,10 +64,9 @@ function scriptFromNumber(n: string): string {
   return numberToSubOrSuperscript[n]?.[1] || n;
 }
 
-const byExp = (u1: Unit.Unit, u2: Unit.Unit): number =>
-  Number(N(u2.exp).sub(u1.exp));
+const byExp = (u1: TUnit, u2: TUnit): number => Number(N(u2.exp).sub(u1.exp));
 
-const produceExp = (unit: Unit.Unit, makePositive = false): Unit.Unit => {
+const produceExp = (unit: TUnit, makePositive = false): TUnit => {
   return produce(unit, (u) => {
     u.unit = singular(u.unit);
     if (makePositive) {
@@ -89,21 +88,8 @@ export function prettyENumbers(
     show10 ? ' ×10' : ''
   }${exponent.replace('+', '').replace(/./g, scriptFromNumber)}`.trim();
 }
-export interface UnitPart {
-  type:
-    | 'unit'
-    | 'unit-literal'
-    | 'unit-exponent'
-    | 'unit-quality'
-    | 'unit-group'
-    | 'unit-prefix';
-  value: string;
-  originalValue?: string; // for values that are prettified
-  base?: string; // for unit conversions in the ui
-}
-
 const stringifyUnit = (
-  unit: Unit.Unit,
+  unit: TUnit,
   prettify = true,
   ignoreExp = false
 ): UnitPart[] => {
@@ -212,13 +198,13 @@ const stringifyUnit = (
 };
 
 export const formatUnitArgs = (
-  units: Unit.Unit[] | null,
+  units: TUnit[] | null,
   value?: DeciNumber,
   prettify = true,
   previousLength = 0
 ) => {
   const unitsLength = units?.length ?? 0 + previousLength;
-  return (units ?? []).reduce((parts: UnitPart[], unit: Unit.Unit) => {
+  return (units ?? []).reduce((parts: UnitPart[], unit: TUnit) => {
     if (parts.length > 0) {
       let prefix: string;
       //
@@ -302,7 +288,7 @@ function fixSpaces(partsOfUnit: UnitPart[]) {
 
 export function formatUnitAsParts(
   _locale: string,
-  units: Unit.Unit[],
+  units: TUnit[],
   value: DeciNumber = TWO,
   prettify = true,
   previousLength = 0
@@ -324,7 +310,7 @@ export function formatUnitAsParts(
 
 export function formatUnit(
   locale: string,
-  units: Unit.Unit[],
+  units: TUnit[],
   value: DeciNumber = TWO,
   prettify = true,
   previousLength = 0
@@ -342,7 +328,7 @@ export function formatUnit(
   throw new Error('This should not happen its a typescript imposition');
 }
 
-function isUserDefinedUnit(unit: Unit.Unit | null): boolean {
+function isUserDefinedUnit(unit: TUnit | null): boolean {
   if (!unit) {
     return false;
   }
@@ -355,14 +341,14 @@ function isUserDefinedUnit(unit: Unit.Unit | null): boolean {
   );
 }
 
-export function isUserDefined(unit: Unit.Unit[] | null): boolean {
+export function isUserDefined(unit: TUnit[] | null): boolean {
   if (unit?.length === 1) {
     return isUserDefinedUnit(unit[0]);
   }
   return false;
 }
 
-function simpleFormatUnitPart(unit: Unit.Unit): string {
+function simpleFormatUnitPart(unit: TUnit): string {
   const multiplier = N(unit.multiplier).valueOf();
   const multiplierStr =
     multipliersToPrefixes[
@@ -374,7 +360,7 @@ function simpleFormatUnitPart(unit: Unit.Unit): string {
   return value;
 }
 
-export function simpleFormatUnit(units: Unit.Unit[]): string {
+export function simpleFormatUnit(units: TUnit[]): string {
   return units.reduce(
     (str, u) =>
       str ? `${str} * ${simpleFormatUnitPart(u)}` : simpleFormatUnitPart(u),

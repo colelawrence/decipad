@@ -1,3 +1,4 @@
+import type { Program } from '@decipad/computer-interfaces';
 import type {
   ColumnsElement,
   ParagraphElement,
@@ -7,6 +8,7 @@ import type {
   CodeLineElement,
   CodeLineV2Element,
 } from '@decipad/editor-types';
+
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -23,8 +25,7 @@ import {
   ELEMENT_TITLE,
   ELEMENT_TAB,
 } from '@decipad/editor-types';
-import type { Program } from '@decipad/remote-computer';
-import { prettyPrintAST, getRemoteComputer } from '@decipad/remote-computer';
+import { prettyPrintAST, getComputer } from '@decipad/computer';
 import { getOnly } from '@decipad/utils';
 import { editorToProgram } from './editorToProgram';
 import { createTestEditorController } from './testEditorController';
@@ -120,7 +121,7 @@ describe('editorToProgram', () => {
     const program = await editorToProgram(
       editor,
       editor.children,
-      getRemoteComputer()
+      getComputer()
     );
 
     expect(program.length).toBe(8);

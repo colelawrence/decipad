@@ -10,12 +10,12 @@ import {
 } from '@decipad/editor-types';
 import type { PlateEditor } from '@udecode/plate-common';
 import { normalizeEditor } from '@udecode/plate-common';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   createNormalizeCodeLineCodePlugin,
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
-import { getRemoteComputer } from '@decipad/remote-computer';
 
 jest.mock('nanoid', () => ({ nanoid: () => 'mocked-id' }));
 

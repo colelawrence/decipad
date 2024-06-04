@@ -1,8 +1,4 @@
-import type {
-  AnyElement,
-  RootDocument,
-  TabElement,
-} from '@decipad/editor-types';
+import type { RootDocument, TabElement } from '@decipad/editor-types';
 import { ELEMENT_TAB } from '@decipad/editor-types';
 import cloneDeep from 'lodash.clonedeep';
 import { getCommands } from './getCommands';
@@ -13,25 +9,6 @@ import get from 'lodash.get';
 import { debug } from '../debug';
 import { isElement, mergeProps } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-
-export interface AddCommand {
-  action: 'add';
-  newBlock: AnyElement; // the block to add
-  placeAfterBlockId?: string; // id of the block to insert after
-}
-
-export interface RemoveCommand {
-  action: 'remove';
-  blockId: string; // the id of the block to remove
-}
-
-export interface ChangeCommand {
-  action: 'change';
-  oldBlock: AnyElement; // the old version of the block
-  newBlock: AnyElement; // the new version of the blocks
-}
-
-export type Command = AddCommand | RemoveCommand | ChangeCommand;
 
 const newTab = (): TabElement => ({
   type: ELEMENT_TAB,

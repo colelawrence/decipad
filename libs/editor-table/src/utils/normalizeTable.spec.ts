@@ -3,7 +3,7 @@ import type { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { createTEditor } from '@udecode/plate-common';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { NodeEntry } from 'slate';
 import { normalizeTable } from './normalizeTable';
 
@@ -12,7 +12,7 @@ const getAvailableIdentifier = (prefix: string, start?: number) =>
 
 describe('normalizeTable', () => {
   let editor!: MyEditor;
-  const computer = getRemoteComputer();
+  const computer = getComputer();
 
   beforeEach(() => {
     editor = createTEditor() as MyEditor;

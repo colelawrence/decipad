@@ -1,4 +1,4 @@
-export * from './interfaces';
+export * from './types';
 export { operators } from './operators';
 export { callBuiltinFunctor } from './callBuiltinFunctor';
 export { callBuiltin } from './callBuiltin';

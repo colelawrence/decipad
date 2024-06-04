@@ -1,4 +1,4 @@
-import { pluralize } from '@decipad/language-utils';
+import { pluralize } from '@decipad/language-units';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { Avatar, Tooltip } from '../../../shared/atoms';
 import { CaretDown, CaretUp } from '../../../icons';

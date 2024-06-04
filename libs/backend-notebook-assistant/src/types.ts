@@ -1,5 +1,5 @@
 import type { TOperation } from '@udecode/plate-common';
-import type { RootDocument } from '@decipad/editor-types';
+import type { RootDocument, AnyElement } from '@decipad/editor-types';
 import type { CompletionUsage } from 'openai/resources';
 
 export interface NotebookAssistantReply {
@@ -75,3 +75,22 @@ export type NotebookAssistantEvent =
   | NotebookAssistantEventError
   | NotebookAssistantEventEnd
   | NotebookAssistantEventTokens;
+
+export interface AddCommand {
+  action: 'add';
+  newBlock: AnyElement; // the block to add
+  placeAfterBlockId?: string; // id of the block to insert after
+}
+
+export interface RemoveCommand {
+  action: 'remove';
+  blockId: string; // the id of the block to remove
+}
+
+export interface ChangeCommand {
+  action: 'change';
+  oldBlock: AnyElement; // the old version of the block
+  newBlock: AnyElement; // the new version of the blocks
+}
+
+export type Command = AddCommand | RemoveCommand | ChangeCommand;

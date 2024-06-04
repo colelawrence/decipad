@@ -1,4 +1,4 @@
-import type DeciNumber from '.';
+import type { DeciNumber } from './types';
 
 export const lessThan = (a: DeciNumber, b: DeciNumber) => a.compare(b) < 0;
 

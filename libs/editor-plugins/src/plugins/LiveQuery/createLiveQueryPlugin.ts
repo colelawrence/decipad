@@ -1,5 +1,6 @@
 import type {
   LiveQueryQueryElement,
+  LiveQueryVarNameElement,
   MyGenericEditor,
 } from '@decipad/editor-types';
 import {
@@ -25,7 +26,6 @@ import { LiveQueryQuery } from './components/LiveQueryQuery';
 import type { NormalizerReturnValue } from '../../pluginFactories';
 import { createNormalizerPlugin } from '../../pluginFactories';
 import { createSoftBreakLiveQueryPluginFactory } from './createSoftBreakLiveQueryPluginFactory';
-import type { LiveQueryVarNameElement } from '../../../../editor-types/src/interactive-elements';
 
 const LazyLiveQuery = lazyElementComponent(
   () =>

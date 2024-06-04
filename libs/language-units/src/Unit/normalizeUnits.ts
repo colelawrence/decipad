@@ -1,4 +1,4 @@
-import type { Unit } from './Unit';
+import type { Unit } from '@decipad/language-interfaces';
 import { simplifyUnits } from './simplifyUnits';
 
 const byUnitName = (a: Unit, b: Unit): number => {

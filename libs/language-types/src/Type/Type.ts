@@ -1,41 +1,21 @@
 // eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
 import omit from 'lodash.omit';
-import type { PromiseOrType } from '@decipad/utils';
-import { produce, getDefined } from '@decipad/utils';
-import type { Unit } from '@decipad/language-units';
 import type {
   AST,
   IInferError,
   Time,
   Type as TypeInterface,
+  Unit as TUnit,
 } from '@decipad/language-interfaces';
-import {
-  divideUnit,
-  getRangeOf,
-  isColumn,
-  isDate,
-  isFunction,
-  isNothing,
-  isPrimitive,
-  isRange,
-  isScalar,
-  isTable,
-  isTableOrRow,
-  isTimeQuantity,
-  isTree,
-  multiplyUnit,
-  reduced,
-  reducedToLowest,
-  sameAs,
-  sharePercentage,
-  withAtParentIndex,
-  withMinimumColumnCount,
-} from './checks';
+import type { PromiseOrType } from '@decipad/utils';
+import { produce, getDefined, dequal, zip } from '@decipad/utils';
+import { N } from '@decipad/number';
 import { InferError } from '../InferError';
 import type { Specificity } from '../Time/Time';
-import { N } from '@decipad/number';
 import { timeUnitFromUnit } from '../Time/timeUnitFromUnit';
+import { timeUnits } from '../Time/timeUnits';
+import { Unit } from '@decipad/language-units';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 
@@ -48,7 +28,7 @@ export class Type implements TypeInterface {
   errorCause: IInferError | null = null;
 
   type: PrimitiveTypeName | null = null;
-  unit: Unit.Unit[] | null = null;
+  unit: TUnit[] | null = null;
   numberFormat: AST.NumberFormat | null = null;
   numberError: 'month-day-conversion' | null = null;
 
@@ -233,11 +213,11 @@ export class Type implements TypeInterface {
     return isDate(this, specificity);
   }
 
-  async multiplyUnit(withUnits: Unit.Unit[] | null): Promise<Type> {
+  async multiplyUnit(withUnits: TUnit[] | null): Promise<Type> {
     return multiplyUnit(this, withUnits);
   }
 
-  async divideUnit(divideBy: Unit.Unit[] | number | null): Promise<Type> {
+  async divideUnit(divideBy: TUnit[] | number | null): Promise<Type> {
     return divideUnit(this, divideBy);
   }
 
@@ -252,7 +232,7 @@ const primitive = (type: PrimitiveTypeName) =>
   });
 
 export const number = (
-  unit: Unit.Unit[] | null = null,
+  unit: TUnit[] | null = null,
   numberFormat: Type['numberFormat'] | undefined = undefined,
   numberError: Type['numberError'] | undefined = undefined
 ) =>
@@ -274,7 +254,7 @@ export const range = (rangeContents: Type) =>
     t.rangeOf = rangeContents;
   });
 
-export const timeQuantity = (timeUnit: Unit.Unit | string) =>
+export const timeQuantity = (timeUnit: TUnit | string) =>
   produce(primitive('number'), (numberType) => {
     numberType.unit = [
       {
@@ -416,4 +396,375 @@ export const impossible = (
     // IMPORTANT!: prevent circular structures
     const sanitized = inNode && omit(inNode, 'inferredType');
     impossibleType.node = sanitized as AST.Node;
+  });
+
+const checker = <Args extends unknown[]>(
+  fn: (...args: Args) => PromiseOrType<Type>
+): typeof fn => {
+  return async function typeChecker(...args: Args) {
+    const errored = args.find(
+      (a) => a instanceof Type && a.errorCause != null
+    ) as Type | undefined;
+
+    return errored ?? fn(...args);
+  };
+};
+
+export const isScalar = checker(async (me: Type, type: PrimitiveTypeName) => {
+  if (type === me.type) {
+    return me;
+  } else {
+    return me.expected(primitive(type));
+  }
+});
+
+export const sameScalarnessAs = checker(async (me: Type, other: Type) => {
+  const meScalar = me.type != null;
+  const theyScalar = me.type != null;
+
+  if (meScalar && theyScalar) {
+    const matchingTypes = me.type === other.type;
+    if (!matchingTypes) {
+      return me.expected(other);
+    }
+    if (me.type === 'number') {
+      return propagateTypeUnits(me, other);
+    }
+
+    return me;
+  } else if (!meScalar && !theyScalar) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
+});
+
+export const sharePercentage = checker((me: Type, other: Type) => {
+  if (me.type === 'number' && other.type === 'number') {
+    return propagatePercentage(me, other);
+  }
+  return me;
+});
+
+export const isNothing = checker(async (me: Type) => {
+  if (me.nothingness === true) {
+    return me;
+  } else {
+    return me.expected('nothing');
+  }
+});
+
+export const isColumn = checker(async (me: Type) => {
+  if (me.cellType != null) {
+    return me;
+  } else {
+    return me.expected('column');
+  }
+});
+
+export const isFunction = checker(async (me: Type) => {
+  if (
+    me.functionness != null &&
+    me.functionArgNames != null &&
+    me.functionBody != null
+  ) {
+    return me;
+  } else {
+    return me.expected('function');
+  }
+});
+
+export const isTable = checker(async (me: Type) => {
+  if (me.columnNames != null && me.columnTypes != null && me.tree == null) {
+    return me;
+  } else {
+    return me.expected('table');
+  }
+});
+
+export const isTree = checker(async (me: Type) => {
+  if (me.tree != null) {
+    return me;
+  } else {
+    return me.expected('tree');
+  }
+});
+
+export const isTableOrRow = checker(async (me: Type) => {
+  if (
+    (me.columnNames != null && me.columnTypes != null) ||
+    (me.rowCellTypes != null && me.rowCellNames != null)
+  ) {
+    return me;
+  } else {
+    return me.expected('table or row');
+  }
+});
+
+export const reduced = checker(async (me: Type) => {
+  if (me.cellType != null) {
+    return me.cellType;
+  } else {
+    return me.expected('column');
+  }
+});
+
+export const reducedToLowest = checker((me: Type) => {
+  while (me.cellType) {
+    me = me.cellType;
+  }
+  return me;
+});
+
+export const withMinimumColumnCount = checker(
+  (me: Type, minColumns: number) => {
+    const columnCount = (me.columnTypes ?? []).length;
+    if (columnCount >= minColumns) {
+      return me;
+    } else {
+      return me.withErrorCause(
+        `Expected table with at least ${minColumns} column${
+          minColumns === 1 ? '' : 's'
+        }`
+      );
+    }
+  }
+);
+
+export const withAtParentIndex = checker((me: Type) => {
+  if (me.atParentIndex != null) {
+    return me;
+  } else {
+    return me.withErrorCause(
+      InferError.expectedTableAndAssociatedColumn(null, me)
+    );
+  }
+});
+
+export const sameColumnessAs = checker(async (me: Type, other: Type) => {
+  if (me.cellType != null && other.cellType != null) {
+    return (await me.cellType.sameAs(other.cellType)).mapType(() => me);
+  } else if (me.cellType == null && other.cellType == null) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
+});
+
+export const isRange = checker(async (me: Type) => {
+  if (me.rangeOf != null) {
+    return me;
+  } else {
+    return me.expected('range');
+  }
+});
+
+export const getRangeOf = checker(
+  async (me: Type) => me.rangeOf ?? me.expected('range')
+);
+
+export const sameRangenessAs = checker(async (me: Type, other: Type) => {
+  if (me.rangeOf != null && other.rangeOf != null) {
+    return (await me.rangeOf.sameAs(other.rangeOf)).mapType(() => me);
+  } else if (me.rangeOf == null && other.rangeOf == null) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
+});
+
+export const sameTablenessAs = checker(async (me: Type, other: Type) => {
+  if (me.columnTypes != null && other.columnTypes != null) {
+    if (
+      dequal(me.columnNames, other.columnNames) &&
+      (
+        await Promise.all(
+          zip(me.columnTypes, other.columnTypes).map(
+            async ([myT, otherT]) => !isErrorType(await myT.sameAs(otherT))
+          )
+        )
+      ).every(Boolean)
+    ) {
+      return me;
+    } else {
+      return me.expected(other);
+    }
+  } else if (me.columnTypes == null && other.columnTypes == null) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
+});
+
+export const isTimeQuantity = checker(async (me: Type) => {
+  if (
+    me.unit == null ||
+    me.unit.length === 0 ||
+    !me.unit.every((unit) => timeUnits.has(unit.unit))
+  ) {
+    return me.expected('time quantity');
+  }
+  return me;
+});
+
+export const isDate = checker(
+  async (me: Type, specificity?: Time.Specificity) => {
+    if (me.date != null && (specificity == null || me.date === specificity)) {
+      return me;
+    } else {
+      return me.expected(specificity ? date(specificity) : 'date');
+    }
+  }
+);
+
+export const sameDatenessAs = checker(async (me: Type, other: Type) => {
+  if (
+    me.date === 'undefined' ||
+    other.date === 'undefined' ||
+    me.date === other.date
+  ) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
+});
+
+export const multiplyUnit = checker((me: Type, withUnits: TUnit[] | null) => {
+  return setUnit(me, Unit.combineUnits(me.unit, withUnits, { mult: true }));
+});
+
+export const divideUnit = checker(
+  (me: Type, divideBy: TUnit[] | number | null) => {
+    if (typeof divideBy === 'number') {
+      const multiplyBy = 1 / divideBy;
+      if (me.unit) {
+        return setUnit(me, Unit.multiplyExponent(me.unit, multiplyBy));
+      }
+      return me;
+    } else {
+      const invTheirUnits = divideBy?.map((u) => Unit.inverseExponent(u)) ?? [];
+      const combinedUnits = Unit.combineUnits(me.unit, invTheirUnits);
+      return setUnit(me, combinedUnits);
+    }
+  }
+);
+
+export const sameAs = checker(
+  async (me: PromiseOrType<Type>, _other: PromiseOrType<Type>) => {
+    const ensurers = [
+      sameScalarnessAs,
+      sameColumnessAs,
+      sameDatenessAs,
+      sameRangenessAs,
+      sameTablenessAs,
+    ];
+
+    const other = await _other;
+    let type = await me;
+    for (const cmp of ensurers) {
+      // eslint-disable-next-line no-await-in-loop
+      type = await cmp(type, other);
+      if (type.errorCause) return type;
+    }
+
+    return type;
+  }
+);
+
+export const isPrimitive = checker(async (me: Type) => {
+  const anyOf = await Type.either(
+    me.isDate(),
+    me.isScalar('string'),
+    me.isScalar('number'),
+    me.isScalar('boolean')
+  );
+
+  if (anyOf.errorCause) {
+    return impossible(InferError.expectedPrimitive(me));
+  } else {
+    return me;
+  }
+});
+
+// Boolean checks
+export const isDateType = (t: Type): t is Type & { date: Time.Specificity } => {
+  return t.date != null;
+};
+
+export const isErrorType = (
+  t: Type
+): t is Type & { errorCause: InferError } => {
+  return t.errorCause != null;
+};
+
+export const isFunctionType = (t: Type): t is Type & { functionness: true } => {
+  return t.functionness;
+};
+
+export const isPendingType = (t: Type): t is Type & { pending: true } => {
+  return t.pending;
+};
+
+export const isNumberType = (t: Type): t is Type & { type: 'number' } => {
+  return t.type === 'number';
+};
+
+export const onlyOneIsPercentage = (
+  me: AST.NumberFormat | null,
+  other: AST.NumberFormat | null
+) => {
+  if (me === 'percentage' && other === 'percentage') {
+    return false;
+  }
+  if (me === 'percentage' || other === 'percentage') {
+    return true;
+  }
+  return false;
+};
+
+export const propagatePercentage = (me: Type, other: Type) => {
+  if (onlyOneIsPercentage(me.numberFormat, other.numberFormat)) {
+    return produce(me, (m) => {
+      m.numberFormat = null;
+    });
+  }
+  return me;
+};
+
+export const removeSingleUnitless = (a: Type, b: Type) => {
+  const bothNumbers = a.type === 'number' && b.type === 'number';
+  const oneIsUnitless = (a.unit == null) !== (b.unit == null);
+
+  if (bothNumbers && oneIsUnitless) {
+    return getDefined(a.unit ?? b.unit);
+  } else {
+    return null;
+  }
+};
+
+export const propagateTypeUnits = (me: Type, other: Type) => {
+  me = propagatePercentage(me, other);
+
+  me = produce(me, (me) => {
+    me.numberError ??= other.numberError;
+  });
+
+  const matchingUnits = Unit.matchUnitArrays(me.unit, other.unit);
+  if (matchingUnits) {
+    return me;
+  }
+
+  const onlyOneHasAUnit = removeSingleUnitless(me, other);
+  if (onlyOneHasAUnit) {
+    return setUnit(me, onlyOneHasAUnit);
+  }
+
+  return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
+};
+
+export const setUnit = (t: Type, newUnit: TUnit[] | null) =>
+  produce(t, (t) => {
+    if (t.type === 'number') {
+      t.unit = newUnit;
+    }
   });

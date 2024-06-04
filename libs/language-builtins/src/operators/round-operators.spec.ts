@@ -3,7 +3,7 @@ import { N } from '@decipad/number';
 import { buildType as t, Value } from '@decipad/language-types';
 import { roundOperators as operators } from './round-operators';
 import { makeContext, U } from '../utils/testUtils';
-import type { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../types';
 
 describe('round', () => {
   const round = operators.round as FullBuiltinSpec;

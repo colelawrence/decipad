@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import type { MyGenericEditor, MyPlatePlugin } from '@decipad/editor-types';
 import {
@@ -47,7 +47,7 @@ export const createTablePlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ): MyPlatePlugin<TablePlugin<TV>, TV> => ({
   key: ELEMENT_TABLE,
   isElement: true,

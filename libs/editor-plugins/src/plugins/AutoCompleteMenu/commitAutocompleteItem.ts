@@ -13,7 +13,7 @@ import {
 } from '@udecode/plate-common';
 import type { BasePoint } from 'slate';
 import { Range } from 'slate';
-import type { MenuItem } from './AutoCompleteMenu';
+import type { MenuItem } from './types';
 
 export const commitAutocompleteItem = (
   editor: MyEditor,

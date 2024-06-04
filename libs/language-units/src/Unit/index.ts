@@ -1,4 +1,3 @@
-export * from './Unit';
 export * from './convertToMultiplierUnit';
 export * from './combineUnits';
 export * from './inverseExponent';

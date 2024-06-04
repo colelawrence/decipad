@@ -10,9 +10,13 @@ import {
 } from '@decipad/language-types';
 import type { AST } from '@decipad/language-interfaces';
 import { getOperatorByName } from './operators';
-import type { FullBuiltinSpec, Functor } from './interfaces';
+import type {
+  FullBuiltinSpec,
+  Functor,
+  BuiltinContextUtils,
+  CallBuiltinFunctor,
+} from './types';
 import { parseFunctor } from './parseFunctor';
-import { type BuiltinContextUtils, type CallBuiltinFunctor } from './types';
 
 const internalCallBuiltinFunctor = async (
   context: BuiltinContextUtils,

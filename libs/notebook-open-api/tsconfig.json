@@ -7,7 +7,7 @@
   "references": [
     { "path": "../editor-types" },
     { "path": "../editor-config" },
-    { "path": "../remote-computer" },
+    { "path": "../computer-interfaces" },
     { "path": "../services" },
     { "path": "../slate-yjs" },
     { "path": "../notebook-tabs" },

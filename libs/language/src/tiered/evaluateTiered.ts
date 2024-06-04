@@ -1,17 +1,22 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
+import type {
+  AST,
+  Unit,
+  Value as ValueTypes,
+} from '@decipad/language-interfaces';
 import DeciNumber, { min, max, ZERO } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import type { Type, Unit } from '@decipad/language-types';
+import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
   RuntimeError,
   Value,
   convertBetweenUnits,
 } from '@decipad/language-types';
-import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { evaluate } from '../interpreter';
-import { getIdentifierString } from '../utils';
 import { predicateSymbols } from './inferTiered';
 import { cleanInferred } from './cleanInferred';
 import { getDefined, getInstanceof } from '@decipad/utils';
@@ -20,8 +25,8 @@ import { prettyPrintAST } from '../parser/utils';
 
 const maybeConvertBetweenUnits = (
   f: DeciNumber,
-  from: Unit.Unit[] | null,
-  to: Unit.Unit[] | null
+  from: Unit[] | null,
+  to: Unit[] | null
 ) => {
   if (!from || !to) {
     return f;

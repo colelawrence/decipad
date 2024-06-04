@@ -7,7 +7,8 @@
   "references": [
     { "path": "../editor-types" },
     { "path": "../utils" },
-    { "path": "../remote-computer" },
+    { "path": "../computer" },
+    { "path": "../computer-interfaces" },
     { "path": "../backend-config" },
     { "path": "../editor-language-elements" },
     { "path": "../doc-verbalizer" },

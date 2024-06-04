@@ -1,9 +1,10 @@
 import type DeciNumber from '@decipad/number';
 import type { AST } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { parseExpression } from '..';
 import type { SimpleValueAST } from './common';
 import { findLiteralNumber, simplisticFunctions } from './common';
-import { getIdentifierString } from '../utils';
 
 /**
  * Checks if `sourceCode` is a simple value.

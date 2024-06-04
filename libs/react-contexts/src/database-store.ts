@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { create } from 'zustand';
+import { Subject } from 'rxjs';
+import omit from 'lodash.omit';
+import pick from 'lodash.pick';
 import type { Result } from '@decipad/remote-computer';
 import { codePlaceholder } from '@decipad/frontend-config';
 import type {
@@ -8,9 +11,7 @@ import type {
 } from '@decipad/editor-types';
 import { type Prettify, generatedNames } from '@decipad/utils';
 import { importFromJSONAndCoercions, importFromNotion } from '@decipad/import';
-import { Subject } from 'rxjs';
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
+import type { Computer } from '@decipad/computer-interfaces';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -40,7 +41,11 @@ export interface IntegrationStore {
   timeOfLastRun: string | null;
 
   // Index is the index of the column (or if not a column, then defaults to 0)
-  setResultTypeMapping: (index: number, type: SimpleTableCellType) => void;
+  setResultTypeMapping: (
+    computer: Computer,
+    index: number,
+    type: SimpleTableCellType
+  ) => void;
   setAllTypeMapping: (v: Array<SimpleTableCellType | undefined>) => void;
 
   /** Method to move to the next stage (This changes depending on the type of integration) */
@@ -118,7 +123,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   resultPreview: undefined,
   resultTypeMapping: [],
 
-  setResultTypeMapping(index, type) {
+  setResultTypeMapping(computer, index, type) {
     const { resultTypeMapping, rawResult, connectionType } = get();
 
     const clonedTypeMappings = [...resultTypeMapping];
@@ -126,16 +131,18 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
 
     if (rawResult && connectionType) {
       const processedResult = getProcessedResult(rawResult, connectionType);
-      importFromJSONAndCoercions(processedResult, clonedTypeMappings).then(
-        (res) => {
-          if (res == null) {
-            // This means our new type mappings cannot be used for the table.
-            set({ warning: 'types' });
-          } else {
-            set({ resultTypeMapping: clonedTypeMappings, resultPreview: res });
-          }
+      importFromJSONAndCoercions(
+        computer,
+        processedResult,
+        clonedTypeMappings
+      ).then((res) => {
+        if (res == null) {
+          // This means our new type mappings cannot be used for the table.
+          set({ warning: 'types' });
+        } else {
+          set({ resultTypeMapping: clonedTypeMappings, resultPreview: res });
         }
-      );
+      });
     }
   },
   setAllTypeMapping(types) {

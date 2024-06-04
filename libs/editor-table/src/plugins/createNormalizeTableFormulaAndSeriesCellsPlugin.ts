@@ -1,3 +1,4 @@
+import type { NodeEntry } from 'slate';
 import type {
   ENodeEntry,
   PlateEditor,
@@ -5,6 +6,7 @@ import type {
   Value,
 } from '@udecode/plate-common';
 import { getChildren, getNodeString, isElement } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import type {
   TableElement,
@@ -14,8 +16,6 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@decipad/editor-types';
 import { enumerate } from '@decipad/utils';
-import type { NodeEntry } from 'slate';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { setCellText } from '../utils/setCellText';
 // We do this following import this way because tree-shaking is not good enough
@@ -154,7 +154,7 @@ export const createNormalizeTableFormulaAndSeriesCellsPlugin = <
   TV extends Value,
   TE extends PlateEditor<TV>
 >(
-  _computer: RemoteComputer
+  _computer: Computer
 ) =>
   createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_TABLE_FORMULA_AND_SERIES_CELLS_PLUGIN',

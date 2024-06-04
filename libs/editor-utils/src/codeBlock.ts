@@ -1,4 +1,4 @@
-import { type RemoteComputer } from '@decipad/remote-computer';
+import { type Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
 import type { PromiseOrType } from '@decipad/utils';
@@ -79,7 +79,7 @@ export const insertStructuredCodeLineBelowOrReplace = ({
   path: Path;
   code?: string;
   select?: boolean;
-  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier'];
+  getAvailableIdentifier: Computer['getAvailableIdentifier'];
 }) => {
   const blockPath = requireBlockParentPath(editor, path);
   const isBlockEmpty = !getEditorString(editor, blockPath);

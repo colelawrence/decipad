@@ -1,6 +1,7 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
+import type { VariableSliderElement } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -11,7 +12,6 @@ import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
 import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
-import type { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
 import { getNodeString } from '../utils/getNodeString';
 
 extendZodWithOpenApi(z);

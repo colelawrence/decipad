@@ -30,6 +30,7 @@ export const SQLIntegration: FC<
   useEffect(() => {
     async function getResult() {
       const result = await importFromJSONAndCoercions(
+        computer,
         latestResult,
         typeMappings
       );
@@ -53,6 +54,7 @@ export const SQLIntegration: FC<
       }
 
       const result = await importFromJSONAndCoercions(
+        computer,
         JSON.stringify(res.data),
         typeMappings
       );
@@ -67,25 +69,27 @@ export const SQLIntegration: FC<
 
       store.abort();
 
-      importFromJSONAndCoercions(latestResult, typeMappings).then((res) => {
-        store.Set({
-          connectionType: 'mysql',
-          stage: 'connect',
-          existingIntegration: id,
-          rawResult: latestResult,
-          resultPreview: res,
-          varName,
-        });
+      importFromJSONAndCoercions(computer, latestResult, typeMappings).then(
+        (res) => {
+          store.Set({
+            connectionType: 'mysql',
+            stage: 'connect',
+            existingIntegration: id,
+            rawResult: latestResult,
+            resultPreview: res,
+            varName,
+          });
 
-        store.setAllTypeMapping(typeMappings);
-        store.changeOpen(true);
+          store.setAllTypeMapping(typeMappings);
+          store.changeOpen(true);
 
-        sqlStore.Set({
-          Query: integrationType.query,
-          ExternalDataName: integrationType.externalDataName,
-          ExternalDataId: integrationType.externalDataUrl,
-        });
-      });
+          sqlStore.Set({
+            Query: integrationType.query,
+            ExternalDataName: integrationType.externalDataName,
+            ExternalDataId: integrationType.externalDataUrl,
+          });
+        }
+      );
     },
   });
 

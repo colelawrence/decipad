@@ -1,11 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
-import type { CellTextEditingProps } from './types';
-import { usePipedCellPluginOption } from './usePipedCellPluginOption';
-import { table as tableStyles } from '@decipad/ui';
 import isHotkey from 'is-hotkey';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { PlatePlugin } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
+import { table as tableStyles } from '@decipad/ui';
 import {
   toDOMNode,
   useEditorRef,
@@ -19,13 +18,14 @@ import {
 } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH, ELEMENT_TD } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
+import { usePipedCellPluginOption } from './usePipedCellPluginOption';
 import {
   createAutoCompleteMenuPlugin,
   createSmartRefPlugin,
 } from '@decipad/editor-plugins';
 import type { CellInputValue } from './serializeCellText';
+import type { CellTextEditingProps } from './types';
 import { deserializeCellText, serializeCellText } from './serializeCellText';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
 
@@ -181,7 +181,7 @@ const cellInputStyles = css({
 });
 
 export const createCellEditorInputPlugin = (
-  computer: RemoteComputer
+  computer: Computer
 ): PlatePlugin => ({
   key: 'cell-editor-input',
   decorate: decorateCode(computer, ELEMENT_PARAGRAPH),

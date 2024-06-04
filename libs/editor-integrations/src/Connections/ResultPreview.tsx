@@ -1,7 +1,10 @@
-import type { ErrSpec, Result } from '@decipad/remote-computer';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
+import { css } from '@emotion/react';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
-import type { IntegrationStore } from '@decipad/react-contexts';
+import { ErrSpec, Result } from '@decipad/language-interfaces';
+import { useComputer, type IntegrationStore } from '@decipad/react-contexts';
 import {
   CodeResult,
   ContentEditableInput,
@@ -12,12 +15,9 @@ import {
   getStringType,
   p12Medium,
 } from '@decipad/ui';
-import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
-import type { FC } from 'react';
-import { useCallback, useState } from 'react';
 
 interface ResultPreviewProps {
   result?: Result.Result;
@@ -44,12 +44,13 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
     },
     [foundError]
   );
+  const computer = useComputer();
   const onChangeColumnType = useCallback(
     (index: number, type: TableCellType | undefined) => {
       if (!type) return;
-      setTypeMapping(index, type as SimpleTableCellType);
+      setTypeMapping(computer, index, type as SimpleTableCellType);
     },
-    [setTypeMapping]
+    [computer, setTypeMapping]
   );
 
   // Changing the type when result is not a table

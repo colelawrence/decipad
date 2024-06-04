@@ -1,7 +1,7 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
+import type { Unit, UnitOfMeasure } from '@decipad/language-interfaces';
 import { produce, getDefined, identity } from '@decipad/utils';
-import type { UnitOfMeasure } from '../../units/known-units';
 import { getUnitByName, isBaseQuantity } from '../../units/known-units';
 import type { BaseQuantityExpansion } from './expansions';
 import { expansions } from './expansions';
@@ -11,7 +11,6 @@ import type {
   ExpandUnitResult,
   ExpandUnitResultWithNullableUnits,
 } from '.';
-import type { Unit } from '..';
 import { normalizeUnits } from '../normalizeUnits';
 import {
   normalizeUnitNameString,
@@ -39,8 +38,8 @@ export function doesNotScaleOnConversion(unit: Unit): boolean {
   return false;
 }
 
-function convertingBy(mul: DeciNumber): Converter {
-  return (n: DeciNumber) => n.mul(mul);
+function convertingBy(mul: DeciNumberBase): Converter {
+  return (n: DeciNumberBase) => n.mul(mul);
 }
 
 function expandUnitWith(unit: Unit, expansion: BaseQuantityExpansion): Unit[] {

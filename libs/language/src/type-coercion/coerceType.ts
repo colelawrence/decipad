@@ -2,8 +2,7 @@
 import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { serializeType, buildType as t } from '@decipad/language-types';
-// eslint-disable-next-line no-restricted-imports
-import { singular } from '@decipad/language-utils';
+import { singular } from '@decipad/language-units';
 import { columnToTable } from './columnToTable';
 import { treeToTable } from './treeToTable';
 import type { TRealm } from '../scopedRealm';

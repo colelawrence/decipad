@@ -5,12 +5,13 @@ import { THEME_PREFERENCE_LOCAL_STORAGE_KEY } from './storage';
 export type ThemePreference = 'system' | 'light' | 'dark';
 
 const getItem =
-  'localStorage' in global
+  // eslint-disable-next-line no-constant-condition
+  typeof localStorage !== 'undefined'
     ? global.localStorage.getItem.bind(global.localStorage)
     : (_key: string) => false;
 
 const isSystemThemeDark = (): boolean => {
-  if (!('matchMedia' in global)) {
+  if (!(typeof matchMedia === 'function')) {
     return false;
   }
 

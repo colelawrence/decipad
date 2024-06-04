@@ -1,10 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { l, n, seq } from '@decipad/language-utils';
 import { inferExpression } from '.';
-import { l, n, seq, date } from '../utils';
 
 import { inferSequence } from './sequence';
 import { ScopedRealm, makeInferContext } from '../scopedRealm';
+import { date } from '../date';
 
 const nilCtx = makeInferContext();
 const nilRealm = new ScopedRealm(undefined, nilCtx);

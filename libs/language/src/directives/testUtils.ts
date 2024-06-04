@@ -1,7 +1,8 @@
 import type { AST, Type, Value } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
-import { isExpression, isNode } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { isExpression, isNode } from '@decipad/language-utils';
 import { inferExpression } from '../infer';
 import type { DirectiveImpl } from './types';
 import type { TRealm } from '../scopedRealm';

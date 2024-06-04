@@ -1,5 +1,5 @@
+import type { Unit } from '@decipad/language-interfaces';
 import { N } from '@decipad/number';
-import type { Unit } from '../Unit/Unit';
 
 export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {

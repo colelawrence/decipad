@@ -47,5 +47,6 @@ module.exports = {
     '<rootDir>/libs/backend-notebook',
     '<rootDir>/libs/notebook-open-api',
     '<rootDir>/apps/backend-tests',
+    '<rootDir>/libs/listener-helper',
   ],
 };

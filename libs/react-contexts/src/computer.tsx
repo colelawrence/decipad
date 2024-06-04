@@ -1,11 +1,9 @@
 import type { FC, ReactNode } from 'react';
 import { createContext, useContext } from 'react';
-import {
-  type RemoteComputer,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
-export type ComputerContextValue = RemoteComputer;
+export type ComputerContextValue = Computer;
 
 const ComputerContext = createContext<ComputerContextValue>(
   getRemoteComputer()
@@ -13,7 +11,7 @@ const ComputerContext = createContext<ComputerContextValue>(
 
 export const ComputerContextProvider: FC<{
   children?: ReactNode;
-  computer?: RemoteComputer;
+  computer?: Computer;
 }> = ({ children, computer }) => {
   return (
     <ComputerContext.Provider value={computer ?? getRemoteComputer()}>
@@ -22,4 +20,4 @@ export const ComputerContextProvider: FC<{
   );
 };
 
-export const useComputer = (): RemoteComputer => useContext(ComputerContext);
+export const useComputer = (): Computer => useContext(ComputerContext);

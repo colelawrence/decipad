@@ -3,9 +3,10 @@ import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, Value, buildType as t } from '@decipad/language-types';
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { inferExpression } from '../infer';
 import { evaluate } from '../interpreter';
-import { getIdentifierString } from '../utils';
 import type { TRealm } from '../scopedRealm';
 
 export const inferCategories = async (

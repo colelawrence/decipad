@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   MathElement,
   MyEditor,
@@ -29,9 +29,7 @@ import { insertSmartRef } from './insertSmartRef';
 import { nanoid } from 'nanoid';
 
 export const onDropSmartRef =
-  (computer: RemoteComputer) =>
-  (editor: MyEditor) =>
-  (event: React.DragEvent) => {
+  (computer: Computer) => (editor: MyEditor) => (event: React.DragEvent) => {
     if (editor.dragging === DRAG_SMART_REF) {
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;

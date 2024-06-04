@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import type { TableHeaderElement } from '@decipad/editor-types';
 import {
@@ -18,7 +18,7 @@ import { nanoid } from 'nanoid';
 import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 export const normalizeTableFormula =
-  <TV extends Value, TE extends PlateEditor<TV>>(_computer: RemoteComputer) =>
+  <TV extends Value, TE extends PlateEditor<TV>>(_computer: Computer) =>
   (editor: TE) =>
   (entry: ENodeEntry<TV>): NormalizerReturnValue => {
     const [element, path] = entry;
@@ -83,7 +83,7 @@ export const createNormalizeTableFormulaPlugin = <
   TV extends Value,
   TE extends PlateEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ) =>
   createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',

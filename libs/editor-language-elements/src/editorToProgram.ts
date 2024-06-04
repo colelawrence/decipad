@@ -3,18 +3,18 @@ import type {
   MinimalRootEditor,
   MyEditor,
 } from '@decipad/editor-types';
-import type { RemoteComputer, Program } from '@decipad/remote-computer';
 import {
   elementToLanguageBlocks,
   interactiveElementTypes,
 } from './elementToLanguageBlock';
+import type { Computer, Program } from '@decipad/computer-interfaces';
 
 export { interactiveElementTypes };
 
 export const editorToProgram = async (
   editor: MinimalRootEditor | MyEditor,
   blocks: Iterable<AnyElement>,
-  computer: RemoteComputer
+  computer: Computer
 ): Promise<Program> => {
   const program: Program = [];
 

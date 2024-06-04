@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import type { RemoteComputer, SerializedType } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { SerializedType } from '@decipad/remote-computer';
 import { isColumn, isTable } from '@decipad/remote-computer';
 import { encodingFor } from './plotUtils';
 import type { PlotSpec } from './plotUtils.interface';
@@ -43,7 +44,7 @@ const firstNominalColumn = (type: SerializedType, exclude?: ExclusionList) =>
   firstColumnInKind(type, nominalKinds, exclude);
 
 export const defaultPlotSpec = (
-  computer: RemoteComputer,
+  computer: Computer,
   type: undefined | SerializedType,
   spec: PlotSpec | undefined
 ): PlotSpec | undefined => {

@@ -14,7 +14,10 @@
       "path": "../editor-utils"
     },
     {
-      "path": "../remote-computer"
+      "path": "../computer-interfaces"
+    },
+    {
+      "path": "../computer"
     },
     {
       "path": "../react-contexts"
@@ -36,6 +39,9 @@
     },
     {
       "path": "../language-filters"
+    },
+    {
+      "path": "../language-interfaces"
     }
   ]
 }

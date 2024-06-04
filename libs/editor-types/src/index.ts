@@ -1,30 +1,26 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
-import type { SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/language-interfaces';
 import * as elementKindsModule from './element-kinds';
 import * as markKinds from './mark-kinds';
+import type { TableCellType } from './value';
 
 export * from './column-kinds';
 export * from './components';
 export * from './data-view';
 export * from './decorator-kinds';
 export * from './element-kinds';
-export * from './event-interception';
 export * from './import-data';
 export * as IntegrationTypes from './integrations';
-export * from './interactive-elements';
 export * from './mark-kinds';
 export * from './nodes';
 export * from './plate';
-export * from './table';
 export * from './utils';
 export * from './value';
 export * from './subscription-plans';
 export * from './icons';
 export * from './slashCommands';
 export { markKinds };
-
-import type { TableCellType } from './table';
 
 export type MarkKind = typeof markKinds[keyof typeof markKinds];
 

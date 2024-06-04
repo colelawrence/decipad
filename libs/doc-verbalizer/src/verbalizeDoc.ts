@@ -1,4 +1,5 @@
 import { isElement } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   type RootDocument,
   type TabElement,
@@ -13,7 +14,6 @@ import {
 import { getVerbalizer, getVarnameToId } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
 import { getNodeString } from './utils/getNodeString';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { verbalizeResult } from './verbalizeResult';
 
 export interface VerbalizedElement {
@@ -36,7 +36,7 @@ const isStructuralElement = (
 
 export const verbalizeElement = (
   element: AnyElement,
-  computer: RemoteComputer,
+  computer: Computer,
   tags: Set<string> = new Set()
 ): VerbalizedElement[] => {
   if (isStructuralElement(element)) {
@@ -100,7 +100,7 @@ export const verbalizeElement = (
 
 export const verbalizeDoc = (
   doc: RootDocument,
-  computer: RemoteComputer,
+  computer: Computer,
   filterElementTypes?: Set<ElementKind>
 ): DocumentVerbalization => {
   const verbalizedObject = {

@@ -2,8 +2,9 @@ import DeciNumber, { N } from '@decipad/number';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { operators } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { prefixCurrencies } from '../grammar/tokenizer';
-import { getIdentifierString } from '../utils';
 import type { SimpleValue, SimpleValueAST } from './common';
 import { deciNumberToSimpleString } from './common';
 import { isValue } from './isValue';

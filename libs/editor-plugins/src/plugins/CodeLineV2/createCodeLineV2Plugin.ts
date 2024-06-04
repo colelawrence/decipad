@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   createEventInterceptorPluginFactory,
   createStructuredKeyboard,
@@ -22,12 +22,12 @@ import {
 } from './normalization';
 import type { PlateEditor, Value } from '@udecode/plate-common';
 
-const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
+const createCodeLineRootPlugin = (_computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2,
   isElement: true,
   component: CodeLineV2,
 });
-const createCodeLineVarnamePlugin = (_computer: RemoteComputer) => ({
+const createCodeLineVarnamePlugin = (_computer: Computer) => ({
   key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
   component: CodeLineV2Varname,
@@ -36,7 +36,7 @@ const createCodeLineCodeTextPlugin = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ) => ({
   key: ELEMENT_CODE_LINE_V2_CODE,
   isElement: true,
@@ -48,7 +48,7 @@ export const createCodeLineV2Plugin = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ): MyPlatePlugin => ({
   key: 'CODE_LINE_V2_ROOT',
   plugins: [

@@ -1,7 +1,7 @@
 import { produce, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, valueToResultValue } from '@decipad/language-types';
-import type { FullBuiltinSpec } from '../../interfaces';
+import type { FullBuiltinSpec } from '../../types';
 import { all, map } from '@decipad/generator-utils';
 import { applyFilterMap } from '../../utils/valueTransforms';
 

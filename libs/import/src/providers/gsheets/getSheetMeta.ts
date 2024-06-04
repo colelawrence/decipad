@@ -1,8 +1,7 @@
 import { stringify as encodeQuery } from 'querystring';
 import { thirdParty } from '@decipad/client-config';
 import { request } from '../../http/request';
-import type { SheetMeta } from '../../types';
-import type { ImportParams } from '../../import';
+import type { ImportParams, SheetMeta } from '../../types';
 
 export interface SpreadsheetMetaResponse {
   body: SheetMeta;

@@ -1,5 +1,5 @@
+import type { IdentifiedBlock } from '@decipad/remote-computer';
 import {
-  type IdentifiedBlock,
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';

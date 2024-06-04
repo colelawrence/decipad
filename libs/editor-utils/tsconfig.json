@@ -12,6 +12,9 @@
       "path": "../remote-computer"
     },
     {
+      "path": "../computer-interfaces"
+    },
+    {
       "path": "../editor-types"
     },
     {

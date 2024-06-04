@@ -7,6 +7,7 @@ import type {
   Value,
 } from '@udecode/plate-common';
 import { getNodeString, getPointAfter } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   MyDecorate,
   ELEMENT_CODE_LINE,
@@ -28,7 +29,6 @@ import {
 } from '@decipad/editor-types';
 import type { BasePoint } from 'slate';
 import { Path, Range } from 'slate';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { parseStatement } from '@decipad/remote-computer';
 import { isExprRef } from 'libs/computer/src/exprRefs';
 import { getVariableRanges } from './getVariableRanges';
@@ -94,7 +94,7 @@ export const decorateCode = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
-  computer: RemoteComputer,
+  computer: Computer,
   elementType:
     | typeof ELEMENT_CODE_LINE
     | typeof ELEMENT_TABLE_COLUMN_FORMULA

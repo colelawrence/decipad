@@ -3,7 +3,7 @@ import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { InferError, Value, buildType as t } from '@decipad/language-types';
 import { mathOperators as operators } from './math-operators';
 import { U, makeContext, l, n, c, col } from '../utils/testUtils';
-import type { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../types';
 
 setupDeciNumberSnapshotSerializer();
 

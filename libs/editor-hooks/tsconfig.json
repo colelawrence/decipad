@@ -24,6 +24,12 @@
     },
     {
       "path": "../routing"
+    },
+    {
+      "path": "../computer-interfaces"
+    },
+    {
+      "path": "../language-interfaces"
     }
   ]
 }

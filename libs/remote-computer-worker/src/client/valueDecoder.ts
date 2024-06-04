@@ -7,20 +7,8 @@ import {
 import { Value } from '@decipad/language-types';
 import { decodeString } from './decodeString';
 import { decodeNumber } from './decodeNumber';
-import type { PromiseOrType } from '@decipad/utils';
 import { decodeTree } from './decodeTree';
-
-export type RecursiveDecoder = (
-  type: SerializedType,
-  buffer: DataView,
-  offset: number,
-  decoders: Record<SerializedType['kind'], RecursiveDecoder>
-) => PromiseOrType<[Result.OneResult, number]>;
-
-export type ValueDecoder = (
-  buffer: DataView,
-  offset: number
-) => PromiseOrType<[Result.OneResult, number]>;
+import type { RecursiveDecoder, ValueDecoder } from './types';
 
 const decodeNothing: RecursiveDecoder = (_, __, offset) => [Unknown, offset];
 

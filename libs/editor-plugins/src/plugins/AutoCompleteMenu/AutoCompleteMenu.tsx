@@ -17,7 +17,7 @@ import { useFocused, useSelected } from 'slate-react';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 import { useTableCaption } from './useTableCaption';
 import { getPluginOptions } from '@udecode/plate-common';
-import type { AutoCompletePlugin } from './types';
+import type { AutoCompletePlugin, MenuItem } from './types';
 
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));
@@ -39,10 +39,6 @@ const nameToIdentifier = (name: AutocompleteName): Identifier => ({
 
 const builtInIdentifiers: Identifier[] =
   getBuiltinsForAutocomplete().map(nameToIdentifier);
-
-export type MenuItem = Parameters<
-  NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
->[0];
 
 export const AutoCompleteMenu: PlateComponent<{
   leaf: AutocompleteDecorationProps;

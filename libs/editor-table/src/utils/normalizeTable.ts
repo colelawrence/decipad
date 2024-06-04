@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { NormalizerReturnValue } from '@decipad/editor-plugins';
 import type {
   TableCaptionElement,
@@ -118,7 +118,7 @@ const normalizeTableStructure = <TV extends Value, TE extends PlateEditor<TV>>(
 const normalizeTableCaption = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,
   entry: TNodeEntry<TableElement>,
-  computer: RemoteComputer
+  computer: Computer
 ): NormalizerReturnValue => {
   const [caption] = getChildren(entry);
   for (const [captionChildIndex, captionChild] of enumerate(
@@ -173,7 +173,7 @@ const normalizeTableHeaderCell = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,
   path: Path,
   th: TableHeaderElement,
-  computer: RemoteComputer
+  computer: Computer
 ): NormalizerReturnValue => {
   if (isText(th)) {
     return () =>
@@ -251,7 +251,7 @@ const normalizeTableHeaderCell = <TV extends Value, TE extends PlateEditor<TV>>(
 const normalizeTableHeaderRow = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,
   [node, path]: TNodeEntry<TableElement>,
-  computer: RemoteComputer
+  computer: Computer
 ): NormalizerReturnValue => {
   const headerRow = node.children[1];
   const headerRowPath = [...path, 1];
@@ -441,7 +441,7 @@ export const normalizeTable = <
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
   editor: TE,
-  computer: RemoteComputer,
+  computer: Computer,
   entry: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   return (

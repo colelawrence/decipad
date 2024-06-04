@@ -4,13 +4,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 
+import type { Computer, ProgramBlock } from '@decipad/computer-interfaces';
 import {
   type MyElement,
   type NotebookValue,
   type AnyElement,
   ELEMENT_TAB,
 } from '@decipad/editor-types';
-import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import type { EElement, TOperation } from '@udecode/plate-common';
@@ -21,7 +21,7 @@ import type { RootEditorController } from './types';
 
 export class BlockProcessor {
   private rootEditor: RootEditorController;
-  private Computer: RemoteComputer;
+  private Computer: Computer;
 
   private ProgramCache: Map<string, ProgramBlock>;
   public DirtyBlocksSet: Map<string, EElement<NotebookValue>>;
@@ -35,7 +35,7 @@ export class BlockProcessor {
 
   constructor(
     rootEditor: RootEditorController,
-    computer: RemoteComputer,
+    computer: Computer,
     debounceEditorChangesMs: number
   ) {
     this.isFirst = true;
@@ -97,7 +97,7 @@ export class BlockProcessor {
       this.Computer
     );
 
-    await this.Computer.pushProgramBlocks(wholeProgram);
+    await this.Computer.pushComputeDelta({ program: { upsert: wholeProgram } });
 
     wholeProgram = await editorToProgram(
       this.rootEditor,
@@ -105,7 +105,7 @@ export class BlockProcessor {
       this.Computer
     );
 
-    await this.Computer.pushProgramBlocks(wholeProgram);
+    await this.Computer.pushComputeDelta({ program: { upsert: wholeProgram } });
 
     for (const update of wholeProgram) {
       this.ProgramCache.set(update.id, update);

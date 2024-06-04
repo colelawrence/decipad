@@ -25,7 +25,7 @@ import {
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { parseSimpleValue } from '@decipad/remote-computer';
 import {
   EditorBlock,
@@ -408,7 +408,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
 const insertSameNodeType = async (
   prevNode: MyElement | undefined,
-  computer: RemoteComputer
+  computer: Computer
 ): Promise<MyElementOrText> => {
   const id = nanoid();
   const { input, formula } = PLACEHOLDERS;

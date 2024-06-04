@@ -1,7 +1,5 @@
 import type {
-  ImportElementSource,
   LiveConnectionElement,
-  MyEditor,
   ParagraphElement,
 } from '@decipad/editor-types';
 import {
@@ -18,28 +16,18 @@ import {
 } from '@decipad/editor-utils';
 import type { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
 import { insertExternalData } from '../utils/insertExternalData';
 import { needsToCreateExternalData } from '../utils/needsToCreateExternalData';
+import type { InsertLiveConnectionProps } from '../types';
 
 const nextBlock = (path: Path): Path => {
   const [block, ...rest] = path;
   return [block + 1, ...rest];
 };
-
-export interface InsertLiveConnectionProps {
-  readonly computer: RemoteComputer;
-  readonly editor: MyEditor;
-  readonly source?: ImportElementSource;
-  readonly fileName?: string;
-  readonly url?: string;
-  readonly identifyIslands?: boolean;
-  readonly path?: Path;
-}
 
 /**
  * returns the ID of the live connection block or undefined if error.

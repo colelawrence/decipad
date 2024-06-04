@@ -1,19 +1,19 @@
-import { type RootDocument } from '@decipad/editor-types';
 import type {
   ChatCompletionSystemMessageParam,
   ChatCompletionUserMessageParam,
 } from 'openai/resources/chat';
+import { type RootDocument } from '@decipad/editor-types';
+import type { Computer } from '@decipad/computer-interfaces';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
 import { debug } from '../debug';
 import { getLanguageDocSnippets } from '../utils/getLanguageDocSnippets';
 import { instructions, intro } from './texts';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 const maxLanguageDocSnippetCount = 2;
 
 interface GenerateInitialMessagesOptions {
   notebook: RootDocument;
-  computer: RemoteComputer;
+  computer: Computer;
   summary?: string;
   prompt: string;
 }

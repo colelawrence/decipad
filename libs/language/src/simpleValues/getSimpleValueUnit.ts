@@ -1,4 +1,5 @@
-import { c, getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { c, getIdentifierString } from '@decipad/language-utils';
 import type { SimpleValueAST } from './common';
 import { findLiteralNumber } from './common';
 

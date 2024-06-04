@@ -33,6 +33,7 @@
     { "path": "../backend-notebook" },
     { "path": "../backend-auth" },
     { "path": "../routing" },
-    { "path": "../backend-search" }
+    { "path": "../backend-search" },
+    { "path": "../computer" }
   ]
 }

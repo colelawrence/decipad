@@ -3,28 +3,27 @@ import type {
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
+import { getComputer } from '@decipad/computer';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
-import { getRemoteComputer } from '@decipad/remote-computer';
-
-const getDef = (): VariableDefinitionElement => ({
-  type: 'def',
-  variant: 'expression',
-  id: '1',
-  children: [
-    { type: 'caption', id: '2', children: [{ text: 'name' }] },
-    { type: 'exp', id: '3', children: [{ text: '' }] },
-  ],
-});
 
 describe('Normalize Caption Plugin', () => {
-  let computer = getRemoteComputer();
+  const getDef = (): VariableDefinitionElement => ({
+    type: 'def',
+    variant: 'expression',
+    id: '1',
+    children: [
+      { type: 'caption', id: '2', children: [{ text: 'name' }] },
+      { type: 'exp', id: '3', children: [{ text: '' }] },
+    ],
+  });
+  let computer = getComputer();
 
   let editor = createMyPlateEditor({
     plugins: [createNormalizeCaptionPlugin(computer)()],
   });
 
   beforeEach(() => {
-    computer = getRemoteComputer();
+    computer = getComputer();
     editor = createMyPlateEditor({
       plugins: [createNormalizeCaptionPlugin(computer)()],
     });

@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createLazyOperationBase } from './LazyOperation';
 import { uniqDimensions } from './uniqDimensions';
@@ -23,7 +23,7 @@ const getArgs = async (
 
 describe('nesting', () => {
   const op =
-    (simpleCallback: (...args: DeciNumber[]) => DeciNumber) =>
+    (simpleCallback: (...args: DeciNumberBase[]) => DeciNumberBase) =>
     async (args: Value.Value[]) =>
       fromJS(
         simpleCallback(

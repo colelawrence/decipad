@@ -1,7 +1,7 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import { getExprRef } from '@decipad/computer';
 import type { SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_SMART_REF } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import type { TText } from '@udecode/plate-common';
 import { isText } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
@@ -36,7 +36,7 @@ export const serializeCellText = (value: CellInputValue): string => {
 };
 
 export const deserializeCellText = (
-  computer: RemoteComputer,
+  computer: Computer,
   text: string
 ): CellInputValue => {
   const parts = parseCellText(computer, text);
@@ -61,7 +61,7 @@ export const deserializeCellText = (
 };
 
 export const parseCellText = (
-  computer: RemoteComputer,
+  computer: Computer,
   text: string
 ): ParsedCellValue => {
   let remainingText = text;

@@ -1,8 +1,14 @@
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { importFromUnknownJson } from './importFromUnknownJson';
 
 it('allows different "types" to be in the same columns', async () => {
   await expect(
-    importFromUnknownJson({ hello: ['100', '200', 'not a number'] }, {})
+    importFromUnknownJson(
+      getComputer(),
+      { hello: ['100', '200', 'not a number'] },
+      {}
+    )
   ).resolves.toMatchInlineSnapshot(`
     {
       "type": {
@@ -30,8 +36,9 @@ it('allows different "types" to be in the same columns', async () => {
 
 describe('Inferring types', () => {
   it('Infers number columns', async () => {
-    await expect(importFromUnknownJson({ hello: ['100', '200', '300'] }, {}))
-      .resolves.toMatchInlineSnapshot(`
+    await expect(
+      importFromUnknownJson(getComputer(), { hello: ['100', '200', '300'] }, {})
+    ).resolves.toMatchInlineSnapshot(`
       {
         "type": {
           "columnNames": [
@@ -73,8 +80,13 @@ describe('Inferring types', () => {
   });
 
   it('Infers number columns with units', async () => {
-    await expect(importFromUnknownJson({ price: ['$100', '$200', '$300'] }, {}))
-      .resolves.toMatchInlineSnapshot(`
+    await expect(
+      importFromUnknownJson(
+        getComputer(),
+        { price: ['$100', '$200', '$300'] },
+        {}
+      )
+    ).resolves.toMatchInlineSnapshot(`
       {
         "type": {
           "columnNames": [
@@ -138,7 +150,7 @@ describe('Inferring types', () => {
 
 describe('single json values and infers correct type', () => {
   it('parses strings', async () => {
-    await expect(importFromUnknownJson('hello', {})).resolves
+    await expect(importFromUnknownJson(getComputer(), 'hello', {})).resolves
       .toMatchInlineSnapshot(`
       {
         "type": {
@@ -149,7 +161,7 @@ describe('single json values and infers correct type', () => {
     `);
   });
   it('parses numbers', async () => {
-    await expect(importFromUnknownJson('250', {})).resolves
+    await expect(importFromUnknownJson(getComputer(), '250', {})).resolves
       .toMatchInlineSnapshot(`
       {
         "type": {
@@ -166,7 +178,7 @@ describe('single json values and infers correct type', () => {
     `);
   });
   it('parses booleans', async () => {
-    await expect(importFromUnknownJson('true', {})).resolves
+    await expect(importFromUnknownJson(getComputer(), 'true', {})).resolves
       .toMatchInlineSnapshot(`
       {
         "type": {
@@ -180,8 +192,13 @@ describe('single json values and infers correct type', () => {
 
 describe('Nested objects', () => {
   it('can import nested JSON objects', async () => {
-    await expect(importFromUnknownJson({ hello: [{ world: 'a string' }] }, {}))
-      .resolves.toMatchInlineSnapshot(`
+    await expect(
+      importFromUnknownJson(
+        getComputer(),
+        { hello: [{ world: 'a string' }] },
+        {}
+      )
+    ).resolves.toMatchInlineSnapshot(`
       {
         "type": {
           "columnNames": [
@@ -219,7 +236,11 @@ describe('Nested objects', () => {
 
   it('can import some nested objects', async () => {
     await expect(
-      importFromUnknownJson({ col1: 123, col2: [500, 600, 890] }, {})
+      importFromUnknownJson(
+        getComputer(),
+        { col1: 123, col2: [500, 600, 890] },
+        {}
+      )
     ).resolves.toMatchInlineSnapshot(`
       {
         "type": {
@@ -277,7 +298,7 @@ describe('Nested objects', () => {
 
 describe('edge cases', () => {
   it('doesnt infer number on non-number', async () => {
-    await expect(importFromUnknownJson('aaa55ff', {})).resolves
+    await expect(importFromUnknownJson(getComputer(), 'aaa55ff', {})).resolves
       .toMatchInlineSnapshot(`
       {
         "type": {
@@ -291,8 +312,8 @@ describe('edge cases', () => {
 
 describe('Infers dates', () => {
   it('Simple date', async () => {
-    await expect(importFromUnknownJson('2024-04-16', {})).resolves
-      .toMatchInlineSnapshot(`
+    await expect(importFromUnknownJson(getComputer(), '2024-04-16', {}))
+      .resolves.toMatchInlineSnapshot(`
       {
         "type": {
           "date": "day",

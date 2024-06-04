@@ -4,7 +4,7 @@ import { Type, Value, compare, buildType as t } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { getDefined, getInstanceof } from '@decipad/utils';
 import { overloadBuiltin } from '../overloadBuiltin';
-import type { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../types';
 import { concat } from './concat';
 
 const extractDateValues = async (a: ValueTypes.Value) => {

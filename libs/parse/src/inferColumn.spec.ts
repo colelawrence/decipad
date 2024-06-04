@@ -1,9 +1,10 @@
-import { getExprRef, getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getExprRef, getComputer } from '@decipad/computer';
 import { inferColumn } from './inferColumn';
 import { getIdentifiedBlocks } from '../../computer/src/testUtils';
 
 it('infer column with percentages', async () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   let result = await inferColumn(computer, [100, 200, 300]);
   expect(result).toMatchInlineSnapshot(`
     Object {
@@ -22,7 +23,7 @@ it('infer column with percentages', async () => {
 });
 
 it('infers columns with references to other variables', async () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const program = getIdentifiedBlocks('x = 1');
   const { id } = program[0];
 
@@ -44,7 +45,7 @@ it('infers columns with references to other variables', async () => {
 // this comes from a variable. Annoying.
 //
 it('doesnt infer booleans', async () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const result = await inferColumn(computer, ['true'], {
     doNotInferBoolean: true,
   });
@@ -55,7 +56,7 @@ it('doesnt infer booleans', async () => {
 });
 
 it('infers booleans by default', async () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const result = await inferColumn(computer, ['true']);
 
   expect(result).toMatchObject({

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type {
-  MyElement,
+  AnyElement,
   MyValue,
   MyWithOverride,
   TableHeaderRowElement,
@@ -52,7 +52,7 @@ export const withTable =
             if (node.children[0].type !== ELEMENT_TABLE_CAPTION) {
               const isHeaderRow = (
                 node.children[0]?.children as Array<TDescendant> | undefined
-              )?.every((cell) => (cell as MyElement).type === ELEMENT_TH);
+              )?.every((cell) => (cell as AnyElement).type === ELEMENT_TH);
 
               if (!isHeaderRow) {
                 const cells = Array.from(

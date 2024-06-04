@@ -1,11 +1,11 @@
 import { N } from '@decipad/number';
 import type { TableCellType } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
 import {
-  getRemoteComputer,
-  prettyPrintAST,
+  getComputer,
   parseBlockOrThrow,
-} from '@decipad/remote-computer';
+  prettyPrintAST,
+} from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { getExpression, parseCell } from './parseCell';
 
@@ -14,14 +14,14 @@ type NoValidateTest = [string, TableCellType];
 const testParseCell = async (
   type: TableCellType,
   text: string,
-  computer: RemoteComputer = getRemoteComputer()
+  computer = getComputer()
 ) =>
   prettyPrintAST(
     getExpression(getDefined(await parseCell(computer, type, text)))
   );
 
 it('can parse cells with exprRefs', async () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   await computer.pushComputeDelta({
     program: {
       upsert: [
@@ -139,7 +139,5 @@ it.each([
   ['aaaa', { kind: 'date', date: 'year' }],
   ['$100,000', { kind: 'number', unit: null }],
 ] as NoValidateTest[])('%s is not a valid %s', async (format, type) => {
-  expect(await parseCell(getRemoteComputer(), type, format)).toBeInstanceOf(
-    Error
-  );
+  expect(await parseCell(getComputer(), type, format)).toBeInstanceOf(Error);
 });

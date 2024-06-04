@@ -1,6 +1,7 @@
 import { zip } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { walkAst } from '@decipad/language-utils';
 import { parseBlock } from '.';
-import { walkAst } from '../utils';
 import { prettyPrintAST } from './utils';
 
 function cleanSourceMap(ast) {

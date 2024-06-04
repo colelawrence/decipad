@@ -1,10 +1,11 @@
-import DeciNumber, { N, ONE } from '@decipad/number';
-import { produce, getDefined, getInstanceof } from '@decipad/utils';
 import type {
+  Unit as TUnit,
   AST,
   Type,
   Value as ValueTypes,
 } from '@decipad/language-interfaces';
+import DeciNumber, { N, ONE } from '@decipad/number';
+import { produce, getDefined, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import {
   Dimension,
@@ -18,9 +19,10 @@ import {
   parseUnit,
   buildType as t,
 } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString, U } from '@decipad/language-utils';
 import { evaluate } from '../interpreter';
 import type { DirectiveImpl } from './types';
-import { getIdentifierString, U } from '../utils';
 import { inferExpression } from '../infer';
 import {
   isTypeCoercionTarget,
@@ -28,22 +30,22 @@ import {
   coerceValue,
 } from '../type-coercion';
 
-function isUserUnit(exp: AST.Expression, targetUnit: Unit.Unit[]) {
+function isUserUnit(exp: AST.Expression, targetUnit: TUnit[]) {
   if (exp.type !== 'ref') {
     return false;
   }
-  const unit: Unit.Unit[] = [parseUnit(getIdentifierString(exp))];
+  const unit: TUnit[] = [parseUnit(getIdentifierString(exp))];
   return !Unit.matchUnitArrays(unit, targetUnit);
 }
 
-function singleUnitRef(unit?: Unit.Unit): string | undefined {
+function singleUnitRef(unit?: TUnit): string | undefined {
   if (!unit || !unit.exp.equals(ONE) || !unit.multiplier.equals(ONE)) {
     return undefined;
   }
   return unit.unit;
 }
 
-function isTypeCoercion(units: Unit.Unit[]): boolean {
+function isTypeCoercion(units: TUnit[]): boolean {
   if (units.length !== 1) {
     return false;
   }
@@ -56,7 +58,7 @@ function isTypeCoercion(units: Unit.Unit[]): boolean {
 }
 
 function multiplyUnitMultipliers(
-  units: Unit.Unit[] | null | undefined
+  units: TUnit[] | null | undefined
 ): DeciNumber {
   return (units || []).reduce(
     (acc, unit) => acc.mul(unit.multiplier.pow(unit.exp)),
@@ -65,7 +67,7 @@ function multiplyUnitMultipliers(
 }
 
 function multiplyUnitMultipliersIfNeedsEnforcing(
-  units: Unit.Unit[] | null | undefined
+  units: TUnit[] | null | undefined
 ): DeciNumber {
   return (units || []).reduce(
     (acc, unit) =>
@@ -139,11 +141,11 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   return ret;
 };
 
-function inlineUnitAliases(units: Unit.Unit[] | null): Unit.Unit[] | null {
+function inlineUnitAliases(units: TUnit[] | null): TUnit[] | null {
   if (!units) {
     return null;
   }
-  return units.reduce<Unit.Unit[]>((units, oneUnit) => {
+  return units.reduce<TUnit[]>((units, oneUnit) => {
     if (oneUnit.aliasFor != null) {
       const unit = getDefined(inlineUnitAliases(oneUnit.aliasFor));
       for (const u of unit) {

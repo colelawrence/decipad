@@ -1,12 +1,11 @@
 import { getDefined, getInstanceof, zip } from '@decipad/utils';
 import DeciNumber, { ONE } from '@decipad/number';
-import type { Unit } from '@decipad/language-units';
+import type { Unit, Value } from '@decipad/language-interfaces';
 import {
   contractUnits,
   expandUnits,
   getUnitByName,
 } from '@decipad/language-units';
-import type { Value } from '@decipad/language-interfaces';
 import type { ContextUtils } from '../ContextUtils';
 import { FMappedColumn, NumberValue } from '../Value';
 import { serializeType, type Type } from '../Type';
@@ -56,7 +55,7 @@ const crossBaseConvert = async (
   ctx: ContextUtils,
   typeAndValues: Array<TypeAndValue>
 ): Promise<Value.Value[]> => {
-  const consumedUnits = new Set<Unit.Unit>();
+  const consumedUnits = new Set<Unit>();
   return Promise.all(
     typeAndValues.map(async ([sourceType, value]) => {
       const { unit: sourceUnits } = sourceType;

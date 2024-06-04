@@ -1,8 +1,3 @@
-/* eslsnt-disable prefer-destructuring */
-import {
-  type RemoteComputer,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
 import type { DocSyncEditor } from '@decipad/docsync';
 import {
   useFinishOnboarding,
@@ -28,6 +23,7 @@ import {
 import type { FC } from 'react';
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { Subject } from 'rxjs';
+import { Computer } from '@decipad/computer-interfaces';
 import { ErrorPage } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
@@ -53,7 +49,7 @@ export const Notebook: FC = () => {
 
   const [changeSubject] = useState(() => new Subject<undefined>());
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
-  const [computer, setComputer] = useState<RemoteComputer>(getRemoteComputer());
+  const [computer, setComputer] = useState<Computer | undefined>();
   const [error, setError] = useState<Error | undefined>(undefined);
 
   const { setWorkspacePlan } = useNotebookMetaData();

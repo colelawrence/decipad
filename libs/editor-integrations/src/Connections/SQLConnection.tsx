@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
+  useComputer,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { CodeEditor } from '@decipad/ui';
@@ -23,6 +24,9 @@ export const SQLConnection: FC<ConnectionProps> = ({
   const [log, setLog] = useState<TExecution<boolean>[]>([]);
 
   const { onExecute, info } = useContext(ExecutionContext);
+
+  const computer = useComputer();
+
   const runCode = useCallback(async () => {
     if (sqlStore.ExternalDataId) {
       const queryExec = await fetchQuery(
@@ -36,7 +40,7 @@ export const SQLConnection: FC<ConnectionProps> = ({
       }
 
       if (queryExec.type === 'success') {
-        importFromUnknownJson(queryExec.data, {
+        importFromUnknownJson(computer, queryExec.data, {
           columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
         }).then((res) => {
           setResultPreview(res);
@@ -53,7 +57,15 @@ export const SQLConnection: FC<ConnectionProps> = ({
       onExecute({ status: 'error', err: 'No data connection selected.' });
       setLog([{ status: 'error', err: 'No data connection selected.' }]);
     }
-  }, [onExecute, setRawResult, setResultPreview, sqlStore, typeMapping]);
+  }, [
+    computer,
+    onExecute,
+    setRawResult,
+    setResultPreview,
+    sqlStore.ExternalDataId,
+    sqlStore.Query,
+    typeMapping,
+  ]);
 
   useEffect(() => {
     if (info.status === 'run') {

@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { ONE } from '@decipad/number';
 import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
@@ -7,7 +7,7 @@ import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
-import type { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../types';
 import { binopBuiltin } from '../utils/binopBuiltin';
 import { binopFunctor } from '../utils/binopFunctor';
 
@@ -15,7 +15,7 @@ const addPrimitive = async (
   n1: Result.OneResult,
   n2: Result.OneResult,
   types: Type[]
-): Promise<DeciNumber> => {
+): Promise<DeciNumberBase> => {
   if (secondArgIsPercentage(types)) {
     return coherceToFraction(n1).mul(coherceToFraction(n2).add(ONE));
   }

@@ -1,3 +1,8 @@
+import type { Path } from 'slate';
+import cloneDeep from 'lodash.clonedeep';
+import { nanoid } from 'nanoid';
+import type { TEditor } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { DataViewElement } from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,
@@ -6,14 +11,9 @@ import {
   ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import type { TEditor } from '@udecode/plate-common';
-import cloneDeep from 'lodash.clonedeep';
-import { nanoid } from 'nanoid';
-import type { Path } from 'slate';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 const getInitialDataViewElement = async (
-  computer: RemoteComputer,
+  computer: Computer,
   blockId?: string,
   varName?: string
 ): Promise<DataViewElement> => {
@@ -52,7 +52,7 @@ const getInitialDataViewElement = async (
 export const insertDataViewBelow = async (
   editor: TEditor,
   path: Path,
-  computer: RemoteComputer,
+  computer: Computer,
   blockId?: string,
   varName?: string
 ): Promise<void> => {

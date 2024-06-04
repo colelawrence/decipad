@@ -1,4 +1,5 @@
-import type { AST, RemoteComputer, Program } from '@decipad/remote-computer';
+import type { AST } from '@decipad/language-interfaces';
+import type { Computer, Program } from '@decipad/computer-interfaces';
 import type {
   CodeLineV2Element,
   MinimalRootEditor,
@@ -52,7 +53,7 @@ const tryParseAsNumber: InteractiveLanguageElement['getParsedBlockFromElement'] 
  */
 export const parseStructuredCodeLine = async (
   editor: MinimalRootEditor | MyEditor,
-  computer: RemoteComputer,
+  computer: Computer,
   block: CodeLineV2Element
 ): Promise<{
   interpretedAs: 'code' | 'literal' | 'empty';

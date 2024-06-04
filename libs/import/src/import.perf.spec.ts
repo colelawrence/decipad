@@ -1,4 +1,5 @@
-import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer, materializeResult } from '@decipad/computer';
 import type { Server } from 'http';
 import { createServer } from 'http';
 import path from 'path';
@@ -41,7 +42,7 @@ describe('import performance', () => {
   it(
     'imports big(ish) csv',
     async () => {
-      const computer = getRemoteComputer();
+      const computer = getComputer();
       const address = getDefined(server.address());
       const file = '/bigish1.csv';
       const url =
@@ -72,7 +73,7 @@ describe('import performance', () => {
       // Wait a little bit, otherwise we get a fail here.
       await timeout(2000);
 
-      const computer = getRemoteComputer();
+      const computer = getComputer();
       const address = getDefined(server.address());
       const file = '/big1.csv';
       const url =

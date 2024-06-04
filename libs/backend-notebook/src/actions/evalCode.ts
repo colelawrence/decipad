@@ -1,4 +1,5 @@
-import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer, materializeResult } from '@decipad/computer';
 import { outputResult } from './utils/outputResult';
 import type { ServerSideNotebookApi } from '../types';
 import type { CustomAction } from '@decipad/notebook-open-api';
@@ -57,7 +58,7 @@ export const evalCode: CustomAction<
   requiresNotebook: false,
   requiresRootEditor: false,
   handler: async ({ code }) => {
-    const computer = getRemoteComputer();
+    const computer = getComputer();
 
     return new Promise((resolve) => {
       const sub = computer

@@ -1,10 +1,10 @@
-import type { RemoteComputer, Result } from '@decipad/remote-computer';
-import { isColumn } from '@decipad/remote-computer';
-import type { ImportOptions } from './import';
+import type { Computer } from '@decipad/computer-interfaces';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
-import type { ImportResult } from './types';
+import type { ImportOptions, ImportResult } from './types';
 import { sanitizeRawResult } from './utils/sanitizeRawResult';
+import type { Result } from '@decipad/language-interfaces';
+import { isColumn } from '@decipad/remote-computer';
 
 const unnestOneColumnOneCellIfNecessary = (
   result: Result.Result
@@ -25,7 +25,7 @@ const unnestOneColumnOneCellIfNecessary = (
 export type RawResult = JSON | string;
 
 const importFromUnknownResponse = async (
-  computer: RemoteComputer,
+  computer: Computer,
   resp: Response,
   options: ImportOptions,
   url?: URL
@@ -45,7 +45,7 @@ const importFromUnknownResponse = async (
       );
     }
     rawResult = sanitizeRawResult(await resp.json()) as RawResult | undefined;
-    result = await importFromUnknownJson(rawResult, options);
+    result = await importFromUnknownJson(computer, rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
     if (options.provider && options.provider !== 'csv') {
       throw new TypeError(
@@ -77,7 +77,7 @@ const importFromUnknownResponse = async (
 };
 
 const importFromUnknownUrl = async (
-  computer: RemoteComputer,
+  computer: Computer,
   url: URL,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {
@@ -91,7 +91,7 @@ const importFromUnknownUrl = async (
 };
 
 export const importFromUnknown = async (
-  computer: RemoteComputer,
+  computer: Computer,
   source: URL | Response,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {

@@ -169,7 +169,7 @@ describe('unnestTableRows', () => {
           `Matrix = [100, 200] * Table.Xs`
         ),
       });
-      await timeout(0);
+      await timeout(100);
     });
 
     it('can retrieve labels', async () => {
@@ -253,7 +253,7 @@ describe('unnestTableRows', () => {
         `Matrix = Table1.Xs * Table2.Ys`
       ),
     });
-    await timeout(0);
+    await timeout(100);
 
     const explanation = await computer.explainDimensions$.get(
       getDefined(computer.getBlockIdResult$.get('block-2'))

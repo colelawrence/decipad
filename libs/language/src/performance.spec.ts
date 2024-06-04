@@ -1,7 +1,6 @@
 import { N } from '@decipad/number';
 import type { AST, Result } from '@decipad/language-interfaces';
-import { serializeResult } from './result';
-import { runAST } from '.';
+import { runAST, serializeType, validateResult } from '.';
 import { anyMappingToMap } from '@decipad/utils';
 
 const TEST_COLUMN_LENGTH = 10_000;
@@ -112,18 +111,19 @@ describe.skip('language performance', () => {
       const timeSpan = Date.now() - startTime;
 
       // validate result
-      const result = serializeResult(r.type, r.value);
-      expect(result.type.kind).toBe('table');
-      if (result.type.kind === 'table') {
-        for (const columnType of result.type.columnTypes) {
+      const serializedResult = { type: serializeType(r.type), value: r.value };
+      validateResult(serializedResult.type, serializedResult.value);
+      expect(serializedResult.type.kind).toBe('table');
+      if (serializedResult.type.kind === 'table') {
+        for (const columnType of serializedResult.type.columnTypes) {
           // eslint-disable-next-line jest/no-conditional-expect
           expect(columnType.kind).toBe('number');
         }
       } else {
         throw new Error('Expected result to be table');
       }
-      expect(result.value).toHaveLength(1);
-      for (const colValue of result.value as Array<unknown>) {
+      expect(serializedResult.value).toHaveLength(1);
+      for (const colValue of serializedResult.value as Array<unknown>) {
         expect(colValue).toHaveLength(TEST_COLUMN_LENGTH);
       }
 

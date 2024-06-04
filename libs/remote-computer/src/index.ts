@@ -1,4 +1,3 @@
-export * from './types';
 export * from './remoteComputer';
 export * from './isRemoteComputer';
 
@@ -75,7 +74,6 @@ export {
   ScopedRealm,
   selectErrorFromResult,
   serializeType,
-  serializeResult,
   setErrorReporter,
   shadowExprRef,
   simpleValueToString,

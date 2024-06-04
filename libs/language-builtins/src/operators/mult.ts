@@ -4,7 +4,7 @@ import { Type } from '@decipad/language-types';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { binopBuiltin } from '../utils/binopBuiltin';
-import type { Functor } from '../interfaces';
+import type { Functor } from '../types';
 import { reverseFunctor } from '../utils/reverseFunctor';
 
 const multEval = (n1: Result.OneResult, n2: Result.OneResult) =>

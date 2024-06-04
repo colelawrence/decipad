@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
 import { getDefined, produce, getInstanceof } from '@decipad/utils';
 import { sort } from '@decipad/column';
@@ -12,7 +13,7 @@ import {
   buildType as t,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
-import { type BuiltinSpec, type Functor } from '../interfaces';
+import { type BuiltinSpec, type Functor } from '../types';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { binopFunctor } from '../utils/binopFunctor';
 import { add } from './add';
@@ -27,7 +28,7 @@ const removeUnit = produce((t: Type) => {
 const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
   const bValue = getDefined(values?.[1]);
 
-  let u: DeciNumber;
+  let u: DeciNumberBase;
   if (a.unit && a.unit.length > 0) {
     try {
       u = coherceToFraction(
@@ -287,7 +288,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   sqrt: {
     argCount: 1,
     fn: ([n]) => {
-      let result: DeciNumber | undefined;
+      let result: DeciNumberBase | undefined;
       try {
         result = coherceToFraction(n).pow(N(1, 2));
       } catch (err) {

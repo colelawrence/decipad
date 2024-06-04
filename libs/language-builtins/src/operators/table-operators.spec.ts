@@ -11,7 +11,7 @@ import {
 import { tableOperators as operators } from './table-operators';
 import { miscOperators } from './misc-operators';
 import { U, makeContext } from '../utils/testUtils';
-import type { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../types';
 
 setupDeciNumberSnapshotSerializer();
 

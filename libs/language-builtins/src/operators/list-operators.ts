@@ -11,7 +11,7 @@ import {
   serializeType,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
-import type { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../types';
 import { reverse, sort, unique } from '../utils/valueTransforms';
 import { coherceToFraction } from '../utils/coherceToFraction';
 

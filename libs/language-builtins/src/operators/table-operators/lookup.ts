@@ -11,7 +11,7 @@ import {
   RuntimeError,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
-import type { FullBuiltinSpec } from '../../interfaces';
+import type { FullBuiltinSpec } from '../../types';
 import { findIndex, map } from '@decipad/generator-utils';
 
 export const lookupFunctorNoAutomap: FullBuiltinSpec['functorNoAutomap'] =

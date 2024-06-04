@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { type MyEditor } from '@decipad/editor-types';
-import { type RemoteComputer } from '@decipad/remote-computer';
+import { type Computer } from '@decipad/computer-interfaces';
 import { type RootEditorController } from '@decipad/notebook-tabs';
 import { notAcceptable } from '@hapi/boom';
 import type { ZodFormattedError } from 'zod';
@@ -12,7 +12,7 @@ import { debug } from './debug';
 export interface CallActionOptions<Args extends Record<string, unknown>, Ret> {
   editor: RootEditorController;
   subEditor: MyEditor;
-  computer: RemoteComputer;
+  computer: Computer;
   action: CustomAction<Args, Ret>;
   params: unknown;
 }

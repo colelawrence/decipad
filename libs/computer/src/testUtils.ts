@@ -1,5 +1,5 @@
 import stringify from 'json-stringify-safe';
-import type { AST, Result } from '@decipad/language-interfaces';
+import type { AST, Result, Unit as TUnit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   astNode,
@@ -24,13 +24,9 @@ import type {
 import { Computer } from '.';
 import { getDefinedSymbol, getIdentifierString } from './utils';
 import { programToComputerProgram } from './utils/programToComputerProgram';
-import type { Unit } from '@decipad/language-units';
 import { formatError } from './format/formatError';
 
-export function u(
-  unit: string | Unit.Unit,
-  opts: Partial<Unit.Unit> = {}
-): Unit.Unit {
+export function u(unit: string | TUnit, opts: Partial<TUnit> = {}): TUnit {
   if (typeof unit === 'string') {
     unit = {
       unit,
@@ -43,9 +39,9 @@ export function u(
 }
 
 export function U(
-  units: string | Unit.Unit | Unit.Unit[],
-  opts?: Partial<Unit.Unit>
-): Unit.Unit[] {
+  units: string | TUnit | TUnit[],
+  opts?: Partial<TUnit>
+): TUnit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
   return unitsArr.map((unit) => u(unit, opts));
 }
@@ -95,7 +91,7 @@ export const testProgram = (
 
 export const computerWithBlocks = async (...blocks: (AST.Block | string)[]) => {
   const computer = new Computer({ initialProgram: testProgram(...blocks) });
-  await timeout(0); // debounceMs
+  await timeout(100); // debounceMs
   return computer;
 };
 

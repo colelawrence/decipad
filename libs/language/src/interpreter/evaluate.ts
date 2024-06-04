@@ -10,9 +10,10 @@ import {
   resultToValue,
 } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import type { TRealm, TScopedRealm } from '..';
 import { prettyPrintAST } from '..';
-import { getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
 import { expandDirectiveToValue } from '../directives';
 import { columnFromDateSequence, columnFromSequence } from '../value';

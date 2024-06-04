@@ -1,4 +1,4 @@
-import type { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../types';
 
 export const booleanOperators: Record<string, BuiltinSpec> = {
   '!': {

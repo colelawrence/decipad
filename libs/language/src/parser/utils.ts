@@ -1,7 +1,12 @@
 import stringify from 'json-stringify-safe';
 import DeciNumber, { N } from '@decipad/number';
 import type { AST } from '@decipad/language-interfaces';
-import { getIdentifierString, isNode, isStatement } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  getIdentifierString,
+  isNode,
+  isStatement,
+} from '@decipad/language-utils';
 
 // eslint-disable-next-line complexity
 export const prettyPrintAST = (node: AST.Node, indent = 0): string => {

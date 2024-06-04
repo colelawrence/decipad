@@ -2,7 +2,8 @@ import { tables } from '@architect/functions';
 import { indexNotebook } from '@decipad/backend-search';
 import { getStoredSnapshot } from '@decipad/services/notebooks';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
-import { getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import { PublishedVersionName } from '@decipad/interfaces';
 
 const SNAPSHOT_NAME = PublishedVersionName.Published;
@@ -18,7 +19,7 @@ export const maybeUpdateSearchIndex = async (
   if (notebook.isTemplate) {
     const snapshotContent = await getStoredSnapshot(notebookId, SNAPSHOT_NAME);
     if (snapshotContent) {
-      const verbalized = verbalizeDoc(snapshotContent.doc, getRemoteComputer())
+      const verbalized = verbalizeDoc(snapshotContent.doc, getComputer())
         .verbalized.map((v) => v.verbalized)
         .join('\n\n');
       await indexNotebook(notebook, verbalized);

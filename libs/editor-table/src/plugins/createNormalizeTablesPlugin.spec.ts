@@ -1,3 +1,5 @@
+import type { TEditor, TElement } from '@udecode/plate-common';
+import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -7,10 +9,8 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import type { TEditor, TElement } from '@udecode/plate-common';
-import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
+import { getComputer } from '@decipad/computer';
 import { createTablePlugin } from './createTablePlugin';
-import { getRemoteComputer } from '@decipad/remote-computer';
 
 let editor: TEditor;
 
@@ -26,7 +26,7 @@ jest.mock('nanoid', () => {
 });
 
 beforeEach(() => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   editor = createPlateEditor({
     plugins: [createTablePlugin(computer)],
   });

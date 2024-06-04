@@ -1,4 +1,5 @@
-import { assign, block, c, col, l, prop, table } from '../../utils';
+// eslint-disable-next-line no-restricted-imports
+import { assign, block, c, col, l, prop, table } from '@decipad/language-utils';
 import { prettyPrintAST } from '../utils';
 
 it('can pretty print the AST', () => {

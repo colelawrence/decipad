@@ -4,6 +4,7 @@ import {
   defaultConvertInto,
   defaultTextConversions,
 } from '@decipad/editor-utils';
+import { isElement } from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 export const useTurnIntoProps = (element: MyElement) => {
@@ -14,7 +15,10 @@ export const useTurnIntoProps = (element: MyElement) => {
     [editor, element]
   );
   const turnInto = useMemo(
-    () => defaultTextConversions.filter(({ value }) => value !== element.type),
+    () =>
+      defaultTextConversions.filter(
+        ({ value }) => isElement(element) && value !== element.type
+      ),
     [element]
   );
 

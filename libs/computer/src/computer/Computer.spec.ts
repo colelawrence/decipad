@@ -465,7 +465,7 @@ describe('tooling data', () => {
       },
     });
 
-    const names = computer.getNamesDefined();
+    const names = await computer.getNamesDefined();
     expect(names).toMatchObject([
       {
         kind: 'variable',
@@ -665,7 +665,7 @@ describe('can retrieve columns indexed by a table', () => {
         `Table.Xs * 2`
       ),
     });
-    await timeout(0);
+    await timeout(100);
   });
 
   it('can get columns indexed by a table', () => {
@@ -692,7 +692,7 @@ it('can list tables and columns', async () => {
     ),
   });
 
-  await timeout(0);
+  await timeout(100);
 
   const columns = computer.getAllColumns$.get();
   const tables = computer.getAllTables$.get();

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
@@ -25,7 +26,6 @@ import {
   parseExpression,
   parseExpressionOrThrow,
   runCode,
-  serializeResult,
   deserializeType,
   serializeType,
   buildResult,
@@ -40,6 +40,7 @@ import {
 } from '@decipad/utils';
 import type {
   BlockResult,
+  Computer as ComputerInterface,
   ComputerProgram,
   IdentifiedError,
   IdentifiedResult,
@@ -51,6 +52,7 @@ import type {
   TableDesc,
   ComputeDeltaRequest,
 } from '@decipad/computer-interfaces';
+import { listenerHelper } from '@decipad/listener-helper';
 import { findNames } from '../autocomplete';
 import { computeProgram } from '../compute/computeProgram';
 import { blocksInUse, isInUse, programDependencies } from '../dependencies';
@@ -59,7 +61,6 @@ import {
   programWithAbstractNamesAndReferences,
   statementWithAbstractRefs,
 } from '../exprRefs';
-import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
 import { ResultStreams } from '../resultStreams';
 import {
@@ -85,6 +86,7 @@ import { statementToML } from '../mathML/statementToML';
 import { count, first } from '@decipad/generator-utils';
 import { updateProgram } from './updateProgram';
 import type { ComputeDeltaRequestWithDone } from '../../../computer-interfaces/src/types';
+import { serializeResult } from '@decipad/computer-utils';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -96,7 +98,7 @@ export interface IngestComputeRequestResponse {
   program: ComputerProgram;
 }
 
-export class Computer {
+export class Computer implements ComputerInterface {
   private latestProgram: ComputerProgram = emptyComputerProgram();
   public latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm({
@@ -112,8 +114,13 @@ export class Computer {
   private readonly computeRequests = new Subject<ComputeDeltaRequestWithDone>();
   private resultStreams = new ResultStreams(this);
   public results = this.resultStreams.global;
-
   private flushedSubject = new BehaviorSubject<boolean>(true);
+
+  private deltaQueue = fnQueue({
+    onError: (err) => {
+      console.error('error on computer delta queue:', err);
+    },
+  });
 
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
@@ -122,32 +129,7 @@ export class Computer {
     }
   }
 
-  async getExternalData(): Promise<
-    Map<
-      string,
-      [
-        id: string,
-        injectedResult: Result.Result<
-          | 'string'
-          | 'number'
-          | 'boolean'
-          | 'function'
-          | 'column'
-          | 'materialized-column'
-          | 'table'
-          | 'tree'
-          | 'materialized-table'
-          | 'row'
-          | 'date'
-          | 'range'
-          | 'pending'
-          | 'nothing'
-          | 'anything'
-          | 'type-error'
-        >
-      ][]
-    >
-  > {
+  async getExternalData(): Promise<ExternalDataMap> {
     throw new Error('Method not implemented.');
   }
   async getExtraProgramBlocks(): Promise<Map<string, ProgramBlock[]>> {
@@ -159,28 +141,33 @@ export class Computer {
       return Promise.resolve();
     }
 
-    return new Promise<void>((resolve) => {
-      if (req.external?.upsert) {
-        // TODO: we need to update the external data map, for now...
-        this.latestExternalData = new Map([
-          ...this.latestExternalData,
-          ...anyMappingToMap(req.external.upsert),
-        ]);
-      }
-      if (req.external?.remove) {
-        // TODO: we need to update the external data map, for now...
-        for (const key of req.external.remove) {
-          this.latestExternalData = new Map(
-            Object.entries(this.latestExternalData).filter(([k]) => k !== key)
-          );
-        }
-      }
+    return this.deltaQueue.push(
+      async () =>
+        new Promise<void>((resolve) => {
+          if (req.external?.upsert) {
+            // TODO: we need to update the external data map, for now...
+            this.latestExternalData = new Map([
+              ...this.latestExternalData,
+              ...anyMappingToMap(req.external.upsert),
+            ]);
+          }
+          if (req.external?.remove) {
+            // TODO: we need to update the external data map, for now...
+            for (const key of req.external.remove) {
+              this.latestExternalData = new Map(
+                Object.entries(this.latestExternalData).filter(
+                  ([k]) => k !== key
+                )
+              );
+            }
+          }
 
-      this.computeRequests.next({
-        ...req,
-        done: resolve,
-      });
-    });
+          this.computeRequests.next({
+            ...req,
+            done: resolve,
+          });
+        })
+    );
   }
 
   public async pushProgramBlocks(blocks: ProgramBlock[]): Promise<void> {
@@ -217,10 +204,10 @@ export class Computer {
     });
   }
 
-  public async pushExternalDataDelete(key: string): Promise<void> {
+  public async pushExternalDataDelete(key: string[]): Promise<void> {
     return new Promise<void>((resolve) => {
       this.computeRequests.next({
-        external: { remove: [key] },
+        external: { remove: key },
         done: resolve,
       });
     });
@@ -406,17 +393,21 @@ export class Computer {
     (_, blockId: string) => this.getParseableTypeInBlock(blockId)
   );
 
-  /**
-   * Get names for the autocomplete, and information about them
-   */
-  getNamesDefined(inBlockId?: string): AutocompleteName[] {
+  private _getNamesDefined(inBlockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram.asSequence);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
     return Array.from(findNames(this, program, toIgnore, inBlockId));
   }
 
+  /**
+   * Get names for the autocomplete, and information about them
+   */
+  async getNamesDefined(inBlockId?: string): Promise<AutocompleteName[]> {
+    return this._getNamesDefined(inBlockId);
+  }
+
   getNamesDefined$ = listenerHelper(this.results, (_, inBlockId?: string) =>
-    this.getNamesDefined(inBlockId)
+    this._getNamesDefined(inBlockId)
   );
 
   getFunctionDefinition(_funcName: string): AST.FunctionDefinition | undefined {
@@ -432,8 +423,7 @@ export class Computer {
     this.getFunctionDefinition(funcName)
   );
 
-  /** Does `name` exist? Ignores a block ID if you pass the second argument */
-  variableExists(name: string, inBlockIds?: string[]) {
+  private _variableExists(name: string, inBlockIds?: string[]) {
     return this.latestProgram.asSequence.some((p) => {
       // Skip own block
       if (inBlockIds?.includes(p.id)) {
@@ -450,6 +440,14 @@ export class Computer {
         return false;
       }
     });
+  }
+
+  /** Does `name` exist? Ignores a block ID if you pass the second argument */
+  async variableExists(
+    name: string,
+    inBlockIds?: string[] | undefined
+  ): Promise<boolean> {
+    return this._variableExists(name, inBlockIds);
   }
 
   /**
@@ -894,10 +892,14 @@ export class Computer {
     this.wireRequestsToResults();
   }
 
-  getStatement(blockId: string): AST.Statement | undefined {
+  _getStatement(blockId: string): AST.Statement | undefined {
     const block = this.latestProgram?.asBlockIdMap.get(blockId)?.block;
 
     return block?.args[0];
+  }
+
+  async getStatement(blockId: string): Promise<AST.Statement | undefined> {
+    return this._getStatement(blockId);
   }
 
   /**
@@ -934,7 +936,7 @@ export class Computer {
    * Parses a unit from text.
    * NOTE: Don't use with '%', percentages are NOT units. I will crash
    */
-  async getUnitFromText(text: string): Promise<Unit.Unit[] | null> {
+  async getUnitFromText(text: string): Promise<Unit[] | null> {
     if (text.trim() === '%') {
       throw new Error('% is not a unit!');
     }

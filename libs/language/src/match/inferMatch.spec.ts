@@ -1,7 +1,8 @@
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
-import { match, matchDef, n } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { match, matchDef, n } from '@decipad/language-utils';
 import { inferMatch } from './inferMatch';
 import { ScopedRealm, makeInferContext } from '../scopedRealm';
 

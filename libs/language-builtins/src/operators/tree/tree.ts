@@ -1,4 +1,4 @@
-import type { FullBuiltinSpec } from '../../interfaces';
+import type { FullBuiltinSpec } from '../../types';
 import { treeFunctor } from './treeFunctor';
 import { treeValue } from './treeValue';
 

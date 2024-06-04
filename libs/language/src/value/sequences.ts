@@ -2,6 +2,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError, Time, Value } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
+import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber, { N } from '@decipad/number';
 import { getDefined, getInstanceof } from '@decipad/utils';
 
@@ -19,7 +20,7 @@ export async function columnFromSequence(
   );
 
   const by = byV
-    ? ((await byV.getData()) as DeciNumber)
+    ? ((await byV.getData()) as DeciNumberBase)
     : start.compare(end) < 0
     ? N(1)
     : N(-1);
@@ -27,7 +28,7 @@ export async function columnFromSequence(
   const array = [];
 
   // helper to allow decreasing sequences
-  const cmpFn = (s: DeciNumber, e: DeciNumber, i: DeciNumber) => {
+  const cmpFn = (s: DeciNumberBase, e: DeciNumberBase, i: DeciNumberBase) => {
     return s.compare(e) < 0 ? i.compare(e) <= 0 : i.compare(e) >= 0;
   };
 

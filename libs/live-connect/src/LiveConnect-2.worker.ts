@@ -3,10 +3,11 @@ import './utils/workerPolyfills';
 import { nanoid } from 'nanoid';
 import type { ImportResult } from '@decipad/import';
 import { tryImport } from '@decipad/import';
-import type { RemoteComputer } from '@decipad/remote-computer';
-import { getRemoteComputer, setErrorReporter } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer, setErrorReporter } from '@decipad/computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { createWorkerWorker } from '@decipad/remote-computer-worker/worker';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   Observe,
   SubscribeParams,
@@ -38,7 +39,7 @@ const reply = async (
 };
 
 const tryImportHere = async (
-  computer: RemoteComputer,
+  computer: Computer,
   subscriptionId: SubscriptionId
 ) => {
   const sub = subscriptions.get(subscriptionId);
@@ -75,7 +76,7 @@ const tryImportHere = async (
   }
 };
 
-const schedule = (computer: RemoteComputer, subscriptionId: SubscriptionId) => {
+const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     setTimeout(
@@ -192,7 +193,7 @@ const subscribeInternal = async (
       onError(subscriptionId, params)
     );
   } else {
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     schedule(computer, subscriptionId);
     setTimeout(() => {
       tryImportHere(computer, subscriptionId);

@@ -8,7 +8,7 @@
   "include": ["src", "storybook"],
   "references": [
     {
-      "path": "../remote-computer"
+      "path": "../computer-interfaces"
     },
     {
       "path": "../utils"

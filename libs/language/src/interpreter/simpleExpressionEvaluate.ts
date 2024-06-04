@@ -4,7 +4,8 @@ import type { AST } from '@decipad/language-interfaces';
 import { Value, InferError } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltin } from '@decipad/language-builtins';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { getOfType } from '../parser/getOfType';
 import type { TRealm } from '../scopedRealm';
 

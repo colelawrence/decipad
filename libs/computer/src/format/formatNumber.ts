@@ -1,4 +1,4 @@
-import type { AST } from '@decipad/language-interfaces';
+import type { AST, Unit as TUnit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Unit } from '@decipad/language';
 import type DeciNumber from '@decipad/number';
@@ -17,9 +17,14 @@ import {
   isEdgeCaseNumber,
 } from './formatEdgeCaseNumbers';
 import { formatTime, isTimeUnit } from './formatTime';
-import type { UnitPart } from './formatUnit';
 import { formatUnitAsParts, isUserDefined, prettyENumbers } from './formatUnit';
 import { getCurrency, getPrettyCurrency, hasCurrency } from './getCurrency';
+import type {
+  DeciNumberFormatOptions,
+  DeciNumberPart,
+  DeciNumberRep,
+  IntermediateDeciNumber,
+} from './types';
 
 const DEFAULT_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
   maximumFractionDigits: 2,
@@ -55,34 +60,6 @@ const SCIENTIFIC_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
   minimumFractionDigits: 0,
   notation: 'scientific',
 };
-
-export type DeciNumberPart = (
-  | Intl.NumberFormatPart
-  | { type: 'ellipsis'; value: string }
-  | { type: 'roughly'; value: string }
-) & {
-  originalValue?: string;
-  partsOf?: UnitPart[];
-};
-
-export type DeciNumberFormatOptions = {
-  financialString: string;
-  preciseString: string;
-  scientificString: string;
-};
-
-export type DeciNumberRep = {
-  isPrecise: boolean;
-  value: number;
-  asString: string;
-  asStringPrecise: string;
-  formatOptions: DeciNumberFormatOptions | null;
-  partsOf: DeciNumberPart[];
-};
-
-export type UnionDeciNumberRep = DeciNumberRep;
-
-export type IntermediateDeciNumber = Omit<DeciNumberRep, 'asString'>;
 
 function beautifyExponents(partsOf: DeciNumberPart[]): DeciNumberPart[] {
   const unclean = partsOf.reduce((acc, e) => {
@@ -275,11 +252,7 @@ const formatToParts = (
   };
 };
 
-function formatCurrency(
-  locale: string,
-  unit: Unit.Unit[],
-  fraction: DeciNumber
-) {
+function formatCurrency(locale: string, unit: TUnit[], fraction: DeciNumber) {
   const currency = getCurrency(unit);
 
   const numberFormatOptions: Intl.NumberFormatOptions = {
@@ -331,7 +304,7 @@ function formatUnitless(
 
 function formatUserDefinedUnit(
   locale: string,
-  unit: Unit.Unit[],
+  unit: TUnit[],
   fraction: DeciNumber
 ) {
   const args: Intl.NumberFormatOptions = { ...DEFAULT_NUMBER_OPTIONS };
@@ -363,7 +336,7 @@ function formatUserDefinedUnit(
 
 export function formatAnyUnit(
   locale: string,
-  units: Unit.Unit[],
+  units: TUnit[],
   fraction: DeciNumber
 ) {
   const args = { ...DEFAULT_NUMBER_OPTIONS };
@@ -388,11 +361,11 @@ export function formatAnyUnit(
 
 function formatAnyCurrency(
   locale: string,
-  units: Unit.Unit[],
+  units: TUnit[],
   fraction: DeciNumber
 ) {
   const currencyIndex = hasCurrency(units);
-  const currencyUnit: Unit.Unit[] = [units[currencyIndex]];
+  const currencyUnit: TUnit[] = [units[currencyIndex]];
 
   const unitsWithoutCurrency = [...units];
   unitsWithoutCurrency.splice(currencyIndex, 1);
@@ -440,7 +413,7 @@ function formatAnyCurrency(
 //
 export function formatNumber(
   locale: string,
-  unit: Unit.Unit[] | null | undefined,
+  unit: TUnit[] | null | undefined,
   number: DeciNumber,
   numberFormat: AST.NumberFormat | null = undefined,
   imprecise = false

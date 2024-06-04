@@ -1,6 +1,6 @@
 import type { ImportElementSource } from '@decipad/editor-types';
 import { once } from '@decipad/utils';
-import type { InsertLiveConnectionProps } from '../InteractiveParagraph/insertLiveConnection';
+import type { InsertLiveConnectionProps } from '../types';
 
 const sourcesThatNeedExternalData = once(
   () =>

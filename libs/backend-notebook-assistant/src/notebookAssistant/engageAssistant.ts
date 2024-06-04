@@ -13,7 +13,8 @@ import { track } from '@decipad/backend-analytics';
 import type { User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
-import { getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import {
   CONVERSATION_SYSTEM_PROMPT,
   CREATION_SYSTEM_PROMPT,
@@ -103,7 +104,7 @@ export const engageAssistant = async ({
   let idMapping: string;
 
   try {
-    const { verbalized } = verbalizeDoc(doc, getRemoteComputer());
+    const { verbalized } = verbalizeDoc(doc, getComputer());
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
     idMapping = verbalized

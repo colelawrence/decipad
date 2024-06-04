@@ -5,11 +5,12 @@ import type {
   ColumnMenuDropdown,
   TableCellType,
 } from '@decipad/editor-types';
+import type { Unit } from '@decipad/language-interfaces';
 import { formatUnit } from '@decipad/format';
 import { commonCurrencies } from '@decipad/language-units';
 import { N, ONE } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
-import { Unit, UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
+import { UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { cssVar, p12Medium } from 'libs/ui/src/primitives';
@@ -77,7 +78,7 @@ interface TableColumnMenuProps
 }
 
 const sameUnits = (
-  unit: Unit.Unit[] | null | undefined,
+  unit: Unit[] | null | undefined,
   um: UnitOfMeasure
 ): boolean => {
   if (!unit || unit.length !== 1) {
@@ -193,7 +194,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                           known: true,
                           unit: unit.name,
                           baseSuperQuantity: unit.superBaseQuantity,
-                          baseQuantity: unit.name as Unit.Unit['baseQuantity'],
+                          baseQuantity: unit.name as Unit['baseQuantity'],
                         },
                       ])
                     )

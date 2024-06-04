@@ -1,13 +1,13 @@
+import { Computer } from '@decipad/computer-interfaces';
 import { ELEMENT_CODE_LINE, MyAutoformatRule } from '@decipad/editor-types';
 import {
   insertStructuredCodeLineBelowOrReplace,
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
-import { RemoteComputer } from '@decipad/remote-computer';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatCodeBlocks = (
-  computer: RemoteComputer
+  computer: Computer
 ): MyAutoformatRule[] => [
   {
     mode: 'block',

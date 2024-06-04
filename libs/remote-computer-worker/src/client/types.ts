@@ -3,8 +3,15 @@ import type {
   SerializedTypes,
   Result,
 } from '@decipad/language-interfaces';
+import type { PromiseOrType } from '@decipad/utils';
 import type { SharedRPC } from '../utils/SharedRPC';
-import type { RecursiveDecoder } from './valueDecoder';
+
+export type RecursiveDecoder = (
+  type: SerializedType,
+  buffer: DataView,
+  offset: number,
+  decoders: Record<SerializedType['kind'], RecursiveDecoder>
+) => PromiseOrType<[Result.OneResult, number]>;
 
 export interface ClientWorkerContext {
   rpc: SharedRPC;
@@ -22,3 +29,8 @@ export type StreamingValue = (
   valueId: string,
   decoders: Record<SerializedType['kind'], RecursiveDecoder>
 ) => Promise<Result.ResultColumn | Result.ResultTable>;
+
+export type ValueDecoder = (
+  buffer: DataView,
+  offset: number
+) => PromiseOrType<[Result.OneResult, number]>;

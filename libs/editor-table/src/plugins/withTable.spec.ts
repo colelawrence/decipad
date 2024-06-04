@@ -1,9 +1,8 @@
 import type { PlatePlugin, TEditor } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
-
 import { nanoid } from 'nanoid';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_PARAGRAPH,
@@ -23,7 +22,7 @@ describe('withTable', () => {
     editor = createPlateEditor({
       plugins: [
         createNodeIdPlugin({ options: { idCreator: nanoid } }),
-        createTablePlugin(getRemoteComputer()) as PlatePlugin,
+        createTablePlugin(getComputer()) as PlatePlugin,
       ],
     });
   });

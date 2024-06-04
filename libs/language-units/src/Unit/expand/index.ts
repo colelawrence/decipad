@@ -1,7 +1,7 @@
-import type DeciNumber from '@decipad/number';
-import type { Unit } from '../Unit';
+import type { Unit } from '@decipad/language-interfaces';
+import type { DeciNumberBase } from '@decipad/number';
 
-export type Converter = (n: DeciNumber) => DeciNumber;
+export type Converter = (n: DeciNumberBase) => DeciNumberBase;
 export type ExpandUnitResult = [Unit[], Converter];
 export type ExpandUnitResultWithNullableUnits = [
   Unit[] | undefined | null,

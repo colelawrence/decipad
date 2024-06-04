@@ -6,13 +6,14 @@ import {
   buildType as t,
   Value,
 } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { c, col, l, matrixAssign, matrixRef, r } from '@decipad/language-utils';
 import {
   evaluateMatrixAssign,
   evaluateMatrixRef,
   inferMatrixRef,
   inferMatrixAssign,
 } from '.';
-import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
 import type { ScopedInferContext } from '../scopedRealm';
 import { makeInferContext, ScopedRealm } from '../scopedRealm';
 

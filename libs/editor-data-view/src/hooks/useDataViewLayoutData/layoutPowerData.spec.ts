@@ -1,19 +1,10 @@
-import type {
-  AST,
-  IdentifiedBlock,
-  Program,
-  Result,
-} from '@decipad/remote-computer';
-import {
-  Unknown,
-  buildResult,
-  decilang,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
-import { Value } from '@decipad/language-types';
-import { layoutPowerData } from './layoutPowerData';
 import { nanoid } from 'nanoid';
+import { type Result, type AST, Unknown } from '@decipad/language-interfaces';
+import type { IdentifiedBlock, Program } from '@decipad/computer-interfaces';
+import { Value } from '@decipad/language-types';
 import { getDefined } from '@decipad/utils';
+import { buildResult, decilang, getComputer } from '@decipad/computer';
+import { layoutPowerData } from './layoutPowerData';
 
 const programBlock = (
   statement: AST.Statement,
@@ -57,7 +48,7 @@ describe('layoutPowerData', () => {
   });
 
   it('works with one column one group tree', async () => {
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     const results = await computer.computeDeltaRequest({
       program: {
         upsert: toProgram([
@@ -145,7 +136,7 @@ describe('layoutPowerData', () => {
   });
 
   it('works with one column one group tree and aggregation', async () => {
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     const results = await computer.computeDeltaRequest({
       program: {
         upsert: toProgram([
@@ -257,7 +248,7 @@ describe('layoutPowerData', () => {
   });
 
   it('works with two column two groups tree and aggregation', async () => {
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     const results = await computer.computeDeltaRequest({
       program: {
         upsert: toProgram([

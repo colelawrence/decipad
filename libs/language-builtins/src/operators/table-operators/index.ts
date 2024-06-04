@@ -1,6 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-// eslint-disable-next-line no-restricted-imports
-import type { BuiltinSpec } from '../../interfaces';
+import type { BuiltinSpec } from '../../types';
 import { tree } from '../tree';
 import { lookupFunctorNoAutomap, lookupValuesNoAutomap } from './lookup';
 import { sortByFunctorNoAutomap, sortyByValuesNoAutomap } from './sortby';

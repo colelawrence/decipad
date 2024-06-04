@@ -1,8 +1,5 @@
-import type {
-  RemoteComputer,
-  Result,
-  SerializedType,
-} from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { Result, SerializedType } from '@decipad/remote-computer';
 import {
   Unit,
   materializeResult,
@@ -118,7 +115,7 @@ function displayTimeUnitType(type: SerializedType): TimeUnit | undefined {
 }
 
 export function encodingFor(
-  _computer: RemoteComputer,
+  _computer: Computer,
   columnName: string,
   columnType: SerializedType,
   markType: PlotElement['markType']
@@ -142,7 +139,7 @@ export function encodingFor(
 
 // eslint-disable-next-line complexity
 export function specFromType(
-  computer: RemoteComputer,
+  computer: Computer,
   type: undefined | SerializedType,
   displayProps: DisplayProps
 ): undefined | PlotSpec {

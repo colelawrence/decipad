@@ -1,18 +1,18 @@
 import type { Selection } from 'slate';
+import type { Computer } from '@decipad/computer-interfaces';
 import { dequal } from '@decipad/utils';
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPluginFactory } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
 type OnCursorChangePlugin = (
   editor: MyEditor,
-  computer?: RemoteComputer
+  computer?: Computer
 ) => (selection: Selection) => void;
 
 export const createOnCursorChangePluginFactory = (
   name: string,
   plugin: OnCursorChangePlugin,
-  computer?: RemoteComputer
+  computer?: Computer
 ) =>
   createMyPluginFactory({
     key: name,

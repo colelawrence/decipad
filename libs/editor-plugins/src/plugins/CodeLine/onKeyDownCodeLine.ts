@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 /* tested in apps/client-e2e/src/notebook-calculation-block.ts */
 import type React from 'react';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate-common';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   focusAndSetSelection,
   insertCodeLineBelow,
@@ -36,7 +36,7 @@ const findCodeLineParentEntry = (editor: MyEditor) => {
 };
 
 export const onKeyDownCodeLine =
-  (computer: RemoteComputer) =>
+  (computer: Computer) =>
   (editor: MyEditor) =>
   (event: React.KeyboardEvent<Element>) => {
     if (event.key !== 'Enter') return;

@@ -5,11 +5,6 @@
     "jsx",
     "tsx"
   ],
-  "detectiveOptions": {
-    "ts": {
-      "skipTypeImports": true
-    }
-  },
   "excludeRegExp": [
     "debug.ts",
     "meta/authentication/next-auth.d.ts",

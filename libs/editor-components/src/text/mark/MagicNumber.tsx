@@ -1,7 +1,7 @@
 import { getExprRef } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
 import type {
-  MyElement,
+  AnyElement,
   PlateComponent,
   RichText,
 } from '@decipad/editor-types';
@@ -131,7 +131,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
           expression={exp}
           onClick={onClick}
           readOnly={readOnly}
-          element={element}
+          element={element as AnyElement}
           isReference={sourceId !== undefined}
         />
         {shadow.portal}
@@ -223,6 +223,6 @@ function useMagicNumberId(text: RichText) {
 
     if (!entry) return '';
 
-    return magicNumberId(entry[0] as MyElement, path[path.length - 1]);
+    return magicNumberId(entry[0] as AnyElement, path[path.length - 1]);
   });
 }

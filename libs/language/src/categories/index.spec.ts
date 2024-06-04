@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { Value, buildType as t } from '@decipad/language-types';
-import { col, categories } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { col, categories } from '@decipad/language-utils';
 import { inferCategories } from '.';
 import type { ScopedInferContext, TRealm } from '../scopedRealm';
 import { ScopedRealm, makeInferContext } from '../scopedRealm';

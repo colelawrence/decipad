@@ -2,7 +2,8 @@ import { getDefined } from '@decipad/utils';
 import type { AST, Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult } from '@decipad/language-types';
-import { block } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { block } from '@decipad/language-utils';
 import { inferProgram } from '../infer';
 import { evaluate } from './evaluate';
 import { evaluateTargets } from './selective';

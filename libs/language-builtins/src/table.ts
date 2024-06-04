@@ -1,8 +1,8 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N } from '@decipad/number';
 
 export const approximateSubsetSumIndices = (
-  upperBound: DeciNumber,
+  upperBound: DeciNumberBase,
   table: unknown[][],
   columnIndex: number
 ): number[] => {

@@ -4,7 +4,8 @@ import type {
   APIGatewayProxyEventV2,
 } from 'aws-lambda';
 import stringify from 'json-stringify-safe';
-import { getRemoteComputer } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { getComputer } from '@decipad/computer';
 import type {
   CustomAction,
   ActionResultWithNotebookError,
@@ -44,7 +45,7 @@ export const server = async (
     properties: params,
   });
 
-  const computer = getRemoteComputer();
+  const computer = getComputer();
 
   let result: MaybeWrappedInActionResult<ReturnType<typeof action.handler>>;
   if (action.requiresNotebook) {

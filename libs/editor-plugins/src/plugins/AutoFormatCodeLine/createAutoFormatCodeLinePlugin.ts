@@ -1,5 +1,5 @@
 import { getAnalytics } from '@decipad/client-events';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { getExprRef } from '@decipad/remote-computer';
 import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
 import type {
@@ -61,7 +61,7 @@ export const createAutoFormatCodeLinePlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ) =>
   createOnKeyDownPluginFactory<TV, TE>({
     name: pluginName,
@@ -195,7 +195,7 @@ const commitPotentialFormula = <
   TE extends MyGenericEditor<TV>
 >(
   editor: TE,
-  computer: RemoteComputer,
+  computer: Computer,
   expressionRange: BaseRange,
   onCommit: (ref: ShadowCalcReference) => void,
   id?: string

@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { Type, buildType as t, compare } from '@decipad/language-types';
-import type { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
+import type { BuiltinSpec, FullBuiltinSpec } from '../types';
 import { narrowFunctionCall } from '../narrowing';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

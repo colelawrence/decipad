@@ -36,7 +36,6 @@ export {
   RuntimeError,
   ScopedRealm,
   serializeType,
-  serializeResult,
   simpleValueToString,
   STATEMENT_SEP_TOKEN_TYPE,
   Time,

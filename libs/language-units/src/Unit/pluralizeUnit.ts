@@ -1,8 +1,7 @@
 import { produce } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import { pluralize } from '@decipad/language-utils';
+import type { Unit } from '@decipad/language-interfaces';
 import { isKnownSymbol } from '../units/known-units';
-import type { Unit } from './Unit';
+import { pluralize } from '../utils/langPluralize';
 
 export const pluralizeUnit = (
   baseUnit: Unit,

@@ -11,8 +11,9 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import { callBuiltinFunctor } from '@decipad/language-builtins';
 import type { AST } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { inferExpression, inferStatement } from '.';
-import { getIdentifierString } from '../utils';
 import { logRetrievedName } from './logRetrievedName';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';

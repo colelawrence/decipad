@@ -3,7 +3,7 @@ import { Type } from '@decipad/language-types';
 import { coherceToFraction } from '../utils/coherceToFraction';
 import { binopBuiltin } from '../utils/binopBuiltin';
 import { overloadBuiltin } from '../overloadBuiltin';
-import type { Functor } from '../interfaces';
+import type { Functor } from '../types';
 import { reverseFunctor } from '../utils/reverseFunctor';
 
 const divFunctor: Functor = async ([a, b]) =>

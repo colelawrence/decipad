@@ -7,7 +7,7 @@ import {
 } from './overloadBuiltin';
 import { makeContext } from './utils/testUtils';
 import { getDefined } from '@decipad/utils';
-import type { FullBuiltinSpec } from './interfaces';
+import type { FullBuiltinSpec } from './types';
 
 const numberPlus: FullBuiltinSpec = {
   argCount: 2,

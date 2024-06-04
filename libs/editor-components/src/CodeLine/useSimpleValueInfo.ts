@@ -1,17 +1,18 @@
 import { useCallback, useMemo } from 'react';
-import type { RemoteComputer, AST } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { AST } from '@decipad/language-interfaces';
+import type { CodeLineV2Element } from '@decipad/editor-types';
 import {
   simpleValueToString,
   parseSimpleValueUnit,
   parseSimpleValue,
 } from '@decipad/remote-computer';
-import type { CodeLineV2Element } from '@decipad/editor-types';
 import { ELEMENT_SMART_REF, useMyEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { findNodePath, insertText } from '@udecode/plate-common';
 
 export function useSimpleValueInfo(
-  computer: RemoteComputer,
+  computer: Computer,
   element: CodeLineV2Element,
   sourceCode: string
 ) {

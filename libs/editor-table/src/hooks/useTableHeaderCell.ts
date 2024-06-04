@@ -1,4 +1,4 @@
-import { type Unit } from '@decipad/remote-computer';
+import type { Unit } from '@decipad/language-interfaces';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import type {
   CellValueType,
@@ -39,7 +39,7 @@ export interface UseTableHeaderCellResult {
   isOver: boolean;
   dropTarget: ConnectDropTarget;
   dropDirection: 'left' | 'right' | undefined;
-  parseUnit: (text: string) => Promise<Unit.Unit[] | null>;
+  parseUnit: (text: string) => Promise<Unit[] | null>;
   columnIndex: number | undefined;
   path: Path | undefined;
   inferredType: CellValueType | undefined;

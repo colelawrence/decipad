@@ -14,7 +14,8 @@ import {
   isPendingType,
   isErrorType,
 } from '@decipad/language-types';
-import { getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import { getDateFromAstForm } from '../date';
 import { expandDirectiveToType } from '../directives';
 import { inferTable } from '../tables/inference';

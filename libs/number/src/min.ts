@@ -1,11 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import { min as minFraction } from '@decipad/fraction';
-import DeciNumber, { isFinite, isInfinite, isUndefined, N } from '.';
-import type { FiniteNumber } from './types';
+// eslint-disable-next-line no-restricted-imports
+import type Fraction from '@decipad/fraction';
+import { DeciNumber, N, isFinite, isInfinite, isUndefined } from './DeciNumber';
+import type { DeciNumber as TDeciNumber } from './types';
 
-const isNegativeInfinite = (n: DeciNumber) => isInfinite(n) && n.s < 0n;
+const isNegativeInfinite = (n: TDeciNumber) => isInfinite(n) && (n.s ?? 0) < 0n;
 
-export const min = (...ns: DeciNumber[]): DeciNumber => {
+export const min = (...ns: TDeciNumber[]): TDeciNumber => {
   for (const n of ns) {
     if (isUndefined(n)) {
       return DeciNumber.undefined();
@@ -14,5 +16,5 @@ export const min = (...ns: DeciNumber[]): DeciNumber => {
       return DeciNumber.infinite(-1);
     }
   }
-  return N(minFraction(...(ns.filter(isFinite) as unknown as FiniteNumber[])));
+  return N(minFraction(...(ns.filter(isFinite) as unknown as Fraction[])));
 };

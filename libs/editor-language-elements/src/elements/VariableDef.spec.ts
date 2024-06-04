@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   ELEMENT_VARIABLE_DEF,
@@ -35,11 +35,7 @@ describe('VariableDef expression element', () => {
     } as VariableDefinitionElement;
     expect(
       (
-        await VariableDef.getParsedBlockFromElement?.(
-          editor,
-          getRemoteComputer(),
-          el
-        )
+        await VariableDef.getParsedBlockFromElement?.(editor, getComputer(), el)
       )?.[0].block?.args
     ).toMatchObject([
       astNode(
@@ -84,11 +80,7 @@ describe('VariableDef slider element', () => {
     } as VariableDefinitionElement;
     expect(
       (
-        await VariableDef.getParsedBlockFromElement?.(
-          editor,
-          getRemoteComputer(),
-          el
-        )
+        await VariableDef.getParsedBlockFromElement?.(editor, getComputer(), el)
       )?.[0].block?.args
     ).toMatchObject([
       astNode(

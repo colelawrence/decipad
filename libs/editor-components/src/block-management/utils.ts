@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { MyElement } from '@decipad/editor-types';
 import { ELEMENT_TABLE, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { clone } from '@decipad/editor-utils';
@@ -10,7 +10,7 @@ const utils = {
    * add it onto this function,
    * otherwise the function `clone` is used.
    */
-  async cloneProxy(computer: RemoteComputer, element: MyElement) {
+  async cloneProxy(computer: Computer, element: MyElement) {
     const newElement = await clone(computer, element);
     switch (newElement.type) {
       case ELEMENT_VARIABLE_DEF: {

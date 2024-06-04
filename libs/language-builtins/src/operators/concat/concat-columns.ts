@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { Evaluator, Functor } from '../../interfaces';
+import type { Evaluator, Functor } from '../../types';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 

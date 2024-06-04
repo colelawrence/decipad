@@ -1,7 +1,7 @@
 import { N } from '@decipad/number';
 import { identity } from '@decipad/utils';
 import { invert } from '../utils/invert';
-import type { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from '@decipad/language-interfaces';
 import { oneMile, oneYard, oneFoot, oneInch } from './length-units';
 
 const oneGallon = N(454_609);

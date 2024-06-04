@@ -13,7 +13,6 @@ import {
   Value,
   evaluateStatement,
   inferBlock,
-  serializeResult,
   validateResult,
   isErrorType,
   isFunctionType,
@@ -33,6 +32,7 @@ import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef, toUserlandResult } from '../exprRefs';
 import { identifiedResultForTable } from './identifiedResultForTable';
 import type { Computer } from '../computer';
+import { serializeResult } from '@decipad/computer-utils';
 
 /*
  - Skip cached stuff
@@ -162,6 +162,7 @@ export const resultFromError = (
   blockId: string,
   realm: ComputationRealm
 ): IdentifiedResult => {
+  console.log('resultFromError', error);
   // Not a user-facing error, so let's hide internal details
   const message = error.message.replace(
     /^panic: (.+)$/,
@@ -210,7 +211,7 @@ export const computeProgram = async (
 
       resultsToCache.push({ result, value });
     } catch (err) {
-      console.error(err);
+      console.error('computeProgram: caught error', err);
       resultsToCache.push({
         result: resultFromError(err as Error, block.id, realm),
       });

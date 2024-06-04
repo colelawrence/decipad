@@ -1,8 +1,9 @@
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { table, col, n, c, l, r } from '@decipad/language-utils';
 import { inferStatement } from '../infer';
-import { table, col, n, c, l, r } from '../utils';
 import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
 import { ScopedRealm, makeInferContext } from '../scopedRealm';

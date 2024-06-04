@@ -1,7 +1,7 @@
-import { ErrSpec, Result } from '@decipad/remote-computer';
-import { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
+import type { ErrSpec, Result } from '@decipad/language-interfaces';
+import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
-import { IntegrationStore } from '@decipad/react-contexts';
+import { IntegrationStore, useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
@@ -43,12 +43,13 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
     },
     [foundError]
   );
+  const computer = useComputer();
   const onChangeColumnType = useCallback(
     (index: number, type: TableCellType | undefined) => {
       if (!type) return;
-      setTypeMapping(index, type as SimpleTableCellType);
+      setTypeMapping(computer, index, type as SimpleTableCellType);
     },
-    [setTypeMapping]
+    [computer, setTypeMapping]
   );
 
   // Changing the type when result is not a table

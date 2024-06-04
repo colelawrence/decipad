@@ -1,14 +1,16 @@
 import { captureException } from '@sentry/react';
-import type { RemoteComputer, Result } from '@decipad/remote-computer';
 import { Unknown } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
+import type { Result } from '@decipad/language-interfaces';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
+  ImportOptions,
+  ImportParams,
   ImportResult,
   ImportResultWithMandatoryResult,
   Sheet,
 } from '../../types';
-import type { ImportOptions, ImportParams } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
 import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';
@@ -62,7 +64,7 @@ const getSheet = (response: unknown): Sheet => {
 };
 
 const handleGsheetsResponse = async (
-  computer: RemoteComputer,
+  computer: Computer,
   resp: unknown,
   options: ImportOptions
 ): Promise<Result.Result> => {

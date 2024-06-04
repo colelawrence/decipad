@@ -1,4 +1,5 @@
 import type { ClipboardEvent } from 'react';
+import type { Computer } from '@decipad/computer-interfaces';
 import type {
   MyEditor,
   TopLevelValue,
@@ -14,7 +15,6 @@ import {
   ELEMENT_BLOCKQUOTE,
 } from '@decipad/editor-types';
 import { getNode, insertFragment } from '@udecode/plate-common';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { clone } from '@decipad/editor-utils';
 
 const PASTE_PLAIN_ELEMENTS = new Set<ElementKind>([
@@ -31,7 +31,7 @@ const PASTE_PLAIN_ELEMENTS = new Set<ElementKind>([
 export const editorOnPaste = (
   e: ClipboardEvent<HTMLDivElement>,
   editor: MyEditor,
-  computer: RemoteComputer
+  computer: Computer
 ) => {
   if (!editor.selection) return;
   if (editor.selection.focus.path[0] !== editor.selection.anchor.path[0]) {

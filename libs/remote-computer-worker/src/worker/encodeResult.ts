@@ -2,7 +2,7 @@
 import type { Result, SerializedType } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 import { encodeType } from './encodeType';
-import type { RecursiveEncoder } from './valueEncoder';
+import type { RecursiveEncoder } from './types';
 
 const undefinedResult: Result.Result = {
   type: { kind: 'nothing' },

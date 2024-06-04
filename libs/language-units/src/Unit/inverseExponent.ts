@@ -1,4 +1,4 @@
-import type { Unit } from './Unit';
+import type { Unit } from '@decipad/language-interfaces';
 import { setExponent } from './setExponent';
 
 export const inverseExponent = (unit: Unit) =>

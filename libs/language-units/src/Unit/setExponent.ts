@@ -1,7 +1,9 @@
-import type DeciNumber from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
 import { produce } from '@decipad/utils';
-import type { Unit } from './Unit';
+import type { DeciNumberBase } from '@decipad/number';
 
-export const setExponent = produce((unit: Unit, newExponent: DeciNumber) => {
-  unit.exp = newExponent;
-});
+export const setExponent = produce(
+  (unit: Unit, newExponent: DeciNumberBase) => {
+    unit.exp = newExponent;
+  }
+);

@@ -128,14 +128,18 @@ export const useLiveConnectionResponse = ({
   ]);
 
   useEffect(() => {
-    worker?.worker.addEventListener('error', (ev) => {
+    const { worker: workerWorker } = worker ?? {};
+    if (!workerWorker || !(workerWorker instanceof Worker)) {
+      return;
+    }
+    workerWorker.addEventListener('error', (ev) => {
       if (!isFatalError(ev.message)) {
         return;
       }
       console.error('Error detected on worker', ev);
       setError(new Error(ev.message));
     });
-  }, [worker?.worker]);
+  }, [worker]);
 
   const retry = useCallback(() => {
     setError(undefined);

@@ -1,8 +1,9 @@
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as T } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { n, block, tiered, tieredDef, r, c } from '@decipad/language-utils';
 import { runAST } from '..';
-import { n, block, tiered, tieredDef, r, c } from '../utils';
 
 describe('evaluateTiered', () => {
   it('returns tier value if only one tier', async () => {

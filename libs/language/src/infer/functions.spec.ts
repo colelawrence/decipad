@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { assign, block, c, funcDef, l, r, U } from '@decipad/language-utils';
 import { ScopedRealm, inferBlock, makeInferContext } from '..';
 import { getErrSpec } from '../type';
-import { assign, block, c, funcDef, l, r, U } from '../utils';
 import { inferFunction } from './functions';
 import { inferProgram } from '.';
 

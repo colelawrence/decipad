@@ -1,8 +1,8 @@
 import type { Subject } from 'rxjs';
 import type {
-  RemoteComputer,
+  Computer,
   ComputeDeltaRequest,
-} from '@decipad/remote-computer';
+} from '@decipad/computer-interfaces';
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
 
@@ -11,7 +11,7 @@ export interface UpdateComputerPluginProps {
 }
 
 export const createUpdateComputerPlugin = (
-  computer: RemoteComputer
+  computer: Computer
 ): MyPlatePlugin => ({
   key: 'UPDATE_COMPUTER_PLUGIN',
   withOverrides: withUpdateComputerOverride(computer),

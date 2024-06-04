@@ -19,10 +19,7 @@ import {
 } from 'react';
 import { Link } from '../../../shared';
 import { AutoCompleteMenuFormulaTooltip } from '../AutoCompleteMenuFormulaTooltip/AutoCompleteMenuFormulaTooltip';
-import {
-  type ACItemType,
-  AutoCompleteMenuItem,
-} from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
+import { AutoCompleteMenuItem } from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { ArrowDiagonalTopRight } from '../../../icons';
 import { AutoCompleteMenuGroup } from '../AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 import {
@@ -40,29 +37,13 @@ import {
   PopoverContent,
   PopoverPortal,
 } from '@radix-ui/react-popover';
+import { Identifier } from './types';
 
 export type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
   'children'
 > & {
   readonly items: ReadonlyArray<Identifier>;
-};
-
-export type Identifier = {
-  readonly kind: 'variable' | 'function' | 'column';
-  readonly identifier: string;
-  readonly blockId?: string;
-  readonly columnId?: string;
-  readonly type: ACItemType;
-  readonly inTable?: string;
-  readonly editing?: boolean;
-  readonly focused?: boolean;
-  readonly explanation?: string;
-  readonly syntax?: string;
-  readonly example?: string;
-  readonly formulaGroup?: string;
-  readonly isCell?: boolean;
-  readonly decoration?: SmartRefDecoration;
 };
 
 export type AutoCompleteMenuMode = 'default' | 'tableCell';

@@ -26,6 +26,7 @@ import {
   getNewGroupsTargetLengths,
   setIn,
 } from './helpers';
+import type { ColumnGroupName, ColumnWidths } from './types';
 
 /** Finds contiguous groups of blocks with type {blockTypes},
  * each of which will mount a BlockLengthSynchronizationProvider,
@@ -93,13 +94,6 @@ export const BlockLengthSynchronizationProvider = ({
     </NameSyncContext.Provider>
   );
 };
-
-export type ColumnWidths = {
-  variableNameColumn: number;
-  resultColumn: number;
-};
-
-export type ColumnGroupName = keyof ColumnWidths;
 
 export const NameSyncContext = createSelectableContext({
   targetWidths: new Map<string, ColumnWidths>(),

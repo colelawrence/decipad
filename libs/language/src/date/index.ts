@@ -1,10 +1,9 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language-types';
+import type { Unit as TUnit, AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Time } from '@decipad/language-types';
-import { n, pairwise } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { n, pairwise } from '@decipad/language-utils';
 import { getDefined } from '@decipad/utils';
-import type { AST } from '@decipad/language-interfaces';
 
 export { Time };
 
@@ -57,11 +56,11 @@ const timeUnitToIndex: Record<Time.TimeUnit, number> = {
   millisecond: 11,
 };
 
-export const sortTimeUnits = <T extends string | Unit.Unit>(
+export const sortTimeUnits = <T extends string | TUnit>(
   toSort: Iterable<T>
 ): T[] => {
   const uniqueUnits = Array.from(new Set(toSort));
-  return uniqueUnits.sort((a: Unit.Unit | string, b: Unit.Unit | string) => {
+  return uniqueUnits.sort((a: TUnit | string, b: TUnit | string) => {
     const tua = Time.timeUnitFromUnit(a);
     const tub = Time.timeUnitFromUnit(b);
     return Math.sign(timeUnitToIndex[tua] - timeUnitToIndex[tub]);

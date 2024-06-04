@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { immerable } from 'immer';
-// eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language-units';
+import type { Unit } from './Unit';
 import type { AST, IInferError, Time } from '.';
 import type { PromiseOrType } from '@decipad/utils';
 
@@ -13,7 +12,7 @@ export interface Type {
   errorCause: IInferError | null;
 
   type: PrimitiveTypeName | null;
-  unit: Unit.Unit[] | null;
+  unit: Unit[] | null;
   numberFormat: AST.NumberFormat | null;
   numberError: 'month-day-conversion' | null;
 
@@ -85,7 +84,7 @@ export interface Type {
   getRangeOf(): Promise<Type>;
   isTimeQuantity(): Promise<Type>;
   isDate(specificity?: Time.Specificity): Promise<Type>;
-  multiplyUnit(withUnits: Unit.Unit[] | null): Promise<Type>;
-  divideUnit(divideBy: Unit.Unit[] | number | null): Promise<Type>;
+  multiplyUnit(withUnits: Unit[] | null): Promise<Type>;
+  divideUnit(divideBy: Unit[] | number | null): Promise<Type>;
   sharePercentage(other: Type): Promise<Type>;
 }

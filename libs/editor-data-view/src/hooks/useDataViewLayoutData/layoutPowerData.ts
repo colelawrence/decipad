@@ -1,4 +1,3 @@
-import { editorStatsStore } from '@decipad/react-contexts';
 import { type Result } from '@decipad/remote-computer';
 import { Value } from '@decipad/language-types';
 import { type DataViewFilter } from '@decipad/editor-types';
@@ -32,7 +31,6 @@ export const layoutPowerData = async ({
     console.error('Expected tree value', tree);
     throw new Error('Expected tree value');
   }
-  const start = Date.now();
   const rootGroups = await generateGroups({
     tableName,
     tree,
@@ -72,10 +70,6 @@ export const layoutPowerData = async ({
       ? [totalGroup]
       : []),
   ];
-  const elapsedMs = Date.now() - start;
-  editorStatsStore
-    .getState()
-    .pushDataViewStat({ computeLayoutElapsedTimeMs: elapsedMs });
 
   return result;
 };

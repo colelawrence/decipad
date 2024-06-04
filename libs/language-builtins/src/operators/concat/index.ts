@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { Type } from '@decipad/language-types';
-import type { BuiltinSpec } from '../../interfaces';
+import type { BuiltinSpec } from '../../types';
 import { concatTablesFunctor, concatTablesValues } from './concat-tables';
 import { concatColumnsFunctor, concatColumnsValues } from './concat-columns';
 

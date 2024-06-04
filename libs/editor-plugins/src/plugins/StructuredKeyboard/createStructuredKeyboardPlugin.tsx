@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { CodeLineV2Element, MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,
@@ -41,7 +41,7 @@ const getShortcut = <
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
   editor: TE,
-  computer: RemoteComputer,
+  computer: Computer,
   event: KeyboardEvent
 ): Shortcuts | undefined => {
   switch (true) {
@@ -94,7 +94,7 @@ export const createStructuredKeyboard = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ) => {
   return createOnKeyDownPluginFactory<TV, TE>({
     name: 'STRUCTURED_KEYBOARD_SHORTCUTS',

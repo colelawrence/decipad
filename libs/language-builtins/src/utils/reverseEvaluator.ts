@@ -1,4 +1,4 @@
-import type { Evaluator } from '../interfaces';
+import type { Evaluator } from '../types';
 
 export const reverseEvaluator =
   (evaluator: Evaluator): Evaluator =>

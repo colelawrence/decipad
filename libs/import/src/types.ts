@@ -1,5 +1,10 @@
 import type { Result } from '@decipad/remote-computer';
-import type { ImportElementSource } from '@decipad/editor-types';
+import type {
+  ImportElementSource,
+  ColIndex,
+  TableCellType,
+} from '@decipad/editor-types';
+import type { Computer } from '@decipad/computer-interfaces';
 
 export interface Provider {
   name: ImportElementSource;
@@ -55,4 +60,35 @@ export interface SourceUrlParseResponse {
   isRange?: boolean;
   range?: string[];
   userUrl: string;
+}
+
+export interface ImportParams {
+  computer: Computer;
+  url: URL;
+  proxy?: URL;
+  provider?: ImportElementSource;
+}
+export interface ImportOptions {
+  identifyIslands?: boolean;
+  useFirstRowAsHeader?: boolean;
+  columnTypeCoercions?: Record<ColIndex, TableCellType>;
+  doNotTryExpressionNumbersParse?: boolean;
+  maxCellCount?: number;
+  subId?: number | string;
+
+  // Potentially tidy these up.
+  useRawResult?: string;
+  externalDataLinkId?: string;
+
+  jsonPath?: string;
+  delimiter?: string;
+  provider?: ImportElementSource;
+}
+
+export interface Island {
+  sheetName: string;
+  firstCol: number;
+  firstRow: number;
+  lastCol: number;
+  lastRow: number;
 }

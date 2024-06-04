@@ -1,15 +1,12 @@
 import type { VariableDropdownElement } from '@decipad/editor-types';
 import { ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
-import {
-  type AST,
-  type RemoteComputer,
-  type Program,
-  getExprRef,
-} from '@decipad/remote-computer';
+import type { Computer, Program } from '@decipad/computer-interfaces';
+import type { AST } from '@decipad/language-interfaces';
 import { getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType, parseCell } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
+import { getExprRef } from '@decipad/remote-computer';
 import type { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
@@ -71,7 +68,7 @@ export const VariableDef: InteractiveLanguageElement = {
  * A normal dropdown widget.
  */
 async function parseDropdown(
-  computer: RemoteComputer,
+  computer: Computer,
   element: VariableDropdownElement
 ): Promise<Program> {
   const [name, expression] = element.children.map((c) => getNodeString(c));
@@ -102,7 +99,7 @@ async function parseDropdown(
 }
 
 async function parseDropdownOptions(
-  computer: RemoteComputer,
+  computer: Computer,
   element: VariableDropdownElement
 ): Promise<Program> {
   const [, dropdown] = element.children;

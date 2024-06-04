@@ -1,8 +1,8 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Session } from 'next-auth';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import type { BlockProcessor } from '@decipad/notebook-tabs';
 import type { MyPlatePlugin } from '@decipad/editor-types';
-import type { Session } from 'next-auth';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;
@@ -21,7 +21,7 @@ export interface NotebookState {
   notebookId?: string | undefined;
   syncClientState: 'idle' | 'created';
   editor?: DocSyncEditor | undefined;
-  computer: RemoteComputer | undefined;
+  computer: Computer | undefined;
   initEditor: (
     notebookId: string,
     options: InitNotebookStateOptions,

@@ -1,35 +1,6 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
-import type {
-  ColIndex,
-  ImportElementSource,
-  TableCellType,
-} from '@decipad/editor-types';
 import { importFromUnknown } from './importFromUnknown';
 import { decipad, gsheets } from './providers';
-import type { ImportResult } from './types';
-
-export interface ImportParams {
-  computer: RemoteComputer;
-  url: URL;
-  proxy?: URL;
-  provider?: ImportElementSource;
-}
-export interface ImportOptions {
-  identifyIslands?: boolean;
-  useFirstRowAsHeader?: boolean;
-  columnTypeCoercions?: Record<ColIndex, TableCellType>;
-  doNotTryExpressionNumbersParse?: boolean;
-  maxCellCount?: number;
-  subId?: number | string;
-
-  // Potentially tidy these up.
-  useRawResult?: string;
-  externalDataLinkId?: string;
-
-  jsonPath?: string;
-  delimiter?: string;
-  provider?: ImportElementSource;
-}
+import type { ImportOptions, ImportParams, ImportResult } from './types';
 
 const internalTryImport = (
   params: ImportParams,

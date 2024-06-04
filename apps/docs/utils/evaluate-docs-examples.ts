@@ -3,15 +3,18 @@ import stringify from 'json-stringify-safe';
 // import { formatError, formatResult } from '@decipad/format';
 import maxBy from 'lodash.maxby';
 import {
+  IdentifiedError,
+  IdentifiedResult,
+  NotebookResults,
+} from '@decipad/computer-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import {
   deserializeType,
   materializeOneResult,
   RuntimeError,
   createProgramFromMultipleStatements,
-  type IdentifiedError,
-  type IdentifiedResult,
-  type NotebookResults,
-  getRemoteComputer,
-} from '@decipad/remote-computer';
+  getComputer,
+} from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { formatError, formatResult } from '@decipad/format';
 
@@ -53,7 +56,7 @@ async function resultFromComputerResult(
 async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
   try {
     const program = createProgramFromMultipleStatements(codeExample);
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     const result = await computer.computeDeltaRequest({
       program: { upsert: program },
     });

@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { isElement } from '@udecode/plate-common';
-import type { Command } from './applyCommands';
 import { parseJSONResponse } from './parseJSONResponse';
+import type { Command } from '../types';
 
 export const getCommands = (commandString: string): Command[] => {
   let commands = parseJSONResponse(commandString);

@@ -1,4 +1,4 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumber } from './types';
 
 export const MAX_PRECISION = 15;
 export const DEFAULT_PRECISION = 10;

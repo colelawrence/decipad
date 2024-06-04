@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { N } from '@decipad/number';
 import type { PromiseOrType } from '@decipad/utils';
-// eslint-disable-next-line no-restricted-imports
-import type { Type, Unit } from '@decipad/language-types';
+import type { Type, Unit } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 import { U, makeContext } from './utils/testUtils';
 
-const meter: Unit.Unit = {
+const meter: Unit = {
   unit: 'meter',
   exp: N(1),
   multiplier: N(1),
   known: true,
 };
 
-const second: Unit.Unit = {
+const second: Unit = {
   unit: 'second',
   exp: N(1),
   multiplier: N(1),
@@ -163,7 +162,7 @@ describe('callBuiltin', () => {
 
 interface TestBuilderArgs {
   type: 'string' | 'boolean' | 'number' | 'month' | 'year';
-  unit?: Unit.Unit[] | null;
+  unit?: Unit[] | null;
 }
 type Builder = (a: TestBuilderArgs) => PromiseOrType<Type>;
 // build, build2, build3, and buildOut will switch dimensionality to test propagation

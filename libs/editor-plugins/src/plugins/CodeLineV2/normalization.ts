@@ -1,3 +1,4 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -5,7 +6,6 @@ import {
   type MyGenericEditor,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
 import {
   type EElementOrText,
@@ -108,7 +108,7 @@ export const createNormalizeCodeLineCodePlugin = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ) =>
   createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_CODE_LINE_V2_CODE',

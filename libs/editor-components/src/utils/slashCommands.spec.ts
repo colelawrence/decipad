@@ -10,7 +10,7 @@ import {
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import { createCodeBlockPlugin } from '@udecode/plate-code-block';
 import { execute } from './slashCommands';
 
@@ -39,7 +39,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
 
     await execute({
       editor,
-      computer: getRemoteComputer(),
+      computer: getComputer(),
       path: [0],
       command,
       getAvailableIdentifier,

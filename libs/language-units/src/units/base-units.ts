@@ -1,4 +1,4 @@
-import type { BaseQuantity } from '../Unit';
+import type { BaseQuantity } from '@decipad/language-interfaces';
 
 const baseQuantityToBaseUnit: Readonly<Record<BaseQuantity, string>> = {
   length: 'meter',

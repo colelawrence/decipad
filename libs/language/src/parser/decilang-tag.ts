@@ -1,6 +1,7 @@
 import type { AST } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { mutateAst, isNode, isIdentifier } from '@decipad/language-utils';
 import { parseStatementOrThrow } from '..';
-import { mutateAst, isNode, isIdentifier } from '../utils';
 
 /**
  * Construct a bit of decilang, and interpolate identifiers or other

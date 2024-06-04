@@ -2,7 +2,7 @@ import type {
   AutocompleteName,
   ErrSpec,
   SerializedType,
-} from '@decipad/remote-computer';
+} from '@decipad/language-interfaces';
 import { useEditorChange } from '@decipad/editor-hooks';
 import type {
   DataViewElement,

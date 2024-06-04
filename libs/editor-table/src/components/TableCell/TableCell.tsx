@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useCallback, useRef, useContext } from 'react';
-import type { PlateComponent } from '@decipad/editor-types';
+import type { AnyElement, PlateComponent } from '@decipad/editor-types';
 import { ELEMENT_TD, useMyEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -41,7 +41,9 @@ export const TableCell: PlateComponent = ({
 }) => {
   if (!isElementOfType(element, ELEMENT_TD)) {
     throw new Error(
-      `TableCell is meant to render table cells, not ${element?.type}`
+      `TableCell is meant to render table cells, not ${
+        (element as AnyElement | null)?.type
+      }`
     );
   }
 

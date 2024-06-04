@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
@@ -136,11 +136,7 @@ describe('Table', () => {
       ],
     };
 
-    const result = await getParsedBlockFromElement(
-      editor,
-      getRemoteComputer(),
-      node
-    );
+    const result = await getParsedBlockFromElement(editor, getComputer(), node);
 
     expect(
       result.map((ex) => ({
@@ -514,7 +510,7 @@ describe('Table', () => {
     };
 
     expect(
-      (await getParsedBlockFromElement(editor, getRemoteComputer(), node)).map(
+      (await getParsedBlockFromElement(editor, getComputer(), node)).map(
         (ex) => ({
           blockId: ex.id,
           column: ex.block?.args[0],
@@ -751,7 +747,7 @@ describe('Table', () => {
     };
 
     expect(
-      (await getParsedBlockFromElement(editor, getRemoteComputer(), node)).map(
+      (await getParsedBlockFromElement(editor, getComputer(), node)).map(
         (ex) => ({
           blockId: ex.id,
           column: ex.block?.args[0],
@@ -934,7 +930,7 @@ describe('Table', () => {
         },
       ],
     };
-    const computer = getRemoteComputer();
+    const computer = getComputer();
     expect(
       (await getParsedBlockFromElement(editor, computer, node)).map((ex) => ({
         blockId: ex.id,

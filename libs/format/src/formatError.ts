@@ -1,4 +1,5 @@
-import { type ErrSpec, serializeType, Format } from '@decipad/remote-computer';
+import type { ErrSpec } from '@decipad/language-interfaces';
+import { serializeType, Format } from '@decipad/remote-computer';
 
 const looksLikeVariable = (s: string) => s.toLocaleLowerCase() !== s;
 

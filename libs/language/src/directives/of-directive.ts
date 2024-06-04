@@ -2,10 +2,11 @@ import { produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Dimension, InferError, buildType as t } from '@decipad/language-types';
 import type { AST, Type } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { getIdentifierString } from '@decipad/language-utils';
 import type { TRealm } from '..';
 import { inferExpression } from '..';
 import { evaluate } from '../interpreter';
-import { getIdentifierString } from '../utils';
 import { type DirectiveImpl } from './types';
 
 export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (

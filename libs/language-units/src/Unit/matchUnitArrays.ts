@@ -1,5 +1,5 @@
+import type { Unit } from '@decipad/language-interfaces';
 import { areUnitsCompatible } from '../units/known-units';
-import type { Unit } from './Unit';
 import { expandUnits } from './expand/expand-units';
 
 export const matchUnitArrays = (

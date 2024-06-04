@@ -1,5 +1,5 @@
+import type { Computer } from '@decipad/computer-interfaces';
 import type { MyElement, MyEditor } from '@decipad/editor-types';
-import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate-common';
@@ -14,7 +14,7 @@ export interface WithUpdateComputerOverrideOptions {
 
 export const withUpdateComputerOverride =
   (
-    computer: RemoteComputer,
+    computer: Computer,
     {
       debounceEditorChangesMs = DEBFAULT_DEBOUNCE_UPDATE_COMPUTER_MS,
     }: WithUpdateComputerOverrideOptions = {}
@@ -22,30 +22,10 @@ export const withUpdateComputerOverride =
   (editor: MyEditor) => {
     const { onChange, apply } = editor;
 
-    const programCache = new Map<string, ProgramBlock>();
     let dirtyBlocksSet = new Map<string, MyElement>();
     let removedBlockIds: string[] = [];
 
-    const removeDirtyBlocks = () => {
-      for (const el of dirtyBlocksSet.values()) {
-        programCache.delete(el.id);
-      }
-      for (const [id, block] of programCache.entries()) {
-        if (
-          block.isArtificial &&
-          block.artificiallyDerivedFrom != null &&
-          // eslint-disable-next-line no-loop-func
-          block.artificiallyDerivedFrom.some((derivedFromBlockId) =>
-            dirtyBlocksSet.has(derivedFromBlockId)
-          )
-        ) {
-          programCache.delete(id);
-        }
-      }
-    };
-
     const compute = async () => {
-      removeDirtyBlocks();
       const dirty = dirtyBlocksSet;
       dirtyBlocksSet = new Map();
       // eslint-disable-next-line no-param-reassign
@@ -90,21 +70,8 @@ export const withUpdateComputerOverride =
 
     const removeNode = (id: string) => {
       for (const blockId of allBlockIds(editor, id)) {
-        programCache.delete(blockId);
         dirtyBlocksSet.delete(blockId);
         removedBlockIds.push(blockId);
-        for (const [nodeId, block] of programCache.entries()) {
-          if (
-            block.type === 'identified-block' &&
-            block.isArtificial &&
-            block.artificiallyDerivedFrom != null &&
-            block.artificiallyDerivedFrom.some(
-              (derivedFromBlockId) => derivedFromBlockId === blockId
-            )
-          ) {
-            removeNode(nodeId);
-          }
-        }
       }
     };
 

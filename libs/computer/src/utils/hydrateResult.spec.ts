@@ -25,7 +25,7 @@ describe('hydrateResult result', () => {
 
               unit: 'bananas',
               known: false,
-            } as unknown as Unit.Unit,
+            } as unknown as Unit,
           ],
         },
         value: { n: 1, d: 1, s: 1 } as unknown as Result.OneResult,
@@ -105,7 +105,7 @@ describe('hydrateResult result', () => {
 
                 unit: 'bananas',
                 known: false,
-              } as unknown as Unit.Unit,
+              } as unknown as Unit,
             ],
           },
         },
@@ -203,7 +203,7 @@ describe('hydrateResult result', () => {
 
                   unit: 'bananas',
                   known: false,
-                } as unknown as Unit.Unit,
+                } as unknown as Unit,
               ],
             },
           ],

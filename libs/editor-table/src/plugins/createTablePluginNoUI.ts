@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -27,7 +27,7 @@ export const createTablePluginNoUI = <
   TV extends Value,
   TE extends MyGenericEditor<TV>
 >(
-  computer: RemoteComputer
+  computer: Computer
 ): MyPlatePlugin<TablePlugin<TV>, TV> => ({
   key: ELEMENT_TABLE,
   isElement: true,

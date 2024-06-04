@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import DeciNumber from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { empty } from '@decipad/generator-utils';
@@ -18,7 +19,6 @@ import {
 } from '@decipad/language-types';
 import { validateColumnResult } from './validateColumnResult';
 import type { Validate } from './types';
-import stringify from 'json-stringify-safe';
 
 const getTrue = (cond: boolean, failureMessage: string) => {
   if (cond) return true;
@@ -155,12 +155,14 @@ const validate: Validate = <
 };
 
 const reportError = (
-  type: SerializedType,
+  type: SerializedType | Type,
   value: Result.OneResult | null | undefined,
   error?: Error
 ) => {
   console.error(
-    `Failed to validate a Result of type ${type.kind}"`,
+    `Failed to validate a Result of type ${
+      (type as SerializedType).kind ?? stringify(type, null, 2)
+    }"`,
     error?.message
   );
   console.error({ type, value });
@@ -171,11 +173,11 @@ export function validateResult(
   value: Result.OneResult | null | undefined
 ): Result.OneResult | null | undefined {
   let type: Type | SerializedType = _type;
-  if (type instanceof Type) {
-    type = serializeType(type);
-  }
 
   try {
+    if (type instanceof Type) {
+      type = serializeType(type);
+    }
     return validate(type, value);
   } catch (e) {
     reportError(type, value, e as Error);

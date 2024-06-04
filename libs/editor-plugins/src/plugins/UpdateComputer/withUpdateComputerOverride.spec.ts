@@ -5,18 +5,18 @@ import {
   ELEMENT_PARAGRAPH,
   createMyPlateEditor,
 } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
 import { insertNodes, removeNodes, setNodes } from '@udecode/plate-common';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
+import type { Computer } from '@decipad/computer-interfaces';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
 
 setupDeciNumberSnapshotSerializer();
 
 describe('withUpdateComputerOverride', () => {
   let editor: MyEditor;
-  let computer: RemoteComputer;
+  let computer: Computer;
   beforeEach(() => {
     const ed = createMyPlateEditor();
     ed.children = [

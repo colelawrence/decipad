@@ -11,7 +11,6 @@ import {
 import { act, render } from '@testing-library/react';
 import type { PlatePlugin } from '@udecode/plate-common';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import { getRemoteComputer, parseBlock } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
 import {
@@ -22,12 +21,13 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
 import { BrowserRouter } from 'react-router-dom';
+import type { Computer } from '@decipad/computer-interfaces';
 
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
 type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'> & {
-  computer: RemoteComputer;
+  computer: Computer;
 };
 const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
   <DndProvider backend={HTML5Backend}>
@@ -61,7 +61,7 @@ describe('variable highlights', () => {
       initialProgram: [getIdentifiedBlock('x1', 'id = 42')],
     });
 
-    await timeout(0);
+    await timeout(100);
 
     const children = [
       {
@@ -108,7 +108,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await act(() => timeout(0));
+    await act(() => timeout(100));
 
     const children = [
       {
@@ -162,7 +162,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await act(() => timeout(0));
+    await act(() => timeout(100));
 
     const children = [
       {
@@ -226,7 +226,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await act(() => timeout(0));
+    await act(() => timeout(100));
 
     const children = [
       {
@@ -274,7 +274,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await act(() => timeout(0));
+    await act(() => timeout(100));
 
     const children = [
       {
@@ -325,7 +325,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(0);
+    await act(() => timeout(100));
 
     const children = [
       {
@@ -366,7 +366,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await act(() => timeout(0));
+    await act(() => timeout(100));
 
     const children = [
       {

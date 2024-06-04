@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { MyElement, MyNode } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
@@ -30,13 +30,13 @@ const cloneAndReplaceElementIds = <T extends MyElement>(
 };
 
 const cloneElement = <T extends MyElement>(
-  computer: RemoteComputer,
+  computer: Computer,
   el: T
 ): PromiseOrType<T> =>
   cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
 export const clone = <T extends MyNode>(
-  computer: RemoteComputer,
+  computer: Computer,
   node: T
 ): PromiseOrType<T> => {
   if (isElement(node)) {

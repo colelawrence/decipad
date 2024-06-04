@@ -1,8 +1,8 @@
-import { useSelectableContext } from '@decipad/react-utils';
 import type { ReactNode } from 'react';
 import { useEffect, useRef } from 'react';
-import type { ColumnGroupName } from './BlockLengthSynchronizationProvider';
+import { useSelectableContext } from '@decipad/react-utils';
 import { NameSyncContext } from './BlockLengthSynchronizationProvider';
+import type { ColumnGroupName } from './types';
 
 /**
  * Measures self, sends length to BlockLengthSynchronizationProvider.

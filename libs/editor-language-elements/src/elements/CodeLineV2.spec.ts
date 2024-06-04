@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type {
   CodeLineV2Element,
   CodeLineV2ElementCode,
@@ -35,7 +35,7 @@ const createTestCodeLine = (
     ],
   };
 
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const editor = createTestEditorController('id');
 
   editor.children = [

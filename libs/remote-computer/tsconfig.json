@@ -4,6 +4,7 @@
   "references": [
     { "path": "../computer" },
     { "path": "../computer-interfaces" },
-    { "path": "../utils" }
+    { "path": "../utils" },
+    { "path": "../listener-helper" }
   ]
 }

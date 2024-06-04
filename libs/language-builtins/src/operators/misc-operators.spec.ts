@@ -2,7 +2,7 @@
 import { Time, Value, buildType as t } from '@decipad/language-types';
 import { makeContext } from '../utils/testUtils';
 import { miscOperators as operators } from './misc-operators';
-import type { FullBuiltinSpec } from '../interfaces';
+import type { FullBuiltinSpec } from '../types';
 
 it('knows whether a range contains a value', async () => {
   expect(

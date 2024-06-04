@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import type { RemoteComputer, SerializedTypes } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { SerializedTypes } from '@decipad/remote-computer';
 import { areUnitsConvertible } from '@decipad/remote-computer';
 import type { CellValueType } from '@decipad/editor-types';
 import { containsNumber } from '@decipad/utils';
@@ -16,7 +17,7 @@ interface InferColumnOptions {
 const INFER_MAX_ROWS = 20;
 
 export const inferColumn = async (
-  computer: RemoteComputer,
+  computer: Computer,
   column: SpreadsheetColumn,
   options: InferColumnOptions = {}
 ): Promise<CellValueType> => {

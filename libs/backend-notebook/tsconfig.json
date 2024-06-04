@@ -10,7 +10,7 @@
     { "path": "../editor-types" },
     { "path": "../editor-config" },
     { "path": "../backendtypes" },
-    { "path": "../remote-computer" },
+    { "path": "../computer" },
     { "path": "../services" },
     { "path": "../backend-config" },
     { "path": "../slate-yjs" },

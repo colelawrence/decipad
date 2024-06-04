@@ -1,4 +1,4 @@
-import type { Program } from '@decipad/remote-computer';
+import type { Program } from '@decipad/computer-interfaces';
 import {
   parseExpression,
   parseStatement,

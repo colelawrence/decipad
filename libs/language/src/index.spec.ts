@@ -11,6 +11,8 @@ import {
   serializeType,
   InferError,
 } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { block, c, n, U, u } from '@decipad/language-utils';
 import { date } from './date';
 import { runCode } from './run';
 import {
@@ -19,7 +21,6 @@ import {
   runAST,
   runCodeForVariables,
 } from './testUtils';
-import { block, c, n, U, u } from './utils';
 
 setupDeciNumberSnapshotSerializer();
 

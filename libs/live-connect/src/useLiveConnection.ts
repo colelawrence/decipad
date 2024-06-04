@@ -1,5 +1,7 @@
 import type { Context } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import type { Computer } from '@decipad/computer-interfaces';
+import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import {
   astNode,
   buildType,
@@ -8,11 +10,7 @@ import {
   isTableResult,
   Unknown,
 } from '@decipad/remote-computer';
-import type {
-  RemoteComputer,
-  ProgramBlock,
-  Result,
-} from '@decipad/remote-computer';
+import type { ProgramBlock, Result } from '@decipad/remote-computer';
 import type { PromiseOrType } from '@decipad/utils';
 import { zip } from '@decipad/utils';
 import type {
@@ -26,7 +24,6 @@ import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
-import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 
 export interface LiveConnectionResult {
   error?: Error;
@@ -59,7 +56,7 @@ export interface LiveConnectionProps {
 const WAIT_TIMEOUT_MS = 7000;
 
 export const useLiveConnection = (
-  computer: RemoteComputer,
+  computer: Computer,
   {
     notebookId,
     blockId,
@@ -167,7 +164,7 @@ export const useLiveConnection = (
 };
 
 async function pushPendingResultToComputer(
-  computer: RemoteComputer,
+  computer: Computer,
   blockId: string,
   variableName: string
 ): Promise<void> {
@@ -214,7 +211,7 @@ async function pushPendingResultToComputer(
  * Pass `computerResult` as `undefined` if you want to erase the result.
  */
 export async function pushResultToComputer(
-  computer: RemoteComputer,
+  computer: Computer,
   blockId: string,
   variableName: string,
   computerResult: Result.Result | undefined

@@ -1,38 +1,39 @@
 // eslint-disable-next-line no-restricted-imports
 import Fraction, { F, isFractionLike } from '../../fraction/src';
 import type {
+  DeciNumber as TDeciNumber,
   DeciNumberInput,
   DeciNumberInputWithNumerator,
-  FiniteNumber,
-  InfiniteNumber,
   UndefinableOrInfiniteOrFractionLike,
-  UndefinedNumber,
 } from './types';
 
 export type { DeciNumberInputWithNumerator };
 
-export const isUndefined = (n: unknown): n is UndefinedNumber => {
+export const isUndefined = (n: unknown): boolean => {
   return n instanceof DeciNumber && n.n == null && n.d == null && n.s == null;
 };
 
-export const isFinite = (n: unknown): n is FiniteNumber => {
+export const isFinite = (n: unknown): boolean => {
   return n instanceof DeciNumber && !isUndefined(n) && !isInfinite(n);
 };
 
-export const isInfinite = (n: unknown): n is InfiniteNumber =>
-  n instanceof DeciNumber && !!(n as DeciNumber).infinite;
+export const isInfinite = (n: unknown): boolean =>
+  n instanceof DeciNumber && !!(n as unknown as TDeciNumber).infinite;
 
-const isSameInfinite = (a: InfiniteNumber, b: InfiniteNumber): boolean => {
+const isSameInfinite = (a: TDeciNumber, b: TDeciNumber): boolean => {
   return a.s === b.s;
 };
 
-const isZero = (n: DeciNumber | Fraction): boolean => isFinite(n) && n.n === 0n;
+const isZero = (n: TDeciNumber | Fraction): boolean =>
+  isFinite(n) && n.n === 0n;
+
+export type BinOpOp<B> = (this: Fraction, that: B) => Fraction;
 
 const binOp = <B>(
-  a: DeciNumber,
-  b: DeciNumber | B,
-  op: (this: Fraction, that: B) => Fraction
-): DeciNumber => {
+  a: TDeciNumber,
+  b: TDeciNumber | B,
+  op: BinOpOp<B>
+): TDeciNumber => {
   if (isUndefined(a) || isInfinite(a)) {
     return a;
   }
@@ -60,7 +61,7 @@ export const isDeciNumberInput = (n: unknown): n is DeciNumberInput => {
 export const fromNumber = (
   n: unknown,
   d?: number | bigint | string
-): DeciNumber => {
+): TDeciNumber => {
   if (n == null) {
     return new DeciNumber({});
   }
@@ -88,10 +89,10 @@ export const fromNumber = (
 
 export const N = fromNumber;
 
-export class DeciNumber {
-  public readonly n?: bigint;
-  public readonly d?: bigint;
-  public readonly s?: bigint;
+export class DeciNumber implements TDeciNumber {
+  public readonly n: bigint | undefined;
+  public readonly d: bigint | undefined;
+  public readonly s: bigint | undefined;
   public infinite = false;
 
   // eslint-disable-next-line complexity
@@ -161,46 +162,46 @@ export class DeciNumber {
     }
   }
 
-  public abs(): DeciNumber {
+  public abs(): TDeciNumber {
     if (isUndefined(this) || isInfinite(this)) {
       return this;
     }
     return fromNumber(Fraction.prototype.abs.call(this));
   }
 
-  neg(): DeciNumber {
+  neg(): TDeciNumber {
     if (isUndefined(this)) {
       return this;
     }
     if (isInfinite(this)) {
       return new DeciNumber({
         infinite: true,
-        s: -this.s,
+        s: this.s && -this.s,
       });
     }
     return fromNumber(Fraction.prototype.neg.call(this));
   }
 
-  add(n: DeciNumber): DeciNumber {
+  add(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, Fraction.prototype.add);
   }
 
-  sub(n: DeciNumber): DeciNumber {
+  sub(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, Fraction.prototype.sub);
   }
 
-  mul(n: DeciNumber): DeciNumber {
+  mul(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, Fraction.prototype.mul);
   }
 
-  div(d: DeciNumber): DeciNumber {
+  div(d: TDeciNumber): TDeciNumber {
     if (isFinite(d) && isZero(d)) {
       if (isFinite(this) && isZero(this)) {
         // 0 / 0 = undefined
         return new DeciNumber({
           n: undefined,
           d: undefined,
-          s: this.s ?? 0n * d.s,
+          s: (this.s ?? 0n) * (d.s ?? 0n),
           infinite: false,
         });
       }
@@ -209,7 +210,7 @@ export class DeciNumber {
       return new DeciNumber({
         n: undefined,
         d: undefined,
-        s: this.s ?? 0n * d.s,
+        s: (this.s ?? 0n) * (d.s ?? 0n),
         infinite: true,
       });
     }
@@ -217,7 +218,7 @@ export class DeciNumber {
       return new DeciNumber({
         n: undefined,
         d: undefined,
-        s: this.s ?? 0n * d.s,
+        s: (this.s ?? 0n) * (d.s ?? 0n),
         infinite: true,
       });
     }
@@ -231,14 +232,16 @@ export class DeciNumber {
     return binOp(this, d, Fraction.prototype.div);
   }
 
-  private excelLikeRound(n?: number) {
+  public excelLikeRound(n?: number) {
     const nr = n || 0;
     const powPart = F(10).pow(F(nr));
-    const roundResult = this.mul(powPart as unknown as DeciNumber);
-    return Fraction.prototype.round.call(roundResult, 0).div(powPart);
+    const roundResult = this.mul(powPart as unknown as TDeciNumber);
+    return Fraction.prototype.round
+      .call(roundResult, 0)
+      .div(powPart) as unknown as TDeciNumber;
   }
 
-  private internalPow(b: DeciNumber): Fraction {
+  internalPow(b: TDeciNumber): Fraction {
     let result: Fraction | undefined;
     if (b.compare(ZERO) < 0) {
       return this.internalPow(b.neg()).inverse();
@@ -261,43 +264,49 @@ export class DeciNumber {
     return result as unknown as Fraction;
   }
 
-  pow(n: DeciNumber): DeciNumber {
+  pow(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, DeciNumber.prototype.internalPow);
   }
 
-  gcd(n: DeciNumber): DeciNumber {
+  gcd(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, Fraction.prototype.gcd);
   }
 
-  lcm(n: DeciNumber): DeciNumber {
+  lcm(n: TDeciNumber): TDeciNumber {
     return binOp(this, n, Fraction.prototype.lcm);
   }
 
-  mod(n: DeciNumber | number): DeciNumber {
+  mod(n: TDeciNumber | number): TDeciNumber {
     return binOp(this, n, Fraction.prototype.mod);
   }
 
-  ceil(n?: DeciNumber | number): DeciNumber {
+  ceil(n?: TDeciNumber | number): TDeciNumber {
     return binOp(this, n, Fraction.prototype.ceil);
   }
 
-  floor(n?: DeciNumber | number): DeciNumber {
+  floor(n?: TDeciNumber | number): TDeciNumber {
     return binOp(this, n, Fraction.prototype.floor);
   }
 
-  round(n?: DeciNumber | number): DeciNumber {
-    return binOp(this, n, DeciNumber.prototype.excelLikeRound);
+  round(n?: TDeciNumber | number): TDeciNumber {
+    return binOp(
+      this,
+      n,
+      DeciNumber.prototype.excelLikeRound as unknown as BinOpOp<
+        number | TDeciNumber | undefined
+      >
+    );
   }
 
-  inverse(): DeciNumber {
+  inverse(): TDeciNumber {
     return binOp(this, undefined, Fraction.prototype.inverse);
   }
 
-  simplify(eps?: number): DeciNumber {
+  simplify(eps?: number): TDeciNumber {
     return binOp(this, eps, Fraction.prototype.simplify);
   }
 
-  compare(that: DeciNumber): number {
+  compare(that: TDeciNumber): number {
     const a = isFinite(this)
       ? this
       : ZERO.mul(
@@ -306,13 +315,13 @@ export class DeciNumber {
             : N(1)
         );
     const b = isFinite(that)
-      ? (that as Fraction)
+      ? (that as unknown as Fraction)
       : (ZERO as unknown as Fraction);
 
     return Fraction.prototype.compare.call(a, b);
   }
 
-  equals(that: DeciNumber): boolean {
+  equals(that: TDeciNumber): boolean {
     if (isUndefined(this) || isUndefined(that)) {
       return isUndefined(this) && isUndefined(that);
     }
@@ -325,11 +334,11 @@ export class DeciNumber {
     return Fraction.prototype.equals.call(this, that as unknown as Fraction);
   }
 
-  divisible(that: DeciNumber): boolean {
+  divisible(that: TDeciNumber): boolean {
     return (
       isFinite(this) &&
       isFinite(that) &&
-      Fraction.prototype.divisible.call(this, that)
+      Fraction.prototype.divisible.call(this, that as unknown as Fraction)
     );
   }
 
@@ -345,7 +354,7 @@ export class DeciNumber {
       return NaN;
     }
     if (isInfinite(this)) {
-      if (this.s < 0) {
+      if ((this.s ?? 0n) < 0) {
         return -Infinity;
       }
       return Infinity;
@@ -358,7 +367,7 @@ export class DeciNumber {
       return UNKNOWN_ASSTRING;
     }
     if (isInfinite(this)) {
-      return `${this.s < 0 ? '-' : ''}∞`;
+      return `${(this.s ?? 0n) < 0 ? '-' : ''}∞`;
     }
     return Fraction.prototype.toString.call(this, decimalPlaces);
   }
@@ -387,7 +396,7 @@ export class DeciNumber {
     return Fraction.prototype.toContinued.call(this);
   }
 
-  clone(): DeciNumber {
+  clone(): TDeciNumber {
     return fromNumber(this);
   }
 

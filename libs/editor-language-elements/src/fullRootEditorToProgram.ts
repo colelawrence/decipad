@@ -1,15 +1,15 @@
 import type { RootDocument, TabElement } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import type {
-  RemoteComputer,
+  Computer,
   Program,
   ProgramBlock,
-} from '@decipad/remote-computer';
+} from '@decipad/computer-interfaces';
 import { editorToProgram } from './editorToProgram';
 
 export const fullRootEditorToProgram = async (
   doc: RootDocument,
-  computer: RemoteComputer
+  computer: Computer
 ): Promise<Program> => {
   let blocks: ProgramBlock[] = [];
   // eslint-disable-next-line no-underscore-dangle

@@ -1,4 +1,5 @@
 import { isElement } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
@@ -24,11 +25,8 @@ import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { Dropdown } from '../components/Dropdown';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
-import type { RemoteComputer } from '@decipad/remote-computer';
 
-export const createVariableDefPlugin = (
-  computer: RemoteComputer
-): MyPlatePlugin => ({
+export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
   isElement: true,
   component: VariableDef,

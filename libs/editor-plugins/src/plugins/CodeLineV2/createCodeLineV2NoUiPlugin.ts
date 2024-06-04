@@ -1,5 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
-
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_STRUCTURED_VARNAME,
@@ -12,17 +11,17 @@ import {
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
 
-const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
+const createCodeLineRootPlugin = (_computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2,
   isElement: true,
 });
-const createCodeLineVarnamePlugin = (_computer: RemoteComputer) => ({
+const createCodeLineVarnamePlugin = (_computer: Computer) => ({
   key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
 });
 
 export const createCodeLineV2NoUiPlugin = (
-  computer: RemoteComputer
+  computer: Computer
 ): MyPlatePlugin => ({
   key: 'CODE_LINE_V2_ROOT',
   plugins: [

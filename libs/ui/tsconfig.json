@@ -11,7 +11,7 @@
       "path": "../dom-test-utils"
     },
     {
-      "path": "../computer"
+      "path": "../computer-utils"
     },
     {
       "path": "../shared-config"
@@ -72,6 +72,9 @@
     },
     {
       "path": "../client-env"
+    },
+    {
+      "path": "../language-interfaces"
     }
   ]
 }

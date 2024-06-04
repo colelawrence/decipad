@@ -1,6 +1,6 @@
-import type DeciNumber from '@decipad/number';
-import type { SerializedType, SerializedTypeKind } from './SerializedType';
+import type { SerializedType, SerializedTypeKind } from './SerializedTypes';
 import type { Value } from '.';
+import type { DeciNumberBase } from '@decipad/number';
 
 export type GenericResultGenerator<T> = (
   start?: number,
@@ -12,7 +12,7 @@ export type ResultGenerator = (
   end?: number
 ) => AsyncGenerator<OneResult>;
 
-export type ResultNumber = DeciNumber;
+export type ResultNumber = DeciNumberBase;
 export type ResultString = string;
 export type ResultBoolean = boolean;
 export type ResultDate = bigint | undefined;

@@ -15,13 +15,24 @@ import type {
   TEditor,
   TNode,
 } from '@udecode/plate-common';
-import type { RefObject } from 'react';
+import type { RefObject, KeyboardEvent } from 'react';
 import type { UndoManager } from 'yjs';
 import type { Subject } from 'rxjs';
 import type { BaseEditor, Path } from 'slate';
-import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
 import type { NotebookValue, UserIconKey } from '.';
+
+export type EventInterceptor = (
+  editor: MyEditor,
+  target: MyElementEntry,
+  ev: InterceptableEvent
+) => boolean;
+
+export type InterceptableEvent =
+  | { type: 'delete-text-start'; event: KeyboardEvent }
+  | { type: 'delete-text-end'; event: KeyboardEvent }
+  | { type: 'delete-block'; event: KeyboardEvent }
+  | { type: 'on-enter'; event: KeyboardEvent };
 
 /**
  * Node

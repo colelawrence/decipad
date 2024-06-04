@@ -1,12 +1,12 @@
 import type { z } from 'zod';
+import type { Computer } from '@decipad/computer-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 import type { MyEditor } from '@decipad/editor-types';
 import type { NotebookOpenApi } from '../types';
-import type { RemoteComputer } from '@decipad/remote-computer';
 import type { RootEditorController } from '@decipad/notebook-tabs';
 
 export interface HandlerContext {
-  computer: RemoteComputer;
+  computer: Computer;
 }
 
 export type NotebookActionHandler<

@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   type RootEditorController,
@@ -8,7 +8,7 @@ import { editorPlugins } from './editorPlugins';
 
 interface GetEditorOptions {
   notebookId: string;
-  computer: RemoteComputer;
+  computer: Computer;
 }
 
 export const getEditor = async ({

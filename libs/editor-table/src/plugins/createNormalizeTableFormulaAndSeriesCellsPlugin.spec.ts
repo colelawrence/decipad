@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -13,9 +13,7 @@ import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormali
 let editor: TEditor;
 beforeEach(() => {
   editor = createPlateEditor({
-    plugins: [
-      createNormalizeTableFormulaAndSeriesCellsPlugin(getRemoteComputer()),
-    ],
+    plugins: [createNormalizeTableFormulaAndSeriesCellsPlugin(getComputer())],
   });
 });
 

@@ -1,5 +1,5 @@
-import type DeciNumber from '@decipad/number';
-import type { Unit } from '@decipad/language-units';
+import type { DeciNumberBase } from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
 import { convertBetweenUnits as realConvertBetweenUnits } from '@decipad/language-units';
 import { InferError } from '../InferError';
 
@@ -8,11 +8,11 @@ interface ImprecisionOpts {
 }
 
 export const convertBetweenUnits = (
-  n: DeciNumber,
-  from: Unit.Unit[],
-  to: Unit.Unit[],
+  n: DeciNumberBase,
+  from: Unit[],
+  to: Unit[],
   opts: ImprecisionOpts = {}
-): DeciNumber => {
+): DeciNumberBase => {
   try {
     return realConvertBetweenUnits(n, from, to, opts);
   } catch (err) {

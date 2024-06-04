@@ -1,10 +1,9 @@
-import type { MyValue } from '@decipad/editor-types';
 import type { PlatePlugin, TEditor } from '@udecode/plate-common';
 import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
-
 import { nanoid } from 'nanoid';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import type { MyValue } from '@decipad/editor-types';
+import { getComputer } from '@decipad/computer';
 import fixtureDoc from '../__fixtures__/001_doc.json';
 import { createTablePlugin } from './createTablePlugin';
 
@@ -13,7 +12,7 @@ beforeEach(() => {
   editor = createPlateEditor({
     plugins: [
       createNodeIdPlugin({ options: { idCreator: nanoid } }),
-      createTablePlugin(getRemoteComputer()) as PlatePlugin,
+      createTablePlugin(getComputer()) as PlatePlugin,
     ],
   });
 });

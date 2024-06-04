@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import type { Unit } from '@decipad/language-units';
+import type { Unit } from './Unit';
 import type * as Time from './Time';
 import type { Type } from './Type';
 
@@ -32,7 +31,7 @@ export type ErrSpec = {
     }
   | {
       errType: 'expected-unit';
-      expectedUnit: [Unit.Unit[] | null, Unit.Unit[] | null];
+      expectedUnit: [Unit[] | null, Unit[] | null];
     }
   | { errType: 'unexpected-empty-column' }
   | {
@@ -56,8 +55,8 @@ export type ErrSpec = {
     }
   | {
       errType: 'cannot-convert-between-units';
-      fromUnit: Unit.Unit[];
-      toUnit: Unit.Unit[];
+      fromUnit: Unit[];
+      toUnit: Unit[];
     }
   | {
       errType: 'formula-cannot-call-itself';
@@ -65,7 +64,7 @@ export type ErrSpec = {
     }
   | {
       errType: 'cannot-convert-to-unit';
-      toUnit: Unit.Unit[];
+      toUnit: Unit[];
     }
   | {
       errType: 'unknown-category';

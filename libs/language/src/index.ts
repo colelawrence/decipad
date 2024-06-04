@@ -41,9 +41,9 @@ export {
   SyntaxError,
 } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export { serializeResult } from './result';
 export { validateResult } from './validateResult';
 export * from './run';
+// eslint-disable-next-line no-restricted-imports
 export {
   isAssignment,
   isExpression,
@@ -53,7 +53,7 @@ export {
   walkAstAsync,
   mutateAst,
   isStatement,
-} from './utils';
+} from '@decipad/language-utils';
 export { buildResult } from './utils/buildResult';
 export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';

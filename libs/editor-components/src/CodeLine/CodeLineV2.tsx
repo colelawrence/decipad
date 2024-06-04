@@ -45,6 +45,7 @@ import {
   getNodeString,
   getPreviousNode,
   insertText,
+  isElement,
   useElement,
   useEventEditorSelectors,
 } from '@udecode/plate-common';
@@ -281,15 +282,13 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   );
 
   const onEditorChange = useCallback(() => {
-    const shouldReset = shouldResetContentEditable(
-      editor,
-      props.element.id as string,
-      contentEditable
-    );
+    const shouldReset =
+      isElement(props.element) &&
+      shouldResetContentEditable(editor, props.element.id, contentEditable);
     if (shouldReset !== null) {
       setContentEditable(shouldReset);
     }
-  }, [contentEditable, editor, props.element.id, setContentEditable]);
+  }, [contentEditable, editor, props.element]);
 
   const handleCodeVariableDefinitionClick = useCallback(
     (event: MouseEvent<HTMLSpanElement>) => {

@@ -1,4 +1,4 @@
-import type { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from '@decipad/language-interfaces';
 import { identity } from '@decipad/utils';
 
 export const units: UnitOfMeasure[] = [

@@ -1,10 +1,11 @@
+// eslint-disable-next-line no-restricted-imports
 import {
   getRemoteComputer,
   materializeOneResult,
   runCode,
-  serializeResult,
 } from '@decipad/remote-computer';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
+import { serializeResult } from '@decipad/computer-utils';
 import { pushResultToComputer } from './useLiveConnection';
 
 setupDeciNumberSnapshotSerializer();

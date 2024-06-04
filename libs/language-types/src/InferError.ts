@@ -1,8 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
 import stringify from 'json-stringify-safe';
-import type { Unit } from '@decipad/language-units';
-import type { ErrSpec, IInferError } from '@decipad/language-interfaces';
+import type { Unit, ErrSpec, IInferError } from '@decipad/language-interfaces';
 import type * as Time from './Time';
 import type { Type } from './Type';
 
@@ -63,7 +62,7 @@ export class InferError extends Error implements IInferError {
     });
   }
 
-  static expectedUnit(expected: Unit.Unit[] | null, got: Unit.Unit[] | null) {
+  static expectedUnit(expected: Unit[] | null, got: Unit[] | null) {
     return new InferError({
       errType: 'expected-unit',
       expectedUnit: [expected, got],
@@ -110,7 +109,7 @@ export class InferError extends Error implements IInferError {
     });
   }
 
-  static cannotConvertBetweenUnits(fromUnit: Unit.Unit[], toUnit: Unit.Unit[]) {
+  static cannotConvertBetweenUnits(fromUnit: Unit[], toUnit: Unit[]) {
     return new InferError({
       errType: 'cannot-convert-between-units',
       fromUnit,
@@ -122,7 +121,7 @@ export class InferError extends Error implements IInferError {
     return new InferError({ errType: 'formula-cannot-call-itself', fname });
   }
 
-  static cannotConvertToUnit(toUnit: Unit.Unit[]) {
+  static cannotConvertToUnit(toUnit: Unit[]) {
     return new InferError({
       errType: 'cannot-convert-to-unit',
       toUnit,

@@ -1,4 +1,4 @@
-import type { SerializedType } from './SerializedType';
+import type { SerializedType } from './SerializedTypes';
 
 export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';

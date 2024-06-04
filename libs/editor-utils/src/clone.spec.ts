@@ -1,5 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -7,13 +6,14 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
+import type { Computer } from '@decipad/computer-interfaces';
 import { clone } from '.';
 
 jest.mock('nanoid', () => ({ nanoid: () => 'mock-nanoid' }));
 
-let computer: RemoteComputer;
+let computer: Computer;
 beforeEach(() => {
-  computer = getRemoteComputer();
+  computer = getComputer();
 });
 
 it('clones and uses a new nanoid', async () => {

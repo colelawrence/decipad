@@ -2,7 +2,6 @@ export { CodeResult } from './CodeResult/CodeResult';
 export * from './PlotParams/PlotParams';
 export * from './UploadProgressModal/UploadProgressModal';
 export * from './UploadFileModal/UploadFileModal';
-export * from './StatsPopup/StatsPopup';
 export * from './SmartColumnCell/SmartColumnCell';
 export * from './SmartRow/SmartRow';
 export * from './EditorTable/EditorTable';

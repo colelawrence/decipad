@@ -1,7 +1,7 @@
-import type DeciNumber from '@decipad/number';
+import type { DeciNumberBase } from '@decipad/number';
 import { N, ONE } from '@decipad/number';
+import type { Unit } from '@decipad/language-interfaces';
 import { getUnitByName, knowsUnit, unitUsesPrefixes } from '.';
-import type { Unit } from '../Unit/Unit';
 
 const abbreviatedPrefixes = {
   q: 'quecto',
@@ -33,7 +33,7 @@ const abbreviatedPrefixes = {
 type AbbreviatedPrefixes = typeof abbreviatedPrefixes;
 
 type MultiplierPrefixToFraction = {
-  [P in AbbreviatedPrefixes[keyof AbbreviatedPrefixes]]: DeciNumber;
+  [P in AbbreviatedPrefixes[keyof AbbreviatedPrefixes]]: DeciNumberBase;
 };
 const multiplierPrefixToFraction: MultiplierPrefixToFraction = {
   quecto: N(1, 1_000_000_000_000_000_000_000_000_000_000n), // 1e-30,
@@ -64,7 +64,7 @@ const multiplierPrefixToFraction: MultiplierPrefixToFraction = {
 
 const multiplierPrefixes = Object.keys(multiplierPrefixToFraction);
 
-function trimPrefix(unitName: string): [DeciNumber, string] {
+function trimPrefix(unitName: string): [DeciNumberBase, string] {
   for (const fullPrefix of multiplierPrefixes) {
     if (unitName.startsWith(fullPrefix)) {
       return [

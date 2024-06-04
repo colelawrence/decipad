@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { parseStatement } from '@decipad/remote-computer';
 import type {
   AnyElement,
@@ -20,7 +20,7 @@ import {
 import { getNodeString } from '@udecode/plate-common';
 
 async function deduplicateVarNameInDef(
-  computer: RemoteComputer,
+  computer: Computer,
   e: VariableDefinitionElement
 ) {
   e.children[0].children[0].text = await computer.getAvailableIdentifier(
@@ -29,7 +29,7 @@ async function deduplicateVarNameInDef(
 }
 
 async function deduplicateAssignmentVarName(
-  computer: RemoteComputer,
+  computer: Computer,
   e: CodeLineElement
 ) {
   const code = getNodeString(e);
@@ -42,7 +42,7 @@ async function deduplicateAssignmentVarName(
 }
 
 async function deduplicateVarNameInCodeLineV2(
-  computer: RemoteComputer,
+  computer: Computer,
   e: CodeLineV2Element
 ) {
   e.children[0].children[0].text = await computer.getAvailableIdentifier(
@@ -51,7 +51,7 @@ async function deduplicateVarNameInCodeLineV2(
 }
 
 async function deduplicateVarNameInStructuredIn(
-  computer: RemoteComputer,
+  computer: Computer,
   e: StructuredInputElement
 ) {
   e.children[0].children[0].text = await computer.getAvailableIdentifier(
@@ -59,10 +59,7 @@ async function deduplicateVarNameInStructuredIn(
   );
 }
 
-async function deduplicateTableVarName(
-  computer: RemoteComputer,
-  e: TableElement
-) {
+async function deduplicateTableVarName(computer: Computer, e: TableElement) {
   const captionEl = e.children[0].children[0];
   const varName = getNodeString(captionEl);
   e.children[0].children[0].children[0].text =
@@ -70,7 +67,7 @@ async function deduplicateTableVarName(
 }
 
 async function deduplicateIntegrationVarName(
-  computer: RemoteComputer,
+  computer: Computer,
   e: IntegrationTypes.IntegrationBlock
 ): Promise<void> {
   const varName = getNodeString(e.children[0]);
@@ -79,7 +76,7 @@ async function deduplicateIntegrationVarName(
 }
 
 export const deduplicateVarNameInBlock = async <T extends AnyElement>(
-  computer: RemoteComputer,
+  computer: Computer,
   el: T
 ): Promise<T> => {
   switch (el.type) {

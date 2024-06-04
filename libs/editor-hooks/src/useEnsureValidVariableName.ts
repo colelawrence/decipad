@@ -1,4 +1,4 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { identifierRegExpGlobal } from '@decipad/remote-computer';
 import type { MyElement, PlainText } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
@@ -123,7 +123,7 @@ function stripOffInvalidIdentifierCharacters(varName: string) {
 }
 
 /** Calls callback when slate useSelected() changes to false */
-function useSlateOnBlur(computer: RemoteComputer, onBlur: () => void) {
+function useSlateOnBlur(computer: Computer, onBlur: () => void) {
   const selected = useSelected();
   const previouslySelected = useRef(selected);
 

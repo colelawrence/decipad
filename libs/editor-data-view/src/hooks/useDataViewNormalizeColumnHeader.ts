@@ -1,5 +1,5 @@
 import type { DataViewHeader, MyEditor } from '@decipad/editor-types';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import type { Computer } from '@decipad/computer-interfaces';
 import { findNodePath, setNodes } from '@udecode/plate-common';
 import { useEffect } from 'react';
 import type { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { debounceTime } from 'rxjs';
 
 export const useDataViewNormalizeColumnHeader = (
   editor: MyEditor,
-  computer: RemoteComputer,
+  computer: Computer,
   tableBlockId: string | undefined,
   element?: DataViewHeader
 ) => {
