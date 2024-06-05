@@ -322,6 +322,7 @@
     "p-series": "3.0.0",
     "patch-package": "7.0.2",
     "pg": "^8.10.0",
+    "playwright-performance": "^1.0.2",
     "pluralize": "8.0.0",
     "postinstall-postinstall": "2.1.0",
     "prismjs": "^1.29.0",

@@ -318,3 +318,6 @@ apps/frontend/vite.config.js
 
 # Vite PWA
 dev-dist
+
+# performance test results
+performance-results

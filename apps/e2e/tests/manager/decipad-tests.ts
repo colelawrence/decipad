@@ -1,7 +1,15 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { test as base } from '@playwright/test';
 import { User } from './test-users';
 import { genericTestEmail, genericTestEmail2 } from '../../utils/src/users';
 import { STORAGE_STATE, STORAGE_STATE2 } from '../../playwright.config';
+
+import type {
+  PerformanceOptions,
+  PlaywrightPerformance,
+  PerformanceWorker,
+} from 'playwright-performance';
+import { playwrightPerformance } from 'playwright-performance';
 
 type DecipadFixtures = {
   testUser: User;
@@ -11,7 +19,14 @@ type DecipadFixtures = {
   anotherTestUser: User;
 };
 
-export const test = base.extend<DecipadFixtures>({
+export const test = base.extend<
+  PlaywrightPerformance & DecipadFixtures,
+  PerformanceOptions & PerformanceWorker
+>({
+  performance: playwrightPerformance.performance,
+  performanceOptions: [{}, { scope: 'worker' }],
+  worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }],
+
   testUser: async ({ browser }, use) => {
     const context = await browser.newContext({ storageState: STORAGE_STATE });
     const userPage = new User(context, await context.newPage());

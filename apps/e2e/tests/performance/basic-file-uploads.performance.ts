@@ -4,6 +4,8 @@ import { Notebook } from '../manager/notebook';
 import { Workspace } from '../manager/workspace';
 import { Timeouts } from '../../utils/src';
 
+test.describe.configure({ mode: 'serial' });
+
 export async function deleteAllWorkspaceNotebooks(
   page: Page,
   workspace: Workspace
@@ -13,9 +15,7 @@ export async function deleteAllWorkspaceNotebooks(
     if ((await page.getByText('No documents to list').count()) !== 1) {
       await workspace.archivePad(0);
     }
-    await expect(page.getByText('No documents to list')).toBeVisible({
-      timeout: 100,
-    });
+    await expect(page.getByText('No documents to list')).toBeVisible();
   }).toPass();
   await workspace.openArchive();
 
@@ -24,22 +24,23 @@ export async function deleteAllWorkspaceNotebooks(
     if ((await page.getByText('No documents to list').count()) !== 1) {
       await workspace.deleteNotepad(0);
     }
-    await expect(page.getByText('No documents to list')).toBeVisible({
-      timeout: 100,
-    });
+    await expect(page.getByText('No documents to list')).toBeVisible();
   }).toPass();
 }
 
-test.describe('production regression checks', () => {
+test.describe('staging performance checks', () => {
   let page: Page;
   let notebook: Notebook;
   let workspace: Workspace;
+
+  // get PR Number
+  const deployName = process.env.DEPLOY_NAME;
 
   const currentDate = new Date().getTime();
   const notebookTitle =
     currentDate.toString() + Math.round(Math.random() * 10000);
 
-  test.beforeEach(async ({ browser }) => {
+  test('login', async ({ browser }) => {
     // get staging user agent string
     const userAgent = process.env.USER_AGENT_KEY;
 
@@ -53,61 +54,52 @@ test.describe('production regression checks', () => {
 
     notebook = new Notebook(page);
     workspace = new Workspace(page);
+  });
+
+  test('check workspace is empty', async ({}) => {
     await test.step('create new notebook for the test', async () => {
       // go to production
-      await page.goto('https://app.decipad.com');
-
-      await expect(page.getByText('Regression Testing').first()).toBeVisible();
+      await page.goto(`https://${deployName}.decipadstaging.com`);
 
       // if there are notebooks there from previous fails remove eveything
       await deleteAllWorkspaceNotebooks(page, workspace);
-
-      // go back to production (in case it went to the archive to reset the workspace)
-      await page.goto('https://app.decipad.com');
-
-      await workspace.clickNewPadButton();
-      await notebook.closeSidebar();
-      await notebook.waitForEditorToLoad();
-      await notebook.selectLastParagraph();
-      await notebook.updateNotebookTitle(notebookTitle);
     });
   });
 
-  test.afterEach(async () => {
-    await test.step('remove notebook from the test', async () => {
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await page.waitForTimeout(Timeouts.redirectDelay);
-      await page.getByTestId('go-to-workspace').click();
-
-      // restored an empty workspace for the next test
-      await deleteAllWorkspaceNotebooks(page, workspace);
-    });
-    page.close();
+  test('load workspace', async ({ performance }) => {
+    performance.sampleStart('Load Workspace');
+    await page.goto(`https://${deployName}.decipadstaging.com`);
+    await expect(page.getByText('Welcome to')).toBeVisible();
+    await expect(page.getByTestId('dashboard')).toBeVisible();
+    performance.sampleEnd('Load Workspace');
+    expect
+      .soft(
+        performance.getSampleTime('Load Workspace'),
+        'Loading workspace took more than 10 seconds'
+      )
+      .toBeLessThanOrEqual(10000);
   });
 
-  test('checks image uploads work', async () => {
-    await notebook.closeSidebar();
+  test('new notebook', async ({ performance }) => {
+    performance.sampleStart('New Norwbook');
+    await workspace.clickNewPadButton();
     await notebook.waitForEditorToLoad();
-    await notebook.selectLastParagraph();
-    await notebook.addImage({
-      method: 'upload',
-      file: './__fixtures__/images/download.png',
-    });
-
-    await test.step('delete image imported', async () => {
-      await page.getByTestId('drag-handle').nth(0).click();
-      await page.getByRole('menuitem', { name: 'Trash Delete' }).click();
-      await expect(
-        page.getByTestId('notebook-image-block').locator('img')
-      ).toBeHidden();
-    });
+    performance.sampleEnd('New Norwbook');
+    expect
+      .soft(
+        performance.getSampleTime('New Norwbook'),
+        'Creating a Notebook took more than 5 seconds'
+      )
+      .toBeLessThanOrEqual(5000);
   });
 
-  test('checks csv uploads work', async () => {
+  test('checks csv uploads work', async ({ performance }) => {
     await test.step('importing csv link through csv panel with link', async () => {
+      await notebook.updateNotebookTitle(notebookTitle);
       await notebook.closeSidebar();
       await notebook.waitForEditorToLoad();
       await notebook.selectLastParagraph();
+
       await notebook.openCSVUploader();
       await page.getByTestId('link-file-tab').click();
       await page
@@ -115,7 +107,9 @@ test.describe('production regression checks', () => {
         .fill(
           'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv'
         );
+
       await page.getByRole('button', { name: 'insert data' }).click();
+      performance.sampleStart('Ingest CSV');
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
       await expect(async () => {
@@ -134,5 +128,21 @@ test.describe('production regression checks', () => {
         page.getByText('20 rows, previewing rows 1 to 10')
       ).toBeVisible();
     });
+    performance.sampleEnd('Ingest CSV');
+    expect
+      .soft(
+        performance.getSampleTime('Ingest CSV'),
+        'CSV Ingest took more than 10 seconds'
+      )
+      .toBeLessThanOrEqual(10000);
+  });
+
+  test('leaves workspace clean', async ({}) => {
+    await page.goto(`https://${deployName}.decipadstaging.com`);
+
+    // restored an empty workspace for the next test
+    await deleteAllWorkspaceNotebooks(page, workspace);
+
+    page.close();
   });
 });

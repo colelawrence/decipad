@@ -22,6 +22,11 @@ export const STORAGE_STATE_PRODUCTION = path.join(
   './utils/src/user_production.json'
 );
 
+export const STORAGE_STATE_STAGING = path.join(
+  __dirname,
+  './utils/src/user_staging.json'
+);
+
 const config: PlaywrightTestConfig = {
   testDir: './tests',
   /* Maximum time one test can run for. */
@@ -74,6 +79,11 @@ const config: PlaywrightTestConfig = {
       testDir: './utils/src',
     },
     {
+      name: 'setup_staging',
+      testMatch: '**/**/login-staging.setup.ts',
+      testDir: './utils/src',
+    },
+    {
       name: 'regression',
       dependencies: ['setup_production'],
       testDir: './tests/regression',
@@ -81,6 +91,21 @@ const config: PlaywrightTestConfig = {
       use: {
         ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE_PRODUCTION,
+        trace: 'retain-on-failure',
+        contextOptions: {
+          // chromium-specific permissions
+          permissions: ['clipboard-read', 'clipboard-write'],
+        },
+      },
+    },
+    {
+      name: 'performance',
+      dependencies: ['setup_staging'],
+      testDir: './tests/performance',
+      testMatch: '**/**/*.performance.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE_STAGING,
         trace: 'retain-on-failure',
         contextOptions: {
           // chromium-specific permissions
