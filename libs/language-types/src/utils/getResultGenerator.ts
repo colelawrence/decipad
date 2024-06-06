@@ -9,7 +9,8 @@ export const getResultGenerator = (
     if (Array.isArray(v)) {
       return (start = 0, end = Infinity) => slice(from(v), start, end);
     } else {
-      throw new Error('Expected result generator or array');
+      console.error(v);
+      throw new Error(`Expected result generator or array and got ${typeof v}`);
     }
   }
   return v;

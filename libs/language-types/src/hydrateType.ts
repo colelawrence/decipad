@@ -5,6 +5,7 @@ const hydrateUnit = (u: Unit): Unit => ({
   ...u,
   exp: N(u.exp),
   multiplier: N(u.multiplier),
+  aliasFor: u.aliasFor && u.aliasFor.map(hydrateUnit),
 });
 
 export const hydrateType = (type: SerializedType): SerializedType => {

@@ -1,13 +1,15 @@
 // eslint-disable-next-line no-restricted-imports
-import { getComputer } from '@decipad/computer';
+import { getComputer, materializeResult } from '@decipad/computer';
 import { importFromUnknownJson } from './importFromUnknownJson';
 
 it('allows different "types" to be in the same columns', async () => {
   await expect(
-    importFromUnknownJson(
-      getComputer(),
-      { hello: ['100', '200', 'not a number'] },
-      {}
+    materializeResult(
+      importFromUnknownJson(
+        getComputer(),
+        { hello: ['100', '200', 'not a number'] },
+        {}
+      )
     )
   ).resolves.toMatchInlineSnapshot(`
     {
@@ -37,7 +39,13 @@ it('allows different "types" to be in the same columns', async () => {
 describe('Inferring types', () => {
   it('Infers number columns', async () => {
     await expect(
-      importFromUnknownJson(getComputer(), { hello: ['100', '200', '300'] }, {})
+      materializeResult(
+        importFromUnknownJson(
+          getComputer(),
+          { hello: ['100', '200', '300'] },
+          {}
+        )
+      )
     ).resolves.toMatchInlineSnapshot(`
       {
         "type": {
@@ -81,10 +89,12 @@ describe('Inferring types', () => {
 
   it('Infers number columns with units', async () => {
     await expect(
-      importFromUnknownJson(
-        getComputer(),
-        { price: ['$100', '$200', '$300'] },
-        {}
+      materializeResult(
+        importFromUnknownJson(
+          getComputer(),
+          { price: ['$100', '$200', '$300'] },
+          {}
+        )
       )
     ).resolves.toMatchInlineSnapshot(`
       {
@@ -193,10 +203,12 @@ describe('single json values and infers correct type', () => {
 describe('Nested objects', () => {
   it('can import nested JSON objects', async () => {
     await expect(
-      importFromUnknownJson(
-        getComputer(),
-        { hello: [{ world: 'a string' }] },
-        {}
+      materializeResult(
+        importFromUnknownJson(
+          getComputer(),
+          { hello: [{ world: 'a string' }] },
+          {}
+        )
       )
     ).resolves.toMatchInlineSnapshot(`
       {
@@ -236,10 +248,12 @@ describe('Nested objects', () => {
 
   it('can import some nested objects', async () => {
     await expect(
-      importFromUnknownJson(
-        getComputer(),
-        { col1: 123, col2: [500, 600, 890] },
-        {}
+      materializeResult(
+        importFromUnknownJson(
+          getComputer(),
+          { col1: 123, col2: [500, 600, 890] },
+          {}
+        )
       )
     ).resolves.toMatchInlineSnapshot(`
       {

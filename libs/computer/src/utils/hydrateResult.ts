@@ -1,43 +1,32 @@
 import {
   type SerializedTypes,
-  type Unit,
   type Result,
   Unknown,
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { buildResult } from '@decipad/language';
+import {
+  buildResult,
+  getResultGenerator,
+  hydrateType,
+} from '@decipad/language';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { isColumn } from './isColumn';
-
-const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
-  unit?.map(
-    (u) =>
-      ({
-        ...u,
-        exp: fromNumber(u.exp),
-        multiplier: fromNumber(u.multiplier),
-        aliasFor: u.aliasFor && fixUnit(u.aliasFor),
-      } as Unit)
-  ) ?? null;
+import { map } from '@decipad/generator-utils';
 
 // eslint-disable-next-line complexity
 export const hydrateResult = <T extends Result.Result>(
   result: T | undefined
 ): T | undefined => {
-  if (result == null) {
+  if (result == null || result.value == null) {
     return undefined;
   }
   const { type, value } = result;
   let replaceValue: Result.OneResult | undefined;
-  let replaceType: typeof type | undefined;
+  let replaceType = hydrateType(type);
   switch (type.kind) {
     case 'number':
       replaceValue = fromNumber(value);
-      replaceType = {
-        ...type,
-        unit: fixUnit(type.unit),
-      } as typeof type;
       break;
     case 'date':
       if (
@@ -53,30 +42,13 @@ export const hydrateResult = <T extends Result.Result>(
       break;
     case 'column':
     case 'materialized-column':
-      if (type.cellType.kind === 'number') {
-        replaceValue = (value as Result.OneResult[])?.map((n) => fromNumber(n));
-        replaceType = {
-          ...type,
-          kind: 'materialized-column',
-          cellType: {
-            ...type.cellType,
-            unit: fixUnit(type.cellType.unit),
-          },
-        } as typeof type;
-        break;
-      }
-      const replacements = (value as Result.OneResult[])?.map((v) =>
-        hydrateResult({ type: type.cellType, value: v } as Result.Result)
-      );
-      replaceValue = replacements?.map((r) => r?.value) as
-        | Result.OneResult
-        | undefined;
-      if (replacements?.length) {
-        replaceType = {
-          ...type,
-          cellType: getDefined(replacements[0]?.type),
-        };
-      }
+      const valueGen = getResultGenerator(value);
+      replaceValue = (start = 0, end = Infinity) =>
+        map(
+          valueGen(start, end),
+          (value) => hydrateResult({ type: type.cellType, value })?.value
+        );
+
       break;
     case 'table':
     case 'materialized-table': {
@@ -92,11 +64,11 @@ export const hydrateResult = <T extends Result.Result>(
                 : '',
           },
           value: (value as Result.OneResult[])?.[colIndex],
-        } as Result.Result)
+        })
       );
       replaceType = {
         ...type,
-        kind: 'materialized-table',
+        kind: type.kind,
         columnTypes: replacementColumns.map((col) =>
           isColumn(col?.type) ? col?.type.cellType : undefined
         ) as SerializedTypes.Table['columnTypes'],
