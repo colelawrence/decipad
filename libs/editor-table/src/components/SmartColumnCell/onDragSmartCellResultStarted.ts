@@ -1,11 +1,11 @@
 import type { MyEditor } from '@decipad/editor-types';
-import { setSlateFragment } from '@decipad/editor-utils';
 import type { DragEvent } from 'react';
 import type { Result } from '@decipad/remote-computer';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';
 
 export const DRAG_SMART_CELL_RESULT = 'smart-cell-result';
+export const DRAG_SMART_CELL_RESULT_CONTENT_TYPE = 'text/x-smart-cell-result';
 
 export const onDragSmartCellResultStarted =
   (editor: MyEditor) =>
@@ -13,8 +13,9 @@ export const onDragSmartCellResultStarted =
   (e: DragEvent) => {
     // eslint-disable-next-line no-param-reassign
     editor.dragging = DRAG_SMART_CELL_RESULT;
-
-    setSlateFragment(e.dataTransfer, [expression]);
+    // This is needed to make it draggable.
+    e.dataTransfer.setData('text', '');
+    e.dataTransfer.setData(DRAG_SMART_CELL_RESULT_CONTENT_TYPE, expression);
 
     if (editor.previewRef?.current) {
       dndPreviewActions.previewText(
@@ -23,6 +24,4 @@ export const onDragSmartCellResultStarted =
 
       e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
     }
-
-    editor.setFragmentData(e.dataTransfer, 'drag');
   };

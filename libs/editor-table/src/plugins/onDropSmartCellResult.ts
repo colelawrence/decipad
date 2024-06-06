@@ -1,30 +1,19 @@
-import type { MyGenericEditor, MyText } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_LIC,
-  ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
+  type MyGenericEditor,
 } from '@decipad/editor-types';
-import {
-  getSlateFragment,
-  insertNodes,
-  selectEventRange,
-} from '@decipad/editor-utils';
+import { RICH_TEXT_BLOCK_TYPES, selectEventRange } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
-import type { ElementOf, TEditor, Value } from '@udecode/plate-common';
 import {
-  getBlockAbove,
-  isElementEmpty,
-  isText,
-  removeNodes,
-} from '@udecode/plate-common';
+  DRAG_SMART_CELL_RESULT,
+  DRAG_SMART_CELL_RESULT_CONTENT_TYPE,
+} from '../components/SmartColumnCell/onDragSmartCellResultStarted';
+import type { Value } from '@udecode/plate-common';
+import { getBlockAbove } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
-import { nanoid } from 'nanoid';
 import type { DragEvent } from 'react';
-import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
-
-type DragCellData = string;
 
 export const onDropSmartCellResult =
   <TV extends Value, TE extends MyGenericEditor<TV>>() =>
@@ -41,53 +30,27 @@ export const onDropSmartCellResult =
 
       selectEventRange<TV>(editor)(event);
 
-      const fragment = getSlateFragment(
-        event.dataTransfer
-      ) as unknown as DragCellData[];
-      if (!fragment) return;
+      const expression = event.dataTransfer.getData(
+        DRAG_SMART_CELL_RESULT_CONTENT_TYPE
+      );
+      if (!expression) return;
 
-      const filteredFragments: MyText[] = [];
+      const blockAbove = getBlockAbove(editor) ?? [];
+      const [block] = blockAbove;
+      if (!block) return;
 
-      fragment.forEach((data) => {
-        const blockAbove = getBlockAbove(editor) ?? [];
-        const [block, blockPath] = blockAbove;
-        if (!block) return;
-
-        const text = data;
-
-        if (
-          block.type === ELEMENT_CODE_LINE ||
-          block.type === ELEMENT_CODE_LINE_V2_CODE
-        ) {
-          filteredFragments.push({
-            text,
-          });
-        } else if (
-          block.type === ELEMENT_PARAGRAPH ||
-          block.type === ELEMENT_LIC
-        ) {
-          filteredFragments.push({
-            text,
+      if (
+        block.type === ELEMENT_CODE_LINE ||
+        block.type === ELEMENT_CODE_LINE_V2_CODE
+      ) {
+        editor.insertFragment([{ text: expression }]);
+      } else if (RICH_TEXT_BLOCK_TYPES.includes(block.type as any)) {
+        editor.insertFragment([
+          {
+            text: expression,
             [MARK_MAGICNUMBER]: true,
-          });
-        } else {
-          if (isElementEmpty(editor, block as ElementOf<TEditor<Value & TV>>)) {
-            removeNodes(editor, { at: blockPath });
-          }
-          insertNodes(editor, [
-            {
-              id: nanoid(),
-              type: ELEMENT_CODE_LINE,
-              children: [
-                {
-                  text,
-                },
-              ],
-            } as ElementOf<TEditor<Value & TV>>,
-          ]);
-        }
-      });
-
-      editor.insertFragment(filteredFragments.filter(isText));
+          },
+        ]);
+      }
     }
   };
