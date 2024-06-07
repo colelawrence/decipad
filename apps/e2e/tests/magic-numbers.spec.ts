@@ -206,4 +206,17 @@ test('Inputs and magic numbers', async ({ testUser }) => {
     await page.getByTestId('number-column-separator').last().waitFor();
     await page.getByTestId('number-column-ellipsis').last().waitFor();
   });
+
+  await test.step('move widget to another tab and check inline number still works', async () => {
+    await notebook.createTab('Another Tab');
+    await notebook.selectTab('New Tab');
+    await notebook.moveToTab(0, 'Another Tab');
+    // adding some action so the computer has time to update after the move
+    await notebook.focusOnBody();
+    await notebook.updateNotebookTitle('Checking tabs');
+    await expect(
+      page.getByTestId('magic-number').getByText('1,337'),
+      "inline number dosn't work when variable is moved to another tab"
+    ).toBeVisible();
+  });
 });
