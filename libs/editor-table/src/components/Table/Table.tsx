@@ -1,5 +1,5 @@
 import { DraggableBlock } from '@decipad/editor-components';
-import { useNodePath } from '@decipad/editor-hooks';
+import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import type { PlateComponent, UserIconKey } from '@decipad/editor-types';
 import { ELEMENT_TABLE, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
@@ -7,7 +7,6 @@ import type { EditorTableContextValue } from '@decipad/react-contexts';
 import {
   EditorTableContext,
   EditorTableResultContext,
-  useComputer,
   useCurrentWorkspaceStore,
   useEditorStylesContext,
 } from '@decipad/react-contexts';

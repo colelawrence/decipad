@@ -1,14 +1,13 @@
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
   useCodeConnectionStore,
-  useComputer,
   useConnectionStore,
   useNotebookId,
 } from '@decipad/react-contexts';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDeciVariables, useIntegrationOptions } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
-import { useWorker } from '@decipad/editor-hooks';
+import { useComputer, useWorker } from '@decipad/editor-hooks';
 import { findNodePath, getNodeString, setNodes } from '@udecode/plate-common';
 import type { ResultMessageType } from '@decipad/safejs';
 import { useMyEditorRef, type IntegrationTypes } from '@decipad/editor-types';

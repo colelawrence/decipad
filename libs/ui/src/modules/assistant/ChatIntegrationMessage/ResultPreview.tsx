@@ -1,7 +1,7 @@
 import type { ErrSpec, Result } from '@decipad/language-interfaces';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
-import { IntegrationStore, useComputer } from '@decipad/react-contexts';
+import { IntegrationStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
@@ -14,6 +14,7 @@ import { ContentEditableInput } from 'libs/ui/src/shared';
 import { CodeResult } from '../../editor';
 import { TableColumnMenu } from '../../editor/TableColumnMenu/TableColumnMenu';
 import { ErrorMessage } from '../../editor/ErrorMessage/ErrorMessage';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface ResultPreviewProps {
   result?: Result.Result;

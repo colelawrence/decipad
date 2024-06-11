@@ -5,11 +5,11 @@ import { useAutoConvertToSmartRef } from '@decipad/editor-components';
 import type { PlateComponent } from '@decipad/editor-types';
 import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';
 import { useDeepMemo } from '@decipad/react-utils';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 import { useCallback } from 'react';
+import { useComputer } from '@decipad/editor-hooks';
 
 const errorDebounceMs = 500;
 

@@ -1,3 +1,5 @@
+import type { FC, PropsWithChildren } from 'react';
+import { useEffect } from 'react';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import type {
   CodeLineElement,
@@ -11,27 +13,24 @@ import {
 import { act, render } from '@testing-library/react';
 import type { PlatePlugin } from '@udecode/plate-common';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import { getRemoteComputer, parseBlock } from '@decipad/remote-computer';
+import { defaultComputerResults, parseBlock } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
-import {
-  AnnotationsProvider,
-  ComputerContextProvider,
-} from '@decipad/react-contexts';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
 import { BrowserRouter } from 'react-router-dom';
-import type { Computer } from '@decipad/computer-interfaces';
+import type { NotebookResults, Program } from '@decipad/computer-interfaces';
+import { useComputer } from '@decipad/editor-hooks';
 
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
-type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'> & {
-  computer: Computer;
-};
-const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
-  <DndProvider backend={HTML5Backend}>
-    <ComputerContextProvider computer={computer}>
+type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'>;
+const PlateWrapper = ({ children }: PlateWrapperProps) => {
+  const computer = useComputer();
+  return (
+    <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
         ()
         <Plate<MyValue>
@@ -51,18 +50,42 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
           <PlateContent />
         </Plate>
       </BrowserRouter>
-    </ComputerContextProvider>
-  </DndProvider>
-);
+    </DndProvider>
+  );
+};
+
+interface ComputerWrapperProps {
+  injectResults?: Partial<NotebookResults>;
+  initialProgram?: Program;
+}
+
+const ComputerWrapper =
+  ({
+    injectResults,
+    initialProgram,
+  }: ComputerWrapperProps): FC<PropsWithChildren> =>
+  ({ children }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const computer = useComputer();
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      if (injectResults) {
+        computer.results.next({
+          ...defaultComputerResults,
+          ...injectResults,
+        });
+      }
+      if (initialProgram) {
+        computer.pushComputeDelta({ program: { upsert: initialProgram } });
+      }
+    }, [computer]);
+
+    return <>{children}</>;
+  };
 
 describe('variable highlights', () => {
   it('show bubbles in variable declarations', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [getIdentifiedBlock('x1', 'id = 42')],
-    });
-
-    await timeout(100);
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -83,9 +106,17 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [getIdentifiedBlock('x1', 'id = 42')],
+        }),
+      }
     );
+
+    await timeout(100);
+
     cleanup = await applyCssVars();
     const bubbleBackgroundColor = findParentWithStyle(
       getByText(/id/),
@@ -101,15 +132,6 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles in usages of defined variables', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('x1', 'x=42'),
-        getIdentifiedBlock('x2', 'y=x'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -135,9 +157,19 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [
+            getIdentifiedBlock('x1', 'x=42'),
+            getIdentifiedBlock('x2', 'y=x'),
+          ],
+        }),
+      }
     );
+
+    await act(() => timeout(100));
 
     const [xDecl, xUsage] = getAllByText(/x/);
 
@@ -155,15 +187,6 @@ describe('variable highlights', () => {
   });
 
   it('highlights defined columns of a table', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('x1', 'MyTable = { A = [1] }'),
-        getIdentifiedBlock('x2', 'MyTable.A'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -194,9 +217,19 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [
+            getIdentifiedBlock('x1', 'MyTable = { A = [1] }'),
+            getIdentifiedBlock('x2', 'MyTable.A'),
+          ],
+        }),
+      }
     );
+
+    await act(() => timeout(100));
 
     cleanup = await applyCssVars();
     const [tableDecl, tableUsage, notTableUsage] = getAllByText(/MyTable/).map(
@@ -219,15 +252,6 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access inside table', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
-        getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -248,9 +272,19 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [
+            getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
+            getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
+          ],
+        }),
+      }
     );
+
+    await act(() => timeout(100));
 
     // first element resolves to <Add /> icon
     const [_, colDecl, colUsage1, colUsage2] = getAllByText(/A/);
@@ -268,14 +302,6 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access with spaces', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -296,9 +322,18 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [
+            getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}'),
+          ],
+        }),
+      }
     );
+
+    await act(() => timeout(100));
 
     const [colDecl, colUsage] = getAllByText(/A/);
     const [tableDecl, tableUsage] = getAllByText(/x/);
@@ -317,16 +352,6 @@ describe('variable highlights', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('does not mistake a table column access for another declared variable', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('x1', 'x = { A = [1]}'),
-        getIdentifiedBlock('x2', 'B = 2'),
-        getIdentifiedBlock('x3', 'x.B'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -345,9 +370,17 @@ describe('variable highlights', () => {
       } as CodeLineElement,
     ];
 
-    const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
-    );
+    const { getAllByText } = render(<PlateWrapper children={children} />, {
+      wrapper: ComputerWrapper({
+        initialProgram: [
+          getIdentifiedBlock('x1', 'x = { A = [1]}'),
+          getIdentifiedBlock('x2', 'B = 2'),
+          getIdentifiedBlock('x3', 'x.B'),
+        ],
+      }),
+    });
+
+    await act(() => timeout(100));
 
     const [bVar, bColumn] = getAllByText(/B/);
     cleanup = await applyCssVars();
@@ -359,15 +392,6 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles for external variables in function declarations', async () => {
-    const computer = getRemoteComputer({
-      initialProgram: [
-        getIdentifiedBlock('x1', 'X=3'),
-        getIdentifiedBlock('x2', 'F(A) = A+X'),
-      ],
-    });
-
-    await act(() => timeout(100));
-
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -393,9 +417,19 @@ describe('variable highlights', () => {
           permission: 'WRITE',
         }}
       >
-        <PlateWrapper children={children} computer={computer} />
-      </AnnotationsProvider>
+        <PlateWrapper children={children} />
+      </AnnotationsProvider>,
+      {
+        wrapper: ComputerWrapper({
+          initialProgram: [
+            getIdentifiedBlock('x1', 'X=3'),
+            getIdentifiedBlock('x2', 'F(A) = A+X'),
+          ],
+        }),
+      }
     );
+
+    await act(() => timeout(100));
 
     const [xDecl, xUsage] = getAllByText(/X/);
     cleanup = await applyCssVars();

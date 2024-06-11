@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
-import { useResult } from '@decipad/react-contexts';
 import { type Result } from '@decipad/remote-computer';
 import { Value } from '@decipad/language-types';
 import { type DataViewFilter } from '@decipad/editor-types';
 import type { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface UseDataViewLayoutDataProps {
   blockId: string;
@@ -30,7 +30,9 @@ export const useDataViewLayoutData = ({
   includeTotal = true,
   preventExpansion = false,
 }: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
-  const treeIdentResult = useResult(`${blockId}_shadow`);
+  const treeIdentResult = useComputer().getBlockIdResult$.use(
+    `${blockId}_shadow`
+  );
 
   return useResolved(
     useMemo(() => {

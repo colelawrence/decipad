@@ -18,7 +18,6 @@ import {
 } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH, ELEMENT_TD } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { usePipedCellPluginOption } from './usePipedCellPluginOption';
 import {
   createAutoCompleteMenuPlugin,
@@ -28,6 +27,7 @@ import type { CellInputValue } from './serializeCellText';
 import type { CellTextEditingProps } from './types';
 import { deserializeCellText, serializeCellText } from './serializeCellText';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const CellEditorDefaultEditing = (props: CellTextEditingProps) => {
   const { cellProps, value, onChange, onConfirm, onCancel } = props;

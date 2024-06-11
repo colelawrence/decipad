@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { Computer } from '@decipad/computer-interfaces';
 import { parseBlock } from '@decipad/remote-computer';
 import type { MyEditor } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/editor-hooks';
 
 const ENABLE_CLICK_REFERENCING = false;
 

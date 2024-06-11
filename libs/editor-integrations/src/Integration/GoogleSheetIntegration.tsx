@@ -3,7 +3,6 @@ import { Result, materializeResult } from '@decipad/remote-computer';
 import { tryImport } from '@decipad/import';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
-  useComputer,
   useConnectionStore,
   useGSheetConnectionStore,
 } from '@decipad/react-contexts';
@@ -11,6 +10,7 @@ import { getNodeString } from '@udecode/plate-common';
 import { useEffect, useCallback, useRef } from 'react';
 import { useIntegrationOptions } from '../hooks';
 import { getExternalDataUrl } from '../utils';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const GoogleSheetIntegration: React.FC<
   IntegrationTypes.IntegrationBlock<'gsheets'> & {

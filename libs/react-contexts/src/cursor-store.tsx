@@ -1,10 +1,9 @@
 import { createZustandStore } from '@udecode/plate-common';
 import type { BaseSelection } from 'slate';
 import type { Session } from 'next-auth';
-import type { OpaqueColor } from '@decipad/utils';
 
 export type CursorData = {
-  color?: OpaqueColor;
+  color?: string;
   style: {
     backgroundColor: string;
     width: number;

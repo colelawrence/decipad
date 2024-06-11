@@ -6,12 +6,9 @@ import type {
   TableCellType,
 } from '@decipad/editor-types';
 import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
-import { useNodePath } from '@decipad/editor-hooks';
+import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import { useLiveConnection } from '@decipad/live-connect';
-import {
-  useComputer,
-  ExternalDataSourceContext,
-} from '@decipad/react-contexts';
+import { ExternalDataSourceContext } from '@decipad/react-contexts';
 import type { Result } from '@decipad/remote-computer';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
 import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';

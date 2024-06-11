@@ -1,4 +1,8 @@
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   type AnyElement,
   type AvailableSwatchColor,
@@ -9,7 +13,6 @@ import {
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { exportProgramByVarname } from '@decipad/import';
 import {
-  useComputer,
   useCurrentWorkspaceStore,
   useEditorStylesContext,
   useIsEditorReadOnly,

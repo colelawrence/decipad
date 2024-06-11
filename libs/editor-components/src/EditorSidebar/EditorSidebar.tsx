@@ -1,7 +1,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { type AutocompleteName } from '@decipad/remote-computer';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { useComputer, useNotebookMetaData } from '@decipad/react-contexts';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
   SlashCommandsMenu,
   EditorSidebar as UIEditorSidebar,
@@ -17,6 +17,7 @@ import { selectCatalogNames } from './selectCatalogNames';
 import { toVar } from './toVar';
 import type { MyEditor, SlashCommand } from '@decipad/editor-types';
 import { groupByTab } from './groupByTab';
+import { useComputer } from '@decipad/editor-hooks';
 
 const catalogDebounceTimeMs = 1_000;
 

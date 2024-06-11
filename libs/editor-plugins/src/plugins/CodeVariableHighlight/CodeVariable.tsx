@@ -1,6 +1,6 @@
+import { useComputer } from '@decipad/editor-hooks';
 import type { PlateComponent, RichText } from '@decipad/editor-types';
 import type { VariableInfo } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { CodeVariable as UICodeVariable } from '@decipad/ui';
 
 type VariableScope = 'local' | 'global' | 'undefined';

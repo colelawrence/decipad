@@ -4,7 +4,7 @@ import {
   insertDataViewBelow,
   insertPlotBelow,
 } from '@decipad/editor-components';
-import { useNodePath } from '@decipad/editor-hooks';
+import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import type {
   IntegrationTypes,
   MyElement,
@@ -18,7 +18,6 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
 import {
-  useComputer,
   useCurrentWorkspaceStore,
   useIsEditorReadOnly,
   useResourceUsage,

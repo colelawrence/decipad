@@ -20,6 +20,7 @@ import {
   isStructuredElement,
 } from '@decipad/editor-utils';
 import {
+  useComputer,
   useEnsureValidVariableName,
   useGeneratedName,
   useNodePath,
@@ -27,7 +28,6 @@ import {
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
 import {
-  useComputer,
   useEditorTeleportContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';

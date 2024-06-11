@@ -6,7 +6,6 @@ import {
 import {
   ExecutionContext,
   useCodeConnectionStore,
-  useComputer,
   useConnectionStore,
   useCurrentWorkspaceStore,
   useNotebookId,
@@ -30,7 +29,7 @@ import type { RemoteData } from 'libs/editor-components/src/AIPanel/hooks';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { useDeciVariables } from '../hooks';
 import type { ConnectionProps } from './types';
-import { useWorker } from '@decipad/editor-hooks';
+import { useComputer, useWorker } from '@decipad/editor-hooks';
 
 const fieldsetStyles = css({
   display: 'grid',

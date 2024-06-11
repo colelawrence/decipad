@@ -6,7 +6,6 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import type { ACItemType, AutoCompleteMenuMode, Identifier } from '@decipad/ui';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
@@ -18,6 +17,7 @@ import { commitAutocompleteItem } from './commitAutocompleteItem';
 import { useTableCaption } from './useTableCaption';
 import { getPluginOptions } from '@udecode/plate-common';
 import type { AutoCompletePlugin, MenuItem } from './types';
+import { useComputer } from '@decipad/editor-hooks';
 
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));

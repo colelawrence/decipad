@@ -1,10 +1,7 @@
 import type { AnyElement, ImportElementSource } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import type { EditorPasteInteractionMenuContextValue } from '@decipad/react-contexts';
-import {
-  useComputer,
-  useEditorPasteInteractionMenuContext,
-} from '@decipad/react-contexts';
+import { useEditorPasteInteractionMenuContext } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import {
@@ -20,6 +17,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { insertImport } from './insertImport';
 import { insertLiveConnection } from './insertLiveConnection';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface UseInteractiveMenuResult {
   showInteractionMenu: boolean;

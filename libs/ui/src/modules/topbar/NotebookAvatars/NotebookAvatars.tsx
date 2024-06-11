@@ -2,7 +2,6 @@
 import { cursorStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { OpaqueColor } from '@decipad/utils';
 import { Avatar, Tooltip } from '../../../shared/atoms';
 import { componentCssVars, p12Regular, p13Medium } from '../../../primitives';
 import { PermissionType } from '../../../types';
@@ -57,7 +56,7 @@ export type NotebookAvatarsProps = {
 };
 
 interface EmailLookup {
-  [key: string]: OpaqueColor;
+  [key: string]: string;
 }
 
 export const NotebookAvatars = ({

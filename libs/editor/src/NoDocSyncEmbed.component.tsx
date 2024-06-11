@@ -5,10 +5,8 @@ import { Subject } from 'rxjs';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import {
-  ComputerContextProvider,
   EditorChangeContextProvider,
   EditorReadOnlyContext,
-  useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import type { MyValue } from '@decipad/editor-types';
@@ -22,6 +20,7 @@ import { plugins } from '@decipad/editor-config';
 import { Tooltip } from './components';
 import { embedNotebook } from './exampleNotebooks';
 import { useWriteLock } from './utils/useWriteLock';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const NoDocSyncEmbedInternal: FC = () => {
   const computer = useComputer();
@@ -82,9 +81,5 @@ export const NoDocSyncEmbedInternal: FC = () => {
 };
 
 export const NoDocSyncEmbed: FC = () => {
-  return (
-    <ComputerContextProvider>
-      <NoDocSyncEmbedInternal />
-    </ComputerContextProvider>
-  );
+  return <NoDocSyncEmbedInternal />;
 };

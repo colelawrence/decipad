@@ -1,5 +1,5 @@
 import { getExprRef } from '@decipad/remote-computer';
-import { useEditorChange } from '@decipad/editor-hooks';
+import { useComputer, useEditorChange } from '@decipad/editor-hooks';
 import type {
   AnyElement,
   PlateComponent,
@@ -12,9 +12,7 @@ import {
   magicNumberId,
 } from '@decipad/editor-utils';
 import {
-  useComputer,
   useIsEditorReadOnly,
-  useResult,
   useShadowCodeLine,
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
@@ -52,7 +50,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
 
   const shadow = useShadowCodeLine(blockId);
 
-  const result = useResult(blockId)?.result;
+  const result = computer.getBlockIdResult$.use(blockId)?.result;
 
   const editor = useMyEditorRef();
 

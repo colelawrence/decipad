@@ -5,7 +5,6 @@ import { requirePathBelowBlock } from '@decipad/editor-utils';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
 import { tryImport } from '@decipad/import';
-import { useComputer } from '@decipad/react-contexts';
 import { Spinner } from '@decipad/ui';
 import {
   findNodePath,
@@ -16,6 +15,7 @@ import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { importTable } from './importTable';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface SuspendedImportProps {
   element: ImportElement;

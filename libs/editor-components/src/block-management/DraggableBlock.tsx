@@ -1,5 +1,9 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useFilteredTabs,
+  useNodePath,
+} from '@decipad/editor-hooks';
 import type {
   MyEditor,
   MyElement,
@@ -22,7 +26,6 @@ import {
 import {
   dndPreviewActions,
   useAnnotations,
-  useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import type { Computer } from '@decipad/computer-interfaces';

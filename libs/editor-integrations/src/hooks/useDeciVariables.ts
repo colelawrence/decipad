@@ -1,6 +1,6 @@
 import { safeNumberForPrecision } from '@decipad/remote-computer';
 import type DeciNumber from '@decipad/number';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/editor-hooks';
 
 /**
  * We take the results from the computer

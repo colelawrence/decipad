@@ -77,7 +77,7 @@ type AvatarProps = {
   readonly roundedSquare?: boolean;
   readonly hoverSelector?: string;
   readonly greyedOut?: boolean;
-  readonly cursorColor?: OpaqueColor;
+  readonly cursorColor?: string | null;
   readonly variant?: boolean;
   readonly title?: string;
   readonly onClick?: () => void;
@@ -150,7 +150,7 @@ export const Avatar = ({
             },
             cursorColor && {
               borderRadius: '50%',
-              boxShadow: `0 0 0 2px ${cursorColor.hex}`,
+              boxShadow: `0 0 0 2px ${cursorColor}`,
             },
           ]}
         >

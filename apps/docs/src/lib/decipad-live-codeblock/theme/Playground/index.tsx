@@ -17,11 +17,11 @@ import {
   type IdentifiedError,
   identifiedErrorToMessage,
 } from '@decipad/remote-computer';
-import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { CodeResult } from '@decipad/ui';
 import maxBy from 'lodash.maxby';
 import styles from './styles.module.css';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface PreviewProps {
   result: Result.Result;
@@ -235,12 +235,10 @@ const Playground: FC<PlaygroundProps> = ({ children, ...props }) => {
   return (
     <div className={styles.playgroundContainer}>
       {isBrowser && (
-        <ComputerContextProvider>
-          <EditorWithHeaderAndResults
-            code={isBrowser ? children.replace(/\n$/, '') : ''}
-            {...props}
-          />
-        </ComputerContextProvider>
+        <EditorWithHeaderAndResults
+          code={isBrowser ? children.replace(/\n$/, '') : ''}
+          {...props}
+        />
       )}
     </div>
   );

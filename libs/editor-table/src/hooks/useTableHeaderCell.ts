@@ -1,5 +1,9 @@
 import type { Unit } from '@decipad/language-interfaces';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type {
   CellValueType,
   ColumnMenuDropdown,
@@ -8,7 +12,7 @@ import type {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getNode } from '@udecode/plate-common';
 import { useMemo } from 'react';
 import type { ConnectDragSource, ConnectDropTarget } from 'react-dnd';

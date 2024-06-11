@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC, useEffect, useState } from 'react';
 import MathJax from 'react-mathjax-preview';
 import { CodeResultProps } from '../../../types';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/editor-hooks';
 
 const functionResultStyles = css({
   textOverflow: 'ellipsis',

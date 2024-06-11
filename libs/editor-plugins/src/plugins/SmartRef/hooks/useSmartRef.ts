@@ -1,12 +1,12 @@
 import { isExprRef } from '@decipad/remote-computer';
 import {
+  useComputer,
   useEditorChange,
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
 import type { MyElement, SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_SMART_REF, useMyEditorRef } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import {
   getNextNode,
   getNodeString,

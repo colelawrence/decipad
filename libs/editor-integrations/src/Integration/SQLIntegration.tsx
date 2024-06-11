@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
-  useComputer,
   useConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
@@ -11,6 +10,7 @@ import { useIntegrationOptions } from '../hooks';
 import { getNodeString } from '@udecode/plate-common';
 import { type IntegrationTypes } from '@decipad/editor-types';
 import type { FC } from 'react';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const SQLIntegration: FC<
   IntegrationTypes.IntegrationBlock<'mysql'> & {

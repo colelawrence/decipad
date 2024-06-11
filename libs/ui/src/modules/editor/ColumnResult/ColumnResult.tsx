@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { concatMap, distinctUntilChanged } from 'rxjs';
 import { useObservable } from 'rxjs-hooks';
-import { useComputer } from '@decipad/react-contexts';
 import { dequal } from '@decipad/utils';
 import { CodeResultProps } from '../../../types';
 import { LabeledColumnResult } from './LabeledColumnResult';
 import { SimpleColumnResult } from './SimpleColumnResult';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const ColumnResult: FC<
   CodeResultProps<'materialized-column'> | CodeResultProps<'column'>

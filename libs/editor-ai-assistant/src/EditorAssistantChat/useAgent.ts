@@ -8,14 +8,13 @@ import {
   ControllerProvider,
   useAIChatHistory,
   useResourceUsage,
-  useComputer,
 } from '@decipad/react-contexts';
 import * as Sentry from '@sentry/react';
 import { useCallback, useContext, useRef } from 'react';
 
 import { nanoid } from 'nanoid';
 
-import { useActiveEditor } from '@decipad/editor-hooks';
+import { useActiveEditor, useComputer } from '@decipad/editor-hooks';
 import type {
   Action,
   GenericSummaryResult,

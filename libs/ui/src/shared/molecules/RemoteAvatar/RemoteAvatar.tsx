@@ -2,7 +2,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { OpaqueColor } from '@decipad/utils';
 import { shortAnimationDuration } from '../../../primitives';
 import { slimBlockWidth } from '../../../styles/editor-layout';
 import { Avatar } from '../../atoms';
@@ -22,7 +21,7 @@ interface RemoteAvatarProps {
   image?: string;
   top: number;
   left: number;
-  cursorColor: OpaqueColor;
+  cursorColor: string;
 }
 
 export const RemoteAvatar: FC<RemoteAvatarProps> = ({

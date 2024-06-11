@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import { ErrSpec, Result } from '@decipad/language-interfaces';
-import { useComputer, type IntegrationStore } from '@decipad/react-contexts';
+import { type IntegrationStore } from '@decipad/react-contexts';
 import {
   CodeResult,
   ContentEditableInput,
@@ -18,6 +18,7 @@ import {
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface ResultPreviewProps {
   result?: Result.Result;

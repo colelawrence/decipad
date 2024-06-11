@@ -1,7 +1,7 @@
 import type { Computer } from '@decipad/computer-interfaces';
+import { useComputer } from '@decipad/editor-hooks';
 import type { AutocompleteName, Result } from '@decipad/remote-computer';
 import { isTable } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useState } from 'react';
 
 const isSourceLiveConnection = (

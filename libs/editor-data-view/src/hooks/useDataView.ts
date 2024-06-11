@@ -3,13 +3,12 @@ import type {
   ErrSpec,
   SerializedType,
 } from '@decipad/language-interfaces';
-import { useEditorChange } from '@decipad/editor-hooks';
+import { useComputer, useEditorChange } from '@decipad/editor-hooks';
 import type {
   DataViewElement,
   DataViewFilter,
   MyEditor,
 } from '@decipad/editor-types';
-import { useComputer, useResult } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
 import type { Path } from 'slate';
@@ -49,7 +48,8 @@ export const useDataView = ({
   editor,
   element,
 }: UseDataViewProps): UseDataViewReturnType => {
-  const result = useResult(`${element.id}_shadow`);
+  const computer = useComputer();
+  const result = computer.getBlockIdResult$.use(`${element.id}_shadow`);
   const error =
     result?.error?.message ??
     (result?.result?.type.kind === 'type-error'
@@ -65,7 +65,6 @@ export const useDataView = ({
     columnChanges$,
   } = useDataViewActions(editor, element);
 
-  const computer = useComputer();
   const blockId = element.varName || '';
   const tableName = computer.getSymbolDefinedInBlock$.use(blockId);
 

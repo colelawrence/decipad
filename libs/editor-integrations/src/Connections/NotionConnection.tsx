@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import { Suspense, useEffect, useState } from 'react';
 import { Computer } from '@decipad/computer-interfaces';
 import {
-  useComputer,
   useExecutionContext,
   useNotionConnectionStore,
 } from '@decipad/react-contexts';
@@ -27,6 +26,7 @@ import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 import { merge } from '@decipad/utils';
 import type { ConnectionProps } from './types';
 import { getExternalDataReqUrl, getExternalDataUrl } from '../utils';
+import { useComputer } from '@decipad/editor-hooks';
 
 const Styles = {
   OuterWrapper: styled.div({

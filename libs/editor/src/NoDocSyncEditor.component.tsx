@@ -7,11 +7,9 @@ import { plugins } from '@decipad/editor-config';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import {
-  ComputerContextProvider,
   EditorChangeContextProvider,
   EditorIdContext,
   EditorReadOnlyContext,
-  useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
@@ -32,6 +30,7 @@ import { useWriteLock } from './utils/useWriteLock';
 import { createEditor } from 'slate';
 import { TitleEditor } from './TitleEditor.component';
 import { createUpdateComputerPlugin } from 'libs/editor-plugins/src/plugins/UpdateComputer/createUpdateComputerPlugin';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
@@ -136,9 +135,5 @@ export const NoDocSyncEditorInternal: FC = () => {
 };
 
 export const NoDocSyncEditor: FC = () => {
-  return (
-    <ComputerContextProvider>
-      <NoDocSyncEditorInternal />
-    </ComputerContextProvider>
-  );
+  return <NoDocSyncEditorInternal />;
 };

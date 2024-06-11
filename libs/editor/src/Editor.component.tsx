@@ -9,7 +9,6 @@ import {
   CategoriesContextProvider,
   EditorBlockParentRefProvider,
   EditorReadOnlyContext,
-  useComputer,
 } from '@decipad/react-contexts';
 import { useCanUseDom, useWindowListener } from '@decipad/react-utils';
 import { EditorLayout, EditorPlaceholder, LoadingFilter } from '@decipad/ui';
@@ -28,6 +27,7 @@ import { useAutoAnimate } from './hooks';
 import { editorOnCopy } from './utils/editorOnCopy';
 import { editorOnPaste } from './utils/editorOnPaste';
 import { useWriteLock } from './utils/useWriteLock';
+import { useComputer } from '@decipad/editor-hooks';
 
 export interface EditorProps {
   notebookId: string;

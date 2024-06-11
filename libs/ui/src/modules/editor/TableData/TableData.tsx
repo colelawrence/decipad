@@ -71,7 +71,7 @@ const ringStyles = (color?: string) =>
 const tdAnchorStyles = ringStyles(componentCssVars('TableFocusColor'));
 
 const cursorStyles = (cursorState: CursorState) =>
-  ringStyles(cursorState.data.color?.rgb);
+  ringStyles(cursorState.data.color);
 
 const editingStyles = css({
   filter: componentCssVars('TableEditingShadowFilter'),

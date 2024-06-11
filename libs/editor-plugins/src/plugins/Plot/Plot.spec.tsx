@@ -1,15 +1,10 @@
 import type { PlotElement } from '@decipad/editor-types';
 import { ELEMENT_PLOT } from '@decipad/editor-types';
 import {
-  getRemoteComputer,
   type NotebookResults,
   type SerializedType,
 } from '@decipad/remote-computer';
-import {
-  AnnotationsProvider,
-  ComputerContextProvider,
-  TestResultsProvider,
-} from '@decipad/react-contexts';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import { createRef } from 'react';
@@ -65,7 +60,6 @@ const tableData = [
 
 const PlotWithProviders = ({
   element: _element = {},
-  blockResults = {},
 }: PlotWithProvidersParams) => {
   const element: PlotElement = {
     id: 'block-id',
@@ -100,20 +94,16 @@ const PlotWithProviders = ({
     >
       <DndProvider backend={HTML5Backend}>
         <BrowserRouter>
-          <TestResultsProvider blockResults={blockResults}>
-            <ComputerContextProvider computer={getRemoteComputer()}>
-              <Plate>
-                <PlateContent />
-                <Plot
-                  attributes={{
-                    'data-slate-node': 'element',
-                    ref: createRef(),
-                  }}
-                  element={element}
-                />
-              </Plate>
-            </ComputerContextProvider>
-          </TestResultsProvider>
+          <Plate>
+            <PlateContent />
+            <Plot
+              attributes={{
+                'data-slate-node': 'element',
+                ref: createRef(),
+              }}
+              element={element}
+            />
+          </Plate>
         </BrowserRouter>
       </DndProvider>
     </AnnotationsProvider>

@@ -6,7 +6,7 @@ import {
   useAttachFileToNotebookMutation,
   useGetCreateAttachmentFormMutation,
 } from '@decipad/graphql-client';
-import { useComputer, useFileUploadStore } from '@decipad/react-contexts';
+import { useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Modal, UploadFileModal } from '@decipad/ui';
 import { noop } from '@decipad/utils';
@@ -16,6 +16,7 @@ import type { FC } from 'react';
 import { useCallback } from 'react';
 import type { Path } from 'slate';
 import { attachGenericFile } from './attachGeneric';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
   notebookId,

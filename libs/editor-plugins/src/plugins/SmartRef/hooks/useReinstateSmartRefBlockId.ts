@@ -2,9 +2,9 @@ import { findNodePath, setNodes } from '@udecode/plate-common';
 import type { Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs';
 import { useEffect, useState } from 'react';
-import { useComputer } from '@decipad/react-contexts';
 import type { SmartRefElement } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
+import { useComputer } from '@decipad/editor-hooks';
 
 const debounceTimeMs = 5_000;
 

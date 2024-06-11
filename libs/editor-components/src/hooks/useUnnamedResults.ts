@@ -1,3 +1,4 @@
+import { useComputer } from '@decipad/editor-hooks';
 import type { SmartRefElement } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
@@ -5,7 +6,6 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { getNodeString } from '@udecode/plate-common';
 
 interface SourceResult {

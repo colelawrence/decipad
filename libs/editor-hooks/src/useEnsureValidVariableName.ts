@@ -2,7 +2,6 @@ import type { Computer } from '@decipad/computer-interfaces';
 import { identifierRegExpGlobal } from '@decipad/remote-computer';
 import type { MyElement, PlainText } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { timeout } from '@decipad/utils';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
@@ -11,6 +10,7 @@ import type { Observable } from 'rxjs';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { useSelected } from 'slate-react';
 import { generateVarName } from '@decipad/editor-utils';
+import { useComputer } from './useComputer';
 
 /**
  * Makes sure a variable name is not empty or duplicate

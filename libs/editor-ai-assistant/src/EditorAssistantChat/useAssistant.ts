@@ -1,9 +1,5 @@
 import type { UserMessage } from '@decipad/react-contexts';
-import {
-  ControllerProvider,
-  useAIChatHistory,
-  useComputer,
-} from '@decipad/react-contexts';
+import { ControllerProvider, useAIChatHistory } from '@decipad/react-contexts';
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import type { Action } from 'libs/notebook-open-api/src/actions';
 import { actions } from 'libs/notebook-open-api/src/actions';
@@ -14,6 +10,7 @@ import type {
   RunSubmitToolOutputsParams,
 } from 'openai/resources/beta/threads/runs/runs';
 import type { MessageCreateParams } from 'openai/resources/beta/threads/messages/messages';
+import { useComputer } from '@decipad/editor-hooks';
 
 type ModelAgentOptions = {
   notebookId: string;

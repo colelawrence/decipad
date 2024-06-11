@@ -9,7 +9,6 @@ import type { Unit } from '@decipad/language-interfaces';
 import { formatUnit } from '@decipad/format';
 import { commonCurrencies } from '@decipad/language-units';
 import { N, ONE } from '@decipad/number';
-import { useComputer } from '@decipad/react-contexts';
 import { UnitOfMeasure, currencyUnits } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -48,6 +47,7 @@ import {
 import { getFormulaType } from '../../../utils/table';
 import { UnitMenuItem, UnitsAction } from '../UnitMenuItem/UnitMenuItem';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
+import { useComputer } from '@decipad/editor-hooks';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',

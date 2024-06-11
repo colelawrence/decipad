@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate-common';
 import {
   type MyEditor,
@@ -10,6 +9,7 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
+import { useComputer } from '@decipad/editor-hooks';
 
 const collectColumnData = (
   editor: MyEditor,

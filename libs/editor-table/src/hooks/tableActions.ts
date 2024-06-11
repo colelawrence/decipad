@@ -1,5 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type {
   MyEditor,
   MyValue,
@@ -26,7 +30,6 @@ import {
 } from '@decipad/editor-utils';
 import {
   useResourceUsage,
-  useComputer,
   useCurrentWorkspaceStore,
   useEditorTableContext,
 } from '@decipad/react-contexts';

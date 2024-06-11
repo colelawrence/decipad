@@ -1,4 +1,3 @@
-import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor } from '@decipad/docsync';
 
 export interface NotebookConnectionParams {
@@ -16,7 +15,6 @@ export interface NotebookProps {
   connectionParams: NotebookConnectionParams | undefined;
   initialState?: string;
   onDocsync: (docsync: DocSyncEditor) => void;
-  onComputer: (computer: Computer) => void;
   getAttachmentForm: (
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;

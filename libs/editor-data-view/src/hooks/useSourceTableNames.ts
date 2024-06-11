@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import type { AutocompleteName } from '@decipad/remote-computer';
 import { isTable as isComputerTable } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
 import { dequal } from '@decipad/utils';
 import { debounce } from 'lodash';
+import { useComputer } from '@decipad/editor-hooks';
 
 const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>
   name.name.indexOf('.') < 0;

@@ -9,6 +9,7 @@ import {
   useNodePath,
   useGlobalParentNode,
   usePathMutatorCallback,
+  useComputer,
 } from '@decipad/editor-hooks';
 import type { DropdownElement } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
@@ -16,7 +17,6 @@ import { formatResultPreview } from '@decipad/format';
 import {
   CategoriesContext,
   EditorChangeContext,
-  useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';

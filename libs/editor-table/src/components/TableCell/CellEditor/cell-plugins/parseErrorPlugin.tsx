@@ -1,8 +1,8 @@
 import type { CellValueType } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 
 import type { CellPlugin } from '../types';
 import { SyntaxErrorHighlight } from '@decipad/ui';
+import { useComputer } from '@decipad/editor-hooks';
 
 const EXCLUDE_CELL_KINDS: CellValueType['kind'][] = ['anything', 'string'];
 

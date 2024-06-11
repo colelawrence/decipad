@@ -4,8 +4,8 @@ import { Aggregation } from '@decipad/ui';
 import { type AnyElement, useMyEditorRef } from '@decipad/editor-types';
 import type { Result } from '@decipad/remote-computer';
 import { useOnDragEnd } from '@decipad/editor-components';
-import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from '../SmartCell';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface GroupAggregationProps {
   aggregationType?: string;

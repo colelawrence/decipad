@@ -3,11 +3,11 @@ import { getNodeString, isElement } from '@udecode/plate-common';
 import type { Result } from '@decipad/remote-computer';
 import type { LiveQueryElement } from '@decipad/editor-types';
 import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import { importFromUnknown } from '@decipad/import';
 import { fetch } from '@decipad/fetch';
 import { useLiveConnectionUrl } from './useLiveConnectionUrl';
 import { errorFromFetchResult } from '../utils/errorFromFetchResult';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface UseLiveQueryParams {
   element: LiveQueryElement;

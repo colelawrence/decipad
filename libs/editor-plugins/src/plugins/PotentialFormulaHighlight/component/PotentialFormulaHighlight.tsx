@@ -22,7 +22,7 @@ import {
   magicNumberId,
 } from '@decipad/editor-utils';
 import type { ShadowCalcReference } from '@decipad/react-contexts';
-import { useComputer, useEditorTeleportContext } from '@decipad/react-contexts';
+import { useEditorTeleportContext } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import {
@@ -35,6 +35,7 @@ import { useCallback, useContext, useEffect } from 'react';
 import type { BaseRange, Path, Point } from 'slate';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
 import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const PotentialFormulaHighlight: PlateComponent<{
   leaf: PotentialFormulaDecoration & RichText;

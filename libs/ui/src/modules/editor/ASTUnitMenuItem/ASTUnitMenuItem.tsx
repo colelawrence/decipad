@@ -1,11 +1,11 @@
 import { AST, parseSimpleValueUnit } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useRef, useState } from 'react';
 import { MenuItem } from '../../../shared';
 import { cssVar, p12Medium, p13Medium } from '../../../primitives';
 import { menu } from '../../../styles';
+import { useComputer } from '@decipad/editor-hooks';
 
 const menuItemStyles = css({
   background: cssVar('backgroundMain'),

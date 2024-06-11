@@ -2,12 +2,12 @@
 import { isTable, isTableColumn, Result } from '@decipad/remote-computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
-import { useComputer } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { DragHandle } from '../../../icons';
 import { cssVar, p14Medium } from '../../../primitives';
 import { CodeResult } from '../../editor';
+import { useComputer } from '@decipad/editor-hooks';
 
 interface NumberProps {
   name: string;

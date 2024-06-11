@@ -1,6 +1,5 @@
 export * from './ai-chat-history';
 export * from './categories';
-export * from './computer';
 export * from './current-workspace-store';
 export * from './cursor-store';
 export * from './database-store';
@@ -18,7 +17,6 @@ export * from './editor-teleport.hooks';
 export * from './editor-user-interactions';
 export * from './execution';
 export * from './file-upload-store';
-export * from './results';
 export * from './tab-editor';
 export * from './theme';
 export * from './notebook-meta-actions';

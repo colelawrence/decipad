@@ -1,6 +1,5 @@
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
-  useComputer,
   useConnectionStore,
   useNotionConnectionStore,
 } from '@decipad/react-contexts';
@@ -15,6 +14,7 @@ import { getNodeString } from '@udecode/plate-common';
 import type { FC } from 'react';
 import { type IntegrationTypes } from '@decipad/editor-types';
 import { merge } from '@decipad/utils';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const NotionIntegration: FC<
   IntegrationTypes.IntegrationBlock<'notion'> & {

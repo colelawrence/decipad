@@ -6,7 +6,6 @@ import {
 } from '@decipad/editor-components';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
-import { useComputer } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';
@@ -32,7 +31,7 @@ import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
-import { useActiveEditor } from '@decipad/editor-hooks';
+import { useActiveEditor, useComputer } from '@decipad/editor-hooks';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,

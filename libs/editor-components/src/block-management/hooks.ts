@@ -1,4 +1,5 @@
 import {
+  useComputer,
   useMoveToTab,
   useNodePath,
   usePathMutatorCallback,
@@ -27,7 +28,7 @@ import {
 } from '@udecode/plate-selection';
 import { useCallback, useContext } from 'react';
 import utils from './utils';
-import { ControllerProvider, useComputer } from '@decipad/react-contexts';
+import { ControllerProvider } from '@decipad/react-contexts';
 
 type OnDelete = (() => void) | 'none' | undefined;
 

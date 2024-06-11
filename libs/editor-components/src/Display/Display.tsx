@@ -5,7 +5,11 @@ import {
   useDragAndDropOnDrop,
   useUnnamedResults,
 } from '@decipad/editor-components';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type {
   PlateComponent,
   UserIconKey,
@@ -21,10 +25,8 @@ import {
   isDragAndDropHorizontal,
 } from '@decipad/editor-utils';
 import {
-  useComputer,
   useEditorStylesContext,
   useIsEditorReadOnly,
-  useResult,
 } from '@decipad/react-contexts';
 import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
 import { DisplayWidget, VariableEditor } from '@decipad/ui';
@@ -83,8 +85,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     'Display'
   );
 
-  const res = useResult(element.blockId);
   const computer = useComputer();
+  const res = computer.getBlockIdResult$.use(element.blockId);
 
   // Results from computer are NOT calculated until the menu is actually open.
   // Saving a lot of CPU when the editor is re-rendering when the user is busy

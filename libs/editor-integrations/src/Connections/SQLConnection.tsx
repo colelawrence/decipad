@@ -3,7 +3,6 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import type { TExecution } from '@decipad/react-contexts';
 import {
   ExecutionContext,
-  useComputer,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { CodeEditor } from '@decipad/ui';
@@ -13,6 +12,7 @@ import {
 } from '@decipad/import';
 import type { ConnectionProps } from './types';
 import { fetchQuery } from '../utils';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const SQLConnection: FC<ConnectionProps> = ({
   setRawResult,

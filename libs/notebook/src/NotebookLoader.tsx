@@ -2,10 +2,7 @@ import type { FC } from 'react';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { lastValueFrom } from 'rxjs';
-import {
-  ComputerContextProvider,
-  useEditorUserInteractionsContext,
-} from '@decipad/react-contexts';
+import { useEditorUserInteractionsContext } from '@decipad/react-contexts';
 import { useEditorPlugins } from '@decipad/editor-config';
 import { useNotebookState } from '@decipad/notebook-state';
 import { isServerSideRendering } from '@decipad/support';
@@ -33,7 +30,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   connectionParams,
   initialState,
   onDocsync,
-  onComputer,
   onNotebookTitleChange,
 }) => {
   const { data: session } = useSession();
@@ -103,12 +99,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   }
 
   useEffect(() => {
-    if (computer) {
-      onComputer(computer);
-    }
-  }, [computer, onComputer]);
-
-  useEffect(() => {
     return () => {
       const { pathname } = window.location;
       const match = pathname.match(/^\/n\/.*%3A(.*)/);
@@ -154,24 +144,22 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
 
   if (editor) {
     return (
-      <ComputerContextProvider computer={computer}>
-        <Suspense fallback={<EditorPlaceholder />}>
-          <div
-            data-editorloaded={loaded}
-            data-hydrated={!isServerSideRendering() && loaded}
+      <Suspense fallback={<EditorPlaceholder />}>
+        <div
+          data-editorloaded={loaded}
+          data-hydrated={!isServerSideRendering() && loaded}
+        >
+          <TabEditorComponent
+            notebookId={notebookId}
+            workspaceId={workspaceId}
+            loaded={loaded}
+            controller={readOrSuspendEditor.read()}
+            readOnly={readOnly}
           >
-            <TabEditorComponent
-              notebookId={notebookId}
-              workspaceId={workspaceId}
-              loaded={loaded}
-              controller={readOrSuspendEditor.read()}
-              readOnly={readOnly}
-            >
-              <OutsideTabHiddenLanguageElements editor={editor} tabId={tabId} />
-            </TabEditorComponent>
-          </div>
-        </Suspense>
-      </ComputerContextProvider>
+            <OutsideTabHiddenLanguageElements editor={editor} tabId={tabId} />
+          </TabEditorComponent>
+        </div>
+      </Suspense>
     );
   }
   return null;

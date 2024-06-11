@@ -2,8 +2,9 @@ import type { Result } from '@decipad/remote-computer';
 import { materializeResult } from '@decipad/remote-computer';
 import type { CellValueType } from '@decipad/editor-types';
 import { useMemo } from 'react';
-import { useCategories, useComputer } from '@decipad/react-contexts';
+import { useCategories } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
+import { useComputer } from './useComputer';
 
 export interface DropdownOption {
   id: string;

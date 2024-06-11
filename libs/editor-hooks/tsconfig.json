@@ -30,6 +30,9 @@
     },
     {
       "path": "../language-interfaces"
+    },
+    {
+      "path": "../notebook-state"
     }
   ]
 }

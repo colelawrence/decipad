@@ -6,14 +6,10 @@ import { EElementOrText } from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
 import { Computer } from '@decipad/computer-interfaces';
-import { useWorker } from '@decipad/editor-hooks';
+import { useComputer, useWorker } from '@decipad/editor-hooks';
 import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import {
-  AssistantMessage,
-  ExecutionContext,
-  useComputer,
-} from '@decipad/react-contexts';
+import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
 import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';

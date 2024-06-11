@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useRef } from 'react';
 import { Path } from 'slate';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import { isCellAlignRight } from '@decipad/editor-table';
 import type {
   DataViewElement,
@@ -9,7 +13,6 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_DATA_VIEW_TH, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { availableAggregations as getAvailableAggregations } from '@decipad/language-aggregations';
 import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';

@@ -2,7 +2,7 @@ import {
   insertDataViewBelow,
   insertPlotBelow,
 } from '@decipad/editor-components';
-import { useEnsureValidVariableName } from '@decipad/editor-hooks';
+import { useComputer, useEnsureValidVariableName } from '@decipad/editor-hooks';
 import type { PlateComponent, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
@@ -10,7 +10,7 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getExprRef } from '@decipad/remote-computer';
 import type { MarkType } from '@decipad/ui';
 import { EditableTableCaption, Tooltip } from '@decipad/ui';

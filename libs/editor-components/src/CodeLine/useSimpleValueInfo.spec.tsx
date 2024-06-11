@@ -17,10 +17,10 @@ import { useState } from 'react';
 
 import type { AST } from '@decipad/remote-computer';
 import { parseSimpleValueUnit, prettyPrintAST } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
 import { timeout } from '@decipad/utils';
 import { act } from 'react-dom/test-utils';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
+import { useComputer } from '@decipad/editor-hooks';
 
 const element: CodeLineV2Element = {
   type: ELEMENT_CODE_LINE_V2,

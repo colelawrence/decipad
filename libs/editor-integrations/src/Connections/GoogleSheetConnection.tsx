@@ -15,7 +15,6 @@ import {
   useCreateExternalDataSourceMutation,
 } from '@decipad/graphql-client';
 import {
-  useComputer,
   useConnectionStore,
   useGSheetConnectionStore,
 } from '@decipad/react-contexts';
@@ -27,6 +26,7 @@ import { nanoid } from 'nanoid';
 import { env } from '@decipad/client-env';
 import { getExternalDataAuthUrl, getExternalDataUrl } from '../utils';
 import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
+import { useComputer } from '@decipad/editor-hooks';
 
 const Styles = {
   Trigger: styled.div({

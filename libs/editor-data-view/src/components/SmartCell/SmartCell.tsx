@@ -3,10 +3,10 @@ import { useCallback } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import type { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
+import { useComputer } from '@decipad/editor-hooks';
 
 const emptyCellStyles = css({
   borderBottom: 0,

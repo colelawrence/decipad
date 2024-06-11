@@ -4,6 +4,7 @@ import {
 } from '@decipad/editor-components';
 
 import {
+  useComputer,
   useParentNodeEntry,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
@@ -41,7 +42,6 @@ import { useCallback, useMemo, useState } from 'react';
 import type { ComponentProps } from 'react';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
-import { useComputer } from '@decipad/react-contexts';
 
 const captionWrapperStyles = css({
   display: 'flex',

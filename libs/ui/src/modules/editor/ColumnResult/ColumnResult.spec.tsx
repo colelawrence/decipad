@@ -1,20 +1,12 @@
-import { FC } from 'react';
 import { render, act } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
-import { TestResultsProvider } from '@decipad/react-contexts';
-import type { NotebookResults } from '@decipad/remote-computer';
 
 import { runCode } from '../../../test-utils';
 import { ColumnResult } from './ColumnResult';
 import { timeout } from '@decipad/utils';
-
-function withResultContextWrapper(
-  value: Partial<NotebookResults>
-): FC<React.PropsWithChildren<unknown>> {
-  return ({ children }) => {
-    return <TestResultsProvider {...value}>{children}</TestResultsProvider>;
-  };
-}
+import { useComputer } from '@decipad/editor-hooks';
+import { defaultComputerResults } from '@decipad/computer';
+import { FC, PropsWithChildren, useEffect } from 'react';
 
 // eslint-disable-next-line jest/no-disabled-tests
 it('renders a single column table', async () => {
@@ -69,12 +61,25 @@ describe('dimensions', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it('renders a bidimensional column', async () => {
+    const Wrapper: FC<PropsWithChildren> = ({ children }) => {
+      const computer = useComputer();
+
+      useEffect(() => {
+        computer.results.next({
+          ...defaultComputerResults,
+          indexLabels,
+        });
+      }, [computer]);
+
+      return <>{children}</>;
+    };
+
     const { container } = render(
       <ColumnResult
         {...((await runCode(code, { doNotMaterialiseResults: true })) as any)}
       />,
       {
-        wrapper: withResultContextWrapper({ indexLabels }),
+        wrapper: Wrapper,
       }
     );
 

@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import { useEffect, useMemo } from 'react';
 import { useRouteParams } from 'typesafe-routes/react-router';
-import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor } from '@decipad/docsync';
 import { Notebook as NotebookEditor } from '@decipad/notebook';
 import { notebooks } from '@decipad/routing';
@@ -18,7 +17,6 @@ export interface EditorProps {
   readonly notebookId: string;
   readonly docsync: DocSyncEditor | undefined;
   readonly setDocsync: (docsync: DocSyncEditor) => void;
-  readonly setComputer: (computer: Computer) => void;
   readonly setError: (error: Error | undefined) => void;
 }
 
@@ -31,7 +29,6 @@ const AppEditor: FC<EditorProps> = ({
   notebookId,
   docsync,
   setDocsync,
-  setComputer,
   setError,
 }) => {
   const actions = useNotebookStateAndActions({
@@ -79,7 +76,6 @@ const AppEditor: FC<EditorProps> = ({
             notebookId={notebookId}
             onNotebookTitleChange={onNotebookTitleChange}
             onDocsync={setDocsync}
-            onComputer={setComputer}
             notebookMetaLoaded={actions.notebook != null}
             workspaceId={actions.notebook?.workspace?.id ?? ''}
             readOnly={actions.isReadOnly}

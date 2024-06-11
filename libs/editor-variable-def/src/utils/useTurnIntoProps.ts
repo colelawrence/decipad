@@ -8,7 +8,6 @@ import {
   isElementOfType,
 } from '@decipad/editor-utils';
 import { textify } from '@decipad/parse';
-import { useComputer } from '@decipad/react-contexts';
 import {
   findNodePath,
   focusEditor,
@@ -17,6 +16,7 @@ import {
   setNodes,
 } from '@udecode/plate-common';
 import { useMemo } from 'react';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Input', value: 'expression' },

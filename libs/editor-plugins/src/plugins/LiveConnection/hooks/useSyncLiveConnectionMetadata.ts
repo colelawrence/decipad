@@ -1,10 +1,10 @@
+import { useComputer } from '@decipad/editor-hooks';
 import type {
   LiveConnectionElement,
   LiveDataSetElement,
 } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
-import { useComputer } from '@decipad/react-contexts';
 import { varNamify } from '@decipad/utils';
 import { getNodeString, insertText } from '@udecode/plate-common';
 import { useEffect, useRef } from 'react';

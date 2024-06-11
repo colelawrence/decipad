@@ -4,7 +4,7 @@ import { parseCellText } from './serializeCellText';
 import type { CellProps } from './types';
 import { usePipedCellPluginOption } from './usePipedCellPluginOption';
 import { SmartRef } from '@decipad/ui';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/editor-hooks';
 
 export const CellEditorDefaultReadOnly = (props: CellProps) => {
   const { value, plugins } = props;

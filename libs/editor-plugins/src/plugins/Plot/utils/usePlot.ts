@@ -10,8 +10,12 @@ import {
   useMyEditorRef,
   type MyNode,
 } from '@decipad/editor-types';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import uniq from 'lodash.uniq';
 import { useEffect, useMemo } from 'react';

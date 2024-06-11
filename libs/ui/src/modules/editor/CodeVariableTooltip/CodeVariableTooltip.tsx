@@ -1,9 +1,9 @@
-import { useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from '../../../shared';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { componentCssVars, p8Regular } from '../../../primitives';
+import { useComputer } from '@decipad/editor-hooks';
 
 const goToDefStyles = css(p8Regular, {
   color: componentCssVars('TooltipText'),

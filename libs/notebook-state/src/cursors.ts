@@ -3,16 +3,6 @@ import type {
   TCursorEditor as GTCursorEditor,
   TYjsEditor as GTYjsEditor,
 } from '@decipad/slate-yjs';
-import {
-  blue400,
-  brand400,
-  orange400,
-  purple400,
-  red400,
-  teal400,
-  yellow500,
-} from '@decipad/ui';
-import type { OpaqueColor } from '@decipad/utils';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
 import type { UserCursorState } from '@decipad/react-contexts';
@@ -24,16 +14,16 @@ type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
 type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
 
 const colors = [
-  orange400,
-  red400,
-  blue400,
-  brand400,
-  purple400,
-  teal400,
-  yellow500,
+  'rgb(255, 163, 71)', // orange400,
+  'rgb(243, 106, 106)', // red400,
+  'rgb(91, 133, 247)', // blue400
+  'rgb(205, 251, 137)', // brand400,
+  'rgb(143, 135, 251)', // purple400,
+  'rgb(68, 199, 183)', // teal400,
+  'rgb(255, 220, 66)', // yellow500,
 ];
 
-function cursorColor(clientID: number): OpaqueColor {
+function cursorColor(clientID: number): string {
   return colors[clientID % colors.length];
 }
 
@@ -69,7 +59,7 @@ function getCursorData(
           ...(jsonify(awareness) as Session),
           color,
           style: {
-            backgroundColor: color.rgb,
+            backgroundColor: color,
             width: 3,
           },
         },
