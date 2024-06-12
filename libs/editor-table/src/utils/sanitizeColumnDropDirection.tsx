@@ -1,4 +1,4 @@
-import type { DropDirection } from '@decipad/editor-components';
+import type { ColumnDndDirection } from '../types';
 
-export const sanitizeColumnDropDirection = (dir: DropDirection) =>
+export const sanitizeColumnDropDirection = (dir: ColumnDndDirection) =>
   dir == null || dir === 'left' || dir === 'right' ? dir : undefined;

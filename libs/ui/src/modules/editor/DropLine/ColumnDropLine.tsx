@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedStyles, css } from '@emotion/react';
-import { DropLine } from './DropLine';
+import { TableDropLine } from './TableDropLine';
 
 const dropStyles = css({
   position: 'absolute',
@@ -26,7 +26,7 @@ export const ColumnDropLine = ({
       ]}
       contentEditable={false}
     >
-      <DropLine variant="inline" />
+      <TableDropLine variant="column" />
     </div>
   );
 };

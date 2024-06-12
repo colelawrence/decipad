@@ -76,7 +76,7 @@ const dataViewColumnHeaderStyles = css({
 
 const dataViewColumnHeaderBorderLeftStyles = css({
   '&::before': {
-    background: componentCssVars('DroplineColor'),
+    background: componentCssVars('DropLineColor'),
     translate: '-8px',
   },
 });
@@ -130,7 +130,7 @@ export const DataViewColumnHeader = forwardRef<
 
   const borderRightStyles = css({
     '&::after': {
-      background: componentCssVars('DroplineColor'),
+      background: componentCssVars('DropLineColor'),
       translate: getBorderRightTranslation(),
     },
   });

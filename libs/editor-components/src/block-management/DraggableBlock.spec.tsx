@@ -1,19 +1,16 @@
-import type { PlateComponent } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, thro } from '@decipad/utils';
-import { act, fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type {
-  PlateEditor,
-  PlatePlugin,
-  PlateProps,
-} from '@udecode/plate-common';
+import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {
   createPlateEditor,
   createPlugins,
   Plate,
   PlateContent,
 } from '@udecode/plate-common';
+import { createParagraphPlugin } from '@udecode/plate-paragraph';
+import { Paragraph } from '../text/Paragraph';
 import type { PropsWithChildren } from 'react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
@@ -22,33 +19,29 @@ import {
   EditorReadOnlyContext,
   AnnotationsProvider,
 } from '@decipad/react-contexts';
-import { DraggableBlock } from './DraggableBlock';
 import { BrowserRouter } from 'react-router-dom';
-
-const DraggableParagraph: PlateComponent = ({ element, children }) => (
-  <DraggableBlock blockKind="paragraph" element={element!}>
-    <div data-testid="draggable">{children}</div>
-  </DraggableBlock>
-);
-
-const DraggableParagraphPlugin: PlatePlugin = {
-  key: ELEMENT_PARAGRAPH,
-  isElement: true,
-  type: ELEMENT_PARAGRAPH,
-  component: DraggableParagraph,
-};
 
 let editor: PlateEditor;
 let plateProps: Omit<PlateProps, 'children'>;
 let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
-  const plugins = createPlugins([DraggableParagraphPlugin]);
+  const plugins = createPlugins([
+    createParagraphPlugin({
+      component: Paragraph,
+    }),
+  ]);
+
   plateProps = {
     initialValue: [
-      { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'text' }] },
+      {
+        type: ELEMENT_PARAGRAPH,
+        id: '0',
+        children: [{ text: 'my-paragraph' }],
+      },
     ],
     plugins,
   };
+
   editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
@@ -70,8 +63,8 @@ beforeEach(() => {
   );
 });
 
-it('renders the main block', async () => {
-  const { getByTestId } = render(
+it('renders the paragraph', async () => {
+  const { getByText } = render(
     <Plate {...plateProps} editor={editor}>
       <PlateContent scrollSelectionIntoView={noop} />
     </Plate>,
@@ -79,7 +72,7 @@ it('renders the main block', async () => {
       wrapper,
     }
   );
-  expect(getByTestId('draggable')).toBeVisible();
+  expect(getByText('my-paragraph')).toBeVisible();
 });
 
 it('renders a drag handle', async () => {
@@ -143,59 +136,4 @@ it('can delete the block', async () => {
   expect(editor.children).toHaveChildrenText(['first', 'second']);
   await userEvent.click(getByTitle(/trash/i));
   expect(editor.children).toHaveChildrenText(['first']);
-});
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-const originalCaretPositionFromPoint: typeof document.caretPositionFromPoint =
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  document.caretPositionFromPoint;
-afterEach(() => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  document.caretPositionFromPoint = originalCaretPositionFromPoint;
-});
-it('can move the block', async () => {
-  plateProps.initialValue = [
-    { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'first' }] },
-    { type: ELEMENT_PARAGRAPH, id: '1', children: [{ text: 'second' }] },
-  ];
-  const { getByText, getAllByTitle } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>,
-    {
-      wrapper,
-    }
-  );
-  const dragHandles = getAllByTitle(/drag/i);
-  expect(dragHandles).toHaveLength(2);
-  const [firstDragHandle] = dragHandles;
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  document.caretPositionFromPoint = (x, y) => {
-    if (x !== 100 || y !== 100)
-      throw new Error('Do not know position for this point');
-    return {
-      offsetNode: getByText('second'),
-      offset: 0,
-      getClientRect: () => null,
-    };
-  };
-  await act(async () => {
-    fireEvent.dragStart(firstDragHandle);
-    fireEvent.dragEnter(getByText('second'), { clientX: 100, clientY: 100 });
-    fireEvent.dragOver(getByText('second'), { clientX: 100, clientY: 100 });
-  });
-  expect(editor.children).toHaveChildrenText(['first', 'second']);
-
-  await act(async () => {
-    fireEvent.drop(getByText('second'), {
-      clientX: 100,
-      clientY: 100,
-    });
-  });
-  expect(editor.children).toHaveChildrenText(['second', 'first']);
 });

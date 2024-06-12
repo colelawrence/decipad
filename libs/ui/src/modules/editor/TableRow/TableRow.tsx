@@ -5,7 +5,6 @@ import { DropLineDirection } from '@udecode/plate-dnd';
 import { FC, forwardRef, ReactNode, RefCallback, RefObject } from 'react';
 import { noop } from 'rxjs';
 import { useMergedRef } from '../../../hooks';
-import { draggingOpacity } from '../DraggableBlock/DraggableBlock';
 import { regularBorder } from '../Table/Table';
 import {
   TableCellControls,
@@ -15,7 +14,7 @@ import { componentCssVars } from '../../../primitives';
 
 const tableRowStyles = (isBeingDragged: boolean) =>
   css({
-    opacity: isBeingDragged ? draggingOpacity : 'unset',
+    opacity: isBeingDragged ? 0 : 'unset',
     '&:not(:last-child) > td': {
       borderBottom: regularBorder,
     },
@@ -98,9 +97,9 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
 );
 
 const bottomDroplineStyles = css({
-  td: { boxShadow: `0 2px 0 ${componentCssVars('DroplineColor')}` },
+  td: { boxShadow: `0 2px 0 ${componentCssVars('DropLineColor')}` },
 });
 
 const topDroplineStyles = css({
-  td: { boxShadow: `0 -2px 0 ${componentCssVars('DroplineColor')}` },
+  td: { boxShadow: `0 -2px 0 ${componentCssVars('DropLineColor')}` },
 });

@@ -47,36 +47,3 @@ it('changes opacity when being dragged', () => {
   )?.opacity;
   expect(beingDraggedOpacity).not.toEqual(normalOpacity);
 });
-
-it('does not render a drop line by default', () => {
-  const { queryByLabelText } = render(
-    <Plate>
-      <DraggableBlock {...props} dropLine={undefined} />
-    </Plate>
-  );
-  expect(queryByLabelText(/drop/i)).not.toBeInTheDocument();
-});
-/* eslint-disable no-bitwise */
-it('can render a drop line above the block', () => {
-  const { getByText, getByLabelText } = render(
-    <Plate>
-      <DraggableBlock {...props} dropLine="top" />
-    </Plate>
-  );
-  expect(
-    getByText('block').compareDocumentPosition(getByLabelText(/drop/i)) &
-      Node.DOCUMENT_POSITION_PRECEDING
-  ).toBeTruthy();
-});
-it('can render a drop line below the block', () => {
-  const { getByText, getByLabelText } = render(
-    <Plate>
-      <DraggableBlock {...props} dropLine="bottom" />
-    </Plate>
-  );
-  expect(
-    getByText('block').compareDocumentPosition(getByLabelText(/drop/i)) &
-      Node.DOCUMENT_POSITION_FOLLOWING
-  ).toBeTruthy();
-});
-/* eslint-enable no-bitwise */

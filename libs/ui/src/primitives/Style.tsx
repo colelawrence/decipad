@@ -476,13 +476,13 @@ export interface ComponentCssVariables {
   TooltipTextSecondary: string;
   // -------------End  Tooltips ---------------
 
-  // ------------- Droplines ------------------
-  DroplineBgColor: string;
-  DroplineColor: string;
+  // ------------- DropLines ------------------
+  DropLineBorderColor: string;
+  DropLineColor: string;
   TableSelectionBackgroundColor: string;
   TableFocusColor: string;
   TableEditingShadowFilter: string;
-  // ------------ End Droplines ---------------
+  // ------------ End DropLines ---------------
 
   // REMOVE ME
   // ---------- Slash (remove me) -------------
@@ -609,8 +609,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       TooltipText: offWhite.hex,
       TooltipTextSecondary: grey400.hex,
 
-      DroplineBgColor: blue100.hex,
-      DroplineColor: blue300.hex,
+      DropLineBorderColor: blue100.hex,
+      DropLineColor: blue300.hex,
       TableSelectionBackgroundColor: blue50.hex,
       TableFocusColor: blue300.hex,
       TableEditingShadowFilter: `drop-shadow(0 0 0.5rem ${black.hex}30)`,
@@ -722,8 +722,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       TooltipText: offBlack.hex,
       TooltipTextSecondary: dark500.hex,
 
-      DroplineBgColor: blue900.hex,
-      DroplineColor: blue600.hex,
+      DropLineBorderColor: blue900.hex,
+      DropLineColor: blue600.hex,
       TableSelectionBackgroundColor: blue900.hex,
       TableFocusColor: blue600.hex,
       TableEditingShadowFilter: `drop-shadow(0 0 0.5rem ${black.hex}90)`,

@@ -18,6 +18,8 @@ export * from './EditorPlaceholder/EditorPlaceholder';
 export * from './EditorLayout/EditorLayout';
 export * from './EditorPlaceholder/EditorPlaceholder';
 export * from './DraggableBlock/DraggableBlock';
+export * from './DraggableBlockOverlay/DraggableBlockOverlay';
+export * from './DropLine/BlockDropLine';
 export * from './EditorBlock/EditorBlock';
 export * from './EditorTitle/EditorTitle';
 export * from './UnorderedList/UnorderedList';

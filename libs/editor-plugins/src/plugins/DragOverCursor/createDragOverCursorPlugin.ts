@@ -16,7 +16,7 @@ export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
         key: 'drag',
         data: {
           style: {
-            backgroundColor: componentCssVars('DroplineColor'),
+            backgroundColor: componentCssVars('DropLineColor'),
             width: 2,
           },
         },

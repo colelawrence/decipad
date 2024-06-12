@@ -37,6 +37,7 @@ import {
   BlockAnnotations,
   BlockCommentButton,
 } from '@decipad/ui';
+import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
 import {
@@ -64,10 +65,10 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
-import type { UseDndNodeOptions } from '../utils/useDnd';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { useBlockActions } from './hooks';
 import { createPortal } from 'react-dom';
+import { Portal } from 'react-portal';
 
 const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
   '> div': {
@@ -106,8 +107,7 @@ type DraggableBlockProps = {
   | 'isCentered'
   | 'isDownloadable'
   | 'onDownload'
-> &
-  Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
+>;
 
 const PLACEHOLDERS = {
   input: '100$',
@@ -124,9 +124,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       element,
       onDelete: parentOnDelete,
       onceDeleted = noop,
-      accept,
-      getAxis,
-      onDrop,
       hasPreviousSibling,
       isCentered,
       dependencyId,
@@ -172,20 +169,14 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       );
 
     const blockRef = useRef<HTMLDivElement>(null);
-    const previewRef = useRef<HTMLDivElement>(null);
 
     const ref = useMergedRef(blockRef, forwardedRef);
 
-    const { dragRef, dropLine, isDragging } = useDnd({
-      accept,
-      element,
-      getAxis,
-      onDrop,
-      previewRef,
-      nodeRef: blockRef,
-    });
+    const { dragRef, isDragging } = useDnd({ element });
 
     const draggingIds = dndStore.use.draggingIds();
+
+    const previewHtmlRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (!isDragging) {
@@ -351,60 +342,71 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       );
     }
 
-    return (
-      <UIDraggableBlock
-        {...props}
-        isHidden={element.isHidden}
-        isMultipleSelection={isMultipleSelection}
-        isSelected={selected}
-        dragSource={dragRef}
-        blockRef={ref}
-        previewRef={previewRef}
-        dropLine={dropLine || undefined}
-        isBeingDragged={isDragging || draggingIds.has(element.id)}
-        onMouseDown={onMouseDown}
-        onDelete={handleDelete}
-        onAnnotation={handleAnnotation}
-        dependenciesForBlock={dependenciesForBlock}
-        onDuplicate={handleDuplicate}
-        onShowHide={handleShowHide}
-        onMoveToTab={handleMoveTab}
-        tabs={tabs}
-        onAdd={onAdd}
-        onPlus={onPlus}
-        onCopyHref={onCopyHref}
-        showLine={showLine}
-        isCentered={isCentered}
-        hasPreviousSibling={hasPreviousSibling}
-        path={path}
-        disableDrag={disableDrag}
-      >
-        <DraggableBlockStyled
-          blockHighlighted={blockHighlighted}
-          data-testid="draggable-block"
-        >
-          <BlockSelectable element={element}>
-            <BlockCommentButton
-              canComment={!!permission && !disableDrag}
-              onComment={handleAnnotation}
-            >
-              <BlockErrorBoundary element={element}>
-                {children}
-              </BlockErrorBoundary>
-            </BlockCommentButton>
-          </BlockSelectable>
-        </DraggableBlockStyled>
+    const isBeingDragged = isDragging || draggingIds.has(element.id);
 
-        {document.getElementById('annotations-container') &&
-          createPortal(
-            <BlockAnnotations
-              blockId={element.id}
-              blockRef={blockRef}
-              setBlockHighlighted={setBlockHighlighted}
-            />,
-            document.getElementById('annotations-container')!
-          )}
-      </UIDraggableBlock>
+    return (
+      <>
+        {isBeingDragged && (
+          <Portal>
+            <DraggableBlockOverlay
+              element={element}
+              previewHtmlRef={previewHtmlRef}
+            />
+          </Portal>
+        )}
+
+        <UIDraggableBlock
+          {...props}
+          isHidden={element.isHidden}
+          isMultipleSelection={isMultipleSelection}
+          isSelected={selected}
+          dragSource={dragRef}
+          blockRef={ref}
+          isBeingDragged={isBeingDragged}
+          onMouseDown={onMouseDown}
+          onDelete={handleDelete}
+          onAnnotation={handleAnnotation}
+          dependenciesForBlock={dependenciesForBlock}
+          onDuplicate={handleDuplicate}
+          onShowHide={handleShowHide}
+          onMoveToTab={handleMoveTab}
+          tabs={tabs}
+          onAdd={onAdd}
+          onPlus={onPlus}
+          onCopyHref={onCopyHref}
+          showLine={showLine}
+          isCentered={isCentered}
+          hasPreviousSibling={hasPreviousSibling}
+          path={path}
+          disableDrag={disableDrag}
+        >
+          <DraggableBlockStyled
+            blockHighlighted={blockHighlighted}
+            data-testid="draggable-block"
+          >
+            <BlockSelectable element={element}>
+              <BlockCommentButton
+                canComment={!!permission && !disableDrag}
+                onComment={handleAnnotation}
+              >
+                <BlockErrorBoundary element={element}>
+                  <div ref={previewHtmlRef}>{children}</div>
+                </BlockErrorBoundary>
+              </BlockCommentButton>
+            </BlockSelectable>
+          </DraggableBlockStyled>
+
+          {document.getElementById('annotations-container') &&
+            createPortal(
+              <BlockAnnotations
+                blockId={element.id}
+                blockRef={blockRef}
+                setBlockHighlighted={setBlockHighlighted}
+              />,
+              document.getElementById('annotations-container')!
+            )}
+        </UIDraggableBlock>
+      </>
     );
   }
 );

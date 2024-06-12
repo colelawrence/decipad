@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { DropLine } from './DropLine';
+import { TableDropLine } from './TableDropLine';
 
 it('renders a presentational element', () => {
-  render(<DropLine />);
+  render(<TableDropLine variant="row" />);
   expect(screen.getByLabelText(/drop/i)).toBeVisible();
 });

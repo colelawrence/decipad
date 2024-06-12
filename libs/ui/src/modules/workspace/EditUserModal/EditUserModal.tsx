@@ -81,7 +81,7 @@ export const EditUserModal: React.FC = () => {
             Please upload and manage your avatar at{' '}
             <a
               css={{
-                color: componentCssVars('DroplineColor'),
+                color: componentCssVars('DropLineColor'),
                 textDecoration: 'underline',
               }}
               href="https://gravatar.com"

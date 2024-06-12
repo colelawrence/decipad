@@ -11,41 +11,17 @@ import {
   cssVar,
   largestDesktop,
   mouseMovingOverTransitionDelay,
-  Opacity,
   shortAnimationDuration,
 } from '../../../primitives';
 import { blockAlignment, editorLayout } from '../../../styles';
 import { slimBlockWidth } from '../../../styles/editor-layout';
 import { TabElement } from '@decipad/editor-types';
 import { EditorBlock } from '../EditorBlock/EditorBlock';
-import { DropLine } from '../DropLine/DropLine';
 import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
 import { Path } from 'slate';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
-
-export const draggingOpacity: Opacity = 0.4;
-
-const horizontalDropLineStyle = css({
-  position: 'absolute',
-  width: '100%',
-  zIndex: 2,
-});
-
-// This positioning puts the dropLine in line with the NewElementLine.
-const topDropLineStyle = css({ top: '4px' });
-const bottomDropLineStyle = css({ bottom: '-6px' });
-
-const verticalDropLineStyle = css({
-  position: 'absolute',
-  width: 'auto',
-  height: '100%',
-  top: 0,
-  zIndex: 2,
-});
-const leftDropLineStyle = css({ left: `-6px` });
-const rightDropLineStyle = css({ right: '-6px' });
 
 const hiddenEditorBlockStyle = css({
   opacity: '.5',
@@ -60,12 +36,10 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly isSelected?: boolean;
   readonly isHidden?: boolean;
   readonly isBeingDragged?: boolean;
-  readonly dropLine?: 'top' | 'bottom' | 'left' | 'right';
   readonly path?: Path;
 
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: Ref<HTMLDivElement>;
-  readonly previewRef?: Ref<HTMLDivElement>;
   readonly dependenciesForBlock?: BlockDependents[];
 
   readonly draggableCss?: SerializedStyles;
@@ -112,11 +86,9 @@ export const DraggableBlock = ({
   isSelected = false,
   isHidden = false,
   isBeingDragged = false,
-  dropLine,
 
   dragSource,
   blockRef,
-  previewRef,
 
   draggableCss,
   tabs = [],
@@ -159,24 +131,6 @@ export const DraggableBlock = ({
 
   const showEyeLabel = isHidden && !menuOpen;
 
-  const dropLineEl = (
-    <div
-      contentEditable={false}
-      css={[
-        dropLine === 'top' && [horizontalDropLineStyle, topDropLineStyle],
-        dropLine === 'bottom' && [horizontalDropLineStyle, bottomDropLineStyle],
-        dropLine === 'left' && [verticalDropLineStyle, leftDropLineStyle],
-        dropLine === 'right' && [verticalDropLineStyle, rightDropLineStyle],
-      ]}
-    >
-      <DropLine
-        variant={
-          dropLine === 'left' || dropLine === 'right' ? 'inline' : 'block'
-        }
-      />
-    </div>
-  );
-
   return (
     <EditorBlock
       isHidden={isHidden}
@@ -185,14 +139,32 @@ export const DraggableBlock = ({
       {...props}
     >
       <div
-        css={{
-          display: 'grid',
-          gridTemplateColumns: `${handleWidth}px auto`,
-          gridColumnGap: `${editorLayout.gutterGap}px`,
+        css={[
+          {
+            display: 'grid',
+            gridTemplateColumns: `${handleWidth}px auto`,
+            gridColumnGap: `${editorLayout.gutterGap}px`,
 
-          marginLeft: `-${totalSpaceWithGap}px`,
-          transition: `margin-left ${shortAnimationDuration} ease-out`,
-        }}
+            marginLeft: `-${totalSpaceWithGap}px`,
+            transition: `margin-left ${shortAnimationDuration} ease-out`,
+          },
+          isBeingDragged && {
+            '& > *': {
+              opacity: 0,
+            },
+            position: 'relative',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              left: totalSpaceWithGap,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              background: cssVar('backgroundDefault'),
+              borderRadius: '0.5rem',
+            },
+          },
+        ]}
       >
         <div
           contentEditable={false}
@@ -278,23 +250,18 @@ export const DraggableBlock = ({
         </div>
         <div
           css={[
-            isBeingDragged ? { opacity: draggingOpacity } : {},
             isHidden ? hiddenEditorBlockStyle : {},
             isSelected || menuOpen ? hiddenFocusedStyle : {},
             // Duplication from `EditorBlock` but forces any rogue elements not to overflow.
             { maxWidth: slimBlockWidth, width: '100%' },
           ]}
-          ref={previewRef}
         >
-          {(dropLine === 'top' || dropLine === 'left') && dropLineEl}
           <NewElementLine
             onAdd={onAdd}
             show={showLine}
             hasPreviousSibling={hasPreviousSibling}
           />
           <div css={selectedBlockStyles(menuOpen)}>{children}</div>
-
-          {(dropLine === 'bottom' || dropLine === 'right') && dropLineEl}
         </div>
       </div>
     </EditorBlock>

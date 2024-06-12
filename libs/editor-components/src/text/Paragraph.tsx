@@ -10,12 +10,8 @@ import type {
   ParagraphElement,
   PlateComponent,
 } from '@decipad/editor-types';
-import {
-  COLUMN_KINDS,
-  ELEMENT_PARAGRAPH,
-  useMyEditorRef,
-} from '@decipad/editor-types';
-import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
+import { ELEMENT_PARAGRAPH, useMyEditorRef } from '@decipad/editor-types';
+import { getRangeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
 import {
@@ -31,7 +27,6 @@ import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { ParagraphAIPanel } from '../AIPanel';
 import { DraggableBlock } from '../block-management';
-import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 
 const isSelected = (editor: MyEditor, element: AnyElement) => {
@@ -78,14 +73,6 @@ export const Paragraph: PlateComponent = ({
   const turnIntoProps = useTurnIntoProps(element);
   const editor = useMyEditorRef();
   const path = useNodePath(element);
-  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
-  const getAxis = useDragAndDropGetAxis({ isHorizontal });
-  const onDrop = useDragAndDropOnDrop({
-    editor,
-    element: element as AnyElement,
-    path,
-    isHorizontal,
-  });
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = () => {
     getAnalytics().then((analytics) =>
@@ -98,9 +85,6 @@ export const Paragraph: PlateComponent = ({
     <DraggableBlock
       blockKind="paragraph"
       element={element}
-      accept={isHorizontal ? COLUMN_KINDS : undefined}
-      getAxis={getAxis}
-      onDrop={onDrop}
       aiPanel={{
         text: 'Rewrite with AI',
         visible: showAiPanel,

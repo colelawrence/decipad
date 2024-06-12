@@ -2,8 +2,6 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { type SerializedType } from '@decipad/remote-computer';
 import {
   DraggableBlock,
-  useDragAndDropGetAxis,
-  useDragAndDropOnDrop,
   useTextTypeInference,
 } from '@decipad/editor-components';
 import type {
@@ -11,16 +9,8 @@ import type {
   VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
-import {
-  ELEMENT_DISPLAY,
-  ELEMENT_VARIABLE_DEF,
-  useMyEditorRef,
-} from '@decipad/editor-types';
-import {
-  assertElementType,
-  isDragAndDropHorizontal,
-  mutateText,
-} from '@decipad/editor-utils';
+import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
+import { assertElementType, mutateText } from '@decipad/editor-utils';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   useEditorStylesContext,
@@ -137,10 +127,6 @@ export const VariableDef: PlateComponent = ({
     [editor, element.variant, secondChild]
   );
 
-  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
-  const getAxis = useDragAndDropGetAxis({ isHorizontal });
-  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
-
   const { color: defaultColor } = useEditorStylesContext();
 
   const turnIntoProps = useTurnIntoProps(element);
@@ -151,11 +137,6 @@ export const VariableDef: PlateComponent = ({
     <DraggableBlock
       blockKind="interactive"
       element={element}
-      accept={
-        isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
-      }
-      getAxis={getAxis}
-      onDrop={onDrop}
       contentEditable={true}
       suppressContentEditableWarning
       id={element.id}

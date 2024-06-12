@@ -10,6 +10,7 @@ export * from './CodeVariableHighlight';
 export * from './DeduplicateElementIds';
 export * from './Display';
 export * from './Divider';
+export * from './DndBlock';
 export * from './DndSmartRef';
 export * from './DragOverCursor';
 export * from './Draw';

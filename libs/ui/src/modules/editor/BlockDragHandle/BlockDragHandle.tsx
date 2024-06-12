@@ -93,7 +93,7 @@ const eyeLabelStyles = css(handleButtonStyle, {
   },
 });
 
-const handleStyle = css(handleButtonStyle, {
+export const handleStyle = css(handleButtonStyle, {
   gridArea: 'handle',
   cursor: 'grab',
   height: '20px',

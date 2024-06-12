@@ -1,29 +1,17 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import { DraggableBlock, useUnnamedResults } from '@decipad/editor-components';
 import {
-  DraggableBlock,
-  useDragAndDropGetAxis,
-  useDragAndDropOnDrop,
-  useUnnamedResults,
-} from '@decipad/editor-components';
-import {
-  useComputer,
   useNodePath,
   usePathMutatorCallback,
+  useComputer,
 } from '@decipad/editor-hooks';
 import type {
   PlateComponent,
   UserIconKey,
   MyNode,
 } from '@decipad/editor-types';
-import {
-  COLUMN_KINDS,
-  ELEMENT_DISPLAY,
-  useMyEditorRef,
-} from '@decipad/editor-types';
-import {
-  assertElementType,
-  isDragAndDropHorizontal,
-} from '@decipad/editor-utils';
+import { ELEMENT_DISPLAY, useMyEditorRef } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import {
   useEditorStylesContext,
   useIsEditorReadOnly,
@@ -141,10 +129,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     [namesDefined, unnamedResults]
   );
 
-  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
-  const getAxis = useDragAndDropGetAxis({ isHorizontal });
-  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
-
   // Performance improvement: Because results are only calculated when
   // menu is open, we no longer have access to them all the time. So we
   // need to store a bit more information about it.
@@ -195,13 +179,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const { color = defaultColor } = element;
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
-      <DraggableBlock
-        blockKind="interactive"
-        element={element}
-        accept={isHorizontal ? COLUMN_KINDS : undefined}
-        getAxis={getAxis}
-        onDrop={onDrop}
-      >
+      <DraggableBlock blockKind="interactive" element={element}>
         <VariableEditor
           onChangeFormatting={changeFormatting}
           variant="display"
