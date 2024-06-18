@@ -3,7 +3,7 @@ import type { LogEntry } from '@decipad/graphql-client';
 import { useCreateLogsMutation } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import type { FC, PropsWithChildren } from 'react';
 import { useCallback, useEffect } from 'react';
 import { chunkify } from './chunkify';

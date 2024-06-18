@@ -9,7 +9,7 @@ import type {
   ExternalDataSourceUpdateInput,
   ExternalProvider,
 } from '@decipad/graphqlserver-types';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 
 const isDatabaseSource = new Set<ExternalProvider>([
   'postgresql',

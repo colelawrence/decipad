@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { MyElement, MyNode } from '@decipad/editor-types';

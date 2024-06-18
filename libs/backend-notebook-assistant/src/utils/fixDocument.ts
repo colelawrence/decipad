@@ -7,7 +7,7 @@ import {
   type RootDocument,
 } from '@decipad/editor-types';
 import { getNodeString, isElement } from '@udecode/plate-common';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { findNode } from './findNode';
 
 const fixDataViews = (doc: RootDocument): void => {

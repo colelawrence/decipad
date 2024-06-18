@@ -3,7 +3,7 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import isEmpty from 'lodash.isempty';
+import isEmpty from 'lodash/isEmpty';
 import md5 from 'md5';
 import { FormEvent, useCallback } from 'react';
 import Gravatar from 'react-gravatar';

@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { create } from 'zustand';
 import { Subject } from 'rxjs';
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import type { Result } from '@decipad/remote-computer';
 import { codePlaceholder } from '@decipad/frontend-config';
 import type {

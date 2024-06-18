@@ -1,7 +1,7 @@
 import { type TOperation, withoutNormalizing } from '@udecode/plate-common';
 import { createMyPlateEditor, type Document } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const applyOperations = (doc: Document, ops: TOperation[]) => {
   const editor = createMyPlateEditor();

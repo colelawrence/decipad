@@ -1,6 +1,6 @@
 import type { RootDocument } from '@decipad/editor-types';
 import { scanElementIds } from './scanElementIds';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import type { TElement } from '@udecode/plate-common';
 import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';

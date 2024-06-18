@@ -1,6 +1,6 @@
 import { Button } from '@decipad/ui';
 import { css } from '@emotion/react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SearchFieldWithDropdown } from '../../molecules';
 

@@ -7,7 +7,7 @@ import { ELEMENT_DRAW, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Draw as UIDraw } from '../../editor-components/src/plate-ui/draw';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import type { MutableRefObject } from 'react';
 import { useCallback, useRef, useState } from 'react';
 import type { ExcalidrawRef as TExcalidrawRef } from '@decipad/editor-components';

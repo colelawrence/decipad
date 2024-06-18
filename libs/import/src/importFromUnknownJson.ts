@@ -19,7 +19,7 @@ import { normalizeColumnName } from './utils/normalizeColumnName';
 import { rowsToColumns } from './utils/rowsToColumns';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import { isValid, parseISO } from 'date-fns';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { ImportOptions } from './types';

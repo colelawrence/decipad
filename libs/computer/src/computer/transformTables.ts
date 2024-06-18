@@ -1,4 +1,4 @@
-import groupBy from 'lodash.groupby';
+import groupBy from 'lodash/groupBy';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { decilang } from '@decipad/language';

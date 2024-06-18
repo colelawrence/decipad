@@ -1,7 +1,7 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import type { MyElement, MyEditor } from '@decipad/editor-types';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { findNode, getNode, isElement } from '@udecode/plate-common';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';

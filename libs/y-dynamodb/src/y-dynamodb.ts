@@ -7,7 +7,7 @@ import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
 const MAX_ALLOWED_RECORD_SIZE_BYTES = 150_000;

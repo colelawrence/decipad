@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import capitalize from 'lodash.capitalize';
+import capitalize from 'lodash/capitalize';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { create } from 'zustand';

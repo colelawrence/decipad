@@ -1,11 +1,11 @@
 import type { RootDocument, TabElement } from '@decipad/editor-types';
 import { ELEMENT_TAB } from '@decipad/editor-types';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { getCommands } from './getCommands';
 import { findPath } from './findPath';
-import set from 'lodash.set';
+import set from 'lodash/set';
 import { removePath } from './removePath';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { debug } from '../debug';
 import { isElement, mergeProps } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';

@@ -1,6 +1,6 @@
-import clone from 'lodash.clonedeep';
-import get from 'lodash.get';
-import set from 'lodash.set';
+import clone from 'lodash/cloneDeep';
+import get from 'lodash/get';
+import set from 'lodash/set';
 import type { PlotSpec } from './plotUtils.interface';
 
 const colorSchemePaths = [

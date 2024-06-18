@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { dequal, getDefined } from '@decipad/utils';
 import type {

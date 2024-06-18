@@ -1,5 +1,5 @@
 import type { TOperation } from '@udecode/plate-common';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import type { Path } from 'slate';
 import { debug } from './debug';
 import stringify from 'json-stringify-safe';

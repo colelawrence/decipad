@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import capitalize from 'lodash.capitalize';
+import capitalize from 'lodash/capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Divider, MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
 import { Aggregate, CaretDown, Cluster, Trash } from '../../../icons';

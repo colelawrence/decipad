@@ -12,7 +12,7 @@ import {
   ELEMENT_TAB,
 } from '@decipad/editor-types';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import type { EElement, TOperation } from '@udecode/plate-common';
 import { isElement } from '@udecode/plate-common';
 import { affectedPaths } from './affectedPaths';

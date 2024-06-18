@@ -1,6 +1,6 @@
 import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { isNode, walkAst } from '@decipad/language-utils';

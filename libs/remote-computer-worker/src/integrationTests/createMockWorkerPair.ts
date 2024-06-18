@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Subject } from 'rxjs';
 import { MockWorker } from './MockWorker';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 const cloning = (handle: (data: unknown) => void) => (data: unknown) =>
   handle(cloneDeep(data));

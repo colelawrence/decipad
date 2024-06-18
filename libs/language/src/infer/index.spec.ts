@@ -1,4 +1,4 @@
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import { produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
 import type { AST, Type, Unit } from '@decipad/language-interfaces';

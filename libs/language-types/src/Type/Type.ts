@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import type {
   AST,
   IInferError,

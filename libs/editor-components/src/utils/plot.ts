@@ -2,7 +2,7 @@ import type { MyEditor, PlotElement } from '@decipad/editor-types';
 import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import type { MarkType } from '@decipad/ui';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
 

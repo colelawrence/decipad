@@ -5,7 +5,7 @@
 
 import type { SecretRecord, Workspace, PadRecord } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
 
 test('secrets', (ctx) => {

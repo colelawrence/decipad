@@ -8,7 +8,7 @@ import {
   isAllowedToLogIn,
 } from '@decipad/services/users';
 import { createVerifier } from '@decipad/services/authentication';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { track } from '@decipad/backend-analytics';
 

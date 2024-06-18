@@ -5,7 +5,7 @@ import type {
 } from '@decipad/editor-types';
 import { useEditorChangeCallback } from '@decipad/editor-hooks';
 import { findNodePath, getNode } from '@udecode/plate-common';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { useCallback, useRef } from 'react';
 import type { DrawElementsDiff } from './types';
 import { findElementsDiff } from './findElementsDiff';

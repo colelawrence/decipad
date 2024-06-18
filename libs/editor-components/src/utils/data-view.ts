@@ -1,5 +1,5 @@
 import type { Path } from 'slate';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { nanoid } from 'nanoid';
 import type { TEditor } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';

@@ -10,7 +10,7 @@ import type {
   APIGatewayProxyHandlerV2,
   APIGatewayProxyEventV2,
 } from 'aws-lambda';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
 import adaptReqRes from './adapt-req-res';

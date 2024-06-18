@@ -12,7 +12,7 @@ import {
 } from '@decipad/editor-utils';
 import type { TEditor } from '@udecode/plate-common';
 import { findNode, focusEditor, nanoid } from '@udecode/plate-common';
-import clone from 'lodash.clonedeep';
+import clone from 'lodash/cloneDeep';
 import { Path } from 'slate';
 
 const getInitialLiveQueryElement = (

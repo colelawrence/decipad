@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import invariant from 'tiny-invariant';
 import { type Awareness } from 'y-protocols/awareness';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { type Session } from 'next-auth';
 import { jsonify } from '../utils/jsonify';
 import type { MinimalRootEditor } from '@decipad/editor-types';

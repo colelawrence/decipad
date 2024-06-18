@@ -10,7 +10,7 @@ import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import type { EnhancedPromise, NotebookState } from './state';
 import { isNewNotebook } from './isNewNotebook';
 import { cursorAwareness } from './cursors';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import * as idb from 'lib0/indexeddb';
 
 const LOAD_TIMEOUT_MS = 5000;

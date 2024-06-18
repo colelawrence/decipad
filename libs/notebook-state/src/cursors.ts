@@ -4,7 +4,7 @@ import type {
   TYjsEditor as GTYjsEditor,
 } from '@decipad/slate-yjs';
 import { dequal } from '@decipad/utils';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import type { UserCursorState } from '@decipad/react-contexts';
 import { cursorStore } from '@decipad/react-contexts';
 import type { MinimalRootEditor } from '@decipad/editor-types';

@@ -7,7 +7,7 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_LIVE_CONNECTION } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import isEmpty from 'lodash.isempty';
+import isEmpty from 'lodash/isEmpty';
 import type { SubscriptionLike } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import type { ConnectionResult, Observe } from '../types';

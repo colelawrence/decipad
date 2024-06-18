@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { findNodePath } from '@udecode/plate-common';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import type { MutableRefObject } from 'react';
 import { useCallback, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';

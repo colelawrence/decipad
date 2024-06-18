@@ -19,7 +19,7 @@ import {
 } from '@decipad/remote-computer';
 import { formatError } from '@decipad/format';
 import { CodeResult } from '@decipad/ui';
-import maxBy from 'lodash.maxby';
+import maxBy from 'lodash/maxBy';
 import styles from './styles.module.css';
 import { useComputer } from '@decipad/editor-hooks';
 

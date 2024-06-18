@@ -13,7 +13,7 @@ import * as Styled from './styles';
 import { AnimatePresence } from 'framer-motion';
 import { useActiveElement } from '@decipad/react-utils';
 import { useCallback, useEffect, useState } from 'react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']

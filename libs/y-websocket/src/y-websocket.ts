@@ -4,7 +4,7 @@ import * as decoding from 'lib0/decoding';
 import * as encoding from 'lib0/encoding';
 import { Observable } from 'lib0/observable';
 import * as time from 'lib0/time';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
 import type { Doc as YDoc } from 'yjs';

@@ -1,6 +1,6 @@
 import type { RootDocument } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 export const removePath = (doc: RootDocument, path: string[]): void => {
   const lastPointStr = path[path.length - 1];

@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { type Observable } from 'rxjs';
 import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { EditorChangeContext } from '@decipad/react-contexts';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
