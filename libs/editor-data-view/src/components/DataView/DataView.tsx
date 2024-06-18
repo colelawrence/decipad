@@ -1,25 +1,29 @@
 import { DraggableBlock } from '@decipad/editor-components';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type { PlateComponent, UserIconKey } from '@decipad/editor-types';
 import { ELEMENT_DATA_VIEW, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
+import { formatError } from '@decipad/format';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import type { AvailableSwatchColor } from '@decipad/ui';
 import {
-  DataView as UIDataView,
-  DataViewMenu,
-  VoidBlock,
   CodeError,
+  DataViewMenu,
+  DataView as UIDataView,
+  VoidBlock,
 } from '@decipad/ui';
+import { getNodeString } from '@udecode/plate-common';
 import type { ReactNode } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';
-import { DataViewData } from '../DataViewData';
-import { getNodeString } from '@udecode/plate-common';
 import { DataViewContextProvider } from '../DataViewContext';
-import { formatError } from '@decipad/format';
+import { DataViewData } from '../DataViewData';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -28,6 +32,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW);
   const editor = useMyEditorRef();
+  const computer = useComputer();
 
   const path = useNodePath(element);
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'DataView');
@@ -50,6 +55,18 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     'alternateRotation',
     'DataView'
   );
+  const saveVarName = usePathMutatorCallback(
+    editor,
+    path,
+    'varName',
+    'DataView'
+  );
+
+  const blockId = computer.getVarBlockId$.use(element.varName ?? '');
+  useEffect(() => {
+    if (blockId == null) return;
+    saveVarName(blockId, 'migrating a missing smartRef to blockId');
+  }, [computer, blockId, saveVarName]);
 
   const {
     error,

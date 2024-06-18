@@ -4,8 +4,8 @@ import styled from '@emotion/styled';
 import { FC, ReactNode } from 'react';
 import { componentCssVars, cssVar } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { ExperimentalTooltip } from '../ExperimentalTooltip/ExperimentalTooltip';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface SegmentButton {
   readonly children: ReactNode;
@@ -71,6 +71,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
           hasTooltip && !disabled ? (
             experimentalTooltip ? (
               <ExperimentalTooltip
+                key={`figure-segment-tooltip-labs-${i}`}
                 title={typeof tooltip === 'string' ? tooltip : ''}
                 trigger={trigger}
                 side="top"

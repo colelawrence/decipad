@@ -1,19 +1,22 @@
 import {
+  createEventInterceptorPluginFactory,
+  createMigrateDataviewPlugin,
+} from '@decipad/editor-plugins';
+import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_TH,
   ELEMENT_DATA_VIEW_TR,
 } from '@decipad/editor-types';
 import { createPluginFactory } from '@udecode/plate-common';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   DataView,
   DataViewCaption,
   DataViewColumnHeader,
   DataViewColumnHeaderRow,
 } from '../components';
-import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 import { createNormalizeDataViewHeaderAggregationPlugin } from './createNormalizeDataViewHeaderAggregationPlugin';
+import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 
 export const createDataViewPlugin = createPluginFactory({
   key: ELEMENT_DATA_VIEW,
@@ -43,5 +46,6 @@ export const createDataViewPlugin = createPluginFactory({
       elementTypes: [ELEMENT_DATA_VIEW],
       interceptor: () => true,
     })(),
+    createMigrateDataviewPlugin(),
   ],
 });

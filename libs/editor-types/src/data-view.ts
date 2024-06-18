@@ -1,4 +1,10 @@
-import type { BaseElement, EmptyText, TableCellType, Text } from '.';
+import type {
+  BaseElement,
+  EmptyText,
+  TableCaptionElement,
+  TableCellType,
+  Text,
+} from '.';
 import type {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
@@ -37,6 +43,16 @@ export interface DataViewElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW;
   children: [DataViewCaptionElement, DataViewHeaderRowElement];
   expandedGroups?: string[];
+  rotate?: boolean;
+  alternateRotation?: boolean;
+  varName?: string;
+  color?: string;
+  icon?: string;
+}
+
+export interface OldDataViewElement extends BaseElement {
+  type: typeof ELEMENT_DATA_VIEW;
+  children: [TableCaptionElement, DataViewHeaderRowElement];
   rotate?: boolean;
   alternateRotation?: boolean;
   varName?: string;

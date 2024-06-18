@@ -1,21 +1,21 @@
 import {
-  type NormalizerReturnValue,
   createNormalizerPlugin,
+  type NormalizerReturnValue,
 } from '@decipad/editor-plugins';
 import {
   ELEMENT_DATA_VIEW,
-  type MyEditor,
-  type MyNodeEntry,
-  type TableColumnFormulaElement,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_DATA_VIEW_TR,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
+  ELEMENT_DATA_VIEW_TR,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
   type DataViewCaptionElement,
   type DataViewElement,
   type DataViewHeaderRowElement,
   type DataViewNameElement,
+  type MyEditor,
+  type MyNodeEntry,
+  type TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import {
@@ -180,6 +180,7 @@ export const createNormalizeDataViewPlugin = () =>
       'icon',
       'rotate',
       'alternateRotation',
+      'schema',
     ],
     acceptableSubElements: [ELEMENT_TABLE_CAPTION, ELEMENT_DATA_VIEW_TR],
     plugin: normalizeDataViewPlugin,

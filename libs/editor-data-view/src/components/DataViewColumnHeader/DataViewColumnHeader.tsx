@@ -1,5 +1,3 @@
-import { useCallback, useMemo, useRef } from 'react';
-import { Path } from 'slate';
 import {
   useComputer,
   useNodePath,
@@ -13,15 +11,17 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_DATA_VIEW_TH, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
-import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { availableAggregations as getAvailableAggregations } from '@decipad/language-aggregations';
+import { useDeepMemo } from '@decipad/react-utils';
+import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
 import { useDragColumn } from 'libs/editor-table/src/hooks/useDragColumn';
+import { useCallback, useMemo, useRef } from 'react';
+import { Path } from 'slate';
 import { useDataViewActions, useDropColumn } from '../../hooks';
-import { availableRoundings } from './availableRoundings';
-import { useDataViewContext } from '../DataViewContext';
-import { useDeepMemo } from '@decipad/react-utils';
 import { useDataViewNormalizeColumnHeader } from '../../hooks/useDataViewNormalizeColumnHeader';
+import { useDataViewContext } from '../DataViewContext';
+import { availableRoundings } from './availableRoundings';
 
 export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   attributes,
@@ -32,13 +32,15 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
 
   const editor = useMyEditorRef();
+  const computer = useComputer();
+  const path = useNodePath(element);
+
   const { columns } = useDataViewContext();
   const { dragSource, dragPreview } = useDragColumn(
     editor,
     element,
     DRAG_ITEM_DATAVIEW_COLUMN
   );
-  const path = useNodePath(element);
   const actualPath = overridePath ?? path;
   const dataView: DataViewElement | undefined = useMemo(() => {
     const dataViewPath = actualPath && Path.parent(Path.parent(actualPath));
@@ -106,7 +108,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
 
   useDataViewNormalizeColumnHeader(
     editor,
-    useComputer(),
+    computer,
     dataView?.varName,
     element
   );

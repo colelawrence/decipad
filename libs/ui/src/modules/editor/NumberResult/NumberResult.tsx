@@ -1,11 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC } from 'react';
+import { formatNumber } from '@decipad/format';
+import { css } from '@emotion/react';
+import { FC, useMemo } from 'react';
+import { useFormattedResultString } from '../../../hooks';
+import { Tooltip } from '../../../shared';
 import { characterLimitStyles } from '../../../styles/results';
 import { CodeResultProps } from '../../../types';
-import { Tooltip } from '../../../shared';
-import { css } from '@emotion/react';
-import { useFormattedResultString } from '../../../hooks';
-import { formatNumber } from '@decipad/format';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
@@ -14,12 +14,16 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
   tooltip = true,
   variant = 'block',
 }) => {
-  const formatted = formatNumber(
-    'en-US',
-    type.unit,
-    value,
-    type.numberFormat,
-    type.numberError === 'month-day-conversion'
+  const formatted = useMemo(
+    () =>
+      formatNumber(
+        'en-US',
+        type.unit,
+        value,
+        type.numberFormat,
+        type.numberError === 'month-day-conversion'
+      ),
+    [type.numberError, type.numberFormat, type.unit, value]
   );
 
   const unitPart = formatted.partsOf?.find(
