@@ -7,6 +7,56 @@ import type {
   VarnameExportedResult,
 } from './types';
 import type { PromiseOrType } from '@decipad/utils';
+import { all } from '@decipad/generator-utils';
+
+async function getColumnValues(
+  result: Result.Result<'column'> | Result.Result<'materialized-column'>
+): Promise<ColumnValue> {
+  const { value, type } = result;
+
+  if (typeof value === 'function') {
+    const values = await all(value());
+    return {
+      type: 'column',
+      value: (
+        await Promise.all(values.map((v) => getSingleResult(v, type.cellType)))
+      ).filter((v): v is FormattedResult => v != null),
+    };
+  }
+
+  return {
+    type: 'column',
+    value: (
+      await Promise.all(value.map((v) => getSingleResult(v, type.cellType)))
+    ).filter((v): v is FormattedResult => v != null),
+  };
+}
+
+async function getTableValues(
+  result: Result.Result<'table'> | Result.Result<'materialized-table'>
+): Promise<FormattedResult> {
+  const { value, type } = result;
+
+  const columns: Array<Promise<ColumnValue>> = [];
+
+  for (const [index, v] of value.entries()) {
+    const columnResult = {
+      value: v,
+      type: {
+        kind: type.kind === 'table' ? 'column' : 'materialized-column',
+        cellType: type.columnTypes[index],
+        indexedBy: null,
+      },
+    } as Result.Result<'column'> | Result.Result<'materialized-column'>;
+
+    columns.push(getColumnValues(columnResult));
+  }
+
+  return {
+    type: 'table',
+    value: await Promise.all(columns),
+  };
+}
 
 async function getSingleResult(
   _value: Result.OneResult,
@@ -45,42 +95,20 @@ async function getSingleResult(
     };
   }
 
-  if (kind === 'column') {
-    const { value, type } = result as Result.Result<'materialized-column'>;
+  if (kind === 'column' || kind === 'materialized-column') {
+    const columnResult = result as
+      | Result.Result<'materialized-column'>
+      | Result.Result<'column'>;
 
-    const colCells: Array<FormattedResult | undefined> = await Promise.all(
-      value.map((cell) => getSingleResult(cell, type.cellType))
-    );
-
-    return {
-      type: 'column',
-      value: colCells.filter((c): c is FormattedResult => c != null),
-    };
+    return getColumnValues(columnResult);
   }
 
-  if (kind === 'table') {
-    const { value: columns, type } =
-      result as Result.Result<'materialized-table'>;
+  if (kind === 'table' || kind === 'materialized-table') {
+    const tableResult = result as
+      | Result.Result<'table'>
+      | Result.Result<'materialized-table'>;
 
-    const colValues: Array<ColumnValue> = await Promise.all(
-      columns.map(async (col, i) => {
-        const colType = type.columnTypes[i];
-
-        const colCells: Array<FormattedResult | undefined> = await Promise.all(
-          col.map((cell) => getSingleResult(cell, colType))
-        );
-
-        return {
-          type: 'column',
-          value: colCells.filter((c): c is FormattedResult => c != null),
-        };
-      })
-    );
-
-    return {
-      type: 'table',
-      value: colValues,
-    };
+    return getTableValues(tableResult);
   }
 
   return undefined;

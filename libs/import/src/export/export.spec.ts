@@ -2,6 +2,7 @@ import { serializeResult } from '@decipad/computer-utils';
 import type { IdentifiedResult } from '@decipad/remote-computer';
 import { runCode } from '@decipad/remote-computer';
 import { exportProgram } from './export';
+import { N } from '@decipad/number';
 
 function mockedVarName(blockId: string): string | undefined {
   return `varname-${blockId}`;
@@ -336,6 +337,152 @@ describe('Export computer results', () => {
             ],
           },
           "varName": "varname-0",
+        },
+      ]
+    `);
+  });
+});
+
+describe('it works with un-materialized tables and columns', () => {
+  it('works with unmaterialized columns', async () => {
+    async function* resultGenerator(start = 0, end = Infinity) {
+      const numbers = [1, 2, 3];
+      for (let i = start; i < Math.min(end, numbers.length); i++) {
+        yield N(numbers[i]);
+      }
+    }
+
+    const column: IdentifiedResult = {
+      type: 'computer-result',
+      id: '1',
+      result: {
+        type: {
+          kind: 'column',
+          indexedBy: null,
+          cellType: {
+            kind: 'number',
+          },
+        },
+        value: resultGenerator,
+      },
+      epoch: 1n,
+    };
+
+    await expect(
+      exportProgram(
+        { blockResults: { '1': column }, indexLabels: new Map() },
+        mockedVarName
+      )
+    ).resolves.toMatchInlineSnapshot(`
+      [
+        {
+          "id": "1",
+          "result": {
+            "type": "column",
+            "value": [
+              {
+                "type": "number",
+                "unit": null,
+                "value": 1,
+              },
+              {
+                "type": "number",
+                "unit": null,
+                "value": 2,
+              },
+              {
+                "type": "number",
+                "unit": null,
+                "value": 3,
+              },
+            ],
+          },
+          "varName": "varname-1",
+        },
+      ]
+    `);
+  });
+
+  it('works with unmaterialized tables', async () => {
+    const generateResultGenerator = (multiplier: number) => {
+      return async function* resultGenerator(start = 0, end = Infinity) {
+        const numbers = [1, 2, 3];
+        for (let i = start; i < Math.min(end, numbers.length); i++) {
+          yield N(multiplier * numbers[i]);
+        }
+      };
+    };
+
+    const column: IdentifiedResult = {
+      type: 'computer-result',
+      id: '1',
+      result: {
+        type: {
+          kind: 'table',
+          columnTypes: [{ kind: 'number' }, { kind: 'number' }],
+          indexName: null,
+          columnNames: ['1', '2'],
+        },
+        value: [generateResultGenerator(1), generateResultGenerator(2)],
+      },
+      epoch: 1n,
+    };
+
+    await expect(
+      exportProgram(
+        { blockResults: { '1': column }, indexLabels: new Map() },
+        mockedVarName
+      )
+    ).resolves.toMatchInlineSnapshot(`
+      [
+        {
+          "id": "1",
+          "result": {
+            "type": "table",
+            "value": [
+              {
+                "type": "column",
+                "value": [
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 1,
+                  },
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 2,
+                  },
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 3,
+                  },
+                ],
+              },
+              {
+                "type": "column",
+                "value": [
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 2,
+                  },
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 4,
+                  },
+                  {
+                    "type": "number",
+                    "unit": null,
+                    "value": 6,
+                  },
+                ],
+              },
+            ],
+          },
+          "varName": "varname-1",
         },
       ]
     `);
