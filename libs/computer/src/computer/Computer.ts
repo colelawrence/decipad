@@ -795,6 +795,7 @@ export class Computer implements ComputerInterface {
       this.latestExternalData,
       delta
     );
+
     const {
       program: newProgram,
       varNameToBlockMap,
@@ -805,6 +806,7 @@ export class Computer implements ComputerInterface {
     );
 
     const newParse = topologicalSort(newProgram);
+
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     const newComputerProgram = programToComputerProgram(newParse);

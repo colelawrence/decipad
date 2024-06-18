@@ -288,7 +288,7 @@ const inferStatementInternal = linkingToAST(
 
         const constant = getConstantByName(varName);
         const type =
-          constant || ctx.stack.has(varName)
+          constant != null
             ? t.impossible(InferError.duplicatedName(varName))
             : await inferExpression(realm, nValue);
 

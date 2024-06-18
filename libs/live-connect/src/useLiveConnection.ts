@@ -241,6 +241,7 @@ export async function pushResultToComputer(
                 args: [astNode('table', astNode('tabledef', variableName))],
               },
               definesVariable: variableName,
+              isArtificial: true,
             },
           ],
         ],
@@ -270,6 +271,8 @@ export async function pushResultToComputer(
               ],
             },
             definesTableColumn: [variableName, colName],
+            isArtificial: true,
+            artificiallyDerivedFrom: [blockId],
           },
         ]);
 
@@ -287,10 +290,11 @@ export async function pushResultToComputer(
         extra: { upsert: programBlocks },
       });
     } else {
+      const externalRef = `${blockId}-external`;
       await computer.pushComputeDelta({
         external: {
           upsert: {
-            [blockId]: {
+            [externalRef]: {
               type: serializeType(computerResult.type),
               value: computerResult.value,
             },
@@ -311,10 +315,11 @@ export async function pushResultToComputer(
                       astNode(
                         'assign',
                         astNode('def', variableName),
-                        astNode('externalref', blockId)
+                        astNode('externalref', externalRef)
                       ),
                     ],
                   },
+                  isArtificial: true,
                 },
               ],
             ],
@@ -324,7 +329,7 @@ export async function pushResultToComputer(
     }
   } else {
     await computer.pushComputeDelta({
-      external: { remove: [blockId] },
+      external: { remove: [`${blockId}-external`] },
       extra: { remove: [blockId] },
     });
   }

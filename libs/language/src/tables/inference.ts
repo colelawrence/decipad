@@ -2,12 +2,7 @@ import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import {
-  InferError,
-  Value,
-  buildType,
-  buildType as t,
-} from '@decipad/language-types';
+import { Value, buildType } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import type { FullBuiltinSpec } from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
@@ -30,9 +25,6 @@ export const inferTable = async (realm: TRealm, table: AST.Table) => {
 
   const tableDef = table.args[0];
   const tableName = getIdentifierString(tableDef);
-  if (ctx.stack.has(tableName)) {
-    return t.impossible(InferError.duplicatedName(tableName));
-  }
 
   ctx.stack.createNamespace(tableName);
   const type = await withPush(

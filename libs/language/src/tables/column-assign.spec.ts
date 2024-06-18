@@ -308,13 +308,6 @@ describe('Column assignment inference', () => {
   });
 
   it('propagates multiple errors', async () => {
-    const duplicatedColumn = await inferColumnAssign(
-      realm,
-      tableColAssign('Table', 'Col1', col('1', '2'))
-    );
-    expect(duplicatedColumn.errorCause?.spec.errType).toEqual(
-      'duplicated-table-column'
-    );
     expect(ctx.stack.globalVariables.get('Table')).toMatchObject({
       columnNames: ['Col1'],
       columnTypes: [{ type: 'number' }],

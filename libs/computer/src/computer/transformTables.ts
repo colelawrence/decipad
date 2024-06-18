@@ -45,6 +45,8 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
         decilang`${{ name: tableName }} = {}`
       ),
       definesVariable: program.definesVariable,
+      isArtificial: program.isArtificial,
+      artificiallyDerivedFrom: program.artificiallyDerivedFrom,
     };
 
     const assigns = [tableItself];

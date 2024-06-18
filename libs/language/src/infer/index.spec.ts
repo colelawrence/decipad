@@ -91,21 +91,6 @@ it('infers literals', async () => {
   expect(await inferExpression(nilRealm, l(true))).toEqual(t.boolean());
 });
 
-describe('variables', () => {
-  it('disallows reassigning variables', async () => {
-    const reassigning = n(
-      'block',
-      n('assign', n('def', 'Reassigned'), l(1)),
-      n('assign', n('def', 'Reassigned'), l(1))
-    );
-
-    expect(
-      await (await inferProgram([reassigning])).stack.get('Reassigned')
-        ?.errorCause
-    ).not.toBeNull();
-  });
-});
-
 describe('ranges', () => {
   it('infers ranges', async () => {
     expect(await inferExpression(nilRealm, range(1, 2))).toEqual(

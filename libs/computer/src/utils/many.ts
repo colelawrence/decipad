@@ -63,8 +63,10 @@ export const getIdentifierString = (ident: AST.Identifier): string =>
 
 export const getDefinedSymbol = (
   stmt: AST.Statement,
-  findIncrementalDefinitions = true
+  findIncrementalDefinitions = true,
+  excludeTypes: Set<AST.Node['type']> = new Set()
 ) => {
+  if (excludeTypes.has(stmt.type)) return null;
   switch (stmt.type) {
     case 'function-definition':
     case 'assign':
@@ -109,7 +111,11 @@ export function* getSymbolsDefinedInBlocks(
   }
 }
 
-const getReferredSymbol = (node: AST.Node) => {
+const getReferredSymbol = (
+  node: AST.Node,
+  excludeTypes: ReadonlySet<AST.Node['type']>
+) => {
+  if (excludeTypes.has(node.type)) return null;
   switch (node.type) {
     case 'ref':
     case 'funcref':
@@ -120,11 +126,14 @@ const getReferredSymbol = (node: AST.Node) => {
   }
 };
 
-export const findSymbolsUsed = (stmt: AST.Statement) => {
+export const findSymbolsUsed = (
+  stmt: AST.Statement,
+  excludeTypes: ReadonlySet<AST.Node['type']> = new Set()
+) => {
   const symbols: string[] = [];
 
   walkAst(stmt, (node) => {
-    const sym = getReferredSymbol(node);
+    const sym = getReferredSymbol(node, excludeTypes);
     if (sym != null) symbols.push(sym);
   });
 

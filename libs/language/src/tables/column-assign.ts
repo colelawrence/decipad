@@ -30,10 +30,6 @@ export const inferColumnAssign = async (
     return table ?? t.impossible(InferError.missingVariable(tableName));
   }
 
-  if (ctx.stack.hasNamespaced([tableName, columnName])) {
-    return t.impossible(InferError.duplicateTableColumn(columnName));
-  }
-
   const newColumnAtParentIndex =
     sortOrder ?? getDefined(table.columnNames).length;
 

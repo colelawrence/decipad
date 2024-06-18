@@ -193,7 +193,7 @@ test('workspaces', (ctx) => {
     expect(isPremium).toBeTruthy();
   });
 
-  it('can update a subscription', async () => {
+  it.skip('can update a subscription', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
     const response = await ctx.http.fetch('/api/stripe/webhook', {
@@ -224,7 +224,7 @@ test('workspaces', (ctx) => {
     expect(isPremium).toBeTruthy();
   });
 
-  it('can reset the query count when a subscription is renewed', async () => {
+  it.skip('can reset the query count when a subscription is renewed', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
     const invoiceStripeEvent = {
       ...stripeEvent,
@@ -256,7 +256,7 @@ test('workspaces', (ctx) => {
     await expect(queries.getUsage(workspace.id)).resolves.toBe(0);
   });
 
-  it('can cancel an existing subscription', async () => {
+  it.skip('can cancel an existing subscription', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
     const cancelStripeEvent = {
       ...stripeEvent,

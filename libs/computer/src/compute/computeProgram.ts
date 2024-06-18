@@ -53,8 +53,6 @@ const internalComputeStatement = async (
   if (block && cachedResult) {
     if (block?.inferredType) {
       return [getDefined(cachedResult.result), cachedResult.value];
-    } else {
-      realm.evictStatement(program, blockId);
     }
   }
 

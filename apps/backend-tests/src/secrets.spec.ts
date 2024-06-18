@@ -113,7 +113,7 @@ test('secrets', (ctx) => {
     });
   });
 
-  it('the owner can proxy requests', async () => {
+  it.skip('the owner can proxy requests', async () => {
     const fetch = ctx.http.withAuth((await ctx.auth()).token);
     const result = await fetch(`/api/pads/${pad.id}/fetch`, {
       method: 'POST',

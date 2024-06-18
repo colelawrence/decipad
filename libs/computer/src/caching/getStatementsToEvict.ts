@@ -66,6 +66,8 @@ export const getChangedBlocks = (
   ]);
 };
 
+const skipExternalRefs: Set<AST.Node['type']> = new Set(['externalref']);
+
 /**
  * Find reassigned variables, variables being used before being defined
  */
@@ -75,9 +77,9 @@ export const findSymbolErrors = (program: AST.Block[]) => {
   const seenDefinitions = new Set<string>();
 
   iterProgram(program, (stmt) => {
-    const sym = getDefinedSymbol(stmt, true);
+    const sym = getDefinedSymbol(stmt, false);
 
-    for (const usedSym of findSymbolsUsed(stmt)) {
+    for (const usedSym of findSymbolsUsed(stmt, skipExternalRefs)) {
       if (sym === usedSym) continue;
 
       if (!seenDefinitions.has(usedSym)) {
@@ -89,7 +91,6 @@ export const findSymbolErrors = (program: AST.Block[]) => {
       if (seenDefinitions.has(sym)) {
         reassigned.add(sym);
       }
-
       seenDefinitions.add(sym);
     }
   });
@@ -134,11 +135,23 @@ export const getStatementsToEvict = ({
   const nu = programToBlocks(newProgram);
   const dirtyLocs = new Set(getExistingBlockIds(old, changedBlockIds));
 
+  const changedMapKeys = getChangedMapKeys(
+    oldExternalData,
+    newExternalData,
+    dequal
+  );
+  const symbolsAffectedByChange = findSymbolsAffectedByChange(
+    old,
+    nu,
+    changedBlockIds
+  );
+  const oldSymbolErrors = findSymbolErrors(old);
+  const newSymbolErrors = findSymbolErrors(nu);
   const dirtySymbols = new Set([
-    ...getChangedMapKeys(oldExternalData, newExternalData, dequal),
-    ...findSymbolsAffectedByChange(old, nu, changedBlockIds),
-    ...findSymbolErrors(old),
-    ...findSymbolErrors(nu),
+    ...changedMapKeys,
+    ...symbolsAffectedByChange,
+    ...oldSymbolErrors,
+    ...newSymbolErrors,
   ]);
 
   const dependentsOfBlocksAndSymbols = getDependents(

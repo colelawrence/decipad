@@ -4,6 +4,7 @@ import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
 import { Scalar } from './Scalar';
 import { FunctionValue } from './Function';
+import { UnknownValue } from './Unknown';
 
 type ValidFromJSArg =
   | string
@@ -39,6 +40,9 @@ export const fromJS = (
   thing: FromJSArg,
   defaultValue?: Value.Value
 ): Value.Value => {
+  if (thing == null) {
+    return defaultValue ?? UnknownValue;
+  }
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
   if (!validateFromJsArg(thing)) {
     throw new TypeError(`invalid result ${thing?.toString()}`);
