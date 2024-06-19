@@ -75,6 +75,26 @@ After dependency upgrades, some existing compilation caches can cause problems. 
 yarn clean:all
 ```
 
+### Rust
+
+We have some Rust code, which needs to be compiled to WASM, this uses two tools.
+
+1. Rust Compiler
+2. Wasm-Pack
+
+Here is how to install both of them:
+
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh
+
+curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+```
+
+This should work, but here is the website for both of these tools, in case you need extra setup:
+
+1. https://www.rust-lang.org/tools/install
+2. https://rustwasm.github.io/wasm-pack/installer/
+
 ### (Optional) Git hooks
 
 If you'd like to set up lint and test running before commit, run `yarn husky install`.
