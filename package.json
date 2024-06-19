@@ -549,7 +549,7 @@
     "webpack": "5.91.0",
     "webpack-bundle-analyzer": "^4.10.0",
     "worker-loader": "^3.0.8",
-    "ws": "8.16.0"
+    "ws": "8.17.1"
   },
   "resolutions": {
     "@types/react": "18.2.7",
