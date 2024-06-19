@@ -594,10 +594,10 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
           <tr>
             <td>
               <!--[if (gte mso 10)]>
-            <tr>
-            <td>
-            <table style="width: 600px">
-          <![endif]-->
+          <tr>
+          <td>
+          <table style="width: 600px">
+        <![endif]-->
               <table
                 style="
                   border-collapse: collapse;
@@ -783,167 +783,24 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
                                       </table>
   
                                       <p style="margin-bottom: 5px">
-                                        Alternatively, you can use this link:
-                                      </p>
-                                      <p
-                                        style="
-                                          padding: 12px 16px;
-                                          background-color: #f5f7fa;
-                                          border-radius: 10px;
-                                          font-size: 14px;
-                                        "
+                                      Alternatively, you can use this link:
+                                    </p>
+                                    <p style="padding: 12px 16px; background-color: #F5F7FA; border-radius:10px; font-size: 14px;">
+                                      <code
+                                        ><a
+                                          href="${url}"
+                                          target="_blank"
+                                          class="content-link"
+                                          >${url}
+                                        </a></code
                                       >
-                                        <code
-                                          ><a
-                                            href="${url}"
-                                            target="_blank"
-                                            class="content-link"
-                                            >${url}
-                                          </a></code
-                                        >
-                                      </p>
+                                    </p>
   
                                       <p>
                                         If you didn't try to log in, you can
                                         safely ignore this email.
                                       </p>
   
-                                      <h2>Get the most out of Decipad</h2>
-  
-                                      <table
-                                        width="100%"
-                                        cellpadding="0"
-                                        cellspacing="0"
-                                        border="0"
-                                        style="
-                                          border-collapse: collapse;
-                                          color: rgb(84, 84, 84);
-                                          font-family: Helvetica, Arial,
-                                            sans-serif;
-                                          font-size: 13px;
-                                          line-height: 20px;
-                                          max-width: 100%;
-                                          width: 100%;
-                                          margin-top: 20px;
-                                          margin-right: auto;
-                                          margin-bottom: 0px;
-                                          margin-left: auto;
-                                        "
-                                        class="defanged18-message_footer_table"
-                                      >
-                                        <tbody>
-                                          <tr>
-                                            <td
-                                              valign="top"
-                                              width="70"
-                                              align="left"
-                                              class="defanged18-"
-                                              style="
-                                                font-size: 12px;
-                                                padding-top: 10px;
-                                                padding-left: 10px;
-                                              "
-                                            >
-                                              <img
-                                                alt="intercomavatar"
-                                                class="defanged18-avatar"
-                                                width="50"
-                                                height="50"
-                                                src="https://avatars.githubusercontent.com/u/8577?v=4"
-                                                style="
-                                                  max-width: 100%;
-                                                  -webkit-background-clip: padding-box;
-                                                  background-clip: padding-box;
-                                                  border-top-left-radius: 25px;
-                                                  border-top-right-radius: 25px;
-                                                  border-bottom-right-radius: 25px;
-                                                  border-bottom-left-radius: 25px;
-                                                  display: inline-block;
-                                                  height: 50px;
-                                                  outline-color: currentcolor;
-                                                  outline-style: none;
-                                                  outline-width: medium;
-                                                  text-decoration-line: none;
-                                                  width: 50px;
-                                                  margin-top: 0px;
-                                                  margin-right: 0px;
-                                                  margin-bottom: 8px;
-                                                  margin-left: 0px;
-                                                "
-                                              />
-                                            </td>
-                                            <td
-                                              class="defanged18-admin_name"
-                                              style="
-                                                display: table-cell;
-                                                font-size: 12px;
-                                                vertical-align: top;
-                                              "
-                                              valign="top"
-                                            >
-                                              <p
-                                                style="
-                                                  margin-top: 0px;
-                                                  margin-right: 0px;
-                                                  margin-bottom: 24px;
-                                                  margin-left: 0px;
-                                                "
-                                              >
-                                                Book a 30 min onboarding call with
-                                                our co-founder Nuno to learn how
-                                                to make the most out of Decipad
-                                                and start exploring on your own.
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-  
-                                      <table
-                                        class="container"
-                                        style="
-                                          margin-top: 0px;
-                                          margin-right: auto;
-                                          margin-bottom: 8px;
-                                          margin-left: auto;
-                                          text-align: center !important;
-                                        "
-                                      >
-                                        <tbody>
-                                          <tr>
-                                            <td
-                                              style="
-                                                background-color: #cdfb89;
-                                                border-radius: 10px;
-                                                font-family: Inter, Helvetica,
-                                                  Arial, sans-serif;
-                                                margin: 0;
-                                                padding: 10px 26px;
-                                              "
-                                              bgcolor="#CDFB89"
-                                            >
-                                              <a
-                                                class="h2b-button"
-                                                target="_blank"
-                                                href="https://savvycal.com/dscape/decipad?return_to=https%3A%2F%2Fsavvycal.com%2Fdscape"
-                                                style="
-                                                  color: #161f2c;
-                                                  text-decoration: none;
-                                                  font-size: 16px;
-                                                  font-weight: 600;
-                                                  display: inline-block;
-                                                  background-color: #cdfb89;
-                                                  border-radius: 10px;
-                                                  min-height: 20px;
-                                                  padding: 0px;
-                                                  border-style: none;
-                                                "
-                                                >Book onboarding call</a
-                                              >
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
                                       <!-- ### END CONTENT ### -->
   
                                       <table
@@ -998,10 +855,10 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
         </tbody>
       </table>
       <!--[if (gte mso 10)]>
-                  </td>
-                  </tr>
-                  </table>
-                <![endif]-->
+                </td>
+                </tr>
+                </table>
+              <![endif]-->
     </body>
   </html>`,
 });
