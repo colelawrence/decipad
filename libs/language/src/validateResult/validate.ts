@@ -43,6 +43,8 @@ const validate: Validate = <
   type: SerializedType,
   value: T
 ): Result.OneResult | null | undefined => {
+  // For now. this validate function is causing lots of performance issues.
+
   if (
     value == null ||
     typeof value === 'symbol' ||

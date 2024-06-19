@@ -34,6 +34,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         cellType: serializeType(type.cellType),
       };
     }
+
     if (type.tree) {
       return {
         kind: 'tree',

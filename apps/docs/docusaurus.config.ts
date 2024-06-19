@@ -78,6 +78,7 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
+          exclude: ['../../libs/compute-backend-js'],
           breadcrumbs: true,
           /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
           async sidebarItemsGenerator({

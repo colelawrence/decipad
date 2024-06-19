@@ -105,6 +105,8 @@ const internalComputeStatement = async (
   }
 
   let data = await value?.getData();
+
+  // causes a lot of pain and is very slow.
   if (data) {
     const newData = validateResult(valueType, data);
     if (newData != null) {

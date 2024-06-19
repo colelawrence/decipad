@@ -39,6 +39,11 @@ export class Column<T extends Comparable> implements ColumnLike<T> {
     return Promise.resolve(this._values.length);
   }
 
+  // ConcreteColumn types
+  getConcreteValues() {
+    return this._values;
+  }
+
   /**
    * Create a column from the values inside. Empty columns return a special value.
    */

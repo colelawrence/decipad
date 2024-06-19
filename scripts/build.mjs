@@ -143,6 +143,7 @@ async function esBuildOptions(env) {
       '.woff2': 'file',
       '.svg': 'file',
       '.png': 'file',
+      '.wasm': 'file',
     },
     treeShaking: true,
     plugins: [

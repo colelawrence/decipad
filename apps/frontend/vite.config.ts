@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
 
 dotenv.config();
 
@@ -39,6 +41,8 @@ const serverOptions: UserConfig['server'] = {
 };
 
 const plugins = [
+  wasm(),
+  topLevelAwait(),
   react({
     jsxImportSource: '@emotion/react',
     plugins: [['@swc/plugin-emotion', {}]],

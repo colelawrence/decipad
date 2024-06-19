@@ -28,3 +28,5 @@ export * from './WriteSerializedColumn';
 
 export * from './defaultValue';
 export * from './sortValue';
+
+export * from './wasm';

@@ -28,6 +28,12 @@ type TLeanColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
 const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 
+/**
+ * A column result that takes a generator as the values.
+ *
+ * This is useful because you never need to have all the values in memory
+ * at once.
+ */
 export class LeanColumn extends ColumnBase implements TLeanColumn {
   private gen: PromiseOrType<Result.ResultGenerator>;
   private type: SerializedType;

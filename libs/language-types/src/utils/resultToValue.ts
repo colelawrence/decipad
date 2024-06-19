@@ -75,14 +75,17 @@ export const resultToValue = (result: Result.Result): Value.Value => {
       const columnValue = value as
         | Result.ResultColumn
         | Result.ResultMaterializedColumn;
+
       if (columnValue == null) {
         const defaultV = defaultValue(type);
         return Column.fromValues([fromJS(0, defaultV)], defaultV);
       }
+
       const columnType = type as SerializedTypes.Column;
       let columnGen: Result.ResultGenerator;
+
       if (typeof columnValue === 'function') {
-        columnGen = (start = 0, end = Infinity) => columnValue(start, end);
+        columnGen = columnValue;
       } else if (Array.isArray(columnValue)) {
         columnGen = (start = 0, end = Infinity) =>
           slice(from(columnValue.slice()), start, end);
@@ -90,6 +93,7 @@ export const resultToValue = (result: Result.Result): Value.Value => {
         console.error('got invalid column:', value);
         throw new Error(`panic: got invalid column: ${typeof value}`);
       }
+
       return LeanColumn.fromGeneratorAndType(
         columnGen,
         columnType.cellType,

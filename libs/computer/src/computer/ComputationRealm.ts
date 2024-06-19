@@ -102,6 +102,7 @@ export class ComputationRealm {
       const data = getResultGenerator(await column.getData());
 
       if (cellType.type === 'string' || cellType.type === 'number') {
+        // this is causing big performance problems.
         labels.set(name, await all(map(data(), String)));
       }
 

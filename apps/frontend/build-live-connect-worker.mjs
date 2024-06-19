@@ -13,6 +13,9 @@ await build({
     global: 'globalThis',
     'process.env.NODE_ENV': '"production"',
   },
+  loader: {
+    '.wasm': 'file',
+  },
 });
 
 // Important that this one comes second.
@@ -28,6 +31,10 @@ await build({
   define: {
     global: 'globalThis',
     'process.env.NODE_ENV': '"production"',
+  },
+
+  loader: {
+    '.wasm': 'file',
   },
 });
 

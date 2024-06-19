@@ -321,3 +321,5 @@ dev-dist
 
 # performance test results
 performance-results
+
+*.wasm

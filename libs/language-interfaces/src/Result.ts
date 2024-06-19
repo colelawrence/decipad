@@ -7,10 +7,11 @@ export type GenericResultGenerator<T> = (
   end?: number
 ) => AsyncGenerator<T>;
 
-export type ResultGenerator = (
-  start?: number,
-  end?: number
-) => AsyncGenerator<OneResult>;
+export interface ResultGenerator {
+  (start?: number, end?: number): AsyncGenerator<OneResult>;
+  WASM_ID?: string;
+  WASM_REALM_ID?: 'compute-backend';
+}
 
 export type ResultNumber = DeciNumberBase;
 export type ResultString = string;

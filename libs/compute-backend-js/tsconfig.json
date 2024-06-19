@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "WebWorker"]
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../remote-computer"
+    }
+  ]
+}

@@ -21,6 +21,9 @@ echo "VITE_STRIPE_CUSTOMER_PORTAL_LINK"=${VITE_STRIPE_CUSTOMER_PORTAL_LINK:-} >>
 echo "VITE_STRIPE_API_KEY"=${VITE_STRIPE_API_KEY:-} >> apps/frontend/.env.production
 echo "VITE_DECI_APP_URL_BASE"=${DECI_APP_URL_BASE:-} >> apps/frontend/.env.production
 
+echo "Build WASM"
+yarn build:wasm
+
 echo "Building frontend..."
 yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
@@ -36,6 +39,7 @@ echo "Building docs..."
 yarn build:docs
 mkdir -p apps/backend/public/docs
 cp -rT apps/docs/build/. apps/backend/public/docs
+
 
 echo "Building the backend..."
 yarn build:backend:ssr
