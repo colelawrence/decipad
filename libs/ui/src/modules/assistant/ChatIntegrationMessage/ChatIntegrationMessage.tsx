@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { Fragment, useCallback, useContext, useState, useEffect } from 'react';
+import { Fragment, useCallback, useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { EElementOrText } from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
@@ -9,7 +9,7 @@ import { Computer } from '@decipad/computer-interfaces';
 import { useComputer, useWorker } from '@decipad/editor-hooks';
 import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { AssistantMessage, ExecutionContext } from '@decipad/react-contexts';
+import { AssistantMessage } from '@decipad/react-contexts';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
 import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';
@@ -214,7 +214,6 @@ const Integration = ({
   });
   const [tempCode, setTempCode] = useState(functionBody);
   const [timeOfLastRun, setTimeofLastRun] = useState<string | null>(null);
-  const { onExecute } = useContext(ExecutionContext);
   const { secrets } = useWorkspaceSecrets(workspaceId);
   const toast = useToast();
 
@@ -238,17 +237,10 @@ const Integration = ({
     [setResultJSON]
   );
 
-  const errorStream = useCallback(
-    (msg: ErrorMessageType) => {
-      console.error('err', msg);
-      // Print the logs
-      for (const workerLog of msg.logs) {
-        onExecute({ status: 'log', log: workerLog });
-      }
-      setResultJSON({ status: 'error', msg: msg.result.message });
-    },
-    [onExecute]
-  );
+  const errorStream = useCallback((msg: ErrorMessageType) => {
+    console.error('err', msg);
+    setResultJSON({ status: 'error', msg: msg.result.message });
+  }, []);
 
   const [worker] = useWorker(msgStream, errorStream, notebookId);
 
@@ -281,6 +273,8 @@ const Integration = ({
       typeMappings: [],
       latestResult: resultJSON.result,
       timeOfLastRun,
+      columnsToHide: [],
+      isFirstRowHeader: false,
       integrationType: {
         type: 'codeconnection',
         code,
@@ -399,6 +393,9 @@ const Integration = ({
           name={fnName}
           setName={() => {}}
           setTypeMapping={() => {}}
+          timeOfLastRun={undefined}
+          columnsToHide={[]}
+          setColumnsToHide={() => {}}
         />
       )}
       <div css={buttonContainerStyles}>

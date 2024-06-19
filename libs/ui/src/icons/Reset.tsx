@@ -15,7 +15,7 @@ export const Reset = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M7.42 13.3H4.863A1.462 1.462 0 0 1 3.4 11.838V4.162c0-.807.654-1.462 1.462-1.462h4.569l3.107 3.107v1.645"
+        d="M7.42 13.3H4.863A1.46 1.46 0 0 1 3.4 11.838V4.162c0-.807.654-1.462 1.462-1.462h4.569l3.107 3.107v1.645"
       />
       <path
         stroke="currentColor"
@@ -28,7 +28,7 @@ export const Reset = (props: SVGProps<SVGSVGElement>) => {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M10.426 13.414a2.163 2.163 0 0 0 2.96 0 1.937 1.937 0 0 0 0-2.828 2.163 2.163 0 0 0-2.96 0 1.996 1.996 0 0 0-.426.586"
+        d="M10.426 13.414a2.163 2.163 0 0 0 2.96 0 1.937 1.937 0 0 0 0-2.828 2.163 2.163 0 0 0-2.96 0 2 2 0 0 0-.426.586"
       />
       <path
         stroke="currentColor"

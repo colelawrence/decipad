@@ -130,7 +130,7 @@ const importTableFromObject = async (
 
   return buildResult(
     {
-      kind: 'materialized-table',
+      kind: 'table',
       columnNames,
       columnTypes: results.map((res) => {
         if (isColumn(res.type)) {

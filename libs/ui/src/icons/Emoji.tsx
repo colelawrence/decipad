@@ -15,7 +15,7 @@ export const Emoji = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M9.676 12.743a5.123 5.123 0 0 1-1.61.257C5.27 13 3 10.761 3 8s2.269-5 5.067-5C10.466 3 12.475 4.645 13 6.853"
+        d="M9.676 12.743a5.1 5.1 0 0 1-1.61.257C5.27 13 3 10.761 3 8s2.269-5 5.067-5C10.466 3 12.475 4.645 13 6.853"
       />
       <path
         stroke="currentColor"

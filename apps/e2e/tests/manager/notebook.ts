@@ -1128,38 +1128,59 @@ export class Notebook {
    * ```
    */
   async addCSV(
-    option:
+    option: (
       | { method: 'upload'; file: string }
       | { method: 'link'; link: string }
+    ) &
+      Partial<{ firstRowHeader: boolean; varName: string }>
   ) {
+    await this.openIntegrations();
+    await this.page.getByTestId('select-integration:CSV').click();
+
     switch (option.method) {
       case 'upload':
         await test.step('Importing csv through file explorer', async () => {
-          await this.openCSVUploader();
-          await this.page.getByTestId('upload-file-tab').click();
-          await this.page.getByRole('button', { name: 'Choose file' }).click();
           const fileChooserPromise = this.page.waitForEvent('filechooser');
-          await this.page.getByText('Choose file').click();
+
+          await this.page.getByText('Add CSV').click();
+          await this.page.getByText('Upload file').click();
+
           const fileChooser = await fileChooserPromise;
           await fileChooser.setFiles(option.file);
         });
         break;
       case 'link':
         await test.step('Importing csv via link', async () => {
-          await this.openCSVUploader();
-          await this.page.getByTestId('link-file-tab').click();
-          await this.page
-            .getByPlaceholder('Paste the data link here')
-            .fill(option.link);
-          await this.page.getByRole('button', { name: 'insert data' }).click();
+          await this.page.getByText('Add CSV').click();
+          await this.page.getByText('Import from link').click();
+
+          await this.page.getByTestId('csv-link').fill(option.link);
+          await this.page.getByTestId('import-link-csv').click();
         });
         break;
-      default:
-        this.addCSV({
-          method: 'link',
-          link: './__fixtures__/images/download.png',
-        });
     }
+
+    // uploading the file
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(5_000);
+    await this.page.getByText('Continue').click();
+
+    await expect(this.page.getByTestId('result-preview')).toBeVisible();
+
+    if (option.firstRowHeader != null && !option.firstRowHeader) {
+      this.page.getByTestId('toggle-cell-editor').click();
+
+      // importing
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await this.page.waitForTimeout(5_000);
+    }
+
+    if (option.varName != null) {
+      await this.page.getByTestId('result-preview-input').dblclick();
+      await this.page.keyboard.type(option.varName);
+    }
+
+    await this.page.getByText('Continue').click();
   }
 
   /**
@@ -1189,6 +1210,13 @@ export class Notebook {
    */
   async openCSVUploader() {
     this.addBlock('upload-csv');
+  }
+  async openIntegrations(): Promise<void> {
+    if (await this.page.getByTestId('integration-wrapper').isVisible()) {
+      return;
+    }
+
+    await this.addBlockSlashCommand('open-integration');
   }
 
   /**

@@ -16,3 +16,4 @@ export * from './table';
 export * from './user-icons';
 export * from './viewport';
 export * from './useCancelingEvent';
+export * from './isSameUnits';

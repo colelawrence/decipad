@@ -17,7 +17,7 @@ export const Pyramid = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.3}
-        d="M3 10.241 8 13V3l-5 7.241"
+        d="M3 10.241 8 13V3z"
       />
       <path
         stroke="currentColor"

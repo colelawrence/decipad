@@ -17,7 +17,7 @@ export const Bell = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M11.668 8.144a.5.5 0 0 1-.047-.211v-1.28C11.62 4.634 10 3 8 3S4.38 4.635 4.38 6.652v1.28a.5.5 0 0 1-.048.212l-1 2.145a.5.5 0 0 0 .453.711h8.43a.5.5 0 0 0 .453-.711l-1-2.145"
+        d="M11.668 8.144a.5.5 0 0 1-.047-.211v-1.28C11.62 4.634 10 3 8 3S4.38 4.635 4.38 6.652v1.28a.5.5 0 0 1-.048.212l-1 2.145a.5.5 0 0 0 .453.711h8.43a.5.5 0 0 0 .453-.711z"
       />
       <path
         stroke="currentColor"

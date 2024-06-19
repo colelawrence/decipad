@@ -1,0 +1,18 @@
+fragment AttachmentFragment on Attachment {
+  id
+  fileName
+  fileType
+  fileSize
+  userId
+  createdAt
+  url
+}
+
+query GetWorkspaceAttachments($workspaceId: ID!) {
+  getWorkspaceById(id: $workspaceId) {
+    id
+    attachments {
+      ...AttachmentFragment
+    }
+  }
+}

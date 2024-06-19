@@ -8,6 +8,8 @@ import AssistantChat from './AssistantChat';
 import EditorSidebar from './EditorSidebar';
 import Publishing from './Publishing';
 import Annotations from './Annotations';
+import IntegrationsSidebar from './IntegrationsSidebar';
+import IntegrationEditSidebar from './IntegrationEditSidebar';
 
 import type { SidebarComponentProps } from './types';
 
@@ -21,6 +23,8 @@ const SidebarComponents: Record<
   'default-sidebar': EditorSidebar,
   publishing: Publishing,
   annotations: Annotations,
+  integrations: IntegrationsSidebar,
+  'edit-integration': IntegrationEditSidebar,
 };
 
 /**

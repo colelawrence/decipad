@@ -18,6 +18,7 @@ type VariantUpgradeTypes =
 type UpgradeWarningProps =
   | {
       fallback?: ReactNode;
+      noun?: string;
     } & VariantUpgradeTypes;
 
 type UpgradeWarningFullProps = UpgradeWarningProps & {
@@ -25,7 +26,7 @@ type UpgradeWarningFullProps = UpgradeWarningProps & {
 };
 
 type GeneralUpgradeWarningProps = UpgradeWarningProps & {
-  type: 'queries' | 'ai';
+  type: 'queries' | 'ai' | 'storage';
 };
 
 const ConcreteUpgradeWarning: FC<UpgradeWarningFullProps> = (props) => {
@@ -35,6 +36,7 @@ const ConcreteUpgradeWarning: FC<UpgradeWarningFullProps> = (props) => {
         <UpgradePlanWarningTooltip
           featureCustomText={props.featureText}
           quotaLimit={props.resourceTracker.quotaLimit}
+          noun={props.noun}
           maxQueryExecution
           showUpgradeProButton
         />
@@ -45,6 +47,7 @@ const ConcreteUpgradeWarning: FC<UpgradeWarningFullProps> = (props) => {
       <UpgradePlanWarning
         workspaceId={props.workspaceId}
         quotaLimit={props.resourceTracker.quotaLimit}
+        noun={props.noun}
         maxQueryExecution
       />
     );
@@ -56,6 +59,7 @@ const ConcreteUpgradeWarning: FC<UpgradeWarningFullProps> = (props) => {
         <UpgradePlanWarningTooltip
           featureCustomText={props.featureText}
           quotaLimit={props.resourceTracker.quotaLimit}
+          noun={props.noun}
           showQueryQuotaLimit
         />
       );
@@ -65,6 +69,7 @@ const ConcreteUpgradeWarning: FC<UpgradeWarningFullProps> = (props) => {
       <UpgradePlanWarning
         workspaceId={props.workspaceId}
         quotaLimit={props.resourceTracker.quotaLimit}
+        noun={props.noun}
         showQueryQuotaLimit
       />
     );
@@ -89,6 +94,12 @@ const UpgradeWarningAi: FC<UpgradeWarningProps> = (props) => {
   return <ConcreteUpgradeWarning {...props} resourceTracker={ai} />;
 };
 
+const UpgradeWarningStorage: FC<UpgradeWarningProps> = (props) => {
+  const { storage } = useResourceUsage();
+
+  return <ConcreteUpgradeWarning {...props} resourceTracker={storage} />;
+};
+
 export const UpgradeWarningBlock: FC<GeneralUpgradeWarningProps> = ({
   type,
   ...rest
@@ -98,5 +109,7 @@ export const UpgradeWarningBlock: FC<GeneralUpgradeWarningProps> = ({
       return <UpgradeWarningQueries {...rest} />;
     case 'ai':
       return <UpgradeWarningAi {...rest} />;
+    case 'storage':
+      return <UpgradeWarningStorage {...rest} />;
   }
 };

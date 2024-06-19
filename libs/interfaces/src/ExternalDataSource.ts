@@ -1,5 +1,8 @@
 import type { ImportElementSource } from '@decipad/editor-types';
-import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import type {
+  AttachmentFragmentFragment,
+  ExternalDataSourceFragmentFragment,
+} from '@decipad/graphql-client';
 
 export interface ExternalDataSourceKey {
   lastError?: string | null;
@@ -21,3 +24,13 @@ export interface ExternalDataSourcesContextValue {
     params: CreateExternalDataSourceParams
   ) => Promise<ExternalDataSourceFragmentFragment>;
 }
+
+export type Dataset =
+  | {
+      type: 'attachment';
+      dataset: AttachmentFragmentFragment;
+    }
+  | {
+      type: 'data-source';
+      dataset: ExternalDataSourceFragmentFragment;
+    };

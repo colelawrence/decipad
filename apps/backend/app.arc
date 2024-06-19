@@ -36,7 +36,10 @@ get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
 any /api/externaldatasources/db/testconn
+
 get /api/pads/:padid/attachments/:attachmentid
+get /api/workspaces/:workspaceid/attachments/:attachmentid
+
 post /api/pads/:padid/images
 any /api/pads/:padid/export
 get /api/pads/:padid/logs

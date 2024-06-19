@@ -28,7 +28,7 @@ export const Car = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M18.25 10.75H5.75l.721-4.329A2 2 0 0 1 8.444 4.75h7.112a2 2 0 0 1 1.973 1.671l.721 4.329M6.75 17.75v1.5M17.25 17.75v1.5"
+        d="M18.25 10.75H5.75l.721-4.329A2 2 0 0 1 8.444 4.75h7.112a2 2 0 0 1 1.973 1.671zM6.75 17.75v1.5M17.25 17.75v1.5"
       />
     </svg>
   );

@@ -47,12 +47,20 @@ export type Attachment = {
   fileSize: Scalars['Int']['output'];
   fileType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  pad?: Maybe<Pad>;
-  padId: Scalars['String']['output'];
+  padId?: Maybe<Scalars['String']['output']>;
+  resource?: Maybe<AttachmentResource>;
+  resourceId: Scalars['String']['output'];
+  resourceType: AttachmentOwnership;
   uploadedBy?: Maybe<User>;
   url: Scalars['String']['output'];
   userId?: Maybe<Scalars['String']['output']>;
 };
+
+export type AttachmentOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
+
+export type AttachmentResource = Pad | Workspace;
 
 export type CheckoutSessionInfo = {
   __typename?: 'CheckoutSessionInfo';
@@ -194,6 +202,7 @@ export type Mutation = {
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
+  attachFileToWorkspace?: Maybe<Attachment>;
   claimNotebook?: Maybe<Pad>;
   createAnnotation?: Maybe<Annotation>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
@@ -209,6 +218,7 @@ export type Mutation = {
   doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
   getCreateAttachmentForm: CreateAttachmentForm;
+  getCreateAttachmentFormWorkspace: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
   incrementResourceUsage?: Maybe<ResourceUsage>;
@@ -216,6 +226,7 @@ export type Mutation = {
   movePad: Pad;
   refreshExternalDataToken: Scalars['String']['output'];
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
+  removeAttachmentFromWorkspace?: Maybe<AttachmentResource>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
   removePad?: Maybe<Scalars['Boolean']['output']>;
   removeRole?: Maybe<Scalars['Boolean']['output']>;
@@ -274,6 +285,11 @@ export type MutationAddTagToPadArgs = {
 
 
 export type MutationAttachFileToPadArgs = {
+  handle: Scalars['ID']['input'];
+};
+
+
+export type MutationAttachFileToWorkspaceArgs = {
   handle: Scalars['ID']['input'];
 };
 
@@ -358,6 +374,13 @@ export type MutationGetCreateAttachmentFormArgs = {
 };
 
 
+export type MutationGetCreateAttachmentFormWorkspaceArgs = {
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationImportPadArgs = {
   source: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -396,6 +419,11 @@ export type MutationRefreshExternalDataTokenArgs = {
 
 
 export type MutationRemoveAttachmentFromPadArgs = {
+  attachmentId: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveAttachmentFromWorkspaceArgs = {
   attachmentId: Scalars['ID']['input'];
 };
 
@@ -1137,6 +1165,7 @@ export type UsernameInput = {
 export type Workspace = {
   __typename?: 'Workspace';
   access?: Maybe<WorkspaceAccess>;
+  attachments: Array<Attachment>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   isPremium?: Maybe<Scalars['Boolean']['output']>;
@@ -1269,6 +1298,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
+  AttachmentResource: ( Pad ) | ( Workspace );
   Pageable: ( SharedResource );
 };
 
@@ -1277,7 +1307,9 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
 export type ResolversTypes = {
   Annotation: ResolverTypeWrapper<Annotation>;
   AnnotationUser: ResolverTypeWrapper<AnnotationUser>;
-  Attachment: ResolverTypeWrapper<Attachment>;
+  Attachment: ResolverTypeWrapper<Omit<Attachment, 'resource'> & { resource?: Maybe<ResolversTypes['AttachmentResource']> }>;
+  AttachmentOwnership: AttachmentOwnership;
+  AttachmentResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['AttachmentResource']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CheckoutSessionInfo: ResolverTypeWrapper<CheckoutSessionInfo>;
   CreateAttachmentForm: ResolverTypeWrapper<CreateAttachmentForm>;
@@ -1366,7 +1398,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Annotation: Annotation;
   AnnotationUser: AnnotationUser;
-  Attachment: Attachment;
+  Attachment: Omit<Attachment, 'resource'> & { resource?: Maybe<ResolversParentTypes['AttachmentResource']> };
+  AttachmentResource: ResolversUnionTypes<ResolversParentTypes>['AttachmentResource'];
   Boolean: Scalars['Boolean']['output'];
   CheckoutSessionInfo: CheckoutSessionInfo;
   CreateAttachmentForm: CreateAttachmentForm;
@@ -1467,12 +1500,18 @@ export type AttachmentResolvers<ContextType = GraphqlContext, ParentType extends
   fileSize?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fileType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  pad?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType>;
-  padId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  padId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  resource?: Resolver<Maybe<ResolversTypes['AttachmentResource']>, ParentType, ContextType>;
+  resourceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  resourceType?: Resolver<ResolversTypes['AttachmentOwnership'], ParentType, ContextType>;
   uploadedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AttachmentResourceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['AttachmentResource'] = ResolversParentTypes['AttachmentResource']> = {
+  __resolveType: TypeResolveFn<'Pad' | 'Workspace', ParentType, ContextType>;
 };
 
 export type CheckoutSessionInfoResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CheckoutSessionInfo'] = ResolversParentTypes['CheckoutSessionInfo']> = {
@@ -1548,6 +1587,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
   addTagToPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>>;
   attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
+  attachFileToWorkspace?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToWorkspaceArgs, 'handle'>>;
   claimNotebook?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
   createAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationCreateAnnotationArgs, 'blockId' | 'content' | 'padId'>>;
   createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
@@ -1563,6 +1603,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   doNothing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   duplicatePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationDuplicatePadArgs, 'id' | 'targetWorkspace'>>;
   getCreateAttachmentForm?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormArgs, 'fileName' | 'fileType' | 'padId'>>;
+  getCreateAttachmentFormWorkspace?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormWorkspaceArgs, 'fileName' | 'fileType' | 'workspaceId'>>;
   importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
   incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
   incrementResourceUsage?: Resolver<Maybe<ResolversTypes['ResourceUsage']>, ParentType, ContextType, RequireFields<MutationIncrementResourceUsageArgs, 'amount' | 'resourceType' | 'workspaceId'>>;
@@ -1570,6 +1611,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
   refreshExternalDataToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>>;
   removeAttachmentFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>>;
+  removeAttachmentFromWorkspace?: Resolver<Maybe<ResolversTypes['AttachmentResource']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromWorkspaceArgs, 'attachmentId'>>;
   removeExternalDataSource?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>>;
   removePad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemovePadArgs, 'id'>>;
   removeRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveRoleArgs, 'roleId'>>;
@@ -1949,6 +1991,7 @@ export type UserAccessResolvers<ContextType = GraphqlContext, ParentType extends
 
 export type WorkspaceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Workspace'] = ResolversParentTypes['Workspace']> = {
   access?: Resolver<Maybe<ResolversTypes['WorkspaceAccess']>, ParentType, ContextType>;
+  attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPremium?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -2008,6 +2051,7 @@ export type Resolvers<ContextType = GraphqlContext> = {
   Annotation?: AnnotationResolvers<ContextType>;
   AnnotationUser?: AnnotationUserResolvers<ContextType>;
   Attachment?: AttachmentResolvers<ContextType>;
+  AttachmentResource?: AttachmentResourceResolvers<ContextType>;
   CheckoutSessionInfo?: CheckoutSessionInfoResolvers<ContextType>;
   CreateAttachmentForm?: CreateAttachmentFormResolvers<ContextType>;
   CreditPricePlan?: CreditPricePlanResolvers<ContextType>;

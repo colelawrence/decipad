@@ -24,7 +24,7 @@ await build({
   bundle: true,
   outfile: '../../libs/live-connect/src/LiveConnect-2.worker.bundle.js',
   treeShaking: true,
-  minify: true,
+  minify: false, // TODO CHANGE FOR NOW
   metafile: true,
   format: 'esm',
   logLevel: 'info',

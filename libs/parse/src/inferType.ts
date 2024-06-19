@@ -34,11 +34,8 @@ const tryInferChain = async (
   text: string,
   options: InferTypeOptions
 ): Promise<CoercibleType> => {
-  let inferResult = inferDate(text, 'month') ??
-    inferDate(text, 'day') ??
-    inferBoolean(text) ??
+  let inferResult = inferBoolean(text) ??
     (await inferNumber(computer, text, options)) ??
-    inferDate(text) ??
     (options.doNotTryExpressionNumbersParse
       ? undefined
       : await inferExpression(computer, text)) ?? {

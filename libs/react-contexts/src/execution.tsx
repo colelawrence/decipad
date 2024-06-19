@@ -1,10 +1,9 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { createContext, useContext } from 'react';
 
-export type TExecution<T> =
+export type TExecution =
   | {
       status: 'success'; // ok
-      ok: T;
+      ok: boolean;
     }
   | {
       status: 'error' | 'warning'; // error: block receiving should throw
@@ -12,17 +11,16 @@ export type TExecution<T> =
     }
   | { status: 'log'; log: string }
   | { status: 'unset' } // initial
-  | { status: 'run' } // run has been requested
-  | { status: 'secret'; name: string };
+  | { status: 'run' }; // run has been requested
 
-export type TExecutionContext<T> = {
-  onExecute: Dispatch<SetStateAction<TExecution<T>>>;
-  info: TExecution<T>;
+export type TExecutionContext = {
+  onExecute: (_: Array<TExecution>) => void;
+  info: Array<TExecution>;
 };
 
-export const ExecutionContext = createContext<TExecutionContext<boolean>>({
-  onExecute: () => ({ status: 'unset' }),
-  info: { status: 'unset' },
+export const ExecutionContext = createContext<TExecutionContext>({
+  onExecute: () => {},
+  info: [{ status: 'run' }],
 });
 
 export const useExecutionContext = () => useContext(ExecutionContext);

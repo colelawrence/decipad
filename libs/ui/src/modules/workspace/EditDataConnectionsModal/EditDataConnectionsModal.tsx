@@ -50,6 +50,9 @@ export const EditDataConnectionsModal: React.FC<
               case 'integrations':
                 navigate(connections.integrations({}).$);
                 break;
+              case 'datasets':
+                navigate(connections.datasets({}).$);
+                break;
               default:
                 console.warn('This tab is not available');
                 break;
@@ -58,13 +61,22 @@ export const EditDataConnectionsModal: React.FC<
         >
           <TabsList>
             {isFlagEnabled('NOTION_CONNECTIONS') && (
-              <TabsTrigger
-                name="integrations"
-                trigger={{
-                  label: 'Integrations',
-                  disabled: false,
-                }}
-              />
+              <>
+                <TabsTrigger
+                  name="integrations"
+                  trigger={{
+                    label: 'Integrations',
+                    disabled: false,
+                  }}
+                />
+                <TabsTrigger
+                  name="datasets"
+                  trigger={{
+                    label: 'Datasets',
+                    disabled: false,
+                  }}
+                />
+              </>
             )}
             <TabsTrigger
               name="code-secrets"

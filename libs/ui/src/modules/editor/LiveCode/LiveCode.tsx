@@ -153,6 +153,7 @@ const liveIconStyles = css({
 const liveSpanStyles = css({
   paddingRight: 2,
   textTransform: 'uppercase',
+  whiteSpace: 'nowrap',
 });
 
 const metaStyles = css({

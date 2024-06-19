@@ -18,17 +18,9 @@ interface RequestOptions {
   proxy?: URL;
 }
 
-function getFetchUrl(url: URL, proxy?: URL, externalDataLinkId?: string): URL {
+function getFetchUrl(url: URL, proxy?: URL): URL {
   if (proxy == null) {
     return url;
-  }
-
-  if (externalDataLinkId != null && externalDataLinkId.length > 0) {
-    const proxyUrl = new URL(proxy);
-
-    proxyUrl.searchParams.set('externalDataLinkId', externalDataLinkId);
-
-    return proxyUrl;
   }
 
   const proxyUrl = new URL(proxy);
@@ -39,8 +31,7 @@ function getFetchUrl(url: URL, proxy?: URL, externalDataLinkId?: string): URL {
 export async function request(
   url: URL,
   json = false,
-  options: RequestOptions = {},
-  externalDataLinkId: string = ''
+  options: RequestOptions = {}
 ): Promise<RequestResponse> {
   const fetchOptions = {
     method: 'GET',
@@ -49,7 +40,7 @@ export async function request(
     },
   };
 
-  const fetchUrl = getFetchUrl(url, options.proxy, externalDataLinkId);
+  const fetchUrl = getFetchUrl(url, options.proxy);
 
   const response = await fetch(fetchUrl, fetchOptions);
 

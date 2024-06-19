@@ -140,6 +140,7 @@ jobs:
           WORKSPACE_FREE_PLAN_NAME: '${{vars.WORKSPACE_FREE_PLAN_NAME}}'
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{vars.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{vars.DISCORD_FEEDBACK_CHANNEL_ID}}'
+          DECI_MAX_ATTACHMENT_SIZE: '${{vars.DECI_MAX_ATTACHMENT_SIZE}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant,@decipad/notebook-open-api,@decipad/backend-notebook,@decipad/backend-search'
         run: |
           export SAM_BUCKET="decipad-dev-backend-sam"

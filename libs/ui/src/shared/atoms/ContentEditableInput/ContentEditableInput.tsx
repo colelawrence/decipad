@@ -46,7 +46,7 @@ export const ContentEditableInput = ({
     <div
       contentEditable={false}
       css={containerStyles}
-      data-testid={'result-preview-input'}
+      data-testid="result-preview-input"
     >
       <Slate editor={editor} initialValue={initialValue}>
         <Editable onKeyDown={handleKeyDown} />
@@ -59,4 +59,7 @@ const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
+  span: {
+    whiteSpace: 'nowrap',
+  },
 });

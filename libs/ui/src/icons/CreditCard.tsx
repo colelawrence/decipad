@@ -17,7 +17,7 @@ export const CreditCard = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M3 5.069c0-.762.617-1.38 1.379-1.38h7.242c.761 0 1.379.618 1.379 1.38v5.862a1.38 1.38 0 0 1-1.38 1.38H4.38a1.38 1.38 0 0 1-1.38-1.38V5.07"
+        d="M3 5.069c0-.762.617-1.38 1.379-1.38h7.242c.761 0 1.379.618 1.379 1.38v5.862a1.38 1.38 0 0 1-1.38 1.38H4.38a1.38 1.38 0 0 1-1.38-1.38z"
       />
       <path
         stroke="currentColor"

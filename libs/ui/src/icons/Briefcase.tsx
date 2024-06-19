@@ -17,7 +17,7 @@ export const Briefcase = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M3.167 6.5c0-.737.596-1.333 1.333-1.333h7c.736 0 1.333.596 1.333 1.333v5c0 .736-.597 1.333-1.333 1.333h-7A1.333 1.333 0 0 1 3.167 11.5v-5"
+        d="M3.167 6.5c0-.737.596-1.333 1.333-1.333h7c.736 0 1.333.596 1.333 1.333v5c0 .736-.597 1.333-1.333 1.333h-7A1.333 1.333 0 0 1 3.167 11.5z"
       />
       <path
         stroke="currentColor"

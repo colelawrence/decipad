@@ -12,9 +12,9 @@ import {
   provider as externalDataProvider,
   saveExternalKey,
 } from '@decipad/externaldata';
+import { getExternalDataWorkspace } from './helpers';
 
 const notebooks = resource('notebook');
-const workspaces = resource('workspace');
 
 /**
  * Use this when you are creating a connection but don't yet know the name
@@ -53,25 +53,7 @@ const resolvers: Resolvers = {
       );
     },
     getExternalDataSourcesWorkspace: async (_, { workspaceId }, context) => {
-      await workspaces.expectAuthorizedForGraphql({
-        context,
-        recordId: workspaceId,
-        minimumPermissionType: 'READ',
-      });
-
-      const data = await tables();
-
-      const { Items } = await data.externaldatasources.query({
-        IndexName: 'byWorkspace',
-        KeyConditionExpression: 'workspace_id = :workspace_id',
-        ExpressionAttributeValues: {
-          ':workspace_id': workspaceId,
-        },
-      });
-
-      return Items.filter((i) => i.name !== TEMP_CONNECTION_NAME).map(
-        externalDataResource.toGraphql
-      );
+      return getExternalDataWorkspace(workspaceId, context);
     },
   },
 

@@ -29,7 +29,7 @@ export const ListNumbered = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={0.945}
-        d="M3.195 10.01c0-.203.167-.813.837-.813.67 0 .837.406.837.813 0 .406-.376.974-.837 1.421a9.82 9.82 0 0 0-1.047 1.219h2.302"
+        d="M3.195 10.01c0-.203.167-.813.837-.813s.837.406.837.813-.376.974-.837 1.421a10 10 0 0 0-1.047 1.219h2.302"
       />
     </svg>
   );

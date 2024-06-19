@@ -105,6 +105,7 @@ export interface ToggleProps {
   ariaRoleDescription?: string;
   disabled?: boolean;
   variant?: 'checkbox' | 'toggle' | 'small-toggle';
+  testId?: string;
 }
 
 const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({

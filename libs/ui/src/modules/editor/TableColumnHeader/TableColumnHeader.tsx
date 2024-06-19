@@ -46,6 +46,7 @@ type TableColumnHeaderProps = PropsWithChildren<
       | 'isFirst'
       | 'dropdownNames'
       | 'isAiEnabled'
+      | 'onHideColumn'
     > & {
       readonly as?: ElementType;
       readonly empty?: boolean;
@@ -83,6 +84,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
   isLiveResult = false,
   isAiEnabled,
   error,
+  onHideColumn,
   ...props
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -93,14 +95,15 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
       onPopulateColumn={onPopulateColumn}
       onAddColLeft={onAddColLeft}
       onAddColRight={onAddColRight}
-      isEditable={!readOnly}
+      isEditable={!readOnly && !isLiveResult}
       setWidth={setWidth}
       width={width}
       readOnly={readOnly}
       isFirst={isFirst}
       isLiveResult={isLiveResult}
       menu={
-        !readOnly && (
+        !readOnly &&
+        !isLiveResult && (
           <TableColumnMenu
             trigger={
               <button
@@ -125,6 +128,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
             onPopulateColumn={onPopulateColumn}
             onAddColLeft={onAddColLeft}
             onAddColRight={onAddColRight}
+            onHideColumn={onHideColumn}
           />
         )
       }

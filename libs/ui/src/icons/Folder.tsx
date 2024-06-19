@@ -24,7 +24,7 @@ export const Folder = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="m9 5-.621-1.138a1.333 1.333 0 0 0-1.17-.695h-2.71c-.736 0-1.332.597-1.332 1.333v2.833"
+        d="m9 5-.621-1.138a1.33 1.33 0 0 0-1.17-.695h-2.71c-.736 0-1.332.597-1.332 1.333v2.833"
       />
     </svg>
   );

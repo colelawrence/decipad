@@ -5,7 +5,8 @@ export type TrackedIntegrations =
   | 'notion'
   | 'codeconnection'
   | 'mysql'
-  | 'gsheets';
+  | 'gsheets'
+  | 'csv';
 
 type Action =
   // NEW TRACKERS

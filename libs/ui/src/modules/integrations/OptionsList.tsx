@@ -42,7 +42,7 @@ export const OptionsList = <T extends BasicSelector>({
       sideOffset={6}
       trigger={
         <Trigger ref={sizeRef}>
-          {name ?? label}
+          <span>{name ?? label}</span>
           {open ? <CaretUp /> : <CaretDown />}
         </Trigger>
       }
@@ -79,5 +79,6 @@ const Trigger = styled.div(p14Regular, {
   height: '32px',
   border: `1px solid ${cssVar('borderSubdued')}`,
   padding: '8px 12px',
+  overflow: 'hidden',
   svg: { width: '16px', height: '16px' },
 });

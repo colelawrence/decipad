@@ -75,6 +75,7 @@ interface TableColumnMenuProps
   readonly onAddColRight?: () => void;
   readonly onPopulateColumn?: () => void;
   readonly onAddColLeft?: () => void;
+  readonly onHideColumn?: () => void;
 }
 
 const sameUnits = (
@@ -93,7 +94,7 @@ const sameUnits = (
   );
 };
 
-const dividerLabel = css({
+const dividerLabel = css(p12Medium, {
   ...p12Medium,
   color: cssVar('textSubdued'),
   padding: '6px',
@@ -114,6 +115,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   onAddColRight,
   onRemoveColumn,
   onPopulateColumn,
+  onHideColumn,
 }) => {
   const computer = useComputer();
   const parseUnit = useMemo(
@@ -371,7 +373,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             }}
             parseUnit={parseUnit}
           />
-          {!isLiveResult && (
+          {!isLiveResult && !isForImportedColumn && (
             <>
               <h3 css={dividerLabel}>Column Actions</h3>
               <MenuItem
@@ -404,6 +406,15 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 Remove column
               </MenuItem>
             </>
+          )}
+          {isForImportedColumn && onHideColumn && (
+            <MenuItem
+              key="hide-column"
+              icon={<Trash />}
+              onSelect={() => onHideColumn()}
+            >
+              Hide Columns
+            </MenuItem>
           )}
         </MenuList>
       ) : (

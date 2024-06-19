@@ -24,7 +24,7 @@ export const Home = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M6.5 10.5c0-.737.596-1.334 1.333-1.334h.333c.737 0 1.333.597 1.333 1.334v2.333h-3V10.5"
+        d="M6.5 10.5c0-.737.596-1.334 1.333-1.334h.333c.737 0 1.333.597 1.333 1.334v2.333h-3z"
       />
     </svg>
   );

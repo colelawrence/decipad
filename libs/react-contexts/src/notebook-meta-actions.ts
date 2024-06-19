@@ -10,7 +10,9 @@ export type SidebarComponentsWithoutClosed =
   | 'default-sidebar'
   | 'ai'
   | 'publishing'
-  | 'annotations';
+  | 'annotations'
+  | 'integrations'
+  | 'edit-integration';
 
 export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
 
@@ -31,6 +33,9 @@ export interface NotebookMetaDataType {
 
   readonly workspacePlan: string;
   readonly setWorkspacePlan: (workspacePlan: string) => void;
+
+  readonly integrationBlockId: string | undefined;
+  readonly setIntegrationBlockId: (blockId: string) => void;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
@@ -38,6 +43,11 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
     (set, get) => {
       return {
         sidebarTab: 'block',
+        // hahahahha, try remove the `as undefined`.
+        integrationBlockId: undefined as undefined,
+        setIntegrationBlockId(blockId) {
+          set({ integrationBlockId: blockId });
+        },
 
         sidebarComponent: isE2E() ? 'closed' : 'default-sidebar',
 

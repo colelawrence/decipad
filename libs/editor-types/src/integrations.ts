@@ -12,35 +12,34 @@ export interface CodeBlockIntegration {
 
 export interface SQLBlockIntegration {
   type: 'mysql';
+
   query: string;
-  externalDataUrl: string;
-  externalDataName: string;
+  url: string;
 }
 
 export interface NotionBlockIntegration {
   type: 'notion';
-  notionUrl: string;
-  databaseName: string;
 
-  externalDataId: string;
-  externalDataName: string;
+  notionUrl: string;
 }
 
 export interface GoogleSheetIntegration {
   type: 'gsheets';
   spreadsheetUrl: string;
+}
 
-  externalDataId: string;
-  externalDataName: string;
+export interface CSVIntegration {
+  type: 'csv';
 
-  selectedSubsheet: { id: number; name: string } | undefined;
+  csvUrl: string;
 }
 
 type IntegrationTypes =
   | CodeBlockIntegration
   | SQLBlockIntegration
   | NotionBlockIntegration
-  | GoogleSheetIntegration;
+  | GoogleSheetIntegration
+  | CSVIntegration;
 
 export interface IntegrationBlock<
   T extends IntegrationTypes['type'] = IntegrationTypes['type']
@@ -51,8 +50,13 @@ export interface IntegrationBlock<
   // Keeps the users desired result mappings.
   typeMappings: Array<SimpleTableCellType | undefined>;
 
-  latestResult: string;
-  timeOfLastRun: string | null;
+  // TODO: ADD MIGRATION TO EXISTING INTEGRATIONS, OTHERWISE KABOOM.
+  columnsToHide: Array<string>;
+
+  // TODO: migration to make this present everytime.
+  isFirstRowHeader: boolean;
+
+  timeOfLastRun: string | undefined | null;
 
   integrationType: Extract<IntegrationTypes, { type: T }>;
 }

@@ -3,15 +3,10 @@ import type {
   IntegrationTypes,
 } from '@decipad/editor-types';
 import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
-import {
-  useCodeConnectionStore,
-  useConnectionStore,
-  useGSheetConnectionStore,
-  useNotionConnectionStore,
-  useSQLConnectionStore,
-} from '@decipad/react-contexts';
-import { getDefined } from '@decipad/utils';
+import { useConnectionStore } from '@decipad/react-contexts';
 import { nanoid } from 'nanoid';
+import { CodeRunner, GenericContainerRunner, URLRunner } from '../runners';
+import { assertInstanceOf } from '@decipad/utils';
 
 export function getNotionDbLink(url: string): string | undefined {
   const parsedUrl = url.match(/notion.so\/.*\?v=/);
@@ -29,6 +24,24 @@ export function getNotionDataLink(notionDatabaseId: string): string {
   return `${window.location.origin}/api/externaldatasources/notion/${notionDatabaseId}/data`;
 }
 
+function getDefaultBlock(
+  runner: GenericContainerRunner
+): IntegrationTypes.IntegrationBlock {
+  const store = useConnectionStore.getState();
+
+  return {
+    id: nanoid(),
+    type: ELEMENT_INTEGRATION,
+    children: [{ text: store.varName }],
+    typeMappings: runner.getTypes(),
+    latestResult: store.rawResult!,
+    timeOfLastRun: store.timeOfLastRun,
+    columnsToHide: store.columnsToHide,
+    isFirstRowHeader: runner.getIsFirstRowHeader(),
+    integrationType: {} as any, // we can do this because we are about to override this.
+  };
+}
+
 /**
  * Helper function to return the correct new integration,
  * with the correct state.
@@ -38,91 +51,71 @@ export function getNotionDataLink(notionDatabaseId: string): string {
  */
 export function getNewIntegration(
   type: ImportElementSource,
-  varName: string
+  runner: GenericContainerRunner
 ): IntegrationTypes.IntegrationBlock {
+  const defaultBlock = getDefaultBlock(runner);
+
   switch (type) {
     case 'codeconnection': {
-      const codeStore = useCodeConnectionStore.getState();
-      const store = useConnectionStore.getState();
+      assertInstanceOf(runner, CodeRunner);
 
-      return {
-        id: nanoid(),
-        type: ELEMENT_INTEGRATION,
-        children: [{ text: varName }],
-        typeMappings: store.resultTypeMapping,
-        latestResult: store.rawResult!,
-        timeOfLastRun: store.timeOfLastRun,
-
-        integrationType: {
-          type: 'codeconnection',
-          code: codeStore.code,
-        },
+      defaultBlock.integrationType = {
+        type: 'codeconnection',
+        code: runner.code,
       };
+
+      return defaultBlock;
     }
     case 'mysql': {
-      const sqlStore = useSQLConnectionStore.getState();
-      const store = useConnectionStore.getState();
+      assertInstanceOf(runner, URLRunner);
 
-      return {
-        id: nanoid(),
-        type: ELEMENT_INTEGRATION,
-        children: [{ text: varName }],
-        typeMappings: store.resultTypeMapping,
-        latestResult: store.rawResult!,
-        timeOfLastRun: store.timeOfLastRun,
-        integrationType: {
-          type: 'mysql',
-          query: sqlStore.Query,
-          externalDataUrl: getDefined(sqlStore.ExternalDataId),
-          externalDataName: getDefined(sqlStore.ExternalDataName),
-        },
+      defaultBlock.integrationType = {
+        type: 'mysql',
+
+        url: runner.getUrl(),
+        query: runner.getQuery(),
       };
+
+      return defaultBlock;
     }
 
     case 'notion': {
-      const notionStore = useNotionConnectionStore.getState();
-      const store = useConnectionStore.getState();
+      assertInstanceOf(runner, URLRunner);
 
-      const notionIntegration: IntegrationTypes.IntegrationBlock = {
-        id: nanoid(),
-        type: ELEMENT_INTEGRATION,
-        children: [{ text: varName }],
-        typeMappings: store.resultTypeMapping,
-        latestResult: store.rawResult!,
-        timeOfLastRun: store.timeOfLastRun,
-        integrationType: {
-          type: 'notion',
-          notionUrl: notionStore.NotionDatabaseUrl!,
-          externalDataId: notionStore.ExternalDataId!,
-          externalDataName: notionStore.ExternalDataName!,
-          databaseName: notionStore.DatabaseName!,
-        },
+      defaultBlock.integrationType = {
+        type: 'notion',
+        notionUrl: runner.getUrl(),
       };
 
-      return notionIntegration;
+      return defaultBlock;
     }
 
     case 'gsheets': {
-      const gsheetStore = useGSheetConnectionStore.getState();
-      const store = useConnectionStore.getState();
+      assertInstanceOf(runner, URLRunner);
 
-      const gsheetIntegration: IntegrationTypes.IntegrationBlock = {
-        id: nanoid(),
-        type: ELEMENT_INTEGRATION,
-        children: [{ text: varName }],
-        typeMappings: store.resultTypeMapping,
-        latestResult: store.rawResult!,
-        timeOfLastRun: store.timeOfLastRun,
-        integrationType: {
-          type: 'gsheets',
-          externalDataId: gsheetStore.ExternalDataId!,
-          externalDataName: gsheetStore.ExternalDataName!,
-          spreadsheetUrl: gsheetStore.SpreadsheetURL!,
-          selectedSubsheet: gsheetStore.SelectedSubsheet,
-        },
+      defaultBlock.integrationType = {
+        type: 'gsheets',
+        spreadsheetUrl:
+          runner.getProxy() != null
+            ? `${runner.getProxy()!}?url=${runner.getUrl()}`
+            : runner.getUrl(),
       };
 
-      return gsheetIntegration;
+      return defaultBlock;
+    }
+
+    case 'csv': {
+      if (!(runner instanceof URLRunner)) {
+        throw new Error('Need URLRunner');
+      }
+
+      defaultBlock.typeMappings = runner.getTypes();
+      defaultBlock.integrationType = {
+        type: 'csv',
+        csvUrl: runner.getUrl(),
+      };
+
+      return defaultBlock;
     }
 
     default: {

@@ -44,7 +44,7 @@ export type MaterializedColumn = {
 } & Common;
 export type Table = {
   readonly kind: 'table';
-  readonly indexName: string | null;
+  indexName: string | null;
   readonly delegatesIndexTo?: string | null;
   columnTypes: SerializedType[];
   readonly columnNames: string[];
@@ -56,7 +56,7 @@ export type Tree = {
 } & Common;
 export type MaterializedTable = {
   readonly kind: 'materialized-table';
-  readonly indexName: string | null;
+  indexName: string | null;
   readonly delegatesIndexTo?: string | null;
   columnTypes: SerializedType[];
   readonly columnNames: string[];

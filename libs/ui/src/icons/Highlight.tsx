@@ -15,7 +15,7 @@ export const Highlight = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.235}
-        d="M5 3v2.059c.686 1.235 1.647 4.035 1.647 5.353h3.706C10.353 9.176 12 5.059 12 5.059V3M7.059 13.294v-2.882H9.94v1.647l-2.882 1.235M5 5.059h7"
+        d="M5 3v2.059c.686 1.235 1.647 4.035 1.647 5.353h3.706C10.353 9.176 12 5.059 12 5.059V3M7.059 13.294v-2.882H9.94v1.647zM5 5.059h7"
       />
     </svg>
   );

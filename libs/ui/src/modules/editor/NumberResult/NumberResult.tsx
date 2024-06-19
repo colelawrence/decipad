@@ -1,13 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { FC, memo, useMemo } from 'react';
 import { formatNumber } from '@decipad/format';
 import { css } from '@emotion/react';
-import { FC, useMemo } from 'react';
 import { useFormattedResultString } from '../../../hooks';
 import { Tooltip } from '../../../shared';
 import { characterLimitStyles } from '../../../styles/results';
 import { CodeResultProps } from '../../../types';
 
-export const NumberResult: FC<CodeResultProps<'number'>> = ({
+const InternalNumberResult: FC<CodeResultProps<'number'>> = ({
   type,
   value,
   formatting = 'automatic',
@@ -76,3 +76,5 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
     </Tooltip>
   );
 };
+
+export const NumberResult = memo(InternalNumberResult);

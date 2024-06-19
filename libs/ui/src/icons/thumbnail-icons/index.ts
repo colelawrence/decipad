@@ -7,3 +7,4 @@ export * from './ThumbnailMongoDb';
 export * from './ThumbnailNotebooks';
 export * from './ThumbnailNotion';
 export * from './ThumbnailSql';
+export * from './ThumbnailCsv';

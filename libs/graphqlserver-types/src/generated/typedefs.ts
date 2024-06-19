@@ -52,6 +52,13 @@ type CreateAttachmentForm {
   fields: [KeyValue!]!
 }
 
+union AttachmentResource = Pad | Workspace
+
+enum AttachmentOwnership {
+  PAD
+  WORKSPACE
+}
+
 type Attachment {
   id: ID!
   fileName: String!
@@ -61,8 +68,12 @@ type Attachment {
   uploadedBy: User
   createdAt: DateTime
   url: String!
-  padId: String!
-  pad: Pad
+
+  padId: String # DEPRECATE LATER.
+  resourceId: String!
+  resourceType: AttachmentOwnership!
+
+  resource: AttachmentResource
 }
 
 extend type Mutation {
@@ -71,12 +82,29 @@ extend type Mutation {
     fileName: String!
     fileType: String!
   ): CreateAttachmentForm!
+
+  getCreateAttachmentFormWorkspace(
+    workspaceId: ID!
+    fileName: String!
+    fileType: String!
+  ): CreateAttachmentForm!
+
   attachFileToPad(handle: ID!): Attachment
+  attachFileToWorkspace(handle: ID!): Attachment
+
   removeAttachmentFromPad(attachmentId: ID!): Boolean
+
+  # Return atachment resource so the frontend can do some caching
+  removeAttachmentFromWorkspace(attachmentId: ID!): AttachmentResource
+
   undeleteAttachment(attachmentId: ID!): Boolean
 }
 
 extend type Pad {
+  attachments: [Attachment!]!
+}
+
+extend type Workspace {
   attachments: [Attachment!]!
 }
 type Query {

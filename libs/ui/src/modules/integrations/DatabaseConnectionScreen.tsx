@@ -17,7 +17,7 @@ import {
   Button,
   MenuItem,
 } from '../../shared';
-import { IntegrationActionItem } from './IntegrationStyles';
+import { IntegrationActionItem } from './IntegrationItem/IntegrationItem';
 import { cssVar, p13Bold, p14Medium } from '../../primitives';
 import { ThumbnailSql } from '../../icons/thumbnail-icons';
 import { useCancelingEvent } from '../../utils';

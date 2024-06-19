@@ -16,6 +16,7 @@ const integrations = route(
   },
   {}
 );
+const datasets = route('/datasets', {}, {});
 
 const addcredits = route('/add-credits', {}, {});
 const upgrade = route(
@@ -34,6 +35,7 @@ export const connections = route(
     webhooks,
     sqlConnections,
     integrations,
+    datasets,
   }
 );
 

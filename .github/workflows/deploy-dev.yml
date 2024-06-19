@@ -120,6 +120,7 @@ jobs:
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{vars.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{vars.DISCORD_FEEDBACK_CHANNEL_ID}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistant,@decipad/backend-code-assistant'
+          DECI_MAX_ATTACHMENT_SIZE: '${{vars.DECI_MAX_ATTACHMENT_SIZE}}'
         run: |
           export SAM_BUCKET=decipad-backend-sam
           export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"

@@ -59,6 +59,8 @@ const tryImportHere = async (
           maxCellCount: sub.params.maxCellCount,
           jsonPath: sub.params.jsonPath,
           delimiter: sub.params.delimiter,
+          subId: sub.params.subId,
+          query: sub.params.query,
         }
       );
       for (const result of results) {

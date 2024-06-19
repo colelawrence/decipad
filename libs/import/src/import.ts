@@ -1,5 +1,5 @@
 import { importFromUnknown } from './importFromUnknown';
-import { decipad, gsheets } from './providers';
+import { decipad, gsheets, notion, mysql, csv } from './providers';
 import type { ImportOptions, ImportParams, ImportResult } from './types';
 
 const internalTryImport = (
@@ -12,6 +12,12 @@ const internalTryImport = (
         return gsheets.import(params, options);
       case 'decipad':
         return decipad.import(params.url);
+      case 'notion':
+        return notion.import(params, options);
+      case 'mysql':
+        return mysql.import(params, options);
+      case 'csv':
+        return csv.import(params, options);
     }
   }
   return importFromUnknown(params.computer, params.proxy ?? params.url, {

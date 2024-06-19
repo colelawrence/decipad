@@ -75,7 +75,7 @@ export type InputFieldProps = {
   readonly pattern?: string;
   readonly title?: string;
 
-  readonly value: string;
+  readonly value?: string;
   readonly error?: string;
   readonly submitButton?: ReactNode;
   readonly tabIndex?: number;

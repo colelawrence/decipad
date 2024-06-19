@@ -20,8 +20,8 @@ import {
   withoutNormalizingAsync,
 } from '@decipad/editor-utils';
 import {
-  useConnectionStore,
   useFileUploadStore,
+  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
@@ -54,8 +54,8 @@ export const execute = async ({
   deleteFragment,
   deleteBlock = true,
 }: ExecuteProps): Promise<void> => {
-  const { changeOpen } = useConnectionStore.getState();
   const { setDialogOpen, setFileType } = useFileUploadStore.getState();
+  const { setSidebar } = useNotebookMetaData.getState();
 
   // eslint-disable-next-line complexity
   await withoutNormalizingAsync(editor, async () => {
@@ -104,7 +104,7 @@ export const execute = async ({
         await insertDataViewBelow(editor, path, computer);
         break;
       case 'open-integration':
-        changeOpen(true);
+        setSidebar('integrations');
         break;
       case 'live-query':
         await insertLiveQueryBelow(editor, path, getAvailableIdentifier);

@@ -4,7 +4,7 @@
 // values into the builkd targets.
 const defaultEnvValues = {
   VITE_SENTRY_DSN: '',
-  VITE_GOOGLESHEETS_API_KEY: 'AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM',
+  VITE_GOOGLESHEETS_API_KEY: 'AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

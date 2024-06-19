@@ -39,6 +39,7 @@ export interface CodeResultProps<T extends SerializedTypeKind> {
     columnIndex: number,
     type?: SimpleTableCellType
   ) => void;
+  readonly onHideColumn?: (columnName: string) => void;
   readonly element?: AnyElement;
   readonly blockId?: string;
 }

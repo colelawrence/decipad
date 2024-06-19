@@ -48,12 +48,20 @@ export type Attachment = {
   fileSize: Scalars['Int']['output'];
   fileType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  pad?: Maybe<Pad>;
-  padId: Scalars['String']['output'];
+  padId?: Maybe<Scalars['String']['output']>;
+  resource?: Maybe<AttachmentResource>;
+  resourceId: Scalars['String']['output'];
+  resourceType: AttachmentOwnership;
   uploadedBy?: Maybe<User>;
   url: Scalars['String']['output'];
   userId?: Maybe<Scalars['String']['output']>;
 };
+
+export type AttachmentOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
+
+export type AttachmentResource = Pad | Workspace;
 
 export type CheckoutSessionInfo = {
   __typename?: 'CheckoutSessionInfo';
@@ -195,6 +203,7 @@ export type Mutation = {
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
+  attachFileToWorkspace?: Maybe<Attachment>;
   claimNotebook?: Maybe<Pad>;
   createAnnotation?: Maybe<Annotation>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
@@ -210,6 +219,7 @@ export type Mutation = {
   doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
   getCreateAttachmentForm: CreateAttachmentForm;
+  getCreateAttachmentFormWorkspace: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
   incrementResourceUsage?: Maybe<ResourceUsage>;
@@ -217,6 +227,7 @@ export type Mutation = {
   movePad: Pad;
   refreshExternalDataToken: Scalars['String']['output'];
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
+  removeAttachmentFromWorkspace?: Maybe<AttachmentResource>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
   removePad?: Maybe<Scalars['Boolean']['output']>;
   removeRole?: Maybe<Scalars['Boolean']['output']>;
@@ -275,6 +286,11 @@ export type MutationAddTagToPadArgs = {
 
 
 export type MutationAttachFileToPadArgs = {
+  handle: Scalars['ID']['input'];
+};
+
+
+export type MutationAttachFileToWorkspaceArgs = {
   handle: Scalars['ID']['input'];
 };
 
@@ -359,6 +375,13 @@ export type MutationGetCreateAttachmentFormArgs = {
 };
 
 
+export type MutationGetCreateAttachmentFormWorkspaceArgs = {
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationImportPadArgs = {
   source: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -397,6 +420,11 @@ export type MutationRefreshExternalDataTokenArgs = {
 
 
 export type MutationRemoveAttachmentFromPadArgs = {
+  attachmentId: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveAttachmentFromWorkspaceArgs = {
   attachmentId: Scalars['ID']['input'];
 };
 
@@ -1138,6 +1166,7 @@ export type UsernameInput = {
 export type Workspace = {
   __typename?: 'Workspace';
   access?: Maybe<WorkspaceAccess>;
+  attachments: Array<Attachment>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   isPremium?: Maybe<Scalars['Boolean']['output']>;
@@ -1206,7 +1235,7 @@ export type AttachFileToNotebookMutationVariables = Exact<{
 }>;
 
 
-export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFileToPad?: { __typename?: 'Attachment', id: string, padId: string, fileName: string, fileType: string, fileSize: number, url: string } | null };
+export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFileToPad?: { __typename?: 'Attachment', id: string, padId?: string | null, fileName: string, fileType: string, fileSize: number, url: string } | null };
 
 export type RemoveFileFromNotebookMutationVariables = Exact<{
   attachmentId: Scalars['ID']['input'];
@@ -1221,6 +1250,29 @@ export type UndeleteFileFromNotebookMutationVariables = Exact<{
 
 
 export type UndeleteFileFromNotebookMutation = { __typename?: 'Mutation', undeleteAttachment?: boolean | null };
+
+export type GetCreateAttachmentFormWorkspaceMutationVariables = Exact<{
+  workspaceId: Scalars['ID']['input'];
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
+}>;
+
+
+export type GetCreateAttachmentFormWorkspaceMutation = { __typename?: 'Mutation', getCreateAttachmentFormWorkspace: { __typename?: 'CreateAttachmentForm', url: string, handle: string, fields: Array<{ __typename?: 'KeyValue', key: string, value: string }> } };
+
+export type AttachFileToWorkspaceMutationVariables = Exact<{
+  handle: Scalars['ID']['input'];
+}>;
+
+
+export type AttachFileToWorkspaceMutation = { __typename?: 'Mutation', attachFileToWorkspace?: { __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string, resource?: { __typename?: 'Pad', id: string, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, userId?: string | null, createdAt?: any | null, url: string }> } | { __typename?: 'Workspace', id: string, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, userId?: string | null, createdAt?: any | null, url: string }> } | null } | null };
+
+export type RemoveFileFromWorkspaceMutationVariables = Exact<{
+  attachmentId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveFileFromWorkspaceMutation = { __typename?: 'Mutation', removeAttachmentFromWorkspace?: { __typename?: 'Pad' } | { __typename?: 'Workspace', id: string, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, userId?: string | null, createdAt?: any | null, url: string }> } | null };
 
 export type ChangeWorkspaceAccessLevelMutationVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1681,6 +1733,15 @@ export type GetWorkspacesIDsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetWorkspacesIDsQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, myPermissionType?: PermissionType | null }> };
 
+export type AttachmentFragmentFragment = { __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, userId?: string | null, createdAt?: any | null, url: string };
+
+export type GetWorkspaceAttachmentsQueryVariables = Exact<{
+  workspaceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetWorkspaceAttachmentsQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', id: string, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, userId?: string | null, createdAt?: any | null, url: string }> } | null };
+
 export type GetWorkspaceByIdQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
@@ -1951,6 +2012,17 @@ export const WorkspaceSwitcherWorkspaceFragmentDoc = gql`
   myPermissionType
 }
     `;
+export const AttachmentFragmentFragmentDoc = gql`
+    fragment AttachmentFragment on Attachment {
+  id
+  fileName
+  fileType
+  fileSize
+  userId
+  createdAt
+  url
+}
+    `;
 export const WorkspaceNotebookFragmentDoc = gql`
     fragment WorkspaceNotebook on Pad {
   id
@@ -1998,6 +2070,89 @@ export const UndeleteFileFromNotebookDocument = gql`
 
 export function useUndeleteFileFromNotebookMutation() {
   return Urql.useMutation<UndeleteFileFromNotebookMutation, UndeleteFileFromNotebookMutationVariables>(UndeleteFileFromNotebookDocument);
+};
+export const GetCreateAttachmentFormWorkspaceDocument = gql`
+    mutation GetCreateAttachmentFormWorkspace($workspaceId: ID!, $fileName: String!, $fileType: String!) {
+  getCreateAttachmentFormWorkspace(
+    workspaceId: $workspaceId
+    fileName: $fileName
+    fileType: $fileType
+  ) {
+    url
+    handle
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+
+export function useGetCreateAttachmentFormWorkspaceMutation() {
+  return Urql.useMutation<GetCreateAttachmentFormWorkspaceMutation, GetCreateAttachmentFormWorkspaceMutationVariables>(GetCreateAttachmentFormWorkspaceDocument);
+};
+export const AttachFileToWorkspaceDocument = gql`
+    mutation AttachFileToWorkspace($handle: ID!) {
+  attachFileToWorkspace(handle: $handle) {
+    id
+    fileName
+    fileType
+    fileSize
+    url
+    resource {
+      ... on Workspace {
+        id
+        attachments {
+          id
+          fileName
+          fileType
+          fileSize
+          userId
+          createdAt
+          url
+        }
+      }
+      ... on Pad {
+        id
+        attachments {
+          id
+          fileName
+          fileType
+          fileSize
+          userId
+          createdAt
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useAttachFileToWorkspaceMutation() {
+  return Urql.useMutation<AttachFileToWorkspaceMutation, AttachFileToWorkspaceMutationVariables>(AttachFileToWorkspaceDocument);
+};
+export const RemoveFileFromWorkspaceDocument = gql`
+    mutation RemoveFileFromWorkspace($attachmentId: ID!) {
+  removeAttachmentFromWorkspace(attachmentId: $attachmentId) {
+    ... on Workspace {
+      id
+      attachments {
+        id
+        fileName
+        fileType
+        fileSize
+        userId
+        createdAt
+        url
+      }
+    }
+  }
+}
+    `;
+
+export function useRemoveFileFromWorkspaceMutation() {
+  return Urql.useMutation<RemoveFileFromWorkspaceMutation, RemoveFileFromWorkspaceMutationVariables>(RemoveFileFromWorkspaceDocument);
 };
 export const ChangeWorkspaceAccessLevelDocument = gql`
     mutation ChangeWorkspaceAccessLevel($workspaceId: ID!, $email: String!, $permissionType: PermissionType!, $canComment: Boolean!) {
@@ -2757,6 +2912,20 @@ export const GetWorkspacesIDsDocument = gql`
 export function useGetWorkspacesIDsQuery(options?: Omit<Urql.UseQueryArgs<GetWorkspacesIDsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetWorkspacesIDsQuery, GetWorkspacesIDsQueryVariables>({ query: GetWorkspacesIDsDocument, ...options });
 };
+export const GetWorkspaceAttachmentsDocument = gql`
+    query GetWorkspaceAttachments($workspaceId: ID!) {
+  getWorkspaceById(id: $workspaceId) {
+    id
+    attachments {
+      ...AttachmentFragment
+    }
+  }
+}
+    ${AttachmentFragmentFragmentDoc}`;
+
+export function useGetWorkspaceAttachmentsQuery(options: Omit<Urql.UseQueryArgs<GetWorkspaceAttachmentsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWorkspaceAttachmentsQuery, GetWorkspaceAttachmentsQueryVariables>({ query: GetWorkspaceAttachmentsDocument, ...options });
+};
 export const GetWorkspaceByIdDocument = gql`
     query GetWorkspaceById($workspaceId: ID!) {
   getWorkspaceById(id: $workspaceId) {
@@ -2911,8 +3080,10 @@ export type GraphCacheResolvers = {
     fileSize?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['Int'] | string>,
     fileType?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['ID'] | string>,
-    pad?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<Pad> | string>,
     padId?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
+    resource?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<AttachmentResource> | string>,
+    resourceId?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
+    resourceType?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, AttachmentOwnership | string>,
     uploadedBy?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<User> | string>,
     url?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
     userId?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>
@@ -3198,6 +3369,7 @@ export type GraphCacheResolvers = {
   },
   Workspace?: {
     access?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, WithTypename<WorkspaceAccess> | string>,
+    attachments?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Attachment> | string>>,
     createdAt?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['DateTime'] | string>,
     id?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['ID'] | string>,
     isPremium?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['Boolean'] | string>,
@@ -3250,6 +3422,7 @@ export type GraphCacheOptimisticUpdaters = {
   addSectionToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAddSectionToWorkspaceArgs, Maybe<WithTypename<Section>>>,
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
+  attachFileToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAttachFileToWorkspaceArgs, Maybe<WithTypename<Attachment>>>,
   claimNotebook?: GraphCacheOptimisticMutationResolver<MutationClaimNotebookArgs, Maybe<WithTypename<Pad>>>,
   createAnnotation?: GraphCacheOptimisticMutationResolver<MutationCreateAnnotationArgs, Maybe<WithTypename<Annotation>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
@@ -3265,6 +3438,7 @@ export type GraphCacheOptimisticUpdaters = {
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
   getCreateAttachmentForm?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm>>,
+  getCreateAttachmentFormWorkspace?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormWorkspaceArgs, WithTypename<CreateAttachmentForm>>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
   incrementQueryCount?: GraphCacheOptimisticMutationResolver<MutationIncrementQueryCountArgs, WithTypename<WorkspaceExecutedQuery>>,
   incrementResourceUsage?: GraphCacheOptimisticMutationResolver<MutationIncrementResourceUsageArgs, Maybe<WithTypename<ResourceUsage>>>,
@@ -3272,6 +3446,7 @@ export type GraphCacheOptimisticUpdaters = {
   movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
   refreshExternalDataToken?: GraphCacheOptimisticMutationResolver<MutationRefreshExternalDataTokenArgs, Scalars['String']>,
   removeAttachmentFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromPadArgs, Maybe<Scalars['Boolean']>>,
+  removeAttachmentFromWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromWorkspaceArgs, Maybe<WithTypename<AttachmentResource>>>,
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
   removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
   removeRole?: GraphCacheOptimisticMutationResolver<MutationRemoveRoleArgs, Maybe<Scalars['Boolean']>>,
@@ -3340,6 +3515,7 @@ export type GraphCacheUpdaters = {
     addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
+    attachFileToWorkspace?: GraphCacheUpdateResolver<{ attachFileToWorkspace: Maybe<WithTypename<Attachment>> }, MutationAttachFileToWorkspaceArgs>,
     claimNotebook?: GraphCacheUpdateResolver<{ claimNotebook: Maybe<WithTypename<Pad>> }, MutationClaimNotebookArgs>,
     createAnnotation?: GraphCacheUpdateResolver<{ createAnnotation: Maybe<WithTypename<Annotation>> }, MutationCreateAnnotationArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
@@ -3355,6 +3531,7 @@ export type GraphCacheUpdaters = {
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
     getCreateAttachmentForm?: GraphCacheUpdateResolver<{ getCreateAttachmentForm: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormArgs>,
+    getCreateAttachmentFormWorkspace?: GraphCacheUpdateResolver<{ getCreateAttachmentFormWorkspace: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormWorkspaceArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
     incrementQueryCount?: GraphCacheUpdateResolver<{ incrementQueryCount: WithTypename<WorkspaceExecutedQuery> }, MutationIncrementQueryCountArgs>,
     incrementResourceUsage?: GraphCacheUpdateResolver<{ incrementResourceUsage: Maybe<WithTypename<ResourceUsage>> }, MutationIncrementResourceUsageArgs>,
@@ -3362,6 +3539,7 @@ export type GraphCacheUpdaters = {
     movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,
     refreshExternalDataToken?: GraphCacheUpdateResolver<{ refreshExternalDataToken: Scalars['String'] }, MutationRefreshExternalDataTokenArgs>,
     removeAttachmentFromPad?: GraphCacheUpdateResolver<{ removeAttachmentFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveAttachmentFromPadArgs>,
+    removeAttachmentFromWorkspace?: GraphCacheUpdateResolver<{ removeAttachmentFromWorkspace: Maybe<WithTypename<AttachmentResource>> }, MutationRemoveAttachmentFromWorkspaceArgs>,
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
     removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
     removeRole?: GraphCacheUpdateResolver<{ removeRole: Maybe<Scalars['Boolean']> }, MutationRemoveRoleArgs>,
@@ -3429,8 +3607,10 @@ export type GraphCacheUpdaters = {
     fileSize?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     fileType?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
-    pad?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     padId?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    resource?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    resourceId?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    resourceType?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     uploadedBy?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     url?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
     userId?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>
@@ -3716,6 +3896,7 @@ export type GraphCacheUpdaters = {
   },
   Workspace?: {
     access?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    attachments?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     isPremium?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,

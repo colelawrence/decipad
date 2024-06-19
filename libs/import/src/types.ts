@@ -76,13 +76,12 @@ export interface ImportOptions {
   maxCellCount?: number;
   subId?: number | string;
 
-  // Potentially tidy these up.
-  useRawResult?: string;
-  externalDataLinkId?: string;
-
   jsonPath?: string;
   delimiter?: string;
   provider?: ImportElementSource;
+
+  columnsToIgnore?: Set<string>;
+  query?: string;
 }
 
 export interface Island {

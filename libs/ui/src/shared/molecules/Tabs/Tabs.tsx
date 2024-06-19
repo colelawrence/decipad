@@ -9,6 +9,7 @@ import {
   type FC,
   type ReactNode,
   useEffect,
+  ComponentProps,
 } from 'react';
 import { cssVar, p13Medium } from '../../../primitives';
 import { Tooltip } from '../../atoms';
@@ -84,19 +85,19 @@ const ActiveTabContext = createContext({
   setActiveTab: (_: string) => {},
 });
 
-type TabsRootProps = {
+type TabsRootProps<T extends string> = {
   children: ReactNode;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  defaultValue?: T;
+  onValueChange?: (value: T) => void;
   styles?: SerializedStyles | SerializedStyles[];
 };
 
-export const TabsRoot = ({
+export function TabsRoot<T extends string>({
   children,
   styles,
-  defaultValue = '',
+  defaultValue = '' as T,
   onValueChange,
-}: TabsRootProps) => {
+}: TabsRootProps<T>): ReturnType<FC> {
   const [value, setValue] = useState(defaultValue);
   const valueObj = { activeTab: value, setActiveTab: setValue };
 
@@ -105,7 +106,7 @@ export const TabsRoot = ({
   }, [defaultValue]);
 
   const setValueForAll = useCallback(
-    (val: string) => {
+    (val: T) => {
       onValueChange?.(val);
       setValue(val);
     },
@@ -113,17 +114,23 @@ export const TabsRoot = ({
   );
 
   return (
-    <ActiveTabContext.Provider value={valueObj}>
+    <ActiveTabContext.Provider
+      value={
+        valueObj as unknown as ComponentProps<
+          typeof ActiveTabContext.Provider
+        >['value']
+      }
+    >
       <TabsPrimitive.Root
         css={styles}
         value={value}
-        onValueChange={setValueForAll}
+        onValueChange={setValueForAll as (_: string) => void}
       >
         {children}
       </TabsPrimitive.Root>
     </ActiveTabContext.Provider>
   );
-};
+}
 
 type TabsListProps = {
   readonly fullWidth?: boolean;

@@ -5,17 +5,20 @@ export function getExternalDataUrl(
   id: string,
   specialParam: { url?: string; method?: 'GET' | 'POST' } = {}
 ): string {
-  let baseUrl = `${window.location.origin}/api/externaldatasources/${id}/data`;
+  const baseUrl = new URL(
+    `${window.location.origin}/api/externaldatasources/${id}/data`
+  );
 
   if (specialParam.method != null) {
-    baseUrl += `?method=${specialParam.method}`;
+    // baseUrl += `?method=${specialParam.method}`;
+    baseUrl.searchParams.set('method', specialParam.method);
   }
 
   if (specialParam.url != null) {
-    baseUrl += `&url=${specialParam.url}`;
+    baseUrl.searchParams.set('url', specialParam.url);
   }
 
-  return baseUrl;
+  return baseUrl.toString();
 }
 
 /**

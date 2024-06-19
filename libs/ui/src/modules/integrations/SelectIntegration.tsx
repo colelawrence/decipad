@@ -1,7 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { IntegrationDisabledItem, IntegrationItem } from './IntegrationStyles';
+import {
+  IntegrationDisabledItem,
+  IntegrationItem,
+} from './IntegrationItem/IntegrationItem';
 
 interface SelectIntegrationProps {
   integrations: Array<{

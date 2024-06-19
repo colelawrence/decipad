@@ -23,7 +23,7 @@ it('allows different "types" to be in the same columns', async () => {
           },
         ],
         "indexName": "hello",
-        "kind": "materialized-table",
+        "kind": "table",
       },
       "value": [
         [
@@ -59,7 +59,7 @@ describe('Inferring types', () => {
             },
           ],
           "indexName": "hello",
-          "kind": "materialized-table",
+          "kind": "table",
         },
         "value": [
           [
@@ -129,7 +129,7 @@ describe('Inferring types', () => {
             },
           ],
           "indexName": "price",
-          "kind": "materialized-table",
+          "kind": "table",
         },
         "value": [
           [
@@ -227,11 +227,11 @@ describe('Nested objects', () => {
                 },
               ],
               "indexName": "world",
-              "kind": "materialized-table",
+              "kind": "table",
             },
           ],
           "indexName": "hello",
-          "kind": "materialized-table",
+          "kind": "table",
         },
         "value": [
           [
@@ -273,7 +273,7 @@ describe('Nested objects', () => {
             },
           ],
           "indexName": "col1",
-          "kind": "materialized-table",
+          "kind": "table",
         },
         "value": [
           [
@@ -336,5 +336,37 @@ describe('Infers dates', () => {
         "value": 1713225600000n,
       }
     `);
+  });
+});
+
+// Will come back to this feature in a later PR.
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('ignore columns specified in options', () => {
+  it('ignores specific columns', async () => {
+    const toIgnore = new Set<string>(['col1', 'col3']);
+
+    const object = {
+      col1: [1, 2, 3],
+      col2: ['hello', 'world', '!'],
+      col3: [true, false, false],
+    };
+
+    await expect(
+      importFromUnknownJson(getComputer(), object, {
+        columnsToIgnore: toIgnore,
+      })
+    ).resolves.toMatchObject({
+      type: {
+        columnNames: ['col2'],
+        columnTypes: [
+          {
+            kind: 'string',
+          },
+        ],
+        indexName: 'col2',
+        kind: 'materialized-table',
+      },
+      value: [['hello', 'world', '!']],
+    });
   });
 });

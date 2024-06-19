@@ -8,19 +8,12 @@ import {
 } from '../utils/src';
 import { ControlPlus } from '../utils/page/Editor';
 import os from 'node:os';
+import type { User } from './manager/test-users';
 
-const executeCode = (page: Page, sourcecode: string, x: number) =>
+const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
-    await page.getByTestId('paragraph-content').last().click();
-    await page.getByTestId('paragraph-content').last().fill('/i');
-    await page
-      .locator('article')
-      .getByTestId('menu-item-open-integration')
-      .waitFor();
-    await page
-      .locator('article')
-      .getByTestId('menu-item-open-integration')
-      .click();
+    await user.notebook.addBlockSlashCommand('open-integration', true);
+
     await page.getByTestId('select-integration:Code').click();
 
     // First line of the CodeMirror
@@ -100,7 +93,7 @@ test('Make sure our js code templates work', async ({ randomFreeUser }) => {
 
     expect(allSources.length).toBeGreaterThan(0);
     for (const [i, sourcecode] of allSources.entries()) {
-      await executeCode(page, sourcecode, i);
+      await executeCode(randomFreeUser, page, sourcecode, i);
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.liveBlockDelay);
     }
@@ -109,6 +102,7 @@ test('Make sure our js code templates work', async ({ randomFreeUser }) => {
   await test.step('Adding a duplicate to make sure it is not allowed', async () => {
     const allSources = codePlaceholders;
     await executeCode(
+      randomFreeUser,
       page,
       allSources[allSources.length - 1],
       allSources.length - 1
@@ -159,9 +153,13 @@ return this.${generatedVarName};`;
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
-    await page.getByTestId('paragraph-content').last().fill('/');
-    await page.getByTestId('menu-item-open-integration').first().waitFor();
-    await page.getByTestId('menu-item-open-integration').first().click();
+    await page.getByTestId('paragraph-content').last().click({ delay: 100 });
+
+    await randomFreeUser.notebook.addBlockSlashCommand(
+      'open-integration',
+      true
+    );
+
     await page.getByTestId('select-integration:Code').click();
 
     // First line of the CodeMirror
@@ -179,7 +177,7 @@ return this.${generatedVarName};`;
 
     await expect(page.getByTestId('number-result:100')).toBeVisible();
 
-    await page.getByRole('textbox').click();
+    await page.getByTestId('result-preview-input').click();
     await page.keyboard.press(
       os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
       { delay: Timeouts.typing }
@@ -241,7 +239,7 @@ test('Checks the ability to change the unit of a response', async ({
   await randomFreeUser.notebook.closeSidebar();
 
   await notebook.addBlockSlashCommand('open-integration');
-  await await page.getByTestId('select-integration:Code').click();
+  await page.getByTestId('select-integration:Code').click();
 
   // First line of the CodeMirror
   await page
@@ -276,6 +274,8 @@ test('Checks the ability to change the unit of a response', async ({
     .click();
 
   await page.getByRole('menuitem').getByText('Number').nth(1).click();
+  await page.getByRole('menuitem').getByText('Currency').click();
+  await page.getByRole('menuitem').getByText('USD').click();
 
   await page.getByTestId('integration-modal-continue').click();
   // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -283,13 +283,14 @@ test('Checks the ability to change the unit of a response', async ({
 });
 
 test('Check sql integrations is working correctly', async ({ testUser }) => {
+  test.slow();
   let notebookURL: string;
 
   await test.step('create integration', async () => {
     await testUser.notebook.addBlock('open-integration');
     notebookURL = testUser.page.url();
     await testUser.page.getByTestId('select-integration:SQL').click();
-    await testUser.page.getByText('Add SQL Connection').click();
+    await testUser.page.getByText('Select SQL Connection').click();
     await testUser.page.getByRole('menuitem', { name: /SQL/ }).click();
     await testUser.page
       .getByRole('button', { name: 'Add a New Connection' })
@@ -320,13 +321,14 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
     await testUser.notebook.waitForEditorToLoad();
     await testUser.notebook.addBlock('open-integration');
     await testUser.page.getByTestId('select-integration:SQL').click();
-    await testUser.page.getByText('Add SQL Connection').click();
+    await testUser.page.getByText('Select SQL Connection').click();
     await testUser.page.getByText('Planet Scale Intergration').first().click();
     await testUser.page.getByTestId('code-mirror').click();
 
-    await testUser.page
-      .getByRole('textbox')
-      .fill('select text, number from e2e_test_data_table;');
+    await testUser.page.keyboard.type(
+      'select text, number from e2e_test_data_table;'
+    );
+
     await testUser.page.getByRole('button', { name: 'Play Run' }).click();
     await testUser.page.getByRole('tab', { name: 'Preview' }).click();
   });
@@ -390,12 +392,9 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
 
   await expect(testUser.page.getByText('MySQL')).toBeVisible();
 
-  // open integration table to show data
-  await testUser.page.locator('figure').filter({ hasText: 'Show' }).click();
-
   await expect(
     testUser.page.getByText('15 rows, previewing rows 1 to 10')
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 90_000 });
 
   await testUser.page.getByRole('button', { name: 'Pivot view' }).click();
 

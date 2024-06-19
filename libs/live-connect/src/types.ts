@@ -29,6 +29,8 @@ export interface SubscribeParams {
   jsonPath?: string;
   delimiter?: string;
   liveQuery?: LiveQueryElement;
+  subId?: string;
+  query?: string;
 }
 
 export interface Subscription {

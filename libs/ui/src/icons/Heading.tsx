@@ -12,7 +12,7 @@ export const Heading = (props: SVGProps<SVGSVGElement>) => {
       <title>Heading</title>
       <path
         fill="currentColor"
-        d="M4.203 13.028V2.972h1.218V7.45h5.361V2.972H12v10.056h-1.218V8.53H5.421v4.498H4.203"
+        d="M4.203 13.028V2.972h1.218V7.45h5.361V2.972H12v10.056h-1.218V8.53H5.421v4.498z"
       />
     </svg>
   );

@@ -59,9 +59,9 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
       host: url.hostname,
       port: !url.port ? undefined : Number(url.port),
       database: url.pathname.substring(1),
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      // ssl: {
+      //   rejectUnauthorized: false,
+      // },
     },
   };
   return [knex(clientConfig), filterConfig(clientConfig)];

@@ -1,0 +1,76 @@
+mutation GetCreateAttachmentFormWorkspace(
+  $workspaceId: ID!
+  $fileName: String!
+  $fileType: String!
+) {
+  getCreateAttachmentFormWorkspace(
+    workspaceId: $workspaceId
+    fileName: $fileName
+    fileType: $fileType
+  ) {
+    url
+    handle
+    fields {
+      key
+      value
+    }
+  }
+}
+
+mutation AttachFileToWorkspace($handle: ID!) {
+  attachFileToWorkspace(handle: $handle) {
+    id
+    fileName
+    fileType
+    fileSize
+    url
+
+    resource {
+      # resource can either be Workspace | Pad
+      # But graphql needs you to specify for each
+
+      ... on Workspace {
+        id
+        attachments {
+          id
+          fileName
+          fileType
+          fileSize
+          userId
+          createdAt
+          url
+        }
+      }
+
+      ... on Pad {
+        id
+        attachments {
+          id
+          fileName
+          fileType
+          fileSize
+          userId
+          createdAt
+          url
+        }
+      }
+    }
+  }
+}
+
+mutation RemoveFileFromWorkspace($attachmentId: ID!) {
+  removeAttachmentFromWorkspace(attachmentId: $attachmentId) {
+    ... on Workspace {
+      id
+      attachments {
+        id
+        fileName
+        fileType
+        fileSize
+        userId
+        createdAt
+        url
+      }
+    }
+  }
+}

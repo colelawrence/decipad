@@ -22,7 +22,7 @@ export const Compass = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="m10.409 10.409 4.84-1.659-1.658 4.841L8.75 15.25l1.659-4.841"
+        d="m10.409 10.409 4.84-1.659-1.658 4.841L8.75 15.25z"
       />
     </svg>
   );

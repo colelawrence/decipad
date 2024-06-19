@@ -15,7 +15,7 @@ let previousWorkspaceRef: undefined | string;
 export const useInitializeResourceUsage = (
   workspace: WorkspaceWithSubscriptionAndResource | undefined | null
 ): void => {
-  const { ai, queries } = useResourceUsage();
+  const { ai, queries, storage } = useResourceUsage();
 
   const initializeState = useCallback(
     (_workspace: WorkspaceWithSubscriptionAndResource) => {
@@ -36,8 +36,15 @@ export const useInitializeResourceUsage = (
           ?.consumption ?? 0;
 
       ai.updateUsage({ usage: aiUsage, quotaLimit: aiLimit });
+
+      const storageLimit = _workspace.workspaceSubscription.storage;
+      const storageUsage =
+        _workspace.resourceUsages?.find((r) => r?.resourceType === 'storage')
+          ?.consumption ?? 0;
+
+      storage.updateUsage({ usage: storageUsage, quotaLimit: storageLimit });
     },
-    [ai, queries]
+    [ai, queries, storage]
   );
 
   //

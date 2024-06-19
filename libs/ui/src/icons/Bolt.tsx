@@ -15,7 +15,7 @@ export const Bolt = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M7.048 9.034H4L8.952 2v4.966H12L7.048 14V9.034"
+        d="M7.048 9.034H4L8.952 2v4.966H12L7.048 14z"
       />
     </svg>
   );

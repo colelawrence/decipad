@@ -15,7 +15,7 @@ export const QuestionMark = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.3}
-        d="M5 5.503a3.02 3.02 0 0 1 1.348-1.59 3.166 3.166 0 0 1 2.086-.37 3.11 3.11 0 0 1 1.84 1.024c.47.542.727 1.227.726 1.935C11 8.501 7.913 9.5 7.913 9.5"
+        d="M5 5.503a3.02 3.02 0 0 1 1.348-1.59 3.17 3.17 0 0 1 2.086-.37 3.1 3.1 0 0 1 1.84 1.024c.47.542.727 1.227.726 1.935C11 8.501 7.913 9.5 7.913 9.5"
       />
       <path
         stroke="currentColor"

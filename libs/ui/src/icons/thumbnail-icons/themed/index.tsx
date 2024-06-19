@@ -1,3 +1,5 @@
+export { ThumbnailCsvDark } from './ThumbnailCsvDark';
+export { ThumbnailCsvLight } from './ThumbnailCsvLight';
 export { ThumbnailChatDark } from './ThumbnailChatDark';
 export { ThumbnailChatLight } from './ThumbnailChatLight';
 export { ThumbnailCodeDark } from './ThumbnailCodeDark';

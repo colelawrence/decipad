@@ -10,7 +10,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import type { SourceUrlParseResponse } from '@decipad/import';
 import { parseSourceUrl } from '@decipad/import';
-import { useConnectionStore } from '@decipad/react-contexts';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveDataSetParams,
@@ -37,7 +37,7 @@ export const LiveDataSetVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_DATASET_VARIABLE_NAME);
 
-  const { changeOpen } = useConnectionStore();
+  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
   // refactor to useeditorselector
   const parent = useParentNodeEntry<LiveDataSetElement>(element);
   if (parent) {
@@ -73,8 +73,8 @@ export const LiveDataSetVarName: PlateComponent = ({
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   const onOptionsPress = useCallback(() => {
-    changeOpen(true);
-  }, [changeOpen]);
+    setSidebar('integrations');
+  }, [setSidebar]);
 
   const [loading, setLoading] = useState(false);
   const result$ = useLiveConnectionResult$();

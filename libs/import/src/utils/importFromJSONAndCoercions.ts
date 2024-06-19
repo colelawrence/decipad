@@ -4,11 +4,13 @@ import type { Result } from '@decipad/language-interfaces';
 import { columnTypeCoercionsToRec } from './columnTypeCoersionsToRec';
 import { tableFlip } from './tableFlip';
 import { importFromUnknownJson } from '../importFromUnknownJson';
+import { ImportOptions } from '../types';
 
 export const importFromJSONAndCoercions = async (
   computer: Computer,
   msg: string,
-  columnTypeCoercions: Array<TableCellType | undefined>
+  columnTypeCoercions: Array<TableCellType | undefined>,
+  importOptions: ImportOptions = {}
 ): Promise<Result.Result | undefined> => {
   try {
     let parsedMsg: unknown = JSON.parse(msg);
@@ -26,6 +28,7 @@ export const importFromJSONAndCoercions = async (
     }
 
     return importFromUnknownJson(computer, parsedMsg, {
+      ...importOptions,
       columnTypeCoercions: columnTypeCoercionsToRec(columnTypeCoercions),
     });
   } catch (e) {

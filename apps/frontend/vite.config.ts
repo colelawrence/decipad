@@ -97,7 +97,8 @@ const plugins = [
       ],
     },
     devOptions: {
-      enabled: process.env.NODE_ENV !== 'production',
+      enabled:
+        process.env.NODE_ENV !== 'production' && !process.env.DISABLE_PWA,
     },
     manifest: {
       short_name: 'Decipad',

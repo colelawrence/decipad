@@ -83,11 +83,15 @@ test('import image via link @imports @images', async ({ testUser }) => {
 test('import CSVs via link @imports @csv', async ({ testUser }) => {
   test.slow();
   const { page, notebook } = testUser;
+
   await notebook.focusOnBody();
+  await notebook.closeSidebar();
+
   await test.step('importing csv file through csv panel with file', async () => {
     await notebook.addCSV({
       method: 'upload',
       file: './__fixtures__/csv/accounts.csv',
+      varName: 'Variable',
     });
     await expect(async () => {
       await expect(
@@ -96,16 +100,10 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
     }, 'CSV from file upload took too much time to load').toPass({
       timeout: 1000,
     });
-    await expect(async () => {
-      await page
-        .getByTestId('integration-block')
-        .filter({ hasText: /accounts_c/ })
-        .getByTestId('segment-button-trigger')
-        .click();
-      await expect(
-        page.getByText('7109 rows, previewing rows 1 to 10')
-      ).toBeVisible();
-    }, 'CSV table not added to notebook after csv upload').toPass();
+
+    await expect(
+      page.getByText('7109 rows, previewing rows 1 to 10')
+    ).toBeVisible();
   });
 
   await test.step('delete csvs', async () => {
@@ -173,24 +171,18 @@ test('check calculations from CSVs imported with link work across tabs @imports 
 }) => {
   test.slow();
   const { page, notebook } = testUser;
-  notebook.focusOnBody();
+
+  await notebook.focusOnBody();
+  await notebook.closeSidebar();
+
   await test.step('importing csv link through csv panel with link', async () => {
     await notebook.addCSV({
       method: 'link',
       link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv',
+      firstRowHeader: false,
+      varName: 'Variable',
     });
-    await expect(async () => {
-      await expect(
-        page.getByTestId('live-code').getByTestId('loading-animation').first()
-      ).toBeHidden();
-    }).toPass({
-      timeout: 1000,
-    });
-    await page
-      .getByTestId('integration-block')
-      .filter({ hasText: /Variable/ })
-      .getByTestId('segment-button-trigger')
-      .click();
+
     await expect(
       page.getByText('20 rows, previewing rows 1 to 10')
     ).toBeVisible();
@@ -209,22 +201,13 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await notebook.selectTab('New Tab');
     await notebook.moveToTab(1, 'Another Tab');
     await notebook.selectTab('nother Tab');
-    await expect(async () => {
-      await expect(
-        page.getByTestId('live-code').getByTestId('loading-animation').first()
-      ).toBeHidden();
-    }).toPass({
-      timeout: 1000,
-    });
-    await page
-      .getByTestId('integration-block')
-      .filter({ hasText: /Variable/ })
-      .getByTestId('segment-button-trigger')
-      .click();
+
     await expect(
       page.getByText('20 rows, previewing rows 1 to 10')
     ).toBeVisible();
+
     await notebook.selectTab('New Tab');
+
     await expect(
       page.getByTestId('integration-block').filter({ hasText: /Variable/ })
     ).toBeHidden();

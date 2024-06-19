@@ -24,6 +24,7 @@ import { DefaultFunctionResult } from '../DefaultFunctionResult/DefaultFunctionR
 import { ExpandedFunctionResult } from '../ExpandedFunctionResult/ExpandedFunctionResult';
 import { BlockCodeError } from '../BlockCodeError/BlockCodeError';
 import TextResult from '../TextResult/TextResult';
+import { memo, useMemo } from 'react';
 
 // Simple result components
 
@@ -151,7 +152,7 @@ function getResultComponent<T extends SerializedTypeKind>(
 
 // Component
 
-export function CodeResult<T extends SerializedTypeKind>(
+function UnmemoedCodeResult<T extends SerializedTypeKind>(
   props: CodeResultProps<T>
 ): ReturnType<React.FC> {
   const {
@@ -163,15 +164,19 @@ export function CodeResult<T extends SerializedTypeKind>(
     isLiveResult,
     expanded,
   } = props;
-  const ResultComponent = getResultComponent({
-    value,
-    variant,
-    type,
-    element,
-    tooltip,
-    isLiveResult,
-    expanded,
-  });
+  const ResultComponent = useMemo(
+    () =>
+      getResultComponent({
+        value,
+        variant,
+        type,
+        element,
+        tooltip,
+        isLiveResult,
+        expanded,
+      }),
+    [element, expanded, isLiveResult, tooltip, type, value, variant]
+  );
   // Does not present result when result is not present, except for type errors.
   if (
     !ResultComponent ||
@@ -182,3 +187,5 @@ export function CodeResult<T extends SerializedTypeKind>(
 
   return <ResultComponent {...props} />;
 }
+
+export const CodeResult = memo(UnmemoedCodeResult);

@@ -16,7 +16,7 @@ export const CommandPieLight = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M27.368 23.115a8.001 8.001 0 0 1-9.672 4.546 8 8 0 0 1-5.56-9.128 8.003 8.003 0 0 1 4.664-5.869M28 20.002A8.004 8.004 0 0 0 20 12v8.002h8"
+        d="M27.368 23.115a8 8 0 0 1-9.672 4.546 8 8 0 0 1-5.56-9.128 8 8 0 0 1 4.664-5.869M28 20.002A8.004 8.004 0 0 0 20 12v8.002z"
       />
       <path
         fill="#fff"
@@ -24,7 +24,7 @@ export const CommandPieLight = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M28 20a7.999 7.999 0 0 0-8-8v8z"
+        d="M28 20a8 8 0 0 0-8-8v8z"
       />
     </svg>
   );

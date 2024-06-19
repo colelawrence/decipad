@@ -16,7 +16,7 @@ export const Key = (props: SVGProps<SVGSVGElement>) => {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M10.069 8.862a2.931 2.931 0 1 0-2.865-2.307L3 10.759v2.242H5.24l.517-.518v-1.207h1.207l.862-.862V9.207h1.207l.412-.411c.2.044.41.066.623.066"
+        d="M10.069 8.862a2.931 2.931 0 1 0-2.865-2.307L3 10.759v2.242H5.24l.517-.518v-1.207h1.207l.862-.862V9.207h1.207l.412-.411q.302.066.623.066"
       />
       <path
         stroke="currentColor"

@@ -15,7 +15,7 @@ export const PieChart = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M13.526 10.336a6.002 6.002 0 0 1-7.254 3.41 6 6 0 0 1-2.969-9.482A6 6 0 0 1 5.6 2.498M14 8.001A6.003 6.003 0 0 0 8 2v6.001h6"
+        d="M13.526 10.336a6 6 0 0 1-7.254 3.41 6 6 0 0 1-2.969-9.482A6 6 0 0 1 5.6 2.498M14 8.001A6.003 6.003 0 0 0 8 2v6.001z"
       />
       <path
         fill="currentColor"
@@ -24,7 +24,7 @@ export const PieChart = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.2}
-        d="M14 8.001A6.003 6.003 0 0 0 8 2v6.001h6"
+        d="M14 8.001A6.003 6.003 0 0 0 8 2v6.001z"
       />
     </svg>
   );

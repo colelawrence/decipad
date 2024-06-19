@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SimpleTableCellType } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { type Result } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
@@ -35,17 +34,12 @@ type IntegrationBlockProps = {
   readonly error?: string;
   readonly result?: Result.Result;
   readonly integrationChildren?: ReactNode;
-  readonly firstTableRowControls?: ReactNode;
-  readonly onChangeColumnType: (
-    columnIndex: number,
-    colType?: SimpleTableCellType
-  ) => void;
 } & LiveCodePartialProps &
   SegmentButtonsProps;
 
 type LiveCodePartialProps = Pick<
   ComponentProps<typeof LiveCode>,
-  'type' | 'text' | 'meta'
+  'text' | 'meta'
 >;
 
 type SegmentButtonsProps = Pick<
@@ -56,15 +50,12 @@ type SegmentButtonsProps = Pick<
 export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   children,
   meta,
-  type,
   error,
   text,
   buttons,
   actionButtons = [],
   displayResults,
   result,
-  firstTableRowControls,
-  onChangeColumnType,
 }) => {
   const readOnly = useIsEditorReadOnly();
 
@@ -78,7 +69,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
         <LiveCode
           meta={meta}
           error={typeof error === 'string' ? new Error(error) : undefined}
-          type={type}
+          type={result?.type.kind}
           text={text}
         >
           {children}
@@ -118,13 +109,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
 
       <div contentEditable={false}>
         {displayResults && result && (
-          <CodeResult
-            value={result.value}
-            type={result.type}
-            onChangeColumnType={onChangeColumnType}
-            isLiveResult
-            firstTableRowControls={firstTableRowControls}
-          />
+          <CodeResult value={result.value} type={result.type} isLiveResult />
         )}
       </div>
     </div>

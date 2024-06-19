@@ -23,7 +23,7 @@ export const CommandConnectRangesLight = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={0.9}
-        d="M23.905 16.103H22L25.095 12v2.897H27L23.905 19v-2.897"
+        d="M23.905 16.103H22L25.095 12v2.897H27L23.905 19z"
       />
       <path
         fill="#fff"

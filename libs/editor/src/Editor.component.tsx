@@ -3,7 +3,6 @@ import {
   BlockLengthSynchronizationProvider,
   TeleportEditor,
 } from '@decipad/editor-components';
-import { Integrations } from '@decipad/editor-integrations';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   CategoriesContextProvider,
@@ -174,7 +173,6 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
                         workspaceId={workspaceId || ''}
                         notebookId={notebookId}
                       />
-                      <Integrations workspaceId={workspaceId} />
                     </Plate>
                   </TeleportEditor>
                 </BlockLengthSynchronizationProvider>

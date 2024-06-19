@@ -19,12 +19,12 @@ export function importFromNotion(
   // Iterate through first row of json to get column names
   for (const column of cleanResponse[0]) {
     data[column.column_name] = [];
+    cohersingTypes.push(column.cohersion);
   }
 
   for (const row of cleanResponse) {
     for (const column of row) {
       data[column.column_name].push(column.value);
-      cohersingTypes.push(column.cohersion);
     }
   }
 

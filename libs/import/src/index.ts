@@ -4,6 +4,7 @@ export * from './types';
 export * from './isImportUrl';
 export * from './import';
 export * from './export';
+export * from './filterTableResult';
 export * from './parseSourceUrl';
 export * from './importFromUnknown';
 export * from './importFromUnknownJson';

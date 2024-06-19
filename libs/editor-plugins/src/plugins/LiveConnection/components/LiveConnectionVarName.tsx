@@ -1,18 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import {
   insertDataViewBelow,
   insertPlotBelow,
 } from '@decipad/editor-components';
 
-import {
-  useComputer,
-  useParentNodeEntry,
-  usePathMutatorCallback,
-} from '@decipad/editor-hooks';
-import type {
-  LiveConnectionElement,
-  MyEditor,
-  PlateComponent,
-} from '@decipad/editor-types';
+import { useComputer, useParentNodeEntry } from '@decipad/editor-hooks';
+import type { MyEditor, PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -26,10 +19,7 @@ import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
 import { useToast } from '@decipad/toast';
 import type { MarkType } from '@decipad/ui';
-import {
-  ImportTableFirstRowControls,
-  IntegrationBlock as UIIntegrationBlock,
-} from '@decipad/ui';
+import { IntegrationBlock as UIIntegrationBlock } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   findNodePath,
@@ -41,7 +31,6 @@ import { Hide, Show, TableSmall } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
 import type { ComponentProps } from 'react';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
-import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -84,16 +73,6 @@ export const RealLiveConnectionVarName: PlateComponent = ({
   if (parentElem) {
     assertElementType(parentElem, ELEMENT_LIVE_CONNECTION);
   }
-  const setIsFirstRowHeader = usePathMutatorCallback<
-    LiveConnectionElement,
-    'isFirstRowHeaderRow'
-  >(editor, parentEntry?.[1], 'isFirstRowHeaderRow', 'LiveConnectionVarName');
-
-  const isFirstRowHeaderRow = parentElem?.isFirstRowHeaderRow;
-
-  const toggleFirstRowIsHeader = useCallback(() => {
-    setIsFirstRowHeader(!isFirstRowHeaderRow);
-  }, [isFirstRowHeaderRow, setIsFirstRowHeader]);
 
   const [showData, setShowData] = useState(false);
 
@@ -174,11 +153,6 @@ export const RealLiveConnectionVarName: PlateComponent = ({
     error,
   } = useLiveConnectionResult();
 
-  const { onChangeColumnType } = useCoreLiveConnectionActions({
-    path: parentPath,
-    element: parentElem,
-  });
-
   const meta = [];
 
   if (returnRange) {
@@ -225,7 +199,6 @@ export const RealLiveConnectionVarName: PlateComponent = ({
         error={error?.message}
         children={children}
         text={prettySourceName}
-        type={loading ? 'pending' : 'table'}
         actionButtons={actionButtons}
         buttons={[
           {
@@ -240,13 +213,6 @@ export const RealLiveConnectionVarName: PlateComponent = ({
         meta={meta}
         integrationChildren={undefined}
         displayResults={showData}
-        firstTableRowControls={
-          <ImportTableFirstRowControls
-            isFirstRow={!isFirstRowHeaderRow}
-            toggleFirstRowIsHeader={toggleFirstRowIsHeader}
-          />
-        }
-        onChangeColumnType={onChangeColumnType}
       />
     </div>
   );

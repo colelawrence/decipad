@@ -17,7 +17,7 @@ export const Ruler = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.3}
-        d="m13.75 5.25-3-3-8.5 8.5 3 3 8.5-8.5Z"
+        d="m13.75 5.25-3-3-8.5 8.5 3 3z"
       />
       <path
         stroke="currentColor"

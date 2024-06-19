@@ -1,277 +1,121 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
-  useCodeConnectionStore,
-  useConnectionStore,
-} from '@decipad/react-contexts';
-import {
-  removeFocusFromAllBecauseSlate,
-  useEnterListener,
-} from '@decipad/react-utils';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { Close, Sparkles, Play } from '../../icons';
-import {
-  cssVar,
-  mobileQuery,
-  p15Medium,
-  p16Medium,
-  smallestMobile,
-} from '../../primitives';
-import { closeButtonStyles } from '../../styles/buttons';
-import {
-  Button,
-  TextAndIconButton,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from '../../shared';
+import { Close } from '../../icons';
+import { cssVar, p15Medium, p16Medium } from '../../primitives';
+import { Button, TabsList, TabsRoot, TabsTrigger } from '../../shared';
+import { S } from './styles';
 
 type Stages = 'pick-integration' | 'connect' | 'map';
 
-interface WrapperIntegrationModalDialogProps {
-  readonly children: ReactNode;
+type WithTabs = Readonly<{
+  // Short human readable type of the integration.
+  connectionTabLabel: string;
 
-  readonly title: string;
+  tabStage: Stages;
+  onTabClick: (_: Stages) => void;
+}>;
 
-  readonly connectionTabLabel?: string;
+type IntegrationModalProps = Readonly<{
+  children: ReactNode;
 
-  readonly showTabs: boolean;
-  readonly tabStage?: Stages;
-  readonly onTabClick?: (s: Stages) => void;
+  // To be displayed at the top of the modal.
+  title: string;
 
-  readonly onBack: () => void;
-  readonly onReset?: () => void;
-  readonly onContinue: () => void;
-  readonly onRun: () => void;
+  // Hide tabs if this is undefined
+  tabs?: WithTabs;
 
-  readonly setOpen: (open: boolean) => void;
+  // Control buttons.
+  onBack: () => void;
+  onContinue: () => void;
 
-  readonly isEditing?: boolean;
+  // Close the panel.
+  onClose: () => void;
 
-  // REFACTOR: Remove this.
-  readonly isCode: boolean;
+  // Display above the run and back button to show some extra information.
+  infoPanel: ReactNode;
+}>;
 
-  readonly hideRunButton?: boolean;
+const IntegrationTabs: FC<WithTabs> = ({
+  tabStage,
+  onTabClick,
+  connectionTabLabel,
+}) => (
+  <TabsRoot
+    defaultValue={tabStage}
+    onValueChange={(newValue) => {
+      onTabClick(newValue);
+    }}
+  >
+    <TabsList>
+      <TabsTrigger
+        name="connect"
+        trigger={{
+          label: connectionTabLabel,
+          disabled: false,
+        }}
+      />
+      <TabsTrigger
+        name="map"
+        trigger={{
+          label: 'Preview',
+          disabled: false,
+        }}
+      />
+    </TabsList>
+  </TabsRoot>
+);
 
-  readonly disableRunButton?: boolean;
-
-  /**
-   * Display custom react component to perform some actions
-   */
-  readonly actionMenu: ReactNode;
-
-  /**
-   * Display above the run and back button to show some extra information.
-   */
-  readonly infoPanel: ReactNode;
-}
-
-export const WrapperIntegrationModalDialog: FC<
-  WrapperIntegrationModalDialogProps
-  // eslint-disable-next-line complexity
-> = ({
+export const WrapperIntegrationModalDialog: FC<IntegrationModalProps> = ({
   title,
-  onContinue: onConnect,
-  onBack: onAbort,
-  onReset = noop,
-  showTabs = false,
-  tabStage = 'pick-source' as Stages,
-  onTabClick = noop,
-  setOpen = noop,
-  onRun,
-  isEditing = false,
+  onContinue,
+  onBack,
+  onClose,
   children,
-  isCode,
-  connectionTabLabel = 'Code',
 
-  hideRunButton = false,
-  disableRunButton = false,
-
-  actionMenu,
+  tabs,
   infoPanel,
-}) => {
-  const { resultPreview, stage, connectionType } = useConnectionStore();
-  const codeStore = useCodeConnectionStore();
-  const hasDataPreview = !!resultPreview;
+}) => (
+  <S.IntegrationWrapper data-testId="integration-wrapper">
+    <div css={titleWrapperStyles}>
+      <div css={titleStyles}>{title}</div>
 
-  const showAiButton =
-    stage === 'connect' &&
-    connectionType === 'codeconnection' &&
-    !codeStore.showAi;
-
-  const insertIntoNotebook = () => {
-    onConnect();
-    removeFocusFromAllBecauseSlate();
-  };
-
-  useEnterListener(() => {
-    switch (tabStage) {
-      case 'connect':
-        onRun();
-        return;
-      case 'map':
-        insertIntoNotebook();
-    }
-  });
-
-  const tabs = (
-    <TabsRoot
-      defaultValue={tabStage}
-      onValueChange={(newValue) => {
-        onTabClick(newValue as Stages);
-      }}
-    >
-      <TabsList>
-        <TabsTrigger
-          name="connect"
-          trigger={{
-            label: connectionTabLabel,
-            disabled: false,
-          }}
-        />
-        <TabsTrigger
-          name="map"
-          trigger={{
-            label: 'Preview',
-            disabled: false,
-          }}
-        />
-      </TabsList>
-    </TabsRoot>
-  );
-
-  return (
-    <div css={intWrapperStyles}>
-      <div css={titleWrapperStyles}>
-        <div css={titleStyles}>{title}</div>
-        <div css={iconStyles}>
-          <div
-            role="button"
-            css={closeButtonStyles}
-            onClick={() => setOpen(false)}
-          >
-            <Close />
-          </div>
+      <S.CloseIconWrapper>
+        <div role="button" onClick={onClose}>
+          <Close />
         </div>
-      </div>
-      <div css={tabsBarStyles}>
-        <div>{showTabs && tabs}</div>
-        <div css={rightButtonsContainerStyles}>
-          {tabStage === 'connect' && (
-            <>
-              {showAiButton && (
-                <TextAndIconButton
-                  text="AI"
-                  size="normal"
-                  iconPosition="left"
-                  color="transparent-green"
-                  onClick={() => {
-                    codeStore.toggleShowAi();
-                  }}
-                >
-                  <Sparkles />
-                </TextAndIconButton>
-              )}
-            </>
-          )}
-          {actionMenu}
-        </div>
-      </div>
-      <div css={allChildrenStyles(tabStage)}>{children}</div>
-      <section>{infoPanel}</section>
-      {showTabs && (
-        <div css={bottomBarStyles}>
-          {isEditing ? (
-            <div css={connectStyles}>
-              <Button
-                type={'primary'}
-                disabled={!hasDataPreview}
-                onClick={insertIntoNotebook}
-              >
-                Save
-              </Button>
-            </div>
-          ) : (
-            <>
-              <div css={[connectStyles, buttonWrapperStyles]}>
-                <Button
-                  type={'primary'}
-                  disabled={!hasDataPreview}
-                  onClick={insertIntoNotebook}
-                  testId={'integration-modal-continue'}
-                >
-                  {tabStage === 'map' ? 'Insert' : 'Continue'}
-                </Button>
-              </div>
-              <div css={buttonWrapperStyles}>
-                <Button
-                  type="tertiaryAlt"
-                  onClick={() => {
-                    const AIPanelOpen = !showAiButton;
-                    if (tabStage === 'map') {
-                      onAbort();
-                    } else if (tabStage === 'connect') {
-                      if (AIPanelOpen && isCode) {
-                        codeStore.toggleShowAi();
-                      } else if (isCode) {
-                        onReset();
-                      } else {
-                        onAbort();
-                      }
-                    }
-                  }}
-                >
-                  {tabStage === 'map' ||
-                  (tabStage === 'connect' && !showAiButton)
-                    ? 'Back'
-                    : 'Reset'}
-                </Button>
-              </div>
-            </>
-          )}
-          {!hideRunButton && (
-            <TextAndIconButton
-              text="Run"
-              size="normal"
-              iconPosition="left"
-              color="brand"
-              onClick={onRun}
-              disabled={disableRunButton}
-            >
-              <Play />
-            </TextAndIconButton>
-          )}
-        </div>
-      )}
+      </S.CloseIconWrapper>
     </div>
-  );
-};
+    {tabs != null && (
+      <div css={tabsBarStyles}>
+        <IntegrationTabs {...tabs} />
+      </div>
+    )}
+    <div css={allChildrenStyles}>{children}</div>
+    <section>{infoPanel}</section>
+    <div css={bottomBarStyles}>
+      <div css={[connectStyles, buttonWrapperStyles]}>
+        <Button
+          type={'primary'}
+          disabled={false /* TODO */}
+          onClick={onContinue}
+          testId="integration-modal-continue"
+        >
+          Continue
+        </Button>
+      </div>
+      <div css={buttonWrapperStyles}>
+        <Button type="tertiaryAlt" onClick={onBack}>
+          Back
+        </Button>
+      </div>
+    </div>
+  </S.IntegrationWrapper>
+);
 
 const buttonWrapperStyles = css({
   button: {
     height: '32px',
-  },
-});
-
-const intWrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '740px',
-  height: '662px',
-  maxHeight: 'calc(100vh - 40px)',
-  padding: '32px',
-  gap: '20px',
-
-  border: `1px solid ${cssVar('backgroundDefault')}`,
-  borderRadius: '24px',
-
-  backgroundColor: cssVar('backgroundMain'),
-  [mobileQuery]: { width: smallestMobile.landscape.width },
-
-  section: {
-    width: '100%',
   },
 });
 
@@ -296,30 +140,12 @@ const titleStyles = css([
   },
 ]);
 
-const iconStyles = css({
-  marginLeft: 'auto',
-
-  height: '30px',
-  width: '100%',
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'end',
-
-  div: {
-    width: '16px',
-    height: '16px',
-  },
-});
-
 const childrenStyles = css({
   width: '100%',
   flexGrow: 1,
   display: 'flex',
   flexDirection: 'column',
 });
-
-const firstChildrenStyle = css({});
 
 const mapChildrenStyles = css({
   overflow: 'auto',
@@ -353,15 +179,4 @@ const tabsBarStyles = css({
   alignItems: 'center',
 });
 
-const rightButtonsContainerStyles = css({
-  display: 'flex',
-  gap: 10,
-  alignItems: 'center',
-});
-
-const allChildrenStyles = (tabStage: string) =>
-  css(
-    childrenStyles,
-    tabStage === 'connect' && firstChildrenStyle,
-    tabStage === 'map' && mapChildrenStyles
-  );
+const allChildrenStyles = css(childrenStyles, mapChildrenStyles);

@@ -22,7 +22,7 @@ export const World = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M15.25 12c0 4.5-2.007 7.25-3.25 7.25-1.243 0-3.25-2.75-3.25-7.25S10.757 4.75 12 4.75c1.243 0 3.25 2.75 3.25 7.25M5 12h14"
+        d="M15.25 12c0 4.5-2.007 7.25-3.25 7.25S8.75 16.5 8.75 12 10.757 4.75 12 4.75 15.25 7.5 15.25 12M5 12h14"
       />
     </svg>
   );

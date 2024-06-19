@@ -9,12 +9,14 @@ interface UpgradePlanWarningProps {
   readonly workspaceId: string;
   readonly maxQueryExecution?: boolean;
   readonly showQueryQuotaLimit?: boolean;
+  readonly noun?: string;
 }
 export const UpgradePlanWarning = ({
   quotaLimit,
   workspaceId,
   maxQueryExecution = false,
   showQueryQuotaLimit = false,
+  noun = 'credits',
 }: UpgradePlanWarningProps): ReturnType<React.FC> => {
   const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ export const UpgradePlanWarning = ({
         {maxQueryExecution && (
           <>
             <p css={p14Medium}>
-              You have used all of your {quotaLimit} credits.
+              You have used all of your {quotaLimit} {noun}.
             </p>
             <p css={p13Regular}>Upgrade workspace to bypass this limitation.</p>
           </>
@@ -32,7 +34,7 @@ export const UpgradePlanWarning = ({
         {showQueryQuotaLimit && (
           <>
             <p css={p14Medium}>
-              You are about to reach the limit of {quotaLimit} credits.{<br />}
+              You are about to reach the limit of {quotaLimit} {noun}.{<br />}
             </p>
             <p css={p13Regular}>Upgrade workspace to bypass this limitation.</p>
           </>

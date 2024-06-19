@@ -29,7 +29,7 @@ export const Photo = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M10.915 12.823a625.695 625.695 0 0 0 2.576-3.31l.01-.013a2 2 0 0 1 3.085-.06L19 12.25"
+        d="M10.915 12.823a626 626 0 0 0 2.576-3.31l.01-.013a2 2 0 0 1 3.085-.06L19 12.25"
       />
     </svg>
   );

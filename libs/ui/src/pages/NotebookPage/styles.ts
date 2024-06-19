@@ -14,6 +14,7 @@ const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
 export const SIDEBAR_WIDTH = '320px';
 const ASSISTANT_WIDTH = '640px';
+const INTEGRATIONS_WIDTH = '600px';
 const HEADER_HEIGHT = '64px';
 
 /**
@@ -91,6 +92,8 @@ const ComponentWidths: Record<
   ai: { default: ASSISTANT_WIDTH },
   closed: { default: '0px' },
   annotations: { default: SIDEBAR_WIDTH, tablet: '0px' },
+  integrations: { default: INTEGRATIONS_WIDTH },
+  'edit-integration': { default: INTEGRATIONS_WIDTH },
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({

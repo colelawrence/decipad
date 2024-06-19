@@ -3,7 +3,7 @@
 /* eslint-disable jest/expect-expect */
 
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import type { Attachment, Pad, Workspace } from '@decipad/backendtypes';
+import { Attachment, Pad, Workspace } from '@decipad/graphqlserver-types';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
@@ -170,9 +170,8 @@ test('attach files', (ctx) => {
               uploadedBy {
                 id
               }
-              pad {
-                id
-              }
+              resourceType
+              resourceId
             }
           }
         `,
@@ -187,7 +186,8 @@ test('attach files', (ctx) => {
     expect(attachment!.url).toBeDefined();
     expect(attachment!.fileSize).toBe(233);
     expect(attachment!.uploadedBy).toMatchObject({ id: 'test user id 1' });
-    expect(attachment!.pad).toMatchObject({ id: pad.id });
+    expect(attachment!.resourceType === 'PAD').toBeTruthy();
+    expect(attachment!.resourceId).toBe(pad.id);
   });
 
   it('other user cannot access attachment contents', async () => {
@@ -240,9 +240,8 @@ test('attach files', (ctx) => {
                   uploadedBy {
                     id
                   }
-                  pad {
-                    id
-                  }
+                  resourceType
+                  resourceId
                 }
               }
             }
@@ -259,9 +258,8 @@ test('attach files', (ctx) => {
         uploadedBy: {
           id: 'test user id 1',
         },
-        pad: {
-          id: pad.id,
-        },
+        resourceType: 'PAD',
+        resourceId: pad.id,
       });
     });
   });

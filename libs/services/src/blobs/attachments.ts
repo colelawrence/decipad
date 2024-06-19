@@ -39,15 +39,39 @@ const {
   },
 } = getAppConfig();
 
+const genericAttachmentFilePath = (
+  fileName: string,
+  attachmentId: string
+): string => `${fileName}/${attachmentId}`;
+
 export const attachmentFilePath = (
   padId: string,
   fileName: string,
   attachmentId: string
-): string => `pads/${padId}/${fileName}/${attachmentId}`;
+): string =>
+  `pads/${padId}/${genericAttachmentFilePath(fileName, attachmentId)}`;
+
+export const attachmentFilePathWorkspace = (
+  workspaceId: string,
+  fileName: string,
+  attachmentId: string
+): string =>
+  `workspaces/${workspaceId}/${genericAttachmentFilePath(
+    fileName,
+    attachmentId
+  )}`;
 
 export const attachmentUrl = (padId: string, attachmentId: string): string => {
   const appConfig = getAppConfig();
   return `${appConfig.urlBase}${appConfig.apiPathBase}/pads/${padId}/attachments/${attachmentId}`;
+};
+
+export const attachmentUrlWorkspace = (
+  workspaceId: string,
+  attachmentId: string
+): string => {
+  const appConfig = getAppConfig();
+  return `${appConfig.urlBase}${appConfig.apiPathBase}/workspaces/${workspaceId}/attachments/${attachmentId}`;
 };
 
 export const getAttachmentContent = async (
@@ -69,12 +93,10 @@ export const getAttachmentContent = async (
   return content;
 };
 
-export async function getCreateAttachmentForm(
-  padId: string,
-  fileName: string,
+async function attachS3(
+  key: string,
   fileType: string
 ): Promise<CreateAttachmentFormResult> {
-  const key = attachmentFilePath(padId, fileName, nanoid());
   return createPresignedPost(s3, {
     Key: key,
     Bucket,
@@ -90,6 +112,26 @@ export async function getCreateAttachmentForm(
     fileName: key,
     fileType,
   }));
+}
+
+export async function getCreateAttachmentForm(
+  padId: string,
+  fileName: string,
+  fileType: string
+): Promise<CreateAttachmentFormResult> {
+  const key = attachmentFilePath(padId, fileName, nanoid());
+
+  return attachS3(key, fileType);
+}
+
+export async function getCreateAttachmentFormWorkspace(
+  workspaceId: string,
+  fileName: string,
+  fileType: string
+): Promise<CreateAttachmentFormResult> {
+  const key = attachmentFilePathWorkspace(workspaceId, fileName, nanoid());
+
+  return attachS3(key, fileType);
 }
 
 export const getSize = async (fileName: string): Promise<number> => {

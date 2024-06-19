@@ -16,6 +16,7 @@ import {
 type ResourceUsageActions = {
   updateUsage: (usage: Partial<SingleResourceUsage>) => void;
   incrementUsage: () => void;
+  incrementUsageBy: (_: number) => void;
   incrementUsageWithBackend: (workspaceId: string) => void;
   increaseQuotaLimit: (quotaLimit: number) => void;
 };
@@ -28,11 +29,12 @@ export type SingleResourceUsage = {
   isNearLimit: boolean;
 };
 
-type TrackedResources = 'ai' | 'queries';
+type TrackedResources = 'ai' | 'queries' | 'storage';
 
 const GraphqlTypeMap: Record<TrackedResources, ResourceTypes> = {
   ai: 'openai',
   queries: 'queries',
+  storage: 'storage',
 };
 
 type ResourceUsages = Record<TrackedResources, SingleResourceUsage>;
@@ -53,6 +55,7 @@ const defaultContextValue: ResourceUsagesWithActions = {
 
     updateUsage: () => {},
     incrementUsage: () => {},
+    incrementUsageBy: () => {},
     incrementUsageWithBackend: () => {},
     increaseQuotaLimit: () => {},
   },
@@ -65,6 +68,20 @@ const defaultContextValue: ResourceUsagesWithActions = {
 
     updateUsage: () => {},
     incrementUsage: () => {},
+    incrementUsageBy: () => {},
+    incrementUsageWithBackend: () => {},
+    increaseQuotaLimit: () => {},
+  },
+
+  storage: {
+    usage: 0,
+    quotaLimit: 0,
+    hasReachedLimit: false,
+    isNearLimit: false,
+
+    updateUsage: () => {},
+    incrementUsage: () => {},
+    incrementUsageBy: () => {},
     incrementUsageWithBackend: () => {},
     increaseQuotaLimit: () => {},
   },
@@ -131,6 +148,18 @@ export const ResourceUsageProvider: FC<{
     []
   );
 
+  const incrementUsageBy = useCallback<
+    (_: TrackedResources) => ResourceUsageActions['incrementUsageBy']
+  >(
+    (resource) => (amount) =>
+      setResourceUsage((currentUsage) =>
+        getMergedUsage(resource, currentUsage, {
+          usage: currentUsage[resource].usage + amount,
+        })
+      ),
+    []
+  );
+
   const increaseUsageWithBackend = useCallback<
     (_: TrackedResources) => ResourceUsageActions['incrementUsageWithBackend']
   >(
@@ -166,6 +195,7 @@ export const ResourceUsageProvider: FC<{
 
           updateUsage: updateUsage(resource),
           incrementUsage: increaseUsage(resource),
+          incrementUsageBy: incrementUsageBy(resource),
           incrementUsageWithBackend: increaseUsageWithBackend(resource),
           increaseQuotaLimit: increaseQuotaLimit(resource),
         };
@@ -176,6 +206,7 @@ export const ResourceUsageProvider: FC<{
       increaseQuotaLimit,
       increaseUsage,
       increaseUsageWithBackend,
+      incrementUsageBy,
       resourceUsage,
       updateUsage,
     ]

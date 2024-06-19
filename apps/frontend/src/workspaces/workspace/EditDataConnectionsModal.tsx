@@ -1,17 +1,25 @@
+import { useWorkspaceDatasets } from '@decipad/editor-integrations';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { workspaces } from '@decipad/routing';
 import {
   DatabaseConnectionScreen,
+  Datasets,
   Services,
   EditDataConnectionsModal as UIEditDataConnectionsModal,
   WorkspaceSecrets,
 } from '@decipad/ui';
-import type { ComponentProps, FC } from 'react';
+import { Suspense, type ComponentProps, type FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 type EditDataConnectionsModalProps = ComponentProps<
   typeof UIEditDataConnectionsModal
 >;
+
+const SuspendedDatasets: FC<{ workspaceId: string }> = ({ workspaceId }) => {
+  const datasets = useWorkspaceDatasets(workspaceId);
+
+  return <Datasets workspaceId={workspaceId} datasets={datasets} />;
+};
 
 const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
   const currentWorkspaceRoute = workspaces({}).workspace({
@@ -46,10 +54,21 @@ const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
           }
         />
         {isFlagEnabled('NOTION_CONNECTIONS') && (
-          <Route
-            path={currentWorkspaceRoute.connections({}).integrations.template}
-            element={<Services workspaceId={props.currentWorkspace.id} />}
-          />
+          <>
+            <Route
+              path={currentWorkspaceRoute.connections({}).datasets.template}
+              element={
+                <Suspense>
+                  <SuspendedDatasets workspaceId={props.currentWorkspace.id} />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path={currentWorkspaceRoute.connections({}).integrations.template}
+              element={<Services workspaceId={props.currentWorkspace.id} />}
+            />
+          </>
         )}
       </Route>
     </Routes>

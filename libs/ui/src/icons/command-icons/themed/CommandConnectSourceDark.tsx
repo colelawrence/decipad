@@ -26,7 +26,7 @@ export const CommandConnectSourceDark = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={0.9}
-        d="M19.405 22.603H17.5l3.095-4.103v2.897H22.5L19.405 25.5v-2.897"
+        d="M19.405 22.603H17.5l3.095-4.103v2.897H22.5L19.405 25.5z"
       />
       <path
         fill="#1B1A28"

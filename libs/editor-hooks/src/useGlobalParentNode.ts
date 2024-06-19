@@ -81,6 +81,16 @@ export const useGlobalParentNodeEntry = (
   return undefined;
 };
 
+export const useGlobalFindNodeEntry = () => {
+  const controller = useEditorController();
+  if (controller == null) {
+    return undefined;
+  }
+
+  return (selector: (_: TNode) => boolean) =>
+    findGlobalNodeEntry(controller.children, selector);
+};
+
 export const useGlobalFindNode = () => {
   const controller = useEditorController();
   if (controller == null) {

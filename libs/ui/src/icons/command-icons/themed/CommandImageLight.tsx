@@ -31,7 +31,7 @@ export const CommandImageLight = (props: SVGProps<SVGSVGElement>) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.3}
-        d="M18.915 20.823a626.296 626.296 0 0 0 2.576-3.31l.01-.013a2 2 0 0 1 3.085-.06L27 20.25"
+        d="M18.915 20.823a626 626 0 0 0 2.576-3.31l.01-.013a2 2 0 0 1 3.085-.06L27 20.25"
       />
     </svg>
   );

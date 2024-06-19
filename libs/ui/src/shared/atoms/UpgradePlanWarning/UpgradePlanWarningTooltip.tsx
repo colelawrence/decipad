@@ -11,6 +11,7 @@ interface UpgradePlanWarningTooltipProps {
   readonly showQueryQuotaLimit?: boolean;
   readonly featureCustomText?: string;
   readonly showUpgradeProButton?: boolean;
+  readonly noun?: string;
 }
 export const UpgradePlanWarningTooltip = ({
   quotaLimit,
@@ -18,6 +19,7 @@ export const UpgradePlanWarningTooltip = ({
   maxQueryExecution = false,
   showQueryQuotaLimit = false,
   featureCustomText = '',
+  noun = 'credits',
   showUpgradeProButton = true,
 }: UpgradePlanWarningTooltipProps): ReturnType<React.FC> => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export const UpgradePlanWarningTooltip = ({
         <>
           <p css={tooltipTitle}>{featureCustomText}</p>
           <p css={tooltipContent}>
-            You have used all of your {quotaLimit} credits.{<br />}
+            You have used all of your {quotaLimit} {noun}.{<br />}
           </p>
         </>
       )}
@@ -36,7 +38,7 @@ export const UpgradePlanWarningTooltip = ({
         <>
           <p css={tooltipTitle}>{featureCustomText}</p>
           <p css={tooltipContent}>
-            You are about to reach the limit of {quotaLimit} credits.
+            You are about to reach the limit of {quotaLimit} {noun}.
           </p>
         </>
       )}

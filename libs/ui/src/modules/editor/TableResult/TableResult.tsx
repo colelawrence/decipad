@@ -69,12 +69,14 @@ const isTableValue = (
     (column) => Array.isArray(column) || isResultGenerator(column)
   );
 
+// this component is cursed
 export const TableResult: FC<TableResultProps> = ({
   parentType,
   type,
   value: _value,
   onDragStartCell,
   onDragEnd,
+  onHideColumn,
   tooltip = true,
   isLiveResult = false,
   firstTableRowControls,
@@ -112,10 +114,10 @@ export const TableResult: FC<TableResultProps> = ({
       useMemo(
         () => ({
           all,
-          totalRowCount: tableLength ?? 0,
+          totalRowCount: tableLength,
           maxRowsPerPage: MAX_ROWS_PER_PAGE,
         }),
-        [tableLength, all]
+        [all, tableLength]
       )
     );
 
@@ -136,13 +138,15 @@ export const TableResult: FC<TableResultProps> = ({
         ]
       }
     >
-      <div
-        css={[
-          isLiveResult && tableOverflowStyles,
-          isLiveResult && liveTableOverflowStyles,
-        ]}
-        contentEditable={false}
-      />
+      {!isResultPreview && (
+        <div
+          css={[
+            isLiveResult && tableOverflowStyles,
+            isLiveResult && liveTableOverflowStyles,
+          ]}
+          contentEditable={false}
+        />
+      )}
       <Table
         border={isNested ? 'inner' : 'all'}
         isReadOnly={!isLiveResult}
@@ -155,8 +159,13 @@ export const TableResult: FC<TableResultProps> = ({
                   key={index}
                   type={toTableHeaderType(type.columnTypes[index])}
                   isFirst={index === 0}
-                  isLiveResult
+                  isLiveResult={!isResultPreview}
                   isForImportedColumn={isLiveResult}
+                  onHideColumn={
+                    onHideColumn == null
+                      ? undefined
+                      : () => onHideColumn(columnName)
+                  }
                   onChangeColumnType={(columnType) =>
                     onChangeColumnType?.(
                       index,

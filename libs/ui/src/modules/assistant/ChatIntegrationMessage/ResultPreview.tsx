@@ -14,13 +14,16 @@ import { ContentEditableInput } from 'libs/ui/src/shared';
 import { CodeResult } from '../../editor';
 import { TableColumnMenu } from '../../editor/TableColumnMenu/TableColumnMenu';
 import { ErrorMessage } from '../../editor/ErrorMessage/ErrorMessage';
-import { useComputer } from '@decipad/editor-hooks';
 
 interface ResultPreviewProps {
   result?: Result.Result;
   name: string;
   setName: (n: string) => void;
-  setTypeMapping: IntegrationStore['setResultTypeMapping'];
+  setTypeMapping: (index: number, type: SimpleTableCellType) => void;
+  timeOfLastRun: IntegrationStore['timeOfLastRun'];
+
+  columnsToHide: Array<string>;
+  setColumnsToHide: (newColumnsToHide: Array<string>) => void;
 }
 
 const typePickerButtonStyles = {
@@ -44,13 +47,12 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
     },
     [foundError]
   );
-  const computer = useComputer();
   const onChangeColumnType = useCallback(
     (index: number, type: TableCellType | undefined) => {
       if (!type) return;
-      setTypeMapping(computer, index, type as SimpleTableCellType);
+      setTypeMapping(index, type as SimpleTableCellType);
     },
-    [computer, setTypeMapping]
+    [setTypeMapping]
   );
 
   // Changing the type when result is not a table

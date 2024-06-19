@@ -2,6 +2,8 @@ import { nanoid } from 'nanoid';
 import { strictEqual as expectEqual } from 'assert';
 import {
   attachmentUrl,
+  attachmentUrlWorkspace,
+  getCreateAttachmentFormWorkspace as getFormWorkspace,
   getCreateAttachmentForm as getForm,
   getSize,
 } from '@decipad/services/blobs/attachments';
@@ -16,6 +18,7 @@ import type {
   Pad,
   Resolvers,
   User,
+  Workspace,
 } from '@decipad/graphqlserver-types';
 import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import Boom from '@hapi/boom';
@@ -25,6 +28,7 @@ import { getDefined } from '@decipad/utils';
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
 const notebooks = resource('notebook');
+const workspaces = resource('workspace');
 
 export interface ICreateAttachmentFormParams {
   padId: string;
@@ -74,6 +78,52 @@ const resolvers: Resolvers = {
         })),
       };
     },
+
+    async getCreateAttachmentFormWorkspace(
+      _,
+      { workspaceId, fileName: userFileName, fileType },
+      context
+    ) {
+      const { user, resources } = await workspaces.expectAuthorizedForGraphql({
+        context,
+        minimumPermissionType: 'WRITE',
+        recordId: workspaceId,
+      });
+
+      if (!user) {
+        throw new ForbiddenError('Not authenticated');
+      }
+
+      const form = await getFormWorkspace(workspaceId, userFileName, fileType);
+
+      const data = await tables();
+      const newFileAttachment = {
+        id: nanoid(),
+        user_id: user.id,
+        resource_uri: resources[0],
+        user_filename: userFileName,
+        filename: form.fileName,
+        filetype: form.fileType,
+        expires_at: timestamp() + ONE_HOUR_IN_SECONDS,
+      };
+
+      await data.futurefileattachments.create(newFileAttachment);
+
+      return {
+        url: form.url,
+        handle: newFileAttachment.id,
+        fields: Object.entries(form.fields).map(([key, value]) => ({
+          key,
+          value,
+        })),
+      };
+    },
+
+    //
+    // TODO. Both these functions are very similar
+    // so they should be centralized
+    //
+
     async attachFileToPad(_, { handle }, context) {
       const user = requireUser(context);
 
@@ -135,10 +185,75 @@ const resolvers: Resolvers = {
         fileName: newFileAttachment.user_filename,
         fileType: newFileAttachment.filetype,
         userId: newFileAttachment.user_id,
-        padId: parsedResource.id,
         createdAt: newFileAttachment.createdAt,
         fileSize: newFileAttachment.filesize,
         url: newFileAttachment.resource_uri,
+
+        padId: parsedResource.id,
+        resourceId: parsedResource.id,
+        resourceType: 'PAD',
+      };
+    },
+
+    async attachFileToWorkspace(_, { handle }, context) {
+      const user = requireUser(context);
+
+      const data = await tables();
+
+      const attachment = await data.futurefileattachments.get({ id: handle });
+      if (!attachment) {
+        throw new UserInputError('No such attachment was found');
+      }
+
+      if (attachment.user_id !== user.id) {
+        throw new ForbiddenError('File was not uploaded by the same user');
+      }
+
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
+
+      const parsedResource = parseResourceUri(attachment.resource_uri);
+      expectEqual(parsedResource.type, 'workspaces');
+
+      const filesize = await getSize(attachment.filename);
+      const workspaceId = parsedResource.id;
+
+      if (await resourceusage.storage.hasReachedLimit(workspaceId)) {
+        throw Boom.tooManyRequests("You've exceeded your quota limit");
+      }
+
+      const newFileAttachment = {
+        ...attachment,
+        filesize,
+      };
+
+      await data.fileattachments.create(newFileAttachment);
+      await data.futurefileattachments.delete({ id: handle });
+
+      await resourceusage.storage.updateWorkspaceAndUser({
+        workspaceId,
+        userId: context.user?.id,
+        usage: {
+          type: 'files',
+          consumption: newFileAttachment.filesize,
+        },
+      });
+
+      return {
+        id: newFileAttachment.id,
+        fileName: newFileAttachment.user_filename,
+        fileType: newFileAttachment.filetype,
+        userId: newFileAttachment.user_id,
+        createdAt: newFileAttachment.createdAt,
+        fileSize: newFileAttachment.filesize,
+        url: newFileAttachment.resource_uri,
+
+        padId: parsedResource.id,
+        resourceId: parsedResource.id,
+        resourceType: 'WORKSPACE',
       };
     },
 
@@ -176,6 +291,45 @@ const resolvers: Resolvers = {
       });
 
       return true;
+    },
+
+    async removeAttachmentFromWorkspace(_, { attachmentId }, context) {
+      const data = await tables();
+      const attachment = await data.fileattachments.get({ id: attachmentId });
+      if (!attachment) {
+        throw new UserInputError('No such attachment was found');
+      }
+
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
+
+      const workspace = await data.workspaces.get({
+        id: attachment.resource_uri.split('/').at(-1)!,
+      });
+
+      if (workspace == null) {
+        throw new Error('Pad could not be found');
+      }
+
+      attachment.toBeDeleted = timestamp() + ONE_MONTH;
+      await data.fileattachments.put(attachment);
+
+      await resourceusage.storage.updateWorkspaceAndUser({
+        workspaceId: workspace.id,
+        userId: context.user?.id,
+        usage: {
+          type: 'files',
+          consumption: -attachment.filesize,
+        },
+      });
+
+      return {
+        __typename: 'Workspace',
+        ...(workspace as Workspace),
+      };
     },
 
     async undeleteAttachment(_, { attachmentId }, context) {
@@ -242,9 +396,59 @@ const resolvers: Resolvers = {
         createdAt: fileAttachment.createdAt,
         url: fileAttachment.resource_uri,
         padId: pad.id,
+        resourceId: pad.id,
+        resourceType: 'PAD',
         toBeDeleted: fileAttachment.toBeDeleted,
       }))) {
-        if (attachment && attachment.toBeDeleted == null) {
+        if (
+          attachment &&
+          attachment.toBeDeleted == null &&
+          attachment.resourceType === 'PAD'
+        ) {
+          attachments.push(attachment);
+        }
+      }
+
+      return attachments;
+    },
+  },
+
+  Workspace: {
+    async attachments(workspace) {
+      const query = {
+        IndexName: 'byResource',
+        KeyConditionExpression: 'resource_uri = :resource_uri',
+        ExpressionAttributeValues: {
+          ':resource_uri': `/workspaces/${workspace.id}`,
+        },
+      };
+
+      const data = await tables();
+
+      const attachments: Attachment[] = [];
+      for await (const attachment of allPages<
+        FileAttachmentRecord,
+        Attachment & { toBeDeleted?: number }
+      >(data.fileattachments, query, (fileAttachment) => ({
+        id: fileAttachment.id,
+        fileName: fileAttachment.user_filename,
+        fileType: fileAttachment.filetype,
+        fileSize: fileAttachment.filesize,
+        userId: fileAttachment.user_id,
+        createdAt: fileAttachment.createdAt,
+        url: fileAttachment.resource_uri,
+
+        padId: undefined,
+        resourceId: workspace.id,
+        resourceType: 'WORKSPACE',
+
+        toBeDeleted: fileAttachment.toBeDeleted,
+      }))) {
+        if (
+          attachment &&
+          attachment.toBeDeleted == null &&
+          attachment.resourceType === 'WORKSPACE'
+        ) {
           attachments.push(attachment);
         }
       }
@@ -266,14 +470,39 @@ const resolvers: Resolvers = {
     },
 
     url(attachment) {
-      return attachmentUrl(attachment.padId, attachment.id);
+      if (attachment.resourceType === 'PAD') {
+        return attachmentUrl(attachment.resourceId, attachment.id);
+      }
+
+      return attachmentUrlWorkspace(attachment.resourceId, attachment.id);
     },
 
-    async pad(attachment) {
+    async resource(attachment) {
       const data = await tables();
-      return (await data.pads.get({
-        id: attachment.padId,
-      })) as Pad;
+
+      switch (attachment.resourceType) {
+        case 'PAD': {
+          const pad = (await data.pads.get({
+            id: attachment.resourceId,
+          })) as Pad;
+
+          return {
+            __typename: 'Pad',
+            ...pad,
+          };
+        }
+
+        case 'WORKSPACE': {
+          const workspace = (await data.workspaces.get({
+            id: attachment.resourceId,
+          })) as Workspace;
+
+          return {
+            __typename: 'Workspace',
+            ...workspace,
+          };
+        }
+      }
     },
   },
 };
