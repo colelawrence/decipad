@@ -153,6 +153,7 @@ export const getURL = (fileName: string): Promise<string> => {
   const command = new GetObjectCommand({
     Bucket,
     Key: fileName,
+    ResponseCacheControl: 'private, max-age=31536000, immutable',
   });
   return getSignedUrl(
     s3 as Parameters<typeof getSignedUrl>[0],
