@@ -6,12 +6,13 @@ import { Button, InputField, Loading } from '../../../shared';
 import { Check } from '../../../icons';
 import { CollabAccessDropdown } from '../CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../CollabMembersRights/CollabMembersRights';
-import { cssVar, p14Medium, p14Regular } from '../../../primitives';
+import { cssVar, p10Medium, p14Medium, p14Regular } from '../../../primitives';
 import { PermissionType } from '../../../types';
 import { NotebookAccessActionsReturn } from '@decipad/interfaces';
 import { UserAccessMetaFragment } from '@decipad/graphql-client';
 import { workspaces } from '@decipad/routing';
 import { useNavigate } from 'react-router-dom';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 
 /**
  * The styles for the content rendered without the need for the toggle to be activated. This is also the parent of the toggle component.
@@ -66,6 +67,11 @@ const invitationFormStyles = css({
   },
 });
 
+const upgradeButtonStyles = css(p10Medium, {
+  flexGrow: '0',
+  alignSelf: 'baseline',
+});
+
 const CheckMark = () => <Check width="16px" style={{ marginRight: '6px' }} />;
 const LoadingDots = () => (
   <Loading width="24px" style={{ marginRight: '6px' }} />
@@ -113,6 +119,7 @@ export const NotebookCollaborateTab = ({
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [permission, setPermission] = useState<PermissionType>('WRITE');
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
 
   useEffect(() => {
     if (!canInviteEditors && permission === 'WRITE') {
@@ -181,11 +188,21 @@ export const NotebookCollaborateTab = ({
     return (
       <div css={innerPopUpStyles}>
         <div css={titleStyles}>
-          <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
-            {isAdmin
-              ? 'Invite people to collaborate'
-              : 'Invitees of this notebook'}
-          </p>
+          <div css={{ display: 'flex', justifyContent: 'space-between' }}>
+            <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
+              {isAdmin
+                ? 'Invite people to collaborate'
+                : 'Invitees of this notebook'}
+            </p>
+            <Button
+              type="tagBrand"
+              size="tag"
+              onClick={() => setIsUpgradeWorkspaceModalOpen(true)}
+              styles={upgradeButtonStyles}
+            >
+              Upgrade
+            </Button>
+          </div>
           <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
             To invite more users to the notebook you must upgrade plan.
           </p>
@@ -201,6 +218,7 @@ export const NotebookCollaborateTab = ({
           disabled={!isAdmin}
           canInviteReaders={canInviteReaders}
           canInviteEditors={canInviteEditors}
+          hasPaywall={hasPaywall}
         />
       </div>
     );

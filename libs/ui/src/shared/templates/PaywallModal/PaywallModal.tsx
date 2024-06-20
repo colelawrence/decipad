@@ -1,35 +1,13 @@
 import { Modal } from '../../molecules';
-import {
-  ComponentProps,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useContext,
-} from 'react';
+import { ComponentProps, useMemo, useState } from 'react';
 import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { workspaces } from '@decipad/routing';
 import { SubscriptionPlansList } from './SubscriptionPlansList';
-import { SubscriptionPayment } from './SubscriptionPayment';
 import { useClient } from 'urql';
-import {
-  GetStripeCheckoutSessionInfoDocument,
-  GetWorkspaceByIdDocument,
-  GetWorkspaceByIdQuery,
-  GetWorkspaceByIdQueryVariables,
-  GetWorkspacesWithSharedNotebooksDocument,
-  GetWorkspacesWithSharedNotebooksQuery,
-  GetWorkspacesWithSharedNotebooksQueryVariables,
-} from '@decipad/graphql-client';
+import { GetStripeCheckoutSessionInfoDocument } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import { useUserId } from './useUserId';
-import { useToast } from '@decipad/toast';
-import { PaymentAnalyticsProps, getLatestWorkspace } from './helpers';
-import { useResourceUsage } from '@decipad/react-contexts';
-import { getAnalytics, ClientEventsContext } from '@decipad/client-events';
+import { pay } from '@decipad/routing';
 import { useNavigate } from 'react-router-dom';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
@@ -37,6 +15,7 @@ type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   hasFreeWorkspaceSlot: boolean;
   currentPlan?: string;
   onClose: () => void;
+  isCreatingNewWorkspace: boolean;
 };
 
 const DEFAULT_SELECTED_PLAN = 'personal';
@@ -46,17 +25,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   workspaceId,
   hasFreeWorkspaceSlot,
   currentPlan,
+  isCreatingNewWorkspace = false,
 }) => {
-  const clientEvent = useContext(ClientEventsContext);
-
-  const params = useRouteParams(
-    workspaces({}).workspace({ workspaceId }).upgrade
-  );
-  const isCreatingNewWorkspace = !!params.newWorkspace;
-
   const hideFreePlan = !hasFreeWorkspaceSlot && isCreatingNewWorkspace;
-  let modalContent: JSX.Element;
-  let paywallTitle: string;
 
   // this is needed while we still have active subscription on the old Pro plan
   const plans = useStripePlans().filter((plan) => !plan.isDefault);
@@ -69,64 +40,12 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const client = useClient();
 
-  const toast = useToast();
-  const { ai } = useResourceUsage();
-  const navigate = useNavigate();
   const userId = useUserId();
-  const [currentStage, setCurrentStage] = useState('choose-plan');
-  const [clientSecret, setClientSecret] = useState('');
-
-  const isFetching = useRef(false);
-
-  const [paymentStatus, setPaymentStatus] = useState('');
-  const [isPollingData, setIsPollingData] = useState(false);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
-
-  const trackAnalytics = useCallback(
-    ({ planName, planKey }: PaymentAnalyticsProps) => {
-      if (paymentStatus === 'success') {
-        getAnalytics().then((analytics) =>
-          analytics?.track('Purchase', {
-            category: 'Subscription',
-            subCategory: 'Plan',
-            resource: {
-              type: 'workspace',
-              id: workspaceId,
-            },
-            plan: planName,
-          })
-        );
-      } else {
-        getAnalytics().then((analytics) =>
-          analytics?.track('Purchase', {
-            category: 'Subscription',
-            subCategory: 'Plan',
-            resource: {
-              type: 'workspace',
-              id: workspaceId,
-            },
-            plan: planName,
-            error: {
-              code: 'Stripe checkout error',
-              message: `Check error message on Stripe dashboard for plan: ${planKey}`,
-            },
-          })
-        );
-      }
-    },
-    [paymentStatus, workspaceId]
-  );
+  const navigate = useNavigate();
 
   const selectPlanInfo = useMemo(() => {
     return getDefined(plans.find((p) => p?.key === selectedPlan));
   }, [selectedPlan, plans]);
-
-  const updateAiCredits = useCallback(() => {
-    const aiCreditsPlan = selectPlanInfo.credits ?? 0;
-    if ((ai.quotaLimit || 0) < aiCreditsPlan) {
-      ai.increaseQuotaLimit(aiCreditsPlan);
-    }
-  }, [ai, selectPlanInfo.credits]);
 
   const fetchBillingInfo = async (pId: string, resourceId: string) => {
     try {
@@ -137,10 +56,14 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
         })
         .toPromise()
         .then((result) => {
-          setClientSecret(
-            result.data?.getStripeCheckoutSessionInfo?.clientSecret || ''
+          navigate(
+            pay({
+              workspaceId,
+              cs: result.data?.getStripeCheckoutSessionInfo?.clientSecret ?? '',
+              plan: selectPlanInfo.title ?? '',
+              newWorkspace: isCreatingNewWorkspace ? 'newWorkspace' : undefined,
+            }).$
           );
-          setCurrentStage('make-payment');
         });
     } catch (error) {
       console.error('Error fetching billing info:', error);
@@ -154,135 +77,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     return selectedPlan !== currentPlan && selectedPlan !== undefined;
   }, [selectedPlan, currentPlan, isCreatingNewWorkspace]);
 
-  const onExecuteGetWSNoNotebooksQuery = useCallback(() => {
-    if (isFetching.current) {
-      return;
-    }
-
-    isFetching.current = true;
-
-    client
-      .query<
-        GetWorkspacesWithSharedNotebooksQuery,
-        GetWorkspacesWithSharedNotebooksQueryVariables
-      >(
-        GetWorkspacesWithSharedNotebooksDocument,
-        {},
-        { requestPolicy: 'network-only' }
-      )
-      .toPromise()
-      .then(({ data }) => {
-        isFetching.current = false;
-        updateAiCredits();
-        trackAnalytics({
-          planKey: selectPlanInfo.key,
-          planName: selectPlanInfo.title || '',
-        });
-        const wsId = getLatestWorkspace(data?.workspaces ?? []);
-        navigate(workspaces({}).workspace({ workspaceId: wsId }).$);
-      });
-  }, [
-    client,
-    selectPlanInfo.key,
-    selectPlanInfo.title,
-    navigate,
-    trackAnalytics,
-    updateAiCredits,
-  ]);
-
-  const onExecuteGetWSByIdQuery = useCallback(() => {
-    if (isFetching.current) {
-      return;
-    }
-
-    isFetching.current = true;
-
-    client
-      .query<GetWorkspaceByIdQuery, GetWorkspaceByIdQueryVariables>(
-        GetWorkspaceByIdDocument,
-        { workspaceId },
-        { requestPolicy: 'network-only' }
-      )
-      .toPromise()
-      .then(({ data }) => {
-        isFetching.current = false;
-
-        if (data?.getWorkspaceById?.plan !== currentPlan) {
-          toast.success(`Workspace upgraded to ${selectPlanInfo.title} plan`);
-          updateAiCredits();
-          trackAnalytics({
-            planKey: selectPlanInfo.key,
-            planName: selectPlanInfo.title || '',
-          });
-        }
-      });
-  }, [
-    client,
-    currentPlan,
-    workspaceId,
-    toast,
-    selectPlanInfo.key,
-    selectPlanInfo.title,
-    trackAnalytics,
-    updateAiCredits,
-  ]);
-
-  useEffect(() => {
-    if (!isPollingData) {
-      if (intervalId != null) {
-        clearInterval(intervalId);
-      }
-      return;
-    }
-
-    if (!intervalId) {
-      setIntervalId(
-        setInterval(() => {
-          if (isCreatingNewWorkspace) {
-            onExecuteGetWSNoNotebooksQuery();
-          } else {
-            onExecuteGetWSByIdQuery();
-          }
-        }, 2000)
-      );
-    }
-
-    return () => {
-      if (intervalId != null) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [
-    isCreatingNewWorkspace,
-    isPollingData,
-    intervalId,
-    onExecuteGetWSByIdQuery,
-    onExecuteGetWSNoNotebooksQuery,
-  ]);
-
-  const onConfirmPayment = (_paymentStatus: string) => {
-    setPaymentStatus(_paymentStatus);
-    setIsPollingData(true);
-  };
-
-  // to avoid analytics events being triggered multiple times
-  useEffect(() => {
-    if (currentStage === 'make-payment') {
-      clientEvent({
-        segmentEvent: {
-          type: 'action',
-          action: 'Checkout Modal Viewed',
-          props: {
-            analytics_source: 'frontend',
-          },
-        },
-      });
-    }
-  }, [clientEvent, currentStage]);
-
-  switch (currentStage) {
-    case 'choose-plan': {
-      modalContent = (
+  return (
+    <Modal
+      defaultOpen={true}
+      onClose={onClose}
+      title={`Choose a plan ${
+        isCreatingNewWorkspace ? 'for your new workspace' : ''
+      }`}
+    >
+      <Styled.PaywallContainer>
         <SubscriptionPlansList
           plans={filteredPlans}
           isCreatingNewWorkspace={isCreatingNewWorkspace}
@@ -302,41 +105,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           canProceed={canProceed}
           workspaceId={workspaceId}
         />
-      );
-      paywallTitle = `Choose a plan ${
-        isCreatingNewWorkspace ? 'for your new workspace' : ''
-      }`;
-      break;
-    }
-    case 'make-payment': {
-      modalContent = selectPlanInfo ? (
-        <SubscriptionPayment
-          handlePaymentButton={onConfirmPayment}
-          clientSecret={clientSecret}
-        />
-      ) : (
-        <></>
-      );
-      paywallTitle = `Upgrade to ${selectPlanInfo?.title}`;
-      break;
-    }
-    default: {
-      modalContent = <></>;
-      paywallTitle = '';
-    }
-  }
-
-  return (
-    <Modal
-      defaultOpen={true}
-      onClose={onClose}
-      title={paywallTitle}
-      stickyToTopProps={{
-        top: '15%',
-        transform: 'translate(-50%, 0)',
-      }}
-    >
-      <Styled.PaywallContainer>{modalContent}</Styled.PaywallContainer>
+      </Styled.PaywallContainer>
     </Modal>
   );
 };

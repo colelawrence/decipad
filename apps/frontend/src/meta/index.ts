@@ -7,6 +7,5 @@ export { RouteEvents } from './RouteEvents';
 export { initSentry } from './sentry';
 export {
   RequirePaidPlanRoute,
-  RequireUpgradablePlanRoute,
   RequireFreePlanSlotRoute,
 } from './ProtectedRoute';

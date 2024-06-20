@@ -10,7 +10,11 @@ import {
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
 } from '@decipad/graphql-client';
-import { useNotebookMetaData, useResourceUsage } from '@decipad/react-contexts';
+import {
+  useCurrentWorkspaceStore,
+  useNotebookMetaData,
+  useResourceUsage,
+} from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
@@ -29,8 +33,7 @@ import {
 } from '@decipad/ui';
 import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
-import type { FC } from 'react';
-import { useCallback, useMemo } from 'react';
+import { FC, Suspense, useCallback, useMemo, useState } from 'react';
 import {
   Outlet,
   Route,
@@ -45,7 +48,6 @@ import {
   LazyRoute,
   RequireFreePlanSlotRoute,
   RequirePaidPlanRoute,
-  RequireUpgradablePlanRoute,
 } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
@@ -79,6 +81,9 @@ const Workspace: FC = () => {
 
   const { data: session } = useSession();
   const toast = useToast();
+
+  const { setIsUpgradeWorkspaceModalOpen, isUpgradeWorkspaceModalOpen } =
+    useCurrentWorkspaceStore();
 
   const [result] = useGetWorkspacesWithSharedNotebooksQuery();
 
@@ -162,6 +167,7 @@ const Workspace: FC = () => {
     () => allWorkspaces.filter((w) => !w.isPremium).length < 1,
     [allWorkspaces]
   );
+  const [isCreatingNewWorkspace, setIsCreatingNewWorkspace] = useState(false);
 
   useInitializeResourceUsage(currentWorkspace);
 
@@ -226,9 +232,8 @@ const Workspace: FC = () => {
         workspaces={allWorkspaces}
         onCreateWorkspace={() => {
           if (!isFlagEnabled('ALLOW_CREATE_NEW_WORKSPACE')) {
-            navigate(
-              currentWorkspaceRoute.upgrade({ newWorkspace: 'newWorkspace' }).$
-            );
+            setIsCreatingNewWorkspace(true);
+            setIsUpgradeWorkspaceModalOpen(true);
             return;
           }
 
@@ -299,6 +304,17 @@ const Workspace: FC = () => {
                       workspaceId={currentWorkspace.id}
                     />
                   </Frame>
+                  <Suspense>
+                    {isUpgradeWorkspaceModalOpen && (
+                      <PaywallModal
+                        onClose={() => setIsUpgradeWorkspaceModalOpen(false)}
+                        workspaceId={currentWorkspace.id ?? ''}
+                        hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
+                        currentPlan={currentWorkspace.plan ?? undefined}
+                        isCreatingNewWorkspace={isCreatingNewWorkspace}
+                      />
+                    )}
+                  </Suspense>
                 </>
               </Dashboard>
               <Outlet />
@@ -410,23 +426,6 @@ const Workspace: FC = () => {
                   resourceId={currentWorkspace.id}
                 ></AddCreditsModal>
               </LazyRoute>
-            }
-          />
-          <Route
-            path={currentWorkspaceRoute.upgrade.template}
-            element={
-              <RequireUpgradablePlanRoute
-                isPaidPlan={!!currentWorkspace.isPremium}
-              >
-                <LazyRoute>
-                  <PaywallModal
-                    onClose={() => navigate(currentWorkspaceRoute.$)}
-                    workspaceId={currentWorkspace.id}
-                    hasFreeWorkspaceSlot={hasFreeWorkspaceSlot}
-                    currentPlan={currentWorkspace.plan ?? undefined}
-                  />
-                </LazyRoute>
-              </RequireUpgradablePlanRoute>
             }
           />
         </Route>

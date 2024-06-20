@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
-import { workspaces } from '@decipad/routing';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button';
 import { cssVar, p13Medium, p13Regular, p14Medium } from '../../../primitives';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 
 interface UpgradePlanWarningProps {
   readonly quotaLimit: number;
@@ -18,7 +17,7 @@ export const UpgradePlanWarning = ({
   showQueryQuotaLimit = false,
   noun = 'credits',
 }: UpgradePlanWarningProps): ReturnType<React.FC> => {
-  const navigate = useNavigate();
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
 
   return (
     <div css={upgradeProStyles} contentEditable={false}>
@@ -46,14 +45,7 @@ export const UpgradePlanWarning = ({
           size="extraSlim"
           onClick={() => {
             if (workspaceId) {
-              navigate(
-                workspaces({})
-                  .workspace({
-                    workspaceId,
-                  })
-                  .members({}).$,
-                { replace: true }
-              );
+              setIsUpgradeWorkspaceModalOpen(true);
             }
           }}
           sameTab={true} // change this to false if you want to work on payments locally

@@ -3,8 +3,9 @@ import {
   useFinishOnboarding,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
-import type { AnnotationArray } from '@decipad/react-contexts';
 import {
+  AnnotationArray,
+  useCurrentWorkspaceStore,
   ControllerProvider,
   EditorChangeContextProvider,
   useAiCreditsStore,
@@ -18,6 +19,7 @@ import {
   TopbarPlaceholder,
   AddCreditsModal,
   useSetCssVarWidth,
+  PaywallModal,
 } from '@decipad/ui';
 import type { FC } from 'react';
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -70,6 +72,11 @@ export const Notebook: FC = () => {
 
   const { isBuyCreditsModalOpen, setIsBuyCreditsModalOpen } =
     useAiCreditsStore();
+  const {
+    setIsUpgradeWorkspaceModalOpen,
+    isUpgradeWorkspaceModalOpen,
+    workspaceInfo,
+  } = useCurrentWorkspaceStore();
 
   const articleRef = useSetCssVarWidth('editorWidth');
   const [scenarioId] = useScenarioNavigate();
@@ -160,6 +167,15 @@ export const Notebook: FC = () => {
               {isBuyCreditsModalOpen && (
                 <AddCreditsModal
                   closeAction={() => setIsBuyCreditsModalOpen(false)}
+                />
+              )}
+              {isUpgradeWorkspaceModalOpen && (
+                <PaywallModal
+                  onClose={() => setIsUpgradeWorkspaceModalOpen(false)}
+                  workspaceId={workspaceInfo.id ?? ''}
+                  hasFreeWorkspaceSlot={false}
+                  currentPlan={workspaceInfo.plan ?? undefined}
+                  isCreatingNewWorkspace={false}
                 />
               )}
             </Suspense>

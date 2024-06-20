@@ -20,6 +20,7 @@ type CollabMembersRightsProps = {
   readonly disabled: boolean;
   readonly canInviteReaders?: boolean;
   readonly canInviteEditors?: boolean;
+  readonly hasPaywall?: boolean;
 };
 
 const groupStyles = css({
@@ -38,6 +39,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   disabled = false,
   canInviteReaders,
   canInviteEditors,
+  hasPaywall,
 }) => {
   if (nrOfTeamMembers == null) {
     nrOfTeamMembers = 0;
@@ -64,6 +66,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               onChangePermission={onChangePermission}
               canInviteReaders={canInviteReaders}
               canInviteEditors={canInviteEditors}
+              hasPaywall={hasPaywall}
             />
           ) : null
         )}
@@ -77,6 +80,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               manageTeamURL={manageTeamURL}
               canInviteReaders={canInviteReaders}
               canInviteEditors={canInviteEditors}
+              hasPaywall={hasPaywall}
             />
           )}
       </div>

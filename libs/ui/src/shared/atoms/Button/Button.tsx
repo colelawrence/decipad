@@ -170,6 +170,16 @@ const typeStyles: Record<
     enabled: {},
     disabled: {},
   },
+  tagBrand: {
+    enabled: {
+      backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+      color: componentCssVars('ButtonPrimaryDefaultText'),
+      borderRadius: 4,
+      textTransform: 'uppercase',
+      lineHeight: 1,
+    },
+    disabled: {},
+  },
 };
 
 const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
@@ -183,7 +193,10 @@ const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
     padding: '12px 24px',
   },
   extraExtraSlim: {
-    padding: '4px 10px 4px 8px',
+    padding: '4px 8px 4px 8px',
+  },
+  tag: {
+    padding: '2px 4px',
   },
 };
 
@@ -201,12 +214,18 @@ type ButtonProps = {
     | 'yellow'
     | 'lightYellow'
     | 'text'
+    | 'tagBrand'
     | 'darkDanger'
     | 'darkWarning'
     | 'darkWarningText';
   readonly children: ReactNode;
   readonly disabled?: boolean;
-  readonly size?: 'normal' | 'extraSlim' | 'extraLarge' | 'extraExtraSlim';
+  readonly size?:
+    | 'normal'
+    | 'extraSlim'
+    | 'extraLarge'
+    | 'extraExtraSlim'
+    | 'tag';
   readonly testId?: string;
   readonly href?: string;
   readonly tabIndex?: number;

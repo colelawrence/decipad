@@ -1,6 +1,5 @@
-import { workspaces } from '@decipad/routing';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { useNavigate } from 'react-router-dom';
 import { componentCssVars, p13Regular, p14Medium } from '../../../primitives';
 import { Button } from '../Button/Button';
 
@@ -22,7 +21,7 @@ export const UpgradePlanWarningTooltip = ({
   noun = 'credits',
   showUpgradeProButton = true,
 }: UpgradePlanWarningTooltipProps): ReturnType<React.FC> => {
-  const navigate = useNavigate();
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
 
   return (
     <>
@@ -49,14 +48,7 @@ export const UpgradePlanWarningTooltip = ({
             size="extraExtraSlim"
             onClick={() => {
               if (workspaceId) {
-                navigate(
-                  workspaces({})
-                    .workspace({
-                      workspaceId,
-                    })
-                    .members({}).$,
-                  { replace: true }
-                );
+                setIsUpgradeWorkspaceModalOpen(true);
               }
             }}
             sameTab={true} // change this to false if you want to work on payments locally

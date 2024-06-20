@@ -43,6 +43,7 @@ import { NavigationItem } from '../NavigationItem/NavigationItem';
 import { NavigationList } from '../NavigationList/NavigationList';
 import { SectionItem } from '../SectionItem/SectionItem';
 import * as Styled from './styles';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 
 interface WorkspaceNavigationProps {
   readonly activeWorkspace: ShallowWorkspaceFragment;
@@ -84,6 +85,7 @@ export const WorkspaceNavigation = ({
   const [openRenameMenu, setOpenRenameMenu] = useState(false);
 
   const location = useLocation();
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
   const clientEvent = useContext(ClientEventsContext);
 
   const customerPortalLink = useMemo(
@@ -99,7 +101,7 @@ export const WorkspaceNavigation = ({
       <NavigationList>
         {!activeWorkspace.isPremium && (
           <NavigationItem
-            href={activeWorkspaceRoute.upgrade({}).$}
+            onClick={() => setIsUpgradeWorkspaceModalOpen(true)}
             key="workspace-upgrade-pro"
           >
             <Styled.ItemWrapper data-testid="workspace_upgrade_pro">

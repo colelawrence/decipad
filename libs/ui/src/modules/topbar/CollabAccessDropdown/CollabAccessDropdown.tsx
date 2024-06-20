@@ -1,11 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { FC, useCallback } from 'react';
 import { MenuList } from '../../../shared/molecules';
-import { MenuItem, TextAndIconButton, Tooltip } from '../../../shared/atoms';
+import { MenuItem, TextAndIconButton } from '../../../shared';
 import {
-  componentCssVars,
   cssVar,
   p12Medium,
   p12Regular,
@@ -14,7 +14,8 @@ import {
   red500,
 } from '../../../primitives';
 import { PermissionType } from '../../../types';
-import { CaretDown, WarningCircle } from 'libs/ui/src/icons';
+import { CaretDown } from 'libs/ui/src/icons';
+import * as Styled from './styles';
 
 type CollabAccessDropdownProps = {
   isActivatedAccount?: boolean;
@@ -26,6 +27,7 @@ type CollabAccessDropdownProps = {
   onChange?: (newPermission: PermissionType) => void;
   canInviteEditors?: boolean;
   canInviteReaders?: boolean;
+  hasPaywall?: boolean;
 };
 
 const HumanReadablePermission: Record<PermissionType, string> = {
@@ -42,16 +44,26 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   disable,
   canInviteReaders,
   canInviteEditors,
+  hasPaywall,
 }) => {
   const permissionLabel = HumanReadablePermission[currentPermission];
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
 
   const onReaderSelected = useCallback(() => {
-    onChange?.('READ');
-  }, [onChange]);
+    if (canInviteReaders) {
+      onChange?.('READ');
+    } else {
+      setIsUpgradeWorkspaceModalOpen(true);
+    }
+  }, [onChange, setIsUpgradeWorkspaceModalOpen, canInviteReaders]);
 
   const onCollaboratorSelected = useCallback(() => {
-    onChange?.('WRITE');
-  }, [onChange]);
+    if (canInviteEditors) {
+      onChange?.('WRITE');
+    } else {
+      setIsUpgradeWorkspaceModalOpen(true);
+    }
+  }, [onChange, setIsUpgradeWorkspaceModalOpen, canInviteEditors]);
 
   if (disable) {
     return <div css={css(p12Medium)}>{permissionLabel}</div>;
@@ -72,44 +84,6 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     </div>
   );
 
-  const tooltipContentEditor = (
-    <>
-      <p css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
-        <strong>Unlock invite editors</strong>
-      </p>
-      <p
-        css={[
-          p12Regular,
-          {
-            color: componentCssVars('TooltipTextSecondary'),
-            textAlign: 'center',
-          },
-        ]}
-      >
-        Upgrade your plan to invite more editors.
-      </p>
-    </>
-  );
-
-  const tooltipContentReader = (
-    <>
-      <p css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
-        <strong>Unlock invite readers</strong>
-      </p>
-      <p
-        css={[
-          p12Regular,
-          {
-            color: componentCssVars('TooltipTextSecondary'),
-            textAlign: 'center',
-          },
-        ]}
-      >
-        Upgrade your plan to invite more readers.
-      </p>
-    </>
-  );
-
   return currentPermission === 'ADMIN' ? (
     triggerElement(false)
   ) : (
@@ -117,6 +91,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       portal
       root
       dropdown
+      modal={false}
       align="end"
       sideOffset={4}
       trigger={triggerElement(true)}
@@ -125,49 +100,29 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         onSelect={onCollaboratorSelected}
         selected={currentPermission === 'WRITE'}
         testid="notebook-editor"
-        disabled={!canInviteEditors}
       >
-        <p css={p13Medium}>Notebook editor</p>
         <div css={warningWrapperStyles}>
-          <p css={dropDownItemStyles}>Can edit only this notebook</p>
-          {!canInviteEditors && (
-            <Tooltip
-              side="top"
-              trigger={
-                <div>
-                  <WarningCircle />
-                </div>
-              }
-            >
-              {tooltipContentEditor}
-            </Tooltip>
+          <p css={p13Medium}>Notebook editor</p>
+          {!canInviteEditors && !hasPaywall && (
+            <Styled.Badge>Upgrade</Styled.Badge>
           )}
         </div>
+        <p css={dropDownItemStyles}>Can edit only this notebook</p>
       </MenuItem>
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
-        disabled={!canInviteReaders}
         testid="notebook-reader"
       >
-        <p css={p13Medium}>Notebook reader</p>
         <div css={warningWrapperStyles}>
-          <p css={dropDownItemStyles}>
-            Can read and interact only with this notebook
-          </p>
-          {!canInviteReaders && (
-            <Tooltip
-              side="top"
-              trigger={
-                <div>
-                  <WarningCircle />
-                </div>
-              }
-            >
-              {tooltipContentReader}
-            </Tooltip>
+          <p css={p13Medium}>Notebook reader</p>
+          {!canInviteReaders && !hasPaywall && (
+            <Styled.Badge>Upgrade</Styled.Badge>
           )}
         </div>
+        <p css={dropDownItemStyles}>
+          Can read and interact only with this notebook
+        </p>
       </MenuItem>
 
       {onRemove && (
@@ -191,7 +146,7 @@ const dangerOptionStyles = css(p14Medium, {
 
 const warningWrapperStyles = css({
   display: 'flex',
-  justifyContent: 'space-between',
+  gap: '8px',
   '& > div': {
     width: '16px',
   },

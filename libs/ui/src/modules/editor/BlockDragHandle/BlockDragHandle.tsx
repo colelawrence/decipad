@@ -171,7 +171,6 @@ export const BlockDragHandle = ({
   aiPanel,
   isDownloadable = false,
   onDownload = noop,
-  needsUpgrade = false,
   path,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
@@ -224,8 +223,6 @@ export const BlockDragHandle = ({
       <Add />
     </button>
   );
-
-  const downloadMenuItem = <p>Download as CSV</p>;
 
   const aiButton = aiPanel ? (
     <MenuItem icon={<Sparkles />} onSelect={aiPanel.toggle} isNew>
@@ -310,22 +307,8 @@ export const BlockDragHandle = ({
             </MenuList>
           )}
           {isDownloadable && (
-            <MenuItem
-              icon={<Download />}
-              onSelect={onDownload}
-              disabled={needsUpgrade}
-            >
-              {!needsUpgrade && downloadMenuItem}
-              {needsUpgrade && (
-                <Tooltip trigger={downloadMenuItem} side="right">
-                  <div css={{ width: '140px' }}>
-                    <p css={toolTipTitle}>Unlock CSV downloads</p>
-                    <p css={tooltipContent}>
-                      Upgrade your plan to unlock all the features
-                    </p>
-                  </div>
-                </Tooltip>
-              )}
+            <MenuItem icon={<Download />} onSelect={onDownload}>
+              <p>Download as CSV</p>
             </MenuItem>
           )}
           {children}

@@ -1,6 +1,12 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
-import { notebooks, onboard, playground, workspaces } from '@decipad/routing';
+import {
+  notebooks,
+  onboard,
+  playground,
+  workspaces,
+  pay,
+} from '@decipad/routing';
 import { Toolbar } from '@decipad/ui';
 import { useMemo, type FC } from 'react';
 import { createPortal } from 'react-dom';
@@ -11,6 +17,7 @@ import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import Notebooks from './notebooks/Notebooks';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 import { useGAPageTracking } from '@decipad/client-events';
+import { SubscriptionPayment } from 'libs/ui/src/shared/templates/PaywallModal/SubscriptionPayment';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
@@ -95,6 +102,18 @@ export const App: FC = () => {
             </RequireSession>
           }
         />
+
+        <Route
+          path={`${pay.template}/*`}
+          element={
+            <RouteEvents category="Playground Loaded">
+              <LazyRoute>
+                <SubscriptionPayment />
+              </LazyRoute>
+            </RouteEvents>
+          }
+        />
+
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
       {/* Feature flagging the feature flag switcher makes it unreacheable in

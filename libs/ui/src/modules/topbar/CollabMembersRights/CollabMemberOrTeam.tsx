@@ -19,6 +19,8 @@ type CollabMemberUserProps = {
   readonly disabled: boolean;
   readonly canInviteReaders?: boolean;
   readonly canInviteEditors?: boolean;
+  readonly workspaceId?: string;
+  readonly hasPaywall?: boolean;
 };
 
 type CollabMemberTeamProps = {
@@ -57,6 +59,7 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
       disabled = false,
       canInviteReaders,
       canInviteEditors,
+      hasPaywall,
     } = props;
     const { user, permission } = info;
     const { name, id, email, image } = user || {};
@@ -94,6 +97,7 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
           }
           canInviteReaders={canInviteReaders}
           canInviteEditors={canInviteEditors}
+          hasPaywall={hasPaywall}
         />
       </div>
     );

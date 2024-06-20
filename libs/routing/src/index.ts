@@ -6,6 +6,7 @@ export { default as workspaces } from './workspaces';
 export { default as notebooks } from './notebooks';
 export { default as playground } from './playground';
 export { default as onboard } from './onboard';
+export { default as pay } from './pay';
 
 // server side routes
 

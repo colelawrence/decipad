@@ -19,14 +19,6 @@ const integrations = route(
 const datasets = route('/datasets', {}, {});
 
 const addcredits = route('/add-credits', {}, {});
-const upgrade = route(
-  '/upgrade/:newWorkspace?',
-  {
-    newWorkspace: stringParser,
-  },
-  {}
-);
-
 export const connections = route(
   '/connections',
   {},
@@ -53,7 +45,6 @@ const workspace = route(
     shared,
     section,
     addcredits,
-    upgrade,
   }
 );
 

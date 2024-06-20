@@ -1,19 +1,28 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useNotebookMetaData } from '@decipad/react-contexts';
+import {
+  useCurrentWorkspaceStore,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Tooltip } from 'libs/ui/src/shared';
+import styled from '@emotion/styled';
 import { FC, ReactNode, useCallback, useRef } from 'react';
 import {
   componentCssVars,
   cssVar,
-  p12Medium,
+  p10Bold,
   p12Regular,
   p14Medium,
 } from '../../../primitives';
 import { soonStyles } from '../../../styles/menu';
 import { useCancelingEvent } from '../../../utils';
+
+const TextStyles = styled.div({
+  display: 'grid',
+  textAlign: 'start',
+  rowGap: '2px',
+});
 
 const inlineMenuStyles = css({
   display: 'grid',
@@ -28,17 +37,23 @@ const inlineMenuStyles = css({
   },
 });
 
+const Badge = styled.span(p10Bold, {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '2px 4px',
+  borderRadius: 4,
+  marginLeft: 4,
+  lineHeight: 1,
+  textTransform: 'uppercase',
+  color: componentCssVars('ButtonPrimaryDefaultText'),
+  backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+});
+
 const iconStyles = css({
   width: '40px',
   height: '40px',
   display: 'grid',
   borderRadius: 8,
-});
-
-const textStyles = css({
-  display: 'grid',
-  textAlign: 'start',
-  rowGap: '2px',
 });
 
 const inlineStyles = css({
@@ -48,12 +63,6 @@ const inlineStyles = css({
 
 const titleStyles = css(p14Medium, { color: cssVar('textTitle') });
 const descriptionStyles = css(p12Regular);
-
-const PLAN_MAP: Record<string, string> = {
-  pro: 'plus',
-  personal: 'plus',
-  team: 'business',
-};
 
 interface InlineMenuItemProps {
   readonly icon: ReactNode;
@@ -82,15 +91,33 @@ export const InlineMenuItem = ({
 }: InlineMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
+  const { workspacePlan } = useNotebookMetaData();
+  const isFeatureAvailableForCurrentPlan =
+    !restrictToPlans ||
+    (workspacePlan &&
+      restrictToPlans &&
+      restrictToPlans.includes(workspacePlan));
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (focused && event.key === 'Enter' && !event.shiftKey) {
-        enabled && onExecute();
+        if (isFeatureAvailableForCurrentPlan) {
+          enabled && onExecute();
+        } else {
+          setIsUpgradeWorkspaceModalOpen(true);
+        }
         event.stopPropagation();
         event.preventDefault();
       }
     },
-    [onExecute, focused, enabled]
+    [
+      onExecute,
+      focused,
+      enabled,
+      isFeatureAvailableForCurrentPlan,
+      setIsUpgradeWorkspaceModalOpen,
+    ]
   );
   useWindowListener('keydown', onKeyDown, true);
 
@@ -102,21 +129,20 @@ export const InlineMenuItem = ({
     });
   }
 
-  const { workspacePlan } = useNotebookMetaData();
-
-  const isFeatureAvailableForCurrentPlan =
-    !restrictToPlans ||
-    (workspacePlan &&
-      restrictToPlans &&
-      restrictToPlans.includes(workspacePlan));
-
   const menuItem = (
     <button
       role="menuitem"
       data-testid={testId}
       css={inlineMenuStyles}
-      onMouseDown={useCancelingEvent(() => {
-        enabled && isFeatureAvailableForCurrentPlan && onExecute();
+      onMouseDown={useCancelingEvent((event) => {
+        // we don't want to trigger any of this if the user/devs use the right button
+        if (event.button === 0) {
+          if (isFeatureAvailableForCurrentPlan) {
+            enabled && onExecute();
+          } else {
+            setIsUpgradeWorkspaceModalOpen(true);
+          }
+        }
       })}
       data-focused={focused}
       ref={itemRef}
@@ -130,42 +156,16 @@ export const InlineMenuItem = ({
       >
         {icon}
       </span>
-      <div css={textStyles}>
+      <TextStyles>
         <div css={inlineStyles}>
           <strong css={titleStyles}>{title}</strong>
           {!enabled && <span css={soonStyles}>SOON</span>}
+          {!isFeatureAvailableForCurrentPlan && <Badge>Upgrade</Badge>}
         </div>
         <span css={descriptionStyles}>{description}</span>
-      </div>
+      </TextStyles>
     </button>
   );
 
-  return isFeatureAvailableForCurrentPlan ? (
-    menuItem
-  ) : (
-    <Tooltip trigger={menuItem} side="right">
-      <div css={{ width: '140px' }}>
-        <p css={toolTipTitle}>Unlock submit form</p>
-        <p css={tooltipContent}>
-          Upgrade your current plan to{' '}
-          {(
-            restrictToPlans
-              .filter((r) => r !== 'pro')
-              .map((r) => PLAN_MAP[r]) ?? []
-          ).join(' or ')}{' '}
-          to use this feature
-        </p>
-      </div>
-    </Tooltip>
-  );
+  return menuItem;
 };
-
-const toolTipTitle = css(p12Medium, {
-  textAlign: 'center',
-  color: componentCssVars('TooltipText'),
-});
-const tooltipContent = css(p12Regular, {
-  marginTop: '6px',
-  color: componentCssVars('TooltipTextSecondary'),
-  textAlign: 'center',
-});

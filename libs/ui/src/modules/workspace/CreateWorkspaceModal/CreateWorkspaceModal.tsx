@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 2 */
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -17,6 +18,7 @@ export const CreateWorkspaceModal = ({
 }: CreateWorkspaceModalProps): ReturnType<React.FC> => {
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
@@ -26,9 +28,10 @@ export const CreateWorkspaceModal = ({
         await onCreate(name);
       } finally {
         setIsSubmitting(false);
+        setIsUpgradeWorkspaceModalOpen(false);
       }
     },
-    [name, onCreate, setIsSubmitting]
+    [name, onCreate, setIsSubmitting, setIsUpgradeWorkspaceModalOpen]
   );
 
   return (

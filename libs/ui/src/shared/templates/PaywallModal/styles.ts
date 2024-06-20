@@ -167,12 +167,14 @@ export const PaymentMethodTitle = styled.p(p16Medium, {
 
 export const PaymentFormWrapper = styled.div(
   {
-    padding: 12,
-    borderRadius: 12,
+    display: 'grid',
     width: '100%',
-    maxHeight: 'min(60vh, 640px)',
-    // we need hardcoded color to match stripe checkout page in dark mode
+    alignItems: 'center',
+    height: '100vh',
     backgroundColor: grey100.hex,
+    ' iframe': {
+      pointerEvents: 'all',
+    },
   },
   deciOverflowYStyles
 );

@@ -1,32 +1,178 @@
-import { FC, useMemo } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import * as Styled from './styles';
 import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from '@stripe/react-stripe-js';
-import { env } from '@decipad/client-env';
 import { loadStripe } from '@stripe/stripe-js';
+import { env } from '@decipad/client-env';
+import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
+import {
+  useCurrentWorkspaceStore,
+  useResourceUsage,
+} from '@decipad/react-contexts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { workspaces } from '@decipad/routing';
+import { getLatestWorkspace } from './helpers';
+import { useClient } from 'urql';
+import {
+  GetWorkspaceByIdDocument,
+  GetWorkspaceByIdQuery,
+  GetWorkspaceByIdQueryVariables,
+  GetWorkspacesWithSharedNotebooksDocument,
+  GetWorkspacesWithSharedNotebooksQuery,
+  GetWorkspacesWithSharedNotebooksQueryVariables,
+} from '@decipad/graphql-client';
 
-interface SubscriptionPaymentProps {
-  clientSecret: string;
-  handlePaymentButton: (paymentStatus: string) => void;
-}
+export const SubscriptionPayment: FC = () => {
+  const { cs, workspaceId, plan, newWorkspace } = useParams();
+  const navigate = useNavigate();
+  const { setIsUpgradeWorkspaceModalOpen, workspaceInfo } =
+    useCurrentWorkspaceStore();
+  const { ai } = useResourceUsage();
+  const clientEvent = useContext(ClientEventsContext);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [isPollingData, setIsPollingData] = useState(false);
+  const isFetching = useRef(false);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
+  const client = useClient();
 
-export const SubscriptionPayment: FC<SubscriptionPaymentProps> = ({
-  handlePaymentButton,
-  clientSecret,
-}) => {
   const stripePromise = loadStripe(env.VITE_STRIPE_API_KEY);
+
+  useEffect(() => {
+    setIsUpgradeWorkspaceModalOpen(false);
+    clientEvent({
+      segmentEvent: {
+        type: 'action',
+        action: 'Checkout Modal Viewed',
+        props: {
+          analytics_source: 'frontend',
+        },
+      },
+    });
+  }, [setIsUpgradeWorkspaceModalOpen, clientEvent]);
+
+  const onExecuteGetWSNoNotebooksQuery = useCallback(() => {
+    if (isFetching.current) {
+      return;
+    }
+
+    isFetching.current = true;
+
+    client
+      .query<
+        GetWorkspacesWithSharedNotebooksQuery,
+        GetWorkspacesWithSharedNotebooksQueryVariables
+      >(
+        GetWorkspacesWithSharedNotebooksDocument,
+        {},
+        { requestPolicy: 'network-only' }
+      )
+      .toPromise()
+      .then(({ data }) => {
+        isFetching.current = false;
+        const wsId = getLatestWorkspace(data?.workspaces ?? []);
+        navigate(workspaces({}).workspace({ workspaceId: wsId }).$);
+      });
+  }, [client, navigate]);
+
+  const onExecuteGetWSByIdQuery = useCallback(() => {
+    if (isFetching.current) {
+      return;
+    }
+
+    isFetching.current = true;
+    const wsId: string = workspaceId || '';
+
+    client
+      .query<GetWorkspaceByIdQuery, GetWorkspaceByIdQueryVariables>(
+        GetWorkspaceByIdDocument,
+        { workspaceId: wsId },
+        { requestPolicy: 'network-only' }
+      )
+      .toPromise()
+      .then(({ data }) => {
+        isFetching.current = false;
+        const workspace = data?.getWorkspaceById;
+
+        if (
+          workspace?.workspaceSubscription?.credits &&
+          workspace?.plan !== workspaceInfo.plan
+        ) {
+          ai.increaseQuotaLimit(workspace?.workspaceSubscription?.credits);
+        }
+      });
+  }, [client, workspaceId, ai, workspaceInfo.plan]);
+
+  useEffect(() => {
+    if (!isPollingData) {
+      if (intervalId != null) {
+        clearInterval(intervalId);
+      }
+      return;
+    }
+
+    if (!intervalId) {
+      setIntervalId(
+        setInterval(() => {
+          if (newWorkspace) {
+            onExecuteGetWSNoNotebooksQuery();
+          } else {
+            onExecuteGetWSByIdQuery();
+            navigate(-1);
+          }
+        }, 2000)
+      );
+    }
+
+    return () => {
+      if (intervalId != null) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [
+    newWorkspace,
+    isPollingData,
+    intervalId,
+    onExecuteGetWSNoNotebooksQuery,
+    navigate,
+    onExecuteGetWSByIdQuery,
+  ]);
 
   const stripeOptions = useMemo(
     () => ({
-      clientSecret,
+      clientSecret: cs,
       onComplete: () => {
-        handlePaymentButton('success');
+        getAnalytics().then((analytics) =>
+          analytics?.track('Purchase', {
+            category: 'Subscription',
+            subCategory: 'Plan',
+            resource: {
+              type: 'workspace',
+              id: workspaceId,
+            },
+            plan,
+          })
+        );
+        setShouldNavigate(true);
       },
     }),
-    [clientSecret, handlePaymentButton]
+    [cs, workspaceId, plan]
   );
+
+  useEffect(() => {
+    if (shouldNavigate) {
+      setIsPollingData(true);
+    }
+  }, [shouldNavigate, newWorkspace, workspaceId, navigate]);
 
   return (
     <Styled.PaymentFormWrapper>

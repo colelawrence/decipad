@@ -1,11 +1,5 @@
 import { css } from '@emotion/react';
-import {
-  componentCssVars,
-  cssVar,
-  p13Regular,
-  p14Medium,
-  p14Regular,
-} from '../../../primitives';
+import { cssVar, p13Regular, p14Medium, p14Regular } from '../../../primitives';
 import { Link as LinkIcon } from '../../../icons';
 import { Tooltip, Link, Badge } from '../../../shared';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -106,9 +100,8 @@ export const NotebookEmbedTab = ({
                 <Badge
                   styles={css({
                     marginLeft: 6,
-                    backgroundColor: componentCssVars(
-                      'ButtonPrimaryHoverBackground'
-                    ),
+                    backgroundColor: cssVar('borderDefault'),
+                    color: cssVar('textDefault'),
                   })}
                 >
                   beta
