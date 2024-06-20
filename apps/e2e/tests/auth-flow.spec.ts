@@ -43,7 +43,8 @@ test('redirect to workspace if authenticated and can logout @auth', async ({
   await expect(page).toHaveURL(`${app().urlBase}/w`);
 });
 
-test('check redirect from signup from try decipad @auth', async ({
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('check redirect from signup from try decipad @auth', async ({
   testUser,
   unregisteredUser,
 }) => {

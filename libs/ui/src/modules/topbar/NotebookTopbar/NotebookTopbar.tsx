@@ -189,9 +189,13 @@ const TryOrDuplicate: FC<TopbarActions & AccessInfo> = ({
   onDuplicateNotebook,
   isDuplicateAllowed,
 }) => {
+  // We are temporarily disabling the redirects, all access needs to be done via a booking link on our marketing website
+  /*
   const href = `/?redirectAfterLogin=${encodeURIComponent(
     window.location.pathname
   )}`;
+*/
+  const href = 'https://www.decipad.com/request-access';
 
   if (isAuthenticated && !isDuplicateAllowed) {
     return null;
