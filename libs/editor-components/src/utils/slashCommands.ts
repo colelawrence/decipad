@@ -152,10 +152,6 @@ export const execute = async ({
         setFileType('image' as FileType);
         setDialogOpen(true);
         break;
-      case 'upload-csv':
-        setFileType('data' as FileType);
-        setDialogOpen(true);
-        break;
       case 'upload-embed':
         setFileType('embed' as FileType);
         setDialogOpen(true);

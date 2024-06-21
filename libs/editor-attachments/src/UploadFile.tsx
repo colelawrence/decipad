@@ -1,11 +1,6 @@
-import { insertLiveConnection } from '@decipad/editor-components';
 import type { MyEditor } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { insertEmbedBelow, insertImageBelow } from '@decipad/editor-utils';
-import {
-  useAttachFileToNotebookMutation,
-  useGetCreateAttachmentFormMutation,
-} from '@decipad/graphql-client';
 import { useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Modal, UploadFileModal } from '@decipad/ui';
@@ -15,14 +10,11 @@ import axios, { AxiosError } from 'axios';
 import type { FC } from 'react';
 import { useCallback } from 'react';
 import type { Path } from 'slate';
-import { attachGenericFile } from './attachGeneric';
-import { useComputer } from '@decipad/editor-hooks';
 
 export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
   notebookId,
   workspaceId,
 }) => {
-  const computer = useComputer();
   const {
     dialogOpen,
     fileType,
@@ -35,27 +27,18 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
   } = useFileUploadStore();
 
   const insertFunctionForFileType = useCallback(
-    (editor: MyEditor, path: Path, url: string, fileName?: string) => {
+    (editor: MyEditor, path: Path, url: string) => {
       switch (fileType) {
         case 'image':
           return insertImageBelow(editor, path, url, undefined, true);
         case 'embed':
           return insertEmbedBelow(editor, path, url);
-        case 'data':
-          return insertLiveConnection({
-            computer,
-            editor,
-            url,
-            path,
-            fileName,
-            source: 'csv',
-          });
         default:
           // not implemented yet
           return noop;
       }
     },
-    [computer, fileType]
+    [fileType]
   );
 
   const arcEndpoint = useCallback((id: string) => `/api/pads/${id}/images`, []);
@@ -64,14 +47,14 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
   const toast = useToast();
 
   const insertByUrl = useCallback(
-    (fileUrl: string, fileName?: string): void => {
+    (fileUrl: string): void => {
       const { selection } = editor;
       const point =
         selection?.anchor ??
         getStartPoint(editor, [editor.children.length - 1]);
       const path = point.path.slice(0, 1);
 
-      insertFunctionForFileType(editor, path, fileUrl, fileName);
+      insertFunctionForFileType(editor, path, fileUrl);
     },
     [editor, insertFunctionForFileType]
   );
@@ -112,7 +95,7 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
         const url = response.data;
         setUploading(false);
         setUploadProgress(0);
-        insertByUrl(url, file.name);
+        insertByUrl(url);
       } catch (err) {
         console.error(err);
         let message = 'There was an error uploading your file';
@@ -136,27 +119,6 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
     ]
   );
 
-  const [, getCreateAttachmentForm] = useGetCreateAttachmentFormMutation();
-  const [, attachFileToNotebook] = useAttachFileToNotebookMutation();
-  const onAttached = useCallback(
-    async (handle: string) => {
-      const resp = await attachFileToNotebook({ handle });
-      if (resp.error) {
-        toast(resp.error.graphQLErrors[0].message, 'warning');
-        return;
-      }
-      const urlString = resp.data?.attachFileToPad?.url;
-      if (!urlString) {
-        return;
-      }
-      const url = new URL(urlString);
-      return {
-        url,
-      };
-    },
-    [toast, attachFileToNotebook]
-  );
-
   const uploadFile = useCallback(
     async (fileInfo: File | string, uploadType: string) => {
       switch (fileType) {
@@ -178,47 +140,6 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
           }
           break;
         }
-        case 'data': {
-          // live connection note
-          if (uploadType === 'link' && typeof fileInfo === 'string') {
-            insertByUrl(fileInfo);
-          } else if (fileInfo instanceof File) {
-            const form = async (): Promise<
-              [URL, FormData, string] | undefined
-            > => {
-              const result = await getCreateAttachmentForm({
-                notebookId,
-                fileType: fileInfo.type,
-                fileName: fileInfo.name,
-              });
-              const form2 = result.data?.getCreateAttachmentForm;
-              if (!form2) {
-                return;
-              }
-              const url = new URL(form2.url);
-              const formData = new FormData();
-              for (const { key, value } of form2.fields) {
-                formData.set(key, value);
-              }
-              return [url, formData, form2.handle];
-            };
-            attachGenericFile(fileInfo, () => noop, form, onAttached)
-              .then((response) => {
-                if (!response) {
-                  return;
-                }
-
-                insertByUrl(response.url, fileInfo.name);
-              })
-              .catch((err) => {
-                console.error(err);
-                toast('There was an error inserting data', 'warning');
-              });
-          } else {
-            throw new Error('This cannot happen');
-          }
-          break;
-        }
         default: {
           // not implemented yet
           throw new Error('Not implemented yet');
@@ -226,16 +147,7 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
       }
       resetStore();
     },
-    [
-      fileType,
-      resetStore,
-      insertByUrl,
-      insertFromComputer,
-      onAttached,
-      getCreateAttachmentForm,
-      toast,
-      notebookId,
-    ]
+    [fileType, resetStore, insertByUrl, insertFromComputer]
   );
 
   return (
@@ -252,7 +164,7 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
       >
         <UploadFileModal
           workspaceId={workspaceId}
-          fileType={fileType || 'data'}
+          fileType={fileType ?? 'media'}
           onCancel={resetStore}
           onUpload={uploadFile}
           uploading={uploading}

@@ -1199,18 +1199,6 @@ export class Notebook {
     }, `Embed URL Modal didn't open.`).toPass();
   }
 
-  /**
-   * Open CSV uploader.
-   *
-   * **Usage**
-   *
-   * ```js
-   * await notebook.openCSVUploader();
-   * ```
-   */
-  async openCSVUploader() {
-    this.addBlock('upload-csv');
-  }
   async openIntegrations(): Promise<void> {
     if (await this.page.getByTestId('integration-wrapper').isVisible()) {
       return;

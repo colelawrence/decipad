@@ -1,4 +1,4 @@
-export type FileType = 'image' | 'media' | 'data' | 'embed';
+export type FileType = 'image' | 'media' | 'embed';
 
 export const MAX_UPLOAD_FILE_SIZE = {
   // JPEG, JPG, GIF, PNG

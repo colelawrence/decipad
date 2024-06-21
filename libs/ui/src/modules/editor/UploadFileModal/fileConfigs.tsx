@@ -52,14 +52,6 @@ export const getConfigForFileType = (
           </>
         ),
       };
-    case 'data':
-      return {
-        title: 'Upload a data file',
-        maxSize: MAX_UPLOAD_FILE_SIZE.data,
-        accept: '.csv, text/csv, application/vnd.apache.arrow',
-        acceptHuman: ['csv', 'arrow'],
-        addons: {},
-      };
     default:
       return { title: 'Upload a file', maxSize: 5_000_000, addons: {} };
   }

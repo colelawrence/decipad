@@ -25,6 +25,5 @@ export type SlashCommand =
   | 'blockquote'
   | 'sketch'
   | 'upload-image'
-  | 'upload-csv'
   | 'upload-embed'
   | 'submit-form';

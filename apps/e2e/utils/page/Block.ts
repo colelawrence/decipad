@@ -235,10 +235,6 @@ export async function createCodeLineV2Below(
   await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
-export async function createCSVBelow(page: Page) {
-  await createWithSlashCommand(page, '/csv', 'upload-csv');
-}
-
 export async function createEmbedBelow(page: Page) {
   await createWithSlashCommand(page, '/embed');
 }

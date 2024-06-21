@@ -100,16 +100,13 @@ test.describe('staging performance checks', () => {
       await notebook.waitForEditorToLoad();
       await notebook.selectLastParagraph();
 
-      await notebook.openCSVUploader();
-      await page.getByTestId('link-file-tab').click();
-      await page
-        .getByPlaceholder('Paste the data link here')
-        .fill(
-          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv'
-        );
-
-      await page.getByRole('button', { name: 'insert data' }).click();
       performance.sampleStart('Ingest CSV');
+
+      await notebook.addCSV({
+        method: 'link',
+        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv',
+      });
+
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
       await expect(async () => {

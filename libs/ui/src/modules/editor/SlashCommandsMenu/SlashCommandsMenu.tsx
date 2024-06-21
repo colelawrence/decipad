@@ -5,7 +5,6 @@ import {
   CommandArea,
   CommandBar,
   CommandCallout,
-  CommandCsv,
   CommandDataMapping,
   CommandDataView,
   CommandDate,
@@ -154,14 +153,6 @@ const integrationsGroups = {
   title: 'Integrations',
   items: [
     integrationCmd,
-    {
-      command: 'upload-csv',
-      title: 'CSV',
-      description: 'Upload an CSV file',
-      icon: <CommandCsv />,
-      enabled: true,
-      extraSearchTerms: ['upload', 'csv', 'data', 'excel'],
-    },
     {
       command: 'upload-embed',
       title: 'Embed',
