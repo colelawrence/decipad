@@ -10,6 +10,8 @@ const waitForPageLoad = async (page: Page) =>
   Promise.all([
     page.getByTestId('number-result:454534534534534535345340').nth(0).waitFor(),
     page.waitForSelector('text="ם עוד. על בקר"'),
+    await page.getByText('≈1,491.43 weeks').first().waitFor(),
+    await page.getByText('≈1,594.29 weeks').first().waitFor(),
   ]);
 
 test.use({ colorScheme: 'dark' });
