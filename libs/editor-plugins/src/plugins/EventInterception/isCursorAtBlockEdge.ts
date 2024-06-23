@@ -9,7 +9,7 @@ import {
 } from '@udecode/plate-common';
 import type { Path } from 'slate';
 import { Point } from 'slate';
-import type { MyEditor, MyElement } from '@decipad/editor-types';
+import type { AnyElement, MyEditor, MyElement } from '@decipad/editor-types';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 
 /** Is the cursor at the end|start of the parent element? */
@@ -31,7 +31,10 @@ export const isCursorAtBlockEdge = (
     at: cursorPath,
     match: (n) => isBlock(editor, n),
   });
-  if (!nonLeafElement?.[0]?.children) {
+  if (
+    !isElement(nonLeafElement?.[0] as AnyElement) ||
+    nonLeafElement?.[0].children == null
+  ) {
     return false;
   }
 

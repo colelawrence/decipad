@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import type { Computer } from '@decipad/computer-interfaces';
-import type { SerializedTypes } from '@decipad/remote-computer';
+import type { SerializedTypes } from '@decipad/language-interfaces';
 import { areUnitsConvertible } from '@decipad/remote-computer';
 import type { CellValueType } from '@decipad/editor-types';
 import { containsNumber } from '@decipad/utils';

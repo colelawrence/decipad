@@ -1,8 +1,8 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_CAPTION } from '@decipad/editor-types';
-import type { NormalizerReturnValue } from '@decipad/editor-plugins';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
 import {
   deleteText,

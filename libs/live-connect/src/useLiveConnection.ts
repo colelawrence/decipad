@@ -1,16 +1,17 @@
 import type { Context } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import type { Computer } from '@decipad/computer-interfaces';
+import type { Computer, ProgramBlock } from '@decipad/computer-interfaces';
 import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+// eslint-disable-next-line no-restricted-imports
 import {
   astNode,
   buildType,
   deserializeType,
   serializeType,
   isTableResult,
-  Unknown,
-} from '@decipad/remote-computer';
-import type { ProgramBlock, Result } from '@decipad/remote-computer';
+} from '@decipad/computer';
+import type { Result } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 import { zip } from '@decipad/utils';
 import type {

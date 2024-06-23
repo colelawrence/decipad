@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SlashCommandsMenu } from './SlashCommandsMenu';
 
 it('renders menuitems triggering different commands', async () => {
-  const handleExecute = jest.fn();
+  const handleExecute = vi.fn();
   const { getByText, getByTestId } = render(
     <SlashCommandsMenu onExecute={handleExecute} />
   );
@@ -20,7 +21,7 @@ it('renders menuitems triggering different commands', async () => {
 });
 
 it('focuses menuitems using the arrow keys', async () => {
-  const handleExecute = jest.fn();
+  const handleExecute = vi.fn();
   render(<SlashCommandsMenu onExecute={handleExecute} />);
 
   await userEvent.keyboard('{arrowdown}{enter}');
@@ -39,14 +40,14 @@ it('focuses menuitems using the arrow keys', async () => {
   expect(thirdCommand).toEqual(firstCommand);
 });
 it('does not focus menuitems when holding shift', async () => {
-  const handleExecute = jest.fn();
+  const handleExecute = vi.fn();
   render(<SlashCommandsMenu onExecute={handleExecute} />);
 
   await userEvent.keyboard('{Shift>}{arrowdown}{enter}');
   expect(handleExecute).not.toHaveBeenCalled();
 });
 it('focuses menuitems using tab and shift+tab', async () => {
-  const handleExecute = jest.fn();
+  const handleExecute = vi.fn();
   render(<SlashCommandsMenu onExecute={handleExecute} />);
 
   await userEvent.tab();
@@ -83,7 +84,7 @@ describe('search', () => {
   });
 
   it('affects arrow key selection', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     const { getAllByRole } = render(
       <SlashCommandsMenu search="advanced formula" onExecute={handleExecute} />
     );
@@ -103,7 +104,7 @@ describe('search', () => {
   });
 
   it('updates the selection when changing', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     const { rerender } = render(
       <SlashCommandsMenu onExecute={handleExecute} />
     );

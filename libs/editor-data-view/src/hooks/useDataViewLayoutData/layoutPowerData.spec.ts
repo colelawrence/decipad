@@ -44,7 +44,7 @@ describe('layoutPowerData', () => {
         expandedGroups: [],
         preventExpansion: false,
       })
-    ).toMatchInlineSnapshot(`Array []`);
+    ).toMatchInlineSnapshot(`[]`);
   });
 
   it('works with one column one group tree', async () => {
@@ -64,30 +64,30 @@ describe('layoutPowerData', () => {
       'no result for block-1'
     ) as Result.Result<'tree'>;
     expect(tree).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "string",
             },
           ],
           "kind": "tree",
         },
         "value": Tree {
-          "children": Array [
+          "children": [
             Tree {
-              "children": Array [],
-              "columns": Array [],
+              "children": [],
+              "columns": [],
               "originalCardinality": 1,
               "root": "A",
               "rootAggregation": undefined,
             },
           ],
-          "columns": Array [
-            Object {
+          "columns": [
+            {
               "aggregation": undefined,
               "name": "Column1",
             },
@@ -109,23 +109,23 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == \\"A\\")).Column1))",
+      [
+        {
+          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/a32fd8b31587b9c6354faa86e12756d2e7aca860346be182aacebb91f0b58026",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "string",
           },
           "value": "A",
         },
-        Object {
+        {
           "aggregationExpression": "count(unique(TableName.Column1))",
-          "children": Array [],
+          "children": [],
           "elementType": "smartrow",
           "global": true,
           "type": undefined,
@@ -157,32 +157,32 @@ describe('layoutPowerData', () => {
       'no result for block-4'
     ) as Result.Result<'tree'>;
     expect(tree).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "string",
             },
           ],
           "kind": "tree",
         },
         "value": Tree {
-          "children": Array [
+          "children": [
             Tree {
-              "children": Array [],
-              "columns": Array [],
+              "children": [],
+              "columns": [],
               "originalCardinality": 1,
               "root": "A",
               "rootAggregation": undefined,
             },
           ],
-          "columns": Array [
-            Object {
-              "aggregation": Object {
-                "type": Object {
+          "columns": [
+            {
+              "aggregation": {
+                "type": {
                   "kind": "number",
                   "unit": null,
                 },
@@ -213,26 +213,26 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == \\"A\\")).Column1))",
+      [
+        {
+          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/a32fd8b31587b9c6354faa86e12756d2e7aca860346be182aacebb91f0b58026",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "string",
           },
           "value": "A",
         },
-        Object {
+        {
           "aggregationExpression": "count(unique(TableName.Column1))",
-          "children": Array [],
+          "children": [],
           "elementType": "smartrow",
           "global": true,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -283,17 +283,17 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == \\"A\\")).Column1))",
+      [
+        {
+          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
-              "aggregationExpression": "sum((filter(TableName, TableName.Column1 == \\"A\\")).Column2)",
-              "children": Array [],
+          "children": [
+            {
+              "aggregationExpression": "sum((filter(TableName, TableName.Column1 == "A")).Column2)",
+              "children": [],
               "elementType": "smartrow",
               "global": false,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -307,26 +307,26 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": true,
           "elementType": "group",
-          "id": "/",
+          "id": "/ab2343f77c33a58d1431ce0434a21d3d385f00b3308206522aaef176e539a7cc",
           "replicaCount": 2,
-          "type": Object {
+          "type": {
             "kind": "string",
           },
           "value": "A",
         },
-        Object {
-          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == \\"B\\")).Column1))",
+        {
+          "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "B")).Column1))",
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
-              "aggregationExpression": "sum((filter(filter(TableName, TableName.Column1 == \\"B\\"), (filter(TableName, TableName.Column1 == \\"B\\")).Column2 == 2)).Column2)",
+          "children": [
+            {
+              "aggregationExpression": "sum((filter(filter(TableName, TableName.Column1 == "B"), (filter(TableName, TableName.Column1 == "B")).Column2 == 2)).Column2)",
               "aggregationResult": undefined,
-              "children": Array [],
+              "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "//",
+              "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9/b0bc58bdde052273dc781192e21d2539e3dc453f1364463569428c0590b16f32",
               "replicaCount": 1,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -340,22 +340,22 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "string",
           },
           "value": "B",
         },
-        Object {
+        {
           "aggregationExpression": "count(unique(TableName.Column1))",
-          "children": Array [
-            Object {
+          "children": [
+            {
               "aggregationExpression": "sum(TableName.Column2)",
-              "children": Array [],
+              "children": [],
               "elementType": "smartrow",
               "global": true,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -369,7 +369,7 @@ describe('layoutPowerData', () => {
           ],
           "elementType": "smartrow",
           "global": true,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },

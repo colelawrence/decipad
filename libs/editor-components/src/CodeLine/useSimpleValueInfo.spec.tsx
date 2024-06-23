@@ -1,5 +1,5 @@
-import { renderHook } from '@testing-library/react';
-
+import { it, expect } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
 import type {
   CodeLineV2Element,
   MyEditor,
@@ -14,13 +14,11 @@ import {
 } from '@decipad/editor-types';
 import { getNodeString, Plate, PlateContent } from '@udecode/plate-common';
 import { useState } from 'react';
-
-import type { AST } from '@decipad/remote-computer';
+import type { AST } from '@decipad/language-interfaces';
 import { parseSimpleValueUnit, prettyPrintAST } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
-import { act } from 'react-dom/test-utils';
-import { useSimpleValueInfo } from './useSimpleValueInfo';
 import { useComputer } from '@decipad/editor-hooks';
+import { useSimpleValueInfo } from './useSimpleValueInfo';
 
 const element: CodeLineV2Element = {
   type: ELEMENT_CODE_LINE_V2,

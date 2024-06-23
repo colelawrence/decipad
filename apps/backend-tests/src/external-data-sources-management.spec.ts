@@ -1,186 +1,189 @@
+import { describe } from 'vitest';
 import type { ExternalDataSource, Pad } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import getDefined from './utils/get-defined';
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
 
-test('external data sources', (ctx) => {
-  const { test: it } = ctx;
-  let pad: Pad | undefined;
-  let externalDataSource: ExternalDataSource | undefined;
+describe.sequential('external data sources', () => {
+  test('external data sources', (ctx) => {
+    const { test: it } = ctx;
+    let pad: Pad | undefined;
+    let externalDataSource: ExternalDataSource | undefined;
 
-  beforeAll(async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
+    beforeAll(async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
 
-    const workspace = (
-      await ensureGraphqlResponseIsErrorFree(
-        client.mutate({
-          mutation: ctx.gql`
-          mutation {
-            createWorkspace(workspace: { name: "Workspace 1" }) {
-              id
-              name
+      const workspace = (
+        await ensureGraphqlResponseIsErrorFree(
+          client.mutate({
+            mutation: ctx.gql`
+            mutation {
+              createWorkspace(workspace: { name: "Workspace 1" }) {
+                id
+                name
+              }
             }
-          }
+          `,
+          })
+        )
+      ).data.createWorkspace;
+
+      expect(workspace).toMatchObject({ name: 'Workspace 1' });
+
+      pad = (
+        await ensureGraphqlResponseIsErrorFree(
+          client.mutate({
+            mutation: ctx.gql`
+            mutation {
+              createPad(
+                workspaceId: "${workspace.id}"
+                pad: { name: "Pad 1" }
+              ) {
+                id
+                name
+              }
+            }
+          `,
+          })
+        )
+      ).data.createPad;
+    });
+
+    it('can be created', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+
+      const newDataSource = (
+        await client.mutate({
+          mutation: ctx.gql`
+            mutation {
+              createExternalDataSource(
+                dataSource: {
+                  padId: "${getDefined(pad).id}"
+                  name: "test data source 1"
+                  provider: gsheets
+                  externalId: "external id"
+                }
+              ) {
+                id
+                name
+                provider
+                dataUrl
+              }
+            }
+          `,
+        })
+      ).data.createExternalDataSource;
+
+      expect(newDataSource).toMatchObject({
+        id: expect.stringMatching(/.+/),
+        name: 'test data source 1',
+        provider: 'gsheets',
+      });
+
+      externalDataSource = newDataSource;
+    });
+
+    it('can be fetched', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+
+      const dataSource = (
+        await client.query({
+          query: ctx.gql`
+            query {
+              getExternalDataSource(id: "${externalDataSource!.id}") {
+                id
+                name
+                provider
+                dataUrl
+              }
+            }
+          `,
+        })
+      ).data.getExternalDataSource;
+
+      expect(dataSource).toMatchObject(externalDataSource!);
+    });
+
+    it('can be modified by owner', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+      const dataSource = (
+        await client.mutate({
+          mutation: ctx.gql`
+            mutation {
+              updateExternalDataSource(id: "${
+                externalDataSource!.id
+              }", dataSource: {
+                name: "test data source 1 name modified"
+              }) {
+                id
+                name
+                provider
+                dataUrl
+              }
+            }
         `,
         })
-      )
-    ).data.createWorkspace;
+      ).data.updateExternalDataSource;
 
-    expect(workspace).toMatchObject({ name: 'Workspace 1' });
+      expect(dataSource).toMatchObject({
+        ...externalDataSource,
+        name: 'test data source 1 name modified',
+      });
 
-    pad = (
-      await ensureGraphqlResponseIsErrorFree(
-        client.mutate({
-          mutation: ctx.gql`
+      externalDataSource = dataSource;
+    });
+
+    it('can be removed', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+      await client.mutate({
+        mutation: ctx.gql`
           mutation {
-            createPad(
-              workspaceId: "${workspace.id}"
-              pad: { name: "Pad 1" }
-            ) {
-              id
-              name
-            }
+            removeExternalDataSource(id: "${externalDataSource!.id}")
           }
         `,
+      });
+
+      await expect(
+        client.query({
+          query: ctx.gql`
+            query {
+              getExternalDataSource(id: "${externalDataSource!.id}") {
+                id
+                name
+                provider
+                dataUrl
+              }
+            }
+          `,
         })
-      )
-    ).data.createPad;
-  });
+      ).rejects.toThrow();
+    });
 
-  it('can be created', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-
-    const newDataSource = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            createExternalDataSource(
-              dataSource: {
-                padId: "${getDefined(pad).id}"
-                name: "test data source 1"
-                provider: gsheets
-                externalId: "external id"
+    it('can be recreated', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+      const newDataSource = (
+        await client.mutate({
+          mutation: ctx.gql`
+            mutation {
+              createExternalDataSource(
+                dataSource: {
+                  padId: "${getDefined(pad).id}"
+                  name: "test data source 1"
+                  provider: gsheets
+                  externalId: "external id"
+                }
+              ) {
+                id
+                name
+                provider
+                dataUrl
               }
-            ) {
-              id
-              name
-              provider
-              dataUrl
             }
-          }
-        `,
-      })
-    ).data.createExternalDataSource;
+          `,
+        })
+      ).data.createExternalDataSource;
 
-    expect(newDataSource).toMatchObject({
-      id: expect.stringMatching(/.+/),
-      name: 'test data source 1',
-      provider: 'gsheets',
+      externalDataSource = newDataSource;
     });
-
-    externalDataSource = newDataSource;
-  });
-
-  it('can be fetched', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-
-    const dataSource = (
-      await client.query({
-        query: ctx.gql`
-          query {
-            getExternalDataSource(id: "${externalDataSource!.id}") {
-              id
-              name
-              provider
-              dataUrl
-            }
-          }
-        `,
-      })
-    ).data.getExternalDataSource;
-
-    expect(dataSource).toMatchObject(externalDataSource!);
-  });
-
-  it('can be modified by owner', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    const dataSource = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            updateExternalDataSource(id: "${
-              externalDataSource!.id
-            }", dataSource: {
-              name: "test data source 1 name modified"
-            }) {
-              id
-              name
-              provider
-              dataUrl
-            }
-          }
-      `,
-      })
-    ).data.updateExternalDataSource;
-
-    expect(dataSource).toMatchObject({
-      ...externalDataSource,
-      name: 'test data source 1 name modified',
-    });
-
-    externalDataSource = dataSource;
-  });
-
-  it('can be removed', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    await client.mutate({
-      mutation: ctx.gql`
-        mutation {
-          removeExternalDataSource(id: "${externalDataSource!.id}")
-        }
-      `,
-    });
-
-    await expect(
-      client.query({
-        query: ctx.gql`
-          query {
-            getExternalDataSource(id: "${externalDataSource!.id}") {
-              id
-              name
-              provider
-              dataUrl
-            }
-          }
-        `,
-      })
-    ).rejects.toThrow();
-  });
-
-  it('can be recreated', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    const newDataSource = (
-      await client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            createExternalDataSource(
-              dataSource: {
-                padId: "${getDefined(pad).id}"
-                name: "test data source 1"
-                provider: gsheets
-                externalId: "external id"
-              }
-            ) {
-              id
-              name
-              provider
-              dataUrl
-            }
-          }
-        `,
-      })
-    ).data.createExternalDataSource;
-
-    externalDataSource = newDataSource;
   });
 });

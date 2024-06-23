@@ -34,17 +34,20 @@ export class ReadSerializedColumn<T extends Result.OneResult>
   private buffer: DataView;
   private _dimensions: Dimension[];
   private _allData: T[] | undefined;
+  private initialOffset;
 
   constructor(
     type: SerializedType,
     decode: ReadSerializedColumnDecoder<T>,
     buffer: DataView,
-    dimensions: Dimension[]
+    dimensions: Dimension[],
+    initialOffset: number
   ) {
     this.typedResultToValue = typedResultToValue(deserializeType(type));
     this.decode = decode;
     this.buffer = buffer;
     this._dimensions = dimensions;
+    this.initialOffset = initialOffset;
   }
   async getData(): Promise<Result.GenericResultGenerator<T>> {
     return (start = 0, end = Infinity) => {
@@ -53,17 +56,20 @@ export class ReadSerializedColumn<T extends Result.OneResult>
   }
 
   private allDataNow(): AsyncGenerator<T> {
-    const { buffer, decode } = this;
+    const { buffer, decode, initialOffset } = this;
     if (this._allData) {
       return from(this._allData);
     }
     return memoizing(
       (async function* serializedColumnAllData() {
-        let offset = 0;
-        while (offset < buffer.byteLength) {
+        const maxCount = buffer.getUint32(initialOffset);
+        let offset = initialOffset + 4;
+        let count = 0;
+        while (count < maxCount) {
+          count += 1;
           // eslint-disable-next-line no-await-in-loop
-          const [value, bytesRead] = await decode(buffer, offset);
-          offset = bytesRead;
+          const [value, newOffset] = await decode(buffer, offset);
+          offset = newOffset;
           yield value;
         }
       })(),

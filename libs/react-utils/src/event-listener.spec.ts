@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useWindowListener } from './event-listener';
 
 describe('useWindowListener', () => {
   it('attaches the listener to the window', () => {
-    const listener = jest.fn();
+    const listener = vi.fn();
     renderHook(() => useWindowListener('keydown', listener));
 
     window.dispatchEvent(new KeyboardEvent('keydown'));
@@ -11,7 +12,7 @@ describe('useWindowListener', () => {
   });
 
   it('removes the listener on unmount', () => {
-    const listener = jest.fn();
+    const listener = vi.fn();
     const { unmount } = renderHook(() =>
       useWindowListener('keydown', listener)
     );
@@ -22,8 +23,8 @@ describe('useWindowListener', () => {
   });
 
   it('can attach capture listeners', () => {
-    const bubbleListener = jest.fn();
-    const captureListener = jest.fn();
+    const bubbleListener = vi.fn();
+    const captureListener = vi.fn();
     renderHook(() => {
       useWindowListener('keydown', bubbleListener, false);
       useWindowListener('keydown', captureListener, true);

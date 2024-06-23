@@ -11,7 +11,7 @@ import { ELEMENT_INTEGRATION, MyValue } from '@decipad/editor-types';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { AssistantMessage } from '@decipad/react-contexts';
 import { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
-import { IntegrationMessageData, addEnvVars } from '@decipad/utils';
+import { addEnvVars } from '@decipad/utils';
 import { CaretDown, CaretUp, Code, DeciAi, Duplicate } from '../../../icons';
 import {
   componentCssVars,
@@ -19,13 +19,14 @@ import {
   p13Medium,
   p14Regular,
 } from '../../../primitives';
+import type { IntegrationMessageData } from '../../../types/integrationMessageData';
 
 import {
   columnTypeCoercionsToRec,
   importFromUnknownJson,
 } from '@decipad/import';
 import { useToast } from '@decipad/toast';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { ResultPreview } from './ResultPreview';

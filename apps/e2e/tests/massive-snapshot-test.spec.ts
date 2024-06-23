@@ -26,7 +26,7 @@ test('Loading and snapshot of big notebook darkmode', async ({ testUser }) => {
       notebookSource,
       testUser.workspace.baseWorkspaceID
     );
-    testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.waitForEditorToLoad();
   });
 
   await test.step('navigates to notebook and loads it', async () => {
@@ -73,14 +73,16 @@ test('Loading and snapshot of big notebook', async ({
       notebookSource,
       testUser.workspace.baseWorkspaceID
     );
-    testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.waitForEditorToLoad();
   });
 
   await test.step('navigates to notebook and loads it', async () => {
-    testUser.navigateToNotebook(notebookId);
-    testUser.notebook.waitForEditorToLoad();
+    await testUser.navigateToNotebook(notebookId);
+    await testUser.notebook.waitForEditorToLoad();
     await waitForPageLoad(testUser.page);
-    testUser.notebook.checkNotebookTitle('Everything, everywhere, all at once');
+    await testUser.notebook.checkNotebookTitle(
+      'Everything, everywhere, all at once'
+    );
     await waitForPageLoad(testUser.page);
 
     await snapshot(testUser.page, 'Notebook: All elements');

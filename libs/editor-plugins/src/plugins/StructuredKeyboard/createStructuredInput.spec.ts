@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import { reset } from '@decipad/feature-flags';
@@ -8,7 +8,7 @@ import { timeout } from '@decipad/utils';
 
 describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   beforeEach(() => {
     editor = createMyPlateEditor({
       plugins: [createStructuredKeyboard(computer)],
@@ -32,18 +32,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 0,
-          "path": Array [
+          "path": [
             0,
             1,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 3,
-          "path": Array [
+          "path": [
             0,
             1,
             0,
@@ -60,18 +60,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
@@ -88,18 +88,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 1,
-          "path": Array [
+          "path": [
             1,
             0,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 1,
-          "path": Array [
+          "path": [
             1,
             0,
             0,
@@ -116,18 +116,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
@@ -145,18 +145,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       ).handlers?.onKeyDown?.(editor)(event);
     }
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 0,
-          "path": Array [
+          "path": [
             1,
             1,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 2,
-          "path": Array [
+          "path": [
             1,
             1,
             0,
@@ -174,18 +174,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       ).handlers?.onKeyDown?.(editor)(event);
     }
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
@@ -206,18 +206,18 @@ describe('Structured input basic keyboard shortcuts', () => {
     ).handlers?.onKeyDown?.(editor)(event);
     await timeout(100);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 0,
-          "path": Array [
+          "path": [
             1,
             1,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 4,
-          "path": Array [
+          "path": [
             1,
             1,
             0,
@@ -238,18 +238,18 @@ describe('Structured input basic keyboard shortcuts', () => {
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 1,
-          "path": Array [
+          "path": [
             0,
             0,
             0,
@@ -262,7 +262,7 @@ describe('Structured input basic keyboard shortcuts', () => {
 
 describe('Works with smart refs', () => {
   let editor: MyEditor;
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   beforeEach(() => {
     editor = createMyPlateEditor({
       plugins: [createStructuredKeyboard(computer)],
@@ -294,18 +294,18 @@ describe('Works with smart refs', () => {
     }
 
     expect(editor.selection).toMatchInlineSnapshot(`
-      Object {
-        "anchor": Object {
+      {
+        "anchor": {
           "offset": 0,
-          "path": Array [
+          "path": [
             2,
             1,
             0,
           ],
         },
-        "focus": Object {
+        "focus": {
           "offset": 0,
-          "path": Array [
+          "path": [
             2,
             1,
             1,

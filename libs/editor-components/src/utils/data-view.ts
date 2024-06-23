@@ -15,11 +15,11 @@ import {
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 
-const getInitialDataViewElement = async (
+const getInitialDataViewElement = (
   computer: Computer,
   blockId?: string,
   varName?: string
-): Promise<DataViewElement> => {
+): DataViewElement => {
   return {
     id: nanoid(),
     type: ELEMENT_DATA_VIEW,
@@ -35,7 +35,7 @@ const getInitialDataViewElement = async (
             type: ELEMENT_DATA_VIEW_NAME,
             children: [
               {
-                text: await computer?.getAvailableIdentifier(
+                text: computer?.getAvailableIdentifier(
                   varName ? `${varName}Data` : 'DataView'
                 ),
               },

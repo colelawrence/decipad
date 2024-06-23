@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { AutocompleteName } from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/language-interfaces';
 import { FC } from 'react';
 import { SelectInput } from '../../../shared/molecules/SelectInput/SelectInput';
 import { hideOnPrint } from '../../../styles/editor-layout';

@@ -2,7 +2,7 @@ import type { DisplayElement } from '@decipad/editor-types';
 import { createMyPluginFactory, ELEMENT_DISPLAY } from '@decipad/editor-types';
 import { Display } from '@decipad/editor-components';
 import { nanoid } from 'nanoid';
-import { createEventInterceptorPluginFactory } from '../../pluginFactories';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const createDisplayPlugin = createMyPluginFactory({
   key: ELEMENT_DISPLAY,

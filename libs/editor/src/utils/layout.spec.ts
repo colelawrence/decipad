@@ -1,3 +1,4 @@
+import { expect, beforeEach, describe, it } from 'vitest';
 import type { PlateEditor } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-common';
 import type { VariableDefinitionElement } from '@decipad/editor-types';

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { isTable } from '@decipad/remote-computer';
 import { getDefined, dequal } from '@decipad/utils';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';

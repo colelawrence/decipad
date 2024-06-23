@@ -1,5 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import type { Result, SerializedType } from '@decipad/remote-computer';
+import type { Result, SerializedType } from '@decipad/language-interfaces';
 import {
   Unit,
   materializeResult,

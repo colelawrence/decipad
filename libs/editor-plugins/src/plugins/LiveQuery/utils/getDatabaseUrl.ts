@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { isTableResult } from '@decipad/remote-computer';
 
 export const getDatabaseUrl = async (

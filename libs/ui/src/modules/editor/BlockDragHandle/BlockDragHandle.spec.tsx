@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BlockDragHandle } from './BlockDragHandle';
@@ -23,7 +24,7 @@ it('shows a tooltip when focussing the handle', async () => {
 });
 
 it('emits a changeMenuOpen event when clicking the handle', async () => {
-  const handleChangeMenuOpen = jest.fn();
+  const handleChangeMenuOpen = vi.fn();
   const { getAllByTitle } = render(
     <Plate>
       <BlockDragHandle onChangeMenuOpen={handleChangeMenuOpen} />

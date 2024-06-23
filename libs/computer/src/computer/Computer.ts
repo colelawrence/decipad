@@ -143,7 +143,7 @@ export class Computer implements ComputerInterface {
 
     return this.deltaQueue.push(
       async () =>
-        new Promise<void>((resolve) => {
+        new Promise<void>((resolve, reject) => {
           if (req.external?.upsert) {
             // TODO: we need to update the external data map, for now...
             this.latestExternalData = new Map([
@@ -165,6 +165,7 @@ export class Computer implements ComputerInterface {
           this.computeRequests.next({
             ...req,
             done: resolve,
+            error: reject,
           });
         })
     );
@@ -188,27 +189,33 @@ export class Computer implements ComputerInterface {
   }
 
   public async pushExtraProgramBlocksDelete(ids: string[]): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.computeRequests.next({ extra: { remove: ids }, done: resolve });
+    return new Promise<void>((resolve, reject) => {
+      this.computeRequests.next({
+        extra: { remove: ids },
+        done: resolve,
+        error: reject,
+      });
     });
   }
 
   public async pushExternalDataUpdate(
     values: Array<[string, Result.Result]>
   ): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       this.computeRequests.next({
         external: { upsert: new Map(values) },
         done: resolve,
+        error: reject,
       });
     });
   }
 
   public async pushExternalDataDelete(key: string[]): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       this.computeRequests.next({
         external: { remove: key },
         done: resolve,
+        error: reject,
       });
     });
   }
@@ -220,20 +227,27 @@ export class Computer implements ComputerInterface {
     this.computeRequests
       .pipe(
         // Compute me some computes!
-        concatMap(async ({ done, ...req }) => {
-          const result = await this.computeDeltaRequest(req);
-          return { result, done };
+        concatMap(async ({ done, error, ...req }) => {
+          try {
+            const result = await this.computeDeltaRequest(req);
+            return { result, done };
+          } catch (err) {
+            error(err);
+            return {};
+          }
         })
       )
       .subscribe(({ done, result }) => {
         if (result) {
           this.resultStreams.pushResults(result);
         }
-        done();
+        if (done) {
+          done();
+        }
       });
   }
 
-  getVarBlockId(varName: string) {
+  _getVarBlockId(varName: string): string | undefined {
     const mainIdentifier = varName.includes('.') // table.name
       ? varName.split('.')[0]
       : varName;
@@ -245,6 +259,9 @@ export class Computer implements ComputerInterface {
         return p.definesVariable === mainIdentifier;
       }
     })?.id;
+  }
+  getVarBlockId(varName: string) {
+    return this._getVarBlockId(varName);
   }
 
   results$ = listenerHelper(this.results, identity);
@@ -268,12 +285,12 @@ export class Computer implements ComputerInterface {
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
-    this.getVarBlockId(varName)
+    this._getVarBlockId(varName)
   );
 
   getVarResult$ = listenerHelper(
     (varName: string) => {
-      const blockId = this.getVarBlockId(varName);
+      const blockId = this._getVarBlockId(varName);
       return blockId
         ? this.resultStreams.blockSubject(blockId)
         : emptyBlockResultSubject();
@@ -338,7 +355,7 @@ export class Computer implements ComputerInterface {
 
       if (programBlock?.definesTableColumn) {
         const [tableName] = programBlock.definesTableColumn;
-        const tableId = this.getVarBlockId(tableName);
+        const tableId = this._getVarBlockId(tableName);
         if (!tableId) return undefined;
 
         return [tableId, blockId];
@@ -423,7 +440,8 @@ export class Computer implements ComputerInterface {
     this.getFunctionDefinition(funcName)
   );
 
-  private _variableExists(name: string, inBlockIds?: string[]) {
+  /** Does `name` exist? Ignores a block ID if you pass the second argument */
+  variableExists(name: string, inBlockIds?: string[]) {
     return this.latestProgram.asSequence.some((p) => {
       // Skip own block
       if (inBlockIds?.includes(p.id)) {
@@ -440,14 +458,6 @@ export class Computer implements ComputerInterface {
         return false;
       }
     });
-  }
-
-  /** Does `name` exist? Ignores a block ID if you pass the second argument */
-  async variableExists(
-    name: string,
-    inBlockIds?: string[] | undefined
-  ): Promise<boolean> {
-    return this._variableExists(name, inBlockIds);
   }
 
   /**
@@ -618,10 +628,11 @@ export class Computer implements ComputerInterface {
               }
 
               const tableName = getIdentifierString(statement.args[0]);
-              const blockId = this.getVarBlockId(tableName);
+              const blockId: string | undefined =
+                this._getVarBlockId(tableName);
               readableTableName = this.getSymbolDefinedInBlock(blockId ?? '');
               if (filterForBlockId) {
-                const blockId = this.getVarBlockId(tableName);
+                const blockId = this._getVarBlockId(tableName);
                 if (blockId !== filterForBlockId) {
                   return [];
                 }
@@ -894,14 +905,10 @@ export class Computer implements ComputerInterface {
     this.wireRequestsToResults();
   }
 
-  _getStatement(blockId: string): AST.Statement | undefined {
+  getStatement(blockId: string): AST.Statement | undefined {
     const block = this.latestProgram?.asBlockIdMap.get(blockId)?.block;
 
     return block?.args[0];
-  }
-
-  async getStatement(blockId: string): Promise<AST.Statement | undefined> {
-    return this._getStatement(blockId);
   }
 
   /**
@@ -974,7 +981,13 @@ export class Computer implements ComputerInterface {
       });
     });
   }
+
+  async terminate(): Promise<void> {
+    // nothing to do here
+  }
 }
 
 export const getComputer = (options?: ComputerOpts): Computer =>
   new Computer(options);
+
+export const createRemoteComputerClient = getComputer; // for backend build

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import {
   inlineChildToString,
   valueToMarkup,
@@ -904,7 +905,7 @@ Table1 = {
   });
 });
 
-describe('valuesToMarkdown', () => {
+it('valuesToMarkdown', () => {
   expect(
     valuesToMarkdown([
       {

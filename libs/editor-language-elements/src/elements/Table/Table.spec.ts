@@ -145,13 +145,13 @@ describe('Table', () => {
         errors: ex.type === 'identified-error' && ex.error,
       }))
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "blockId": "table1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                   3,
                 ],
@@ -162,38 +162,38 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column1",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -204,16 +204,16 @@ describe('Table', () => {
                                 ],
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "bananas",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 6,
                                   "column": 7,
                                   "line": 1,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 0,
                                   "column": 1,
                                   "line": 1,
@@ -226,18 +226,18 @@ describe('Table', () => {
                         ],
                         "type": "function-call",
                       },
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -248,16 +248,16 @@ describe('Table', () => {
                                 ],
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "bananas",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 6,
                                   "column": 7,
                                   "line": 1,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 0,
                                   "column": 1,
                                   "line": 1,
@@ -270,18 +270,18 @@ describe('Table', () => {
                         ],
                         "type": "function-call",
                       },
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -292,16 +292,16 @@ describe('Table', () => {
                                 ],
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "bananas",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 6,
                                   "column": 7,
                                   "line": 1,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 0,
                                   "column": 1,
                                   "line": 1,
@@ -326,42 +326,42 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th2",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column2",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "string",
                           "string 1",
                         ],
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "string",
                           "string 2",
                         ],
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "string",
                           "string 3",
                         ],
@@ -379,28 +379,28 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th3",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column3",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "year",
                           2022n,
                           "month",
@@ -410,8 +410,8 @@ describe('Table', () => {
                         ],
                         "type": "date",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "year",
                           2022n,
                           "month",
@@ -421,8 +421,8 @@ describe('Table', () => {
                         ],
                         "type": "date",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "year",
                           2022n,
                           "month",
@@ -518,13 +518,13 @@ describe('Table', () => {
         })
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "blockId": "table1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                   1,
                 ],
@@ -535,28 +535,28 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column1",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "string",
                           "Hello",
                         ],
@@ -574,44 +574,44 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th2",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column2",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "+",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 2,
                       "column": 3,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 2,
                       "column": 3,
                       "line": 1,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -620,20 +620,20 @@ describe('Table', () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -642,12 +642,12 @@ describe('Table', () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 4,
                           "column": 5,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 4,
                           "column": 5,
                           "line": 1,
@@ -655,12 +655,12 @@ describe('Table', () => {
                         "type": "literal",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 4,
                       "column": 5,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
@@ -668,12 +668,12 @@ describe('Table', () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 4,
                   "column": 5,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
@@ -755,13 +755,13 @@ describe('Table', () => {
         })
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "blockId": "table1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                   2,
                 ],
@@ -772,28 +772,28 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "tableVariableName",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "column1",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "year",
                           2020n,
                           "month",
@@ -801,8 +801,8 @@ describe('Table', () => {
                         ],
                         "type": "date",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "year",
                           2020n,
                           "month",
@@ -938,13 +938,13 @@ describe('Table', () => {
         errors: ex.type === 'identified-error' && ex.error,
       }))
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "blockId": "table1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "Table",
                   1,
                 ],
@@ -955,28 +955,28 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "Table",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "Column1",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "exprRef_categoryValue1",
                         ],
                         "type": "ref",
@@ -993,28 +993,28 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "th2",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "Table",
                 ],
                 "type": "tablepartialdef",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "Column2",
                 ],
                 "type": "coldef",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "string",
                           "categoryValue4",
                         ],
@@ -1032,27 +1032,27 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "categoryValue1",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "exprRef_categoryValue1",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "string",
                   "1",
                 ],
-                "end": Object {
+                "end": {
                   "char": 2,
                   "column": 3,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
@@ -1064,27 +1064,27 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "categoryValue2",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "exprRef_categoryValue2",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "string",
                   "2",
                 ],
-                "end": Object {
+                "end": {
                   "char": 2,
                   "column": 3,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
@@ -1096,27 +1096,27 @@ describe('Table', () => {
           },
           "errors": false,
         },
-        Object {
+        {
           "blockId": "categoryValue3",
-          "column": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "column": {
+            "args": [
+              {
+                "args": [
                   "exprRef_categoryValue3",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "string",
                   "3",
                 ],
-                "end": Object {
+                "end": {
                   "char": 2,
                   "column": 3,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,

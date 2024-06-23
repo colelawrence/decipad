@@ -7,7 +7,7 @@ import type {
 } from '@udecode/plate-common';
 import { getChildren, getNodeString, isElement } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';
-import { type NormalizerReturnValue } from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import type {
   TableElement,
   TableHeaderElement,
@@ -17,9 +17,9 @@ import type {
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@decipad/editor-types';
 import { enumerate } from '@decipad/utils';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 import { setCellText } from '../utils/setCellText';
 // We do this following import this way because tree-shaking is not good enough
-import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],

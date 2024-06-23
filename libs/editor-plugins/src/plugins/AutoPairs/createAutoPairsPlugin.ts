@@ -13,7 +13,7 @@ import {
   moveSelection,
 } from '@udecode/plate-common';
 import { Path, Range } from 'slate';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 
 const pairs = [
   { start: '{', end: '}' },

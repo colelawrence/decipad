@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { FC, PropsWithChildren } from 'react';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';
@@ -20,7 +21,7 @@ it('renders the children', () => {
 });
 
 it('can render a button and emit click events', async () => {
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
   render(
     <WithProviders>
       <NavigationItem onClick={handleClick}>Text</NavigationItem>

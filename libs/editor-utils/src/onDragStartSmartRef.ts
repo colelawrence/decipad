@@ -5,7 +5,7 @@ import type {
 } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import { dndPreviewActions } from '@decipad/react-contexts';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 
 export const DRAG_SMART_REF = 'smart-ref';
 export const DRAG_BLOCK_ID_CONTENT_TYPE = 'text/x-block-id';

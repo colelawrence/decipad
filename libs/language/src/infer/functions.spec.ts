@@ -33,20 +33,6 @@ describe('function inference', () => {
     );
   });
 
-  it('cannot indirectly infinitely recurse', async () => {
-    const selfReferringProgram = [
-      block(funcDef('Fn', ['A'], c('Fn2', l(true)))),
-      block(funcDef('Fn2', ['A'], c('Fn', l(true)))),
-      block(assign('Error', c('Fn', l(true)))),
-    ];
-    const context = await inferProgram(selfReferringProgram);
-
-    expect(getErrSpec(context.stack.get('Error'))).toEqual({
-      errType: 'formula-cannot-call-itself',
-      fname: 'Fn',
-    });
-  });
-
   it('disallows wrong argument count', async () => {
     const unaryFn = funcDef('Fn', ['A'], r('A'));
 

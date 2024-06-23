@@ -187,7 +187,7 @@ export async function createSliderBelow(
         .fill(String(options.step));
     }
 
-    page.keyboard.press('Escape');
+    await page.keyboard.press('Escape');
   }
 }
 

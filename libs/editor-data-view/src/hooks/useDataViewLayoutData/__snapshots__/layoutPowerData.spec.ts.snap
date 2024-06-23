@@ -1,17 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`layoutPowerData works with two column two groups tree and aggregation 1`] = `
-Object {
-  "type": Object {
-    "columnNames": Array [
+exports[`layoutPowerData > works with two column two groups tree and aggregation 1`] = `
+{
+  "type": {
+    "columnNames": [
       "Column1",
       "Column2",
     ],
-    "columnTypes": Array [
-      Object {
+    "columnTypes": [
+      {
         "kind": "string",
       },
-      Object {
+      {
         "kind": "number",
         "unit": null,
       },
@@ -19,12 +19,12 @@ Object {
     "kind": "tree",
   },
   "value": Tree {
-    "children": Array [
+    "children": [
       Tree {
-        "children": Array [
+        "children": [
           Tree {
-            "children": Array [],
-            "columns": Array [],
+            "children": [],
+            "columns": [],
             "originalCardinality": 1,
             "root": DeciNumber {
               "d": 1n,
@@ -35,8 +35,8 @@ Object {
             "rootAggregation": undefined,
           },
           Tree {
-            "children": Array [],
-            "columns": Array [],
+            "children": [],
+            "columns": [],
             "originalCardinality": 1,
             "root": DeciNumber {
               "d": 1n,
@@ -47,10 +47,10 @@ Object {
             "rootAggregation": undefined,
           },
         ],
-        "columns": Array [
-          Object {
-            "aggregation": Object {
-              "type": Object {
+        "columns": [
+          {
+            "aggregation": {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -66,8 +66,8 @@ Object {
         ],
         "originalCardinality": 2,
         "root": "A",
-        "rootAggregation": Object {
-          "type": Object {
+        "rootAggregation": {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -80,10 +80,10 @@ Object {
         },
       },
       Tree {
-        "children": Array [
+        "children": [
           Tree {
-            "children": Array [],
-            "columns": Array [],
+            "children": [],
+            "columns": [],
             "originalCardinality": 1,
             "root": DeciNumber {
               "d": 1n,
@@ -94,10 +94,10 @@ Object {
             "rootAggregation": undefined,
           },
         ],
-        "columns": Array [
-          Object {
-            "aggregation": Object {
-              "type": Object {
+        "columns": [
+          {
+            "aggregation": {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -113,8 +113,8 @@ Object {
         ],
         "originalCardinality": 1,
         "root": "B",
-        "rootAggregation": Object {
-          "type": Object {
+        "rootAggregation": {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -127,10 +127,10 @@ Object {
         },
       },
     ],
-    "columns": Array [
-      Object {
-        "aggregation": Object {
-          "type": Object {
+    "columns": [
+      {
+        "aggregation": {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -143,9 +143,9 @@ Object {
         },
         "name": "Column1",
       },
-      Object {
-        "aggregation": Object {
-          "type": Object {
+      {
+        "aggregation": {
+          "type": {
             "kind": "number",
             "unit": null,
           },

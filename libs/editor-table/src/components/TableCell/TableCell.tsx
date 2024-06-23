@@ -28,7 +28,8 @@ declare global {
   }
 }
 
-const shouldCountRenders = isFlagEnabled('COUNT_TABLE_CELL_RENDERS');
+const shouldCountRenders =
+  isFlagEnabled('COUNT_TABLE_CELL_RENDERS') && 'window' in globalThis;
 
 if (shouldCountRenders) {
   window.tableCellRenderCount = 0;

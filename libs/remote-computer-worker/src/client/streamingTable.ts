@@ -3,12 +3,9 @@ import type {
   Result,
   SerializedTypes,
 } from '@decipad/language-interfaces';
-import { decodeString } from './decodeString';
-import type {
-  ClientWorkerContext,
-  StreamingValue,
-  RecursiveDecoder,
-} from './types';
+import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
+import { decodeString } from '@decipad/remote-computer-codec';
+import type { ClientWorkerContext, StreamingValue } from './types';
 import { getRemoteValue } from '../utils/getRemoteValue';
 
 export const streamingTable = async (

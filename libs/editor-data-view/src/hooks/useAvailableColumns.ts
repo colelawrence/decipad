@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { isColumn } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';

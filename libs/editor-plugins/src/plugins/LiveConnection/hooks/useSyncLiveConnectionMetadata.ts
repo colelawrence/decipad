@@ -27,19 +27,21 @@ export const useSyncLiveConnectionMetadata = ({
 
   // sync connection metadata title if needed
   useEffect(() => {
-    if (path && result && !mutated.current) {
-      const caption = element.children[0];
-      const currentTitle = getNodeString(caption);
-      if (!currentTitle && result.meta?.title) {
-        const newTitle = result.meta.title;
-        if (currentTitle.includes(newTitle)) return;
-        mutated.current = true;
-        insertText(
-          editor,
-          computer.getAvailableIdentifier(varNamify(newTitle)),
-          { at: [...path, 0] }
-        );
+    (async () => {
+      if (path && result && !mutated.current) {
+        const caption = element.children[0];
+        const currentTitle = getNodeString(caption);
+        if (!currentTitle && result.meta?.title) {
+          const newTitle = result.meta.title;
+          if (currentTitle.includes(newTitle)) return;
+          mutated.current = true;
+          insertText(
+            editor,
+            computer.getAvailableIdentifier(varNamify(newTitle)),
+            { at: [...path, 0] }
+          );
+        }
       }
-    }
+    })();
   }, [computer, editor, element.children, path, result]);
 };

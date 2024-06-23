@@ -23,8 +23,8 @@ import {
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveQueryVarName } from './components/LiveQueryVarName';
 import { LiveQueryQuery } from './components/LiveQueryQuery';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 import { createSoftBreakLiveQueryPluginFactory } from './createSoftBreakLiveQueryPluginFactory';
 
 const LazyLiveQuery = lazyElementComponent(

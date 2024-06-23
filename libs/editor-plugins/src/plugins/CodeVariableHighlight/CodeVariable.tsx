@@ -41,7 +41,6 @@ export const CodeVariable: CodeLeaf = ({
 
   const variableScope = getVariableScope(variableName, visibleVariables);
   const variableMissing = variableScope === 'undefined';
-
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
 

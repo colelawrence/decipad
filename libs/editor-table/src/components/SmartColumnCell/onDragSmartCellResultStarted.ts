@@ -1,6 +1,6 @@
 import type { MyEditor } from '@decipad/editor-types';
 import type { DragEvent } from 'react';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';
 

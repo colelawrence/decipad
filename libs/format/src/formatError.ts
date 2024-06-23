@@ -1,7 +1,7 @@
 import type { ErrSpec } from '@decipad/language-interfaces';
 import { serializeType, Format } from '@decipad/remote-computer';
 
-const looksLikeVariable = (s: string) => s.toLocaleLowerCase() !== s;
+const looksLikeVariable = (s?: string) => s?.toLocaleLowerCase() !== s;
 
 // istanbul ignore next
 // eslint-disable-next-line complexity

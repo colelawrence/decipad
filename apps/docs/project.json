@@ -9,7 +9,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["../../node_modules/.bin/docusaurus start"],
+        "commands": ["npx docusaurus start"],
         "cwd": "apps/docs"
       }
     },
@@ -23,7 +23,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["../../node_modules/.bin/docusaurus build"],
+        "commands": ["npx docusaurus build"],
         "cwd": "apps/docs"
       }
     },

@@ -20,7 +20,7 @@ it('can get the text before or after a selection', () => {
 
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [0], offset: 0 }))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "textAfter": "",
         "textBefore": "",
       }
@@ -37,28 +37,28 @@ it('can get the text before or after a selection', () => {
   ];
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [0], offset: 0 }))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "textAfter": "hey smartrefplaceholder",
         "textBefore": "",
       }
     `);
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [0], offset: 4 }))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "textAfter": "smartrefplaceholder",
         "textBefore": "hey ",
       }
     `);
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [1], offset: 0 }))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "textAfter": "smartrefplaceholder",
         "textBefore": "hey ",
       }
     `);
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [2], offset: 0 }))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "textAfter": "",
         "textBefore": "hey smartrefplaceholder",
       }

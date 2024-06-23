@@ -9,7 +9,7 @@ Tables help you organize data, making it easier to read and understand. You can 
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
- <YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png" />
+<YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png" />
 
 ## Creating a Table
 
@@ -79,9 +79,9 @@ You can easily reuse and incorporate values from any column in your calculations
 
 To reference a table column in a calculation, follow these steps:
 
-1.  Type the table name.
-2.  Use a dot `.` to indicate the specific column within the table.
-3.  Append the column name after the dot.
+1. Type the table name.
+2. Use a dot `.` to indicate the specific column within the table.
+3. Append the column name after the dot.
 
 For example, if your table is named "Table" and you want to access the "Column" within it, write it as:
 

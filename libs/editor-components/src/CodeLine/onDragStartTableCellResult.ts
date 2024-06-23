@@ -2,7 +2,7 @@ import type { MyEditor } from '@decipad/editor-types';
 import type { ComponentProps } from 'react';
 import { setSlateFragment } from '@decipad/editor-utils';
 import type { CodeResult } from '@decipad/ui';
-import type { SerializedTypes } from '@decipad/remote-computer';
+import type { SerializedTypes } from '@decipad/language-interfaces';
 import type { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';

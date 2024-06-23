@@ -1,4 +1,4 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import type { CodeLineElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
@@ -19,7 +19,7 @@ function codeLine(code: string): CodeLineElement {
 
 let editor: PlateEditor;
 beforeEach(() => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const plugins = createMyPlugins([createNormalizeCodeLinePlugin(computer)]);
   editor = createMyPlateEditor({
     plugins,

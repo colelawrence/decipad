@@ -25,8 +25,8 @@ import type { TNodeEntry } from '@udecode/plate-common';
 import { getChildren, getNodeString, nanoid } from '@udecode/plate-common';
 import type { BaseEditor, Range } from 'slate';
 import { Transforms } from 'slate';
-import type { NormalizerReturnValue } from '../../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<
   MyValue,

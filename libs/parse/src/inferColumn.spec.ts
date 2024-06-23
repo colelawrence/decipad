@@ -7,7 +7,7 @@ it('infer column with percentages', async () => {
   const computer = getComputer();
   let result = await inferColumn(computer, [100, 200, 300]);
   expect(result).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "number",
       "unit": null,
     }
@@ -15,7 +15,7 @@ it('infer column with percentages', async () => {
 
   result = await inferColumn(computer, ['100%', '20', '30']);
   expect(result).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "number",
       "numberFormat": "percentage",
     }

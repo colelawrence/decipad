@@ -1,4 +1,5 @@
-import type { Parser } from '@decipad/remote-computer';
+import { describe, it, expect } from 'vitest';
+import type { Parser } from '@decipad/language-interfaces';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 

@@ -15,8 +15,8 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import type { NormalizerReturnValue } from '@decipad/editor-plugins';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import { removeNodes, setNodes } from '@udecode/plate-common';
 import { insertNodes, isElementOfType } from '@decipad/editor-utils';
 

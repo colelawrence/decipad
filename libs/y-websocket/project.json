@@ -20,6 +20,14 @@
         "command": "yarn tsc -b libs/y-websocket"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/y-websocket"],
+      "options": {
+        "command": "npx vitest --run",
+        "cwd": "libs/y-websocket"
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

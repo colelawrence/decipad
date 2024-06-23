@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { TEditor, TElement } from '@udecode/plate-common';
 import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import {
@@ -16,7 +17,7 @@ import { timeout } from '@decipad/utils';
 let editor: TEditor;
 
 // To have nice and consistent IDs
-jest.mock('nanoid', () => {
+vi.mock('nanoid', () => {
   let mockCounter = 0;
   return {
     nanoid: () => {
@@ -44,14 +45,14 @@ describe('normalizeTables plugin', () => {
     normalizeEditor(editor, { force: true });
     await timeout(100);
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -62,14 +63,14 @@ describe('normalizeTables plugin', () => {
               "id": undefined,
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "Column1",
                     },
                   ],
@@ -80,11 +81,11 @@ describe('normalizeTables plugin', () => {
               "id": "id-4",
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -125,14 +126,14 @@ describe('normalizeTables plugin', () => {
     normalizeEditor(editor, { force: true });
     await timeout(100);
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -142,14 +143,14 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "Column1",
                     },
                   ],
@@ -159,11 +160,11 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -209,14 +210,14 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -227,14 +228,14 @@ describe('normalizeTables plugin', () => {
               "id": undefined,
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "Column1",
                     },
                   ],
@@ -245,11 +246,11 @@ describe('normalizeTables plugin', () => {
               "id": "id-10",
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -334,14 +335,14 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -350,25 +351,25 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "Column1",
                     },
                   ],
                   "type": "th",
                 },
-                Object {
-                  "cellType": Object {
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "Column2",
                     },
                   ],
@@ -377,19 +378,19 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
                   "type": "td",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -399,19 +400,19 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
                   "type": "td",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -513,14 +514,14 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -529,25 +530,25 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName11",
                     },
                   ],
                   "type": "th",
                 },
-                Object {
-                  "cellType": Object {
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName2",
                     },
                   ],
@@ -556,19 +557,19 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "value 1.1value 1.2",
                     },
                   ],
                   "type": "td",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -578,19 +579,19 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "value 2.1",
                     },
                   ],
                   "type": "td",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "value 2.2",
                     },
                   ],
@@ -647,14 +648,14 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Table",
                     },
                   ],
@@ -663,25 +664,25 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName11",
                     },
                   ],
                   "type": "th",
                 },
-                Object {
-                  "cellType": Object {
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName2",
                     },
                   ],
@@ -690,20 +691,20 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
                   "id": "id-17",
                   "type": "td",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -768,14 +769,14 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "caption",
                     },
                   ],
@@ -785,14 +786,14 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName1",
                     },
                   ],
@@ -801,11 +802,11 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -814,11 +815,11 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -887,22 +888,22 @@ describe('normalizeTables plugin', () => {
     await timeout(100);
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "caption",
                     },
                   ],
                   "type": "table-var-name",
                 },
-                Object {
-                  "children": Array [
-                    Object {
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -913,14 +914,14 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "table-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "table-formula",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "colName1",
                     },
                   ],
@@ -930,11 +931,11 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -943,11 +944,11 @@ describe('normalizeTables plugin', () => {
               ],
               "type": "tr",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],

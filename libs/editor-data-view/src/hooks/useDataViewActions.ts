@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { type SerializedType } from '@decipad/remote-computer';
+import { type SerializedType } from '@decipad/language-interfaces';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import type {
   DataViewElement,

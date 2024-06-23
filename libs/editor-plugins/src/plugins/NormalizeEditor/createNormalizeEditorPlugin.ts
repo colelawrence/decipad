@@ -17,8 +17,8 @@ import {
   wrapNodes,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 const normalizeEditor =
   (editor: MyEditor) =>

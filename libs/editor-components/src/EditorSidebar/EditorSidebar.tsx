@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { type AutocompleteName } from '@decipad/remote-computer';
+import { type AutocompleteName } from '@decipad/language-interfaces';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import {

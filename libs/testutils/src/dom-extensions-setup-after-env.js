@@ -1,12 +1,7 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 
-// DOM matchers
-import '@testing-library/jest-dom/extend-expect';
-
-// emotion
-import { matchers } from '@emotion/jest';
-expect.extend(matchers);
+import { vi } from 'vitest';
 
 // Text{En,De}coder
 import { TextEncoder, TextDecoder } from 'util';
@@ -50,8 +45,8 @@ Storage.prototype.removeItem = function removeItem(key) {
 };
 
 // element scroll methods
-Element.prototype.scrollIntoView = jest.fn();
-Element.prototype.scrollTo = jest.fn();
+Element.prototype.scrollIntoView = vi.fn();
+Element.prototype.scrollTo = vi.fn();
 
 // geometry
 import 'geometry-polyfill';
@@ -100,4 +95,27 @@ Object.defineProperty(SVGSVGElement.prototype, 'viewBox', {
     const rect = new SVGRect(...this.getAttribute('viewBox').split(' '));
     return { baseVal: rect, animVal: rect };
   },
+});
+
+if (typeof window?.addEventListener !== 'function') {
+  window.addEventListener = () => {};
+  window.removeEventListener = () => {};
+}
+
+if (typeof window?.addEventListener === 'function') {
+  document.addEventListener = window.addEventListener.bind(window);
+  document.removeEventListener = window.removeEventListener.bind(window);
+}
+
+document.createEvent = (...args) => {
+  return new Event(...args);
+};
+
+document.createTextNode = (...args) => {
+  return new Text(...args);
+};
+
+document.getSelection = () => ({
+  removeAllRanges: () => {},
+  addRange: () => {},
 });

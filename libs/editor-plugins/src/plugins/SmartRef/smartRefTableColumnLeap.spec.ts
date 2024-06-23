@@ -38,13 +38,10 @@ import {
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createCodeLine } from '@decipad/editor-utils';
-import {
-  getRemoteComputer,
-  getExprRef,
-  materializeResult,
-} from '@decipad/remote-computer';
+import { getExprRef, materializeResult } from '@decipad/remote-computer';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
 import { createTestEditorController } from '../../utils/createTestEditorController';
+import { getComputer } from '@decipad/computer';
 
 it('supports a variable name with the same name as a table', async () => {
   expect(
@@ -53,9 +50,9 @@ it('supports a variable name with the same name as a table', async () => {
       mkTable('TableName', 'Column2', 'exprRef_codeline_id + 1')
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
+    [
+      {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -66,18 +63,18 @@ it('supports a variable name with the same name as a table', async () => {
           "s": 1n,
         },
       },
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
             "Column2",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -86,8 +83,8 @@ it('supports a variable name with the same name as a table', async () => {
           "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -95,7 +92,7 @@ it('supports a variable name with the same name as a table', async () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -105,16 +102,16 @@ it('supports a variable name with the same name as a table', async () => {
           ],
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -123,16 +120,16 @@ it('supports a variable name with the same name as a table', async () => {
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -148,29 +145,56 @@ it('supports a variable name with the same name as a table', async () => {
 it('supports a table column named the same as the table (1 - does not refer to it)', async () => {
   expect(await run(mkTable('TableName', 'TableName', 'Column1 + 1')))
     .toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
-            "Column1",
-            "TableName",
+      [
+        {
+          "type": {
+            "columnNames": [
+              "Column1",
+              "TableName",
+            ],
+            "columnTypes": [
+              {
+                "kind": "number",
+                "unit": null,
+              },
+              {
+                "kind": "number",
+                "unit": null,
+              },
+            ],
+            "delegatesIndexTo": "exprRef_id_TableName",
+            "indexName": "exprRef_id_TableName",
+            "kind": "table",
+          },
+          "value": [
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+            ],
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            ],
           ],
-          "columnTypes": Array [
-            Object {
-              "kind": "number",
-              "unit": null,
-            },
-            Object {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "delegatesIndexTo": "exprRef_id_TableName",
-          "indexName": "exprRef_id_TableName",
-          "kind": "table",
         },
-        "value": Array [
-          Array [
+        {
+          "type": {
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_id_TableName",
+            "kind": "column",
+          },
+          "value": [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -178,7 +202,17 @@ it('supports a table column named the same as the table (1 - does not refer to i
               "s": 1n,
             },
           ],
-          Array [
+        },
+        {
+          "type": {
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_id_TableName",
+            "kind": "column",
+          },
+          "value": [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -186,74 +220,64 @@ it('supports a table column named the same as the table (1 - does not refer to i
               "s": 1n,
             },
           ],
-        ],
-      },
-      Object {
-        "type": Object {
-          "cellType": Object {
-            "kind": "number",
-            "unit": null,
-          },
-          "indexedBy": "exprRef_id_TableName",
-          "kind": "column",
         },
-        "value": Array [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": 1n,
-          },
-        ],
-      },
-      Object {
-        "type": Object {
-          "cellType": Object {
-            "kind": "number",
-            "unit": null,
-          },
-          "indexedBy": "exprRef_id_TableName",
-          "kind": "column",
-        },
-        "value": Array [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 2n,
-            "s": 1n,
-          },
-        ],
-      },
-    ]
-  `);
+      ]
+    `);
 });
 
 it('supports a table column named the same as the table (2 - tricky name used in its own definition)', async () => {
   expect(await run(mkTable('TableName', 'TableName', 'TableName.Column1 + 1')))
     .toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
-            "Column1",
-            "TableName",
+      [
+        {
+          "type": {
+            "columnNames": [
+              "Column1",
+              "TableName",
+            ],
+            "columnTypes": [
+              {
+                "kind": "number",
+                "unit": null,
+              },
+              {
+                "kind": "number",
+                "unit": null,
+              },
+            ],
+            "delegatesIndexTo": "exprRef_id_TableName",
+            "indexName": "exprRef_id_TableName",
+            "kind": "table",
+          },
+          "value": [
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+            ],
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            ],
           ],
-          "columnTypes": Array [
-            Object {
-              "kind": "number",
-              "unit": null,
-            },
-            Object {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "delegatesIndexTo": "exprRef_id_TableName",
-          "indexName": "exprRef_id_TableName",
-          "kind": "table",
         },
-        "value": Array [
-          Array [
+        {
+          "type": {
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_id_TableName",
+            "kind": "column",
+          },
+          "value": [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -261,7 +285,17 @@ it('supports a table column named the same as the table (2 - tricky name used in
               "s": 1n,
             },
           ],
-          Array [
+        },
+        {
+          "type": {
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_id_TableName",
+            "kind": "column",
+          },
+          "value": [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -269,46 +303,9 @@ it('supports a table column named the same as the table (2 - tricky name used in
               "s": 1n,
             },
           ],
-        ],
-      },
-      Object {
-        "type": Object {
-          "cellType": Object {
-            "kind": "number",
-            "unit": null,
-          },
-          "indexedBy": "exprRef_id_TableName",
-          "kind": "column",
         },
-        "value": Array [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": 1n,
-          },
-        ],
-      },
-      Object {
-        "type": Object {
-          "cellType": Object {
-            "kind": "number",
-            "unit": null,
-          },
-          "indexedBy": "exprRef_id_TableName",
-          "kind": "column",
-        },
-        "value": Array [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 2n,
-            "s": 1n,
-          },
-        ],
-      },
-    ]
-  `);
+      ]
+    `);
 });
 
 it('supports a table column named the same as the table (3 - defined before)', async () => {
@@ -316,24 +313,24 @@ it('supports a table column named the same as the table (3 - defined before)', a
     mkTable('TableName', 'TableName', '2', 'UsesTableName', 'TableName + 1')
   );
   expect(result).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
+    [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
             "TableName",
             "UsesTableName",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -342,8 +339,8 @@ it('supports a table column named the same as the table (3 - defined before)', a
           "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -351,7 +348,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -359,7 +356,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -369,16 +366,16 @@ it('supports a table column named the same as the table (3 - defined before)', a
           ],
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -387,16 +384,16 @@ it('supports a table column named the same as the table (3 - defined before)', a
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -405,16 +402,16 @@ it('supports a table column named the same as the table (3 - defined before)', a
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -439,24 +436,24 @@ it('supports a table column named the same as the table (4 - defined after)', as
       )
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
+    [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
             "Column2",
             "TableName",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -465,8 +462,8 @@ it('supports a table column named the same as the table (4 - defined after)', as
           "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -474,7 +471,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -482,7 +479,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -492,16 +489,16 @@ it('supports a table column named the same as the table (4 - defined after)', as
           ],
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -510,16 +507,16 @@ it('supports a table column named the same as the table (4 - defined after)', as
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -528,16 +525,16 @@ it('supports a table column named the same as the table (4 - defined after)', as
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -562,19 +559,19 @@ it('supports a table column named the same as the table (5 - defined after)', as
       )
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
+    [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
             "TableName",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -583,8 +580,8 @@ it('supports a table column named the same as the table (5 - defined after)', as
           "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -592,7 +589,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -602,16 +599,16 @@ it('supports a table column named the same as the table (5 - defined after)', as
           ],
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -620,16 +617,16 @@ it('supports a table column named the same as the table (5 - defined after)', as
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -650,19 +647,19 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       createCodeLine({ id: 'code', code: `exprRef_${idOfColumn} + 100` })
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": Object {
-          "columnNames": Array [
+    [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
             "Column2",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -671,8 +668,8 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
           "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -680,7 +677,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -690,16 +687,16 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
           ],
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -708,16 +705,16 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -726,16 +723,16 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
           },
         ],
       },
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -754,7 +751,7 @@ const run = async (...elements: AnyElement[]) => {
 
   Editor.normalize(editor as BaseEditor, { force: true });
 
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const program = await editorToProgram(editor, editor.children, computer);
 
   await computer.pushComputeDelta({ program: { upsert: program } });

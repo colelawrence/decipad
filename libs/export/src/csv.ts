@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { simpleFormatResult } from './simpleFormat';
 import { formatUnit } from '@decipad/format';
 

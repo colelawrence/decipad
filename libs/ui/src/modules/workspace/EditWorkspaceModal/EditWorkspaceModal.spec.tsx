@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
@@ -32,7 +33,7 @@ it('cannot rename to an empty name', async () => {
 });
 
 it('emits a rename event when typing a new workspace name and submitting', async () => {
-  const handleRename = jest.fn();
+  const handleRename = vi.fn();
   const { getByText, getByPlaceholderText } = renderWithRouter(
     <EditWorkspaceModal {...props} onRename={handleRename} />
   );
@@ -70,7 +71,7 @@ describe('with allowDelete', () => {
   });
 
   it('emits a delete event when typing the workspace name into the confirmation prompt and submitting', async () => {
-    const handleDelete = jest.fn();
+    const handleDelete = vi.fn();
     const { getByText, getByPlaceholderText } = renderWithRouter(
       <EditWorkspaceModal
         {...props}
@@ -88,7 +89,7 @@ describe('with allowDelete', () => {
 
   it('disables all buttons while deleting', async () => {
     let resolveDeletion!: () => void;
-    const handleDelete = jest.fn().mockReturnValue(
+    const handleDelete = vi.fn().mockReturnValue(
       new Promise<void>((resolve) => {
         resolveDeletion = resolve;
       })

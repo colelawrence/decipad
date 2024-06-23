@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { noop } from '@decipad/utils';
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -19,7 +20,7 @@ it('cannot create a folder in its initial state', () => {
 });
 
 it('emits a create event when typings a folder name and submitting', async () => {
-  const handleCreate = jest.fn();
+  const handleCreate = vi.fn();
   const { getByText, getByPlaceholderText } = renderWithRouter(
     <CreateOrEditSectionModal {...props} onSubmit={handleCreate} />
   );

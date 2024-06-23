@@ -1,3 +1,4 @@
+const { join } = require('path');
 const {
   setupFilesAfterEnv = [],
   collectCoverageFrom,
@@ -9,7 +10,7 @@ module.exports = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: 'language',
-  setupFilesAfterEnv: [...setupFilesAfterEnv, './jest.setup.js'],
+  setupFilesAfterEnv: [...setupFilesAfterEnv, join(__dirname, 'jest.setup.js')],
   collectCoverageFrom: [
     ...collectCoverageFrom,
     '!<rootDir>/src/builtins/operators/*.ts',

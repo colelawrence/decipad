@@ -4,8 +4,8 @@ import {
   type Value,
   type PlateEditor,
 } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '@decipad/editor-plugins';
-import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 import type { TableHeaderElement } from '@decipad/editor-types';
 import { ELEMENT_TH } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';

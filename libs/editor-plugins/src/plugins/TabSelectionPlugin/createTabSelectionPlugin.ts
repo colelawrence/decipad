@@ -4,7 +4,7 @@ import {
   getPreviousNode,
   getStartPoint,
 } from '@udecode/plate-common';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import type { MyValue } from '@decipad/editor-types';
 
 export const createTabSelectionPlugin = createOnKeyDownPluginFactory({

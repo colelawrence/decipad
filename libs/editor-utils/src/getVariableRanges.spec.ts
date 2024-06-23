@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { getVariableRanges } from './getVariableRanges';
 
 const testFindVariables = (code: string) => {
@@ -10,7 +11,7 @@ const testFindVariables = (code: string) => {
 
 it('finds bubbles', () => {
   expect(testFindVariables('Ayy = B\nC = D')).toMatchInlineSnapshot(`
-    Array [
+    [
       "Ayy",
       "B",
       "C",
@@ -19,18 +20,18 @@ it('finds bubbles', () => {
   `);
 
   expect(testFindVariables('Ayy == B')).toMatchInlineSnapshot(`
-    Array [
+    [
       "Ayy",
       "B",
     ]
   `);
 
-  expect(testFindVariables('"A = B"')).toMatchInlineSnapshot(`Array []`);
+  expect(testFindVariables('"A = B"')).toMatchInlineSnapshot(`[]`);
 });
 
 it('finds bubbles for previously defined variables', () => {
   expect(testFindVariables('Ayy = B')).toMatchInlineSnapshot(`
-    Array [
+    [
       "Ayy",
       "B",
     ]
@@ -39,7 +40,7 @@ it('finds bubbles for previously defined variables', () => {
 
 it('finds bubbles for external variables in function declarations', () => {
   expect(testFindVariables('F(A) = A + Y')).toMatchInlineSnapshot(`
-    Array [
+    [
       "A",
       "A",
       "Y",
@@ -50,7 +51,7 @@ it('finds bubbles for external variables in function declarations', () => {
 it('matches tables correctly', () => {
   expect(testFindVariables('Table = { Col = 1, Col2 = Col }'))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "Table",
         "Col",
       ]
@@ -59,7 +60,7 @@ it('matches tables correctly', () => {
 
 it('takes leading whitespace into account', () => {
   expect(testFindVariables('  Ayy = B')).toMatchInlineSnapshot(`
-    Array [
+    [
       "Ayy",
       "B",
     ]

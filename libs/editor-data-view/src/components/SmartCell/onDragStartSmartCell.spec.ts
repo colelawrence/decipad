@@ -1,11 +1,12 @@
+import { vi } from 'vitest';
 import type React from 'react';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { DRAG_SMART_CELL } from '@decipad/editor-plugins';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 
-jest.mock('@udecode/plate-common', () => ({
-  ...jest.requireActual('@udecode/plate-common'),
+vi.mock('@udecode/plate-common', async (requireActual) => ({
+  ...((await requireActual()) as object),
   findNodePath: () => [],
   getNodeString: () => '',
 }));
@@ -24,12 +25,12 @@ describe('onDragStartSmartCell', () => {
     editor = {
       dragging: null,
       previewRef,
-      setFragmentData: jest.fn(),
+      setFragmentData: vi.fn(),
     };
     dragEvent = {
       dataTransfer: {
-        setData: jest.fn(),
-        setDragImage: jest.fn(),
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
       },
     } as any;
     result = {
@@ -48,7 +49,7 @@ describe('onDragStartSmartCell', () => {
   });
 
   it('should call dndPreviewActions.previewText if element is present', () => {
-    dndPreviewActions.previewText = jest.fn();
+    dndPreviewActions.previewText = vi.fn();
 
     const dragStartSmartRef = onDragStartSmartCell(editor);
     dragStartSmartRef({

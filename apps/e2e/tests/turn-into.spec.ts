@@ -58,7 +58,7 @@ test('Make sure the toggle conversion works', async ({ testUser }) => {
   await createWithSlashCommand(page, '/input', 'input');
   await page.locator('article').getByTestId('drag-handle').first().click();
 
-  page.getByText('Turn into').waitFor();
+  await page.getByText('Turn into').waitFor();
   await page.getByText('Turn into').click();
   await page.getByRole('menuitem').getByText('Toggle').waitFor();
   await page.getByRole('menuitem').getByText('Toggle').click();

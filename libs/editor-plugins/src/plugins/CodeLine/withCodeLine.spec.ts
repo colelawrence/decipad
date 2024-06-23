@@ -1,17 +1,16 @@
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-// eslint-disable-next-line no-restricted-imports
-import { getRemoteComputer } from '@decipad/remote-computer';
 import type { Computer } from '@decipad/computer-interfaces';
 import { createCodeLinePlugin } from './createCodeLinePlugin';
 import { codeLine } from '../NormalizeCodeBlock/testUtils';
+import { getComputer } from '@decipad/computer';
 
 describe('withCodeLine', () => {
   let editor: MyEditor;
   let computer: Computer;
   beforeEach(() => {
-    computer = getRemoteComputer();
+    computer = getComputer();
     editor = createMyPlateEditor({
       plugins: [createCodeLinePlugin(computer)],
     });

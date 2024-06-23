@@ -23,6 +23,12 @@ type CreateSectionModalProps = {
   readonly onOpenChange: (open: boolean) => void;
 };
 
+const formStyles = css({
+  display: 'grid',
+  rowGap: '12px',
+  pointerEvents: 'auto',
+});
+
 export const CreateOrEditSectionModal = ({
   open,
   onOpenChange,
@@ -41,7 +47,7 @@ export const CreateOrEditSectionModal = ({
   return (
     <Modal open={open} onOpenChange={onOpenChange} title={`${term} folder`}>
       <form
-        css={{ display: 'grid', rowGap: '12px' }}
+        css={formStyles}
         onSubmit={async (event) => {
           event.preventDefault();
           setIsSubmitting(true);

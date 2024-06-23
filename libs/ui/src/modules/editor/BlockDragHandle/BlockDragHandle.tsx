@@ -8,7 +8,7 @@ import {
   TopLevelValue,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import type { BlockDependents } from '@decipad/remote-computer';
+import type { BlockDependents } from '@decipad/computer-interfaces';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {

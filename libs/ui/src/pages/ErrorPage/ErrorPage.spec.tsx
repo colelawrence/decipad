@@ -22,50 +22,50 @@ it('shows default text for an unknown error', () => {
   );
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
-    Array [
-      "Sorry, we did something wrong",
-      "Decipad isn't accessible right now. We're probably fixing this right now",
-      "Back to our website",
-      "Contact support",
-    ]
-  `);
+      [
+        "Sorry, we did something wrong",
+        "Decipad isn't accessible right now. We're probably fixing this right now",
+        "Back to our website",
+        "Contact support",
+      ]
+    `);
 });
 
 it('shows explanatory text for a 403 error', () => {
   const { getAllByText } = render(<ErrorPage {...props} wellKnown="403" />);
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
-    Array [
-      "You don't have permissions to access this page",
-      "Contact the owner for access",
-      "Back to our website",
-      "Contact support",
-    ]
-  `);
+      [
+        "You don't have permissions to access this page",
+        "Contact the owner for access",
+        "Back to our website",
+        "Contact support",
+      ]
+    `);
 });
 
 it('shows explanatory text for a 404 error', () => {
   const { getAllByText } = render(<ErrorPage {...props} wellKnown="404" />);
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
-    Array [
-      "The requested URL was not found",
-      "The link you tried may be broken, or the page may have been removed",
-      "Back to our website",
-      "Contact support",
-    ]
-  `);
+      [
+        "The requested URL was not found",
+        "The link you tried may be broken, or the page may have been removed",
+        "Back to our website",
+        "Contact support",
+      ]
+    `);
 });
 
 it('shows explanatory text for a 500 error', () => {
   const { getAllByText } = render(<ErrorPage {...props} wellKnown="500" />);
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
-    Array [
-      "Sorry, we did something wrong",
-      "Decipad isn't accessible right now. We're probably fixing this right now",
-      "Back to our website",
-      "Contact support",
-    ]
-  `);
+      [
+        "Sorry, we did something wrong",
+        "Decipad isn't accessible right now. We're probably fixing this right now",
+        "Back to our website",
+        "Contact support",
+      ]
+    `);
 });

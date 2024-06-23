@@ -1,4 +1,4 @@
-import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { ELEMENT_TD } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import type { TElement } from '@udecode/plate-common';

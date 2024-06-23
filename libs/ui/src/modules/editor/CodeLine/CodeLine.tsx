@@ -5,7 +5,7 @@ import {
   useThemeFromStore,
 } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import type { DragEvent, FC } from 'react';
 import React, {

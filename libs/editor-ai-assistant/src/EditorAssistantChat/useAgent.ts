@@ -22,7 +22,7 @@ import type {
 } from '@decipad/notebook-open-api';
 import { actions, callAction } from '@decipad/notebook-open-api';
 import type { EditorController } from '@decipad/notebook-tabs';
-import { parseIntegration } from '@decipad/utils';
+import { parseIntegration } from './parseIntegration';
 import { objectToHumanReadableString } from './helpers';
 import { useRemoteAgent } from './useRemoteAgent';
 

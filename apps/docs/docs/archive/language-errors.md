@@ -233,7 +233,7 @@ You are trying to call a formula inside the definition for the formula.
 ```deci live
 MyFormula(Arg) = MyFormula(Arg) + 1
 MyFormula(0)
-==> Error in operation "+" (type-error, number): MyFormula() cannot be used in its own definition
+==> MyFormula() cannot be used in its own definition
 ```
 
 This is not supported.

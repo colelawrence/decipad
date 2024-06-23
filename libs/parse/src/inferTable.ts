@@ -1,4 +1,4 @@
-import type { Result, SerializedType } from '@decipad/remote-computer';
+import type { Result, SerializedType } from '@decipad/language-interfaces';
 import {
   memoizedColumnResultGenerator,
   Time,

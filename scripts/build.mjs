@@ -129,6 +129,9 @@ async function esBuildOptions(env) {
       'pg-native',
       'oracledb',
     ],
+    alias: {
+      '@decipad/remote-computer': '@decipad/computer',
+    },
     legalComments: 'none',
     sourcemap: true,
     outdir: 'apps/backend/src',

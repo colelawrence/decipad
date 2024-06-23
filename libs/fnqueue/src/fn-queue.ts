@@ -2,6 +2,10 @@
 import type { PromiseOrType } from '@decipad/utils';
 import { noop, timeout } from '@decipad/utils';
 
+const isTesting =
+  typeof process !== 'undefined' &&
+  (!!process.env.JEST_WORKER_ID || !!process.env.VITEST_WORKER_ID);
+
 type AsyncFunction<T> = () => PromiseOrType<T>;
 type Fn<T> = (value: T) => void;
 
@@ -19,8 +23,6 @@ export interface FnQueueOptions {
 }
 
 const returnsFalse = () => false;
-
-const isTesting = process.env.JEST_WORKER_ID != null;
 
 export function fnQueue({
   onError = noop,

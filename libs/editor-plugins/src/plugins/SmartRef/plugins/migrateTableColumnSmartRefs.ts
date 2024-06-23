@@ -9,8 +9,8 @@ import { assertElementType, isElementOfType } from '@decipad/editor-utils';
 import { findNode } from '@udecode/plate-common';
 import type { BaseEditor } from 'slate';
 import { Editor, Transforms } from 'slate';
-import type { NormalizerReturnValue } from '../../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const migrateTableColumnSmartRefs = createNormalizerPluginFactory<
   MyValue,

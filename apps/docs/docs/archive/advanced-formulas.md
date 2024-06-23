@@ -18,8 +18,8 @@ Advanced Formulas enable you to:
 
 To **add ad Advanced Formula block** to your notebook, follow these steps:
 
-1.  Click the `+` button next to an empty line,
-2.  Select **Advanced Formula** from the menu.
+1. Click the `+` button next to an empty line,
+2. Select **Advanced Formula** from the menu.
 
 ## Advanced Formula Anatomy
 
@@ -33,9 +33,9 @@ Variables are labels for your numbers. They make your calculations easy to follo
 
 To **create a new variable on an Advanced Formula**, follow these steps:
 
-1.  Add an Advanced Formula block from the menu.
-2.  Write the variable name for your number.
-3.  Add an `=` sign next to your name and write your number.
+1. Add an Advanced Formula block from the menu.
+2. Write the variable name for your number.
+3. Add an `=` sign next to your name and write your number.
 
 Take a look at this example:
 

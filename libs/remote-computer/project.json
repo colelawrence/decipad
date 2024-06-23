@@ -20,6 +20,13 @@
         "command": "yarn tsc -b libs/remote-computer"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest --run",
+        "cwd": "libs/remote-computer"
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

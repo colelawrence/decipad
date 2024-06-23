@@ -37,11 +37,11 @@ export function useEnsureValidVariableName(
 
   useSlateOnBlur(
     computer,
-    useCallback(async () => {
+    useCallback(() => {
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
 
-      const varExists = await computer.variableExists(
+      const varExists = computer.variableExists(
         currentVarName,
         blockIds.filter(Boolean) as string[]
       );
@@ -61,7 +61,7 @@ export function useEnsureValidVariableName(
             /\d+$/,
             ''
           ) || defaultVarName;
-        const newName = await computer.getAvailableIdentifier(tentativeNewName);
+        const newName = computer.getAvailableIdentifier(tentativeNewName);
 
         insertText(editor, newName, { at: path });
       }

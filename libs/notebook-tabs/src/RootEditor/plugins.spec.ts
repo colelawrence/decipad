@@ -4,8 +4,9 @@ import { normalizers } from './plugins';
 import { ELEMENT_H1 } from '@udecode/plate-heading';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import type { TEditor } from '@udecode/plate-common';
+import { vi, it, expect } from 'vitest';
 
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => 'mocked-id',
 }));
 

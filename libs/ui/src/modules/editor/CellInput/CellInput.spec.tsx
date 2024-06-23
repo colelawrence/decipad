@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CellInput } from './CellInput';
@@ -9,7 +10,7 @@ it('renders the cell text', () => {
 });
 
 it('submits a new value when blurring', async () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
   render(<CellInput value="text" onChange={onChange} />);
 
   await userEvent.type(screen.getByRole('textbox'), ' newtext');
@@ -23,7 +24,7 @@ it('submits a new value when blurring', async () => {
 });
 
 it('submits a new value when pressing enter', async () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
   render(<CellInput value="text" onChange={onChange} />);
 
   await userEvent.type(screen.getByRole('textbox'), ' newtext');
@@ -48,14 +49,14 @@ it('takes a new value from the props', () => {
 
 describe('format prop', () => {
   it('formats input when blurred', () => {
-    const format = jest.fn((value) => `${value} bananas`);
+    const format = vi.fn((value) => `${value} bananas`);
     render(<CellInput format={format} value="text" />);
 
     expect(screen.getByRole('textbox')).toHaveValue('text bananas');
   });
 
   it('restores original value when focused', () => {
-    const format = jest.fn((value) => `${value} bananas`);
+    const format = vi.fn((value) => `${value} bananas`);
     render(<CellInput format={format} value="text" />);
 
     fireEvent.focus(screen.getByRole('textbox'));
@@ -79,8 +80,8 @@ describe('readOnly prop', () => {
 
 describe('transform prop', () => {
   it('transforms the input before submitting', async () => {
-    const onChange = jest.fn(() => 'transformed');
-    const transform = jest.fn(() => 'transformed');
+    const onChange = vi.fn(() => 'transformed');
+    const transform = vi.fn(() => 'transformed');
     render(
       <CellInput onChange={onChange} transform={transform} value="text" />
     );
@@ -100,8 +101,8 @@ describe('transform prop', () => {
 
 describe('validate prop', () => {
   it('validates the input before submitting', async () => {
-    const onChange = jest.fn();
-    const validate = jest.fn(() => true);
+    const onChange = vi.fn();
+    const validate = vi.fn(() => true);
     const { rerender } = render(
       <CellInput onChange={onChange} validate={validate} value="" />
     );
@@ -113,7 +114,7 @@ describe('validate prop', () => {
     expect(validate).toHaveBeenCalledWith('text');
     expect(onChange).toHaveBeenCalledWith('text');
 
-    const noValidate = jest.fn(() => false);
+    const noValidate = vi.fn(() => false);
     rerender(<CellInput onChange={onChange} validate={noValidate} value="" />);
 
     await userEvent.type(screen.getByRole('textbox'), 'text');

@@ -1,5 +1,6 @@
 import { getExprRef, parseStatement } from '@decipad/remote-computer';
 import type {
+  AnyElement,
   MyElement,
   RichText,
   SmartRefElement,
@@ -56,7 +57,7 @@ const surroundWithPlusSigns = (
 };
 
 export function insertSmartRef(
-  blockType: MyElement['type'],
+  blockType: AnyElement['type'],
   blockId: string,
   columnId: string | null,
   precedingText = '',

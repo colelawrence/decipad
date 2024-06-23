@@ -1,6 +1,6 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import { useComputer } from '@decipad/editor-hooks';
-import type { AutocompleteName, Result } from '@decipad/remote-computer';
+import type { AutocompleteName, Result } from '@decipad/language-interfaces';
 import { isTable } from '@decipad/remote-computer';
 import { useEffect, useState } from 'react';
 

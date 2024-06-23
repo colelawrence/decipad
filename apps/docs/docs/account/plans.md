@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Upgrading Plans
 
-Invite your team to collaborate, expand data imports and schedule query executions. <br/>
+Invite your team to collaborate, expand data imports and schedule query executions. <br />
 For information on each plan, please visit our [pricing page](https://www.decipad.com/pricing).
 
 ## Upgrading Your Plan

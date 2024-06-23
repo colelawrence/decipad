@@ -22,7 +22,8 @@ const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
       setTimeout(() => {
         if (store?.getState().destroyed) {
           // eslint-disable-next-line no-console
-          console.log(`notebook ${notebookId} destroyed`);
+          console.log(`notebook ${notebookId} state destroyed`);
+          store?.getState().computer?.terminate();
           notebooks.delete(notebookId);
         }
       }, NOTEBOOK_DESTROY_DELAY_MS);

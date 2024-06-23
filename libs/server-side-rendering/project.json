@@ -39,10 +39,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/server-side-rendering"],
       "options": {
-        "jestConfig": "libs/server-side-rendering/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/server-side-rendering"
       }
     }
   },

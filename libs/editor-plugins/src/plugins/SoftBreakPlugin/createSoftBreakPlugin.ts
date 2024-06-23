@@ -5,7 +5,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { getSoftBreakOnKeyDown } from './getSoftBreakOnKeyDown';
 
 /**

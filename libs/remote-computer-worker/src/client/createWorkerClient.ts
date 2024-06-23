@@ -1,37 +1,45 @@
-import type { Result, SerializedType } from '@decipad/language-interfaces';
 import { fnQueue } from '@decipad/fnqueue';
+import type { PromiseOrType } from '@decipad/utils';
 import type {
   TBaseNotificationParams,
   TSerializedNotificationParams,
 } from '../types';
-import { decodeString } from './decodeString';
-import { decoders, valueDecoder } from './valueDecoder';
 import type { ClientWorkerContext } from './types';
-import { streamingValue } from './streamingValue';
 import { SharedRPC } from '../utils/SharedRPC';
+import { decodeNotification as defaultDecodeNotification } from './decodeNotification';
+import { debug } from './debug';
+import { nanoid } from 'nanoid';
 
 export type SubscriptionId = string;
 
-export type SubscriptionListener<TNotificationParams extends object> = (
+export type SubscriptionListener<TSubscriptionParams, TNotificationParams> = (
   error: Error | undefined,
+  subscriptionParams: TSubscriptionParams,
   response: TNotificationParams
 ) => void;
 
+export type Subscription<TSubscriptionParams, TNotificationParams> = {
+  subscriptionParams: TSubscriptionParams;
+  listener: SubscriptionListener<TSubscriptionParams, TNotificationParams>;
+};
+
 export type Unsubscribe = () => void;
 
-export interface RemoteWorker<
-  TSubscriptionParams extends object,
-  TNotificationParams extends object
-> {
+export interface RemoteWorker<TSubscriptionParams, TNotificationParams> {
   subscribe: (
     props: TSubscriptionParams,
-    listener: SubscriptionListener<TNotificationParams>
+    listener: SubscriptionListener<TSubscriptionParams, TNotificationParams>
   ) => Promise<Unsubscribe>;
   terminate: () => void;
+  call: <T>(method: string, params: object) => Promise<T>;
   worker: Worker;
+  context: ClientWorkerContext;
 }
 
-const createRPCWorker = (worker: Worker) => {
+const createRPCWorker = (
+  worker: Worker,
+  serviceId = 'remote-computer-worker'
+) => {
   return new SharedRPC({
     target: {
       postMessage: (data) => {
@@ -39,86 +47,55 @@ const createRPCWorker = (worker: Worker) => {
       },
     },
     receiver: {
-      readMessages: (cb) => {
+      readMessages: (notify) => {
+        const cb = (event: MessageEvent) => {
+          debug('Received message from worker', event.data);
+          notify(event);
+        };
         worker.addEventListener('message', cb);
 
-        return () => worker.removeEventListener('message', cb);
+        return () => {
+          worker.removeEventListener('message', cb);
+        };
       },
     },
-    serviceId: 'remote-computer-worker',
+    serviceId,
   });
 };
 
-const recursiveDeserializeRemoteValue = async (
-  ctx: ClientWorkerContext,
-  buffer: DataView,
-  _offset: number,
-  type: SerializedType
-): Promise<[Result.OneResult, number]> => {
-  let offset = _offset;
-  switch (type.kind) {
-    case 'anything':
-    case 'pending':
-    case 'nothing':
-    case 'type-error':
-    case 'boolean':
-    case 'function':
-    case 'number':
-    case 'row':
-    case 'tree':
-    case 'range':
-    case 'string':
-    case 'date':
-      return valueDecoder(type)(buffer, offset);
-    // these following types are held in the remoteValueStore
-    case 'table':
-    case 'materialized-table':
-    case 'materialized-column':
-    case 'column': {
-      let valueId;
-      [valueId, offset] = decodeString(buffer, offset);
-      const value = await streamingValue(ctx, type, valueId, decoders);
-      ctx.finalizationRegistry.register(value, valueId);
-      ctx.refCounter.set(valueId, (ctx.refCounter.get(valueId) || 0) + 1);
-      return [value, offset];
-    }
-  }
-};
-
-const deserializeNotification = async <TMeta extends object = object>(
-  ctx: ClientWorkerContext,
-  notification: TSerializedNotificationParams<TMeta>
-): Promise<TBaseNotificationParams<TMeta>> => {
-  return {
-    ...notification,
-    result:
-      notification.result == null
-        ? undefined
-        : {
-            type: notification.result.type,
-            value: (
-              await recursiveDeserializeRemoteValue(
-                ctx,
-                new DataView(notification.result.value),
-                0,
-                notification.result.type
-              )
-            )[0],
-          },
-  };
-};
+export type TransformNotification<
+  TSubscriptionParams,
+  TSerNotificationParams,
+  TNotificationParams
+> = (
+  context: ClientWorkerContext,
+  subscriptionParams: TSubscriptionParams,
+  notification: TSerNotificationParams
+) => PromiseOrType<TNotificationParams>;
 
 export const createWorkerClient = <
-  TSubscriptionParams extends object,
-  TMeta extends object = object
+  TSubscriptionParams,
+  TNotificationParams = TBaseNotificationParams<object>,
+  TSerNotificationParams = TSerializedNotificationParams<object>
 >(
-  worker: Worker
-): RemoteWorker<TSubscriptionParams, TBaseNotificationParams<TMeta>> => {
-  const listeners = new Map<
+  worker: Worker,
+  serviceId: string,
+  decodeNotification: TransformNotification<
+    TSubscriptionParams,
+    TSerNotificationParams,
+    TNotificationParams
+    // TODO: fix this:
+  > = defaultDecodeNotification as unknown as TransformNotification<
+    TSubscriptionParams,
+    TSerNotificationParams,
+    TNotificationParams
+  >
+): RemoteWorker<TSubscriptionParams, TNotificationParams> => {
+  const subscribers = new Map<
     SubscriptionId,
-    SubscriptionListener<TBaseNotificationParams<TMeta>>
+    Subscription<TSubscriptionParams, TNotificationParams>
   >();
-  const rpc = createRPCWorker(worker);
+  const rpc = createRPCWorker(worker, serviceId);
 
   const queue = fnQueue({
     onError: (err) => {
@@ -127,55 +104,79 @@ export const createWorkerClient = <
     },
   });
 
-  const ctx: ClientWorkerContext = {
+  const context: ClientWorkerContext = {
     rpc,
     finalizationRegistry: new FinalizationRegistry((valueId: string) => {
-      const newRefCount = (ctx.refCounter.get(valueId) ?? 0) - 1;
+      const newRefCount = (context.refCounter.get(valueId) ?? 0) - 1;
       if (newRefCount <= 0) {
-        ctx.refCounter.delete(valueId);
+        context.refCounter.delete(valueId);
         rpc.call('releaseValue', { valueId }, false);
       } else {
-        ctx.refCounter.set(valueId, newRefCount);
+        context.refCounter.set(valueId, newRefCount);
       }
     }),
     refCounter: new Map(),
   };
 
   rpc.expose<
-    TSerializedNotificationParams<TMeta> & {
+    TSerNotificationParams & {
       error?: string;
       subscriptionId: string;
     }
-  >('notify', async ({ error, subscriptionId, ...restParams }) =>
-    queue.push(async () => {
-      const listener = listeners.get(subscriptionId);
-      if (listener) {
-        listener(
+  >('notify', async (notification) => {
+    const { error, subscriptionId, ...restParams } = notification;
+    return queue.push(async () => {
+      const subscriber = subscribers.get(subscriptionId);
+      if (subscriber) {
+        subscriber.listener(
           (error != null && new Error(error)) || undefined,
-          await deserializeNotification(
-            ctx,
-            restParams as TSerializedNotificationParams<TMeta>
+          subscriber.subscriptionParams,
+          await decodeNotification(
+            context,
+            subscriber.subscriptionParams,
+            restParams as TSerNotificationParams
           )
         );
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn('Worker client: no subscriber found', subscriptionId);
       }
-    })
-  );
+    });
+  });
 
   return {
-    subscribe: async (params, listener) =>
-      queue.push(async () => {
+    subscribe: async (params, listener) => {
+      return queue.push(async () => {
         await rpc.isReady;
-        const subscriptionId = await rpc.call<string>('subscribe', params);
-        listeners.set(subscriptionId, listener);
+        const subscriptionId = nanoid();
+        subscribers.set(subscriptionId, {
+          subscriptionParams: params,
+          listener,
+        });
+        const responseSubscriptionId = await rpc.call<string>('subscribe', {
+          ...(params ?? {}),
+          newSubscriptionId: subscriptionId,
+        });
+        if (responseSubscriptionId !== subscriptionId) {
+          throw new Error(
+            `Subscription id mismatch: ${responseSubscriptionId} !== ${subscriptionId}`
+          );
+        }
         return async () => {
-          listeners.delete(subscriptionId);
+          subscribers.delete(subscriptionId);
           await rpc.call('unsubscribe', { subscriptionId });
         };
-      }),
+      });
+    },
     terminate: () => {
-      listeners.clear();
+      subscribers.clear();
       worker.terminate();
     },
+    call: async (method: string, params: object) => {
+      await rpc.isReady;
+      return rpc.call(method, params);
+    },
     worker,
+    context,
   };
 };

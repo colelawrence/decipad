@@ -1,12 +1,12 @@
-import { type NormalizerReturnValue } from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import { ELEMENT_TD } from '@decipad/editor-types';
 import {
   type PlateEditor,
   type Value,
   getChildren,
 } from '@udecode/plate-common';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import { normalizeExcessProperties } from '../../../editor-plugins/src/utils/normalize';
-import { createNormalizerPluginFactory } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 const restrictedChildren = ['img'];
 export const createNormalizeTdPlugin = <

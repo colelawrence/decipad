@@ -1,7 +1,8 @@
 const baseUrl =
   'window' in global && 'location' in window
     ? window.location.origin
-    : process.env.DECI_APP_URL_BASE || 'http://localhost:3000';
+    : (typeof process !== 'undefined' && process.env.DECI_APP_URL_BASE) ||
+      'http://localhost:3000';
 
 export const BackendUrl = {
   // NotebookID = EditorID

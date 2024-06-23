@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import type { ElementKind, SlashCommand } from '@decipad/editor-types';
 import {
   createMyPlateEditor,

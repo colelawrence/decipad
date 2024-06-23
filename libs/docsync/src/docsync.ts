@@ -31,7 +31,7 @@ declare global {
   }
 }
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!process.env.VITEST;
 
 // A few helper functions to help customer support recover notebooks.
 if (

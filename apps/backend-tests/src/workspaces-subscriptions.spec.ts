@@ -1,3 +1,4 @@
+import { beforeAll } from 'vitest';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import Stripe from 'stripe';
 import { addMonths } from 'date-fns';

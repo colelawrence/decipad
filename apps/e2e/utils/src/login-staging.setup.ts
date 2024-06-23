@@ -82,10 +82,10 @@ test('save storage state for reuse', async ({ browser }) => {
   expect(match && match.length > 1, 'Button with link not found').toBeTruthy();
 
   const link = match[1];
-  page.goto(link);
+  await page.goto(link);
   const workspace = new Workspace(page);
   // if there are notebooks there from previous fails remove eveything
-  deleteAllWorkspaceNotebooks(page, workspace);
+  await deleteAllWorkspaceNotebooks(page, workspace);
   await expect(page.getByText('No documents to list')).toBeVisible();
   await page.context().storageState({ path: STORAGE_STATE_STAGING });
   await page.close();

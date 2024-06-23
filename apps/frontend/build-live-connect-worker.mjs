@@ -20,9 +20,9 @@ await build({
 
 // Important that this one comes second.
 await build({
-  entryPoints: ['../../libs/live-connect/src/LiveConnect-2.worker.ts'],
+  entryPoints: ['../../libs/live-connect/src/worker/LiveConnect.worker.ts'],
   bundle: true,
-  outfile: '../../libs/live-connect/src/LiveConnect-2.worker.bundle.js',
+  outfile: '../../libs/live-connect/src/worker/LiveConnect-4.worker.bundle.js',
   treeShaking: true,
   minify: false, // TODO CHANGE FOR NOW
   metafile: true,
@@ -30,7 +30,6 @@ await build({
   logLevel: 'info',
   define: {
     global: 'globalThis',
-    'process.env.NODE_ENV': '"production"',
   },
 
   loader: {

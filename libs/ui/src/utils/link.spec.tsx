@@ -1,3 +1,4 @@
+import { vi, describe, it } from 'vitest';
 import { FC } from 'react';
 import { useLocation, MemoryRouter, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
@@ -7,7 +8,7 @@ import { docs } from '@decipad/routing';
 import { mockConsoleError } from '@decipad/testutils';
 import { Anchor, resolveHref } from './link';
 
-describe('resolveHref', () => {
+describe.sequential('resolveHref', () => {
   it.each`
     externalHref                                                                  | resolvedHref
     ${`https://example.com/`}                                                     | ${`https://example.com/`}
@@ -50,7 +51,7 @@ describe('resolveHref', () => {
   );
 });
 
-describe('Anchor', () => {
+describe.sequential('Anchor', () => {
   it('renders the text in an anchor', () => {
     const { getByText } = render(<Anchor href="/">text</Anchor>);
     expect(getByText('text').tagName).toBe('A');
@@ -146,7 +147,7 @@ describe('Anchor', () => {
     });
   });
 
-  describe('for an internal link with a router', () => {
+  describe.sequential('for an internal link with a router', () => {
     mockConsoleError();
     it('does not trigger a full page navigation on click', () => {
       const { getByRole } = render(
@@ -170,7 +171,7 @@ describe('Anchor', () => {
         { wrapper: MemoryRouter }
       );
       const main = getByRole('main');
-      const spyScrollIntoView = jest.spyOn(main, 'scrollIntoView');
+      const spyScrollIntoView = vi.spyOn(main, 'scrollIntoView');
 
       await userEvent.click(getByRole('link'));
       await waitFor(() =>
@@ -178,7 +179,7 @@ describe('Anchor', () => {
       );
     });
 
-    describe('and active styles', () => {
+    describe.sequential('and active styles', () => {
       it('applies the active styles only when on the right page', async () => {
         const { getByText } = render(
           <MemoryRouter>
@@ -187,10 +188,14 @@ describe('Anchor', () => {
             </Anchor>
           </MemoryRouter>
         );
-        expect(getComputedStyle(getByText('text')).color).not.toBe('red');
+        expect(getComputedStyle(getByText('text')).color).not.toBe(
+          'rgb(255, 0, 0)'
+        );
 
         await userEvent.click(getByText('text'));
-        expect(getComputedStyle(getByText('text')).color).toBe('red');
+        expect(getComputedStyle(getByText('text')).color).toBe(
+          'rgb(255, 0, 0)'
+        );
       });
 
       it('does not apply the active styles when on a sub page and exact is set', async () => {
@@ -207,10 +212,14 @@ describe('Anchor', () => {
             <NavigateToChild />
           </MemoryRouter>
         );
-        expect(getComputedStyle(getByText('text')).color).toBe('red');
+        expect(getComputedStyle(getByText('text')).color).toBe(
+          'rgb(255, 0, 0)'
+        );
 
         await userEvent.click(getByText('child'));
-        expect(getComputedStyle(getByText('text')).color).not.toBe('red');
+        expect(getComputedStyle(getByText('text')).color).not.toBe(
+          'rgb(255, 0, 0)'
+        );
       });
     });
   });

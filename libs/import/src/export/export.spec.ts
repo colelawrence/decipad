@@ -1,5 +1,5 @@
 import { serializeResult } from '@decipad/computer-utils';
-import type { IdentifiedResult } from '@decipad/remote-computer';
+import type { IdentifiedResult } from '@decipad/computer-interfaces';
 import { runCode } from '@decipad/remote-computer';
 import { exportProgram } from './export';
 import { N } from '@decipad/number';

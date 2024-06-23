@@ -1,4 +1,4 @@
-import type { AST, Parser } from '@decipad/remote-computer';
+import type { AST, Parser } from '@decipad/language-interfaces';
 import { parseStatement, isExpression } from '@decipad/remote-computer';
 
 interface ExpressionFromEditorNodesResult {

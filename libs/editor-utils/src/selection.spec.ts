@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import type { TEditor } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-common';
 import type { Point } from 'slate';

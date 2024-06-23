@@ -4,7 +4,13 @@
     "allowJs": true,
     "lib": ["esnext", "dom", "dom.iterable"]
   },
-  "include": [".", "./utils", "./__fixtures__/**/*.json", "./tests"],
+  "include": [
+    ".",
+    "./utils",
+    "./__fixtures__/**/*.json",
+    "./tests",
+    ".eslintrc.js"
+  ],
   "references": [
     { "path": "../../libs/backend-config" },
     { "path": "../../libs/shared-config" },

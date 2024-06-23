@@ -12,10 +12,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/live-connect"],
       "options": {
-        "jestConfig": "libs/live-connect/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/live-connect"
       }
     },
     "typecheck": {

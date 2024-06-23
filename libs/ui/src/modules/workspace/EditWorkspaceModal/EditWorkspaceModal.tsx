@@ -144,4 +144,8 @@ const buttonIconStyle = css({
   marginRight: '4px',
 });
 
-const formStyles = css({ display: 'grid', rowGap: '12px' });
+const formStyles = css({
+  display: 'grid',
+  rowGap: '12px',
+  pointerEvents: 'all',
+});

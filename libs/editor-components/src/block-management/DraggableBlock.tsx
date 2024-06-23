@@ -251,7 +251,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       [event, element, onShowHide]
     );
 
-    const onAdd = useCallback(async () => {
+    const onAdd = useCallback(() => {
       if (path == null) return;
       const entry = getPreviousNode(editor, {
         at: path,
@@ -259,7 +259,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       const [prevNode] = entry || [];
       insertNodes(
         editor,
-        [await insertSameNodeType(prevNode as MyElement, computer)],
+        [insertSameNodeType(prevNode as MyElement, computer)],
         {
           at: path,
         }
@@ -329,7 +329,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
             </BlockErrorBoundary>
           </BlockCommentButton>
 
-          {document.getElementById('annotations-container') &&
+          {'getElementById' in document &&
+            document.getElementById('annotations-container') &&
             createPortal(
               <BlockAnnotations
                 blockId={element.id}
@@ -411,19 +412,17 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
   }
 );
 
-const insertSameNodeType = async (
+const insertSameNodeType = (
   prevNode: MyElement | undefined,
   computer: Computer
-): Promise<MyElementOrText> => {
+): MyElementOrText => {
   const id = nanoid();
   const { input, formula } = PLACEHOLDERS;
   switch (prevNode?.type) {
     case ELEMENT_CODE_LINE_V2: {
       const prevNodeText = getCodeLineSource(prevNode.children[1]);
       const isSimpleValue = !!parseSimpleValue(prevNodeText);
-      const autoVarName = await computer.getAvailableIdentifier(
-        generateVarName()
-      );
+      const autoVarName = computer.getAvailableIdentifier(generateVarName());
       return createStructuredCodeLine({
         id,
         varName: autoVarName,

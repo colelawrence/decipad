@@ -13,7 +13,7 @@ import {
   setNodes,
   unsetNodes,
 } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 
 const baseProps = {
   element: ['type', 'children', 'id', 'isHidden'],

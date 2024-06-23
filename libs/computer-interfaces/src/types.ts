@@ -70,12 +70,13 @@ export type ComputeDeltaRequest = {
     remove?: string[];
   };
   external?: {
-    upsert?: AnyMapping<Result.Result>;
+    upsert?: AnyMapping<Result.AnyResult>;
     remove?: string[];
   };
 };
 export type ComputeDeltaRequestWithDone = ComputeDeltaRequest & {
   done: () => unknown;
+  error: (error: unknown) => unknown;
 };
 
 export interface ComputerProgram {

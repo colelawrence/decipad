@@ -1,8 +1,10 @@
 import { all } from '@decipad/generator-utils';
+import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { createResizableArrayBuffer } from '@decipad/language-utils';
 import type { ReadSerializedColumnDecoder } from './ReadSerializedColumn';
 import { ReadSerializedColumn } from './ReadSerializedColumn';
 import { getResultGenerator } from '../utils/getResultGenerator';
-import { N } from '@decipad/number';
 
 describe('SerializedColumn', () => {
   const decoder: ReadSerializedColumnDecoder<bigint> = (buffer, offset) => [
@@ -12,16 +14,18 @@ describe('SerializedColumn', () => {
 
   it('decodes on generator from .getData()', async () => {
     const count = 100;
-    const underlyingBuffer = new ArrayBuffer(8 * count);
+    const underlyingBuffer = createResizableArrayBuffer(8 * count + 4);
     const buffer = new DataView(underlyingBuffer);
+    buffer.setUint32(0, count);
     for (let i = 0; i < count; i++) {
-      buffer.setBigInt64(i * 8, BigInt(i));
+      buffer.setBigInt64(i * 8 + 4, BigInt(i));
     }
     const column = new ReadSerializedColumn(
       { kind: 'number' },
       decoder,
       buffer,
-      []
+      [],
+      0
     );
 
     const values = await all(getResultGenerator(await column.getData())());
@@ -38,16 +42,18 @@ describe('SerializedColumn', () => {
 
   it('decodes on partial generator from .getData()', async () => {
     const count = 100;
-    const underlyingBuffer = new ArrayBuffer(8 * count);
+    const underlyingBuffer = createResizableArrayBuffer(8 * count + 4);
     const buffer = new DataView(underlyingBuffer);
+    buffer.setUint32(0, count);
     for (let i = 0; i < count; i++) {
-      buffer.setBigInt64(i * 8, BigInt(i));
+      buffer.setBigInt64(i * 8 + 4, BigInt(i));
     }
     const column = new ReadSerializedColumn(
       { kind: 'number' },
       decoder,
       buffer,
-      []
+      [],
+      0
     );
 
     const values = await all(

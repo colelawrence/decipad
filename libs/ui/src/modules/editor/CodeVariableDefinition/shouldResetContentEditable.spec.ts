@@ -1,11 +1,12 @@
+import { vi } from 'vitest';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import * as plate from '@udecode/plate-common';
 import { eventEditorActions } from '@udecode/plate-common';
 import { shouldResetContentEditable } from './CodeVariableDefinition';
 
-jest.mock('@udecode/plate-common', () => ({
+vi.mock('@udecode/plate-common', async (requireActual) => ({
   __esModule: true,
-  ...jest.requireActual('@udecode/plate-common'),
+  ...((await requireActual()) as object),
 }));
 
 describe('shouldResetContentEditable', () => {
@@ -21,7 +22,7 @@ describe('shouldResetContentEditable', () => {
 
   it('returns false if blurred and contentEditable is falsy', () => {
     eventEditorActions.blur('id');
-    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+    vi.spyOn(plate, 'someNode').mockReturnValue(true);
 
     const result = shouldResetContentEditable(editor, 'node-id', false);
     expect(result).toBe(false);
@@ -29,14 +30,14 @@ describe('shouldResetContentEditable', () => {
 
   it('returns null if blurred but contentEditable is true', () => {
     eventEditorActions.blur('id');
-    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+    vi.spyOn(plate, 'someNode').mockReturnValue(true);
 
     const result = shouldResetContentEditable(editor, 'node-id', true);
     expect(result).toBe(null);
   });
 
   it('returns false if editor has no selection', () => {
-    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+    vi.spyOn(plate, 'someNode').mockReturnValue(true);
 
     editor.selection = null;
 
@@ -45,28 +46,28 @@ describe('shouldResetContentEditable', () => {
   });
 
   it('returns true if contentEditable is false and someNode is true', () => {
-    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+    vi.spyOn(plate, 'someNode').mockReturnValue(true);
 
     const result = shouldResetContentEditable(editor, 'node-id', false);
     expect(result).toBe(true);
   });
 
   it('returns null if contentEditable is false and someNode is false', () => {
-    jest.spyOn(plate, 'someNode').mockReturnValue(false);
+    vi.spyOn(plate, 'someNode').mockReturnValue(false);
 
     const result = shouldResetContentEditable(editor, 'node-id', false);
     expect(result).toBe(null);
   });
 
   it('returns null if contentEditable is true and someNode is true', () => {
-    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+    vi.spyOn(plate, 'someNode').mockReturnValue(true);
 
     const result = shouldResetContentEditable(editor, 'node-id', true);
     expect(result).toBe(null);
   });
 
   it('returns false if contentEditable is true and someNode is false', () => {
-    jest.spyOn(plate, 'someNode').mockReturnValue(false);
+    vi.spyOn(plate, 'someNode').mockReturnValue(false);
 
     const result = shouldResetContentEditable(editor, 'node-id', true);
     expect(result).toBe(false);

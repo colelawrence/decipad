@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { type SerializedType } from '@decipad/remote-computer';
+import { type SerializedType } from '@decipad/language-interfaces';
 import {
   DraggableBlock,
   useTextTypeInference,

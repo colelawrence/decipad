@@ -29,7 +29,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/libs/message-packer"],
+      "outputs": ["{workspaceRoot}/coverage/libs/message-packer"],
       "options": {
         "jestConfig": "libs/message-packer/jest.config.js"
       }

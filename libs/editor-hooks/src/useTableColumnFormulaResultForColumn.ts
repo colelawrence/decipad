@@ -1,5 +1,5 @@
 import { findNodePath } from '@udecode/plate-common';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { buildResult, isTableResult } from '@decipad/remote-computer';
 import type {
   MyReactEditor,

@@ -13,6 +13,7 @@ import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type { BlockResultObservableStream, BlockResultStream } from './types';
 import { defaultBlockResults } from './defaultBlockResults';
 import { areBlockResultsEqual } from '../utils/areBlockResultsEqual';
+import { dequal } from '@decipad/utils';
 
 export class ResultStreams {
   global: NotebookResultStream = new BehaviorSubject(defaultComputerResults);
@@ -41,17 +42,21 @@ export class ResultStreams {
   }
 
   pushResults(results: NotebookResults) {
-    const existingBlockIds = new Map(
-      Array.from(this.blocks.keys()).map((key) => [key, true])
-    );
-    for (const [blockId, blockResult] of Object.entries(results.blockResults)) {
-      existingBlockIds.delete(blockId);
-      this.blockSubject(blockId).next(blockResult);
-    }
-    this.global.next(results);
-    // remove blocks that no longer exist
-    for (const toDeleteBlockId of existingBlockIds.keys()) {
-      this.close(toDeleteBlockId, true);
+    if (!dequal(results, this.global.value)) {
+      const existingBlockIds = new Map(
+        Array.from(this.blocks.keys()).map((key) => [key, true])
+      );
+      for (const [blockId, blockResult] of Object.entries(
+        results.blockResults
+      )) {
+        existingBlockIds.delete(blockId);
+        this.blockSubject(blockId).next(blockResult);
+      }
+      this.global.next(results);
+      // remove blocks that no longer exist
+      for (const toDeleteBlockId of existingBlockIds.keys()) {
+        this.close(toDeleteBlockId, true);
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/react';
-import { Unknown } from '@decipad/remote-computer';
+import { Unknown } from '@decipad/language-interfaces';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import type { Result } from '@decipad/language-interfaces';

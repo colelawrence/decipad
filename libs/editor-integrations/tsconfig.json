@@ -5,7 +5,10 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react"
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "../editor-plugins/src/pluginFactories/normalizerPlugin.ts"
+  ],
   "references": [
     {
       "path": "../editor-types"
@@ -33,6 +36,9 @@
     },
     {
       "path": "../remote-computer"
+    },
+    {
+      "path": "../editor-plugin-factories"
     }
   ]
 }

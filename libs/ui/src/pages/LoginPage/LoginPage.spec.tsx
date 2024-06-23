@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
@@ -7,7 +8,7 @@ describe('Login page', () => {
   it('disables the button when the input value is not a valid email', async () => {
     const { getByRole, findByText } = render(
       <MemoryRouter>
-        <LoginPage onSubmit={jest.fn()} />
+        <LoginPage onSubmit={vi.fn()} />
       </MemoryRouter>
     );
     await act(async () => (await findByText('Continue')).click());
@@ -27,7 +28,7 @@ describe('Login page', () => {
   it('emits a submit event when typing an email and clicking continue', async () => {
     const { getByText, getByRole, findByText } = render(
       <MemoryRouter>
-        <LoginPage onSubmit={jest.fn()} />
+        <LoginPage onSubmit={vi.fn()} />
       </MemoryRouter>
     );
     await act(async () => (await findByText('Continue')).click());

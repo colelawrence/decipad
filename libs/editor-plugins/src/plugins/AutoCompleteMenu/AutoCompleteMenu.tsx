@@ -1,4 +1,4 @@
-import type { AutocompleteName } from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/language-interfaces';
 import { getBuiltinsForAutocomplete } from '@decipad/remote-computer';
 import type { PlateComponent } from '@decipad/editor-types';
 import {

@@ -1,7 +1,7 @@
 import type { MyGenericEditor } from '@decipad/editor-types';
 import { createMyPluginFactory } from '@decipad/editor-types';
 import { withOverrides } from './withOverrides';
-import { createNormalizerPlugin } from '../../pluginFactories/normalizerPlugin';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 import { normalizeElementIdPlugin } from './normalizeElementIdPlugin';
 import type { Value } from '@udecode/plate-common';
 

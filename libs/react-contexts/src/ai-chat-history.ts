@@ -5,7 +5,24 @@ import {
 } from 'zustand/middleware';
 import { create } from 'zustand';
 import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
-import { type IntegrationMessageData } from '@decipad/utils';
+
+type JsDocParams = {
+  [key: string]: {
+    type: string;
+    description: string;
+  };
+};
+
+export type JsIntegrationMessageData = {
+  fnName: string;
+  jsDocParams: JsDocParams;
+  envVars: string[];
+  params: string[];
+  functionBody: string;
+};
+export type IntegrationMessageData = JsIntegrationMessageData & {
+  content: string;
+};
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {

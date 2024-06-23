@@ -1,3 +1,4 @@
+import { it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import type { PlateEditor, PlateProps } from '@udecode/plate-common';
 import {

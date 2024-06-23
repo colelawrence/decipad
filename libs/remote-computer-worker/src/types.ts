@@ -9,12 +9,16 @@ export interface TBaseNotificationParams<TMeta extends object> {
   [key: string]: unknown;
 }
 
+export type SerializedResult = {
+  type: SerializedType;
+  value: ArrayBuffer;
+};
+
 export type TSerializedNotificationParams<TMeta extends object> = Omit<
   TBaseNotificationParams<TMeta>,
   'result'
 > & {
-  result?: {
-    type: SerializedType;
-    value: ArrayBuffer;
-  };
+  result?: SerializedResult;
 };
+
+export type RemoteValueStore = Map<string, Result.Result>;

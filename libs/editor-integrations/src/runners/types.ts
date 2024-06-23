@@ -142,7 +142,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
 
   public async initWorker(): Promise<void> {
     const { createWorker } = await import(
-      '../../../live-connect/src/createWorker'
+      '../../../live-connect/src/worker/createWorker'
     );
     this.worker = createWorker();
   }
@@ -224,7 +224,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
 
         maxCellCount: 10_000_000_000_000,
       },
-      async (_, res) => {
+      async (_, __, res) => {
         if (res.loading == null || res.loading) {
           return;
         }

@@ -268,7 +268,9 @@ type ErrorWithLoggedError = Error & { [loggedError]?: boolean };
 
 const shouldOutputDebugInfo =
   !!process.env.DEBUG ||
-  (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID);
+  (process.env.NODE_ENV !== 'test' &&
+    !process.env.JEST_WORKER_ID &&
+    !!process.env.VITEST_WORKER_ID);
 
 export async function evaluate(
   realm: TRealm,

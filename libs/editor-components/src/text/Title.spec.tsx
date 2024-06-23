@@ -1,3 +1,4 @@
+import { it, expect, beforeEach } from 'vitest';
 import { ELEMENT_H1 } from '@decipad/editor-types';
 import { findDomNodePath } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';

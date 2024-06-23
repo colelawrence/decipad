@@ -9,8 +9,8 @@ import {
   removeNodes,
   unwrapNodes,
 } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 const normalizeColumns =
   (editor: MyEditor) =>

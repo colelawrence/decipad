@@ -1,5 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import type { MyGenericEditor, MyPlatePlugin } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,

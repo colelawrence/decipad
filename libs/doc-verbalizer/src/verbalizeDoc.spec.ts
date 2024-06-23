@@ -1,6 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 // eslint-disable-next-line no-restricted-imports
 import { getComputer } from '@decipad/computer';
+import { describe, it, expect } from 'vitest';
 import { verbalizeDoc } from './verbalizeDoc';
 import textOnly from './__fixtures__/text-only.json';
 import someCode from './__fixtures__/some-code.json';

@@ -6,7 +6,7 @@ import type {
   Value,
 } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';
-import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import type {
   DeprecatedTableInputElement,
   TableElement,
@@ -17,9 +17,9 @@ import {
 } from '@decipad/editor-types';
 import { deleteText, isElement } from '@udecode/plate-common';
 import { insertNodes } from '@decipad/editor-utils';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
-import { createNormalizerPluginFactory } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 const normalizeTableInput = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,

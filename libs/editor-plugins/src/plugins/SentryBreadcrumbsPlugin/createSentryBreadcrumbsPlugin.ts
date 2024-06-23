@@ -1,5 +1,5 @@
 import { addBreadcrumb } from '@sentry/react';
-import { createOverrideApplyPluginFactory } from '../../pluginFactories';
+import { createOverrideApplyPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const createSentryBreadcrumbsPlugin = createOverrideApplyPluginFactory({
   name: 'SENTRY_BREADCRUMBS_PLUGIN',

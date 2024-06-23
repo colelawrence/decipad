@@ -39,7 +39,7 @@ export const onDropNodeHorizontal = (
 
   const draggingPaths = Array.from(
     getNodeEntries(editor, {
-      match: (n) => isElement(n) && draggingIds.includes(n.id),
+      match: (n) => isElement(n) && draggingIds.includes(n.id as string),
       at: [],
     }),
     ([, path]) => path

@@ -8,14 +8,15 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
+import { getComputer } from '@decipad/computer';
+import { timeout } from '@decipad/utils';
 
 let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   plugin = createAutoFormatCodeLinePlugin(computer)();
   editor = createMyPlateEditor({
     plugins: [plugin, createNormalizeCodeLinePlugin(computer)],
@@ -92,25 +93,27 @@ const pressKey = (
 };
 
 describe('Auto format code line plugin', () => {
-  it('formats a paragraph to a code line when = is pressed at the start', () => {
+  it('formats a paragraph to a code line when = is pressed at the start', async () => {
     renderEditorParagraph('');
     pressKey('=');
+    await timeout(100);
     expect(editor.children).toMatchObject([
       makeCodeLine(),
       { type: ELEMENT_PARAGRAPH },
     ]);
   });
 
-  it('formats a paragraph to a code line when = is pressed while holding shift on some keyboard layouts', () => {
+  it('formats a paragraph to a code line when = is pressed while holding shift on some keyboard layouts', async () => {
     renderEditorParagraph('');
     pressKey('=', { shiftKey: true });
+    await timeout(100);
     expect(editor.children).toMatchObject([
       makeCodeLine(),
       { type: ELEMENT_PARAGRAPH },
     ]);
   });
 
-  it('does not format a paragraph to a code line when holding modifier keys', () => {
+  it('does not format a paragraph to a code line when holding modifier keys', async () => {
     renderEditorParagraph('');
     pressKey('=', { altKey: true });
     expect(editor.children).toEqual(makeParagraph());

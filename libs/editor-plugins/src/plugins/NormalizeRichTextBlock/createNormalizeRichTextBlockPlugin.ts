@@ -3,17 +3,18 @@ import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_INLINE_NUMBER, ELEMENT_LINK } from '@decipad/editor-types';
 import { RICH_TEXT_BLOCK_TYPES } from '@decipad/editor-utils';
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 const ALLOWED_CHILD_TYPES = new Set([ELEMENT_LINK, ELEMENT_INLINE_NUMBER]);
+const RICH_TEXT_BLOCK_TYPES_SET = new Set<string>(RICH_TEXT_BLOCK_TYPES);
 
 const normalizeRichTextBlock =
   (editor: MyEditor) =>
   (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
 
-    if (isElement(node) && new Set(RICH_TEXT_BLOCK_TYPES).has(node.type)) {
+    if (isElement(node) && RICH_TEXT_BLOCK_TYPES_SET.has(node.type)) {
       for (const childEntry of getNodeChildren(editor, path)) {
         const [childNode, childPath] = childEntry;
         if (isElement(childNode) && !ALLOWED_CHILD_TYPES.has(childNode.type)) {

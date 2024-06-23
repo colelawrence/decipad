@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import type { TEditor, TElement } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-common';

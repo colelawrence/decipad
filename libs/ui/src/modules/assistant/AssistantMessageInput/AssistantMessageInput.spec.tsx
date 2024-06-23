@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AssistantMessageInput } from './AssistantMessageInput';
@@ -35,7 +36,7 @@ describe('<AssistantMessageInput />', () => {
   });
 
   it('calls onSubmit when form is submitted', async () => {
-    const mockOnSubmit = jest.fn();
+    const mockOnSubmit = vi.fn();
     const { getByTestId } = render(
       <AssistantMessageInput
         isFirstInteraction={false}
@@ -56,7 +57,7 @@ describe('<AssistantMessageInput />', () => {
   });
 
   it('submits form on Enter key press', async () => {
-    const mockOnSubmit = jest.fn();
+    const mockOnSubmit = vi.fn();
     const { getByTestId } = render(
       <AssistantMessageInput
         isFirstInteraction={false}

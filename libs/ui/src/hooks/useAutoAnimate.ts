@@ -1,4 +1,5 @@
-import autoAnimate, { AutoAnimateOptions } from '@formkit/auto-animate';
+import type { AutoAnimateOptions } from '@formkit/auto-animate';
+import autoAnimate from '@formkit/auto-animate';
 import { useEffect, useRef } from 'react';
 import { useCanUseDom } from '@decipad/react-utils';
 import {
@@ -6,7 +7,7 @@ import {
   shortAnimationDurationMs as defaultDuration,
 } from '../primitives';
 
-const supportsAnimation = 'IntersectionObserver' in global;
+const supportsAnimation = 'IntersectionObserver' in globalThis;
 
 /**
  * AutoAnimate hook for adding dead-simple transitions and animations to react.
@@ -24,8 +25,9 @@ export function useAutoAnimate<T extends HTMLElement>({
       canUseDom &&
       element.current instanceof HTMLElement &&
       supportsAnimation
-    )
+    ) {
       autoAnimate(element.current, { easing, duration });
+    }
   }, [canUseDom, element, easing, duration]);
   return [element];
 }

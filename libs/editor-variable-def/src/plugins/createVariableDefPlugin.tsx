@@ -8,7 +8,7 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import { setSelectionNext } from '@decipad/editor-utils';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {

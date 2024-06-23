@@ -7,7 +7,8 @@ import type {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
-import { hydrateType } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { hydrateType } from '@decipad/language-types';
 import type { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
@@ -68,7 +69,7 @@ export const useLiveConnectionResponse = ({
               delimiter,
               liveQuery,
             },
-            (err, res) => {
+            (err, _, res) => {
               if (!canceled) {
                 if (err && !isFatalError(err.message)) {
                   return;

@@ -1,5 +1,5 @@
 import { isServerSideRendering } from '@decipad/support';
-import { createOverrideApplyPluginFactory } from '../../pluginFactories';
+import { createOverrideApplyPluginFactory } from '@decipad/editor-plugin-factories';
 
 const logsColor = `
   color: green;

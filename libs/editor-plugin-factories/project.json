@@ -1,0 +1,40 @@
+{
+  "name": "editor-plugin-factories",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/editor-plugin-factories/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/editor-plugin-factories/**/*.ts",
+          "libs/editor-plugin-factories/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/editor-plugin-factories"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/editor-plugin-factories"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-plugin-factories"],
+      "options": {
+        "command": "npx vitest --run",
+        "cwd": "libs/editor-plugin-factories"
+      }
+    }
+  },
+  "tags": []
+}

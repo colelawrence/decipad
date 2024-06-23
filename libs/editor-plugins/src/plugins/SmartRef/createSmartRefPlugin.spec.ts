@@ -1,5 +1,4 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { getRemoteComputer } from '@decipad/remote-computer';
 import type {
   CodeLineElement,
   MyEditor,
@@ -21,10 +20,12 @@ import { editorToProgram } from '@decipad/editor-language-elements';
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
+import { vi, expect, beforeEach, it } from 'vitest';
+import { getComputer } from '@decipad/computer';
 
 type VarAndCol = [string, string?];
 
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => 'nanoid()',
 }));
 
@@ -67,7 +68,7 @@ beforeEach(() => {
     createCodeLine({ id: 'varId', code: 'var = 1' }),
   ] as unknown as MyValue;
 
-  computer = getRemoteComputer();
+  computer = getComputer();
 });
 
 it('can turn text into smartrefs', async () => {
@@ -97,10 +98,10 @@ it('can turn text into smartrefs', async () => {
   convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
-    Object {
+    {
       "blockId": "varId",
-      "children": Array [
-        Object {
+      "children": [
+        {
           "text": "",
         },
       ],
@@ -139,10 +140,10 @@ it('can turn text into smartrefs (columns edition)', async () => {
   convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
-    Object {
+    {
       "blockId": "Table1Id",
-      "children": Array [
-        Object {
+      "children": [
+        {
           "text": "",
         },
       ],
@@ -170,10 +171,10 @@ it('migrates old-style smart refs (just col ID) to NEW SMART REFS (blockId + col
   Editor.normalize(editor as BaseEditor, { force: true });
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
-    Object {
+    {
       "blockId": "Table1Id",
-      "children": Array [
-        Object {
+      "children": [
+        {
           "text": "",
         },
       ],

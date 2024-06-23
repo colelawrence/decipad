@@ -3,12 +3,8 @@ import type {
   Result,
   SerializedTypes,
 } from '@decipad/language-interfaces';
-// eslint-disable-next-line no-restricted-imports
-import type {
-  ClientWorkerContext,
-  StreamingValue,
-  RecursiveDecoder,
-} from './types';
+import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
+import type { ClientWorkerContext, StreamingValue } from './types';
 import { streamingColumn } from './streamingColumn';
 import { streamingTable } from './streamingTable';
 

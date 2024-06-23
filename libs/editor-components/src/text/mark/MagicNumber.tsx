@@ -109,7 +109,8 @@ const UnprotectedMagicNumber: PlateComponent = ({
 
     const isCodeline = editSource(sourceId, text);
     if (!isCodeline) {
-      const el = document.getElementById(sourceId);
+      const el =
+        'getElementById' in document && document.getElementById(sourceId);
       if (el) {
         el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         el?.focus();

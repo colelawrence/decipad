@@ -136,11 +136,11 @@ const dataRows = (
   return rows;
 };
 
-const tableElement = async (
+const tableElement = (
   computer: Computer,
   table: Result.Result<'materialized-table'>,
   meta?: ImportResult['meta']
-): Promise<TableElement> => {
+): TableElement => {
   return {
     id: nanoid(),
     type: ELEMENT_TABLE,
@@ -156,7 +156,7 @@ const tableElement = async (
               {
                 text: meta?.title
                   ? varNamify(meta.title)
-                  : await computer.getAvailableIdentifier(
+                  : computer.getAvailableIdentifier(
                       generateTableName('Imported')
                     ),
               },

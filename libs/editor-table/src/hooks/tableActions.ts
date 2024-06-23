@@ -50,7 +50,7 @@ import { useCallback, useEffect, useContext } from 'react';
 import { type Path } from 'slate';
 import * as Sentry from '@sentry/react';
 import { exportCsv } from '@decipad/export';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { getColumnName, setCellText } from '../utils';

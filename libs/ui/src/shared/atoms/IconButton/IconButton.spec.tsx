@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,7 +16,7 @@ it('renders the button icon', () => {
 });
 
 it('emits click events', async () => {
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
   render(<IconButton onClick={handleClick}>icon</IconButton>);
 
   await userEvent.click(screen.getByRole('button'));

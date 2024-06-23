@@ -1,4 +1,4 @@
-import { type Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { formatError } from '@decipad/format';
 
 export const getResultErrorMessage = (

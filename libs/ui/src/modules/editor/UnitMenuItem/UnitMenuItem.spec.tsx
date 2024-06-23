@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { U } from '@decipad/language-utils';
@@ -33,7 +34,7 @@ it('renders a button when parse is successful', async () => {
 
 describe('onSelect prop', () => {
   it('gets called when parse is successful and button is pressed', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(<UnitMenuItem onSelect={onSelect} parseUnit={() => []} />, {
       wrapper,
     });
@@ -46,7 +47,7 @@ describe('onSelect prop', () => {
   });
 
   it('gets called when parse is successful and Enter is pressed', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(<UnitMenuItem onSelect={onSelect} parseUnit={() => []} />, {
       wrapper,
     });

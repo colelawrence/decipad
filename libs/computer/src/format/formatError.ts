@@ -4,7 +4,7 @@ import type { ErrSpec } from '@decipad/language-interfaces';
 import { formatTypeToBasicString } from './formatTypeBasic';
 import { formatUnit } from './formatUnit';
 
-const looksLikeVariable = (s: string) => s.toLocaleLowerCase() !== s;
+const looksLikeVariable = (s?: string) => s?.toLocaleLowerCase() !== s;
 
 // istanbul ignore next
 // eslint-disable-next-line complexity

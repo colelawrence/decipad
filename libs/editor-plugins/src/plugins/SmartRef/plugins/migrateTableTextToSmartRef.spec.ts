@@ -19,8 +19,9 @@ import { Editor } from 'slate';
 import { findNode } from '@udecode/plate-common';
 import { isElementOfType } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from '../createSmartRefPlugin';
+import { vi, it, expect } from 'vitest';
 
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => 'nanoid()',
 }));
 

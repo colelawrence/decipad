@@ -1,5 +1,7 @@
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { createResizableArrayBuffer } from '@decipad/language-utils';
 import { Column } from './Column';
 import { Scalar } from './Scalar';
 import type { WriteSerializedColumnEncoder } from './WriteSerializedColumn';
@@ -25,17 +27,17 @@ describe('WriteSerializedColumn', () => {
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => N(n)).map(Scalar.fromValue)
     );
     const column = new WriteSerializedColumn(encoder, source);
-    const buffer = new GrowableDataView(
-      new ArrayBuffer(2, { maxByteLength: 1000000000 })
-    );
+    const buffer = new GrowableDataView(createResizableArrayBuffer(2));
 
     const offset = await column.serialize(buffer);
-    expect(offset).toBe(160); // 10 * 16
+    expect(offset).toBe(164); // 4 + 10 * 16
     const result = new DataView(buffer.seal(offset));
-    expect(result.byteLength).toBe(160);
+    expect(result.byteLength).toBe(164);
+
+    expect(result.getUint32(0)).toBe(10); // length (in number of elements)
 
     for (let i = 0; i < 10; i++) {
-      const startOffset = i * 16;
+      const startOffset = i * 16 + 4;
       expect(result.getBigInt64(startOffset)).toBe(BigInt(i + 1)); // numerator
       expect(result.getBigInt64(startOffset + 8)).toBe(BigInt(1)); // denominator
     }

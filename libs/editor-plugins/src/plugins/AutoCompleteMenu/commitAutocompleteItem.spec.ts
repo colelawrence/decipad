@@ -36,9 +36,9 @@ it('inserts the item, surrounded by spaces as necessary', () => {
 
   expect(getNodeString(editor)).toMatchInlineSnapshot(`"hi + INSERTED *"`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
-    Object {
+    {
       "offset": 14,
-      "path": Array [
+      "path": [
         0,
         0,
       ],
@@ -70,9 +70,9 @@ it('removes spaces at the beginning of the line', () => {
 
   expect(getNodeString(editor)).toMatchInlineSnapshot(`"INSERTED "`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
-    Object {
+    {
       "offset": 9,
-      "path": Array [
+      "path": [
         0,
         0,
       ],
@@ -104,9 +104,9 @@ it('removes spaces after parens', () => {
 
   expect(getNodeString(editor)).toMatchInlineSnapshot(`"fun(INSERTED "`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
-    Object {
+    {
       "offset": 13,
-      "path": Array [
+      "path": [
         0,
         0,
       ],

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { mockConsoleError } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -38,7 +39,7 @@ describe('the root MenuList', () => {
 
 describe('the dropdown root MenuList', () => {
   it('emits changeOpen events when the trigger is clicked', async () => {
-    const handleChangeOpen = jest.fn();
+    const handleChangeOpen = vi.fn();
     render(
       <MenuList
         root

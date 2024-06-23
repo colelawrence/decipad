@@ -12,10 +12,10 @@ Add calculation columns to your table to display results and create calculations
 
 To **add a new calculation to your table**:
 
-1.  Add a new column to your table,
-2.  Hover over the column header and click the drop-down triangle, and then `Formula`. <br />
-    See how a new calculation line appears on top of your table.
-3.  Write your calculation on the new calculation line and see the results appear in the column.
+1. Add a new column to your table,
+2. Hover over the column header and click the drop-down triangle, and then `Formula`. <br />
+   See how a new calculation line appears on top of your table.
+3. Write your calculation on the new calculation line and see the results appear in the column.
 
 <br />
 

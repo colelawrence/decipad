@@ -1,3 +1,4 @@
+import { it, describe, expect } from 'vitest';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,

@@ -15,7 +15,7 @@ export const useLiveConnectionWorker = (
     let cancelled = false;
     if (!workerRef.current) {
       (async () => {
-        const { createWorker } = await import('./createWorker');
+        const { createWorker } = await import('./worker/createWorker');
         const w = await createWorker();
         workerRef.current = w;
         if (cancelled) return;

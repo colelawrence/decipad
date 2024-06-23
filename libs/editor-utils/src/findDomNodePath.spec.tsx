@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { Editable, Slate } from 'slate-react';

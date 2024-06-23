@@ -14,7 +14,7 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
 Decipad is a smart document that helps everyone tell stories using data.
 
- <YouTubePlayer videoId="HgonzbhFWLA" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
+<YouTubePlayer videoId="HgonzbhFWLA" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
 
 <br />
 

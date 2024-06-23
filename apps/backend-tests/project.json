@@ -13,11 +13,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/apps/backend-tests"],
       "options": {
-        "jestConfig": "apps/backend-tests/jest.config.js",
-        "codeCoverage": false
+        "command": "npx vitest --run",
+        "cwd": "apps/backend-tests"
       }
     },
     "typecheck": {

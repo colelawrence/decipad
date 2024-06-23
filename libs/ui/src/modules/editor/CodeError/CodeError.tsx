@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import type { Parser } from '@decipad/remote-computer';
+import type { Parser } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import { FC, useContext } from 'react';
 import { Tooltip } from '../../../shared';

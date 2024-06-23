@@ -2,7 +2,9 @@ const logsColor = `
   color: green;
 `;
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
+);
 
 export const printReceivedMessage = (m: string | Uint8Array) => {
   const s = m instanceof Uint8Array ? Buffer.from(m).toString('base64') : m;

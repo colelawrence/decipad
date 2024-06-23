@@ -1,4 +1,5 @@
-import type { AST, Program } from '@decipad/remote-computer';
+import type { Program } from '@decipad/computer-interfaces';
+import type { AST } from '@decipad/language-interfaces';
 import {
   parseExpression,
   statementToIdentifiedBlock,

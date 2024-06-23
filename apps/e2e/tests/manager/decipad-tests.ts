@@ -11,7 +11,7 @@ import type {
 } from 'playwright-performance';
 import { playwrightPerformance } from 'playwright-performance';
 
-type DecipadFixtures = {
+export type DecipadFixtures = {
   testUser: User;
   unregisteredUser: User;
   randomFreeUser: User;

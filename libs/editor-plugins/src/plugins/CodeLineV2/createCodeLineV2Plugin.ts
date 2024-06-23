@@ -1,8 +1,6 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import {
-  createEventInterceptorPluginFactory,
-  createStructuredKeyboard,
-} from '@decipad/editor-plugins';
+import { createStructuredKeyboard } from '@decipad/editor-plugins';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import type { MyPlatePlugin, MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,

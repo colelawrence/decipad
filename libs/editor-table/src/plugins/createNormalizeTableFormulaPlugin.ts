@@ -1,5 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { type NormalizerReturnValue } from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import type { TableHeaderElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,
@@ -15,7 +15,7 @@ import type {
 import { hasNode, deleteText } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 // We do this following import this way because tree-shaking is not good enough
-import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 
 export const normalizeTableFormula =
   <TV extends Value, TE extends PlateEditor<TV>>(_computer: Computer) =>

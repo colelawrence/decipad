@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { Computer } from '@decipad/computer-interfaces';
-import type { SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { isColumn, isTable } from '@decipad/remote-computer';
 import { encodingFor } from './plotUtils';
 import type { PlotSpec } from './plotUtils.interface';

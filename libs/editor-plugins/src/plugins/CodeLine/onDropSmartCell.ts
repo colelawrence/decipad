@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
-import { getBlockAbove } from '@udecode/plate-common';
+import { getBlockAbove, isElement } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import type React from 'react';
 
@@ -39,21 +39,23 @@ export const onDropSmartCell =
       if (!block) return;
 
       const filteredFragment: MyText[] = [];
-      if (
-        block.type === ELEMENT_CODE_LINE ||
-        block.type === ELEMENT_CODE_LINE_V2_CODE
-      ) {
-        filteredFragment.push({
-          text,
-        });
-      } else if (
-        block.type === ELEMENT_PARAGRAPH ||
-        block.type === ELEMENT_LIC
-      ) {
-        filteredFragment.push({
-          text,
-          [MARK_MAGICNUMBER]: true,
-        });
+      if (isElement(block)) {
+        if (
+          block.type === ELEMENT_CODE_LINE ||
+          block.type === ELEMENT_CODE_LINE_V2_CODE
+        ) {
+          filteredFragment.push({
+            text,
+          });
+        } else if (
+          block.type === ELEMENT_PARAGRAPH ||
+          block.type === ELEMENT_LIC
+        ) {
+          filteredFragment.push({
+            text,
+            [MARK_MAGICNUMBER]: true,
+          });
+        }
       }
 
       if (filteredFragment.length) {

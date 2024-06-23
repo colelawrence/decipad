@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SerializedType } from '@decipad/remote-computer';
+import { SerializedType } from '@decipad/language-interfaces';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { timeout } from '@decipad/utils';
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +7,7 @@ import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 import { renderWithRouter } from '../../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof CreateWorkspaceModal> = {
-  onClose: jest.fn(),
+  onClose: vi.fn(),
 };
 
 it('cannot create a workspace in its initial state', () => {
@@ -15,7 +16,7 @@ it('cannot create a workspace in its initial state', () => {
 });
 
 it('emits a create event when typings a workspace name and submitting', async () => {
-  const handleCreate = jest.fn();
+  const handleCreate = vi.fn();
   const { getByTestId, getByPlaceholderText } = renderWithRouter(
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
@@ -30,7 +31,7 @@ it('emits a create event when typings a workspace name and submitting', async ()
 
 it('disables workspace creation while already submitting', async () => {
   let resolveCreation!: () => void;
-  const handleCreate = jest.fn().mockReturnValue(
+  const handleCreate = vi.fn().mockReturnValue(
     new Promise<void>((resolve) => {
       resolveCreation = resolve;
     })

@@ -1,4 +1,5 @@
-import type { AST, Token } from '@decipad/remote-computer';
+import { type Token } from 'moo';
+import type { AST } from '@decipad/language-interfaces';
 import { parseStatement, tokenize } from '@decipad/remote-computer';
 import { acceptableOperators, isAcceptableUnit } from './languageSubset';
 

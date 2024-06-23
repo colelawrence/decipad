@@ -1,3 +1,4 @@
+import { describe } from 'vitest';
 import { Buffer } from 'buffer';
 import { nanoid } from 'nanoid';
 import nacl from 'tweetnacl';
@@ -30,26 +31,28 @@ function headersFor(message: string): Record<string, string> {
   };
 }
 
-test('discord', (ctx) => {
-  it('discards request without sec headers', async () => {
-    const response = await ctx.http.fetch('/api/discord', {
-      method: 'POST',
-      body: stringify(interaction()),
+describe.sequential('discord', () => {
+  test('discord', (ctx) => {
+    it('discards request without sec headers', async () => {
+      const response = await ctx.http.fetch('/api/discord', {
+        method: 'POST',
+        body: stringify(interaction()),
+      });
+
+      expect(response.ok).toBe(false);
+      expect(response.status).toBe(400);
     });
 
-    expect(response.ok).toBe(false);
-    expect(response.status).toBe(400);
-  });
+    it('allows a ping', async () => {
+      const requestBody = stringify(interaction());
+      const response = await ctx.http.fetch('/api/discord', {
+        method: 'POST',
+        body: requestBody,
+        headers: headersFor(requestBody),
+      });
 
-  it('allows a ping', async () => {
-    const requestBody = stringify(interaction());
-    const response = await ctx.http.fetch('/api/discord', {
-      method: 'POST',
-      body: requestBody,
-      headers: headersFor(requestBody),
+      expect(response.ok).toBe(true);
+      expect(await response.json()).toMatchObject({ type: 1 });
     });
-
-    expect(response.ok).toBe(true);
-    expect(await response.json()).toMatchObject({ type: 1 });
   });
 });

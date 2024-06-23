@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { PlateComponent } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -72,7 +73,7 @@ beforeEach(() => {
 });
 
 // Return a drop line below the second block
-jest.mock('./getDropLineForMonitor', () => ({
+vi.mock('./getDropLineForMonitor', () => ({
   getDropLineForMonitor: () =>
     ({
       type: 'horizontal',

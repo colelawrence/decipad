@@ -54,7 +54,7 @@ test('Custom function Table', async ({ testUser }) => {
   });
 
   await test.step('reload page', async () => {
-    page.reload();
+    await page.reload();
   });
 
   await test.step('hide and show table', async () => {

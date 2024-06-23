@@ -51,6 +51,9 @@
     },
     {
       "path": "../language-filters"
+    },
+    {
+      "path": "../editor-plugin-factories"
     }
   ]
 }

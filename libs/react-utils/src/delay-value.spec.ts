@@ -1,8 +1,9 @@
+import { vi } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 import { useDelayedTrue, useDelayedValue } from './delay-value';
 
 it('can delay a `true` value, but go `false` instantly', async () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   const renderedHook = renderHook(({ bool }) => useDelayedTrue(bool), {
     initialProps: { bool: false },
@@ -10,20 +11,20 @@ it('can delay a `true` value, but go `false` instantly', async () => {
 
   // Starts with `false`
   expect(renderedHook.result.current).toEqual(false);
-  jest.advanceTimersByTime(10);
+  vi.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
   await act(() => {
-    jest.advanceTimersByTime(2000);
+    vi.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(false);
 
   // Go `true`, later
   renderedHook.rerender({ bool: true });
   expect(renderedHook.result.current).toEqual(false);
-  jest.advanceTimersByTime(10);
+  vi.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
   await act(() => {
-    jest.advanceTimersByTime(2000);
+    vi.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(true);
 
@@ -33,7 +34,7 @@ it('can delay a `true` value, but go `false` instantly', async () => {
 });
 
 it('can delay a value as well', async () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   const { rerender, result } = renderHook(
     ({ value, bool }) => useDelayedValue(value, bool),
@@ -50,7 +51,7 @@ it('can delay a value as well', async () => {
   rerender({ value: 3, bool: true });
   expect(result.current).toEqual(2);
   await act(() => {
-    jest.advanceTimersByTime(2000);
+    vi.advanceTimersByTime(2000);
   });
   expect(result.current).toEqual(3);
 });

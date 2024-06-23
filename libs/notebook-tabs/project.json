@@ -15,10 +15,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/notebook-tabs"],
       "options": {
-        "jestConfig": "libs/notebook-tabs/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/notebook-tabs"
       }
     },
     "typecheck": {

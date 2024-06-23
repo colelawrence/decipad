@@ -9,7 +9,7 @@ Easily import your Notion databases into Decipad.
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
- <YouTubePlayer videoId="KojMxUd0Z6w" thumbnailUrl="/docs/img/thumbnails/thumbnail-notion.png" />
+<YouTubePlayer videoId="KojMxUd0Z6w" thumbnailUrl="/docs/img/thumbnails/thumbnail-notion.png" />
 
 ## Connecting Notion to Decipad
 

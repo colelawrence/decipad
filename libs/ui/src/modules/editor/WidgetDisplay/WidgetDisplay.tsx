@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { CaretDown, CaretUp } from '../../../icons';

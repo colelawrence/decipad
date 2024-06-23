@@ -19,3 +19,8 @@ export interface ListenerHelper<Args extends unknown[], Ret> {
   ): T;
   get(...a: Args): Ret;
 }
+
+export type Select<SubjectContents, MoreArgs extends Array<unknown>, Ret> = (
+  a: SubjectContents,
+  ...m: MoreArgs
+) => Ret;

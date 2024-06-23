@@ -1,3 +1,4 @@
+import { vi, beforeEach, it, expect } from 'vitest';
 import type { CodeLineElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
@@ -10,14 +11,14 @@ import {
 } from '@decipad/editor-types';
 import type { PlateEditor } from '@udecode/plate-common';
 import { normalizeEditor } from '@udecode/plate-common';
-import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   createNormalizeCodeLineCodePlugin,
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
+import { getComputer } from '@decipad/computer';
 
-jest.mock('nanoid', () => ({ nanoid: () => 'mocked-id' }));
+vi.mock('nanoid', () => ({ nanoid: () => 'mocked-id' }));
 
 function codeLine(varName?: string, code?: string): CodeLineElement {
   return {
@@ -45,7 +46,7 @@ function codeLine(varName?: string, code?: string): CodeLineElement {
 
 let editor: PlateEditor;
 beforeEach(() => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   const plugins = createMyPlugins([
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
@@ -85,20 +86,20 @@ describe('in a code line', () => {
       normalizeEditor(editor, { force: true });
 
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "varvarname",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "code",
                   },
                 ],
@@ -126,21 +127,21 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
                 "id": "mocked-id",
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
@@ -164,20 +165,20 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "varName",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
@@ -187,20 +188,20 @@ describe('in a code line', () => {
             ],
             "type": "code_line_v2",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
                 "id": "mocked-id",
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
@@ -226,21 +227,21 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
                 "id": "mocked-id",
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
@@ -261,20 +262,20 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "a",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "{
           b",
                   },
@@ -295,20 +296,20 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "a",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "{}",
                   },
                 ],
@@ -328,20 +329,20 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "a",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "{
         b
         }",
@@ -363,20 +364,20 @@ describe('in a code line', () => {
 
       normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+        [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "a",
                   },
                 ],
                 "type": "structured_varname",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "{
           b",
                   },

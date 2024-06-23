@@ -17,12 +17,12 @@ The Notebook Chat Assistant is your smart collaborator for brainstorming, clarif
 
 To access the AI Chat, just click the AI button on the topbar of your notebook and start your conversation. Here's what it can do for you:
 
-- **Suggest Ideas and Topics**: <br/>
+- **Suggest Ideas and Topics**: <br />
   Kickstart your analysis by receiving creative ideas and relevant topics tailored to your notebook's context.
-- **Explain Your Notebook or Template**: <br/>
-  Gain a deeper understanding of your own work. <br/> The Chat Assistant can provide explanations, making your notebooks more comprehensible to both yourself and others.
-- **Help You Create Calculations and Models**: <br/>
-  Need assistance with complex calculations or model building? <br/> The Chat Assistant is here to guide you through the process, offering valuable insights, suggestions and by creating calculations for you.
+- **Explain Your Notebook or Template**: <br />
+  Gain a deeper understanding of your own work. <br /> The Chat Assistant can provide explanations, making your notebooks more comprehensible to both yourself and others.
+- **Help You Create Calculations and Models**: <br />
+  Need assistance with complex calculations or model building? <br /> The Chat Assistant is here to guide you through the process, offering valuable insights, suggestions and by creating calculations for you.
 
 **Note:** This feature is available as a limited preview. To help us improve share your thoughts and feedback by sending us an email ([support@decipad.com](mailto:support@decipad.com)) or via the support chat.
 

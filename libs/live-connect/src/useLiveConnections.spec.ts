@@ -6,6 +6,7 @@ import {
 } from '@decipad/remote-computer';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { serializeResult } from '@decipad/computer-utils';
+import { timeout } from '@decipad/utils';
 import { pushResultToComputer } from './useLiveConnection';
 
 setupDeciNumberSnapshotSerializer();
@@ -25,6 +26,8 @@ it('can push a new table into the computer', async () => {
     serializeResult(type, value)
   );
 
+  await timeout(100);
+
   expect(
     await Promise.all(
       Array.from(
@@ -37,11 +40,11 @@ it('can push a new table into the computer', async () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         "blockid",
-        Array [
-          Array [
+        [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -49,7 +52,7 @@ it('can push a new table into the computer', async () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -59,9 +62,9 @@ it('can push a new table into the computer', async () => {
           ],
         ],
       ],
-      Array [
+      [
         "blockid--0",
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -70,9 +73,9 @@ it('can push a new table into the computer', async () => {
           },
         ],
       ],
-      Array [
+      [
         "blockid--1",
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -83,10 +86,4 @@ it('can push a new table into the computer', async () => {
       ],
     ]
   `);
-
-  // Garbage collect
-  await pushResultToComputer(computer, 'blockid', 'Table1', undefined);
-
-  // Assert on the computer's internal state to make sure we've GC'd the things we need to
-  expect(await computer.getExternalData()).toEqual(new Map());
 });

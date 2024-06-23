@@ -19,8 +19,8 @@ import {
   isText,
 } from '@udecode/plate-common';
 import type { Path } from 'slate';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import {
   normalizeExcessProperties,
   normalizeMissingProperties,

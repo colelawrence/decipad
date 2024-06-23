@@ -7,8 +7,8 @@ import {
   isText,
   removeNodes,
 } from '@udecode/plate-common';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import { normalizeExcessProperties } from './normalize';
-import type { NormalizerReturnValue } from '../pluginFactories';
 
 export const normalizePlainTextChildren = <
   TV extends Value,

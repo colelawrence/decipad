@@ -1,5 +1,5 @@
 import { createMyPluginFactory, ELEMENT_PLOT } from '@decipad/editor-types';
-import { createEventInterceptorPluginFactory } from '../../pluginFactories';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 
 const LazyPlot = lazyElementComponent(() => import('./Plot'));

@@ -18,6 +18,7 @@ export * from './one';
 export * from './queuedGen';
 export * from './trace';
 export * from './transform';
+export * from './scan';
 export * from './unzip';
 export * from './skip';
 export * from './slice';

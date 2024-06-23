@@ -1,7 +1,5 @@
-import {
-  createEventInterceptorPluginFactory,
-  createMigrateDataviewPlugin,
-} from '@decipad/editor-plugins';
+import { createMigrateDataviewPlugin } from '@decipad/editor-plugins';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,

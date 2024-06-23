@@ -45,10 +45,13 @@ export class WriteSerializedColumn<T extends Result.OneResult>
   ): Promise<number> {
     const data = getResultGenerator(await this.source.getData());
 
-    let offset = initialOffset;
+    let offset = initialOffset + 4; // reserve space for the length
+    let count = 0;
     for await (const value of data(start, end)) {
+      count += 1;
       offset = await this.encoder(buffer, offset, value as T);
     }
+    buffer.setUint32(initialOffset, count); // write the length (in number of elements)
 
     return offset;
   }

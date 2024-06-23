@@ -15,7 +15,7 @@ For more information on each plan, please visit our [pricing page](https://www.d
 
 ## How Decipad's Submit Button Works
 
- <YouTubePlayer videoId="SNJqHiV2oD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-forms.png" />
+<YouTubePlayer videoId="SNJqHiV2oD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-forms.png" />
 
 ### Getting Started
 

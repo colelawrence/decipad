@@ -12,7 +12,7 @@ import {
 import { callBuiltinFunctor } from '@decipad/language-builtins';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { getIdentifierString } from '@decipad/language-utils';
+import { getIdentifierString, walkAst } from '@decipad/language-utils';
 import { inferExpression, inferStatement } from '.';
 import { logRetrievedName } from './logRetrievedName';
 import { isPrevious } from '../utils/isPrevious';
@@ -119,6 +119,22 @@ const continueInferFunctionCall = async (
   }
 };
 
+const functionCallsItself = (funcDef: Type) => {
+  if (!funcDef.functionBody) {
+    return false;
+  }
+  let callsItSelf = false;
+  walkAst(funcDef.functionBody, (node) => {
+    if (node.type === 'function-call') {
+      const fName = getIdentifierString(node.args[0]);
+      if (fName === funcDef.functionName) {
+        callsItSelf = true;
+      }
+    }
+  });
+  return callsItSelf;
+};
+
 // IMPORTANT: keep this function below synchronous, otherwise the guard is not guaranteed.
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const guardFunctionCallInfer = (
@@ -129,7 +145,7 @@ const guardFunctionCallInfer = (
   const fName = getIdentifierString(expr.args[0]);
   const { inferContext: ctx } = realm;
   const functionDefinition = ctx.stack.get(fName);
-  if (functionDefinition != null && ctx.onGoingFunctionCalls.has(fName)) {
+  if (functionDefinition && functionCallsItself(functionDefinition)) {
     return Promise.resolve(
       t.impossible(InferError.formulaCannotCallItself(fName))
     );

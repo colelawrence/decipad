@@ -1,8 +1,8 @@
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_H1, ELEMENT_H2 } from '@decipad/editor-types';
 import { isElement, setNodes } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const createTransformH1 = createNormalizerPluginFactory({
   name: 'MIGRATE_H1_TO_H2',

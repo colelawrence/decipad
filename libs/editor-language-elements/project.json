@@ -28,10 +28,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/editor-language-elements"],
       "options": {
-        "jestConfig": "libs/editor-language-elements/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/editor-language-elements"
       }
     }
   },

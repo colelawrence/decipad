@@ -1,16 +1,16 @@
 import { jsonPathsFromObject } from './jsonPathsFromObject';
 
 test('jsonPathsFromObject', () => {
-  expect(jsonPathsFromObject({})).toMatchInlineSnapshot(`Array []`);
+  expect(jsonPathsFromObject({})).toMatchInlineSnapshot(`[]`);
   expect(jsonPathsFromObject({ a: 1, b: 2 })).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [],
+    [
+      {
+        "children": [],
         "fullPathFromRoot": "a",
         "label": "a",
       },
-      Object {
-        "children": Array [],
+      {
+        "children": [],
         "fullPathFromRoot": "b",
         "label": "b",
       },
@@ -19,21 +19,21 @@ test('jsonPathsFromObject', () => {
   expect(
     jsonPathsFromObject({ a: [1, 2, 3], b: { c: 4, d: [5, 6, 7], e: 'hey' } })
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [],
+    [
+      {
+        "children": [
+          {
+            "children": [],
             "fullPathFromRoot": "a[0]",
             "label": "[0]",
           },
-          Object {
-            "children": Array [],
+          {
+            "children": [],
             "fullPathFromRoot": "a[1]",
             "label": "[1]",
           },
-          Object {
-            "children": Array [],
+          {
+            "children": [],
             "fullPathFromRoot": "a[2]",
             "label": "[2]",
           },
@@ -41,27 +41,27 @@ test('jsonPathsFromObject', () => {
         "fullPathFromRoot": "a",
         "label": "a",
       },
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [],
+      {
+        "children": [
+          {
+            "children": [],
             "fullPathFromRoot": "b.c",
             "label": "c",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [],
+          {
+            "children": [
+              {
+                "children": [],
                 "fullPathFromRoot": "b.d[0]",
                 "label": "[0]",
               },
-              Object {
-                "children": Array [],
+              {
+                "children": [],
                 "fullPathFromRoot": "b.d[1]",
                 "label": "[1]",
               },
-              Object {
-                "children": Array [],
+              {
+                "children": [],
                 "fullPathFromRoot": "b.d[2]",
                 "label": "[2]",
               },
@@ -69,8 +69,8 @@ test('jsonPathsFromObject', () => {
             "fullPathFromRoot": "b.d",
             "label": "d",
           },
-          Object {
-            "children": Array [],
+          {
+            "children": [],
             "fullPathFromRoot": "b.e",
             "label": "e",
           },

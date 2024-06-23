@@ -9,7 +9,7 @@ import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import { useLiveConnection } from '@decipad/live-connect';
 import { ExternalDataSourceContext } from '@decipad/react-contexts';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
 import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';

@@ -21,8 +21,8 @@ You can achieve the same result by creating a new table and adding columns that 
 
 #### New Version
 
-1.  **Create a new table** and fill in your old data
-2.  **Add columns** and assign the columns you want to copy
+1. **Create a new table** and fill in your old data
+2. **Add columns** and assign the columns you want to copy
 
 ![Expanding Tables New](./img/ExpandingTablesNew.png)
 
@@ -37,9 +37,9 @@ You can achieve the same result by creating a new table and adding columns that 
 
 #### New Version
 
-1.  **Create a new table** and fill in your old data
-2.  **Add columns** and assign the columns you want to copy
-    ![Select Formula Old](./img/SelectFormulaOld.png)
+1. **Create a new table** and fill in your old data
+2. **Add columns** and assign the columns you want to copy
+   ![Select Formula Old](./img/SelectFormulaOld.png)
 
 ## Splitby() Formula
 
@@ -52,8 +52,8 @@ You can achieve the same result with data views.
 
 #### New Version
 
-1.  **Create a new table** and fill in your old data
-2.  **Create a view** to filter
+1. **Create a new table** and fill in your old data
+2. **Create a view** to filter
 
 ![Splitby Formula New](./img/SplitbyNew.gif)
 

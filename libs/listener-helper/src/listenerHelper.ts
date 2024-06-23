@@ -2,7 +2,7 @@ import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/w
 import type { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { dequal, identity } from '@decipad/utils';
-import type { ListenerHelper } from './types';
+import type { ListenerHelper, Select } from './types';
 
 type ListenerHelperSubject<SubjectContents, MoreArgs extends unknown[]> =
   | BehaviorSubject<SubjectContents>
@@ -17,11 +17,6 @@ const getSubject = <SubjectContents, MoreArgs extends unknown[]>(
   }
   return subject;
 };
-
-type Select<SubjectContents, MoreArgs extends Array<unknown>, Ret> = (
-  a: SubjectContents,
-  ...m: MoreArgs
-) => Ret;
 
 export function listenerHelper<
   SubjectContents,

@@ -64,7 +64,9 @@ import { normalizers } from './RootEditor/plugins';
 const INITIAL_TAB_NAME = 'New Tab';
 const TITLE_EDITOR_INDEX = 0;
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
+);
 
 /**
  * Helper error class to make errors more visible on sentry.
@@ -375,6 +377,7 @@ export class EditorController implements RootEditorController {
 
       if (op.type === 'insert_node') {
         if (IsTab(op.node)) {
+          // console.log('handleTopLevelOps: is tab and going to insert it', op);
           this.InsertTab(op as TInsertNodeOperation<TabElement>);
           return true;
         }
@@ -562,11 +565,13 @@ export class EditorController implements RootEditorController {
   }
 
   private unguardedApply(op: TOperation): void {
+    // console.log('>>>>> EditorController unguardedApply', op);
     if (op.FROM_ROOT) {
       return;
     }
 
     const isTopLevel = this.handleTopLevelOps(op);
+    // console.log('isTopLevel', isTopLevel);
     if (!isTopLevel) {
       const childIndex = childIndexForOp(op);
       // Remote event to the title (no need to translate down)
@@ -584,14 +589,21 @@ export class EditorController implements RootEditorController {
           console.error('children count:', this.children.length);
           throw new Error(`Could not find editor at index ${tabEditorIndex}`);
         }
+        // console.log(
+        //   'going to apply to tab editor',
+        //   tabEditorIndex,
+        //   translatedOp
+        // );
         tabEditor.apply(translatedOp);
       }
     }
 
     op.FROM_ROOT = true;
     if (!op.FROM_MIRROR) {
+      // console.log('going to apply to mirror', op);
       this.mirrorEditor.apply(op);
     }
+    // console.log('<<<<<<< EditorController unguardedApply', op);
   }
 
   // ====== End Slate Editor Stubs ======

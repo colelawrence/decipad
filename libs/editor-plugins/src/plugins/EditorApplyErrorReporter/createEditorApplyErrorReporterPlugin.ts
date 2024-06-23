@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/browser';
 import type { TOperation } from '@udecode/plate-common';
-import { createOverrideApplyPluginFactory } from '../../pluginFactories';
+import { createOverrideApplyPluginFactory } from '@decipad/editor-plugin-factories';
 
 const maxHistorySize = 50;
 

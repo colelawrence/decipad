@@ -5,7 +5,8 @@ import type {
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
-import type { ClientWorkerContext, RecursiveDecoder } from './types';
+import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
+import type { ClientWorkerContext } from './types';
 import type { ReadSerializedColumnDecoder } from 'libs/language-types/src/Value';
 import { getRemoteValue } from '../utils/getRemoteValue';
 
@@ -31,9 +32,10 @@ export const streamingColumn = (
     const decode = decoders[cellType.kind];
     const column = new Value.ReadSerializedColumn(
       cellType,
-      recursiveDecoderToReadSerializedColumnDecoder(decode, type, decoders),
+      recursiveDecoderToReadSerializedColumnDecoder(decode, cellType, decoders),
       new DataView(value),
-      []
+      [],
+      0
     );
     yield* getResultGenerator(await column.getData())();
   };

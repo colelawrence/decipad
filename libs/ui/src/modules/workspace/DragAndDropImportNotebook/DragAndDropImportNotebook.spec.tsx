@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import stringify from 'json-stringify-safe';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
@@ -174,7 +175,7 @@ it('does not show a drop effect when dragging only a file that is too large over
 });
 
 it('emits an import event when dropping for only the acceptable file', async () => {
-  const handleImport = jest.fn();
+  const handleImport = vi.fn();
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <DragAndDropImportNotebook onImport={handleImport}>

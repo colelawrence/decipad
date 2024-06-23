@@ -1,7 +1,12 @@
 import { formatResult } from '@decipad/format';
 import type DeciNumber from '@decipad/number';
-import type { Result, SerializedType, Type } from '@decipad/remote-computer';
-import { Unit, serializeType } from '@decipad/remote-computer';
+import type {
+  Result,
+  SerializedType,
+  Type,
+} from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { Unit, serializeType } from '@decipad/language-types';
 
 export const simpleFormatResult = (
   locale: string,

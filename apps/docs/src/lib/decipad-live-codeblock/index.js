@@ -20,6 +20,7 @@ export default function theme() {
           alias: {
             stream: 'stream-browserify',
             process: 'process/browser',
+            '@decipad/remote-computer': '@decipad/computer',
           },
         },
         module: {

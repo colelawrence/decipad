@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
 import {
   getContiguousGroups,

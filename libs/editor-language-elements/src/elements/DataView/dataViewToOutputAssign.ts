@@ -1,5 +1,6 @@
 import { type DataViewElement } from '@decipad/editor-types';
-import { type Program, shadowExprRef } from '@decipad/remote-computer';
+import { type Program } from '@decipad/computer-interfaces';
+import { shadowExprRef } from '@decipad/remote-computer';
 import { parseElementAsVariableAssignment } from '../../utils/parseElementAsVariableAssignment';
 import { getNodeString } from '@udecode/plate-common';
 

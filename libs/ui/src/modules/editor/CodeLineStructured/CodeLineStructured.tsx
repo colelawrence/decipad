@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useDelayedValue } from '@decipad/react-utils';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 
 import { grey400 } from '../../../primitives';

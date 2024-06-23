@@ -53,10 +53,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/apps/frontend"],
       "options": {
-        "jestConfig": "apps/frontend/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "apps/frontend"
       }
     }
   },

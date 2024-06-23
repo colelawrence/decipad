@@ -44,7 +44,7 @@ test('Basic + button to insert new line', async ({ testUser }) => {
 
   await test.step('press + button after table', async () => {
     // first column
-    await page.getByTestId('add-new-line-button').nth(3).click();
+    await page.getByTestId('add-new-line-button').last().click();
 
     // Check only two structure inputs were created and no structured input was added when we press the + button after the table
     await expect(page.getByTestId('codeline-code')).toHaveCount(2);

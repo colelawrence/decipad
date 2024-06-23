@@ -1,4 +1,4 @@
-import { type Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { AnyElement } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { Select, SmartColumnCell as UISmartColumnCell } from '@decipad/ui';

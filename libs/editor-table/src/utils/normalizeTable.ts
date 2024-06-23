@@ -1,5 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import type { NormalizerReturnValue } from '@decipad/editor-plugins';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import type {
   TableCaptionElement,
   TableCellElement,

@@ -1,5 +1,6 @@
 import type { ErrSpec } from '@decipad/language-interfaces';
-import { buildType as t } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { formatError } from './formatError';
 
 const locale = 'en-US';

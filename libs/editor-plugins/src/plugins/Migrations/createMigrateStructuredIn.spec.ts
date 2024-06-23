@@ -80,20 +80,20 @@ it('Converts structured inputs to structured codelines', () => {
   ];
   normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
+    [
+      {
+        "children": [
+          {
+            "children": [
+              {
                 "text": "VarName",
               },
             ],
             "type": "structured_varname",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "100",
               },
             ],

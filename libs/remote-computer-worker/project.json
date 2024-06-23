@@ -7,10 +7,7 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/remote-computer-worker/**/*.ts",
-          "libs/remote-computer-worker/**/*.tsx"
-        ],
+        "lintFilePatterns": ["libs/remote-computer-worker/**/*.ts"],
         "maxWarnings": 0
       }
     },
@@ -21,10 +18,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/remote-computer-worker"],
       "options": {
-        "jestConfig": "libs/remote-computer-worker/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/remote-computer-worker"
       }
     },
     "depcheck": {

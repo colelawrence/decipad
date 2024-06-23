@@ -12,7 +12,7 @@ export interface ParserError {
   isDisallowedNodeType?: boolean;
   detailMessage?: string;
   bracketError?: BracketError;
-  token?: moo.Token;
+  token?: moo.Token | undefined;
   line?: number;
   column?: number;
   expected?: string[];

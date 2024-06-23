@@ -1,4 +1,5 @@
-import { buildType as t, parseUnit, Time } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t, parseUnit, Time } from '@decipad/language-types';
 import { N } from '@decipad/number';
 import { formatResult } from './formatResult';
 

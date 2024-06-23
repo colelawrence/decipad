@@ -50,7 +50,7 @@ const config: PlaywrightTestConfig = {
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 3 : 0,
-  workers: '100%',
+  workers: '80%',
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? 'blob' : 'html',
 
@@ -127,6 +127,7 @@ const config: PlaywrightTestConfig = {
           permissions: ['clipboard-read', 'clipboard-write'],
         },
       },
+      timeout: 200000,
     },
     {
       name: 'chromium',

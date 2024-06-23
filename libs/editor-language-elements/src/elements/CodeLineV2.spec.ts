@@ -55,20 +55,20 @@ it('can parse a number', async () => {
   );
   expect(interpretedAs).toMatchInlineSnapshot(`"literal"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
-    Object {
+    {
       "artificiallyDerivedFrom": undefined,
-      "block": Object {
-        "args": Array [
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+      "block": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
                   "TestName",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "number",
                   DeciNumber {
                     "d": 1n,
@@ -103,40 +103,40 @@ it('can parse code', async () => {
   );
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
-    Object {
+    {
       "artificiallyDerivedFrom": undefined,
-      "block": Object {
-        "args": Array [
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+      "block": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
                   "TestName",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "implicit*",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 6,
                       "column": 7,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -145,28 +145,28 @@ it('can parse code', async () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "meter",
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 6,
                           "column": 7,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 2,
                           "column": 3,
                           "line": 1,
@@ -174,12 +174,12 @@ it('can parse code', async () => {
                         "type": "ref",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 6,
                       "column": 7,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
@@ -187,12 +187,12 @@ it('can parse code', async () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 6,
                   "column": 7,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
@@ -223,20 +223,20 @@ it('can parse nothing', async () => {
   );
   expect(interpretedAs).toMatchInlineSnapshot(`"empty"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
-    Object {
+    {
       "artificiallyDerivedFrom": undefined,
-      "block": Object {
-        "args": Array [
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+      "block": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
                   "TestName",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "number",
                   DeciNumber {
                     "d": 1n,
@@ -281,40 +281,40 @@ it('regression: deals with smart refs', async () => {
   );
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
-    Object {
+    {
       "artificiallyDerivedFrom": undefined,
-      "block": Object {
-        "args": Array [
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+      "block": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
                   "TestName",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "implicit*",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 13,
                       "column": 14,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -323,28 +323,28 @@ it('regression: deals with smart refs', async () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "exprRef_1234",
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 13,
                           "column": 14,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 2,
                           "column": 3,
                           "line": 1,
@@ -352,12 +352,12 @@ it('regression: deals with smart refs', async () => {
                         "type": "ref",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 13,
                       "column": 14,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
@@ -365,12 +365,12 @@ it('regression: deals with smart refs', async () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 13,
                   "column": 14,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
@@ -411,40 +411,40 @@ it('deals with table+column smart refs', async () => {
   );
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
-    Object {
+    {
       "artificiallyDerivedFrom": undefined,
-      "block": Object {
-        "args": Array [
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+      "block": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
                   "TestName",
                 ],
                 "type": "def",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "implicit*",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 33,
                       "column": 34,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -453,46 +453,46 @@ it('deals with table+column smart refs', async () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 0,
                           "column": 1,
                           "line": 1,
                         },
                         "type": "literal",
                       },
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "exprRef_tableId",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 16,
                               "column": 17,
                               "line": 1,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 2,
                               "column": 3,
                               "line": 1,
                             },
                             "type": "ref",
                           },
-                          Object {
-                            "args": Array [
+                          {
+                            "args": [
                               "exprRef_columnId",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 33,
                               "column": 34,
                               "line": 1,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 18,
                               "column": 19,
                               "line": 1,
@@ -500,12 +500,12 @@ it('deals with table+column smart refs', async () => {
                             "type": "colref",
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 33,
                           "column": 34,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 2,
                           "column": 3,
                           "line": 1,
@@ -513,12 +513,12 @@ it('deals with table+column smart refs', async () => {
                         "type": "property-access",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 33,
                       "column": 34,
                       "line": 1,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 0,
                       "column": 1,
                       "line": 1,
@@ -526,12 +526,12 @@ it('deals with table+column smart refs', async () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 33,
                   "column": 34,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,

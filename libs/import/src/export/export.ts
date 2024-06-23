@@ -1,4 +1,5 @@
-import { type NotebookResults, type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
+import { type NotebookResults } from '@decipad/computer-interfaces';
 import type { ExportedResult } from '.';
 import { formatUnit } from '@decipad/format';
 import type {

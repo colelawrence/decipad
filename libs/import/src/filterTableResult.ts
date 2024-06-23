@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { ImportOptions, ImportResult } from './types';
 
 function getIndexes(arr: Array<string>, names: Set<string>): Array<number> {

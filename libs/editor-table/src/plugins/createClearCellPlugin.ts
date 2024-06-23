@@ -1,4 +1,4 @@
-import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import type { BlockElement } from '@decipad/editor-types';
 import {
   ELEMENT_TABLE,

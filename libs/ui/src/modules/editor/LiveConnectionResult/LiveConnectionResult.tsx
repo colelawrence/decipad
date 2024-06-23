@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type {
   LiveConnectionElement,
   LiveDataSetElement,

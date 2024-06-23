@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { test } from './manager/decipad-tests';
+import { timeout } from '@decipad/utils';
+import { Timeouts } from '../utils/src';
 
 const matcher = process.env.SELECT_NOTEBOOK || '';
 
@@ -12,7 +14,7 @@ const jsonFiles = files
 
 for (const file of jsonFiles) {
   test(`Check gallery template: ${file}`, async ({ randomFreeUser }) => {
-    test.slow();
+    test.setTimeout(60000);
     await randomFreeUser.goToWorkspace();
 
     await test.step(`Load Notebook "${file}"`, async () => {
@@ -24,15 +26,16 @@ for (const file of jsonFiles) {
       await randomFreeUser.notebook.waitForEditorToLoad();
     });
 
-    const authorNotebookTabs = await randomFreeUser.notebook.getTabNames();
+    await test.step('Check notebook tabs', async () => {
+      const authorNotebookTabs = await randomFreeUser.notebook.getTabNames();
 
-    for (const tab of authorNotebookTabs) {
-      await test.step(`Author checks notebook tab "${tab}" for errors`, async () => {
+      for (const tab of authorNotebookTabs) {
         await randomFreeUser.notebook.selectTab(tab);
         await randomFreeUser.notebook.waitForEditorToLoad();
         await randomFreeUser.notebook.focusOnBody();
+        await timeout(Timeouts.computerDelay);
         await randomFreeUser.notebook.checkCalculationErrors();
-      });
-    }
+      }
+    });
   });
 }

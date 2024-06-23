@@ -1,4 +1,4 @@
-import { type Program } from '@decipad/remote-computer';
+import { type Program } from '@decipad/computer-interfaces';
 import { ELEMENT_DATA_VIEW } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { type InteractiveLanguageElement } from '../../types';

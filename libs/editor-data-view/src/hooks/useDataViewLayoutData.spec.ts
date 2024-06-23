@@ -56,14 +56,14 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/6928ccba6acd181409639d9943aa09d33152c7e80992998f5d5c1c52b5a0a68d",
           "replicaCount": 0,
           "type": undefined,
           "value": DeciNumber {
@@ -108,16 +108,16 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/e8ff5fa8101d5c30dd4a077e63a3643da60921a1383a9a7151ecc4f3f03c80fd",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -128,15 +128,15 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/b0bc58bdde052273dc781192e21d2539e3dc453f1364463569428c0590b16f32",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -147,15 +147,15 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/357645b0b9ff41c07c165c9cc44e1c262db6ddd9344743aa876d9a4bd4f44603",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -205,16 +205,16 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/4fb48be7eccb023553dbcf97f12f7e01fa459e409bdccafe69097fd2cfc447a7",
           "replicaCount": 2,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -225,15 +225,15 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/b0bc58bdde052273dc781192e21d2539e3dc453f1364463569428c0590b16f32",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -306,20 +306,20 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
+          "children": [
+            {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "children": Array [],
+              "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "//",
+              "id": "/13a0c0dcf86068e93be28d3bd2cb9f19454c6b764c18b3aa409cbe88fdedfc3f/64af05c38af2169228d32711e4987d231887eb1eba6f7aeada017c73b76e939b",
               "replicaCount": 1,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -333,9 +333,9 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/13a0c0dcf86068e93be28d3bd2cb9f19454c6b764c18b3aa409cbe88fdedfc3f",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -346,19 +346,19 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
+          "children": [
+            {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "children": Array [],
+              "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "//",
+              "id": "/3867fef80ac7abe2e353fc9b9d556196acc261b790f7fae9f0f7e6756f6eb000/64af05c38af2169228d32711e4987d231887eb1eba6f7aeada017c73b76e939b",
               "replicaCount": 1,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -372,9 +372,9 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/3867fef80ac7abe2e353fc9b9d556196acc261b790f7fae9f0f7e6756f6eb000",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -385,19 +385,19 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
+          "children": [
+            {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "children": Array [],
+              "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "//",
+              "id": "/2532e1cba3f131e7b41394f05d41fa7d586ac0cd6d53994e39a885187ad0608a/c3d60875bbe6b4b51e361979a4f1760d4213d6f18908662d6e76f080e1b11a16",
               "replicaCount": 1,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -411,9 +411,9 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/2532e1cba3f131e7b41394f05d41fa7d586ac0cd6d53994e39a885187ad0608a",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -483,16 +483,16 @@ describe('layoutPowerData', () => {
         preventExpansion: false,
       })
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [],
+          "children": [],
           "collapsible": true,
           "elementType": "group",
-          "id": "/",
+          "id": "/21d8e03d750bcbeb52db19bb6370aeb239cb643bbf264b8a14b6437b4196453b",
           "replicaCount": 2,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },
@@ -503,19 +503,19 @@ describe('layoutPowerData', () => {
             "s": 1n,
           },
         },
-        Object {
+        {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
-          "children": Array [
-            Object {
+          "children": [
+            {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "children": Array [],
+              "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "//",
+              "id": "/44abfd98e4e434bc96c1a943313814602ce3af5bfe0577a962223721bd650916/c3d60875bbe6b4b51e361979a4f1760d4213d6f18908662d6e76f080e1b11a16",
               "replicaCount": 1,
-              "type": Object {
+              "type": {
                 "kind": "number",
                 "unit": null,
               },
@@ -529,9 +529,9 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/",
+          "id": "/44abfd98e4e434bc96c1a943313814602ce3af5bfe0577a962223721bd650916",
           "replicaCount": 1,
-          "type": Object {
+          "type": {
             "kind": "number",
             "unit": null,
           },

@@ -1,5 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import type { Parser } from '@decipad/remote-computer';
+import type { Parser } from '@decipad/language-interfaces';
 import type {
   MyElement,
   VariableDefinitionElement,

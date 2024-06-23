@@ -14,7 +14,7 @@ test('Check references break', async ({ testUser }) => {
   await test.step('deletes calculation to break inline results', async () => {
     await page.locator('article').getByTestId('drag-handle').nth(3).click();
 
-    page.getByText('Delete').waitFor();
+    await page.getByText('Delete').waitFor();
     await page.getByText('Delete').click();
   });
 

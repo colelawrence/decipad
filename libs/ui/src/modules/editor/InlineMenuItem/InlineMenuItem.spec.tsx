@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +18,7 @@ afterEach(() => cleanup?.());
 
 describe('an execute event', () => {
   it('is emitted on click', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <InlineMenuItem {...props} title="Title" onExecute={handleExecute} />
     );
@@ -27,7 +28,7 @@ describe('an execute event', () => {
   });
 
   it('is emitted on pressing enter when focused', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <InlineMenuItem
         {...props}
@@ -41,7 +42,7 @@ describe('an execute event', () => {
     expect(handleExecute).toHaveBeenCalled();
   });
   it('is not emitted when not focused', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <InlineMenuItem
         {...props}
@@ -55,7 +56,7 @@ describe('an execute event', () => {
     expect(handleExecute).not.toHaveBeenCalled();
   });
   it('is not emitted when holding shift', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <InlineMenuItem
         {...props}

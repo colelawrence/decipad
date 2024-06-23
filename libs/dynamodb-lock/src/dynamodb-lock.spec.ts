@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { getDefined } from '../../utils/src';
 import { concurrentWrites } from './utils/concurrent-writes';

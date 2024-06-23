@@ -1,11 +1,6 @@
-import {
-  type SerializedTypeKind,
-  isColumn,
-  isTable,
-  Unknown,
-} from '@decipad/remote-computer';
+import { type SerializedTypeKind, Unknown } from '@decipad/language-interfaces';
+import { isColumn, isTable } from '@decipad/computer';
 import { isDeciNumberInput } from '@decipad/number';
-
 import { CodeResultProps } from '../../../types';
 import { InlineCodeError } from '../InlineCodeError/InlineCodeError';
 import { AnyResult } from '../AnyResult/AnyResult';

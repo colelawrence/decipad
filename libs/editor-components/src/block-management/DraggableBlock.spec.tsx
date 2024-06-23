@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, thro } from '@decipad/utils';
 import { render } from '@testing-library/react';

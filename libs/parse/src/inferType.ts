@@ -1,4 +1,4 @@
-import type { SerializedType } from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/language-interfaces';
 import { containsNumber } from '@decipad/utils';
 import type { CoercibleType } from './types';
 import { inferBoolean } from './inferBoolean';

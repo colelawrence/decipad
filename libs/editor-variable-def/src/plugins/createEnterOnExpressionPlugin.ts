@@ -1,5 +1,5 @@
-import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
-import type { MyElement } from '@decipad/editor-types';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
+import type { AnyElement } from '@decipad/editor-types';
 import { ELEMENT_EXPRESSION, ELEMENT_CAPTION } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
@@ -23,7 +23,7 @@ export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
       const [node] = parentNode;
 
       if (
-        (node as MyElement)?.type === ELEMENT_EXPRESSION &&
+        (node as AnyElement)?.type === ELEMENT_EXPRESSION &&
         event.code === 'Enter'
       ) {
         const next = getNextNode(editor);
@@ -35,7 +35,7 @@ export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
           setSelection(editor, { anchor, focus: anchor });
         }
       } else if (
-        (node as MyElement)?.type === ELEMENT_CAPTION &&
+        (node as AnyElement)?.type === ELEMENT_CAPTION &&
         event.code === 'Enter'
       ) {
         const title = getNodeString(node);

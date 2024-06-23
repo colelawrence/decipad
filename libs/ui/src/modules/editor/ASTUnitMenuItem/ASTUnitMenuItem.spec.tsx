@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { decilang, SimpleValueAST } from '@decipad/remote-computer';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -35,7 +36,7 @@ it('renders a button when parse is successful', async () => {
 
 describe('onSelect prop', () => {
   it('gets called when parse is successful and button is pressed', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(<ASTUnitMenuItem onSelect={onSelect} parseUnit={() => goodUnit} />, {
       wrapper,
     });
@@ -48,7 +49,7 @@ describe('onSelect prop', () => {
   });
 
   it('gets called when parse is successful and Enter is pressed', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(<ASTUnitMenuItem onSelect={onSelect} parseUnit={() => goodUnit} />, {
       wrapper,
     });

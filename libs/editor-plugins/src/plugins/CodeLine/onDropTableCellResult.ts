@@ -10,6 +10,7 @@ import { cursorStore } from '@decipad/react-contexts';
 import type { CodeResult } from '@decipad/ui';
 import {
   getBlockAbove,
+  isElement,
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate-common';
@@ -49,7 +50,7 @@ export const onDropTableCellResult =
 
         const text = `lookup(${data.tableName}, "${data.cellValue}").${data.columnName}`;
 
-        if (block.type === ELEMENT_CODE_LINE) {
+        if (isElement(block) && block.type === ELEMENT_CODE_LINE) {
           filteredFragment.push({
             text,
           });

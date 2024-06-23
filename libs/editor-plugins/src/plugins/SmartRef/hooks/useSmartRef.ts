@@ -6,7 +6,7 @@ import {
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
 import type { MyElement, SmartRefElement } from '@decipad/editor-types';
-import { ELEMENT_SMART_REF, useMyEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import {
   getNextNode,
   getNodeString,
@@ -18,6 +18,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounceTime, filter } from 'rxjs';
 import { ReactEditor, useSelected } from 'slate-react';
+import { isSmartRef } from '../utils/isSmartRef';
 
 interface UseSmartRefResult {
   symbolName?: string;
@@ -44,7 +45,7 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       })?.[0];
       const hasPrevious = previousStr.length
         ? /\w$/.test(previousStr)
-        : previousElement?.type === ELEMENT_SMART_REF;
+        : isSmartRef(previousElement);
 
       const nextNode = getNextNode<MyElement>(editor, {
         at: ReactEditor.findPath(editor as ReactEditor, element),
@@ -56,7 +57,7 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       })?.[0];
       const hasNext = nextStr.length
         ? /^\w/.test(nextStr)
-        : nextElement?.type === ELEMENT_SMART_REF;
+        : isSmartRef(nextElement);
 
       return {
         hasPrevious,

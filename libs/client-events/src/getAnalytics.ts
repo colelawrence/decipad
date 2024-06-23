@@ -10,7 +10,9 @@ import * as Sentry from '@sentry/react';
 
 let globalAnalytics: Analytics | undefined;
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
+);
 
 export const getAnalytics = async (): Promise<Analytics | undefined> => {
   if (isTesting) {

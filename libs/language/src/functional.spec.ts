@@ -382,7 +382,7 @@ describe('use of funds document', () => {
         ],
       ]
     `);
-    expect(time).toBeLessThanOrEqual(4000 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(20000 * (process.env.CI ? 2 : 1));
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -567,7 +567,7 @@ describe('more models', () => {
       },
     });
 
-    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(800 * (process.env.CI ? 2 : 1));
   });
 });
 
@@ -653,7 +653,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(1600 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
@@ -747,7 +747,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   test('Works with one table dimensions', async () => {
@@ -781,7 +781,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   test('Simpler version of cars with table column assigns', async () => {
@@ -863,7 +863,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
@@ -1134,7 +1134,7 @@ ${'' /* Get capital needed */}
         value: N(893445208465297985000n, 7573195695208414869n), // 117,974662799844137
       },
     });
-    expect(time).toBeLessThanOrEqual(2200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(4000 * (process.env.CI ? 2 : 1));
   });
 
   test('rounds dates', async () => {

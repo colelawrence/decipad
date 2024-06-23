@@ -4,12 +4,12 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';
 
 const insert = (editor: MyEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });
-  const plugin = createAutoPairsPlugin(getRemoteComputer());
+  const plugin = createAutoPairsPlugin(getComputer());
   plugin.handlers?.onKeyDown?.(
     // @ts-expect-error
     editor,

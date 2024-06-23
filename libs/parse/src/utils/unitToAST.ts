@@ -1,5 +1,6 @@
 import { simpleFormatUnit } from '@decipad/format';
-import { type AST, parseBlock } from '@decipad/remote-computer';
+import { type AST } from '@decipad/language-interfaces';
+import { parseBlock } from '@decipad/remote-computer';
 import type { TableCellType } from '@decipad/editor-types';
 
 export const unitToAST = (

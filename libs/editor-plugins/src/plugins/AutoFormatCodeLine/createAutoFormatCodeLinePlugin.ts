@@ -43,7 +43,7 @@ import {
   toDOMNode,
 } from '@udecode/plate-common';
 import type { BaseRange, Point } from 'slate';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { getTextBeforeCursor } from './utils';
 
 type LastFormattedBlock = null | {

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { UserIconKey } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import type { AutocompleteName } from '@decipad/remote-computer';
+import type { AutocompleteName } from '@decipad/language-interfaces';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Invisible, SegmentButtons, Spinner } from 'libs/ui/src/shared';

@@ -1,3 +1,4 @@
+import { it, expect, beforeEach } from 'vitest';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { act, render, waitFor } from '@testing-library/react';
 import { createParagraphPlugin } from '@udecode/plate-paragraph';

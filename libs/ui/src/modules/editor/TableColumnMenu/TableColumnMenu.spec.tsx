@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +18,7 @@ it('renders trigger icon', () => {
   expect(getByText('trigger')).toBeInTheDocument();
 });
 it('emits a changeOpen event when clicking the trigger', async () => {
-  const handleChangeOpen = jest.fn();
+  const handleChangeOpen = vi.fn();
   const { getByText } = render(
     <TableColumnMenu
       {...props}
@@ -42,7 +43,7 @@ it('renders the menu only when open', async () => {
 });
 
 it('shows the sub menu', async () => {
-  const handleChangeOpen = jest.fn();
+  const handleChangeOpen = vi.fn();
   const { findByText, getByText, rerender } = render(
     <TableColumnMenu
       {...props}

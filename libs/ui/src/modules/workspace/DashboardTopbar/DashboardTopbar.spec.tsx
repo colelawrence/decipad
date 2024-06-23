@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps, FC, PropsWithChildren } from 'react';
@@ -17,7 +18,7 @@ const WithProviders: FC<PropsWithChildren> = ({ children }) => (
 );
 
 it('renders a button to create a new notebook', async () => {
-  const handleCreateNotebook = jest.fn();
+  const handleCreateNotebook = vi.fn();
   const { getByText } = render(
     <WithProviders>
       <DashboardTopbar {...props} onCreateNotebook={handleCreateNotebook} />

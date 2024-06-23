@@ -71,10 +71,12 @@ export const CreateWorkspaceModal = ({
 const formWrapperStyle = css({
   display: 'grid',
   rowGap: '26px',
+  pointerEvents: 'auto',
 });
 
 const createWorkspaceButtonStyle = css({
   display: 'flex',
   gap: '8px',
   button: { flexGrow: 0 },
+  pointerEvents: 'auto',
 });

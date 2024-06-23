@@ -1,6 +1,8 @@
+import { vi } from 'vitest';
+
 export const mockConsoleWarn = () => {
   const originalConsoleWarn = console.warn;
-  const mockConsoleWarn: jest.MockedFunction<typeof console.warn> = jest.fn();
+  const mockConsoleWarn = vi.fn();
 
   beforeEach(() => {
     console.warn = mockConsoleWarn;
@@ -14,7 +16,7 @@ export const mockConsoleWarn = () => {
 };
 export const mockConsoleError = () => {
   const originalConsoleError = console.error;
-  const mockConsoleError: jest.MockedFunction<typeof console.error> = jest.fn();
+  const mockConsoleError = vi.fn();
 
   beforeEach(() => {
     console.error = mockConsoleError;

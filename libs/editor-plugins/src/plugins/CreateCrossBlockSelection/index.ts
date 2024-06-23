@@ -1,4 +1,4 @@
-import { createOnCursorChangePluginFactory } from '../../pluginFactories';
+import { createOnCursorChangePluginFactory } from '@decipad/editor-plugin-factories';
 import {
   blockSelectionActions,
   blockSelectionStore,

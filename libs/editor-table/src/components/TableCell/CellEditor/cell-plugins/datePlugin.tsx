@@ -1,5 +1,5 @@
 import { DatePickerWrapper } from '@decipad/ui';
-import type { Time } from '@decipad/remote-computer';
+import type { Time } from '@decipad/language-interfaces';
 import type { CellPlugin } from '../types';
 import { matchCellKind } from '../matchCellKind';
 

@@ -1,3 +1,4 @@
+import { it, expect, beforeEach, vi } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE,
@@ -9,7 +10,7 @@ import {
 import type { Computer } from '@decipad/computer-interfaces';
 import { clone } from '.';
 
-jest.mock('nanoid', () => ({ nanoid: () => 'mock-nanoid' }));
+vi.mock('nanoid', () => ({ nanoid: () => 'mock-nanoid' }));
 
 let computer: Computer;
 beforeEach(() => {
@@ -24,9 +25,9 @@ it('clones and uses a new nanoid', async () => {
       children: [{ text: 'hello' }],
     })
   ).toMatchInlineSnapshot(`
-    Object {
-      "children": Array [
-        Object {
+    {
+      "children": [
+        {
           "text": "hello",
         },
       ],
@@ -44,10 +45,10 @@ it('clones while using a different varname', async () => {
       children: [{ text: 'hello = "world"' }],
     })
   ).toMatchInlineSnapshot(`
-    Object {
-      "children": Array [
-        Object {
-          "text": "helloCopy = \\"world\\"",
+    {
+      "children": [
+        {
+          "text": "helloCopy = "world"",
         },
       ],
       "id": "mock-nanoid",
@@ -75,21 +76,21 @@ it('clones while using a different varname (2)', async () => {
       ],
     })
   ).toMatchInlineSnapshot(`
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [
-            Object {
+    {
+      "children": [
+        {
+          "children": [
+            {
               "text": "helloCopy",
             },
           ],
           "id": "mock-nanoid",
           "type": "structured_varname",
         },
-        Object {
-          "children": Array [
-            Object {
-              "text": "\\"world\\"",
+        {
+          "children": [
+            {
+              "text": ""world"",
             },
           ],
           "id": "mock-nanoid",

@@ -1,4 +1,4 @@
-import { type SerializedType } from '@decipad/remote-computer';
+import { type SerializedType } from '@decipad/language-interfaces';
 
 export const cellType = (type: SerializedType): SerializedType => {
   if (type.kind !== 'column') {

@@ -106,14 +106,14 @@ it('Replaces all expression ref with block ids', () => {
   ];
   normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+    [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "Table",
                   },
                 ],
@@ -122,25 +122,25 @@ it('Replaces all expression ref with block ids', () => {
             ],
             "type": "table-caption",
           },
-          Object {
-            "children": Array [
-              Object {
-                "cellType": Object {
+          {
+            "children": [
+              {
+                "cellType": {
                   "kind": "dropdown",
                 },
-                "children": Array [
-                  Object {
+                "children": [
+                  {
                     "text": "Column1",
                   },
                 ],
                 "type": "th",
               },
-              Object {
-                "cellType": Object {
+              {
+                "cellType": {
                   "kind": "anything",
                 },
-                "children": Array [
-                  Object {
+                "children": [
+                  {
                     "text": "Column2",
                   },
                 ],
@@ -149,19 +149,19 @@ it('Replaces all expression ref with block ids', () => {
             ],
             "type": "tr",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "This 1 should be updated, and so should 2",
                   },
                 ],
                 "type": "td",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "text",
                   },
                 ],
@@ -170,19 +170,19 @@ it('Replaces all expression ref with block ids', () => {
             ],
             "type": "tr",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
                 "type": "td",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],

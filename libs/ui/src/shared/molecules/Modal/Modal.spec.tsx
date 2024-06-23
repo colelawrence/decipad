@@ -1,3 +1,4 @@
+import { vi, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Modal } from './Modal';
@@ -13,7 +14,7 @@ it('renders a dialog with the children', () => {
 });
 
 it('can be closed', async () => {
-  const closeAction = jest.fn();
+  const closeAction = vi.fn();
   render(
     <Modal title="modal" open={true} onOpenChange={noop} onClose={closeAction}>
       text

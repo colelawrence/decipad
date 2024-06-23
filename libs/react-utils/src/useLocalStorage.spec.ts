@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useLocalStorage } from './useLocalStorage';
 
@@ -7,10 +8,10 @@ describe('useLocalStorage', () => {
 
   beforeEach(() => {
     mockStorage = {};
-    Storage.prototype.setItem = jest.fn((key, value) => {
+    Storage.prototype.setItem = vi.fn((key, value) => {
       mockStorage[key] = value;
     });
-    Storage.prototype.getItem = jest.fn((key) => mockStorage[key] || null);
+    Storage.prototype.getItem = vi.fn((key) => mockStorage[key] || null);
   });
 
   it('uses initial value when localStorage is empty', () => {

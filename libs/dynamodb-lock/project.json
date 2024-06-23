@@ -15,10 +15,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/dynamodb-lock"],
       "options": {
-        "jestConfig": "libs/dynamodb-lock/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/dynamodb-lock"
       }
     },
     "typecheck": {

@@ -33,10 +33,10 @@ it('groups identifiers', () => {
       ''
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "items": Array [
-          Object {
+    [
+      {
+        "items": [
+          {
             "focused": false,
             "identifier": "a",
             "kind": "variable",
@@ -46,23 +46,23 @@ it('groups identifiers', () => {
         "tableName": undefined,
         "title": "Variables",
       },
-      Object {
-        "items": Array [
-          Object {
+      {
+        "items": [
+          {
             "focused": false,
             "identifier": "Table1",
             "inTable": "Table1",
             "kind": "variable",
             "type": "table",
           },
-          Object {
+          {
             "focused": false,
             "identifier": "Column1",
             "inTable": "Table1",
             "kind": "column",
             "type": "number",
           },
-          Object {
+          {
             "focused": false,
             "identifier": "Column2",
             "inTable": "Table1",
@@ -114,17 +114,17 @@ it('Places my table columns first', () => {
       'Table1'
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "items": Array [
-          Object {
+    [
+      {
+        "items": [
+          {
             "focused": false,
             "identifier": "Table1",
             "inTable": "Table1",
             "kind": "variable",
             "type": "table",
           },
-          Object {
+          {
             "blockId": "tableid",
             "columnId": "column1id",
             "decoration": "cell",
@@ -136,7 +136,7 @@ it('Places my table columns first', () => {
             "kind": "column",
             "type": "number",
           },
-          Object {
+          {
             "blockId": "tableid",
             "columnId": "column1id",
             "explanation": "The column Column1 from table Table1 as a list.",
@@ -147,7 +147,7 @@ it('Places my table columns first', () => {
             "kind": "column",
             "type": "number",
           },
-          Object {
+          {
             "blockId": "tableid",
             "columnId": "column2id",
             "decoration": "cell",
@@ -159,7 +159,7 @@ it('Places my table columns first', () => {
             "kind": "column",
             "type": "number",
           },
-          Object {
+          {
             "blockId": "tableid",
             "columnId": "column2id",
             "explanation": "The column Column2 from table Table1 as a list.",
@@ -174,9 +174,9 @@ it('Places my table columns first', () => {
         "tableName": "Table1",
         "title": "Table1",
       },
-      Object {
-        "items": Array [
-          Object {
+      {
+        "items": [
+          {
             "focused": false,
             "identifier": "a",
             "kind": "variable",

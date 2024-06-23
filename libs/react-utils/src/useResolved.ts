@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PromiseOrType } from '@decipad/utils';
+import { captureException } from '@sentry/browser';
 
 export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   const [resolved, setResolved] = useState<T | undefined>();
@@ -17,9 +18,14 @@ export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
       if (p == null) {
         return;
       }
-      const newResult = await Promise.resolve(p);
-      if (latest.current === p) {
-        setResolved(newResult);
+      try {
+        const newResult = await Promise.resolve(p);
+        if (latest.current === p) {
+          setResolved(newResult);
+        }
+      } catch (err) {
+        console.error(err);
+        captureException(err);
       }
     })();
   }, [p]);

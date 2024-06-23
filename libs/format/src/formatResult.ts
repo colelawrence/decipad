@@ -2,8 +2,13 @@ import util from 'util';
 import type DeciNumber from '@decipad/number';
 import { N } from '@decipad/number';
 import { getDefined, identity, zip } from '@decipad/utils';
-import type { Result, SerializedType, Type } from '@decipad/remote-computer';
-import { Time, Unit, serializeType } from '@decipad/remote-computer';
+import type {
+  Result,
+  SerializedType,
+  Type,
+} from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { Time, Unit, serializeType } from '@decipad/language-types';
 import { formatType } from './formatType';
 
 export type FormatResult = (

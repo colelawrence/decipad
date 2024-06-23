@@ -8,7 +8,7 @@ import {
   isCollapsed,
 } from '@udecode/plate-common';
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
-import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { isSmartRef } from '../utils/isSmartRef';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 

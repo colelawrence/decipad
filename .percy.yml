@@ -8,4 +8,4 @@ discovery:
   networkIdleTimeout: 100
   launch-options:
     headless: true
-    timeout: 30000
+    timeout: 45000

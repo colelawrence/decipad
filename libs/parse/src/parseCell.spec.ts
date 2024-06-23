@@ -95,7 +95,7 @@ it('turns cells into AST nodes', async () => {
   ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref m) (ref s)))"`);
 
   expect(await testParseCell({ kind: 'string' }, '123')).toMatchInlineSnapshot(
-    `"\\"123\\""`
+    `""123""`
   );
 
   expect(

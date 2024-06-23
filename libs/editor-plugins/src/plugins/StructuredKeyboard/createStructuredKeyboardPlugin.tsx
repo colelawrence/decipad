@@ -22,7 +22,7 @@ import {
 import type { KeyboardEvent } from 'react';
 import type { BaseEditor, Path } from 'slate';
 import { Editor, Transforms } from 'slate';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
 import utils from './structured_utils';
 

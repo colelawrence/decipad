@@ -1,4 +1,5 @@
 /* eslint-disable jest/no-disabled-tests */
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
@@ -9,7 +10,7 @@ it('renders the button text', () => {
 });
 
 it('emits click events', async () => {
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
   render(<Button onClick={handleClick}>text</Button>);
 
   await userEvent.click(screen.getByRole('button'));
@@ -96,7 +97,7 @@ describe('with an href', () => {
   });
 
   it('still emits click events', async () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(
       <Button href="/page" onClick={handleClick}>
         icon

@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { MyEditor, MyElement } from '@decipad/editor-types';
 import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
 import {

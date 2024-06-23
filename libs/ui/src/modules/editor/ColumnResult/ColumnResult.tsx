@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { concatMap, distinctUntilChanged } from 'rxjs';
+import { concatMap, distinctUntilChanged, map } from 'rxjs';
 import { useObservable } from 'rxjs-hooks';
 import { dequal } from '@decipad/utils';
 import { CodeResultProps } from '../../../types';
@@ -14,6 +14,7 @@ export const ColumnResult: FC<
 
   const labels = useObservable(() =>
     computer.explainDimensions$.observe(result).pipe(
+      map((p) => Promise.resolve(p)),
       concatMap((p) => p),
       distinctUntilChanged((a, b) => dequal(a, b))
     )

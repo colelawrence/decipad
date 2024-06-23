@@ -20,4 +20,4 @@ Add notebook comments to Notebooks to help you align and discuss results with co
 2. Click the `...` icon next to the comment.
 3. Select `Delete`.
 
-We're rolling out Notebook Comments. Share your thoughts and feedback by emailing us at support@decipad.com or through the support chat.
+We're rolling out Notebook Comments. Share your thoughts and feedback by emailing us at [support@decipad.com](mailto:support@decipad.com) or through the support chat.

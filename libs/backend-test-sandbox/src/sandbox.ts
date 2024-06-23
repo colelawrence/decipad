@@ -12,8 +12,8 @@ let child: ChildProcess | undefined;
 let started = false;
 let stoppedResolve: (code: number | null) => void;
 
-const workerId = Number(process.env.JEST_WORKER_ID);
-assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
+const workerId = Number(process.env.VITEST_WORKER_ID);
+assert(!!workerId, 'need VITEST_WORKER_ID env var to be defined');
 
 const verbose = !!process.env.DECI_VERBOSE;
 
@@ -135,11 +135,10 @@ function stop(): Promise<unknown> {
     return Promise.resolve();
   }
   stopping = true;
-  const stoppedPromise = new Promise((resolve) => {
+  return new Promise((resolve) => {
     stoppedResolve = resolve;
+    child?.kill('SIGTERM');
   });
-  child.kill('SIGTERM');
-  return stoppedPromise;
 }
 
 export default { start, stop };

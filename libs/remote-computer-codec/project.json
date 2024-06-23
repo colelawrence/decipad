@@ -1,0 +1,38 @@
+{
+  "name": "remote-computer-codec",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/remote-computer-codec/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/remote-computer-codec/**/*.ts",
+          "libs/remote-computer-codec/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/remote-computer-codec"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/remote-computer-codec"],
+      "options": {
+        "jestConfig": "libs/remote-computer-codec/jest.config.js"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/remote-computer-codec"
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { DisplayElement, PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,

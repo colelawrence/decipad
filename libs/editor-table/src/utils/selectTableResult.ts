@@ -1,4 +1,4 @@
-import type { Result, SerializedType } from '@decipad/remote-computer';
+import type { Result, SerializedType } from '@decipad/language-interfaces';
 import { Unknown, buildResult, isTableResult } from '@decipad/remote-computer';
 import { empty } from '@decipad/generator-utils';
 import type { TableColumn } from '..';

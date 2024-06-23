@@ -2,10 +2,10 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-console */
 /* eslint-disable no-use-before-define */
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/valid-title */
-/* eslint-disable jest/no-export */
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import type { beforeAll } from 'vitest';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { it, describe, afterAll } from 'vitest';
 import stringify from 'json-stringify-safe';
 import sandbox from './sandbox';
 import type { Env } from './sandbox-env';
@@ -59,10 +59,10 @@ export function testWithSandbox(
   let env: Env;
 
   const sandboxStartedPromise: Promise<void> = new Promise((resolve) => {
-    const workerId = process.env.JEST_WORKER_ID;
-    if (typeof workerId === 'undefined') {
+    const workerId = process.env.VITEST_WORKER_ID;
+    if (workerId === null) {
       throw new Error(
-        'expected Jest worker id to be defined in process.env.JEST_WORKER_ID'
+        'expected Vitest worker id to be defined in process.env.VITEST_WORKER_ID'
       );
     }
     createSandboxEnv(Number(workerId)).then((sandboxEnv) => {
@@ -84,12 +84,13 @@ export function testWithSandbox(
     gql,
   } as TestContext;
 
-  global.describe(description, () => {
-    global.beforeAll(() => sandboxStartedPromise, 20e3);
+  describe.sequential(description, () => {
+    it('starts sandbox', () => sandboxStartedPromise, 20e3);
+    describe.sequential('inside sandbox', () => {
+      afterAll(() => sandbox.stop() as Promise<void>);
 
-    global.afterAll(() => sandbox.stop());
-
-    spec(testContext as TestContext);
+      spec(testContext as TestContext);
+    });
   });
 
   function wrap(
@@ -129,7 +130,7 @@ export function testWithSandbox(
     }
   }
 
-  function getTestFunction(): typeof global.test {
+  function getTestFunction() {
     const testFn = function testFn(
       description: string,
       fn: () => Promise<unknown> | void,
@@ -143,6 +144,6 @@ export function testWithSandbox(
     testFn.concurrent = wrapTestHelper(it.concurrent);
     testFn.each = (collection: Array<unknown>) =>
       wrapTestHelper(it.each(collection) as DoneCallback);
-    return testFn as typeof global.test;
+    return testFn as typeof it;
   }
 }

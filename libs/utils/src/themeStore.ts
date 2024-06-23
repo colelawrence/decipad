@@ -6,7 +6,7 @@ export type ThemePreference = 'system' | 'light' | 'dark';
 
 const getItem =
   // eslint-disable-next-line no-constant-condition
-  typeof localStorage !== 'undefined'
+  typeof 'localStorage' in global
     ? global.localStorage.getItem.bind(global.localStorage)
     : (_key: string) => false;
 

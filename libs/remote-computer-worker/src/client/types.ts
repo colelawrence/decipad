@@ -3,15 +3,9 @@ import type {
   SerializedTypes,
   Result,
 } from '@decipad/language-interfaces';
+import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
 import type { PromiseOrType } from '@decipad/utils';
 import type { SharedRPC } from '../utils/SharedRPC';
-
-export type RecursiveDecoder = (
-  type: SerializedType,
-  buffer: DataView,
-  offset: number,
-  decoders: Record<SerializedType['kind'], RecursiveDecoder>
-) => PromiseOrType<[Result.OneResult, number]>;
 
 export interface ClientWorkerContext {
   rpc: SharedRPC;

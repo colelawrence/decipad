@@ -5,6 +5,7 @@ import type {
 import { createMyPlateEditor } from '@decipad/editor-types';
 import { getComputer } from '@decipad/computer';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
+import { timeout } from '@decipad/utils';
 
 describe('Normalize Caption Plugin', () => {
   const getDef = (): VariableDefinitionElement => ({
@@ -65,12 +66,14 @@ describe('Normalize Caption Plugin', () => {
     });
   });
 
-  it('inserts a text node if none present, with appropriate name', () => {
+  it('inserts a text node if none present, with appropriate name', async () => {
     const def = getDef();
     def.children[0].children = [] as any;
 
     editor.children = [def];
     editor.normalize({ force: true });
+
+    await timeout(100);
 
     const editorDef = editor.children[0] as VariableDefinitionElement;
 
@@ -80,7 +83,7 @@ describe('Normalize Caption Plugin', () => {
     expect(editorDef.children[0].children[0].text).toBe('Slider1');
   });
 
-  it('inserts unique names', () => {
+  it('inserts unique names', async () => {
     const def1 = getDef();
     def1.children[0].children[0].text = '';
 
@@ -90,6 +93,8 @@ describe('Normalize Caption Plugin', () => {
     editor.children = [def1, def2];
     editor.normalize({ force: true });
 
+    await timeout(100);
+
     const editorDef1 = editor.children[0] as VariableDefinitionElement;
     const editorDef2 = editor.children[1] as VariableDefinitionElement;
 
@@ -98,7 +103,7 @@ describe('Normalize Caption Plugin', () => {
     expect(editorDef2.children[0].children[0].text).toBe('Slider2');
   });
 
-  it('inserts unique names in columns', () => {
+  it('inserts unique names in columns', async () => {
     const def1 = getDef();
     def1.children[0].children[0].text = '';
 
@@ -113,6 +118,8 @@ describe('Normalize Caption Plugin', () => {
 
     editor.children = [col];
     editor.normalize({ force: true });
+
+    await timeout(100);
 
     const editorCol = editor.children[0] as ColumnsElement;
 

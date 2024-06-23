@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-npx esbuild --bundle --target=node18 --platform=node --format=cjs --outdir=build src/apiSpec/index.ts --external:aws-sdk --external:@aws-sdk --loader:.wasm=file
+./scripts/buildEndpoint.mjs
 
 if [[ -z "${DECI_DOMAIN:-}" ]]; then
     echo "Must provide DECI_DOMAIN in environment"
@@ -12,7 +12,7 @@ fi
 pwd
 
 ESCAPED_DOMAIN=`printf '%s' "$DECI_DOMAIN" | sed 's/[\/]/\\\\\//g'`
-echo $ESCAPED_DOMAIN
+echo building for domain $ESCAPED_DOMAIN
 
 PUBLIC_TARGET_DIR=../../apps/backend/public
 PLUGIN_TARGET_DIR=${PUBLIC_TARGET_DIR}/.well-known

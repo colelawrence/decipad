@@ -358,7 +358,7 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
       ).toBeVisible(),
     ]);
 
-    testUser.page
+    await testUser.page
       .getByTestId(/Go to page/)
       .nth(1)
       .click();
@@ -498,7 +498,9 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
       .getByTestId('segment-button-trigger')
       .click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.maxSelectorWaitTime);
+    await page.waitForTimeout(
+      Timeouts.computerDelay + Timeouts.liveBlockDelay + Timeouts.syncDelay
+    );
 
     await expect(
       page.getByTestId('code-line-warning'),

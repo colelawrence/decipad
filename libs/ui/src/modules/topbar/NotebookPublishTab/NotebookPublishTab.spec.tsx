@@ -1,11 +1,14 @@
+import { vi } from 'vitest';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
-import fetch from 'jest-fetch-mock';
+import createFetch from 'vitest-fetch-mock';
 import { ComponentProps } from 'react';
 import { NotebookPublishTab } from './NotebookPublishTab';
 import { PublishedVersionName } from '@decipad/interfaces';
 
 describe('NotebookPublishingPopUp organism', () => {
+  const fetch = createFetch(vi);
+
   beforeAll(() => {
     fetch.enableMocks();
   });

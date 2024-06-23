@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { disable } from '@decipad/feature-flags';
 import { getDefined } from '@decipad/utils';
 import waitForExpect from 'wait-for-expect';
@@ -40,7 +41,7 @@ describe('pad editor persistence', () => {
     onSavedImpl = undefined;
   });
 
-  test('loads', async () => {
+  it('loads', async () => {
     let loaded = editor.isLoadedLocally;
     onLoadedImpl = (source: string) => {
       expect(source).toBe('local');
@@ -52,7 +53,7 @@ describe('pad editor persistence', () => {
     });
   });
 
-  test('Saves some small changes', async () => {
+  it('Saves some small changes', async () => {
     let saved = false;
     onSavedImpl = (source: string) => {
       expect(source).toBe('local');
@@ -119,7 +120,7 @@ describe('pad editor persistence', () => {
     e.destroy();
   });
 
-  test('loads document as was saved', async () => {
+  it('loads document as was saved', async () => {
     let loaded = false;
     const onLoaded2 = (source: string) => {
       expect(source).toBe('local');

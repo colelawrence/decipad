@@ -10,7 +10,7 @@ import {
   getSyntaxErrorRanges,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import type { Token } from '@decipad/remote-computer';
+import type { Token } from 'moo';
 import { tokenize } from '@decipad/remote-computer';
 import { getNodeString, getParentNode, isElement } from '@udecode/plate-common';
 import type { NodeEntry, Path, Range } from 'slate';

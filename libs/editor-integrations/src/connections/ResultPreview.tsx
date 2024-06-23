@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import type { IntegrationStore } from '@decipad/react-contexts';
 import type { FC } from 'react';

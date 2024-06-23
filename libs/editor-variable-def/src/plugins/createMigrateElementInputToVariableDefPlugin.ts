@@ -1,4 +1,4 @@
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import type {
   DeprecatedInputElement,
   MyEditor,

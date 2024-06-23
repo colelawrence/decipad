@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getNodeString, isElement } from '@udecode/plate-common';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type { LiveQueryElement } from '@decipad/editor-types';
 import { MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { importFromUnknown } from '@decipad/import';

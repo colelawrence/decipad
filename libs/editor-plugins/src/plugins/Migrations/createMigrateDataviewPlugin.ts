@@ -12,7 +12,7 @@ import { cloneDeep, merge, omit } from 'lodash';
 import {
   NormalizerReturnValue,
   createNormalizerPlugin,
-} from '../../pluginFactories';
+} from '@decipad/editor-plugin-factories';
 
 function migrateDataviewSpecToJun24(
   old: Partial<OldDataViewElement>

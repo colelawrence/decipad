@@ -153,7 +153,7 @@ export const NewElementLine = ({
               css={buttonStyles(!!hasPreviousSibling)}
               onClick={() => {
                 setClicked(true);
-                if (onAdd !== undefined) onAdd();
+                onAdd?.();
               }}
             >
               <span css={iconWrapperStyles} data-testid="add-new-line-button">

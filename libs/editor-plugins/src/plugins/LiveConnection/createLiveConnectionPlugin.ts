@@ -21,8 +21,8 @@ import {
 import type { ENodeEntry, Value } from '@udecode/plate-common';
 import { getChildren, insertNodes, removeNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveConnectionVarName } from './components/LiveConnectionVarName';
 import { LiveDataSetVarName } from './components/LiveDataSetVarName';

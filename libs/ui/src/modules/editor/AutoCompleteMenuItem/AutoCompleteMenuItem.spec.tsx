@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
@@ -39,7 +40,7 @@ it.skip('shows a pseudo-focused state', async () => {
 
 describe('an execute event', () => {
   it('is emitted on click', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(<AutoCompleteMenuItem {...props} onExecute={handleExecute} />);
 
     await userEvent.click(screen.getByText('MyVariable'));
@@ -47,7 +48,7 @@ describe('an execute event', () => {
   });
 
   it('is emitted on pressing enter when focused', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <AutoCompleteMenuItem {...props} focused onExecute={handleExecute} />
     );
@@ -56,7 +57,7 @@ describe('an execute event', () => {
     expect(handleExecute).toHaveBeenCalled();
   });
   it('is not emitted when not focused', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <AutoCompleteMenuItem
         {...props}
@@ -69,7 +70,7 @@ describe('an execute event', () => {
     expect(handleExecute).not.toHaveBeenCalled();
   });
   it('is not emitted when holding shift', async () => {
-    const handleExecute = jest.fn();
+    const handleExecute = vi.fn();
     render(
       <AutoCompleteMenuItem {...props} focused onExecute={handleExecute} />
     );

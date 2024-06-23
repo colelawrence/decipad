@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { materializeResult } from '@decipad/remote-computer';
 import type { CellValueType } from '@decipad/editor-types';
 import { useMemo } from 'react';

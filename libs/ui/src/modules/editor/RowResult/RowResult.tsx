@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
 import { CodeResult } from '..';
 import { Table } from '../Table/Table';
 import { table } from '../../../styles';

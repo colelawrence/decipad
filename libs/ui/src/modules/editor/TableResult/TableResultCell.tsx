@@ -1,7 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useRef } from 'react';
 import { css } from '@emotion/react';
-import type { SerializedType, SerializedTypes } from '@decipad/remote-computer';
+import type {
+  SerializedType,
+  SerializedTypes,
+} from '@decipad/language-interfaces';
 import { AnyElement } from '@decipad/editor-types';
 import { CodeResult } from '..';
 import { TableData } from '../TableData/TableData';

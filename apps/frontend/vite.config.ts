@@ -37,7 +37,11 @@ const serverOptions: UserConfig['server'] = {
       changeOrigin: true,
     },
   },
-  hmr: !isForTests,
+  hmr: isForTests
+    ? false
+    : {
+        overlay: false,
+      },
 };
 
 const plugins = [

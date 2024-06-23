@@ -114,14 +114,14 @@ describe('createMigrateDataviewPlugin', () => {
     editor.normalize({ force: true });
 
     expect(editor.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
+      [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
                       "text": "Data view for Tools_and_Infra",
                     },
                   ],
@@ -132,14 +132,14 @@ describe('createMigrateDataviewPlugin', () => {
               "id": "Hoflt4zOtaFYe0VN31uIX",
               "type": "data-view-caption",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "cellType": Object {
+            {
+              "children": [
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -147,12 +147,12 @@ describe('createMigrateDataviewPlugin', () => {
                   "name": "column1",
                   "type": "data-view-th",
                 },
-                Object {
-                  "cellType": Object {
+                {
+                  "cellType": {
                     "kind": "string",
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -160,36 +160,36 @@ describe('createMigrateDataviewPlugin', () => {
                   "name": "column2",
                   "type": "data-view-th",
                 },
-                Object {
-                  "cellType": Object {
+                {
+                  "cellType": {
                     "kind": "number",
-                    "unit": Array [
-                      Object {
+                    "unit": [
+                      {
                         "baseQuantity": "USD",
                         "baseSuperQuantity": "currency",
-                        "exp": Object {
+                        "exp": {
                           "d": "1",
                           "n": "1",
                           "s": "1",
                         },
                         "known": true,
-                        "multiplier": Object {
+                        "multiplier": {
                           "d": "1",
                           "n": "1",
                           "s": "1",
                         },
                         "unit": "$",
                       },
-                      Object {
+                      {
                         "baseQuantity": "month",
                         "baseSuperQuantity": "month",
-                        "exp": Object {
+                        "exp": {
                           "d": "1",
                           "n": "1",
                           "s": "-1",
                         },
                         "known": true,
-                        "multiplier": Object {
+                        "multiplier": {
                           "d": "1",
                           "n": "1",
                           "s": "1",
@@ -198,8 +198,8 @@ describe('createMigrateDataviewPlugin', () => {
                       },
                     ],
                   },
-                  "children": Array [
-                    Object {
+                  "children": [
+                    {
                       "text": "",
                     },
                   ],
@@ -212,7 +212,7 @@ describe('createMigrateDataviewPlugin', () => {
               "type": "data-view-tr",
             },
           ],
-          "expandedGroups": Array [],
+          "expandedGroups": [],
           "id": "JxlP1w7CeUPwiv3MAYqA3",
           "schema": "jun-2024",
           "type": "data-view",

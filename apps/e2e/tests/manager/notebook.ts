@@ -460,7 +460,7 @@ export class Notebook {
       await this.page
         .getByTestId('segment-button-trigger-top-bar-sidebar')
         .click();
-      this.checkSidebarIsOpen();
+      await this.checkSidebarIsOpen();
     }
   }
 
@@ -505,7 +505,7 @@ export class Notebook {
    * ```
    */
   async openNumberCatalog() {
-    this.openSidebar();
+    await this.openSidebar();
     await this.page.getByTestId('sidebar-Data').click();
   }
 
@@ -659,7 +659,7 @@ export class Notebook {
    */
   async addAdvancedFormula(expression: string) {
     const checkIncremented = await this.page.getByTestId('code-line').count();
-    this.addBlock('calculation-block');
+    await this.addBlock('calculation-block');
     await expect(async () => {
       await expect(await this.page.getByTestId('code-line').count()).toBe(
         checkIncremented + 1
@@ -745,7 +745,7 @@ export class Notebook {
       | 'pie-chart'
       | 'scatter-plot' = 'area-chart'
   ) {
-    this.addBlock(type);
+    await this.addBlock(type);
   }
 
   /**
@@ -758,7 +758,7 @@ export class Notebook {
    * ```
    */
   async addBlockquote() {
-    this.addBlock('blockquote');
+    await this.addBlock('blockquote');
   }
 
   /**
@@ -771,7 +771,7 @@ export class Notebook {
    * ```
    */
   async addCallout() {
-    this.addBlock('callout');
+    await this.addBlock('callout');
   }
 
   /**
@@ -784,7 +784,7 @@ export class Notebook {
    * ```
    */
   async addDataView() {
-    this.addBlock('data-view');
+    await this.addBlock('data-view');
   }
 
   /**
@@ -821,7 +821,7 @@ export class Notebook {
    * ```
    */
   async addDisplayWidget() {
-    this.addBlock('display');
+    await this.addBlock('display');
   }
 
   /**
@@ -834,7 +834,7 @@ export class Notebook {
    * ```
    */
   async addDivider() {
-    this.addBlock('divider');
+    await this.addBlock('divider');
   }
 
   /**
@@ -847,7 +847,7 @@ export class Notebook {
    * ```
    */
   async addDropdownWidget() {
-    this.addBlock('dropdown');
+    await this.addBlock('dropdown');
   }
 
   /**
@@ -924,7 +924,7 @@ export class Notebook {
    * ```
    */
   async selectDropdownOption(option: string) {
-    this.page
+    await this.page
       .getByTestId('dropdown-option')
       .filter({ hasText: option })
       .click();
@@ -957,7 +957,7 @@ export class Notebook {
    * ```
    */
   async addHeadding() {
-    this.addBlock('heading1');
+    await this.addBlock('heading1');
   }
 
   /**
@@ -970,7 +970,7 @@ export class Notebook {
    * ```
    */
   async addSubHeadding() {
-    this.addBlock('heading2');
+    await this.addBlock('heading2');
   }
 
   /**
@@ -983,7 +983,7 @@ export class Notebook {
    * ```
    */
   async addInputWidget(identifier: string, value: number | string) {
-    this.addBlock('input');
+    await this.addBlock('input');
 
     await this.page
       .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -1018,7 +1018,7 @@ export class Notebook {
    * ```
    */
   async openImageUploader(insertLastParagraph = true) {
-    this.addBlock('upload-image', undefined, insertLastParagraph);
+    await this.addBlock('upload-image', undefined, insertLastParagraph);
     await expect(async () => {
       await expect(this.page.getByText('Add an image')).toBeVisible();
     }, `Embed Image modal didn't open`).toPass();
@@ -1089,7 +1089,7 @@ export class Notebook {
         test.fail();
         break;
       default:
-        this.addImage({
+        await this.addImage({
           method: 'link',
           link: './__fixtures__/images/download.png',
         });
@@ -1158,6 +1158,11 @@ export class Notebook {
           await this.page.getByTestId('import-link-csv').click();
         });
         break;
+      default:
+        await this.addCSV({
+          method: 'link',
+          link: './__fixtures__/images/download.png',
+        });
     }
 
     // uploading the file
@@ -1168,7 +1173,7 @@ export class Notebook {
     await expect(this.page.getByTestId('result-preview')).toBeVisible();
 
     if (option.firstRowHeader != null && !option.firstRowHeader) {
-      this.page.getByTestId('toggle-cell-editor').click();
+      await this.page.getByTestId('toggle-cell-editor').click();
 
       // importing
       // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -1193,7 +1198,7 @@ export class Notebook {
    * ```
    */
   async openEmbedUploader() {
-    this.addBlock('upload-embed');
+    await this.addBlock('upload-embed');
     await expect(async () => {
       await expect(this.page.getByText('Embed URL')).toBeVisible();
     }, `Embed URL Modal didn't open.`).toPass();
@@ -1217,7 +1222,7 @@ export class Notebook {
    * ```
    */
   async addSketch() {
-    this.addBlock('sketch');
+    await this.addBlock('sketch');
   }
 
   /**
@@ -1230,7 +1235,7 @@ export class Notebook {
    * ```
    */
   async addSliderWidget() {
-    this.addBlock('slider');
+    await this.addBlock('slider');
   }
 
   /**
@@ -1243,7 +1248,7 @@ export class Notebook {
    * ```
    */
   async addToggleWidget() {
-    this.addBlock('toggle');
+    await this.addBlock('toggle');
   }
 
   /**
@@ -1304,7 +1309,7 @@ export class Notebook {
    * ```
    */
   async addNumber() {
-    this.addBlock('structured-input');
+    await this.addBlock('structured-input');
   }
 
   /**
@@ -1800,7 +1805,7 @@ export class Notebook {
           `loading blocks visible`
         ).toBeHidden();
       }).toPass({
-        intervals: [4_000],
+        intervals: [2_000],
         timeout: 20_000,
       });
     });

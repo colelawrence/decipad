@@ -1,7 +1,7 @@
 import {
   createNormalizerPlugin,
   type NormalizerReturnValue,
-} from '@decipad/editor-plugins';
+} from '@decipad/editor-plugin-factories';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,

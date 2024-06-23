@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { create } from 'zustand';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import type {
   ImportElementSource,
   IntegrationTypes,

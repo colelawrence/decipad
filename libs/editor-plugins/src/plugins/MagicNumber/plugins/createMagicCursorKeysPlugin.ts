@@ -7,7 +7,7 @@ import {
   removeNodes,
 } from '@udecode/plate-common';
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
-import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
 export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({

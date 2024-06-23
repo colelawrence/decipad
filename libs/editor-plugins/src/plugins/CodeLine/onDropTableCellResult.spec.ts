@@ -1,3 +1,4 @@
+import { vi, beforeEach, it, expect } from 'vitest';
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable import/no-extraneous-dependencies */
 import type { MyEditor } from '@decipad/editor-types';
@@ -12,9 +13,9 @@ import type { DragEvent } from 'react';
 import { onDragStartTableCellResult } from '@decipad/editor-components';
 import { onDropTableCellResult } from './onDropTableCellResult';
 
-jest.mock('@udecode/plate-common', () => ({
+vi.mock('@udecode/plate-common', async (requireActual) => ({
   __esModule: true,
-  ...jest.requireActual('@udecode/plate-common'),
+  ...((await requireActual()) as object),
 }));
 
 const testStorage = new Map();
@@ -36,7 +37,7 @@ describe('onDropTableCellResult', () => {
       },
     } as unknown as DragEvent<HTMLDivElement>;
 
-    jest.spyOn(plate, 'isEditorFocused').mockReturnValue(true);
+    vi.spyOn(plate, 'isEditorFocused').mockReturnValue(true);
   });
 
   describe('when dragging a table cell into an empty code line', () => {
@@ -53,7 +54,7 @@ describe('onDropTableCellResult', () => {
 
       editor.children = [codeLine] as never;
 
-      jest.spyOn(plate, 'findEventRange').mockReturnValue({
+      vi.spyOn(plate, 'findEventRange').mockReturnValue({
         anchor: { path: [0, 0], offset: 0 },
         focus: { path: [0, 0], offset: 0 },
       });
@@ -90,7 +91,7 @@ describe('onDropTableCellResult', () => {
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'abcd' }] },
       ] as never;
 
-      jest.spyOn(plate, 'findEventRange').mockReturnValue({
+      vi.spyOn(plate, 'findEventRange').mockReturnValue({
         anchor: { path: [0, 0], offset: 2 },
         focus: { path: [0, 0], offset: 2 },
       });
@@ -128,7 +129,7 @@ describe('onDropTableCellResult', () => {
         { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
       ] as never;
 
-      jest.spyOn(plate, 'findEventRange').mockReturnValue({
+      vi.spyOn(plate, 'findEventRange').mockReturnValue({
         anchor: { path: [0, 0], offset: 0 },
         focus: { path: [0, 0], offset: 0 },
       });

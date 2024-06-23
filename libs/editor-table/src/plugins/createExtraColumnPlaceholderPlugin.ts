@@ -1,4 +1,4 @@
-import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
+import { createOnCursorChangePluginFactory } from '@decipad/editor-plugin-factories';
 import {
   hasNode,
   isCollapsed,

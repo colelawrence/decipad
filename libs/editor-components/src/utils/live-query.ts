@@ -40,14 +40,14 @@ const getInitialLiveQueryElement = (
   };
 };
 
-export const insertLiveQueryBelow = async (
+export const insertLiveQueryBelow = (
   editor: TEditor,
   path: Path,
   getAvailableIdentifier: GetAvailableIdentifier,
   connectionBlockId?: string,
   query?: string
-): Promise<void> => {
-  const varName = await getAvailableIdentifier(generateVarName());
+): void => {
+  const varName = getAvailableIdentifier(generateVarName());
   const liveQuery = clone(
     getInitialLiveQueryElement(connectionBlockId, varName)
   );

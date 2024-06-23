@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import {
   type CodeLineElement,
@@ -77,7 +78,7 @@ describe('decorateCode', () => {
       const place = testCodeVars('var');
 
       expect(place).toMatchInlineSnapshot(`
-        Array [
+        [
           "var",
         ]
       `);
@@ -87,7 +88,7 @@ describe('decorateCode', () => {
       const place = testCodeVars('f(x) = x * 2');
 
       expect(place).toMatchInlineSnapshot(`
-        Array [
+        [
           "x",
           "x",
         ]
@@ -110,9 +111,9 @@ describe('decorateCode', () => {
       });
 
       expect(place).toMatchInlineSnapshot(`
-        Object {
+        {
           "offset": 0,
-          "path": Array [
+          "path": [
             1,
             0,
           ],
@@ -126,9 +127,9 @@ describe('decorateCode', () => {
       });
 
       expect(place).toMatchInlineSnapshot(`
-        Object {
+        {
           "offset": 0,
-          "path": Array [
+          "path": [
             1,
             0,
           ],

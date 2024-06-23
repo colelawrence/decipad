@@ -1,3 +1,4 @@
+import { it, describe, expect } from 'vitest';
 import type { NodeEntry } from 'slate';
 import { Editor, Element, createEditor as createEditorSlate } from 'slate';
 import { normalizeCurried } from './normalizeNode';

@@ -13,8 +13,8 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
 import { isElement, removeNodes, setNodes } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 
 export const createMigrateStructuredInputs = createNormalizerPluginFactory({
   name: 'MIGRATE_STRUCTURED_IN_TO_CODELINE_V2',

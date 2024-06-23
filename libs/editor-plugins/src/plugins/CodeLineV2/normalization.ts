@@ -20,7 +20,7 @@ import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeL
 import {
   type NormalizerReturnValue,
   createNormalizerPlugin,
-} from '../../pluginFactories';
+} from '@decipad/editor-plugin-factories';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
 export const createNormalizeCodeLineV2Plugin = <

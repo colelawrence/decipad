@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { type Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { cssVar, p12Medium } from '../../../primitives';

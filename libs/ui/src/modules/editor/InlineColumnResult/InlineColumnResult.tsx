@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Fragment } from 'react';
-import { type Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { characterLimitStyles } from '../../../styles/results';
 import { CodeResultProps } from '../../../types';
 import { useMaterializedColumnResultValue } from '../../../utils/useMaterializedColumnResultValue';

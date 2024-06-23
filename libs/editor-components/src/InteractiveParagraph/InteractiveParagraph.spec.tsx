@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { PropsWithChildren } from 'react';
 import React from 'react';
 import { createParagraphPlugin } from '@udecode/plate-paragraph';
@@ -76,95 +77,51 @@ beforeEach(() => {
   );
 });
 
-it('renders the menu when typing in the selected paragraph starting with a /', async () => {
-  const { getByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>,
-    {
-      wrapper,
-    }
-  );
+describe('InteractiveParagraph', () => {
+  it('renders the menu when typing in the selected paragraph starting with a /', async () => {
+    const { getByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      {
+        wrapper,
+      }
+    );
 
-  await act(async () => {
-    focusEditor(editor);
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 's');
-    await timeout(500);
-  });
-
-  expect(getByText(/sub-head/i)).toBeVisible();
-});
-
-it('does not render the menu when the editor is not focused', async () => {
-  const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>,
-    { wrapper }
-  );
-
-  await act(async () => {
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 'a');
-    await timeout(500);
-  });
-
-  expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-});
-
-it('does not render the menu when the paragraph is not selected', async () => {
-  const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>,
-    { wrapper }
-  );
-
-  await act(async () => {
-    focusEditor(editor);
-    insertText(editor, 'h', {
-      at: {
+    await act(async () => {
+      focusEditor(editor);
+      select(editor, {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
-      },
+      });
+      insertText(editor, 's');
+      await timeout(500);
     });
-    deselect(editor);
-    await timeout(500);
+
+    expect(getByText(/sub-head/i)).toBeVisible();
   });
 
-  expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-});
+  it('does not render the menu when the editor is not focused', async () => {
+    const { getByText, queryByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      { wrapper }
+    );
 
-it('does not render the menu before typing', async () => {
-  const { getByText, queryByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>,
-    { wrapper }
-  );
-
-  await act(async () => {
-    focusEditor(editor);
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
+    await act(async () => {
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      insertText(editor, 'a');
+      await timeout(500);
     });
-    await timeout(500);
+
+    expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
   });
 
-  expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-});
-
-it.each([' /cmd', '/cmd#', '/42'])(
-  'does not render the menu for the non-command text "%s"',
-  async (text) => {
+  it('does not render the menu when the paragraph is not selected', async () => {
     const { getByText, queryByText } = render(
       <Plate {...plateProps} editor={editor}>
         <PlateContent scrollSelectionIntoView={noop} />
@@ -174,24 +131,70 @@ it.each([' /cmd', '/cmd#', '/42'])(
 
     await act(async () => {
       focusEditor(editor);
-      const textPath = findDomNodePath(editor, getByText('/'))!;
-      select(editor, {
-        anchor: {
-          path: textPath,
-          offset: 0,
-        },
-        focus: {
-          path: textPath,
+      insertText(editor, 'h', {
+        at: {
+          path: findDomNodePath(editor, getByText('/'))!,
           offset: '/'.length,
         },
       });
-      insertText(editor, text);
+      deselect(editor);
       await timeout(500);
     });
 
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-  }
-);
+  });
+
+  it('does not render the menu before typing', async () => {
+    const { getByText, queryByText } = render(
+      <Plate {...plateProps} editor={editor}>
+        <PlateContent scrollSelectionIntoView={noop} />
+      </Plate>,
+      { wrapper }
+    );
+
+    await act(async () => {
+      focusEditor(editor);
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      await timeout(500);
+    });
+
+    expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
+  });
+
+  it.each([' /cmd', '/cmd#', '/42'])(
+    'does not render the menu for the non-command text "%s"',
+    async (text) => {
+      const { getByText, queryByText } = render(
+        <Plate {...plateProps} editor={editor}>
+          <PlateContent scrollSelectionIntoView={noop} />
+        </Plate>,
+        { wrapper }
+      );
+
+      await act(async () => {
+        focusEditor(editor);
+        const textPath = findDomNodePath(editor, getByText('/'))!;
+        select(editor, {
+          anchor: {
+            path: textPath,
+            offset: 0,
+          },
+          focus: {
+            path: textPath,
+            offset: '/'.length,
+          },
+        });
+        insertText(editor, text);
+        await timeout(500);
+      });
+
+      expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
+    }
+  );
+});
 
 describe('the menu', () => {
   it('is scrolled into view on opening', async () => {
@@ -247,7 +250,7 @@ describe('the menu', () => {
     )!.element;
 
     await act(async () => {
-      menuElement.scrollIntoView = jest.fn();
+      menuElement.scrollIntoView = vi.fn();
 
       insertText(editor, 'b');
       await timeout(500);

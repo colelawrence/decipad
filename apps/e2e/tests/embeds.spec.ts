@@ -9,8 +9,8 @@ test('Checks notebook embeds @embeds', async ({
   let embedUrl: string;
 
   await test.step('import candle business notebook', async () => {
-    testUser.importNotebook(startingACandleBusiness);
-    testUser.notebook.waitForEditorToLoad();
+    await testUser.importNotebook(startingACandleBusiness);
+    await testUser.notebook.waitForEditorToLoad();
   });
 
   await test.step('modify slider values before publishing', async () => {

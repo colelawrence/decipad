@@ -25,6 +25,8 @@ const styles = css(p13Bold, {
   justifyContent: 'center',
   alignItems: 'center',
 
+  pointerEvents: 'auto',
+
   borderRadius: '6px',
   boxShadow: `0px 1px 12px -4px ${transparency(grey700, 0.04).rgba}`,
 });

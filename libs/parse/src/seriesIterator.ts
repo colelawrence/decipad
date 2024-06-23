@@ -1,4 +1,4 @@
-import type { Time } from '@decipad/remote-computer';
+import type { Time } from '@decipad/language-interfaces';
 import type { Duration } from 'date-fns';
 import { N, ONE } from '@decipad/number';
 import { formatNumber } from '@decipad/format';

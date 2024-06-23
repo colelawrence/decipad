@@ -3,11 +3,11 @@ import { createTEditor } from '@udecode/plate-common';
 import { mockConsoleError } from '@decipad/testutils';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
 import {
   normalizeExcessProperties,
   normalizeMissingProperties,
 } from './normalize';
-import type { NormalizerReturnValue } from '../pluginFactories';
 
 const applyNormalization = (norm: NormalizerReturnValue): boolean => {
   if (norm) {

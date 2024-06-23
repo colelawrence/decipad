@@ -1,8 +1,9 @@
+import { it, expect, beforeEach, describe, vi } from 'vitest';
 import type { TableElement } from '@decipad/editor-types';
 import { getComputer } from '@decipad/computer';
 import utils from './utils';
 
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => 'mocked-nano-id',
 }));
 

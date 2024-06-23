@@ -82,7 +82,7 @@ test.describe('production regression checks', () => {
       // restored an empty workspace for the next test
       await deleteAllWorkspaceNotebooks(page, workspace);
     });
-    page.close();
+    await page.close();
   });
 
   test('checks image uploads work', async () => {

@@ -70,7 +70,7 @@ export async function setUp(
     for (const [flagName, value] of Object.entries(featureFlags)) {
       url.searchParams.set(flagName, value.toString());
     }
-    page.goto(url.toString());
+    await page.goto(url.toString());
     await waitForEditorToLoad(page);
   }
 

@@ -1,9 +1,11 @@
+/* eslint-disable import/first */
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { N } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { onDragStartSmartRef } from './onDragStartSmartRef';
 
-jest.mock('@udecode/plate-common', () => ({
-  ...jest.requireActual('@udecode/plate-common'),
+vi.mock('@udecode/plate-common', async (importOriginal) => ({
+  ...((await importOriginal()) as object),
   findNodePath: () => [],
   getNodeString: () => '',
 }));
@@ -24,8 +26,8 @@ describe('onDragStartSmartRef', () => {
     };
     dragEvent = {
       dataTransfer: {
-        setData: jest.fn(),
-        setDragImage: jest.fn(),
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
       },
     } as any;
     result = {
@@ -42,7 +44,7 @@ describe('onDragStartSmartRef', () => {
   });
 
   it('should call dndPreviewActions.previewText if element is present', () => {
-    dndPreviewActions.previewText = jest.fn();
+    dndPreviewActions.previewText = vi.fn();
 
     const dragStartSmartRef = onDragStartSmartRef(editor);
     dragStartSmartRef({

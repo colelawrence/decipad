@@ -9,7 +9,9 @@ type NotifySubscriptionsArgs = {
   changes: Changes<TableRecord>;
 };
 
-const inTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
+);
 
 export const handler = handle(notifySubscriptions);
 
@@ -54,7 +56,7 @@ async function notifySubscriptions(args: NotifySubscriptionsArgs) {
         payload: { id: sub.id, type: 'next', payload },
       });
 
-      if (process.env.NODE_ENV !== 'production' && !inTesting) {
+      if (process.env.NODE_ENV !== 'production' && !isTesting) {
         await arc.ws.send({
           id: sub.connection_id,
           payload: { id: sub.id, type: 'data', payload },

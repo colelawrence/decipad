@@ -25,10 +25,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/format"],
       "options": {
-        "jestConfig": "libs/format/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/format"
       }
     }
   },

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import type { MyEditor } from '@decipad/editor-types';
 import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { createTEditor } from '@udecode/plate-common';

@@ -37,69 +37,69 @@ describe('treeToRotatedTable', () => {
 
     expect(treeToRotatedTable(schema).map(stripChildren))
       .toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
-            "colspan": 1,
-            "key": "name",
-            "rowspan": 3,
-          },
-          Object {
-            "colspan": 5,
-            "key": "personal",
-            "rowspan": 1,
-          },
-          Object {
-            "colspan": 2,
-            "key": "education",
-            "rowspan": 1,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "key": "birthsday",
-            "rowspan": 2,
-          },
-          Object {
-            "colspan": 1,
-            "key": "gender",
-            "rowspan": 2,
-          },
-          Object {
-            "colspan": 3,
-            "key": "contact",
-            "rowspan": 1,
-          },
-          Object {
-            "colspan": 1,
-            "key": "degree",
-            "rowspan": 2,
-          },
-          Object {
-            "colspan": 1,
-            "key": "CA",
-            "rowspan": 2,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "key": "address",
-            "rowspan": 1,
-          },
-          Object {
-            "colspan": 1,
-            "key": "zipcode",
-            "rowspan": 1,
-          },
-          Object {
-            "colspan": 1,
-            "key": "mobile",
-            "rowspan": 1,
-          },
-        ],
-      ]
-    `);
+        [
+          [
+            {
+              "colspan": 1,
+              "key": "name",
+              "rowspan": 3,
+            },
+            {
+              "colspan": 5,
+              "key": "personal",
+              "rowspan": 1,
+            },
+            {
+              "colspan": 2,
+              "key": "education",
+              "rowspan": 1,
+            },
+          ],
+          [
+            {
+              "colspan": 1,
+              "key": "birthsday",
+              "rowspan": 2,
+            },
+            {
+              "colspan": 1,
+              "key": "gender",
+              "rowspan": 2,
+            },
+            {
+              "colspan": 3,
+              "key": "contact",
+              "rowspan": 1,
+            },
+            {
+              "colspan": 1,
+              "key": "degree",
+              "rowspan": 2,
+            },
+            {
+              "colspan": 1,
+              "key": "CA",
+              "rowspan": 2,
+            },
+          ],
+          [
+            {
+              "colspan": 1,
+              "key": "address",
+              "rowspan": 1,
+            },
+            {
+              "colspan": 1,
+              "key": "zipcode",
+              "rowspan": 1,
+            },
+            {
+              "colspan": 1,
+              "key": "mobile",
+              "rowspan": 1,
+            },
+          ],
+        ]
+      `);
   });
 });

@@ -6,7 +6,9 @@ import type { Path } from 'slate';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { dequal } from '@decipad/utils';
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
+);
 
 export const usePathMutatorCallback = <
   E extends MyElement,

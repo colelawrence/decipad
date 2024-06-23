@@ -7,6 +7,7 @@ import {
 } from '@udecode/plate-common';
 import type { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { Path } from 'slate';
+import type { PromiseOrType } from '@decipad/utils';
 
 export const normalizeIdentifierElement = <
   TV extends Value = MyValue,
@@ -14,8 +15,8 @@ export const normalizeIdentifierElement = <
 >(
   editor: TE,
   [node, path]: ENodeEntry<TV>,
-  getUniqueName?: () => string
-): false | (() => void) => {
+  getUniqueName?: () => PromiseOrType<string>
+): false | (() => unknown) => {
   const text = getNodeString(node);
   const { selection } = editor;
 
@@ -39,7 +40,7 @@ export const normalizeIdentifierElement = <
     text.length === 0 &&
     !Path.equals(selection?.anchor.path || [-1], path)
   ) {
-    return () => insertText(editor, getUniqueName(), { at: path });
+    return async () => insertText(editor, await getUniqueName(), { at: path });
   }
 
   return false;

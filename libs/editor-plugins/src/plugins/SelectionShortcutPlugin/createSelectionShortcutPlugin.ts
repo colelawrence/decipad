@@ -8,7 +8,7 @@ import {
 } from '@udecode/plate-common';
 import type { BaseEditor, BaseSelection } from 'slate';
 import { Transforms } from 'slate';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import {
   blockSelectionStore,
   blockSelectionSelectors,

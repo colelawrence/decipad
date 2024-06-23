@@ -21,6 +21,7 @@ import type {
   Unit,
 } from '@decipad/language-interfaces';
 import { type ListenerHelper } from '@decipad/listener-helper';
+import type { PromiseOrType } from '@decipad/utils';
 
 export interface Computer {
   // --------------- results --------------//
@@ -31,9 +32,9 @@ export interface Computer {
   expressionResult(_expression: AST.Expression): Promise<Result.Result>;
 
   // --------------- symbols --------------//
-  getStatement(blockId: string): Promise<AST.Statement | undefined>;
+  getStatement(blockId: string): AST.Statement | undefined;
   getSymbolDefinedInBlock(blockId: string): string | undefined;
-  variableExists(name: string, inBlockIds?: string[]): Promise<boolean>;
+  variableExists(name: string, inBlockIds?: string[]): boolean;
   getAvailableIdentifier(
     prefix: string,
     start?: number,
@@ -98,7 +99,7 @@ export interface Computer {
   >;
   explainDimensions$: ListenerHelper<
     [result: Result.Result<'materialized-column'> | Result.Result<'column'>],
-    Promise<DimensionExplanation[] | undefined>
+    PromiseOrType<DimensionExplanation[] | undefined>
   >;
   getSymbolOrTableDotColumn$: ListenerHelper<
     [blockId: string, columnId: string | null],
@@ -115,6 +116,9 @@ export interface Computer {
 
   // flush
   flush(): Promise<void>;
+
+  // terminate
+  terminate(): Promise<void>;
 
   // expression refs
   latestExprRefToVarNameMap: Map<string, string>;

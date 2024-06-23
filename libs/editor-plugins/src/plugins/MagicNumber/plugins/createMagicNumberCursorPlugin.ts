@@ -6,7 +6,7 @@ import {
   isText,
 } from '@udecode/plate-common';
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
-import { createOnCursorChangePluginFactory } from '../../../pluginFactories';
+import { createOnCursorChangePluginFactory } from '@decipad/editor-plugin-factories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
 export const createMagicNumberCursorPlugin = createOnCursorChangePluginFactory(

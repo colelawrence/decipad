@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`import performance imports big(ish) csv: bigish1.csv-import-result 1`] = `
+exports[`import performance > imports big(ish) csv > bigish1.csv-import-result 1`] = `
 {
   "type": {
     "columnNames": [

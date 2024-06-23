@@ -74,6 +74,7 @@ export const ModalTitle = styled.h2(p14Medium, {
 });
 
 export const ModalCloseButton = styled.button({
+  pointerEvents: 'all',
   border: 'none',
   padding: 0,
   cursor: 'pointer',

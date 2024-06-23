@@ -15,7 +15,7 @@ import {
 } from '@udecode/plate-common';
 import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { Range } from 'slate';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 
 /**
  * This plugin handles navigation keys, such as

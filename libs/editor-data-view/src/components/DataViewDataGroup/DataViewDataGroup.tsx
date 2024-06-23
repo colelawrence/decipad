@@ -1,5 +1,6 @@
-import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { type FC } from 'react';
+import { isCellAlignRight } from 'libs/editor-table/src/components';
+import type { Result } from '@decipad/language-interfaces';
 import type {
   AggregationKind,
   DataGroup,
@@ -7,7 +8,6 @@ import type {
   SmartProps,
 } from '../../types';
 import type { Element as GroupElement } from '../../utils/types';
-import type { Result } from '@decipad/remote-computer';
 
 interface DataViewDataGroupElementProps {
   element: GroupElement<DataGroup>;

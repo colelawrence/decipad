@@ -1,5 +1,5 @@
 import { getAnalytics } from '@decipad/client-events';
-import type { Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { useNodePath } from '@decipad/editor-hooks';
 import type {
   LiveQueryElement,

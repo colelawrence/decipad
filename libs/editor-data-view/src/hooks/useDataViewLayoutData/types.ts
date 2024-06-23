@@ -1,4 +1,8 @@
-import type { Result, SerializedType, Value } from '@decipad/remote-computer';
+import type {
+  Result,
+  SerializedType,
+  Value,
+} from '@decipad/language-interfaces';
 import type { DataViewFilter } from '@decipad/editor-types';
 import type { DataGroup } from '../../types';
 

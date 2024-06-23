@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../../test-utils';
@@ -11,7 +12,7 @@ beforeEach(() => {
 describe('onChange prop', () => {
   it('gets called when the input is changed', async () => {
     const result = 'text';
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     render(<InputMenuItem onChange={onChange} />, {
       wrapper,
     });

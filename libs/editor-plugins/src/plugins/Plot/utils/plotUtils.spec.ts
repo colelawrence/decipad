@@ -1,5 +1,4 @@
 import type { SerializedType } from '@decipad/language-interfaces';
-import { getRemoteComputer } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import type { DisplayProps } from './plotUtils';
@@ -8,6 +7,7 @@ import {
   resultToPlotResultData,
   specFromType,
 } from './plotUtils';
+import { getComputer } from '@decipad/computer';
 
 const defaultDisplayProps: DisplayProps = {
   sourceVarName: '',
@@ -67,7 +67,7 @@ const tableData = [
 ];
 
 describe('specFromType', () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   it('returns no spec if no type is provided', () => {
     expect(specFromType(computer, undefined, displayProps())).toBeUndefined();
   });
@@ -268,23 +268,23 @@ describe('resultToPlotResultData', () => {
         })
       )
     ).toMatchInlineSnapshot(`
-      Object {
-        "table": Array [
-          Object {
+      {
+        "table": [
+          {
             "date-day": "1970-01-01",
             "date-month": "1970-01",
             "date-year": "1970",
             "index": "label 1",
             "simple-number": 1,
           },
-          Object {
+          {
             "date-day": "1970-01-01",
             "date-month": "1970-01",
             "date-year": "1970",
             "index": "label 2",
             "simple-number": 2,
           },
-          Object {
+          {
             "date-day": "1970-01-01",
             "date-month": "1970-01",
             "date-year": "1970",
@@ -298,7 +298,7 @@ describe('resultToPlotResultData', () => {
 });
 
 describe('enhanceSpecFromWideData', () => {
-  const computer = getRemoteComputer();
+  const computer = getComputer();
   it('enhances spec when data are numbers', () => {
     const data = {
       table: [

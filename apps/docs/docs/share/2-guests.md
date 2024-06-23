@@ -8,9 +8,9 @@ sidebar_class_name: new
 
 ## Share Your Notebook
 
-1.  Open your notebook and click the `Share` button on the top bar and select `Collaborate`.
-2.  Enter the email address and role of the person you want to invite.
-3.  Click `Send invite` to send an email with an invite link.
+1. Open your notebook and click the `Share` button on the top bar and select `Collaborate`.
+2. Enter the email address and role of the person you want to invite.
+3. Click `Send invite` to send an email with an invite link.
 
 There are two roles you can assign to your teammate:
 
@@ -29,6 +29,6 @@ Note: Notebook guests can't publish new changes. Only workspace admins are able 
 
 ## Find Notebooks Shared With You
 
-1.  Go to your workspace.
-2.  Select `Shared with me` on the left.
-    Alternatively, you can click the link we send to your email each time someone shares a notebook with you.
+1. Go to your workspace.
+2. Select `Shared with me` on the left.
+   Alternatively, you can click the link we send to your email each time someone shares a notebook with you.

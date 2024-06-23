@@ -199,7 +199,7 @@ export function focusOnTable(page: Page, tableName?: string) {
 }
 
 export async function addRow(page: Page, tableName?: string) {
-  focusOnTable(page, tableName);
+  await focusOnTable(page, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
   const selector = getTableOrPage(page, tableName).getByTestId(
@@ -250,8 +250,8 @@ export function hideTable(page: Page, tableName?: string) {
     .click();
 }
 
-export function deleteTable(page: Page) {
-  page.getByTestId('drag-handle').first().click();
+export async function deleteTable(page: Page) {
+  await page.getByTestId('drag-handle').first().click();
   return page.getByText('Delete').last().click();
 }
 

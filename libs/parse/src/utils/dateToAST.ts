@@ -1,4 +1,4 @@
-import type { AST } from '@decipad/remote-computer';
+import type { AST } from '@decipad/language-interfaces';
 import type { CellValueType } from '@decipad/editor-types';
 import { dateFromMillis } from '@decipad/utils';
 import type { DateTime } from 'luxon';

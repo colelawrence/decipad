@@ -37,20 +37,23 @@ export class GrowableDataView<TBuffer extends SharedArrayBuffer | ArrayBuffer>
 
   private ensureCapacity(size: number) {
     while (size > this.buf.byteLength) {
-      if (supportsSharedArrayBuffer && this.buf instanceof SharedArrayBuffer) {
-        if (!this.buf.growable) {
-          throw new Error(
-            "You have an outdated browser, please update. If you're using Firefox, please use another browser"
-          );
-        }
-        this.buf.grow(this.buf.byteLength + this.options.pageSize);
-      } else if (this.buf instanceof ArrayBuffer) {
+      if (this.buf instanceof ArrayBuffer) {
         if (!this.buf.resizable) {
           throw new Error(
             "You have an outdated browser, please update. If you're using Firefox, please use another browser"
           );
         }
         this.buf.resize(this.buf.byteLength + this.options.pageSize);
+      } else if (
+        supportsSharedArrayBuffer &&
+        this.buf instanceof SharedArrayBuffer
+      ) {
+        if (!this.buf.growable) {
+          throw new Error(
+            "You have an outdated browser, please update. If you're using Firefox, please use another browser"
+          );
+        }
+        this.buf.grow(this.buf.byteLength + this.options.pageSize);
       }
     }
   }

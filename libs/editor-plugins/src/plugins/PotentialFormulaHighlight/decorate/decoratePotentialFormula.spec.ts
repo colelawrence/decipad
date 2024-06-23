@@ -9,19 +9,19 @@ import type { PotentialFormulaDecoration } from './interface';
 
 it('finds simple expressions in strings', () => {
   expect(testFindFormulas('1 + 1')).toMatchInlineSnapshot(`
-    Array [
+    [
       "1 + 1",
     ]
   `);
 
   expect(testFindFormulas('1 + 123 tons of meatloaf')).toMatchInlineSnapshot(`
-    Array [
+    [
       "1 + 123",
     ]
   `);
 
   expect(testFindFormulas('68 + 1 and 123%')).toMatchInlineSnapshot(`
-    Array [
+    [
       "68 + 1",
       "123%",
     ]
@@ -30,12 +30,12 @@ it('finds simple expressions in strings', () => {
 
 it('supports some units', () => {
   expect(testFindFormulas('10 days')).toMatchInlineSnapshot(`
-    Array [
+    [
       "10 days",
     ]
   `);
   expect(testFindFormulas('$100')).toMatchInlineSnapshot(`
-    Array [
+    [
       "$100",
     ]
   `);
@@ -43,7 +43,7 @@ it('supports some units', () => {
 
 it('finds negative numbers', () => {
   expect(testFindFormulas('-1 also hi = -1')).toMatchInlineSnapshot(`
-    Array [
+    [
       "-1",
       "hi = -1",
     ]
@@ -51,20 +51,20 @@ it('finds negative numbers', () => {
 });
 
 it('only finds stuff surrounded with whitespace', () => {
-  expect(testFindFormulas('/1 [1]')).toMatchInlineSnapshot(`Array []`);
+  expect(testFindFormulas('/1 [1]')).toMatchInlineSnapshot(`[]`);
 });
 
 it('doesnt touch magic numbers', () => {
   expect(
     testRunDecoration({ [MARK_MAGICNUMBER]: true, text: '1' })
-  ).toMatchInlineSnapshot(`Array []`);
+  ).toMatchInlineSnapshot(`[]`);
 });
 
 it('resists token errors', () => {
   // This test only makes sense if ' is an error token
   expect(tokenize("a quote'").find((t) => t.type === 'error')).toBeDefined();
   expect(testFindFormulas(`A quote ' and a 4`)).toMatchInlineSnapshot(`
-    Array [
+    [
       "4",
     ]
   `);
@@ -72,7 +72,7 @@ it('resists token errors', () => {
 
 it('finds assignments', () => {
   expect(testFindFormulas('things = 123 + 1')).toMatchInlineSnapshot(`
-    Array [
+    [
       "things = 123 + 1",
     ]
   `);

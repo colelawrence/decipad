@@ -1,5 +1,6 @@
+import { vi } from 'vitest';
 import { act, render } from '@testing-library/react';
-import fetch from 'jest-fetch-mock';
+import createFetch from 'vitest-fetch-mock';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps } from 'react';
 import { runCode } from '../../../test-utils';
@@ -11,6 +12,8 @@ let typeErrorProps: ComponentProps<typeof CodeLine>;
 const syntaxError = { message: 'Syntax Error', url: 'https://foo' };
 
 describe('CodeLine', () => {
+  const fetch = createFetch(vi);
+
   beforeAll(async () => {
     tabularProps = {
       children: '[1, 2, 3]',

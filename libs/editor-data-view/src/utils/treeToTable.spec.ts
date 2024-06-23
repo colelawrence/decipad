@@ -36,83 +36,83 @@ describe('treeToTable', () => {
     };
 
     expect(treeToTable(schema).map(stripChildren)).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
+      [
+        [
+          {
             "colspan": 3,
             "depth": 1,
             "key": "name",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 1,
             "depth": 3,
             "key": "personal",
             "rowspan": 5,
           },
-          Object {
+          {
             "colspan": 2,
             "depth": 1,
             "key": "birthsday",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 2,
             "depth": 1,
             "key": "gender",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 1,
             "depth": 2,
             "key": "contact",
             "rowspan": 3,
           },
-          Object {
+          {
             "colspan": 1,
             "depth": 1,
             "key": "address",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 1,
             "depth": 1,
             "key": "zipcode",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 1,
             "depth": 1,
             "key": "mobile",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 2,
             "depth": 2,
             "key": "education",
             "rowspan": 2,
           },
-          Object {
+          {
             "colspan": 1,
             "depth": 1,
             "key": "degree",
             "rowspan": 1,
           },
         ],
-        Array [
-          Object {
+        [
+          {
             "colspan": 1,
             "depth": 1,
             "key": "CA",

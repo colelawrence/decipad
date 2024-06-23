@@ -1,12 +1,18 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src"],
+  "include": [
+    "src",
+    ".eslintrc.js",
+    "vitest.config.ts",
+    "../../vite.config.ts"
+  ],
   "references": [
     { "path": "../language-types" },
     { "path": "../language-interfaces" },
     { "path": "../utils" },
     { "path": "../number" },
     { "path": "../generator-utils" },
+    { "path": "../remote-computer-codec" },
     { "path": "../fnqueue" }
   ]
 }

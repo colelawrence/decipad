@@ -76,7 +76,7 @@ const justInsertLiveConnection = async ({
     return;
   }
 
-  const name = await computer.getAvailableIdentifier(
+  const name = computer.getAvailableIdentifier(
     fileName
       ? fileName.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 10)
       : generateVarName()

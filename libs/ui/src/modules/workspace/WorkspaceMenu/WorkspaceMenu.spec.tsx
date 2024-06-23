@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps, FC, PropsWithChildren } from 'react';
@@ -40,7 +41,7 @@ const WithContexts: FC<PropsWithChildren> = ({ children }) => (
 );
 
 it('renders a button to create a workspace', async () => {
-  const handleCreateWorkspace = jest.fn();
+  const handleCreateWorkspace = vi.fn();
   const { getByText } = render(
     <WithContexts>
       <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />

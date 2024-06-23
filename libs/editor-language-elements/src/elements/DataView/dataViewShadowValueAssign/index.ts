@@ -1,4 +1,5 @@
-import { type Program, getExprRef } from '@decipad/remote-computer';
+import { getExprRef } from '@decipad/remote-computer';
+import type { Program } from '@decipad/computer-interfaces';
 import { type DataViewElement } from '@decipad/editor-types';
 import { generateAssembledTableDef } from './generateAssembledTableDef';
 import { generateRoundingsTableDef } from './generateRoundingsTableDef';

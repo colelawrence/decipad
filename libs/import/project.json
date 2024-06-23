@@ -18,10 +18,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/import"],
       "options": {
-        "jestConfig": "libs/import/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/import"
       }
     },
     "depcheck": {

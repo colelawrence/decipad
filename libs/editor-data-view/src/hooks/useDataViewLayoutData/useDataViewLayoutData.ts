@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
-import { type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
 import { Value } from '@decipad/language-types';
 import { type DataViewFilter } from '@decipad/editor-types';
 import type { AggregationKind, Column, DataGroup } from '../../types';

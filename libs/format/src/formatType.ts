@@ -1,4 +1,5 @@
-import { type SerializedType, Format } from '@decipad/remote-computer';
+import { Format } from '@decipad/remote-computer';
+import { type SerializedType } from '@decipad/language-interfaces';
 import { zip } from '@decipad/utils';
 
 export function formatType(

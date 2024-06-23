@@ -1,0 +1,13 @@
+diff --git a/node_modules/@testing-library/user-event/dist/esm/utils/misc/isElementType.js b/node_modules/@testing-library/user-event/dist/esm/utils/misc/isElementType.js
+index 5d9cac0..d756b86 100644
+--- a/node_modules/@testing-library/user-event/dist/esm/utils/misc/isElementType.js
++++ b/node_modules/@testing-library/user-event/dist/esm/utils/misc/isElementType.js
+@@ -6,7 +6,7 @@ function isElementType(element, tag, props) {
+         tag
+     ];
+     // tagName is uppercase in HTMLDocument and lowercase in XMLDocument
+-    if (!tag.includes(element.tagName.toLowerCase())) {
++    if (!tag.includes(element.tagName?.toLowerCase())) {
+         return false;
+     }
+     if (props) {

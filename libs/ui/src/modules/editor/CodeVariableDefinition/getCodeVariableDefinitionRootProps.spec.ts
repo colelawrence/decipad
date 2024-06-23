@@ -1,14 +1,15 @@
+import { vi } from 'vitest';
 import { getCodeVariableDefinitionRootProps } from './CodeVariableDefinition';
 
 describe('getCodeVariableDefinitionRootProps', () => {
-  let setGrabbing: jest.Mock;
-  let onDragStartInlineResult: jest.Mock;
-  let onDragEnd: jest.Mock;
+  let setGrabbing: ReturnType<typeof vi.fn>;
+  let onDragStartInlineResult: ReturnType<typeof vi.fn>;
+  let onDragEnd: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    setGrabbing = jest.fn();
-    onDragStartInlineResult = jest.fn();
-    onDragEnd = jest.fn();
+    setGrabbing = vi.fn();
+    onDragStartInlineResult = vi.fn();
+    onDragEnd = vi.fn();
   });
 
   it('should return an empty object when contentEditable is true', () => {

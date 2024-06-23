@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { getMagicNumberPath } from './getMagicNumberPath';
 import { MARK_MAGICNUMBER, createMyPlateEditor } from '@decipad/editor-types';
 

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InputField } from './InputField';
@@ -8,7 +9,7 @@ describe('Auth Input', () => {
       <InputField
         placeholder="Placeholder"
         value="This is an input"
-        onChange={jest.fn()}
+        onChange={vi.fn()}
       />
     );
 
@@ -18,7 +19,7 @@ describe('Auth Input', () => {
   });
 
   it('onChange gets called', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     render(
       <InputField placeholder="Placeholder" value="" onChange={onChange} />
     );

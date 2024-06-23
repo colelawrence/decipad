@@ -33,7 +33,12 @@ export interface InitialWorkspace {
 
 const isTesting = once(
   () =>
-    !!process.env.JEST_WORKER_ID || !!process.env.CI || !!process.env.DECI_E2E
+    !!(
+      process.env.JEST_WORKER_ID ??
+      process.env.VITEST_WORKER_ID ??
+      process.env.CI ??
+      process.env.DECI_E2E
+    )
 );
 // eslint-disable-next-line no-underscore-dangle
 export const isLocalDev = once(() => {

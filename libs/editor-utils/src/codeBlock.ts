@@ -1,7 +1,6 @@
 import { type Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
-import type { PromiseOrType } from '@decipad/utils';
 import type { EElementOrText, PlateEditor, Value } from '@udecode/plate-common';
 import { deleteText, getEditorString } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
@@ -25,12 +24,9 @@ export const insertCodeLineBelow = (
   });
 };
 
-export type GetAvailableIdentifier = (
-  prefix: string,
-  start?: number
-) => PromiseOrType<string>;
+export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
 
-export const insertStructuredCodeLineBelow = async <
+export const insertStructuredCodeLineBelow = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >({
@@ -47,11 +43,11 @@ export const insertStructuredCodeLineBelow = async <
   getAvailableIdentifier: GetAvailableIdentifier;
   code?: string;
   varName?: string;
-}): Promise<string> => {
+}): string => {
   const newId = nanoid();
   const elm = createStructuredCodeLine({
     id: newId,
-    varName: await getAvailableIdentifier(varName ?? generateVarName(), 1),
+    varName: getAvailableIdentifier(varName ?? generateVarName(), 1),
     code,
   }) as EElementOrText<TV>;
 

@@ -218,10 +218,10 @@ export class User {
    * ```
    */
   async writeToClipboard(values: { [key: string]: string }) {
-    this.page.evaluate(async (clipboard) => {
+    await this.page.evaluate(async (clipboard) => {
       for (const type in clipboard) {
         if (type) {
-          navigator.clipboard.write([
+          await navigator.clipboard.write([
             new ClipboardItem({
               [type]: new Blob([clipboard[type]], { type }),
             }),

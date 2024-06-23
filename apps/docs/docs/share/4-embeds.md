@@ -8,16 +8,16 @@ Add data insights or calculations to any webpage with Decipad embeds.
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
- <YouTubePlayer videoId="JGfDMgo4FUA" thumbnailUrl="/docs/img/thumbnails/thumbnail-embeds.png" />
+<YouTubePlayer videoId="JGfDMgo4FUA" thumbnailUrl="/docs/img/thumbnails/thumbnail-embeds.png" />
 
 <br />
 
 ## Embed Decipad Notebooks on other APPs
 
-1.  Click the `Share` button at the top of your notebook to open the sharing menu.
-2.  Select the `Publish` tab from the sharing menu and enable `Anyone with the link can view`. To hide blocks from embeds, use the option menu that appears when you hover over blocks and select `Hide from reader`.
-3.  Go to the `Embed` tab in the sharing menu, and click `Copy` to get the embed link.
-4.  Don't forget to republish your notebook when you make updates to ensure they show up in your embed.
+1. Click the `Share` button at the top of your notebook to open the sharing menu.
+2. Select the `Publish` tab from the sharing menu and enable `Anyone with the link can view`. To hide blocks from embeds, use the option menu that appears when you hover over blocks and select `Hide from reader`.
+3. Go to the `Embed` tab in the sharing menu, and click `Copy` to get the embed link.
+4. Don't forget to republish your notebook when you make updates to ensure they show up in your embed.
 
 #### Embed on Notion
 

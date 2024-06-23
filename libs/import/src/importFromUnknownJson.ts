@@ -1,11 +1,8 @@
 /* eslint-disable no-restricted-globals */
-import type { Result, SerializedTypes } from '@decipad/remote-computer';
-import {
-  isColumn,
-  Unknown,
-  buildResult,
-  hydrateResult,
-} from '@decipad/remote-computer';
+import type { Result, SerializedTypes } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { isColumn, buildResult, hydrateResult } from '@decipad/computer';
 import type { ColIndex, TableCellType } from '@decipad/editor-types';
 import {
   columnNameFromIndex,

@@ -1,4 +1,4 @@
-import type { AST } from '@decipad/remote-computer';
+import type { AST } from '@decipad/language-interfaces';
 import {
   getExprRef,
   statementToIdentifiedBlock,

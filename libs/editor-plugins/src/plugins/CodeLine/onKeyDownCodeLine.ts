@@ -4,7 +4,12 @@ import type React from 'react';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate-common';
+import {
+  focusEditor,
+  getBlockAbove,
+  getEndPoint,
+  isElement,
+} from '@udecode/plate-common';
 import {
   focusAndSetSelection,
   insertCodeLineBelow,
@@ -28,7 +33,7 @@ const findCodeLineParentEntry = (editor: MyEditor) => {
   if (!entry) return;
 
   const [node] = entry;
-  if (node.type !== ELEMENT_CODE_LINE) {
+  if (isElement(node) && node.type !== ELEMENT_CODE_LINE) {
     return;
   }
 

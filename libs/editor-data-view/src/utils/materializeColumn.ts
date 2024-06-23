@@ -1,5 +1,5 @@
 import { all, slice } from '@decipad/generator-utils';
-import { type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
 
 export type AnyImmaterializedColumn = {
   value: Result.ResultColumn;

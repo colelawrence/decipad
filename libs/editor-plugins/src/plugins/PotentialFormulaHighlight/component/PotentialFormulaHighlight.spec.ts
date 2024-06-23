@@ -1,4 +1,3 @@
-import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   createMyPlateEditor,
   DECORATE_POTENTIAL_FORMULA,
@@ -9,6 +8,7 @@ import type { TEditor } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
+import { getComputer } from '@decipad/computer';
 
 let editor: TEditor;
 let computer: Computer;
@@ -16,7 +16,7 @@ beforeEach(() => {
   editor = createMyPlateEditor({
     plugins: [createInlineNumberPlugin()],
   });
-  computer = getRemoteComputer();
+  computer = getComputer();
 });
 
 it('turns a decoration into a magic number and a code line', async () => {
@@ -52,16 +52,16 @@ it('turns a decoration into a magic number and a code line', async () => {
       ],
     },
     `
-    Object {
-      "children": Array [
-        Object {
+    {
+      "children": [
+        {
           "children": Any<Array>,
           "id": Any<String>,
           "type": "structured_varname",
         },
-        Object {
-          "children": Array [
-            Object {
+        {
+          "children": [
+            {
               "text": "1 + 1",
             },
           ],
@@ -81,22 +81,22 @@ it('turns a decoration into a magic number and a code line', async () => {
       children: [{}, { id: expect.any(String) }, {}],
     },
     `
-    Object {
-      "children": Array [
-        Object {
+    {
+      "children": [
+        {
           "text": "hi ",
         },
-        Object {
+        {
           "blockId": "id-of-thingy",
-          "children": Array [
-            Object {
+          "children": [
+            {
               "text": "",
             },
           ],
           "id": Any<String>,
           "type": "inline-number",
         },
-        Object {
+        {
           "text": " lol",
         },
       ],

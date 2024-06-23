@@ -12,10 +12,11 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/editor"],
       "options": {
-        "jestConfig": "libs/editor-config/jest.config.js"
+        "command": "npx vitest --run",
+        "cwd": "libs/editor-config"
       }
     },
     "typecheck": {

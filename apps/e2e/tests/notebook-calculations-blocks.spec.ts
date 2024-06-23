@@ -375,7 +375,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       const lastParagraphNode = page.locator(selector);
 
       const resultEl = await getResult(page, lineNo);
-      resultEl.dragTo(lastParagraphNode);
+      await resultEl.dragTo(lastParagraphNode);
     });
 
     await test.step('second instance editable by click', async () => {

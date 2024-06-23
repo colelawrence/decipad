@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,7 +16,7 @@ it('renders the children', () => {
 });
 
 it('is clickable', async () => {
-  const handleSelect = jest.fn();
+  const handleSelect = vi.fn();
   render(<MenuItem onSelect={handleSelect}>Text</MenuItem>, { wrapper });
 
   await user.click(screen.getByRole('menuitem'));

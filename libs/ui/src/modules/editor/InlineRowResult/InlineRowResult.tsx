@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { type Result } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
 import { CodeResult } from '..';
 import { CodeResultProps } from '../../../types';
 

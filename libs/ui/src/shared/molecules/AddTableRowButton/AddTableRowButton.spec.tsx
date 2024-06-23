@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddTableRowButton } from './AddTableRowButton';
@@ -18,7 +19,7 @@ it('renders the text', () => {
 
 describe('onAddRow prop', () => {
   it('gets called when the button is clicked', async () => {
-    const onAddRow = jest.fn();
+    const onAddRow = vi.fn();
     render(
       <table>
         <tbody>

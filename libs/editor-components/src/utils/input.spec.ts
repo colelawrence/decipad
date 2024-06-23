@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import type { MyEditor, SliderElement } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,

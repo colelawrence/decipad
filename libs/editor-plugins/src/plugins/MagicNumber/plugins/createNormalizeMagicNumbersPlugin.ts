@@ -1,7 +1,7 @@
 import { insertNodes } from '@decipad/editor-utils';
 import { getNodeChildren, isElement, isText } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '../../../pluginFactories';
-import { createNormalizerPluginFactory } from '../../../pluginFactories';
+import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
+import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
 export const createNormalizeMagicNumbersPlugin = createNormalizerPluginFactory({

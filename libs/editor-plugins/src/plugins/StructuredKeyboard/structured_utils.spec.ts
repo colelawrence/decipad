@@ -45,13 +45,13 @@ it('Gives the correct selection for a given offset', () => {
   s2.children[1].children.unshift(getSmartRef(s2.id, 'Var2'));
 
   expect(utils.getTargetSelection(s1, 5)).toMatchInlineSnapshot(`
-    Array [
+    [
       0,
       5,
     ]
   `);
   expect(utils.getTargetSelection(s1, 9)).toMatchInlineSnapshot(`
-    Array [
+    [
       1,
       0,
     ]

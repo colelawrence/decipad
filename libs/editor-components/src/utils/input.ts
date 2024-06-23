@@ -1,4 +1,4 @@
-import type { SerializedTypeKind } from '@decipad/remote-computer';
+import type { SerializedTypeKind } from '@decipad/language-interfaces';
 import type {
   DisplayElement,
   DropdownElement,
@@ -76,14 +76,14 @@ const getVariantAndHolder = (
   return ['expression', DEFAULT_INPUT_VALUE];
 };
 
-export const insertInputBelow = async (
+export const insertInputBelow = (
   editor: MyEditor,
   path: Path,
   kind: SerializedTypeKind,
   getAvailableIdentifier: GetAvailableIdentifier
-): Promise<void> => {
+): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
-  const name = await getAvailableIdentifier(generateInputName());
+  const name = getAvailableIdentifier(generateInputName());
 
   const input = getInitialInputElement({
     kind,
@@ -133,13 +133,13 @@ const getSliderInputElement = () => {
   };
 };
 
-export const insertSliderInputBelow = async (
+export const insertSliderInputBelow = (
   editor: MyEditor,
   path: Path,
   getAvailableIdentifier: GetAvailableIdentifier
-): Promise<void> => {
+): void => {
   const input = getSliderInputElement();
-  input.children[0].children[0].text = await getAvailableIdentifier(
+  input.children[0].children[0].text = getAvailableIdentifier(
     generateSliderName()
   );
   insertNodes<VariableSliderElement>(
@@ -191,13 +191,13 @@ const getDropdownElement = () =>
     ],
   } as VariableDropdownElement);
 
-export const insertDropdownBelow = async (
+export const insertDropdownBelow = (
   editor: MyEditor,
   path: Path,
   getAvailableIdentifier: GetAvailableIdentifier
-): Promise<void> => {
+): void => {
   const dropdown = getDropdownElement();
-  dropdown.children[0].children[0].text = await getAvailableIdentifier(
+  dropdown.children[0].children[0].text = getAvailableIdentifier(
     generateDropdownName(),
     1
   );

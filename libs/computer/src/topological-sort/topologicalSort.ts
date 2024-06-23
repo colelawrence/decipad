@@ -103,7 +103,44 @@ const identifiedErrorFromNode = (id: string): IdentifiedError => ({
   errorKind: 'dependency-cycle',
 });
 
-const isTesting = !!process.env.JEST_WORKER_ID;
+const isTesting = !!(
+  process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
+);
+
+const getBlockName = (block: IdentifiedBlock): string =>
+  block.definesVariable ??
+  (block.definesTableColumn ? block.definesTableColumn.join('.') : block.id);
+
+const printDependents = (n: Node, visited: Set<string>): void => {
+  if (visited.has(n.value.id)) {
+    return;
+  }
+  if (n.edges == null) {
+    return;
+  }
+  const interestingEdges = Array.from(n.edges).filter(
+    (edge) => edge.temporaryMark
+  );
+  if (!interestingEdges.length) {
+    return;
+  }
+  visited.add(n.value.id);
+  console.error(
+    '%s depends on %s',
+    getBlockName(n.value),
+    interestingEdges.map((edge) => getBlockName(edge.value)).join(', ')
+  );
+  for (const edge of n.edges ?? []) {
+    if (!visited.has(edge.value.id)) {
+      printDependents(edge, visited);
+    }
+  }
+};
+
+const printDependencyCycle = (n: Node): void => {
+  console.error('node %s has a dependency cycle', getBlockName(n.value));
+  printDependents(n, new Set());
+};
 
 // eslint-disable-next-line complexity
 export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
@@ -130,14 +167,7 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     if (n.temporaryMark) {
       // Circular dep
       if (!isTesting) {
-        console.error('node %s has a dependency cycle', n.value.id);
-        console.error(
-          'node %s depends on',
-          n.value.id,
-          Array.from(n.edges ?? []).map((edge) => [
-            Array.from(edge.edges ?? []).map((edge) => edge.value.id),
-          ])
-        );
+        printDependencyCycle(n);
       }
       if (!n.permanentMark) {
         const errorNode = identifiedErrorFromNode(n.value.id);

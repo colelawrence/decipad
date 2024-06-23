@@ -328,6 +328,6 @@ export class AiAssistant {
    * ```
    */
   async clearChat() {
-    this.page.getByTestId('ai-chat-clear').click();
+    await this.page.getByTestId('ai-chat-clear').click();
   }
 }

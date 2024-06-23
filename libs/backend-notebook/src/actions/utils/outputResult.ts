@@ -1,5 +1,6 @@
 import DeciNumber from '@decipad/number';
-import { buildResult, type Result } from '@decipad/remote-computer';
+import { type Result } from '@decipad/language-interfaces';
+import { buildResult } from '@decipad/remote-computer';
 
 type OutputValue = Result.OneResult | string;
 

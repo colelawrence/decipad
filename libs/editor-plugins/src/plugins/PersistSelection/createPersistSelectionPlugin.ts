@@ -1,4 +1,4 @@
-import { createOverrideApplyPluginFactory } from '../../pluginFactories';
+import { createOverrideApplyPluginFactory } from '@decipad/editor-plugin-factories';
 import { saveSelection } from './saveSelection';
 import { selectionStorageKey } from './selectionStorageKey';
 
