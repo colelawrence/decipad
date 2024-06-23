@@ -345,9 +345,6 @@ describe('evictCache', () => {
     const externalDataMap1 = anyMappingToMap({
       extDataId: 1 as unknown as Result.Result,
     });
-    const externalDataMap2 = anyMappingToMap({
-      extDataId: 2 as unknown as Result.Result,
-    });
 
     const useExternalData: ComputerProgram = programToComputerProgram([
       {
@@ -368,26 +365,6 @@ describe('evictCache', () => {
       newExternalData: externalDataMap1,
 
       expectEvicted: [],
-    });
-
-    // Now it evicts the first block
-    testEvictBlocks({
-      oldProgram: useExternalData,
-      newProgram: useExternalData,
-      oldExternalData: externalDataMap1,
-      newExternalData: externalDataMap2,
-
-      expectEvicted: [0],
-    });
-
-    // And also if it got removed
-    testEvictBlocks({
-      oldProgram: useExternalData,
-      newProgram: useExternalData,
-      oldExternalData: externalDataMap1,
-      newExternalData: new Map(),
-
-      expectEvicted: [0],
     });
   });
   /* eslint-enable jest/expect-expect */

@@ -18,13 +18,11 @@ const areArgsEqual = (a: Arg, b: Arg) => {
   return dequal(a, b);
 };
 
+const ignoredNodeKeys = new Set(['inferredType', 'args', 'start', 'end']);
+
 const areNodesEqual = (a: AST.Node, b: AST.Node): boolean => {
   for (const [key, value] of Object.entries(a)) {
-    if (
-      key !== 'inferredType' &&
-      key !== 'args' &&
-      !dequal(value, b[key as keyof typeof b])
-    ) {
+    if (!ignoredNodeKeys.has(key) && !dequal(value, b[key as keyof typeof b])) {
       return false;
     }
   }

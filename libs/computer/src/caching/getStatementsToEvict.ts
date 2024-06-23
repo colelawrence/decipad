@@ -126,20 +126,12 @@ export interface GetStatementsToEvictArgs {
 export const getStatementsToEvict = ({
   oldProgram,
   newProgram,
-  oldExternalData = new Map(),
-  newExternalData = new Map(),
 }: GetStatementsToEvictArgs) => {
   const changedBlockIds = getChangedBlocks(oldProgram, newProgram);
 
   const old = programToBlocks(oldProgram);
   const nu = programToBlocks(newProgram);
   const dirtyLocs = new Set(getExistingBlockIds(old, changedBlockIds));
-
-  const changedMapKeys = getChangedMapKeys(
-    oldExternalData,
-    newExternalData,
-    dequal
-  );
   const symbolsAffectedByChange = findSymbolsAffectedByChange(
     old,
     nu,
@@ -148,7 +140,6 @@ export const getStatementsToEvict = ({
   const oldSymbolErrors = findSymbolErrors(old);
   const newSymbolErrors = findSymbolErrors(nu);
   const dirtySymbols = new Set([
-    ...changedMapKeys,
     ...symbolsAffectedByChange,
     ...oldSymbolErrors,
     ...newSymbolErrors,
