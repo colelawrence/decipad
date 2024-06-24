@@ -1,4 +1,4 @@
-import type { LiveConnectionResult } from '@decipad/live-connect';
+import type { LiveConnectionResult } from '@decipad/editor-live-connect';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import type { FC, PropsWithChildren } from 'react';

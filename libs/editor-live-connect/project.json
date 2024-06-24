@@ -1,0 +1,40 @@
+{
+  "name": "editor-live-connect",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/editor-live-connect/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/editor-live-connect/**/*.ts",
+          "libs/editor-live-connect/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/editor-live-connect"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/editor-live-connect"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-data-view"],
+      "options": {
+        "command": "npx vitest --run",
+        "cwd": "libs/editor-live-connect"
+      }
+    }
+  },
+  "tags": []
+}

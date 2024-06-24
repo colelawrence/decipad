@@ -7,7 +7,7 @@ import {
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { serializeResult } from '@decipad/computer-utils';
 import { timeout } from '@decipad/utils';
-import { pushResultToComputer } from './useLiveConnection';
+import { pushResultToComputer } from './pushResultToComputer';
 
 setupDeciNumberSnapshotSerializer();
 

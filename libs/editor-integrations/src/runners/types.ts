@@ -109,7 +109,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
   private url: string;
 
   // Generic to any runner
-  private worker: LiveConnectionWorker | undefined;
+  private worker: LiveConnectionWorker;
 
   private source: ImportElementSource;
   private proxy: string | undefined;
@@ -128,27 +128,19 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
    */
   private query: string;
 
-  private init: Promise<void>;
-
   // TODO, this sucks, change to object
-  constructor(url?: string, types?: TypeArray, source?: ImportElementSource) {
+  constructor(
+    worker: LiveConnectionWorker,
+    url?: string,
+    types?: TypeArray,
+    source?: ImportElementSource
+  ) {
     super(types);
 
+    this.worker = worker;
     this.url = url ?? '';
-    this.init = this.initWorker();
     this.source = source ?? 'csv';
     this.query = '';
-  }
-
-  public async initWorker(): Promise<void> {
-    const { createWorker } = await import(
-      '../../../live-connect/src/worker/createWorker'
-    );
-    this.worker = createWorker();
-  }
-
-  public deinitWorker(): void {
-    this.worker?.terminate();
   }
 
   public setUrl(url: string): void {
@@ -192,14 +184,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
   }
 
   private async getWorker(): Promise<LiveConnectionWorker> {
-    await this.init;
-
-    const worker = this.worker;
-    if (worker == null) {
-      throw new Error('Worker is not initialized');
-    }
-
-    return worker;
+    return this.worker;
   }
 
   public async import(): Promise<Result.Result | undefined> {

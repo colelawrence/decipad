@@ -80,6 +80,7 @@
       "@decipad/editor-language-elements": [
         "libs/editor-language-elements/src/index.ts"
       ],
+      "@decipad/editor-live-connect": ["libs/editor-live-connect/src/index.ts"],
       "@decipad/editor-plugin-factories": [
         "libs/editor-plugin-factories/src/index.ts"
       ],

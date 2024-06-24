@@ -41,6 +41,7 @@ import {
   useEditorController,
   useGlobalFindNode,
   useGlobalFindNodeEntry,
+  useLiveConnectionWorker,
 } from '@decipad/editor-hooks';
 import { ResultPreview } from './ResultPreview';
 import { getNodeString } from '@udecode/plate-common';
@@ -57,37 +58,24 @@ const useRunner = (
   computer: Computer,
   connectionType: ImportElementSource
 ): GenericContainerRunner => {
-  const runner = useMemo(() => {
+  const worker = useLiveConnectionWorker();
+  return useMemo(() => {
     switch (connectionType) {
       case 'csv':
       case 'gsheets':
-        const r = new URLRunner(undefined, undefined, connectionType);
+        const r = new URLRunner(worker, undefined, undefined, connectionType);
         r.setIsFirstRowHeader(true);
 
         return r;
       case 'notion':
       case 'mysql':
-        return new URLRunner(undefined, undefined, connectionType);
+        return new URLRunner(worker, undefined, undefined, connectionType);
       case 'codeconnection':
         return new CodeRunner(notebookId, computer, undefined);
       default:
         throw new Error('NOT IMPLEMENTED');
     }
-  }, [connectionType, computer, notebookId]);
-
-  useEffect(() => {
-    if (runner instanceof URLRunner) {
-      runner.initWorker();
-    }
-
-    return () => {
-      if (runner instanceof URLRunner) {
-        runner.deinitWorker();
-      }
-    };
-  }, [runner]);
-
-  return runner;
+  }, [connectionType, worker, notebookId, computer]);
 };
 
 const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {

@@ -15,8 +15,6 @@ export type RPCResponse = ImportResult & {
   error?: string;
 };
 
-export type Unsubscribe = () => void;
-
 export interface SubscribeParams {
   url: string;
   proxy?: string;

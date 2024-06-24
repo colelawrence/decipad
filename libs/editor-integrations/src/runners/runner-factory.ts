@@ -1,9 +1,10 @@
-import { IntegrationTypes } from '@decipad/editor-types';
+import type { IntegrationTypes } from '@decipad/editor-types';
 import { CodeRunner, GenericContainerRunner, URLRunner } from './types';
-import { Computer } from '@decipad/computer-interfaces';
+import type { Computer } from '@decipad/computer-interfaces';
 import { useMemo } from 'react';
 import { notebooks, useRouteParams } from '@decipad/routing';
-import { useComputer } from '@decipad/editor-hooks';
+import { useComputer, useLiveConnectionWorker } from '@decipad/editor-hooks';
+import type { LiveConnectionWorker } from '@decipad/live-connect';
 
 type RunnerFactoryParams = {
   integration: IntegrationTypes.IntegrationBlock['integrationType'];
@@ -11,12 +12,14 @@ type RunnerFactoryParams = {
   notebookId: string;
   computer: Computer;
   isFirstRowHeader: boolean;
+  worker: LiveConnectionWorker;
 };
 
 function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
   switch (options.integration.type) {
     case 'csv':
       const csvRunner = new URLRunner(
+        options.worker,
         options.integration.csvUrl,
         options.types,
         'csv'
@@ -24,12 +27,14 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
       return csvRunner;
     case 'notion':
       return new URLRunner(
+        options.worker,
         options.integration.notionUrl,
         options.types,
         'notion'
       );
     case 'gsheets':
       const runner = new URLRunner(
+        options.worker,
         options.integration.spreadsheetUrl,
         options.types,
         'gsheets'
@@ -52,6 +57,7 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
       return runner;
     case 'mysql':
       const sqlRunner = new URLRunner(
+        options.worker,
         options.integration.url,
         options.types,
         'mysql'
@@ -87,6 +93,7 @@ export function useRunner(
   isFirstRowHeader: boolean
 ): GenericContainerRunner {
   const computer = useComputer();
+  const worker = useLiveConnectionWorker();
 
   const {
     notebook: { id: notebookId },
@@ -95,12 +102,13 @@ export function useRunner(
   return useMemo(
     () =>
       runnerFactory({
+        worker,
         integration,
         types,
         notebookId,
         computer,
         isFirstRowHeader,
       }),
-    [computer, integration, isFirstRowHeader, notebookId, types]
+    [computer, integration, isFirstRowHeader, notebookId, types, worker]
   );
 }

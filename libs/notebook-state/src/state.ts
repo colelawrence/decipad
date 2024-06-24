@@ -3,6 +3,7 @@ import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import type { BlockProcessor } from '@decipad/notebook-tabs';
 import type { MyPlatePlugin } from '@decipad/editor-types';
+import type { LiveConnectionWorker } from '@decipad/live-connect';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;
@@ -22,6 +23,7 @@ export interface NotebookState {
   syncClientState: 'idle' | 'created';
   editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
+  liveConnectionWorker: () => LiveConnectionWorker;
   initEditor: (
     notebookId: string,
     options: InitNotebookStateOptions,

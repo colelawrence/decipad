@@ -7,11 +7,11 @@ import type {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import type { ImportResult } from '@decipad/import';
-// eslint-disable-next-line no-restricted-imports
-import { hydrateType } from '@decipad/language-types';
+import { hydrateType } from '@decipad/remote-computer';
+import { useLiveConnectionWorker } from '@decipad/editor-hooks';
 import type { Unsubscribe } from './types';
-import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
+import { noop } from '@decipad/utils';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
@@ -44,80 +44,73 @@ export const useLiveConnectionResponse = ({
   delimiter,
   liveQuery,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
-  const [workerGen, setWorkerGen] = useState(0);
-  const worker = useLiveConnectionWorker(workerGen);
+  const worker = useLiveConnectionWorker();
+  const [gen, setGen] = useState(0);
   const [error, setError] = useState<Error | undefined>();
   const [result, setResult] = useState<ImportResult | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    let unsubscribe: Unsubscribe | undefined;
+  const subscribe = useCallback(async (): Promise<Unsubscribe> => {
+    let realUnsubscribe: Unsubscribe | undefined;
     let canceled = false;
-    (async () => {
-      if (worker) {
-        try {
-          unsubscribe = await worker.subscribe(
-            {
-              url,
-              proxy,
-              options,
-              source,
-              useFirstRowAsHeader,
-              columnTypeCoercions,
-              maxCellCount,
-              jsonPath,
-              delimiter,
-              liveQuery,
-            },
-            (err, _, res) => {
-              if (!canceled) {
-                if (err && !isFatalError(err.message)) {
-                  return;
-                }
-                setError(err);
-                if (res) {
-                  if (res.result?.type.kind === 'type-error') {
-                    setError(
-                      new Error(
-                        formatError('en-US', res.result.type.errorCause)
-                      )
-                    );
-                  } else if (res.result) {
-                    setResult({
-                      ...res,
-                      result: {
-                        ...res.result,
-                        type: hydrateType(res.result.type),
-                      },
-                    });
-                  }
-                  if (res.loading != null) {
-                    setLoading(res.loading);
-                  }
-                }
+    try {
+      realUnsubscribe = await worker.subscribe(
+        {
+          url,
+          proxy,
+          options,
+          source,
+          useFirstRowAsHeader,
+          columnTypeCoercions,
+          maxCellCount,
+          jsonPath,
+          delimiter,
+          liveQuery,
+        },
+        (err, _, res) => {
+          if (!canceled) {
+            if (err && !isFatalError(err.message)) {
+              return;
+            }
+            setError(err);
+            if (res) {
+              if (res.result?.type.kind === 'type-error') {
+                setError(
+                  new Error(formatError('en-US', res.result.type.errorCause))
+                );
+              } else if (res.result) {
+                setResult({
+                  ...res,
+                  result: {
+                    ...res.result,
+                    type: hydrateType(res.result.type),
+                  },
+                });
+              }
+              if (res.loading != null) {
+                setLoading(res.loading);
               }
             }
-          );
-        } catch (err) {
-          if (err && !isFatalError((err as Error).message)) {
-            return;
           }
-          console.error(err);
-          setError(err as Error);
         }
+      );
+    } catch (err) {
+      if (err && !isFatalError((err as Error).message)) {
+        return noop;
       }
-    })();
+      console.error(err);
+      setError(err as Error);
+    }
 
     return () => {
       canceled = true;
-      if (unsubscribe) {
-        unsubscribe();
-      }
+      realUnsubscribe?.();
     };
   }, [
     columnTypeCoercions,
     delimiter,
     jsonPath,
+    liveQuery,
     maxCellCount,
     options,
     proxy,
@@ -125,8 +118,18 @@ export const useLiveConnectionResponse = ({
     url,
     useFirstRowAsHeader,
     worker,
-    liveQuery,
   ]);
+
+  useEffect(() => {
+    let unsubscribe: Unsubscribe | undefined;
+    (async () => {
+      unsubscribe = await subscribe();
+    })();
+
+    return () => {
+      unsubscribe?.();
+    };
+  }, [subscribe, gen]); // make unsubscribe / subscribe happen again when gen changes
 
   useEffect(() => {
     const { worker: workerWorker } = worker ?? {};
@@ -145,7 +148,7 @@ export const useLiveConnectionResponse = ({
   const retry = useCallback(() => {
     setError(undefined);
     setResult(undefined);
-    setWorkerGen((gen) => gen + 1);
+    setGen((g) => g + 1); // will make the subscribe happen again
   }, []);
 
   return useMemo(

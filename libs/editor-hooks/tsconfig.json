@@ -33,6 +33,9 @@
     },
     {
       "path": "../notebook-state"
+    },
+    {
+      "path": "../live-connect"
     }
   ]
 }

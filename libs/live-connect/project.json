@@ -11,14 +11,6 @@
         "maxWarnings": 0
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/libs/live-connect"],
-      "options": {
-        "command": "npx vitest --run",
-        "cwd": "libs/live-connect"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

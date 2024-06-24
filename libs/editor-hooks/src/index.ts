@@ -18,3 +18,5 @@ export * from './useActiveEditor';
 export * from './useWorker';
 export * from './useGeneratedName';
 export * from './useComputer';
+export * from './useNotebookId';
+export * from './useLiveConnectionWorker';

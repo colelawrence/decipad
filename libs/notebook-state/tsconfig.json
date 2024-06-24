@@ -12,6 +12,7 @@
     { "path": "../computer-interfaces" },
     { "path": "../react-contexts" },
     { "path": "../notebook-tabs" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../live-connect" }
   ]
 }

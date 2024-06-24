@@ -1,6 +1,6 @@
 import { IntegrationTypes } from '@decipad/editor-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { pushResultToComputer } from '@decipad/live-connect';
+import { pushResultToComputer } from '@decipad/editor-live-connect';
 import { getNodeString } from '@udecode/plate-common';
 import { Result } from '@decipad/language-interfaces';
 import { useRunner } from '../runners';

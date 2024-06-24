@@ -12,6 +12,8 @@ import { isNewNotebook } from './isNewNotebook';
 import { cursorAwareness } from './cursors';
 import debounce from 'lodash/debounce';
 import * as idb from 'lib0/indexeddb';
+import { once } from '@decipad/utils';
+import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -46,6 +48,7 @@ const initialState = (): Omit<
     resolveNotebookLoadedPromise: () => {
       return resolveNotebookLoadedPromise;
     },
+    liveConnectionWorker: once(() => createLiveConnectWorker()),
   };
 };
 
@@ -242,8 +245,9 @@ export const createNotebookStore = (onDestroy: () => void) =>
       set({ initialFocusDone: true });
     },
     destroy: () => {
-      const { syncClientState, editor } = get();
+      const { syncClientState, editor, liveConnectionWorker } = get();
       if (syncClientState === 'created') {
+        liveConnectionWorker().terminate();
         editor?.disconnect();
         editor?.destroy();
         set({ ...initialState(), destroyed: true });

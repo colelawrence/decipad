@@ -21,6 +21,7 @@ module.exports = {
     '<rootDir>/libs/remote-computer-worker',
     '<rootDir>/libs/number',
     '<rootDir>/libs/message-packer',
+    '<rootDir>/libs/editor-live-connect',
     '<rootDir>/libs/column',
     '<rootDir>/libs/backend-notebook-assistant',
     '<rootDir>/libs/backend-code-assistant',
