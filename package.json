@@ -157,7 +157,7 @@
     "@storybook/addon-essentials": "7.6.1",
     "@storybook/builder-manager": "^8.1.10",
     "@storybook/core-common": "^8.1.10",
-    "@storybook/core-server": "7.6.1",
+    "@storybook/core-server": "^8.1.10",
     "@storybook/react": "7.6.1",
     "@stripe/react-stripe-js": "^2.6.0",
     "@stripe/stripe-js": "^3.4.0",
@@ -342,7 +342,6 @@
     "react-portal": "4.2.2",
     "react-remark": "^2.1.0",
     "react-router-dom": "6.23.0",
-    "react-scripts": "^5.0.1",
     "react-simple-code-editor": "0.13.1",
     "react-tweet": "^3.1.1",
     "react-use-intercom": "5.4.0",
@@ -566,6 +565,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "csstype": "3.1.1",
+    "esbuild": "0.20.0",
     "@types/unist": "3.0.0"
   }
 }
