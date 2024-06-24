@@ -11,7 +11,7 @@
     "@architect/architect": "10.16.2",
     "@architect/destroy": "decipad/destroy",
     "@apollo/server": "4.10.0",
-    "aws-sdk": "2.1646.0",
+    "aws-sdk": "2.1608.0",
     "dotenv": "16.4.1",
     "form-data": "4.0.0",
     "graphql": "16.8.0",
@@ -25,7 +25,6 @@
     "@types/architect__functions": "3.13.7",
     "@types/mkdirp": "2.0.0",
     "@types/proper-lockfile": "4.1.2",
-    "proper-lockfile": "4.1.2",
-    "aws-sdk": "2.1646.0"
+    "proper-lockfile": "4.1.2"
   }
 }
