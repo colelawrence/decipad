@@ -4,7 +4,7 @@ import { createWorkerClient } from '@decipad/remote-computer-worker/client';
 import { captureException } from '@sentry/browser';
 import type { SubscribeParams } from '../types';
 
-const workerUrl = new URL('./LiveConnect-4.worker.bundle.js', import.meta.url);
+const workerUrl = new URL('./LiveConnect-5.worker.bundle.js', import.meta.url);
 export const createWorker = () => {
   const worker = new Worker(workerUrl, {
     /* @vite-ignore */

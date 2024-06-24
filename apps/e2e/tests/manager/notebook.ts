@@ -633,7 +633,11 @@ export class Notebook {
    */
   async addBlock(
     command: SlashCommand,
-    menu: 'slashmenu' | 'sidebar' | 'plusblockmenu' = 'slashmenu',
+    menu:
+      | 'slashmenu'
+      | 'sidebar'
+      | 'upload-csv'
+      | 'plusblockmenu' = 'slashmenu',
     insertLastParagraph = true
   ) {
     switch (menu) {

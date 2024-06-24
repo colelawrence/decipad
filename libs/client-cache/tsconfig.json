@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "WebWorker"]
+  },
+  "include": [
+    "src",
+    "vitest.config.ts",
+    "../../vite.config.ts",
+    "../../vite.web.config.ts"
+  ],
+  "references": [
+    { "path": "../utils" },
+    { "path": "../language-utils" },
+    { "path": "../language-types" },
+    { "path": "../remote-computer-codec" }
+  ]
+}

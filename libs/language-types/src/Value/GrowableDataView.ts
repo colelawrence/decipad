@@ -13,8 +13,11 @@ const defaults: AllWriteSerializedColumnOptions = {
 
 const supportsSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
 
-export class GrowableDataView<TBuffer extends SharedArrayBuffer | ArrayBuffer>
-  implements DataView
+export class GrowableDataView<
+  TBuffer extends SharedArrayBuffer | ArrayBuffer =
+    | SharedArrayBuffer
+    | ArrayBuffer
+> implements DataView
 {
   private buf: TBuffer;
   private inner: DataView;
@@ -35,7 +38,7 @@ export class GrowableDataView<TBuffer extends SharedArrayBuffer | ArrayBuffer>
     return this.inner.buffer;
   }
 
-  private ensureCapacity(size: number) {
+  public ensureCapacity(size: number) {
     while (size > this.buf.byteLength) {
       if (this.buf instanceof ArrayBuffer) {
         if (!this.buf.resizable) {

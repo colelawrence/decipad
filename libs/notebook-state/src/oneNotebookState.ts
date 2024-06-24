@@ -7,13 +7,13 @@ import { take } from 'rxjs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
 import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
-import type { EnhancedPromise, NotebookState } from './state';
-import { isNewNotebook } from './isNewNotebook';
-import { cursorAwareness } from './cursors';
 import debounce from 'lodash/debounce';
 import * as idb from 'lib0/indexeddb';
 import { once } from '@decipad/utils';
 import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
+import type { EnhancedPromise, NotebookState } from './state';
+import { isNewNotebook } from './isNewNotebook';
+import { cursorAwareness } from './cursors';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes

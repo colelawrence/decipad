@@ -1,0 +1,17 @@
+{
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "parserOptions": {
+        "project": "libs/client-cache/tsconfig.json"
+      },
+      "rules": {
+        "@typescript-eslint/promise-function-async": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/no-misused-promises": "error"
+      }
+    }
+  ]
+}

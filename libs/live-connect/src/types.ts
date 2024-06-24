@@ -29,17 +29,20 @@ export interface SubscribeParams {
   liveQuery?: LiveQueryElement;
   subId?: string;
   query?: string;
+  useCache?: boolean;
 }
 
 export interface Subscription {
+  id: SubscriptionId;
   params: SubscribeParams;
   timer?: ReturnType<typeof setTimeout>;
   subscription?: SubscriptionLike;
-  notify: (result: RPCResponse) => void | Promise<void>;
+  notify: (result: RPCResponse) => unknown;
+  import: () => Promise<void>;
 }
 
 export type Observe = (
-  subscription: Subscription,
+  subscription: Omit<Subscription, 'id' | 'import'>,
   throwOnError?: boolean
 ) => Promise<SubscriptionLike | undefined>;
 

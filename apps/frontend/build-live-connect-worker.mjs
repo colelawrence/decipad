@@ -22,7 +22,7 @@ await build({
 await build({
   entryPoints: ['../../libs/live-connect/src/worker/LiveConnect.worker.ts'],
   bundle: true,
-  outfile: '../../libs/live-connect/src/worker/LiveConnect-4.worker.bundle.js',
+  outfile: '../../libs/live-connect/src/worker/LiveConnect-5.worker.bundle.js',
   treeShaking: true,
   minify: true,
   metafile: true,

@@ -1,9 +1,12 @@
 import type { Context } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
-import { astNode, Unknown } from '@decipad/remote-computer';
-import type { Result } from '@decipad/remote-computer';
+// eslint-disable-next-line no-restricted-imports
+import { astNode } from '@decipad/remote-computer';
+import type { Result } from '@decipad/language-interfaces';
+import { Unknown } from '@decipad/language-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 import type {
   ColIndex,
@@ -13,7 +16,6 @@ import type {
 } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
-import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
 import { pushResultToComputer } from './utils/pushResultToComputer';
@@ -100,6 +102,7 @@ export const useLiveConnection = (
     columnTypeCoercions,
     maxCellCount,
     liveQuery,
+    useCache: source === 'csv', // TODO: add more?
   });
 
   const result = liveConnectionResult;

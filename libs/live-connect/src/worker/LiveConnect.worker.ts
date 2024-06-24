@@ -1,14 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-globals */
 import './workerPolyfills';
 import { nanoid } from 'nanoid';
+import omit from 'lodash/omit';
 import type { ImportResult } from '@decipad/import';
 import { tryImport } from '@decipad/import';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer, setErrorReporter } from '@decipad/computer';
 // import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { createWorkerWorker } from '@decipad/remote-computer-worker/worker';
+import { caching } from '@decipad/client-cache';
 import type { Computer } from '@decipad/computer-interfaces';
-import type {
+import {
   Observe,
   SubscribeParams,
   Subscription,
@@ -16,6 +19,9 @@ import type {
 } from '../types';
 import type { StartNotebook } from '../notebook';
 import { getNotebook, getURLComponents } from './getEditorDeps';
+import { encodeImportResult } from './encodeImportResult';
+import { SerializedImportResult } from './types';
+import { decodeImportResult } from './decodeImportResult';
 
 if (typeof importScripts === 'function') {
   // eslint-disable-next-line no-console
@@ -44,51 +50,29 @@ if (typeof importScripts === 'function') {
     }
   };
 
-  const tryImportHere = async (
-    computer: Computer,
-    subscriptionId: SubscriptionId
-  ) => {
-    const sub = subscriptions.get(subscriptionId);
-    if (sub) {
-      try {
-        sub.notify({ loading: true });
-        const results = await tryImport(
-          {
-            computer,
-            url: new URL(sub.params.url),
-            proxy: sub.params.proxy ? new URL(sub.params.proxy) : undefined,
-            provider: sub.params.source,
-          },
-          {
-            useFirstRowAsHeader: sub.params.useFirstRowAsHeader,
-            columnTypeCoercions: sub.params.columnTypeCoercions,
-            maxCellCount: sub.params.maxCellCount,
-            jsonPath: sub.params.jsonPath,
-            delimiter: sub.params.delimiter,
-            subId: sub.params.subId,
-            query: sub.params.query,
-          }
-        );
-        for (const result of results) {
-          sub.notify(result);
+  const _internalTryImport =
+    (computer: Computer) => async (params: SubscribeParams) => {
+      return tryImport(
+        {
+          computer,
+          url: new URL(params.url),
+          proxy: params.proxy ? new URL(params.proxy) : undefined,
+          provider: params.source,
+        },
+        {
+          ...params,
         }
-      } catch (err) {
-        console.error(
-          `subscription ${subscriptionId}: caught error while trying to import from ${sub.params.url}`,
-          err
-        );
-        onError(subscriptionId, sub.params)(err as Error);
-      } finally {
-        schedule(computer, subscriptionId);
-      }
-    }
-  };
+      );
+    };
 
-  const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
+  const schedule = (subscriptionId: SubscriptionId) => {
     const sub = subscriptions.get(subscriptionId);
     if (sub) {
       setTimeout(
-        () => tryImportHere(computer, subscriptionId),
+        () =>
+          sub.import().finally(() => {
+            schedule(subscriptionId);
+          }),
         (sub.params.pollIntervalSeconds || 60) * 1000
       );
     }
@@ -108,7 +92,7 @@ if (typeof importScripts === 'function') {
   };
 
   const hasCircularDependency = (
-    subscriptionRequest: Subscription
+    subscriptionRequest: Omit<Subscription, 'id' | 'import'>
   ): boolean => {
     // detect find out if we're already subscribed
     for (const subscription of subscriptions.values()) {
@@ -125,7 +109,7 @@ if (typeof importScripts === 'function') {
 
   const observe =
     (parentSubscriptionId: string): Observe =>
-    async (subscriptionRequest: Subscription, throwOnError = false) => {
+    async (subscriptionRequest, throwOnError = false) => {
       try {
         if (hasCircularDependency(subscriptionRequest)) {
           throw new Error(
@@ -133,7 +117,11 @@ if (typeof importScripts === 'function') {
           );
         }
         const subscriptionId = nanoid();
-        await subscribeInternal(subscriptionId, subscriptionRequest);
+        await subscribeInternal(subscriptionId, {
+          id: subscriptionId,
+          import: async () => {}, // observing a notebook does not trigger import
+          ...subscriptionRequest,
+        });
         let closed = false;
         return {
           get closed() {
@@ -191,8 +179,6 @@ if (typeof importScripts === 'function') {
         return;
       }
 
-      // Hacky, but gets types working!
-      // eslint-ignore-next-line import/no-unresolved
       const { startNotebook: _startNotebook } = await import('../notebook');
 
       const startNotebook = _startNotebook as StartNotebook;
@@ -203,10 +189,10 @@ if (typeof importScripts === 'function') {
         onError(subscriptionId, params)
       );
     } else {
-      const computer = getComputer();
-      schedule(computer, subscriptionId);
       setTimeout(() => {
-        tryImportHere(computer, subscriptionId);
+        subscription.import().finally(() => {
+          schedule(subscriptionId);
+        });
       }, 0);
     }
   };
@@ -216,7 +202,52 @@ if (typeof importScripts === 'function') {
     notify: (result: ImportResult) => void | Promise<void>
   ) => {
     const subscriptionId = nanoid();
-    const subscription: Subscription = { params, notify };
+    const computer = getComputer();
+    const doDoImport = _internalTryImport(computer);
+    const cachedDoDoImport = params.useCache
+      ? caching<
+          ImportResult[],
+          { result: SerializedImportResult[] },
+          [SubscribeParams],
+          [Omit<SubscribeParams, 'newSubscriptionId'>]
+        >({
+          name: params.url,
+          rootValueKeys: ['result'],
+          encode: async (value) => ({
+            result: await Promise.all(value.map(encodeImportResult)),
+          }),
+          decode: async (value) =>
+            Promise.all(value.result.map(decodeImportResult)),
+          getCacheKeyArgs: (subscribeParams) =>
+            [
+              omit(
+                subscribeParams,
+                'newSubscriptionId' as keyof SubscribeParams
+              ),
+            ] as [Omit<SubscribeParams, 'newSubscriptionId'>],
+        })(doDoImport)
+      : doDoImport;
+    const doImport = async () => {
+      notify({ loading: true });
+      try {
+        const results = await cachedDoDoImport(params);
+        for (const result of results) {
+          notify({ ...result, loading: false });
+        }
+      } catch (err) {
+        console.error(
+          `subscription ${subscriptionId}: caught error while trying to import from ${params.url}`,
+          err
+        );
+        onError(subscriptionId, params)(err as Error);
+      }
+    };
+    const subscription: Subscription = {
+      id: subscriptionId,
+      params,
+      notify,
+      import: doImport,
+    };
     await subscribeInternal(subscriptionId, subscription);
 
     return subscriptionId;

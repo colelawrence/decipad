@@ -12,6 +12,7 @@
     "Buildable",
     "cacheable",
     "camelcase",
+    "canonicalize",
     "colspan",
     "contenteditable",
     "customerservice",

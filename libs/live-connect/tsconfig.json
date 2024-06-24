@@ -19,6 +19,7 @@
     { "path": "../interfaces" },
     { "path": "../notebook-tabs" },
     { "path": "../remote-computer-worker" },
-    { "path": "../computer-utils" }
+    { "path": "../computer-utils" },
+    { "path": "../client-cache" }
   ]
 }

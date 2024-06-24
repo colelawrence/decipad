@@ -2,7 +2,6 @@
 import { join } from 'path';
 import WebSocket from 'ws';
 import { rimrafSync } from 'rimraf';
-import 'isomorphic-fetch';
 
 process.env.DECI_ENV_CONFIG_FILE_PATH = join(
   __dirname,

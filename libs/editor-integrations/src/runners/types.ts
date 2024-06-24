@@ -206,8 +206,8 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
         proxy: this.proxy,
         source: this.source,
         subId: this.subId?.id.toString(),
-
         maxCellCount: 10_000_000_000_000,
+        useCache: this.source === 'csv',
       },
       async (_, __, res) => {
         if (res.loading == null || res.loading) {

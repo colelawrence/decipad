@@ -30,6 +30,7 @@ export interface LiveConnectionProps {
   jsonPath?: string;
   delimiter?: string;
   liveQuery?: LiveQueryElement;
+  useCache?: boolean;
 }
 
 export const useLiveConnectionResponse = ({
@@ -43,6 +44,7 @@ export const useLiveConnectionResponse = ({
   jsonPath,
   delimiter,
   liveQuery,
+  useCache,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const worker = useLiveConnectionWorker();
   const [gen, setGen] = useState(0);
@@ -66,6 +68,7 @@ export const useLiveConnectionResponse = ({
           jsonPath,
           delimiter,
           liveQuery,
+          useCache,
         },
         (err, _, res) => {
           if (!canceled) {
@@ -116,6 +119,7 @@ export const useLiveConnectionResponse = ({
     proxy,
     source,
     url,
+    useCache,
     useFirstRowAsHeader,
     worker,
   ]);

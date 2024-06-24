@@ -26,4 +26,5 @@ export type SlashCommand =
   | 'sketch'
   | 'upload-image'
   | 'upload-embed'
+  | 'upload-csv'
   | 'submit-form';

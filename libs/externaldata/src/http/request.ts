@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-fetch';
 import type { ExternalKeyRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
 import { HttpError } from '../utils/HttpError';
