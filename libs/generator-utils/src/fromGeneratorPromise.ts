@@ -1,7 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+import { WithFromArray } from './types';
+
 export const fromGeneratorPromise = async function* fromGeneratorPromise<T>(
-  genP: Promise<AsyncGenerator<T>>
+  genP: Promise<WithFromArray<T> & AsyncGenerator<T>>
 ): AsyncGenerator<T> {
-  for await (const v of await genP) {
-    yield v;
-  }
+  yield* await genP;
 };
