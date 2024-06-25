@@ -6,6 +6,7 @@ import {
 import { decodeType } from '@decipad/remote-computer-codec';
 // eslint-disable-next-line no-restricted-imports
 import type { SerializedResult } from '../types/serializedTypes';
+import { WithEncoded } from '../types/WithEncoded';
 
 const getDataView = (buffer: ArrayBuffer): DataView => {
   try {
@@ -18,7 +19,9 @@ const getDataView = (buffer: ArrayBuffer): DataView => {
 };
 
 export const createResultDecoder = (context: ClientWorkerContext) => {
-  return async (result: SerializedResult): Promise<Result.Result> => {
+  return async (
+    result: SerializedResult
+  ): Promise<WithEncoded<Result.Result, SerializedResult>> => {
     const { type: typeBuffer, value: valueBuffer } = result;
     const typeView = getDataView(typeBuffer);
     const [type] = decodeType(typeView, 0);
@@ -27,6 +30,7 @@ export const createResultDecoder = (context: ClientWorkerContext) => {
     const [value] = await decodeRemoteValue(context, valueView, 0, type);
 
     return {
+      __encoded: result,
       type,
       value,
     };

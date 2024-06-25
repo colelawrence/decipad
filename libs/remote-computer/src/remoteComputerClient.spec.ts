@@ -520,6 +520,10 @@ describe('remote computer client', () => {
 
     expect(await computer.expressionResult(r('A'))).toMatchInlineSnapshot(`
       {
+        "__encoded": {
+          "type": ArrayBuffer [],
+          "value": ArrayBuffer [],
+        },
         "type": {
           "kind": "number",
           "unit": null,
@@ -794,6 +798,10 @@ describe('remote computer client', () => {
           }
           expect(result).toMatchInlineSnapshot(`
             {
+              "__encoded": {
+                "type": ArrayBuffer [],
+                "value": ArrayBuffer [],
+              },
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -820,6 +828,10 @@ describe('remote computer client', () => {
           }
           expect(result).toMatchInlineSnapshot(`
             {
+              "__encoded": {
+                "type": ArrayBuffer [],
+                "value": ArrayBuffer [],
+              },
               "type": {
                 "kind": "number",
                 "unit": [
@@ -1112,6 +1124,10 @@ describe('remote computer client', () => {
                 "columnName": "C1",
                 "readableTableName": "T",
                 "result": {
+                  "__encoded": {
+                    "type": ArrayBuffer [],
+                    "value": ArrayBuffer [],
+                  },
                   "type": {
                     "cellType": {
                       "kind": "number",
@@ -1129,37 +1145,41 @@ describe('remote computer client', () => {
           columnResult = result[0].result;
           expect(await materializeResult(result[0].result))
             .toMatchInlineSnapshot(`
-            {
-              "type": {
-                "cellType": {
-                  "kind": "number",
-                  "unit": null,
+              {
+                "__encoded": {
+                  "type": ArrayBuffer [],
+                  "value": ArrayBuffer [],
                 },
-                "indexedBy": "exprRef_block_3",
-                "kind": "column",
-              },
-              "value": [
-                DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 1n,
-                  "s": 1n,
+                "type": {
+                  "cellType": {
+                    "kind": "number",
+                    "unit": null,
+                  },
+                  "indexedBy": "exprRef_block_3",
+                  "kind": "column",
                 },
-                DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 2n,
-                  "s": 1n,
-                },
-                DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 3n,
-                  "s": 1n,
-                },
-              ],
-            }
-          `);
+                "value": [
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 2n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 3n,
+                    "s": 1n,
+                  },
+                ],
+              }
+            `);
           resolve();
         });
     });
@@ -1193,7 +1213,7 @@ describe('remote computer client', () => {
           expect(result).toMatchInlineSnapshot(`
             [
               {
-                "dimensionLength": 3,
+                "dimensionLength": 21,
                 "indexedBy": "T",
                 "labels": [
                   "1",
