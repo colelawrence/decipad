@@ -4,6 +4,7 @@ import type {
   Program,
 } from '@decipad/computer-interfaces';
 import type { ExternalDataMap } from '@decipad/language-interfaces';
+import { anyMappingToMap } from '@decipad/utils';
 
 export const updateProgram = (
   currentProgram: ComputerProgram,
@@ -55,7 +56,7 @@ export const updateProgram = (
       }
     }
     if (external.upsert) {
-      for (const [k, v] of Object.entries(external.upsert)) {
+      for (const [k, v] of anyMappingToMap(external.upsert).entries()) {
         newExternalData.set(k, v);
       }
     }

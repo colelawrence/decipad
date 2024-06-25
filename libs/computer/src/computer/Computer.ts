@@ -144,27 +144,6 @@ export class Computer implements ComputerInterface {
     return this.deltaQueue.push(
       async () =>
         new Promise<void>((resolve, reject) => {
-          if (req.external) {
-            if (req.external.upsert) {
-              // TODO: we need to update the external data map, for now...
-              this.latestExternalData = new Map([
-                ...this.latestExternalData,
-                ...anyMappingToMap(req.external.upsert),
-              ]);
-            }
-            if (req.external.remove) {
-              // TODO: we need to update the external data map, for now...
-              for (const key of req.external.remove) {
-                this.latestExternalData = new Map(
-                  Object.entries(this.latestExternalData).filter(
-                    ([k]) => k !== key
-                  )
-                );
-              }
-            }
-            this.computationRealm.setExternalData(this.latestExternalData);
-          }
-
           this.computeRequests.next({
             ...req,
             done: resolve,
