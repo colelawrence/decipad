@@ -20123,6 +20123,11 @@ esbuild-plugin-alias@^0.2.1:
   resolved "https://registry.yarnpkg.com/esbuild-plugin-alias/-/esbuild-plugin-alias-0.2.1.tgz#45a86cb941e20e7c2bc68a2bea53562172494fcb"
   integrity sha512-jyfL/pwPqaFXyKnj8lP8iLk6Z0m099uXR45aSN8Av1XD4vhvQutxxPzgA2bTcAwQpa1zCXDcWOlhFgyP3GKqhQ==
 
+esbuild-plugin-wasm@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-wasm/-/esbuild-plugin-wasm-1.1.0.tgz#062c0e62c266e94165c66ebcbb5852a1cdbfd7cd"
+  integrity sha512-0bQ6+1tUbySSnxzn5jnXHMDvYnT0cN/Wd4Syk8g/sqAIJUg7buTIi22svS3Qz6ssx895NT+TgLPb33xi1OkZig==
+
 esbuild-register@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/esbuild-register/-/esbuild-register-3.5.0.tgz#449613fb29ab94325c722f560f800dd946dc8ea8"
@@ -35953,6 +35958,11 @@ v8flags@^3.1.1:
   integrity sha512-mH8etigqMfiGWdeXpaaqGfs6BndypxusHHcv2qSHyZkGEznCd/qAXCWWRzeowtL54147cktFOC4P5y+kl8d8Jg==
   dependencies:
     homedir-polyfill "^1.0.1"
+
+valibot@^0.33.3:
+  version "0.33.3"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.33.3.tgz#7c0e2ab2d6e294be672c3c1b763543660612ef13"
+  integrity sha512-/fuY1DlX8uiQ7aphlzrrI2DbG0YJk84JMgvz2qKpUIdXRNsS53varfo4voPjSrjUr5BSV2K0miSEJUOlA5fQFg==
 
 valid-data-url@^3.0.0:
   version "3.0.1"
