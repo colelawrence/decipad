@@ -28,7 +28,7 @@ const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
         }
       }, NOTEBOOK_DESTROY_DELAY_MS);
     };
-    store = createNotebookStore(onDestroy);
+    store = createNotebookStore(notebookId, onDestroy);
     notebooks.set(notebookId, store);
   }
   return store;

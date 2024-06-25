@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { fnQueue } from '@decipad/fnqueue';
 import type { PromiseOrType } from '@decipad/utils';
 import type {
@@ -158,6 +159,7 @@ export const createWorkerClient = <
           newSubscriptionId: subscriptionId,
         });
         if (responseSubscriptionId !== subscriptionId) {
+          console.error('Subscription id mismatch, params are', params);
           throw new Error(
             `Subscription id mismatch: ${responseSubscriptionId} !== ${subscriptionId}`
           );

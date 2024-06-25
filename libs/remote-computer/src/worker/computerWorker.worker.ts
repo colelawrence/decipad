@@ -22,6 +22,8 @@ import { getObservable } from '../utils/getObservable';
 import { createWorkerHandler as createCreateWorkerHandler } from './createRpcEncoder';
 import { decodeSubscriptionArgs } from '../decode/decodeSubscriptionArgs';
 import type { Subscription } from 'rxjs';
+import { createComputerResultsCache } from './computerResultsCache';
+import { ComputerResultsCache } from './types';
 
 if (typeof importScripts === 'function') {
   const computer = getComputer();
@@ -151,10 +153,27 @@ if (typeof importScripts === 'function') {
   );
 
   rpc.expose('flush', createWorkerHandler(computer, remoteValueStore, 'flush'));
-  rpc.expose(
-    'terminate',
-    createWorkerHandler(computer, remoteValueStore, 'terminate')
+
+  // Cache results when initializing
+  let resultsCache: ComputerResultsCache | undefined;
+  rpc.expose<{ notebookId: string }>(
+    'initializeComputer',
+    async ({ notebookId }) => {
+      resultsCache = createComputerResultsCache(computer, notebookId);
+      console.log(
+        'Remote computer worker initialized to notebook Id:',
+        notebookId
+      );
+    }
   );
+
+  // Termination
+  rpc.expose('terminate', () => {
+    computer.terminate().catch((err) => {
+      console.error('Error terminating computer', err);
+    });
+    resultsCache?.terminate();
+  });
 
   console.log('Computer worker started');
 }

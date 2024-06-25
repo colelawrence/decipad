@@ -61,6 +61,7 @@ const unknownResult: ResultType = {
 const RemoteComputerClientSymbol = Symbol('RemoteComputerClient');
 
 export const createRemoteComputerClientFromWorker = (
+  notebookId: string,
   workerWorker: Worker,
   onError: (error: Error) => unknown
 ) => {
@@ -463,11 +464,22 @@ export const createRemoteComputerClientFromWorker = (
       await this._terminate();
       workerWorker.terminate();
     }
+
+    async #initialize() {
+      const { rpc } = context;
+      await rpc.isReady;
+      await rpc.call('initializeComputer', { notebookId });
+    }
+
+    constructor() {
+      this.#initialize().catch(onError);
+    }
   }
   return new RemoteComputerClient();
 };
 
 export const createRemoteComputerClient = (
+  notebookId: string,
   onError: (err: Error) => unknown
 ): Computer => {
   const worker = createComputerWorker();
@@ -477,7 +489,7 @@ export const createRemoteComputerClient = (
     ev.preventDefault();
     onError(ev.error);
   };
-  return createRemoteComputerClientFromWorker(worker, onError);
+  return createRemoteComputerClientFromWorker(notebookId, worker, onError);
 };
 
 const defaultOnError = (err: Error) => {
@@ -486,10 +498,14 @@ const defaultOnError = (err: Error) => {
 };
 
 export const getRemoteComputer = ({
+  notebookId,
   onError,
   initialProgram,
-}: GetRemoteComputerOptions = {}) => {
-  const computer = createRemoteComputerClient(onError ?? defaultOnError);
+}: GetRemoteComputerOptions) => {
+  const computer = createRemoteComputerClient(
+    notebookId,
+    onError ?? defaultOnError
+  );
   if (initialProgram) {
     computer
       .pushComputeDelta({ program: { upsert: initialProgram } })

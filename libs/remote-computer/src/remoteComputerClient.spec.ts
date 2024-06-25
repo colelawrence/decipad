@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { describe, it, beforeEach, afterEach, expect } from 'vitest';
+import {
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+  afterAll,
+  beforeAll,
+} from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { c, r } from '@decipad/language-utils';
 import type { Result } from '@decipad/language-interfaces';
@@ -22,11 +30,49 @@ describe('remote computer client', () => {
 
   beforeEach(async () => {
     computer = (await createRemoteComputerClient(
+      'notebookId',
       onError
     )) as RemoteComputerClient;
   });
 
   afterEach(() => computer.terminate());
+
+  const previousCaches = globalThis.caches;
+  const previousLocation = globalThis.location;
+  const hits = new Map<string, number>();
+
+  afterEach(() => {
+    hits.clear();
+  });
+
+  beforeAll(() => {
+    const cache = new Map<string, Response>();
+    globalThis.caches = {
+      open: (cacheName: string) => {
+        expect(cacheName).toBe('decipad');
+        return {
+          match: async (key: string) => {
+            const got = cache.get(key);
+            if (got) {
+              hits.set(key, (hits.get(key) || 0) + 1);
+            }
+            return got;
+          },
+          put: async (key: string, value: Response) => {
+            // console.log('putting', key, value);
+            cache.set(key, value);
+          },
+        };
+      },
+    } as unknown as typeof globalThis.caches;
+
+    globalThis.location = new URL('https://decipad.com') as unknown as Location;
+  });
+
+  afterAll(() => {
+    globalThis.caches = previousCaches;
+    globalThis.location = previousLocation;
+  });
 
   it('can push compute delta and observe results', async () => {
     computer.pushComputeDelta({

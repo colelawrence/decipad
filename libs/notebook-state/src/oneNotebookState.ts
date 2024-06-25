@@ -52,15 +52,18 @@ const initialState = (): Omit<
   };
 };
 
-export const createNotebookStore = (onDestroy: () => void) =>
+export const createNotebookStore = (
+  notebookId: string,
+  onDestroy: () => void
+) =>
   createStore<NotebookState>((set, get) => ({
     ...initialState(),
-    computer: createRemoteComputerClient((err) => {
+    computer: createRemoteComputerClient(notebookId, (err) => {
       console.error('notebook store: Error in remote computer client', err);
       captureException(err);
     }),
     initEditor: (
-      notebookId,
+      _notebookId,
       { docsync, plugins, onChangeTitle },
       getSession
     ) => {

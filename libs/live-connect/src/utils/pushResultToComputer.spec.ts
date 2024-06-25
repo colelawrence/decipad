@@ -13,7 +13,10 @@ setupDeciNumberSnapshotSerializer();
 
 it('can push a new table into the computer', async () => {
   // We need a first request for the computer to function
-  const computer = getRemoteComputer({ initialProgram: [] });
+  const computer = getRemoteComputer({
+    notebookId: 'notebookId',
+    initialProgram: [],
+  });
 
   const { type, value } = await runCode(
     'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'

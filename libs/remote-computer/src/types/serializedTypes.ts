@@ -58,9 +58,7 @@ export type SerializedNotebookResults = Omit<
   NotebookResults,
   'blockResults'
 > & {
-  blockResults: {
-    readonly [blockId: string]: SerializedBlockResult;
-  };
+  blockResults: ArrayBuffer;
 };
 
 export type SerializedColumnDesc = Omit<ColumnDesc, 'result' | 'blockType'> & {
