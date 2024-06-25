@@ -432,7 +432,7 @@
     "@nx/storybook": "16.10.0",
     "@nx/web": "16.10.0",
     "@nx/workspace": "16.10.0",
-    "@percy/cli": "^1.28.8",
+    "@percy/cli": "^1.27.4",
     "@percy/playwright": "^1.0.4",
     "@storybook/addon-a11y": "7.6.1",
     "@storybook/addon-interactions": "^7.2.1",
