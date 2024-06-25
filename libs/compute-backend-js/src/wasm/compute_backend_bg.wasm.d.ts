@@ -12,6 +12,11 @@ export function computebackend_get_slice_string(a: number, b: number, c: number,
 export function computebackend_sum(a: number, b: number, c: number, d: number): void;
 export function computebackend_sum_from_js(a: number, b: number): number;
 export function computebackend_sum_from_js_frac(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function computebackend_gt_mask(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function computebackend_ge_mask(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function computebackend_lt_mask(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function computebackend_le_mask(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function computebackend_eq_mask(a: number, b: number, c: number, d: number, e: number, f: number): void;
 export function computebackend_insert_number_column_float(a: number, b: number, c: number, d: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_malloc(a: number, b: number): number;

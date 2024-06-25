@@ -11,19 +11,19 @@ export function greet(): void;
 export function parse_csv(csv: string, is_first_header_row: boolean): object;
 /**
 */
-export enum ComputeErrors {
-  IncorrectType = 0,
-  UnknownId = 1,
-  InferError = 2,
-}
-/**
-*/
 export enum DeciType {
   Number = 0,
   String = 1,
   Boolean = 2,
   Column = 3,
   Table = 4,
+}
+/**
+*/
+export enum ComputeErrors {
+  IncorrectType = 0,
+  UnknownId = 1,
+  InferError = 2,
 }
 /**
 */
@@ -84,4 +84,39 @@ export class ComputeBackend {
 * @returns {BigInt64Array}
 */
   sum_from_js_frac(numerators: BigInt64Array, denominator: BigInt64Array): BigInt64Array;
+/**
+* @param {string} id
+* @param {bigint} n
+* @param {bigint} d
+* @returns {object}
+*/
+  gt_mask(id: string, n: bigint, d: bigint): object;
+/**
+* @param {string} id
+* @param {bigint} n
+* @param {bigint} d
+* @returns {object}
+*/
+  ge_mask(id: string, n: bigint, d: bigint): object;
+/**
+* @param {string} id
+* @param {bigint} n
+* @param {bigint} d
+* @returns {object}
+*/
+  lt_mask(id: string, n: bigint, d: bigint): object;
+/**
+* @param {string} id
+* @param {bigint} n
+* @param {bigint} d
+* @returns {object}
+*/
+  le_mask(id: string, n: bigint, d: bigint): object;
+/**
+* @param {string} id
+* @param {bigint} n
+* @param {bigint} d
+* @returns {object}
+*/
+  eq_mask(id: string, n: bigint, d: bigint): object;
 }

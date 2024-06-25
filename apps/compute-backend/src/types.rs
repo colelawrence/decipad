@@ -1,4 +1,5 @@
-use wasm_bindgen::prelude::*;
+use js_sys::{Array, BigInt64Array, Object};
+use wasm_bindgen::{convert::WasmAbi, prelude::*};
 
 pub trait DeciCommon {
     fn get_frac(&self) -> (i64, i64);
@@ -8,14 +9,14 @@ pub trait DeciCommon {
     fn to_float(&self) -> DeciFloat;
 }
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct DeciFloat {
     pub val: f64,
     pub inf: bool,
     pub und: bool,
 }
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct DeciFrac {
     pub n: i64,
     pub d: i64,
@@ -23,14 +24,14 @@ pub struct DeciFrac {
     pub und: bool,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum NCol {
     FracCol(Vec<DeciFrac>),
     FloatCol(Vec<DeciFloat>),
 }
 
 // Results | Extract into seperate file
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum DeciValue {
     NumberColumn(NCol),
     BooleanColumn(Vec<bool>),

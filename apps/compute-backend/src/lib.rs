@@ -2,18 +2,16 @@ mod infer;
 mod parse;
 mod types;
 
-use std::{collections::HashMap, iter::FromIterator};
-
 use crate::types::DeciCommon;
 use infer::infer_columns;
-use js_sys::{Array, Float64Array, Object};
-use num::integer::lcm;
-use parse::csv_to_parsed;
-use types::{DeciType, NCol};
-mod types_impl;
 
-use js_sys::BigInt64Array;
-use types::DeciValue;
+use num::integer::lcm;
+use types::{DeciFloat, DeciFrac, DeciType, DeciValue, NCol};
+mod comparators;
+mod types_impl;
+use js_sys::{Array, BigInt64Array, Float64Array, Object};
+use parse::csv_to_parsed;
+use std::{collections::HashMap, iter::FromIterator};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -156,6 +154,11 @@ impl ComputeBackend {
         }
     }
 
+    /*
+     * Takes the raw string of CSV, coherses it and stores the type in WASM.
+     * It then returns the IDs of the columns or an error.
+     */
+
     pub fn insert_number_column(&mut self, id: String, value: &Float64Array) {
         let numbers = value.to_vec();
 
@@ -253,6 +256,179 @@ impl ComputeBackend {
 
         return vec![sum, my_lcm];
     }
+
+    pub fn gt_mask(&mut self, id: String, n: i64, d: i64) -> Result<Object, ComputeErrors> {
+        let column = self.get_value(id)?;
+
+        match column.gt_num(DeciFrac {
+            n: n,
+            d: d,
+            inf: false,
+            und: false,
+        }) {
+            Some(out) => {
+                let outcol = DeciValue::BooleanColumn(out);
+                Ok(column.mask_with(outcol).unwrap().toJsVal())
+            }
+            None => Err(ComputeErrors::IncorrectType),
+        }
+    }
+    pub fn ge_mask(&mut self, id: String, n: i64, d: i64) -> Result<Object, ComputeErrors> {
+        let column = self.get_value(id)?;
+
+        match column.ge_num(DeciFrac {
+            n: n,
+            d: d,
+            inf: false,
+            und: false,
+        }) {
+            Some(out) => {
+                let outcol = DeciValue::BooleanColumn(out);
+                Ok(column.mask_with(outcol).unwrap().toJsVal())
+            }
+            None => Err(ComputeErrors::IncorrectType),
+        }
+    }
+    pub fn lt_mask(&mut self, id: String, n: i64, d: i64) -> Result<Object, ComputeErrors> {
+        let column = self.get_value(id)?;
+
+        match column.lt_num(DeciFrac {
+            n: n,
+            d: d,
+            inf: false,
+            und: false,
+        }) {
+            Some(out) => {
+                let outcol = DeciValue::BooleanColumn(out);
+                Ok(column.mask_with(outcol).unwrap().toJsVal())
+            }
+            None => Err(ComputeErrors::IncorrectType),
+        }
+    }
+    pub fn le_mask(&mut self, id: String, n: i64, d: i64) -> Result<Object, ComputeErrors> {
+        let column = self.get_value(id)?;
+
+        match column.le_num(DeciFrac {
+            n: n,
+            d: d,
+            inf: false,
+            und: false,
+        }) {
+            Some(out) => {
+                let outcol = DeciValue::BooleanColumn(out);
+                Ok(column.mask_with(outcol).unwrap().toJsVal())
+            }
+            None => Err(ComputeErrors::IncorrectType),
+        }
+    }
+    pub fn eq_mask(&mut self, id: String, n: i64, d: i64) -> Result<Object, ComputeErrors> {
+        let column = self.get_value(id)?;
+
+        match column.eq_num(DeciFrac {
+            n: n,
+            d: d,
+            inf: false,
+            und: false,
+        }) {
+            Some(out) => {
+                let outcol = DeciValue::BooleanColumn(out);
+                Ok(column.mask_with(outcol).unwrap().toJsVal())
+            }
+            None => Err(ComputeErrors::IncorrectType),
+        }
+    }
+}
+
+#[test]
+fn test_masking() {
+    let myVec = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+    let myDeciVal = DeciValue::from_floats(myVec);
+    let boolmask = DeciValue::BooleanColumn(
+        myDeciVal
+            .ge_num(DeciFrac {
+                n: 8,
+                d: 2,
+                inf: false,
+                und: false,
+            })
+            .unwrap(),
+    );
+    let out = myDeciVal.mask_with(boolmask).unwrap();
+    match out {
+        DeciValue::NumberColumn(col) => {
+            assert_eq!(col.to_vec_float(), vec![4.0, 5.0, 6.0])
+        }
+        _ => panic!("wrong type"),
+    }
+}
+
+#[test]
+fn test_column_math() {
+    let mut compute = ComputeBackend::new();
+
+    compute.values.insert(
+        "id-0".to_string(),
+        DeciValue::NumberColumn(NCol::from_float(vec![1.0, 2.0, 1.0])),
+    );
+    compute.values.insert(
+        "id-1".to_string(),
+        DeciValue::NumberColumn(NCol::from_float(vec![2.0, 4.0, 1.0])),
+    );
+    compute.values.insert(
+        "id-2".to_string(),
+        DeciValue::NumberColumn(NCol::from_float(vec![3.0, 6.0, 1.0])),
+    );
+    compute.values.insert(
+        "id-3".to_string(),
+        DeciValue::NumberColumn(NCol::from_float(vec![4.0, 8.0, 1.0])),
+    );
+    compute.values.insert(
+        "id-4".to_string(),
+        DeciValue::NumberColumn(NCol::from_float(vec![5.0, 10.0, 1.0])),
+    );
+
+    // Test Adding Scalar to col
+    assert_eq!(
+        compute
+            .get_value("id-0".to_string())
+            .expect("to return defined")
+            .clone()
+            + 1,
+        DeciValue::from_floats(vec![2.0, 3.0, 2.0])
+    );
+
+    //Test Adding col to col
+    assert_eq!(
+        compute
+            .get_value("id-0".to_string())
+            .expect("to return defined")
+            .clone()
+            + compute
+                .get_value("id-1".to_string())
+                .expect("to return defined")
+                .clone(),
+        DeciValue::from_floats(vec![3.0, 6.0, 2.0])
+    );
+
+    //Test column scalar multiplication, subtraction, equating
+    let myvar = compute
+        .get_value("id-0".to_string())
+        .expect("to return defined")
+        .clone()
+        * 2;
+    assert_eq!(
+        myvar - DeciValue::from_floats(vec![0.0, 0.0, 1.0]),
+        *compute
+            .get_value("id-1".to_string())
+            .expect("to return defined")
+    );
+    let temp1 = compute.get_value("id-1".to_string()).expect("").clone();
+
+    println!(
+        "{}",
+        compute.get_value("id-0".to_string()).expect("").clone()
+            == temp1 + DeciValue::from_floats(vec![-1.0, -2.0, 0.0])
+    )
 }
 
 #[test]
@@ -261,7 +437,7 @@ fn test_inject_csv() {
         1948,Porsche,356,Luxury sports car,true
         1967,Ford,Mustang fastback 1967,American car,False";
 
-    let (names, res) = internal_parse_csv(&csv.to_string()).expect("to not have errors");
+    let (names, res) = internal_parse_csv(&csv.to_string(), true).expect("to not have errors");
 
     assert_eq!(names[0], "year");
     assert_eq!(names[1], "make");

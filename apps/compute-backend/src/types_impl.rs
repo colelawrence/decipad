@@ -1,5 +1,6 @@
 use std::{
     cmp::min,
+    iter::FromIterator,
     ops::{Add, Div, Mul, Sub},
 };
 
@@ -9,7 +10,12 @@ use num::{
     Zero,
 };
 
+use conv::ApproxInto;
+use wasm_bindgen::JsValue;
+
 use crate::types::{DeciCommon, DeciFloat, DeciFrac, DeciValue, NCol};
+
+use js_sys::{Array, Object};
 
 ///
 /// This file contains the implementation functions for Rust primitives
@@ -162,6 +168,37 @@ impl Add<DeciFloat> for DeciFrac {
     }
 }
 
+impl<T> Add<T> for DeciFrac
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFrac;
+
+    fn add(self, other: T) -> DeciFrac {
+        let val = DeciFloat {
+            val: other.approx_into().unwrap(),
+            inf: false,
+            und: false,
+        };
+        self + val
+    }
+}
+
+impl<T> Add<T> for DeciFloat
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFloat;
+
+    fn add(self, other: T) -> DeciFloat {
+        DeciFloat {
+            val: self.val + other.approx_into().unwrap(),
+            inf: self.inf,
+            und: self.und,
+        }
+    }
+}
+
 impl Sub for DeciFloat {
     type Output = DeciFloat;
 
@@ -184,6 +221,53 @@ impl Sub for DeciFrac {
             d: denlcm,
             inf: self.inf || other.inf,
             und: self.und || other.und,
+        }
+    }
+}
+
+impl Sub<DeciFrac> for DeciFloat {
+    type Output = DeciFrac;
+
+    fn sub(self, other: DeciFrac) -> DeciFrac {
+        self.to_frac() - other
+    }
+}
+
+impl Sub<DeciFloat> for DeciFrac {
+    type Output = DeciFrac;
+
+    fn sub(self, other: DeciFloat) -> DeciFrac {
+        self - other.to_frac()
+    }
+}
+
+impl<T> Sub<T> for DeciFrac
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFrac;
+
+    fn sub(self, other: T) -> DeciFrac {
+        let val = DeciFloat {
+            val: other.approx_into().unwrap(),
+            inf: false,
+            und: false,
+        };
+        self - val
+    }
+}
+
+impl<T> Sub<T> for DeciFloat
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFloat;
+
+    fn sub(self, other: T) -> DeciFloat {
+        DeciFloat {
+            val: self.val - other.approx_into().unwrap(),
+            inf: self.inf,
+            und: self.und,
         }
     }
 }
@@ -213,37 +297,142 @@ impl Mul for DeciFrac {
     }
 }
 
+impl Mul<DeciFrac> for DeciFloat {
+    type Output = DeciFrac;
+
+    fn mul(self, other: DeciFrac) -> DeciFrac {
+        other * self.to_frac()
+    }
+}
+
+impl Mul<DeciFloat> for DeciFrac {
+    type Output = DeciFrac;
+
+    fn mul(self, other: DeciFloat) -> DeciFrac {
+        self * other.to_frac()
+    }
+}
+
+impl<T> Mul<T> for DeciFrac
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFrac;
+    fn mul(self, other: T) -> DeciFrac {
+        let val = DeciFloat {
+            val: other.approx_into().unwrap(),
+            inf: false,
+            und: false,
+        };
+        self * val
+    }
+}
+
+impl<T> Mul<T> for DeciFloat
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFloat;
+
+    fn mul(self, other: T) -> DeciFloat {
+        DeciFloat {
+            val: self.val * other.approx_into().unwrap(),
+            inf: self.inf,
+            und: self.und,
+        }
+    }
+}
+
 impl Div for DeciFloat {
     type Output = DeciFloat;
 
     fn div(self, other: DeciFloat) -> DeciFloat {
         DeciFloat {
-            val: if other.val != 0.0 {
+            val: if other.val != 0.0 && !other.inf && !other.und {
                 self.val / other.val
             } else {
                 0.0
             },
+            inf: self.inf || other.val == 0.0,
+            und: self.und || other.inf || other.und,
+        }
+    }
+}
+
+impl Div for DeciFrac {
+    type Output = DeciFrac;
+
+    fn div(self, other: DeciFrac) -> DeciFrac {
+        DeciFrac {
+            n: self.n * other.d,
+            d: other.n * self.d,
+            inf: self.inf || other.d == 0,
+            und: self.und || other.und,
+        }
+    }
+}
+
+impl Div<DeciFrac> for DeciFloat {
+    type Output = DeciFrac;
+
+    fn div(self, other: DeciFrac) -> DeciFrac {
+        self.to_frac() / other
+    }
+}
+
+impl Div<DeciFloat> for DeciFrac {
+    type Output = DeciFrac;
+
+    fn div(self, other: DeciFloat) -> DeciFrac {
+        self / other.to_frac()
+    }
+}
+
+impl<T> Div<T> for DeciFrac
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFrac;
+
+    fn div(self, other: T) -> DeciFrac {
+        let val = DeciFloat {
+            val: other.approx_into().unwrap(),
+            inf: false,
+            und: false,
+        };
+        self / val
+    }
+}
+
+impl<T> Div<T> for DeciFloat
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = DeciFloat;
+
+    fn div(self, other: T) -> DeciFloat {
+        DeciFloat {
+            val: self.val / other.approx_into().unwrap(),
             inf: self.inf,
-            und: self.und || other.inf || other.und || other.val == 0.0,
+            und: self.und,
         }
     }
 }
 
 impl NCol {
-    pub fn from_frac(nums: Vec<i64>, dens: Vec<i64>) -> Option<NCol> {
+    pub fn from_frac(nums: Vec<i64>, dens: Vec<i64>) -> NCol {
+        assert_eq!(nums.len(), dens.len());
+
         let mut fracs = vec![];
-        if nums.len() == dens.len() {
-            for (n, d) in nums.iter().zip(dens.iter()) {
-                fracs.push(DeciFrac {
-                    n: *n,
-                    d: *d,
-                    inf: false,
-                    und: false,
-                });
-            }
-            return Some(NCol::FracCol(fracs));
+        for (n, d) in nums.iter().zip(dens.iter()) {
+            fracs.push(DeciFrac {
+                n: *n,
+                d: *d,
+                inf: false,
+                und: false,
+            });
         }
-        None
+        NCol::FracCol(fracs)
     }
 
     pub fn from_float(nums: Vec<f64>) -> NCol {
@@ -345,6 +534,86 @@ impl NCol {
             NCol::FloatCol(a) => a.iter().map(|x| x.get_float()).collect(),
         }
     }
+
+    pub fn min_frac(&self) -> Vec<i64> {
+        match self {
+            NCol::FracCol(a) => {
+                let mut minfrac = a[0];
+                for frac in a.iter().skip(1) {
+                    if *frac < minfrac {
+                        minfrac = *frac;
+                    }
+                }
+                vec![minfrac.n, minfrac.d]
+            }
+            NCol::FloatCol(a) => {
+                let mut minval = a[0];
+                for val in a.iter().skip(1) {
+                    if *val < minval {
+                        minval = *val;
+                    }
+                }
+                let minfrac = minval.to_frac();
+                vec![minfrac.n, minfrac.d]
+            }
+        }
+    }
+
+    pub fn max_frac(&self) -> Vec<i64> {
+        match self {
+            NCol::FracCol(a) => {
+                let mut maxfrac = a[0];
+                for frac in a.iter().skip(1) {
+                    if *frac > maxfrac {
+                        maxfrac = *frac;
+                    }
+                }
+                vec![maxfrac.n, maxfrac.d]
+            }
+            NCol::FloatCol(a) => {
+                let mut maxval = a[0];
+                for val in a.iter().skip(1) {
+                    if *val > maxval {
+                        maxval = *val;
+                    }
+                }
+                let maxfrac = maxval.to_frac();
+                vec![maxfrac.n, maxfrac.d]
+            }
+        }
+    }
+
+    pub fn eq_num(&self, num: DeciFrac) -> Vec<bool> {
+        match self {
+            NCol::FracCol(a) => a.iter().map(|x| *x == num).collect(),
+            NCol::FloatCol(a) => a.iter().map(|x| *x == num).collect(),
+        }
+    }
+
+    pub fn gt_num(&self, num: DeciFrac) -> Vec<bool> {
+        match self {
+            NCol::FracCol(a) => a.iter().map(|x| *x > num).collect(),
+            NCol::FloatCol(a) => a.iter().map(|x| *x > num).collect(),
+        }
+    }
+    pub fn ge_num(&self, num: DeciFrac) -> Vec<bool> {
+        match self {
+            NCol::FracCol(a) => a.iter().map(|x| *x >= num).collect(),
+            NCol::FloatCol(a) => a.iter().map(|x| *x >= num).collect(),
+        }
+    }
+    pub fn lt_num(&self, num: DeciFrac) -> Vec<bool> {
+        match self {
+            NCol::FracCol(a) => a.iter().map(|x| *x < num).collect(),
+            NCol::FloatCol(a) => a.iter().map(|x| *x < num).collect(),
+        }
+    }
+    pub fn le_num(&self, num: DeciFrac) -> Vec<bool> {
+        match self {
+            NCol::FracCol(a) => a.iter().map(|x| *x <= num).collect(),
+            NCol::FloatCol(a) => a.iter().map(|x| *x <= num).collect(),
+        }
+    }
 }
 
 impl Add for NCol {
@@ -376,12 +645,479 @@ impl Add for NCol {
     }
 }
 
+impl Sub for NCol {
+    type Output = NCol;
+
+    fn sub(self, other: NCol) -> NCol {
+        match (self, other) {
+            (NCol::FloatCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifloat(tuples.map(|(a, b)| *a - *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a - *b).collect())
+            }
+            (NCol::FloatCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a - *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a - *b).collect())
+            }
+        }
+    }
+}
+
+impl Mul for NCol {
+    type Output = NCol;
+
+    fn mul(self, other: NCol) -> NCol {
+        match (self, other) {
+            (NCol::FloatCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifloat(tuples.map(|(a, b)| *a * *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a * *b).collect())
+            }
+            (NCol::FloatCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a * *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a * *b).collect())
+            }
+        }
+    }
+}
+
+impl Div for NCol {
+    type Output = NCol;
+
+    fn div(self, other: NCol) -> NCol {
+        match (self, other) {
+            (NCol::FloatCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifloat(tuples.map(|(a, b)| *a / *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a / *b).collect())
+            }
+            (NCol::FloatCol(a), NCol::FracCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a / *b).collect())
+            }
+            (NCol::FracCol(a), NCol::FloatCol(b)) => {
+                let num: usize = min(a.len(), b.len());
+                let tuples = a[0..num].iter().zip(b[0..num].iter());
+                NCol::from_decifrac(tuples.map(|(a, b)| *a / *b).collect())
+            }
+        }
+    }
+}
+
+impl<T> Add<T> for NCol
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = NCol;
+
+    fn add(self, other: T) -> NCol {
+        match self {
+            NCol::FloatCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifloat(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    };
+                    num
+                ]);
+                NCol::from_decifloat(col) + v
+            }
+            NCol::FracCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifrac(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    }
+                    .to_frac();
+                    num
+                ]);
+                NCol::from_decifrac(col) + v
+            }
+        }
+    }
+}
+
+impl<T> Sub<T> for NCol
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = NCol;
+
+    fn sub(self, other: T) -> NCol {
+        match self {
+            NCol::FloatCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifloat(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    };
+                    num
+                ]);
+                NCol::from_decifloat(col) - v
+            }
+            NCol::FracCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifrac(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    }
+                    .to_frac();
+                    num
+                ]);
+                NCol::from_decifrac(col) - v
+            }
+        }
+    }
+}
+
+impl<T> Mul<T> for NCol
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = NCol;
+
+    fn mul(self, other: T) -> NCol {
+        match self {
+            NCol::FloatCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifloat(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    };
+                    num
+                ]);
+                NCol::from_decifloat(col) * v
+            }
+            NCol::FracCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifrac(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    }
+                    .to_frac();
+                    num
+                ]);
+                NCol::from_decifrac(col) * v
+            }
+        }
+    }
+}
+
+impl<T> Div<T> for NCol
+where
+    T: ApproxInto<f64> + Copy,
+{
+    type Output = NCol;
+
+    fn div(self, other: T) -> NCol {
+        match self {
+            NCol::FloatCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifloat(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    };
+                    num
+                ]);
+                NCol::from_decifloat(col) / v
+            }
+            NCol::FracCol(col) => {
+                let num: usize = col.len();
+                let v = NCol::from_decifrac(vec![
+                    DeciFloat {
+                        val: other.approx_into().unwrap(),
+                        inf: false,
+                        und: false
+                    }
+                    .to_frac();
+                    num
+                ]);
+                NCol::from_decifrac(col) / v
+            }
+        }
+    }
+}
+
 impl DeciValue {
     pub fn from_floats(floats: Vec<f64>) -> DeciValue {
         DeciValue::NumberColumn(NCol::from_float(floats))
     }
 
     pub fn from_fracs(nums: Vec<i64>, dens: Vec<i64>) -> DeciValue {
-        DeciValue::NumberColumn(NCol::from_frac(nums, dens).unwrap())
+        DeciValue::NumberColumn(NCol::from_frac(nums, dens))
+    }
+
+    pub fn len(&self) -> usize {
+        match self {
+            DeciValue::NumberColumn(a) => a.len(),
+            DeciValue::BooleanColumn(a) => a.len(),
+            DeciValue::StringColumn(a) => a.len(),
+        }
+    }
+
+    pub fn eq_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+        match self {
+            DeciValue::NumberColumn(a) => Some(a.eq_num(val)),
+            DeciValue::BooleanColumn(a) => None,
+            DeciValue::StringColumn(a) => None,
+        }
+    }
+
+    pub fn gt_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+        match self {
+            DeciValue::NumberColumn(a) => Some(a.gt_num(val)),
+            DeciValue::BooleanColumn(a) => None,
+            DeciValue::StringColumn(a) => None,
+        }
+    }
+
+    pub fn ge_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+        match self {
+            DeciValue::NumberColumn(a) => Some(a.ge_num(val)),
+            DeciValue::BooleanColumn(a) => None,
+            DeciValue::StringColumn(a) => None,
+        }
+    }
+
+    pub fn lt_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+        match self {
+            DeciValue::NumberColumn(a) => Some(a.lt_num(val)),
+            DeciValue::BooleanColumn(a) => None,
+            DeciValue::StringColumn(a) => None,
+        }
+    }
+
+    pub fn le_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+        match self {
+            DeciValue::NumberColumn(a) => Some(a.le_num(val)),
+            DeciValue::BooleanColumn(a) => None,
+            DeciValue::StringColumn(a) => None,
+        }
+    }
+
+    pub fn mask_with(&self, other: DeciValue) -> Option<DeciValue> {
+        match (self, other) {
+            (DeciValue::NumberColumn(v), DeciValue::BooleanColumn(m)) => match v {
+                NCol::FracCol(f) => Some(DeciValue::NumberColumn(NCol::from_decifrac(
+                    f.iter()
+                        .zip(m.iter())
+                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
+                        .collect(),
+                ))),
+                NCol::FloatCol(f) => Some(DeciValue::NumberColumn(NCol::from_decifloat(
+                    f.iter()
+                        .zip(m.iter())
+                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
+                        .collect(),
+                ))),
+            },
+            (DeciValue::BooleanColumn(v), DeciValue::BooleanColumn(m)) => {
+                Some(DeciValue::BooleanColumn(
+                    v.iter()
+                        .zip(m.iter())
+                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
+                        .collect(),
+                ))
+            }
+            (DeciValue::StringColumn(v), DeciValue::BooleanColumn(m)) => {
+                Some(DeciValue::StringColumn(
+                    v.iter()
+                        .zip(m.iter())
+                        .filter_map(|(val, mask)| if *mask { Some(val.clone()) } else { None })
+                        .collect(),
+                ))
+            }
+            _ => None,
+        }
+    }
+
+    pub fn toJsVal(self) -> Object {
+        let obj = Object::new();
+        match self {
+            DeciValue::NumberColumn(ncol) => {
+                let fraccol = ncol.to_float();
+                match fraccol {
+                    NCol::FracCol(fracs) => {
+                        let frac = Object::new();
+                        _ = js_sys::Reflect::set(
+                            &frac,
+                            &"num".into(),
+                            &Array::from_iter(fracs.iter().map(|x| JsValue::from_f64(x.n as f64))),
+                        );
+                        _ = js_sys::Reflect::set(
+                            &frac,
+                            &"den".into(),
+                            &Array::from_iter(fracs.iter().map(|x| JsValue::from_f64(x.d as f64))),
+                        );
+                    }
+                    _ => panic!("impossible"),
+                }
+            }
+            DeciValue::BooleanColumn(bcol) => {
+                _ = js_sys::Reflect::set(
+                    &obj,
+                    &"temp".into(),
+                    &Array::from_iter(bcol.iter().map(|x| JsValue::from_bool(*x))),
+                );
+            }
+            DeciValue::StringColumn(scol) => {
+                _ = js_sys::Reflect::set(
+                    &obj,
+                    &"temp".into(),
+                    &Array::from_iter(scol.iter().map(|x| JsValue::from_str(x))),
+                );
+            }
+        }
+        obj
+    }
+}
+
+impl Add for DeciValue {
+    type Output = DeciValue;
+
+    fn add(self, other: DeciValue) -> DeciValue {
+        match (self, other) {
+            (DeciValue::NumberColumn(a), DeciValue::NumberColumn(b)) => {
+                DeciValue::NumberColumn(a + b)
+            }
+            _ => panic!("Can't add this value"),
+        }
+    }
+}
+
+impl Sub for DeciValue {
+    type Output = DeciValue;
+
+    fn sub(self, other: DeciValue) -> DeciValue {
+        match (self, other) {
+            (DeciValue::NumberColumn(a), DeciValue::NumberColumn(b)) => {
+                DeciValue::NumberColumn(a - b)
+            }
+            _ => panic!("Can't subtract this value"),
+        }
+    }
+}
+
+impl Mul for DeciValue {
+    type Output = DeciValue;
+
+    fn mul(self, other: DeciValue) -> DeciValue {
+        match (self, other) {
+            (DeciValue::NumberColumn(a), DeciValue::NumberColumn(b)) => {
+                DeciValue::NumberColumn(a * b)
+            }
+            _ => panic!("Can't multiply this value"),
+        }
+    }
+}
+
+impl Div for DeciValue {
+    type Output = DeciValue;
+
+    fn div(self, other: DeciValue) -> DeciValue {
+        match (self, other) {
+            (DeciValue::NumberColumn(a), DeciValue::NumberColumn(b)) => {
+                DeciValue::NumberColumn(a / b)
+            }
+            _ => panic!("Can't divide this value"),
+        }
+    }
+}
+
+impl<T> Add<T> for DeciValue
+where
+    T: ApproxInto<f64>,
+{
+    type Output = DeciValue;
+
+    fn add(self, other: T) -> DeciValue {
+        match self {
+            DeciValue::NumberColumn(a) => DeciValue::NumberColumn(a + other.approx_into().unwrap()),
+            _ => panic!("Can't add this value"),
+        }
+    }
+}
+
+impl<T> Sub<T> for DeciValue
+where
+    T: ApproxInto<f64>,
+{
+    type Output = DeciValue;
+
+    fn sub(self, other: T) -> DeciValue {
+        match self {
+            DeciValue::NumberColumn(a) => DeciValue::NumberColumn(a - other.approx_into().unwrap()),
+            _ => panic!("Can't add this value"),
+        }
+    }
+}
+
+impl<T> Mul<T> for DeciValue
+where
+    T: ApproxInto<f64>,
+{
+    type Output = DeciValue;
+
+    fn mul(self, other: T) -> DeciValue {
+        match self {
+            DeciValue::NumberColumn(a) => DeciValue::NumberColumn(a * other.approx_into().unwrap()),
+            _ => panic!("Can't add this value"),
+        }
+    }
+}
+
+impl<T> Div<T> for DeciValue
+where
+    T: ApproxInto<f64>,
+{
+    type Output = DeciValue;
+
+    fn div(self, other: T) -> DeciValue {
+        match self {
+            DeciValue::NumberColumn(a) => DeciValue::NumberColumn(a / other.approx_into().unwrap()),
+            _ => panic!("Can't add this value"),
+        }
     }
 }
