@@ -1,21 +1,21 @@
-import type { Sharp } from 'sharp';
-import sharp from 'sharp';
 import type { Dimensions } from './types';
+import Jimp from 'jimp';
 
 const MAX_WIDTH = 580;
 
-const resizeToDimensions = async (image: Sharp): Promise<Dimensions> => {
-  const metadata = await image.metadata();
-  const imageWidth = metadata.width ?? Infinity;
+const resizeToDimensions = (image: Jimp): Dimensions => {
+  const imageWidth = image.bitmap.width;
   const width = Math.min(imageWidth, MAX_WIDTH);
-  const originalImageHeight = metadata.height ?? Infinity;
+  const originalImageHeight = image.bitmap.height;
   const ratio = imageWidth / originalImageHeight;
   const height = Math.round(width / ratio);
   return { width, height };
 };
 
 export const resize = async (imageSource: Buffer): Promise<Buffer> => {
-  const image = sharp(imageSource);
-  const { width, height } = await resizeToDimensions(image);
-  return image.resize(width, height).png().toBuffer();
+  const image = await Jimp.read(imageSource);
+  const { width, height } = resizeToDimensions(image);
+  image.resize(width, height);
+
+  return image.getBufferAsync(Jimp.MIME_PNG);
 };

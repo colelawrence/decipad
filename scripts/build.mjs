@@ -116,7 +116,6 @@ async function esBuildOptions(env) {
     external: [
       'aws-sdk',
       '@aws-sdk/*',
-      'sharp',
       'canvas',
       'jsdom',
       'better-sqlite3',
@@ -172,10 +171,6 @@ const env = getEnv();
 printEnv(env);
 console.log('');
 
-const installLambdaDependencies = async () => {
-  await pExec(join(__dirname, '..', 'apps', 'backend', 'scripts', 'build.mjs'));
-};
-
 const hackyGraphqlBuild = async () => {
   await pExec(join(__dirname, 'hacky-build-graphql.sh'));
 };
@@ -188,8 +183,6 @@ const buildTraditionalLambdas = async () => {
     const ctx = await esbuild.context({ ...buildOptions });
     await ctx.watch();
   } else {
-    // console.log('esbuild options: ', buildOptions);
-    // console.log('');
     await esbuild.build(buildOptions);
   }
 };
@@ -208,7 +201,6 @@ const buildSSRLambdas = async (watch) => {
 
 (async () => {
   await hackyGraphqlBuild();
-  await installLambdaDependencies();
   await buildTraditionalLambdas();
   if (process.env.DECI_SSR) {
     // await buildSSRLambdas();
