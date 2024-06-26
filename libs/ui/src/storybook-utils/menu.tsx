@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import * as RadixDropdown from '@radix-ui/react-dropdown-menu';
-import { DecoratorFn } from '@storybook/react';
+import { Decorator } from '@storybook/react';
 
-export const inMenu: DecoratorFn = (story) => (
+export const inMenu: Decorator = (story) => (
   <RadixDropdown.Root open modal={false}>
     <RadixDropdown.Trigger asChild>
       <div css={{ display: 'none' }} />

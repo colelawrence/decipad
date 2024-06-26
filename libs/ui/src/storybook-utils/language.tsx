@@ -1,9 +1,9 @@
 import { Result, SerializedTypeKind } from '@decipad/remote-computer';
-import { DecoratorFn } from '@storybook/react';
+import { Decorator } from '@storybook/react';
 import { useEffect, useState } from 'react';
 import { runCode } from '../test-utils';
 
-type CodeDecoratorFactory = (code: string, asResult?: boolean) => DecoratorFn;
+type CodeDecoratorFactory = (code: string, asResult?: boolean) => Decorator;
 
 export type WithCodeProps<T extends SerializedTypeKind> = Result.Result<T>;
 

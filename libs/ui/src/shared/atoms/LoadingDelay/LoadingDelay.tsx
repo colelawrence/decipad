@@ -1,7 +1,7 @@
 import { css, keyframes } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 
-interface LoadingDelayProps {
+export interface LoadingDelayProps {
   readonly children: ReactNode;
 }
 

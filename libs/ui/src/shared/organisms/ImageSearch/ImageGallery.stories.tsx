@@ -1,5 +1,5 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ImageGallery } from './ImageGallery';
+import { Meta, StoryFn } from '@storybook/react';
+import { ImageGallery, ImageGalleryProps } from './ImageGallery';
 
 const unsplashImages = [
   'https://images.unsplash.com/photo-1493612276216-ee3925520721?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzIzMzZ8MHwxfHNlYXJjaHwxfHxyYW5kb218ZW58MHx8fHwxNzA5ODkyMDA4fDA&ixlib=rb-4.0.3&q=80&w=400',
@@ -34,16 +34,17 @@ const unsplashImages = [
   'https://images.unsplash.com/photo-1605142859862-978be7eba909?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzIzMzZ8MHwxfHNlYXJjaHwzMHx8cmFuZG9tfGVufDB8fHx8MTcwOTg5MjAwOHww&ixlib=rb-4.0.3&q=80&w=400',
 ];
 
-export default {
+const meta: Meta<typeof ImageGallery> = {
   title: 'Molecule / AI / ImageGallery',
   component: ImageGallery,
-} as ComponentMeta<typeof ImageGallery>;
+};
 
-const Template: ComponentStory<typeof ImageGallery> = (args) => (
+export default meta;
+const Template: StoryFn<ImageGalleryProps> = (args) => (
   <ImageGallery {...args} />
 );
 
-export const Default = Template.bind({});
+export const Default: StoryFn<ImageGalleryProps> = Template.bind({});
 Default.args = {
   imageUrls: unsplashImages,
   loading: false,
@@ -51,7 +52,7 @@ Default.args = {
   insertFromPreview: () => 1,
 };
 
-export const LoadingState = Template.bind({});
+export const LoadingState: StoryFn<ImageGalleryProps> = Template.bind({});
 LoadingState.args = {
   imageUrls: [],
   loading: true,
