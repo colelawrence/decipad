@@ -125,15 +125,17 @@ const stringifyUnit = (
       multiplierString = asNumber.toExponential().toString();
     }
     const [coefficient, exponent] = multiplierString.toString().split('e');
-    result.push({
-      type: 'unit-exponent',
-      originalValue: multiPrefix.toString(),
-      value: prettyENumbers(exponent, true, coefficient),
-    });
-    result.push({
-      type: 'unit-literal',
-      value: ' ',
-    });
+    if (exponent !== '+0') {
+      result.push({
+        type: 'unit-exponent',
+        originalValue: multiPrefix.toString(),
+        value: prettyENumbers(exponent, true, coefficient),
+      });
+      result.push({
+        type: 'unit-literal',
+        value: ' ',
+      });
+    }
   }
 
   if (prettify && pretty) {
