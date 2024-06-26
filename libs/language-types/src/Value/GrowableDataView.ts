@@ -13,6 +13,19 @@ const defaults: AllWriteSerializedColumnOptions = {
 
 const supportsSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
 
+const hackyResizeArrayBuffer = <TBuf extends ArrayBuffer | SharedArrayBuffer>(
+  buffer: TBuf,
+  growBy: number
+): TBuf => {
+  const newBuffer = new (
+    supportsSharedArrayBuffer && buffer instanceof SharedArrayBuffer
+      ? SharedArrayBuffer
+      : ArrayBuffer
+  )(buffer.byteLength + growBy);
+  new Uint8Array(newBuffer).set(new Uint8Array(buffer));
+  return newBuffer as TBuf;
+};
+
 export class GrowableDataView<
   TBuffer extends SharedArrayBuffer | ArrayBuffer =
     | SharedArrayBuffer
@@ -42,21 +55,19 @@ export class GrowableDataView<
     while (size > this.buf.byteLength) {
       if (this.buf instanceof ArrayBuffer) {
         if (!this.buf.resizable) {
-          throw new Error(
-            "You have an outdated browser, please update. If you're using Firefox, please use another browser"
-          );
+          this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
+        } else {
+          this.buf.resize(this.buf.byteLength + this.options.pageSize);
         }
-        this.buf.resize(this.buf.byteLength + this.options.pageSize);
       } else if (
         supportsSharedArrayBuffer &&
         this.buf instanceof SharedArrayBuffer
       ) {
         if (!this.buf.growable) {
-          throw new Error(
-            "You have an outdated browser, please update. If you're using Firefox, please use another browser"
-          );
+          this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
+        } else {
+          this.buf.grow(this.buf.byteLength + this.options.pageSize);
         }
-        this.buf.grow(this.buf.byteLength + this.options.pageSize);
       }
     }
   }
