@@ -6,9 +6,9 @@ export type ThemePreference = 'system' | 'light' | 'dark';
 
 const getItem =
   // eslint-disable-next-line no-constant-condition
-  typeof 'localStorage' in global
-    ? global.localStorage.getItem.bind(global.localStorage)
-    : (_key: string) => false;
+  typeof localStorage !== 'undefined'
+    ? localStorage.getItem.bind(localStorage)
+    : (_key: string) => null;
 
 const isSystemThemeDark = (): boolean => {
   if (!(typeof matchMedia === 'function')) {
