@@ -113,7 +113,7 @@ export class Computer implements ComputerInterface {
   // streams
   private readonly computeRequests = new Subject<ComputeDeltaRequestWithDone>();
   private resultStreams = new ResultStreams(this);
-  public results = this.resultStreams.global;
+  public readonly results = this.resultStreams.global;
   private flushedSubject = new BehaviorSubject<boolean>(true);
 
   private deltaQueue = fnQueue({
@@ -882,7 +882,7 @@ export class Computer implements ComputerInterface {
     this.latestProgram = emptyComputerProgram();
     this.latestExternalData = new Map();
     this.computationRealm = new ComputationRealm();
-    this.results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
+    this.results.next(defaultComputerResults);
     this.computationQueue = fnQueue();
     this.wireRequestsToResults();
   }

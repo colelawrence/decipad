@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { fnQueue } from '@decipad/fnqueue';
-import type { PromiseOrType } from '@decipad/utils';
+import { timeout, type PromiseOrType } from '@decipad/utils';
 import type {
   TBaseNotificationParams,
   TSerializedNotificationParams,
@@ -145,31 +145,49 @@ export const createWorkerClient = <
     });
   });
 
-  return {
-    subscribe: async (params, listener) => {
-      return queue.push(async () => {
-        await rpc.isReady;
-        const subscriptionId = nanoid();
-        subscribers.set(subscriptionId, {
-          subscriptionParams: params,
-          listener,
-        });
-        const responseSubscriptionId = await rpc.call<string>('subscribe', {
-          ...(params ?? {}),
-          newSubscriptionId: subscriptionId,
-        });
-        if (responseSubscriptionId !== subscriptionId) {
-          console.error('Subscription id mismatch, params are', params);
-          throw new Error(
-            `Subscription id mismatch: ${responseSubscriptionId} !== ${subscriptionId}`
-          );
-        }
-        return async () => {
-          subscribers.delete(subscriptionId);
-          await rpc.call('unsubscribe', { subscriptionId });
-        };
+  const unguardedSubscribe = async (
+    params: TSubscriptionParams,
+    listener: SubscriptionListener<TSubscriptionParams, TNotificationParams>,
+    retryCount = 0
+  ): Promise<Unsubscribe> => {
+    await rpc.isReady;
+    const subscriptionId = nanoid();
+    subscribers.set(subscriptionId, {
+      subscriptionParams: params,
+      listener,
+    });
+
+    const unsubscribe: Unsubscribe = () => {
+      subscribers.delete(subscriptionId);
+      rpc.call('unsubscribe', { subscriptionId }).catch((err) => {
+        console.error('Error unsubscribing', err);
       });
-    },
+    };
+
+    const responseSubscriptionId = await rpc.call<string>('subscribe', {
+      ...(params ?? {}),
+      newSubscriptionId: subscriptionId,
+    });
+    if (responseSubscriptionId !== subscriptionId) {
+      console.error('Subscription id mismatch, params are', params);
+      console.log('responseSubscriptionId', responseSubscriptionId);
+      if (retryCount < 2) {
+        console.log('trying again...');
+        unsubscribe(); // just in case
+        await timeout(1000);
+        return unguardedSubscribe(params, listener, retryCount + 1);
+      }
+      throw new Error(
+        `Subscription id mismatch: ${responseSubscriptionId} !== ${subscriptionId}`
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    return unsubscribe;
+  };
+
+  return {
+    subscribe: (params, listener) =>
+      queue.push(() => unguardedSubscribe(params, listener)),
     terminate: () => {
       subscribers.clear();
       worker.terminate();

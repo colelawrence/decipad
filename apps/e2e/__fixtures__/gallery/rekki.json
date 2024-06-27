@@ -1,0 +1,3136 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Copy of Rekki - Order Based Pricing Template"
+				}
+			],
+			"type": "title",
+			"id": "KFcTM0tvpo9dYTEpuxQp5"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Your Current Costs"
+						}
+					],
+					"id": "HxI471tc4paquHd9lmZdP",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "KF-rE6EVkrHLy4JU0r0d0",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Edit the numbers below to get an accurate figure for you"
+								}
+							],
+							"type": "callout",
+							"id": "eyzOrtOlcaWdqo1fm1kPY",
+							"icon": "Pencil",
+							"color": "Sulu"
+						},
+						{
+							"children": [
+								{
+									"text": "Total savings: "
+								},
+								{
+									"text": "exprRef_MbbFtT7BVHmcC6A7RIjWy",
+									"magicnumberz": true
+								},
+								{
+									"text": " ( "
+								},
+								{
+									"text": "exprRef_mfY5S8Hi1e9jJMliaYSNC",
+									"magicnumberz": true
+								},
+								{
+									"text": "of processing and "
+								},
+								{
+									"text": "exprRef_FuGyJwBXFjLiYi1Hc2bYP",
+									"magicnumberz": true
+								},
+								{
+									"text": " from errors)"
+								}
+							],
+							"id": "ckIYATZ_ZRblr9YbIv_oX",
+							"type": "p"
+						}
+					],
+					"id": "-APWkMSSNb27MHPVx5AEM",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Orders"
+										}
+									],
+									"id": "Ke86i-qzSGW20F0QBAKhT",
+									"type": "caption",
+									"icon": "Kiosk",
+									"color": "Sulu"
+								},
+								{
+									"children": [
+										{
+											"text": "260 orders per week"
+										}
+									],
+									"id": "lblST5um7_1fmsWmM8DHe",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CUBr8VZL3LWaw1aAlsKJL",
+									"type": "slider",
+									"max": "500",
+									"min": "200",
+									"step": "20",
+									"value": "5"
+								}
+							],
+							"id": "VipfUxdFBM_P-ws3r9urg",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "The amount of orders you receive from "
+								},
+								{
+									"text": "all",
+									"italic": true
+								},
+								{
+									"text": " your customers in a typical week"
+								}
+							],
+							"type": "callout",
+							"id": "9qOFXVRiuxkAqntN1dILl",
+							"icon": "Kiosk",
+							"color": "Malibu"
+						}
+					],
+					"id": "4EwVKv2e6t_4-sibgvpmG",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "OrdersPerProcessor"
+										}
+									],
+									"id": "m7QthvGziKE261AMtesPa",
+									"type": "caption",
+									"color": "Sun",
+									"icon": "People"
+								},
+								{
+									"children": [
+										{
+											"text": "1000"
+										}
+									],
+									"id": "XaClYR2ldUpRQcd50emLw",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "esXMrvOFuKgQUwmqDgIN5",
+									"type": "slider",
+									"max": "2000",
+									"min": "500",
+									"step": "25",
+									"value": "5"
+								}
+							],
+							"id": "bX-r_dLkD0SLdAn3fTt3Z",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "Amount of orders a processor can do per month"
+								}
+							],
+							"type": "callout",
+							"id": "lyNuvV583LCB2tTLLkaJ3",
+							"color": "Sun",
+							"icon": "People"
+						}
+					],
+					"id": "m7tIHZl5-ptxywPLeQ-kV",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "AnnualSalary"
+										}
+									],
+									"id": "7Gw18pqiDSw6kl6ZHwyqT",
+									"type": "caption",
+									"color": "Grapefruit",
+									"icon": "Wallet"
+								},
+								{
+									"children": [
+										{
+											"text": "£27k"
+										}
+									],
+									"id": "41ZUM5KqjkiIey1tOLoKN",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KeynpX_PCN6irnOWf8jHE",
+									"type": "slider",
+									"max": "40",
+									"min": "10",
+									"step": "1",
+									"value": "5"
+								}
+							],
+							"id": "xcSG-KbmpRitlz3MpZgGm",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "Average salary of staff members incl. NI and associated costs"
+								}
+							],
+							"type": "callout",
+							"id": "xAPXkW8mechZcFkp6Z7Zf",
+							"color": "Grapefruit",
+							"icon": "Wallet"
+						}
+					],
+					"id": "fDV1rj4C_35QVA33bMnpx",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Customers"
+										}
+									],
+									"id": "0VhTHrww5Ly-MwGUwdCvC",
+									"type": "caption",
+									"icon": "Happy",
+									"color": "Perfume"
+								},
+								{
+									"children": [
+										{
+											"text": "200 buyers"
+										}
+									],
+									"id": "1fi4XrZfgQMX2FBCkJZV_",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xRG9etJJHB3oFF1b9aiei",
+									"type": "slider",
+									"max": "500",
+									"min": "20",
+									"step": "20",
+									"value": "5"
+								}
+							],
+							"id": "qD2gTc_26em2MjMC5tnDS",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "Enter the number of customers you have"
+								}
+							],
+							"type": "callout",
+							"id": "9m4RGyUFc1G36-dxPVNmd",
+							"color": "Perfume",
+							"icon": "Happy"
+						}
+					],
+					"id": "zpEf--HJgmZwL9xyUkaoZ",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "fEzm0Q_O7M-0DPjgK6FZ9"
+				},
+				{
+					"children": [
+						{
+							"text": "Costs Before and After REKKI"
+						}
+					],
+					"type": "h2",
+					"id": "Gt6Glm7DBK3uTUtfYIzfh"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "P-ezySfh4PHF50EFiGkAB",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "Before REKKI"
+						}
+					],
+					"type": "h3",
+					"id": "yN7Oje83v4WZvYX4q0cGF"
+				},
+				{
+					"children": [
+						{
+							"text": "Your processing costs are "
+						},
+						{
+							"text": "exprRef_wEJYp8e6CZQqXwiySijZL",
+							"magicnumberz": true
+						},
+						{
+							"text": " in salaries. \nYou process "
+						},
+						{
+							"text": "exprRef_VnvuGsi8BN1I4qndpOybL",
+							"magicnumberz": true
+						},
+						{
+							"text": " at a cost of  "
+						},
+						{
+							"text": "exprRef_CM0zi9_4GXOyLjoK4_Pnh",
+							"magicnumberz": true
+						},
+						{
+							"text": " and a team of "
+						},
+						{
+							"text": "stripunit(ceil(Staff))",
+							"magicnumberz": true
+						},
+						{
+							"text": " processors."
+						}
+					],
+					"type": "p",
+					"id": "q7LKOKVu-JISs1DmSTFId"
+				},
+				{
+					"children": [
+						{
+							"text": "Introducing REKKI Connect"
+						}
+					],
+					"id": "ha3mwDumNhVZf5IhSylA-",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "dpMGhCoKsChMm6KrpyToY",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "REKKI connect is deployed and starts processing a certain portion of your total orders. "
+						}
+					],
+					"id": "BBqkFlRUfQ1H8n25uuJEg",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "RekkiShare"
+										}
+									],
+									"id": "Jc-XB_MH3e0fRjT4zEOhl",
+									"type": "caption",
+									"icon": "Percentage",
+									"color": "Catskill"
+								},
+								{
+									"children": [
+										{
+											"text": "40%"
+										}
+									],
+									"id": "QNlqlB1BoeTJEtx8VB4rt",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "e_tRGd5NAW7xaD7EsML0a",
+									"type": "slider",
+									"max": "100",
+									"min": "10",
+									"step": "1",
+									"value": "5"
+								}
+							],
+							"id": "hpYie2XTzZDrsAHtBye0b",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "Percentage of orders "
+								},
+								{
+									"text": " ",
+									"italic": true
+								},
+								{
+									"text": "processed by REKKI"
+								}
+							],
+							"type": "callout",
+							"id": "4NmxZmb0Yf3Q6bm6FnRZ5",
+							"icon": "Percentage",
+							"color": "Catskill"
+						}
+					],
+					"id": "V6ljeumDThb4BxrSXD5Wj",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "This would mean that "
+						},
+						{
+							"text": "round(RekkiOrderCount, -1)",
+							"magicnumberz": true
+						},
+						{
+							"text": " are being processed by REKKI with "
+						},
+						{
+							"text": "exprRef_g8FHVRDifymAK4gXMw_Ef",
+							"magicnumberz": true
+						},
+						{
+							"text": " supervisor/s from your team (vs. "
+						},
+						{
+							"text": "stripunit(ceil(StaffRekkiRatio))",
+							"magicnumberz": true
+						},
+						{
+							"text": " before). "
+						}
+					],
+					"id": "dOX6YalgLcaNGWD6VLLER",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": " This translates to a saving of\n  "
+						},
+						{
+							"text": "round(RekkiSaving, -2)",
+							"magicnumberz": true
+						},
+						{
+							"text": " ("
+						},
+						{
+							"text": "exprRef_A6_JAB3FQd2OXnqZJnRbl",
+							"magicnumberz": true
+						},
+						{
+							"text": " headcount saving)"
+						}
+					],
+					"id": "RIOrSnJcRP95cHtpU3c5n",
+					"type": "h3",
+					"colorScheme": "multicolor_yellow"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Kwk63mIpgW2RQtvI3mOXy",
+					"type": "plot",
+					"title": "Number of Orders (x axis) vs Cost Savings in £ (y axis)",
+					"sourceVarName": "exprRef_wTdIYvdamhXfrmThAre_4",
+					"xColumnName": "Orders",
+					"yColumnName": "Savings",
+					"markType": "line",
+					"thetaColumnName": "",
+					"sizeColumnName": "",
+					"colorColumnName": "",
+					"y2ColumnName": "None",
+					"colorScheme": "multicolor_yellow"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "cbc10tRgsiH0CbsdgOGjn",
+					"type": "divider",
+					"colorScheme": "multicolor_yellow"
+				},
+				{
+					"children": [
+						{
+							"text": "Reducing Processing Errors"
+						}
+					],
+					"type": "h3",
+					"id": "2V1boAGeuaQ8dNXfI2grY",
+					"colorScheme": "multicolor_yellow"
+				},
+				{
+					"children": [
+						{
+							"text": "  Our suppliers are reporting a 95% drop in the volume of processing related errors. "
+						}
+					],
+					"type": "callout",
+					"id": "noufGNh0huB6jZmMC_B7b",
+					"color": "Sun"
+				},
+				{
+					"children": [
+						{
+							"text": "REKKI connect has been shown to reduce the number of processing related errors because over time, it captures all the different ways in which customers call a certain product, even if ambiguous. Let's do a quick calculation. "
+						}
+					],
+					"id": "SjBkwRxDAJn9wFcIwmQsT",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "A typical error in delivery costs the company "
+						}
+					],
+					"type": "p",
+					"id": "kCXwvVtV-KMK2bZ3IxVau"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "CostPerError"
+										}
+									],
+									"type": "caption",
+									"id": "LbC8hx2mevp4qHDn2l-TV",
+									"icon": "Construction",
+									"color": "Sun"
+								},
+								{
+									"children": [
+										{
+											"text": "£25 per error"
+										}
+									],
+									"type": "exp",
+									"id": "VAGpHNfonnFdKXIMva4gk"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"type": "slider",
+									"id": "C5JeoHIvD1G7ALQehQEY9",
+									"min": "10",
+									"max": "100",
+									"step": "5",
+									"value": "50"
+								}
+							],
+							"type": "def",
+							"variant": "slider",
+							"id": "kOnRrWEZsZMujT1axzP33"
+						},
+						{
+							"children": [
+								{
+									"text": "The cost to the business when an error occurs such as 2nd Deliveries, restocking, admin."
+								}
+							],
+							"type": "callout",
+							"id": "A7r9kgBTdJ4MA6eD8Pfkl",
+							"icon": "Construction",
+							"color": "Catskill"
+						}
+					],
+					"id": "UTXz0L4bDB81u5Pcg2AZx",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "Lets assume some error rate in your current operation:"
+						}
+					],
+					"type": "p",
+					"id": "skyKZGQA3x2qNGAzoe8w6"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "ErrorRate"
+										}
+									],
+									"id": "IjY9dkhtEN6GsC6kEurFJ",
+									"type": "caption",
+									"icon": "Percentage",
+									"color": "Sun"
+								},
+								{
+									"children": [
+										{
+											"text": "10%"
+										}
+									],
+									"id": "lLObu_fzz1ldaMj1yM3f-",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X1Khlttj_bdcfwSMszKbR",
+									"type": "slider",
+									"max": "15",
+									"min": "0",
+									"step": "1",
+									"value": "5"
+								}
+							],
+							"id": "I9ZvU4PhpY_FlB2BSpl66",
+							"type": "def",
+							"variant": "slider"
+						},
+						{
+							"children": [
+								{
+									"text": "Percentage of errors that happen in the business"
+								}
+							],
+							"type": "callout",
+							"id": "sps8bluEtHe71GHvVVg_O",
+							"icon": "Percentage",
+							"color": "Catskill"
+						}
+					],
+					"id": "EF9RMpdDhc1wYRat81kVi",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "For every "
+						},
+						{
+							"text": "100",
+							"magicnumberz": true
+						},
+						{
+							"text": " deliveries, there are "
+						},
+						{
+							"text": "100*ErrorRate",
+							"magicnumberz": true
+						},
+						{
+							"text": " deliveries that require some rectification. "
+						}
+					],
+					"type": "p",
+					"id": "FGW_dGz91VyNsvCosDxns"
+				},
+				{
+					"children": [
+						{
+							"text": "Now, not all errors are processing related. Some are driver/picking mistakes. So lets assume a % of deliveries caused by human error at processing:"
+						}
+					],
+					"type": "p",
+					"id": "_B9AA1970PdwRYm56uzTe"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "ProcessingErrorRate"
+										}
+									],
+									"type": "caption",
+									"id": "w6FNgo9hr90VmM9ZSi6e-",
+									"icon": "Route",
+									"color": "Sun"
+								},
+								{
+									"children": [
+										{
+											"text": "50%"
+										}
+									],
+									"type": "exp",
+									"id": "4ldfPHfpWnJXK8SNxV-IX"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"type": "slider",
+									"id": "xjUBUg19gVEnfLcErnG-C",
+									"min": "0",
+									"max": "100",
+									"step": "1",
+									"value": "30"
+								}
+							],
+							"type": "def",
+							"variant": "slider",
+							"id": "iFoOQtYuUWn2e48Ha8Oj9"
+						},
+						{
+							"children": [
+								{
+									"text": "Amount of errors that are attributable to processing errors"
+								}
+							],
+							"id": "kbjUcbFGwgI9LBN-cXWrF",
+							"type": "callout"
+						}
+					],
+					"id": "5_1e0TJ5kBcd6HoSGnaGi",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "Amount of errors that are attributable to processing errors"
+						}
+					],
+					"id": "3EvCOWVYw771KBfTWAiy4",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "This means an additional saving of  "
+						},
+						{
+							"text": "exprRef_FuGyJwBXFjLiYi1Hc2bYP",
+							"magicnumberz": true
+						},
+						{
+							"text": " due to increased accuracy.  Altogether, the monthly savings from processing "
+						},
+						{
+							"text": "and",
+							"italic": true
+						},
+						{
+							"text": " accuracy are "
+						},
+						{
+							"text": "exprRef_MbbFtT7BVHmcC6A7RIjWy",
+							"magicnumberz": true
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "p",
+					"id": "9GbqfbROgR0fEwHX2HTrP"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "axMJ3xYn8vaSijqH28kaX",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "JrI-LgGYKQkti90GJwOpt",
+					"type": "img",
+					"url": "https://app.decipad.com/api/pads/mt_iVN4zWMS8fq4STAN0E/attachments/fTr1hV-8sV04fJOoWzwxg",
+					"colorScheme": "multicolor_yellow"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "qXhOheb3Tg4asAclzTRnH"
+				}
+			],
+			"type": "tab",
+			"id": "C_fgQynW4zJ93p1S8zQNm",
+			"name": "Order Processing Costs",
+			"icon": "Truck"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Welcome to the Cost Comparison tool. This area is hidden from the client but you can use it to configure your document."
+						}
+					],
+					"id": "CZlqmembQEF-Uxq4_zXIu",
+					"type": "callout",
+					"color": "Catskill",
+					"icon": "Announcement"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "z4u4t9QlfTbComm-0Dqj0"
+				},
+				{
+					"children": [
+						{
+							"text": "Assumptions"
+						}
+					],
+					"id": "hjhcSQYgrXZ5hL3MAdW_7",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "joCtQdgfY504IZpfYrGL4",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "This is the amount of orders you assume a processor can do per month.\n"
+						},
+						{
+							"text": " If the client says he employs more or less staff, this is the number you can change to alter the performance of their team.",
+							"bold": true
+						}
+					],
+					"type": "p",
+					"id": "h2H7KnzQBYY44jTuCpHzo"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "StaffOutput"
+								}
+							],
+							"type": "structured_varname",
+							"id": "LChoBN3CGbrxkzn5kKHNN"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "OrdersPerProcessor",
+									"id": "_D1kTFhHj0x1ZWjnYceja",
+									"type": "smart-ref",
+									"blockId": "bX-r_dLkD0SLdAn3fTt3Z",
+									"columnId": null
+								},
+								{
+									"text": " orders per month "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "rogWlkVwmBuqLX4wyuq8V"
+						}
+					],
+					"id": "gP-IysrbRhkD8KI_FiWYK",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": "This is the processor supervision ratio after they start using Rekki"
+						}
+					],
+					"type": "p",
+					"id": "69-eHsXHgWYieOpxEVHNi"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SupRatio"
+								}
+							],
+							"type": "structured_varname",
+							"id": "xe6A6CVen5rxR6m-b9fJG"
+						},
+						{
+							"children": [
+								{
+									"text": "1 supervisor per 5K orders"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "fwgIIAqLJCgGril-Xy0H_"
+						}
+					],
+					"id": "7Qi7VnaYW9-fsQ6ONNwLm",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": "Hence the amount of Processors is "
+						},
+						{
+							"text": "exprRef_3tn_mMp0LQouAgo69mgxO",
+							"magicnumberz": true
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "p",
+					"id": "D1m2b9x6akcIoB1xQaT1n"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "wQ73Hc1ZOFv2nODapJ9wr"
+				},
+				{
+					"children": [
+						{
+							"text": "Client Definitions"
+						}
+					],
+					"id": "fcQmWuMRkQ7gbbGLt3pPW",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "bfT2EbRpGjsevkkXsuQLG",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "Here is the data record that corresponds to the slider:"
+						}
+					],
+					"type": "p",
+					"id": "FYHUy49lcNkdHlaB1UhjB"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Record"
+								}
+							],
+							"type": "structured_varname",
+							"id": "AjFy6uIrbSrKOR-rPhoS2"
+						},
+						{
+							"children": [
+								{
+									"text": "lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CdSZ9ER9MFdRZzpxR-nsg",
+									"type": "smart-ref",
+									"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+									"columnId": null,
+									"lastSeenVariableName": "Data"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AJ8y8aslB3uECaJbOBTmS",
+									"type": "smart-ref",
+									"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+									"columnId": "s1knqlv_VxuWlfaqGctp3",
+									"lastSeenVariableName": "Data.Slider"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "7M6BdPS0lwDiADF7u5fHJ"
+						}
+					],
+					"id": "Jr-8uI3hNnrf6G7jpv7UK",
+					"type": "code_line_v2",
+					"showResult": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MonthlyOrders"
+								}
+							],
+							"type": "structured_varname",
+							"id": "dD1fBcUfcKnqQWlYOqD9F"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.PerMonth"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "krCxj0qIiBqcEXpEQG4hU"
+						}
+					],
+					"id": "PB4s_LmWqCMLRKWq3l-kT",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CostBeforeRekki"
+								}
+							],
+							"type": "structured_varname",
+							"id": "Ga-b-0dFq326CCOUzvO67"
+						},
+						{
+							"children": [
+								{
+									"text": "round(Record.CostB4Rekki / 12 months)"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "2F5aMwn9h3FWUnSjGv8ZR"
+						}
+					],
+					"id": "wEJYp8e6CZQqXwiySijZL",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Staff"
+								}
+							],
+							"type": "structured_varname",
+							"id": "mVbgECgwzzAZzN1OCSBAA"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.StaffNeeded"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "kPs5_x0cXOUv565oij3C7"
+						}
+					],
+					"id": "3tn_mMp0LQouAgo69mgxO",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CostPerOrder"
+								}
+							],
+							"type": "structured_varname",
+							"id": "ehCdFMR3kW6zMdNgSlSiY"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.CostPerOrder"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "f3GCPMazZH7ws_FFl5UXv"
+						}
+					],
+					"id": "CM0zi9_4GXOyLjoK4_Pnh",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RekkiOrderCount"
+								}
+							],
+							"type": "structured_varname",
+							"id": "OE6dzmMoq7qb_AWPU6PGV"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.RekkiOrders"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "tiHLD1RCmcgxhVBuPa3Jr"
+						}
+					],
+					"id": "0klvhPREZXaVa1AhJaUy-",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PriceForClient"
+								}
+							],
+							"type": "structured_varname",
+							"id": "WbxLiMZaJKnSfyMjR9t7g"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.CostWithRekki"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "dV0ZQteqlcfxAN7Sht3D5"
+						}
+					],
+					"id": "wBYhs8lKehsd1aFlDJJo3",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "1RhWiLAbG_mlJuP9xf6FF"
+				},
+				{
+					"children": [
+						{
+							"text": "Rekki Definitions"
+						}
+					],
+					"type": "h3",
+					"id": "feHSDpZYnD4j5jf1cgjDS"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "4nuzCZqXb38OztbJyLUq0",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OrderPerBuyer"
+								}
+							],
+							"type": "structured_varname",
+							"id": "q2QFfdd-YFnKvArm42GvU"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "iePMeqPvyxn5PJh0SweSC",
+									"type": "smart-ref",
+									"blockId": "VipfUxdFBM_P-ws3r9urg",
+									"columnId": null,
+									"lastSeenVariableName": "Orders"
+								},
+								{
+									"text": " per "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7jF75HRjN2wroK7yg6FX4",
+									"type": "smart-ref",
+									"blockId": "qD2gTc_26em2MjMC5tnDS",
+									"columnId": null,
+									"lastSeenVariableName": "Customers"
+								},
+								{
+									"text": " in orders per buyer per month"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "JMialv5_CwRQtgTrX5-9d"
+						}
+					],
+					"id": "VnvuGsi8BN1I4qndpOybL",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Supervisors"
+								}
+							],
+							"type": "structured_varname",
+							"id": "4E8GVbHDpKzxq8IcNlAEI"
+						},
+						{
+							"children": [
+								{
+									"text": "stripunit(ceil("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RZkn-R83s1bXovLJvSuNq",
+									"type": "smart-ref",
+									"blockId": "PB4s_LmWqCMLRKWq3l-kT",
+									"columnId": null,
+									"lastSeenVariableName": "MonthlyOrders"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Q2aBy4RXhysEb2lCYfud7",
+									"type": "smart-ref",
+									"blockId": "hpYie2XTzZDrsAHtBye0b",
+									"columnId": null,
+									"lastSeenVariableName": "RekkiShare"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2UtJShiFertyWF-RANWj3",
+									"type": "smart-ref",
+									"blockId": "7Qi7VnaYW9-fsQ6ONNwLm",
+									"columnId": null,
+									"lastSeenVariableName": "SupRatio"
+								},
+								{
+									"text": "))"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "y56HZBk0O08J0WX0UpKhX"
+						}
+					],
+					"id": "g8FHVRDifymAK4gXMw-Ef",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "mEs1W4m1vKuIflw6vNJFw"
+				},
+				{
+					"children": [
+						{
+							"text": "Headcount savings"
+						}
+					],
+					"type": "h3",
+					"id": "MV1iBBEURomrLq7ced5dj"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "JNHEgPFmcP72zlt7bC6gY",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "StaffRekkiRatio"
+								}
+							],
+							"type": "structured_varname",
+							"id": "9bWnjNkUuCedOyHok9u0P"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LxEcmOU5o3wZuDEyj1vO9",
+									"type": "smart-ref",
+									"blockId": "3tn_mMp0LQouAgo69mgxO",
+									"columnId": null,
+									"lastSeenVariableName": "Staff"
+								},
+								{
+									"text": "  * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Z1LtvbjsZg_A5EMz8_VAP",
+									"type": "smart-ref",
+									"blockId": "hpYie2XTzZDrsAHtBye0b",
+									"columnId": null,
+									"lastSeenVariableName": "RekkiShare"
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "48bmmuVnicpiEyUfH7Hlp"
+						}
+					],
+					"id": "kdnPJgwmuWySP08zyQRKv",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "HeadcountSaving"
+								}
+							],
+							"type": "structured_varname",
+							"id": "U486qcsHvEPWcZ_9Eg4se"
+						},
+						{
+							"children": [
+								{
+									"text": "stripunit(ceil( "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bhsPZPTxBs4pFfKvlhb8l",
+									"type": "smart-ref",
+									"blockId": "kdnPJgwmuWySP08zyQRKv",
+									"columnId": null,
+									"lastSeenVariableName": "StaffRekkiRatio"
+								},
+								{
+									"text": "  - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QAUaX55FjyKyj7rimmO7S",
+									"type": "smart-ref",
+									"blockId": "g8FHVRDifymAK4gXMw-Ef",
+									"columnId": null,
+									"lastSeenVariableName": "Supervisors"
+								},
+								{
+									"text": " ))"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "fvre3qL0x2-dgkXgPq8tZ"
+						}
+					],
+					"id": "A6_JAB3FQd2OXnqZJnRbl",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "U6JKRiacJHuAJ4-DOtS0_",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "Processing Errors"
+						}
+					],
+					"type": "h3",
+					"id": "5-3oFZs-9k-XVvBewcEHu"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Ej3r-Pwmv8kGMl61oXMOY",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TotalSavings"
+								}
+							],
+							"type": "structured_varname",
+							"id": "3kCd-7FYdKbiRgCtQsbgy"
+						},
+						{
+							"children": [
+								{
+									"text": "round("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kJ-ouMG2iQicbftrDXqfM",
+									"type": "smart-ref",
+									"blockId": "FuGyJwBXFjLiYi1Hc2bYP",
+									"columnId": null,
+									"lastSeenVariableName": "ErrorSaving"
+								},
+								{
+									"text": " + "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WqWebiW12T7icODS4-39y",
+									"type": "smart-ref",
+									"blockId": "mfY5S8Hi1e9jJMliaYSNC",
+									"columnId": null,
+									"lastSeenVariableName": "RekkiSaving"
+								},
+								{
+									"text": ", 0) "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "TS-vA7t_vauBX8j27FpVo"
+						}
+					],
+					"id": "MbbFtT7BVHmcC6A7RIjWy",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ErrorSaving"
+								}
+							],
+							"type": "structured_varname",
+							"id": "EI6WjGCK4PPAjaSPtLlOG"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MlXablgtQKuTyR4oOqj9Z",
+									"type": "smart-ref",
+									"blockId": "PB4s_LmWqCMLRKWq3l-kT",
+									"columnId": null,
+									"lastSeenVariableName": "MonthlyOrders"
+								},
+								{
+									"text": "*"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lBSS4tBPp5krSutB8fXtK",
+									"type": "smart-ref",
+									"blockId": "I9ZvU4PhpY_FlB2BSpl66",
+									"columnId": null,
+									"lastSeenVariableName": "ErrorRate"
+								},
+								{
+									"text": "* "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Rco0VjsCbA3PZO1PpM4Rx",
+									"type": "smart-ref",
+									"blockId": "iFoOQtYuUWn2e48Ha8Oj9",
+									"columnId": null,
+									"lastSeenVariableName": "ProcessingErrorRate"
+								},
+								{
+									"text": "*"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "oMCa_ucnLwhC8gGeZtGHf",
+									"type": "smart-ref",
+									"blockId": "CM0zi9_4GXOyLjoK4_Pnh",
+									"columnId": null,
+									"lastSeenVariableName": "CostPerOrder"
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "Py9ePPXaoMvzm-w5fd5ir"
+						}
+					],
+					"id": "FuGyJwBXFjLiYi1Hc2bYP",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RekkiSaving"
+								}
+							],
+							"type": "structured_varname",
+							"id": "I1ibKTwQdgomU_H3yVvWh"
+						},
+						{
+							"children": [
+								{
+									"text": "Record.Savings "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "xIx6AwzVeVgzG26rraEwZ"
+						}
+					],
+					"id": "mfY5S8Hi1e9jJMliaYSNC",
+					"type": "code_line_v2",
+					"isHidden": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "RIwYJyQjleTP0CuuBKLW7"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "OvbhE_X-liXyVp11G2AOh"
+				}
+			],
+			"type": "tab",
+			"name": "Calculations",
+			"id": "mOFyrme29rsunZsr-fBHI",
+			"icon": "Frame",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Tables"
+						}
+					],
+					"type": "h3",
+					"id": "sAcYbVcC_zSxHLewM3iRu"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lZIGUW0pBj80oFINnaP4v",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Data"
+										}
+									],
+									"id": "kUQ1DsldhGdNaos2c5dCt",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "46tUfokLIYbWxcES_0AFa",
+											"type": "smart-ref",
+											"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+											"columnId": "kxyIMevJRrz1fNmUlJY0F",
+											"lastSeenVariableName": "Data.PerMonth"
+										},
+										{
+											"text": "   * "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Wc_1QNZa0hbJBogLeXXBV",
+											"type": "smart-ref",
+											"blockId": "hpYie2XTzZDrsAHtBye0b",
+											"columnId": null,
+											"lastSeenVariableName": "RekkiShare"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "IvNa9lWYQfpmevIs2Y88D",
+									"type": "table-column-formula",
+									"columnId": "oV3ijQ0AdSGjqYRrl6CmG"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ZeqyCT4ywLTay-3B5-s6p",
+											"type": "smart-ref",
+											"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+											"columnId": "B57o0SkdEwxveOtTG-wmY",
+											"lastSeenVariableName": "Data.Orders"
+										},
+										{
+											"text": "  in orders per month"
+										}
+									],
+									"id": "X8a5UKPhH36xRDmUMvVIy",
+									"type": "table-column-formula",
+									"columnId": "kxyIMevJRrz1fNmUlJY0F"
+								},
+								{
+									"children": [
+										{
+											"text": " stripunit(ceil("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "QWqV0cpaXqOTj0U8LJXoU",
+											"type": "smart-ref",
+											"blockId": "kxyIMevJRrz1fNmUlJY0F",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "PerMonth"
+										},
+										{
+											"text": " per "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "enaOxlKqqVTned6Vq5OM3",
+											"type": "smart-ref",
+											"blockId": "gP-IysrbRhkD8KI_FiWYK",
+											"columnId": null,
+											"lastSeenVariableName": "StaffOutput"
+										},
+										{
+											"text": " ))"
+										}
+									],
+									"id": "yf3fU1q5xkt2NayS5ajFC",
+									"type": "table-column-formula",
+									"columnId": "FNuioOcrQ1EBva6NfZMqK"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "lohXq5DNbG9W4J7Bs5Ciz",
+											"type": "smart-ref",
+											"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+											"columnId": "FNuioOcrQ1EBva6NfZMqK",
+											"lastSeenVariableName": "Data.StaffNeeded"
+										},
+										{
+											"text": " * "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ikvj3sBNYWv_QxLsazrAD",
+											"type": "smart-ref",
+											"blockId": "xcSG-KbmpRitlz3MpZgGm",
+											"columnId": null,
+											"lastSeenVariableName": "AnnualSalary"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "OKJ8HaO1jJiOgANnhyky6",
+									"type": "table-column-formula",
+									"columnId": "_rC4m8W8EpgFMroBFY8bG"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Vbx7AbrF5u7hEy9AvdzWc",
+											"type": "smart-ref",
+											"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+											"columnId": "_rC4m8W8EpgFMroBFY8bG",
+											"lastSeenVariableName": "Data.CostB4Rekki"
+										},
+										{
+											"text": " / 12 months / "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "lR1jJKVRthPDj37g9fzmb",
+											"type": "smart-ref",
+											"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+											"columnId": "kxyIMevJRrz1fNmUlJY0F",
+											"lastSeenVariableName": "Data.PerMonth"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "L1fMZTklDbJD9oz12rSi3",
+									"type": "table-column-formula",
+									"columnId": "HJXDMnoly6em5ETcHbbMT"
+								},
+								{
+									"children": [
+										{
+											"text": " OfferPrice("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ayNLfudXZZHqAaD32tdWd",
+											"type": "smart-ref",
+											"blockId": "oV3ijQ0AdSGjqYRrl6CmG",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "RekkiOrders"
+										},
+										{
+											"text": ")"
+										}
+									],
+									"id": "zwbFcULIEiXwwcLHHEnmq",
+									"type": "table-column-formula",
+									"columnId": "AqnAzW3IJQyCCxbQ1M4vy"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "acwyGx5PWGFltWG23__3a",
+											"type": "smart-ref",
+											"blockId": "HJXDMnoly6em5ETcHbbMT",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CostPerOrder"
+										},
+										{
+											"text": " -"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "EZmNpWiVdYxQO9AVCXgj8",
+											"type": "smart-ref",
+											"blockId": "AqnAzW3IJQyCCxbQ1M4vy",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CostWithRekki"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "LiAunnRDeygPc8ADHYdTI",
+									"type": "table-column-formula",
+									"columnId": "54bFimn2Q9M9Foh9EdiJt"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "TM_3nwTx7hl2UEXTByIyz",
+											"type": "smart-ref",
+											"blockId": "oV3ijQ0AdSGjqYRrl6CmG",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "RekkiOrders"
+										},
+										{
+											"text": " * "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "HRY-YPKjahW99pkoaZXnJ",
+											"type": "smart-ref",
+											"blockId": "54bFimn2Q9M9Foh9EdiJt",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "UnitSaving"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "G0AsG1BejIpomlYuueZ43",
+									"type": "table-column-formula",
+									"columnId": "S7joQXDbIUBJkXMgfgKag"
+								}
+							],
+							"id": "iCOBjQ-8cERYmZsmrBZMI",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Orders"
+										}
+									],
+									"width": 171,
+									"id": "B57o0SkdEwxveOtTG-wmY",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "orders",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": false
+											},
+											{
+												"unit": "weeks",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "-1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "second",
+												"baseSuperQuantity": "second"
+											}
+										]
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "UseInChart"
+										}
+									],
+									"id": "kBQeZyHuKtRsinCthBRdX",
+									"type": "th",
+									"cellType": {
+										"kind": "boolean"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "PerMonth"
+										}
+									],
+									"id": "kxyIMevJRrz1fNmUlJY0F",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "RekkiOrders"
+										}
+									],
+									"id": "oV3ijQ0AdSGjqYRrl6CmG",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "StaffNeeded"
+										}
+									],
+									"id": "FNuioOcrQ1EBva6NfZMqK",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CostB4Rekki"
+										}
+									],
+									"id": "_rC4m8W8EpgFMroBFY8bG",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CostPerOrder"
+										}
+									],
+									"id": "HJXDMnoly6em5ETcHbbMT",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CostWithRekki"
+										}
+									],
+									"id": "AqnAzW3IJQyCCxbQ1M4vy",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "UnitSaving"
+										}
+									],
+									"id": "54bFimn2Q9M9Foh9EdiJt",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Savings"
+										}
+									],
+									"id": "S7joQXDbIUBJkXMgfgKag",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Slider"
+										}
+									],
+									"id": "s1knqlv_VxuWlfaqGctp3",
+									"type": "th",
+									"cellType": {
+										"kind": "boolean"
+									}
+								}
+							],
+							"id": "StL_fm6TOCaj-B-38XLRO",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "1"
+										}
+									],
+									"id": "5AvI7EjMlmvO84vCp7UUE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "X6sElqbHbO3ebQcRsBKRh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AFBSaAg4X7j1nA_TjotyP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RRuExIlNyvLIb-Bm76KYy",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BXCq1TRbRySEABKs3WlHi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "a6a0Tzfb_Dj6v_q0o5Y9J",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "N0gj7GecjG2nlFS_0a8Qn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KJe2y5GJUgIBSFBORwcPY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ceszXUGJD3WV1zHQJ8AEQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bg1Ivj-msslUWBbFxr5ix",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Bjt3sR0wPLaBporcbdIUL",
+									"type": "td"
+								}
+							],
+							"id": "BZLCOXozbazUXHXPzDg1B",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "1000"
+										}
+									],
+									"id": "NFeKFSXYPKNw1DCE00ejF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "1veAuqBox7IQBcP030QAg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "9Yi7D-uiI62YBJbR2zfCx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PuR14rHnuwu-SAF--apxV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7nOTAAKJABujGO73A43rQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "SD9_uAG_4ZZ5DPAk9UHjT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WmjwE3g2AjoIhLPC9itOm",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "O5B5762kSqMQRJ_MA0lJe",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Omnh8rG4pZhkjoqtmHMiG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UHDR0NSq0VJZ7Kkj1pdvD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PYc2Pm-7Ha0NBEYKNS1vu",
+									"type": "td"
+								}
+							],
+							"id": "ZkA6mEolpltENRGTnBF4g",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2000"
+										}
+									],
+									"id": "js2boqyaQRzCm4d8sEyq_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "sLDIaLOvtjjOg1rf2k5xx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "63vgzOUJ_WZC94bgQRSNs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Po5ygZ7HsTGbC-Wse_r0X",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LXLp7et2mPbRTPj-injOf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CgmDVJOuzu1DHDdDWJNfD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "eUZpVc8TikDE_BMGh-AAx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OKT-p2CHEezB8q485Xjly",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yj_KGmXdyotekGixBmngS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "c44fDtqGVjDDalRDHJALT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NM-ngFkfYPmaG3FfwmQ57",
+									"type": "td"
+								}
+							],
+							"id": "YdUibCczkP0_qam3Fp2qz",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "3000"
+										}
+									],
+									"id": "j3DHczqmHMRfrvs9TwQRI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "nkt9pB3G4XkHmIS8-PQtQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "dqXfDCA6Jg38bk4bvsJIf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TQnmy5-QgJRypF6L9Ium8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B48wJCb5McNf6aaE10kHx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "x0YjZ7q0Dq7K-EWVUNqfU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "p113THbW_5v7fju7xiMKW",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "s77ko7eVjafs1vBM1uQ9m",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "vQBrKCT5l4KAIwVzZrQWe",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "N6tPWoS0VXk-Pb2lagNR6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "e7h5xHNc404JQyMUtBNUB",
+									"type": "td"
+								}
+							],
+							"id": "RkbQQTd4S2nc9UAdY-1PZ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "4000"
+										}
+									],
+									"id": "X5XkLowpyBSU8J7j6l-cM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "_imqlVaJTjQIG_A7R_dXn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6hJ1L6DzPIO_aTTBobd9d",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u0tWj5zwGKQH3MdKOhlXc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Jg2b2C4WZJR6AaaeiuvzB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ugg04rzbEIS9hnLc4XvD8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zUhaBK2EHwYNN1wiXYZwv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Oi7lN2NBw-DdVQHIVeTkD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kvlQfbh2Jk7UflYQ-pZLo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pTlPFy8LdrU_SQfXmR-rk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EnpHojySnku2pVRM-9mAe",
+									"type": "td"
+								}
+							],
+							"id": "8Ezs8hCx61cnYc1rwe5QA",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "5000"
+										}
+									],
+									"id": "C3Fsjz--BXH5afLB-ZrjM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "CRwZK-iKnylfy9GpIvrlg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "o8G2-ai4lSUneJo6ulXbc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ud3icPPVHRSfh3vv9yImq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "M76woB9bPdEaHY4rrPrm5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HNjdvvIYzs3fous116z7e",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kJMcZT-umwfzOU-Y742HC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RGm4W3PUrnr2HNsOhSdec",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "M7szGdkPlEhZhO_dBcpcP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "D2_xiOlq_mPzvTu0IWUn4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hgZztHeMbNNATd20kDMuy",
+									"type": "td"
+								}
+							],
+							"id": "hBWzo-0BEtwLT_Mdoj6CL",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "exprRef_VipfUxdFBM_P_ws3r9urg"
+										}
+									],
+									"id": "1zsuuFeJNyJHy7tQrO8tP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rg_0MYW2c1kPEEukSKAMy",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZlnBtqMD06ZOXZtmspAdS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RKjkvvqTSt4fCLg_XY0YF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WIV10ZyTDaXHN6c9J4kyf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AxmdVFrK9AfevSWmsUyDe",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BFQllPeV5TcWNG-Sa1p7j",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sGnu8uHAS8Pt0yQKoN5P4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ysemFSKgYxwja4ldjmGGg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "b_KhNwNklCjMMHNlgVcS_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "l4ijoMUKdvH2dk8g2cAdv",
+									"type": "td"
+								}
+							],
+							"id": "8AhiDaViwZtskxWZa2vBA",
+							"type": "tr"
+						}
+					],
+					"id": "Y0SPAx8TXmXaebq-fpqKy",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ForChart"
+								}
+							],
+							"type": "structured_varname",
+							"id": "amSrcpCZSgiECkztKYZoX"
+						},
+						{
+							"children": [
+								{
+									"text": "filter("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TurcdxN8GQnwCIbAfzf3f",
+									"type": "smart-ref",
+									"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+									"columnId": null,
+									"lastSeenVariableName": "Data"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rdl-7vXTZH5m0XcqfuSiU",
+									"type": "smart-ref",
+									"blockId": "Y0SPAx8TXmXaebq-fpqKy",
+									"columnId": "kBQeZyHuKtRsinCthBRdX",
+									"lastSeenVariableName": "Data.UseInChart"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "Ufo58Q6I8fAKV20xeMTsj"
+						}
+					],
+					"id": "wTdIYvdamhXfrmThAre-4",
+					"type": "code_line_v2",
+					"showResult": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "lOH8-EhpHQShbRYfwIPY4"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "QVDzZoEhRIzdF-jysGjTw"
+				}
+			],
+			"type": "tab",
+			"name": "Data",
+			"id": "0NfI51lbqaPSHwdHV4UsD",
+			"icon": "Switch2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Price per order"
+						}
+					],
+					"type": "h3",
+					"id": "kFg8ThWsBUDYHI1ihRnie"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "GmNvoQEiS4lEAcWCNeCpx",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "OfferPrice (x) = match {\n  x  > 0 and x <= 1K: £1.2 per order\n  x > 1k and x <= 5k: £1.08 per order\n  x > 5k and x <= 10k: £0.96 per order\n x > 10k and x  <= 20k: £0.8 per order\n  true: £0.7 per order\n}"
+						}
+					],
+					"id": "IGKeewZ_ZB1vzKUlT-d9g",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "85yFDW2dfChHdgT6sbrax"
+				}
+			],
+			"type": "tab",
+			"name": "Pricing",
+			"id": "OYQKnMCshJhoa3N5La9Cs",
+			"icon": "BalanceSheet",
+			"isHidden": true
+		}
+	]
+}

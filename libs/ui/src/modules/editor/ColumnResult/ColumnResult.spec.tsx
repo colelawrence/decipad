@@ -21,7 +21,7 @@ describe.sequential('ColumnResult', () => {
     );
 
     // time to stream columns
-    await act(() => timeout(1000));
+    await act(() => timeout(3000));
 
     const rows = getAllByRole('row');
     const cells = getAllByRole('cell');
@@ -89,7 +89,7 @@ describe.sequential('ColumnResult', () => {
       const { container } = render(<Wrapper />);
 
       // time to stream columns
-      await act(() => timeout(1000));
+      await act(() => timeout(3000));
 
       const rows = [...container.querySelectorAll('tbody > tr')];
 

@@ -53,21 +53,27 @@ export class GrowableDataView<
 
   public ensureCapacity(size: number) {
     while (size > this.buf.byteLength) {
-      if (this.buf instanceof ArrayBuffer) {
-        if (!this.buf.resizable) {
-          this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
-        } else {
-          this.buf.resize(this.buf.byteLength + this.options.pageSize);
+      try {
+        if (this.buf instanceof ArrayBuffer) {
+          if (!this.buf.resizable) {
+            this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
+          } else {
+            this.buf.resize(this.buf.byteLength + this.options.pageSize);
+          }
+        } else if (
+          supportsSharedArrayBuffer &&
+          this.buf instanceof SharedArrayBuffer
+        ) {
+          if (!this.buf.growable) {
+            this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
+          } else {
+            this.buf.grow(this.buf.byteLength + this.options.pageSize);
+          }
         }
-      } else if (
-        supportsSharedArrayBuffer &&
-        this.buf instanceof SharedArrayBuffer
-      ) {
-        if (!this.buf.growable) {
-          this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
-        } else {
-          this.buf.grow(this.buf.byteLength + this.options.pageSize);
-        }
+      } catch (err) {
+        console.error('Error resizing buffer', err);
+        console.warn('Falling back to copying buffer');
+        this.buf = hackyResizeArrayBuffer(this.buf, this.options.pageSize);
       }
     }
   }

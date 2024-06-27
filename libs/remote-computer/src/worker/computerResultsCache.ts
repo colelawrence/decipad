@@ -2,7 +2,7 @@
 import { Computer, NotebookResults } from '@decipad/computer-interfaces';
 import { createCache } from '@decipad/client-cache';
 import { ComputerResultsCache } from './types';
-import { debounceTime } from 'rxjs';
+import { debounceTime, shareReplay } from 'rxjs';
 import { captureException } from '@sentry/browser';
 import { SerializedNotebookResults } from '../types/serializedTypes';
 import { encodeFullNotebookResults } from '../encode/encodeFullNotebookResults';
@@ -49,13 +49,15 @@ export const createComputerResultsCache = (
   };
 
   const resultsSubscription = computer.results
-    .pipe(debounceTime(CACHE_RESULTS_DEBOUNCE_TIME_MS))
+    .asObservable()
+    .pipe(shareReplay(2), debounceTime(CACHE_RESULTS_DEBOUNCE_TIME_MS))
     .subscribe(onNewResults);
 
   const emittedCachedResults = (async () => {
     try {
       const cachedResults = await cache.get(notebookId);
       if (cachedResults != null && !emittedFirstResults) {
+        console.log('Results cache: emitting first results', cachedResults);
         latestCachedResults = cachedResults;
         computer.results.next(cachedResults);
       } else {

@@ -11,6 +11,14 @@ import { encodingToBuffer } from './encode';
 export const createCache = <TValue, TEncodedValue extends object>(
   config: CacheConfig<TValue, TEncodedValue>
 ): Cache<TValue> => {
+  if (!globalThis.caches) {
+    // eslint-disable-next-line no-console
+    console.warn('Cache API not available, falling back to empty cache');
+    return {
+      get: async () => undefined,
+      set: async () => undefined,
+    };
+  }
   const cache = globalThis.caches.open('decipad');
 
   const encodeToBuffer = encodingToBuffer({

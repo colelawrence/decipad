@@ -7,7 +7,6 @@ import type {
 import type { ListenerMethodName } from '../types/listeners';
 import type { Observable } from 'rxjs';
 import type { ListenerHelper } from '@decipad/listener-helper';
-import type { PlainSubjectPropName } from '../types/plainSubjects';
 
 export const getObservable = <TMethodName extends TCommonSubjectName>(
   computer: Computer,
@@ -49,8 +48,7 @@ export const getObservable = <TMethodName extends TCommonSubjectName>(
 
     // Plain subjects
     case 'results': {
-      const propName = methodName as PlainSubjectPropName;
-      return computer[propName] as unknown as Observable<
+      return computer.results as unknown as Observable<
         TCommonSubject<TMethodName>
       >;
     }

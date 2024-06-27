@@ -25,7 +25,7 @@ import type { PromiseOrType } from '@decipad/utils';
 
 export interface Computer {
   // --------------- results --------------//
-  results: NotebookResultStream;
+  readonly results: NotebookResultStream;
   getBlockIdResult(
     blockId: string
   ): Readonly<IdentifiedError | IdentifiedResult> | undefined;

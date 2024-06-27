@@ -1,11 +1,14 @@
 /* eslint-disable no-labels */
+import { createStore } from 'zustand';
+import { UAParser } from 'ua-parser-js';
+import { take } from 'rxjs';
 import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { createDocSyncEditor } from '@decipad/docsync';
-import { createStore } from 'zustand';
 import { captureException } from '@sentry/browser';
-import { take } from 'rxjs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
+import { getComputer } from '@decipad/computer';
 import { isServerSideRendering } from '@decipad/support';
+import { type Computer } from '@decipad/computer-interfaces';
 import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import debounce from 'lodash/debounce';
 import * as idb from 'lib0/indexeddb';
@@ -52,16 +55,33 @@ const initialState = (): Omit<
   };
 };
 
+const supportsRemoteComputer = () => {
+  if (typeof navigator !== 'undefined') {
+    const { browser, device } = UAParser(navigator.userAgent);
+    if (browser.name?.includes('Safari') && device.type === 'mobile') {
+      return false;
+    }
+  }
+  return true;
+};
+
+const createComputer = (notebookId: string): Computer => {
+  if (supportsRemoteComputer()) {
+    return createRemoteComputerClient(notebookId, (err) => {
+      console.error('notebook store: Error in remote computer client', err);
+      captureException(err);
+    });
+  }
+  return getComputer();
+};
+
 export const createNotebookStore = (
   notebookId: string,
   onDestroy: () => void
 ) =>
   createStore<NotebookState>((set, get) => ({
     ...initialState(),
-    computer: createRemoteComputerClient(notebookId, (err) => {
-      console.error('notebook store: Error in remote computer client', err);
-      captureException(err);
-    }),
+    computer: createComputer(notebookId),
     initEditor: (
       _notebookId,
       { docsync, plugins, onChangeTitle },

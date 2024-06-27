@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 import { createWorkerClient } from '@decipad/remote-computer-worker/client';
 import type {
@@ -40,6 +41,7 @@ import type {
   RPCMethodName,
   TRPCDecodedArgs,
   TRPCDecodedResult,
+  TRPCEncodedArgs,
   TRPCEncodedResult,
 } from './types/rpc';
 import { createRPCArgEncoder } from './encode/createRpcArgEncoder';
@@ -72,6 +74,15 @@ export const createRemoteComputerClientFromWorker = (
   >(workerWorker, 'remote-computer-worker', decodeNotification);
   const { context } = worker;
 
+  let signalComputerReady: () => void;
+  const computerReady = new Promise<void>((resolve) => {
+    signalComputerReady = resolve;
+  });
+  context.rpc.expose('computerReady', () => {
+    console.log('Worker client: computer signaled ready');
+    signalComputerReady();
+  });
+
   const subscribeToRemote = async <
     TMethodName extends TCommonSubjectName,
     TArgs extends TCommonSubscriptionParams<TMethodName>,
@@ -81,6 +92,7 @@ export const createRemoteComputerClientFromWorker = (
     args: TArgs,
     listener: (_args: TSubject) => unknown
   ) => {
+    await computerReady;
     const unsubscribe = await worker.subscribe(
       {
         type: subjectName,
@@ -119,26 +131,55 @@ export const createRemoteComputerClientFromWorker = (
   ): Computer[TMethodName] => {
     const encodeArgs = createRPCArgEncoder(method);
     const decodeResult = createRPCResultDecoder(method);
+
+    const tryCall = async (encodedArgs: TRPCEncodedArgs<TMethodName>) => {
+      await computerReady;
+      const encodedResult = (await worker.call(
+        method,
+        encodedArgs
+      )) as TRPCEncodedResult<TMethodName>;
+      return (await decodeResult(context, encodedResult)) as PromiseOrType<
+        TRPCDecodedResult<TMethodName>
+      >;
+    };
+
     return (async (
       ...args: TRPCDecodedArgs<TMethodName>
     ): Promise<TRPCDecodedResult<TMethodName>> => {
-      const encodedArgs = await encodeArgs(args);
+      const encodedArgs = (await encodeArgs(
+        args
+      )) as TRPCEncodedArgs<TMethodName>;
       if (!Array.isArray(encodedArgs)) {
         // eslint-disable-next-line no-console
         console.error(encodeArgs);
         throw new TypeError('Decoded arguments should be array');
       }
-      const encodedResult = (await worker.call(
-        method,
-        encodedArgs
-      )) as TRPCEncodedResult<TMethodName>;
+      let triedCount = 1;
       try {
-        return (await decodeResult(context, encodedResult)) as PromiseOrType<
-          TRPCDecodedResult<TMethodName>
-        >;
+        return await tryCall(encodedArgs);
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error('Error decoding result', encodedResult);
+        console.error('Error calling', method, args, err);
+        if (triedCount < 2) {
+          // eslint-disable-next-line no-console
+          console.log('Retrying', method, args);
+          triedCount += 1;
+          try {
+            const result = await tryCall(encodedArgs);
+            // eslint-disable-next-line no-console
+            console.log('Retry success', method, args);
+            return result;
+          } catch (err2) {
+            // eslint-disable-next-line no-console
+            console.error('Retry failed', method, args, err2);
+            throw err2;
+          }
+        }
+        // eslint-disable-next-line no-console
+        console.error(
+          `Error decoding result for call ${method} and args`,
+          args
+        );
         // eslint-disable-next-line no-console
         console.log('method', method, args);
         throw err;
