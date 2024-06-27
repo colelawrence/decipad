@@ -26,6 +26,13 @@ type Action =
       };
     }
   | {
+      action: 'Chart Downloaded';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Tab Created';
       props: {
         notebook_id?: string;

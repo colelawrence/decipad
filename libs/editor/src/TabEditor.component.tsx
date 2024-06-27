@@ -1,19 +1,13 @@
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { useMemo, useEffect } from 'react';
-import { Editor } from './Editor.component';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
+import { useTabs } from '@decipad/editor-hooks';
+import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
 import type { TabEditorContextValue } from '@decipad/react-contexts';
 import {
   EditorIdContext,
   TabEditorContext,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
-import { TitleEditor } from './TitleEditor.component';
-import { useUndo } from './hooks/useUndo';
-import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
-import { useTabs } from '@decipad/editor-hooks';
-import { useRecoverNotebook } from './hooks';
+import { captureException } from '@decipad/remote-computer';
+import { notebooks } from '@decipad/routing';
 import {
   Button,
   EditorPlaceholder,
@@ -24,9 +18,16 @@ import {
   transparencyHex,
 } from '@decipad/ui';
 import styled from '@emotion/styled';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import type { ComponentProps, FC, PropsWithChildren } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useIntercom } from 'react-use-intercom';
-import { captureException } from '@decipad/remote-computer';
 import { withReact } from 'slate-react';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { Editor } from './Editor.component';
+import { TitleEditor } from './TitleEditor.component';
+import { useRecoverNotebook } from './hooks';
+import { useUndo } from './hooks/useUndo';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
@@ -170,7 +171,7 @@ const LoadingDiv = styled.div({
     marginTop: '24px',
     padding: '8px 12px',
     width: '100%',
-    maxWidth: `580px`,
+    maxWidth: `${slimBlockWidth}px`,
     borderRadius: '12px',
     display: 'flex',
     flexDirection: 'column',

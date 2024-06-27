@@ -22,6 +22,8 @@
     "esbenp.prettier-vscode",
     "kamikillerto.vscode-colorize",
     "figma.figma-vscode-extension",
-    "stateful.runme"
+    "stateful.runme",
+    "vitest.explorer",
+    "hbenl.vscode-test-explorer"
   ]
 }

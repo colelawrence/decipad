@@ -78,8 +78,6 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
       element={element}
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
       {...attributes}
-      suppressContentEditableWarning
-      id={blockId}
       dependencyId={blockId}
       key={blockId}
       isDownloadable
@@ -92,7 +90,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         >
           <TableDndProvider editor={editor} table={element}>
             <EditorTable
-              id={element.id}
+              id={blockId}
               onChangeIcon={onSaveIcon}
               onChangeColor={onSaveColor}
               onSetCollapsed={onSetCollapsed}

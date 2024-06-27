@@ -4,6 +4,13 @@
   "editor.formatOnSave": true,
   "cSpell.userWords": ["decipad"],
   "explorer.compactFolders": false,
+  "testing.automaticallyOpenPeekView": "never",
+  "testing.defaultGutterClickAction": "debug",
+  "testing.runAllTestsInWorkspace": true,
+  "vitest.path": "./node_modules/.bin/vitest",
+  "testExplorer.codeLens": true,
+  "testExplorer.gutterDecoration": true,
+  "vitestExplorer.path": "./node_modules/.bin/vitest",
   "cSpell.words": [
     "Autoconvert",
     "automap",

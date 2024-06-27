@@ -71,7 +71,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
           hasTooltip && !disabled ? (
             experimentalTooltip ? (
               <ExperimentalTooltip
-                key={`figure-segment-tooltip-labs-${i}`}
+                key={`figure-experimental-tooltip-${i}`}
                 title={typeof tooltip === 'string' ? tooltip : ''}
                 trigger={trigger}
                 side="top"

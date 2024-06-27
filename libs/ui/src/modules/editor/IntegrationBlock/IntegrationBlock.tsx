@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { MarkType } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import type { Result } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
@@ -13,7 +14,6 @@ import { Height } from '../../../styles/spacings';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
-import { MarkType } from '../PlotParams/PlotParams';
 
 type IntegrationButton =
   | {
@@ -65,7 +65,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
       css={integrationBlockStyles}
       data-testid={'integration-block'}
     >
-      <div css={css({ display: 'flex', alignItems: 'center' })}>
+      <div css={css(hideOnPrint, { display: 'flex', alignItems: 'center' })}>
         <LiveCode
           meta={meta}
           error={typeof error === 'string' ? new Error(error) : undefined}

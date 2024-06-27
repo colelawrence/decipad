@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react"
+    "jsxImportSource": "@emotion/react",
+    "types": ["@testing-library/jest-dom"]
   },
   "include": ["src"],
   "references": [

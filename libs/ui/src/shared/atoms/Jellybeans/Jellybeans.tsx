@@ -1,7 +1,8 @@
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
+import { SerializedStyles, css } from '@emotion/react';
 import { Property } from 'csstype';
 import { cssVar, offBlack, offWhite, p12Medium } from 'libs/ui/src/primitives';
+import { deciOverflowXStyles } from 'libs/ui/src/styles/scrollbars';
 import { ReactNode } from 'react';
 
 function getContrastYIQ(hexColor: string) {
@@ -23,9 +24,11 @@ type JellyBeanProps = {
 
 export type JellyBrainsProps = {
   readonly beans: JellyBeanProps[];
+  readonly noMultiline?: boolean;
+  readonly wrapperStyles?: SerializedStyles;
 };
 
-const JellyBean = ({
+export const JellyBean = ({
   text,
   onClick = noop,
   backgroundColor,
@@ -41,8 +44,16 @@ const JellyBean = ({
   );
 };
 
-export const JellyBeans = ({ beans }: JellyBrainsProps) => (
-  <div css={jellyBrainsWrapperStyles} contentEditable={false}>
+export const JellyBeans = ({
+  beans,
+  noMultiline = false,
+  wrapperStyles,
+}: JellyBrainsProps) => (
+  <div
+    // eslint-disable-next-line decipad/css-prop-named-variable
+    css={[wrapperStyles, jellyBrainsWrapperStyles(noMultiline)]}
+    contentEditable={false}
+  >
     {beans.map(({ text, onClick, backgroundColor, disabled, icon }, index) => (
       <JellyBean
         key={index}
@@ -97,10 +108,17 @@ const beanWrapperStyles = (
     }
   );
 
-const jellyBrainsWrapperStyles = css({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'start',
-  gridGap: 8,
-  marginBottom: 8,
-});
+const jellyBrainsWrapperStyles = (noMultiline: boolean) =>
+  css(
+    {
+      display: 'flex',
+      flexWrap: noMultiline ? 'nowrap' : 'wrap',
+      alignItems: 'start',
+      gridGap: 8,
+      marginBottom: 8,
+      overflowX: noMultiline ? 'auto' : 'visible',
+      whiteSpace: noMultiline ? 'nowrap' : 'normal',
+      maxHeight: noMultiline ? 'calc(26px + 8px)' : 'none',
+    },
+    deciOverflowXStyles
+  );

@@ -1007,16 +1007,44 @@ components:
                       - arc
                   xColumnName:
                     type: string
-                  yColumnName:
+                  labelColumnName:
                     type: string
                   sizeColumnName:
                     type: string
-                  colorColumnName:
+                  orientation:
                     type: string
-                  thetaColumnName:
+                  startFromZero:
+                    type: boolean
+                  mirrorYAxis:
+                    type: boolean
+                  flipTable:
+                    type: boolean
+                  grid:
+                    type: boolean
+                  showDataLabel:
+                    type: boolean
+                  groupByX:
+                    type: boolean
+                  lineVariant:
                     type: string
-                  y2ColumnName:
+                  barVariant:
                     type: string
+                  arcVariant:
+                    type: string
+                  xAxisLabel:
+                    type: string
+                  yAxisLabel:
+                    type: string
+                  yColumnChartTypes:
+                    type: array
+                    items:
+                      type: string
+                      description: what chart to plot on yAxis
+                  yColumnNames:
+                    type: array
+                    items:
+                      type: string
+                      description: column names for the yaxis
                 required:
                   - plotType
                 description: parameters for the plot
@@ -1049,15 +1077,11 @@ components:
                       - arc
                   xColumnName:
                     type: string
-                  yColumnName:
-                    type: string
                   sizeColumnName:
                     type: string
                   colorColumnName:
                     type: string
                   thetaColumnName:
-                    type: string
-                  y2ColumnName:
                     type: string
                 required:
                   - plotType

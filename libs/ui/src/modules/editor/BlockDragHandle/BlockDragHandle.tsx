@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import type { BlockDependents } from '@decipad/computer-interfaces';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -8,9 +9,10 @@ import {
   TopLevelValue,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import type { BlockDependents } from '@decipad/computer-interfaces';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { getNode } from '@udecode/plate-common';
 import {
   FC,
   HTMLProps,
@@ -19,18 +21,19 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { Path } from 'slate';
 import {
+  Add,
   Chat,
-  Trash,
   Download,
   DragHandle,
   Duplicate,
   Hide,
   Link,
-  Sparkles,
-  Add,
-  Show,
   Move,
+  Show,
+  Sparkles,
+  Trash,
 } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import {
@@ -49,9 +52,6 @@ import {
 import { editorLayout } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { Path } from 'slate';
-import { getNode } from '@udecode/plate-common';
 
 const gridStyles = once(() =>
   css({
@@ -145,6 +145,7 @@ interface BlockDragHandleProps {
   };
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
+  readonly handleDownloadChart?: () => void;
   readonly needsUpgrade?: boolean;
   readonly path?: Path;
 }
@@ -171,6 +172,7 @@ export const BlockDragHandle = ({
   aiPanel,
   isDownloadable = false,
   onDownload = noop,
+  handleDownloadChart,
   path,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
@@ -305,6 +307,16 @@ export const BlockDragHandle = ({
                 );
               })}
             </MenuList>
+          )}
+          {handleDownloadChart && (
+            <MenuItem
+              icon={<Download />}
+              onSelect={() => {
+                handleDownloadChart();
+              }}
+            >
+              Download chart
+            </MenuItem>
           )}
           {isDownloadable && (
             <MenuItem icon={<Download />} onSelect={onDownload}>

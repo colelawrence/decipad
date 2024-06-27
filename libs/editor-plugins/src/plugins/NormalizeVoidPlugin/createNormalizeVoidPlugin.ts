@@ -7,10 +7,9 @@ import type {
 } from '@decipad/editor-types';
 import {
   DEPRECATED_ELEMENT_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_FETCH,
   ELEMENT_IMPORT,
-  ELEMENT_PLOT,
-  DEPRECATED_ELEMENT_TABLE_INPUT,
 } from '@decipad/editor-types';
 import {
   deleteText,
@@ -38,18 +37,6 @@ const VOID_TYPE_PROPERTIES = {
     'data-provider',
     'data-varname',
   ],
-  [ELEMENT_PLOT]: [
-    'title',
-    'colorScheme',
-    'sourceVarName',
-    'markType',
-    'xColumnName',
-    'yColumnName',
-    'sizeColumnName',
-    'colorColumnName',
-    'thetaColumnName',
-    'y2ColumnName',
-  ],
   [DEPRECATED_ELEMENT_INPUT]: ['value', 'variableName'],
   [ELEMENT_IMPORT]: ['url', 'source', 'createdByUserId'],
 };
@@ -69,17 +56,6 @@ const MISSING_ATTRIBUTE_GENERATOR = {
     'data-href': emptyString,
     'data-provider': emptyString,
     'data-varname': emptyString,
-  },
-  [ELEMENT_PLOT]: {
-    colorScheme: emptyString,
-    sourceVarName: emptyString,
-    markType: emptyString,
-    xColumnName: emptyString,
-    yColumnName: emptyString,
-    sizeColumnName: emptyString,
-    colorColumnName: emptyString,
-    thetaColumnName: emptyString,
-    y2ColumnName: emptyString,
   },
   [DEPRECATED_ELEMENT_INPUT]: {
     value: emptyString,

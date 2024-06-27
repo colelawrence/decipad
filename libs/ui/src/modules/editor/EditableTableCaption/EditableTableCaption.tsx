@@ -1,5 +1,8 @@
 /* eslint-disable decipad/css-prop-named-variable */
+import { ClientEventsContext } from '@decipad/client-events';
+import { markTypes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
+import { Formula, Hide, Show, Source, Table } from 'libs/ui/src/icons';
 import {
   Children,
   FC,
@@ -18,9 +21,6 @@ import { slimBlockWidth, wideBlockWidth } from '../../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
-import { markTypes } from '../PlotParams/PlotParams';
-import { Formula, Hide, Show, Source, Table } from 'libs/ui/src/icons';
-import { ClientEventsContext } from '@decipad/client-events';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -77,7 +77,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     setHideCellFormulas,
   } = useContext(TableStyleContext);
 
-  const Icon = userIcons[icon];
+  const Icon = userIcons[icon] || userIcons.Deci;
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
   const clientEvent = useContext(ClientEventsContext);

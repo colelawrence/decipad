@@ -1,26 +1,18 @@
-import { VegaProps } from 'react-vega/lib/Vega';
+import { BasePlotProps } from '@decipad/editor-types';
+import { SerializedType } from '@decipad/language-interfaces';
 
-type SpecConfig = VegaProps['spec']['config'];
-
-export type PlotSpec = VegaProps['spec'] & {
-  config?: SpecConfig & {
-    encoding?: { color?: { scheme?: string | undefined } };
-  };
-  encoding?: {
-    color?: {
-      field?: string | undefined;
-      type?: string | undefined;
-      legend?: {
-        orient?: string;
-        direction?: string;
-      };
-    };
-  };
+export type PlainObject = {
+  readonly table: any[];
 };
 
-export interface PlotResultProps {
-  spec: NonNullable<PlotSpec>;
-  data: NonNullable<VegaProps['data']>;
-  repeatedColumns?: string[];
-  onError?: VegaProps['onError'];
+export interface PlotResultNewProps {
+  readonly data?: PlainObject;
 }
+
+export type PlotResultProps = {
+  typeForColumnName?: (columnName: string) => SerializedType;
+  setYAxisLabel?: (label: string) => void;
+  setXAxisLabel?: (label: string) => void;
+  isExporting?: boolean;
+} & PlotResultNewProps &
+  Partial<BasePlotProps>;

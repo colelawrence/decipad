@@ -1,22 +1,44 @@
+import { useComputer } from '@decipad/editor-hooks';
 import type { PlotElement } from '@decipad/editor-types';
-import { ELEMENT_PLOT } from '@decipad/editor-types';
-import {
-  type NotebookResults,
-  type SerializedType,
-} from '@decipad/remote-computer';
+import { ELEMENT_PLOT, PlotDefaultColorScheme } from '@decipad/editor-types';
+import { Result } from '@decipad/language-interfaces';
+import { N } from '@decipad/number';
 import { AnnotationsProvider } from '@decipad/react-contexts';
-import { render } from '@testing-library/react';
+import { type SerializedType } from '@decipad/remote-computer';
+import { ToastDisplay } from '@decipad/ui';
+import { timeout } from '@decipad/utils';
+import { act, render } from '@testing-library/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
-import { createRef } from 'react';
+import { nanoid } from 'nanoid';
+import { createRef, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { N } from '@decipad/number';
-import Plot from './Plot';
 import { BrowserRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
+import Plot from './Plot';
+
+class ResizeObserver {
+  [x: string]: any;
+  constructor(callback: any) {
+    this.callback = callback;
+  }
+  observe(element: any) {
+    this.callback([
+      { target: element, contentRect: { width: 500, height: 300 } },
+    ]);
+  }
+
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
 
 interface PlotWithProvidersParams {
   element?: Partial<PlotElement>;
-  blockResults?: NotebookResults['blockResults'];
+  injectResult?: Result.Result;
+  resultBlockId?: string;
+  resultVarName?: string;
 }
 
 const tableType: SerializedType = {
@@ -60,18 +82,72 @@ const tableData = [
 
 const PlotWithProviders = ({
   element: _element = {},
+  injectResult,
+  resultBlockId = 'block-id',
+  resultVarName = 'varName',
 }: PlotWithProvidersParams) => {
+  const computer = useComputer();
+
+  useEffect(() => {
+    if (injectResult) {
+      const externalDataId = nanoid();
+      computer.pushComputeDelta({
+        external: {
+          upsert: {
+            [externalDataId]: injectResult,
+          },
+        },
+        program: {
+          upsert: [
+            {
+              type: 'identified-block',
+              id: resultBlockId,
+              block: {
+                type: 'block',
+                id: resultBlockId,
+                args: [
+                  {
+                    type: 'assign',
+                    args: [
+                      { type: 'def', args: [resultVarName] },
+                      {
+                        type: 'externalref',
+                        args: [externalDataId],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+    }
+  }, [computer, injectResult, resultBlockId, resultVarName]);
+
   const element: PlotElement = {
     id: 'block-id',
     type: ELEMENT_PLOT,
     sourceVarName: '',
     markType: 'bar',
     xColumnName: '',
-    yColumnName: '',
-    y2ColumnName: '',
+    xAxisLabel: '',
+    yAxisLabel: '',
     sizeColumnName: '',
-    colorColumnName: '',
-    thetaColumnName: '',
+    orientation: 'horizontal',
+    barVariant: 'grouped',
+    lineVariant: 'area',
+    arcVariant: 'simple',
+    grid: true,
+    startFromZero: true,
+    mirrorYAxis: false,
+    flipTable: false,
+    groupByX: true,
+    showDataLabel: false,
+    yColumnNames: [],
+    schema: 'jun-2024',
+    yColumnChartTypes: [],
+    colorScheme: PlotDefaultColorScheme,
     children: [
       {
         text: '',
@@ -92,55 +168,80 @@ const PlotWithProviders = ({
         permission: 'WRITE',
       }}
     >
-      <DndProvider backend={HTML5Backend}>
-        <BrowserRouter>
-          <Plate>
-            <PlateContent />
-            <Plot
-              attributes={{
-                'data-slate-node': 'element',
-                ref: createRef(),
-              }}
-              element={element}
-            />
-          </Plate>
-        </BrowserRouter>
-      </DndProvider>
+      <ToastDisplay>
+        <DndProvider backend={HTML5Backend}>
+          <BrowserRouter>
+            <Plate>
+              <PlateContent />
+              <Plot
+                attributes={{
+                  'data-slate-node': 'element',
+                  ref: createRef(),
+                }}
+                element={element}
+              />
+            </Plate>
+          </BrowserRouter>
+        </DndProvider>
+      </ToastDisplay>
     </AnnotationsProvider>
   );
 };
 
-it('shows nothing if no var has been selected', async () => {
-  const { queryByRole } = render(<PlotWithProviders />);
-  expect(await queryByRole('graphics-document')).toBeNull();
-});
+describe.sequential('Plot', () => {
+  it('shows nothing if no var has been selected', async () => {
+    const { queryByText } = render(<PlotWithProviders />);
 
-it('shows nothing if var has been selected but no data', async () => {
-  const { queryByRole } = render(
-    <PlotWithProviders
-      element={{ sourceVarName: 'varName' }}
-    ></PlotWithProviders>
-  );
-  expect(await queryByRole('graphics-document')).toBeNull();
-});
+    expect(queryByText(/No data/i)).toBeInTheDocument();
+  });
 
-it('shows a plot if has data and options', async () => {
-  const blockId = 'block-id';
-  const { queryByRole } = render(
-    <PlotWithProviders
-      element={{ sourceVarName: 'varName' }}
-      blockResults={{
-        [blockId]: {
-          type: 'computer-result',
-          id: blockId,
-          result: {
-            type: tableType,
-            value: tableData,
-          },
-          epoch: 1n,
-        },
-      }}
-    />
-  );
-  expect(await queryByRole('graphics-document')).toBeDefined();
+  it('shows nothing if var has been selected but no data', async () => {
+    const { queryByText } = render(
+      <PlotWithProviders
+        element={{ sourceVarName: 'varName' }}
+      ></PlotWithProviders>
+    );
+
+    expect(queryByText(/No data/i)).toBeInTheDocument();
+  });
+
+  it('shows a plot if has data and options', async () => {
+    const { queryByText, container } = render(
+      <PlotWithProviders
+        element={{
+          sourceVarName: 'varName',
+          xColumnName: 'label 1',
+          yColumnNames: ['label 2'],
+        }}
+        injectResult={{
+          type: tableType,
+          value: tableData,
+        }}
+        resultVarName="varName"
+      />
+    );
+
+    await act(() => timeout(2000));
+
+    expect(queryByText(/No data/i)).not.toBeInTheDocument();
+
+    const svgElement = container.querySelector('svg.recharts-surface');
+    expect(svgElement).toBeInTheDocument();
+
+    const plotContainer = container.querySelector('[data-type="plot"]');
+    expect(plotContainer).toBeVisible();
+
+    const captionInput = container.querySelector(
+      'input[placeholder="Add a caption to this chart"]'
+    );
+    expect(captionInput).toBeInTheDocument();
+
+    const tooltip = container.querySelector('.recharts-tooltip-wrapper');
+    expect(tooltip).toBeInTheDocument();
+
+    const lines = container.querySelectorAll(
+      '.recharts-cartesian-grid-horizontal'
+    );
+    expect(lines.length).toBeGreaterThan(0);
+  });
 });

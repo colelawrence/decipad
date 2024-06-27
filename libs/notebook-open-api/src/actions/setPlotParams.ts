@@ -2,10 +2,9 @@ import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { setNodes } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
+import { plotParams } from './schemas/plotParams';
 import type { RequiresNotebookAction } from './types';
 import { getElementById } from './utils/getElementById';
-import { getPartialPlotParams } from './utils/getPartialPlotParams';
-import { plotParams } from './schemas/plotParams';
 
 extendZodWithOpenApi(z);
 
@@ -26,11 +25,9 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
     }),
   handler: (editor, { plotId, newPlotParams }) => {
     const [plot, plotPath] = getElementById(editor, plotId, ELEMENT_PLOT);
-
-    const updateParams = getPartialPlotParams(newPlotParams);
     const newPlot = {
-      ...updateParams,
-      markType: updateParams.markType ?? plot.markType,
+      ...newPlotParams,
+      markType: newPlotParams.markType ?? plot.markType,
     };
     setNodes(editor, newPlot, { at: plotPath });
 

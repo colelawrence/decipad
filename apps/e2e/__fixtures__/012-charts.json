@@ -1,0 +1,5378 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Big chart extravaganza"
+        }
+      ],
+      "type": "title",
+      "id": "Emx0ufxA3KzN7O38V54FI"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "1nNttgFhizUAcr27an9PD",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "",
+          "xColumnName": "",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "line",
+          "sizeColumnName": "",
+          "yColumnNames": [],
+          "yColumnChartTypes": [],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_gray",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Line charts"
+            }
+          ],
+          "id": "zSfFiTXiKpBBfyECIo4x_",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "GAUImdxQv6BRwl9zm1S_S",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "2kvVqrbwXeC2TySoJTgnl",
+          "type": "plot",
+          "title": "Sales Opportunity ",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Company",
+          "xAxisLabel": "Company",
+          "yAxisLabel": "Money",
+          "labelColumnName": "",
+          "markType": "line",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity"],
+          "yColumnChartTypes": ["bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_orange",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "GjZvYX9N91DILqq1or5x1",
+              "type": "plot",
+              "title": "Booked",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "Company",
+              "yAxisLabel": "Money",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Booked"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "monochrome_purple",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nCMLlU7ssmStRuKfx3DoA",
+              "type": "plot",
+              "title": "Realized without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_yellow",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "htbBdDihd79f8JKihQ4gG",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "oG_itBUkPcT1qKpgnT5nw",
+              "type": "plot",
+              "title": "Multi yColumn with labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "6lADbf5Z75nk1kUw3mIZ1",
+              "type": "plot",
+              "title": "Multi yColumn without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_green",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "uURT34N4G-Mp3VDAl7rat",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "W2WWgbt4cwYVyi37muaso",
+              "type": "plot",
+              "title": "Area chart vertical",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "monochrome_yellow",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Zz49MVf6GUmFSXyFZ8uZe",
+              "type": "plot",
+              "title": "Vertical area chart with gridline and labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "monochrome_purple",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "9F57bFmnhUj30pm-twbhW",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "-oeOD-JKBeRSZkjIcUMKG",
+              "type": "plot",
+              "title": "Area chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "area",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "wLEwUy15IP9sYBLmApqN1",
+              "type": "plot",
+              "title": "Line chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "cIXR8y2pO_6OZCAu1b-VP",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "pss6-IcmDIyEvucx8bS6b",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "36NMDLAPRAzWIEURfOBpI",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "39D0HksVnIgB8N2Q_c1D_",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "rxVUtoTtbJRoiUfVPxHAq",
+          "type": "plot",
+          "title": "Group by with Dates",
+          "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+          "xColumnName": "When",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "line",
+          "sizeColumnName": "",
+          "yColumnNames": ["Total"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_orange",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "hRsU9LYGHAxx__UzdZbJe",
+              "type": "plot",
+              "title": "Booleans dont have axis ticks but hey",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": true,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "xbRDkdiSZuTQgzScVhGwB",
+              "type": "plot",
+              "title": "Nongrouped booleans do",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "line",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "TwzctOR8rmsASFVYx5kPb",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "9NvX99DiBdYgqCi5abYCK"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "smWcpP12nE2eNrLcUZmnD",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Sector",
+          "xAxisLabel": "Industry (group by)",
+          "yAxisLabel": "Sales",
+          "labelColumnName": "",
+          "markType": "line",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity", "Booked", "Realized"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "area100",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_blue",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Combo"
+            }
+          ],
+          "id": "brvyv3EkRFeOgJzB_bUam",
+          "type": "h2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "5KYHAruXaugVCdlSsWl--",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "EFTWkMWRLVVcWV2V9b3Xr",
+          "type": "plot",
+          "title": "Sales Opportunity ",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Company",
+          "xAxisLabel": "Company",
+          "yAxisLabel": "Money",
+          "labelColumnName": "",
+          "markType": "combo",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity"],
+          "yColumnChartTypes": ["bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_orange",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "YghNOVnS5sCtQErNiZcp9",
+              "type": "plot",
+              "title": "Booked",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "Company",
+              "yAxisLabel": "Money",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Booked"],
+              "yColumnChartTypes": ["line"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Qn4lc-4GZ1HyXc1cMK12p",
+              "type": "plot",
+              "title": "Realized without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_green",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "E6oIGn3VW6s3jTvR0RSa8",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "9hjg-sXec4cfZ4YRABSqu",
+              "type": "plot",
+              "title": "Multi yColumn with labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "line", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_yellow",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Xc4e6omYOWeKDqP9fApW3",
+              "type": "plot",
+              "title": "Multi yColumn without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["line", "line", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "monochrome_red",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "yMpKWxD8UtZm594z8STGV",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ovJMZ4joXwkAKcGj5rtWg",
+              "type": "plot",
+              "title": "Area chart vertical",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "line", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "V4Qq3GRePyb6dNdgoXfUk",
+              "type": "plot",
+              "title": "Vertical area chart with gridline and labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["line", "line", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_green",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "jgvbE642LvZ9gDrONrwd8",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "r9QJ_cLyCM6styV4ORNhU",
+              "type": "plot",
+              "title": "Area chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "HRtCX04O9OoTSBVi_a92E",
+              "type": "plot",
+              "title": "Line chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["line"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "j9VjNLlwORVChJY84zH5_",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "w_IA54jkDZAa3b2kdiI9J",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "line", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "m8D3WjpQ0UQWN13F-0lDc",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "vF5yrXW1J7huKYia7AAZN",
+          "type": "columns",
+          "colorScheme": "multicolor_orange"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "6rI7sTnbI5zSd053vpTFc",
+          "type": "plot",
+          "title": "Group by with Dates",
+          "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+          "xColumnName": "When",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "combo",
+          "sizeColumnName": "",
+          "yColumnNames": ["Total"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_orange",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "SHrQf99mjgA_Oe5pCeVd0",
+              "type": "plot",
+              "title": "Booleans dont have axis ticks but hey",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": true,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "gYoVetrwzTo6E7caszSpj",
+              "type": "plot",
+              "title": "Nongrouped booleans do",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "combo",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["line"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "6ZVlHoMxO9IX3g10XqS7q",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "QVPEdc445pax7B4hNriYn",
+          "colorScheme": "multicolor_blue"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "6LNteAorzYDj8wCv_PVHn",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Sector",
+          "xAxisLabel": "Industry (group by)",
+          "yAxisLabel": "Sales",
+          "labelColumnName": "",
+          "markType": "combo",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity", "Booked", "Realized"],
+          "yColumnChartTypes": ["bar", "bar", "line"],
+          "barVariant": "grouped",
+          "lineVariant": "area100",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_blue",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Bar charts"
+            }
+          ],
+          "type": "h2",
+          "id": "oTHyk1K53aT7kEoSXWxJJ"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "lFXP6oWcMv2KDtZR1_dNx",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "JQEsZ2OnFbRAtA76KfEDS"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "VrR9A-UCvPPliZ3EcBupy",
+          "type": "plot",
+          "title": "Sales Opportunity ",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Company",
+          "xAxisLabel": "Company",
+          "yAxisLabel": "Money",
+          "labelColumnName": "",
+          "markType": "bar",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity"],
+          "yColumnChartTypes": ["bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_purple",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "X7a5Za_72yuvYdm1_ZQHJ",
+              "type": "plot",
+              "title": "Booked",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "Company",
+              "yAxisLabel": "Money",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Booked"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "monochrome_purple",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "v4k8hAesvLW6hGXHVgZzr",
+              "type": "plot",
+              "title": "Realized without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_yellow",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "LYTv45_S6AoavMDw1O9m_",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Yb8DTXeQ3SLObZZ2mEL-K",
+              "type": "plot",
+              "title": "Multi yColumn with labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IPLbW8hs-YLFTpVyulvGD",
+              "type": "plot",
+              "title": "Multi yColumn without labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_green",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "-tWkDWnkl2RpR4-KOOUlP",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "N0BD0dtHwSCjFNeZP5Eci",
+              "type": "plot",
+              "title": "Stacked",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar", "bar", "bar"],
+              "barVariant": "stacked",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "T7yAlu3GI_bY-JLrYGY-W",
+              "type": "plot",
+              "title": "Vertical stacked chart with gridline and labels",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar", "bar", "bar"],
+              "barVariant": "stacked",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "faDhM0jEdlYHNswiUBpqK",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "n3Xv1Mu50wA0Le6Fa5vhK",
+              "type": "plot",
+              "title": "Area chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "area",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "oprZi5CQ1djBkU8Mi7alk",
+              "type": "plot",
+              "title": "Line chart",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "eF_HgHvWxeQMFL2hCUTSO",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IP2ik8gb4CUsrKvPGcW-D",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "stacked100",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "MCgp5Xob81i8xucQGIU3f",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "stacked100",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_yellow",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "OA_SNencJvPDw89HAjXht",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "stacked",
+              "lineVariant": "area100",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "eQokp8mhOizLui-dhy59S",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "uioq3Bbs9YOFnYiTr8CZJ",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "stacked",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ttf24QVi6jhKvZzys-BG5",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Booked", "Realized"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "stacked",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_yellow",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "L9KvPhNHpQzW84hbIxuuK",
+          "type": "columns",
+          "colorScheme": "multicolor_red"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "pj0aAsk2GXpi94cWX7fz7",
+          "type": "plot",
+          "title": "Group by with Dates",
+          "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+          "xColumnName": "When",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "bar",
+          "sizeColumnName": "",
+          "yColumnNames": ["Total"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_red",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "8O_4XJNatrN1vWhRUj01O",
+              "type": "plot",
+              "title": "Booleans dont have axis ticks but hey",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": true,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1-38oFK_WOK0rBFiLMjfY",
+              "type": "plot",
+              "title": "Nongrouped booleans do",
+              "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+              "xColumnName": "Approved",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "bar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Total"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "65YQI2hoDTLHwJHLDR8rl",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "lx0JUPypopVW5VEfD56gb",
+          "colorScheme": "multicolor_blue"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "LKecwGdK1_TqB8NkG-GE6",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+          "xColumnName": "Sector",
+          "xAxisLabel": "Industry (group by)",
+          "yAxisLabel": "Sales",
+          "labelColumnName": "",
+          "markType": "bar",
+          "sizeColumnName": "",
+          "yColumnNames": ["Opportunity", "Booked", "Realized"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "stacked100",
+          "lineVariant": "area100",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": false,
+          "groupByX": true,
+          "colorScheme": "multicolor_blue",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Pie charts"
+            }
+          ],
+          "type": "h2",
+          "id": "5MTQmtQWZU1SMMT0n28Q5"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "ge75XxAabXcKQpovG08ip",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "7etNgD8_CWajPFM_-8Q3M",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_LvHzhXeLhcCKLnnGBBE8i",
+              "xColumnName": "Shareholder",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shares"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IZUdGjusXgkU0rnTIWAuB",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_LvHzhXeLhcCKLnnGBBE8i",
+              "xColumnName": "Shareholder",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shares"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "ZduBDYuaPyyqHLv927szT",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "U_RGU0yqmQOOwyRARQJIq",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_LvHzhXeLhcCKLnnGBBE8i",
+              "xColumnName": "Shareholder",
+              "xAxisLabel": "Label",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shares"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "donut",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1xXnXxZWgNFAOnK0tXpam",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_LvHzhXeLhcCKLnnGBBE8i",
+              "xColumnName": "Shareholder",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shares"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "donut",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "IaP8flCFO7-sS9l18rxgL",
+          "type": "columns",
+          "colorScheme": "multicolor_blue"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "h-8wb2L-uqR3zqT7OCWf5",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_cGVUc_hrYH2AJaIPF5aFP",
+          "xColumnName": "Item",
+          "xAxisLabel": "Grouped",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "arc",
+          "sizeColumnName": "",
+          "yColumnNames": ["Total"],
+          "yColumnChartTypes": ["bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "donut",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": true,
+          "groupByX": true,
+          "colorScheme": "multicolor_blue",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "tLFkp4LkY7PAv46L3ep6L",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+              "xColumnName": "Name",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shooting"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "FHZy54GTklx1FDNYIdteE",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+              "xColumnName": "Key",
+              "xAxisLabel": "Rafael Leao",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "yColumnNames": ["Lamine Yamal"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "donut",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024",
+              "flipTable": true
+            }
+          ],
+          "id": "xUA2Cin4HmtgSkNy41fLi",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "B69x-pe3XvE_6Xaa0tprB",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": "Funnel"
+            }
+          ],
+          "type": "h2",
+          "id": "FaT8EJI9Tn2CMnvfcMJWj"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "166kXO8ZzYIyP0l9pRQx8",
+          "type": "divider",
+          "colorScheme": "monochrome_purple"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "rJH8ZXPZCHh3ZSnBtQOW4",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "funnel",
+          "sizeColumnName": "",
+          "yColumnNames": ["London"],
+          "yColumnChartTypes": ["bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "monochrome_purple",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dzp9IlSxRiilkDLq5lGDH",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "colorScheme": "multicolor_blue",
+              "title": "London",
+              "mirrorYAxis": false
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "SYjllmq6cUtfhifB5xygE",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "orientation": "vertical",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "colorScheme": "multicolor_red",
+              "title": "Madrid",
+              "mirrorYAxis": false
+            }
+          ],
+          "id": "tQy_ZGG53QNpG1L3tC3yg",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dDYmlnuuRQxTbdRH0xIKf",
+              "type": "plot",
+              "title": "London",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_blue",
+              "schema": "jun-2024",
+              "mirrorYAxis": true
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "pfECCTEQEtlAhGy4gP_xm",
+              "type": "plot",
+              "title": "Madrid",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_red",
+              "schema": "jun-2024",
+              "mirrorYAxis": false
+            }
+          ],
+          "id": "uDIEhpA_CGIIA2L4OY1qQ",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "GniIjqhno6sH1muiICtgY",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "colorScheme": "multicolor_blue",
+              "title": "London",
+              "mirrorYAxis": false
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "zObK2gBlU4eGpw3bbytHc",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "orientation": "vertical",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "colorScheme": "multicolor_red",
+              "title": "Madrid",
+              "mirrorYAxis": true
+            }
+          ],
+          "id": "6wCru1n3VIxmDm7Gc2Omg",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "-St2mdbZfChDPrDrm5TD0",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "colorScheme": "multicolor_blue",
+              "title": "London",
+              "mirrorYAxis": false
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nK6gZI3tnN7poJ9abO2Pt",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "orientation": "horizontal",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "colorScheme": "multicolor_red",
+              "title": "Madrid",
+              "mirrorYAxis": false
+            }
+          ],
+          "id": "z4JZ-NG_NapGCwfuNCJq_",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1FQoy_Y9BI6RiaNafKzeO",
+              "type": "plot",
+              "title": "London",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_blue",
+              "schema": "jun-2024",
+              "mirrorYAxis": true
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "zTxur9jsYNw_3Mk6swUVy",
+              "type": "plot",
+              "title": "Madrid",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_red",
+              "schema": "jun-2024",
+              "mirrorYAxis": false
+            }
+          ],
+          "id": "736x0Hk-PB3BrNL6jFJ6i",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nsbuXDelQ-rtqx5jA59lb",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "colorScheme": "multicolor_blue",
+              "title": "London",
+              "mirrorYAxis": false
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "CeAfoddWCcNCkfpUp0bou",
+              "type": "plot",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "grid": true,
+              "startFromZero": true,
+              "showDataLabel": true,
+              "groupByX": false,
+              "schema": "jun-2024",
+              "orientation": "horizontal",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "colorScheme": "multicolor_red",
+              "title": "Madrid",
+              "mirrorYAxis": true
+            }
+          ],
+          "id": "kv-jDNAklSDUBoRNbhWIM",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "lfaFmsGcQiTt8oPwVMJWq"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "JgfeYKehjkKhR1IgExvZQ",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "funnel",
+          "sizeColumnName": "",
+          "yColumnNames": ["London", "Madrid"],
+          "yColumnChartTypes": ["bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_yellow",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "n-4ifGeW-g6YiTCJ72vq5",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "funnel",
+          "sizeColumnName": "",
+          "yColumnNames": ["London", "Madrid"],
+          "yColumnChartTypes": ["bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": true,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_yellow",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "ssxiOg4cfxdTD_gbx5eEY",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "funnel",
+          "sizeColumnName": "",
+          "yColumnNames": ["London", "Madrid"],
+          "yColumnChartTypes": ["bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "vertical",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": true,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_yellow",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "oAH0VpGQSmCMGAW5zhFaw",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "funnel",
+          "sizeColumnName": "",
+          "yColumnNames": ["London", "Madrid"],
+          "yColumnChartTypes": ["bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "vertical",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_yellow",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Radar"
+            }
+          ],
+          "type": "h2",
+          "id": "RUI0MWmjSWXzkDZZhJBQw"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "g0K-yr7mIM4oKwXJxbIIj",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "flipTable": false,
+              "id": "J7I01cm6rgJQgnxCoscaH",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+              "xColumnName": "Name",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "radar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shooting", "Pace"],
+              "yColumnChartTypes": [
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar"
+              ],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_red",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "xM8Tq3vSZmyUi5WzzMZcz",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_kY8WvZHcbuwpUBGfNbnR5",
+              "xColumnName": "Company",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "radar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Opportunity", "Realized", "Booked"],
+              "yColumnChartTypes": ["bar", "bar", "bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "vVGJugOQ0jNOP2x7CWr1s",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "flipTable": false,
+              "id": "4qUTH8X-Pw4c6oyBhHvtA",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+              "xColumnName": "Name",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "radar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Shooting", "Pace"],
+              "yColumnChartTypes": [
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar"
+              ],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": false,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_red",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "OisRaEsk0gfpQrP1gt_vY",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+              "xColumnName": "Key",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "radar",
+              "sizeColumnName": "",
+              "yColumnNames": ["Lamine Yamal"],
+              "yColumnChartTypes": [
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar",
+                "bar"
+              ],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": false,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": true,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_orange",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "N3CLw6d0p5Mca5MxmI3iu",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "hrbUcUpeDu6Bt6KOAYlij",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+          "xColumnName": "Stage",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "radar",
+          "sizeColumnName": "",
+          "yColumnNames": ["London", "Madrid"],
+          "yColumnChartTypes": ["bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_yellow",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Scatter"
+            }
+          ],
+          "type": "h2",
+          "id": "i0gWUoSGE4TpcmWqytky_"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "mBzSScHlJBe7mhu4P66CA",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "VnL0PKo9nbAxmzvcpUHaP",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+          "xColumnName": "Physical",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "Name",
+          "markType": "point",
+          "sizeColumnName": "Defensive",
+          "yColumnNames": ["Pace"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_gray",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1uwWXSduisiR4HqnvVG7q",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "point",
+              "sizeColumnName": "London",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "pIJ8svEMKQ7AxhCQmrlNz",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "point",
+              "sizeColumnName": "Madrid",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "Sp3AkqdU_fSJx9Gyq4ukj",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "V0NYATvVBv-qTj-l2xPeU",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+          "xColumnName": "Physical",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "Name",
+          "markType": "point",
+          "sizeColumnName": "Pace",
+          "yColumnNames": ["Pace"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "vertical",
+          "grid": false,
+          "startFromZero": false,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "showDataLabel": true,
+          "groupByX": false,
+          "colorScheme": "multicolor_gray",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "NJ7AQOwkzTY6sFiVu_rYi",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "point",
+              "sizeColumnName": "London",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "xVcyEiqZ-5riQv6y3dut4",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "point",
+              "sizeColumnName": "Madrid",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "rzhy60UDO3IH3V-YoskeL",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "gSlY7-BTTrps0CBs4FDxl",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+          "xColumnName": "Physical",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "Name",
+          "markType": "point",
+          "sizeColumnName": "",
+          "yColumnNames": ["Pace"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "vertical",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_gray",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "S3zQxm0aVe26aP49LYrmN",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "point",
+              "sizeColumnName": "London",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "vertical",
+              "grid": false,
+              "startFromZero": false,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "monochrome_red",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "sIMJ-hBBG56kIRcCxfsaq",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_Q0Xara9HEhFFd4MeApnR_",
+              "xColumnName": "London",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "Stage",
+              "markType": "point",
+              "sizeColumnName": "Madrid",
+              "yColumnNames": ["Madrid"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": false,
+              "startFromZero": false,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "5GMeeoemE2-xeIko6YcHJ",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "UNZ2a-ymjV1_c1_eNUe83"
+        }
+      ],
+      "type": "tab",
+      "id": "9eja-LFNk8Li-b7ImV3nF",
+      "name": "New Tab"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Sales"
+                    }
+                  ],
+                  "id": "936UKwRy9e6cbYLjv22Ej",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "gorNiOHOoSfvpqfANGEmW",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Company"
+                    }
+                  ],
+                  "id": "tM5MruxfUvokihI5UGNNx",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Sector"
+                    }
+                  ],
+                  "id": "qkknAnfCVLH6_Nb-2WBRM",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "category"
+                  },
+                  "categoryValues": [
+                    {
+                      "id": "0t2y1BVKpssDPRIVTpDQl",
+                      "value": "Transportation"
+                    },
+                    {
+                      "id": "RM2D8QjW6ORtVSaAq7CMy",
+                      "value": "Paper"
+                    },
+                    {
+                      "id": "MobKXJuSS5Gec6TOdZKwr",
+                      "value": "Financial Services"
+                    },
+                    {
+                      "id": "_LoQmvqeU0_tMCmkC77Hv",
+                      "value": "Social Media"
+                    },
+                    {
+                      "id": "WiMvbmKjAqjvTZO2Xr-GZ",
+                      "value": "Import Export"
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Opportunity"
+                    }
+                  ],
+                  "id": "fPUMLtSzxZYSwcxSqMPyb",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "USD",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "baseQuantity": "USD",
+                        "baseSuperQuantity": "currency"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Booked"
+                    }
+                  ],
+                  "id": "Bjt96L1prWw1do7LTdqlt",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "usd",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "baseQuantity": "USD",
+                        "baseSuperQuantity": "currency"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Realized"
+                    }
+                  ],
+                  "id": "LvtrZIPWZ7QkL7jJ20Hse",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "usd",
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "baseQuantity": "USD",
+                        "baseSuperQuantity": "currency"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "id": "e6MIOiBaWZXwDiAaeicGZ",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ACME Inc"
+                    }
+                  ],
+                  "id": "wZwW1TUHE_QX6oJekG3NB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0t2y1BVKpssDPRIVTpDQl"
+                    }
+                  ],
+                  "id": "6nM9ITHVc5XIxgfTIcUYb",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "500000"
+                    }
+                  ],
+                  "id": "3PUSZezb7zJZURfDPhDCA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "250000"
+                    }
+                  ],
+                  "id": "tW0lJXz5T-07KGrHMhi6b",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "aHhfAp1jnanRUfKb_LpZn",
+                  "type": "td"
+                }
+              ],
+              "id": "iX-7Nz5uWnNQI5my86ph6",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Dunder Mif"
+                    }
+                  ],
+                  "id": "K4wQLjzLZZ-V4SOkFI_Zh",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "RM2D8QjW6ORtVSaAq7CMy"
+                    }
+                  ],
+                  "id": "udHGXHPeNVw_MSLr59ZKp",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "750000"
+                    }
+                  ],
+                  "id": "SNLRboLo3ZYF0qk497XG_",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "750000"
+                    }
+                  ],
+                  "id": "RIajAMxBYV-DbuBBF9Y4N",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "750000"
+                    }
+                  ],
+                  "id": "yHittcZuuOuKrzo7g1ASy",
+                  "type": "td"
+                }
+              ],
+              "id": "V7OnokQsNCv9Gx6UNWT_Z",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Retry Inc"
+                    }
+                  ],
+                  "id": "GKPUyQ-E0TZXunb36kxn4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0t2y1BVKpssDPRIVTpDQl"
+                    }
+                  ],
+                  "id": "SuBTvmZwUg1jm4wN01xhj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "40000"
+                    }
+                  ],
+                  "id": "BNTlfHmljouVoDCLiBK9f",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "100000"
+                    }
+                  ],
+                  "id": "_O75bQEREWPDXKg6Pi_dM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "100000"
+                    }
+                  ],
+                  "id": "cCN1b3oxR9E_S3hVVssUQ",
+                  "type": "td"
+                }
+              ],
+              "id": "KkYhX8rkotK_5-UxumasR",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Wegovy Capital"
+                    }
+                  ],
+                  "id": "oJDBvEVvw52oNyy37iIoS",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "MobKXJuSS5Gec6TOdZKwr"
+                    }
+                  ],
+                  "id": "2W3yPGdy9Vc89kHDOtAVq",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "1500000"
+                    }
+                  ],
+                  "id": "1m5hkNfC1dTx66l0XWxVe",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "500000"
+                    }
+                  ],
+                  "id": "c4h1HMkfoAvq3U2f2I9RK",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5000"
+                    }
+                  ],
+                  "id": "ubv77uTVRINpggXpi_IHy",
+                  "type": "td"
+                }
+              ],
+              "id": "1WU5_wcDv4V-FagrX8kvZ",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Tronter LLC"
+                    }
+                  ],
+                  "id": "bbNiYXgUyqxzZ3sWrq5rd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "0t2y1BVKpssDPRIVTpDQl"
+                    }
+                  ],
+                  "id": "EAboQD9HcFtzea53RSVkL",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "430234"
+                    }
+                  ],
+                  "id": "r2zqAcn14MrkrJzhou2ud",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "350000"
+                    }
+                  ],
+                  "id": "mfrBnTLbRDFfP8FlN5W5d",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "150000"
+                    }
+                  ],
+                  "id": "jvv5R84rLmgg5KMpVqKqT",
+                  "type": "td"
+                }
+              ],
+              "id": "omP24awkvPxM3qTbHRHzz",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Ewww Inc."
+                    }
+                  ],
+                  "id": "wXWGVQx06wkWsOJNeYT9x",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "_LoQmvqeU0_tMCmkC77Hv"
+                    }
+                  ],
+                  "id": "srJiI1bbpDSRm1omBmCX3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "450000"
+                    }
+                  ],
+                  "id": "8IFaT_9FheMf-KtlSubpC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "450000"
+                    }
+                  ],
+                  "id": "5BJdzDfdpYpVOBlV1rHNz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "450000"
+                    }
+                  ],
+                  "id": "sPqV8DloL3nfd2j4Rt2Xs",
+                  "type": "td"
+                }
+              ],
+              "id": "_ESPzEWexk9Wco4pcKSgo",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Pongyan Ltd"
+                    }
+                  ],
+                  "id": "5XsbacKju9mYCpdMJQ9bT",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "WiMvbmKjAqjvTZO2Xr-GZ"
+                    }
+                  ],
+                  "id": "9iNgNMZCobCUqL5rxsJfk",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "32000"
+                    }
+                  ],
+                  "id": "UkX2M6FcBHD8zroIy99az",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "10000"
+                    }
+                  ],
+                  "id": "eeHrM1aNqOGzNDlmKSsxe",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5000"
+                    }
+                  ],
+                  "id": "vSKwAqXBRJVFjjQFhLK7K",
+                  "type": "td"
+                }
+              ],
+              "id": "l7nTDoly6l9HrL--Flhie",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Qovan Inc"
+                    }
+                  ],
+                  "id": "riR3JCTTsrYDCKVXOpdfE",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "RM2D8QjW6ORtVSaAq7CMy"
+                    }
+                  ],
+                  "id": "sRAblK81D1Bh1A8EVVPCY",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "850000"
+                    }
+                  ],
+                  "id": "PEWPwILTg8SSyzhgnCMlr",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "oBND6iGWhH6HYdOZpFYVC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "zrQG_kkkX3lmtzEaVqz32",
+                  "type": "td"
+                }
+              ],
+              "id": "C2egBtimy4-q0i6SewGna",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Marshmeme Inc"
+                    }
+                  ],
+                  "id": "GupR3sAXJEThfWgJimAbv",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "_LoQmvqeU0_tMCmkC77Hv"
+                    }
+                  ],
+                  "id": "qr8yS6xia_Dyzmrdwvsok",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "350000"
+                    }
+                  ],
+                  "id": "aCGt7UqomouEQeAUdVdiR",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "pgqQuVKShhkVFCPxbCcRq",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "8ZHrjBiGd0RcfKiyiad4Z",
+                  "type": "td"
+                }
+              ],
+              "id": "i-mIArtoNL-5mTBPs146C",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "UgeEgu"
+                    }
+                  ],
+                  "id": "Tt_l069OqJQAIRGVxGcB2",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "_LoQmvqeU0_tMCmkC77Hv"
+                    }
+                  ],
+                  "id": "N1r7wwVzytJzhVRPJfQfs",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "100000"
+                    }
+                  ],
+                  "id": "rjlN8sr5noKzmgCkaCdkS",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15000"
+                    }
+                  ],
+                  "id": "vrEpUiodp5vFCJ1xcRQQJ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "V6nGkc7jW9gHUhLgpqx6N",
+                  "type": "td"
+                }
+              ],
+              "id": "b0TGcxlZfRLS8SlDmeUqu",
+              "type": "tr"
+            }
+          ],
+          "id": "kY8WvZHcbuwpUBGfNbnR5",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Cap"
+                    }
+                  ],
+                  "id": "r2kiysbFNulnYQFM3TdsJ",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "5h3UPT5UDVIRD0sOyhJ7F",
+                      "type": "smart-ref",
+                      "blockId": "vMSc9M0KsFuQ2gRI2xqoN",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "Shares"
+                    },
+                    {
+                      "text": " / total("
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "ZIT3Nr6I3Sgs0_JqOYIBW",
+                      "type": "smart-ref",
+                      "blockId": "LvHzhXeLhcCKLnnGBBE8i",
+                      "columnId": "vMSc9M0KsFuQ2gRI2xqoN",
+                      "lastSeenVariableName": "Cap.Shares"
+                    },
+                    {
+                      "text": ") in %"
+                    }
+                  ],
+                  "id": "AdfnaWk4a5DMdv1fHltQq",
+                  "type": "table-column-formula",
+                  "columnId": "lA-pTgtdye60BOMzAaHhq"
+                }
+              ],
+              "id": "kzFu2DdOtyZZbM_8Qmz8k",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Shareholder"
+                    }
+                  ],
+                  "id": "v76M5aXVsXSLd0bDJ_fBi",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Shares"
+                    }
+                  ],
+                  "id": "vMSc9M0KsFuQ2gRI2xqoN",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Perc"
+                    }
+                  ],
+                  "id": "lA-pTgtdye60BOMzAaHhq",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                }
+              ],
+              "id": "oXALcDEgeuM352BdjJYDH",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Joanne"
+                    }
+                  ],
+                  "id": "xVQo-REANj2j5_PgvUR0N",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5000000"
+                    }
+                  ],
+                  "id": "7bTqfjJaqn8u38mr1F756",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "0GlWchX49ZQYG5s_3JFff",
+                  "type": "td"
+                }
+              ],
+              "id": "U7k7rmtENEU4TmVbQJBKh",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Isabelle"
+                    }
+                  ],
+                  "id": "ZeOGNJdAJwvKUl8F2zZWX",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "15000000"
+                    }
+                  ],
+                  "id": "grDAnF2rQkNnKgpdph6F5",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "gAMIiS9Ct4SKU7GBodSJp",
+                  "type": "td"
+                }
+              ],
+              "id": "08dUaMgoMTVqmqrKXuXmx",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Marsha"
+                    }
+                  ],
+                  "id": "6GjcZNfPprI9EtZPrTLvj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "4000000"
+                    }
+                  ],
+                  "id": "oT3vGtGsqIE3uAS-CTRfc",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "R0bq3StOYjpW2KnJ4q60b",
+                  "type": "td"
+                }
+              ],
+              "id": "8P89L14BDaJE26D3F2Lxp",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Tricapital"
+                    }
+                  ],
+                  "id": "FMgHlvG8kltIfNuuHv3rZ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2500000"
+                    }
+                  ],
+                  "id": "m5C1mzHpADwHoKR5_9XfT",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "5CEW12s_EUMSiwobwJkVK",
+                  "type": "td"
+                }
+              ],
+              "id": "voFAeaVBfa7g8MHsCY0gS",
+              "type": "tr"
+            }
+          ],
+          "id": "LvHzhXeLhcCKLnnGBBE8i",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": true
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Attendees"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "6RTjEKL4EiJIRF0ijtEjM"
+            },
+            {
+              "children": [
+                {
+                  "text": "50"
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "f77qHGa6QaZdrc-612LUm"
+            }
+          ],
+          "id": "vaRLZE8b6N8PDe8ntoK7q",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Ledger"
+                    }
+                  ],
+                  "id": "i3GXEAR3oVkfqjMkTO6ne",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "njPDikZJEr8cRoze8vLUv",
+                      "type": "smart-ref",
+                      "blockId": "IeMWvrNs420IahY4RuEbZ",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "Subtotal"
+                    },
+                    {
+                      "text": " + 20%"
+                    }
+                  ],
+                  "id": "kEaRgDc9VRq2-viwxEgFI",
+                  "type": "table-column-formula",
+                  "columnId": "kN2zFLSl_oq3W59SHAgs5"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "Du9RGQZy0-FAFnSSJVJXf",
+                      "type": "smart-ref",
+                      "blockId": "li9NBNaL1N-hC9q_59CAP",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "Amount"
+                    },
+                    {
+                      "text": " * "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "aIaf89zEMbbow2K1L2t4b",
+                      "type": "smart-ref",
+                      "blockId": "wB56vjFsrvhKg5X4RHNZg",
+                      "columnId": null,
+                      "decoration": "cell",
+                      "lastSeenVariableName": "UnitPrice"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "AZKWXHl05CG3QtsH_nMXZ",
+                  "type": "table-column-formula",
+                  "columnId": "IeMWvrNs420IahY4RuEbZ"
+                }
+              ],
+              "id": "feOINkNJT4gMBVmVsyg5l",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "When"
+                    }
+                  ],
+                  "id": "1gggkDgkeG0v10K2A91Nd",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "date",
+                    "date": "day"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Item"
+                    }
+                  ],
+                  "id": "N2AcmgHBQt0DU1XbvBBGc",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Amount"
+                    }
+                  ],
+                  "id": "li9NBNaL1N-hC9q_59CAP",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": null
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "UnitPrice"
+                    }
+                  ],
+                  "id": "wB56vjFsrvhKg5X4RHNZg",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "exp": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "multiplier": {
+                          "n": "1",
+                          "d": "1",
+                          "s": "1",
+                          "infinite": false
+                        },
+                        "known": true,
+                        "unit": "euro",
+                        "baseSuperQuantity": "currency",
+                        "baseQuantity": "euro"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Subtotal"
+                    }
+                  ],
+                  "id": "IeMWvrNs420IahY4RuEbZ",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Total"
+                    }
+                  ],
+                  "id": "kN2zFLSl_oq3W59SHAgs5",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Approved"
+                    }
+                  ],
+                  "id": "ku8n0Y1Nw_QK64-iUF7QI",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "boolean"
+                  }
+                }
+              ],
+              "id": "HuTPHp93r9_bntStrn44j",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-12"
+                    }
+                  ],
+                  "id": "odeM7DmVo2u6dLsC_CbM9",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Shoes"
+                    }
+                  ],
+                  "id": "CIotOek1Hcmh0EOKCJJ_m",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_vaRLZE8b6N8PDe8ntoK7q"
+                    }
+                  ],
+                  "id": "ggsKyCntxmXm1_iBUz9dA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "50"
+                    }
+                  ],
+                  "id": "ZtE0V6bEkcE2BjuzjATEa",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "_pnLDUbMljEF7-o1udgxl",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "SDuQTzSnds0BFbHBY_NEj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "rq8kGaIT9VPYVLW8zQBT8",
+                  "type": "td"
+                }
+              ],
+              "id": "VHerakE8rzmKvjKPANnmm",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-12"
+                    }
+                  ],
+                  "id": "HCqhMllsvyx-cDRz-iN7I",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Wine"
+                    }
+                  ],
+                  "id": "xJaf9s_oZm4-ERb8nCoDw",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "190"
+                    }
+                  ],
+                  "id": "Y1BDih7Q1jaHqej0eQHEZ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "8"
+                    }
+                  ],
+                  "id": "QbuD8lnxqo9cqjsDgJv5Q",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "GzzgpR39LkLDbhUEktqRz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Waz6bhya2sEQIV-E9H3SR",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "false"
+                    }
+                  ],
+                  "id": "ExYuS4QZDBGQgtQ8ziV8Z",
+                  "type": "td"
+                }
+              ],
+              "id": "LsL8a_f-ytcNjo0MsM-yF",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-12"
+                    }
+                  ],
+                  "id": "T9wIdI3r4PLIFaaYWt4jC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Auditorium"
+                    }
+                  ],
+                  "id": "8rE8-5HjJLbGV3sYWhsst",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "1"
+                    }
+                  ],
+                  "id": "Vb7YsZP4mkib5r4lFGjvx",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5400"
+                    }
+                  ],
+                  "id": "NKBoCiFc2pdY4sxI3qU-D",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "U1HskOLN8VBiYCyErfpSf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "P40nFTD9cS7Vt0cdWQ2em",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "7zkKet2p0nYfDp78d0MEN",
+                  "type": "td"
+                }
+              ],
+              "id": "mAHCTsa10pdnMop7btroB",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-13"
+                    }
+                  ],
+                  "id": "No7cooCYP_wy1WYAXzKHk",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Tea"
+                    }
+                  ],
+                  "id": "1kbB925kvtKqUjKZUj0eR",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_vaRLZE8b6N8PDe8ntoK7q"
+                    }
+                  ],
+                  "id": "XcM4HOnvxa_oaUOwJR8cQ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "4"
+                    }
+                  ],
+                  "id": "olGfUVqewYzqHdzcJx9Aj",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "jBU47osUznPzOjE57A-jA",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "eZ6x6ahi5mQxsy_tOboi1",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "iJCcAdgLj4iKK_5UalKjy",
+                  "type": "td"
+                }
+              ],
+              "id": "rebVclmw23bMMjxdx2VGz",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-19"
+                    }
+                  ],
+                  "id": "NtwzXNV2I6s-qqieHNnUD",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Food"
+                    }
+                  ],
+                  "id": "kx9UIOw84IlwHi5WHpYKa",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_vaRLZE8b6N8PDe8ntoK7q"
+                    }
+                  ],
+                  "id": "QQjzD7QI1U-DNHPTDJ7V4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "12"
+                    }
+                  ],
+                  "id": "r5y6V9ko5X7eFnXkqZNnW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "jbpMbWGPrlGjjgniqgKnf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "NgFZw2d2F0cnm_5dUHizz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "JYdAgyiiMdh0eomnNTaqr",
+                  "type": "td"
+                }
+              ],
+              "id": "htswejZiBZTX2myDU6O3Q",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-20"
+                    }
+                  ],
+                  "id": "DSskEVi8x_enOn848eCPo",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Wine"
+                    }
+                  ],
+                  "id": "_2YgnDvYzE7kXBTB3r7wf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "20"
+                    }
+                  ],
+                  "id": "KUMlPoGnzjHitxVxfttCd",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "12"
+                    }
+                  ],
+                  "id": "6tfMQ3bWOcsmxGx64NHQL",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ZgI21CZbJmnH7k3iC6uQM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KVgQ6eRoG8GHf-sft4fLT",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "true"
+                    }
+                  ],
+                  "id": "01dUWM72U2vrsBY8_Wug_",
+                  "type": "td"
+                }
+              ],
+              "id": "pN3Poig-osKjbhOV0GMwm",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "2024-06-20"
+                    }
+                  ],
+                  "id": "6f0ejgbxOlqD3Ncc7h_hV",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Tea"
+                    }
+                  ],
+                  "id": "9s_zW6wBUqAoq2555Wslb",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "5"
+                    }
+                  ],
+                  "id": "_yIV-fIam20j_Zfd9yktX",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "6"
+                    }
+                  ],
+                  "id": "1KnkpkxNEU0kw66ugweNL",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "gwsvMNHeZcIDuRbCzRBDn",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "6jZunMPY5pFEYK58q_-02",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "CfJkbgPUS-g4_etuflNqx",
+                  "type": "td"
+                }
+              ],
+              "id": "9oUo0NS6G8c-cjaYQzBnB",
+              "type": "tr"
+            }
+          ],
+          "id": "cGVUc_hrYH2AJaIPF5aFP",
+          "type": "table",
+          "version": 2,
+          "hideFormulas": false,
+          "hideCellFormulas": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Omni"
+                    }
+                  ],
+                  "id": "E5qa_Hr9d4pGrXDRL21SU",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "7IAejN9WOEc2FEBAj8hxC",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Stage"
+                    }
+                  ],
+                  "id": "bq3NumBjkYgGnYRe96t0L",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "London"
+                    }
+                  ],
+                  "id": "m6aNfd_zzrDf7q6o9-xDK",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Madrid"
+                    }
+                  ],
+                  "id": "oK7fKx63ul1nPRz506VzB",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                }
+              ],
+              "id": "nLq0HfaFbkIJSxjtvzgw8",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Website inquiries"
+                    }
+                  ],
+                  "id": "zQStoFd4b2R42YMwhojhS",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "10342"
+                    }
+                  ],
+                  "id": "z_HV7V3SnzKkd7I2fgli-",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "4500"
+                    }
+                  ],
+                  "id": "ug8eDhXnV2a-C9QAq9heu",
+                  "type": "td"
+                }
+              ],
+              "id": "f2jzBC5SSKp8fOZQ59pP9",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Meeting"
+                    }
+                  ],
+                  "id": "VYI8MCSfejPyVDjbqtKSW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "6700"
+                    }
+                  ],
+                  "id": "8-tTGZo3lT_kU19Tra57U",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "3000"
+                    }
+                  ],
+                  "id": "TXwhIZm4AfGGhRYu717D1",
+                  "type": "td"
+                }
+              ],
+              "id": "_1OVoRxUqGh-RfH7sLpE7",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Proposal"
+                    }
+                  ],
+                  "id": "F8Ubsmd1GcE07XD3zUb28",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "3000"
+                    }
+                  ],
+                  "id": "17CiqNW060rbiH4S7VblF",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2300"
+                    }
+                  ],
+                  "id": "4wcz9xtA_RdSJGYRlOlrm",
+                  "type": "td"
+                }
+              ],
+              "id": "nzTJju7Rv6Y0If2E70ZPj",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Contract"
+                    }
+                  ],
+                  "id": "C4UGGyzxw5C11sQsH7NEF",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "2300"
+                    }
+                  ],
+                  "id": "wMXIMjC94o6F05aStZLJ7",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "1000"
+                    }
+                  ],
+                  "id": "PnOquIaEuE_IqB-Tc7yRR",
+                  "type": "td"
+                }
+              ],
+              "id": "wLv_x5xKlWacXDwuwZajc",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Closed"
+                    }
+                  ],
+                  "id": "Pjf3ucS22Yw9BKYLGyTKR",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "900"
+                    }
+                  ],
+                  "id": "tLEiuVKM2VebASBeFHt6Q",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "400"
+                    }
+                  ],
+                  "id": "Pj5X_XA1Dy7YOu5wJeB6d",
+                  "type": "td"
+                }
+              ],
+              "id": "D_Ze5TwwvVQ6D8CWDnzIY",
+              "type": "tr"
+            }
+          ],
+          "id": "Q0Xara9HEhFFd4MeApnR-",
+          "type": "table",
+          "version": 2
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Players"
+                    }
+                  ],
+                  "id": "SBL498mwxkjsd0TQPg1WL",
+                  "type": "table-var-name"
+                }
+              ],
+              "id": "VQaEY_e8o5V_WYnSTixHH",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Name"
+                    }
+                  ],
+                  "id": "1PiNedWM1KMyQx9V9whdu",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Shooting"
+                    }
+                  ],
+                  "id": "Uiy5q8obSO8FwZiecxzoj",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Passing"
+                    }
+                  ],
+                  "id": "uM7isYX3hCf4sqp8eRMuL",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Dribbling"
+                    }
+                  ],
+                  "id": "opI-zHhkYwIRMz64YE0Nz",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Defensive"
+                    }
+                  ],
+                  "id": "5xryDTuVPa3vzpn1xc8R6",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Physical"
+                    }
+                  ],
+                  "id": "GuYoJwQEd78caMpla-ZYe",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Pace"
+                    }
+                  ],
+                  "id": "E3UgETANDHXnaaS9QbKpe",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                }
+              ],
+              "id": "qSL_gynwoAr2Zgj1d4uQx",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Lamine Yamal"
+                    }
+                  ],
+                  "id": "aE4avIyL9_o-vRiYkzQ9z",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "72"
+                    }
+                  ],
+                  "id": "ANZSyskquuomj1PhCVWcQ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "68"
+                    }
+                  ],
+                  "id": "nmKxfBxm3F7dcaKjgjr2S",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "81"
+                    }
+                  ],
+                  "id": "CDuPhqwYoH-6S2lAVWQP3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "23"
+                    }
+                  ],
+                  "id": "Kzc8d6j4V4_EITSD4-qvu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "48"
+                    }
+                  ],
+                  "id": "qiaBig6quP39XHCnJVXw7",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "82"
+                    }
+                  ],
+                  "id": "3UCOhRpgPo42zy46xPvnx",
+                  "type": "td"
+                }
+              ],
+              "id": "sLDxye2MkfoZqn5VrVCsy",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Kai Havertz"
+                    }
+                  ],
+                  "id": "gHwr6g6EvcEipkE5Wr_ui",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "81"
+                    }
+                  ],
+                  "id": "iwb6vAsdP6QZV_9-rA0Xu",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "79"
+                    }
+                  ],
+                  "id": "fMyC8AE-55qD-g4whw8wC",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "83"
+                    }
+                  ],
+                  "id": "bSS1X9nhZtRvrtAe2aI7t",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "49"
+                    }
+                  ],
+                  "id": "2QEVd1vDpvr8JX3RMBawh",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "70"
+                    }
+                  ],
+                  "id": "hxSSH2myr9wxkTq7J5U9A",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "78"
+                    }
+                  ],
+                  "id": "pskJ2QANAqKApCLIWmJtG",
+                  "type": "td"
+                }
+              ],
+              "id": "yGsajOZqDY8l6su71BVKo",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Khvicha Kvaratskhelia"
+                    }
+                  ],
+                  "id": "0v0cWO4kYmOY4Md9PmEKe",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "79"
+                    }
+                  ],
+                  "id": "C7HjnAKLF_eQCRY7DdGH2",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "81"
+                    }
+                  ],
+                  "id": "hWFjiCd90i_jjLfOf0yu4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "87"
+                    }
+                  ],
+                  "id": "dFXHA-Sj_CYSUrnx_-xaH",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "41"
+                    }
+                  ],
+                  "id": "EWZ8StLmgvo2Akc-rYijZ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "71"
+                    }
+                  ],
+                  "id": "T3pzjcSLSuzk4MgP4jYbY",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "86"
+                    }
+                  ],
+                  "id": "CNchr03T9AgcPpSIb6F9M",
+                  "type": "td"
+                }
+              ],
+              "id": "Lywv-cIYVDBxZB8ppeh1J",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Jamal Musiala"
+                    }
+                  ],
+                  "id": "LX377EnjU7hPxTethQUs6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "75"
+                    }
+                  ],
+                  "id": "1TGoml28B11uyEvM9hUHN",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "76"
+                    }
+                  ],
+                  "id": "IT3uj-Y7fCR-Rnij6uhHW",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "91"
+                    }
+                  ],
+                  "id": "jiE9FafwcjTITS2Po4ncf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "75"
+                    }
+                  ],
+                  "id": "bEXrB0bjbw4q44eT9A5yf",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "61"
+                    }
+                  ],
+                  "id": "jDVLiMFa3vHn9OzxsVPPy",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "85"
+                    }
+                  ],
+                  "id": "Y-mgsMnaGRw9eWo9YZVPS",
+                  "type": "td"
+                }
+              ],
+              "id": "7O9Dqp_j3kCENvmc6318z",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Rafael Leão"
+                    }
+                  ],
+                  "id": "jM7JeGH199ouMCGWHqJO4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "78"
+                    }
+                  ],
+                  "id": "uxOVYkgtqZW_4qhBbGJwE",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "79"
+                    }
+                  ],
+                  "id": "_ZbUwz3AG0_pULCGBi4Lz",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "88"
+                    }
+                  ],
+                  "id": "rcGauLkm9OJrFOlUwebYZ",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "28"
+                    }
+                  ],
+                  "id": "nlMKMKcTaYU_dyVF3CFcX",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "77"
+                    }
+                  ],
+                  "id": "i7ZTKnDjYzMdTI3m_pKIo",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "93"
+                    }
+                  ],
+                  "id": "AR2A-vec9utjMP3lxwkmF",
+                  "type": "td"
+                }
+              ],
+              "id": "D5ExwC9sEI4t3rqwkNIKz",
+              "type": "tr"
+            }
+          ],
+          "id": "CAG1rSx4_L-5o7NiYx_rc",
+          "type": "table",
+          "version": 2
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "_GiDgA41b4cZq5MF9T46R",
+          "type": "plot",
+          "title": "",
+          "sourceVarName": "exprRef_CAG1rSx4_L_5o7NiYx_rc",
+          "xColumnName": "Key",
+          "xAxisLabel": "",
+          "yAxisLabel": "",
+          "labelColumnName": "",
+          "markType": "radar",
+          "sizeColumnName": "",
+          "yColumnNames": ["Lamine Yamal"],
+          "yColumnChartTypes": ["bar", "bar", "bar"],
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": true,
+          "showDataLabel": false,
+          "groupByX": false,
+          "colorScheme": "multicolor_red",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "wxUFz7sqB6ZAOxJEWgNSY"
+        }
+      ],
+      "type": "tab",
+      "name": "Data",
+      "id": "sH4biLyeTr4IrxUqLFp7U"
+    }
+  ]
+}

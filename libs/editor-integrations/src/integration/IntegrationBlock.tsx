@@ -1,3 +1,4 @@
+import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
   UpgradeWarningBlock,
@@ -5,7 +6,11 @@ import {
   insertPlotBelow,
 } from '@decipad/editor-components';
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
-import type { MyElement, PlateComponent } from '@decipad/editor-types';
+import type {
+  MarkType,
+  MyElement,
+  PlateComponent,
+} from '@decipad/editor-types';
 import {
   ELEMENT_INTEGRATION,
   ImportElementSourcePretty,
@@ -20,7 +25,6 @@ import {
 } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { Result, getExprRef } from '@decipad/remote-computer';
-import type { MarkType } from '@decipad/ui';
 import {
   AnimatedIcon,
   IntegrationBlock as UIIntegrationBlock,
@@ -29,7 +33,6 @@ import {
 import { getNodeString, getPreviousNode } from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
 import { useCallback, useState } from 'react';
-import { useClientEvents } from '@decipad/client-events';
 import { useIntegration } from '../hooks/useIntegration';
 
 function canBePlotted(result: Result.Result | undefined): boolean {

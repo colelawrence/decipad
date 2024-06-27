@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { mergeConfig, defineConfig } from 'vitest/config';
+import { defineConfig, mergeConfig } from 'vitest/config';
 // eslint-disable-next-line import/no-relative-packages
 import rootViteConfig from '../../vite.web.config';
 
@@ -16,6 +16,7 @@ export default mergeConfig(
         'vitest-fetch-mock',
         '../../libs/testutils/src/dom-extensions-setup-after-env',
         '../../libs/testutils/src/window-match-media-setup',
+        './vitest.setup.js',
       ],
       css: true,
       globals: true,

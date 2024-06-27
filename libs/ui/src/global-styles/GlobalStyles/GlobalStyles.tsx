@@ -289,9 +289,7 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         '*:focus-visible': {
           outline: 'none',
         },
-        svg: {
-          pointerEvents: 'none',
-        },
+
         '@media print': {
           body: {
             padding: '48px',

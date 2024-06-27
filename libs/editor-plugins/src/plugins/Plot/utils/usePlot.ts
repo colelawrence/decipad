@@ -1,57 +1,31 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import {
-  type AutocompleteName,
-  type SerializedType,
-  getExprRef,
-  isTable as isComputerTable,
-} from '@decipad/remote-computer';
-import {
-  type PlotElement,
-  useMyEditorRef,
-  type MyNode,
-} from '@decipad/editor-types';
-import {
   useComputer,
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import { useThemeFromStore } from '@decipad/react-contexts';
-import { colorSchemes } from '@decipad/ui';
-import uniq from 'lodash.uniq';
-import { useEffect, useMemo } from 'react';
-import { useResolved } from '@decipad/react-utils';
-import { defaultPlotSpec } from './defaultPlotSpec';
-import { normalizePlotSpec } from './normalizePlotSpec';
 import {
-  enhanceSpecFromWideData,
-  resultToPlotResultData,
-  specFromType,
-} from './plotUtils';
-import type { PlotData, PlotSpec } from './plotUtils.interface';
-import { fixColorScheme } from './fixColorScheme';
-
-type StringSetter = (value: string) => void;
-
-export type PlotParams = Omit<PlotElement, 'children' | 'id' | 'type'> & {
-  sourceVarNameOptions: string[];
-  sourceExprRefOptions: string[];
-  columnNameOptions: string[];
-  setSourceVarName: StringSetter;
-  setMarkType: StringSetter;
-  setXColumnName: StringSetter;
-  setYColumnName: StringSetter;
-  setSizeColumnName: StringSetter;
-  setColorColumnName: StringSetter;
-  setThetaColumnName: StringSetter;
-  setColorScheme: StringSetter;
-  setY2ColumnName: StringSetter;
-};
+  defaultPlotParams,
+  useMyEditorRef,
+  type MyNode,
+  type PlotElement,
+  type PlotParams,
+} from '@decipad/editor-types';
+import { useResolved } from '@decipad/react-utils';
+import {
+  getExprRef,
+  isTable as isComputerTable,
+  type AutocompleteName,
+  type SerializedType,
+} from '@decipad/remote-computer';
+import { useMemo } from 'react';
+import { resultToPlotResultData } from './plotUtils';
+import type { PlotData } from './plotUtils.interface';
 
 type UsePlotReturn = {
-  spec?: PlotSpec;
   data?: PlotData;
+  unfiltered?: PlotData;
   plotParams: PlotParams;
-  repeatedColumns: string[];
 };
 
 type AutocompleteNameWithExpRef = AutocompleteName & {
@@ -71,47 +45,32 @@ const autocompleteNameToExprRef = (
 const isTable = (name: AutocompleteName) =>
   !name.name.includes('.') && isComputerTable(name.type);
 
-const shapes = ['point', 'circle', 'square', 'tick'] as const;
+function isNumber(type: SerializedType) {
+  return type.kind === 'number';
+}
 
-export type Shape = typeof shapes[number];
+function isBoolean(type: SerializedType) {
+  return type.kind === 'boolean';
+}
 
-export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
-  const [isDarkMode] = useThemeFromStore();
+function isString(type: SerializedType) {
+  return type.kind === 'string';
+}
+
+function isDate(type: SerializedType) {
+  return type.kind === 'date';
+}
+
+const validTypes = [isNumber, isBoolean, isString, isDate];
+
+function isValidType(type: SerializedType) {
+  return validTypes.some((guard) => guard(type));
+}
+
+export const usePlot = (element: PlotElement): UsePlotReturn => {
   const editor = useMyEditorRef();
   const computer = useComputer();
   const path = useNodePath(element);
-
-  const names = computer.getNamesDefined$.useWithSelectorDebounced(500, (n) =>
-    n.filter(isTable).map((table) => autocompleteNameToExprRef(computer, table))
-  );
-
-  const source = computer.getVarResult$.use(element.sourceVarName)?.result;
-  const sourceType: SerializedType | undefined = source?.type;
-
-  const data = useResolved<PlotData | undefined>(
-    useMemo(() => resultToPlotResultData(source, element), [element, source])
-  );
-
-  const spec = useMemo(
-    () =>
-      fixColorScheme(
-        (() => {
-          const normalizedSpec = normalizePlotSpec(
-            defaultPlotSpec(
-              computer,
-              source?.type,
-              specFromType(computer, source?.type, element)
-            )
-          );
-          if (normalizedSpec && data) {
-            return enhanceSpecFromWideData(normalizedSpec, data);
-          }
-          return normalizedSpec;
-        })(),
-        isDarkMode
-      ),
-    [computer, data, element, isDarkMode, source?.type]
-  );
 
   const setMarkType = usePathMutatorCallback(
     editor,
@@ -119,18 +78,22 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     'markType' as keyof MyNode,
     'usePlot'
   );
-
-  const shape = useMemo(() => {
-    if (shapes.includes(element.markType as Shape)) {
-      return element.markType;
-    }
-    return undefined;
-  }, [element.markType]);
-
   const setSourceVarName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'sourceVarName',
+    'usePlot'
+  );
+  const setXAxisLabel = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'xAxisLabel',
+    'usePlot'
+  );
+  const setYAxisLabel = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'yAxisLabel',
     'usePlot'
   );
   const setXColumnName = usePathMutatorCallback<PlotElement>(
@@ -139,34 +102,88 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     'xColumnName',
     'usePlot'
   );
-  const setYColumnName = usePathMutatorCallback<PlotElement>(
-    editor,
-    path,
-    'yColumnName',
-    'usePlot'
-  );
   const setSizeColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
     'sizeColumnName',
     'usePlot'
   );
-  const setColorColumnName = usePathMutatorCallback<PlotElement>(
+  const setLabelColumnName = usePathMutatorCallback<PlotElement>(
     editor,
     path,
-    'colorColumnName',
+    'labelColumnName',
     'usePlot'
   );
-  const setThetaColumnName = usePathMutatorCallback<PlotElement>(
+  const setOrientation = usePathMutatorCallback<PlotElement>(
     editor,
     path,
-    'thetaColumnName',
+    'orientation',
     'usePlot'
   );
-  const setY2ColumnName = usePathMutatorCallback<PlotElement>(
+  const setBarVariant = usePathMutatorCallback<PlotElement>(
     editor,
     path,
-    'y2ColumnName',
+    'barVariant',
+    'usePlot'
+  );
+  const setLineVariant = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'lineVariant',
+    'usePlot'
+  );
+  const setArcVariant = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'arcVariant',
+    'usePlot'
+  );
+  const setGrid = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'grid',
+    'usePlot'
+  );
+  const setShowDataLabel = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'showDataLabel',
+    'usePlot'
+  );
+  const setStartFromZero = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'startFromZero',
+    'usePlot'
+  );
+  const setMirrorYAxis = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'mirrorYAxis',
+    'usePlot'
+  );
+  const setFlipTable = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'flipTable',
+    'usePlot'
+  );
+  const setGroupByX = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'groupByX',
+    'usePlot'
+  );
+  const setYColumnNames = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'yColumnNames',
+    'usePlot'
+  );
+  const setYColumnChartTypes = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'yColumnChartTypes',
     'usePlot'
   );
   const setColorScheme = usePathMutatorCallback<PlotElement>(
@@ -176,62 +193,114 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     'usePlot'
   );
 
-  const repeatedColumns = useMemo((): string[] => {
-    if (element.markType === 'arc') {
-      return [element.thetaColumnName ?? ''];
+  const tableNames = computer.getNamesDefined$.useWithSelectorDebounced(
+    500,
+    (n) =>
+      n
+        .filter(isTable)
+        .map((table) => autocompleteNameToExprRef(computer, table))
+  );
+
+  const source = computer.getVarResult$.use(
+    element.sourceVarName ?? ''
+  )?.result;
+  const sourceType: SerializedType | undefined = source?.type;
+
+  const resolvedResult = useResolved(
+    useMemo(() => resultToPlotResultData(source, element), [element, source])
+  );
+
+  const mergedElement = useMemo(
+    () => ({ ...defaultPlotParams, ...element }),
+    [element]
+  );
+
+  const allNameOptions = useMemo(() => {
+    return isComputerTable(sourceType) ? sourceType.columnNames : [];
+  }, [sourceType]);
+
+  const allTypeOptions = useMemo(() => {
+    return isComputerTable(sourceType) ? sourceType.columnTypes : [];
+  }, [sourceType]);
+
+  const { columnNameOptions, columnTypeOptions } = useMemo(() => {
+    const fColumnNameOptions = [];
+    const fColumnTypeOptions = [];
+    for (let i = 0; i < allTypeOptions.length; i++) {
+      if (isValidType(allTypeOptions[i])) {
+        fColumnNameOptions.push(allNameOptions[i]);
+        fColumnTypeOptions.push(allTypeOptions[i]);
+      }
     }
-    return uniq([element.y2ColumnName, element.yColumnName])
-      .filter((word) => word !== 'None')
-      .filter(Boolean) as string[];
-  }, [element]);
+    return {
+      columnTypeOptions: fColumnTypeOptions,
+      columnNameOptions: fColumnNameOptions,
+    };
+  }, [allNameOptions, allTypeOptions]);
 
   const plotParams: PlotParams = useMemo(
     () => ({
-      sourceVarNameOptions: names.map((name) => name.name),
-      sourceExprRefOptions: names.map((name) => name.exprRef),
-      columnNameOptions: isComputerTable(sourceType)
-        ? sourceType.columnNames
-        : [],
+      sourceVarNameOptions: tableNames.map((name) => name.name),
+      sourceExprRefOptions: tableNames.map((name) => name.exprRef),
+      columnNameOptions,
+      columnTypeOptions,
       setSourceVarName,
-      setMarkType: setMarkType as StringSetter,
+      setMarkType: setMarkType as (value: string) => void,
       setXColumnName,
-      setYColumnName,
       setSizeColumnName,
-      setColorColumnName,
-      setThetaColumnName,
       setColorScheme,
-      setY2ColumnName,
-      ...element,
+      setYColumnNames,
+      setYColumnChartTypes,
+      setOrientation,
+      setXAxisLabel,
+      setYAxisLabel,
+      setStartFromZero,
+      setGroupByX,
+      setMirrorYAxis,
+      setFlipTable,
+      setGrid,
+      setLineVariant,
+      setShowDataLabel,
+      setArcVariant,
+      setBarVariant,
+      setLabelColumnName,
+      ...mergedElement,
       setShape: setMarkType,
-      shape,
     }),
     [
-      names,
-      sourceType,
+      tableNames,
+      columnNameOptions,
+      columnTypeOptions,
       setSourceVarName,
       setMarkType,
       setXColumnName,
-      setYColumnName,
       setSizeColumnName,
-      setColorColumnName,
-      setThetaColumnName,
       setColorScheme,
-      setY2ColumnName,
-      element,
-      shape,
+      setYColumnNames,
+      setYColumnChartTypes,
+      setOrientation,
+      setXAxisLabel,
+      setYAxisLabel,
+      setStartFromZero,
+      setGroupByX,
+      setMirrorYAxis,
+      setFlipTable,
+      setGrid,
+      setLineVariant,
+      setShowDataLabel,
+      setArcVariant,
+      setBarVariant,
+      setLabelColumnName,
+      mergedElement,
     ]
   );
 
-  // Notebooks with charts that do not have a current color scheme need to be updated or they won't render.
-  useEffect(() => {
-    const colorScheme = plotParams.colorScheme as string;
-    if (colorScheme && !Object.keys(colorSchemes).includes(colorScheme)) {
-      plotParams.setColorScheme(Object.keys(colorSchemes)[0]);
-    }
-  }, [plotParams]);
-
   return useMemo(
-    () => ({ spec, data, plotParams, repeatedColumns }),
-    [data, plotParams, repeatedColumns, spec]
+    () => ({
+      data: resolvedResult?.data,
+      unfiltered: resolvedResult?.unfiltered,
+      plotParams,
+    }),
+    [plotParams, resolvedResult?.data, resolvedResult?.unfiltered]
   );
 };

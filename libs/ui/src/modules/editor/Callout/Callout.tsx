@@ -1,14 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { UserIconKey } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as userIcons from '../../../icons/user-icons';
-import { IconPopover } from '../../../shared';
 import { cssVar, useThemeColor } from '../../../primitives';
+import { IconPopover } from '../../../shared';
 import { blockAlignment } from '../../../styles';
 import { AvailableSwatchColor } from '../../../utils';
-import { UserIconKey } from '@decipad/editor-types';
 
 const { callout } = blockAlignment;
 
@@ -52,7 +52,7 @@ export const Callout = ({
   saveIcon = noop,
   saveColor = noop,
 }: CalloutProps): ReturnType<FC> => {
-  const Icon = userIcons[icon];
+  const Icon = userIcons[icon] ?? userIcons.Deci;
   const themeColor = useThemeColor(color);
 
   return (

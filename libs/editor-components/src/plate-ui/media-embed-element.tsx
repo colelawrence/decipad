@@ -1,10 +1,11 @@
-import { PlateElement, withHOC } from '@udecode/plate-common';
-import type { ComponentProps, FC, ReactNode } from 'react';
 import type {
   MediaEmbedElement as MediaEmbedElementType,
   MyElement,
   PlateComponent,
 } from '@decipad/editor-types';
+import { cn, componentCssVars, p14Regular } from '@decipad/ui';
+import { SerializedStyles, css } from '@emotion/react';
+import { PlateElement, withHOC } from '@udecode/plate-common';
 import {
   ELEMENT_MEDIA_EMBED,
   parseTwitterUrl,
@@ -12,19 +13,18 @@ import {
   useMediaState,
 } from '@udecode/plate-media';
 import { ResizableProvider, useResizableStore } from '@udecode/plate-resizable';
-import {
-  mediaResizeHandleVariants,
-  Resizable,
-  ResizeHandle,
-} from './resizable';
-import { MediaPopover } from './media-popover';
+import type { ComponentProps, FC, ReactNode } from 'react';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import { Tweet } from 'react-tweet';
-import { css } from '@emotion/react';
+import { DraggableBlock } from '../block-management/index';
 import { Caption, CaptionTextarea } from './caption';
-import { cn, componentCssVars, p14Regular } from '@decipad/ui';
-import type { DraggableBlock } from '../block-management/index';
 import { draggableStyles } from './image-element';
+import { MediaPopover } from './media-popover';
+import {
+  Resizable,
+  ResizeHandle,
+  mediaResizeHandleVariants,
+} from './resizable';
 
 const resizableSelectedStyles = css({
   background: componentCssVars('TableSelectionBackgroundColor'),
@@ -35,6 +35,7 @@ type Component = PlateComponent<{
     ComponentProps<typeof DraggableBlock> & {
       readonly element: MyElement;
       readonly children: ReactNode;
+      draggableCss?: SerializedStyles;
     }
   >;
   readOnly?: boolean;

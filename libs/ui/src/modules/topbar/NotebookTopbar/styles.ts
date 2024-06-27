@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
+import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import {
   componentCssVars,
   cssVar,
@@ -223,7 +223,7 @@ export const GPTNotification = styled.div(p13Medium, {
   transform: 'translateX(-50%)',
   bottom: '-32px',
   width: '100%',
-  maxWidth: '580px',
+  maxWidth: `${slimBlockWidth}px`,
   height: 32,
   display: 'flex',
   alignItems: 'center',

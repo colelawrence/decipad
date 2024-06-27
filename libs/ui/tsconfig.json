@@ -4,9 +4,17 @@
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "types": ["@testing-library/jest-dom"]
+    "types": [
+      "vitest/globals",
+      "@testing-library/jest-dom",
+      "vitest-dom/matchers"
+    ]
   },
-  "include": ["src", "storybook"],
+  "include": [
+    "src",
+    "storybook",
+    "src/modules/editor/PlotResult/helpers/**/*.json"
+  ],
   "references": [
     {
       "path": "../dom-test-utils"

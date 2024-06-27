@@ -1,9 +1,10 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { type SerializedType } from '@decipad/language-interfaces';
+import type { SerializedType } from '@decipad/language-interfaces';
 import {
   DraggableBlock,
   useTextTypeInference,
 } from '@decipad/editor-components';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import type {
   PlateComponent,
   VariableDropdownElement,
@@ -11,7 +12,6 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, mutateText } from '@decipad/editor-utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   useEditorStylesContext,
   useIsEditorReadOnly,

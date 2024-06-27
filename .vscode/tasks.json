@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Test with Vitest",
+      "type": "shell",
+      "command": "vitest",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": ["$vitest"]
+    }
+  ]
+}

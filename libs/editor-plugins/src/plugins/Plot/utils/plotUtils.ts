@@ -1,302 +1,27 @@
-import type { Computer } from '@decipad/computer-interfaces';
+import type { BasePlotProps } from '@decipad/editor-types';
+import { formatResult } from '@decipad/format';
 import type { Result, SerializedType } from '@decipad/language-interfaces';
+import type DeciNumber from '@decipad/number';
 import {
   Unit,
   materializeResult,
   safeNumberForPrecision,
 } from '@decipad/remote-computer';
-import type { PlotElement } from '@decipad/editor-types';
-import { formatResult } from '@decipad/format';
-import type DeciNumber from '@decipad/number';
-import { componentCssVarHex, cssVarHex } from '@decipad/ui';
-import type {
-  AllowedPlotValue,
-  DisplayType,
-  EncodingKey,
-  EncodingSpec,
-  FieldType,
-  PlotData,
-  PlotSpec,
-  Row,
-  TimeUnit,
-} from './plotUtils.interface';
-import { comparableChartTypes } from './plotUtils.interface';
+import { PlotData } from './plotUtils.interface';
 
-export type DisplayProps = {
-  sourceVarName: string;
-  markType: PlotElement['markType'];
-  xColumnName?: string;
-  yColumnName?: string;
-  sizeColumnName?: string;
-  colorColumnName?: string;
-  thetaColumnName?: string;
-  y2ColumnName?: string;
-  colorScheme?: string;
-};
-
-const displayPropsToEncoding: Record<string, EncodingKey> = {
-  xColumnName: 'x',
-  yColumnName: 'y',
-  sizeColumnName: 'size',
-  colorColumnName: 'color',
-  thetaColumnName: 'theta',
-};
-
-const relevantDataDisplayProps: Array<keyof DisplayProps> = Object.keys(
-  displayPropsToEncoding
-) as Array<keyof DisplayProps>;
-
-const markTypeToFill = (
-  markType: DisplayProps['markType']
-): string | undefined => {
-  switch (markType) {
-    case 'bar':
-    case 'area':
-    case 'point':
-      return componentCssVarHex('ChartBlueColor');
-    case 'circle':
-    case 'square':
-      return 'white';
-    default:
-      return undefined;
-  }
-};
-
-export function encodingTypeForColumnType(type: SerializedType): DisplayType {
-  switch (type.kind) {
-    case 'date':
-      return 'temporal';
-    case 'string':
-      return 'nominal';
-    default:
-      return 'quantitative';
-  }
-}
-
-function relevantColumnNames(displayProps: DisplayProps): string[] {
+function relevantColumnNames(displayProps: BasePlotProps): string[] {
   return [
     displayProps.xColumnName ?? '',
-    displayProps.yColumnName ?? '',
+    ...(displayProps.yColumnNames ?? []),
     displayProps.sizeColumnName ?? '',
-    displayProps.colorColumnName ?? '',
-    displayProps.thetaColumnName ?? '',
-    displayProps.y2ColumnName ?? '',
+    displayProps.labelColumnName ?? '',
   ].filter(Boolean);
-}
-
-function displayTimeUnitType(type: SerializedType): TimeUnit | undefined {
-  if (type.kind !== 'date') {
-    throw new Error('expected column to be of date type');
-  }
-  switch (type.date) {
-    case 'year': {
-      return 'utcyear';
-    }
-    case 'quarter':
-      return 'utcquarter';
-    case 'month': {
-      return 'utcyearmonth';
-    }
-    case 'day': {
-      return 'utcyearmonthdate';
-    }
-    case 'hour': {
-      return 'utcyearmonthdatehours';
-    }
-    case 'minute': {
-      return 'utcyearmonthdatehoursminutes';
-    }
-    case 'second':
-    case 'millisecond': {
-      return 'utcyearmonthdatehoursminutesseconds';
-    }
-  }
-  return undefined;
-}
-
-export function encodingFor(
-  _computer: Computer,
-  columnName: string,
-  columnType: SerializedType,
-  markType: PlotElement['markType']
-): EncodingSpec {
-  const type = encodingTypeForColumnType(columnType);
-  const spec: EncodingSpec = {
-    field: columnName,
-    type,
-    title: '',
-    timeUnit:
-      columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
-    legend: markType !== 'arc' ? null : undefined,
-  };
-
-  if (type === 'nominal') {
-    // remove sort
-    spec.sort = null;
-  }
-  return spec;
-}
-
-// eslint-disable-next-line complexity
-export function specFromType(
-  computer: Computer,
-  type: undefined | SerializedType,
-  displayProps: DisplayProps
-): undefined | PlotSpec {
-  if (!displayProps.markType || !type || type.kind !== 'table') {
-    return;
-  }
-  const columnNames = relevantColumnNames(displayProps);
-  const columnIndexes = columnNames.map((name) =>
-    type.columnNames.indexOf(name)
-  );
-  const columnTypes = columnIndexes.map(
-    (index) => (index >= 0 && type.columnTypes[index]) || undefined
-  );
-
-  const encoding = relevantDataDisplayProps.reduce(
-    (encodings, specPropName) => {
-      const columnName = displayProps[specPropName];
-      if (!columnName) {
-        return encodings;
-      }
-      const columnIndex = columnNames.indexOf(columnName);
-      const columnType = columnTypes[columnIndex];
-      if (columnType) {
-        const channelKey = displayPropsToEncoding[specPropName];
-        // eslint-disable-next-line no-param-reassign
-        encodings[channelKey] = encodingFor(
-          computer,
-          columnName,
-          columnType,
-          displayProps.markType
-        );
-      }
-
-      return encodings;
-    },
-    {} as Record<EncodingKey, EncodingSpec>
-  );
-
-  // if we want to compare multiple columns in the same chart
-  if (
-    displayProps.y2ColumnName &&
-    displayProps.y2ColumnName !== 'None' &&
-    comparableChartTypes.includes(displayProps.markType)
-  ) {
-    const { field } = encoding.x || {};
-
-    if (field) {
-      encoding.color = {
-        datum: { repeat: 'layer' },
-      };
-
-      encoding.y = {
-        aggregate: 'sum',
-        field: { repeat: 'layer' },
-        type: 'quantitative',
-        title: '',
-        axis: {},
-      };
-
-      const extraOffset =
-        displayProps.markType === 'bar'
-          ? { datum: { repeat: 'layer' } }
-          : { field: 'repeat' };
-
-      encoding.xOffset = {
-        ...extraOffset,
-        type: 'nominal',
-      };
-
-      encoding.x = {
-        field,
-        type: 'nominal',
-        title: '',
-      };
-    }
-  }
-
-  //
-  // all charts of comparable type need this,
-  // but unlike above this is not specific
-  // to ones that have a y2 column name
-  //
-  if (comparableChartTypes.includes(displayProps.markType)) {
-    encoding.x = {
-      ...encoding.x,
-      axis: {
-        labelAngle: 0,
-        labelOverlap: true,
-      },
-    };
-  }
-
-  if (encoding.color && !encoding.color.scale) {
-    encoding.color.scale = {
-      scheme: displayProps.colorScheme,
-    };
-  }
-
-  if (encoding.y && encoding.y.axis) {
-    encoding.y.axis.labelAngle = 0;
-    encoding.y.axis.tickColor = cssVarHex('textDefault');
-    encoding.y.axis.labelColor = cssVarHex('textSubdued');
-    encoding.y.axis.labelFontWeight = 700;
-    encoding.y.axis.gridColor = cssVarHex('backgroundDefault');
-  }
-  if (encoding.x && encoding.x.axis) {
-    encoding.x.axis.domainColor = cssVarHex('textDefault');
-    encoding.x.axis.tickColor = cssVarHex('textSubdued');
-    encoding.x.axis.labelColor = cssVarHex('textHeavy');
-    encoding.x.axis.labelAngle = 0;
-    encoding.x.axis.labelFontWeight = 700;
-    encoding.x.axis.grid = false;
-  }
-  if (
-    !comparableChartTypes.includes(displayProps.markType) &&
-    displayProps.markType !== 'arc'
-  ) {
-    encoding.color = undefined;
-  }
-
-  const markProps =
-    displayProps.markType === 'bar' ? { width: { band: 0.8 } } : {};
-
-  return {
-    mark: {
-      interpolate: 'natural',
-      type: displayProps.markType,
-      tooltip: true,
-      ...markProps,
-    },
-    encoding,
-    config: {
-      encoding: {
-        color: {
-          scheme: displayProps.colorScheme || 'deciblues',
-        },
-      },
-      mark: {
-        stroke:
-          displayProps.markType !== 'arc' && !encoding.color
-            ? componentCssVarHex('ChartBlueColor')
-            : undefined,
-        fill: markTypeToFill(displayProps.markType),
-        strokeWidth: 3,
-      },
-      autosize: 'fit',
-    },
-  };
 }
 
 function toPlotColumn(
   type: SerializedType,
   column: Array<Result.OneResult>
-): Array<AllowedPlotValue> {
-  if (!column || !column.length) {
-    return column as Array<AllowedPlotValue>;
-  }
+): Array<number | string> | null {
   if (type.kind === 'number') {
     return (column as Array<DeciNumber>).map((f) => {
       const [rounded] = safeNumberForPrecision(
@@ -308,13 +33,19 @@ function toPlotColumn(
   if (type.kind === 'date') {
     return (column as Array<bigint>).map((d) => formatResult('en-US', d, type));
   }
-  return column as Array<AllowedPlotValue>;
+  if (type.kind === 'boolean') {
+    return (column as Array<boolean>).map((d) => (d ? 'True' : 'False'));
+  }
+  if (type.kind === 'string') {
+    return column as Array<string>;
+  }
+  return null;
 }
 
 function makeWide(
-  table: Record<string, Array<AllowedPlotValue>>
-): Array<Record<string, AllowedPlotValue>> {
-  const rows: Array<Array<[string, AllowedPlotValue]>> = [];
+  table: Record<string, Array<number | string>>
+): Array<Record<string, number | string>> {
+  const rows: Array<Array<[string, number | string]>> = [];
   let first = true;
   for (const [key, values] of Object.entries(table)) {
     if (!key || !values) {
@@ -336,86 +67,51 @@ function makeWide(
 
 export async function resultToPlotResultData(
   _result: undefined | Result.Result,
-  displayProps: DisplayProps
-): Promise<undefined | PlotData> {
+  displayProps: BasePlotProps
+): Promise<
+  | undefined
+  | {
+      data: PlotData;
+      unfiltered: PlotData;
+    }
+> {
   if (!_result || _result.type.kind !== 'table') {
     return;
   }
   const type = _result?.type;
   if (!type || type.kind !== 'table') {
-    return undefined;
+    return;
   }
+
+  const allColumnNames = _result.type.columnNames;
   const result = await materializeResult(_result);
   const value = result?.value;
+
   if (!value) {
     return;
   }
   const tableValue = value as Result.ResultMaterializedTable;
   const columnNames = relevantColumnNames(displayProps);
-
-  const columnsTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =
-    columnNames.map((columnName): [SerializedType, Result.OneResult[]] => {
+  const columnsAllTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =
+    allColumnNames.map((columnName): [SerializedType, Result.OneResult[]] => {
       const index = type.columnNames.indexOf(columnName);
       return [type.columnTypes[index], tableValue[index]];
     });
-  const returnValue: Record<string, Array<AllowedPlotValue>> = {};
-  columnNames.forEach((columnName, index) => {
-    const [columnType, values] = columnsTypesAndResults[index];
-    returnValue[columnName] = toPlotColumn(columnType, values);
+  const returnValue: Record<string, Array<number | string>> = {};
+  const returnValueUnfiltered: Record<string, Array<number | string>> = {};
+  allColumnNames.forEach((columnName, index) => {
+    const [columnType, values] = columnsAllTypesAndResults[index];
+    const plotValueThatIsAcceptable = toPlotColumn(columnType, values);
+    if (plotValueThatIsAcceptable) {
+      returnValueUnfiltered[columnName] = plotValueThatIsAcceptable;
+      if (columnNames.includes(columnName)) {
+        returnValue[columnName] = plotValueThatIsAcceptable;
+      }
+    }
   });
 
-  return { table: makeWide(returnValue) };
-}
-
-function findWideDataDomain(
-  key: FieldType | undefined,
-  data: Row[]
-): [number, number] | void {
-  let min = Infinity;
-  let max = -Infinity;
-
-  if (typeof key === 'string') {
-    for (const row of data) {
-      const value = row[key];
-      if (value) {
-        if (typeof value === 'number') {
-          if (value < min) {
-            min = value;
-          }
-          if (value > max) {
-            max = value;
-          }
-        }
-      }
-    }
-  }
-
-  if (Number.isFinite(min) && Number.isFinite(max)) {
-    const range = max - min;
-    return [Math.min(min, 0), Math.ceil(max + range / 10)];
-  }
-}
-
-export function enhanceSpecFromWideData(
-  spec: PlotSpec,
-  data: PlotData
-): PlotSpec {
-  if (spec.mark.type !== 'arc') {
-    for (const encValue of Object.values(spec?.encoding)) {
-      if (encValue) {
-        const { field, type } = encValue;
-        if (type === 'quantitative') {
-          const domain = findWideDataDomain(field, data.table);
-          if (domain) {
-            if (!encValue.scale) {
-              encValue.scale = {};
-            }
-            encValue.scale.domain = domain;
-          }
-        }
-      }
-    }
-  }
-
-  return spec;
+  return {
+    unfiltered: { table: makeWide(returnValueUnfiltered) },
+    data: { table: makeWide(returnValue) },
+  };
 }

@@ -1,5 +1,3 @@
-import { deleteText, removeNodes } from '@udecode/plate-common';
-import type { Location, Path } from 'slate';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { FileType, MyEditor, SlashCommand } from '@decipad/editor-types';
 import {
@@ -23,6 +21,8 @@ import {
   useFileUploadStore,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
+import { deleteText, removeNodes } from '@udecode/plate-common';
+import type { Location, Path } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -123,6 +123,15 @@ export const execute = async ({
         break;
       case 'scatter-plot':
         await insertPlotBelow(editor, path, 'point');
+        break;
+      case 'radar-plot':
+        await insertPlotBelow(editor, path, 'radar');
+        break;
+      case 'funnel-plot':
+        await insertPlotBelow(editor, path, 'funnel');
+        break;
+      case 'combo-chart':
+        await insertPlotBelow(editor, path, 'combo');
         break;
       case 'import':
         await insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);

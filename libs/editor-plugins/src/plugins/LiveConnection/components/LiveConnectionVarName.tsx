@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-components';
 
 import { useComputer, useParentNodeEntry } from '@decipad/editor-hooks';
-import type { MyEditor, PlateComponent } from '@decipad/editor-types';
+import type { MyEditor, PlateComponent, MarkType } from '@decipad/editor-types';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -18,7 +18,7 @@ import { parseSourceUrl } from '@decipad/import';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
 import { useToast } from '@decipad/toast';
-import type { MarkType } from '@decipad/ui';
+
 import { IntegrationBlock as UIIntegrationBlock } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
@@ -28,8 +28,8 @@ import {
   isElement,
 } from '@udecode/plate-common';
 import { Hide, Show, TableSmall } from 'libs/ui/src/icons';
-import { useCallback, useMemo, useState } from 'react';
 import type { ComponentProps } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 
 const captionWrapperStyles = css({

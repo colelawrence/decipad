@@ -92,9 +92,9 @@ NEVER remove a table.`,
 
   plots: `Plots, Graphs or Charts:
 An element of type \`plot\` can be used to print a chart or graphic.
-Always fill the \`xColumnName\` and the \`yColumnName\` attributes with column names.,
-The chart type can be changed by changing the \`markType\` attribute to "bar", "circle", "square", "tick", "line", "area", or "point".
-If the \`markType\` is \`arc\` it will print a pie chart. For pie charts the \`thetaColumnName\` should be filled.
+Always fill the \`xColumnName\` and the \`yColumnNames\` attributes with column names.,
+The chart type can be changed by changing the \`markType\` attribute to "bar", "arc", "line", "funnel", "point", "radar", "combo", or "area".
+"arc" is for pie charts, "point" is for scatter charts.
 NEVER remove a table when adding or changing a chart.`,
 };
 

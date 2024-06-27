@@ -1,48 +1,16 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { ComponentProps, FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { CellInput } from '../CellInput/CellInput';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
-import { initializeVega } from './initializeVega';
-import { cssVar, p14Regular } from '../../../primitives';
-
-const plotTitleStyles = css({
-  position: 'absolute',
-  zIndex: 9,
-  right: 18,
-  top: 18,
-  button: {
-    float: 'right',
-  },
-});
-
-const plotBlockStyles = css({
-  display: 'grid',
-});
-
-const plotStyles = css({
-  alignSelf: 'center',
-});
-
-const emptyChartStyles = css({
-  height: '100px',
-  backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: '8px',
-  padding: '16px 48px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-interface PlotBlockProps {
-  readOnly?: boolean;
-  plotParams: ComponentProps<typeof PlotParams>;
-  result?: ComponentProps<typeof PlotResult>;
-  title?: string;
-  onTitleChange?: (newValue: string) => void;
-}
+import {
+  cellInputStyles,
+  plotBlockStyles,
+  plotStyles,
+  plotTitleStyles,
+  positionRelative,
+} from './styles';
+import { PlotBlockProps } from './types';
 
 export const PlotBlock = ({
   readOnly = false,
@@ -50,72 +18,45 @@ export const PlotBlock = ({
   result,
   title,
   onTitleChange = noop,
+  chartUuid,
 }: PlotBlockProps): ReturnType<FC> => {
   const caption = useMemo(() => title || '', [title]);
-  initializeVega();
-  const hasOptions = plotParams.sourceVarNameOptions.length > 0;
+  const noAxis = useMemo(
+    () => !!plotParams.xColumnName && plotParams.yColumnNames.length > 0,
+    [plotParams.xColumnName, plotParams.yColumnNames.length]
+  );
+  const canRenderChart = useMemo(
+    () => plotParams.sourceVarName && result && noAxis,
+    [noAxis, plotParams.sourceVarName, result]
+  );
 
   return (
     <section
       data-testid="chart-styles"
+      aria-label="column-content"
       className={'block-p'}
       css={plotBlockStyles}
       contentEditable={false}
     >
-      <div css={{ position: 'relative' }}>
+      <div css={positionRelative}>
         {!readOnly && (
           <div css={plotTitleStyles}>
             <PlotParams {...plotParams} />
           </div>
         )}
-        {result && (
-          <output css={plotStyles}>
-            <PlotResult {...result} />
-          </output>
-        )}
+
+        <output css={plotStyles} id={chartUuid}>
+          <PlotResult {...result} {...plotParams} isExporting={readOnly} />
+        </output>
       </div>
 
-      {(!plotParams.sourceVarName || !result) && (
-        <div css={emptyChartStyles}>
-          {hasOptions ? (
-            <span>Please select a table to base this chart on.</span>
-          ) : (
-            <span>
-              It seems you don't have any tables to base this chart on. Create
-              some tables and try again.
-            </span>
-          )}
-        </div>
-      )}
-
-      <div
-        css={[
-          { cursor: 'text' },
-          {
-            input: css(p14Regular, {
-              padding: '0',
-              marginTop: 8,
-              width: '100%',
-              borderStyle: 'none',
-              resize: 'none',
-
-              color: 'inherit',
-              overflowY: 'hidden',
-              backgroundColor: 'inherit',
-              textAlign: 'center',
-              ':focus': { '::placeholder': { opacity: 0 } },
-            }),
-          },
-          { input: { fontVariantNumeric: 'unset' } },
-        ]}
-      >
-        {(readOnly && caption === '') ||
-        !plotParams.sourceVarName ? undefined : (
+      <div css={cellInputStyles}>
+        {(readOnly && caption === '') || !canRenderChart ? undefined : (
           <CellInput
             value={caption}
             readOnly={readOnly}
             onChange={onTitleChange}
-            placeholder="Chart caption"
+            placeholder="Add a caption to this chart"
           />
         )}
       </div>

@@ -1,14 +1,17 @@
+import type {
+  Constant,
+  SerializedType,
+  SerializedTypes,
+  Unit,
+} from '@decipad/language-interfaces';
 import type { TElement } from '@udecode/plate-common';
-import type { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
 import type { TExcalidrawProps } from '@udecode/plate-excalidraw';
+import type { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
 import type { Mutable } from 'utility-types';
 import type {
-  Unit,
-  Constant,
-  SerializedTypes,
-  SerializedType,
-} from '@decipad/language-interfaces';
-import type {
+  AcceptableChartShapesForCombo,
+  ChartColorSchemeKeys,
+  DEPRECATED_ELEMENT_INPUT,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LI,
   ELEMENT_LIC,
@@ -16,8 +19,12 @@ import type {
   ElementKind,
   IntegrationTypes,
   MarkKind,
+  MarkType,
+  PlotArcVariant,
+  PlotBarVariant,
+  PlotLineVariant,
+  PlotOrientation,
   UserIconKey,
-  DEPRECATED_ELEMENT_INPUT,
 } from '.';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
@@ -48,35 +55,35 @@ import type {
   DataViewNameElement,
 } from './data-view';
 import type {
+  ELEMENT_CAPTION,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_SMART_REF,
-  ELEMENT_STRUCTURED_IN_CHILD,
-  ELEMENT_STRUCTURED_VARNAME,
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
-  ELEMENT_DRAW_IMAGE,
   ELEMENT_DIAMOND,
+  ELEMENT_DRAW_IMAGE,
+  ELEMENT_DROPDOWN,
   ELEMENT_ELLIPSE,
+  ELEMENT_EXPRESSION,
   ELEMENT_FREEDRAW,
   ELEMENT_LINE,
   ELEMENT_LINEAR,
-  ELEMENT_RECTANGLE,
-  ELEMENT_SELECTION,
-  ELEMENT_TEXT,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TABLE_VARIABLE_NAME,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
-  ELEMENT_CAPTION,
-  ELEMENT_DROPDOWN,
-  ELEMENT_EXPRESSION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+  ELEMENT_RECTANGLE,
+  ELEMENT_SELECTION,
   ELEMENT_SLIDER,
+  ELEMENT_SMART_REF,
+  ELEMENT_STRUCTURED_IN_CHILD,
+  ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TAB,
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  ELEMENT_TD,
+  ELEMENT_TEXT,
+  ELEMENT_TH,
+  ELEMENT_TITLE,
+  ELEMENT_TR,
 } from './element-kinds';
 import {
   ELEMENT_CODE_LINE_V2,
@@ -327,7 +334,7 @@ export interface FetchElement extends BaseElement {
   'data-varname': string;
 }
 
-export interface PlotElement extends BaseElement {
+export interface OldPlotElement extends BaseElement {
   type: typeof ELEMENT_PLOT;
   title?: string;
   colorScheme?: string;
@@ -349,6 +356,37 @@ export interface PlotElement extends BaseElement {
   children: [EmptyText];
   y2ColumnName?: string;
 }
+
+export interface BasePlotProps {
+  readonly sourceVarName?: string;
+  readonly markType: MarkType;
+  readonly xColumnName?: string;
+  readonly xAxisLabel?: string;
+  readonly yAxisLabel?: string;
+  readonly yColumnNames: string[];
+  readonly yColumnChartTypes: AcceptableChartShapesForCombo[];
+  readonly labelColumnName?: string;
+  readonly sizeColumnName?: string;
+  readonly orientation: PlotOrientation;
+  readonly colorScheme?: ChartColorSchemeKeys;
+  readonly grid: boolean;
+  readonly startFromZero: boolean;
+  readonly mirrorYAxis: boolean;
+  readonly flipTable: boolean;
+  readonly groupByX: boolean;
+  readonly showDataLabel: boolean;
+  readonly barVariant: PlotBarVariant;
+  readonly lineVariant: PlotLineVariant;
+  readonly arcVariant: PlotArcVariant;
+  readonly schema: 'jun-2024';
+}
+
+export interface PlotElement extends BaseElement, BasePlotProps {
+  type: typeof ELEMENT_PLOT;
+  title?: string;
+  children: [EmptyText];
+}
+
 export interface DeprecatedInputElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_INPUT;
   children: [EmptyText];

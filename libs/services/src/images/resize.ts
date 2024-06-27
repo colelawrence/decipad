@@ -1,5 +1,5 @@
-import type { Dimensions } from './types';
 import Jimp from 'jimp';
+import type { Dimensions } from './types';
 
 const MAX_WIDTH = 580;
 

@@ -1,5 +1,5 @@
-import toposort from 'toposort';
 import { unique } from '@decipad/utils';
+import toposort from 'toposort';
 
 const schemaByElementType: Record<string, string> = {
   a: `interface LinkElement {
@@ -257,12 +257,24 @@ type VariableSliderElement = VariableBaseElement<
       | 'point'
       | 'arc';
     xColumnName: string;
-    yColumnName: string;
+    xAxisLabel: string;
+    yAxisLabel: string;
+    labelColumnName: string;
     sizeColumnName: string;
-    colorColumnName: string;
-    thetaColumnName: string;
     children: [EmptyText];
-    y2ColumnName: string;
+    yColumnNames: string[];
+    yColumnChartTypes: string[];
+    orientation: string;
+    startFromZero: boolean;
+    mirrorYAxis: boolean;
+    flipTable: boolean;
+    groupByX: boolean;
+    grid: boolean;
+    showDataLabel: boolean;
+    lineVariant: string;
+    arcVariant: string;
+    barVariant: string;
+    schema: 'jun-2024';
   }`,
 } as const;
 

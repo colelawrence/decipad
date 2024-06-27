@@ -1,4 +1,4 @@
-import type { AnyElement } from '@decipad/editor-types';
+import type { AnyElement, PlotParams } from '@decipad/editor-types';
 
 export interface NotebookError {
   elementId: string;
@@ -15,24 +15,6 @@ export interface CreateResult {
   createdElementType: string;
   createdElementName: string;
   createdSubElements?: Array<CreateResult>;
-}
-
-export interface PlotParams {
-  plotType:
-    | 'bar'
-    | 'circle'
-    | 'square'
-    | 'tick'
-    | 'line'
-    | 'area'
-    | 'point'
-    | 'arc';
-  xColumnName: string;
-  yColumnName: string;
-  sizeColumnName: string;
-  colorColumnName: string;
-  thetaColumnName: string;
-  y2ColumnName: string;
 }
 
 export type AllNotebookElementsDescriptionResult = Array<{

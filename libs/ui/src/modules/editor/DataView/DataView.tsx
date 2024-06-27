@@ -5,11 +5,12 @@ import type { AutocompleteName } from '@decipad/language-interfaces';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Invisible, SegmentButtons, Spinner } from 'libs/ui/src/shared';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { Children, FC, ReactNode } from 'react';
 import { Move, Transpose } from '../../../icons';
+import * as userIcons from '../../../icons/user-icons';
 import { p14Regular, smallScreenQuery } from '../../../primitives';
 import { IconPopover, TableToolbar } from '../../../shared/molecules';
-import * as userIcons from '../../../icons/user-icons';
 import { editorLayout, scrollbars } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { tableCaptionWrapperStyles } from '../EditorTable/EditorTable';
@@ -41,7 +42,7 @@ const dataViewAlternateRotationTableStyles = css({
 
 const dataViewTableWrapperStyles = css(
   {
-    transform: `translateX(calc((((100vw - 580px) / 2)) * -1 ))`,
+    transform: `translateX(calc((((100vw - ${slimBlockWidth}px) / 2)) * -1 ))`,
     width: '100vw',
     minWidth: editorLayout.slimBlockWidth,
     paddingBottom: '12px',

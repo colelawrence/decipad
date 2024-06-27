@@ -1,14 +1,10 @@
+import { markTypes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
-import { MenuItem, TextAndIconButton, MenuList } from '../../../shared';
-import {
-  markTypeIcons,
-  markTypeNames,
-  markTypes,
-  shapes,
-} from '../PlotParams/PlotParams';
-import { hideOnPrint } from '../../../styles/editor-layout';
 import { BarChart } from '../../../icons';
+import { MenuItem, MenuList, TextAndIconButton } from '../../../shared';
+import { hideOnPrint } from '../../../styles/editor-layout';
+import { markTypeIcons, markTypeNames } from '../PlotParams/types';
 
 type CreateChartMenuProps = PropsWithChildren<{
   onAddChartViewButtonPress: (_type: typeof markTypes[number]) => void;
@@ -29,11 +25,9 @@ export const CreateChartMenu: FC<CreateChartMenuProps> = ({
     }
   >
     {markTypes.map((mark) => {
-      const type = shapes.includes(mark) ? 'point' : mark;
-
       return (
         <MenuItem
-          key={type}
+          key={mark}
           onSelect={() => {
             onAddChartViewButtonPress(mark);
           }}

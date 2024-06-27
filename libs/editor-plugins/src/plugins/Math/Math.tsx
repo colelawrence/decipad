@@ -68,12 +68,7 @@ const Math: PlateComponent = ({ attributes, element, children }) => {
   }, [editor, element]);
 
   return (
-    <DraggableBlock
-      element={element}
-      blockKind="math"
-      contentEditable={false}
-      {...attributes}
-    >
+    <DraggableBlock element={element} blockKind="math" {...attributes}>
       <UIMathBlock
         readOnly={readOnly}
         onReference={onScrollToRef}

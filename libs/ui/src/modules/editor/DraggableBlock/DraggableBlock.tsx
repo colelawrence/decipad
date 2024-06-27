@@ -4,8 +4,8 @@ import { css, SerializedStyles } from '@emotion/react';
 import { ComponentProps, FC, HTMLProps, ReactNode, Ref, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
 
-import { MenuItem, TriggerMenuItem, MenuList } from '../../../shared';
-import { NewElementLine } from '../NewElementLine/NewElementLine';
+import { TabElement } from '@decipad/editor-types';
+import { Path } from 'slate';
 import { Rotate } from '../../../icons';
 import {
   cssVar,
@@ -13,12 +13,12 @@ import {
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../../primitives';
+import { MenuItem, MenuList, TriggerMenuItem } from '../../../shared';
 import { blockAlignment, editorLayout } from '../../../styles';
 import { slimBlockWidth } from '../../../styles/editor-layout';
-import { TabElement } from '@decipad/editor-types';
-import { EditorBlock } from '../EditorBlock/EditorBlock';
 import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
-import { Path } from 'slate';
+import { EditorBlock } from '../EditorBlock/EditorBlock';
+import { NewElementLine } from '../NewElementLine/NewElementLine';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -79,6 +79,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   // Downloadable
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
+  readonly handleDownloadChart?: () => void;
   readonly needsUpgrade?: boolean;
 }
 // eslint-disable-next-line complexity
@@ -121,6 +122,7 @@ export const DraggableBlock = ({
 
   isDownloadable,
   onDownload,
+  handleDownloadChart,
   needsUpgrade = false,
   path,
   ...props
@@ -222,6 +224,7 @@ export const DraggableBlock = ({
               aiPanel={aiPanel}
               isDownloadable={isDownloadable}
               onDownload={onDownload}
+              handleDownloadChart={handleDownloadChart}
               needsUpgrade={needsUpgrade}
               path={path}
             >

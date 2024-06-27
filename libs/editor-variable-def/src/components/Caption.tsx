@@ -87,7 +87,6 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
     <div
       {...attributes}
       contentEditable={!readOnly}
-      suppressContentEditableWarning
       data-testid="widget-caption"
     >
       <UICaption

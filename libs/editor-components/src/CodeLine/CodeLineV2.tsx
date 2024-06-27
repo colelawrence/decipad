@@ -1,8 +1,11 @@
-import type {
-  IdentifiedError,
-  IdentifiedResult,
-  SimpleValue,
-} from '@decipad/remote-computer';
+import {
+  useComputer,
+  useEnsureValidVariableName,
+  useGeneratedName,
+  useNodePath,
+  useNodeText,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import type {
   CodeLineV2Element,
   MyElement,
@@ -20,17 +23,14 @@ import {
   isStructuredElement,
 } from '@decipad/editor-utils';
 import {
-  useComputer,
-  useEnsureValidVariableName,
-  useGeneratedName,
-  useNodePath,
-  useNodeText,
-  usePathMutatorCallback,
-} from '@decipad/editor-hooks';
-import {
   useEditorTeleportContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+  SimpleValue,
+} from '@decipad/remote-computer';
 import {
   CodeLineStructured,
   CodeVariableDefinition,
@@ -40,6 +40,7 @@ import {
   focusMouseEventLocation,
   shouldResetContentEditable,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import {
   findNodePath,
   getNodeString,
@@ -60,18 +61,17 @@ import {
   useState,
 } from 'react';
 import { useSelected } from 'slate-react';
-import { css } from '@emotion/react';
-import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
+import { DraggableBlock } from '../block-management';
 import { CodeLineTeleport } from './CodeLineTeleport';
+import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
+import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
 import { useTurnIntoProps } from './useTurnIntoProps';
-import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
-import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
@@ -185,7 +185,6 @@ export const CodeLineV2: PlateComponent = ({
       {...turnIntoProps}
       {...attributes}
       dependencyId={lineId}
-      id={lineId}
       isCentered={true}
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}
     >

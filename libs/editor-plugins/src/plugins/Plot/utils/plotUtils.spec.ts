@@ -1,26 +1,31 @@
+import { BasePlotProps } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/language-interfaces';
 import { N } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
-import type { DisplayProps } from './plotUtils';
-import {
-  enhanceSpecFromWideData,
-  resultToPlotResultData,
-  specFromType,
-} from './plotUtils';
-import { getComputer } from '@decipad/computer';
+import { resultToPlotResultData } from './plotUtils';
 
-const defaultDisplayProps: DisplayProps = {
+const defaultDisplayProps: BasePlotProps = {
   sourceVarName: '',
   xColumnName: '',
-  yColumnName: '',
-  y2ColumnName: '',
+  xAxisLabel: '',
+  yAxisLabel: '',
+  yColumnNames: [],
   sizeColumnName: '',
-  colorColumnName: '',
-  thetaColumnName: '',
   markType: 'bar',
+  yColumnChartTypes: [],
+  orientation: 'horizontal',
+  grid: false,
+  startFromZero: true,
+  mirrorYAxis: false,
+  flipTable: false,
+  groupByX: false,
+  showDataLabel: true,
+  barVariant: 'grouped',
+  lineVariant: 'simple',
+  arcVariant: 'donut',
+  schema: 'jun-2024',
 };
 
-const displayProps = (props: Partial<DisplayProps> = {}): DisplayProps => {
+const displayProps = (props: Partial<BasePlotProps> = {}): BasePlotProps => {
   return {
     ...defaultDisplayProps,
     ...props,
@@ -65,189 +70,6 @@ const tableData = [
   [100n, 200n, 300n], // date-millisecond
   [N(1), N(2), N(3)], // simple-number
 ];
-
-describe('specFromType', () => {
-  const computer = getComputer();
-  it('returns no spec if no type is provided', () => {
-    expect(specFromType(computer, undefined, displayProps())).toBeUndefined();
-  });
-
-  it('returns no encodings if nothing other than a table and a mark type are provided', () => {
-    const type: SerializedType = {
-      kind: 'table',
-      columnNames: ['col1', 'col2'],
-      columnTypes: [{ kind: 'string' }, { kind: 'number', unit: null }],
-      indexName: 'col1',
-    };
-    expect(
-      specFromType(computer, type, displayProps({ markType: 'bar' }))
-    ).toMatchObject({
-      config: {
-        encoding: {
-          color: {
-            scheme: 'deciblues',
-          },
-        },
-      },
-      encoding: {},
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('returns a default spec with default display props', () => {
-    expect(specFromType(computer, tableType, displayProps())).toMatchObject({
-      encoding: {},
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('changes spec mark type accordingly', () => {
-    expect(
-      specFromType(computer, tableType, displayProps({ markType: 'area' }))
-    ).toMatchObject({
-      encoding: {},
-      mark: {
-        tooltip: true,
-        type: 'area',
-      },
-    });
-  });
-
-  it('xColumnName', () => {
-    expect(
-      specFromType(computer, tableType, displayProps({ xColumnName: 'index' }))
-    ).toMatchObject({
-      encoding: {
-        x: {
-          field: 'index',
-          timeUnit: undefined,
-          type: 'nominal',
-        },
-      },
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('yColumnName', () => {
-    expect(
-      specFromType(computer, tableType, displayProps({ yColumnName: 'index' }))
-    ).toMatchObject({
-      encoding: {
-        y: {
-          field: 'index',
-        },
-      },
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('sizeColumnName', () => {
-    expect(
-      specFromType(
-        computer,
-        tableType,
-        displayProps({ sizeColumnName: 'index' })
-      )
-    ).toMatchObject({
-      encoding: {
-        size: {
-          field: 'index',
-        },
-      },
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('colorColumnName', () => {
-    expect(
-      specFromType(
-        computer,
-        tableType,
-        displayProps({ colorColumnName: 'index' })
-      )
-    ).toMatchObject({
-      encoding: {
-        color: {
-          field: 'index',
-        },
-      },
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it('thetaColumnName', () => {
-    expect(
-      specFromType(
-        computer,
-        tableType,
-        displayProps({ thetaColumnName: 'index' })
-      )
-    ).toMatchObject({
-      encoding: {
-        theta: {
-          field: 'index',
-        },
-      },
-      mark: {
-        tooltip: true,
-        type: 'bar',
-      },
-    });
-  });
-
-  it.each(['year', 'month', 'day', 'hour', 'minute', 'second', 'millisecond'])(
-    'supports %s time units',
-    (unit) => {
-      const expectedDateUnitToVegaTimeUnit: Record<string, string> = {
-        year: 'utcyear',
-        month: 'utcyearmonth',
-        day: 'utcyearmonthdate',
-        hour: 'utcyearmonthdatehours',
-        minute: 'utcyearmonthdatehoursminutes',
-        second: 'utcyearmonthdatehoursminutesseconds',
-        millisecond: 'utcyearmonthdatehoursminutesseconds',
-      };
-      expect(
-        specFromType(
-          computer,
-          tableType,
-          displayProps({ xColumnName: `date-${unit}` })
-        )
-      ).toMatchObject({
-        encoding: {
-          x: {
-            field: `date-${unit}`,
-            timeUnit: expectedDateUnitToVegaTimeUnit[unit],
-            type: 'temporal',
-          },
-        },
-        mark: {
-          tooltip: true,
-          type: 'bar',
-        },
-      });
-    }
-  );
-});
-
 describe('resultToPlotResultData', () => {
   it('undefined result gets undefined plot results', async () => {
     expect(
@@ -260,65 +82,75 @@ describe('resultToPlotResultData', () => {
         { value: tableData, type: tableType },
         displayProps({
           xColumnName: 'index',
-          yColumnName: 'date-year',
-          y2ColumnName: 'date-year2',
-          thetaColumnName: 'date-month',
-          colorColumnName: 'date-day',
+          yColumnNames: ['date-day', 'date-month', 'date-year'],
           sizeColumnName: 'simple-number',
         })
       )
     ).toMatchInlineSnapshot(`
       {
-        "table": [
-          {
-            "date-day": "1970-01-01",
-            "date-month": "1970-01",
-            "date-year": "1970",
-            "index": "label 1",
-            "simple-number": 1,
-          },
-          {
-            "date-day": "1970-01-01",
-            "date-month": "1970-01",
-            "date-year": "1970",
-            "index": "label 2",
-            "simple-number": 2,
-          },
-          {
-            "date-day": "1970-01-01",
-            "date-month": "1970-01",
-            "date-year": "1970",
-            "index": "label 3",
-            "simple-number": 3,
-          },
-        ],
+        "data": {
+          "table": [
+            {
+              "date-day": "1970-01-01",
+              "date-month": "1970-01",
+              "date-year": "1970",
+              "index": "label 1",
+              "simple-number": 1,
+            },
+            {
+              "date-day": "1970-01-01",
+              "date-month": "1970-01",
+              "date-year": "1970",
+              "index": "label 2",
+              "simple-number": 2,
+            },
+            {
+              "date-day": "1970-01-01",
+              "date-month": "1970-01",
+              "date-year": "1970",
+              "index": "label 3",
+              "simple-number": 3,
+            },
+          ],
+        },
+        "unfiltered": {
+          "table": [
+            {
+              "date-day": "1970-01-01",
+              "date-hour": "1970-01-01 00:00",
+              "date-millisecond": "1970-01-01 00:00",
+              "date-minute": "1970-01-01 00:00",
+              "date-month": "1970-01",
+              "date-second": "1970-01-01 00:00",
+              "date-year": "1970",
+              "index": "label 1",
+              "simple-number": 1,
+            },
+            {
+              "date-day": "1970-01-01",
+              "date-hour": "1970-01-01 00:00",
+              "date-millisecond": "1970-01-01 00:00",
+              "date-minute": "1970-01-01 00:00",
+              "date-month": "1970-01",
+              "date-second": "1970-01-01 00:00",
+              "date-year": "1970",
+              "index": "label 2",
+              "simple-number": 2,
+            },
+            {
+              "date-day": "1970-01-01",
+              "date-hour": "1970-01-01 00:00",
+              "date-millisecond": "1970-01-01 00:00",
+              "date-minute": "1970-01-01 00:00",
+              "date-month": "1970-01",
+              "date-second": "1970-01-01 00:00",
+              "date-year": "1970",
+              "index": "label 3",
+              "simple-number": 3,
+            },
+          ],
+        },
       }
     `);
-  });
-});
-
-describe('enhanceSpecFromWideData', () => {
-  const computer = getComputer();
-  it('enhances spec when data are numbers', () => {
-    const data = {
-      table: [
-        { a: 1, 'simple-number': 4 },
-        { a: 3, 'simple-number': 2 },
-        { a: 5, 'simple-number': 8 },
-        { a: 7, 'simple-number': 6 },
-      ],
-    };
-    const spec = enhanceSpecFromWideData(
-      getDefined(
-        specFromType(
-          computer,
-          tableType,
-          displayProps({ xColumnName: 'simple-number' })
-        )
-      ),
-      data
-    );
-
-    expect(spec.encoding.x?.scale?.domain).toStrictEqual([0, 9]);
   });
 });

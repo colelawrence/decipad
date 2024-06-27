@@ -1,5 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import {
+  useAiCreditsStore,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
+import { useCallback } from 'react';
+import { Close, Sparkles } from '../../../icons';
 import {
   componentCssVars,
   cssVar,
@@ -7,13 +13,7 @@ import {
   p12Medium,
   p13Medium,
 } from '../../../primitives';
-import { Close, Sparkles } from '../../../icons';
 import { Button, Tooltip } from '../../../shared';
-import { useCallback } from 'react';
-import {
-  useAiCreditsStore,
-  useNotebookMetaData,
-} from '@decipad/react-contexts';
 
 export const wrapperStyles = css({
   display: 'flex',
@@ -157,7 +157,12 @@ const Credits: React.FC<{
         <div css={creditsStyles(creditsLeft === 0)}>
           <span>Credits</span>
           <label>
-            <span>{Math.max(0, creditsLeft)}</span>
+            <span>
+              {new Intl.NumberFormat('en-US', {
+                notation: 'compact',
+                compactDisplay: 'short',
+              }).format(Math.max(0, creditsLeft))}
+            </span>
           </label>
           <Button
             type="secondary"

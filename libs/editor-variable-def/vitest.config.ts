@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { mergeConfig, defineConfig } from 'vitest/config';
+import { defineConfig, mergeConfig } from 'vitest/config';
 // eslint-disable-next-line import/no-relative-packages
 import rootViteConfig from '../../vite.config';
 
@@ -7,9 +7,16 @@ export default mergeConfig(
   rootViteConfig,
   defineConfig({
     test: {
+      environment: 'jsdom',
       root: __dirname,
-      include: ['src/**/*.spec.ts'],
-      setupFiles: ['@vitest/web-worker', 'fake-indexeddb/auto'],
+      include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+      setupFiles: [
+        '@vitest/web-worker',
+        'fake-indexeddb/auto',
+        '../../libs/testutils/src/dom-extensions-setup-after-env',
+        '../../libs/testutils/src/window-match-media-setup',
+        './vitest.setup.js',
+      ],
       globals: true,
       css: true,
       server: {

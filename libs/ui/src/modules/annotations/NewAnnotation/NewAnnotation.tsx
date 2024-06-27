@@ -1,6 +1,8 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { useCreateAnnotationMutation } from '@decipad/graphql-client';
+import { useAnnotations } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
+import { Send } from 'libs/ui/src/icons';
 import {
   useCallback,
   useContext,
@@ -10,8 +12,6 @@ import {
   useState,
 } from 'react';
 import * as Styled from './styles';
-import { Send } from 'libs/ui/src/icons';
-import { useAnnotations } from '@decipad/react-contexts';
 
 type NewAnnotationProps = {
   blockId: string;
@@ -24,7 +24,6 @@ type NewAnnotationProps = {
 export const NewAnnotation: React.FC<NewAnnotationProps> = ({
   blockId,
   notebookId,
-
   isReply,
 }) => {
   const toast = useToast();
@@ -128,7 +127,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
         value={annotation}
         autoFocus
         rows={1}
-        placeholder={isReply ? 'Add a reply' : 'Add a comment'}
+        placeholder={'Add a comment'}
         onKeyDown={handleKeyDown}
         onChange={(e) => setAnnotation(e.target.value)}
       />

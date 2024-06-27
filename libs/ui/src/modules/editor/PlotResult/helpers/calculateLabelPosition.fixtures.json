@@ -1,0 +1,277 @@
+[
+  {
+    "input": {
+      "x": 10.633333333333333,
+      "y": 311.10625000000005,
+      "value": 11000,
+      "height": 22.893749999999955,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "grouped",
+      "referenceValue": 150000
+    },
+    "output": {
+      "rectX1": 34.333333333333336,
+      "rectY1": 291.10625000000005,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 303.10625000000005,
+      "centerX": 49.13333333333333,
+      "centerY": 299.10625000000005,
+      "rotate": false,
+      "textX": 49.13333333333333,
+      "fontSize": 12,
+      "prettyValue": "11K"
+    }
+  },
+  {
+    "input": {
+      "x": 6.78,
+      "y": 311.10625000000005,
+      "value": 11000,
+      "height": 22.893749999999955,
+      "width": 46,
+      "orientation": "horizontal",
+      "barVariant": "grouped",
+      "referenceValue": 150000
+    },
+    "output": {
+      "rectX1": 14.980000000000002,
+      "rectY1": 291.10625000000005,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 303.10625000000005,
+      "centerX": 29.78,
+      "centerY": 299.10625000000005,
+      "rotate": false,
+      "textX": 29.78,
+      "fontSize": 12,
+      "prettyValue": "11K"
+    }
+  },
+  {
+    "input": {
+      "x": 122.38,
+      "y": 73.84375,
+      "value": 125000,
+      "height": 260.15625,
+      "width": 46,
+      "orientation": "horizontal",
+      "barVariant": "grouped",
+      "referenceValue": 150000
+    },
+    "output": {
+      "rectX1": 126.97999999999999,
+      "rectY1": 77.84375,
+      "rectWidth": 36.8,
+      "rectHeight": 16,
+      "textY": 89.84375,
+      "centerX": 145.38,
+      "centerY": 85.84375,
+      "rotate": false,
+      "textX": 145.38,
+      "fontSize": 12,
+      "prettyValue": "125K"
+    }
+  },
+  {
+    "input": {
+      "x": 91.82857142857142,
+      "y": 265.8269230769231,
+      "value": 25000,
+      "height": 28.173076923076906,
+      "width": 66,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 150000
+    },
+    "output": {
+      "rectX1": 110.02857142857142,
+      "rectY1": 245.8269230769231,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 257.8269230769231,
+      "textX": 124.82857142857142,
+      "centerX": 124.82857142857142,
+      "centerY": 253.8269230769231,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "25K"
+    }
+  },
+  {
+    "input": {
+      "x": 174.4,
+      "y": 33.44862307692308,
+      "value": 231206,
+      "height": 105.64903846153848,
+      "width": 66,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 150000
+    },
+    "output": {
+      "rectX1": 189,
+      "rectY1": 37.44862307692308,
+      "rectWidth": 36.8,
+      "rectHeight": 16,
+      "textY": 49.44862307692308,
+      "textX": 207.4,
+      "centerX": 207.4,
+      "centerY": 45.44862307692308,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "231K"
+    }
+  },
+  {
+    "input": {
+      "x": 10.633333333333333,
+      "y": 197.79104477611938,
+      "value": 0.3283582089552239,
+      "height": 96.20895522388062,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "stacked100",
+      "referenceValue": 1000
+    },
+    "output": {
+      "rectX1": 34.333333333333336,
+      "rectY1": 201.79104477611938,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 213.79104477611938,
+      "textX": 49.13333333333333,
+      "centerX": 49.13333333333333,
+      "centerY": 209.79104477611938,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "33%"
+    }
+  },
+  {
+    "input": {
+      "x": 106.96666666666667,
+      "y": 265.8269230769231,
+      "value": 25000,
+      "height": 28.173076923076906,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 846315
+    },
+    "output": {
+      "rectX1": 130.66666666666666,
+      "rectY1": 245.8269230769231,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 257.8269230769231,
+      "textX": 145.46666666666667,
+      "centerX": 145.46666666666667,
+      "centerY": 253.8269230769231,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "25K"
+    }
+  },
+  {
+    "input": {
+      "x": 203.29999999999998,
+      "y": 33.44862307692308,
+      "value": 231206,
+      "height": 105.64903846153848,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 846315
+    },
+    "output": {
+      "rectX1": 223.39999999999998,
+      "rectY1": 37.44862307692308,
+      "rectWidth": 36.8,
+      "rectHeight": 16,
+      "textY": 49.44862307692308,
+      "textX": 241.79999999999998,
+      "centerX": 241.79999999999998,
+      "centerY": 45.44862307692308,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "231K"
+    }
+  },
+  {
+    "input": {
+      "x": 492.29999999999995,
+      "y": 68.61538461538461,
+      "value": 200000,
+      "height": 56.34615384615387,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 846315
+    },
+    "output": {
+      "rectX1": 512.4,
+      "rectY1": 72.61538461538461,
+      "rectWidth": 36.8,
+      "rectHeight": 16,
+      "textY": 84.61538461538461,
+      "textX": 530.8,
+      "centerX": 530.8,
+      "centerY": 80.61538461538461,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "200K"
+    }
+  },
+  {
+    "input": {
+      "x": 299.6333333333333,
+      "y": 95.97256923076921,
+      "value": 175724,
+      "height": 36.625,
+      "width": 77,
+      "orientation": "horizontal",
+      "barVariant": "stacked",
+      "referenceValue": 846315
+    },
+    "output": {
+      "rectX1": 319.73333333333335,
+      "rectY1": 75.97256923076921,
+      "rectWidth": 36.8,
+      "rectHeight": 16,
+      "textY": 87.97256923076921,
+      "textX": 338.1333333333333,
+      "centerX": 338.1333333333333,
+      "centerY": 83.97256923076921,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "176K"
+    }
+  },
+  {
+    "input": {
+      "x": 1,
+      "y": 54.71666666666667,
+      "value": 25000,
+      "height": 39,
+      "width": 55.57692307692308,
+      "orientation": "vertical",
+      "barVariant": "stacked",
+      "referenceValue": 846315
+    },
+    "output": {
+      "rectX1": 22.976923076923082,
+      "rectY1": 66.21666666666667,
+      "rectWidth": 29.599999999999998,
+      "rectHeight": 16,
+      "textY": 78.21666666666667,
+      "textX": 37.77692307692308,
+      "centerX": 37.77692307692308,
+      "centerY": 74.21666666666667,
+      "rotate": false,
+      "fontSize": 12,
+      "prettyValue": "25K"
+    }
+  }
+]

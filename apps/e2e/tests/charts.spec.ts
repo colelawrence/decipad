@@ -1,7 +1,7 @@
-import type { Page } from './manager/decipad-tests';
-import { test, expect } from './manager/decipad-tests';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
-import { snapshot, Timeouts } from '../utils/src';
+import { Timeouts, snapshot } from '../utils/src';
+import type { Page } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 
 import notebookSource from '../__fixtures__/002-notebook-charts.json';
 
@@ -44,17 +44,6 @@ test('Charts', async ({ testUser: { page, notebook } }) => {
     await page.evaluate(() => document.fonts.ready);
   });
 
-  await test.step('updates chart caption', async () => {
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
-    await page.getByPlaceholder('Chart caption').dblclick();
-    await page.getByPlaceholder('Chart caption').click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-    await page.getByPlaceholder('Chart caption').fill('I like this caption');
-    await page.isVisible("text='I like this caption'");
-  });
-
   await test.step('pie chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
@@ -63,7 +52,7 @@ test('Charts', async ({ testUser: { page, notebook } }) => {
   await test.step('change color scheme', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByText('Color scheme').click();
-    await page.getByText('Monochrome').click();
+    await page.getByText(/^Monochrome$/).click();
     await page.getByText('Purple').click();
   });
 
@@ -81,25 +70,14 @@ test('Charts', async ({ testUser: { page, notebook } }) => {
 
   await test.step('swap axes', async () => {
     await page.evaluate(() => document.fonts.ready);
-    await page.getByText('label').click();
-    await page.getByTestId('chart__settings__label__Column2').click();
-
+    await page
+      .locator('[data-testid="trigger-menu-item"]')
+      .getByText('Category')
+      .click();
+    await page.getByTestId('chart__settings__xcolumn__Column2').click();
     await page.getByTestId('chart-settings-button').click();
-    await page.getByRole('menuitem', { name: 'Value Column2' }).click();
-    await page.getByTestId('chart__settings__value__Column1').click();
-  });
-
-  await test.step('convert to scatter chart', async () => {
-    await page.evaluate(() => document.fonts.ready);
-    await page.getByTestId('chart-settings-button').click();
-    await page.getByText('Chart type').click();
-    await page.getByTestId('chart__settings__chart-type__point').click();
-  });
-
-  await test.step('scatter plot menu', async () => {
-    await page.evaluate(() => document.fonts.ready);
-    await page.getByTestId('chart-settings-button').click();
-    await snapshot(page as Page, 'Notebook: Last chart');
+    await page.getByText('Add Value 𝑦').click();
+    await page.getByTestId('chart__settings__add_moar__Column1').click();
   });
 });
 

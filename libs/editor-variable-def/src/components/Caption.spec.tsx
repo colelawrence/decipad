@@ -1,4 +1,5 @@
 import { ELEMENT_CAPTION } from '@decipad/editor-types';
+import { ToastDisplay } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import type {
@@ -7,13 +8,12 @@ import type {
   PlateProps,
 } from '@udecode/plate-common';
 import {
-  createPlateEditor,
-  createPlugins,
   Plate,
   PlateContent,
+  createPlateEditor,
+  createPlugins,
 } from '@udecode/plate-common';
 import { Caption } from './Caption';
-import { ToastDisplay } from '@decipad/ui';
 
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
@@ -37,7 +37,7 @@ beforeEach(() => {
 });
 
 it('renders the element properties', () => {
-  const { getByText } = render(
+  const { container } = render(
     <ToastDisplay>
       <Plate {...plateProps} editor={editor}>
         <PlateContent scrollSelectionIntoView={noop} />
@@ -45,5 +45,8 @@ it('renders the element properties', () => {
     </ToastDisplay>
   );
 
-  expect(getByText('var')).toBeVisible();
+  const { innerHTML } = container;
+
+  expect(innerHTML).toContain('data-testid="input-widget-name"');
+  expect(innerHTML).toContain('var');
 });

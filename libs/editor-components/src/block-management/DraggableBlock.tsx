@@ -1,8 +1,10 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   useComputer,
   useFilteredTabs,
   useNodePath,
+  useNotebookId,
 } from '@decipad/editor-hooks';
 import type {
   MyEditor,
@@ -28,16 +30,14 @@ import {
   useAnnotations,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import type { Computer } from '@decipad/computer-interfaces';
 import { parseSimpleValue } from '@decipad/remote-computer';
 import {
+  BlockAnnotations,
+  BlockCommentButton,
   EditorBlock,
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
-  BlockAnnotations,
-  BlockCommentButton,
 } from '@decipad/ui';
-import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
 import {
@@ -62,13 +62,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
+import { Portal } from 'react-portal';
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { dndStore, useDnd } from '../utils/useDnd';
+import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
-import { createPortal } from 'react-dom';
-import { Portal } from 'react-portal';
 
 const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
   '> div': {
@@ -90,13 +91,24 @@ const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
   },
 }));
 
+interface AIPanel {
+  text: string;
+  visible: boolean;
+  toggle: () => void;
+}
+
 type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
   readonly dependencyId?: string | string[]; // block id
-  readonly [key: string]: unknown; // For organisms.DraggableBlock
+  readonly aiPanel?: AIPanel;
+  readonly needsUpgrade?: boolean;
+  readonly contentEditable?: boolean;
+  readonly suppressContentEditableWarning?: boolean;
+  readonly id?: string; // element id for variable def
   readonly onceDeleted?: () => void;
   readonly hasPreviousSibling?: boolean; // used for code line blocks
+  readonly onDownloadChart?: () => void;
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
   | 'blockKind'
@@ -128,6 +140,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       isCentered,
       dependencyId,
       disableDrag,
+      onDownloadChart = noop,
       ...props
     },
     forwardedRef
@@ -138,6 +151,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const readOnly = useIsEditorReadOnly();
     const computer = useComputer();
     const tabs = useFilteredTabs();
+
+    const notebookId = useNotebookId();
 
     const event = useContext(ClientEventsContext);
 
@@ -237,6 +252,20 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       [event, element, onMoveTab]
     );
 
+    const handleDownloadChart = useCallback(() => {
+      if (!notebookId) {
+        return;
+      }
+      event({
+        segmentEvent: {
+          type: 'action',
+          action: 'Chart Downloaded',
+          props: { notebook_id: notebookId, analytics_source: 'frontend' },
+        },
+      });
+      onDownloadChart();
+    }, [onDownloadChart, event, notebookId]);
+
     const handleShowHide = useCallback(
       (action: 'show' | 'hide') => {
         event({
@@ -317,7 +346,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           contentEditable={
             !readOnly || alwaysWritableElementTypes.includes(element.type)
           }
-          suppressContentEditableWarning
           annotationsHovered={blockHighlighted}
         >
           <BlockCommentButton
@@ -377,6 +405,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           onCopyHref={onCopyHref}
           showLine={showLine}
           isCentered={isCentered}
+          handleDownloadChart={handleDownloadChart}
           hasPreviousSibling={hasPreviousSibling}
           path={path}
           disableDrag={disableDrag}

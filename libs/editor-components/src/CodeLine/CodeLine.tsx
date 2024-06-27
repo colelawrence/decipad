@@ -1,3 +1,4 @@
+import { useComputer, useNodeText } from '@decipad/editor-hooks';
 import type { Result } from '@decipad/language-interfaces';
 import type { DisplayElement, PlateComponent } from '@decipad/editor-types';
 import {
@@ -14,8 +15,7 @@ import {
   useEditorTeleportContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { useComputer, useNodeText } from '@decipad/editor-hooks';
-import { CodeLine as UICodeLine, ParagraphFormulaEditor } from '@decipad/ui';
+import { ParagraphFormulaEditor, CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath } from '@udecode/plate-common';
 import { Formula } from 'libs/ui/src/icons';
 import { codeBlock } from 'libs/ui/src/styles';
@@ -28,10 +28,10 @@ import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
+import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useTurnIntoProps } from './useTurnIntoProps';
-import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 
 const codeLineDebounceResultMs = 500;
 
@@ -139,7 +139,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       {...turnIntoProps}
       {...attributes}
       dependencyId={lineId}
-      id={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >
       <CodeLineTeleport

@@ -4,6 +4,7 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
+import { AnnotationsProvider } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import type {
@@ -12,16 +13,15 @@ import type {
   PlateProps,
 } from '@udecode/plate-common';
 import {
-  createPlateEditor,
-  createPlugins,
   Plate,
   PlateContent,
+  createPlateEditor,
+  createPlugins,
 } from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { VariableDef } from './VariableDef';
 import { BrowserRouter } from 'react-router-dom';
-import { AnnotationsProvider } from '@decipad/react-contexts';
+import { VariableDef } from './VariableDef';
 
 describe('Variable def expression element', () => {
   let plateProps: Omit<PlateProps, 'children'>;
@@ -29,6 +29,7 @@ describe('Variable def expression element', () => {
   let wrapper: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
   >;
+
   beforeEach(() => {
     const inputPlugin: PlatePlugin = {
       key: ELEMENT_VARIABLE_DEF,
@@ -103,6 +104,7 @@ describe('Variable def slider element', () => {
   let wrapper: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
   >;
+
   beforeEach(() => {
     const inputPlugin: PlatePlugin = {
       key: ELEMENT_VARIABLE_DEF,

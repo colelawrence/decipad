@@ -1,8 +1,11 @@
-import type { PlotElement, TableElement } from '@decipad/editor-types';
-import { ELEMENT_PLOT } from '@decipad/editor-types';
-import { nanoid } from 'nanoid';
+import type {
+  PlotElement,
+  PlotParams,
+  TableElement,
+} from '@decipad/editor-types';
+import { ELEMENT_PLOT, defaultPlotParams } from '@decipad/editor-types';
 import { getExprRef } from '@decipad/remote-computer';
-import type { PlotParams } from '../../types';
+import { nanoid } from 'nanoid';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const getPlotParams = (
@@ -11,30 +14,27 @@ export const getPlotParams = (
 ): PlotElement => {
   const tableName = getNodeString(table.children[0].children[0]);
   const columnNames = table.children[1].children.map(getNodeString);
-  const { plotType = 'bar' } = plotParams;
+  const { markType = 'bar' } = plotParams;
   const baseParams: Pick<
     PlotElement,
     'type' | 'id' | 'markType' | 'sourceVarName'
   > = {
     type: ELEMENT_PLOT,
     id: nanoid(),
-    markType: plotType,
+    markType,
     sourceVarName: getExprRef(table.id),
   };
-  if (plotType === 'arc') {
-    return {
-      ...baseParams,
-      ...plotParams,
-      colorColumnName: plotParams.colorColumnName ?? columnNames[0],
-      thetaColumnName: plotParams.thetaColumnName ?? columnNames[1],
-      children: [{ text: '' }],
-    };
-  }
   return {
     ...baseParams,
     ...plotParams,
+    ...defaultPlotParams,
+    yColumnNames:
+      plotParams.yColumnNames ?? typeof columnNames[1] === 'string'
+        ? [columnNames[1]]
+        : [],
     xColumnName: plotParams.xColumnName ?? columnNames[0],
-    yColumnName: plotParams.yColumnName ?? columnNames[1],
+    yColumnChartTypes: plotParams.yColumnChartTypes ?? ['bar'],
+    schema: 'jun-2024',
     title: `Data view for ${tableName}`,
     children: [{ text: '' }],
   };

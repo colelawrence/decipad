@@ -602,7 +602,31 @@ it('tests every action', () => {
             "plotParams": {
               "description": "parameters for the plot",
               "properties": {
-                "colorColumnName": {
+                "arcVariant": {
+                  "type": "string",
+                },
+                "barVariant": {
+                  "type": "string",
+                },
+                "flipTable": {
+                  "type": "boolean",
+                },
+                "grid": {
+                  "type": "boolean",
+                },
+                "groupByX": {
+                  "type": "boolean",
+                },
+                "labelColumnName": {
+                  "type": "string",
+                },
+                "lineVariant": {
+                  "type": "string",
+                },
+                "mirrorYAxis": {
+                  "type": "boolean",
+                },
+                "orientation": {
                   "type": "string",
                 },
                 "plotType": {
@@ -618,20 +642,35 @@ it('tests every action', () => {
                   ],
                   "type": "string",
                 },
+                "showDataLabel": {
+                  "type": "boolean",
+                },
                 "sizeColumnName": {
                   "type": "string",
                 },
-                "thetaColumnName": {
+                "startFromZero": {
+                  "type": "boolean",
+                },
+                "xAxisLabel": {
                   "type": "string",
                 },
                 "xColumnName": {
                   "type": "string",
                 },
-                "y2ColumnName": {
+                "yAxisLabel": {
                   "type": "string",
                 },
-                "yColumnName": {
-                  "type": "string",
+                "yColumnChartTypes": {
+                  "items": {
+                    "type": "string",
+                  },
+                  "type": "array",
+                },
+                "yColumnNames": {
+                  "items": {
+                    "type": "string",
+                  },
+                  "type": "array",
                 },
               },
               "required": [
@@ -659,7 +698,31 @@ it('tests every action', () => {
             "newPlotParams": {
               "description": "the parameters to change on the plot. Only include those that need to change",
               "properties": {
-                "colorColumnName": {
+                "arcVariant": {
+                  "type": "string",
+                },
+                "barVariant": {
+                  "type": "string",
+                },
+                "flipTable": {
+                  "type": "boolean",
+                },
+                "grid": {
+                  "type": "boolean",
+                },
+                "groupByX": {
+                  "type": "boolean",
+                },
+                "labelColumnName": {
+                  "type": "string",
+                },
+                "lineVariant": {
+                  "type": "string",
+                },
+                "mirrorYAxis": {
+                  "type": "boolean",
+                },
+                "orientation": {
                   "type": "string",
                 },
                 "plotType": {
@@ -675,20 +738,35 @@ it('tests every action', () => {
                   ],
                   "type": "string",
                 },
+                "showDataLabel": {
+                  "type": "boolean",
+                },
                 "sizeColumnName": {
                   "type": "string",
                 },
-                "thetaColumnName": {
+                "startFromZero": {
+                  "type": "boolean",
+                },
+                "xAxisLabel": {
                   "type": "string",
                 },
                 "xColumnName": {
                   "type": "string",
                 },
-                "y2ColumnName": {
+                "yAxisLabel": {
                   "type": "string",
                 },
-                "yColumnName": {
-                  "type": "string",
+                "yColumnChartTypes": {
+                  "items": {
+                    "type": "string",
+                  },
+                  "type": "array",
+                },
+                "yColumnNames": {
+                  "items": {
+                    "type": "string",
+                  },
+                  "type": "array",
                 },
               },
               "required": [
