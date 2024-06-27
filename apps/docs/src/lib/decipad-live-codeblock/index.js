@@ -15,9 +15,6 @@ export default function theme() {
 
     configureWebpack() {
       return {
-        experiments: {
-          asyncWebAssembly: true,
-        },
         resolve: {
           plugins: [new TsconfigPathsPlugin()],
           alias: {

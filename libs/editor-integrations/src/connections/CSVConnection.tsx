@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-packages */
 import { type FC } from 'react';
 import { ConnectionProps } from './types';
 import { UpgradeWarningBlock } from '@decipad/editor-components';

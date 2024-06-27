@@ -1,5 +1,4 @@
 import { build } from 'esbuild';
-import { wasmLoader } from 'esbuild-plugin-wasm';
 
 await build({
   entryPoints: ['../../libs/live-connect/src/notebook/index.ts'],
@@ -14,8 +13,9 @@ await build({
     global: 'globalThis',
     'process.env.NODE_ENV': '"production"',
   },
-
-  plugins: [wasmLoader()],
+  loader: {
+    '.wasm': 'file',
+  },
 });
 
 // Important that this one comes second.
@@ -32,7 +32,9 @@ await build({
     global: 'globalThis',
   },
 
-  plugins: [wasmLoader({ mode: 'embedded' })],
+  loader: {
+    '.wasm': 'file',
+  },
 });
 
 // console.log(JSON.stringify(out.metafile));
