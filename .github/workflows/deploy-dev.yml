@@ -127,7 +127,7 @@ jobs:
           scripts/pull-sam.sh
 
           cd apps/backend
-          export PATH=./node_modules/.bin:$PATH
+          export PATH=../../node_modules/.bin:$PATH
           arc env staging NODE_OPTIONS --enable-source-maps --max_old_space_size=32768
           cd ../..
           scripts/push-sam.sh
