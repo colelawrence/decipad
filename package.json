@@ -518,7 +518,7 @@
     "jest-config": "29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-fetch-mock": "3.0.3",
-    "jest-silent-reporter": "0.5.0",
+    "jest-silent-reporter": "0.6.0",
     "jsdom": "^24.1.0",
     "lint-staged": "15.2.7",
     "madge": "^6.0.0",
