@@ -552,7 +552,7 @@
     "vitest-canvas-mock": "^0.3.3",
     "vitest-dom": "^0.1.1",
     "vitest-fetch-mock": "^0.2.2",
-    "webpack": "5.91.0",
+    "webpack": "5.92.1",
     "webpack-bundle-analyzer": "^4.10.0",
     "worker-loader": "^3.0.8",
     "ws": "8.17.1"
