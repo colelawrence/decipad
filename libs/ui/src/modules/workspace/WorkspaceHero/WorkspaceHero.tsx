@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../shared';
+import { PermissionType } from 'libs/ui/src/types';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Deci } from '../../../icons';
 import {
   componentCssVars,
@@ -9,9 +9,9 @@ import {
   p14Medium,
   p32Medium,
 } from '../../../primitives';
+import { Button } from '../../../shared';
 import { RainbowText } from '../../../styles/card';
 import { WorkspaceHeroHeader } from './WorkspaceHeroHeader.private';
-import { PermissionType } from 'libs/ui/src/types';
 
 type WorkspaceHeroProps = {
   name: string;
@@ -63,7 +63,17 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
     </>
   );
 
-  return (
+  const { '*': maybeWorkspaceFolder } = useParams();
+  const isSharedWithMePage = maybeWorkspaceFolder?.includes('shared');
+
+  return isSharedWithMePage ? (
+    <Container>
+      <WorkspaceHeroHeader />
+      <div data-testid="workspace-hero-title">
+        <Title>Shared with me</Title>
+      </div>
+    </Container>
+  ) : (
     <Container>
       <WorkspaceHeroHeader
         membersHref={membersHref}
