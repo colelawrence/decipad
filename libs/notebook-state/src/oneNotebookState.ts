@@ -62,6 +62,11 @@ const supportsRemoteComputer = () => {
       return false;
     }
   }
+  if (typeof globalThis.location !== 'undefined') {
+    if (globalThis.location.pathname.startsWith('/docs')) {
+      return false;
+    }
+  }
   return true;
 };
 
