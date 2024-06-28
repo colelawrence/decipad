@@ -1,4 +1,4 @@
-const S3rver = require('s3rver');
+const S3rver = require('@20minutes/s3rver');
 const path = require('path');
 const { nanoid } = require('nanoid');
 const { sync: mkdirpSync} = require('mkdirp');

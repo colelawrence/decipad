@@ -82,6 +82,7 @@
     ]
   },
   "dependencies": {
+    "@20minutes/s3rver": "^4.0.0",
     "@apollo/client": "3.10.1",
     "@apollo/server": "4.10.0",
     "@architect/architect": "10.16.2",
@@ -430,7 +431,7 @@
     "@nx/storybook": "16.10.0",
     "@nx/web": "16.10.0",
     "@nx/workspace": "16.10.0",
-    "@percy/cli": "^1.27.4",
+    "@percy/cli": "1.27.4",
     "@percy/playwright": "^1.0.4",
     "@storybook/addon-a11y": "^8.1.10",
     "@storybook/addon-interactions": "^8.1.10",
@@ -534,7 +535,6 @@
     "remark-gfm": "4.0.0",
     "remark-mdx": "3.0.1",
     "rimraf": "5.0.7",
-    "s3rver": "3.7.1",
     "serve-handler": "^6.1.5",
     "storybook": "7.6.1",
     "swc-plugin-import-meta-env": "^1.5.0",
@@ -545,13 +545,13 @@
     "typescript": "4.9.4",
     "vite": "^5.2.2",
     "vite-plugin-pwa": "^0.19.8",
+    "vite-plugin-top-level-await": "^1.4.1",
+    "vite-plugin-wasm": "^3.3.0",
     "vite-tsconfig-paths": "^4.3.1",
     "vitest": "^1.6.0",
     "vitest-canvas-mock": "^0.3.3",
     "vitest-dom": "^0.1.1",
     "vitest-fetch-mock": "^0.2.2",
-    "vite-plugin-top-level-await": "^1.4.1",
-    "vite-plugin-wasm": "^3.3.0",
     "webpack": "5.91.0",
     "webpack-bundle-analyzer": "^4.10.0",
     "worker-loader": "^3.0.8",
@@ -572,6 +572,7 @@
     "webpack-dev-middleware": "5.3.4",
     "nth-check": "2.0.1",
     "esbuild": "0.21.5",
-    "next": "14.2.0"
+    "next": "14.2.0",
+    "braces": "3.0.3"
   }
 }
