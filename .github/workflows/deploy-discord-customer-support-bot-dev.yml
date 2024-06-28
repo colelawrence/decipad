@@ -37,6 +37,11 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-modules-
 
+      - name: Uses wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
+
       - name: Install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
