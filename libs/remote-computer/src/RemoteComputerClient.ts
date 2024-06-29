@@ -23,7 +23,7 @@ import {
   Result,
   AST,
 } from '@decipad/language-interfaces';
-import type { Observable } from 'rxjs';
+import type { Observable, Subscription } from 'rxjs';
 import { listenerHelper } from '@decipad/listener-helper';
 // eslint-disable-next-line no-restricted-imports
 import { getExprRef } from '@decipad/computer';
@@ -502,6 +502,7 @@ export const createRemoteComputerClientFromWorker = (
     _terminate = calling<'terminate'>('terminate');
 
     async terminate() {
+      this.#resultsMonitorSubscription.unsubscribe();
       await this._terminate();
       workerWorker.terminate();
     }
@@ -512,8 +513,14 @@ export const createRemoteComputerClientFromWorker = (
       await rpc.call('initializeComputer', { notebookId });
     }
 
+    #resultsMonitorSubscription: Subscription;
+
     constructor() {
       this.#initialize().catch(onError);
+      this.#resultsMonitorSubscription = this.results.subscribe((results) => {
+        // eslint-disable-next-line no-console
+        debug('Results updated', results);
+      });
     }
   }
   return new RemoteComputerClient();
