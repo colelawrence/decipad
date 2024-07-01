@@ -205,7 +205,7 @@
     "@udecode/plate-common": "31.3.2",
     "@udecode/plate-cursor": "31.0.0",
     "@udecode/plate-dnd": "31.2.1",
-    "@udecode/plate-excalidraw": "31.1.0",
+    "@udecode/plate-excalidraw": "31.4.0",
     "@udecode/plate-floating": "31.0.0",
     "@udecode/plate-heading": "31.0.0",
     "@udecode/plate-highlight": "31.0.0",
@@ -310,7 +310,7 @@
     "mysql": "^2.18.1",
     "nanoid": "3.3.4",
     "nearley": "2.20.1",
-    "next-auth": "4.24.3",
+    "next-auth": "^4.24.7",
     "node-fetch": "3.3.0",
     "nodemailer": "6.9.0",
     "oauth": "0.10.0",
@@ -568,11 +568,15 @@
     "react-dom": "18.2.0",
     "csstype": "3.1.1",
     "@types/unist": "3.0.0",
+    "ip": "2.0.1",
     "ws": "8.17.1",
     "webpack-dev-middleware": "5.3.4",
     "nth-check": "2.0.1",
     "esbuild": "0.21.5",
     "next": "14.2.0",
-    "braces": "3.0.3"
+    "braces": "3.0.3",
+    "trim-newlines": "5.0.0",
+    "@mdx-js/mdx": "3.0.1",
+    "browserify-sign": "4.2.3"
   }
 }
