@@ -140,7 +140,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       isCentered,
       dependencyId,
       disableDrag,
-      onDownloadChart = noop,
+      onDownloadChart,
       ...props
     },
     forwardedRef
@@ -263,7 +263,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           props: { notebook_id: notebookId, analytics_source: 'frontend' },
         },
       });
-      onDownloadChart();
+      typeof onDownloadChart === 'function' && onDownloadChart();
     }, [onDownloadChart, event, notebookId]);
 
     const handleShowHide = useCallback(
@@ -405,7 +405,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           onCopyHref={onCopyHref}
           showLine={showLine}
           isCentered={isCentered}
-          handleDownloadChart={handleDownloadChart}
+          handleDownloadChart={
+            onDownloadChart ? handleDownloadChart : undefined
+          }
           hasPreviousSibling={hasPreviousSibling}
           path={path}
           disableDrag={disableDrag}

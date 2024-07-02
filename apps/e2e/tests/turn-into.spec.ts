@@ -41,6 +41,8 @@ test('Turn Into', async ({ testUser }) => {
     ).toBeVisible();
 
     await page.getByTestId('drag-handle').nth(1).click();
+    await expect(page.getByText('turn into')).toBeVisible();
+    await expect(page.getByText('Download chart')).toBeHidden();
     await page.getByRole('menuitem').getByText('turn into').hover();
     await page.getByRole('menuitem').getByText('calculation').click();
 
