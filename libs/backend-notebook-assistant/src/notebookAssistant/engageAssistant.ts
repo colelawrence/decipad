@@ -190,7 +190,7 @@ export const engageAssistant = async ({
 
   if (mode === 'creation') {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
@@ -224,7 +224,7 @@ export const engageAssistant = async ({
     message = completion.choices[0].message;
   } else if (mode === 'fetch_data') {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
@@ -263,7 +263,7 @@ export const engageAssistant = async ({
     }`;
   } else {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
