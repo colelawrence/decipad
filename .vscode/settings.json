@@ -70,5 +70,10 @@
     "urql",
     "wsconnected",
     "wsconnecting"
-  ]
+  ],
+  "rust-analyzer.linkedProjects": ["./apps/compute-backend/Cargo.toml"],
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  }
 }

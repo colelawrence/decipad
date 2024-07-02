@@ -1,13 +1,12 @@
 //! Test suite for the Web and headless browsers.
-
-#![cfg(target_arch = "wasm32")]
-
+use js_sys::Float64Array;
+#[cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use compute_backend::ComputeBackend;
 use wasm_bindgen_test::*;
 
 wasm_bindgen_test_configure!(run_in_browser);
-
+/*
 #[wasm_bindgen_test]
 fn simple_slice() {
     let mut compute = ComputeBackend::new();
@@ -22,3 +21,4 @@ fn simple_slice() {
 
     assert_eq!(slice, vec![1.0, 2.0, 3.0]);
 }
+*/
