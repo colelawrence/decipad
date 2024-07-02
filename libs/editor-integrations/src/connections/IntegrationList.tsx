@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useConnectionStore } from '@decipad/react-contexts';
 import type { SelectIntegration } from '@decipad/ui';
 import {
@@ -7,12 +7,40 @@ import {
   ThumbnailNotion,
   ThumbnailSql,
 } from '@decipad/ui/src/icons/thumbnail-icons';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import type { ComponentProps } from 'react';
 
 const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
   typeof SelectIntegration
 >['integrations'] = [
+  {
+    icon: <ThumbnailGoogleSheet />,
+    title: 'Google sheet',
+    description: 'Import, collaborate, and analyze Google Sheets data.',
+    onClick: () => {
+      store.Set({ connectionType: 'gsheets', stage: 'connect' });
+    },
+    enabled: isFlagEnabled('GOOGLE_SHEET_INTEGRATION'),
+  },
+  {
+    icon: <ThumbnailNotion />,
+    title: 'Notion',
+    description: 'Connect your notion databases to decipad.',
+    onClick: () => {
+      store.Set({ connectionType: 'notion' });
+      store.Set({ stage: 'connect' });
+    },
+    enabled: isFlagEnabled('NOTION_CONNECTIONS'),
+  },
+  {
+    icon: <ThumbnailGoogleSheet />,
+    title: 'CSV',
+    description: 'Easily retrieve your CSV and use it in Deci.',
+    onClick: () => {
+      store.Set({ connectionType: 'csv', stage: 'connect' });
+    },
+    enabled: true,
+  },
   {
     icon: <ThumbnailCode />,
     title: 'Code',
@@ -32,34 +60,6 @@ export const IntegrationList: ComponentProps<
     onClick: () => {
       store.Set({ connectionType: 'mysql' });
       store.Set({ stage: 'connect' });
-    },
-    enabled: true,
-  },
-  {
-    icon: <ThumbnailNotion />,
-    title: 'Notion',
-    description: 'Connect your notion databases to decipad.',
-    onClick: () => {
-      store.Set({ connectionType: 'notion' });
-      store.Set({ stage: 'connect' });
-    },
-    enabled: isFlagEnabled('NOTION_CONNECTIONS'),
-  },
-  {
-    icon: <ThumbnailGoogleSheet />,
-    title: 'Google sheet',
-    description: 'Import, collaborate, and analyze Google Sheets data.',
-    onClick: () => {
-      store.Set({ connectionType: 'gsheets', stage: 'connect' });
-    },
-    enabled: isFlagEnabled('GOOGLE_SHEET_INTEGRATION'),
-  },
-  {
-    icon: <ThumbnailGoogleSheet />,
-    title: 'CSV',
-    description: 'Easily retrieve your CSV and use it in Deci.',
-    onClick: () => {
-      store.Set({ connectionType: 'csv', stage: 'connect' });
     },
     enabled: true,
   },

@@ -55,6 +55,7 @@ const integrationCmd = {
     'notion',
     'javascript',
     'code',
+    'csv',
   ],
 };
 
