@@ -13685,10 +13685,10 @@
   resolved "https://registry.yarnpkg.com/@udecode/plate-basic-marks/-/plate-basic-marks-31.0.0.tgz#84d940590573d3ec24e27931dc74d9af0592776f"
   integrity sha512-yV05ohuWk7ZcVxshLQIoqRbJTCbn8hANaMR98PuOMHFajr68/Qvdn9B5MuOzLqPHyOOQ4yVBdzPNcsG6l1DuAg==
 
-"@udecode/plate-block-quote@31.0.0":
-  version "31.0.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-31.0.0.tgz#ea79f75695ccbf10586311c287a50c0f0ed66f02"
-  integrity sha512-82gWC4uXsYvkkmtz4/mvlgAx7s6FgkUP80ZVVMJ2O9p9C6HipJs6/fvs5VWR1L8P04+leRIqi5dknm6ZzW5Epg==
+"@udecode/plate-block-quote@31.4.3":
+  version "31.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-31.4.3.tgz#902eb796eacc06e8f547d32709203897b4854372"
+  integrity sha512-dJjWajnrUi/yvAiBUJKwUeytAMm8ysIR6L41LyLKpehxxL+itFbJKmsQfjSfGEcG4QaX+IPj3b7xgjdZgvNz1A==
 
 "@udecode/plate-break@31.0.0":
   version "31.0.0"
@@ -13787,10 +13787,10 @@
   resolved "https://registry.yarnpkg.com/@udecode/plate-horizontal-rule/-/plate-horizontal-rule-31.0.0.tgz#c0e31d0fa98e49e1780db97415c2b585a1940f3a"
   integrity sha512-JtED7u6pYl0os8TfOft8txGPRQQQwNSrQIwLhAyo4rIXKfGMAPMym1LY2/83XidTYDSJSQVNHmA8vv6eOFQg/g==
 
-"@udecode/plate-indent-list@31.2.2":
-  version "31.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-31.2.2.tgz#536f521643b02ee9c655519255ce90eda8e1e208"
-  integrity sha512-FWbdiAtSyuuMdzc/wlMZ8xyMhN9tszqiO7g/6WNwdAhd4b5NxyeCj/e7kr2i7yHFFjSE6vzpNiKZUihBP8uO2w==
+"@udecode/plate-indent-list@31.4.3":
+  version "31.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-31.4.3.tgz#d15b7fcf3ff753eaa9c4f9941e4c13dfb3f33deb"
+  integrity sha512-QfCjCuHxdxXeAH2gz3sSeLNrY2rhGpk2dwLAMuXQnH0Tntzd6pzA5MUHIwhPZYTSLqJdr1W4umg70NVfwYKY1g==
   dependencies:
     "@udecode/plate-indent" "31.1.0"
     "@udecode/plate-list" "31.1.3"
@@ -13873,26 +13873,26 @@
     "@viselect/vanilla" "3.2.5"
     copy-to-clipboard "^3.3.3"
 
-"@udecode/plate-serializer-docx@31.3.3":
-  version "31.3.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-31.3.3.tgz#02aaab37896d5086df6855a893325d5fd72eba4b"
-  integrity sha512-jVoqiKu+TkAOXGTAl7ePWvxTA02smJswNmvrACfxwh52C+54OGS15Kl+iKMNH/JSy1BLxVoOHXIlJ7R5VXFwLA==
+"@udecode/plate-serializer-docx@31.4.3":
+  version "31.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-31.4.3.tgz#a3afa0d77511e6ccd616c139988b6c00ee16d8e8"
+  integrity sha512-f/tEF6wDYzGWq/yI0fHx3PR5bq/Wk/hjTKEK9N2k7k4EVmZFCcYEWyGp/idx2sY9UP0brPoWhXr+TVdAAE6mMg==
   dependencies:
     "@udecode/plate-heading" "31.0.0"
     "@udecode/plate-indent" "31.1.0"
-    "@udecode/plate-indent-list" "31.2.2"
+    "@udecode/plate-indent-list" "31.4.3"
     "@udecode/plate-media" "31.0.0"
     "@udecode/plate-paragraph" "31.0.0"
-    "@udecode/plate-table" "31.3.3"
+    "@udecode/plate-table" "31.4.1"
     validator "^13.11.0"
 
-"@udecode/plate-serializer-md@31.3.4":
-  version "31.3.4"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-31.3.4.tgz#a38fb892456d10af1aadaf4ed16dabc15a199dc4"
-  integrity sha512-NAKqPRpRnZI/tAEC9gZLoQ3QNH+n/LkHc0DRrgmmKQwUpFttWOorkb1dmzsOgzzpo6ZFDiz3vBIiGrszVmrIpQ==
+"@udecode/plate-serializer-md@31.4.3":
+  version "31.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-31.4.3.tgz#ad5f4c66df15ea8b779ea549fc8d128fea740481"
+  integrity sha512-B4SBccA6YoT0rgKRTbe38Rd44li1fiKaZ2rEWRYl16E6WMIqLS/QpVFqDL5FqTVYKM5TFdl5f9LH7Qizt6bIJA==
   dependencies:
     "@udecode/plate-basic-marks" "31.0.0"
-    "@udecode/plate-block-quote" "31.0.0"
+    "@udecode/plate-block-quote" "31.4.3"
     "@udecode/plate-code-block" "31.3.4"
     "@udecode/plate-heading" "31.0.0"
     "@udecode/plate-horizontal-rule" "31.0.0"
@@ -13903,10 +13903,10 @@
     remark-parse "^9.0.0"
     unified "^9.2.2"
 
-"@udecode/plate-table@31.3.3":
-  version "31.3.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-31.3.3.tgz#aac4224a6687fe58d107c8cf22e229e5cb3024be"
-  integrity sha512-FAFqquZ/X9I41iNwQ8F3m9jIb0nQ4sufjT7X6buWIiTqdVO70UOFXvVKrIHp2+ozY4Ro/YKoKzk9cEfPZgxf9w==
+"@udecode/plate-table@31.4.1":
+  version "31.4.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-31.4.1.tgz#6abc0fcda5851b3728c0f0d3b7a26288d4346e91"
+  integrity sha512-kRw3D4MOcSnEWOI2PCzQLOOBzpUvK2FWLKKbfDYvOu5FdvO2yrh030tTL0ziaX96LzEGGT6SmN/YhNxSn+9wcA==
   dependencies:
     "@udecode/plate-resizable" "31.0.0"
     lodash "^4.17.21"
