@@ -22,7 +22,7 @@ test('page title is the same as notebook @browser @notebook', async ({
   await test.step('check page title persists after going to workspace and back', async () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
-    await page.getByTestId('go-to-workspace').click();
+    await page.getByTestId('segment-button-trigger-back-to-home').click();
     await page.getByText(notebookTitle).first().click();
     await notebook.waitForEditorToLoad();
     await expect(page, "page title don't match pattern").toHaveTitle(

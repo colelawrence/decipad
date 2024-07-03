@@ -16,7 +16,9 @@ smoketest(
     );
     await randomFreeUser.createNewNotebook();
     await randomFreeUser.notebook.waitForEditorToLoad();
-    await randomFreeUser.page.getByTestId('go-to-workspace').click();
+    await randomFreeUser.page
+      .getByTestId('segment-button-trigger-back-to-home')
+      .click();
     await expect(randomFreeUser.workspace.newNotebook).toBeVisible();
   }
 );

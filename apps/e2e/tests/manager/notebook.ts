@@ -1575,7 +1575,7 @@ export class Notebook {
    *
    */
   async returnToWorkspace() {
-    await this.page.getByTestId('go-to-workspace').click();
+    await this.page.getByTestId('segment-button-trigger-back-to-home').click();
     await expect(this.page.getByTestId('new-notebook')).toBeVisible();
   }
 

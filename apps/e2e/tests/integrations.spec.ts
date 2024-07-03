@@ -419,7 +419,7 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
   });
 
   await test.step('checks can add reference to formula in another notebook', async () => {
-    await page.getByTestId('go-to-workspace').click();
+    await page.getByTestId('segment-button-trigger-back-to-home').click();
     await workspace.createNewNotebook();
     await testUser.notebook.closeSidebar();
     await notebook.waitForEditorToLoad();

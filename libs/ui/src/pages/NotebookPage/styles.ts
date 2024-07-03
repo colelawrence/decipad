@@ -1,5 +1,6 @@
-import styled from '@emotion/styled';
+import { SidebarComponent } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
   cssVar,
   mediumShadow,
@@ -7,7 +8,6 @@ import {
   tabletScreenQuery,
 } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
-import { SidebarComponent } from '@decipad/react-contexts';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
@@ -39,7 +39,7 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
     position: 'fixed',
     height: HEADER_HEIGHT,
     width: '100%',
-    padding: '0px 32px',
+    padding: '0px 24px',
     backgroundColor: cssVar('backgroundAccent'),
     display: 'flex',
     alignItems: 'center',

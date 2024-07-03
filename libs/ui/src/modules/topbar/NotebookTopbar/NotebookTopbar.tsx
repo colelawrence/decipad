@@ -1,35 +1,27 @@
 import { docs } from '@decipad/routing';
 import { FC } from 'react';
+import { Chat, Deci, Home, Show, Sidebar, Templates } from '../../../icons';
 import {
   Button,
-  IconButton,
+  HelpMenu,
   Link,
   SegmentButtons,
   Tooltip,
-  HelpMenu,
 } from '../../../shared';
-import {
-  Templates,
-  Deci,
-  ArrowBack,
-  Show,
-  Sidebar,
-  Chat,
-} from '../../../icons';
 
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { p13Bold } from '../../../primitives';
 import { Anchor } from '../../../utils';
-import * as Styled from './styles';
+import { NotebookAvatars } from '../NotebookAvatars/NotebookAvatars';
+import { NotebookPath } from '../NotebookPath/NotebookPath';
 import { GeneratedByAi } from './GeneratedByAi';
+import * as Styled from './styles';
 import {
   AccessInfo,
   Authors,
   TopbarActions,
   TopbarGenericProps,
 } from './types';
-import { NotebookAvatars } from '../NotebookAvatars/NotebookAvatars';
-import { NotebookPath } from '../NotebookPath/NotebookPath';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const TemplatesLink: FC<TopbarActions> = ({ onGalleryClick }) => (
   <Styled.TemplateWrapper>
@@ -159,21 +151,30 @@ const NotebookAuthors: FC<Authors> = (props) => {
   return <NotebookAvatars {...props} />;
 };
 
-const BackButton: FC<AccessInfo & TopbarActions> = ({
+const HomeButton: FC<AccessInfo & TopbarActions> = ({
   isSharedNotebook,
   hasWorkspaceAccess,
   onBack,
 }) => {
   if (isSharedNotebook || hasWorkspaceAccess) {
     return (
-      <Styled.IconWrap>
-        <IconButton onClick={onBack} testId="go-to-workspace">
-          <ArrowBack />
-        </IconButton>
-      </Styled.IconWrap>
+      <SegmentButtons
+        variant="darker"
+        buttons={[
+          {
+            children: (
+              <Styled.SidebarToggleTrigger>
+                <Home />
+              </Styled.SidebarToggleTrigger>
+            ),
+            onClick: onBack,
+            tooltip: 'Back to workspace',
+            testId: 'back-to-home',
+          },
+        ]}
+      />
     );
   }
-
   return (
     <Link href="https://decipad.com">
       <Styled.IconWrap>
@@ -292,7 +293,7 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
-          <BackButton {...access} {...actions} />
+          <HomeButton {...access} {...actions} />
           <Styled.TitleContainer>
             {NotebookOptions}
             <Styled.Status data-testid="notebook-status">
@@ -351,7 +352,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
-          <BackButton {...access} {...actions} />
+          <HomeButton {...access} {...actions} />
           <Styled.TitleContainer>
             {NotebookOptions}
             <Styled.Status data-testid="notebook-status">

@@ -264,7 +264,7 @@ test('duplicate in workspace with single workspace', async ({
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
-    await page.getByTestId('go-to-workspace').click();
+    await page.getByTestId('segment-button-trigger-back-to-home').click();
   });
 
   await test.step('Notebook is listed', async () => {
@@ -390,7 +390,7 @@ test('duplicate in workspace with multiple workspaces', async ({
     await notebook.waitForEditorToLoad();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
-    await page.getByTestId('go-to-workspace').click();
+    await page.getByTestId('segment-button-trigger-back-to-home').click();
     expect(page.url()).toMatch(/\/w\/[^/]+/);
   });
 
@@ -448,7 +448,9 @@ test('duplicate inside notebook with single workspace', async ({
   await randomFreeUserNotebook.duplicate();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await randomFreeUserPage.waitForTimeout(Timeouts.redirectDelay);
-  await randomFreeUserPage.getByTestId('go-to-workspace').click();
+  await randomFreeUserPage
+    .getByTestId('segment-button-trigger-back-to-home')
+    .click();
   await expect(
     randomFreeUserPage.getByText(`Copy of ${notebookTitle}`)
   ).toBeVisible();
@@ -470,7 +472,9 @@ test('duplicate inside notebook with multiple workspaces', async ({
     notebookUrl = randomFreeUserPage.url();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await randomFreeUserPage.waitForTimeout(Timeouts.redirectDelay);
-    await randomFreeUserPage.getByTestId('go-to-workspace').click();
+    await randomFreeUserPage
+      .getByTestId('segment-button-trigger-back-to-home')
+      .click();
     await randomFreeUserPage.getByTestId('workspace-selector-button').click();
     await randomFreeUserPage.getByTestId('create-workspace-button').click();
     await randomFreeUserPage.getByPlaceholder('Team workspace').click();
