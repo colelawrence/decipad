@@ -23,9 +23,13 @@ export const SignUpConditionsContent: FC = () => {
       <a target="_blank" css={linkStyles} href="/docs/terms">
         Terms of Service
       </a>
-      <> and </>
+      <>, </>
       <a target="_blank" css={linkStyles} href="/docs/privacy">
         Privacy Policy
+      </a>
+      <> and </>
+      <a target="_blank" css={linkStyles} href="/docs/security">
+        Security Policy
       </a>
     </div>
   );
