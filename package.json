@@ -224,7 +224,7 @@
     "@udecode/plate-serializer-md": "31.3.4",
     "@udecode/plate-table": "31.3.3",
     "@uiw/codemirror-themes": "^4.22.2",
-    "@uiw/react-codemirror": "^4.20.2",
+    "@uiw/react-codemirror": "^4.22.2",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-graphcache": "5.2.0",
     "@vitest/coverage-v8": "^1.6.0",
