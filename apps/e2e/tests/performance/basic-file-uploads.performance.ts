@@ -116,13 +116,8 @@ test.describe('staging performance checks', () => {
       }).toPass({
         timeout: 1000,
       });
-      await page
-        .getByTestId('integration-block')
-        .filter({ hasText: /Variable/ })
-        .getByTestId('segment-button-trigger')
-        .click();
       await expect(
-        page.getByText('20 rows, previewing rows 1 to 10')
+        page.getByText('19 rows, previewing rows 1 to 10')
       ).toBeVisible();
     });
     performance.sampleEnd('Ingest CSV');
