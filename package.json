@@ -223,7 +223,7 @@
     "@udecode/plate-serializer-docx": "31.4.3",
     "@udecode/plate-serializer-md": "31.4.3",
     "@udecode/plate-table": "31.4.1",
-    "@uiw/codemirror-themes": "^4.22.2",
+    "@uiw/codemirror-themes": "^4.23.0",
     "@uiw/react-codemirror": "^4.22.2",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-graphcache": "5.2.0",
