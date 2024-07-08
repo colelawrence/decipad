@@ -1,7 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import { type Locator, type Page, expect, test } from '@playwright/test';
 import { cleanText, Timeouts } from '../../utils/src';
-import { ControlPlus } from '../../utils/page/Editor';
 import path from 'path';
 import os from 'os';
 import Zip from 'adm-zip';
@@ -532,13 +531,16 @@ export class Notebook {
    * ```
    */
   async updateNotebookTitle(title: string) {
-    await expect(this.notebookTitle).toBeVisible();
-    // make sure notebook is editable in 3s
-    await this.notebookTitle.click({ timeout: 3000 });
-    await ControlPlus(this.page, 'A');
-    await this.page.keyboard.press('Delete');
+    await expect(async () => {
+      await expect(this.notebookTitle).toBeVisible();
+      await this.notebookTitle.selectText();
+      await this.page.keyboard.press('Backspace');
+      await this.checkNotebookTitle('');
+    }).toPass();
     await this.notebookTitle.fill(title);
     await expect(this.notebookTitle).toHaveText(title);
+
+    // check topbar title also updated
     await expect(async () => {
       expect(await this.page.getByText(title.substring(0, 20)).count()).toEqual(
         2

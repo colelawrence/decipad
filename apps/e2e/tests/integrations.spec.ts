@@ -6,7 +6,6 @@ import {
   Timeouts,
   snapshot,
 } from '../utils/src';
-import { ControlPlus } from '../utils/page/Editor';
 import os from 'node:os';
 import type { User } from './manager/test-users';
 
@@ -425,7 +424,7 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
     await notebook.waitForEditorToLoad();
     IntegrationNotebookURL = page.url();
     await notebook.selectLastParagraph();
-    await ControlPlus(testUser.page, 'V');
+    await testUser.page.keyboard.press('ControlOrMeta+V');
     await page.getByText('Decipad notebook Integration').click();
     await expect(async () => {
       await expect(

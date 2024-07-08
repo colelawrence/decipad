@@ -6,7 +6,6 @@ import {
   renameColumn,
   writeInTable,
 } from '../utils/page/Table';
-import { createCodeLineV2Below } from '../utils/page/Block';
 import { Timeouts } from '../utils/src';
 
 test('Make sure auto-complete works', async ({ testUser }) => {
@@ -28,11 +27,11 @@ test('Make sure auto-complete works', async ({ testUser }) => {
     await writeInTable(page, '3', 3, 1);
 
     // Creates formula and fills it
-    await createCodeLineV2Below(page, 'Revenue', '100');
+    await testUser.notebook.addFormula('Revenue', '100');
   });
 
   await test.step('Checks if the revenue variable is linked properly', async () => {
-    await createCodeLineV2Below(page, 'Another', '');
+    await testUser.notebook.addFormula('Another', '100');
     await page.getByTestId('codeline-code').last().fill('Revenue');
     await page
       .getByTestId('autocomplete-group:Variables')
@@ -66,7 +65,7 @@ test('Make sure auto-complete works', async ({ testUser }) => {
 
   await test.step('New table with revenueNew', async () => {
     // Creates a new formula for RevenueNew
-    await createCodeLineV2Below(page, 'RevenueNew', '100');
+    await testUser.notebook.addFormula('RevenueNew', '100');
 
     // Creates a new table and fills it
     await createTable(page);

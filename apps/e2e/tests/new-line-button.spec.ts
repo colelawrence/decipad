@@ -1,5 +1,4 @@
 import { expect, test } from './manager/decipad-tests';
-import { createCodeLineV2Below } from '../utils/page/Block';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
 test('Basic + button to insert new line', async ({ testUser }) => {
@@ -7,7 +6,7 @@ test('Basic + button to insert new line', async ({ testUser }) => {
   await test.step('creates structured input', async () => {
     await notebook.focusOnBody();
     const lineText = '1 + 1';
-    await createCodeLineV2Below(page, 'MyVariable', lineText);
+    await testUser.notebook.addFormula('MyVariable', lineText);
   });
 
   await test.step('creates table', async () => {
@@ -40,6 +39,7 @@ test('Basic + button to insert new line', async ({ testUser }) => {
   await test.step('press + button after structured input', async () => {
     // first column
     await page.getByTestId('add-new-line-button').nth(1).click();
+    await notebook.checkNotebookTitle('Welcome to Decipad!');
   });
 
   await test.step('press + button after table', async () => {

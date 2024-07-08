@@ -16,8 +16,6 @@ import {
   createResultBelow,
 } from '../utils/page/Block';
 
-import { ControlPlus } from '../utils/page/Editor';
-
 import { Timeouts } from '../utils/src';
 
 test('toggle Widget', async ({ testUser }) => {
@@ -164,7 +162,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       .locator('div')
       .filter({ hasText: 'Edit' })
       .click();
-    await ControlPlus(page, 'A');
+    await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('Delete');
     await page.keyboard.type('55%');
     await page.keyboard.press('Enter');
@@ -182,7 +180,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       .locator('div')
       .filter({ hasText: 'Edit' })
       .click();
-    await ControlPlus(page, 'A');
+    await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('Delete');
     await page.keyboard.type('50%');
     await page.keyboard.press('Enter');
@@ -333,8 +331,10 @@ test('result widget', async ({ testUser }) => {
     await notebook.addAdvancedFormula('Hello = $5 + $1');
     await notebook.addAdvancedFormula('World = $5 + $3.33333');
     await notebook.addAdvancedFormula('Bye = $8');
-    await notebook.resultWidget.click();
-    await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
+    await expect(async () => {
+      await notebook.resultWidget.click();
+      await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
+    }).toPass();
   });
 
   await test.step('shows correct result of a variable', async () => {
@@ -344,8 +344,7 @@ test('result widget', async ({ testUser }) => {
 
   await test.step('updates the result when calculation changes', async () => {
     await page.getByText('Bye = $8').click();
-    await ControlPlus(page, 'a');
-    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('End');
     await page.keyboard.type(' + 4');
 
     await expect(async () => {
@@ -357,9 +356,11 @@ test('result widget', async ({ testUser }) => {
     await notebook.addAdvancedFormula('table = { hello = [1, 2, 3] }');
     await notebook.addAdvancedFormula('f(x) = x + 10');
 
-    await notebook.resultWidget.click();
-    // make sure formulas and table names weren't added to result widget
-    await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
+    await expect(async () => {
+      await notebook.resultWidget.click();
+      // make sure formulas and table names weren't added to result widget
+      await notebook.checkDropdownOptions(['Hello', 'World', 'Bye']);
+    }).toPass();
   });
 
   await test.step('check displayed option is selected', async () => {

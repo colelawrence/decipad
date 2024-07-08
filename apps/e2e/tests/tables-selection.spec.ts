@@ -1,5 +1,4 @@
 import { expect, test } from './manager/decipad-tests';
-import { ControlPlus } from '../utils/page/Editor';
 import {
   createTable,
   clickCell,
@@ -242,7 +241,7 @@ test('Table Selection', async ({ testUser }) => {
      * +-+-+-+
      *  0 1 2
      */
-    await ControlPlus(page, 'a');
+    await page.keyboard.press('ControlOrMeta+A');
 
     expect(await getSelectionGrid(page)).toEqual({
       start: { line: 1, col: 0 },

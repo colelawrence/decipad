@@ -10,8 +10,6 @@ import {
   getSelectionGrid,
 } from '../utils/page/Table';
 
-import { ControlPlus } from '../utils/page/Editor';
-
 test('Table Pasting', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('creates table', async () => {
@@ -194,9 +192,9 @@ test('copy column values into another column', async ({ testUser }) => {
     end: { line: 3, col: 0 },
   });
 
-  await ControlPlus(testUser.page, 'C');
+  await testUser.page.keyboard.press('ControlOrMeta+C');
   await page.keyboard.press('ArrowRight');
-  await ControlPlus(testUser.page, 'V');
+  await testUser.page.keyboard.press('ControlOrMeta+V');
 
   // +---------+----------+
   // | Column1 | Column2  |

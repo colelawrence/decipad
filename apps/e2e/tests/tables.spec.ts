@@ -2,7 +2,6 @@ import os from 'node:os';
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import {
-  ControlPlus,
   keyPress,
   navigateToNotebook,
   editorTitleLocator,
@@ -226,12 +225,12 @@ test('Basic Table Interactions + Collisions', async ({ testUser }) => {
   await test.step('copy and paste', async () => {
     await testUser.page.getByTestId('paragraph-wrapper').nth(-1).click();
     await testUser.page.keyboard.insertText('test copy and paste text');
-    await ControlPlus(testUser.page, 'A');
-    await ControlPlus(testUser.page, 'C');
+    await testUser.page.keyboard.press('ControlOrMeta+A');
+    await testUser.page.keyboard.press('ControlOrMeta+C');
     await writeInTable(testUser.page, '', 2, 0, 'NewTableName2');
-    await ControlPlus(testUser.page, 'V');
+    await testUser.page.keyboard.press('ControlOrMeta+V');
     await keyPress(testUser.page, 'ArrowRight');
-    await ControlPlus(testUser.page, 'V');
+    await testUser.page.keyboard.press('ControlOrMeta+V');
   });
 });
 
@@ -387,7 +386,7 @@ test('Number Parsing Checks', async ({ testUser }) => {
     });
 
     await testUser.notebook.focusOnBody();
-    await ControlPlus(testUser.page, 'V');
+    await testUser.page.keyboard.press('ControlOrMeta+V');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.syncDelay);
@@ -788,7 +787,7 @@ test('multiline table cells', async ({ testUser }) => {
   await writeInTable(testUser.page, 'A', 1, 0, 'Table');
   await doubleClickCell(page, 1, 0);
   await page.keyboard.press('End');
-  await ControlPlus(testUser.page, 'Enter');
+  await page.keyboard.press('ControlOrMeta+Enter');
   await page.keyboard.insertText('B');
   expect(await getFromTable(testUser.page, 1, 0, 'Table')).toBe('A\nBA﻿B');
 });

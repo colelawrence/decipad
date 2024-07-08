@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-force-option */
 import type { JSHandle, Locator, Page } from '@playwright/test';
 import { Timeouts } from '../src';
-import { ControlPlus, keyPress } from './Editor';
+import { keyPress } from './Editor';
 import { createWithSlashCommand } from './Block';
 
 export async function createTable(page: Page) {
@@ -140,7 +140,7 @@ export async function writeInTable(
   await doubleClickCell(page, line, col, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  await ControlPlus(page, 'a');
+  await page.keyboard.press('ControlOrMeta+A');
   await page.keyboard.type(text);
   await page.keyboard.press('Enter');
 }

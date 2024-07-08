@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import type { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
-import { ControlPlus, keyPress } from './Editor';
+import { keyPress } from './Editor';
 
 export async function focusTrailingParagraph(page: Page) {
   // Clicking once doesn't always work when running tests at full speed
@@ -46,7 +46,7 @@ export async function createNumberInputBelow(
 
   await page.keyboard.press('ArrowRight');
 
-  await ControlPlus(page, 'a');
+  await page.keyboard.press('ControlOrMeta+A');
 
   await page.keyboard.type(value);
 
@@ -202,37 +202,6 @@ export async function createDateBelow(page: Page, identifier: string) {
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
-}
-
-export async function createCodeLineV2Below(
-  page: Page,
-  variableName: string,
-  decilang: string
-) {
-  await focusTrailingParagraph(page);
-
-  await keyPress(page, '=');
-
-  await page.waitForSelector(
-    '[data-slate-editor] [data-testid="codeline-varname"]'
-  );
-
-  // Select the varname (we default to the code itself)
-  await page.click(
-    '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
-  );
-
-  await ControlPlus(page, 'a');
-
-  await page.keyboard.type(variableName);
-
-  await page.keyboard.press('ArrowRight');
-
-  await ControlPlus(page, 'a');
-
-  await page.keyboard.type(decilang);
-
-  await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
 export async function createEmbedBelow(page: Page) {

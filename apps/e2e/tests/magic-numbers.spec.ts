@@ -1,7 +1,7 @@
 import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
 import { editorTitleLocator, keyPress } from '../utils/page/Editor';
-import { createCodeLineV2Below, createInputBelow } from '../utils/page/Block';
+import { createInputBelow } from '../utils/page/Block';
 
 test('Testing magic numbers', async ({ testUser }) => {
   const { page } = testUser;
@@ -169,7 +169,7 @@ test('Navigating with magic numbers', async ({ testUser }) => {
     await keyPress(page, 'Enter');
     await keyPress(page, '=');
 
-    await createCodeLineV2Below(page, 'Price', 'Fees + 30£');
+    await notebook.addFormula('Price', 'Fees + 30£');
     await page.getByText('is £35').waitFor();
     const magic = page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();

@@ -105,13 +105,3 @@ export async function keyPress(page: Page, k: string) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
 }
-
-export async function ControlPlus(page: Page, key: string) {
-  const isMac = process.platform === 'darwin';
-  const modifier = isMac ? 'Meta' : 'Control';
-  if (key === 'Enter') {
-    await page.keyboard.press(`${modifier}+${key}`);
-  } else {
-    await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
-  }
-}

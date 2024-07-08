@@ -2,7 +2,7 @@
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import { getClearText, snapshot, Timeouts } from '../utils/src';
-import { ControlPlus, keyPress } from '../utils/page/Editor';
+import { keyPress } from '../utils/page/Editor';
 import { getResult } from '../utils/page/Block';
 
 test.describe('structured input and calculations @calculation-blocks', () => {
@@ -316,11 +316,11 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     await test.step('paste into formula', async () => {
       await notebook.addFormula('CopyFromMe', '3000');
       await page.keyboard.press('Tab');
-      await ControlPlus(testUser.page, 'C');
+      await testUser.page.keyboard.press('ControlOrMeta+C');
       await notebook.addFormula('PasteIntoMe', '');
       await page.keyboard.press('Tab');
       await page.keyboard.press('Backspace');
-      await ControlPlus(page, 'V');
+      await page.keyboard.press('ControlOrMeta+V');
       await expect(
         page
           .getByTestId('codeline-code')
