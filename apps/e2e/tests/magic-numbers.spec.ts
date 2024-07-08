@@ -82,7 +82,6 @@ test('Testing magic numbers', async ({ testUser }) => {
 
   await test.step('block and variable search in sidebar', async () => {
     await testUser.notebook.openSidebar();
-    await page.getByTestId('sidebar-Insert').click();
     await expect(
       page.getByTestId('editor-sidebar').getByText('Number Input').first()
     ).toBeVisible();

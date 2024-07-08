@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
 import { SearchFieldWithDropdown } from 'libs/ui/src/shared/molecules';
-import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 import { Children, FC, useState } from 'react';
 import { Formula, MagnifyingGlass, Sheet, ShowMore } from '../../../icons';
 import {
@@ -18,8 +16,10 @@ import {
   sidebarWrapperStyles,
 } from './styles';
 import { EditorSidebarProps, SelectedTab } from './types';
+import { css } from '@emotion/react';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 
-const AVAILABLE_TABS: SelectedTab[] = ['variable', 'block'];
+const AVAILABLE_TABS: SelectedTab[] = ['block', 'variable'];
 
 const getTriggerMetaForTab = (tab: SelectedTab) => {
   switch (tab) {
@@ -50,7 +50,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
   setSearch,
 }) => {
   const [variable, block] = Children.toArray(children);
-  const [activeTab, setActiveTab] = useState<SelectedTab>('variable');
+  const [activeTab, setActiveTab] = useState<SelectedTab>('block');
 
   return (
     <div css={sidebarColumnStyles} data-testid="editor-sidebar">
