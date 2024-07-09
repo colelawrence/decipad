@@ -1,4 +1,9 @@
-import { Dropdown, InputField, TextareaField } from '@decipad/ui';
+import {
+  Dropdown,
+  InputField,
+  TextareaField,
+  sanitizeInput,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
 import React from 'react';
 import { DropdownChoice } from '../../atoms/Dropdown/Dropdown';
@@ -79,7 +84,13 @@ export const SearchFieldWithDropdown: React.FC<
       <InputField
         autoFocus
         value={searchTerm}
-        onChange={(search) => onSearchChange(search)}
+        onChange={(search) => {
+          const sanitizedValue = sanitizeInput({
+            input: search,
+            isURL: false,
+          });
+          onSearchChange(sanitizedValue);
+        }}
         size="small"
         placeholder={placeholder}
         autocomplete={'off'}

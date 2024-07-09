@@ -1,5 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import { cssVar } from 'libs/ui/src/primitives';
+import { sanitizeInput } from 'libs/ui/src/utils';
 import React, { ReactNode } from 'react';
 
 const loadingAnimation = keyframes`
@@ -44,6 +45,8 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
     },
   });
 
+  const safeUrl = sanitizeInput({ input: src || '', isURL: true });
+
   return (
     <div
       css={imageDisplayWrapperStyle}
@@ -51,7 +54,7 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
     >
       {src ? (
         <>
-          <img src={src} alt={alt} css={imageStyle} />
+          <img src={safeUrl} alt={alt} css={imageStyle} />
           <div css={authorWrapStyle}>{author || null}</div>
         </>
       ) : (

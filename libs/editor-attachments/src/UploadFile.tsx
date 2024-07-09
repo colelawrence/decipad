@@ -3,7 +3,7 @@ import { useMyEditorRef } from '@decipad/editor-types';
 import { insertEmbedBelow, insertImageBelow } from '@decipad/editor-utils';
 import { useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { Modal, UploadFileModal } from '@decipad/ui';
+import { Modal, UploadFileModal, isValidURL } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { getStartPoint } from '@udecode/plate-common';
 import axios, { AxiosError } from 'axios';
@@ -48,6 +48,10 @@ export const UploadFile: FC<{ notebookId: string; workspaceId: string }> = ({
 
   const insertByUrl = useCallback(
     (fileUrl: string): void => {
+      if (!isValidURL(fileUrl)) {
+        console.error('Invalid URL:', fileUrl);
+        return;
+      }
       const { selection } = editor;
       const point =
         selection?.anchor ??

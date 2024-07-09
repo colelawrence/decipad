@@ -18,7 +18,7 @@ import {
   p13Medium,
   transparency,
 } from '../../../primitives';
-import { Anchor, TextChildren } from '../../../utils';
+import { Anchor, TextChildren, sanitizeInput } from '../../../utils';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { AnimatedIcon } from '../AnimatedIcon/AnimatedIcon';
 
@@ -122,6 +122,8 @@ export const TextAndIconButton = ({
     [animateIcon, children, color, onButtonClick]
   );
 
+  const safeUrl = sanitizeInput({ input: href || '', isURL: true });
+
   return (
     <div css={wrapperStyles} contentEditable={false}>
       {onClick ? (
@@ -139,7 +141,7 @@ export const TextAndIconButton = ({
           )}
         </button>
       ) : (
-        <Anchor href={disabled ? '' : href} css={buttonStyles}>
+        <Anchor href={disabled ? '' : safeUrl} css={buttonStyles}>
           {iconPosition === 'left' ? iconElement : null}
           {textElement}
           {iconPosition === 'right' ? iconElement : null}

@@ -22,7 +22,7 @@ import {
   TabsTrigger,
 } from '../../../shared';
 import { closeButtonStyles } from '../../../styles/buttons';
-import { isValidURL } from '../../../utils';
+import { isValidURL, sanitizeInput } from '../../../utils';
 import DragArea from './DragArea';
 import { SelectedFile } from './SelectedFile';
 import { getConfigForFileType, giphyBeans, unsplashBeans } from './fileConfigs';
@@ -240,8 +240,20 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
             icon={<LinkIcon />}
             label={`Insert ${fileType}`}
             placeholder={`Paste the ${fileType} link here`}
-            onSearchChange={(newSearch) => setFileName(newSearch)}
-            onSearchSubmit={() => onUpload(fileName, 'link')}
+            onSearchChange={(newSearch) => {
+              const sanitizedUrl = sanitizeInput({
+                input: newSearch,
+                isURL: true,
+              });
+              setFileName(sanitizedUrl);
+            }}
+            onSearchSubmit={() => {
+              const sanitizedUrl = sanitizeInput({
+                input: fileName,
+                isURL: true,
+              });
+              onUpload(sanitizedUrl, 'link');
+            }}
             disabled={!isValidURL(fileName)}
           />
         </TabsContent>

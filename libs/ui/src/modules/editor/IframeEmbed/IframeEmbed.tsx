@@ -6,6 +6,7 @@ import {
 } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { sanitizeInput } from 'libs/ui/src/utils';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 
@@ -43,6 +44,8 @@ export const IframeEmbed: IframeEmbedComponent = ({
   const { children, element } = props;
   const { url } = element as IframeEmbedElement;
 
+  const safeUrl = sanitizeInput({ input: url, isURL: true });
+
   return (
     <Draggable
       blockKind="media"
@@ -53,7 +56,7 @@ export const IframeEmbed: IframeEmbedComponent = ({
       <IFrameContainerDiv>
         <ResponsiveIFrame
           title="decipad-embed"
-          src={url}
+          src={safeUrl}
           allow="fullscreen"
           allowFullScreen
           width="100%"

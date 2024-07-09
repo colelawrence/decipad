@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { sanitizeInput } from 'libs/ui/src/utils';
 import { FC, ReactNode, useEffect, useId, useRef } from 'react';
 import { cssVar, p13Medium, p14Regular } from '../../../primitives';
 import { inputLabel } from '../../../primitives/text';
@@ -54,6 +55,7 @@ const fullWidth = css({
 
 type FieldType =
   | 'text'
+  | 'url'
   | 'search'
   | 'email'
   | 'tel'
@@ -107,6 +109,14 @@ export const InputField = ({
 }: InputFieldProps): ReturnType<FC> => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const handleInputChange = (unsanitized: string) => {
+    const sanitizedValue = sanitizeInput({
+      input: unsanitized,
+      isURL: type === 'url',
+    });
+    onChange(sanitizedValue);
+  };
+
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       setTimeout(() => {
@@ -157,7 +167,7 @@ export const InputField = ({
       pattern={pattern}
       title={title}
       tabIndex={tabIndex}
-      onChange={(event) => onChange(event.currentTarget.value)}
+      onChange={(event) => handleInputChange(event.currentTarget.value)}
       onKeyDown={(event) => {
         if (event.key === 'Enter') {
           onEnter();

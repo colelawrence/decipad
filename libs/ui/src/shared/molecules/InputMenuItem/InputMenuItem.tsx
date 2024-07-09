@@ -1,10 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { sanitizeInput } from 'libs/ui/src/utils';
 import { FC, InputHTMLAttributes } from 'react';
-import { MenuItem, Tooltip } from '../../atoms';
 import { cssVar, p13Medium, red200 } from '../../../primitives';
 import { menu } from '../../../styles';
+import { MenuItem, Tooltip } from '../../atoms';
 
 const menuItemStyles = css({
   background: cssVar('backgroundMain'),
@@ -78,7 +79,13 @@ export const InputMenuItem = ({
         // as an option and close the dropdown
         e.stopPropagation();
       }}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => {
+        const sanitizedValue = sanitizeInput({
+          input: e.target.value,
+          isURL: false,
+        });
+        return onChange(sanitizedValue);
+      }}
       pattern={pattern}
       placeholder={placeholder}
       type={type}

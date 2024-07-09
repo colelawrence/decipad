@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SERVER_SIDE_ROUTES } from '@decipad/routing';
 import { SerializedStyles } from '@emotion/react';
-import { AnchorHTMLAttributes, ComponentProps, ReactNode } from 'react';
-import { matchRoutes, RouteObject } from 'react-router-dom';
 import { HashLink, NavHashLink } from '@xzar90/react-router-hash-link';
+import { AnchorHTMLAttributes, ComponentProps, ReactNode } from 'react';
+import { RouteObject, matchRoutes } from 'react-router-dom';
 import { useHasRouter } from './routing';
 
 const SERVER_SIDE_ROUTE_OBJECTS: Array<RouteObject> =

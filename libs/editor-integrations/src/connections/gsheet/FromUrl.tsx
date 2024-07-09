@@ -1,30 +1,36 @@
-import { Button, cssVar } from '@decipad/ui';
-import styled from '@emotion/styled';
-import { FC, useRef } from 'react';
-import { ConnectionProps } from '../types';
+import { Button, cssVar, isValidURL, sanitizeInput } from '@decipad/ui';
 import { assertInstanceOf } from '@decipad/utils';
+import styled from '@emotion/styled';
+import { FC, useMemo, useRef } from 'react';
 import { URLRunner } from '../../runners';
+import { ConnectionProps } from '../types';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
   assertInstanceOf(runner, URLRunner);
 
   const inputUrlRef = useRef<HTMLInputElement>(null);
 
+  const isValidUrl = useMemo(() => {
+    const url = inputUrlRef.current?.value;
+    return url != null && isValidURL(url);
+  }, [inputUrlRef]);
+
   const onImportUrl = async () => {
     const url = inputUrlRef.current?.value;
-    if (url == null) {
+    if (url == null || !isValidURL(url)) {
       console.error('Url is not provided');
       return;
     }
+    const sanitizedUrl = sanitizeInput({ input: url, isURL: true });
 
-    runner.setUrl(url);
+    runner.setUrl(sanitizedUrl);
     onRun();
   };
 
   return (
     <Wrapper>
       <input ref={inputUrlRef} type="text" placeholder="Google Sheet URL" />
-      <Button type="primary" onClick={onImportUrl}>
+      <Button type="primary" onClick={onImportUrl} disabled={!isValidUrl}>
         Import
       </Button>
     </Wrapper>
