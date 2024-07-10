@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import {
   componentCssVars,
   cssVar,
+  p10Bold,
   p12Regular,
   p13Medium,
   p13Regular,
@@ -319,4 +320,15 @@ export const PublishingControlsItem = styled.div({
   alignItems: 'center',
   paddingTop: '6px',
   paddingBottom: '6px',
+});
+
+export const Badge = styled.div(p10Bold, {
+  display: 'inline-block',
+  padding: '2px 4px',
+  borderRadius: 4,
+  marginLeft: 4,
+  lineHeight: 1,
+  textTransform: 'uppercase',
+  backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+  color: componentCssVars('ButtonPrimaryDefaultText'),
 });

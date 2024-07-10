@@ -3,7 +3,7 @@
 /* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
 import { keyPress, editorLocator } from '../utils/page/Editor';
-import { Timeouts, getWorkspaces, timeout } from '../utils/src';
+import { Timeouts, getWorkspaces, timeout, snapshot } from '../utils/src';
 import oldNotebookJson from '../__fixtures__/011-old-notebook-json.json';
 
 import {
@@ -21,6 +21,45 @@ const unpublishedParagraph = 'This paragraph isnt published';
 
 // tests on this file can't be ran in paparell, make them flaky, might be related to the workspace reuse
 test.describe.configure({ mode: 'serial' });
+
+test('check private url publishing on free workspace', async ({ testUser }) => {
+  await test.step('create notebook', async () => {
+    await testUser.notebook.focusOnBody();
+  });
+
+  await test.step('share notebook', async () => {
+    await testUser.notebook.publishNotebook('Welcome-to-Decipad');
+    await testUser.page.getByTestId('publish-dropdown').click();
+    await expect(testUser.page.getByTestId('upgrade-badge')).toBeVisible();
+    await testUser.page.getByTestId('publish-private-url').click();
+    await expect(testUser.page.getByText('Choose a plan')).toBeVisible();
+    await snapshot(testUser.page, 'Notebook: Upgrade Plan');
+  });
+});
+
+test('check private url publishing on paid workspace', async ({ testUser }) => {
+  await test.step('create notebook on paid workspace', async () => {
+    await testUser.page.goto('/');
+    await testUser.workspace.newWorkspaceWithPlan('plus');
+    await testUser.workspace.clickNewPadButton();
+    await testUser.notebook.focusOnBody();
+  });
+
+  await test.step('share notebook', async () => {
+    await testUser.notebook.publishNotebook('Welcome-to-Decipad');
+    await testUser.page.getByTestId('publish-dropdown').click();
+    await expect(
+      testUser.page.getByTestId('publish-private-url')
+    ).toBeVisible();
+    await expect(testUser.page.getByTestId('upgrade-badge')).toBeHidden();
+    await testUser.page.getByTestId('publish-private-url').click();
+    await expect(testUser.page.getByTestId('publish-private-url')).toBeHidden();
+    await expect(testUser.page.getByText('Choose a plan')).toBeHidden();
+    await expect(
+      testUser.page.getByText('Allow readers to duplicate')
+    ).toBeVisible();
+  });
+});
 
 test('publish notebook, check logged out reader + logged in duplication', async ({
   testUser,

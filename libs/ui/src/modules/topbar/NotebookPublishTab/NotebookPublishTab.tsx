@@ -7,6 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { FC, ReactNode, useContext, useState } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Publish_State } from '@decipad/graphql-client';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import * as Popover from '@radix-ui/react-popover';
 import * as S from './styles';
 import { PublishControls } from './PublishControls';
@@ -39,13 +40,14 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
   onPublish,
   onUpdateAllowDuplicate,
   allowDuplicate,
+  isPremium,
 }) => {
   const isPublished = publishingState !== 'PRIVATE';
 
   const clientEvent = useContext(ClientEventsContext);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
-
+  const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
   const [open, setOpen] = useState(false);
 
   return (
@@ -117,14 +119,21 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                     aria-selected={publishingState === 'PUBLIC'}
                     data-testid="publish-private-url"
                     onClick={() => {
-                      setOpen(false);
-                      onUpdatePublish(notebookId, 'PUBLIC');
+                      if (isPremium) {
+                        setOpen(false);
+                        onUpdatePublish(notebookId, 'PUBLIC');
+                      } else {
+                        setIsUpgradeWorkspaceModalOpen(true);
+                      }
                     }}
                   >
                     <div>
                       <p>
                         {PublishingIconMap.PUBLIC}
                         {PublishingTextMap.PUBLIC}
+                        {!isPremium && (
+                          <S.Badge data-testid="upgrade-badge">Upgrade</S.Badge>
+                        )}
                       </p>
                       <span>
                         Only people you share the link with can view this

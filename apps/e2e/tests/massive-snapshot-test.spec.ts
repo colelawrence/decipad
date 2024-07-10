@@ -103,6 +103,8 @@ test('Loading and snapshot of big notebook', async ({
 
   await test.step('click publish button and extract text', async () => {
     publishedNotebookURL = await testUser.notebook.publishNotebook();
+    await testUser.page.getByTestId('publish-dropdown').click();
+    await expect(testUser.page.getByTestId('upgrade-badge')).toBeVisible();
     await snapshot(testUser.page, 'Notebook: Publish Popover');
   });
 

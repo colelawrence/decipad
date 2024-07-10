@@ -74,14 +74,14 @@ describe.sequential('public and private pads', () => {
       ).rejects.toThrow('Forbidden');
     });
 
-    it('the creator can set to public', async () => {
+    it('the creator can set to public to the web', async () => {
       const client = ctx.graphql.withAuth(await ctx.auth());
       const result = (
         await client.mutate({
           mutation: ctx.gql`
           mutation {
             setPadPublic(id: "${pad.id}", publishState: ${getPublishState(
-            'PUBLIC'
+            'PUBLICLY_HIGHLIGHTED'
           )})
           }
       `,
@@ -103,6 +103,24 @@ describe.sequential('public and private pads', () => {
       ).data.getPadById;
 
       expect(resultPad.isPublic).toBeTruthy();
+    });
+
+    it('the creator cannot publish privately on a free workspace', async () => {
+      const client = ctx.graphql.withAuth(await ctx.auth());
+
+      await expect(
+        client.mutate({
+          mutation: ctx.gql`
+          mutation {
+            setPadPublic(id: "${pad.id}", publishState: ${getPublishState(
+            'PUBLIC'
+          )})
+          }
+        `,
+        })
+      ).rejects.toThrow(
+        'User needs to upgrade workspace to publish notebooks privately'
+      );
     });
 
     it('other still user cannot update', async () => {

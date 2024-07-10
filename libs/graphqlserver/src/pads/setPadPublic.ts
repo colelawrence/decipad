@@ -4,6 +4,7 @@ import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import type { MutationResolvers } from '@decipad/graphqlserver-types';
 import { PublishedVersionName } from '@decipad/interfaces';
+import { isNotebookOnPremiumWorkspace } from './utils';
 
 const notebooks = resource('notebook');
 
@@ -53,6 +54,15 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
 
   if (pad.banned) {
     throw new UserInputError('Pad is banned');
+  }
+
+  if (
+    !(await isNotebookOnPremiumWorkspace(pad.workspace_id)) &&
+    publishState === 'PUBLIC'
+  ) {
+    throw new UserInputError(
+      'User needs to upgrade workspace to publish notebooks privately'
+    );
   }
 
   const isPublic = publishState !== 'PRIVATE';
