@@ -69,7 +69,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AA1?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AA1?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -110,7 +110,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AD3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AD3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -185,7 +185,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -239,7 +239,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -310,7 +310,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -364,7 +364,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A5%3AG6?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A5%3AG6?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {
@@ -447,7 +447,7 @@ describe('findAllIslands', () => {
               "sheets": [],
               "spreadsheetId": "sheetid",
             },
-            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyA8IDBtUpEP0DSBqscQDM_eI0l9bemXV3U",
+            "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=",
           },
           "result": {
             "type": {

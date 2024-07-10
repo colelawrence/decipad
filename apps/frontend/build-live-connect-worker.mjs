@@ -30,6 +30,8 @@ await build({
   logLevel: 'info',
   define: {
     global: 'globalThis',
+    'import.meta.env.VITE_GOOGLESHEETS_API_KEY':
+      `"${process.env.VITE_GOOGLESHEETS_API_KEY}"` ?? '""',
   },
 
   loader: {
