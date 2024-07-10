@@ -34,10 +34,9 @@ test.describe('staging performance checks', () => {
   let workspace: Workspace;
 
   const deployName = process.env.DEPLOY_NAME;
-  const stagingURL =
-    deployName === 'dev'
-      ? 'https://dev.decipad.com'
-      : `https://${deployName}.decipadstaging.com`;
+  const stagingURL = Number.isNaN(Number(deployName))
+    ? 'https://dev.decipad.com'
+    : `https://${deployName}.decipadstaging.com`;
 
   const currentDate = new Date().getTime();
   const notebookTitle =
