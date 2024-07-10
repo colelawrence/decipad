@@ -15,7 +15,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.ts", "**/*.tsx"],
+      "files": ["./src/**/*.ts", "./src/**/*.tsx"],
       "parserOptions": {
         "project": "libs/language-builtins/tsconfig.json"
       },

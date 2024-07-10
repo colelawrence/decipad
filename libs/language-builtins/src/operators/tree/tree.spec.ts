@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { Value, buildType } from '@decipad/language-types';
 import { makeContext } from '../../utils/testUtils';
@@ -66,8 +67,8 @@ describe('tree', () => {
     );
     await expect(treeValue.root).toEqual(Unknown);
     expect(treeValue.columns).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregation": undefined,
           "name": "a",
         },
@@ -105,8 +106,8 @@ describe('tree', () => {
     );
     await expect(treeValue.root).toEqual(Unknown);
     expect(treeValue.columns).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregation": undefined,
           "name": "a",
         },
@@ -147,12 +148,12 @@ describe('tree', () => {
     );
     await expect(treeValue.root).toEqual(Unknown);
     expect(treeValue.columns).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregation": undefined,
           "name": "a",
         },
-        Object {
+        {
           "aggregation": undefined,
           "name": "b",
         },
@@ -213,16 +214,16 @@ describe('tree', () => {
     );
     await expect(treeValue.root).toEqual(Unknown);
     expect(treeValue.columns).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "aggregation": undefined,
           "name": "a",
         },
-        Object {
+        {
           "aggregation": undefined,
           "name": "b",
         },
-        Object {
+        {
           "aggregation": undefined,
           "name": "c",
         },

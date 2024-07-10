@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { InferError, buildType as t, Value } from '@decipad/language-types';
 import {

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { Type } from '@decipad/language-types';
@@ -53,8 +54,8 @@ describe('table operators', () => {
         )?.getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -80,7 +81,7 @@ describe('table operators', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "Hello",
           "World",
           "Sup",
@@ -124,8 +125,8 @@ describe('table operators', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -163,7 +164,7 @@ describe('table operators', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "a",
           "b",
           "c",
@@ -246,8 +247,8 @@ describe('table operators', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -267,7 +268,7 @@ describe('table operators', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -330,8 +331,8 @@ describe('table operators', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -351,7 +352,7 @@ describe('table operators', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           true,
           true,
           true,
@@ -442,7 +443,7 @@ describe('table operators', () => {
         []
       )
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Could not find a row with the given condition"`
+      `[Error: Could not find a row with the given condition]`
     );
   });
 

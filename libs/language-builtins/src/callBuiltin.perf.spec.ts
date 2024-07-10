@@ -1,3 +1,4 @@
+import { describe, expect, afterAll, test } from 'vitest';
 /* eslint-disable jest/expect-expect */
 import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { N } from '@decipad/number';
 import { approximateSubsetSumIndices } from './table';
 

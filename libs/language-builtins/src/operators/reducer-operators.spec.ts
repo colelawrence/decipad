@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { getDefined } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports

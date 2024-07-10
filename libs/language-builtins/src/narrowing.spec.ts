@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { parseUnit, buildType as t } from '@decipad/language-types';
 import { narrowFunctionCall, narrowTypes } from './narrowing';
@@ -365,8 +366,8 @@ it('can narrow units', async () => {
       "symbol": null,
       "tree": undefined,
       "type": "number",
-      "unit": Array [
-        Object {
+      "unit": [
+        {
           "baseQuantity": "length",
           "baseSuperQuantity": "length",
           "exp": DeciNumber {
@@ -419,8 +420,8 @@ it('can narrow units', async () => {
       "symbol": null,
       "tree": undefined,
       "type": "number",
-      "unit": Array [
-        Object {
+      "unit": [
+        {
           "baseQuantity": "length",
           "baseSuperQuantity": "length",
           "exp": DeciNumber {
@@ -565,58 +566,58 @@ describe('percentages', () => {
     const meters = t.number([parseUnit('meters')]);
     expect(await narrowTypes(meters, t.number(null, 'percentage')))
       .toMatchInlineSnapshot(`
-      Type {
-        "anythingness": false,
-        "atParentIndex": null,
-        "cellType": null,
-        "columnNames": null,
-        "columnTypes": null,
-        "date": null,
-        "delegatesIndexTo": undefined,
-        "errorCause": null,
-        "functionArgNames": undefined,
-        "functionBody": undefined,
-        "functionName": undefined,
-        "functionScopeDepth": undefined,
-        "functionness": false,
-        "indexName": null,
-        "indexedBy": null,
-        "node": null,
-        "nothingness": false,
-        "numberError": null,
-        "numberFormat": null,
-        "pending": false,
-        "rangeOf": null,
-        "rowCellNames": null,
-        "rowCellTypes": null,
-        "rowCount": undefined,
-        "rowIndexName": null,
-        "symbol": null,
-        "tree": undefined,
-        "type": "number",
-        "unit": Array [
-          Object {
-            "baseQuantity": "length",
-            "baseSuperQuantity": "length",
-            "exp": DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
+        Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgNames": undefined,
+          "functionBody": undefined,
+          "functionName": undefined,
+          "functionScopeDepth": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "tree": undefined,
+          "type": "number",
+          "unit": [
+            {
+              "baseQuantity": "length",
+              "baseSuperQuantity": "length",
+              "exp": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              "known": true,
+              "multiplier": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              "unit": "meters",
             },
-            "known": true,
-            "multiplier": DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
-            },
-            "unit": "meters",
-          },
-        ],
-        Symbol(immer-draftable): true,
-      }
-    `);
+          ],
+          Symbol(immer-draftable): true,
+        }
+      `);
   });
 });
 

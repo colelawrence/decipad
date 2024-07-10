@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { Time, Value, buildType as t } from '@decipad/language-types';
 import { makeContext } from '../utils/testUtils';

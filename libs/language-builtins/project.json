@@ -15,10 +15,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/language-builtins"],
       "options": {
-        "jestConfig": "libs/language-builtins/jest.config.js"
+        "command": "npx vitest --run && npx vitest bench --outputJson benchmark.json",
+        "cwd": "libs/language-builtins"
       }
     },
     "typecheck": {
