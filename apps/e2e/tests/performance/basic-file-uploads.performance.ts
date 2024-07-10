@@ -33,8 +33,11 @@ test.describe('staging performance checks', () => {
   let notebook: Notebook;
   let workspace: Workspace;
 
-  // get PR Number
   const deployName = process.env.DEPLOY_NAME;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
 
   const currentDate = new Date().getTime();
   const notebookTitle =
@@ -58,8 +61,7 @@ test.describe('staging performance checks', () => {
 
   test('check workspace is empty', async ({}) => {
     await test.step('create new notebook for the test', async () => {
-      // go to production
-      await page.goto(`https://${deployName}.decipadstaging.com`);
+      await page.goto(stagingURL);
 
       // if there are notebooks there from previous fails remove eveything
       await deleteAllWorkspaceNotebooks(page, workspace);

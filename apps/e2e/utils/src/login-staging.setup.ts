@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-conditional-in-test */
 import type { Page } from '../../tests/manager/decipad-tests';
 import { expect, test } from '../../tests/manager/decipad-tests';
 import { STORAGE_STATE_STAGING } from '../../playwright.config';
@@ -38,8 +39,11 @@ test('save storage state for reuse', async ({ browser }) => {
   // get staging user agent string
   const userAgent = process.env.USER_AGENT_KEY;
 
-  // get PR Number
   const deployName = process.env.DEPLOY_NAME;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
 
   // Create a new browser context with the custom user agent
   const context = await browser.newContext({
@@ -49,7 +53,7 @@ test('save storage state for reuse', async ({ browser }) => {
   // Use the custom context to create a new page
   const page = await context.newPage();
 
-  await page.goto(`https://${deployName}.decipadstaging.com`);
+  await page.goto(stagingURL);
   await page.getByPlaceholder('Enter your email').fill(email);
   await page.getByTestId('login-button').click();
 
