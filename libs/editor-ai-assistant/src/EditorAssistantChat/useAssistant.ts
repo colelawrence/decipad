@@ -9,8 +9,8 @@ import type {
   RequiredActionFunctionToolCall,
   RunSubmitToolOutputsParams,
 } from 'openai/resources/beta/threads/runs/runs';
-import type { MessageCreateParams } from 'openai/resources/beta/threads/messages/messages';
 import { useComputer } from '@decipad/editor-hooks';
+import { MessageCreateParams } from 'openai/resources/beta/threads/messages';
 
 type ModelAgentOptions = {
   notebookId: string;

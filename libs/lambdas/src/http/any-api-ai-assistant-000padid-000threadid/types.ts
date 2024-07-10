@@ -1,4 +1,4 @@
-import type { MessageCreateParams } from 'openai/resources/beta/threads/messages/messages';
+import { MessageCreateParams } from 'openai/resources/beta/threads/messages';
 
 export type RequestPayload = {
   message: MessageCreateParams;

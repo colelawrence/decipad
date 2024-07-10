@@ -317,7 +317,7 @@
     "nodemailer": "6.9.14",
     "oauth": "0.10.0",
     "open": "^10.1.0",
-    "openai": "^4.36.0",
+    "openai": "^4.52.3",
     "p-reduce": "^3.0.0",
     "p-series": "3.0.0",
     "papaparse": "^5.4.1",
