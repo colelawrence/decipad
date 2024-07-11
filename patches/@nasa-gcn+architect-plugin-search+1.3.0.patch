@@ -1,8 +1,8 @@
 diff --git a/node_modules/@nasa-gcn/architect-plugin-search/index.js b/node_modules/@nasa-gcn/architect-plugin-search/index.js
-index f91368a..41ea05c 100644
+index 7fbcf4f..a835f04 100644
 --- a/node_modules/@nasa-gcn/architect-plugin-search/index.js
 +++ b/node_modules/@nasa-gcn/architect-plugin-search/index.js
-@@ -510,6 +510,9 @@ async function executeSearchRequests(cwd) {
+@@ -536,6 +536,9 @@ async function executeSearchRequests(cwd) {
  var deploy = {
    // @ts-expect-error: The Architect plugins API has no type definitions.
    start({ cloudformation, inventory, arc, stage }) {
@@ -12,7 +12,7 @@ index f91368a..41ea05c 100644
      let resources;
      const config = getConfig(arc);
      if (config.availabilityZoneCount) {
-@@ -524,8 +527,13 @@ var deploy = {
+@@ -550,8 +553,13 @@ var deploy = {
    },
    // @ts-expect-error: The Architect plugins API has no type definitions.
    services({ stage, arc }) {
@@ -28,7 +28,28 @@ index f91368a..41ea05c 100644
      } else if (arc.search) {
        return services2;
      } else {
-@@ -555,13 +563,13 @@ var sandbox = {
+@@ -563,13 +571,13 @@ var deploy = {
+     executeSearchRequests(inventory.inv._project.cwd);
+   }
+ };
+-var local;
+-function getEngine(name2) {
+-  if (name2?.toLowerCase() === "opensearch")
+-    return "opensearch";
+-  else
+-    return "elasticsearch";
+-}
++// var local;
++// function getEngine(name2) {
++//   if (name2?.toLowerCase() === "opensearch")
++//     return "opensearch";
++//   else
++//     return "elasticsearch";
++// }
+ var sandbox = {
+   async start({
+     // @ts-expect-error: The Architect plugins API has no type definitions.
+@@ -581,13 +589,13 @@ var sandbox = {
        }
      }
    }) {

@@ -6615,10 +6615,10 @@
     "@opensearch-project/opensearch" "^2.2.1"
     memoizee "^0.4.15"
 
-"@nasa-gcn/architect-plugin-search@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@nasa-gcn/architect-plugin-search/-/architect-plugin-search-1.2.0.tgz#cd4d9167cad04d19f8691d824c4bac0d1ce6741b"
-  integrity sha512-JO0Fds6Qu3M42SPyDYJ9ebeKi9Dlp1TulBo8lRJzCB0iweCjX0BySePLPSoinTykGfwVLdburBazMlVY7Oz70A==
+"@nasa-gcn/architect-plugin-search@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@nasa-gcn/architect-plugin-search/-/architect-plugin-search-1.3.0.tgz#8ae8156a1fad1fe093a9cc7f352e379e4d598f1f"
+  integrity sha512-yPhXsyWjrsDUWpQoUkKBbpJii47Cp7vBvmaINjGjNd25b9LoCNH97WS6jailODTP1O5mN1a4T/SpNqAxsSwQ8w==
   dependencies:
     "@nasa-gcn/architect-functions-search" "^1.0.0"
     "@opensearch-project/opensearch" "^2.2.0"
@@ -6627,7 +6627,7 @@
     lodash "^4.17.21"
     make-fetch-happen "^11.0.3"
     rimraf "^4.1.2"
-    tar "^6.1.13"
+    tar "^6.2.1"
     unzip-stream "^0.3.1"
     wait-port "^1.0.4"
 
@@ -31154,7 +31154,7 @@ tar-stream@^2.0.0, tar-stream@^2.1.4, tar-stream@~2.2.0:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-tar@6.1.11, tar@6.2.1, tar@^6.1.11, tar@^6.1.13:
+tar@6.1.11, tar@6.2.1, tar@^6.1.11, tar@^6.1.13, tar@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/tar/-/tar-6.2.1.tgz#717549c541bc3c2af15751bea94b1dd068d4b03a"
   integrity sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==
