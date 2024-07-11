@@ -70,7 +70,7 @@ test.describe('staging performance checks', () => {
 
   test('load workspace', async ({ performance }) => {
     performance.sampleStart('Load Workspace');
-    await page.goto(`https://${deployName}.decipadstaging.com`);
+    await page.goto(stagingURL);
     await expect(page.getByText('Welcome to')).toBeVisible();
     await expect(page.getByTestId('dashboard')).toBeVisible();
     performance.sampleEnd('Load Workspace');
@@ -132,7 +132,7 @@ test.describe('staging performance checks', () => {
   });
 
   test('leaves workspace clean', async ({}) => {
-    await page.goto(`https://${deployName}.decipadstaging.com`);
+    await page.goto(stagingURL);
 
     // restored an empty workspace for the next test
     await deleteAllWorkspaceNotebooks(page, workspace);
