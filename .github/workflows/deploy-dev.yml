@@ -217,7 +217,7 @@ jobs:
       - name: Run e2e & Visual Regression Tests
         env:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
-          DEPLOY_NAME: '${{ github.event.pull_request.number }}'
+          DEPLOY_NAME: 'dev'
           TESTMAIL_APIKEY: '${{secrets.TESTMAIL_APIKEY}}'
           TESTMAIL_NAMESPACE: '${{secrets.TESTMAIL_NAMESPACE}}'
           USER_AGENT_KEY: '${{secrets.USER_AGENT_KEY}}'

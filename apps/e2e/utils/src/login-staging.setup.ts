@@ -40,9 +40,10 @@ test('save storage state for reuse', async ({ browser }) => {
   const userAgent = process.env.USER_AGENT_KEY;
 
   const deployName = process.env.DEPLOY_NAME;
-  const stagingURL = Number.isNaN(Number(deployName))
-    ? 'https://dev.decipad.com'
-    : `https://${deployName}.decipadstaging.com`;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
 
   // Create a new browser context with the custom user agent
   const context = await browser.newContext({
