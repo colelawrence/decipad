@@ -23,7 +23,7 @@
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "../../node_modules/.bin/madge --circular .",
+        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js .",
         "cwd": "libs/webpack-config"
       }
     }

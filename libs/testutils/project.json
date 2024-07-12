@@ -20,7 +20,7 @@
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "../../node_modules/.bin/madge --circular src",
+        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
         "cwd": "libs/testutils"
       }
     }
