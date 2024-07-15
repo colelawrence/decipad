@@ -67,6 +67,7 @@ export interface ImportParams {
   url: URL;
   proxy?: URL;
   provider?: ImportElementSource;
+  padId?: string;
 }
 export interface ImportOptions {
   identifyIslands?: boolean;

@@ -168,9 +168,13 @@ test('embed pitch on deipad @embeds', async ({ testUser }) => {
 
 test('check calculations from CSVs imported with link work across tabs @imports @csv @tabs', async ({
   testUser,
+  unregisteredUser,
 }) => {
   test.slow();
   const { page, notebook } = testUser;
+  const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
+    unregisteredUser;
+  let notebookLink = '';
 
   await notebook.focusOnBody();
   await notebook.closeSidebar();
@@ -222,6 +226,79 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await expect(
       page.getByTestId('number-result:20'),
       'Formula that uses integration from another tab has a calculation error or never loads'
+    ).toBeVisible();
+    notebookLink = testUser.page.url();
+    await testUser.notebook.publishNotebook();
+  });
+
+  await test.step('[unregisteredUser] can navigate to notebook with csv calculations', async () => {
+    await unregisteredUserPage.goto(notebookLink);
+    await unregisteredUserNotebook.waitForEditorToLoad();
+    await unregisteredUserPage.getByText('Try Decipad').waitFor();
+    await unregisteredUserNotebook.selectTab('New Tab');
+    await expect(
+      unregisteredUserPage.getByTestId('number-result:20'),
+      'Formula that uses integration from another tab has a calculation error or never loads'
+    ).toBeVisible();
+    await unregisteredUserNotebook.selectTab('Another Tab');
+    await expect(
+      unregisteredUserPage.getByText('20 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+  });
+});
+
+test('csv integrations work when duplicating a notebook', async ({
+  testUser,
+  anotherRandomFreeUser,
+}) => {
+  test.slow();
+  const { page, notebook } = testUser;
+
+  await notebook.focusOnBody();
+  await notebook.closeSidebar();
+
+  await test.step('importing csv link through csv panel with link', async () => {
+    await notebook.addCSV({
+      method: 'upload',
+      file: './__fixtures__/csv/accounts.csv',
+      varName: 'Variable',
+    });
+    await expect(async () => {
+      await expect(
+        page.getByTestId('live-code').getByTestId('loading-animation').first()
+      ).toBeHidden();
+    }, 'CSV from file upload took too much time to load').toPass({
+      timeout: 1000,
+    });
+
+    await expect(
+      page.getByText('7109 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+  });
+
+  // Wait for CSV to be placed in the document.
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await notebook.page.waitForTimeout(5_000);
+
+  await test.step('publish notebook', async () => {
+    await notebook.focusOnBody();
+    await notebook.publishNotebook();
+  });
+
+  await test.step('Unregistered user can see integration', async () => {
+    await anotherRandomFreeUser.page.goto(page.url());
+
+    await expect(
+      page.getByText('7109 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+  });
+
+  await test.step('Unregistered user can duplicate notebook with integrations', async () => {
+    await anotherRandomFreeUser.notebook.topRightDuplicateNotebook.click();
+    await expect(anotherRandomFreeUser.notebook.notebookActions).toBeVisible();
+
+    await expect(
+      page.getByText('7109 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
 });

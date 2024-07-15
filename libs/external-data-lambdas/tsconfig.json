@@ -13,6 +13,7 @@
     { "path": "../tables" },
     { "path": "../utils" },
     { "path": "../externaldata" },
-    { "path": "../backend-resources" }
+    { "path": "../backend-resources" },
+    { "path": "../interfaces" }
   ]
 }

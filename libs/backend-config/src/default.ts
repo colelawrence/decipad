@@ -17,6 +17,9 @@ const defaultEnvValues = {
   DECI_S3_PAD_BACKUPS_BUCKET: 'padBackups',
   DECI_S3_ATTACHMENTS_BUCKET: 'attachments',
   DECI_S3_THIRD_PARTIES_BUCKET: 'decipad-staging-third-parties',
+
+  DECI_S3_EXTERNAL_DATA_SNAPSHOT_BUCKET: 'external-data-snapshot-bucket',
+
   DECI_INVITE_EXPIRATION_SECONDS: '604800',
 
   DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '2592000',

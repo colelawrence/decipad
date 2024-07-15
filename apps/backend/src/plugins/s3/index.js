@@ -1,19 +1,21 @@
 const S3rver = require('@20minutes/s3rver');
 const path = require('path');
 const { nanoid } = require('nanoid');
-const { sync: mkdirpSync} = require('mkdirp');
+const { sync: mkdirpSync } = require('mkdirp');
 const { join } = require('path');
 const { tmpdir } = require('os');
 const { readFileSync: file } = require('fs');
 
 let s3rver;
 
-const port = Number((process.env.DECI_S3_ENDPOINT || 'localhost:4568').split(':')[1]) || 443;
+const port =
+  Number((process.env.DECI_S3_ENDPOINT || 'localhost:4568').split(':')[1]) ||
+  443;
 
-let directory = join(tmpdir(), '.s3rver_data', nanoid());
+const directory = join(tmpdir(), '.s3rver_data', nanoid());
 mkdirpSync(directory);
 
-console.log('s3rver storing data in ' + directory);
+console.log(`s3rver storing data in ${directory}`);
 
 const options = {
   port,
@@ -28,24 +30,33 @@ const options = {
     {
       name: 'attachments',
       configs: [file(join(__dirname, 'cors-config.xml'))],
-    }
+    },
+    {
+      name: 'external-data-snapshot-bucket',
+    },
   ],
   silent: process.env.NODE_ENV === 'production',
 };
 
-function pkg({ arc, cloudformation, stage='staging', inventory, createFunction }) {
+function pkg({
+  arc,
+  cloudformation,
+  stage = 'staging',
+  inventory,
+  createFunction,
+}) {
   // no changes
   return cloudformation;
 }
 
 function start({ arc, inventory, invokeFunction, services }) {
-  console.log('starting s3rver...', options)
+  console.log('starting s3rver...', options);
   s3rver = new S3rver(options);
   return s3rver.run();
 }
 
 function end({ arc, inventory, services }, callback) {
-  console.log('stopping s3rver...')
+  console.log('stopping s3rver...');
   if (!s3rver) {
     return callback();
   }
@@ -56,6 +67,6 @@ function end({ arc, inventory, services }, callback) {
 const sandbox = { start, end };
 
 module.exports = {
-  'package': pkg,
+  package: pkg,
   sandbox,
 };

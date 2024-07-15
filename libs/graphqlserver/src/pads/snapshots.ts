@@ -13,10 +13,82 @@ import type {
   GraphqlContext,
   MutationResolvers,
 } from '@decipad/graphqlserver-types';
+import {
+  ELEMENT_INTEGRATION,
+  ELEMENT_TAB,
+  IntegrationTypes,
+  type RootDocument,
+} from '@decipad/editor-types';
+import { externaldata } from '@decipad/services';
 
 const MAX_DATA_SIZE_BYTES = 100_000;
 
 const notebooks = resource('notebook');
+
+//
+function getExternalDataIdFromUrl(stringUrl: string): string | undefined {
+  try {
+    const url = new URL(stringUrl);
+
+    // http://localhost:3000/api/externaldata/{id}/data
+    // pathname = /api/externaldata/{id}/data
+
+    return url.pathname.split('/').at(3);
+  } catch (e) {
+    return undefined;
+  }
+}
+
+function publishExternalData(doc: RootDocument): Array<string> {
+  const integrationBlocks: Array<IntegrationTypes.IntegrationBlock> = [];
+  for (const tab of doc.children) {
+    if (tab.type !== ELEMENT_TAB) {
+      continue;
+    }
+
+    for (const tabChildren of tab.children) {
+      if (tabChildren.type !== ELEMENT_INTEGRATION) {
+        continue;
+      }
+
+      integrationBlocks.push(tabChildren);
+    }
+  }
+
+  const externalDataIds: Array<string> = [];
+
+  for (const integration of integrationBlocks) {
+    switch (integration.integrationType.type) {
+      case 'csv':
+      case 'mysql':
+      case 'codeconnection':
+        continue;
+
+      case 'notion': {
+        const url = getExternalDataIdFromUrl(
+          integration.integrationType.notionUrl
+        );
+        if (url == null) {
+          continue;
+        }
+        externalDataIds.push(url);
+        break;
+      }
+      case 'gsheets': {
+        const url = getExternalDataIdFromUrl(
+          integration.integrationType.spreadsheetUrl
+        );
+        if (url == null) {
+          continue;
+        }
+        externalDataIds.push(url);
+        break;
+      }
+    }
+  }
+
+  return externalDataIds;
+}
 
 export const createOrUpdateSnapshot: MutationResolvers['createOrUpdateSnapshot'] =
   async (
@@ -77,6 +149,18 @@ export const createOrUpdateSnapshot: MutationResolvers['createOrUpdateSnapshot']
     }
 
     await data.docsyncsnapshots.put(existingSnapshot);
+
+    //
+    // Look for all the externaldata's used in the notebook,
+    // And set them as published
+    //
+
+    const notebookExternalDataIds = publishExternalData(snapshotData.value);
+    await Promise.all(
+      notebookExternalDataIds.map((id) =>
+        externaldata.setSnapshotsAsPublished(id, existingSnapshot.id)
+      )
+    );
 
     if (pad.isTemplate && forceSearchIndexUpdate) {
       await indexNotebook(pad, stringify(snapshotData.value));

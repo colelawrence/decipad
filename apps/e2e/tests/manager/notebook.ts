@@ -1191,6 +1191,9 @@ export class Notebook {
       await this.page.keyboard.type(option.varName);
     }
 
+    // A request is made before creating the integration. Which has to be waited for
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(2_000);
     await this.page.getByText('Continue').click();
   }
 

@@ -22,7 +22,8 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
         options.worker,
         options.integration.csvUrl,
         options.types,
-        'csv'
+        'csv',
+        options.notebookId
       );
       return csvRunner;
     case 'notion':
@@ -30,14 +31,16 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
         options.worker,
         options.integration.notionUrl,
         options.types,
-        'notion'
+        'notion',
+        options.notebookId
       );
     case 'gsheets':
       const runner = new URLRunner(
         options.worker,
         options.integration.spreadsheetUrl,
         options.types,
-        'gsheets'
+        'gsheets',
+        options.notebookId
       );
 
       const url = new URL(options.integration.spreadsheetUrl);
@@ -63,7 +66,8 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
         options.worker,
         options.integration.url,
         options.types,
-        'mysql'
+        'mysql',
+        options.notebookId
       );
       sqlRunner.setQuery(options.integration.query);
 

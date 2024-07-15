@@ -14,6 +14,7 @@ interface RequestResponse {
 
 interface RequestOptions {
   proxy?: URL;
+  padId?: string;
 }
 
 function getFetchUrl(url: URL, proxy?: URL): URL {
@@ -39,6 +40,13 @@ export async function request(
   };
 
   const fetchUrl = getFetchUrl(url, options.proxy);
+
+  // Only add PadID if we are proxying the request.
+  // Otherwise we can mess up the actual URL, since we
+  // are requesting directly.
+  if (options.proxy != null && options.padId != null) {
+    fetchUrl.searchParams.set('padId', options.padId);
+  }
 
   const response = await fetch(fetchUrl, fetchOptions);
 

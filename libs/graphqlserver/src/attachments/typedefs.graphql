@@ -46,6 +46,8 @@ extend type Mutation {
     fileType: String!
   ): CreateAttachmentForm!
 
+  addAttachmentToPad(attachmentId: ID!, padId: ID!): Attachment
+
   attachFileToPad(handle: ID!): Attachment
   attachFileToWorkspace(handle: ID!): Attachment
 

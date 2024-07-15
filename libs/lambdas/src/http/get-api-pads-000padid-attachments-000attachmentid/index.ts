@@ -37,12 +37,24 @@ export const handler = handle(async (event, user) => {
     };
   }
 
+  const workspaceId = pad.workspace_id;
+  if (!workspaceId) {
+    return {
+      statusCode: 400,
+      body: 'Notebook does not have a workspace.',
+    };
+  }
+
   const attachment = await data.fileattachments.get({ id: attachmentId });
 
   if (!attachment) {
     throw Boom.notFound('No such attachment');
   }
-  if (attachment.resource_uri !== `/pads/${padId}`) {
+
+  if (
+    attachment.resource_uri !== `/pads/${padId}` &&
+    attachment.resource_uri !== `/workspaces/${pad.workspace_id}`
+  ) {
     throw Boom.forbidden('Forbidden');
   }
 

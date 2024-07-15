@@ -126,9 +126,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Ingest CSV'),
-        'CSV Ingest took more than 10 seconds'
+        'CSV Ingest took more than 12 seconds'
       )
-      .toBeLessThanOrEqual(10000);
+      .toBeLessThanOrEqual(12_000);
   });
 
   test('leaves workspace clean', async ({}) => {

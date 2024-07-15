@@ -9,8 +9,13 @@ import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import fetch from 'isomorphic-fetch';
-import { checkNotebookOrWorkspaceAccess } from './checkAccess';
-import { debug } from './debug';
+import {
+  checkNotebookAccess,
+  checkNotebookAccessNoPublic,
+  checkWorkspaceAccess,
+} from './checkAccess';
+import { externaldata } from '@decipad/services';
+import { PublishedVersionName } from '@decipad/interfaces';
 
 const fetchExternalDataSource = async (
   id: string
@@ -79,7 +84,6 @@ const proxy = async (
   }
 
   const reqUrl = url ?? dataSource.externalId;
-  debug(`proxying ${reqUrl}`, { headers: reqHeaders });
 
   const resp = await fetch(reqUrl, { method, headers: reqHeaders });
 
@@ -88,11 +92,6 @@ const proxy = async (
   }
 
   const body = Buffer.from(await resp.arrayBuffer());
-  debug(
-    'response from %s: %s',
-    url ?? dataSource.externalId,
-    body.toString('utf-8')
-  );
 
   if (resp.status >= 300) {
     await markKeyAsErrored(key, body.toString('utf-8'));
@@ -108,6 +107,10 @@ const proxy = async (
 export const data: Handler = async (event) => {
   const externalDataSourceId = getDefined(getDefined(event.pathParameters).id);
 
+  const providedPadId = event.queryStringParameters?.padId;
+  const url = event.queryStringParameters?.url;
+  const method = event.queryStringParameters?.method;
+
   const externalDataSource = await fetchExternalDataSource(
     externalDataSourceId
   );
@@ -118,19 +121,104 @@ export const data: Handler = async (event) => {
     };
   }
 
-  await checkNotebookOrWorkspaceAccess({
-    workspaceId: externalDataSource.workspace_id,
-    notebookId: externalDataSource.padId,
-    event,
-  });
-
   const key = await getAccessKey(externalDataSource);
   if (!key) {
     throw Boom.forbidden('Needs authentication');
   }
 
-  const url = event.queryStringParameters?.url;
-  const method = event.queryStringParameters?.method;
+  const padId = externalDataSource.padId ?? providedPadId;
 
-  return proxy(externalDataSource, key, url, method);
+  const hasWorkspaceAccess = await checkWorkspaceAccess(
+    externalDataSource.workspace_id!,
+    event,
+    'READ'
+  )
+    .then(() => true)
+    .catch(() => false);
+
+  if (hasWorkspaceAccess) {
+    const response = await proxy(externalDataSource, key, url, method);
+    if (typeof response !== 'object') {
+      throw Boom.internal();
+    }
+
+    await externaldata.saveData(
+      externalDataSource.id,
+      url,
+      Buffer.from(response.body!, 'base64')
+    );
+
+    return response;
+  }
+
+  if (padId == null) {
+    throw Boom.badRequest('Could not find a PadID provided');
+  }
+
+  const hasNotebookAccess = await checkNotebookAccessNoPublic(
+    padId,
+    event,
+    'READ'
+  )
+    .then(() => true)
+    .catch(() => false);
+
+  if (hasNotebookAccess) {
+    const latestSnapshot = await externaldata.getLatestExternalDataSnapshot(
+      externalDataSourceId,
+      url
+    );
+
+    if (latestSnapshot == null) {
+      throw Boom.badRequest('Could not find a data snapshot');
+    }
+
+    return {
+      statusCode: 200,
+      body: latestSnapshot.toString('base64'),
+      isBase64Encoded: true,
+    };
+  }
+
+  const hasPublicNotebookAccess = await checkNotebookAccess(
+    padId,
+    event,
+    'READ'
+  )
+    .then(() => true)
+    .catch(() => false);
+
+  if (hasPublicNotebookAccess) {
+    const dataTables = await tables();
+    const snapshotRec = (
+      await dataTables.docsyncsnapshots.query({
+        IndexName: 'byDocsyncIdAndSnapshotName',
+        KeyConditionExpression:
+          'docsync_id = :docsyncId and snapshotName = :snapshotName',
+        ExpressionAttributeValues: {
+          ':docsyncId': padId,
+          ':snapshotName': PublishedVersionName.Published,
+        },
+      })
+    ).Items[0];
+
+    const latestSnapshot =
+      await externaldata.getLatestExternalDataSnapshotWithPublish(
+        externalDataSourceId,
+        url,
+        snapshotRec.id
+      );
+
+    if (latestSnapshot == null) {
+      throw Boom.badRequest('Could not find a data snapshot');
+    }
+
+    return {
+      statusCode: 200,
+      body: latestSnapshot.toString('base64'),
+      isBase64Encoded: true,
+    };
+  }
+
+  throw Boom.unauthorized();
 };

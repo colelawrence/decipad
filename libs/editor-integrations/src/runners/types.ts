@@ -128,12 +128,15 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
    */
   private query: string;
 
+  private padId: string | undefined;
+
   // TODO, this sucks, change to object
   constructor(
     worker: LiveConnectionWorker,
     url?: string,
     types?: TypeArray,
-    source?: ImportElementSource
+    source?: ImportElementSource,
+    padId?: string
   ) {
     super(types);
 
@@ -141,6 +144,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
     this.url = url ?? '';
     this.source = source ?? 'csv';
     this.query = '';
+    this.padId = padId;
   }
 
   public setUrl(url: string): void {
@@ -207,6 +211,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
         source: this.source,
         maxCellCount: 10_000_000_000_000,
         useCache: this.source === 'csv',
+        padId: this.padId,
       },
       async (_, __, res) => {
         if (res.loading == null || res.loading) {

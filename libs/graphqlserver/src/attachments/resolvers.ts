@@ -257,6 +257,58 @@ const resolvers: Resolvers = {
       };
     },
 
+    /**
+     * Take an existing attachment from the workspace and add it to the pad.
+     * Useful when you have a workspace dataset (CSV), and add it to a pad.
+     *
+     * Because in the case you want to share the notebook, the reader
+     * does not have workspace permissions, but they still need to read the
+     * CSV, hence why we create a record on the Pad level.
+     */
+    async addAttachmentToPad(_, { attachmentId, padId }, context) {
+      const data = await tables();
+      const attachment = await data.fileattachments.get({ id: attachmentId });
+      if (!attachment) {
+        throw new UserInputError('No such attachment was found');
+      }
+
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
+
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [`/pads/${padId}`],
+        minimumPermissionType: 'WRITE',
+      });
+
+      const padAttachment: FileAttachmentRecord = {
+        ...attachment,
+        resource_uri: `/pads/${padId}`,
+
+        // Careful, add the ID after, otherwise it will be overriden.
+        id: nanoid(),
+      };
+
+      await data.fileattachments.create(padAttachment);
+
+      return {
+        id: padAttachment.id,
+        fileName: padAttachment.user_filename,
+        fileType: padAttachment.filetype,
+        userId: padAttachment.user_id,
+        createdAt: padAttachment.createdAt,
+        fileSize: padAttachment.filesize,
+        url: padAttachment.resource_uri,
+
+        padId,
+        resourceId: padId,
+        resourceType: 'PAD',
+      };
+    },
+
     async removeAttachmentFromPad(_, { attachmentId }, context) {
       const data = await tables();
       const attachment = await data.fileattachments.get({ id: attachmentId });

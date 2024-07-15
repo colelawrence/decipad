@@ -27,6 +27,7 @@ export interface SubscribeParams {
   jsonPath?: string;
   delimiter?: string;
   liveQuery?: LiveQueryElement;
+  padId?: string;
   query?: string;
   useCache?: boolean;
 }

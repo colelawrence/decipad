@@ -13,6 +13,7 @@ import {
   saveExternalKey,
 } from '@decipad/externaldata';
 import { getExternalDataWorkspace } from './helpers';
+import { externaldata } from '@decipad/services';
 
 const notebooks = resource('notebook');
 
@@ -88,7 +89,11 @@ const resolvers: Resolvers = {
     },
 
     updateExternalDataSource: externalDataResource.update,
-    removeExternalDataSource: externalDataResource.remove,
+    async removeExternalDataSource(_, params, context) {
+      await externaldata.deleteAllExternalDataSnapshots(params.id);
+
+      return externalDataResource.remove(_, params, context);
+    },
     shareExternalDataSourceWithUser: externalDataResource.shareWithUser,
     unshareExternalDataSourceWithUser: externalDataResource.unshareWithUser,
     shareExternalDataSourceWithRole: externalDataResource.shareWithRole,

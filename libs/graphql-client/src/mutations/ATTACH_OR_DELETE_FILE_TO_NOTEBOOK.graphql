@@ -9,6 +9,13 @@ mutation AttachFileToNotebook($handle: ID!) {
   }
 }
 
+mutation AddAttachmentToNotebook($attachmentId: ID!, $notebookId: ID!) {
+  addAttachmentToPad(attachmentId: $attachmentId, padId: $notebookId) {
+    id
+    url
+  }
+}
+
 mutation RemoveFileFromNotebook($attachmentId: ID!) {
   removeAttachmentFromPad(attachmentId: $attachmentId)
 }

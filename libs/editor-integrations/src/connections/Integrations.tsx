@@ -63,13 +63,25 @@ const useRunner = (
     switch (connectionType) {
       case 'csv':
       case 'gsheets':
-        const r = new URLRunner(worker, undefined, undefined, connectionType);
+        const r = new URLRunner(
+          worker,
+          undefined,
+          undefined,
+          connectionType,
+          notebookId
+        );
         r.setIsFirstRowHeader(true);
 
         return r;
       case 'notion':
       case 'mysql':
-        return new URLRunner(worker, undefined, undefined, connectionType);
+        return new URLRunner(
+          worker,
+          undefined,
+          undefined,
+          connectionType,
+          notebookId
+        );
       case 'codeconnection':
         return new CodeRunner(notebookId, computer, undefined);
       default:
@@ -139,7 +151,7 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
     loading
   );
 
-  useCreateIntegration(editor, runner);
+  useCreateIntegration(editor, runner, notebookId);
 
   return (
     <ExecutionContext.Provider value={{ info, onExecute }}>

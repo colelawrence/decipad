@@ -74,6 +74,11 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_S3_THIRD_PARTIES_BUCKET);
     case 'DECI_S3_SECRET_ACCESS_KEY':
       return valueOrDefault(name, process.env.DECI_S3_SECRET_ACCESS_KEY);
+    case 'DECI_S3_EXTERNAL_DATA_SNAPSHOT_BUCKET':
+      return valueOrDefault(
+        name,
+        process.env.DECI_S3_EXTERNAL_DATA_SNAPSHOT_BUCKET
+      );
     case 'DECI_TEST_USER_SECRET':
       return valueOrDefault(name, process.env.DECI_TEST_USER_SECRET);
     case 'DISCORD_APP_ID':
@@ -206,6 +211,7 @@ export interface BucketsConfig {
   attachments: string;
   padBackups: string;
   thirdParties: string;
+  externalDataSnapshots: string;
 }
 
 export function s3(): S3ClientConfig & { buckets: BucketsConfig } {
@@ -226,6 +232,7 @@ export function s3(): S3ClientConfig & { buckets: BucketsConfig } {
       attachments: env('DECI_S3_ATTACHMENTS_BUCKET'),
       padBackups: env('DECI_S3_PAD_BACKUPS_BUCKET'),
       thirdParties: env('DECI_S3_THIRD_PARTIES_BUCKET'),
+      externalDataSnapshots: env('DECI_S3_EXTERNAL_DATA_SNAPSHOT_BUCKET'),
     },
   };
 }

@@ -13,7 +13,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -199,6 +199,7 @@ export type LogInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAttachmentToPad?: Maybe<Attachment>;
   addNotebookToSection?: Maybe<Scalars['Boolean']['output']>;
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
@@ -264,6 +265,12 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+};
+
+
+export type MutationAddAttachmentToPadArgs = {
+  attachmentId: Scalars['ID']['input'];
+  padId: Scalars['ID']['input'];
 };
 
 
@@ -1237,6 +1244,14 @@ export type AttachFileToNotebookMutationVariables = Exact<{
 
 export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFileToPad?: { __typename?: 'Attachment', id: string, padId?: string | null, fileName: string, fileType: string, fileSize: number, url: string } | null };
 
+export type AddAttachmentToNotebookMutationVariables = Exact<{
+  attachmentId: Scalars['ID']['input'];
+  notebookId: Scalars['ID']['input'];
+}>;
+
+
+export type AddAttachmentToNotebookMutation = { __typename?: 'Mutation', addAttachmentToPad?: { __typename?: 'Attachment', id: string, url: string } | null };
+
 export type RemoveFileFromNotebookMutationVariables = Exact<{
   attachmentId: Scalars['ID']['input'];
 }>;
@@ -2052,6 +2067,18 @@ export const AttachFileToNotebookDocument = gql`
 
 export function useAttachFileToNotebookMutation() {
   return Urql.useMutation<AttachFileToNotebookMutation, AttachFileToNotebookMutationVariables>(AttachFileToNotebookDocument);
+};
+export const AddAttachmentToNotebookDocument = gql`
+    mutation AddAttachmentToNotebook($attachmentId: ID!, $notebookId: ID!) {
+  addAttachmentToPad(attachmentId: $attachmentId, padId: $notebookId) {
+    id
+    url
+  }
+}
+    `;
+
+export function useAddAttachmentToNotebookMutation() {
+  return Urql.useMutation<AddAttachmentToNotebookMutation, AddAttachmentToNotebookMutationVariables>(AddAttachmentToNotebookDocument);
 };
 export const RemoveFileFromNotebookDocument = gql`
     mutation RemoveFileFromNotebook($attachmentId: ID!) {
@@ -3418,6 +3445,7 @@ export type GraphCacheResolvers = {
 };
 
 export type GraphCacheOptimisticUpdaters = {
+  addAttachmentToPad?: GraphCacheOptimisticMutationResolver<MutationAddAttachmentToPadArgs, Maybe<WithTypename<Attachment>>>,
   addNotebookToSection?: GraphCacheOptimisticMutationResolver<MutationAddNotebookToSectionArgs, Maybe<Scalars['Boolean']>>,
   addSectionToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAddSectionToWorkspaceArgs, Maybe<WithTypename<Section>>>,
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
@@ -3511,6 +3539,7 @@ export type GraphCacheUpdaters = {
     workspaces?: GraphCacheUpdateResolver<{ workspaces: Array<WithTypename<Workspace>> }, Record<string, never>>
   },
   Mutation?: {
+    addAttachmentToPad?: GraphCacheUpdateResolver<{ addAttachmentToPad: Maybe<WithTypename<Attachment>> }, MutationAddAttachmentToPadArgs>,
     addNotebookToSection?: GraphCacheUpdateResolver<{ addNotebookToSection: Maybe<Scalars['Boolean']> }, MutationAddNotebookToSectionArgs>,
     addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,

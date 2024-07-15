@@ -565,6 +565,29 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   expires_at?: number;
 }
 
+export interface ExternalDataSourceSnapshotRecord extends TableRecordBase {
+  //
+  // We need both an external_data_id and external_data_url, because a single
+  // external_data can have multiple URL it points to, and hence we want to
+  // capture snapshots from various sources.
+  //
+  // For example, google sheets needs metadata before making a request, which
+  // is a different URL
+  //
+
+  external_data_id: string;
+  external_data_url: string;
+
+  //
+  // A data snapshot could be tagged with a published_snapshot_id,
+  // which means it's tied to a certain published version.
+  //
+  published_snapshot_id?: string;
+
+  // URI of the S3 bucket the actual data is stored in.
+  resource_uri: string;
+}
+
 export interface SecretRecord extends TableRecordBase {
   name: string;
   workspace_id: ID;
@@ -701,6 +724,7 @@ export interface EnhancedDataTables {
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
+  externaldatasnapshots: DataTable<ExternalDataSourceSnapshotRecord>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   resourceusages: EnhancedDataTable<ResourceUsageRecord>;

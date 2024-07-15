@@ -58,6 +58,7 @@ if (typeof importScripts === 'function') {
           url: new URL(params.url),
           proxy: params.proxy ? new URL(params.proxy) : undefined,
           provider: params.source,
+          padId: params.padId,
         },
         {
           ...params,

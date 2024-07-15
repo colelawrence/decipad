@@ -198,6 +198,7 @@ export type LogInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAttachmentToPad?: Maybe<Attachment>;
   addNotebookToSection?: Maybe<Scalars['Boolean']['output']>;
   addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']['output']>;
@@ -263,6 +264,12 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+};
+
+
+export type MutationAddAttachmentToPadArgs = {
+  attachmentId: Scalars['ID']['input'];
+  padId: Scalars['ID']['input'];
 };
 
 
@@ -1297,7 +1304,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 /** Mapping of union types */
-export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
+export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
   AttachmentResource: ( Pad ) | ( Workspace );
   Pageable: ( SharedResource );
 };
@@ -1583,6 +1590,7 @@ export type KeyValueResolvers<ContextType = GraphqlContext, ParentType extends R
 };
 
 export type MutationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addAttachmentToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAddAttachmentToPadArgs, 'attachmentId' | 'padId'>>;
   addNotebookToSection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNotebookToSectionArgs, 'notebookId' | 'sectionId'>>;
   addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
   addTagToPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>>;

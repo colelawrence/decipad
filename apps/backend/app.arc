@@ -248,6 +248,13 @@ externaldatasourcekeys
   expiresAt TTL
   encrypt true
 
+externaldatasnapshots
+  id *String
+  external_data_id String
+  external_data_url String
+  published_snapshot_id String
+  resource_uri String
+
 docsync
   id *String
 
@@ -475,6 +482,11 @@ externaldatasources
 externaldatasourcekeys
   resource_uri *String
   name byResource
+
+externaldatasnapshots
+  external_data_id *String
+  external_data_url **String
+  name byExternalData
 
 docsyncsnapshots
   docsync_id *String
