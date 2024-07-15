@@ -205,7 +205,6 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
         columnTypeCoercions: this.getSubscribeTypes(),
         proxy: this.proxy,
         source: this.source,
-        subId: this.subId?.id.toString(),
         maxCellCount: 10_000_000_000_000,
         useCache: this.source === 'csv',
       },

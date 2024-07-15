@@ -74,7 +74,6 @@ export interface ImportOptions {
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
   doNotTryExpressionNumbersParse?: boolean;
   maxCellCount?: number;
-  subId?: number | string;
 
   jsonPath?: string;
   delimiter?: string;

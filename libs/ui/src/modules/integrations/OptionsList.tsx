@@ -4,7 +4,6 @@ import { CaretDown, CaretUp } from '../../icons';
 import styled from '@emotion/styled';
 import { cssVar, p14Regular } from '../../primitives';
 import { useElementWidth } from '@decipad/react-utils';
-import { noop } from '@decipad/utils';
 
 type BasicSelector = { id: string | number; name: string };
 
@@ -26,8 +25,6 @@ export const OptionsList = <T extends BasicSelector>({
 
   extraOption,
   onSelect,
-
-  disabled,
 }: UISelectConnectionProps<T>): ReturnType<FC> => {
   const [open, setOpen] = useState(false);
 
@@ -38,7 +35,7 @@ export const OptionsList = <T extends BasicSelector>({
       root
       dropdown
       open={open}
-      onChangeOpen={!disabled ? setOpen : noop}
+      onChangeOpen={setOpen}
       sideOffset={6}
       trigger={
         <Trigger ref={sizeRef}>

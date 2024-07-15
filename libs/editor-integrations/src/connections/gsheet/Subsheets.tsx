@@ -36,9 +36,9 @@ type CallbackResponse =
 
 const SubsheetSelector: FC<{
   name: string;
-  subsheets: Array<{ id: string | number; name: string }>;
+  subsheets: Array<{ id: string | number; name: string }> | undefined;
   setSubsheet: (_: { id: string | number; name: string }) => void;
-}> = ({ name, subsheets, setSubsheet }) => {
+}> = ({ name, subsheets = [], setSubsheet }) => {
   return (
     <OptionsList
       name={name}
@@ -132,7 +132,10 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
           name: m.sheetName,
         }));
 
-        SUBSHEET_CACHE.set(picked.docs[0].url, mappedSubsheets);
+        SUBSHEET_CACHE.set(
+          new URL(picked.docs[0].url).pathname,
+          mappedSubsheets
+        );
 
         runner.setProxy(getExternalDataUrl(externalData.id));
         runner.setUrl(picked.docs[0].url);
@@ -168,9 +171,14 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
           <div css={{ width: '100%' }}>
             <SubsheetSelector
               name={subsheet!.name}
-              subsheets={SUBSHEET_CACHE.get(runner.getUrl())!}
+              subsheets={SUBSHEET_CACHE.get(new URL(runner.getUrl()).pathname)}
               setSubsheet={(s) => {
+                const url = new URL(runner.getUrl());
+                url.hash = `gid=${s.id.toString()}`;
+
+                runner.setUrl(url.toString());
                 runner.setSubId(s);
+
                 onRun();
               }}
             />

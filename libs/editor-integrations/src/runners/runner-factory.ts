@@ -50,8 +50,11 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
         return runner;
       }
 
+      const urlWithHash = new URL(url.searchParams.get('url')!);
+      urlWithHash.hash = url.hash;
+
       // data?url=googlehseeturl
-      runner.setUrl(url.searchParams.get('url')!);
+      runner.setUrl(urlWithHash.toString());
       runner.setProxy(url.origin + url.pathname);
 
       return runner;
