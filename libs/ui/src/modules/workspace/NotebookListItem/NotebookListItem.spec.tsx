@@ -1,13 +1,14 @@
+import { UserIconKey } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
+import { ToastDisplay } from 'libs/ui/src/shared';
 import { ComponentProps, FC, PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
-import { NotebookListItem } from './NotebookListItem';
 import { AvailableSwatchColor, TColorStatus } from '../../../utils';
-import { UserIconKey } from '@decipad/editor-types';
+import { NotebookListItem } from './NotebookListItem';
 
 const asyncNoop = async () => null as any;
 
@@ -41,11 +42,13 @@ const props: ComponentProps<typeof NotebookListItem> = {
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>
-    <BrowserRouter>
-      <QueryParamProvider adapter={ReactRouter6Adapter}>
-        {children}
-      </QueryParamProvider>
-    </BrowserRouter>
+    <ToastDisplay>
+      <BrowserRouter>
+        <QueryParamProvider adapter={ReactRouter6Adapter}>
+          {children}
+        </QueryParamProvider>
+      </BrowserRouter>
+    </ToastDisplay>
   </DndProvider>
 );
 

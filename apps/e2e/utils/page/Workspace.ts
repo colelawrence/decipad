@@ -97,8 +97,10 @@ export async function duplicatePad(page: Page, index = 0, workspace = '') {
 
 export async function exportPad(page: Page, index = 0): Promise<string> {
   await page.click(ellipsisSelector(index));
+
+  await page.getByText('Export').click();
   const exportButton = (await page.waitForSelector(
-    'div[role="menuitem"] span:has-text("Download")'
+    '[role="menuitem"]:has-text("JSON")'
   ))!;
   const [fileContent] = await Promise.all([
     waitForDownload(page),

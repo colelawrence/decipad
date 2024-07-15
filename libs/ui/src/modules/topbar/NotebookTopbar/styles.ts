@@ -32,6 +32,7 @@ const genericTopbarStyles = css({
 });
 
 export const DefaultTopbarWrapper = styled.div(
+  hideOnPrint,
   deciOverflowXStyles,
   genericTopbarStyles,
   hideOnPrint,
@@ -64,6 +65,24 @@ export const IconWrap = styled.div({
 
     '&:hover': {
       color: cssVar('textDefault'),
+    },
+  },
+});
+
+export const EllipsisButtonContainer = styled.div({
+  display: 'flex',
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  borderRadius: '6px',
+  color: cssVar('textDefault'),
+  height: '100%',
+  padding: '5px',
+  div: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    svg: {
+      width: '20px',
+      height: '20px',
     },
   },
 });

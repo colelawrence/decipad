@@ -42,7 +42,10 @@ export const exportNotebook = (notebookId: string): ExportCallback => {
     const updates = await getLocalNotebookUpdates(notebookId);
     const file = await remoteExportNotebookWithUpdates(notebookId, updates);
 
-    forceDownload(`${notebookId}.zip`, file);
+    forceDownload(
+      `json-${notebookId}-${new Date().toLocaleDateString('de-DE')}.zip`,
+      file
+    );
   };
 };
 

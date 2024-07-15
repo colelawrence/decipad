@@ -288,6 +288,7 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
   authors,
   NotebookOptions,
   UndoButtons,
+  notebookName,
 }) => {
   return (
     <Styled.DefaultTopbarWrapper>
@@ -295,12 +296,17 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
         <Styled.LeftContainer>
           <HomeButton {...access} {...actions} />
           <Styled.TitleContainer>
-            {NotebookOptions}
+            <div data-testId="notebook-name-topbar">
+              <NotebookPath concatName notebookName={notebookName} />
+            </div>
             <Styled.Status data-testid="notebook-status">
               {status}
             </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
+          <Styled.EllipsisButtonContainer>
+            {NotebookOptions}
+          </Styled.EllipsisButtonContainer>
         </Styled.LeftContainer>
 
         <Styled.RightContainer>
@@ -347,6 +353,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
   actions,
   authors,
   status,
+  notebookName,
 }) => {
   return (
     <Styled.DefaultTopbarWrapper>
@@ -354,18 +361,21 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
         <Styled.LeftContainer>
           <HomeButton {...access} {...actions} />
           <Styled.TitleContainer>
-            {NotebookOptions}
+            <div data-testId="notebook-name-topbar">
+              <NotebookPath concatName notebookName={notebookName} />
+            </div>
+
             <Styled.Status data-testid="notebook-status">
               {status}
             </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
           <Styled.HiddenFromSmallScreens>
-            <Styled.AiContainer>
-              {AiModeSwitch}
-              <Styled.Status>Beta</Styled.Status>
-            </Styled.AiContainer>
+            <Styled.AiContainer>{AiModeSwitch}</Styled.AiContainer>
           </Styled.HiddenFromSmallScreens>
+          <Styled.EllipsisButtonContainer>
+            {NotebookOptions}
+          </Styled.EllipsisButtonContainer>
         </Styled.LeftContainer>
         <Styled.RightContainer>
           {isFlagEnabled('ENABLE_COMMENTS') && (

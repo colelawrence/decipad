@@ -1,26 +1,18 @@
 /* eslint-disable camelcase */
+import { ClientEventsContext } from '@decipad/client-events';
 import type { DocSyncEditor } from '@decipad/docsync';
-import type { FC } from 'react';
-import { useContext, useMemo } from 'react';
-import { useNotebookMetaActions } from '../../hooks';
 import {
   useClaimNotebookMutation,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
-import { notebooks, useRouteParams } from '@decipad/routing';
 import { useNotebookMetaData } from '@decipad/react-contexts';
-import {
-  useBackActions,
-  useEditorUndoState,
-  usePublishedVersionState,
-} from './hooks';
+import { notebooks, useRouteParams } from '@decipad/routing';
 import type { TColorStatus } from '@decipad/ui';
 import {
   AIModeSwitch,
   Button,
   Dot,
   NotebookOptions,
-  NotebookPath,
   NotebookStatusDropdown,
   NotebookTopbar,
   TopbarPlaceholder,
@@ -29,9 +21,16 @@ import {
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
-import { CaretDown } from 'libs/ui/src/icons';
+import { Ellipsis } from 'libs/ui/src/icons';
 import { useSession } from 'next-auth/react';
-import { ClientEventsContext } from '@decipad/client-events';
+import type { FC } from 'react';
+import { useContext, useMemo } from 'react';
+import { useNotebookMetaActions } from '../../hooks';
+import {
+  useBackActions,
+  useEditorUndoState,
+  usePublishedVersionState,
+} from './hooks';
 
 export interface TopbarProps {
   readonly notebookId: string;
@@ -121,6 +120,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
 
   return (
     <NotebookTopbar
+      notebookName={notebookName}
       NotebookOptions={
         <NotebookOptions
           notebookId={notebookId}
@@ -133,8 +133,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
               data-testId="notebook-actions"
               isReadOnly={isReadOnly}
             >
-              <NotebookPath concatName notebookName={notebookName} />
-              {showTrigger && <CaretDown />}
+              {showTrigger && <Ellipsis />}
             </MenuItemButton>
           }
           notebookStatus={

@@ -42,6 +42,7 @@ export type TopbarGenericProps = {
   readonly NotebookPublishing: ReactNode;
 
   readonly access: AccessInfo;
+  readonly notebookName: string;
   readonly actions: TopbarActions;
   readonly authors: Authors;
 

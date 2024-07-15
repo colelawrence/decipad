@@ -7,6 +7,7 @@ import {
   smallScreenQuery,
   tabletScreenQuery,
 } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 
 // needed for screenshot testing
@@ -173,45 +174,48 @@ interface AsideWrapperProps {
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => {
-  return {
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    overflowY: 'auto',
-    flexShrink: 0,
-    width: ComponentWidths[props.sidebarComponent].default,
-    height: 'calc(100% - 12px)',
-    borderRadius: '16px',
-    zIndex: 40,
-    overflow: 'visible',
-    '& > :first-child': css({
-      maxHeight: 'calc(100vh - 80px)',
-      position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
+  return [
+    {
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      overflowY: 'auto',
+      flexShrink: 0,
       width: ComponentWidths[props.sidebarComponent].default,
-      height: props.sidebarComponent === 'publishing' ? 'auto' : '100%',
-    }),
-    [smallScreenQuery]: {
-      display: 'none',
-    },
-    [tabletScreenQuery]: {
-      background: cssVar('backgroundMain'),
-      position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
-      ...(ComponentWidths[props.sidebarComponent].tablet && {
-        width: ComponentWidths[props.sidebarComponent].tablet,
+      height: 'calc(100% - 12px)',
+      borderRadius: '16px',
+      zIndex: 40,
+      overflow: 'visible',
+      '& > :first-child': css({
+        maxHeight: 'calc(100vh - 80px)',
+        position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
+        width: ComponentWidths[props.sidebarComponent].default,
+        height: props.sidebarComponent === 'publishing' ? 'auto' : '100%',
       }),
-      '& > :first-child': {
-        position: 'static',
+      [smallScreenQuery]: {
+        display: 'none',
       },
+      [tabletScreenQuery]: {
+        background: cssVar('backgroundMain'),
+        position: props.sidebarComponent === 'annotations' ? 'static' : 'fixed',
+        ...(ComponentWidths[props.sidebarComponent].tablet && {
+          width: ComponentWidths[props.sidebarComponent].tablet,
+        }),
+        '& > :first-child': {
+          position: 'static',
+        },
 
-      height:
-        props.sidebarComponent === 'publishing' ||
-        props.sidebarComponent === 'annotations'
-          ? 'fit-content'
-          : 'calc(100vh - 80px)',
-      border: `solid 1px ${cssVar('borderDefault')}`,
-      borderRight: 'none',
-      boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-      padding: 0,
+        height:
+          props.sidebarComponent === 'publishing' ||
+          props.sidebarComponent === 'annotations'
+            ? 'fit-content'
+            : 'calc(100vh - 80px)',
+        border: `solid 1px ${cssVar('borderDefault')}`,
+        borderRight: 'none',
+        boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+        padding: 0,
+      },
     },
-  };
+    hideOnPrint,
+  ];
 });

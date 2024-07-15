@@ -3,12 +3,12 @@ import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
 import { CaretDown } from '../../../icons';
-import { UndoButtons } from './UndoButtons';
+import { AIModeSwitch } from '../AIModeSwitch/AIModeSwitch';
 import { NotebookOptions } from '../NotebookOptions/NotebookOptions';
 import { NotebookPath } from '../NotebookPath/NotebookPath';
-import { NotebookStatusDropdown } from '../NotebookStatus/NotebookStatusDropdown';
-import { AIModeSwitch } from '../AIModeSwitch/AIModeSwitch';
 import { NotebookPublishingPopUp } from '../NotebookPublishingPopUp/NotebookPublishingPopUp';
+import { NotebookStatusDropdown } from '../NotebookStatus/NotebookStatusDropdown';
+import { UndoButtons } from './UndoButtons';
 
 const notebookId = 'notebookId';
 const notebookName = 'my notebook';
@@ -128,6 +128,7 @@ const args: ComponentProps<typeof NotebookTopbar> = {
   },
   isEmbed: false,
   status: 'done',
+  notebookName: 'fooo',
 };
 
 export default {

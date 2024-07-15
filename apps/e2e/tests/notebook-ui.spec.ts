@@ -1,7 +1,7 @@
-import { expect, test } from './manager/decipad-tests';
-import { snapshot } from '../utils/src';
 import notebookSource from '../__fixtures__/009-number-catalogue-test.json';
 import { openColTypeMenu } from '../utils/page/Table';
+import { snapshot } from '../utils/src';
+import { expect, test } from './manager/decipad-tests';
 
 test('notebook actions topbar @notebook', async ({ testUser }) => {
   const { page, notebook } = testUser;
@@ -37,10 +37,11 @@ test('notebook actions topbar @notebook', async ({ testUser }) => {
 
   await test.step('can download notebook', async () => {
     await notebook.notebookActions.click();
-    const download = page.locator('[role="menuitem"]:has-text("Download")');
-
+    const download = page.locator('[role="menuitem"]:has-text("Export")');
     const downloadPromise = page.waitForEvent('download');
-    await download.click();
+    await download.hover();
+    const json = page.locator('[role="menuitem"]:has-text("JSON")');
+    await json.click();
     const notebookFile = await downloadPromise;
     const err = await notebookFile.failure();
     expect(err).toBeNull();

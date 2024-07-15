@@ -1559,8 +1559,9 @@ export class Notebook {
    */
   async download() {
     await this.notebookActions.click();
+    await this.page.getByText('Export').click();
     const exportButton = (await this.page.waitForSelector(
-      'div[role="menuitem"] span:has-text("Download")'
+      '[role="menuitem"]:has-text("JSON")'
     ))!;
     const [fileContent] = await Promise.all([
       this.waitForDownload(),

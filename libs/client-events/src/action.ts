@@ -33,6 +33,14 @@ type Action =
       };
     }
   | {
+      action: 'Notebook Downloaded';
+      props: {
+        notebook_id?: string;
+        format: 'json' | 'pdf';
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Tab Created';
       props: {
         notebook_id?: string;

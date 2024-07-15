@@ -1,30 +1,31 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   NotebookMetaDataFragment,
   WorkspaceSwitcherWorkspaceFragment,
 } from '@decipad/graphql-client';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import format from 'date-fns/format';
-import { FC, ReactNode, useState, useContext } from 'react';
-import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
+import { FC, ReactNode, useContext, useState } from 'react';
 import {
   Archive,
-  Duplicate,
   Download,
+  Duplicate,
   FolderOpen,
   GitBranch,
   Move,
   Trash,
 } from '../../../icons';
-import { MenuList } from '../../../shared/molecules';
 import {
   cssVar,
   p12Medium,
   p12Regular,
   shortAnimationDuration,
 } from '../../../primitives';
-import { NotebookMetaActionsReturn } from '@decipad/interfaces';
-import { ClientEventsContext } from '@decipad/client-events';
+import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
+import { BetaBadge, MenuList } from '../../../shared/molecules';
 
 export interface NotebookOptionsProps {
   readonly notebookId: string;
@@ -63,6 +64,11 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const clientEvent = useContext(ClientEventsContext);
+  const toast = useToast();
+
+  const downloadPDF = (_: string) => {
+    toast('Not implemented yet', 'warning');
+  };
 
   return (
     <div css={menuActionsStyles}>
@@ -139,15 +145,57 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         )}
         {permissionType !== 'READ' && (
           <>
-            <MenuItem
-              icon={<Download />}
-              onSelect={() => {
-                actions.onDownloadNotebook(id);
-                setIsOpen(false);
-              }}
+            <MenuList
+              itemTrigger={
+                <TriggerMenuItem icon={<Download />}>
+                  <MinDiv>Export</MinDiv>
+                </TriggerMenuItem>
+              }
             >
-              Download
-            </MenuItem>
+              <MenuItem
+                onSelect={() => {
+                  try {
+                    downloadPDF(`${workspaceId}-${id}`);
+                    clientEvent({
+                      segmentEvent: {
+                        type: 'action',
+                        action: 'Notebook Downloaded',
+                        props: {
+                          analytics_source: 'frontend',
+                          format: 'pdf',
+                        },
+                      },
+                    });
+                  } catch (error) {
+                    toast((error as Error).message, 'warning');
+                  }
+                }}
+              >
+                <span>PDF</span>
+                <div css={betaWrapper}>
+                  <BetaBadge />
+                </div>
+              </MenuItem>
+              <MenuItem
+                onSelect={() => {
+                  actions.onDownloadNotebook(id);
+                  setIsOpen(false);
+                  clientEvent({
+                    segmentEvent: {
+                      type: 'action',
+                      action: 'Notebook Downloaded',
+                      props: {
+                        analytics_source: 'frontend',
+                        format: 'json',
+                      },
+                    },
+                  });
+                }}
+              >
+                JSON
+              </MenuItem>
+            </MenuList>
+
             <MenuItem
               icon={<GitBranch />}
               onSelect={() => {
@@ -242,3 +290,5 @@ const ReaderInfo = styled.li(p12Regular, {
   width: '152px',
   listStyle: 'none',
 });
+
+const betaWrapper = css({ display: 'inline-block', marginLeft: 20 });
