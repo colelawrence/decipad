@@ -18,8 +18,16 @@ const lineNumberWidth = '22px';
 
 const tdPlaceholderStyles = css({
   // Show line numbers on the first cell of each row.
+  height: '100%',
   position: 'relative',
   minWidth: '0',
+  verticalAlign: 'middle',
+
+  '& > div': {
+    height: '100%',
+    display: 'grid',
+    alignItems: 'center',
+  },
 
   '&:first-of-type': {
     paddingLeft: table.firstTdPaddingLeft,
@@ -54,6 +62,10 @@ const nonEditableStyles = css({
 
 const formulaResultStyles = css({
   backgroundColor: cssVar('backgroundSubdued'),
+
+  '& > div:has(table)': {
+    alignItems: 'stretch',
+  },
 });
 
 const selectedStyles = ({ isFormulaResult }: { isFormulaResult: boolean }) =>

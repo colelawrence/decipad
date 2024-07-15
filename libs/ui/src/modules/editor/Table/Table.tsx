@@ -18,6 +18,12 @@ const tableBaseStyles = css({
   // NOTE: border radius on the table does not work with `borderCollapse: collapse`,
   // that's why we need `borderCollapse: separate` on the table and to style <th>
   // and <td> separately for borders and border radius.
+  height: '100%',
+
+  '@-moz-document url-prefix()': {
+    height: 'auto',
+  },
+
   borderCollapse: 'inherit',
   borderSpacing: '0',
   tableLayout: 'auto',
@@ -32,6 +38,11 @@ const tableBaseStyles = css({
   'td:last-child': {
     borderRight: regularBorder,
   },
+
+  tbody: {
+    height: '100%',
+  },
+
   table: {
     marginBottom: 0,
     'tr:last-child td': {
@@ -60,6 +71,7 @@ const nestedStyles = css({
 });
 
 const readOnlyTableStyles = css({
+  height: 'auto',
   width: '100%',
   marginBottom: '12px',
   '> thead > tr > th:first-of-type, > tbody:not(thead + tbody) > tr:first-of-type > td:first-of-type':
