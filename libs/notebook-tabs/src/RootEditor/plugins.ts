@@ -7,7 +7,6 @@ import {
   ELEMENT_TITLE,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import assert from 'assert';
 import { IsTitle } from '../utils';
 import {
   type TNodeEntry,
@@ -57,7 +56,10 @@ const findOrInsertTitlePlugin: CurriedNormalizePlugin = (editor) => (entry) => {
     //
 
     const title = editor.children[titleIndex] as TitleElement;
-    assert(IsTitle(title), 'Should be a title');
+
+    if (!IsTitle(title)) {
+      throw new Error('Should be a title');
+    }
 
     editor.apply({
       type: 'remove_node',
@@ -80,10 +82,11 @@ const ensureOneTabPlugin: CurriedNormalizePlugin = (editor) => (entry) => {
   const [node] = entry;
   if (!Editor.isEditor(node)) return false;
 
-  assert(
-    editor.children.length >= 1,
-    '`findOrInsertTitlePlugin` should have ran before this, and ensured a title'
-  );
+  if (editor.children.length < 1) {
+    throw new Error(
+      'findOrInsertTitlePlugin` should have ran before this, and ensured a title'
+    );
+  }
 
   const tab = editor.children.find((n: any) => n.type === ELEMENT_TAB);
 
@@ -122,10 +125,12 @@ const migrateOlderNodes: CurriedNormalizePlugin = (editor) => (entry) => {
     });
 
     const title = editor.children[0] as TitleElement;
-    assert(
-      title?.type === ELEMENT_TITLE,
-      `0th child should always be title. Got ${JSON.stringify(title)}`
-    );
+
+    if (title?.type !== ELEMENT_TITLE) {
+      throw new Error(
+        `0th child should always be title. Got ${JSON.stringify(title)}`
+      );
+    }
 
     editor.apply({
       type: 'remove_text',
@@ -151,10 +156,11 @@ const migrateOlderNodes: CurriedNormalizePlugin = (editor) => (entry) => {
   const tab = editor.children[1] as TabElement;
 
   // Null chaining, just in case.
-  assert(
-    tab?.type === ELEMENT_TAB,
-    `First element should always be a tab. Got ${JSON.stringify(tab)}`
-  );
+  if (tab?.type !== ELEMENT_TAB) {
+    throw new Error(
+      `First element should always be a tab. Got ${JSON.stringify(tab)}`
+    );
+  }
 
   editor.apply({
     type: 'move_node',
