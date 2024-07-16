@@ -141,7 +141,8 @@ test('embed google slided deipad @embeds', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await notebook.focusOnBody();
   await notebook.addEmbed(
-    'https://docs.google.com/presentation/d/e/2PACX-1vR4fKEEmGwjs7JUioJup8U4ERoV7xkVc2NEJdhNlAfIQRo-uShVPz2EERzEef8K5vAoqr4TBgTO8dMC/embed?start=false&loop=false&delayms=3000'
+    'https://docs.google.com/presentation/d/e/2PACX-1vR4fKEEmGwjs7JUioJup8U4ERoV7xkVc2NEJdhNlAfIQRo-uShVPz2EERzEef8K5vAoqr4TBgTO8dMC/embed?start=false&loop=false&delayms=3000',
+    { typeManually: true }
   );
   await expect(
     page

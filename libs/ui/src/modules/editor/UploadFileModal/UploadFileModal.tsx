@@ -241,11 +241,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
             label={`Insert ${fileType}`}
             placeholder={`Paste the ${fileType} link here`}
             onSearchChange={(newSearch) => {
-              const sanitizedUrl = sanitizeInput({
-                input: newSearch,
-                isURL: true,
-              });
-              setFileName(sanitizedUrl);
+              setFileName(newSearch);
             }}
             onSearchSubmit={() => {
               const sanitizedUrl = sanitizeInput({

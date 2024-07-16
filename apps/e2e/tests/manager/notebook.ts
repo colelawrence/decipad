@@ -1114,9 +1114,19 @@ export class Notebook {
   );
    * ```
    */
-  async addEmbed(link: string) {
+  async addEmbed(
+    link: string,
+    options: { typeManually?: boolean } = { typeManually: false }
+  ) {
     await this.openEmbedUploader();
-    await this.page.getByPlaceholder('Paste the embed link here').fill(link);
+    // eslint-disable-next-line no-unused-expressions
+    options.typeManually
+      ? await this.page
+          .getByPlaceholder('Paste the embed link here')
+          .pressSequentially(link)
+      : await this.page
+          .getByPlaceholder('Paste the embed link here')
+          .fill(link);
     await this.page.getByRole('button', { name: 'insert embed' }).click();
   }
 
