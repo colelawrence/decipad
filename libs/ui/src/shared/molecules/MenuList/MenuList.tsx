@@ -13,9 +13,10 @@ import {
 } from 'react';
 import { isElement } from 'react-is';
 
-import { TriggerMenuItem } from '../../atoms';
-import { cssVar, grey500, transparency } from '../../../primitives';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
+import { cssVar, grey500, transparency } from '../../../primitives';
+import { TriggerMenuItem } from '../../atoms';
 
 export const Depth = createContext(0);
 
@@ -209,10 +210,11 @@ export const MenuList: FC<MenuListProps> = ({
             css={[
               dropdown || undropdownifyContentStyles,
               alwaysTopContentStyles,
+              hideOnPrint,
             ]}
           >
             <DropdownMenuContentElement
-              css={css([defaultStyles, styles])}
+              css={css([defaultStyles, styles, hideOnPrint])}
               align={align}
               onFocusOutside={hideOnAnotherMenuTrigger}
               onClick={(e) => e.preventDefault()}

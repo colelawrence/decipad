@@ -67,7 +67,8 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   const toast = useToast();
 
   const downloadPDF = (_: string) => {
-    toast('Not implemented yet', 'warning');
+    window.print();
+    toast('Use `Save as pdf` from your printing window', 'info');
   };
 
   return (

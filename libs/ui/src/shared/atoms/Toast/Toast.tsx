@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ToastStatus, ToastType, useToastContext } from '@decipad/toast';
 import { css, keyframes } from '@emotion/react';
+import { useLayoutEffect, useRef } from 'react';
 import { Success, Warning } from '../../../icons';
 import {
   brand100,
@@ -14,9 +15,9 @@ import {
   yellow200,
   yellow700,
 } from '../../../primitives';
-import { useLayoutEffect, useRef } from 'react';
 
 import * as ToastPrimitive from '@radix-ui/react-toast';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 
 const slideDown = keyframes`
   from {
@@ -241,7 +242,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({
       css={outerStyles}
       onOpenChange={onOpenChange}
     >
-      <div css={getAppearanceType(status)} data-status={status}>
+      <div css={[getAppearanceType(status), hideOnPrint]} data-status={status}>
         <ToastIcon status={status} />
         <div css={contentStyles}>
           <ToastPrimitive.Title css={titleStyles}>
