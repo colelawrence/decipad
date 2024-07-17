@@ -22,7 +22,7 @@ export const getPlotParams = (
     type: ELEMENT_PLOT,
     id: nanoid(),
     markType,
-    sourceVarName: getExprRef(table.id),
+    sourceVarName: getExprRef(table.id ?? ''),
   };
   return {
     ...baseParams,

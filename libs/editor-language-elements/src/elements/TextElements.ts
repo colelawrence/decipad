@@ -36,7 +36,7 @@ export const Paragraph: InteractiveLanguageElement = {
           getNodeString(child),
           'expression',
           true,
-          [element.id]
+          [element.id ?? '']
         );
       }
       return [];

@@ -49,19 +49,19 @@ const tableFormulaColumnToColumn = ({
   if (isElementOfType(formula, ELEMENT_TABLE_COLUMN_FORMULA)) {
     const ret = formulaSourceToColumnAssign(
       columnName,
-      th.id,
+      th.id ?? '',
       getCodeLineSource(formula)
     );
     return ret;
   }
   return {
-    elementId: th.id,
+    elementId: th.id ?? '',
     columnName,
     errors: [
       simpleArtifficialError(
-        th.id,
+        th.id ?? '',
         'Could not find a formula for this column',
-        [th.id]
+        [th.id ?? '']
       ),
     ],
   };
@@ -82,11 +82,11 @@ const seriesColumnToColumn = async ({
     th.cellType.seriesType,
     content,
     dataRows.length,
-    dataRows.map((dataRow) => dataRow.children[columnIndex].id),
-    th.id
+    dataRows.map((dataRow) => dataRow.children[columnIndex].id ?? ''),
+    th.id ?? ''
   );
   return {
-    elementId: th.id,
+    elementId: th.id ?? '',
     expression,
     columnName: getNodeString(th),
     errors,
@@ -109,7 +109,7 @@ const dropdownOrCategoryColumnToColumn = ({
     const td = tr.children[columnIndex];
     if (td) {
       cellTexts.push(getNodeString(td));
-      cellIds.push(td.id);
+      cellIds.push(td.id ?? '');
     }
   }
 
@@ -128,7 +128,7 @@ const dropdownOrCategoryColumnToColumn = ({
     expression,
     errors,
     columnName: getNodeString(th),
-    elementId: th.id,
+    elementId: th.id ?? '',
   };
 };
 
@@ -145,7 +145,7 @@ const dataColumnToColumn = async ({
     const td = tr.children[columnIndex];
     if (td) {
       cellTexts.push(getNodeString(td));
-      cellIds.push(td.id);
+      cellIds.push(td.id ?? '');
     }
   }
 
@@ -162,7 +162,7 @@ const dataColumnToColumn = async ({
 
       if (parsed instanceof Error) {
         errors.push(
-          simpleArtifficialError(cellIds[index], parsed.message, [th.id])
+          simpleArtifficialError(cellIds[index], parsed.message, [th.id ?? ''])
         );
         parsed = null;
       }
@@ -178,7 +178,7 @@ const dataColumnToColumn = async ({
     expression,
     errors,
     columnName: getNodeString(th),
-    elementId: th.id,
+    elementId: th.id ?? '',
   };
 };
 

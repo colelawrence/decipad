@@ -43,7 +43,7 @@ export const generateAggregationDefs = (
       const columnRef = getColumnRef(header);
       const customFunctionBlockId = `${aggregationsTableBlockId}-${columnRef}-${headerIndex}-function`;
       const customFunctionName = generateCustomFunctionName(
-        dataView.id,
+        dataView.id ?? '',
         columnRef
       );
       return [

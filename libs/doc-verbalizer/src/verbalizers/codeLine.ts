@@ -12,5 +12,5 @@ export const codeLineVerbalizer: Verbalizer = (element, verbalize) => {
 export const codeLineVarnameToId: VarnameToId = (element) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2);
   const [varname] = element.children;
-  return [getNodeString(varname), element.id];
+  return [getNodeString(varname), element.id ?? ''];
 };

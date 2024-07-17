@@ -32,7 +32,7 @@ export const withTable =
   (editor, plugin) => {
     editor = withDeleteTable<TV>(editor);
     editor = withInsertTextTable<TV>(editor);
-    editor = withGetFragmentTable<TV>(editor);
+    editor = withGetFragmentTable<TV>(editor, plugin);
     editor = withInsertFragmentTable<TV>(editor, plugin);
 
     const myEditor = getMyEditor(editor);

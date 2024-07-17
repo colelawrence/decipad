@@ -31,7 +31,7 @@ export const createCrossBlockSelection = createOnCursorChangePluginFactory(
       const ids: Set<string> = new Set();
 
       for (let i = blockRange[0]; i <= blockRange.at(-1)!; i += 1) {
-        ids.add(editor.children[i].id);
+        ids.add(editor.children[i].id ?? '');
       }
       blockSelectionStore.set.selectedIds(ids);
     }

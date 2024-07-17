@@ -11,19 +11,19 @@ export function greet(): void;
 export function parse_csv(csv: string, is_first_header_row: boolean): object;
 /**
 */
-export enum ComputeErrors {
-  IncorrectType = 0,
-  UnknownId = 1,
-  InferError = 2,
-}
-/**
-*/
 export enum DeciType {
   Number = 0,
   String = 1,
   Boolean = 2,
   Column = 3,
   Table = 4,
+}
+/**
+*/
+export enum ComputeErrors {
+  IncorrectType = 0,
+  UnknownId = 1,
+  InferError = 2,
 }
 /**
 */

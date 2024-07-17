@@ -84,7 +84,7 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
         const newFormula: TableColumnFormulaElement = {
           type: ELEMENT_TABLE_COLUMN_FORMULA,
           id: nanoid(),
-          columnId: column.id,
+          columnId: column.id ?? '',
           children: [{ text: formula }],
         };
         const newFormulaIndex = table.children[0].children.length;
@@ -97,7 +97,7 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
     );
     return {
       summary: 'Inserted a calculated column in an existing table',
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement),
     };

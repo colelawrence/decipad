@@ -1,4 +1,9 @@
-import type { AnyElement, MyEditor, MyElement } from '@decipad/editor-types';
+import type {
+  AnyElement,
+  MyEditor,
+  MyElement,
+  TableHeaderElement,
+} from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate-common';
 import type { Path } from 'slate';
 import type { DropTargetMonitor } from 'react-dnd';
@@ -15,7 +20,7 @@ export const findSwappableColumns = (
     column: MyElement;
     tablePath: Path | undefined;
   },
-  dragItem: DragColumnItem,
+  dragItem: DragColumnItem | TableHeaderElement,
   monitor: DropTargetMonitor,
   hoverDirection?: 'left' | 'right'
 ): [number, number] | null => {
@@ -31,7 +36,7 @@ export const findSwappableColumns = (
     (col) => dragItem.id === (col[0] as AnyElement).id
   );
   const targetColumnIndex = isElement(column)
-    ? columns.findIndex((col) => column.id === (col[0] as AnyElement).id)
+    ? columns.findIndex((col) => column.id === (col[0] as AnyElement).id ?? '')
     : -1;
   if (sourceColumnIndex >= 0 && targetColumnIndex >= 0) {
     const direction =

@@ -42,7 +42,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const { dragRef, dropLine, isDragging } = useDndNode({
     type: DRAG_ITEM_ROW,
-    id,
+    id: id ?? '',
     nodeRef: trRef,
     preview: {
       ref: previewRef,
@@ -83,7 +83,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
     <UITableRow
       attributes={attributes}
       readOnly={false}
-      onRemove={() => onRemoveRow(element.id)}
+      onRemove={() => onRemoveRow(element.id ?? '')}
       onSelect={() => path && selectRow(editor, path)}
       onAddRowAbove={() => path && onAddRowHere(path[1])}
       onAddRowBelow={() => path && onAddRowHere(path[1], true)}

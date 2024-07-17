@@ -100,13 +100,13 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
     assertElementType(actualTable, ELEMENT_TABLE);
     return {
       summary: `Added a new table with name ${tableName}`,
-      createdElementId: table.id,
+      createdElementId: table.id ?? '',
       createdElementType: table.type,
       createdElementName: getNodeString(
         table.children[0].children[0].children[0]
       ),
       createdSubElements: actualTable.children[1].children.map((th) => ({
-        createdElementId: th.id,
+        createdElementId: th.id ?? '',
         createdElementType: th.type,
         createdElementName: getNodeString(th),
       })),

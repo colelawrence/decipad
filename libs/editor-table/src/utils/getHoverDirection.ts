@@ -1,4 +1,4 @@
-import type { MyReactEditor } from '@decipad/editor-types';
+import type { MyReactEditor, TableHeaderElement } from '@decipad/editor-types';
 import type { DropTargetMonitor } from 'react-dnd';
 import type { TElement } from '@udecode/plate-common';
 import { toDOMNode } from '@udecode/plate-common';
@@ -6,7 +6,7 @@ import type { MutableRefObject } from 'react';
 import type { ColumnDndDirection, DragColumnItem } from '../types';
 
 export interface GetHoverDirectionOptions {
-  dragItem?: DragColumnItem;
+  dragItem?: DragColumnItem | TableHeaderElement;
 
   monitor: DropTargetMonitor;
 

@@ -277,9 +277,9 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
     const newOptions = element.options;
     if (
       isElement(parent) &&
-      !dequal(categories.store.get(parent.id), newOptions)
+      !dequal(categories.store.get(parent.id ?? ''), newOptions)
     ) {
-      categories.set(parent.id, newOptions);
+      categories.set(parent.id ?? '', newOptions);
     }
   }, [categories, element.id, element.options, parent]);
 

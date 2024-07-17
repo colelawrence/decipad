@@ -18,7 +18,7 @@ export const Heading2: PlateComponent = ({ attributes, children, element }) => {
       {...turnIntoProps}
       {...attributes}
     >
-      <UIHeading2 id={element.id}>{children}</UIHeading2>
+      <UIHeading2 id={element.id ?? ''}>{children}</UIHeading2>
     </DraggableBlock>
   );
 };

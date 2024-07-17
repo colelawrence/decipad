@@ -63,7 +63,7 @@ export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<
         // We'll be checking this progressively, not adding all-at-once, because that would be backwards incompatible with the ill-defined existing behavior of the language.
         const availableSmartRefs = new Map<string, [string, string | null]>();
         // At the start, only the table name is available
-        availableSmartRefs.set(tableName, [tableNode.id, null]);
+        availableSmartRefs.set(tableName, [tableNode.id ?? '', null]);
 
         for (const header of columnHeaders) {
           const columnName = getNodeString(header[0]);
@@ -83,10 +83,10 @@ export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<
           }
 
           // {col} and {table.col} are available from now on
-          availableSmartRefs.set(columnName, [header[0].id, null]);
+          availableSmartRefs.set(columnName, [header[0].id ?? '', null]);
           availableSmartRefs.set(`${tableName}.${columnName}`, [
-            tableNode.id,
-            header[0].id,
+            tableNode.id ?? '',
+            header[0].id ?? '',
           ]);
         }
 

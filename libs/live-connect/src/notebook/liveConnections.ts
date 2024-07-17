@@ -126,7 +126,7 @@ export const liveConnections = (observe: Observe): LiveConnections => {
       .filter(isLiveConnection)
       .reduce<Connections>((connectionsAcc, elem: AnyElement) => {
         assertElementType(elem, ELEMENT_LIVE_CONNECTION);
-        connectionsAcc.set(elem.id, elem);
+        connectionsAcc.set(elem.id ?? '', elem);
         return connectionsAcc;
       }, new Map());
 

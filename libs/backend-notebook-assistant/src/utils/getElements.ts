@@ -8,7 +8,7 @@ export const getElements = (
   let results: AnyElement[] = [];
   for (const child of content.children) {
     if (isElement(child)) {
-      if (elementIds.has(child.id)) {
+      if (child.id && elementIds.has(child.id)) {
         elementIds.delete(child.id);
         results.push(child);
       } else {

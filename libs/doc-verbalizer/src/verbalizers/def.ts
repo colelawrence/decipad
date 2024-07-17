@@ -37,5 +37,5 @@ export const defVerbalizer: Verbalizer = (element, verbalize) => {
 export const defVarnameToId: VarnameToId = (element) => {
   assertElementType(element, ELEMENT_VARIABLE_DEF);
   const [caption] = element.children;
-  return [getNodeString(caption), element.id];
+  return [getNodeString(caption), element.id ?? ''];
 };

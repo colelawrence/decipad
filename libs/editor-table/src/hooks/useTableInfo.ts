@@ -17,7 +17,7 @@ export const useTableInfo = (
       headers: element.children[1]?.children ?? [],
       columns:
         element.children[1]?.children.map((th, index) => ({
-          blockId: th.id,
+          blockId: th.id ?? '',
           name: getNodeString(th),
           cellType: columnTypes[index] ?? { kind: 'nothing' },
           width: th.width,

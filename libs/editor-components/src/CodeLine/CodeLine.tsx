@@ -78,7 +78,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       const newDisplayElement: DisplayElement = {
         id: nanoid(),
         type: ELEMENT_DISPLAY,
-        blockId: element.id,
+        blockId: element.id ?? '',
         children: [{ text: '' }],
       };
 
@@ -118,11 +118,11 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     useWatchTeleported,
   } = useEditorTeleportContext();
 
-  useWatchTeleported(lineId, element);
+  useWatchTeleported(lineId ?? '', element);
 
   const teleport = editing?.codeLineId === element.id ? portal : undefined;
 
-  const turnIntoProps = useTurnIntoProps(element, computer, lineId);
+  const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
 
   const onTeleportDismiss = useCallback(() => {
     closeEditor(element.id, focusNumber);

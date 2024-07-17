@@ -68,7 +68,7 @@ const catalogItem =
         curr,
         {
           type: parentNode.type,
-          blockId: parentNode.id,
+          blockId: parentNode.id ?? '',
           name: getNodeString(adoptiveParent),
           path: parentPath,
           currentTab: true,

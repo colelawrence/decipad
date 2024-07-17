@@ -47,7 +47,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData({
     tableName,
-    blockId: element.id,
+    blockId: element.id ?? '',
     columns,
     aggregationTypes,
     roundings,

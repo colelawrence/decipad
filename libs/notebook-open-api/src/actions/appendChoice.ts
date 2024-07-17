@@ -86,7 +86,7 @@ export const appendChoice: Action<'appendChoice'> = {
     );
     return {
       summary: `Added a new dropdown with name "${variableName}"`,
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),
     };

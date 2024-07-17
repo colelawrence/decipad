@@ -8,7 +8,7 @@ it('returns the length of a structured input', () => {
     'Avery long structured input'
   );
   structuredInput.children[1].children.push(
-    getSmartRef(structuredInput.id, 'Variable')
+    getSmartRef(structuredInput.id ?? '', 'Variable')
   );
 
   expect(utils.getTextLength(structuredInput)).toMatchInlineSnapshot(`12`);
@@ -30,8 +30,8 @@ it('returns cursor placement with smartrefs', () => {
   const s1 = getStructuredCalc('Namee', '1 + 234');
   const s2 = getStructuredCalc('Namee', '1234');
 
-  s1.children[1].children.push(getSmartRef(s2.id, 'VarName1'));
-  s2.children[1].children.unshift(getSmartRef(s2.id, 'Var2'));
+  s1.children[1].children.push(getSmartRef(s2.id ?? '', 'VarName1'));
+  s2.children[1].children.unshift(getSmartRef(s2.id ?? '', 'Var2'));
 
   expect(utils.getSelectionLength(s1, 1, 0)).toMatchInlineSnapshot(`15`);
   expect(utils.getSelectionLength(s2, 1, 2)).toMatchInlineSnapshot(`6`);
@@ -41,8 +41,8 @@ it('Gives the correct selection for a given offset', () => {
   const s1 = getStructuredCalc('Namee', '1 + 234');
   const s2 = getStructuredCalc('Namee', '1234');
 
-  s1.children[1].children.push(getSmartRef(s2.id, 'VarName1'));
-  s2.children[1].children.unshift(getSmartRef(s2.id, 'Var2'));
+  s1.children[1].children.push(getSmartRef(s2.id ?? '', 'VarName1'));
+  s2.children[1].children.unshift(getSmartRef(s2.id ?? '', 'Var2'));
 
   expect(utils.getTargetSelection(s1, 5)).toMatchInlineSnapshot(`
     [

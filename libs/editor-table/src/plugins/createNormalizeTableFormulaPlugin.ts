@@ -33,7 +33,7 @@ export const normalizeTableFormula =
 
     const columnIdToHeader = new Map<string, TableHeaderElement>();
     for (const header of headersWithFormulas) {
-      columnIdToHeader.set(header.id, header);
+      columnIdToHeader.set(header.id ?? '', header);
     }
 
     // insert missing formulas

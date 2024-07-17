@@ -135,11 +135,11 @@ export const CodeLineV2: PlateComponent = ({
     useWatchTeleported,
   } = useEditorTeleportContext();
 
-  useWatchTeleported(lineId, element);
+  useWatchTeleported(lineId ?? '', element);
 
   const teleport = editing?.codeLineId === element.id ? portal : undefined;
 
-  const turnIntoProps = useTurnIntoProps(element, computer, lineId);
+  const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
 
   const onTeleportDismiss = useCallback(() => {
     closeEditor(element.id, focusNumber);
@@ -283,7 +283,11 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const onEditorChange = useCallback(() => {
     const shouldReset =
       isElement(props.element) &&
-      shouldResetContentEditable(editor, props.element.id, contentEditable);
+      shouldResetContentEditable(
+        editor,
+        props.element.id ?? '',
+        contentEditable
+      );
     if (shouldReset !== null) {
       setContentEditable(shouldReset);
     }

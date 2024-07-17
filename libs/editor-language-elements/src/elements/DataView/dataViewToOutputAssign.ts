@@ -6,13 +6,13 @@ import { getNodeString } from '@udecode/plate-common';
 
 export const dataViewToOutputAssign = (dataView: DataViewElement): Program =>
   parseElementAsVariableAssignment(
-    dataView.id,
+    dataView.id ?? '',
     getNodeString(dataView.children[0].children[0]),
     {
       type: 'directive',
       args: [
         'as',
-        { type: 'ref', args: [shadowExprRef(dataView.id)] },
+        { type: 'ref', args: [shadowExprRef(dataView.id ?? '')] },
         { type: 'ref', args: ['table'] },
       ],
     }

@@ -32,7 +32,7 @@ export const inlineChildToString = (
       return inlineChildrenToString(child.children);
     }
     case 'smart-ref': {
-      return child.lastSeenVariableName || child.id; // not sure id is the right behaviour here...
+      return child.lastSeenVariableName || (child.id ?? ''); // not sure id is the right behaviour here...
     }
   }
 };
@@ -135,7 +135,7 @@ const valuetoUnwrappedMarkup = (value: TopLevelValue): string => {
         const colName = headerEl.children[0].text;
         const { cellType } = headerEl;
 
-        const fn = fnDict[headerEl.id];
+        const fn = fnDict[headerEl.id ?? ''];
         if (fn !== undefined) {
           return `${colName} = ${fn}`;
         }

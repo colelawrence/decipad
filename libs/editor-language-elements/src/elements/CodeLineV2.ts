@@ -38,7 +38,7 @@ const tryParseAsNumber: InteractiveLanguageElement['getParsedBlockFromElement'] 
       }
       if (!(parsedInput instanceof Error || parsedInput == null)) {
         return parseElementAsVariableAssignment(
-          e.id,
+          e.id ?? '',
           getNodeString(vname),
           parsedInput
         );
@@ -81,7 +81,7 @@ export const parseStructuredCodeLine = async (
     return {
       interpretedAs: 'code',
       programChunk: parseElementAsVariableAssignment(
-        block.id,
+        block.id ?? '',
         getNodeString(vname),
         getCodeLineSource(sourcetext)
       ),
@@ -91,7 +91,7 @@ export const parseStructuredCodeLine = async (
   return {
     interpretedAs: 'empty',
     programChunk: parseElementAsVariableAssignment(
-      block.id,
+      block.id ?? '',
       getNodeString(vname),
       { type: 'literal', args: ['number', N(0)] }
     ),

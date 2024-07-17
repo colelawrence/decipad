@@ -89,7 +89,7 @@ export const TableCaption: PlateComponent = ({
           editor,
           parentPath,
           markType,
-          getExprRef(tableElement.id)
+          getExprRef(tableElement.id ?? '')
         )
       );
     },

@@ -23,7 +23,7 @@ export const InlineNumber: PlateComponent = ({
   const result = useComputer().getBlockIdResult$.use(calcId);
 
   const isSelected = useSelected();
-  const shadow = useShadowCodeLine(element.id);
+  const shadow = useShadowCodeLine(element.id ?? '');
 
   const { editSource } = shadow;
 

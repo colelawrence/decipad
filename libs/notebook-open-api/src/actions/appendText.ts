@@ -51,9 +51,9 @@ export const appendText: Action<'appendText'> = {
       assertElementType(actualElement, (element as AnyElement)?.type);
       createdElements.push({
         summary: `Added a new paragraph`,
-        createdElementId: actualElement.id,
+        createdElementId: actualElement.id ?? '',
         createdElementType: actualElement.type,
-        createdElementName: actualElement.id,
+        createdElementName: actualElement.id ?? '',
       });
     }
 

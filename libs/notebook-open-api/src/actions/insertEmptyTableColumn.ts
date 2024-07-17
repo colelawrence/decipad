@@ -52,7 +52,7 @@ export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
     );
     return {
       summary: 'Inserted an empty column in an existing table',
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement),
     };

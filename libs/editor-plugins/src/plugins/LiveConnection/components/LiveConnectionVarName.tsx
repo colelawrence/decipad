@@ -142,7 +142,12 @@ export const RealLiveConnectionVarName: PlateComponent = ({
 
       return (
         path &&
-        insertPlotBelow(editor, parentPath, markType, getExprRef(parentElem.id))
+        insertPlotBelow(
+          editor,
+          parentPath,
+          markType,
+          getExprRef(parentElem.id ?? '')
+        )
       );
     },
     [editor, parentElem, parentPath, path]

@@ -8,8 +8,8 @@ function* children(editor: MyEditor, blockId: string): Iterable<string> {
     if (isElement(node)) {
       for (const child of node.children) {
         if (isElement(child)) {
-          yield child.id;
-          for (const childId of children(editor, child.id)) {
+          yield child.id as string;
+          for (const childId of children(editor, child.id as string)) {
             yield childId;
           }
         }

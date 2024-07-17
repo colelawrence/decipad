@@ -282,7 +282,7 @@ describe('Works with smart refs', () => {
 
   it('allows smart ref selection', () => {
     const structuredIn = getStructuredCalc('SmartyRefy', '1 +');
-    structuredIn.children[1].children.push(getSmartRef(structuredIn.id));
+    structuredIn.children[1].children.push(getSmartRef(structuredIn.id ?? ''));
     editor.children.push(structuredIn);
 
     const event = new KeyboardEvent('keydown', { key: 'Tab' });

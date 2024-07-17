@@ -8,7 +8,7 @@ export interface DecorationCellUnit extends Range {
 }
 
 export interface DragColumnItem {
-  id: string;
+  id?: string;
   type?: string;
 }
 

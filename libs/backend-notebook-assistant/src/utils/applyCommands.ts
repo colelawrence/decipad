@@ -38,7 +38,7 @@ export const applyCommands = (
       }
       case 'change':
       case 'add': {
-        const path = findPath(previousDoc, command.newBlock.id);
+        const path = findPath(previousDoc, command.newBlock.id ?? '');
         if (path) {
           const propPath = path.join('.');
           debug('setting', propPath, command.newBlock);

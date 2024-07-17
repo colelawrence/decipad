@@ -31,7 +31,9 @@ export const useEditorTooltip = () => {
   const editor = useMyEditorRef();
 
   const floatingToolbarState = useFloatingToolbarState({
+    editorId: editor.id,
     floatingOptions,
+    focusedEditorId: null,
   });
 
   const floatingToolbar = useFloatingToolbar(floatingToolbarState);

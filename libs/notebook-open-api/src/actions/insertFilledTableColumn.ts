@@ -77,7 +77,7 @@ export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
     );
     return {
       summary: 'Inserted a filled column in an existing table',
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement),
     };

@@ -54,7 +54,7 @@ const fixDataViews = (doc: RootDocument): void => {
             getNodeString(node) === columnId
         );
         if (foundColumn && isElement(foundColumn)) {
-          dataViewCol.name = foundColumn.id;
+          dataViewCol.name = foundColumn.id ?? '';
           dataViewCol.label = getNodeString(foundColumn);
         }
       }

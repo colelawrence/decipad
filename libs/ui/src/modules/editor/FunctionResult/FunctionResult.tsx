@@ -20,7 +20,7 @@ export const FunctionResult: FC<CodeResultProps<'function'>> = ({
   const [math, setMath] = useState('');
   useEffect(() => {
     if (element) {
-      const sub = computer.blockToMathML$(element.id).subscribe(setMath);
+      const sub = computer.blockToMathML$(element.id ?? '').subscribe(setMath);
       return () => sub.unsubscribe();
     }
     return undefined;

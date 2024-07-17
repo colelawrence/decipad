@@ -13,7 +13,7 @@ export const Columns: PlateComponent = ({ attributes, children, element }) => {
   }
 
   const dependencyId = isElement(element)
-    ? element.children.map((child) => child.id)
+    ? element.children.map((child) => child.id ?? '')
     : [];
 
   return (

@@ -47,7 +47,7 @@ export const VariableDef: InteractiveLanguageElement = {
       }
       if (element.variant === 'dropdown') {
         const dropdownVariable = parseElementAsVariableAssignment(
-          id,
+          id ?? '',
           variableName,
           expression
         );
@@ -60,7 +60,7 @@ export const VariableDef: InteractiveLanguageElement = {
       return parseDropdown(computer, element);
     }
 
-    return parseElementAsVariableAssignment(id, variableName, expression);
+    return parseElementAsVariableAssignment(id ?? '', variableName, expression);
   },
 };
 
@@ -90,7 +90,7 @@ async function parseDropdown(
   }
   if (!(parsedInput instanceof Error || parsedInput == null)) {
     return [
-      ...parseElementAsVariableAssignment(element.id, name, parsedInput),
+      ...parseElementAsVariableAssignment(element.id ?? '', name, parsedInput),
       ...parsedOptions,
     ];
   }
@@ -126,7 +126,7 @@ async function parseDropdownOptions(
         getExprRef(option.id),
         dropdownExpression,
         true, // isArtificial
-        [element.id] // origin block id
+        [element.id ?? ''] // origin block id
       );
     })
   );

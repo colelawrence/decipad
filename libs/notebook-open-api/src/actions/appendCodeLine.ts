@@ -113,7 +113,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
     );
     return {
       summary: `Added a new expression with name "${variableName}"`,
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),
     };

@@ -18,7 +18,7 @@ export const useDragColumn = (
   const tableDnd = useContext(TableDndContext);
 
   const [{ isDragging }, dragSource, dragPreview] = useDragNode(editor, {
-    id: element.id,
+    id: element.id ?? '',
     type: elementType,
     end: tableDnd.onCellDragEnd,
   });

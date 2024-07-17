@@ -60,7 +60,7 @@ describe('normalizeTables plugin', () => {
                   "type": "table-var-name",
                 },
               ],
-              "id": undefined,
+              "id": "",
               "type": "table-caption",
             },
             {
@@ -225,7 +225,7 @@ describe('normalizeTables plugin', () => {
                   "type": "table-var-name",
                 },
               ],
-              "id": undefined,
+              "id": "",
               "type": "table-caption",
             },
             {

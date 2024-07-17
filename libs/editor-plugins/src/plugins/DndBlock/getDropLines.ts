@@ -23,7 +23,7 @@ export const getDropLines = (
        * Do not return a drop line between a pair of nodes that are both being
        * dragged.
        */
-      const isBeingDragged = draggingIds.includes(node.id);
+      const isBeingDragged = draggingIds.includes(node.id ?? '');
       const isPairOfDraggedNodes = isBeingDragged && previousWasBeingDragged;
       previousWasBeingDragged = isBeingDragged;
       if (isPairOfDraggedNodes) {
@@ -38,7 +38,7 @@ export const getDropLines = (
 
       const dropLineAbove: DropLine = {
         type: 'horizontal',
-        id: node.id,
+        id: node.id ?? '',
         path,
         direction: 'before',
         mainAxis: top,
@@ -58,7 +58,7 @@ export const getDropLines = (
   const partialVerticalDropLines: PartialVerticalDropLine[] = allowColumns
     ? editorChildren.flatMap(([node, path]) => {
         // Can't drag a node into a column with itself
-        if (draggingIds.includes(node.id)) return [];
+        if (draggingIds.includes(node.id ?? '')) return [];
 
         /**
          * If the node is a group of columns, we want to return drop lines
@@ -70,7 +70,7 @@ export const getDropLines = (
           return nodeChildren.flatMap(([childNode, childPath]) =>
             (['before', 'after'] as const).map((direction) => ({
               type: 'vertical',
-              id: childNode.id,
+              id: childNode.id ?? '',
               path: childPath,
               direction,
               confineToCrossAxis: true,
@@ -85,7 +85,7 @@ export const getDropLines = (
         if (COLUMN_KINDS.includes(node.type)) {
           return (['before', 'after'] as const).map((direction) => ({
             type: 'vertical',
-            id: node.id,
+            id: node.id ?? '',
             path,
             direction,
             confineToCrossAxis: true,

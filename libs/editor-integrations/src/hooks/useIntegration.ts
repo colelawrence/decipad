@@ -47,7 +47,7 @@ export const useIntegration = (
       return;
     }
 
-    pushResultToComputer(computer, element.id, varName, result);
+    pushResultToComputer(computer, element.id ?? '', varName, result);
   }, [computer, element.id, result, varName]);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export const useIntegration = (
 
   useEffect(() => {
     return () => {
-      pushResultToComputer(computer, element.id, varName, undefined);
+      pushResultToComputer(computer, element.id ?? '', varName, undefined);
     };
   }, [computer, element.id, varName]);
 

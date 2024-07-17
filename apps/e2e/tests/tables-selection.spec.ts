@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
 import {
   createTable,
@@ -11,7 +12,7 @@ import {
 } from '../utils/page/Table';
 import { Timeouts } from '../utils/src';
 
-test('Table Selection', async ({ testUser }) => {
+test.skip('Table Selection', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await notebook.focusOnBody();

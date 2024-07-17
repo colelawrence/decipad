@@ -38,7 +38,7 @@ export const useDnd = ({ element }: UseDndNodeOptions) => {
   elementRef.current = element;
 
   const [{ isDragging }, dragRef, preview] = useDragNode(editor, {
-    id,
+    id: id ?? '',
     type,
     item: () => {
       const selectedIds = blockSelectionSelectors.selectedIds();
@@ -48,7 +48,7 @@ export const useDnd = ({ element }: UseDndNodeOptions) => {
       }
 
       return {
-        id,
+        id: id ?? '',
         type,
         selectedIds,
         // The `item` object is set only once when the component renders so we need `getPath` to be

@@ -122,7 +122,7 @@ export class BlockProcessor {
       }
 
       for (const block of tab.children) {
-        this.DirtyBlocksSet.set(block.id, block);
+        this.DirtyBlocksSet.set(block.id ?? '', block);
       }
     }
   }

@@ -26,7 +26,7 @@ export const insertMediaEmbed = <V extends Value>(
 
 export const createMediaEmbedPlugin = () =>
   _createMediaEmbedPlugin({
-    withOverrides: (editor) => {
+    withOverrides: (editor: PlateEditor) => {
       const { insertData } = editor;
 
       // eslint-disable-next-line no-param-reassign

@@ -121,13 +121,13 @@ export const commitPotentialFormula = (
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,
-    text: getExprRef(codeLineBelow.id),
+    text: getExprRef(codeLineBelow.id ?? ''),
   };
 
   const inlineNumberInstead: InlineNumberElement = {
     type: ELEMENT_INLINE_NUMBER,
     id: nanoid(),
-    blockId: codeLineBelow.id,
+    blockId: codeLineBelow.id ?? '',
     children: [{ text: '' }],
   };
 
@@ -159,7 +159,7 @@ export const commitPotentialFormula = (
 
     onCommit({
       numberId,
-      codeLineId: codeLineBelow.id,
+      codeLineId: codeLineBelow.id ?? '',
       numberNode: magicNumberInstead,
       codeLineNode: codeLineBelow,
     });

@@ -21,7 +21,7 @@ export const useUnnamedResults = () => {
   // But we still want to add them.
   const resultsWithNoName = editor.children
     .filter((n) => n.type === ELEMENT_CODE_LINE)
-    .filter((n) => !computer.getSymbolDefinedInBlock(n.id))
+    .filter((n) => !computer.getSymbolDefinedInBlock(n.id ?? ''))
     .filter((n) => {
       assertElementType(n, ELEMENT_CODE_LINE);
       const codelineResult = computer.getBlockIdResult$.get(n.id);
@@ -45,7 +45,7 @@ export const useUnnamedResults = () => {
       }
       return {
         sourceCode: text,
-        blockId: codeline.id,
+        blockId: codeline.id ?? '',
       };
     })
     .filter((n): n is SourceResult => n !== undefined);

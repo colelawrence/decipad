@@ -100,7 +100,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
     );
     return {
       summary: `Added a new slider with name "${variableName}"`,
-      createdElementId: actualElement.id,
+      createdElementId: actualElement.id ?? '',
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),
     };

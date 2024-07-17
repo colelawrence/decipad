@@ -517,7 +517,7 @@ export const useTableActions = (
           return (cell as TableRowElement).children[0].text as string;
         });
 
-        return { cells, rowId };
+        return { cells, rowId: rowId ?? '' };
       });
 
       const unpopulated = rowsArray.filter((row) => {
@@ -572,7 +572,7 @@ export const useTableActions = (
   const onDownload = useCallback(async () => {
     if (element) {
       const tableName = getNodeString(element.children[0].children[0]);
-      const result = computer.getBlockIdResult(element.id);
+      const result = computer.getBlockIdResult(element.id ?? '');
       if (
         !result ||
         result.error ||

@@ -30,7 +30,7 @@ export const useInteractiveMenu = (
   element: AnyElement
 ): UseInteractiveMenuResult => {
   const editor = useMyEditorRef();
-  const pasteContext = useEditorPasteInteractionMenuContext(element.id);
+  const pasteContext = useEditorPasteInteractionMenuContext(element.id ?? '');
   const session = useSession();
   const [show, setShow] = useState(false);
   const lastConsumedPasteContext =
@@ -143,7 +143,7 @@ export const useInteractiveMenu = (
   useWindowListener('keydown', onKeyDown, true);
 
   return {
-    blockId: element.id,
+    blockId: element.id ?? '',
     showInteractionMenu: show,
     onInteractionMenuExecute,
     source: pasteContext.source,

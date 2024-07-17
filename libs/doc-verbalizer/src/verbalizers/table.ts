@@ -60,10 +60,10 @@ export const tableVarnameToId: VarnameToId = (element) => {
   assertElementType(element, ELEMENT_TABLE);
   const [caption] = element.children;
   const [varname] = caption.children;
-  return [getNodeString(varname), element.id];
+  return [getNodeString(varname), element.id ?? ''];
 };
 
 export const columnVarnameToId: VarnameToId = (element) => {
   assertElementType(element, ELEMENT_TH);
-  return [getNodeString(element), element.id];
+  return [getNodeString(element), element.id ?? ''];
 };

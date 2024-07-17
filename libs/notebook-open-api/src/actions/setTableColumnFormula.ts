@@ -52,7 +52,7 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
         const formulaElement: TableColumnFormulaElement = {
           type: 'table-column-formula',
           id: nanoid(),
-          columnId: header.id,
+          columnId: header.id ?? '',
           children: [{ text: formula }],
         };
         const formulaPath = [

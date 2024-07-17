@@ -6,7 +6,7 @@ import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 export const getUnparsedBlockFromCodeLine: InteractiveLanguageElement['getParsedBlockFromElement'] =
   (_editor, _computer, block) => {
     if (block.type === ELEMENT_CODE_LINE) {
-      return parseElementAsSourceCode(block.id, getCodeLineSource(block));
+      return parseElementAsSourceCode(block.id ?? '', getCodeLineSource(block));
     }
     return [];
   };

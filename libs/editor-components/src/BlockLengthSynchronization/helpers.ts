@@ -52,7 +52,7 @@ export function getNewGroupsTargetLengths(
   return ret;
 }
 
-type MockableEditorChildren = { id: string; type: string }[];
+type MockableEditorChildren = { id?: string; type: string }[];
 /** Groups children into contiguous groups of {blockTypes}-type blocks.
  *
  * - code line "TaxRate"
@@ -76,9 +76,9 @@ export function getContiguousGroups(editorChildren: MockableEditorChildren) {
 
     if (!inGroup) {
       inGroup = true;
-      groups.push({ memberIds: [block.id] });
+      groups.push({ memberIds: [block.id ?? ''] });
     } else {
-      groups[groups.length - 1].memberIds.push(block.id);
+      groups[groups.length - 1].memberIds.push(block.id ?? '');
     }
   }
 

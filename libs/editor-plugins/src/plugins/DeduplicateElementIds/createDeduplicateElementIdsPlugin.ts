@@ -78,7 +78,7 @@ export const createDeduplicateElementIdsPlugin = <
               insertNeedsDeduping(el.id, op.node);
             }
 
-            seenIds.add(el.id);
+            seenIds.add(el.id ?? '');
           } else if (
             op.type === 'set_node' &&
             'id' in op.newProperties &&
@@ -118,7 +118,9 @@ export const createDeduplicateElementIdsPlugin = <
           // early break
           return normalizeNode(entry);
         }
-        const elementsNeedingDedup = needsDeduping.get((n as AnyElement).id);
+        const elementsNeedingDedup = needsDeduping.get(
+          (n as AnyElement).id ?? ''
+        );
         if (elementsNeedingDedup) {
           if (elementsNeedingDedup.includes(n)) {
             // eslint-disable-next-line no-console
@@ -128,7 +130,7 @@ export const createDeduplicateElementIdsPlugin = <
               { id: nanoid() } as unknown as Partial<TNodeProps<TEditor<TV>>>,
               { at: path }
             );
-            removeNeedsDeduping((n as AnyElement).id, n);
+            removeNeedsDeduping((n as AnyElement).id ?? '', n);
           }
           return;
         }

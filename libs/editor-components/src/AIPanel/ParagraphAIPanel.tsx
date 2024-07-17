@@ -32,7 +32,7 @@ const getTextFromSelectParagraphs = (
   }
   const allBlockIds = blockSelectionStore.get.selectedIds() as Set<string>;
   const matchingChildren = editor.children.filter((child) => {
-    return allBlockIds.has(child.id);
+    return allBlockIds.has(child.id ?? '');
   });
   const childText = matchingChildren
     .map((child) => getNodeString(child))

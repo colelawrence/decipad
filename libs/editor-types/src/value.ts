@@ -562,7 +562,7 @@ export interface DrawElement extends BaseElement {
 
 export interface BaseElement extends TElement {
   type: ElementKind;
-  id: string;
+  id?: string;
   isHidden?: boolean;
   endpointUrlSecretName?: string;
 }

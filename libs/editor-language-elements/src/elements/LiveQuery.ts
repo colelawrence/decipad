@@ -13,8 +13,8 @@ export const LiveQuery: InteractiveLanguageElement = {
     const { id } = element;
     const expression: AST.Expression = {
       type: 'externalref',
-      args: [id],
+      args: [id ?? ''],
     };
-    return parseElementAsVariableAssignment(element.id, name, expression);
+    return parseElementAsVariableAssignment(element.id ?? '', name, expression);
   },
 };

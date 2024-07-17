@@ -72,7 +72,8 @@ function findColumnIdFor(
       ? referencedThing.columnId
       : null) ??
     // Modern IDs point to the TH
-    referencedThing.id;
+    referencedThing.id ??
+    '';
 
   const th = findNode(editor, { match: { id: referencedThId } });
   if (!th || !isElementOfType(th?.[0], ELEMENT_TH)) {
@@ -87,5 +88,5 @@ function findColumnIdFor(
     return null;
   }
 
-  return [table.id, referencedThId];
+  return [table.id ?? '', referencedThId];
 }

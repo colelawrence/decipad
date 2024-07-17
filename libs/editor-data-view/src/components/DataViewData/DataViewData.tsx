@@ -24,7 +24,7 @@ export const DataViewData: FC<DataViewDataProps> = ({
   return alternateRotation ? (
     <DataViewDataAlternatedRotationLayout
       {...props}
-      blockId={props.element.id}
+      blockId={props.element.id ?? ''}
     />
   ) : (
     <DataViewDataLayout {...props} />

@@ -38,7 +38,7 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
     insertNodes(editor, [newPlot], { at: appendPath(editor) });
     return {
       summary: `Added a new plot`,
-      createdElementId: newPlot.id,
+      createdElementId: newPlot.id ?? '',
       createdElementType: getDefined(newPlot.type),
       createdElementName: getDefined(newPlot.title),
     };

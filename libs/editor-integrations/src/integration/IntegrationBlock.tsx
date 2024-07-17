@@ -85,7 +85,8 @@ export const IntegrationBlock: PlateComponent = ({
   const onAddChartViewButtonPress = useCallback(
     (markType: MarkType) => {
       return (
-        path && insertPlotBelow(editor, path, markType, getExprRef(element.id))
+        path &&
+        insertPlotBelow(editor, path, markType, getExprRef(element.id ?? ''))
       );
     },
     [editor, element.id, path]
@@ -99,7 +100,7 @@ export const IntegrationBlock: PlateComponent = ({
       text: 'Edit',
       onClick: () => {
         setSidebar('edit-integration');
-        setIntegrationBlockId(element.id);
+        setIntegrationBlockId(element.id ?? '');
       },
       icon: <icons.Edit />,
     },

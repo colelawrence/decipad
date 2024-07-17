@@ -16,7 +16,7 @@ export const generateTreeFormation = (
     args: [
       {
         type: 'def',
-        args: [shadowExprRef(dataView.id)],
+        args: [shadowExprRef(dataView.id ?? '')],
       },
       {
         type: 'function-call',

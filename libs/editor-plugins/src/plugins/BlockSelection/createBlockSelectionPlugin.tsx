@@ -4,10 +4,11 @@ import {
   BlockStartArea,
   createBlockSelectionPlugin as _createBlockSelectionPlugin,
 } from '@udecode/plate-selection';
+import { ReactNode } from 'react';
 
 export const createBlockSelectionPlugin = (): MyPlatePlugin =>
   _createBlockSelectionPlugin({
-    renderAboveEditable: ({ children }) => (
+    renderAboveEditable: ({ children }: { children: ReactNode }) => (
       <BlockSelectionArea getBoundaries={() => ['#overflowing-editor']}>
         <BlockStartArea
           state={{

@@ -26,7 +26,7 @@ export const Table: InteractiveLanguageElement = {
     const tableName = getNodeString(caption.children[0]);
     const rowCount = dataRows.length;
 
-    const tableItself = statementToIdentifiedBlock(table.id, {
+    const tableItself = statementToIdentifiedBlock(table.id ?? '', {
       type: 'table',
       args: [{ type: 'tabledef', args: [tableName, rowCount] }],
     } as AST.Table);
@@ -105,7 +105,7 @@ async function parseCategoryOptions(
         getExprRef(option.id),
         dropdownExpression,
         true, // isArtificial
-        [element.id] // origin block id
+        [element.id ?? ''] // origin block id
       );
     }) ?? []
   );

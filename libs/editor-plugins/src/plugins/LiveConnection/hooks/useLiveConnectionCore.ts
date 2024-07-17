@@ -44,7 +44,7 @@ export const useLiveConnectionCore = ({
     });
   const liveConnectionResult = useLiveConnection(computer, {
     notebookId,
-    blockId: element.id,
+    blockId: element.id ?? '',
     variableName: getNodeString(element.children[0]),
     url: element.url,
     proxy: element.proxy,

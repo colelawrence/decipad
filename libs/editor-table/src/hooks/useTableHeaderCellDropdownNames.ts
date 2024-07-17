@@ -52,7 +52,7 @@ export const useTableHeaderCellDropdownNames = (
         .filter(FilterForDropdowns)
         .map(
           (el): ColumnMenuDropdown => ({
-            id: el.id,
+            id: el.id ?? '',
             value: getNodeString(el.children[0]),
             type: (el.children[1].variant as 'string' | 'number') ?? 'string',
           })

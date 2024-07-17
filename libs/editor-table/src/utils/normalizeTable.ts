@@ -66,7 +66,7 @@ const normalizeTableStructure = <TV extends Value, TE extends PlateEditor<TV>>(
     return () =>
       insertNodes<TableCaptionElement>(
         editor,
-        [createTableCaption({ id: node.id })],
+        [createTableCaption({ id: node.id ?? '' })],
         { at: [...path, 0] }
       );
   }

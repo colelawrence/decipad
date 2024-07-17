@@ -117,7 +117,7 @@ export const injectNotebookTemplate: CustomAction<
       },
       computer
     ).verbalized.map((v) => ({
-      elementId: v.element.id,
+      elementId: v.element.id ?? '',
       type: v.element.type,
       description: v.verbalized,
     }));

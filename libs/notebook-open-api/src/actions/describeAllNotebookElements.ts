@@ -49,7 +49,7 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
         },
         getComputer()
       ).verbalized.map((v) => ({
-        elementId: v.element.id,
+        elementId: v.element.id ?? '',
         type: v.element.type,
         description: v.verbalized,
         value: v.value,
