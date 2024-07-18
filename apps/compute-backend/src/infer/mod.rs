@@ -1,4 +1,4 @@
-use crate::{parse::ParsedColumn, types::DeciType};
+use crate::{parse::ParsedColumn, types::types::DeciType};
 
 #[inline]
 pub fn infer_single(value: &str) -> DeciType {

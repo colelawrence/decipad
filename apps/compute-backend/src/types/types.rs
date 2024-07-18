@@ -1,5 +1,4 @@
-use js_sys::{Array, BigInt64Array, Object};
-use wasm_bindgen::{convert::WasmAbi, prelude::*};
+use wasm_bindgen::prelude::*;
 
 pub trait DeciCommon {
     fn get_frac(&self) -> (i64, i64);
@@ -16,7 +15,7 @@ pub struct DeciFloat {
     pub und: bool,
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Ord)]
 pub struct DeciFrac {
     pub n: i64,
     pub d: i64,

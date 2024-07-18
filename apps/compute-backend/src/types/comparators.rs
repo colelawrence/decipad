@@ -1,8 +1,5 @@
+use super::types::{DeciCommon, DeciFloat, DeciFrac, DeciValue, NCol};
 use conv::ApproxInto;
-
-use crate::types::{DeciCommon, DeciFloat, DeciFrac, DeciValue, NCol};
-
-use core::fmt;
 use std::cmp::{PartialEq, PartialOrd};
 
 impl PartialEq for DeciFloat {
@@ -11,6 +8,8 @@ impl PartialEq for DeciFloat {
     }
 }
 
+impl Eq for DeciFloat {}
+
 impl PartialEq for DeciFrac {
     fn eq(&self, other: &DeciFrac) -> bool {
         self.n as f64 * other.d as f64 / self.d as f64 == other.n as f64
@@ -18,6 +17,8 @@ impl PartialEq for DeciFrac {
             && self.und == other.und
     }
 }
+
+impl Eq for DeciFrac {}
 
 impl PartialEq<DeciFrac> for DeciFloat {
     fn eq(&self, other: &DeciFrac) -> bool {
@@ -110,7 +111,7 @@ impl PartialOrd for DeciFrac {
 }
 
 impl PartialOrd<DeciFrac> for DeciFloat {
-    fn partial_cmp(&self, other: &DeciFrac) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, _other: &DeciFrac) -> Option<std::cmp::Ordering> {
         return None;
     }
 
@@ -132,7 +133,7 @@ impl PartialOrd<DeciFrac> for DeciFloat {
 }
 
 impl PartialOrd<DeciFloat> for DeciFrac {
-    fn partial_cmp(&self, other: &DeciFloat) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, _other: &DeciFloat) -> Option<std::cmp::Ordering> {
         return None;
     }
 
@@ -157,7 +158,7 @@ impl<T> PartialOrd<T> for DeciFrac
 where
     T: ApproxInto<f64> + Copy,
 {
-    fn partial_cmp(&self, other: &T) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, _other: &T) -> Option<std::cmp::Ordering> {
         return None;
     }
 
@@ -182,7 +183,7 @@ impl<T> PartialOrd<T> for DeciFloat
 where
     T: ApproxInto<f64> + Copy,
 {
-    fn partial_cmp(&self, other: &T) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, _other: &T) -> Option<std::cmp::Ordering> {
         return None;
     }
 

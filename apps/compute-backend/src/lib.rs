@@ -1,17 +1,14 @@
 mod infer;
 mod parse;
 mod types;
+mod value;
 
-use crate::types::DeciCommon;
 use infer::infer_columns;
 
-use num::integer::lcm;
-use types::{DeciFloat, DeciFrac, DeciType, DeciValue, NCol};
-mod comparators;
-mod types_impl;
 use js_sys::{Array, BigInt64Array, Float64Array, Object};
 use parse::csv_to_parsed;
 use std::{collections::HashMap, iter::FromIterator};
+use types::types::{DeciCommon, DeciFrac, DeciType, DeciValue, NCol};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -239,14 +236,14 @@ impl ComputeBackend {
         let column = self.get_value(id)?;
 
         match column.gt_num(DeciFrac {
-            n: n,
-            d: d,
+            n,
+            d,
             inf: false,
             und: false,
         }) {
             Some(out) => {
                 let outcol = DeciValue::BooleanColumn(out);
-                Ok(column.mask_with(outcol).unwrap().toJsVal())
+                Ok(column.mask_with(outcol).unwrap().to_js_val())
             }
             None => Err(ComputeErrors::IncorrectType),
         }
@@ -255,14 +252,14 @@ impl ComputeBackend {
         let column = self.get_value(id)?;
 
         match column.ge_num(DeciFrac {
-            n: n,
-            d: d,
+            n,
+            d,
             inf: false,
             und: false,
         }) {
             Some(out) => {
                 let outcol = DeciValue::BooleanColumn(out);
-                Ok(column.mask_with(outcol).unwrap().toJsVal())
+                Ok(column.mask_with(outcol).unwrap().to_js_val())
             }
             None => Err(ComputeErrors::IncorrectType),
         }
@@ -271,14 +268,14 @@ impl ComputeBackend {
         let column = self.get_value(id)?;
 
         match column.lt_num(DeciFrac {
-            n: n,
-            d: d,
+            n,
+            d,
             inf: false,
             und: false,
         }) {
             Some(out) => {
                 let outcol = DeciValue::BooleanColumn(out);
-                Ok(column.mask_with(outcol).unwrap().toJsVal())
+                Ok(column.mask_with(outcol).unwrap().to_js_val())
             }
             None => Err(ComputeErrors::IncorrectType),
         }
@@ -287,14 +284,14 @@ impl ComputeBackend {
         let column = self.get_value(id)?;
 
         match column.le_num(DeciFrac {
-            n: n,
-            d: d,
+            n,
+            d,
             inf: false,
             und: false,
         }) {
             Some(out) => {
                 let outcol = DeciValue::BooleanColumn(out);
-                Ok(column.mask_with(outcol).unwrap().toJsVal())
+                Ok(column.mask_with(outcol).unwrap().to_js_val())
             }
             None => Err(ComputeErrors::IncorrectType),
         }
@@ -303,26 +300,26 @@ impl ComputeBackend {
         let column = self.get_value(id)?;
 
         match column.eq_num(DeciFrac {
-            n: n,
-            d: d,
+            n,
+            d,
             inf: false,
             und: false,
         }) {
             Some(out) => {
                 let outcol = DeciValue::BooleanColumn(out);
-                Ok(column.mask_with(outcol).unwrap().toJsVal())
+                Ok(column.mask_with(outcol).unwrap().to_js_val())
             }
             None => Err(ComputeErrors::IncorrectType),
         }
     }
 }
-/*
+
 #[test]
 fn test_masking() {
-    let myVec = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
-    let myDeciVal = DeciValue::from_floats(myVec);
+    let my_vec = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+    let my_deci_val = DeciValue::from_floats(my_vec);
     let boolmask = DeciValue::BooleanColumn(
-        myDeciVal
+        my_deci_val
             .ge_num(DeciFrac {
                 n: 8,
                 d: 2,
@@ -331,7 +328,7 @@ fn test_masking() {
             })
             .unwrap(),
     );
-    let out = myDeciVal.mask_with(boolmask).unwrap();
+    let out = my_deci_val.mask_with(boolmask).unwrap();
     match out {
         DeciValue::NumberColumn(col) => {
             assert_eq!(col.to_vec_float(), vec![4.0, 5.0, 6.0])
@@ -442,4 +439,3 @@ fn test_inject_csv() {
     );
     assert_eq!(res[4], DeciValue::BooleanColumn(vec![true, false]));
 }
-*/
