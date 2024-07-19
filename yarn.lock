@@ -2137,10 +2137,10 @@
     mnemonist "0.38.3"
     tslib "^2.6.2"
 
-"@aws-sdk/lib-dynamodb@^3.316.0", "@aws-sdk/lib-dynamodb@^3.319.0", "@aws-sdk/lib-dynamodb@^3.609.0":
-  version "3.609.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.609.0.tgz#63924b6b4b1462d2b0760df8d6741861f5415561"
-  integrity sha512-V7oWCktXvuZxcXhj3oKmSrkmIQg13yYpamgkAACUzuqUAG1ISPEUGTHYhSImkg4efHQkwHlfJgU5RL9Ya4wsLw==
+"@aws-sdk/lib-dynamodb@^3.316.0", "@aws-sdk/lib-dynamodb@^3.319.0", "@aws-sdk/lib-dynamodb@^3.610.0":
+  version "3.610.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.610.0.tgz#ff8b5df0b1235483043e26df30197110cfe22725"
+  integrity sha512-hlzq36zVnimVO0qX9jZSEL+MowpC5iLH00sLZnW90Q88ZCf/rnCiiEcyHnQSS+YLFDLXMtqqI3b2JZfDJlCGUw==
   dependencies:
     "@aws-sdk/util-dynamodb" "3.609.0"
     "@smithy/smithy-client" "^3.1.5"
