@@ -32,7 +32,7 @@ import { createClearCellPlugin } from './createClearCellPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
-import type { TablePlugin } from '@udecode/plate-table';
+import { getEmptyCellNode, type TablePlugin } from '@udecode/plate-table';
 import { TableAboveEditable } from './TableAboveEditable';
 import { createNormalizeTableHeaderAggregationPlugin } from './createNormalizeTableHeaderAggregationPlugin';
 
@@ -55,7 +55,13 @@ export const createTablePlugin = <
   deserializeHtml: {
     rules: [{ validNodeName: 'TABLE' }],
   },
+  then: (editor) => ({
+    options: {
+      cellFactory: (options: any) => getEmptyCellNode(editor, options),
+    },
+  }),
   options: {
+    getCellChildren: (cell: any) => cell.children,
     insertColumn: (editor, { fromCell }) => {
       const tablePath = fromCell.slice(0, -2);
       addColumn(editor, {

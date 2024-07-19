@@ -1,4 +1,3 @@
-/* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
 import {
   createTable,
@@ -11,7 +10,7 @@ import {
   getSelectionGrid,
 } from '../utils/page/Table';
 
-test.skip('Table Pasting', async ({ testUser }) => {
+test('Table Pasting', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('creates table', async () => {
     await notebook.focusOnBody();
@@ -56,7 +55,7 @@ test.skip('Table Pasting', async ({ testUser }) => {
   });
 });
 
-test.skip('pastes tabular data into bottom-right corner of table', async ({
+test('pastes tabular data into bottom-right corner of table', async ({
   testUser,
 }) => {
   const { page, notebook } = testUser;
@@ -124,7 +123,7 @@ test('pastes html text into collapsed cell selection', async ({ testUser }) => {
   expect(await getFromTable(page, 2, 1)).toBe('Hello world');
 });
 
-test.skip('pastes plain text into expanded forward cell selection', async ({
+test('pastes plain text into expanded forward cell selection', async ({
   testUser,
 }) => {
   const { page, notebook } = testUser;
@@ -141,7 +140,7 @@ test.skip('pastes plain text into expanded forward cell selection', async ({
   expect(await getFromTable(page, 2, 1)).toBe('Hello world');
 });
 
-test.skip('pastes plain text into expanded backward cell selection', async ({
+test('pastes plain text into expanded backward cell selection', async ({
   testUser,
 }) => {
   const { page, notebook } = testUser;
@@ -158,7 +157,7 @@ test.skip('pastes plain text into expanded backward cell selection', async ({
   expect(await getFromTable(page, 2, 1)).toBe('Hello world');
 });
 
-test.skip('copy column values into another column', async ({ testUser }) => {
+test('copy column values into another column', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await notebook.focusOnBody();
   await createTable(page);
