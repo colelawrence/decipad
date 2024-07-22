@@ -16,6 +16,8 @@ export * from './images';
 export * from './styles';
 export * from './global-styles';
 
+export * from './constants';
+
 export { type Identifier } from './modules/editor/AutoCompleteMenu/types';
 
 export const icons = allIcons;

@@ -1,11 +1,18 @@
-import { Annotations as UIAnnotations } from '@decipad/ui';
+import {
+  Annotations as UIAnnotations,
+  IN_EDITOR_SIDEBAR_ID,
+} from '@decipad/ui';
+import { createPortal } from 'react-dom';
 
 type AnnotationsProps = {
   notebookId: string;
 };
 
 const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
-  return <UIAnnotations notebookId={notebookId} />;
+  return createPortal(
+    <UIAnnotations notebookId={notebookId} />,
+    document.getElementById(IN_EDITOR_SIDEBAR_ID)!
+  );
 };
 
 export default Annotations;

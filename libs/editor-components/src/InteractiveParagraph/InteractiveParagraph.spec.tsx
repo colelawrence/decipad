@@ -60,7 +60,6 @@ beforeEach(() => {
         value={{
           annotations: [],
           setAnnotations: () => {},
-          articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           handleExpandedBlockId: () => {},

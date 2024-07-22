@@ -39,7 +39,6 @@ const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
     value={{
       annotations: [],
       setAnnotations: () => {},
-      articleRef: { current: null },
       scenarioId: null,
       expandedBlockId: null,
       handleExpandedBlockId: () => {},

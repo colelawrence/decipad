@@ -19,7 +19,6 @@ const tabsListStyles = (fullWidth: boolean) =>
     width: fullWidth ? '100%' : 'auto',
     padding: '2px',
     height: 'fit-content',
-    backgroundColor: cssVar('backgroundMain'),
     border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: 8,
     gap: 2,

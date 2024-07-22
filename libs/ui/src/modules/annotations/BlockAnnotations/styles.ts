@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
 import {
   cssVar,
   normalShadow,
@@ -10,13 +9,13 @@ import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 type AnnotationProps = {
   collapsed: boolean;
   offset: number;
-  scroll: number;
 };
 
-export const Annotation = styled(motion.div)<AnnotationProps>(
-  ({ collapsed, offset, scroll }) => [
+export const Annotation = styled.div<AnnotationProps>(
+  ({ collapsed, offset }) => [
     {
-      top: offset + 16,
+      top: offset,
+      transition: 'top 0.2s',
       zIndex: collapsed ? 0 : 1,
       position: 'absolute',
       width: '100%',
@@ -32,14 +31,15 @@ export const Annotation = styled(motion.div)<AnnotationProps>(
       display: 'flex',
       flexDirection: 'column',
       gap: '16px',
-      maxHeight: `calc(100vh - ${offset}px + ${scroll}px - 96px)`,
+      // maxHeight: `calc(100vh - ${offset}px + ${scroll}px - 96px)`,
       overflowX: 'hidden',
 
       [tabletScreenQuery]: {
         position: 'absolute',
         right: 24,
         left: 'auto',
-        top: offset + 80,
+        top: offset,
+        zIndex: 50,
       },
     },
     deciOverflowYStyles,

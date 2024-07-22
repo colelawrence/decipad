@@ -1,41 +1,41 @@
-import { useState, useEffect, useRef, RefObject, useCallback } from 'react';
+import { useState, useEffect, RefObject } from 'react';
+import { OVERFLOWING_EDITOR_ID } from '../constants';
 
-// Used to align comments with their blocks
+const PADDING_TOP = 200;
+
 export const useVerticalOffset = (
-  containerRef: RefObject<HTMLElement>,
-  childRef: RefObject<HTMLElement>
-): number => {
-  const [offset, setOffset] = useState<number>(0);
-  const observer = useRef<MutationObserver | null>(null);
-
-  const calculateOffset = useCallback((): void => {
-    if (containerRef.current && childRef.current) {
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const childRect = childRef.current.getBoundingClientRect();
-      setOffset(childRect.top - containerRect.top);
-    }
-  }, [containerRef, childRef, setOffset]);
+  blockRef: RefObject<HTMLElement>
+): number | undefined => {
+  const [offset, setOffset] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    calculateOffset();
-
-    // Setting up the observer to listen for DOM changes
-    observer.current = new MutationObserver(calculateOffset);
-    if (containerRef.current) {
-      observer.current.observe(containerRef.current, {
-        attributes: true,
-        childList: true,
-        subtree: true,
-      });
+    if (blockRef.current == null) {
+      throw new Error('BlockRef provided cannot point to a null element');
     }
 
-    // Clean up
-    return () => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-    };
-  }, [containerRef, childRef, calculateOffset]);
+    const wrapperElement = document.getElementById(OVERFLOWING_EDITOR_ID)!;
+    const element = blockRef.current!;
 
-  return offset;
+    const blockObserver = new MutationObserver(() => {
+      setOffset(element.offsetTop);
+    });
+
+    blockObserver.observe(wrapperElement, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+
+    setOffset(element.offsetTop);
+
+    return () => {
+      blockObserver.disconnect();
+    };
+  }, [blockRef]);
+
+  if (offset == null) {
+    return undefined;
+  }
+
+  return offset + PADDING_TOP;
 };

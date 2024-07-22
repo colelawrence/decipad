@@ -6,18 +6,35 @@ import {
   tabletScreenQuery,
 } from 'libs/ui/src/primitives';
 
+const ANNOTATIONS_WIDTH = '320px';
+
 export const Container = styled.div({
-  width: '100%',
+  width: ANNOTATIONS_WIDTH,
+  height: '100%',
   position: 'relative',
+
+  marginLeft: '16px',
+
+  // A bit smaller, to accomodate for scroll bars, that have 8px width.
+  marginRight: '8px',
 });
 
-export const Placeholder = styled.div({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  height: 'calc(100vh - 80px)',
+const BOTTOM_AND_TOP_SIZE = '80px';
 
+export const Placeholder = styled.div({
+  // We need to to not scroll with the editor.
+  position: 'fixed',
+
+  // top-bar size
+  top: 64,
+
+  // margin-right size
+  right: 16,
+
+  zIndex: 100,
+  width: ANNOTATIONS_WIDTH,
+
+  height: `calc(100vh - ${BOTTOM_AND_TOP_SIZE})`,
   textAlign: 'center',
   display: 'flex',
   flexDirection: 'column',

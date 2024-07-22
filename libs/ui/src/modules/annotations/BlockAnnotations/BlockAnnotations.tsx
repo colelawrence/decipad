@@ -11,9 +11,7 @@ import { SingleAnnotation } from '../SingleAnnotation/SingleAnnotation';
 
 import * as Styled from './styles';
 import { AnimatePresence } from 'framer-motion';
-import { useActiveElement } from '@decipad/react-utils';
-import { useCallback, useEffect, useState } from 'react';
-import debounce from 'lodash/debounce';
+import { useCallback, FC } from 'react';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -21,44 +19,34 @@ export type AnnotationArray = NonNullable<
 
 export type Annotation = NonNullable<AnnotationArray[number]>;
 
-export const BlockAnnotations = ({
-  blockId,
-  blockRef,
-  setBlockHighlighted,
-}: {
+type BlockAnnotationsProps = Readonly<{
   blockId: string;
   blockRef: React.RefObject<HTMLElement>;
-  setBlockHighlighted: (value: boolean) => void;
-}) => {
-  const {
-    annotations,
-    articleRef,
-    expandedBlockId,
-    handleExpandedBlockId,
-    scenarioId,
-  } = useAnnotations();
-  const notbeookId = useNotebookId();
+  setBlockHighlighted: (_value: boolean) => void;
+}>;
 
-  const collapseAnnotation = useCallback(() => {
+type UseAnnotationActionsReturn = {
+  onCollapseAnnotation: () => void;
+  onExpandAnnotation: () => void;
+  onDeleteAnnotation: (id: string) => void;
+};
+
+const useAnnotationActions = (blockId: string): UseAnnotationActionsReturn => {
+  const { expandedBlockId, handleExpandedBlockId } = useAnnotations();
+
+  const onCollapseAnnotation = useCallback(() => {
     if (blockId === expandedBlockId) {
       handleExpandedBlockId(null);
     }
   }, [handleExpandedBlockId, blockId, expandedBlockId]);
 
-  const expandAnnotation = useCallback(() => {
+  const onExpandAnnotation = useCallback(() => {
     if (blockId !== expandedBlockId) {
       handleExpandedBlockId(blockId);
     }
   }, [handleExpandedBlockId, blockId, expandedBlockId]);
 
   const [, deleteAnnotation] = useDeleteAnnotationMutation();
-  const containerRef = useActiveElement(() => {
-    collapseAnnotation();
-  });
-
-  const offset = useVerticalOffset(articleRef, blockRef);
-
-  const [scrollY, setScrollY] = useState(0);
 
   const onDeleteAnnotation = useCallback(
     (id: string) => {
@@ -67,121 +55,47 @@ export const BlockAnnotations = ({
     [deleteAnnotation]
   );
 
-  const updateScrollPosition = debounce((scrollValue: number) => {
-    setScrollY(scrollValue);
-  }, 50);
+  return {
+    onCollapseAnnotation,
+    onExpandAnnotation,
+    onDeleteAnnotation,
+  };
+};
 
-  useEffect(() => {
-    let requestID: number | null = null;
-
-    const handleScroll = () => {
-      if (requestID !== null) {
-        cancelAnimationFrame(requestID);
-      }
-
-      requestID = requestAnimationFrame(() => {
-        updateScrollPosition(window.scrollY);
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (requestID !== null) {
-        cancelAnimationFrame(requestID);
-      }
-    };
-  }, [updateScrollPosition]);
-
-  const collapsed = expandedBlockId !== blockId;
-
-  if (annotations === undefined) {
-    return null;
+const CurrentBlockAnnotations: FC<
+  BlockAnnotationsProps & {
+    blockAnnotations: Array<Annotation>;
+    collapsed: boolean;
   }
+> = ({
+  blockId,
+  blockRef,
+  setBlockHighlighted,
+  collapsed,
+  blockAnnotations,
+}) => {
+  const offset = useVerticalOffset(blockRef);
+  const notebookId = useNotebookId();
+  const { onExpandAnnotation, onDeleteAnnotation } =
+    useAnnotationActions(blockId);
+  const { scenarioId } = useAnnotations();
 
-  const blockAnnotations = annotations.filter(
-    (annotation): annotation is Annotation => annotation?.block_id === blockId
-  );
-
-  if (blockAnnotations.length === 0 && expandedBlockId === blockId) {
-    return (
-      <AnimatePresence>
-        <Styled.Annotation
-          layoutScroll
-          initial={{
-            opacity: 0,
-            y: 10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            y: -10,
-          }}
-          collapsed={false}
-          offset={offset}
-          scroll={scrollY}
-          ref={containerRef}
-        >
-          <NewAnnotation
-            isReply={true}
-            blockId={blockId}
-            notebookId={notbeookId}
-            scenarioId={scenarioId}
-          />
-        </Styled.Annotation>
-      </AnimatePresence>
-    );
-  }
-
-  if (blockAnnotations.length === 0) {
-    return null;
-  }
-
-  blockAnnotations.sort((a, b) => {
-    return (
-      new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime()
-    );
-  });
-  // return null if no block has annotations for current scenario
-  if (
-    blockAnnotations.every(
-      (annotation) => annotation.scenario_id !== scenarioId
-    )
-  ) {
+  if (offset == null) {
     return null;
   }
 
   return (
     <AnimatePresence>
       <Styled.Annotation
-        scroll={scrollY}
         collapsed={collapsed}
         offset={offset}
-        ref={containerRef}
-        initial={{
-          opacity: 0,
-          y: 10,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-          maxHeight: `calc(100vh - ${offset}px + ${scrollY}px - 96px)`,
-        }}
-        exit={{
-          opacity: 0,
-          y: -10,
-        }}
         onMouseEnter={() => setBlockHighlighted(true)}
         onMouseLeave={() => setBlockHighlighted(false)}
       >
         {collapsed ? (
           <CollapsedAnnotation
             collapsed={collapsed}
-            expandAnnotation={expandAnnotation}
+            expandAnnotation={onExpandAnnotation}
             annotations={blockAnnotations}
           />
         ) : (
@@ -202,7 +116,7 @@ export const BlockAnnotations = ({
             <NewAnnotation
               isReply={false}
               blockId={blockId}
-              notebookId={notbeookId}
+              notebookId={notebookId}
               scenarioId={scenarioId}
             />
           </>
@@ -210,4 +124,83 @@ export const BlockAnnotations = ({
       </Styled.Annotation>
     </AnimatePresence>
   );
+};
+
+const NewBlockAnnotations: FC<BlockAnnotationsProps> = ({
+  blockId,
+  blockRef,
+}) => {
+  const offset = useVerticalOffset(blockRef);
+  const { scenarioId } = useAnnotations();
+  const notebookId = useNotebookId();
+
+  if (offset == null) {
+    return null;
+  }
+
+  return (
+    <AnimatePresence>
+      <Styled.Annotation collapsed={false} offset={offset}>
+        <NewAnnotation
+          isReply={true}
+          blockId={blockId}
+          notebookId={notebookId}
+          scenarioId={scenarioId}
+        />
+      </Styled.Annotation>
+    </AnimatePresence>
+  );
+};
+
+export const BlockAnnotations: FC<BlockAnnotationsProps> = (props) => {
+  const { annotations, expandedBlockId, scenarioId } = useAnnotations();
+
+  const collapsed = expandedBlockId !== props.blockId;
+
+  if (annotations == null) {
+    return null;
+  }
+
+  // TODO
+  //
+  // Move this following code into `useAnnotations`,
+  // And make it Record<string, Array<Annotations>>.
+  // It would simply (plus speed up), these.
+
+  const blockAnnotations = annotations.filter(
+    (annotation): annotation is Annotation =>
+      annotation?.block_id === props.blockId &&
+      annotation?.scenario_id === scenarioId
+  );
+
+  blockAnnotations.sort((a, b) => {
+    return (
+      new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime()
+    );
+  });
+
+  //
+  // If no block annotations exist, but we aren't collapsed,
+  // then the user is creating a new annotation.
+  //
+  if (blockAnnotations.length === 0 && !collapsed) {
+    return <NewBlockAnnotations {...props} />;
+  }
+
+  //
+  // Otherwise, we do have some annotations, so we must show them to the user.
+  // These could be collapsed or opened.
+  //
+
+  if (blockAnnotations.length > 0) {
+    return (
+      <CurrentBlockAnnotations
+        {...props}
+        blockAnnotations={blockAnnotations}
+        collapsed={collapsed}
+      />
+    );
+  }
+
+  return null;
 };

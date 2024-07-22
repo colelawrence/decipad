@@ -18,7 +18,6 @@ import {
   NotebookPage,
   TopbarPlaceholder,
   AddCreditsModal,
-  useSetCssVarWidth,
   PaywallModal,
 } from '@decipad/ui';
 import type { FC } from 'react';
@@ -78,7 +77,6 @@ export const Notebook: FC = () => {
     workspaceInfo,
   } = useCurrentWorkspaceStore();
 
-  const articleRef = useSetCssVarWidth('editorWidth');
   const [scenarioId] = useScenarioNavigate();
   const props = {
     notebookId,
@@ -120,7 +118,6 @@ export const Notebook: FC = () => {
             value={{
               annotations,
               setAnnotations,
-              articleRef,
               scenarioId: scenarioId || null,
               expandedBlockId,
               handleExpandedBlockId,
@@ -144,7 +141,6 @@ export const Notebook: FC = () => {
                   <Topbar {...props} />
                 </Suspense>
               }
-              articleRef={articleRef}
               sidebar={
                 <Suspense>
                   <Sidebar {...props} />

@@ -1,12 +1,10 @@
-import { ReactNode } from 'react';
-import {
-  useArticleContentRect,
-  useDraggingScroll,
-  useScrollToHash,
-} from '../../hooks';
+/* eslint decipad/css-prop-named-variable: 0 */
+import { FC, ReactNode } from 'react';
+import { useDraggingScroll, useScrollToHash } from '../../hooks';
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
 import * as S from './styles';
 import { PermissionType } from '../../types';
+import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
 
 interface NotebookPageProps {
   readonly notebook: ReactNode;
@@ -14,10 +12,10 @@ interface NotebookPageProps {
   readonly sidebar: ReactNode;
   readonly tabs: ReactNode;
   readonly isEmbed: boolean;
+
   // Undefined means we haven't loaded yet
   readonly isReadOnly: boolean | undefined;
   readonly permission?: PermissionType | null | undefined;
-  readonly articleRef: React.RefObject<HTMLElement>;
 }
 
 const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent[] = ['annotations'];
@@ -48,14 +46,7 @@ function getShowSidebar(
 }
 
 export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
-  const {
-    topbar,
-    notebook,
-    sidebar,
-    tabs,
-    isEmbed = false,
-    articleRef,
-  } = props;
+  const { topbar, notebook, sidebar, tabs, isEmbed = false } = props;
 
   const sidebarComponent = useNotebookMetaData(
     (state) => state.sidebarComponent
@@ -69,45 +60,81 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
   } = useDraggingScroll<HTMLDivElement>();
 
   const showSidebar = getShowSidebar(props, sidebarComponent);
-  const articleContentRect = useArticleContentRect();
+  const isInEditorSidebar = sidebarComponent === 'annotations';
 
   return (
     <S.AppWrapper isEmbed={isEmbed}>
       {topbar && <header>{topbar}</header>}
 
-      <S.MainWrapper isEmbed={isEmbed} hasTabs={!!tabs} ref={scrollToRef}>
+      <S.MainWrapper
+        isEmbed={isEmbed}
+        hasTabs={!!tabs}
+        ref={scrollToRef}
+        isInEditorSidebar={isInEditorSidebar}
+      >
         <S.ArticleWrapper
           isEmbed={isEmbed}
-          ref={articleRef}
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
         >
-          <S.NotebookSpacingWrapper
-            ref={overflowingDiv}
-            id="overflowing-editor"
-          >
-            <S.BorderRadiusWrapper
-              position="left"
-              offset={articleContentRect?.left}
-            />
-            <S.BorderRadiusWrapper
-              position="right"
-              offset={
-                articleContentRect
-                  ? articleContentRect.width + articleContentRect.left - 16
-                  : undefined
-              }
-            />
-            {notebook}
-          </S.NotebookSpacingWrapper>
-          {tabs}
+          <S.EditorAndTabWrapper>
+            <S.NotebookSpacingWrapper
+              ref={overflowingDiv}
+              id="overflowing-editor"
+            >
+              {!isInEditorSidebar && <SketchyTopRightEditorCorner />}
+              <S.OverflowingEditor id={OVERFLOWING_EDITOR_ID}>
+                <S.PaddingEditor>
+                  {isInEditorSidebar && <SketchyTopRightEditorCorner />}
+                  {notebook}
+                </S.PaddingEditor>
+                <S.InEditorSidebar
+                  id={IN_EDITOR_SIDEBAR_ID}
+                ></S.InEditorSidebar>
+              </S.OverflowingEditor>
+            </S.NotebookSpacingWrapper>
+            {tabs != null && (
+              <S.TabWrapper isInEditorSidebar={isInEditorSidebar}>
+                {tabs}
+              </S.TabWrapper>
+            )}
+          </S.EditorAndTabWrapper>
         </S.ArticleWrapper>
-        {showSidebar && (
-          <S.AsideWrapper sidebarComponent={sidebarComponent}>
-            {sidebar}
-          </S.AsideWrapper>
-        )}
+        <SidebarExtra
+          showSidebar={showSidebar}
+          sidebarComponent={sidebarComponent}
+        >
+          {sidebar}
+        </SidebarExtra>
       </S.MainWrapper>
     </S.AppWrapper>
   );
 };
+
+const SidebarExtra: FC<{
+  showSidebar: boolean;
+  sidebarComponent: SidebarComponent;
+  children: ReactNode;
+}> = ({ showSidebar, sidebarComponent, children }) => {
+  if (!showSidebar) {
+    return null;
+  }
+
+  if (sidebarComponent === 'annotations') {
+    return <>{children}</>;
+  }
+
+  return (
+    <S.AsideWrapper sidebarComponent={sidebarComponent}>
+      {children}
+    </S.AsideWrapper>
+  );
+};
+
+const SketchyTopRightEditorCorner: FC = () => (
+  <S.TopRightWrapper>
+    <div>
+      <div />
+    </div>
+  </S.TopRightWrapper>
+);

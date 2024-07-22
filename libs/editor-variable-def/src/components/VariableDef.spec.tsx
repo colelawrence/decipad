@@ -1,3 +1,4 @@
+import { it, describe, beforeEach, expect } from 'vitest';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -69,7 +70,6 @@ describe('Variable def expression element', () => {
         value={{
           annotations: [],
           setAnnotations: () => {},
-          articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           handleExpandedBlockId: () => {},
@@ -148,7 +148,6 @@ describe('Variable def slider element', () => {
         value={{
           annotations: [],
           setAnnotations: () => {},
-          articleRef: { current: null },
           scenarioId: null,
           expandedBlockId: null,
           handleExpandedBlockId: () => {},

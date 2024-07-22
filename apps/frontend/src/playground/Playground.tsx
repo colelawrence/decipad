@@ -5,7 +5,6 @@ import {
   GlobalThemeStyles,
   NotebookPage,
   PlaygroundTopBar,
-  useSetCssVarWidth,
 } from '@decipad/ui';
 import type { ComponentProps } from 'react';
 import { useState } from 'react';
@@ -26,14 +25,11 @@ const Playground: React.FC = () => {
 
   useAnimateMutations();
 
-  const articleRef = useSetCssVarWidth('editorWidth');
-
   return (
     <AnnotationsProvider
       value={{
         annotations: [],
         setAnnotations: () => {},
-        articleRef: { current: null },
         scenarioId: null,
         expandedBlockId: null,
         handleExpandedBlockId: () => {},
@@ -60,7 +56,6 @@ const Playground: React.FC = () => {
             </Frame>
           </div>
         }
-        articleRef={articleRef}
         sidebar={null}
         tabs={null}
         isEmbed={false}
