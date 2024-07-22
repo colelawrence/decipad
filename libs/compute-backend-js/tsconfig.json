@@ -3,10 +3,21 @@
   "compilerOptions": {
     "lib": ["esnext", "dom", "WebWorker"]
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "vitest.config.ts",
+    "../../vite.config.ts",
+    "../../vite.web.config.ts"
+  ],
   "references": [
     {
       "path": "../remote-computer"
+    },
+    {
+      "path": "../number"
+    },
+    {
+      "path": "../language-interfaces"
     }
   ]
 }

@@ -10,6 +10,13 @@
         "command": "yarn tsc -b libs/compute-backend-js"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest --run",
+        "cwd": "libs/compute-backend-js"
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

@@ -46,3 +46,12 @@ pub enum DeciType {
     Column,
     Table,
 }
+
+#[derive(Clone, Debug)]
+pub enum DeciResult {
+    Boolean(bool),
+    String(String),
+    Fraction(i64, i64),
+    Float(f64),
+    Column(Vec<DeciResult>),
+}
