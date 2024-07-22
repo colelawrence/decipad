@@ -90,7 +90,7 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
                 value={plan?.key}
                 disabled={!isCreatingNewWorkspace && plan.key === currentPlan}
                 asChild
-                data-testid={`paywall_plan_item_${plan?.key}`}
+                data-testid={`paywall_plan_item}`}
               >
                 <Styled.PlanItem>
                   <Styled.PlanTitle>
@@ -141,7 +141,7 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
         <Button
           type="primaryBrand"
           disabled={!canProceed || isStripeInfoLoading}
-          testId="paywall_upgrade_pro"
+          testId="paywall_upgrade"
           onClick={() => {
             if (selectedPlan === 'free') {
               navigate(
