@@ -8,14 +8,17 @@ During the beta phase of Decipad, we are continuously improving the user experie
 
 ## Exporting Notebooks
 
-To export a notebook and create a physical backup file, follow these steps:
+To export a notebook and create a backup file, follow these steps:
 
 1. Go to your workspace.
 2. Hover over the notebook you want to export.
 3. Click the `•••` button.
-4. Select `Download` from the menu that appears.
+4. Select `Export` from the menu that appears.
+5. You can now export your notebook by either:
+   - Downloading a notebook JSON file that can be imported into Decipad at a later date.
+   - Printing the notebook to a PDF.
 
-You will receive a downloadable `.zip` file containing your notebook. You can save this file to a secure location for backup purposes.
+You can save these files to a secure location for backup purposes.
 
 ## Downloading Old Versions of your Notebook
 
