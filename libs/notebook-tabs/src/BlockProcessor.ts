@@ -195,8 +195,30 @@ export class BlockProcessor {
 
   private RemovedNodes: string[] = [];
 
-  public RemoveNode(id: string) {
+  private blockStillExistsElsewhere(
+    id: string,
+    excludeTabIndex: number
+  ): boolean {
+    let tabIndex = -1;
     for (const editor of this.rootEditor.getAllTabEditors()) {
+      tabIndex += 1;
+      if (tabIndex === excludeTabIndex) continue;
+      for (const block of editor.children) {
+        if (block.id === id) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public RemoveNode(id: string) {
+    let tabIndex = -1;
+    for (const editor of this.rootEditor.getAllTabEditors()) {
+      tabIndex += 1;
+      if (this.blockStillExistsElsewhere(id, tabIndex)) {
+        continue;
+      }
       for (const blockId of allBlockIds(editor, id)) {
         this.ProgramCache.delete(blockId);
         this.DirtyBlocksSet.delete(blockId);
@@ -231,7 +253,7 @@ export class BlockProcessor {
     if (op.type === 'remove_node') {
       const { node } = op;
       if (isElement(node) && 'id' in node && typeof node.id === 'string') {
-        this.RemoveNode((node as any).id);
+        this.RemoveNode(node.id);
         if (op.path.length > 2) {
           const rootBlock = this.rootEditor.getNode(op.path.slice(0, 2));
           if (rootBlock) {

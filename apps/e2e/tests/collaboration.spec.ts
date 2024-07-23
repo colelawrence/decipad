@@ -122,3 +122,69 @@ test('check invited collaborators can edit notebook', async ({
     ).toBeTruthy();
   });
 });
+
+test('check collaborator gets updates', async ({
+  testUser,
+  anotherTestUser,
+}) => {
+  await testUser.page.goto(teamWorkspaceURL);
+  await testUser.workspace.createNewNotebook();
+  await testUser.notebook.closeSidebar();
+  await testUser.notebook.waitForEditorToLoad();
+  const notebookURL = testUser.page.url();
+
+  await test.step('Invite another user to notepad as contributor', async () => {
+    await testUser.notebook.openPublishingSidebar();
+    await testUser.page
+      .getByPlaceholder('Enter email address')
+      .fill(anotherTestUser.email);
+    await testUser.page.getByPlaceholder('Enter email address').focus();
+    await testUser.page.getByTestId('send-invitation').click();
+
+    await anotherTestUser.page.goto(notebookURL);
+    await anotherTestUser.aiAssistant.closePannel();
+    await anotherTestUser.notebook.waitForEditorToLoad();
+
+    expect(
+      await anotherTestUser.page
+        .getByTestId('editor-title')
+        .evaluate((e: HTMLElement) => e.isContentEditable)
+    ).toBeTruthy();
+  });
+
+  await test.step('check author can see contributor changes', async () => {
+    await testUser.notebook.focusOnBody();
+    await testUser.notebook.selectLastParagraph();
+    await testUser.notebook.addAdvancedFormula('num2 = 20');
+    await expect(
+      anotherTestUser.page
+        .getByTestId('code-line')
+        .last()
+        .getByTestId('number-result:20')
+    ).toBeVisible();
+    await expect(
+      testUser.page
+        .getByTestId('code-line')
+        .last()
+        .getByTestId('number-result:20')
+    ).toBeVisible();
+  });
+
+  await testUser.notebook.createTabs(['Tab 2', 'Tab 3', 'Tab 4', 'Tab 5']);
+  await testUser.notebook.selectTab('New Tab');
+  await testUser.notebook.moveToTab(0, 'Tab 2');
+  await testUser.notebook.selectTab('Tab 2');
+  await anotherTestUser.notebook.selectTab('Tab 2');
+  await expect(
+    anotherTestUser.page
+      .getByTestId('code-line')
+      .last()
+      .getByTestId('number-result:20')
+  ).toBeVisible();
+  await expect(
+    testUser.page
+      .getByTestId('code-line')
+      .last()
+      .getByTestId('number-result:20')
+  ).toBeVisible();
+});

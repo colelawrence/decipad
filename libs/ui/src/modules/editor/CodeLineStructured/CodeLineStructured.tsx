@@ -60,6 +60,7 @@ export const CodeLineStructured = ({
     onDragStartCell,
     variant: 'inline',
   });
+
   const { inline, expanded } = useDelayedValue(
     freshResult,
     freshResult.errored === true

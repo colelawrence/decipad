@@ -518,7 +518,6 @@ export const createRemoteComputerClientFromWorker = (
     constructor() {
       this.#initialize().catch(onError);
       this.#resultsMonitorSubscription = this.results.subscribe((results) => {
-        // eslint-disable-next-line no-console
         debug('Results updated', results);
       });
     }

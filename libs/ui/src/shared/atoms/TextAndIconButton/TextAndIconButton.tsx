@@ -122,7 +122,7 @@ export const TextAndIconButton = ({
     [animateIcon, children, color, onButtonClick]
   );
 
-  const safeUrl = sanitizeInput({ input: href || '', isURL: true });
+  const safeUrl = href && sanitizeInput({ input: href || '', isURL: true });
 
   return (
     <div css={wrapperStyles} contentEditable={false}>
