@@ -34,6 +34,13 @@
         "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
         "cwd": "libs/language-builtins"
       }
+    },
+    "bench": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest bench",
+        "cwd": "libs/language-builtins"
+      }
     }
   },
   "tags": []
