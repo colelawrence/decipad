@@ -1,4 +1,4 @@
-import type { Value } from '@decipad/language-interfaces';
+import { Unknown, type Value } from '@decipad/language-interfaces';
 import type { DeciNumberBase } from '@decipad/number';
 import { Column } from './Column';
 import type { ValueGeneratorFunction } from './ValueGenerator';
@@ -31,6 +31,7 @@ const validateFromJsArg = (thing: FromJSArg): thing is ValidFromJSArg => {
     throw new TypeError('result cannot be null or undefined');
   }
   if (invalidTypes.has(typeof thing)) {
+    console.warn('invalid type', typeof thing, thing);
     throw new TypeError('result cannot be symbol or function');
   }
   return true;
@@ -40,7 +41,7 @@ export const fromJS = (
   thing: FromJSArg,
   defaultValue?: Value.Value
 ): Value.Value => {
-  if (thing == null) {
+  if (thing == null || thing === Unknown) {
     return defaultValue ?? UnknownValue;
   }
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
