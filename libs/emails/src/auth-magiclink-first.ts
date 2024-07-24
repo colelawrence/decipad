@@ -862,5 +862,4 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
     </body>
   </html>`,
 });
-
 export default authMagiclinkFirst;
