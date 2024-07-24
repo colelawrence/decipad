@@ -119,7 +119,7 @@
     "@nasa-gcn/architect-functions-search": "^1.0.0",
     "@nasa-gcn/architect-plugin-search": "^1.3.0",
     "@notionhq/client": "^2.2.9",
-    "@opensearch-project/opensearch": "^2.10.0",
+    "@opensearch-project/opensearch": "^2.11.0",
     "@playwright/test": "^1.45.0",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
