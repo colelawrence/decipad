@@ -511,3 +511,40 @@ test('Checks copy link to block integrations', async ({ testUser }) => {
     ).toBeHidden();
   });
 });
+
+test('Checks google sheet integrations with link works', async ({
+  testUser,
+}) => {
+  test.slow();
+
+  await test.step('create integration', async () => {
+    await testUser.notebook.addBlock('open-integration');
+    await testUser.page.getByTestId('select-integration:Google sheet').click();
+    // fill with wrong usl
+    await testUser.page
+      .getByPlaceholder('Google Sheet URL')
+      // eslint-disable-next-line no-script-url
+      .fill("javascript:alert('xss')");
+    await expect(
+      testUser.page.getByRole('button', { name: 'Import' })
+    ).toBeDisabled();
+    await testUser.page
+      .getByPlaceholder('Google Sheet URL')
+      .fill(
+        'https://docs.google.com/spreadsheets/d/15ZrP05Qqa84XdAOAh-iFwbe04KErLJeCTPu_OCITUT4/edit?gid=0#gid=0'
+      );
+    await testUser.page.getByRole('button', { name: 'Import' }).click();
+    await expect(
+      testUser.page.getByText('Integration loaded successfully!')
+    ).toBeVisible();
+    await testUser.page.getByRole('button', { name: 'Continue' }).click();
+
+    await expect(
+      testUser.page.getByText('11 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+    await testUser.page.getByRole('button', { name: 'Continue' }).click();
+    await expect(
+      testUser.page.getByText('11 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+  });
+});

@@ -1,7 +1,7 @@
 import { Button, cssVar, isValidURL, sanitizeInput } from '@decipad/ui';
 import { assertInstanceOf } from '@decipad/utils';
 import styled from '@emotion/styled';
-import { FC, useMemo, useRef } from 'react';
+import { FC, useCallback, useMemo, useRef, useState } from 'react';
 import { URLRunner } from '../../runners';
 import { ConnectionProps } from '../types';
 
@@ -9,16 +9,20 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
   assertInstanceOf(runner, URLRunner);
 
   const inputUrlRef = useRef<HTMLInputElement>(null);
+  const [url, setUrl] = useState<string>('');
+
+  const handleInputChange = useCallback(() => {
+    const newUrl = inputUrlRef.current?.value || '';
+    setUrl(newUrl);
+  }, []);
 
   const isValidUrl = useMemo(() => {
-    const url = inputUrlRef.current?.value;
     return url != null && isValidURL(url);
-  }, [inputUrlRef]);
+  }, [url]);
 
   const onImportUrl = async () => {
-    const url = inputUrlRef.current?.value;
     if (url == null || !isValidURL(url)) {
-      console.error('Url is not provided');
+      console.error('Url is invalid or not provided');
       return;
     }
     const sanitizedUrl = sanitizeInput({ input: url, isURL: true });
@@ -29,7 +33,12 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
 
   return (
     <Wrapper>
-      <input ref={inputUrlRef} type="text" placeholder="Google Sheet URL" />
+      <input
+        ref={inputUrlRef}
+        onChange={handleInputChange}
+        type="text"
+        placeholder="Google Sheet URL"
+      />
       <Button type="primary" onClick={onImportUrl} disabled={!isValidUrl}>
         Import
       </Button>
