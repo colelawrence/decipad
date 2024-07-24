@@ -8,8 +8,8 @@ export const decodeBigInt = (
   _offset: number
 ): [bigint, number] => {
   let offset = _offset;
-  const length = buffer.getUint8(offset);
-  offset += 1;
+  const length = buffer.getUint32(offset);
+  offset += 4;
 
   let value = -1n;
   for (

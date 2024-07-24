@@ -37,9 +37,9 @@ export const encodeBigInt = (
   originalOffset: number,
   value: bigint
 ): number => {
-  // start at offset 1 so that we can write the length before
-  const offset = preciselyEncodeBigint(buffer, originalOffset + 1, value);
-  const sizeInBytes = offset - originalOffset - 1;
-  buffer.setUint8(originalOffset, sizeInBytes);
+  // start at offset 4 so that we can write the length before
+  const offset = preciselyEncodeBigint(buffer, originalOffset + 4, value);
+  const sizeInBytes = offset - originalOffset - 4;
+  buffer.setUint32(originalOffset, sizeInBytes);
   return offset;
 };
