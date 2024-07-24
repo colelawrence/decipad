@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "@20minutes/s3rver": "^4.0.0",
-    "@apollo/client": "3.10.1",
+    "@apollo/client": "3.11.1",
     "@apollo/server": "4.10.0",
     "@architect/architect": "10.16.2",
     "@architect/asap": "6.0.2",
