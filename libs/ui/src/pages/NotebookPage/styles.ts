@@ -198,15 +198,16 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
     overflowY: 'auto',
     flexShrink: 0,
     width: ComponentWidths[props.sidebarComponent].default,
-    height: '100%',
     borderRadius: '16px',
     zIndex: 40,
     overflow: 'visible',
 
     '& > :first-child': {
-      maxHeight: 'calc(100vh - 80px)',
       width: ComponentWidths[props.sidebarComponent].default,
-      height: props.sidebarComponent === 'publishing' ? undefined : '100%',
+      height:
+        props.sidebarComponent === 'publishing'
+          ? undefined
+          : 'calc(100vh - 80px)',
     },
 
     [smallScreenQuery]: {
@@ -220,7 +221,6 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
         width: ComponentWidths[props.sidebarComponent].tablet,
       }),
 
-      height: 'fit-content',
       border: `solid 1px ${cssVar('borderDefault')}`,
       borderRight: 'none',
       boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
