@@ -191,7 +191,6 @@ export const parseCell = async (
                 cellUnit
               );
             }
-
             if (type.numberFormat) {
               return astNode(
                 'literal',

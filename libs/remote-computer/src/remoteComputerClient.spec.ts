@@ -717,45 +717,45 @@ describe('remote computer client', () => {
 
     expect(await computer.getUnitFromText('32 bananas per squaremile'))
       .toMatchInlineSnapshot(`
-      [
-        {
-          "aliasFor": undefined,
-          "exp": DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": 1n,
+        [
+          {
+            "aliasFor": undefined,
+            "exp": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            "known": false,
+            "multiplier": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            "unit": "bananas",
           },
-          "known": false,
-          "multiplier": DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": 1n,
+          {
+            "aliasFor": undefined,
+            "baseQuantity": "area",
+            "baseSuperQuantity": "area",
+            "exp": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": -1n,
+            },
+            "known": true,
+            "multiplier": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            "unit": "squaremiles",
           },
-          "unit": "bananas",
-        },
-        {
-          "aliasFor": undefined,
-          "baseQuantity": "area",
-          "baseSuperQuantity": "area",
-          "exp": DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": -1n,
-          },
-          "known": true,
-          "multiplier": DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 1n,
-            "s": -1n,
-          },
-          "unit": "squaremiles",
-        },
-      ]
-    `);
+        ]
+      `);
 
     let subscription: Subscription | undefined;
 

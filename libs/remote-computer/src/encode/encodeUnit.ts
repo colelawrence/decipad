@@ -11,7 +11,7 @@ export const encodeUnit = (unit: Unit): SerializedUnit => {
   const numberLength = encodeNumber(exp, 0, unit.exp);
 
   const multiplier = new Value.GrowableDataView(createResizableArrayBuffer(8));
-  const multiplierLength = encodeNumber(multiplier, 0, unit.exp);
+  const multiplierLength = encodeNumber(multiplier, 0, unit.multiplier);
 
   return {
     ...unit,

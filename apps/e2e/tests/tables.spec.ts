@@ -858,3 +858,14 @@ test('table categories', async ({ testUser }) => {
     ).toBeVisible();
   }
 });
+
+test('table smart row', async ({ testUser }) => {
+  await testUser.notebook.focusOnBody();
+  await createTable(testUser.page);
+  await writeInTable(testUser.page, '200 € per hour', 1, 1);
+  await writeInTable(testUser.page, '150', 2, 1);
+  await writeInTable(testUser.page, '160', 3, 1);
+  await clickCalculateFirstColumn(testUser.page, 'Table');
+  await testUser.page.getByText('Sum').click();
+  await expect(testUser.page.getByText('€510 per hour')).toBeVisible();
+});

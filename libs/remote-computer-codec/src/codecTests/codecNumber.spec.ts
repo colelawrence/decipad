@@ -67,6 +67,7 @@ describe('encodes and decodes DeciNumber', () => {
   it('encodes and decodes many numbers', () => {
     const numbers = [
       N(0),
+      N(1),
       N(11),
       N(1234567890123456789012345678901234567890n),
       N(-1234567890123456789012345678901234567890n),
