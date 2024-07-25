@@ -5,6 +5,7 @@ test('Checks notebook embeds @embeds', async ({ testUser }) => {
   const { page, notebook, workspace } = testUser;
 
   await notebook.returnToWorkspace();
+  await workspace.newWorkspace('new workspace for clean snapshot');
   const currentRoute = page.url();
 
   await page.getByTestId('workspace_upgrade_pro').click();

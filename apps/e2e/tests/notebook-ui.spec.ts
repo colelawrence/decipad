@@ -64,8 +64,11 @@ test('notebook icon @notebook', async ({ testUser }) => {
   });
 
   await test.step('screenshot notebook icon picker', async () => {
+    await notebook.openSidebar();
     await notebook.openNotebookIconPicker();
-    await snapshot(page, 'Notebook: Icon selection');
+    await snapshot(page, 'Notebook: Icon selection', {
+      midSize: true,
+    });
   });
 });
 

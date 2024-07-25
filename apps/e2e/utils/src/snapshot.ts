@@ -8,7 +8,10 @@ const snapshotsTaken = new Set<string>();
 export const snapshot = async (
   page: Page,
   name: string,
-  options = { mobile: false }
+  options: { mobile?: boolean; midSize?: boolean } = {
+    mobile: false,
+    midSize: false,
+  }
 ): Promise<void> => {
   if (!process.env.PERCY_TOKEN || snapshotsTaken.has(name)) {
     return;
@@ -21,8 +24,8 @@ export const snapshot = async (
 
   try {
     await percySnapshot(page as Page, name, {
-      widths: [options.mobile && 375, 1380].filter((n): n is number =>
-        Number.isInteger(n)
+      widths: [options.mobile && 375, options.midSize && 768, 1380].filter(
+        (n): n is number => Number.isInteger(n)
       ),
     });
   } catch (err) {
