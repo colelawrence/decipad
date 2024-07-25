@@ -13,6 +13,7 @@
     { "path": "../number" },
     { "path": "../generator-utils" },
     { "path": "../remote-computer-codec" },
-    { "path": "../fnqueue" }
+    { "path": "../fnqueue" },
+    { "path": "../postmessage-rpc" }
   ]
 }

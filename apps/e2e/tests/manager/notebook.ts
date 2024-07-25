@@ -573,9 +573,9 @@ export class Notebook {
     }).toPass();
     // check paragraph is ready
     await this.page.keyboard.type(`/`);
-    // checks menu had openned
+    // checks menu had opened
     await expect(
-      this.page.getByRole('menu'),
+      this.page.locator('#overflowing_editor_id').getByRole('menu'),
       'Block menu is visible'
     ).toBeVisible();
     await this.page.getByTestId(`menu-item-${command}`).first().click();

@@ -323,3 +323,7 @@ dev-dist
 performance-results
 
 *.wasm
+
+# E2E test artifacts
+
+apps/e2e/Table.csv

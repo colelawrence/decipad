@@ -6592,13 +6592,6 @@
   dependencies:
     "@types/mdx" "^2.0.0"
 
-"@mixer/postmessage-rpc@1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@mixer/postmessage-rpc/-/postmessage-rpc-1.1.4.tgz#ee952ff329161c3077dc9ad732f9fbe63fafa82f"
-  integrity sha512-Cb/3CukztYD/mXILTOjtlOsfKEeHNBJE5Cipn5i+IAVm2pvbI0LaVJ1TJZS67BOTcAlBcvTjhwAlzyrpQO0TeA==
-  dependencies:
-    eventemitter3 "^3.1.0"
-
 "@nasa-gcn/architect-functions-search@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@nasa-gcn/architect-functions-search/-/architect-functions-search-1.0.0.tgz#35ce0be6949bacaafd8f4c137014e29882165c42"
@@ -18375,11 +18368,6 @@ event-target-shim@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
-
-eventemitter3@^3.1.0:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
-  integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
 eventemitter3@^4.0.0, eventemitter3@^4.0.1, eventemitter3@^4.0.4:
   version "4.0.7"

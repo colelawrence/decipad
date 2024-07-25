@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import type { Result } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 import { encodeColumn } from '@decipad/remote-computer-codec';
-import { SharedRPC } from '../utils/SharedRPC';
+import { RPC } from '@decipad/postmessage-rpc';
 // eslint-disable-next-line no-restricted-imports
 import type { TBaseNotificationParams } from '../types';
 import { encodeTable } from '../encode/encodeTable';
@@ -37,7 +37,7 @@ export const createWorkerWorker = <
     serializeNotificationFromStore ?? createNotificationEncoder
   )(remoteValueStore);
 
-  const rpc = new SharedRPC({
+  const rpc = new RPC({
     target: {
       postMessage,
     },
@@ -47,7 +47,7 @@ export const createWorkerWorker = <
     serviceId,
   });
 
-  rpc.on('error', (error) => {
+  rpc.on('error', (error: Error) => {
     console.error(error);
   });
 

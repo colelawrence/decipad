@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import { fnQueue } from '@decipad/fnqueue';
 import { timeout, type PromiseOrType } from '@decipad/utils';
+import { RPC } from '@decipad/postmessage-rpc';
 import type {
   TBaseNotificationParams,
   TSerializedNotificationParams,
 } from '../types';
 import type { ClientWorkerContext } from './types';
-import { SharedRPC } from '../utils/SharedRPC';
 import { decodeNotification as defaultDecodeNotification } from './decodeNotification';
 import { debug } from './debug';
 import { nanoid } from 'nanoid';
@@ -41,7 +41,7 @@ const createRPCWorker = (
   worker: Worker,
   serviceId = 'remote-computer-worker'
 ) => {
-  return new SharedRPC({
+  return new RPC({
     target: {
       postMessage: (data) => {
         worker.postMessage(data);

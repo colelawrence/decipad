@@ -14,9 +14,7 @@ import {
   parseStatement,
   isExpression,
   parseExpressionOrThrow,
-  parseSimpleValue,
   Unit,
-  walkAstAsync,
 } from '@decipad/remote-computer';
 import { formatUnit, formatError } from '@decipad/format';
 import type { PromiseOrType } from '@decipad/utils';
@@ -127,36 +125,11 @@ export const parseCell = async (
     cellType = { kind: 'number', unit: null };
   }
 
-  if (containsExprRef(text) && !parseSimpleValue(text)) {
-    const exp = parseExpressionOrThrow(text);
-    let allRefsExist = true;
-
-    await walkAstAsync(exp, async (node) => {
-      if (node.type !== 'ref') {
-        return;
-      }
-
-      if (allRefsExist) {
-        // returning false;
-        allRefsExist = await computer.variableExists(node.args[0]);
-      }
-    });
-
-    if (allRefsExist) {
-      return exp;
-    }
-  }
-
-  //
   // If you have `exprRef` in your cell, it means you are referencing a variable.
   // Let's parse the expression normally.
-  //
-  // if (containsExprRef(text)) {
-  //   const inferred = await inferType(computer, text, {
-  //     type: cellType as SerializedType,
-  //   });
-  //   return parseExpressionOrThrow(inferred.coerced!);
-  // }
+  if (containsExprRef(text)) {
+    return parseExpressionOrThrow(text);
+  }
 
   try {
     const parsedValue = await parsing(

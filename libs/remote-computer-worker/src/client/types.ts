@@ -5,10 +5,10 @@ import type {
 } from '@decipad/language-interfaces';
 import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
 import type { PromiseOrType } from '@decipad/utils';
-import type { SharedRPC } from '../utils/SharedRPC';
+import type { RPC } from '@decipad/postmessage-rpc';
 
 export interface ClientWorkerContext {
-  rpc: SharedRPC;
+  rpc: RPC;
   finalizationRegistry: FinalizationRegistry<string>;
   refCounter: Map<string, number>;
 }

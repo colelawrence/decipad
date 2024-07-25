@@ -1,8 +1,8 @@
+import { scan } from '@decipad/generator-utils';
 import { RecursiveDecoder } from './types';
 import { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
-import { scan } from '@decipad/generator-utils';
 
 export const decodeColumn: RecursiveDecoder = async (
   type,
