@@ -1,0 +1,1022 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Welcome to Decipad! 2.0"
+        }
+      ],
+      "type": "title",
+      "id": "Fu-Tub2k7PGZC9M7na7nI"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Hi and "
+            },
+            {
+              "text": "welcome to Decipad",
+              "highlight": true
+            },
+            {
+              "text": "! \n\nDecipad is a productivity tool for growth stage founders and teams.\n\nDecipad will transform how you do reporting and planning without the need for a dedicated data team."
+            }
+          ],
+          "type": "p",
+          "id": "SejRXXdfD9ycqebmUewwE"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Decipad is the perfect tool for your team to run your weekly reports: WBRs, sales reviews, etc."
+                }
+              ],
+              "type": "blockquote",
+              "id": "9aixiDOr4x8jsjPd5CAgm"
+            },
+            {
+              "children": [
+                {
+                  "text": "Data is everywhere, and so having a data team or data skills is super important. Decipad is designed to lower the barrier to working with data. It allows more people to report and work with data without the need to know how to code. "
+                }
+              ],
+              "id": "7OzKUEoUb3KMqncti4s-t",
+              "type": "p"
+            }
+          ],
+          "id": "nb4_iA15o1EGWvCZwXT1-",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": "The basics"
+            }
+          ],
+          "type": "h2",
+          "id": "gBbflXueKcsURlmwDm1Ll"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "JVrLOZa_CTHq5AViqG4FP",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Working with your own data"
+            }
+          ],
+          "type": "h3",
+          "id": "LUtStcjgR8xb8Qd0NMGKO"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "Kx6EmJeVa_krKnpYL8vy4",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "First thing you want to do with Decipad is getting your data in. That's what our integration block allows you do to:"
+            }
+          ],
+          "type": "p",
+          "id": "sF5p662JVtQIqOCV1We1B"
+        },
+        {
+          "children": [
+            {
+              "text": "Type "
+            },
+            {
+              "text": "/",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " to open the menu and type "
+            },
+            {
+              "text": "/integration",
+              "code": true,
+              "bold": true
+            }
+          ],
+          "id": "5T0LFlB609OvH02-GPQlM",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": "We have easy ways to connect to your data, for instance from "
+            },
+            {
+              "text": "Notion",
+              "highlight": true
+            },
+            {
+              "text": ", "
+            },
+            {
+              "text": "Google Sheets",
+              "highlight": true
+            },
+            {
+              "text": " or simply upload a "
+            },
+            {
+              "text": "CSV",
+              "highlight": true
+            },
+            {
+              "text": ". If you find that you need to connect to  a service that is not listed, you can use a "
+            },
+            {
+              "text": "Code integration",
+              "highlight": true
+            },
+            {
+              "text": " for using any API, or "
+            },
+            {
+              "text": "SQL",
+              "highlight": true
+            },
+            {
+              "text": " to access a database.\n"
+            }
+          ],
+          "type": "p",
+          "id": "ZNvvW360JVFLh9SlAesMq"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "R870_Nt3VYLou-qNWkRif",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": "Above is a CSV added to Decipad containing a conversion funnel. You can refresh the data by clicking the refresh button — this won't do anything for a CSV for in a live connection to a service, sheet, or notion it would update your data."
+            }
+          ],
+          "type": "p",
+          "id": "HzXvI7GT_vFoq6pGIhQzp"
+        },
+        {
+          "children": [
+            {
+              "text": "To create a chart you can click "
+            },
+            {
+              "text": "Chart",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " and represent the funnel in a easy to digest way:"
+            }
+          ],
+          "type": "p",
+          "id": "Eat605JzTdSBNa7YxMAxS"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "46kSosWDwLXPevVQ-KgvX",
+              "type": "plot",
+              "title": "Funnel for London",
+              "sourceVarName": "exprRef_XYw5l0_apdKn9Zj4OX_Qi",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "monochrome_blue",
+              "schema": "jun-2024"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "POfp6zwK1ROA9iQqAbxjw",
+              "type": "plot",
+              "title": "Funnel for Madrid",
+              "sourceVarName": "exprRef_XYw5l0_apdKn9Zj4OX_Qi",
+              "xColumnName": "Stage",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "funnel",
+              "sizeColumnName": "",
+              "yColumnNames": ["London"],
+              "yColumnChartTypes": ["bar"],
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": true,
+              "groupByX": false,
+              "colorScheme": "monochrome_red",
+              "schema": "jun-2024"
+            }
+          ],
+          "id": "sVTU2Zwk7F7-tdCxa-qmb",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": "You probably noticed that above we have two columns. You can create "
+            },
+            {
+              "text": "layouts",
+              "highlight": true
+            },
+            {
+              "text": " by clicking the drag handle "
+            },
+            {
+              "text": "::",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " and "
+            },
+            {
+              "text": "dragging the block into the side of another block",
+              "highlight": true
+            },
+            {
+              "text": ". A blue line appears when the drop is possible, so don't worry if you don't get it right at first. "
+            }
+          ],
+          "type": "p",
+          "id": "Cb2M5_lg4JtjcksVYJoaH"
+        },
+        {
+          "children": [
+            {
+              "text": "Performing calculations"
+            }
+          ],
+          "type": "h3",
+          "id": "86qUEuvNbHjs59Z2RIN4d"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "qS9_iYy7cSg86xbLpSosY",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "You can defined calculation or values by pressing the "
+            },
+            {
+              "text": "=",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " sign. "
+            }
+          ],
+          "type": "p",
+          "id": "a35_ur3j8NQojAPA73Avm"
+        },
+        {
+          "children": [
+            {
+              "text": "Your readers cannot edit calculations, only input widgets and input tables. If you don't want readers to see your calculations, you can simply hide the block by clicking the drag handle and selecting hide."
+            }
+          ],
+          "type": "p",
+          "id": "H8mMqzJ5HwNctqBQYdHFx",
+          "icon": "AnnotationWarning",
+          "color": "Sun"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "ClosedImprov"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "fgJZ7rvxX50Q1r5E9GoQ2"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "-9zNB3P_6pchP8-miB4D5",
+                  "type": "smart-ref",
+                  "blockId": "TGwbueGoXeQQOp0nqmqfx",
+                  "columnId": null,
+                  "lastSeenVariableName": "ClosedLookup"
+                },
+                {
+                  "text": " + "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "s_xq0Bz2ISoIrXxzM01Ut",
+                  "type": "smart-ref",
+                  "blockId": "JPE0pffIJsXIjYcVQOOMC",
+                  "columnId": null,
+                  "lastSeenVariableName": "Improvement"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "qFoRVtwoWkPDMM_VAASdd"
+            }
+          ],
+          "id": "Rufu2fHGzGShMw0jZ3LyX",
+          "type": "code_line_v2",
+          "colorScheme": "monochrome_blue",
+          "isHidden": true
+        },
+        {
+          "children": [
+            {
+              "text": "Reporting to what you found"
+            }
+          ],
+          "type": "h3",
+          "id": "aY7BOe1FAI2Ssvn8L5_Mx"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "P2mSJNcgYCEAByUNBwEoL",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Decipad was built so you can share your documents with confidence. There's basically two types of users for Decipad: "
+            },
+            {
+              "text": "Readers",
+              "highlight": true
+            },
+            {
+              "text": " and "
+            },
+            {
+              "text": "Editors",
+              "highlight": true
+            },
+            {
+              "text": ".  When you are building a document you are in editor mode, but when you "
+            },
+            {
+              "text": "Share",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " with a reader they can only change numbers you put on "
+            },
+            {
+              "text": "widgets",
+              "highlight": true
+            },
+            {
+              "text": " or "
+            },
+            {
+              "text": "input tables.",
+              "highlight": true
+            }
+          ],
+          "type": "p",
+          "id": "6XhInr-TEdQucGq7-aDX5"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "This widgets below can be edited by readers"
+                }
+              ],
+              "id": "GGuXMZu__0tgJC_lIgkPH",
+              "type": "callout",
+              "icon": "Pencil",
+              "color": "Catskill"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "PbjvKAb_Nsc4LFtMWghxP",
+              "type": "p"
+            }
+          ],
+          "id": "eMUnCIyXXvdDemBiw-zrO",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Improvement"
+                    }
+                  ],
+                  "id": "3eIpvu67t4kwei8XEcuz0",
+                  "type": "caption",
+                  "icon": "Percentage",
+                  "color": "Rose"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "38%"
+                    }
+                  ],
+                  "id": "SwkxJdVf3Az3p-453bWWz",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "-rgl7hMGu7CCxBmfsYcWg",
+                  "type": "slider",
+                  "min": "0",
+                  "step": "1",
+                  "value": "5",
+                  "max": "100"
+                }
+              ],
+              "id": "JPE0pffIJsXIjYcVQOOMC",
+              "type": "def",
+              "variant": "slider"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Comission"
+                    }
+                  ],
+                  "type": "caption",
+                  "id": "6eYTiwIvrk-ia0RBKplVX"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "$40"
+                    }
+                  ],
+                  "type": "exp",
+                  "id": "JxSHVK79ZwcdKMct-_uNv"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "e_HDOz5H6LoR_t3EQTiUu",
+                  "type": "slider",
+                  "max": "100",
+                  "min": "0",
+                  "step": "10",
+                  "value": "0"
+                }
+              ],
+              "id": "APOdYF8c_Vpp_UmICIjNB",
+              "type": "def",
+              "variant": "slider",
+              "coerceToType": {
+                "kind": "number",
+                "date": "day"
+              }
+            }
+          ],
+          "id": "iAsepyoRr0k85_9kAPlpc",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "You can drag any number result into text like we did with this next sentence. You can find a data tab in the sidebar, where all your numbers live. \n\nWe closed  "
+                },
+                {
+                  "text": "exprRef_TGwbueGoXeQQOp0nqmqfx",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " in our London funnel but with a planned improvement of "
+                },
+                {
+                  "text": "Improvement",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " we aim to close "
+                },
+                {
+                  "text": "exprRef_Rufu2fHGzGShMw0jZ3LyX",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " by the next quarter.\n\nYou can use table's to enhance your calculations or work with data in a similar way you would with a spreadsheet\n\n"
+                }
+              ],
+              "id": "SWZ8vRD8JJ5DyAEw_Uy1A",
+              "type": "p"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "0ERKl60rmynyl8Jdxy08q",
+              "type": "plot",
+              "title": "",
+              "sourceVarName": "exprRef_XlKFXTqVZtJJoMgs9bN5E",
+              "xAxisLabel": "",
+              "yAxisLabel": "",
+              "labelColumnName": "",
+              "markType": "arc",
+              "sizeColumnName": "",
+              "barVariant": "grouped",
+              "lineVariant": "simple",
+              "arcVariant": "simple",
+              "orientation": "horizontal",
+              "grid": true,
+              "startFromZero": true,
+              "mirrorYAxis": false,
+              "flipTable": false,
+              "showDataLabel": false,
+              "groupByX": false,
+              "colorScheme": "multicolor_gray",
+              "schema": "jun-2024",
+              "xColumnName": "Quarter",
+              "yColumnNames": ["Closed"],
+              "yColumnChartTypes": ["bar"]
+            }
+          ],
+          "id": "rn8wdev4yG_7C-46G8kyJ",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": "You can use table's to enhance your calculations or work with data in a similar way you would with a spreadsheet. That's how we made the pie chart above."
+            }
+          ],
+          "type": "p",
+          "id": "QzskRvem_HFPvqlGijgca"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ClosedQ3"
+                    }
+                  ],
+                  "id": "vF71-ODsUxlHNWo-zIaTe",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "nUg2indrIm2kABg1Y6BCu",
+                      "type": "smart-ref",
+                      "blockId": "XlKFXTqVZtJJoMgs9bN5E",
+                      "columnId": "cxKWEuU1ZxnKvOuqsQROc",
+                      "lastSeenVariableName": "ClosedQ3.Closed"
+                    },
+                    {
+                      "text": "  * "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "b7cF3gL_8X_FNDgUtmxxH",
+                      "type": "smart-ref",
+                      "blockId": "APOdYF8c_Vpp_UmICIjNB",
+                      "columnId": null,
+                      "lastSeenVariableName": "Comission"
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "id": "gbmCsmyvDLZLxWDn-Dy_L",
+                  "type": "table-column-formula",
+                  "columnId": "H0X6XRSJgHW2RpOiRrzVo"
+                }
+              ],
+              "id": "ihhWkAb1Hynv__eWvACrA",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Quarter"
+                    }
+                  ],
+                  "id": "ufSqwFumyc54vZJfUex77",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Closed"
+                    }
+                  ],
+                  "id": "cxKWEuU1ZxnKvOuqsQROc",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Comissions"
+                    }
+                  ],
+                  "id": "H0X6XRSJgHW2RpOiRrzVo",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  }
+                }
+              ],
+              "id": "XcCZl2-UfOiPffjlfCFC3",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Q1"
+                    }
+                  ],
+                  "id": "NEWk1iAOSRty6pKFc3e47",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_TGwbueGoXeQQOp0nqmqfx"
+                    }
+                  ],
+                  "id": "o0g4ecFsRT27bisRoGc86",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "i1rUH_p81lYlyzoHt19t9",
+                  "type": "td"
+                }
+              ],
+              "id": "zrvzxfJsL-LZKnFNt50A9",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Q2"
+                    }
+                  ],
+                  "id": "jCqF1ZqqYF8YpV69aiVYV",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_Rufu2fHGzGShMw0jZ3LyX"
+                    }
+                  ],
+                  "id": "0onkdOgAB9NlMS-OPMP85",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "bY98dl1qXobVSQOia6J52",
+                  "type": "td"
+                }
+              ],
+              "id": "13VZ-KLpa-y3mojD4Hy7-",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Q3"
+                    }
+                  ],
+                  "id": "kLW2knUUVE_tyDj7GYA3t",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "exprRef_Rufu2fHGzGShMw0jZ3LyX       + exprRef_JPE0pffIJsXIjYcVQOOMC"
+                    }
+                  ],
+                  "id": "mCVv4-ZyN0Nxp9RBTmDN6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "52BMMaavMLIBc4SwKUMcJ",
+                  "type": "td"
+                }
+              ],
+              "id": "eJRZbkuejDu46CZQazbR1",
+              "type": "tr"
+            }
+          ],
+          "id": "XlKFXTqVZtJJoMgs9bN5E",
+          "type": "table",
+          "version": 2,
+          "color": "Perfume",
+          "icon": "Fire",
+          "hideCellFormulas": true,
+          "hideFormulas": false
+        },
+        {
+          "children": [
+            {
+              "text": "Collaborating"
+            }
+          ],
+          "type": "h3",
+          "id": "c14gXXiv3w_w-xlkzFp6c"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "CjVNMjKJNqXABo9bTIfCT",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Collaboration is built into Decipad. When you are adding team-mates you can add them to your workspace. They then become editors on all documents for that workspace. "
+            }
+          ],
+          "type": "p",
+          "id": "8wi7zd42NfavOuJFTVlJp"
+        },
+        {
+          "children": [
+            {
+              "text": "When you "
+            },
+            {
+              "text": "Publish",
+              "code": true,
+              "bold": true
+            },
+            {
+              "text": " documents (for instance to "
+            },
+            {
+              "text": "share with a client",
+              "highlight": true
+            },
+            {
+              "text": ", or to "
+            },
+            {
+              "text": "embed in your website",
+              "highlight": true
+            },
+            {
+              "text": ") people can interact with your documents without ever breaking what you built."
+            }
+          ],
+          "type": "p",
+          "id": "8WIiJu8YgSxI3O4xje63Y"
+        },
+        {
+          "children": [
+            {
+              "text": "By default all documents in Decipad can be duplicated. If you want to prevent clients or prospects from reading your hidden tabs and blocks, you need to publish by Private URL and not allow readers to duplicate."
+            }
+          ],
+          "type": "callout",
+          "id": "wdazjl8IOaN4osT6sdImv",
+          "color": "Sun",
+          "icon": "AnnotationWarning"
+        },
+        {
+          "children": [
+            {
+              "text": "That's all"
+            }
+          ],
+          "type": "h3",
+          "id": "_ofrOLbz8IsJjPFe9selt"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "ZRRCFD6Rupd48uqncvhpY",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "We hope you enjoy your experience with Decipad. There's lot of features we didn't cover so feel free to explore all of our blocks."
+            }
+          ],
+          "type": "p",
+          "id": "qP7dHOM69xCcy2thFjPkr"
+        },
+        {
+          "children": [
+            {
+              "text": "If you need any help feel free to book a call with our founder, Nuno."
+            }
+          ],
+          "type": "p",
+          "id": "lNX-wjBEwFMBsznV1m3XR"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "FuV3RIB5EVzIbNjbQj4JG",
+          "type": "iframe",
+          "url": "https://savvycal.com/dscape"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "KzGVMGzuJMPZeiv6HP7KO"
+        }
+      ],
+      "type": "tab",
+      "id": "dhEmGGxYwN_f-PazfFuYM",
+      "name": "Welcome",
+      "icon": "Deci",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "WiYMPJs-BxCipyoPp_4fk",
+          "type": "media_embed",
+          "url": "https://www.youtube.com/embed/XtAhISkoJZc",
+          "caption": [
+            {
+              "text": "Everything is tables"
+            }
+          ]
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "rI7w7ciq8vw2P-OO2MXrB"
+        }
+      ],
+      "type": "tab",
+      "name": "Top-secret",
+      "id": "RYYJKOF5JeyEh4a4V7zQn",
+      "isHidden": true
+    }
+  ]
+}

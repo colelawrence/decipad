@@ -1,6 +1,8 @@
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import { snapshot } from '../utils/src';
+import notebookSource from '../__fixtures__/013-new-welcome.json';
+import { doubleClickCell } from '../utils/page/Table';
 
 test('import image via upload @imports @images', async ({ testUser }) => {
   const { page, notebook } = testUser;
@@ -90,7 +92,7 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
   await test.step('importing csv file through csv panel with file', async () => {
     await notebook.addCSV({
       method: 'upload',
-      file: './__fixtures__/csv/accounts.csv',
+      file: '__fixtures__/csv/accounts.csv',
       varName: 'Variable',
     });
     await expect(async () => {
@@ -302,4 +304,62 @@ test('csv integrations work when duplicating a notebook', async ({
       page.getByText('7109 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
+});
+
+test('csv calculations propagate @csv', async ({
+  testUser,
+  randomFreeUser,
+}) => {
+  test.slow();
+  const { notebook } = testUser;
+  await testUser.importNotebook(notebookSource);
+  await testUser.notebook.waitForEditorToLoad();
+
+  await notebook.addCSV({
+    method: 'upload',
+    file: '__fixtures__/csv/funnel.csv',
+    varName: 'Funnel',
+  });
+
+  // to be removed once smart refs autoresolve works on column refs
+  await notebook.addFormula(
+    'ClosedLookup',
+    `lookup(Funnel, Funnel.Stage == "Closed").London`
+  );
+
+  // to be removed when autosesolve smart refs work on charts
+  await testUser.page.getByTestId('chart-settings-button').first().click();
+  await testUser.page.getByText('Source Table').click();
+  await testUser.page
+    .getByRole('menuitem', { name: 'Funnel', exact: true })
+    .click();
+
+  await testUser.page.getByTestId('chart-settings-button').nth(1).click();
+  await testUser.page.getByText('Source Table').click();
+  await testUser.page
+    .getByRole('menuitem', { name: 'Funnel', exact: true })
+    .click();
+
+  await testUser.page.getByTestId('chart-settings-button').nth(2).click();
+  await testUser.page.getByText('Source Table').click();
+  await testUser.page
+    .getByRole('menuitem', { name: 'Funnel', exact: true })
+    .click();
+
+  // to be removed when autoresolve smart refs work for cell tables
+  await doubleClickCell(testUser.page, 1, 1, 'ClosedQ3');
+  await testUser.page.keyboard.press('ControlOrMeta+A');
+  await testUser.page.keyboard.press('Backspace');
+  await testUser.page.keyboard.insertText('Clo');
+  await expect(testUser.page.getByText('We currently only')).toBeVisible();
+  await testUser.page.keyboard.press('Enter');
+  await testUser.page.reload();
+  await testUser.notebook.waitForEditorToLoad();
+
+  const sharedPageLocation = await testUser.notebook.publishNotebook();
+
+  await randomFreeUser.page.goto(sharedPageLocation!);
+  await randomFreeUser.notebook.waitForEditorToLoad();
+  // await randomFreeUser.notebook.checkCalculationErrors();
+  await snapshot(randomFreeUser.page, 'Notebook: Welcome to decipad 2.0');
 });
