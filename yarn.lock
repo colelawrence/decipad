@@ -4249,10 +4249,10 @@
     "@lezer/common" "^1.0.0"
     "@lezer/javascript" "^1.0.0"
 
-"@codemirror/lang-sql@^6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.6.0.tgz#706e4a9ce7f119927536e2146edc3060cbffc173"
-  integrity sha512-UKoPjGEistP4yIRH7QmanFAFESTkxI3pib38fECTYwVQ8W6/KCYxvu+uhVLsmPtAlKyE/XaszlMtT4LFye+Y+A==
+"@codemirror/lang-sql@^6.7.0":
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.7.0.tgz#a87fb9b458ae0ad1d8647c0234accca0ef11bb78"
+  integrity sha512-KMXp6rtyPYz6RaElvkh/77ClEAoQoHRPZo0zutRRialeFs/B/X8YaUJBCnAV2zqyeJPLZ4hgo48mG8TKoNXfZA==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/language" "^6.0.0"
