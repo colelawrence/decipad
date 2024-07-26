@@ -1,0 +1,7 @@
+query GetNotebookAliases($notebookId: String!) {
+  getAliasesByPadId(padId: $notebookId) {
+    id
+    alias
+    pad_id
+  }
+}

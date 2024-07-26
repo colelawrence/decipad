@@ -42,12 +42,26 @@ export const Meta = styled.div({
   gap: 4,
 });
 
+export const HeaderWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  paddingBottom: 6,
+});
+
 export const Username = styled.span(p14Medium, {
   color: cssVar('textDefault'),
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   maxWidth: '160px',
+});
+
+export const Subtitle = styled.span(p13Regular, {
+  color: cssVar('textSubdued'),
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 export const Date = styled.span(p13Regular, {

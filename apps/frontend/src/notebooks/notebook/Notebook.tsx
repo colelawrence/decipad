@@ -2,6 +2,7 @@ import type { DocSyncEditor } from '@decipad/docsync';
 import {
   useFinishOnboarding,
   useGetNotebookMetaQuery,
+  useRecordPadEventMutation,
 } from '@decipad/graphql-client';
 import {
   AnnotationArray,
@@ -30,6 +31,7 @@ import { useScenarioNavigate } from './hooks/useScenarioNavigate';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useInitializeResourceUsage } from '../../hooks';
+import { getAnonUserMetadata } from '@decipad/utils';
 
 /**
  * Entire Application Wrapper.
@@ -43,6 +45,7 @@ export const Notebook: FC = () => {
   const {
     notebook: { id: notebookId },
     embed: _embed,
+    alias: aliasId,
   } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
@@ -55,6 +58,35 @@ export const Notebook: FC = () => {
   const [{ data: notebookMetadaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+
+  const [, recordPadEvent] = useRecordPadEventMutation();
+
+  const onRecordPadEvent = useCallback(
+    async (name: string, meta: string) => {
+      await recordPadEvent({
+        padId: notebookId,
+        aliasId: aliasId ?? '',
+        name,
+        meta,
+      });
+    },
+    [notebookId, recordPadEvent, aliasId]
+  );
+
+  // TODO: fix all this stuffs
+  useEffect(() => {
+    const onRecordReaderLoadPad = async () => {
+      const meta = (await getAnonUserMetadata()).join(', ');
+      if (!docsync?.isReadOnly) {
+        return;
+      }
+      await onRecordPadEvent('notebook_load', meta);
+    };
+
+    if (docsync) {
+      onRecordReaderLoadPad();
+    }
+  }, [docsync, onRecordPadEvent]);
 
   useInitializeResourceUsage(notebookMetadaData?.getPadById?.workspace);
 
@@ -118,6 +150,7 @@ export const Notebook: FC = () => {
             value={{
               annotations,
               setAnnotations,
+              aliasId: aliasId || null,
               scenarioId: scenarioId || null,
               expandedBlockId,
               handleExpandedBlockId,

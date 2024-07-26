@@ -100,6 +100,7 @@ describe.sequential('variable highlights', () => {
     const { getByText, getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -152,6 +153,7 @@ describe.sequential('variable highlights', () => {
     const { getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -212,6 +214,7 @@ describe.sequential('variable highlights', () => {
     const { getByText, getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -267,6 +270,7 @@ describe.sequential('variable highlights', () => {
     const { getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -317,6 +321,7 @@ describe.sequential('variable highlights', () => {
     const { getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -412,6 +417,7 @@ describe.sequential('variable highlights', () => {
     const { getAllByText } = render(
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,

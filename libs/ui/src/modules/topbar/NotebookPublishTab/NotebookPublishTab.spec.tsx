@@ -30,6 +30,8 @@ describe('NotebookPublishingPopUp organism', () => {
       publishingState: 'PRIVATE',
       isAdmin: true,
       onUpdatePublish: () => noop as any,
+      onAddAlias: () => noop as any,
+      onRemoveAlias: () => noop as any,
 
       notebookId: 'id',
       allowDuplicate: true,
@@ -41,88 +43,5 @@ describe('NotebookPublishingPopUp organism', () => {
     );
 
     expect(queryByTestId('publish-changes')).toBeNull();
-  });
-
-  it('should render the notebook popup with changes to publish and the published toggle on', async () => {
-    const props: ComponentProps<typeof NotebookPublishTab> = {
-      onPublish: async () => {},
-      currentSnapshot: {
-        createdAt: '2022-12-17T03:24:00',
-        updatedAt: '2022-12-17T03:34:00',
-        snapshotName: PublishedVersionName.Published,
-      },
-      link: 'https://decipad.com/notebook/nbid',
-      publishedVersionState: 'unpublished-changes',
-      isPremium: false,
-      publishingState: 'PUBLIC',
-      isAdmin: true,
-      onUpdatePublish: () => noop as any,
-
-      notebookId: 'id',
-
-      allowDuplicate: true,
-      onUpdateAllowDuplicate: async () => {},
-    };
-
-    const { queryByTestId } = render(
-      <NotebookPublishTab {...props}></NotebookPublishTab>
-    );
-
-    expect(queryByTestId('publish-changes')).not.toBeNull();
-  });
-
-  it('should render the notebook popup with changes to publish and the published toggle on but with created date', async () => {
-    const props: ComponentProps<typeof NotebookPublishTab> = {
-      onPublish: async () => {},
-      currentSnapshot: {
-        createdAt: '2022-12-17T03:24:00',
-        updatedAt: '2022-12-17T03:34:00',
-        snapshotName: PublishedVersionName.Published,
-      },
-      link: 'https://decipad.com/notebook/nbid',
-      isAdmin: true,
-      publishedVersionState: 'unpublished-changes',
-      isPremium: false,
-      publishingState: 'PUBLIC',
-      onUpdatePublish: () => noop as any,
-
-      notebookId: 'id',
-      allowDuplicate: true,
-      onUpdateAllowDuplicate: async () => {},
-    };
-
-    const { queryByTestId } = render(
-      <NotebookPublishTab {...props}></NotebookPublishTab>
-    );
-
-    expect(queryByTestId('version-date')).not.toBeNull();
-  });
-
-  it('should render the notebook popup with changes to publish and the published toggle on with updated date', async () => {
-    const props: ComponentProps<typeof NotebookPublishTab> = {
-      onPublish: async () => {},
-      currentSnapshot: {
-        createdAt: '2022-12-17T03:24:00',
-        updatedAt: '2022-12-17T03:34:00',
-        snapshotName: PublishedVersionName.Published,
-      },
-      link: 'https://decipad.com/notebook/nbid',
-      publishedVersionState: 'unpublished-changes',
-      isPremium: false,
-      publishingState: 'PUBLIC',
-      isAdmin: true,
-      onUpdatePublish: () => noop as any,
-
-      notebookId: 'id',
-
-      allowDuplicate: true,
-      onUpdateAllowDuplicate: async () => {},
-    };
-
-    const { queryByTestId } = render(
-      <NotebookPublishTab {...props}></NotebookPublishTab>
-    );
-
-    expect(queryByTestId('version-date')).not.toBeNull();
   });
 });

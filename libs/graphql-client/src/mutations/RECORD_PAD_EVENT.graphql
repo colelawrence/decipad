@@ -1,0 +1,8 @@
+mutation RecordPadEvent(
+  $padId: ID!
+  $aliasId: ID!
+  $name: String!
+  $meta: String
+) {
+  recordPadEvent(padId: $padId, aliasId: $aliasId, name: $name, meta: $meta)
+}

@@ -1,0 +1,3 @@
+mutation DeleteAlias($aliasId: ID!) {
+  removeAlias(id: $aliasId)
+}

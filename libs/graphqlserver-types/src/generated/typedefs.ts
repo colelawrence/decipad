@@ -8,6 +8,32 @@ type ResourceAccess {
   roles: [RoleAccess!]!
   users: [UserAccess!]!
 }
+type PadEvent {
+  id: ID!
+  alias_id: ID!
+  name: String!
+  meta: String
+  created_at: Float!
+}
+
+type PadAlias {
+  id: ID!
+  pad_id: ID!
+  alias: String!
+  annotations: [Annotation!]
+  events: [PadEvent!]
+}
+
+extend type Query {
+  getAliasesByPadId(padId: String!): [PadAlias!]
+}
+
+extend type Mutation {
+  addAlias(alias: String!, padId: ID!): PadAlias!
+  removeAlias(id: ID!): Boolean
+
+  recordPadEvent(aliasId: ID!, padId: ID!, name: String!, meta: String): Boolean
+}
 type AnnotationUser {
   id: ID!
   username: String!
@@ -17,13 +43,17 @@ type AnnotationUser {
 type Annotation {
   id: ID!
   content: String!
-  user_id: String!
+  type: String!
+  user_id: String
   pad_id: String!
   block_id: String!
+  alias_id: String
   scenario_id: String
   dateCreated: Float!
   dateUpdated: Float
   user: AnnotationUser
+  alias: PadAlias
+  meta: String
 }
 
 extend type Query {
@@ -34,9 +64,12 @@ extend type Query {
 extend type Mutation {
   createAnnotation(
     content: String!
+    type: String!
     padId: String!
     blockId: String!
+    aliasId: String
     scenarioId: String
+    meta: String
   ): Annotation
   updateAnnotation(id: String!, content: String!): Annotation
   deleteAnnotation(id: String!): Annotation
@@ -347,6 +380,7 @@ type Pad {
   padConnectionParams: PadConnectionParams!
   initialState: String
   snapshots: [PadSnapshot!]!
+  aliases: [PadAlias!]!
   document: String!
   isTemplate: Boolean
 

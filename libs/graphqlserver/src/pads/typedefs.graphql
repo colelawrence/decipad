@@ -59,6 +59,7 @@ type Pad {
   padConnectionParams: PadConnectionParams!
   initialState: String
   snapshots: [PadSnapshot!]!
+  aliases: [PadAlias!]!
   document: String!
   isTemplate: Boolean
 

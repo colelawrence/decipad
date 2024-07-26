@@ -68,6 +68,7 @@ describe('Variable def expression element', () => {
     wrapper = ({ children }) => (
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,
@@ -146,6 +147,7 @@ describe('Variable def slider element', () => {
     wrapper = ({ children }) => (
       <AnnotationsProvider
         value={{
+          aliasId: null,
           annotations: [],
           setAnnotations: () => {},
           scenarioId: null,

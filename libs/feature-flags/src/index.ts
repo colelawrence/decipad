@@ -25,6 +25,7 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   'ENABLE_COMMENTS',
   'GOOGLE_SHEET_INTEGRATION',
+  'PRIVATE_LINK_ANALYTICS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

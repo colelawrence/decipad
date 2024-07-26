@@ -12,7 +12,7 @@ import type {
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { workspaces } from '@decipad/routing';
-import { NotebookPublishingPopUp } from '@decipad/ui';
+import { NotebookAliases, NotebookPublishingPopUp } from '@decipad/ui';
 import type { FC } from 'react';
 import { useCallback, useState } from 'react';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../../../hooks';
 import { usePublishedVersionState } from '../hooks';
 import type { SidebarComponentProps } from './types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -169,32 +170,51 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
     localPublish.localPublishState ?? getPublishingState(data);
 
   return (
-    <NotebookPublishingPopUp
-      isPremium={isPremiumWorkspace}
-      notebookName={notebookName}
-      workspaceId={data?.workspace?.id ?? ''}
-      hasPaywall={!allowInviting}
-      invitedUsers={data?.access.users}
-      nrOfTeamMembers={data?.workspace?.membersCount}
-      manageTeamURL={manageTeamURL}
-      teamName={data?.workspace?.name ?? ''}
-      isAdmin={data?.myPermissionType === 'ADMIN'}
-      snapshots={data?.snapshots ?? []}
-      notebookId={notebookId}
-      publishingState={publishingState}
-      publishedVersionState={publishedVersionState}
-      onUpdatePublish={localPublish.onUpdatePublish}
-      onPublish={localPublish.onPublish}
-      onInvite={accessActions.onInviteByEmail}
-      onChange={accessActions.onChangeAccess}
-      onRemove={accessActions.onRemoveAccess}
-      selectedTab={selectedTab}
-      allowDuplicate={data?.canPublicDuplicate ?? true}
-      onChangeSelectedTab={onChangeSelectedTab}
-      onUpdateAllowDuplicate={actions.onUpdateAllowDuplicate}
-      canInviteReaders={canInviteReaders}
-      canInviteEditors={canInviteEditors}
-    />
+    <div
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+        overflowY: 'auto',
+      }}
+    >
+      <NotebookPublishingPopUp
+        isPremium={isPremiumWorkspace}
+        notebookName={notebookName}
+        workspaceId={data?.workspace?.id ?? ''}
+        hasPaywall={!allowInviting}
+        invitedUsers={data?.access.users}
+        nrOfTeamMembers={data?.workspace?.membersCount}
+        manageTeamURL={manageTeamURL}
+        teamName={data?.workspace?.name ?? ''}
+        isAdmin={data?.myPermissionType === 'ADMIN'}
+        snapshots={data?.snapshots ?? []}
+        notebookId={notebookId}
+        publishingState={publishingState}
+        publishedVersionState={publishedVersionState}
+        onUpdatePublish={localPublish.onUpdatePublish}
+        onPublish={localPublish.onPublish}
+        onAddAlias={actions.onAddAlias}
+        onRemoveAlias={actions.onRemoveAlias}
+        onInvite={accessActions.onInviteByEmail}
+        onChange={accessActions.onChangeAccess}
+        onRemove={accessActions.onRemoveAccess}
+        selectedTab={selectedTab}
+        allowDuplicate={data?.canPublicDuplicate ?? true}
+        onChangeSelectedTab={onChangeSelectedTab}
+        onUpdateAllowDuplicate={actions.onUpdateAllowDuplicate}
+        canInviteReaders={canInviteReaders}
+        canInviteEditors={canInviteEditors}
+      />
+      {isFlagEnabled('PRIVATE_LINK_ANALYTICS') && (
+        <NotebookAliases
+          notebookId={notebookId}
+          notebookName={notebookName}
+          aliases={data?.aliases ?? []}
+          onRemoveAlias={actions.onRemoveAlias}
+        />
+      )}
+    </div>
   );
 };
 

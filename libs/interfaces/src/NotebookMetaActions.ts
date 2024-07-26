@@ -40,4 +40,8 @@ export interface NotebookMetaActionsReturn {
     notebookId: string,
     allowDuplicate: boolean
   ) => Promise<void>;
+
+  onAddAlias: (notebookId: string, alias: string) => Promise<void>;
+
+  onRemoveAlias: (aliasId: string) => Promise<void>;
 }

@@ -2,21 +2,25 @@ import { FC } from 'react';
 import * as S from './styles';
 import { Toggle } from '../../../shared';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 interface PublishControlsProps {
   readonly notebookId: string;
-  readonly publishedStatus: S.NotebookPublishTabProps['publishingState'];
   readonly allowDuplicate: boolean;
   readonly onChangeAllowDuplicate: NotebookMetaActionsReturn['onUpdateAllowDuplicate'];
+  readonly publishedStatus: S.NotebookPublishTabProps['publishingState'];
 }
 
 export const PublishControls: FC<PublishControlsProps> = ({
   notebookId,
-  publishedStatus,
   allowDuplicate,
+  publishedStatus,
   onChangeAllowDuplicate,
 }) => {
-  if (publishedStatus !== 'PUBLIC') {
+  if (
+    publishedStatus !== 'PUBLIC' &&
+    !isFlagEnabled('PRIVATE_LINK_ANALYTICS')
+  ) {
     return null;
   }
 

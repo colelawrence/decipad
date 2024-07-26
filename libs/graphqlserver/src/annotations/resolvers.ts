@@ -1,6 +1,9 @@
 import { resource } from '@decipad/backend-resources';
-import type { AnnotationRecord } from '@decipad/backendtypes';
-import type { Resolvers } from '@decipad/graphqlserver-types';
+import type {
+  Annotation,
+  PadAlias,
+  Resolvers,
+} from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 
@@ -27,21 +30,24 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    createAnnotation: async (_, { padId, content, blockId }, context) => {
+    createAnnotation: async (
+      _,
+      { padId, aliasId, content, type, meta, blockId },
+      context
+    ) => {
       const data = await tables();
       const { user } = context;
 
-      // We don't want to allow anonymous user comments until scenarios have been enabled
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      const annotation: AnnotationRecord = {
+      const annotation = {
         id: nanoid(),
+        type,
         pad_id: padId,
+        alias_id: aliasId,
+
         content,
         block_id: blockId,
-        user_id: user.id,
+        meta: meta ?? '',
+        user_id: user?.id ?? '',
         dateCreated: new Date().getTime(),
       };
       await data.annotations.put(annotation);
@@ -72,11 +78,15 @@ const resolvers: Resolvers = {
 
       await data.annotations.delete({ id });
 
-      return annotation;
+      return annotation as Annotation;
     },
   },
   Annotation: {
     user: async (annotation) => {
+      if (!annotation.user_id) {
+        return null;
+      }
+
       const data = await tables();
       const user = await data.users.get({ id: annotation.user_id });
       if (!user) {
@@ -87,6 +97,21 @@ const resolvers: Resolvers = {
         username: user.name,
         avatar: user.image || undefined,
       };
+    },
+    alias: async (annotation) => {
+      if (!annotation.alias_id) {
+        return undefined;
+      }
+      const data = await tables();
+      const alias = await data.aliases.get({ id: annotation.alias_id });
+      if (!alias) {
+        return null;
+      }
+      return {
+        id: alias.id,
+        alias: alias.alias,
+        pad_id: alias.pad_id,
+      } as PadAlias;
     },
   },
 };

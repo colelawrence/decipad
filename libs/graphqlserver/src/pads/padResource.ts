@@ -36,6 +36,7 @@ export const padResource = Resource<
     attachments: [],
     snapshots: [],
     tags: [],
+    aliases: [],
     access: {} as any,
     padConnectionParams: {} as any,
     document: '',

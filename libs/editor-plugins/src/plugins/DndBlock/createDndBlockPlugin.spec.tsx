@@ -62,6 +62,7 @@ beforeEach(() => {
         expandedBlockId: null,
         handleExpandedBlockId: () => {},
         permission: 'WRITE',
+        aliasId: null,
       }}
     >
       <DndProvider backend={HTML5Backend}>

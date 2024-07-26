@@ -64,6 +64,7 @@ beforeEach(() => {
           expandedBlockId: null,
           handleExpandedBlockId: () => {},
           permission: 'WRITE',
+          aliasId: null,
         }}
       >
         <ToastDisplay>

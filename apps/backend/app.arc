@@ -195,6 +195,21 @@ pads
   icon String
   workspace_id String
 
+aliases
+  id *String
+  name String
+  pad_id String
+  workspace_id String
+  created_at Number
+
+padevents
+  id *String
+  pad_id String
+  alias_id String
+  name String
+  meta String
+  created_at Number
+
 sections
   id *String
   name String
@@ -301,10 +316,13 @@ annotations
   id *String
   comment String
   suggestion String
+  type String
   scenario_id String
   user_id String
   pad_id String
+  alias_id String
   block_id String
+  meta String
   dateUpdated Number
 
 anonusers
@@ -501,6 +519,14 @@ secrets
   workspace_id *String
   name byWorkspace
 
+aliases
+  pad_id *String
+  name byPadId
+
+padevents
+  alias_id *String
+  name byAliasId
+
 annotations
   pad_id *String
   name byPadId
@@ -508,6 +534,10 @@ annotations
 annotations
   scenario_id *String
   name byScenarioId
+
+annotations
+  alias_id *String
+  name byAliasId
 
 scenarios
   pad_id *String

@@ -647,12 +647,33 @@ export interface ExternalKeyRecord extends TableRecordBase {
 
 export interface AnnotationRecord extends TableRecordBase {
   content: string;
+  type: string;
   pad_id: string;
-  user_id: string;
+  alias_id?: string;
+  alias?: AliasRecord;
+  user_id?: string;
+  meta?: string;
   block_id: string;
   scenario_id?: string;
   dateCreated: number;
   dateUpdated?: number;
+}
+
+export interface AliasRecord extends TableRecordBase {
+  id: string;
+  alias: string;
+  pad_id: string;
+  annotations?: AnnotationRecord[];
+  events?: PadEventRecord[];
+}
+
+export interface PadEventRecord extends TableRecordBase {
+  id: string;
+  pad_id: string;
+  alias_id: string;
+  name: string;
+  meta: string;
+  created_at: number;
 }
 
 export interface ScenarioRecord extends TableRecordBase {
@@ -731,6 +752,8 @@ export interface EnhancedDataTables {
   annotations: EnhancedDataTable<AnnotationRecord>;
   scenarios: EnhancedDataTable<ScenarioRecord>;
   resourceusagehistory: EnhancedDataTable<ResourceUsageHistoryRecord>;
+  aliases: EnhancedDataTable<AliasRecord>;
+  padevents: EnhancedDataTable<PadEventRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {

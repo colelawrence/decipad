@@ -34,6 +34,13 @@ export const groupStyles = css({
   gap: '8px',
 });
 
+export const aliasInputStyles = css(p14Medium, {
+  color: cssVar('textHeavy'),
+  padding: '6px 12px',
+  borderRadius: '6px',
+  border: `1px solid ${cssVar('borderSubdued')}`,
+});
+
 export const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
 
 export const titleAndToggleStyles = css(horizontalGroupStyles, {
@@ -204,6 +211,18 @@ export const publishNewChangesStyles = css({
 const publishWritingP = css(p14Medium, { color: cssVar('textHeavy') });
 const publishWritingP2 = css(p14Regular, { color: cssVar('textSubdued') });
 
+export const TabContents = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+  padding: '16px 0px 0px',
+});
+
+export const TabDescription = styled.p({
+  ...publishWritingP2,
+  margin: 0,
+});
+
 export const BasicGap = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -249,6 +268,8 @@ export interface NotebookPublishTabProps {
   readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
   readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
   readonly onUpdateAllowDuplicate: NotebookMetaActionsReturn['onUpdateAllowDuplicate'];
+  readonly onAddAlias: NotebookMetaActionsReturn['onAddAlias'];
+  readonly onRemoveAlias: NotebookMetaActionsReturn['onRemoveAlias'];
 }
 
 // ==============================================
@@ -264,9 +285,10 @@ export const PublishingWriting: FC = () => (
     <div css={groupStyles}>
       <div css={titleAndToggleStyles}>
         <div css={titleStyles}>
-          <p css={publishWritingP}>Publish Online</p>
+          <p css={publishWritingP}>Share Externally</p>
           <p css={publishWritingP2}>
-            Create a public URL and manage some settings to share your work.{' '}
+            Generate a sharable link and adjust settings for privacy and SEO.{' '}
+            {/* TODO: Update the docs information */}
             <Link
               color="plain"
               href="https://app.decipad.com/docs/share/publish"
@@ -306,11 +328,15 @@ export const PublishedDate: FC<{
   );
 };
 
-export const Text = styled.span(p13Regular);
+export const Text = styled.span({
+  ...p13Medium,
+  color: cssVar('textDefault'),
+});
 
 export const PublishingControlsWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
+  gap: 12,
 });
 
 export const PublishingControlsItem = styled.div({

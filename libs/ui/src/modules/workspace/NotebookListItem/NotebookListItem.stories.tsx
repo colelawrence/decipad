@@ -27,6 +27,8 @@ const args: ComponentProps<typeof NotebookListItem> = {
     onPublishNotebook: asyncNoop,
     onUpdatePublishState: asyncNoop,
     onUpdateAllowDuplicate: asyncNoop,
+    onAddAlias: asyncNoop,
+    onRemoveAlias: asyncNoop,
   },
   notebookId: '123',
   isArchived: false,

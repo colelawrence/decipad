@@ -1,0 +1,7 @@
+mutation AddAlias($alias: String!, $padId: ID!) {
+  addAlias(alias: $alias, padId: $padId) {
+    id
+    alias
+    pad_id
+  }
+}

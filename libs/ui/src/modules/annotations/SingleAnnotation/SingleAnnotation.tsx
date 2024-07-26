@@ -10,12 +10,44 @@ import { Ellipsis } from 'libs/ui/src/icons';
 import { useAnnotations } from '@decipad/react-contexts';
 import { useSession } from 'next-auth/react';
 import { User } from 'next-auth';
+import { cssVar, p14Medium } from 'libs/ui/src/primitives';
 
 type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
 >;
 
 type Annotation = NonNullable<AnnotationArray[number]>;
+
+const renderSuggestionString = (suggestion: string) => {
+  const arr = suggestion.split(', ');
+  return (
+    <div
+      css={[
+        {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        },
+        p14Medium,
+      ]}
+    >
+      <span
+        css={{
+          padding: '2px 6px',
+          background: cssVar('backgroundDefault'),
+          borderRadius: 4,
+        }}
+      >
+        {arr[0]}
+      </span>
+
+      <div css={{ display: 'flex', alignItems: 'center', marginRight: 4 }}>
+        {'->'}
+        <span>{arr[1]}</span>
+      </div>
+    </div>
+  );
+};
 
 const renderAnnotationString = (annotationString: string) => {
   return annotationString.split('\n').map((str, index) => {
@@ -32,8 +64,11 @@ export const SingleAnnotation = ({
   id,
   user,
   content,
+  type,
   dateCreated,
   deleteAnnotation,
+  meta,
+  alias,
 }: Annotation & {
   deleteAnnotation: (annotationId: string) => void;
 }) => {
@@ -63,41 +98,61 @@ export const SingleAnnotation = ({
           size={20}
         />
       </Styled.Avatar>
-      <Styled.Header>
-        <Styled.Meta>
-          <Styled.Username>{user?.username}</Styled.Username>
-          <Tooltip
-            trigger={
-              <Styled.Date>
-                {format(fromUnixTime(dateCreated / 1000), `MMM do`)}
-              </Styled.Date>
-            }
-          >
-            <p>
-              {format(fromUnixTime(dateCreated / 1000), `HH:mm, MMM do, yyyy`)}
-            </p>
-          </Tooltip>
-        </Styled.Meta>
-        {canDelete && (
-          <MenuList
-            root
-            dropdown
-            align="end"
-            sideOffset={4}
-            portal={false}
-            trigger={
-              <Styled.MenuButton>
-                <Ellipsis />
-              </Styled.MenuButton>
-            }
-          >
-            <MenuItem onSelect={() => handleDelete(id)}>
-              <p css={{ minWidth: '132px' }}>Delete</p>
-            </MenuItem>
-          </MenuList>
+      <Styled.HeaderWrapper>
+        <Styled.Header>
+          <Styled.Meta>
+            <Styled.Username>
+              {user?.username ||
+                `Someone from ${
+                  meta ? meta.split(', ')[0] : 'unknown location'
+                }`}
+            </Styled.Username>
+
+            <Tooltip
+              trigger={
+                <Styled.Date>
+                  {format(fromUnixTime(dateCreated / 1000), `MMM do`)}
+                </Styled.Date>
+              }
+            >
+              <p>
+                {format(
+                  fromUnixTime(dateCreated / 1000),
+                  `HH:mm, MMM do, yyyy`
+                )}
+              </p>
+            </Tooltip>
+          </Styled.Meta>
+
+          {canDelete && (
+            <MenuList
+              root
+              dropdown
+              align="end"
+              sideOffset={4}
+              portal={false}
+              trigger={
+                <Styled.MenuButton>
+                  <Ellipsis />
+                </Styled.MenuButton>
+              }
+            >
+              <MenuItem onSelect={() => handleDelete(id)}>
+                <p css={{ minWidth: '132px' }}>Delete</p>
+              </MenuItem>
+            </MenuList>
+          )}
+        </Styled.Header>
+        {alias && (
+          <Styled.Subtitle>Annotated on {alias?.alias} link</Styled.Subtitle>
         )}
-      </Styled.Header>
-      <Styled.Content>{renderAnnotationString(content)}</Styled.Content>
+      </Styled.HeaderWrapper>
+
+      <Styled.Content>
+        {type === 'comment'
+          ? renderAnnotationString(content)
+          : renderSuggestionString(content)}
+      </Styled.Content>
     </Styled.Wrapper>
   );
 };

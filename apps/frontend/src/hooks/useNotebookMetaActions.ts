@@ -2,7 +2,9 @@
 import { useCallback, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  useAddAliasMutation,
   useCreateOrUpdateNotebookSnapshotMutation,
+  useDeleteAliasMutation,
   useDeleteNotebookMutation,
   useDuplicateNotebookMutation,
   useMoveNotebookMutation,
@@ -78,6 +80,16 @@ export function useNotebookMetaActions(
   const updateAllowDuplicate = useMutationResultHandler(
     useUpdateNotebookAllowDuplicateMutation()[1],
     'Unable to change allow duplicate permission'
+  );
+
+  const addAlias = useMutationResultHandler(
+    useAddAliasMutation()[1],
+    'Unable to add notebook alias'
+  );
+
+  const removeAlias = useMutationResultHandler(
+    useDeleteAliasMutation()[1],
+    'Unable to remove notebook alias'
   );
 
   const duplicateNotebook = useDuplicateNotebookMutation()[1];
@@ -286,6 +298,20 @@ export function useNotebookMetaActions(
     [updateAllowDuplicate]
   );
 
+  const onAddAlias = useCallback<NotebookMetaActionsReturn['onAddAlias']>(
+    async (notebookId, alias) => {
+      await addAlias({ padId: notebookId, alias });
+    },
+    [addAlias]
+  );
+
+  const onRemoveAlias = useCallback<NotebookMetaActionsReturn['onRemoveAlias']>(
+    async (aliasId) => {
+      await removeAlias({ aliasId });
+    },
+    [removeAlias]
+  );
+
   return {
     onDeleteNotebook,
     onUnarchiveNotebook,
@@ -298,5 +324,7 @@ export function useNotebookMetaActions(
     onUpdatePublishState,
     onPublishNotebook,
     onUpdateAllowDuplicate,
+    onAddAlias,
+    onRemoveAlias,
   };
 }

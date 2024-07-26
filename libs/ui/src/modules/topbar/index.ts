@@ -6,3 +6,4 @@ export * from './NotebookPath/NotebookPath';
 export * from './NotebookStatus/NotebookStatusDropdown';
 export * from './TopbarPlaceholder/TopbarPlaceholder';
 export * from './NotebookTopbar/UndoButtons';
+export * from './NotebookAliases/NotebookAliases';

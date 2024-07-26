@@ -23,15 +23,19 @@ export type Scalars = {
 
 export type Annotation = {
   __typename?: 'Annotation';
+  alias?: Maybe<PadAlias>;
+  alias_id?: Maybe<Scalars['String']['output']>;
   block_id: Scalars['String']['output'];
   content: Scalars['String']['output'];
   dateCreated: Scalars['Float']['output'];
   dateUpdated?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
+  meta?: Maybe<Scalars['String']['output']>;
   pad_id: Scalars['String']['output'];
   scenario_id?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   user?: Maybe<AnnotationUser>;
-  user_id: Scalars['String']['output'];
+  user_id?: Maybe<Scalars['String']['output']>;
 };
 
 export type AnnotationUser = {
@@ -199,6 +203,7 @@ export type LogInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAlias: PadAlias;
   addAttachmentToPad?: Maybe<Attachment>;
   addNotebookToSection?: Maybe<Scalars['Boolean']['output']>;
   addSectionToWorkspace?: Maybe<Section>;
@@ -226,7 +231,9 @@ export type Mutation = {
   incrementResourceUsage?: Maybe<ResourceUsage>;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
+  recordPadEvent?: Maybe<Scalars['Boolean']['output']>;
   refreshExternalDataToken: Scalars['String']['output'];
+  removeAlias?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromWorkspace?: Maybe<AttachmentResource>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
@@ -265,6 +272,12 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+};
+
+
+export type MutationAddAliasArgs = {
+  alias: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
 };
 
 
@@ -308,10 +321,13 @@ export type MutationClaimNotebookArgs = {
 
 
 export type MutationCreateAnnotationArgs = {
+  aliasId?: InputMaybe<Scalars['String']['input']>;
   blockId: Scalars['String']['input'];
   content: Scalars['String']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
   padId: Scalars['String']['input'];
   scenarioId?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 
@@ -421,7 +437,20 @@ export type MutationMovePadArgs = {
 };
 
 
+export type MutationRecordPadEventArgs = {
+  aliasId: Scalars['ID']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
+};
+
+
 export type MutationRefreshExternalDataTokenArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveAliasArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -668,6 +697,7 @@ export type Publish_State =
 export type Pad = {
   __typename?: 'Pad';
   access: ResourceAccess;
+  aliases: Array<PadAlias>;
   archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
   banned?: Maybe<Scalars['Boolean']['output']>;
@@ -693,6 +723,15 @@ export type Pad = {
   workspaceId?: Maybe<Scalars['ID']['output']>;
 };
 
+export type PadAlias = {
+  __typename?: 'PadAlias';
+  alias: Scalars['String']['output'];
+  annotations?: Maybe<Array<Annotation>>;
+  events?: Maybe<Array<PadEvent>>;
+  id: Scalars['ID']['output'];
+  pad_id: Scalars['ID']['output'];
+};
+
 export type PadChanges = {
   __typename?: 'PadChanges';
   added: Array<Pad>;
@@ -704,6 +743,15 @@ export type PadConnectionParams = {
   __typename?: 'PadConnectionParams';
   token: Scalars['String']['output'];
   url: Scalars['String']['output'];
+};
+
+export type PadEvent = {
+  __typename?: 'PadEvent';
+  alias_id: Scalars['ID']['output'];
+  created_at: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  meta?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type PadInput = {
@@ -776,6 +824,7 @@ export type PermissionType =
 export type Query = {
   __typename?: 'Query';
   featuredPad?: Maybe<Pad>;
+  getAliasesByPadId?: Maybe<Array<PadAlias>>;
   getAnnotationsByPadId?: Maybe<Array<Maybe<Annotation>>>;
   getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
@@ -797,6 +846,11 @@ export type Query = {
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
+};
+
+
+export type QueryGetAliasesByPadIdArgs = {
+  padId: Scalars['String']['input'];
 };
 
 
@@ -1237,6 +1291,14 @@ export type WorkspacesChanges = {
   updated: Array<Workspace>;
 };
 
+export type AddAliasMutationVariables = Exact<{
+  alias: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
+}>;
+
+
+export type AddAliasMutation = { __typename?: 'Mutation', addAlias: { __typename?: 'PadAlias', id: string, alias: string, pad_id: string } };
+
 export type AttachFileToNotebookMutationVariables = Exact<{
   handle: Scalars['ID']['input'];
 }>;
@@ -1308,12 +1370,15 @@ export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook?: {
 
 export type CreateAnnotationMutationVariables = Exact<{
   content: Scalars['String']['input'];
+  type: Scalars['String']['input'];
   padId: Scalars['String']['input'];
   blockId: Scalars['String']['input'];
+  aliasId?: InputMaybe<Scalars['String']['input']>;
+  meta?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type CreateAnnotationMutation = { __typename?: 'Mutation', createAnnotation?: { __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null } | null };
+export type CreateAnnotationMutation = { __typename?: 'Mutation', createAnnotation?: { __typename?: 'Annotation', id: string, content: string, type: string, pad_id: string, alias_id?: string | null, block_id: string, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null } | null };
 
 export type CreateExternalDataSourceMutationVariables = Exact<{
   dataSource: ExternalDataSourceCreateInput;
@@ -1377,12 +1442,19 @@ export type CreateWorkspaceSecretMutationVariables = Exact<{
 
 export type CreateWorkspaceSecretMutation = { __typename?: 'Mutation', createSecret: { __typename?: 'Secret', id: string, name: string } };
 
+export type DeleteAliasMutationVariables = Exact<{
+  aliasId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteAliasMutation = { __typename?: 'Mutation', removeAlias?: boolean | null };
+
 export type DeleteAnnotationMutationVariables = Exact<{
   annotationId: Scalars['String']['input'];
 }>;
 
 
-export type DeleteAnnotationMutation = { __typename?: 'Mutation', deleteAnnotation?: { __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, dateCreated: number, dateUpdated?: number | null } | null };
+export type DeleteAnnotationMutation = { __typename?: 'Mutation', deleteAnnotation?: { __typename?: 'Annotation', id: string, type: string, content: string, alias_id?: string | null, pad_id: string, block_id: string, dateCreated: number, dateUpdated?: number | null } | null };
 
 export type DeleteNotebookMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1455,6 +1527,16 @@ export type MoveNotebookMutationVariables = Exact<{
 
 
 export type MoveNotebookMutation = { __typename?: 'Mutation', movePad: { __typename?: 'Pad', id: string, workspaceId?: string | null } };
+
+export type RecordPadEventMutationVariables = Exact<{
+  padId: Scalars['ID']['input'];
+  aliasId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type RecordPadEventMutation = { __typename?: 'Mutation', recordPadEvent?: boolean | null };
 
 export type RefreshKeyMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1667,12 +1749,19 @@ export type GetExternalDataSourcesWorkspaceQueryVariables = Exact<{
 
 export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, owner: ExternalDataSourceOwnership, ownerId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', id: string, access?: string | null, lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> }> };
 
+export type GetNotebookAliasesQueryVariables = Exact<{
+  notebookId: Scalars['String']['input'];
+}>;
+
+
+export type GetNotebookAliasesQuery = { __typename?: 'Query', getAliasesByPadId?: Array<{ __typename?: 'PadAlias', id: string, alias: string, pad_id: string }> | null };
+
 export type GetNotebookAnnotationsQueryVariables = Exact<{
   notebookId: Scalars['String']['input'];
 }>;
 
 
-export type GetNotebookAnnotationsQuery = { __typename?: 'Query', getAnnotationsByPadId?: Array<{ __typename?: 'Annotation', id: string, content: string, pad_id: string, block_id: string, scenario_id?: string | null, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null } | null> | null };
+export type GetNotebookAnnotationsQuery = { __typename?: 'Query', getAnnotationsByPadId?: Array<{ __typename?: 'Annotation', id: string, content: string, type: string, alias_id?: string | null, pad_id: string, meta?: string | null, block_id: string, scenario_id?: string | null, dateCreated: number, dateUpdated?: number | null, user?: { __typename?: 'AnnotationUser', id: string, username: string, avatar?: string | null } | null, alias?: { __typename?: 'PadAlias', id: string, alias: string } | null } | null> | null };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -1694,7 +1783,7 @@ export type UserAccessMetaFragment = { __typename?: 'UserAccess', permission: Pe
 
 export type WorkspaceSubscriptionWithDataFragment = { __typename?: 'WorkspaceSubscription', id: string, paymentStatus: SubscriptionPaymentStatus, credits: number, queries: number, seats?: number | null, editors?: number | null, readers?: number | null, storage: number };
 
-export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: ResourceTypes, consumption: number } | null> | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, paymentStatus: SubscriptionPaymentStatus, credits: number, queries: number, seats?: number | null, editors?: number | null, readers?: number | null, storage: number } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } };
+export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, archived?: boolean | null, aliases: Array<{ __typename?: 'PadAlias', id: string, alias: string, annotations?: Array<{ __typename?: 'Annotation', id: string, content: string, meta?: string | null }> | null, events?: Array<{ __typename?: 'PadEvent', id: string, name: string, created_at: number, meta?: string | null }> | null }>, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: ResourceTypes, consumption: number } | null> | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, paymentStatus: SubscriptionPaymentStatus, credits: number, queries: number, seats?: number | null, editors?: number | null, readers?: number | null, storage: number } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } };
 
 export type NotebookWorkspacesDataFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -1703,7 +1792,7 @@ export type GetNotebookMetaQueryVariables = Exact<{
 }>;
 
 
-export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: ResourceTypes, consumption: number } | null> | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, paymentStatus: SubscriptionPaymentStatus, credits: number, queries: number, seats?: number | null, editors?: number | null, readers?: number | null, storage: number } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
+export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, userAllowsPublicHighlighting?: boolean | null, createdAt: any, initialState?: string | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, archived?: boolean | null, aliases: Array<{ __typename?: 'PadAlias', id: string, alias: string, annotations?: Array<{ __typename?: 'Annotation', id: string, content: string, meta?: string | null }> | null, events?: Array<{ __typename?: 'PadEvent', id: string, name: string, created_at: number, meta?: string | null }> | null }>, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, myPermissionType?: PermissionType | null, membersCount?: number | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: ResourceTypes, consumption: number } | null> | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, paymentStatus: SubscriptionPaymentStatus, credits: number, queries: number, seats?: number | null, editors?: number | null, readers?: number | null, storage: number } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
 
 export type GetStripeCheckoutSessionInfoQueryVariables = Exact<{
   priceId: Scalars['ID']['input'];
@@ -1901,6 +1990,21 @@ export const NotebookMetaDataFragmentDoc = gql`
   initialState
   gist
   canPublicDuplicate
+  aliases {
+    id
+    alias
+    annotations {
+      id
+      content
+      meta
+    }
+    events {
+      id
+      name
+      created_at
+      meta
+    }
+  }
   workspace {
     id
     name
@@ -2052,6 +2156,19 @@ export const WorkspaceNotebookFragmentDoc = gql`
   myPermissionType
 }
     `;
+export const AddAliasDocument = gql`
+    mutation AddAlias($alias: String!, $padId: ID!) {
+  addAlias(alias: $alias, padId: $padId) {
+    id
+    alias
+    pad_id
+  }
+}
+    `;
+
+export function useAddAliasMutation() {
+  return Urql.useMutation<AddAliasMutation, AddAliasMutationVariables>(AddAliasDocument);
+};
 export const AttachFileToNotebookDocument = gql`
     mutation AttachFileToNotebook($handle: ID!) {
   attachFileToPad(handle: $handle) {
@@ -2212,11 +2329,20 @@ export function useClaimNotebookMutation() {
   return Urql.useMutation<ClaimNotebookMutation, ClaimNotebookMutationVariables>(ClaimNotebookDocument);
 };
 export const CreateAnnotationDocument = gql`
-    mutation CreateAnnotation($content: String!, $padId: String!, $blockId: String!) {
-  createAnnotation(content: $content, padId: $padId, blockId: $blockId) {
+    mutation CreateAnnotation($content: String!, $type: String!, $padId: String!, $blockId: String!, $aliasId: String, $meta: String) {
+  createAnnotation(
+    content: $content
+    type: $type
+    padId: $padId
+    blockId: $blockId
+    aliasId: $aliasId
+    meta: $meta
+  ) {
     id
     content
+    type
     pad_id
+    alias_id
     block_id
     dateCreated
     dateUpdated
@@ -2323,11 +2449,22 @@ export const CreateWorkspaceSecretDocument = gql`
 export function useCreateWorkspaceSecretMutation() {
   return Urql.useMutation<CreateWorkspaceSecretMutation, CreateWorkspaceSecretMutationVariables>(CreateWorkspaceSecretDocument);
 };
+export const DeleteAliasDocument = gql`
+    mutation DeleteAlias($aliasId: ID!) {
+  removeAlias(id: $aliasId)
+}
+    `;
+
+export function useDeleteAliasMutation() {
+  return Urql.useMutation<DeleteAliasMutation, DeleteAliasMutationVariables>(DeleteAliasDocument);
+};
 export const DeleteAnnotationDocument = gql`
     mutation DeleteAnnotation($annotationId: String!) {
   deleteAnnotation(id: $annotationId) {
     id
+    type
     content
+    alias_id
     pad_id
     block_id
     dateCreated
@@ -2441,6 +2578,15 @@ export const MoveNotebookDocument = gql`
 
 export function useMoveNotebookMutation() {
   return Urql.useMutation<MoveNotebookMutation, MoveNotebookMutationVariables>(MoveNotebookDocument);
+};
+export const RecordPadEventDocument = gql`
+    mutation RecordPadEvent($padId: ID!, $aliasId: ID!, $name: String!, $meta: String) {
+  recordPadEvent(padId: $padId, aliasId: $aliasId, name: $name, meta: $meta)
+}
+    `;
+
+export function useRecordPadEventMutation() {
+  return Urql.useMutation<RecordPadEventMutation, RecordPadEventMutationVariables>(RecordPadEventDocument);
 };
 export const RefreshKeyDocument = gql`
     mutation RefreshKey($id: ID!) {
@@ -2813,12 +2959,28 @@ export const GetExternalDataSourcesWorkspaceDocument = gql`
 export function useGetExternalDataSourcesWorkspaceQuery(options: Omit<Urql.UseQueryArgs<GetExternalDataSourcesWorkspaceQueryVariables>, 'query'>) {
   return Urql.useQuery<GetExternalDataSourcesWorkspaceQuery, GetExternalDataSourcesWorkspaceQueryVariables>({ query: GetExternalDataSourcesWorkspaceDocument, ...options });
 };
+export const GetNotebookAliasesDocument = gql`
+    query GetNotebookAliases($notebookId: String!) {
+  getAliasesByPadId(padId: $notebookId) {
+    id
+    alias
+    pad_id
+  }
+}
+    `;
+
+export function useGetNotebookAliasesQuery(options: Omit<Urql.UseQueryArgs<GetNotebookAliasesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetNotebookAliasesQuery, GetNotebookAliasesQueryVariables>({ query: GetNotebookAliasesDocument, ...options });
+};
 export const GetNotebookAnnotationsDocument = gql`
     query GetNotebookAnnotations($notebookId: String!) {
   getAnnotationsByPadId(padId: $notebookId) {
     id
     content
+    type
+    alias_id
     pad_id
+    meta
     block_id
     scenario_id
     dateCreated
@@ -2827,6 +2989,10 @@ export const GetNotebookAnnotationsDocument = gql`
       id
       username
       avatar
+    }
+    alias {
+      id
+      alias
     }
   }
 }
@@ -3019,8 +3185,10 @@ export type GraphCacheKeysConfig = {
   KeyValue?: (data: WithTypename<KeyValue>) => null | string,
   NewResourceQuotaLimit?: (data: WithTypename<NewResourceQuotaLimit>) => null | string,
   Pad?: (data: WithTypename<Pad>) => null | string,
+  PadAlias?: (data: WithTypename<PadAlias>) => null | string,
   PadChanges?: (data: WithTypename<PadChanges>) => null | string,
   PadConnectionParams?: (data: WithTypename<PadConnectionParams>) => null | string,
+  PadEvent?: (data: WithTypename<PadEvent>) => null | string,
   PadSnapshot?: (data: WithTypename<PadSnapshot>) => null | string,
   PagedPadResult?: (data: WithTypename<PagedPadResult>) => null | string,
   PagedResult?: (data: WithTypename<PagedResult>) => null | string,
@@ -3063,6 +3231,7 @@ export type GraphCacheKeysConfig = {
 export type GraphCacheResolvers = {
   Query?: {
     featuredPad?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<Pad> | string>,
+    getAliasesByPadId?: GraphCacheResolver<WithTypename<Query>, QueryGetAliasesByPadIdArgs, Array<WithTypename<PadAlias> | string>>,
     getAnnotationsByPadId?: GraphCacheResolver<WithTypename<Query>, QueryGetAnnotationsByPadIdArgs, Array<WithTypename<Annotation> | string>>,
     getCreditsPlans?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<CreditsPlan> | string>,
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
@@ -3086,13 +3255,17 @@ export type GraphCacheResolvers = {
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
   },
   Annotation?: {
+    alias?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, WithTypename<PadAlias> | string>,
+    alias_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     block_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     content?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     dateCreated?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['Float'] | string>,
     dateUpdated?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['Float'] | string>,
     id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['ID'] | string>,
+    meta?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     pad_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     scenario_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
+    type?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>,
     user?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, WithTypename<AnnotationUser> | string>,
     user_id?: GraphCacheResolver<WithTypename<Annotation>, Record<string, never>, Scalars['String'] | string>
   },
@@ -3170,6 +3343,7 @@ export type GraphCacheResolvers = {
   },
   Pad?: {
     access?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<ResourceAccess> | string>,
+    aliases?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<PadAlias> | string>>,
     archived?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     attachments?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<Attachment> | string>>,
     banned?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
@@ -3194,6 +3368,13 @@ export type GraphCacheResolvers = {
     workspace?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<Workspace> | string>,
     workspaceId?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['ID'] | string>
   },
+  PadAlias?: {
+    alias?: GraphCacheResolver<WithTypename<PadAlias>, Record<string, never>, Scalars['String'] | string>,
+    annotations?: GraphCacheResolver<WithTypename<PadAlias>, Record<string, never>, Array<WithTypename<Annotation> | string>>,
+    events?: GraphCacheResolver<WithTypename<PadAlias>, Record<string, never>, Array<WithTypename<PadEvent> | string>>,
+    id?: GraphCacheResolver<WithTypename<PadAlias>, Record<string, never>, Scalars['ID'] | string>,
+    pad_id?: GraphCacheResolver<WithTypename<PadAlias>, Record<string, never>, Scalars['ID'] | string>
+  },
   PadChanges?: {
     added?: GraphCacheResolver<WithTypename<PadChanges>, Record<string, never>, Array<WithTypename<Pad> | string>>,
     removed?: GraphCacheResolver<WithTypename<PadChanges>, Record<string, never>, Array<Scalars['ID'] | string>>,
@@ -3202,6 +3383,13 @@ export type GraphCacheResolvers = {
   PadConnectionParams?: {
     token?: GraphCacheResolver<WithTypename<PadConnectionParams>, Record<string, never>, Scalars['String'] | string>,
     url?: GraphCacheResolver<WithTypename<PadConnectionParams>, Record<string, never>, Scalars['String'] | string>
+  },
+  PadEvent?: {
+    alias_id?: GraphCacheResolver<WithTypename<PadEvent>, Record<string, never>, Scalars['ID'] | string>,
+    created_at?: GraphCacheResolver<WithTypename<PadEvent>, Record<string, never>, Scalars['Float'] | string>,
+    id?: GraphCacheResolver<WithTypename<PadEvent>, Record<string, never>, Scalars['ID'] | string>,
+    meta?: GraphCacheResolver<WithTypename<PadEvent>, Record<string, never>, Scalars['String'] | string>,
+    name?: GraphCacheResolver<WithTypename<PadEvent>, Record<string, never>, Scalars['String'] | string>
   },
   PadSnapshot?: {
     createdAt?: GraphCacheResolver<WithTypename<PadSnapshot>, Record<string, never>, Scalars['DateTime'] | string>,
@@ -3445,6 +3633,7 @@ export type GraphCacheResolvers = {
 };
 
 export type GraphCacheOptimisticUpdaters = {
+  addAlias?: GraphCacheOptimisticMutationResolver<MutationAddAliasArgs, WithTypename<PadAlias>>,
   addAttachmentToPad?: GraphCacheOptimisticMutationResolver<MutationAddAttachmentToPadArgs, Maybe<WithTypename<Attachment>>>,
   addNotebookToSection?: GraphCacheOptimisticMutationResolver<MutationAddNotebookToSectionArgs, Maybe<Scalars['Boolean']>>,
   addSectionToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAddSectionToWorkspaceArgs, Maybe<WithTypename<Section>>>,
@@ -3472,7 +3661,9 @@ export type GraphCacheOptimisticUpdaters = {
   incrementResourceUsage?: GraphCacheOptimisticMutationResolver<MutationIncrementResourceUsageArgs, Maybe<WithTypename<ResourceUsage>>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
   movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
+  recordPadEvent?: GraphCacheOptimisticMutationResolver<MutationRecordPadEventArgs, Maybe<Scalars['Boolean']>>,
   refreshExternalDataToken?: GraphCacheOptimisticMutationResolver<MutationRefreshExternalDataTokenArgs, Scalars['String']>,
+  removeAlias?: GraphCacheOptimisticMutationResolver<MutationRemoveAliasArgs, Maybe<Scalars['Boolean']>>,
   removeAttachmentFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromPadArgs, Maybe<Scalars['Boolean']>>,
   removeAttachmentFromWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromWorkspaceArgs, Maybe<WithTypename<AttachmentResource>>>,
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
@@ -3516,6 +3707,7 @@ export type GraphCacheOptimisticUpdaters = {
 export type GraphCacheUpdaters = {
   Query?: {
     featuredPad?: GraphCacheUpdateResolver<{ featuredPad: Maybe<WithTypename<Pad>> }, Record<string, never>>,
+    getAliasesByPadId?: GraphCacheUpdateResolver<{ getAliasesByPadId: Maybe<Array<WithTypename<PadAlias>>> }, QueryGetAliasesByPadIdArgs>,
     getAnnotationsByPadId?: GraphCacheUpdateResolver<{ getAnnotationsByPadId: Maybe<Array<WithTypename<Annotation>>> }, QueryGetAnnotationsByPadIdArgs>,
     getCreditsPlans?: GraphCacheUpdateResolver<{ getCreditsPlans: Maybe<WithTypename<CreditsPlan>> }, Record<string, never>>,
     getExternalDataSource?: GraphCacheUpdateResolver<{ getExternalDataSource: WithTypename<ExternalDataSource> }, QueryGetExternalDataSourceArgs>,
@@ -3539,6 +3731,7 @@ export type GraphCacheUpdaters = {
     workspaces?: GraphCacheUpdateResolver<{ workspaces: Array<WithTypename<Workspace>> }, Record<string, never>>
   },
   Mutation?: {
+    addAlias?: GraphCacheUpdateResolver<{ addAlias: WithTypename<PadAlias> }, MutationAddAliasArgs>,
     addAttachmentToPad?: GraphCacheUpdateResolver<{ addAttachmentToPad: Maybe<WithTypename<Attachment>> }, MutationAddAttachmentToPadArgs>,
     addNotebookToSection?: GraphCacheUpdateResolver<{ addNotebookToSection: Maybe<Scalars['Boolean']> }, MutationAddNotebookToSectionArgs>,
     addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
@@ -3566,7 +3759,9 @@ export type GraphCacheUpdaters = {
     incrementResourceUsage?: GraphCacheUpdateResolver<{ incrementResourceUsage: Maybe<WithTypename<ResourceUsage>> }, MutationIncrementResourceUsageArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
     movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,
+    recordPadEvent?: GraphCacheUpdateResolver<{ recordPadEvent: Maybe<Scalars['Boolean']> }, MutationRecordPadEventArgs>,
     refreshExternalDataToken?: GraphCacheUpdateResolver<{ refreshExternalDataToken: Scalars['String'] }, MutationRefreshExternalDataTokenArgs>,
+    removeAlias?: GraphCacheUpdateResolver<{ removeAlias: Maybe<Scalars['Boolean']> }, MutationRemoveAliasArgs>,
     removeAttachmentFromPad?: GraphCacheUpdateResolver<{ removeAttachmentFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveAttachmentFromPadArgs>,
     removeAttachmentFromWorkspace?: GraphCacheUpdateResolver<{ removeAttachmentFromWorkspace: Maybe<WithTypename<AttachmentResource>> }, MutationRemoveAttachmentFromWorkspaceArgs>,
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
@@ -3615,13 +3810,17 @@ export type GraphCacheUpdaters = {
     workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>
   },
   Annotation?: {
+    alias?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    alias_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     block_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     content?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     dateCreated?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     dateUpdated?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    meta?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     pad_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     scenario_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
+    type?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     user?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>,
     user_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Annotation>>, Record<string, never>>
   },
@@ -3699,6 +3898,7 @@ export type GraphCacheUpdaters = {
   },
   Pad?: {
     access?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    aliases?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     archived?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     attachments?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     banned?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
@@ -3723,6 +3923,13 @@ export type GraphCacheUpdaters = {
     workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
     workspaceId?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>
   },
+  PadAlias?: {
+    alias?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAlias>>, Record<string, never>>,
+    annotations?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAlias>>, Record<string, never>>,
+    events?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAlias>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAlias>>, Record<string, never>>,
+    pad_id?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAlias>>, Record<string, never>>
+  },
   PadChanges?: {
     added?: GraphCacheUpdateResolver<Maybe<WithTypename<PadChanges>>, Record<string, never>>,
     removed?: GraphCacheUpdateResolver<Maybe<WithTypename<PadChanges>>, Record<string, never>>,
@@ -3731,6 +3938,13 @@ export type GraphCacheUpdaters = {
   PadConnectionParams?: {
     token?: GraphCacheUpdateResolver<Maybe<WithTypename<PadConnectionParams>>, Record<string, never>>,
     url?: GraphCacheUpdateResolver<Maybe<WithTypename<PadConnectionParams>>, Record<string, never>>
+  },
+  PadEvent?: {
+    alias_id?: GraphCacheUpdateResolver<Maybe<WithTypename<PadEvent>>, Record<string, never>>,
+    created_at?: GraphCacheUpdateResolver<Maybe<WithTypename<PadEvent>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<PadEvent>>, Record<string, never>>,
+    meta?: GraphCacheUpdateResolver<Maybe<WithTypename<PadEvent>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<PadEvent>>, Record<string, never>>
   },
   PadSnapshot?: {
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>,

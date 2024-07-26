@@ -48,3 +48,4 @@ export * from './isE2E';
 export * from './containsExprRefs';
 export * from './email';
 export * from './prettify';
+export * from './getAnonUserMetadata';

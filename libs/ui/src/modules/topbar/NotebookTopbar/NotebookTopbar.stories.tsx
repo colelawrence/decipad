@@ -61,6 +61,8 @@ const args: ComponentProps<typeof NotebookTopbar> = {
         onUpdatePublishState: async () => {},
         onPublishNotebook: async () => {},
         onUpdateAllowDuplicate: async () => {},
+        onAddAlias: async () => {},
+        onRemoveAlias: async () => {},
       }}
       creationDate={new Date()}
       workspaceId={workspaceId}
@@ -101,6 +103,8 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       onChangeSelectedTab={() => {}}
       allowDuplicate={false}
       onUpdateAllowDuplicate={async () => {}}
+      onAddAlias={async () => {}}
+      onRemoveAlias={async () => {}}
     />
   ),
   access: {

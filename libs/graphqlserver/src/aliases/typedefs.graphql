@@ -1,0 +1,26 @@
+type PadEvent {
+  id: ID!
+  alias_id: ID!
+  name: String!
+  meta: String
+  created_at: Float!
+}
+
+type PadAlias {
+  id: ID!
+  pad_id: ID!
+  alias: String!
+  annotations: [Annotation!]
+  events: [PadEvent!]
+}
+
+extend type Query {
+  getAliasesByPadId(padId: String!): [PadAlias!]
+}
+
+extend type Mutation {
+  addAlias(alias: String!, padId: ID!): PadAlias!
+  removeAlias(id: ID!): Boolean
+
+  recordPadEvent(aliasId: ID!, padId: ID!, name: String!, meta: String): Boolean
+}

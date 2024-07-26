@@ -1,7 +1,9 @@
 mutation DeleteAnnotation($annotationId: String!) {
   deleteAnnotation(id: $annotationId) {
     id
+    type
     content
+    alias_id
     pad_id
     block_id
     dateCreated

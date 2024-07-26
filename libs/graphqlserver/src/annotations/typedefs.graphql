@@ -7,13 +7,17 @@ type AnnotationUser {
 type Annotation {
   id: ID!
   content: String!
-  user_id: String!
+  type: String!
+  user_id: String
   pad_id: String!
   block_id: String!
+  alias_id: String
   scenario_id: String
   dateCreated: Float!
   dateUpdated: Float
   user: AnnotationUser
+  alias: PadAlias
+  meta: String
 }
 
 extend type Query {
@@ -24,9 +28,12 @@ extend type Query {
 extend type Mutation {
   createAnnotation(
     content: String!
+    type: String!
     padId: String!
     blockId: String!
+    aliasId: String
     scenarioId: String
+    meta: String
   ): Annotation
   updateAnnotation(id: String!, content: String!): Annotation
   deleteAnnotation(id: String!): Annotation

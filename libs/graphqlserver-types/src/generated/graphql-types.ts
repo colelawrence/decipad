@@ -22,15 +22,19 @@ export type Scalars = {
 
 export type Annotation = {
   __typename?: 'Annotation';
+  alias?: Maybe<PadAlias>;
+  alias_id?: Maybe<Scalars['String']['output']>;
   block_id: Scalars['String']['output'];
   content: Scalars['String']['output'];
   dateCreated: Scalars['Float']['output'];
   dateUpdated?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
+  meta?: Maybe<Scalars['String']['output']>;
   pad_id: Scalars['String']['output'];
   scenario_id?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   user?: Maybe<AnnotationUser>;
-  user_id: Scalars['String']['output'];
+  user_id?: Maybe<Scalars['String']['output']>;
 };
 
 export type AnnotationUser = {
@@ -198,6 +202,7 @@ export type LogInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAlias: PadAlias;
   addAttachmentToPad?: Maybe<Attachment>;
   addNotebookToSection?: Maybe<Scalars['Boolean']['output']>;
   addSectionToWorkspace?: Maybe<Section>;
@@ -225,7 +230,9 @@ export type Mutation = {
   incrementResourceUsage?: Maybe<ResourceUsage>;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
+  recordPadEvent?: Maybe<Scalars['Boolean']['output']>;
   refreshExternalDataToken: Scalars['String']['output'];
+  removeAlias?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
   removeAttachmentFromWorkspace?: Maybe<AttachmentResource>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
@@ -264,6 +271,12 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+};
+
+
+export type MutationAddAliasArgs = {
+  alias: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
 };
 
 
@@ -307,10 +320,13 @@ export type MutationClaimNotebookArgs = {
 
 
 export type MutationCreateAnnotationArgs = {
+  aliasId?: InputMaybe<Scalars['String']['input']>;
   blockId: Scalars['String']['input'];
   content: Scalars['String']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
   padId: Scalars['String']['input'];
   scenarioId?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 
@@ -420,7 +436,20 @@ export type MutationMovePadArgs = {
 };
 
 
+export type MutationRecordPadEventArgs = {
+  aliasId: Scalars['ID']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
+};
+
+
 export type MutationRefreshExternalDataTokenArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveAliasArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -667,6 +696,7 @@ export type Publish_State =
 export type Pad = {
   __typename?: 'Pad';
   access: ResourceAccess;
+  aliases: Array<PadAlias>;
   archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
   banned?: Maybe<Scalars['Boolean']['output']>;
@@ -692,6 +722,15 @@ export type Pad = {
   workspaceId?: Maybe<Scalars['ID']['output']>;
 };
 
+export type PadAlias = {
+  __typename?: 'PadAlias';
+  alias: Scalars['String']['output'];
+  annotations?: Maybe<Array<Annotation>>;
+  events?: Maybe<Array<PadEvent>>;
+  id: Scalars['ID']['output'];
+  pad_id: Scalars['ID']['output'];
+};
+
 export type PadChanges = {
   __typename?: 'PadChanges';
   added: Array<Pad>;
@@ -703,6 +742,15 @@ export type PadConnectionParams = {
   __typename?: 'PadConnectionParams';
   token: Scalars['String']['output'];
   url: Scalars['String']['output'];
+};
+
+export type PadEvent = {
+  __typename?: 'PadEvent';
+  alias_id: Scalars['ID']['output'];
+  created_at: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  meta?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type PadInput = {
@@ -775,6 +823,7 @@ export type PermissionType =
 export type Query = {
   __typename?: 'Query';
   featuredPad?: Maybe<Pad>;
+  getAliasesByPadId?: Maybe<Array<PadAlias>>;
   getAnnotationsByPadId?: Maybe<Array<Maybe<Annotation>>>;
   getCreditsPlans?: Maybe<CreditsPlan>;
   getExternalDataSource: ExternalDataSource;
@@ -796,6 +845,11 @@ export type Query = {
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
+};
+
+
+export type QueryGetAliasesByPadIdArgs = {
+  padId: Scalars['String']['input'];
 };
 
 
@@ -1343,8 +1397,10 @@ export type ResolversTypes = {
   NewResourceQuotaLimit: ResolverTypeWrapper<NewResourceQuotaLimit>;
   PUBLISH_STATE: Publish_State;
   Pad: ResolverTypeWrapper<Pad>;
+  PadAlias: ResolverTypeWrapper<PadAlias>;
   PadChanges: ResolverTypeWrapper<PadChanges>;
   PadConnectionParams: ResolverTypeWrapper<PadConnectionParams>;
+  PadEvent: ResolverTypeWrapper<PadEvent>;
   PadInput: PadInput;
   PadSnapshot: ResolverTypeWrapper<PadSnapshot>;
   PageInput: PageInput;
@@ -1428,8 +1484,10 @@ export type ResolversParentTypes = {
   Mutation: {};
   NewResourceQuotaLimit: NewResourceQuotaLimit;
   Pad: Pad;
+  PadAlias: PadAlias;
   PadChanges: PadChanges;
   PadConnectionParams: PadConnectionParams;
+  PadEvent: PadEvent;
   PadInput: PadInput;
   PadSnapshot: PadSnapshot;
   PageInput: PageInput;
@@ -1482,15 +1540,19 @@ export type ResolversParentTypes = {
 };
 
 export type AnnotationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Annotation'] = ResolversParentTypes['Annotation']> = {
+  alias?: Resolver<Maybe<ResolversTypes['PadAlias']>, ParentType, ContextType>;
+  alias_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   block_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   dateCreated?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   dateUpdated?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pad_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   scenario_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['AnnotationUser']>, ParentType, ContextType>;
-  user_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1590,6 +1652,7 @@ export type KeyValueResolvers<ContextType = GraphqlContext, ParentType extends R
 };
 
 export type MutationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addAlias?: Resolver<ResolversTypes['PadAlias'], ParentType, ContextType, RequireFields<MutationAddAliasArgs, 'alias' | 'padId'>>;
   addAttachmentToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAddAttachmentToPadArgs, 'attachmentId' | 'padId'>>;
   addNotebookToSection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNotebookToSectionArgs, 'notebookId' | 'sectionId'>>;
   addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
@@ -1597,7 +1660,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
   attachFileToWorkspace?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToWorkspaceArgs, 'handle'>>;
   claimNotebook?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
-  createAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationCreateAnnotationArgs, 'blockId' | 'content' | 'padId'>>;
+  createAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationCreateAnnotationArgs, 'blockId' | 'content' | 'padId' | 'type'>>;
   createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
   createLogs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateLogsArgs, 'input'>>;
   createOrUpdateSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>>;
@@ -1617,7 +1680,9 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   incrementResourceUsage?: Resolver<Maybe<ResolversTypes['ResourceUsage']>, ParentType, ContextType, RequireFields<MutationIncrementResourceUsageArgs, 'amount' | 'resourceType' | 'workspaceId'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
+  recordPadEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRecordPadEventArgs, 'aliasId' | 'name' | 'padId'>>;
   refreshExternalDataToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>>;
+  removeAlias?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAliasArgs, 'id'>>;
   removeAttachmentFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>>;
   removeAttachmentFromWorkspace?: Resolver<Maybe<ResolversTypes['AttachmentResource']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromWorkspaceArgs, 'attachmentId'>>;
   removeExternalDataSource?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>>;
@@ -1665,6 +1730,7 @@ export type NewResourceQuotaLimitResolvers<ContextType = GraphqlContext, ParentT
 
 export type PadResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Pad'] = ResolversParentTypes['Pad']> = {
   access?: Resolver<ResolversTypes['ResourceAccess'], ParentType, ContextType>;
+  aliases?: Resolver<Array<ResolversTypes['PadAlias']>, ParentType, ContextType>;
   archived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
   banned?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -1691,6 +1757,15 @@ export type PadResolvers<ContextType = GraphqlContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PadAliasResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadAlias'] = ResolversParentTypes['PadAlias']> = {
+  alias?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  annotations?: Resolver<Maybe<Array<ResolversTypes['Annotation']>>, ParentType, ContextType>;
+  events?: Resolver<Maybe<Array<ResolversTypes['PadEvent']>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  pad_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PadChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadChanges'] = ResolversParentTypes['PadChanges']> = {
   added?: Resolver<Array<ResolversTypes['Pad']>, ParentType, ContextType>;
   removed?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -1701,6 +1776,15 @@ export type PadChangesResolvers<ContextType = GraphqlContext, ParentType extends
 export type PadConnectionParamsResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadConnectionParams'] = ResolversParentTypes['PadConnectionParams']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PadEventResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadEvent'] = ResolversParentTypes['PadEvent']> = {
+  alias_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1754,6 +1838,7 @@ export type PermissionResolvers<ContextType = GraphqlContext, ParentType extends
 
 export type QueryResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   featuredPad?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType>;
+  getAliasesByPadId?: Resolver<Maybe<Array<ResolversTypes['PadAlias']>>, ParentType, ContextType, RequireFields<QueryGetAliasesByPadIdArgs, 'padId'>>;
   getAnnotationsByPadId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Annotation']>>>, ParentType, ContextType, RequireFields<QueryGetAnnotationsByPadIdArgs, 'padId'>>;
   getCreditsPlans?: Resolver<Maybe<ResolversTypes['CreditsPlan']>, ParentType, ContextType>;
   getExternalDataSource?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourceArgs, 'id'>>;
@@ -2071,8 +2156,10 @@ export type Resolvers<ContextType = GraphqlContext> = {
   Mutation?: MutationResolvers<ContextType>;
   NewResourceQuotaLimit?: NewResourceQuotaLimitResolvers<ContextType>;
   Pad?: PadResolvers<ContextType>;
+  PadAlias?: PadAliasResolvers<ContextType>;
   PadChanges?: PadChangesResolvers<ContextType>;
   PadConnectionParams?: PadConnectionParamsResolvers<ContextType>;
+  PadEvent?: PadEventResolvers<ContextType>;
   PadSnapshot?: PadSnapshotResolvers<ContextType>;
   Pageable?: PageableResolvers<ContextType>;
   PagedPadResult?: PagedPadResultResolvers<ContextType>;

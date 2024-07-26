@@ -33,7 +33,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
 
   const userEvents = useContext(ClientEventsContext);
 
-  const { permission } = useAnnotations();
+  const { permission, aliasId } = useAnnotations();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -64,6 +64,8 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
     const res = await createAnnotation({
       content: annotation,
       blockId,
+      type: 'comment',
+      aliasId,
       padId: notebookId,
     });
     if (res.error) {
@@ -92,6 +94,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
     userEvents,
     permission,
     toast,
+    aliasId,
   ]);
 
   const handleForm = useCallback(

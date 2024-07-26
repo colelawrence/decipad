@@ -1,21 +1,63 @@
 import type { PlateComponent } from '@decipad/editor-types';
 import { ClientEventsContext } from '@decipad/client-events';
-import { ELEMENT_SLIDER } from '@decipad/editor-types';
+import { ELEMENT_SLIDER, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  useAnnotations,
+  useIsEditorReadOnly,
+  useNotebookId,
+} from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
 import { useCallback, useContext } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 import { useOnSliderChange } from '../hooks';
+import {
+  useCreateAnnotationMutation,
+  useRecordPadEventMutation,
+} from '@decipad/graphql-client';
+import { useParentNodeEntry } from '@decipad/editor-hooks';
+import { getAnonUserMetadata } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_SLIDER);
   const [value, onChange, setSyncValues] = useOnSliderChange(element);
 
+  const parentEntry = useParentNodeEntry(element);
+  const parentElement = parentEntry && parentEntry[0];
+
+  assertElementType(parentElement, ELEMENT_VARIABLE_DEF);
+
+  const notebookId = useNotebookId();
+
+  const [, createAnnotation] = useCreateAnnotationMutation();
+  const [, recordPadEvent] = useRecordPadEventMutation();
+
+  const { aliasId } = useAnnotations();
+
   // Analytics
   const userEvents = useContext(ClientEventsContext);
   const isReadOnly = useIsEditorReadOnly();
-  const onCommit = useCallback(() => {
+  const onCommit = useCallback(async () => {
+    if (isFlagEnabled('PRIVATE_LINK_ANALYTICS')) {
+      const meta = (await getAnonUserMetadata()).join(', ');
+      if (parentElement && isReadOnly && aliasId) {
+        await recordPadEvent({
+          padId: notebookId,
+          aliasId,
+          name: 'value_change',
+          meta,
+        });
+        await createAnnotation({
+          type: 'suggestion',
+          aliasId,
+          meta,
+          content: `${parentElement.children[0].children[0].text}, ${value}`,
+          blockId: parentElement.id ?? '',
+          padId: notebookId,
+        });
+      }
+    }
     setSyncValues(true);
     userEvents({
       segmentEvent: {
@@ -32,7 +74,17 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
         label: 'slider',
       },
     });
-  }, [isReadOnly, userEvents, setSyncValues]);
+  }, [
+    isReadOnly,
+    userEvents,
+    setSyncValues,
+    value,
+    createAnnotation,
+    recordPadEvent,
+    aliasId,
+    notebookId,
+    parentElement,
+  ]);
 
   const { color } = useVariableEditorContext();
 
@@ -44,7 +96,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
         min={Number(element.min)}
         max={Number(element.max)}
         step={Number(element.step)}
-        onChange={(e) => {
+        onChange={async (e) => {
           setSyncValues(false);
           onChange(e);
         }}

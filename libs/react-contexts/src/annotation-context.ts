@@ -10,6 +10,7 @@ export type AnnotationArray = NonNullable<
 type AnnotationsContextValue = {
   setAnnotations: (annotations: AnnotationArray) => void;
   annotations: AnnotationArray | undefined;
+  aliasId: string | null;
   scenarioId: string | null;
   expandedBlockId: string | null;
   handleExpandedBlockId: (id: string | null) => void;

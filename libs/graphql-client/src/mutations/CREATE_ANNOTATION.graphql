@@ -1,12 +1,24 @@
 mutation CreateAnnotation(
   $content: String!
+  $type: String!
   $padId: String!
   $blockId: String!
+  $aliasId: String
+  $meta: String
 ) {
-  createAnnotation(content: $content, padId: $padId, blockId: $blockId) {
+  createAnnotation(
+    content: $content
+    type: $type
+    padId: $padId
+    blockId: $blockId
+    aliasId: $aliasId
+    meta: $meta
+  ) {
     id
     content
+    type
     pad_id
+    alias_id
     block_id
     dateCreated
     dateUpdated

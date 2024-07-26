@@ -23,6 +23,8 @@ const args: NotebookSharingPopUpProps = {
   onChangeSelectedTab: () => {},
   allowDuplicate: true,
   onUpdateAllowDuplicate: async () => {},
+  onAddAlias: async () => {},
+  onRemoveAlias: async () => {},
 };
 
 export default {

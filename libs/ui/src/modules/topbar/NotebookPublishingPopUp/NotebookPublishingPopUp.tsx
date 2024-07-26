@@ -15,7 +15,7 @@ import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
-import { cssVar, smallScreenQuery, smallShadow } from '../../../primitives';
+import { cssVar, smallScreenQuery } from '../../../primitives';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
@@ -35,7 +35,6 @@ const popUpStyles = css({
   },
 
   backgroundColor: cssVar('backgroundMain'),
-  boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
 });
 
 /**
@@ -68,6 +67,7 @@ export type NotebookSharingPopUpProps = Pick<
     'publishingState' | 'isPremium'
   > & {
     readonly snapshots: NotebookMetaDataFragment['snapshots'];
+
     readonly hasPaywall?: boolean;
     readonly invitedUsers?: UserAccessMetaFragment[] | null;
     readonly nrOfTeamMembers?: number | null;
@@ -85,6 +85,8 @@ export type NotebookSharingPopUpProps = Pick<
     readonly onUpdatePublish: NotebookMetaActionsReturn['onUpdatePublishState'];
     readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
     readonly onUpdateAllowDuplicate: NotebookMetaActionsReturn['onUpdateAllowDuplicate'];
+    readonly onAddAlias: NotebookMetaActionsReturn['onAddAlias'];
+    readonly onRemoveAlias: NotebookMetaActionsReturn['onRemoveAlias'];
 
     readonly selectedTab: SidebarPublishingTab;
     readonly onChangeSelectedTab: (tab: SidebarPublishingTab) => void;
@@ -113,6 +115,9 @@ export const NotebookPublishingPopUp = ({
   allowDuplicate,
 
   onPublish,
+
+  onAddAlias,
+  onRemoveAlias,
 
   isPremium,
   publishingState,
@@ -173,10 +178,11 @@ export const NotebookPublishingPopUp = ({
                 }}
               />
               <TabsTrigger
+                // TODO: change ids to "share"
                 testId="publish-tab"
                 name="publishing"
                 trigger={{
-                  label: 'Publish',
+                  label: 'Share',
                   disabled: false,
                 }}
               />
@@ -220,6 +226,8 @@ export const NotebookPublishingPopUp = ({
                   currentSnapshot={currentSnapshot}
                   onUpdatePublish={onUpdatePublish}
                   onPublish={onPublish}
+                  onAddAlias={onAddAlias}
+                  onRemoveAlias={onRemoveAlias}
                   allowDuplicate={allowDuplicate}
                   onUpdateAllowDuplicate={onUpdateAllowDuplicate}
                 />
@@ -267,6 +275,8 @@ export const NotebookPublishingPopUp = ({
                   onUpdatePublish={onUpdatePublish}
                   onPublish={onPublish}
                   allowDuplicate={allowDuplicate}
+                  onAddAlias={onAddAlias}
+                  onRemoveAlias={onRemoveAlias}
                   onUpdateAllowDuplicate={onUpdateAllowDuplicate}
                 />
               </div>

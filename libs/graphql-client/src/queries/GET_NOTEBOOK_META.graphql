@@ -31,6 +31,21 @@ fragment NotebookMetaData on Pad {
   initialState
   gist
   canPublicDuplicate
+  aliases {
+    id
+    alias
+    annotations {
+      id
+      content
+      meta
+    }
+    events {
+      id
+      name
+      created_at
+      meta
+    }
+  }
   workspace {
     id
     name

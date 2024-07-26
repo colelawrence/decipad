@@ -32,6 +32,8 @@ const props: ComponentProps<typeof NotebookListItem> = {
     onUpdatePublishState: asyncNoop,
     onPublishNotebook: asyncNoop,
     onUpdateAllowDuplicate: asyncNoop,
+    onAddAlias: asyncNoop,
+    onRemoveAlias: asyncNoop,
   },
   notebookId: '123',
   isArchived: false,

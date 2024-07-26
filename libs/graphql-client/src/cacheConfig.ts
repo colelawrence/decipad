@@ -20,6 +20,7 @@ import type {
   GetNotebookByIdQuery,
   GetNotebookByIdQueryVariables,
   ExternalDataSourceFragmentFragment,
+  PadAlias,
 } from './generated';
 import {
   GetExternalDataSourcesWorkspaceDocument,
@@ -121,10 +122,13 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
       > = {
         __typename: 'Annotation',
         id: nanoid(),
+        type: args.type,
         dateCreated: new Date().getTime(),
         dateUpdated: new Date().getTime(),
         content: args.content,
+        alias_id: args.aliasId,
         pad_id: args.padId,
+        meta: args.meta,
         scenario_id: null,
         ...(session?.user
           ? {
@@ -184,7 +188,9 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
 
             data.getAnnotationsByPadId.push({
               dateCreated: new Date().getTime(),
+              type: args.type,
               content: args.content,
+              alias_id: args.aliasId,
               pad_id: args.padId,
               block_id: args.blockId,
               id: nanoid(),
@@ -208,6 +214,27 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           id: args.id,
         });
       },
+      addAlias: (result, args, cache) => {
+        cache.updateQuery<GetNotebookMetaQuery>(
+          { query: GetNotebookMetaDocument, variables: { id: args.padId } },
+          (data) => {
+            if (!data?.getPadById) {
+              throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
+            }
+
+            data.getPadById?.aliases.push(result.addAlias as PadAlias);
+            return data;
+          }
+        );
+      },
+
+      removeAlias: (_result, args, cache) => {
+        cache.invalidate({
+          __typename: 'PadAlias',
+          id: args.id,
+        });
+      },
+
       removeWorkspace: (_result, args, cache) => {
         cache.invalidate({
           __typename: 'Workspace',

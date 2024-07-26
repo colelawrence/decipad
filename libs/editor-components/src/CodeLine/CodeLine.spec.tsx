@@ -42,6 +42,7 @@ const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
       scenarioId: null,
       expandedBlockId: null,
       handleExpandedBlockId: () => {},
+      aliasId: null,
       permission: 'WRITE',
     }}
   >

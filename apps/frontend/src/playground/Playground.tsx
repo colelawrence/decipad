@@ -34,6 +34,7 @@ const Playground: React.FC = () => {
         expandedBlockId: null,
         handleExpandedBlockId: () => {},
         permission: 'WRITE',
+        aliasId: null,
       }}
     >
       <NotebookPage

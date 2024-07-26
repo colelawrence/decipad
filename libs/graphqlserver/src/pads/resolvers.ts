@@ -174,6 +174,7 @@ const resolvers: Resolvers = {
     createOrUpdateSnapshot,
     createSnapshot,
     movePad,
+
     importPad: async (parent, args, context) =>
       padResource.toGraphql(await importPad(parent, args, context)),
 
@@ -312,6 +313,21 @@ const resolvers: Resolvers = {
       return getSnapshots({
         notebookId: pad.id,
       });
+    },
+
+    async aliases(pad) {
+      const data = await tables();
+
+      const query = {
+        IndexName: 'byPadId',
+        KeyConditionExpression: 'pad_id = :padId',
+        ExpressionAttributeValues: {
+          ':padId': pad.id,
+        },
+      };
+      const aliases = await data.aliases.query(query);
+
+      return aliases.Items;
     },
 
     async document(pad) {
