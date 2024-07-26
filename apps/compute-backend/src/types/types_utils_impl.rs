@@ -1,157 +1,219 @@
-use super::types::{DeciFloat, DeciFrac, DeciValue, NCol};
-use js_sys::{Array, Object};
-use std::{cmp::Ordering, iter::FromIterator};
-use wasm_bindgen::JsValue;
+use super::types::DeciResult;
+use std::cmp::Ordering;
 
-impl Ord for DeciFloat {
+impl Ord for DeciResult {
     fn cmp(&self, other: &Self) -> Ordering {
-        let are_both_defined = !self.inf && !other.inf && !self.und && !other.und;
-
-        if are_both_defined {
-            if self.val == other.val {
-                Ordering::Equal
-            } else if self.val < other.val {
-                Ordering::Less
-            } else {
-                Ordering::Greater
-            }
-        } else {
-            // what should we do here?
+        if self == other {
             Ordering::Equal
+        } else if self > other {
+            Ordering::Greater
+        } else {
+            Ordering::Less
         }
     }
 }
 
-impl DeciValue {
-    pub fn from_floats(floats: Vec<f64>) -> DeciValue {
-        DeciValue::NumberColumn(NCol::from_float(floats))
+impl DeciResult {
+    pub fn from_frac(nums: Vec<i64>, dens: Vec<i64>) -> DeciResult {
+        assert_eq!(nums.len(), dens.len());
+        DeciResult::Column(
+            nums.iter()
+                .zip(dens.iter())
+                .map(|(n, d)| DeciResult::Fraction(*n, *d))
+                .collect(),
+        )
     }
 
-    pub fn from_fracs(nums: Vec<i64>, dens: Vec<i64>) -> DeciValue {
-        DeciValue::NumberColumn(NCol::from_frac(nums, dens))
+    pub fn from_float(nums: Vec<f64>) -> DeciResult {
+        DeciResult::Column(nums.iter().map(|x| DeciResult::Float(*x)).collect())
+    }
+
+    pub fn sum_float(&self) -> DeciResult {
+        match self {
+            DeciResult::Column(column) => {
+                let mut sum = DeciResult::Float(0.0);
+
+                for item in column {
+                    match item {
+                        DeciResult::Column(_) => {
+                            sum = sum + item.sum_float();
+                        }
+                        _ => sum = sum + item.clone(),
+                    }
+                }
+                sum
+            }
+            DeciResult::Float(f) => DeciResult::Float(*f),
+            DeciResult::Fraction(n, d) => DeciResult::Fraction(*n, *d).to_float(),
+            _ => panic!("Expected a Column of Fractions"),
+        }
+    }
+
+    pub fn sum_frac(&self) -> DeciResult {
+        match self {
+            DeciResult::Column(items) => {
+                let mut sum = DeciResult::Fraction(0, 1);
+                for item in items {
+                    match item {
+                        DeciResult::Column(_) => {
+                            sum = sum + item.sum_frac();
+                        }
+                        _ => sum = sum + item.clone(),
+                    }
+                }
+                sum
+            }
+            _ => panic!("Can't sum non-column"),
+        }
     }
 
     pub fn len(&self) -> usize {
         match self {
-            DeciValue::NumberColumn(a) => a.len(),
-            DeciValue::BooleanColumn(a) => a.len(),
-            DeciValue::StringColumn(a) => a.len(),
+            DeciResult::Column(items) => items.len(),
+            _ => 1 as usize,
         }
     }
 
-    pub fn eq_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+    pub fn get_slice(&self, start: usize, end: usize) -> DeciResult {
         match self {
-            DeciValue::NumberColumn(a) => Some(a.eq_num(val)),
-            DeciValue::BooleanColumn(_a) => None,
-            DeciValue::StringColumn(_a) => None,
+            DeciResult::Column(items) => DeciResult::Column(items[start..end].to_vec()),
+            _ => panic!("Can't slice non-column"),
         }
     }
 
-    pub fn gt_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
+    pub fn eq_num(&self, val: DeciResult) -> DeciResult {
         match self {
-            DeciValue::NumberColumn(a) => Some(a.gt_num(val)),
-            DeciValue::BooleanColumn(_a) => None,
-            DeciValue::StringColumn(_a) => None,
-        }
-    }
-
-    pub fn ge_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
-        match self {
-            DeciValue::NumberColumn(a) => Some(a.ge_num(val)),
-            DeciValue::BooleanColumn(_a) => None,
-            DeciValue::StringColumn(_a) => None,
-        }
-    }
-
-    pub fn lt_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
-        match self {
-            DeciValue::NumberColumn(a) => Some(a.lt_num(val)),
-            DeciValue::BooleanColumn(_a) => None,
-            DeciValue::StringColumn(_a) => None,
-        }
-    }
-
-    pub fn le_num(&self, val: DeciFrac) -> Option<Vec<bool>> {
-        match self {
-            DeciValue::NumberColumn(a) => Some(a.le_num(val)),
-            DeciValue::BooleanColumn(_a) => None,
-            DeciValue::StringColumn(_a) => None,
-        }
-    }
-
-    pub fn mask_with(&self, other: DeciValue) -> Option<DeciValue> {
-        match (self, other) {
-            (DeciValue::NumberColumn(v), DeciValue::BooleanColumn(m)) => match v {
-                NCol::FracCol(f) => Some(DeciValue::NumberColumn(NCol::from_decifrac(
-                    f.iter()
-                        .zip(m.iter())
-                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
+            DeciResult::Column(items) => match &items[0] {
+                DeciResult::Column(_) => {
+                    DeciResult::Column(items.iter().map(|x| x.eq_num(val.clone())).collect())
+                }
+                _ => DeciResult::Column(
+                    items
+                        .iter()
+                        .map(|x| DeciResult::Boolean(*x == val))
                         .collect(),
-                ))),
-                NCol::FloatCol(f) => Some(DeciValue::NumberColumn(NCol::from_decifloat(
-                    f.iter()
-                        .zip(m.iter())
-                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
-                        .collect(),
-                ))),
+                ),
             },
-            (DeciValue::BooleanColumn(v), DeciValue::BooleanColumn(m)) => {
-                Some(DeciValue::BooleanColumn(
-                    v.iter()
-                        .zip(m.iter())
-                        .filter_map(|(val, mask)| if *mask { Some(*val) } else { None })
-                        .collect(),
-                ))
-            }
-            (DeciValue::StringColumn(v), DeciValue::BooleanColumn(m)) => {
-                Some(DeciValue::StringColumn(
-                    v.iter()
-                        .zip(m.iter())
-                        .filter_map(|(val, mask)| if *mask { Some(val.clone()) } else { None })
-                        .collect(),
-                ))
-            }
-            _ => None,
+            _ => panic!("Mask functions should be called on a column with a value"),
         }
     }
 
-    pub fn to_js_val(self) -> Object {
-        let obj = Object::new();
+    pub fn gt_num(&self, val: DeciResult) -> DeciResult {
         match self {
-            DeciValue::NumberColumn(ncol) => {
-                let fraccol = ncol.to_float();
-                match fraccol {
-                    NCol::FracCol(fracs) => {
-                        let frac = Object::new();
-                        _ = js_sys::Reflect::set(
-                            &frac,
-                            &"num".into(),
-                            &Array::from_iter(fracs.iter().map(|x| JsValue::from_f64(x.n as f64))),
-                        );
-                        _ = js_sys::Reflect::set(
-                            &frac,
-                            &"den".into(),
-                            &Array::from_iter(fracs.iter().map(|x| JsValue::from_f64(x.d as f64))),
-                        );
+            DeciResult::Column(items) => match &items[0] {
+                DeciResult::Column(_) => {
+                    DeciResult::Column(items.iter().map(|x| x.gt_num(val.clone())).collect())
+                }
+                _ => DeciResult::Column(
+                    items
+                        .iter()
+                        .map(|x| DeciResult::Boolean(*x > val))
+                        .collect(),
+                ),
+            },
+            _ => panic!("Mask functions should be called on a column with a value"),
+        }
+    }
+
+    pub fn ge_num(&self, val: DeciResult) -> DeciResult {
+        match self {
+            DeciResult::Column(items) => match &items[0] {
+                DeciResult::Column(_) => {
+                    DeciResult::Column(items.iter().map(|x| x.ge_num(val.clone())).collect())
+                }
+                _ => DeciResult::Column(
+                    items
+                        .iter()
+                        .map(|x| DeciResult::Boolean(*x >= val))
+                        .collect(),
+                ),
+            },
+            _ => panic!("Mask functions should be called on a column with a value"),
+        }
+    }
+
+    pub fn lt_num(&self, val: DeciResult) -> DeciResult {
+        match self {
+            DeciResult::Column(items) => match &items[0] {
+                DeciResult::Column(_) => {
+                    DeciResult::Column(items.iter().map(|x| x.lt_num(val.clone())).collect())
+                }
+                _ => DeciResult::Column(
+                    items
+                        .iter()
+                        .map(|x| DeciResult::Boolean(*x < val))
+                        .collect(),
+                ),
+            },
+            _ => panic!("Mask functions should be called on a column with a value"),
+        }
+    }
+
+    pub fn le_num(&self, val: DeciResult) -> DeciResult {
+        match self {
+            DeciResult::Column(items) => match &items[0] {
+                DeciResult::Column(_) => {
+                    DeciResult::Column(items.iter().map(|x| x.le_num(val.clone())).collect())
+                }
+                _ => DeciResult::Column(
+                    items
+                        .iter()
+                        .map(|x| DeciResult::Boolean(*x <= val))
+                        .collect(),
+                ),
+            },
+            _ => panic!("Mask functions should be called on a column with a value"),
+        }
+    }
+
+    pub fn truthval(&self) -> bool {
+        match self {
+            DeciResult::Boolean(b) => *b,
+            _ => panic!("Can't take truth value of non-boolean"),
+        }
+    }
+    pub fn mask_with(&self, other: DeciResult) -> DeciResult {
+        match (self, other) {
+            (DeciResult::Column(items), DeciResult::Column(masks)) => {
+                assert_eq!(items.len(), masks.len());
+                match (items[0].clone(), masks[0].clone()) {
+                    (_, DeciResult::Boolean(_)) => DeciResult::Column(
+                        items
+                            .iter()
+                            .zip(masks.iter())
+                            .filter_map(|(val, mask)| {
+                                if mask.truthval() {
+                                    Some(val.clone())
+                                } else {
+                                    None
+                                }
+                            })
+                            .collect(),
+                    ),
+                    (DeciResult::Column(_), DeciResult::Column(_)) => {
+                        assert_eq!(items.len(), masks.len());
+                        DeciResult::Column(
+                            items
+                                .iter()
+                                .zip(masks.iter())
+                                .map(|(i, m)| i.mask_with(m.clone()))
+                                .collect(),
+                        )
                     }
-                    _ => panic!("impossible"),
+                    _ => panic!("Must mask with boolean (or correct dimension column of booleans)"),
                 }
             }
-            DeciValue::BooleanColumn(bcol) => {
-                _ = js_sys::Reflect::set(
-                    &obj,
-                    &"temp".into(),
-                    &Array::from_iter(bcol.iter().map(|x| JsValue::from_bool(*x))),
-                );
-            }
-            DeciValue::StringColumn(scol) => {
-                _ = js_sys::Reflect::set(
-                    &obj,
-                    &"temp".into(),
-                    &Array::from_iter(scol.iter().map(|x| JsValue::from_str(x))),
-                );
-            }
+            _ => panic!("Can't mask a non-column"),
         }
-        obj
+    }
+
+    pub fn sort(&mut self) -> DeciResult {
+        match self {
+            DeciResult::Column(items) => {
+                items.sort();
+                self.clone()
+            }
+            _ => self.clone(),
+        }
     }
 }

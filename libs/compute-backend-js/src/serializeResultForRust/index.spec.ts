@@ -2,14 +2,17 @@
 /* eslint-disable no-bitwise */
 import { describe, expect, it } from 'vitest';
 import DeciNumber from '@decipad/number';
-import { Result } from '@decipad/language-interfaces';
+import {
+  SerializedResult,
+  deserializeResultFromRust,
+  serializeResultForRust,
+} from 'libs/compute-backend-js/src/serializeResultForRust';
+import { OneResult } from 'libs/language-interfaces/src/Result';
 import chunk from 'lodash/chunk';
-import { deserializeResult, SerializedResult, serializeResult } from '.';
-import { serializeResultForRust } from '../serializeResultForRust';
 
-describe('serializeResult', () => {
+describe('serializeResultForRust', () => {
   it('should serialize true', async () => {
-    const resultTrue = await serializeResult({
+    const resultTrue = await serializeResultForRust({
       type: { kind: 'boolean' },
       value: true,
     });
@@ -21,7 +24,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize false', async () => {
-    const resultTrue = await serializeResult({
+    const resultTrue = await serializeResultForRust({
       type: { kind: 'boolean' },
       value: false,
     });
@@ -33,7 +36,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize positive integers', async () => {
-    const one = await serializeResult({
+    const one = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
     });
@@ -45,7 +48,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize fractions', async () => {
-    const oneThird = await serializeResult({
+    const oneThird = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 3n, s: 1 }),
     });
@@ -57,7 +60,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize zero', async () => {
-    const zero = await serializeResult({
+    const zero = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
     });
@@ -65,7 +68,7 @@ describe('serializeResult', () => {
       type: new BigUint64Array([1n, 0n, 16n]),
       data: new Uint8Array(new BigInt64Array([0n, 1n]).buffer),
     });
-    const negativeZero = await serializeResult({
+    const negativeZero = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 0n, d: 1n, s: -1n }),
     });
@@ -76,7 +79,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize negative numbers', async () => {
-    const negativeOne = await serializeResult({
+    const negativeOne = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
@@ -84,7 +87,7 @@ describe('serializeResult', () => {
       type: new BigUint64Array([1n, 0n, 16n]),
       data: new Uint8Array(new BigInt64Array([-1n, 1n]).buffer),
     });
-    const negativeDenominator = await serializeResult({
+    const negativeDenominator = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: 1n, infinite: false }),
     });
@@ -92,7 +95,7 @@ describe('serializeResult', () => {
       type: new BigUint64Array([1n, 0n, 16n]),
       data: new Uint8Array(new BigInt64Array([-1n, 1n]).buffer),
     });
-    const negativeBoth = await serializeResult({
+    const negativeBoth = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: -1n, infinite: false }),
     });
@@ -100,7 +103,7 @@ describe('serializeResult', () => {
       type: new BigUint64Array([1n, 0n, 16n]),
       data: new Uint8Array(new BigInt64Array([1n, 1n]).buffer),
     });
-    const negativeSign = await serializeResult({
+    const negativeSign = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
@@ -111,7 +114,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize infinity', async () => {
-    const positiveInfinity = await serializeResult({
+    const positiveInfinity = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ infinite: true }),
     });
@@ -119,7 +122,7 @@ describe('serializeResult', () => {
       type: new BigUint64Array([1n, 0n, 16n]),
       data: new Uint8Array(new BigInt64Array([1n, 0n]).buffer),
     });
-    const negativeInfinity = await serializeResult({
+    const negativeInfinity = await serializeResultForRust({
       type: { kind: 'number' },
       value: new DeciNumber({ s: -1n, infinite: true }),
     });
@@ -130,7 +133,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize a string', async () => {
-    const result = await serializeResult({
+    const result = await serializeResultForRust({
       type: { kind: 'string' },
       value: 'Hello, world!',
     });
@@ -165,7 +168,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize a column of strings', async () => {
-    const column = await serializeResult({
+    const column = await serializeResultForRust({
       type: {
         kind: 'column',
         indexedBy: 'number',
@@ -192,7 +195,7 @@ describe('serializeResult', () => {
   });
 
   it.skip('should serialize a column of columns of bools', async () => {
-    const column = await serializeResult({
+    const column = await serializeResultForRust({
       type: {
         kind: 'column',
         indexedBy: 'number',
@@ -225,7 +228,7 @@ describe('serializeResult', () => {
   });
 
   it('should serialize a column of columns of strings', async () => {
-    const column = await serializeResult({
+    const column = await serializeResultForRust({
       type: {
         kind: 'column',
         indexedBy: 'number',
@@ -299,7 +302,9 @@ describe('serializeResult', () => {
   };
 
   it('should serialize a 3D column of strings with varying lengths', async () => {
-    const serialized = await serializeResult(threeDimensionalStringColumn);
+    const serialized = await serializeResultForRust(
+      threeDimensionalStringColumn
+    );
 
     expect(serialized.type.length).toBe(45); // 7 type entries * 3 values each
 
@@ -329,14 +334,14 @@ describe('serializeResult', () => {
   });
 });
 
-describe('deserializeResult', () => {
+describe('deserializeResultFromRust', () => {
   it('should deserialize boolean true', () => {
     const serializedTrue = {
       type: BigUint64Array.from([0n, 0n, 1n]),
       data: new Uint8Array([1]),
     };
 
-    const result = deserializeResult(serializedTrue);
+    const result = deserializeResultFromRust(serializedTrue);
     expect(result).toEqual({
       type: { kind: 'boolean' },
       value: true,
@@ -349,7 +354,7 @@ describe('deserializeResult', () => {
       data: new Uint8Array([0]),
     };
 
-    const result = deserializeResult(serializedFalse);
+    const result = deserializeResultFromRust(serializedFalse);
     expect(result).toEqual({
       type: { kind: 'boolean' },
       value: false,
@@ -362,7 +367,7 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([1n, 3n]).buffer),
     };
 
-    const result = deserializeResult(serializedOneThird);
+    const result = deserializeResultFromRust(serializedOneThird);
     expect(result).toMatchInlineSnapshot(`
       {
         "type": {
@@ -384,7 +389,7 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([-1n, 2n]).buffer),
     };
 
-    const result = deserializeResult(serializedNegativeOneHalf);
+    const result = deserializeResultFromRust(serializedNegativeOneHalf);
     expect(result).toMatchInlineSnapshot(`
       {
         "type": {
@@ -406,7 +411,7 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([1n, 0n]).buffer),
     };
 
-    const result = deserializeResult(serializedInfinity);
+    const result = deserializeResultFromRust(serializedInfinity);
     expect(result).toEqual({
       type: { kind: 'number' },
       value: new DeciNumber({ infinite: true }),
@@ -419,7 +424,7 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([-1n, 0n]).buffer),
     };
 
-    const result = deserializeResult(serializedNegativeInfinity);
+    const result = deserializeResultFromRust(serializedNegativeInfinity);
     expect(result).toEqual({
       type: { kind: 'number' },
       value: new DeciNumber({ s: -1n, infinite: true }),
@@ -432,7 +437,7 @@ describe('deserializeResult', () => {
       data: new TextEncoder().encode('Hello, world!'),
     };
 
-    const result = deserializeResult(serializedString);
+    const result = deserializeResultFromRust(serializedString);
     expect(result).toEqual({
       type: { kind: 'string' },
       value: 'Hello, world!',
@@ -461,10 +466,10 @@ describe('deserializeResult', () => {
       [1, 0, 1, 0]
     );
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -484,10 +489,10 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([1n, 2n, 3n, 4n, 5n, 6n]).buffer),
     };
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -523,10 +528,10 @@ describe('deserializeResult', () => {
       [72, 101, 108, 108, 111, 87, 111, 114, 108, 100, 84, 101, 115, 116]
     );
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -541,10 +546,10 @@ describe('deserializeResult', () => {
       [1, 0, 1]
     );
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -559,10 +564,10 @@ describe('deserializeResult', () => {
       data: new Uint8Array(new BigInt64Array([1n, 2n, 3n, 4n, 5n, 6n]).buffer),
     };
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -606,10 +611,10 @@ describe('deserializeResult', () => {
       [1, 0, 0, 1]
     );
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -619,8 +624,8 @@ describe('deserializeResult', () => {
     expect(values[0]).toBeInstanceOf(Function); // AsyncGenerator
     expect(values[1]).toBeInstanceOf(Function); // AsyncGenerator
 
-    const subColumn1 = values[0] as () => AsyncGenerator<Result.OneResult>;
-    const subColumn2 = values[1] as () => AsyncGenerator<Result.OneResult>;
+    const subColumn1 = values[0] as () => AsyncGenerator<OneResult>;
+    const subColumn2 = values[1] as () => AsyncGenerator<OneResult>;
 
     const subValues1 = [];
     for await (const value of subColumn1()) {
@@ -641,10 +646,10 @@ describe('deserializeResult', () => {
       [1, 0, 0, 1]
     );
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const columnData = result.value as () => AsyncGenerator<OneResult>;
     const values = [];
     for await (const value of columnData()) {
       values.push(value);
@@ -654,8 +659,8 @@ describe('deserializeResult', () => {
     expect(values[0]).toBeInstanceOf(Function); // AsyncGenerator
     expect(values[1]).toBeInstanceOf(Function); // AsyncGenerator
 
-    const subColumn1 = values[0] as () => AsyncGenerator<Result.OneResult>;
-    const subColumn2 = values[1] as () => AsyncGenerator<Result.OneResult>;
+    const subColumn1 = values[0] as () => AsyncGenerator<OneResult>;
+    const subColumn2 = values[1] as () => AsyncGenerator<OneResult>;
 
     const subValues1 = [];
     for await (const value of subColumn1()) {
@@ -684,17 +689,15 @@ describe('deserializeResult', () => {
       data: new TextEncoder().encode('HelloWorld!DeciPad'),
     };
 
-    const result = deserializeResult(serialized);
+    const result = deserializeResultFromRust(serialized);
     expect(result.type.kind).toBe('column');
 
-    const outerColumnData =
-      result.value as () => AsyncGenerator<Result.OneResult>;
+    const outerColumnData = result.value as () => AsyncGenerator<OneResult>;
     const outerValues = [];
     for await (const innerColumn of outerColumnData()) {
       expect(innerColumn).toBeInstanceOf(Function); // AsyncGenerator
 
-      const innerColumnData =
-        innerColumn as () => AsyncGenerator<Result.OneResult>;
+      const innerColumnData = innerColumn as () => AsyncGenerator<OneResult>;
       const innerValues = [];
       for await (const value of innerColumnData()) {
         innerValues.push(value);

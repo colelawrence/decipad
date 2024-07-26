@@ -1,5 +1,5 @@
 mod comparators;
-mod types_utils_impl;
+pub mod types_utils_impl;
 mod zero;
 
 pub mod types;

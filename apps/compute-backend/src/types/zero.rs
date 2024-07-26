@@ -1,38 +1,18 @@
+use super::types::DeciResult;
 use num::Zero;
 
-use super::types::{DeciFloat, DeciFrac};
-
-impl Zero for DeciFloat {
-    fn zero() -> DeciFloat {
-        DeciFloat {
-            val: 0.0,
-            inf: false,
-            und: false,
-        }
+impl Zero for DeciResult {
+    fn zero() -> DeciResult {
+        DeciResult::Fraction(0, 1)
     }
 
     fn is_zero(&self) -> bool {
-        if self.val == 0.0 && !self.inf && !self.und {
-            return true;
+        match self {
+            DeciResult::Boolean(a) => !*a,
+            DeciResult::String(_) => false,
+            DeciResult::Fraction(n, d) => *n == 0 && *d != 0,
+            DeciResult::Float(a) => *a == 0.0,
+            DeciResult::Column(_) => false,
         }
-        return false;
-    }
-}
-
-impl Zero for DeciFrac {
-    fn zero() -> DeciFrac {
-        DeciFrac {
-            n: 0,
-            d: 1,
-            inf: false,
-            und: false,
-        }
-    }
-
-    fn is_zero(&self) -> bool {
-        if self.n == 0 && self.d != 0 && !self.inf && !self.und {
-            return true;
-        }
-        return false;
     }
 }

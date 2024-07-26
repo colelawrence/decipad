@@ -1,37 +1,27 @@
-use crate::types::types::{DeciValue, NCol};
+use crate::types::types::DeciResult;
 
 pub struct SortedColumn {
-    column: DeciValue,
-    sorted_column: Option<DeciValue>,
+    column: DeciResult,
+    sorted_column: Option<DeciResult>,
 }
 
 impl SortedColumn {
     fn sort_and_save(&mut self) {
         let mut cloned_column = self.column.clone();
-
-        match &mut cloned_column {
-            DeciValue::BooleanColumn(col) => col.sort(),
-            DeciValue::NumberColumn(col) => match col {
-                NCol::FracCol(ncol) => ncol.sort(),
-                NCol::FloatCol(ncol) => ncol.sort(),
-            },
-            DeciValue::StringColumn(col) => col.sort(),
-        };
-
-        self.sorted_column = Some(cloned_column);
+        self.sorted_column = Some(cloned_column.sort());
     }
 
-    pub fn get_sorted(mut self) -> DeciValue {
+    pub fn get_sorted(mut self) -> DeciResult {
         if let Some(existing_sorted_column) = self.sorted_column {
             existing_sorted_column
         } else {
             self.sort_and_save();
             self.sorted_column
-                .expect("Should not be None after `sort_and_save` call.")
+                .expect("Should not be None, since sort_and_save was called.")
         }
     }
 
-    pub fn new(column: DeciValue) -> SortedColumn {
+    pub fn new(column: DeciResult) -> SortedColumn {
         SortedColumn {
             column,
             sorted_column: None,
@@ -40,37 +30,15 @@ impl SortedColumn {
 }
 
 #[test]
-fn sorted_simple() {
-    let float_val = DeciValue::from_floats(vec![5.0, 4.0, 3.5, 4.5, 5.1, 4.9, 5.0]);
-    let sorted_column = SortedColumn::new(float_val);
-
-    let sorted_float_col = sorted_column.get_sorted();
-
-    if let DeciValue::NumberColumn(NCol::FloatCol(floats)) = sorted_float_col {
-        for i in 0..floats.len() - 1 {
-            if floats[i] > floats[i + 1] {
-                panic!("Column is not sorted");
+fn test_sort_col() {
+    let mut myCol = DeciResult::Column((1..20).map(|x| DeciResult::Fraction(1, x)).collect());
+    let sorted = SortedColumn::new(myCol).get_sorted();
+    match sorted {
+        DeciResult::Column(items) => {
+            for i in 1..items.len() {
+                assert!(items[i - 1] <= items[i])
             }
         }
-    } else {
-        panic!("sorted_float_col is not of the correct type");
-    }
-}
-
-#[test]
-fn sorted_fractions() {
-    let float_val = DeciValue::from_fracs(vec![1, 5, 3], vec![2, 4, 5]);
-    let sorted_column = SortedColumn::new(float_val);
-
-    let sorted_float_col = sorted_column.get_sorted();
-
-    if let DeciValue::NumberColumn(NCol::FracCol(fracs)) = sorted_float_col {
-        for i in 0..fracs.len() - 1 {
-            if fracs[i] > fracs[i + 1] {
-                panic!("Column is not sorted");
-            }
-        }
-    } else {
-        panic!("sorted_float_col is not of the correct type");
+        _ => panic!("Should be a column"),
     }
 }

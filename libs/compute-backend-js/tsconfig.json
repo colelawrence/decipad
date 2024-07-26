@@ -11,6 +11,9 @@
   ],
   "references": [
     {
+      "path": "../number"
+    },
+    {
       "path": "../remote-computer"
     },
     {

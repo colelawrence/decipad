@@ -33,7 +33,7 @@ export type SerializedResult = {
   data: Uint8Array;
 };
 
-export const serializeResultIter = async <T extends AnyResult>(
+export const serializeResultForRustIter = async <T extends AnyResult>(
   results: T[],
   typeArray: number[],
   dataArray: Uint8Array[],
@@ -41,8 +41,11 @@ export const serializeResultIter = async <T extends AnyResult>(
 ) => {
   const nextResults: AnyResult[] = [];
   const initialTypeArrayLength = typeArray.length;
+  let dataArrayLength = dataArray.length;
+  let childLength: number | undefined;
 
   // leaving this unused for now; but will be needed to compress data at some point
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const result of results) {
     switch (result.type.kind) {
       case 'boolean': {
@@ -103,6 +106,13 @@ export const serializeResultIter = async <T extends AnyResult>(
         break;
       }
     }
+    const lengthDelta = dataArrayLength - dataArray.length;
+    dataArrayLength = dataArray.length;
+    if (childLength === undefined) {
+      childLength = lengthDelta;
+    } else if (childLength !== lengthDelta) {
+      // childrenHaveUniformLength = false;
+    }
   }
 
   // Time to fix those placeholder values
@@ -114,18 +124,23 @@ export const serializeResultIter = async <T extends AnyResult>(
   }
 
   if (nextResults.length > 0) {
-    await serializeResultIter(nextResults, typeArray, dataArray, dataLength);
+    await serializeResultForRustIter(
+      nextResults,
+      typeArray,
+      dataArray,
+      dataLength
+    );
   }
 };
 
-export const serializeResult = async (
+export const serializeResultForRust = async (
   result: AnyResult
 ): Promise<SerializedResult> => {
   const typeArray: number[] = [];
   const dataArray: Uint8Array[] = [];
   const dataLength = { n: 0 };
 
-  await serializeResultIter([result], typeArray, dataArray, dataLength);
+  await serializeResultForRustIter([result], typeArray, dataArray, dataLength);
 
   const totalTypeLength = typeArray.length;
   const type = new BigUint64Array(totalTypeLength);
@@ -276,7 +291,7 @@ const decodeData = (
   }
 };
 
-export const deserializeResult = (val: {
+export const deserializeResultFromRust = (val: {
   type: BigUint64Array;
   data: Uint8Array;
 }): Result => {

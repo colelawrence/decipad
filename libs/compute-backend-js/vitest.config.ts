@@ -9,6 +9,7 @@ export default mergeConfig(
     test: {
       root: __dirname,
       include: ['src/**/*.spec.ts'],
+      globals: true,
     },
   })
 );

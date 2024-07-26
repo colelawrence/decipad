@@ -2,6 +2,7 @@ import type { UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import wasm from 'vite-plugin-wasm';
 
 const plugins = [
   react({
@@ -9,10 +10,11 @@ const plugins = [
     plugins: [['@swc/plugin-emotion', {}]],
   }),
   tsconfigPaths(),
+  wasm(),
 ];
 
 const viteConfig: UserConfig = {
-  plugins,
+  plugins: [plugins],
   build: {
     sourcemap: true,
     outDir: './dist/apps/frontend',
