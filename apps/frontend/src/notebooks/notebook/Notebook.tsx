@@ -63,12 +63,14 @@ export const Notebook: FC = () => {
 
   const onRecordPadEvent = useCallback(
     async (name: string, meta: string) => {
-      await recordPadEvent({
-        padId: notebookId,
-        aliasId: aliasId ?? '',
-        name,
-        meta,
-      });
+      if (aliasId) {
+        await recordPadEvent({
+          padId: notebookId,
+          aliasId,
+          name,
+          meta,
+        });
+      }
     },
     [notebookId, recordPadEvent, aliasId]
   );
