@@ -1,4 +1,4 @@
-export * from './RemoteComputerClient';
+export * from './client';
 
 export type {
   AST,
@@ -109,4 +109,4 @@ export type {
   Token,
 } from '@decipad/computer';
 
-export * from './RemoteComputerClient';
+export * from './client';

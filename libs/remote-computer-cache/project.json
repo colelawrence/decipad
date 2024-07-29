@@ -1,0 +1,31 @@
+{
+  "name": "remote-computer-cache",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/remote-computer-cache/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/remote-computer-cache/**/*.ts",
+          "libs/remote-computer-cache/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/remote-computer-cache"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
+        "cwd": "libs/remote-computer-cache"
+      }
+    }
+  }
+}

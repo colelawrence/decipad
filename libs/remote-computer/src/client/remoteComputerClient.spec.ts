@@ -13,9 +13,9 @@ import {
 import { c, r } from '@decipad/language-utils';
 import type { Result } from '@decipad/language-interfaces';
 import { createRemoteComputerClient } from './RemoteComputerClient';
-import { getIdentifiedBlocks, pushResultToComputer } from './testUtils';
-import type { RemoteComputerClient } from './types/misc';
-import { buildResult, materializeResult, runCode } from '.';
+import { getIdentifiedBlocks, pushResultToComputer } from '../testUtils';
+import type { RemoteComputerClient } from '../types/misc';
+import { buildResult, materializeResult, runCode } from '..';
 import { N } from '@decipad/number';
 import { getDefined, timeout } from '@decipad/utils';
 import { serializeResult } from '@decipad/computer-utils';

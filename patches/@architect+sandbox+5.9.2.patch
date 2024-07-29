@@ -635,3 +635,19 @@ index 2413332..625da81 100644
      // Do we still have anything left?
      if (missing.length) {
        let plural = missing.length > 1
+diff --git a/node_modules/@architect/sandbox/src/sandbox/startup-scripts.js b/node_modules/@architect/sandbox/src/sandbox/startup-scripts.js
+index 2bd4015..1888af1 100644
+--- a/node_modules/@architect/sandbox/src/sandbox/startup-scripts.js
++++ b/node_modules/@architect/sandbox/src/sandbox/startup-scripts.js
+@@ -22,7 +22,10 @@ module.exports = function startupScripts (params, callback) {
+       return function (callback) {
+         let env = { ...process.env, ARC_INV, ARC_RAW, ...envVars }
+         exec(cmd, { cwd, env }, function (err, stdout, stderr) {
+-          if (err) callback(err)
++          if (err) {
++            console.error('Error running startup script:', cmd)
++            callback(err)
++          }
+           else {
+             stdout = stdout ? stdout.toString() : ''
+             stderr = stderr ? stderr.toString() : ''

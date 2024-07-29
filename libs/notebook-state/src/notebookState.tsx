@@ -34,5 +34,6 @@ const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
   return store;
 };
 
-export const useNotebookState = (notebookId: string) =>
-  useStore(getNotebookStore(notebookId));
+export const useNotebookState = (notebookId: string) => {
+  return useStore(getNotebookStore(notebookId));
+};

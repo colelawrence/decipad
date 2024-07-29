@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createSubscriptionCentral } from './SubscriptionCentral';
-import type { TSubscribeToRemote } from './types/SubscriptionCentral';
+import type { TSubscribeToRemote } from '../types/SubscriptionCentral';
 
 describe('SubscriptionCentral', () => {
   it('should keep track of subscriptions to remote', async () => {

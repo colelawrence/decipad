@@ -12,7 +12,8 @@
     { "path": "../utils" },
     { "path": "../remote-computer-worker" },
     { "path": "../listener-helper" },
-    { "path": "../client-cache" }
+    { "path": "../client-cache" },
+    { "path": "../remote-computer-cache" }
   ],
   "compilerOptions": {
     "lib": ["esnext", "webworker"]

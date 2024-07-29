@@ -1,17 +1,17 @@
 import type { SubscriptionLike } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
-import type { PlainSubjectPropName } from './types/plainSubjects';
-import type { ListenerMethodName } from './types/listeners';
-import type { ParametrizedSubjectMethodName } from './types/parametrizedSubjects';
+import type { PlainSubjectPropName } from '../types/plainSubjects';
+import type { ListenerMethodName } from '../types/listeners';
+import type { ParametrizedSubjectMethodName } from '../types/parametrizedSubjects';
 import type {
   TSubscribeToRemote,
   TSubscriptionCentral,
-} from './types/SubscriptionCentral';
+} from '../types/SubscriptionCentral';
 import type {
   TCommonSubject,
   TCommonSubjectName,
   TCommonSubscriptionParams,
-} from './types/common';
+} from '../types/common';
 
 const methodArgsKey = (methodName: string, argsKey: string) =>
   `${methodName}:${argsKey}`;

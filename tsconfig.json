@@ -156,6 +156,15 @@
       "@decipad/remote-computer-worker/client": [
         "libs/remote-computer-worker/src/client/index.ts"
       ],
+      "@decipad/remote-computer-cache/client": [
+        "libs/remote-computer-cache/src/client/index.ts"
+      ],
+      "@decipad/remote-computer-cache/worker": [
+        "libs/remote-computer-cache/src/worker/index.ts"
+      ],
+      "@decipad/remote-computer-cache/server": [
+        "libs/remote-computer-cache/src/server/index.ts"
+      ],
       "@decipad/retry": ["libs/retry/src/index.ts"],
       "@decipad/routing": ["libs/routing/src/index.ts"],
       "@decipad/server-side-rendering": [

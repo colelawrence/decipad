@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
+import { nanoid } from 'nanoid';
+import type { Observable, Subscription } from 'rxjs';
+import isEmpty from 'lodash/isEmpty';
 import { createWorkerClient } from '@decipad/remote-computer-worker/client';
 import type {
   Computer,
@@ -11,49 +14,53 @@ import type {
   ResultType,
   NotebookResultStream,
 } from '@decipad/computer-interfaces';
-import { createComputerWorker } from './worker/createComputerWorker';
-import { remoteListenerHelper } from './utils/remoteListenerHelper';
-import { createSubscriptionCentral } from './SubscriptionCentral';
-import { encodeSubscriptionArgs } from './encode/encodeSubscriptionArgs';
-import { decodeNotification } from './decode/decodeNotification';
-import { nanoid } from 'nanoid';
+import { createComputerWorker } from '../worker/createComputerWorker';
+import { remoteListenerHelper } from './remoteListenerHelper';
+import { encodeSubscriptionArgs } from '../encode/encodeSubscriptionArgs';
+import { decodeNotification } from '../decode/decodeNotification';
 import {
   Unknown,
   ExternalDataMap,
   Result,
   AST,
 } from '@decipad/language-interfaces';
-import type { Observable, Subscription } from 'rxjs';
 import { listenerHelper } from '@decipad/listener-helper';
+import { identity, type PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { getExprRef } from '@decipad/computer';
-import { remotePlainSubject } from './utils/remotePlainSubject';
+import {
+  fetchRawRemoteResults,
+  parseRawRemoteResults,
+} from '@decipad/remote-computer-cache/client';
+import {
+  getDefinedSymbol,
+  getIdentifierString,
+} from '../../../computer/src/utils';
+import { isColumn } from '../../../computer/src/utils/isColumn';
 import type {
   TCommonSubjectName,
   TCommonTypedSubscriptionParams,
   TCommonSubject,
   TCommonSubscriptionParams,
   TCommonSerializedNotification,
-} from './types/common';
-import type { GetRemoteComputerOptions } from './types/misc';
-import { debug } from './debug';
+} from '../types/common';
+import type { GetRemoteComputerOptions } from '../types/misc';
+import { debug } from '../debug';
 import type {
   RPCMethodName,
   TRPCDecodedArgs,
   TRPCDecodedResult,
   TRPCEncodedArgs,
   TRPCEncodedResult,
-} from './types/rpc';
-import { createRPCArgEncoder } from './encode/createRpcArgEncoder';
-import { createRPCResultDecoder } from './decode/createRpcResultDecoder';
-import { identity, type PromiseOrType } from '@decipad/utils';
-import type { TSubscribeToRemote } from './types/SubscriptionCentral';
-import {
-  getDefinedSymbol,
-  getIdentifierString,
-} from '../../computer/src/utils';
-import { isColumn } from '../../computer/src/utils/isColumn';
-import { enrichComputeDelta } from './utils/enrichComputeDelta';
+} from '../types/rpc';
+import { createRPCArgEncoder } from '../encode/createRpcArgEncoder';
+import { createRPCResultDecoder } from '../decode/createRpcResultDecoder';
+import type { TSubscribeToRemote } from '../types/SubscriptionCentral';
+import { enrichComputeDelta } from './enrichComputeDelta';
+import { remotePlainSubject } from './remotePlainSubject';
+import { createSubscriptionCentral } from './SubscriptionCentral';
+import { decodeRemoteNotebookResults } from './decodeRemoteNotebookResults';
+import { PROTOCOL_VERSION } from '../constants';
 
 const unknownResult: ResultType = {
   type: { kind: 'anything' },
@@ -61,6 +68,14 @@ const unknownResult: ResultType = {
 };
 
 const RemoteComputerClientSymbol = Symbol('RemoteComputerClient');
+
+const initialNotebookResults: NotebookResults = {
+  blockResults: {},
+  indexLabels: new Map(),
+};
+
+const areNotebookResultsEmpty = (results: NotebookResults) =>
+  isEmpty(results.blockResults);
 
 export const createRemoteComputerClientFromWorker = (
   notebookId: string,
@@ -191,10 +206,7 @@ export const createRemoteComputerClientFromWorker = (
     results: NotebookResultStream = remotePlainSubject(
       'results',
       subscriptionCentral,
-      {
-        blockResults: {},
-        indexLabels: new Map(),
-      } as NotebookResults
+      initialNotebookResults
     );
 
     #latestProgram: Map<string, ProgramBlock> = new Map();
@@ -513,12 +525,50 @@ export const createRemoteComputerClientFromWorker = (
       await rpc.call('initializeComputer', { notebookId });
     }
 
+    // fetch remote cache
+    async #fetchNotebookResultsFromRemoteCache() {
+      debug(
+        'Remote computer cache: fetching notebook results from remote cache'
+      );
+      const resultsArrayBuffer = await fetchRawRemoteResults(notebookId);
+      if (!this.#gotFirstResults) {
+        debug(
+          'Remote computer cache: parsing raw remote results',
+          resultsArrayBuffer
+        );
+        const remoteNotebookResults = await parseRawRemoteResults(
+          resultsArrayBuffer,
+          PROTOCOL_VERSION,
+          decodeRemoteNotebookResults
+        );
+        if (!this.#gotFirstResults && remoteNotebookResults) {
+          debug('Remote computer cache: fetched notebook cache, applying it');
+          this.results.next(remoteNotebookResults);
+        } else if (!remoteNotebookResults) {
+          console.warn(
+            'Did not apply remote cache because of no remote results, which may mean that the cache has an outdated encoding',
+            resultsArrayBuffer
+          );
+        }
+      }
+    }
+
     #resultsMonitorSubscription: Subscription;
+    #gotFirstResults = false;
 
     constructor() {
       this.#initialize().catch(onError);
       this.#resultsMonitorSubscription = this.results.subscribe((results) => {
         debug('Results updated', results);
+        if (!this.#gotFirstResults && !areNotebookResultsEmpty(results)) {
+          this.#gotFirstResults = true;
+        }
+      });
+      this.#fetchNotebookResultsFromRemoteCache().catch((err) => {
+        console.error(
+          'Error trying to fetch notebook results from the remote cache',
+          err
+        );
       });
     }
   }
@@ -532,6 +582,7 @@ export const createRemoteComputerClient = (
   const worker = createComputerWorker();
   worker.onerror = (ev: ErrorEvent) => {
     // eslint-disable-next-line no-console
+
     console.error('Worker error', ev);
     ev.preventDefault();
     onError(ev.error);

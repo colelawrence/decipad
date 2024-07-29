@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src",
+    ".eslintrc.js",
+    "vitest.config.ts",
+    "../../vite.config.ts"
+  ],
+  "references": [{ "path": "../backend-config" }, { "path": "../fetch" }],
+  "compilerOptions": {
+    "lib": ["esnext", "webworker"]
+  }
+}

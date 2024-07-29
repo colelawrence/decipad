@@ -45,6 +45,7 @@ any /api/pads/:padid/export
 get /api/pads/:padid/logs
 get /api/pads/:padid/backups/export
 post /api/pads/:padid/backups
+any /api/pads/:padid/computercache
 get /api/pads/:padid
 post /api/pads/:padid/fetch
 post /api/discord

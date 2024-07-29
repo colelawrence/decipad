@@ -4,9 +4,13 @@ import { createCache } from '@decipad/client-cache';
 import { ComputerResultsCache } from './types';
 import { debounceTime, shareReplay } from 'rxjs';
 import { captureException } from '@sentry/browser';
+import { putRemoteResult } from '@decipad/remote-computer-cache/worker';
 import { SerializedNotebookResults } from '../types/serializedTypes';
 import { encodeFullNotebookResults } from '../encode/encodeFullNotebookResults';
 import { decodeFullNotebookResults } from '../decode/decodeFullNotebookResults';
+import { encodeRemoteNotebookResults } from './encodeRemoteNotebookResults';
+import { PROTOCOL_VERSION } from '../constants';
+import { debug } from '../debug';
 
 const CACHE_RESULTS_DEBOUNCE_TIME_MS = 3000;
 
@@ -23,6 +27,34 @@ export const createComputerResultsCache = (
   let emittedFirstResults = false;
   let latestCachedResults: NotebookResults | undefined;
 
+  const saveCacheResultsLocally = async (results: NotebookResults) => {
+    cache
+      .set(notebookId, results)
+      .finally(() => {
+        debug('Cached results locally', results);
+      })
+      .catch((err) => {
+        console.error('Failed to save results to local cache', err);
+        captureException(err);
+      });
+  };
+
+  const saveCacheResultsRemotely = async (results: NotebookResults) => {
+    return putRemoteResult(
+      notebookId,
+      results,
+      encodeRemoteNotebookResults,
+      PROTOCOL_VERSION
+    )
+      .then(() => {
+        debug('Cached results remotely', results);
+      })
+      .catch((err) => {
+        console.error('Failed to save results to remote cache', err);
+        captureException(err);
+      });
+  };
+
   const onNewResults = (results: NotebookResults) => {
     emittedFirstResults = true;
     if (results === latestCachedResults) {
@@ -31,17 +63,12 @@ export const createComputerResultsCache = (
     latestCachedResults = results;
     // eslint-disable-next-line no-use-before-define
     emittedCachedResults
-      .then(() => {
-        cache
-          .set(notebookId, results)
-          .finally(() => {
-            console.log('Cached results', results);
-          })
-          .catch((err) => {
-            console.error('Failed to cache results', err);
-            captureException(err);
-          });
-      })
+      .then(() =>
+        Promise.all([
+          saveCacheResultsLocally(results),
+          saveCacheResultsRemotely(results),
+        ])
+      )
       .catch((err) => {
         console.error('Failed to emit cached results', err);
         captureException(err);
@@ -53,21 +80,23 @@ export const createComputerResultsCache = (
     .pipe(shareReplay(2), debounceTime(CACHE_RESULTS_DEBOUNCE_TIME_MS))
     .subscribe(onNewResults);
 
-  const emittedCachedResults = (async () => {
+  const fetchAndEmitLocalCacheResults = async () => {
     try {
       const cachedResults = await cache.get(notebookId);
       if (cachedResults != null && !emittedFirstResults) {
-        console.log('Results cache: emitting first results', cachedResults);
+        debug('Results cache: emitting first results', cachedResults);
         latestCachedResults = cachedResults;
         computer.results.next(cachedResults);
       } else {
-        console.log('No cached results found');
+        debug('No locally cached results found');
       }
     } catch (err) {
       console.error('Error decoding cached results', err);
       captureException(err);
     }
-  })();
+  };
+
+  const emittedCachedResults = fetchAndEmitLocalCacheResults();
 
   const terminate = () => {
     resultsSubscription?.unsubscribe();
