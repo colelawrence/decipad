@@ -274,6 +274,18 @@ export const createRemoteComputerClientFromWorker = (
       return parsed?.definesVariable;
     }
     getVarBlockId(varName: string): string | undefined {
+      const isColumnName = varName.includes('.');
+      if (isColumnName) {
+        for (const p of this.#latestProgram.values()) {
+          if (
+            p.definesTableColumn &&
+            p.definesTableColumn.join('.') === varName
+          ) {
+            return p.id;
+          }
+        }
+      }
+
       const identifier = varName.includes('.') // table.name
         ? varName.split('.')
         : varName;

@@ -637,7 +637,7 @@ describe('getVarBlockId$', () => {
 
     const firstFoo = await firstValueFrom(fooStream);
 
-    expect(firstFoo).toBe('block-1');
+    expect(firstFoo).toBe('block-1_0');
   });
 
   it('can find exprRefs', async () => {

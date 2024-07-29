@@ -230,7 +230,19 @@ export class Computer implements ComputerInterface {
   }
 
   _getVarBlockId(varName: string): string | undefined {
-    const mainIdentifier = varName.includes('.') // table.name
+    const isColumnName = varName.includes('.');
+    if (isColumnName) {
+      const columnBlockId = this.latestProgram.asSequence.find((p) => {
+        if (p.definesTableColumn) {
+          return p.definesTableColumn.join('.') === varName;
+        }
+        return false;
+      })?.id;
+      if (columnBlockId) {
+        return columnBlockId;
+      }
+    }
+    const mainIdentifier = isColumnName // table.columnName
       ? varName.split('.')[0]
       : varName;
 

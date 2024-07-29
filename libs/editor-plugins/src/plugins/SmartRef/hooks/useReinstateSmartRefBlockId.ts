@@ -46,15 +46,10 @@ export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
           // still exists, no need to reinstate
           return;
         }
-        if (lastSeenVariableName.includes('.') || element.columnId) {
-          // table column smart refs are complicated, and we are bound to make a mistake if we're going
-          // to try to reinstate them. So we'll just skip them for now.
-          return;
-        }
         const doesThisVariableExist$ = computer.getVarBlockId$
           .observe(lastSeenVariableName)
           .pipe(filter((blockId) => !!blockId));
-        sub = doesThisVariableExist$.subscribe((newBlockId) => {
+        sub = doesThisVariableExist$.subscribe(async (newBlockId) => {
           if (newBlockId && newBlockId !== element.blockId) {
             const elPath = findNodePath(editor, element);
             if (elPath) {
@@ -62,8 +57,22 @@ export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
               console.log(
                 `>>>>>>>>>>>>>>> ${lastSeenVariableName}: setting new reference of smart ref to new block id ${newBlockId} because the old one (${element.blockId}) was missing`
               );
-              setNodes(editor, { blockId: newBlockId }, { at: elPath });
-              setMissingRef(false);
+              const isColumn = lastSeenVariableName.includes('.');
+              if (isColumn) {
+                const tableName = lastSeenVariableName.split('.')[0];
+                const newTableBlockId = computer.getVarBlockId(tableName);
+                if (newTableBlockId) {
+                  setNodes(
+                    editor,
+                    { columnId: newBlockId, blockId: newTableBlockId },
+                    { at: elPath }
+                  );
+                  setMissingRef(false);
+                }
+              } else {
+                setNodes(editor, { blockId: newBlockId }, { at: elPath });
+                setMissingRef(false);
+              }
             }
           }
         });
@@ -75,5 +84,5 @@ export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
         clearTimeout(timeout);
       }
     };
-  }, [computer.getVarBlockId$, editor, element, missingRef]);
+  }, [computer, computer.getVarBlockId$, editor, element, missingRef]);
 };
