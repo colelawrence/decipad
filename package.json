@@ -366,7 +366,7 @@
     "slate": "0.103.0",
     "slate-history": "0.100.0",
     "slate-hyperscript": "0.100.0",
-    "slate-react": "0.102.0",
+    "slate-react": "0.107.1",
     "slug": "9.0.0",
     "storybook-dark-mode": "^4.0.2",
     "stream-browserify": "3.0.0",
