@@ -3,6 +3,7 @@ import type { AutocompleteName } from '@decipad/language-interfaces';
 import { FC } from 'react';
 import { SelectInput } from '../../../shared/molecules/SelectInput/SelectInput';
 import { hideOnPrint } from '../../../styles/editor-layout';
+import { usePersistentVariableName } from '@decipad/editor-hooks';
 
 interface VariableNameProps {
   label?: string;
@@ -19,6 +20,11 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
   onChangeVariableName,
   testId,
 }) => {
+  usePersistentVariableName(
+    selectedVariableName,
+    variableNames,
+    onChangeVariableName
+  );
   return (
     <div css={hideOnPrint} contentEditable={false}>
       <SelectInput

@@ -404,10 +404,10 @@ function __wbg_adapter_111(arg0, arg1, arg2, arg3) {
 
 /**
 */
-export const ComputeErrors = Object.freeze({ IncorrectType:0,"0":"IncorrectType",UnknownId:1,"1":"UnknownId",InferError:2,"2":"InferError", });
+export const DeciType = Object.freeze({ Number:0,"0":"Number",String:1,"1":"String",Boolean:2,"2":"Boolean",Column:3,"3":"Column",Table:4,"4":"Table", });
 /**
 */
-export const DeciType = Object.freeze({ Number:0,"0":"Number",String:1,"1":"String",Boolean:2,"2":"Boolean",Column:3,"3":"Column",Table:4,"4":"Table", });
+export const ComputeErrors = Object.freeze({ IncorrectType:0,"0":"IncorrectType",UnknownId:1,"1":"UnknownId",InferError:2,"2":"InferError", });
 
 const ComputeBackendFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }

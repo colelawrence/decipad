@@ -20,3 +20,4 @@ export * from './useGeneratedName';
 export * from './useComputer';
 export * from './useNotebookId';
 export * from './useLiveConnectionWorker';
+export * from './usePersistentVariableName';

@@ -48,6 +48,7 @@ import {
   markTypeIsDisabled,
   markTypeNames,
 } from './types';
+import { usePersistentVariableName } from '@decipad/editor-hooks';
 
 export const PlotParams = ({
   sourceVarName,
@@ -437,6 +438,16 @@ export const PlotParams = ({
       selectedChartTypeFor,
     ]
   );
+
+  const existingVars = useMemo(
+    () =>
+      sourceVarNameOptions.map((varName, index) => ({
+        name: varName,
+        blockId: sourceExprRefOptions?.[index],
+      })),
+    [sourceExprRefOptions, sourceVarNameOptions]
+  );
+  usePersistentVariableName(sourceVarName, existingVars, setSourceVarName);
 
   return (
     <div css={plotParamsWrapperStyles}>
