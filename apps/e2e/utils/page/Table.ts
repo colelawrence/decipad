@@ -279,7 +279,7 @@ export async function changeColumnYear(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText('Date').click();
+  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
   await page.getByText('Year').click();
 }
 
@@ -289,7 +289,7 @@ export async function changeColumnMonth(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText('Date').click();
+  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
   await page.getByText('Month').click();
 }
 
@@ -299,7 +299,7 @@ export async function changeColumnDay(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText('Date').click();
+  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
   await page.getByText('Day').click();
 }
 

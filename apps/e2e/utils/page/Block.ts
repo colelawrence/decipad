@@ -22,7 +22,7 @@ export async function createWithSlashCommand(
 
   await page.keyboard.insertText(command);
   // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
+  await page.waitForTimeout(Timeouts.typing + Timeouts.menuOpenDelay);
 
   if (menuItem) {
     await page.click(`[data-testid="menu-item-${menuItem}"]`);

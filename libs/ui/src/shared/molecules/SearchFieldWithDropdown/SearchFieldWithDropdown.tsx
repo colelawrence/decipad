@@ -72,7 +72,6 @@ export const SearchFieldWithDropdown: React.FC<
     if (variant === 'textarea') {
       return (
         <TextareaField
-          autoFocus
           value={searchTerm}
           height={5}
           onChange={(search) => onSearchChange(search)}
@@ -82,7 +81,6 @@ export const SearchFieldWithDropdown: React.FC<
     }
     return (
       <InputField
-        autoFocus
         value={searchTerm}
         onChange={(search) => {
           const sanitizedValue = sanitizeInput({
