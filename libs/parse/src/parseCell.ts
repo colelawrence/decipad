@@ -97,6 +97,21 @@ const fixCellUnit = (unit: TUnit[]): TUnit[] => {
   });
 };
 
+const insertNumberUnit = (
+  number: AST.Literal,
+  unit: TUnit[] | undefined | null
+): AST.Expression => {
+  const unitAST = unitToAST(unit);
+  if (unitAST == null) {
+    return number;
+  }
+  return astNode(
+    'function-call',
+    astNode('funcref', 'implicit*'),
+    astNode('argument-list', number, unitAST)
+  );
+};
+
 export function assertCellType<Kind extends CellValueType['kind']>(
   type: CellValueType,
   kind: Kind
@@ -178,17 +193,7 @@ export const parseCell = async (
               'number' as const,
               N(result.value as DeciNumber)
             );
-            const unit = unitToAST(cellUnit);
-
-            if (unit == null) {
-              return literal;
-            }
-
-            return astNode(
-              'function-call',
-              astNode('funcref', 'implicit*'),
-              astNode('argument-list', literal, unit)
-            ) as AST.Expression;
+            return insertNumberUnit(literal, cellUnit);
           }
           case 'date':
             return dateToAST(cellType, result.value as bigint);
@@ -237,7 +242,10 @@ export const getNullReplacementValue = (
     return dateToAST(cellType, undefined);
   }
   if (cellType.kind === 'number') {
-    return astNode('literal', 'number', ZERO);
+    return insertNumberUnit(
+      astNode('literal', 'number', ZERO),
+      cellType.unit && fixCellUnit(cellType.unit)
+    );
   }
   if (cellType.kind === 'boolean') {
     return astNode('literal', 'boolean', false);

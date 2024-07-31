@@ -1,0 +1,294 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Check implicit units work"
+				}
+			],
+			"type": "title",
+			"id": "kU5C68VNKqPsCvbOYcKJV"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Table"
+										}
+									],
+									"id": "b1h2Yb3w39XMkDpr6xj09",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "u7H1Mvdvrd7n9OWYHyFZm",
+											"type": "smart-ref",
+											"blockId": "ZKRqYPBqMTX1090elq1EU",
+											"columnId": null,
+											"lastSeenVariableName": "Days"
+										},
+										{
+											"text": " * "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "r_X2tQY0eKKDJXJ2i__gt",
+											"type": "smart-ref",
+											"blockId": "CVdXL-kz2LXxUBEONcrKg",
+											"columnId": null,
+											"lastSeenVariableName": "Rate"
+										},
+										{
+											"text": ""
+										}
+									],
+									"id": "nyZfM17dICjUqd3UkQgp6",
+									"type": "table-column-formula",
+									"columnId": "7620c8fyc6AUZrB8otK1S"
+								}
+							],
+							"id": "woX590H3uG0JYdVtj3fwc",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Days"
+										}
+									],
+									"id": "ZKRqYPBqMTX1090elq1EU",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "day",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "second",
+												"baseSuperQuantity": "second"
+											}
+										]
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Rate"
+										}
+									],
+									"id": "CVdXL-kz2LXxUBEONcrKg",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									},
+									"width": 106
+								},
+								{
+									"children": [
+										{
+											"text": "Tot"
+										}
+									],
+									"id": "7620c8fyc6AUZrB8otK1S",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								}
+							],
+							"id": "-ALnC_Wj22e2N_q_9s7aA",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rE78F-KkMsdw7WM0D7Y0-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "500 £ per day"
+										}
+									],
+									"id": "2-8xKLG63kQxQVPvHunCQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "oXnYxVbHwTBL6yycc8kY5",
+									"type": "td"
+								}
+							],
+							"id": "unKjEU4ZOnOaLgf_nUXTf",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "5 days"
+										}
+									],
+									"id": "_O9_4Yxf7ggQzqm3z0Uid",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "600 £ per day"
+										}
+									],
+									"id": "vU_FsvQfNhKMO0lt04azE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7r9HZ-d8SjFxr7BTLwcRq",
+									"type": "td"
+								}
+							],
+							"id": "5JV3hDXZlsDYnFTZFDZUi",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2"
+										}
+									],
+									"id": "OxdqnirUxmPtD84Sa48-M",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "700 £ per day"
+										}
+									],
+									"id": "mAf-ygO-Fc5FuiNytS4qw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "emlw45exqB-lTv-rYfF4N",
+									"type": "td"
+								}
+							],
+							"id": "sDlBW4tcSrq0U202byI_-",
+							"type": "tr"
+						}
+					],
+					"id": "D-SGvcoFGfSkVeEjsgF50",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Variable"
+								}
+							],
+							"type": "structured_varname",
+							"id": "GYOqhzco7C24uEcRiQ0RU"
+						},
+						{
+							"children": [
+								{
+									"text": "sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ps_UP9JtW__xkAhjDPfwc",
+									"type": "smart-ref",
+									"blockId": "D-SGvcoFGfSkVeEjsgF50",
+									"columnId": "7620c8fyc6AUZrB8otK1S",
+									"lastSeenVariableName": "Table.Tot"
+								},
+								{
+									"text": ") == £4400"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "Ixx29abvxA6kMfdKYbDvT"
+						}
+					],
+					"id": "0SHRo0yDMOWYnrFjJfKYV",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "4ri3m9e2L95AoSqf5FdIy"
+				}
+			],
+			"type": "tab",
+			"id": "DUQznkY_mHKnpPl20jvYc",
+			"name": "New Tab"
+		}
+	]
+}

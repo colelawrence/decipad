@@ -869,3 +869,27 @@ test('table smart row', async ({ testUser }) => {
   await testUser.page.getByText('Sum').click();
   await expect(testUser.page.getByText('€510 per hour')).toBeVisible();
 });
+
+test('table column formulas autoresolve themselves', async ({ testUser }) => {
+  await testUser.notebook.focusOnBody();
+  await createTable(testUser.page);
+  await writeInTable(testUser.page, '200 € per hour', 1, 1);
+  await writeInTable(testUser.page, '150', 2, 1);
+  await writeInTable(testUser.page, '160', 3, 1);
+
+  await testUser.notebook.addFormula('TableCalculation', `Sum(Table.Column2)`);
+
+  await expect(testUser.page.getByText('€510 per hour')).toBeVisible();
+
+  await testUser.notebook.deleteBlock(0);
+
+  await expect(testUser.page.getByTestId('code-line-warning')).toBeVisible();
+
+  await createTable(testUser.page);
+  await writeInTable(testUser.page, '300 € per hour', 1, 1);
+  await writeInTable(testUser.page, '150', 2, 1);
+  await writeInTable(testUser.page, '160', 3, 1);
+
+  await expect(testUser.page.getByText('€610 per hour')).toBeVisible();
+  await expect(testUser.page.getByTestId('loading-results')).toBeHidden();
+});
