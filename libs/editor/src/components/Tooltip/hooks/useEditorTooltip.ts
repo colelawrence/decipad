@@ -1,8 +1,10 @@
+import { useEditorChange } from '@decipad/editor-hooks';
 import { useMyEditorRef } from '@decipad/editor-types';
 import {
   allowsTextStyling,
   getPathContainingSelection,
 } from '@decipad/editor-utils';
+import { isCollapsed } from '@udecode/plate-common';
 import type { UseVirtualFloatingOptions } from '@udecode/plate-floating';
 import {
   flip,
@@ -10,6 +12,7 @@ import {
   useFloatingToolbar,
   useFloatingToolbarState,
 } from '@udecode/plate-floating';
+import { useCallback, useEffect, useMemo } from 'react';
 
 const floatingOptions: UseVirtualFloatingOptions = {
   placement: 'top',
@@ -30,18 +33,38 @@ const floatingOptions: UseVirtualFloatingOptions = {
 export const useEditorTooltip = () => {
   const editor = useMyEditorRef();
 
+  const hidden = useEditorChange(
+    useCallback(
+      (e) => {
+        const hide =
+          isCollapsed(editor.selection) ||
+          !allowsTextStyling(e, getPathContainingSelection(e));
+        return hide;
+      },
+      [editor.selection]
+    ),
+    {
+      debounceTimeMs: 0,
+    }
+  );
+
   const floatingToolbarState = useFloatingToolbarState({
+    hideToolbar: hidden,
     editorId: editor.id,
-    floatingOptions,
+    floatingOptions: useMemo(
+      () => ({ ...floatingOptions, open: !hidden }),
+      [hidden]
+    ),
     focusedEditorId: null,
   });
 
-  const floatingToolbar = useFloatingToolbar(floatingToolbarState);
-
-  if (editor) {
-    if (!allowsTextStyling(editor, getPathContainingSelection(editor))) {
-      floatingToolbar.hidden = true;
+  useEffect(() => {
+    if (!hidden && !floatingToolbarState.open) {
+      floatingToolbarState.setOpen(true);
+    } else if (hidden && floatingToolbarState.open) {
+      floatingToolbarState.setOpen(false);
     }
-  }
-  return floatingToolbar;
+  }, [floatingToolbarState, hidden]);
+
+  return useFloatingToolbar(floatingToolbarState);
 };

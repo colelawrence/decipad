@@ -86,7 +86,7 @@ test('inserts a magic number', async ({ testUser }) => {
   ).toBeVisible();
 });
 
-test('writing in the editor', async ({ testUser }) => {
+test('text formatter options', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await test.step('starts empty', async () => {
@@ -219,6 +219,59 @@ test('writing in the editor', async ({ testUser }) => {
       'second para-graph'
     );
   });
+});
+
+test('text formatter with mouse', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+
+  await notebook.focusOnBody();
+  await notebook.selectLastParagraph();
+  await page.keyboard.type('this is the content for the first paragraph');
+  await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+    'this is the content for the first paragraph'
+  );
+
+  // text that will be selected by the mouse
+  const p = page.getByText('for the first par');
+
+  // Get the bounding box of the paragraph
+  const box = await p.boundingBox();
+
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (box) {
+    // Calculate positions for the selection
+    const startX = box.x + 130; // approximate position before "for"
+    const startY = box.y + box.height / 2;
+    const endX = box.x + 230; // approximate position after "the first"
+    const endY = startY;
+
+    // Simulate mouse actions to select "for the first"
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(endX, endY);
+    await page.mouse.up();
+  } else {
+    throw new Error('Failed to retrieve bounding box for the paragraph');
+  }
+
+  // checks the actual text style.
+  const beforeTextStyles = await p.evaluate((element) => [
+    window.getComputedStyle(element).getPropertyValue('font-weight'),
+    window.getComputedStyle(element).getPropertyValue('font-style'),
+  ]);
+
+  await page.click('button:has-text("Bold")');
+  await page.click('button:has-text("Italic")');
+
+  // checks the actual text style.
+  const textStyles = await p.evaluate((element) => [
+    window.getComputedStyle(element).getPropertyValue('font-weight'),
+    window.getComputedStyle(element).getPropertyValue('font-style'),
+  ]);
+
+  // compare the before styles with the current styles.
+  expect(textStyles[0] > beforeTextStyles[0]).toBe(true);
+  expect(textStyles[1] !== beforeTextStyles[1]).toBe(true);
 });
 
 test('check notebook scroll with clicks', async ({ testUser }) => {
