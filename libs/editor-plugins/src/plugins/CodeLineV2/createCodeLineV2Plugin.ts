@@ -1,5 +1,4 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { createStructuredKeyboard } from '@decipad/editor-plugins';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import type { MyPlatePlugin, MyValue } from '@decipad/editor-types';
 import {
@@ -19,6 +18,7 @@ import {
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
 import type { PlateEditor, Value } from '@udecode/plate-common';
+import { createStructuredKeyboard } from '../StructuredKeyboard/createStructuredKeyboardPlugin';
 
 const createCodeLineRootPlugin = (_computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2,

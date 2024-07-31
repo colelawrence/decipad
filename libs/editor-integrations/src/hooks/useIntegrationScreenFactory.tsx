@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useConnectionStore } from '@decipad/react-contexts';
-import { Connection, ResultPreview } from '../connections';
 import { notebooks, useRouteParams } from '@decipad/routing';
-import { GenericContainerRunner } from '../runners';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
+import { Connection } from '../connections/Connection';
+import { ResultPreview } from '../connections/ResultPreview';
+import { type GenericContainerRunner } from '../runners/types';
 
 /**
  * Factory method to return different integrations based on state.

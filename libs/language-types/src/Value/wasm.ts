@@ -1,11 +1,16 @@
 import type { Result, Value } from '@decipad/language-interfaces';
-import { LeanColumn } from '.';
+import { type LeanColumn } from './LeanColumn';
+
+const isLeanColumn = (thing: Value.Value | undefined): thing is LeanColumn =>
+  thing != null &&
+  typeof thing === 'object' &&
+  typeof (thing as LeanColumn).getGetData === 'function';
 
 // move this somewhere else
 export const getWasmId = async (
   thing: Value.Value | undefined
 ): Promise<string | undefined> => {
-  if (!(thing instanceof LeanColumn)) {
+  if (!isLeanColumn(thing)) {
     return undefined;
   }
 
@@ -20,7 +25,7 @@ export const getWasmId = async (
 export const getWasmRealmId = async (
   thing: Value.Value | undefined
 ): Promise<Result.ResultGenerator['WASM_REALM_ID'] | undefined> => {
-  if (!(thing instanceof LeanColumn)) {
+  if (!isLeanColumn(thing)) {
     return undefined;
   }
 

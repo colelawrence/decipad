@@ -45,13 +45,6 @@
         "command": "yarn tsc -b apps/frontend"
       }
     },
-    "depcheck": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
-        "cwd": "apps/frontend"
-      }
-    },
     "test": {
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/apps/frontend"],

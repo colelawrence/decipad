@@ -18,10 +18,11 @@ import { isColumnLike } from './ColumnLike';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
 import { getDefined, once } from '@decipad/utils';
-import { getResultGenerator, resultToValue } from '../utils';
 import { buildResult } from '../utils/buildResult';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
+import { getResultGenerator } from '../utils/getResultGenerator';
+import { resultToValue } from '../utils/resultToValue';
 
 type TFMappedColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 

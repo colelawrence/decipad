@@ -1,7 +1,8 @@
 import type { FC, ReactNode } from 'react';
-import { DataViewDataAlternatedRotationLayout, DataViewDataLayout } from '..';
 import type { AggregationKind, Column } from '../../types';
 import type { DataViewElement, DataViewFilter } from '@decipad/editor-types';
+import { DataViewDataAlternatedRotationLayout } from '../DataViewDataAlternatedRotationLayout/DataViewDataAlternatedRotationLayout';
+import { DataViewDataLayout } from '../DataViewDataLayout/DataViewDataLayout';
 
 interface DataViewDataProps {
   element: DataViewElement;

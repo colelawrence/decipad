@@ -7,8 +7,8 @@ import type {
 import { getNodeChildren, isElement } from '@udecode/plate-common';
 import type { Path } from 'slate';
 import type { DropTargetMonitor } from 'react-dnd';
-import { getHoverDirection } from '.';
 import type { DragColumnItem } from '../types';
+import { getHoverDirection } from './getHoverDirection';
 
 export const findSwappableColumns = (
   {

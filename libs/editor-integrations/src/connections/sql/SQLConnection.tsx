@@ -3,13 +3,13 @@ import { useExecutionContext, useResourceUsage } from '@decipad/react-contexts';
 import type { ConnectionProps } from '../types';
 import { useState } from 'react';
 import { CodeEditor, OptionsList, TextAndIconButton } from '@decipad/ui';
-import { URLRunner } from '../../runners';
-import { useWorkspaceConnections } from '../../hooks';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { Play } from 'libs/ui/src/icons';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { assertInstanceOf } from '@decipad/utils';
+import { URLRunner } from '../../runners/types';
+import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 
 const SQL: Array<ExternalProvider> = ['mysql', 'postgresql'];
 

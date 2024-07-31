@@ -1,7 +1,7 @@
 import { Sender } from '@decipad/message-packer';
 import { map } from 'rxjs';
 import type { MessageSender } from '.';
-import { MAX_MESSAGE_BYTES } from '../y-lambdawebsocket';
+import { MAX_MESSAGE_BYTES } from '../constants';
 
 export const version2 = (): MessageSender => {
   const r = new Sender(MAX_MESSAGE_BYTES);

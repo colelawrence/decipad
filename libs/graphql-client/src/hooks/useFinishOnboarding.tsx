@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { DefaultSession } from 'next-auth';
-import { useUpdateUserMutation } from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
+import { useUpdateUserMutation } from '../generated';
 
 interface CustomerUser extends DefaultSession {
   onboarded?: boolean | null;

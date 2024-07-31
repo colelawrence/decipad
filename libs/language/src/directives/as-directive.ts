@@ -23,12 +23,12 @@ import {
 import { getIdentifierString, U } from '@decipad/language-utils';
 import { evaluate } from '../interpreter';
 import type { DirectiveImpl } from './types';
-import { inferExpression } from '../infer';
 import {
   isTypeCoercionTarget,
   coerceType,
   coerceValue,
 } from '../type-coercion';
+import { inferExpression } from '../infer/infer';
 
 function isUserUnit(exp: AST.Expression, targetUnit: TUnit[]) {
   if (exp.type !== 'ref') {

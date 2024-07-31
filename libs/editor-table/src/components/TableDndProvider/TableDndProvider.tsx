@@ -1,10 +1,4 @@
 import React, { useCallback, useState, useMemo } from 'react';
-
-import {
-  findSwappableColumns,
-  getHoverDirection,
-  useTableActions,
-} from '@decipad/editor-table';
 import type {
   MyEditor,
   TableElement,
@@ -20,6 +14,9 @@ import { TableDndContext } from '../../contexts/TableDndContext';
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 import { useMemoPath } from '@decipad/react-utils';
+import { useTableActions } from '../../hooks/tableActions';
+import { getHoverDirection } from '../../utils/getHoverDirection';
+import { findSwappableColumns } from '../../utils/findSwappableColumns';
 
 export const TableDndProvider = ({
   editor,

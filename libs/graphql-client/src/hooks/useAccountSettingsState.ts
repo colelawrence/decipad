@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import { useToast } from '@decipad/toast';
 import { useAuthenticationState } from './useAuthenticationState';
-import { useUpdateUserMutation, useSetUsernameMutation } from '..';
+import { useUpdateUserMutation, useSetUsernameMutation } from '../generated';
 import { useMutationResultHandler } from '../utils/useMutationResultHandler';
 
 export const useAccountSettingsState = () => {

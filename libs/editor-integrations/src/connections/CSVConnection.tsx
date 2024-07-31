@@ -1,13 +1,12 @@
 import { type FC } from 'react';
-import { ConnectionProps } from './types';
+import styled from '@emotion/styled';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
-
+import { type ConnectionProps } from './types';
 import { UploadCSV, OptionsList } from '@decipad/ui';
 import { URLRunner } from '../runners';
 import { assertInstanceOf } from '@decipad/utils';
-import { useWorkspaceDatasets } from '../hooks';
 import { Loading } from './shared';
-import styled from '@emotion/styled';
+import { useWorkspaceDatasets } from '../hooks/useWorkspaceDatasets';
 
 const Wrapper = styled.div({
   display: 'flex',

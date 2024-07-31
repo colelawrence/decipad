@@ -28,6 +28,24 @@ export const abs = <N extends number | bigint>(n: N): N => {
   return n;
 };
 
+export const isZero = (f: Fraction): boolean => {
+  return f.compare(0) === 0;
+};
+
+export const pow = (a: Fraction, b: Fraction): Fraction => {
+  const result = Fraction.prototype.pow.call(a, b);
+  if (result == null || isZero(result)) {
+    const resultNumber = a.valueOf() ** b.valueOf();
+    if (Number.isNaN(resultNumber)) {
+      throw new TypeError(
+        `**: result of raising to ${b.toString()} is not rational`
+      );
+    }
+    return from(resultNumber);
+  }
+  return result;
+};
+
 const from = (
   n: Fraction | FractionLike | number | string | bigint,
   d?: bigint | number
@@ -64,7 +82,6 @@ export const ONE = from(1);
 export const F = (n: number | bigint | FractionLike | string): Fraction =>
   from(n);
 
-export * from './utils';
 export * from './isFractionLike';
 export * from './min';
 export * from './max';

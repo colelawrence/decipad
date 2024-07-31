@@ -2,7 +2,6 @@ import { useContext } from 'react';
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ClientEventsContext } from '@decipad/client-events';
 import type { Computer } from '@decipad/computer-interfaces';
-import { Paragraph } from '@decipad/editor-components';
 import type { PlateComponent, SlashCommand } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, useMyEditorRef } from '@decipad/editor-types';
 import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
@@ -12,6 +11,7 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { execute } from '../utils/slashCommands';
 import { useInteractiveMenu } from './useInteractiveMenu';
 import { useSlashMenu } from './useSlashMenu';
+import { Paragraph } from '../text/Paragraph';
 
 export const InteractiveParagraph =
   (computer: Computer): PlateComponent =>

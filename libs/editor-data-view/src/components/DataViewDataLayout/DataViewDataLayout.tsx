@@ -7,9 +7,9 @@ import type { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
-import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
 import { getAggregationShortName } from '../../../../language-aggregations/src/aggregations';
+import { DataViewTableHeader } from '../DataViewTableHeader/DataViewTableHeader';
 
 export interface DataViewLayoutProps {
   element: DataViewElement;

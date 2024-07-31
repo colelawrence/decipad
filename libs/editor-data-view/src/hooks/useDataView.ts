@@ -12,11 +12,11 @@ import type {
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
 import type { Path } from 'slate';
-import { useDataViewActions } from '.';
 import type { AggregationKind, Column } from '../types';
 import { sortColumns } from '../utils/sortColumns';
 import { useAvailableColumns } from './useAvailableColumns';
 import { useSourceTableNames } from './useSourceTableNames';
+import { useDataViewActions } from './useDataViewActions';
 
 interface UseDataViewProps {
   editor: MyEditor;

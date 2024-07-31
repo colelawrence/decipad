@@ -9,18 +9,16 @@ import type {
 } from '@decipad/language-interfaces';
 import { UnknownValue } from '../Value/Unknown';
 import { buildResult } from './buildResult';
-import {
-  Column,
-  DateValue,
-  LeanColumn,
-  Scalar,
-  Table,
-  Range,
-  defaultValue,
-  fromJS,
-  Row,
-  Tree,
-} from '../Value';
+import { Table } from '../Value/Table';
+import { defaultValue } from '../Value/defaultValue';
+import { Column } from '../Value/Column';
+import { fromJS } from '../Value/fromJS';
+import { LeanColumn } from '../Value/LeanColumn';
+import { DateValue } from '../Value/Date';
+import { Scalar } from '../Value/Scalar';
+import { Range } from '../Value/Range';
+import { Row } from '../Value/Row';
+import { Tree } from '../Value/Tree';
 
 // eslint-disable-next-line complexity
 export const resultToValue = (result: Result.Result): Value.Value => {

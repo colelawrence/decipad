@@ -6,47 +6,13 @@ import type {
 } from '@decipad/language-interfaces';
 import type { TElement } from '@udecode/plate-common';
 import type { TExcalidrawProps } from '@udecode/plate-excalidraw';
-import type { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
-import type { Mutable } from 'utility-types';
-import type {
-  AcceptableChartShapesForCombo,
-  ChartColorSchemeKeys,
-  DEPRECATED_ELEMENT_INPUT,
-  ELEMENT_INLINE_NUMBER,
-  ELEMENT_LI,
-  ELEMENT_LIC,
-  ELEMENT_LINK,
-  ElementKind,
-  IntegrationTypes,
-  MarkKind,
-  MarkType,
-  PlotArcVariant,
-  PlotBarVariant,
-  PlotLineVariant,
-  PlotOrientation,
-  UserIconKey,
-} from '.';
 import {
-  DEPRECATED_ELEMENT_CODE_BLOCK,
-  DEPRECATED_ELEMENT_TABLE_INPUT,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CALLOUT,
-  ELEMENT_CODE_LINE,
-  ELEMENT_COLUMNS,
-  ELEMENT_FETCH,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_HR,
-  ELEMENT_IMAGE,
-  ELEMENT_INTEGRATION,
   ELEMENT_MEDIA_EMBED,
-  ELEMENT_OL,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_PLOT,
-  ELEMENT_TABLE,
-  ELEMENT_UL,
-} from '.';
+  TImageElement,
+  TMediaEmbedElement,
+  ELEMENT_IMAGE,
+} from '@udecode/plate-media';
+import type { Mutable } from 'utility-types';
 import type {
   DataViewCaptionElement,
   DataViewElement,
@@ -54,21 +20,40 @@ import type {
   DataViewHeaderRowElement,
   DataViewNameElement,
 } from './data-view';
-import type {
+import {
+  DEPRECATED_ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CALLOUT,
   ELEMENT_CAPTION,
+  ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_COLUMNS,
   ELEMENT_DIAMOND,
   ELEMENT_DRAW_IMAGE,
   ELEMENT_DROPDOWN,
   ELEMENT_ELLIPSE,
   ELEMENT_EXPRESSION,
+  ELEMENT_FETCH,
   ELEMENT_FREEDRAW,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_HR,
+  ELEMENT_INLINE_NUMBER,
+  ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_LINE,
   ELEMENT_LINEAR,
+  ELEMENT_LINK,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+  ELEMENT_OL,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
   ELEMENT_RECTANGLE,
   ELEMENT_SELECTION,
   ELEMENT_SLIDER,
@@ -76,6 +61,7 @@ import type {
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TAB,
+  ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TABLE_VARIABLE_NAME,
@@ -84,8 +70,7 @@ import type {
   ELEMENT_TH,
   ELEMENT_TITLE,
   ELEMENT_TR,
-} from './element-kinds';
-import {
+  ELEMENT_UL,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_DATA_VIEW,
   ELEMENT_DISPLAY,
@@ -99,7 +84,20 @@ import {
   ELEMENT_STRUCTURED_IN,
   ELEMENT_SUBMIT_FORM,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_INTEGRATION,
 } from './element-kinds';
+import {
+  AcceptableChartShapesForCombo,
+  ChartColorSchemeKeys,
+  MarkType,
+  PlotArcVariant,
+  PlotBarVariant,
+  PlotLineVariant,
+  PlotOrientation,
+} from './plot-kinds';
+import { UserIconKey } from './icons';
+import { IntegrationBlock } from './integrations';
+import { ElementKind, markKinds } from '.';
 
 export type SeriesType = 'date' | 'number';
 
@@ -521,7 +519,7 @@ export type InteractiveElement =
   | ExpressionElement
   | VariableDefinitionElement
   | LiveQueryElement
-  | IntegrationTypes.IntegrationBlock;
+  | IntegrationBlock;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;
 
@@ -716,6 +714,8 @@ export interface ColumnsElement extends BaseElement {
   ];
 }
 
+type MarkKind = typeof markKinds[keyof typeof markKinds];
+
 // Overall node types
 
 export type EmptyText = {
@@ -824,7 +824,7 @@ export type TopLevelValue =
   | DataViewElement
   | IframeEmbedElement
   | SubmitForm
-  | IntegrationTypes.IntegrationBlock;
+  | IntegrationBlock;
 
 export type NotebookValue = [TitleElement, ...Array<TabElement>];
 

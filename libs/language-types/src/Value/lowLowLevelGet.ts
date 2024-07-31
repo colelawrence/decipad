@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { firstOrUndefined } from '@decipad/generator-utils';
 import type { Result } from '@decipad/language-interfaces';
-import { isResultGenerator } from '../utils';
+import { isResultGenerator } from '../utils/isResultGenerator';
 
 export async function lowLowLevelGet(
   valueHere: Result.OneResult | undefined,

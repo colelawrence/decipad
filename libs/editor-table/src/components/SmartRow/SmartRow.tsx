@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import type { Path } from 'slate';
 import { SmartRow as UISmartRow } from '@decipad/ui';
 import type { AnyElement } from '@decipad/editor-types';
-import { SmartColumnCell } from '..';
 import type { TableColumn } from '../../types';
+import { SmartColumnCell } from '../SmartColumnCell/SmartColumnCell';
 
 interface SmartRowProps {
   readonly tableName: string;

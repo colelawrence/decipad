@@ -13,7 +13,7 @@ import { callBuiltinFunctor } from '@decipad/language-builtins';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { getIdentifierString, walkAst } from '@decipad/language-utils';
-import { inferExpression, inferStatement } from '.';
+import { inferExpression, inferStatement } from './infer';
 import { logRetrievedName } from './logRetrievedName';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';

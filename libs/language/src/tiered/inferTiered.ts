@@ -7,9 +7,10 @@ import type { Type } from '@decipad/language-types';
 import { buildType as t } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { getIdentifierString } from '@decipad/language-utils';
-import { inferExpression } from '../infer';
+import { inferExpression } from '../infer/infer';
 import { cleanInferred } from './cleanInferred';
-import { withPush, type TRealm } from '../scopedRealm';
+import { type TRealm } from '../scopedRealm';
+import { withPush } from '../scopedRealm/ScopedRealm';
 import { prettyPrintAST } from '../parser/utils';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);

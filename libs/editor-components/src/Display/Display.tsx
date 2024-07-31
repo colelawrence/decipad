@@ -1,5 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { DraggableBlock, useUnnamedResults } from '@decipad/editor-components';
+import { DraggableBlock } from '../block-management/DraggableBlock';
+import { useUnnamedResults } from '../hooks/useUnnamedResults';
 import {
   useNodePath,
   usePathMutatorCallback,

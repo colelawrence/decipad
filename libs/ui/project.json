@@ -25,13 +25,6 @@
         "command": "yarn tsc -b libs/ui"
       }
     },
-    "depcheck": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
-        "cwd": "libs/ui"
-      }
-    },
     "storybook": {
       "executor": "@nx/storybook:storybook",
       "options": {

@@ -8,7 +8,7 @@ import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
 import { OptionsList } from '@decipad/ui';
 import { ConnectionProps } from '../types';
 import { getExternalDataAuthUrl } from '../../utils';
-import { useWorkspaceConnections } from '../../hooks';
+import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 
 function onAuth(externalDataId: string) {
   window.location.replace(getExternalDataAuthUrl(externalDataId));

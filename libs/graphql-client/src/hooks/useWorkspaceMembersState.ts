@@ -6,7 +6,7 @@ import {
   useChangeWorkspaceAccessLevelMutation,
   useShareWorkspaceWithEmailMutation,
   useUnshareWorkspaceWithUserMutation,
-} from '..';
+} from '../generated';
 
 export const useWorkspaceMembersState = () => {
   const toast = useToast();

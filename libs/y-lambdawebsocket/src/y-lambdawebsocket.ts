@@ -137,8 +137,6 @@ const readMessage = (
   return encoder;
 };
 
-export const MAX_MESSAGE_BYTES = 80_000;
-
 const broadcastMessage = async (
   provider: LambdaWebsocketProvider,
   message: string
