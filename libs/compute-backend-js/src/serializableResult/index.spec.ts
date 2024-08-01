@@ -2,10 +2,9 @@
 /* eslint-disable no-bitwise */
 import { describe, expect, it } from 'vitest';
 import DeciNumber from '@decipad/number';
-import { Result } from '@decipad/language-interfaces';
+import { Result, SerializedType } from '@decipad/language-interfaces';
 import chunk from 'lodash/chunk';
 import { deserializeResult, SerializedResult, serializeResult } from '.';
-import { serializeResultForRust } from '../serializeResultForRust';
 
 describe('serializeResult', () => {
   it('should serialize true', async () => {
@@ -141,14 +140,42 @@ describe('serializeResult', () => {
     });
   });
 
-  it.skip('should serialize a column of bools', async () => {
-    const column = await serializeResultForRust({
+  it('should serialize a date that has a value', async () => {
+    const result = await serializeResult({
+      type: { kind: 'date', date: 'day' },
+      value: BigInt(new Date('2024-01-01T00:00:00.000Z').getTime()),
+    });
+
+    const data = new Uint8Array(9);
+    data.set([4], 0);
+    data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
+
+    expect(result).toEqual({
+      type: new BigUint64Array([5n, 0n, 9n]),
+      data,
+    });
+  });
+
+  it('should serialize a date that has no value', async () => {
+    const result = await serializeResult({
+      type: { kind: 'date', date: 'day' },
+      value: undefined,
+    });
+
+    expect(result).toEqual({
+      type: new BigUint64Array([5n, 0n, 1n]),
+      data: new Uint8Array([4]),
+    });
+  });
+
+  it.skip('should serialize a column of bools with compression', async () => {
+    const column = await serializeResult({
       type: {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'boolean' },
       },
-      async *value() {
+      value: async function* () {
         yield true;
         yield false;
         yield true;
@@ -162,6 +189,29 @@ describe('serializeResult', () => {
       ]),
       data: new Uint8Array([1, 0, 1]),
     });
+  });
+
+  it('should serialize a column of bools without compression', async () => {
+    const result = await serializeResult({
+      type: {
+        kind: 'column',
+        indexedBy: 'number',
+        cellType: { kind: 'boolean' },
+      },
+      value: async function* () {
+        yield true;
+        yield false;
+        yield true;
+      },
+    });
+
+    expect(chunk(Array.from(result.type), 3)).toEqual([
+      [4n, 1n, 3n], // column
+      [0n, 0n, 1n],
+      [0n, 1n, 1n],
+      [0n, 2n, 1n],
+    ]);
+    expect(result.data).toEqual(new Uint8Array([1, 0, 1]));
   });
 
   it('should serialize a column of strings', async () => {
@@ -191,6 +241,7 @@ describe('serializeResult', () => {
     });
   });
 
+  // Abandoning compressed form for now
   it.skip('should serialize a column of columns of bools', async () => {
     const column = await serializeResult({
       type: {
@@ -327,6 +378,221 @@ describe('serializeResult', () => {
       'ShortLonger stringMedium lengthVery long string hereAnotherDifferent lengthsTestVariable string sizes'
     );
   });
+
+  it('should serialize a table', async () => {
+    const table = {
+      type: {
+        columnNames: ['T1', 'T2'],
+        columnTypes: [
+          {
+            kind: 'string',
+          },
+          {
+            kind: 'string',
+          },
+        ],
+        delegatesIndexTo: 'exprRef_block_0_del',
+        indexName: 'exprRef_block_0_ind',
+        kind: 'table',
+      } as SerializedType,
+      value: [
+        async function* () {
+          yield 'Short';
+          yield 'Longer string';
+        },
+        async function* () {
+          yield 'Medium length';
+          yield 'Very long string here';
+        },
+      ],
+    };
+
+    const serialized = await serializeResult(table);
+    expect(chunk(Array.from(serialized.type), 3)).toEqual([
+      [6n, 1n, 2n], // table
+      [3n, 0n, 19n], // indexName
+      [3n, 19n, 19n], // delegatesIndexTo
+      [3n, 38n, 2n], // T1
+      [3n, 40n, 2n], // T2
+      [4n, 7n, 2n], // column
+      [4n, 9n, 2n], // column
+      [3n, 42n, 5n], // T1
+      [3n, 47n, 13n], // T1
+      [3n, 60n, 13n], // T2
+      [3n, 73n, 21n], // T2
+    ]);
+    expect(new TextDecoder().decode(serialized.data)).toEqual(
+      'exprRef_block_0_ind' +
+        'exprRef_block_0_del' +
+        'T1' +
+        'T2' +
+        'ShortLonger stringMedium lengthVery long string here'
+    );
+  });
+
+  it('should serialize a materialized column of strings', async () => {
+    const column = await serializeResult({
+      type: {
+        kind: 'materialized-column',
+        indexedBy: 'number',
+        cellType: { kind: 'string' },
+      },
+      value: ['Hello', 'there', 'world', '!'],
+    });
+
+    expect(column).toEqual({
+      type: new BigUint64Array([
+        ...[4n, 1n, 4n], // column
+        ...[3n, 0n, 5n], // Hello
+        ...[3n, 5n, 5n], // there
+        ...[3n, 10n, 5n], // world
+        ...[3n, 15n, 1n], // !
+      ]),
+      data: new TextEncoder().encode('Hellothereworld!'),
+    });
+  });
+
+  it('should serialize a materialized table', async () => {
+    const table = {
+      type: {
+        columnNames: ['T1', 'T2'],
+        columnTypes: [
+          {
+            kind: 'string',
+          },
+          {
+            kind: 'string',
+          },
+        ],
+        delegatesIndexTo: 'exprRef_block_0_del',
+        indexName: 'exprRef_block_0_ind',
+        kind: 'materialized-table',
+      } as SerializedType,
+      value: [
+        ['Short', 'Longer string'],
+        ['Medium length', 'Very long string here'],
+      ],
+    };
+
+    const serialized = await serializeResult(table);
+    expect(chunk(Array.from(serialized.type), 3)).toEqual([
+      [6n, 1n, 2n], // table
+      [3n, 0n, 19n], // indexName
+      [3n, 19n, 19n], // delegatesIndexTo
+      [3n, 38n, 2n], // T1
+      [3n, 40n, 2n], // T2
+      [4n, 7n, 2n], // column
+      [4n, 9n, 2n], // column
+      [3n, 42n, 5n], // T1
+      [3n, 47n, 13n], // T1
+      [3n, 60n, 13n], // T2
+      [3n, 73n, 21n], // T2
+    ]);
+    expect(new TextDecoder().decode(serialized.data)).toEqual(
+      'exprRef_block_0_ind' +
+        'exprRef_block_0_del' +
+        'T1' +
+        'T2' +
+        'ShortLonger stringMedium lengthVery long string here'
+    );
+  });
+
+  it('should serialize a range containing bigints', async () => {
+    const range = await serializeResult({
+      type: { kind: 'range', rangeOf: { kind: 'number' } },
+      value: [2n, 8n],
+    });
+
+    expect(range).toEqual({
+      type: new BigUint64Array([7n, 0n, 32n]),
+      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+    });
+  });
+
+  it('should serialize a range containing DeciNumbers', async () => {
+    const range = await serializeResult({
+      type: { kind: 'range', rangeOf: { kind: 'number' } },
+      value: [
+        new DeciNumber({ n: 2n, d: 1n, s: 1n }),
+        new DeciNumber({ n: 8n, d: 1n, s: 1n }),
+      ],
+    });
+
+    expect(range).toEqual({
+      type: new BigUint64Array([7n, 0n, 32n]),
+      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+    });
+  });
+
+  it('should serialize a row', async () => {
+    const row = await serializeResult({
+      type: {
+        kind: 'row',
+        rowIndexName: 'rowIndexName',
+        rowCellTypes: [{ kind: 'string' }, { kind: 'number' }],
+        rowCellNames: ['String', 'Number'],
+      },
+      value: ['Hello there', new DeciNumber({ n: 1n, d: 3n, s: 1n })],
+    });
+    const rowIndexNameData = new TextEncoder().encode('rowIndexName');
+    const cell1NameData = new TextEncoder().encode('String');
+    const cell1Data = new TextEncoder().encode('Hello there');
+    const cell2NameData = new TextEncoder().encode('Number');
+    const cell2Data = new Uint8Array(new BigInt64Array([1n, 3n]).buffer);
+    expect(chunk(row.type, 3)).toEqual([
+      [8n, 1n, 2n], // row
+      [3n, 0n, 12n], // rowIndexName
+      [3n, 12n, 6n], // String
+      [3n, 18n, 11n], // Hello there
+      [3n, 29n, 6n], // Number
+      [1n, 35n, 16n], // 1/3
+    ]);
+    expect(row.data).toEqual(
+      new Uint8Array([
+        ...rowIndexNameData,
+        ...cell1NameData,
+        ...cell1Data,
+        ...cell2NameData,
+        ...cell2Data,
+      ])
+    );
+  });
+
+  it('should serialize a type error', async () => {
+    const result = await serializeResult({
+      type: {
+        kind: 'type-error',
+        errorCause: {
+          errType: 'free-form',
+          message: 'Some error message',
+        },
+        errorLocation: {
+          start: { line: 1, column: 1, char: 1 },
+          end: { line: 2, column: 2, char: 2 },
+        },
+      },
+      value: null,
+    });
+
+    expect(result).toEqual({
+      type: new BigUint64Array([9n, 0n, 0n]),
+      data: new Uint8Array(),
+    });
+  });
+
+  it('should serialize pending', async () => {
+    const result = await serializeResult({
+      type: {
+        kind: 'pending',
+      },
+      value: null,
+    });
+
+    expect(result).toEqual({
+      type: new BigUint64Array([10n, 0n, 0n]),
+      data: new Uint8Array(0),
+    });
+  });
 });
 
 describe('deserializeResult', () => {
@@ -449,6 +715,36 @@ describe('deserializeResult', () => {
     };
   }
 
+  it('should deserialize a date with a value', () => {
+    const data = new Uint8Array(9);
+    data.set([4], 0);
+    data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
+
+    const serializedDate = {
+      type: new BigUint64Array([5n, 0n, 9n]),
+      data,
+    };
+
+    const result = deserializeResult(serializedDate);
+    expect(result).toEqual({
+      type: { kind: 'date', date: 'day' },
+      value: 1704067200000n,
+    });
+  });
+
+  it('should deserialize a date with no value', () => {
+    const serializedDate = {
+      type: new BigUint64Array([5n, 0n, 1n]),
+      data: new Uint8Array([4]),
+    };
+
+    const result = deserializeResult(serializedDate);
+    expect(result).toEqual({
+      type: { kind: 'date', date: 'day' },
+      value: undefined,
+    });
+  });
+
   it('should deserialize uncompressed column of booleans', async () => {
     const serialized = createSerializedResult(
       [
@@ -523,8 +819,9 @@ describe('deserializeResult', () => {
       [72, 101, 108, 108, 111, 87, 111, 114, 108, 100, 84, 101, 115, 116]
     );
 
-    const result = deserializeResult(serialized);
-    expect(result.type.kind).toBe('column');
+    const result = deserializeResult(serialized) as Result.Result<'column'>;
+    expect(result.type.kind).toEqual('column');
+    expect(result.type.cellType).toEqual({ kind: 'string' });
 
     const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
     const values = [];
@@ -535,7 +832,7 @@ describe('deserializeResult', () => {
     expect(values).toEqual(['Hello', 'World', 'Test']);
   });
 
-  it('should deserialize compressed column of booleans', async () => {
+  it.skip('should deserialize compressed column of booleans', async () => {
     const serialized = createSerializedResult(
       [4n, 0n, 3n, 9223372036854775808n, 3n, 1n],
       [1, 0, 1]
@@ -553,7 +850,7 @@ describe('deserializeResult', () => {
     expect(values).toEqual([true, false, true]);
   });
 
-  it('should deserialize compressed column of fractions', async () => {
+  it.skip('should deserialize compressed column of fractions', async () => {
     const serialized: SerializedResult = {
       type: new BigUint64Array([4n, 0n, 48n, 9223372036854775809n, 3n, 16n]),
       data: new Uint8Array(new BigInt64Array([1n, 2n, 3n, 4n, 5n, 6n]).buffer),
@@ -635,7 +932,7 @@ describe('deserializeResult', () => {
     expect(subValues2).toEqual([false, true]);
   });
 
-  it('should deserialize nested columns (compressed)', async () => {
+  it.skip('should deserialize nested columns (compressed)', async () => {
     const serialized = createSerializedResult(
       [4n, 0n, 4n, 9223372036854775812n, 2n, 2n, 9223372036854775808n, 2n, 1n],
       [1, 0, 0, 1]
@@ -706,5 +1003,161 @@ describe('deserializeResult', () => {
       ['Hello', 'World!'],
       ['Deci', 'Pad'],
     ]);
+  });
+
+  it('should deserialize a date that has a value', () => {
+    const data = new Uint8Array(9);
+    data.set([4], 0);
+    data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
+
+    const serializedDate: SerializedResult = {
+      type: new BigUint64Array([5n, 0n, 9n]),
+      data,
+    };
+
+    const result = deserializeResult(serializedDate);
+    expect(result).toEqual({
+      type: { kind: 'date', date: 'day' },
+      value: 1704067200000n,
+    });
+  });
+
+  it('should deserialize a date that has no value', () => {
+    const serializedDate: SerializedResult = {
+      type: new BigUint64Array([5n, 0n, 1n]),
+      data: new Uint8Array([4]),
+    };
+
+    const result = deserializeResult(serializedDate);
+    expect(result).toEqual({
+      type: { kind: 'date', date: 'day' },
+      value: undefined,
+    });
+  });
+
+  it('should deserialize a range', () => {
+    const serializedRange: SerializedResult = {
+      type: new BigUint64Array([7n, 0n, 32n]),
+      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+    };
+
+    const result = deserializeResult(serializedRange);
+    expect(result).toEqual({
+      type: {
+        kind: 'range',
+        rangeOf: { kind: 'number' },
+      },
+      value: [new DeciNumber(2n), new DeciNumber(8n)],
+    });
+  });
+
+  it('should deserialize a table', () => {
+    const serializedTable: SerializedResult = {
+      type: new BigUint64Array([
+        ...[6n, 1n, 2n], // table
+        ...[3n, 0n, 19n], // indexName
+        ...[3n, 19n, 19n], // delegatesIndexTo
+        ...[3n, 38n, 2n], // T1
+        ...[3n, 40n, 2n], // T2
+        ...[4n, 7n, 2n], // column
+        ...[4n, 9n, 2n], // column
+        ...[3n, 42n, 5n], // T1
+        ...[3n, 47n, 13n], // T1
+        ...[3n, 60n, 13n], // T2
+        ...[3n, 73n, 21n], // T2
+      ]),
+      data: new TextEncoder().encode(
+        'exprRef_block_0_ind' +
+          'exprRef_block_0_del' +
+          'T1' +
+          'T2' +
+          'ShortLonger stringMedium lengthVery long string here'
+      ),
+    };
+
+    const result = deserializeResult(serializedTable) as Result.Result<'table'>;
+    expect(result.type.kind).toBe('table');
+    expect(result.type.columnNames).toEqual(['T1', 'T2']);
+    expect(result.type.columnTypes).toEqual([
+      { kind: 'string' },
+      { kind: 'string' },
+    ]);
+    expect(result.type.delegatesIndexTo).toEqual('exprRef_block_0_del');
+    expect(result.type.indexName).toEqual('exprRef_block_0_ind');
+
+    expect(result.value).toHaveLength(2);
+    expect(result.value[0]).toBeInstanceOf(Function); // AsyncGenerator
+    expect(result.value[1]).toBeInstanceOf(Function); // AsyncGenerator
+  });
+
+  it('should deserialize a row', () => {
+    const rowIndexNameData = new TextEncoder().encode('rowIndexName');
+    const cell1NameData = new TextEncoder().encode('String');
+    const cell1Data = new TextEncoder().encode('Hello there');
+    const cell2NameData = new TextEncoder().encode('Number');
+    const cell2Data = new Uint8Array(new BigInt64Array([1n, 3n]).buffer);
+
+    const serializedRow: SerializedResult = {
+      type: new BigUint64Array([
+        ...[8n, 1n, 2n], // row
+        ...[3n, 0n, 12n], // rowIndexName
+        ...[3n, 12n, 6n], // String
+        ...[3n, 18n, 11n], // Hello there
+        ...[3n, 29n, 6n], // Number
+        ...[1n, 35n, 16n], // 1/3
+      ]),
+      data: new Uint8Array([
+        ...rowIndexNameData,
+        ...cell1NameData,
+        ...cell1Data,
+        ...cell2NameData,
+        ...cell2Data,
+      ]),
+    };
+
+    const result = deserializeResult(serializedRow);
+
+    expect(result).toEqual({
+      type: {
+        kind: 'row',
+        rowIndexName: 'rowIndexName',
+        rowCellTypes: [{ kind: 'string' }, { kind: 'number' }],
+        rowCellNames: ['String', 'Number'],
+      },
+      value: ['Hello there', new DeciNumber({ n: 1n, d: 3n, s: 1n })],
+    });
+  });
+
+  it('should deserialize a type error', () => {
+    const serializedTypeError: SerializedResult = {
+      type: new BigUint64Array([9n, 0n, 0n]),
+      data: new Uint8Array(),
+    };
+
+    const result = deserializeResult(serializedTypeError);
+
+    expect(result).toEqual({
+      type: {
+        kind: 'type-error',
+        errorCause: {
+          errType: 'free-form',
+          message: 'Error message lost in ABI translation.',
+        },
+      },
+      value: undefined,
+    });
+  });
+
+  it('should deserialize a pending result', () => {
+    const serializedPending: SerializedResult = {
+      type: new BigUint64Array([10n, 0n, 0n]),
+      data: new Uint8Array(0),
+    };
+
+    const result = deserializeResult(serializedPending);
+    expect(result).toEqual({
+      type: { kind: 'pending' },
+      value: undefined,
+    });
   });
 });

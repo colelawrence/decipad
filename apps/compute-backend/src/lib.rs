@@ -6,7 +6,7 @@ mod value;
 
 use infer::infer_columns;
 
-use deci_result::{deserialize_result, serialize_result, SerializedResult};
+use deci_result::{deserialize_result, serialize_result};
 use js_sys;
 use js_sys::Float64Array;
 use js_sys::{BigInt64Array, Object};

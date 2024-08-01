@@ -8,7 +8,7 @@ use num::{
 
 use conv::ApproxInto;
 
-use super::types::DeciResult;
+use super::types::{DateSpecificity, DeciResult};
 
 ///
 /// This file contains the implementation functions for Rust primitives
@@ -128,6 +128,22 @@ impl DeciResult {
                     .collect::<Vec<String>>()
                     .join(", ")
             ),
+            DeciResult::Date(date, specificity) => match specificity {
+                DateSpecificity::None => date.unwrap().format("%Y-%m-%d %H:%M:%S.%f").to_string(),
+                DateSpecificity::Year => date.unwrap().format("%Y").to_string(),
+                DateSpecificity::Quarter => date.unwrap().format("%Y-%m").to_string(),
+                DateSpecificity::Month => date.unwrap().format("%Y-%m-%d").to_string(),
+                DateSpecificity::Day => date.unwrap().format("%Y-%m-%d").to_string(),
+                DateSpecificity::Hour => date.unwrap().format("%Y-%m-%d %H").to_string(),
+                DateSpecificity::Minute => date.unwrap().format("%Y-%m-%d %H:%M").to_string(),
+                DateSpecificity::Second => date.unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
+                DateSpecificity::Millisecond => date.unwrap().format("%Y-%m-%d %H:%M:%S.%f").to_string(),
+            },
+            DeciResult::Table(table) => format!("{:?}", table),
+            DeciResult::Range(range) => format!("{:?}", range),
+            DeciResult::Row(row) => format!("{:?}", row),
+            DeciResult::TypeError => format!("{:?}", self),
+            DeciResult::Pending => format!("{:?}", self),
         }
     }
 
@@ -196,6 +212,7 @@ impl DeciResult {
             }
             DeciResult::String(s) => DeciResult::String(s.chars().rev().collect::<String>()),
             DeciResult::Boolean(b) => DeciResult::Boolean(!b),
+            _ => panic!("Cannot negate this type"),
         }
     }
 

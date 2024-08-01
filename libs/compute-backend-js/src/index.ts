@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-relative-packages
 import { ComputeBackend } from './wasm/compute_backend';
-import { serializeResultForRust } from './serializeResultForRust';
+import { serializeResult } from './serializableResult';
 
 class ComputeBackendSingleton {
   private _computeBackend: ComputeBackend | undefined;
@@ -16,4 +16,4 @@ class ComputeBackendSingleton {
 
 const computeBackendSingleton = new ComputeBackendSingleton();
 
-export { computeBackendSingleton, serializeResultForRust };
+export { computeBackendSingleton, serializeResult };

@@ -22,6 +22,12 @@ impl PartialEq for DeciResult {
                 .zip(items2.iter())
                 .map(|(a, b)| *a == *b)
                 .all(|x| x),
+            (DeciResult::Pending, DeciResult::Pending) => true, // Add this line
+            (DeciResult::TypeError, DeciResult::TypeError) => true,
+            (DeciResult::Date(d1, s1), DeciResult::Date(d2, s2)) => d1 == d2 && s1 == s2,
+            (DeciResult::Table(t1), DeciResult::Table(t2)) => t1 == t2,
+            (DeciResult::Range(r1), DeciResult::Range(r2)) => r1 == r2,
+            (DeciResult::Row(r1), DeciResult::Row(r2)) => r1 == r2,
             _ => false,
         }
     }
