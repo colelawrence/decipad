@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import {
+  ELEMENT_DATA_TAB,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer } from '@decipad/computer';
@@ -38,6 +42,11 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
               type: ELEMENT_TITLE,
               id: 'title-id',
               children: [{ text: 'Title' }],
+            },
+            {
+              type: ELEMENT_DATA_TAB,
+              id: 'data-tab-id',
+              children: [],
             },
             {
               type: ELEMENT_TAB,

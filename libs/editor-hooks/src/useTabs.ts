@@ -29,7 +29,7 @@ function _useTabs(
 
   // useMemo is necessary here since Array.slice breaks equality
   return useMemo(
-    () => (controller?.children.slice(1) as Array<TabElement>) ?? [],
+    () => (controller?.children.slice(2) as Array<TabElement>) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [controller, renderKey]
   );

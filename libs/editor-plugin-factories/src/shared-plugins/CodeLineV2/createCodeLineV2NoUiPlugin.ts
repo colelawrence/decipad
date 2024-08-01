@@ -32,3 +32,14 @@ export const createCodeLineV2NoUiPlugin = (
     createNormalizeCodeLineVarnamePlugin(),
   ],
 });
+
+export const createCodeLineV2Normalizers = (
+  computer: Computer
+): MyPlatePlugin => ({
+  key: 'CODE_LINE_V2_NORMALIZERS',
+  plugins: [
+    createNormalizeCodeLineV2Plugin(),
+    createNormalizeCodeLineCodePlugin(computer),
+    createNormalizeCodeLineVarnamePlugin(),
+  ],
+});

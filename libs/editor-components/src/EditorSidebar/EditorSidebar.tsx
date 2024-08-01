@@ -18,14 +18,22 @@ import { toVar } from './toVar';
 import type { MyEditor, SlashCommand } from '@decipad/editor-types';
 import { groupByTab } from './groupByTab';
 import { useComputer } from '@decipad/editor-hooks';
+import { useNotebookState } from '@decipad/notebook-state';
+import { EditorController } from '@decipad/notebook-tabs';
 
 const catalogDebounceTimeMs = 1_000;
 
 interface EditorSidebarProps {
+  notebookId: string;
   editor: MyEditor;
+  controller: EditorController;
 }
 
-export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
+export const EditorSidebar: FC<EditorSidebarProps> = ({
+  notebookId,
+  editor,
+  controller,
+}) => {
   const notebookMetaData = useNotebookMetaData();
 
   const onDragStart = useMemo(
@@ -38,7 +46,16 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
 
   const clientEvent = useContext(ClientEventsContext);
 
-  const catalog = useMemo(() => editor && catalogItems(editor), [editor]);
+  const [setAddVariable, setEditingVariable] = useNotebookState(
+    notebookId,
+    (s) => [s.setAddVariable, s.setEditingVariable] as const
+  );
+
+  const catalog = useMemo(
+    () => editor && catalogItems(editor, controller),
+    [editor, controller]
+  );
+
   const items = computer.getNamesDefined$.useWithSelectorDebounced(
     catalogDebounceTimeMs,
     useCallback(
@@ -104,6 +121,8 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
           items={groupedItems}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
+          toggleAddNewVariable={setAddVariable}
+          editVariable={setEditingVariable}
         />
         <SlashCommandsMenu
           variant="inline"

@@ -246,7 +246,7 @@ export const AutoCompleteMenu = ({
       <PopoverPortal>
         <PopoverContent
           align="start"
-          css={{ zIndex: 10 }}
+          css={{ zIndex: 70 }}
           onOpenAutoFocus={(event) => event.preventDefault()}
           onCloseAutoFocus={(event) => event.preventDefault()}
           onMouseLeave={onMouseLeave}

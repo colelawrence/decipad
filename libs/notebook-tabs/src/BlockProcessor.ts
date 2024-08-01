@@ -10,6 +10,7 @@ import {
   type NotebookValue,
   type AnyElement,
   ELEMENT_TAB,
+  ELEMENT_DATA_TAB,
 } from '@decipad/editor-types';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash/debounce';
@@ -117,7 +118,7 @@ export class BlockProcessor {
   public SetAllBlocksDirty() {
     for (const _tab of this.rootEditor.children.slice(1)) {
       const tab = _tab as AnyElement;
-      if (tab.type !== ELEMENT_TAB) {
+      if (tab.type !== ELEMENT_TAB && tab.type !== ELEMENT_DATA_TAB) {
         continue;
       }
 

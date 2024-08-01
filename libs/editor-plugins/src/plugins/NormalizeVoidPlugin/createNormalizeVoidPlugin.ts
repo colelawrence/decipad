@@ -19,11 +19,11 @@ import {
 } from '@udecode/plate-common';
 import type { Path } from 'slate';
 import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
 import {
+  createNormalizerPluginFactory,
   normalizeExcessProperties,
   normalizeMissingProperties,
-} from '../../utils/normalize';
+} from '@decipad/editor-plugin-factories';
 
 const VOID_TYPE_PROPERTIES = {
   [DEPRECATED_ELEMENT_TABLE_INPUT]: ['tableData'],

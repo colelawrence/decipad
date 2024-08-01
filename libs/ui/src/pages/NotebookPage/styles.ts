@@ -106,6 +106,8 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
   width: '100%',
   display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
 
   [tabletScreenQuery]: {
     width: '100%',
@@ -119,6 +121,8 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
 
 export const EditorAndTabWrapper = styled.div({
   width: '100%',
+  height: '100%',
+
   display: 'flex',
   flexDirection: 'column',
 
@@ -130,6 +134,22 @@ export const TabWrapper = styled.div<{ isInEditorSidebar: boolean }>(
   (props) => ({
     display: 'flex',
     width: props.isInEditorSidebar ? 'calc(100% - 320px - 32px)' : '100%',
+
+    [tabletScreenQuery]: {
+      width: '100%',
+    },
+  })
+);
+
+export const DataDrawer = styled.div<{ isInEditorSidebar: boolean }>(
+  (props) => ({
+    position: 'relative',
+    zIndex: 50, // Above `dropzoneDetector`
+
+    width: props.isInEditorSidebar ? 'calc(100% - 320px - 32px)' : '100%',
+    background: cssVar('backgroundMain'),
+    borderRadius: '16px',
+    padding: '16px',
 
     [tabletScreenQuery]: {
       width: '100%',

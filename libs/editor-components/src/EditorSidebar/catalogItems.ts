@@ -4,6 +4,7 @@ import type { NodeEntry } from 'slate';
 import { Path } from 'slate';
 import { findParent } from './findParent';
 import type { CatalogHeadingItem, CatalogItemVar, CatalogItems } from './types';
+import { EditorController } from '@decipad/notebook-tabs';
 
 const insertInOrder = (
   items: CatalogItems,
@@ -29,11 +30,15 @@ const insertInOrder = (
 };
 
 const catalogItem =
-  (editor: MyEditor) =>
+  (editor: MyEditor, controller: EditorController) =>
   (
     curr: CatalogItems,
     _name: Omit<CatalogItemVar, 'currentTab'>
   ): CatalogItems => {
+    if (controller.children[1].children.some((c) => c.id === _name.blockId)) {
+      return [...curr, { ..._name, currentTab: false, dataTab: true }];
+    }
+
     const entry = findNode(editor, {
       at: [],
       match: { id: _name.blockId },
@@ -72,6 +77,7 @@ const catalogItem =
           name: getNodeString(adoptiveParent),
           path: parentPath,
           currentTab: true,
+          dataTab: false,
         },
         name
       );
@@ -88,6 +94,6 @@ const catalogItem =
   };
 
 export const catalogItems =
-  (editor: MyEditor) =>
+  (editor: MyEditor, controller: EditorController) =>
   (names: Omit<CatalogItemVar, 'currentTab'>[]): CatalogItems =>
-    names.reduce<CatalogItems>(catalogItem(editor), []);
+    names.reduce<CatalogItems>(catalogItem(editor, controller), []);

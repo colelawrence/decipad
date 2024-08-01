@@ -13,7 +13,6 @@ import {
   AnnotationsProvider,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
-import { notebooks, useRouteParams } from '@decipad/routing';
 import {
   EditorPlaceholder,
   NotebookPage,
@@ -31,7 +30,10 @@ import { useScenarioNavigate } from './hooks/useScenarioNavigate';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useInitializeResourceUsage } from '../../hooks';
+import { useIsEmbed, useNotebookRouterId } from './hooks';
 import { getAnonUserMetadata } from '@decipad/utils';
+import { notebooks, useRouteParams } from '@decipad/routing';
+import { DataDrawer } from './data-drawer';
 
 /**
  * Entire Application Wrapper.
@@ -42,12 +44,9 @@ import { getAnonUserMetadata } from '@decipad/utils';
  * This is the only component that should contain suspend barriers.
  */
 export const Notebook: FC = () => {
-  const {
-    notebook: { id: notebookId },
-    embed: _embed,
-    alias: aliasId,
-  } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(_embed);
+  const notebookId = useNotebookRouterId();
+  const isEmbed = useIsEmbed();
+  const { alias: aliasId } = useRouteParams(notebooks({}).notebook);
 
   const [changeSubject] = useState(() => new Subject<undefined>());
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
@@ -190,6 +189,7 @@ export const Notebook: FC = () => {
                   />
                 ) : null
               }
+              dataDrawer={<DataDrawer />}
               isEmbed={isEmbed}
               isReadOnly={docsync?.isReadOnly}
               permission={notebookMetadaData?.getPadById?.myPermissionType}

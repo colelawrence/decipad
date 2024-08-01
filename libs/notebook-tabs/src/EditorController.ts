@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -24,8 +25,11 @@ import {
   isElement,
   removeNodes,
 } from '@udecode/plate-common';
-import type {
+import {
   AnyElement,
+  DataTabElement,
+  DataTabValue,
+  ELEMENT_DATA_TAB,
   MyEditor,
   MyPlatePlugin,
   MyTabEditor,
@@ -33,8 +37,6 @@ import type {
   TabElement,
   TitleElement,
   UserIconKey,
-} from '@decipad/editor-types';
-import {
   createMyPlateEditor,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
@@ -47,7 +49,7 @@ import {
   translateOpUp,
   translatePathUp,
 } from './TranslatePaths';
-import { IsTab, IsTitle } from './utils';
+import { IsDataTab, IsTab, IsTitle } from './utils';
 import {
   type BaseEditor,
   createEditor,
@@ -60,26 +62,18 @@ import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import stringify from 'json-stringify-safe';
 import { normalizeCurried } from './RootEditor/normalizeNode';
 import { normalizers } from './RootEditor/plugins';
-
-const INITIAL_TAB_NAME = 'New Tab';
-const TITLE_EDITOR_INDEX = 0;
+import {
+  DATA_TAB_INDEX,
+  INITIAL_TAB_NAME,
+  SUB_EDITOR_OFFSET,
+  TITLE_INDEX,
+} from './constants';
 
 const isTesting = !!(
   process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
 );
 
-/**
- * Helper error class to make errors more visible on sentry.
- */
-
-export class OutOfSyncError extends Error {
-  public op: TOperation;
-
-  constructor(error: string, op: TOperation) {
-    super(error);
-    this.op = op;
-  }
-}
+const getOffsetIndex = (index: number) => index - SUB_EDITOR_OFFSET;
 
 /**
  * Editor Controller Class
@@ -103,6 +97,7 @@ export class EditorController implements RootEditorController {
   private selectedTab = 0;
   private editorPlugins: Array<MyPlatePlugin>;
   private mirrorEditor: PlateEditor<NotebookValue>;
+  private dataTabEditor: PlateEditor<DataTabValue>;
 
   /**
    * Constructor initalizes a basic slate text editor, and
@@ -116,6 +111,7 @@ export class EditorController implements RootEditorController {
     this.events = new Subject();
     this.titleEditor = this.createTitleEditor();
     this.mirrorEditor = this.createMirrorEditor();
+    this.dataTabEditor = this.createDataTabEditor();
   }
 
   private debugPrintMirrorState() {
@@ -201,6 +197,42 @@ export class EditorController implements RootEditorController {
     return mirrorEditor;
   }
 
+  private createDataTabEditor(): PlateEditor<DataTabValue> {
+    const dataTabEditor = createPlateEditor<DataTabValue>({
+      plugins: [],
+    });
+
+    dataTabEditor.normalize = normalizeCurried(dataTabEditor, []);
+
+    const { apply, onChange } = dataTabEditor;
+
+    dataTabEditor.apply = (op) => {
+      // Cancel any selection events.
+      if (op.type === 'set_selection') {
+        return;
+      }
+
+      if (op.FROM_ROOT) {
+        this.events.next({ type: 'any-change', op });
+
+        apply(op);
+        return;
+      }
+
+      const translatedOp = translateOpUp(DATA_TAB_INDEX, op);
+
+      translatedOp.IS_LOCAL = true;
+      this.apply(translatedOp);
+    };
+
+    dataTabEditor.onChange = () => {
+      onChange();
+      this.onChange();
+    };
+
+    return dataTabEditor;
+  }
+
   public selectTab(tabIndex: number) {
     this.selectedTab = tabIndex;
   }
@@ -246,6 +278,11 @@ export class EditorController implements RootEditorController {
   public get children(): NotebookValue {
     return [
       this.titleEditor.children[0] as TitleElement,
+      {
+        id: this.dataTabEditor.id,
+        type: ELEMENT_DATA_TAB,
+        children: this.dataTabEditor.children,
+      },
       ...this.tabEditors.map(
         (subEditor): TabElement => ({
           type: ELEMENT_TAB,
@@ -354,6 +391,7 @@ export class EditorController implements RootEditorController {
     withoutNormalizingEditors(
       [
         this.mirrorEditor,
+        this.dataTabEditor,
         this.titleEditor as unknown as TEditor,
         ...this.tabEditors,
       ],
@@ -371,78 +409,104 @@ export class EditorController implements RootEditorController {
    * Various error throwing, and its crutial this part works perfectly.
    */
   private handleTopLevelOps(op: TOperation): boolean {
-    if (op.type !== 'set_selection' && op.path.length === 1) {
-      // Must be a top level operation.
-      const [childIndex] = op.path;
+    if (op.type === 'set_selection' || op.path.length !== 1) {
+      return false;
+    }
 
-      if (op.type === 'insert_node') {
-        if (IsTab(op.node)) {
-          // console.log('handleTopLevelOps: is tab and going to insert it', op);
-          this.InsertTab(op as TInsertNodeOperation<TabElement>);
-          return true;
-        }
-        if (childIndex === 0) {
-          this.InsertTitle(op as TInsertNodeOperation<AnyElement>);
-          return true;
-        }
-      } else if (op.type === 'set_node') {
-        this.SetElementProps(op);
-      } else if (op.type === 'remove_node') {
-        if (IsTab(op.node)) {
-          this.RemoveTabOp(op as TRemoveNodeOperation<TabElement>);
-        }
-      } else if (op.type === 'move_node') {
-        const sourceBlock = getNode(this.mirrorEditor, [op.path[0]]);
-        const targetBlock = getNode(this.mirrorEditor, [op.newPath[0]]);
-        if (
-          op.path.length === 1 &&
-          op.newPath.length === 1 &&
-          IsTab(sourceBlock) &&
-          IsTab(targetBlock)
-        ) {
-          this.MoveTab(op);
-          return true;
-        }
-        if (!IsTab(sourceBlock) && !IsTab(targetBlock)) {
-          return true;
-        }
-        if (sourceBlock === targetBlock) {
-          const [tabIndex, translatedOp] = translateOpDown(op);
-          this.tabEditors[tabIndex - 1].apply(translatedOp);
-          return true;
-        }
-        // moving a node from one tab to another
-        const [tabIndex, translatedOp] = translateOpDown(op);
-        const sourceNode = getDefined(
-          getNode(this.mirrorEditor, op.newPath)
-        ) as TDescendant;
-        if (IsTab(sourceBlock) && translatedOp.path.length > 0) {
-          this.tabEditors[tabIndex - 1].apply({
-            type: 'remove_node',
-            path: translatedOp.path,
-            node: sourceNode,
-            FROM_ROOT: true,
-          });
-        }
-        if (IsTab(targetBlock)) {
-          this.tabEditors[tabIndex - 1].apply({
-            type: 'insert_node',
-            path: translatedOp.newPath,
-            node: sourceNode,
-            FROM_ROOT: true,
-          });
-        }
+    // Must be a top level operation.
+    const [childIndex] = op.path;
+
+    if (op.type === 'insert_node') {
+      if (IsTab(op.node)) {
+        // console.log('handleTopLevelOps: is tab and going to insert it', op);
+        this.InsertTab(op as TInsertNodeOperation<TabElement>);
+        return true;
       }
 
-      return true;
+      if (IsDataTab(op.node) && op.path[0] === DATA_TAB_INDEX) {
+        this.InsertDataTab(op as TInsertNodeOperation<DataTabElement>);
+        return true;
+      }
+
+      if (childIndex === 0) {
+        this.InsertTitle(op as TInsertNodeOperation<AnyElement>);
+        return true;
+      }
+    } else if (op.type === 'set_node') {
+      this.SetElementProps(op);
+    } else if (op.type === 'remove_node') {
+      if (IsTab(op.node)) {
+        this.RemoveTabOp(op as TRemoveNodeOperation<TabElement>);
+      }
+    } else if (op.type === 'move_node') {
+      const sourceBlock = getNode(this.mirrorEditor, [op.path[0]]);
+      const targetBlock = getNode(this.mirrorEditor, [op.newPath[0]]);
+      if (
+        op.path.length === 1 &&
+        op.newPath.length === 1 &&
+        IsTab(sourceBlock) &&
+        IsTab(targetBlock)
+      ) {
+        this.MoveTab(op);
+        return true;
+      }
+      if (!IsTab(sourceBlock) && !IsTab(targetBlock)) {
+        return true;
+      }
+      if (sourceBlock === targetBlock) {
+        const [tabIndex, translatedOp] = translateOpDown(op);
+        this.tabEditors[tabIndex - 1].apply(translatedOp);
+        return true;
+      }
+      // moving a node from one tab to another
+      const [tabIndex, translatedOp] = translateOpDown(op);
+
+      const sourceNode = getDefined(
+        getNode(this.mirrorEditor, op.newPath)
+      ) as TDescendant;
+
+      const offsetTabIndex = getOffsetIndex(tabIndex);
+
+      if (IsTab(sourceBlock) && translatedOp.path.length > 0) {
+        this.tabEditors[offsetTabIndex].apply({
+          type: 'remove_node',
+          path: translatedOp.path,
+          node: sourceNode,
+          FROM_ROOT: true,
+        });
+      }
+      if (IsTab(targetBlock)) {
+        this.tabEditors[offsetTabIndex].apply({
+          type: 'insert_node',
+          path: translatedOp.newPath,
+          node: sourceNode,
+          FROM_ROOT: true,
+        });
+      }
     }
-    return false;
+
+    return true;
   }
 
   private InsertTitle(op: TInsertNodeOperation<AnyElement>): void {
     op.FROM_ROOT = true;
     if (IsTitle(op.node)) {
       this.titleEditor.apply(op);
+    }
+  }
+
+  private InsertDataTab(op: TInsertNodeOperation<DataTabElement>): void {
+    op.FROM_ROOT = true;
+
+    this.dataTabEditor.id = op.node.id;
+
+    for (const [index, child] of op.node.children.entries()) {
+      this.dataTabEditor.apply({
+        type: 'insert_node',
+        path: [index],
+        node: child,
+        FROM_ROOT: true,
+      });
     }
   }
 
@@ -479,14 +543,17 @@ export class EditorController implements RootEditorController {
       return;
     }
 
-    [this.tabEditors[op.path[0] - 1], this.tabEditors[op.newPath[0] - 1]] = [
-      this.tabEditors[op.newPath[0] - 1],
-      this.tabEditors[op.path[0] - 1],
+    const originalIndex = getOffsetIndex(op.path[0]);
+    const newIndex = getOffsetIndex(op.newPath[0]);
+
+    [this.tabEditors[originalIndex], this.tabEditors[newIndex]] = [
+      this.tabEditors[newIndex],
+      this.tabEditors[originalIndex],
     ];
 
-    [this.children[op.path[0]], this.children[op.newPath[0]]] = [
-      this.children[op.newPath[0]],
-      this.children[op.path[0]],
+    [this.children[originalIndex + 1], this.children[newIndex + 1]] = [
+      this.children[newIndex + 1],
+      this.children[originalIndex + 1],
     ];
   }
 
@@ -494,11 +561,13 @@ export class EditorController implements RootEditorController {
     if (path.length < 1) {
       throw new Error('Could not get target editor from empty path');
     }
+
     const [rootChildIndex] = path;
     if (rootChildIndex === 0) {
       return [this.titleEditor, true];
     }
-    const tabEditor = this.tabEditors[rootChildIndex - 1];
+
+    const tabEditor = this.tabEditors[getOffsetIndex(rootChildIndex)];
     if (!tabEditor) {
       throw new Error(
         `Could not get tab editor for child index ${rootChildIndex}`
@@ -520,7 +589,7 @@ export class EditorController implements RootEditorController {
     }
 
     if (!isTitleEditor) {
-      const tabIndex = op.path[0] - 1;
+      const tabIndex = getOffsetIndex(op.path[0]);
       const tab = this.tabEditors[tabIndex];
       if (tab) {
         for (const [key, value] of Object.entries(op.newProperties)) {
@@ -539,8 +608,7 @@ export class EditorController implements RootEditorController {
   }
 
   private RemoveTabOp(op: TRemoveNodeOperation<TabElement>): void {
-    const index = op.path[0];
-    this.tabEditors.splice(index - 1, 1);
+    this.tabEditors.splice(getOffsetIndex(op.path[0]), 1);
     this.events.next({ type: 'remove-tab' });
   }
 
@@ -565,35 +633,36 @@ export class EditorController implements RootEditorController {
   }
 
   private unguardedApply(op: TOperation): void {
-    // console.log('>>>>> EditorController unguardedApply', op);
     if (op.FROM_ROOT) {
       return;
     }
 
     const isTopLevel = this.handleTopLevelOps(op);
-    // console.log('isTopLevel', isTopLevel);
     if (!isTopLevel) {
       const childIndex = childIndexForOp(op);
       // Remote event to the title (no need to translate down)
-      if (childIndex === TITLE_EDITOR_INDEX) {
+      if (childIndex === TITLE_INDEX) {
         op.FROM_ROOT = true;
         this.titleEditor.apply(op);
+      } else if (childIndex === DATA_TAB_INDEX) {
+        op.FROM_ROOT = true;
+
+        const [, translatedOp] = translateOpDown(op);
+        this.dataTabEditor.apply(translatedOp);
       } else {
         const [tabIndex, translatedOp] = translateOpDown(op);
         translatedOp.FROM_ROOT = true;
-        const tabEditorIndex = tabIndex - 1;
+
+        const tabEditorIndex = getOffsetIndex(tabIndex);
         const tabEditor = this.tabEditors[tabEditorIndex];
+
         if (!tabEditor) {
           console.error('editor controller apply', op);
           console.error('tab editors count:', this.tabEditors.length);
           console.error('children count:', this.children.length);
           throw new Error(`Could not find editor at index ${tabEditorIndex}`);
         }
-        // console.log(
-        //   'going to apply to tab editor',
-        //   tabEditorIndex,
-        //   translatedOp
-        // );
+
         tabEditor.apply(translatedOp);
       }
     }
@@ -811,7 +880,7 @@ export class EditorController implements RootEditorController {
         throw new Error(`Could not find tab editor with id ${tabId}`);
       }
 
-      const translatedOp = translateOpUp(tabIndex + 1, op);
+      const translatedOp = translateOpUp(tabIndex + SUB_EDITOR_OFFSET, op);
 
       translatedOp.IS_LOCAL = true;
       this.apply(translatedOp);

@@ -15,7 +15,7 @@ export const getCodeLineSource = (
     | TableColumnFormulaElement
     | CodeLineV2ElementCode
     | ParagraphElement
-) => {
+): string => {
   const childCount = node.children.length;
   const res = node.children
     .map((c, i) => {

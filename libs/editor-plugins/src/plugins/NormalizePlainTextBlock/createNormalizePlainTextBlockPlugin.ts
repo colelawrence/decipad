@@ -3,9 +3,11 @@ import type { MyEditor, MyNodeEntry, MyValue } from '@decipad/editor-types';
 import { ELEMENT_H1 } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate-common';
 import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
-import { normalizeExcessProperties } from '../../utils/normalize';
-import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
+import {
+  createNormalizerPluginFactory,
+  normalizeExcessProperties,
+  normalizePlainTextChildren,
+} from '@decipad/editor-plugin-factories';
 
 const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1];
 

@@ -1,3 +1,4 @@
+import { expect, it, beforeEach } from 'vitest';
 import type { TEditor, TText } from '@udecode/plate-common';
 import { createTEditor } from '@udecode/plate-common';
 import { mockConsoleError } from '@decipad/testutils';

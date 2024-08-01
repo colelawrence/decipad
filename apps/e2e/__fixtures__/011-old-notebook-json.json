@@ -10,6 +10,11 @@
       "id": "GIoXeBdhJzdXHs2SJOolc"
     },
     {
+      "type": "data-tab",
+      "id": "some_random_id",
+      "children": []
+    },
+    {
       "children": [
         {
           "children": [

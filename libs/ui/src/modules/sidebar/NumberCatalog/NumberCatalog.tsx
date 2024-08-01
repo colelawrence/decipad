@@ -5,13 +5,15 @@ import { ReactNode } from 'react';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
-import { cssVar, p14Medium } from '../../../primitives';
+import { cssVar, p13Medium, p14Medium } from '../../../primitives';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export type NumberCatalogItemType = {
   name: string;
   blockId: string;
   type: 'h2' | 'h3' | 'var';
   currentTab: boolean;
+  dataTab: boolean;
 };
 
 interface NumberCatalogProps {
@@ -19,12 +21,17 @@ interface NumberCatalogProps {
   onDragEnd?: (e: React.DragEvent) => void;
   items: Record<string, NumberCatalogItemType[]>;
   alignment?: 'right' | 'left';
+
+  toggleAddNewVariable: () => void;
+  editVariable: (id: string) => void;
 }
 
 export const NumberCatalog = ({
   onDragStart,
   onDragEnd,
   items = {},
+  toggleAddNewVariable,
+  editVariable,
 }: NumberCatalogProps) => {
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
@@ -41,6 +48,8 @@ export const NumberCatalog = ({
             blockId={item.blockId}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
+            onClick={() => editVariable(item.blockId)}
+            isDataTab={item.dataTab}
           />
         );
       default:
@@ -49,7 +58,9 @@ export const NumberCatalog = ({
   }
 
   if (!Object.keys(items).length) {
-    return null;
+    return isFlagEnabled('DATA_DRAWER') ? (
+      <button onClick={toggleAddNewVariable}>+ New Variable</button>
+    ) : null;
   }
 
   return (
@@ -65,6 +76,12 @@ export const NumberCatalog = ({
             </div>
           ))}
         </div>
+
+        {isFlagEnabled('DATA_DRAWER') && (
+          <button css={newVariableButton} onClick={toggleAddNewVariable}>
+            + New Variable
+          </button>
+        )}
       </div>
     </div>
   );
@@ -103,4 +120,9 @@ const groupStyles = css({
 const groupHeadingStyles = css(p14Medium, {
   color: cssVar('textSubdued'),
   padding: '4px 8px',
+});
+
+const newVariableButton = css(p13Medium, {
+  paddingLeft: '16px',
+  color: cssVar('textDisabled'),
 });

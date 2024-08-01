@@ -10,6 +10,7 @@ import {
   ELEMENT_SMART_REF,
   ELEMENT_TITLE,
   ELEMENT_TAB,
+  ELEMENT_DATA_TAB,
 } from '@decipad/editor-types';
 import { getOnly } from '@decipad/utils';
 import { parseStructuredCodeLine } from './CodeLineV2';
@@ -40,6 +41,7 @@ const createTestCodeLine = (
 
   editor.children = [
     { id: 'title', type: ELEMENT_TITLE, children: [{ text: '' }] },
+    { id: 'data-tab', type: ELEMENT_DATA_TAB, children: [] },
     { id: 'tab1', type: ELEMENT_TAB, name: 'First tab', children: [codeLine] },
   ];
 

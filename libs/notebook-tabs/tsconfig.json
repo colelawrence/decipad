@@ -8,6 +8,7 @@
   "include": ["src"],
   "references": [
     { "path": "../editor-types" },
+    { "path": "../editor-plugin-factories" },
     { "path": "../routing" },
     { "path": "../editor-language-elements" },
     { "path": "../computer-interfaces" }

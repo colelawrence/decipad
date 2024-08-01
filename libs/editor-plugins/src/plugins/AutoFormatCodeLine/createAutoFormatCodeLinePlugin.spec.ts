@@ -1,4 +1,5 @@
 /* eslint-disable jest/no-disabled-tests */
+import { describe, it, expect, beforeEach } from 'vitest';
 import type React from 'react';
 import type { MyEditor, MyElement, MyPlatePlugin } from '@decipad/editor-types';
 import {
@@ -9,9 +10,9 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
-import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 import { getComputer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
+import { createNormalizeCodeLinePlugin } from '@decipad/editor-plugin-factories';
 
 let editor: MyEditor;
 let plugin: MyPlatePlugin;

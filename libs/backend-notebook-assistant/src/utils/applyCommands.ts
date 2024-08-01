@@ -1,5 +1,5 @@
 import type { RootDocument, TabElement } from '@decipad/editor-types';
-import { ELEMENT_TAB } from '@decipad/editor-types';
+import { ELEMENT_DATA_TAB, ELEMENT_TAB } from '@decipad/editor-types';
 import cloneDeep from 'lodash/cloneDeep';
 import { getCommands } from './getCommands';
 import { findPath } from './findPath';
@@ -86,6 +86,11 @@ export const applyCommands = (
             firstTab = newTab();
             newDocument.children = [
               newDocument.children[0],
+              {
+                type: ELEMENT_DATA_TAB,
+                id: nanoid(),
+                children: [],
+              },
               newTab(),
               ...(newDocument.children.slice(1) as TabElement[]),
             ];

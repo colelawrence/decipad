@@ -24,7 +24,15 @@ const COMPUTER_DEBOUNCE = 100;
 
 const initialState = (): Omit<
   NotebookState,
-  'initEditor' | 'destroy' | 'setInitialFocusDone' | 'computer'
+  | 'initEditor'
+  | 'destroy'
+  | 'setInitialFocusDone'
+  | 'computer'
+  | 'isAddingOrEditingVariable'
+  | 'editingVariableId'
+  | 'setAddVariable'
+  | 'setEditingVariable'
+  | 'closeDataDrawer'
 > => {
   let resolveNotebookLoadedPromise: (e: DocSyncEditor) => void;
   const notebookLoadedPromise: EnhancedPromise<DocSyncEditor> =
@@ -272,6 +280,7 @@ export const createNotebookStore = (
     setInitialFocusDone: () => {
       set({ initialFocusDone: true });
     },
+
     destroy: () => {
       const { syncClientState, editor, liveConnectionWorker } = get();
       if (syncClientState === 'created') {
@@ -281,5 +290,29 @@ export const createNotebookStore = (
         set({ ...initialState(), destroyed: true });
         onDestroy();
       }
+    },
+
+    isAddingOrEditingVariable: undefined,
+    editingVariableId: undefined,
+
+    setAddVariable() {
+      set(() => ({
+        isAddingOrEditingVariable: 'create',
+        editingVariableId: undefined,
+      }));
+    },
+
+    setEditingVariable(id) {
+      set(() => ({
+        isAddingOrEditingVariable: 'edit',
+        editingVariableId: id,
+      }));
+    },
+
+    closeDataDrawer() {
+      set(() => ({
+        isAddingOrEditingVariable: undefined,
+        editingVariableId: undefined,
+      }));
     },
   }));

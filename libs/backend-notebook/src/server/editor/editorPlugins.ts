@@ -1,10 +1,10 @@
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';
 import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md';
-import { createCodeLineV2NoUiPlugin } from '../../../../editor-plugins/src/plugins/CodeLineV2/createCodeLineV2NoUiPlugin';
 import { createTablePluginNoUI } from '../../../../editor-table/src/plugins/createTablePluginNoUI';
 import { createSmartRefPluginNoUI } from '../../../../editor-plugins/src/plugins/SmartRef/createSmartRefPluginNoUI';
 import { createMagicNumberPluginNoUI } from '../../../../editor-plugins/src/plugins/MagicNumber/createMagicNumberPluginNoUI';
+import { createCodeLineV2NoUiPlugin } from '../../../../editor-plugin-factories/src/shared-plugins/CodeLineV2/createCodeLineV2NoUiPlugin';
 
 interface EditorPluginsOptions {
   computer: Computer;

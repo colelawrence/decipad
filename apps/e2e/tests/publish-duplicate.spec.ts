@@ -357,6 +357,11 @@ test('duplicate in workspace with single workspace', async ({
           id: expect.any(String),
         },
         {
+          type: 'data-tab',
+          id: expect.any(String),
+          children: [],
+        },
+        {
           children: [
             {
               children: [

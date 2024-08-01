@@ -15,7 +15,17 @@ export type EnhancedPromise<T> = typeof Promise & {
   resolved?: T;
 };
 
-export interface NotebookState {
+export type DataDrawerState = {
+  isAddingOrEditingVariable: 'edit' | 'create' | undefined;
+  editingVariableId: string | undefined;
+
+  // Use when you want to create a new variable.
+  setAddVariable: () => void;
+  setEditingVariable: (id: string) => void;
+  closeDataDrawer: () => void;
+};
+
+export type EditorState = {
   notebookLoadedPromise: EnhancedPromise<DocSyncEditor>;
   resolveNotebookLoadedPromise: () => (e: DocSyncEditor) => void;
   blockProcessor: BlockProcessor | undefined;
@@ -40,4 +50,6 @@ export interface NotebookState {
   initialFocusDone: boolean;
   destroyed?: boolean;
   isNewNotebook: boolean;
-}
+};
+
+export type NotebookState = EditorState & DataDrawerState;

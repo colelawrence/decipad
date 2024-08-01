@@ -1,16 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC, ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { useDraggingScroll, useScrollToHash } from '../../hooks';
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
 import * as S from './styles';
 import { PermissionType } from '../../types';
 import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
+import { shouldRenderComponent } from '@decipad/react-utils';
 
 interface NotebookPageProps {
   readonly notebook: ReactNode;
   readonly topbar: ReactNode;
   readonly sidebar: ReactNode;
   readonly tabs: ReactNode;
+  readonly dataDrawer: ReactNode;
+
   readonly isEmbed: boolean;
 
   // Undefined means we haven't loaded yet
@@ -46,7 +49,14 @@ function getShowSidebar(
 }
 
 export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
-  const { topbar, notebook, sidebar, tabs, isEmbed = false } = props;
+  const {
+    topbar,
+    notebook,
+    sidebar,
+    tabs,
+    dataDrawer,
+    isEmbed = false,
+  } = props;
 
   const sidebarComponent = useNotebookMetaData(
     (state) => state.sidebarComponent
@@ -99,6 +109,11 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
               </S.TabWrapper>
             )}
           </S.EditorAndTabWrapper>
+          {shouldRenderComponent(dataDrawer) && (
+            <S.DataDrawer isInEditorSidebar={isInEditorSidebar}>
+              {dataDrawer}
+            </S.DataDrawer>
+          )}
         </S.ArticleWrapper>
         <SidebarExtra
           showSidebar={showSidebar}

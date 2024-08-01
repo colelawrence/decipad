@@ -1,5 +1,11 @@
-import type { TabElement, TitleElement } from '@decipad/editor-types';
-import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import {
+  DataTabElement,
+  ELEMENT_DATA_TAB,
+  TabElement,
+  TitleElement,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from '@decipad/editor-types';
 import type { TOperation } from '@udecode/plate-common';
 import { Element, Text } from 'slate';
 
@@ -20,6 +26,15 @@ export function IsTab(node: unknown): node is TabElement {
     'type' in node &&
     typeof node.type === 'string' &&
     node.type === ELEMENT_TAB
+  );
+}
+
+export function IsDataTab(node: unknown): node is DataTabElement {
+  return (
+    Element.isElement(node) &&
+    'type' in node &&
+    typeof node.type === 'string' &&
+    node.type === ELEMENT_DATA_TAB
   );
 }
 

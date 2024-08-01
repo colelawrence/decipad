@@ -8,8 +8,10 @@ import {
   unwrapNodes,
 } from '@udecode/plate-common';
 import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugin-factories';
-import { normalizeExcessProperties } from '../../utils/normalize';
+import {
+  createNormalizerPluginFactory,
+  normalizeExcessProperties,
+} from '@decipad/editor-plugin-factories';
 
 const normalizeLink =
   (editor: MyEditor) =>

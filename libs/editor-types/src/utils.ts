@@ -10,12 +10,13 @@ import {
   useEditorRef,
   type TEditor,
   type Value,
+  PlateEditor,
 } from '@udecode/plate-common';
 import {
   type AutoformatPlugin,
   createAutoformatPlugin,
 } from '@udecode/plate-autoformat';
-import type { MyValue, NotebookValue } from './value';
+import type { DataTabValue, MyValue, NotebookValue } from './value';
 import type { MyEditor, MyGenericEditor, RootEditor } from './nodes';
 import type { MyOverrideByKey, MyPlatePlugin } from './plate';
 
@@ -59,6 +60,21 @@ export const createMyPluginFactory = <
   P = PluginOptions,
   V extends Value = MyValue,
   E extends MyGenericEditor<V> = MyGenericEditor<V>
+>(
+  defaultPlugin: PlatePlugin<NoInfer<P>, V, E>
+) => createPluginFactory(defaultPlugin);
+
+export const createMyPlateDataTabEditor = (
+  options: CreatePlateEditorOptions<
+    DataTabValue,
+    PlateEditor<DataTabValue>
+  > = {}
+) => createPlateEditor<DataTabValue, PlateEditor<DataTabValue>>(options);
+
+export const createMyPlateDataTabPluginFactory = <
+  P = PluginOptions,
+  V extends Value = DataTabValue,
+  E extends PlateEditor<V> = PlateEditor<V>
 >(
   defaultPlugin: PlatePlugin<NoInfer<P>, V, E>
 ) => createPluginFactory(defaultPlugin);

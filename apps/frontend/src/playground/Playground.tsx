@@ -59,6 +59,7 @@ const Playground: React.FC = () => {
         }
         sidebar={null}
         tabs={null}
+        dataDrawer={null}
         isEmbed={false}
         isReadOnly={false}
       />

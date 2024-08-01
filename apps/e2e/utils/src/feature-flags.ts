@@ -2,4 +2,5 @@ export const e2eFlags = {
   ALLOW_CREATE_NEW_WORKSPACE: true,
   NOTION_CONNECTIONS: true,
   GOOGLE_SHEET_INTEGRATION: true,
+  PRIVATE_LINK_ANALYTICS: false,
 };

@@ -6,7 +6,11 @@ import { forbidden, notFound } from '@hapi/boom';
 import { z } from 'zod';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import type { MyValue } from '@decipad/editor-types';
-import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import {
+  ELEMENT_DATA_TAB,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from '@decipad/editor-types';
 import type { EElementOrText } from '@udecode/plate-common';
 import {
   getNodeString,
@@ -106,6 +110,11 @@ export const injectNotebookTemplate: CustomAction<
             type: ELEMENT_TITLE,
             id: 'title-id',
             children: [{ text: title }],
+          },
+          {
+            type: ELEMENT_DATA_TAB,
+            id: 'data-tab-id',
+            children: [],
           },
           {
             type: ELEMENT_TAB,

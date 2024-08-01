@@ -532,6 +532,10 @@ export interface ComponentCssVariables {
   RequiresPremiumBorder: string;
   RequiresPremiumText: string;
   // -------- End Premium Indicators ----------
+
+  // -------------- Data Drawer ---------------
+  DataDrawerUnitColour: string;
+  // ------------ End Data Drawer -------------
 }
 
 /**
@@ -652,6 +656,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       RequiresPremium: brand500.hex,
       RequiresPremiumBorder: brand600.hex,
       RequiresPremiumText: blackWhiteBlack.hex,
+
+      DataDrawerUnitColour: blue600.rgb,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -765,6 +771,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       RequiresPremium: purple300.hex,
       RequiresPremiumBorder: purple500.hex,
       RequiresPremiumText: blackWhiteBlack.hex,
+
+      DataDrawerUnitColour: blue600.rgb,
     },
   } as const;
 

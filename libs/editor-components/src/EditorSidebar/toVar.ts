@@ -8,4 +8,5 @@ export const toVar = (
   type: 'var',
   name: name.name,
   blockId: getDefined(name.blockId),
+  dataTab: false,
 });

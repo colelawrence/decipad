@@ -1,5 +1,9 @@
 import type { RootDocument } from '@decipad/editor-types';
-import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
+import {
+  ELEMENT_DATA_TAB,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from '@decipad/editor-types';
 import { codeAssistant } from '@decipad/backend-code-assistant';
 import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
@@ -78,6 +82,11 @@ export const generateCode: CustomAction<
           type: ELEMENT_TITLE,
           id: nanoid(),
           children: [{ text: 'Title' }],
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          id: nanoid(),
+          children: [],
         },
         {
           type: ELEMENT_TAB,

@@ -7,3 +7,5 @@ export * from './Column';
 export * from './VariableDef';
 export * from './LiveQuery';
 export * from './Tabs';
+export * from './DataTab';
+export * from './DataTabChild';

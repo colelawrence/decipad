@@ -8,12 +8,15 @@ import { DragHandle } from '../../../icons';
 import { cssVar, p14Medium } from '../../../primitives';
 import { CodeResult } from '../../editor';
 import { useComputer } from '@decipad/editor-hooks';
+import { noop } from '@decipad/utils';
 
 interface NumberProps {
   name: string;
   blockId: string;
   onDragStart?: SmartRefDragCallback;
   onDragEnd?: (e: React.DragEvent) => void;
+  onClick?: () => void;
+  isDataTab?: boolean;
 }
 
 export const NumberCatalogItem = ({
@@ -21,6 +24,8 @@ export const NumberCatalogItem = ({
   blockId,
   onDragStart,
   onDragEnd,
+  onClick,
+  isDataTab = false,
 }: NumberProps) => {
   const computer = useComputer();
   const undebouncedResult = computer.getBlockIdResult$.use(blockId);
@@ -70,7 +75,7 @@ export const NumberCatalogItem = ({
   };
 
   return (
-    <div>
+    <div onClick={!isDataTab ? noop : onClick}>
       <div
         draggable
         onDragStart={
@@ -87,26 +92,9 @@ export const NumberCatalogItem = ({
         <span data-drag-handle css={dragHandleStyles}>
           <DragHandle />
         </span>
-        <span
-          css={css(p14Medium, {
-            position: 'relative',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            minWidth: 0,
-            display: 'inline-flex',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-          })}
-        >
-          {name}
-          <span
-            css={css(p14Medium, {
-              color: cssVar('textSubdued'),
-            })}
-          >
-            {displayResultType(result.result)}
-          </span>
+        <span css={contentWrapper}>
+          <span>{name}</span>
+          <span>{displayResultType(result.result)}</span>
         </span>
       </div>
     </div>
@@ -146,5 +134,27 @@ export const numberCatalogListItemStyles = css(p14Medium, {
       mixBlendMode: 'initial',
       color: cssVar('themeTextSubdued'),
     },
+  },
+});
+
+const contentWrapper = css(p14Medium, {
+  position: 'relative',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  minWidth: 0,
+  display: 'inline-flex',
+  alignItems: 'baseline',
+  justifyContent: 'space-between',
+
+  '> span:first-of-type': {
+    maxWidth: '200px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: 'inline-block',
+  },
+
+  '> span:last-of-type': {
+    color: cssVar('textSubdued'),
   },
 });

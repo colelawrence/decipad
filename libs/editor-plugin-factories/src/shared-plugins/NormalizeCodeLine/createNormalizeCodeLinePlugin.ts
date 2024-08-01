@@ -18,9 +18,11 @@ import {
   unwrapNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import type { NormalizerReturnValue } from '@decipad/editor-plugin-factories';
-import { createNormalizerPlugin } from '@decipad/editor-plugin-factories';
-import { normalizeExcessProperties } from '../../utils/normalize';
+import { normalizeExcessProperties } from '../utils';
+import {
+  NormalizerReturnValue,
+  createNormalizerPlugin,
+} from '../../normalizerPlugin';
 
 export const normalizeCodeChildren = <
   TV extends Value,

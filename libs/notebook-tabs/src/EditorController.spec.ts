@@ -1,15 +1,23 @@
 import { vi, it, describe, expect } from 'vitest';
-import type { MyValue, TabElement, TitleElement } from '@decipad/editor-types';
 import {
+  DataTabChildrenElement,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_DATA_TAB,
+  ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  MyValue,
+  TabElement,
+  TitleElement,
 } from '@decipad/editor-types';
 import { EditorController } from './EditorController';
 import { nanoid } from 'nanoid';
 import { IsTab } from './utils';
 import { createTrailingParagraphPlugin } from './testPlugins';
+import { DATA_TAB_INDEX, FIRST_TAB_INDEX, TITLE_INDEX } from './constants';
 
 describe.sequential('EditorController', () => {
   vi.mock('nanoid', () => {
@@ -34,6 +42,10 @@ describe.sequential('EditorController', () => {
             },
           ],
           type: 'title',
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          children: [],
         },
         {
           children: [
@@ -71,6 +83,10 @@ describe.sequential('EditorController', () => {
             },
           ],
           type: 'title',
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          children: [],
         },
         {
           children: [
@@ -119,6 +135,10 @@ describe.sequential('EditorController', () => {
             },
           ],
           type: 'title',
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          children: [],
         },
         {
           children: [
@@ -176,6 +196,10 @@ describe.sequential('EditorController', () => {
             },
           ],
           type: 'title',
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          children: [],
         },
         {
           children: [
@@ -239,7 +263,7 @@ describe.sequential('EditorController', () => {
       });
 
       expect(Array.from(controller.getAllTabEditors())).toHaveLength(1);
-      expect(controller.children).toHaveLength(2);
+      expect(controller.children).toHaveLength(3);
 
       const editor = controller.getAllTabEditors()[0];
 
@@ -247,12 +271,11 @@ describe.sequential('EditorController', () => {
         anchor: { path: [0, 0], offset: 0 },
         focus: { path: [0, 0], offset: 0 },
       });
-      editor.insertText('test');
 
       expect(editor.children).toMatchObject([
         {
           type: 'p',
-          children: [{ text: 'test' }],
+          children: [{ text: '' }],
         },
       ]);
     });
@@ -833,12 +856,13 @@ describe.sequential('EditorController', () => {
         }
       });
 
-      expect(controller.children).toHaveLength(2);
-      expect(controller.children[0].type).toBe(ELEMENT_TITLE);
-      expect(controller.children[1].type).toBe(ELEMENT_TAB);
-      expect(controller.children[1].children.length).toBe(21);
+      expect(controller.children).toHaveLength(3);
+      expect(controller.children[TITLE_INDEX].type).toBe(ELEMENT_TITLE);
+      expect(controller.children[DATA_TAB_INDEX].type).toBe(ELEMENT_DATA_TAB);
+      expect(controller.children[FIRST_TAB_INDEX].type).toBe(ELEMENT_TAB);
+      expect(controller.children[FIRST_TAB_INDEX].children.length).toBe(21);
 
-      expect(controller.children[0]).toMatchObject({
+      expect(controller.children[TITLE_INDEX]).toMatchObject({
         children: [
           {
             text: 'How rich would you be if you invested in bitcoin',
@@ -849,7 +873,7 @@ describe.sequential('EditorController', () => {
 
       // Really just making sure
       expect(
-        controller.children[1].children.some(
+        controller.children[FIRST_TAB_INDEX].children.some(
           (c) =>
             (c.type as any) === ELEMENT_TAB || (c.type as any) === ELEMENT_TITLE
         )
@@ -928,6 +952,10 @@ describe.sequential('EditorController', () => {
           type: 'title',
         },
         {
+          type: ELEMENT_DATA_TAB,
+          children: [],
+        },
+        {
           children: [
             {
               children: [
@@ -969,17 +997,18 @@ describe.sequential('EditorController', () => {
     it('Meets initial conditions -> title, tab', () => {
       const controller = new EditorController('id', []);
       controller.forceNormalize();
-      expect(controller.children).toHaveLength(2);
+      expect(controller.children).toHaveLength(3);
     });
 
     it('Renames the first tab', () => {
       const controller = new EditorController('id', []);
       controller.forceNormalize();
 
-      const { id } = controller.children[1];
+      const { id } = controller.children[FIRST_TAB_INDEX];
+
       controller.renameTab(id, 'My Name!');
 
-      expect(controller.children[1]).toMatchObject({
+      expect(controller.children[FIRST_TAB_INDEX]).toMatchObject({
         type: ELEMENT_TAB,
         id,
         name: 'My Name!',
@@ -991,7 +1020,7 @@ describe.sequential('EditorController', () => {
       const controller = new EditorController('id', []);
       controller.forceNormalize();
       controller.insertTab();
-      expect(controller.children).toHaveLength(3);
+      expect(controller.children).toHaveLength(4);
     });
 
     it('Removes a tab', () => {
@@ -999,6 +1028,7 @@ describe.sequential('EditorController', () => {
       controller.forceNormalize();
 
       const id = controller.insertTab();
+
       expect(controller.children.filter(IsTab)).toHaveLength(2);
 
       controller.removeTab(id);
@@ -1048,6 +1078,10 @@ describe.sequential('EditorController', () => {
             type: 'title',
           },
           {
+            type: ELEMENT_DATA_TAB,
+            children: [],
+          },
+          {
             children: [
               {
                 children: [
@@ -1066,8 +1100,7 @@ describe.sequential('EditorController', () => {
         ]);
       });
 
-      // eslint-disable-next-line jest/no-disabled-tests
-      it('Inserts a title if one if not present', () => {
+      it('Inserts a title if one if not present (2)', () => {
         const controller = new EditorController('id', []);
 
         controller.withoutNormalizing(() => {
@@ -1093,6 +1126,10 @@ describe.sequential('EditorController', () => {
               },
             ],
             type: 'title',
+          },
+          {
+            type: ELEMENT_DATA_TAB,
+            children: [],
           },
           {
             children: [
@@ -1131,6 +1168,10 @@ describe.sequential('EditorController', () => {
             ],
             id: 'titleid',
             type: 'title',
+          },
+          {
+            type: ELEMENT_DATA_TAB,
+            children: [],
           },
           {
             children: [
@@ -1193,6 +1234,10 @@ describe.sequential('EditorController', () => {
             type: 'title',
           },
           {
+            type: ELEMENT_DATA_TAB,
+            children: [],
+          },
+          {
             children: [
               {
                 children: [
@@ -1239,7 +1284,7 @@ describe.sequential('EditorController', () => {
           path: [1],
         });
 
-        expect(controller.children[1]).toMatchObject({
+        expect(controller.children[FIRST_TAB_INDEX]).toMatchObject({
           type: 'tab',
           name: 'tabname',
           children: [
@@ -1264,12 +1309,14 @@ describe.sequential('EditorController', () => {
           children: [{ text: 'title here' }],
         },
       });
+
       controller.insertTab('tab1');
       controller.insertTab('tab2');
+
       controller.moveTabs('tab1', 'tab2');
 
-      expect(controller.children[2].id).toBe('tab2');
-      expect(controller.children[3].id).toBe('tab1');
+      expect(controller.children[3].id).toBe('tab2');
+      expect(controller.children[4].id).toBe('tab1');
     });
 
     it('moves tabs various times', () => {
@@ -1292,11 +1339,11 @@ describe.sequential('EditorController', () => {
       controller.moveTabs('tab5', 'tab1');
       controller.moveTabs('tab4', 'tab2');
 
-      expect(controller.children[2].id).toBe('tab5');
-      expect(controller.children[3].id).toBe('tab4');
-      expect(controller.children[4].id).toBe('tab3');
-      expect(controller.children[5].id).toBe('tab2');
-      expect(controller.children[6].id).toBe('tab1');
+      expect(controller.children[3].id).toBe('tab5');
+      expect(controller.children[4].id).toBe('tab4');
+      expect(controller.children[5].id).toBe('tab3');
+      expect(controller.children[6].id).toBe('tab2');
+      expect(controller.children[7].id).toBe('tab1');
     });
   });
 
@@ -1310,7 +1357,7 @@ describe.sequential('EditorController', () => {
       controller.withoutNormalizing(() => {
         controller.apply({
           type: 'insert_node',
-          path: [1, 1],
+          path: [2, 1],
           node: { type: ELEMENT_PARAGRAPH, children: [{ text: 'not empty' }] },
         });
       });
@@ -1323,6 +1370,10 @@ describe.sequential('EditorController', () => {
             },
           ],
           type: 'title',
+        },
+        {
+          type: ELEMENT_DATA_TAB,
+          children: [],
         },
         {
           children: [
@@ -1385,6 +1436,32 @@ describe.sequential('EditorController', () => {
       });
 
       expect(controller.getTitle()).toBe('my title');
+    });
+  });
+
+  describe.sequential('Data tab', () => {
+    it('allows for changes to the data tab', () => {
+      const controller = new EditorController('id', []);
+      controller.forceNormalize();
+
+      controller.apply({
+        type: 'insert_node',
+        path: [1, 0],
+        node: {
+          id: 'calc-1',
+          type: ELEMENT_DATA_TAB_CHILDREN,
+          children: [
+            {
+              type: ELEMENT_STRUCTURED_VARNAME,
+              children: [{ text: 'My Var Name' }],
+            },
+            {
+              type: ELEMENT_CODE_LINE_V2_CODE,
+              children: [{ text: '5' }],
+            },
+          ],
+        } satisfies DataTabChildrenElement,
+      });
     });
   });
 });

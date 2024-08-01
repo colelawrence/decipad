@@ -2,7 +2,7 @@
 import { commonCurrencies } from '@decipad/language-units';
 import { AST, currencyUnits, UnitOfMeasure } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
-import { FC, useCallback, useState } from 'react';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
 import {
   CaretDown,
@@ -13,7 +13,7 @@ import {
   Scale,
   Timer,
 } from '../../../icons';
-import { p13Medium } from '../../../primitives';
+import { cssVar, p13Medium } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { ASTUnitMenuItem } from '../ASTUnitMenuItem/ASTUnitMenuItem';
 import { MenuList } from '../../../shared/molecules/MenuList/MenuList';
@@ -21,7 +21,9 @@ import { MenuList } from '../../../shared/molecules/MenuList/MenuList';
 export interface StructuredInputUnitsProps {
   readonly unit: AST.Expression | '%' | undefined;
   readonly onChangeUnit: (unit?: AST.Expression | '%' | undefined) => void;
+
   readonly readOnly?: boolean;
+  readonly variant?: 'normal' | 'colourful';
 }
 
 const ExpandableColumnsArr = [
@@ -30,7 +32,20 @@ const ExpandableColumnsArr = [
   ['Time', Timer],
   ['Currency', Dollar],
 ] as const;
+
 type ExpandableColumns = typeof ExpandableColumnsArr[number][0] | null;
+
+const CategoriesToIcon: Record<
+  Exclude<ExpandableColumns, null> | 'Percentage' | 'Number',
+  ReactNode
+> = {
+  Number: <Number />,
+  Distance: <Ruler />,
+  Weight: <Scale />,
+  Time: <Timer />,
+  Currency: <Dollar />,
+  Percentage: <Percentage />,
+};
 
 const presentableCurrencyUnits = currencyUnits.filter((unit) => {
   return commonCurrencies.includes(unit.name);
@@ -75,6 +90,7 @@ const unitCategories: Record<
     {}
   ),
 };
+
 const categoryAndCaretStyles = css([
   hideOnPrint,
   {
@@ -114,6 +130,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
   unit,
   onChangeUnit,
   readOnly = false,
+  variant = 'normal',
 }) => {
   // No sub menu can be open at the same time
   const [open, setOpen] = useState(false);
@@ -153,11 +170,32 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           onChangeOpen={setOpen}
           trigger={
             <span css={categoryAndCaretStyles}>
-              <span css={p13Medium}>
+              <span
+                css={[
+                  p13Medium,
+                  {
+                    display: 'inline-flex',
+                  },
+                  variant === 'colourful' && {
+                    color: cssVar('themeTextSubdued'),
+                  },
+                ]}
+              >
                 {/* Without text the icon has no line height, and so floats
                 upwards, hence the non-breaking space */}
                 {'\uFEFF'}
-                {stringUnit || 'Units'}
+                <span
+                  css={{
+                    display: 'inline-flex',
+                    gap: '2px',
+                    alignItems: 'center',
+                    svg: { width: '16px', height: '16px' },
+                  }}
+                >
+                  {(variant === 'colourful' &&
+                    CategoriesToIcon[stringUnit]) ?? <></>}
+                  {stringUnit || 'Units'}
+                </span>
               </span>
               <span
                 css={{

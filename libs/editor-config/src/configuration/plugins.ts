@@ -11,7 +11,6 @@ import {
   createBlockSelectionPlugin,
   createCalloutPlugin,
   createCodeLinePlugin,
-  createCodeLineV2Plugin,
   createCodeVariableHighlightPlugin,
   createDeduplicateElementIdsPlugin,
   createDisplayPlugin,
@@ -37,10 +36,8 @@ import {
   createMigrateStructuredInputs,
   createMigrateTableDropdownToId,
   createNavigationPlugin,
-  createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
   createNormalizeEditorPlugin,
-  createNormalizeElementIdPlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
   createNormalizePlainTextBlockPlugin,
@@ -63,7 +60,16 @@ import {
   createTabSelectionPlugin,
   createMathPlugin,
   createTransformH1,
+  createStructuredKeyboard,
+  createCodeLineRootPlugin,
+  createCodeLineVarnamePlugin,
+  createCodeLineCodeTextPlugin,
 } from '@decipad/editor-plugins';
+import {
+  createCodeLineV2Plugin,
+  createNormalizeCodeLinePlugin,
+  createNormalizeElementIdPlugin,
+} from '@decipad/editor-plugin-factories';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
   createMyAutoformatPlugin,
@@ -196,7 +202,13 @@ export const plugins = ({
 
       // language
       createCodeLinePlugin(computer),
-      createCodeLineV2Plugin(computer),
+      createCodeLineV2Plugin(
+        computer,
+        createStructuredKeyboard(computer),
+        createCodeLineRootPlugin(computer),
+        createCodeLineVarnamePlugin(computer),
+        createCodeLineCodeTextPlugin(computer)
+      ),
       createVariableDefPlugin(computer),
       createPotentialFormulaHighlightPlugin(readOnly),
 

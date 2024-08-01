@@ -29,6 +29,8 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_DATA_TAB,
+  ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_COLUMNS,
   ELEMENT_DIAMOND,
   ELEMENT_DRAW_IMAGE,
@@ -800,6 +802,18 @@ export interface TitleElement extends BaseElement {
   children: [{ text: string }];
 }
 
+export interface DataTabChildrenElement extends BaseElement {
+  type: typeof ELEMENT_DATA_TAB_CHILDREN;
+  id: string;
+  children: [StructuredVarnameElement, CodeLineV2ElementCode];
+}
+
+export interface DataTabElement extends BaseElement {
+  type: typeof ELEMENT_DATA_TAB;
+  id: string;
+  children: Array<DataTabChildrenElement>;
+}
+
 export type TopLevelValue =
   | H1Element
   | H2Element
@@ -826,7 +840,13 @@ export type TopLevelValue =
   | SubmitForm
   | IntegrationBlock;
 
-export type NotebookValue = [TitleElement, ...Array<TabElement>];
+export type NotebookValue = [
+  TitleElement,
+  DataTabElement,
+  ...Array<TabElement>
+];
+
+export type DataTabValue = Array<DataTabChildrenElement>;
 
 export type TitleValue = [TitleElement];
 
@@ -848,6 +868,8 @@ export type PlainTextChildren = [PlainText];
 export type AnyElement =
   | TitleElement
   | TabElement
+  | DataTabElement
+  | DataTabChildrenElement
   | BlockElement
   | InlineElement
   | CodeLineV2ElementCode

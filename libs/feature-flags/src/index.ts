@@ -26,6 +26,8 @@ export const availableFlags = [
   'ENABLE_COMMENTS',
   'GOOGLE_SHEET_INTEGRATION',
   'PRIVATE_LINK_ANALYTICS',
+
+  'DATA_DRAWER',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

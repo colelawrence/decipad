@@ -24,6 +24,7 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_TITLE,
   ELEMENT_TAB,
+  ELEMENT_DATA_TAB,
 } from '@decipad/editor-types';
 import { prettyPrintAST, getComputer } from '@decipad/computer';
 import { getOnly } from '@decipad/utils';
@@ -35,6 +36,11 @@ describe('editorToProgram', () => {
     const editor = createTestEditorController('id');
     editor.children = [
       { type: ELEMENT_TITLE, id: '1', children: [{ text: '' }] },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'data-tab',
+        children: [],
+      },
       {
         type: ELEMENT_TAB,
         id: 'tab1',

@@ -1,6 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
-import type { MyPlatePlugin, MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -12,25 +11,22 @@ import {
   CodeLineV2Code,
   CodeLineV2Varname,
 } from '@decipad/editor-components';
-import {
-  createNormalizeCodeLineCodePlugin,
-  createNormalizeCodeLineV2Plugin,
-  createNormalizeCodeLineVarnamePlugin,
-} from './normalization';
-import type { PlateEditor, Value } from '@udecode/plate-common';
-import { createStructuredKeyboard } from '../StructuredKeyboard/createStructuredKeyboardPlugin';
 
-const createCodeLineRootPlugin = (_computer: Computer) => ({
+import type { PlateEditor, Value } from '@udecode/plate-common';
+
+export const createCodeLineRootPlugin = (_computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2,
   isElement: true,
   component: CodeLineV2,
 });
-const createCodeLineVarnamePlugin = (_computer: Computer) => ({
+
+export const createCodeLineVarnamePlugin = (_computer: Computer) => ({
   key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
   component: CodeLineV2Varname,
 });
-const createCodeLineCodeTextPlugin = <
+
+export const createCodeLineCodeTextPlugin = <
   TV extends Value = MyValue,
   TE extends PlateEditor<TV> = PlateEditor<TV>
 >(
@@ -40,30 +36,4 @@ const createCodeLineCodeTextPlugin = <
   isElement: true,
   component: CodeLineV2Code,
   decorate: decorateCode<TV, TE>(computer, ELEMENT_CODE_LINE_V2_CODE),
-});
-
-export const createCodeLineV2Plugin = <
-  TV extends Value = MyValue,
-  TE extends PlateEditor<TV> = PlateEditor<TV>
->(
-  computer: Computer
-): MyPlatePlugin => ({
-  key: 'CODE_LINE_V2_ROOT',
-  plugins: [
-    createCodeLineRootPlugin(computer),
-    createCodeLineVarnamePlugin(computer),
-    createCodeLineCodeTextPlugin(computer),
-    createNormalizeCodeLineV2Plugin(),
-    createNormalizeCodeLineCodePlugin(computer),
-    createNormalizeCodeLineVarnamePlugin(),
-    createStructuredKeyboard<TV, TE>(computer) as any,
-    createEventInterceptorPluginFactory({
-      name: 'INTERCEPT_CODE_LINE_V2',
-      elementTypes: [ELEMENT_CODE_LINE_V2],
-      interceptor: (_editor, _entry, e) => {
-        // Keyboard shortcut for creating a new element.
-        return e.event.key !== 'Enter';
-      },
-    })(),
-  ],
 });
