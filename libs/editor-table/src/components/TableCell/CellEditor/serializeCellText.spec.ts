@@ -1,7 +1,7 @@
 import type { SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';
-import type { CellInputValue } from './serializeCellText';
+import type { CellInputValue } from './types';
 import { parseCellText, serializeCellText } from './serializeCellText';
 
 const computerStub = {

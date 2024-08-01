@@ -23,8 +23,7 @@ import {
   createAutoCompleteMenuPlugin,
   createSmartRefPlugin,
 } from '@decipad/editor-plugins';
-import type { CellInputValue } from './serializeCellText';
-import type { CellTextEditingProps } from './types';
+import type { CellInputValue, CellTextEditingProps } from './types';
 import { deserializeCellText, serializeCellText } from './serializeCellText';
 import { CellEditorDefaultReadOnly } from './CellEditorDefaultReadOnly';
 import { useComputer } from '@decipad/editor-hooks';

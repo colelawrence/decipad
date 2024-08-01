@@ -2,22 +2,10 @@ import type { Computer } from '@decipad/computer-interfaces';
 import { getExprRef } from '@decipad/computer';
 import type { SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_SMART_REF } from '@decipad/editor-types';
-import type { TText } from '@udecode/plate-common';
 import { isText } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { nanoid } from 'nanoid';
-
-export type CellInputValue = [
-  {
-    id: string;
-    type: typeof ELEMENT_PARAGRAPH;
-    children: CellInputInlineValue[];
-  }
-];
-
-export type CellInputInlineValue = TText | SmartRefElement;
-
-export type ParsedCellValue = (TText | { blockId: string })[];
+import { CellInputValue, ParsedCellValue } from './types';
 
 export const serializeCellText = (value: CellInputValue): string => {
   const inlines = value.map((val) => val.children).flat();

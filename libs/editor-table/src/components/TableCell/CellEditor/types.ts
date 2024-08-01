@@ -1,5 +1,11 @@
 import type { Path } from 'slate';
-import type { CellValueType, TableCellElement } from '@decipad/editor-types';
+import {
+  CellValueType,
+  TableCellElement,
+  SmartRefElement,
+} from '@decipad/editor-types';
+import { TText } from '@udecode/plate-common';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 export type CellPlugin = {
   // Determine whether the plugin is active
@@ -65,3 +71,15 @@ export interface CellTextEditingProps {
   onConfirm: () => void;
   onCancel: () => void;
 }
+
+export type CellInputValue = [
+  {
+    id: string;
+    type: typeof ELEMENT_PARAGRAPH;
+    children: CellInputInlineValue[];
+  }
+];
+
+export type CellInputInlineValue = TText | SmartRefElement;
+
+export type ParsedCellValue = (TText | { blockId: string })[];
