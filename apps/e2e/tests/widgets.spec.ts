@@ -367,3 +367,22 @@ test('result widget', async ({ testUser }) => {
     await notebook.checkDropdownOptionIsSelected('Bye');
   });
 });
+
+test('check editor doesnt crash widgets', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await notebook.focusOnBody();
+  await notebook.selectLastParagraph();
+  await notebook.addParagraph('Hello');
+  await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+    'Hello'
+  );
+  await notebook.addSliderWidget();
+  await page.getByTestId('paragraph-wrapper').nth(0).selectText();
+  await page.keyboard.press('Home', { delay: 100 });
+  await page.keyboard.press('Enter', { delay: 200 });
+  await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText('');
+  await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+    'Hello'
+  );
+  await notebook.checkCalculationErrors();
+});
