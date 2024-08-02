@@ -10,6 +10,8 @@ const ANNOTATIONS_WIDTH = '320px';
 
 export const Container = styled.div({
   width: ANNOTATIONS_WIDTH,
+  backgroundColor: cssVar('backgroundAccent'),
+
   height: '100%',
   position: 'relative',
 
@@ -17,6 +19,8 @@ export const Container = styled.div({
 
   // A bit smaller, to accomodate for scroll bars, that have 8px width.
   marginRight: '8px',
+
+  zIndex: 100,
 });
 
 const BOTTOM_AND_TOP_SIZE = '80px';

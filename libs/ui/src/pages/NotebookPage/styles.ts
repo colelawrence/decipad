@@ -183,22 +183,14 @@ export const PaddingEditor = styled.div({
   paddingBottom: '200px',
 
   position: 'relative',
-
-  // '::before': {
-  //   display: 'absolute',
-  //   content: '""',
-  //   top: 0,
-  //   right: 0,
-  //   width: '16px',
-  //   height: '16px',
-  //   backgroundColor: 'red',
-  // },
 });
 
 export const InEditorSidebar = styled.div({
   flexGrow: 0,
   minHeight: '100%',
   position: 'relative',
+  backgroundColor: cssVar('backgroundAccent'),
+  zIndex: 100,
   [tabletScreenQuery]: {
     position: 'absolute',
     right: 0,
