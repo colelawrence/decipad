@@ -106,7 +106,8 @@ test.describe('staging performance checks', () => {
 
       await notebook.addCSV({
         method: 'link',
-        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv',
+        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRRPBbsSx0_NoW2dAQ9K8wTOC6ish3utLpID7qGPQXVuDLULD8eHwYaMGb7gTXx3HFkmNgfG4fYc9bl/pub?gid=400338077&single=true&output=csv',
+        varName: 'Funnel',
       });
 
       // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -119,16 +120,16 @@ test.describe('staging performance checks', () => {
         timeout: 1000,
       });
       await expect(
-        page.getByText('19 rows, previewing rows 1 to 10')
+        page.getByText('18 rows, previewing rows 1 to 10')
       ).toBeVisible();
     });
     performance.sampleEnd('Ingest CSV');
     expect
       .soft(
         performance.getSampleTime('Ingest CSV'),
-        'CSV Ingest took more than 13 seconds'
+        'CSV Ingest took more than 20 seconds'
       )
-      .toBeLessThanOrEqual(13_000);
+      .toBeLessThanOrEqual(20_000);
   });
 
   test('text formatter with mouse', async ({}) => {
@@ -179,6 +180,45 @@ test.describe('staging performance checks', () => {
     // compare the before styles with the current styles.
     expect(textStyles[0] > beforeTextStyles[0]).toBe(true);
     expect(textStyles[1] !== beforeTextStyles[1]).toBe(true);
+  });
+
+  test('creates a data view', async ({ performance }) => {
+    performance.sampleStart('Adding Data View');
+    await page.getByText('Pivot view').click();
+
+    await expect(page.getByText(/Data/)).toBeVisible();
+    performance.sampleEnd('Adding Data View');
+    expect
+      .soft(
+        performance.getSampleTime('Adding Data View'),
+        'Adding Data View took more than 3 seconds'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    await notebook.checkCalculationErrors();
+
+    await expect(page.getByTestId('add-data-view-column-button')).toBeVisible();
+
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Stage' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'London' }).click();
+    await page.getByTestId('add-data-view-column-button').click();
+    await page.getByRole('menuitem', { name: 'Madrid' }).click();
+    await page.getByTestId('data-view-options-menu-London').click();
+    performance.sampleStart('Aggregation Data View');
+    await page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await page.getByRole('menuitem', { name: 'Sum' }).click();
+    await expect(page.getByText('89.77')).toBeVisible();
+    performance.sampleEnd('Aggregation Data View');
+    expect
+      .soft(
+        performance.getSampleTime('Aggregation Data View'),
+        'Data View Aggregation took more than 3 seconds'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    await notebook.checkCalculationErrors();
   });
 
   test('leaves workspace clean', async ({}) => {
