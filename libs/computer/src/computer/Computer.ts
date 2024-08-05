@@ -129,6 +129,10 @@ export class Computer implements ComputerInterface {
     }
   }
 
+  get blocks() {
+    return this.latestProgram.asSequence;
+  }
+
   async getExternalData(): Promise<ExternalDataMap> {
     throw new Error('Method not implemented.');
   }

@@ -1,10 +1,11 @@
 /* eslint-disable complexity */
-/* eslint-disable complexity */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-param-reassign */
 
-import type { Computer, ProgramBlock } from '@decipad/computer-interfaces';
+import debounce from 'lodash/debounce';
+import type { EElement, TOperation } from '@udecode/plate-common';
+import { isElement } from '@udecode/plate-common';
+import type { Computer } from '@decipad/computer-interfaces';
 import {
   type MyElement,
   type NotebookValue,
@@ -13,9 +14,7 @@ import {
   ELEMENT_DATA_TAB,
 } from '@decipad/editor-types';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import debounce from 'lodash/debounce';
-import type { EElement, TOperation } from '@udecode/plate-common';
-import { isElement } from '@udecode/plate-common';
+import { fnQueue } from '@decipad/fnqueue';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
 import type { RootEditorController } from './types';
@@ -24,15 +23,13 @@ export class BlockProcessor {
   private rootEditor: RootEditorController;
   private Computer: Computer;
 
-  private ProgramCache: Map<string, ProgramBlock>;
   public DirtyBlocksSet: Map<string, EElement<NotebookValue>>;
 
-  private Computing: Promise<void> | undefined;
-  private Next: (() => void) | undefined;
-
-  public MaybeCompute: () => void;
+  public DebouncedComputeCompute: () => void;
 
   private isFirst: boolean;
+
+  private sendQueue = fnQueue();
 
   constructor(
     rootEditor: RootEditorController,
@@ -43,19 +40,16 @@ export class BlockProcessor {
     this.rootEditor = rootEditor;
     this.Computer = computer;
 
-    this.ProgramCache = new Map();
     this.DirtyBlocksSet = new Map();
 
-    this.Computing = undefined;
-    this.Next = undefined;
-
-    this.MaybeCompute = debounce(
+    this.DebouncedComputeCompute = debounce(
       this.PushCompute.bind(this),
       debounceEditorChangesMs
     );
 
     const { apply, onChange } = rootEditor;
 
+    // eslint-disable-next-line no-param-reassign
     rootEditor.apply = (op) => {
       if (op.type !== 'remove_node') {
         apply.bind(rootEditor)(op);
@@ -66,9 +60,10 @@ export class BlockProcessor {
       }
     };
 
+    // eslint-disable-next-line no-param-reassign
     rootEditor.onChange = () => {
       onChange.bind(rootEditor)();
-      this.MaybeCompute();
+      this.DebouncedComputeCompute();
     };
   }
 
@@ -108,10 +103,6 @@ export class BlockProcessor {
 
     await this.Computer.pushComputeDelta({ program: { upsert: wholeProgram } });
 
-    for (const update of wholeProgram) {
-      this.ProgramCache.set(update.id, update);
-    }
-
     this.DirtyBlocksSet.clear();
   }
 
@@ -128,70 +119,30 @@ export class BlockProcessor {
     }
   }
 
-  private async Compute() {
-    if (this.isFirst) {
-      this.isFirst = false;
-      await this.DoublePass();
-      return;
-    }
-
-    this.RemoveDirtyBlocks();
-
-    const changedProgram = await editorToProgram(
-      this.rootEditor,
-      this.DirtyBlocksSet.values() as Iterable<AnyElement>,
-      this.Computer
-    );
-
-    await this.Computer.pushComputeDelta({
-      program: {
-        upsert: changedProgram,
-        remove: this.RemovedNodes,
-      },
-    });
-
-    this.DirtyBlocksSet.clear();
-    this.RemovedNodes = [];
-  }
-
-  /**
-   * If `PushCompute` is called whilst the computer is still computing.
-   * we have to wait until it is finished.
-   *
-   * We use the variable `this.Next` to keep track of the callback that needs
-   * to be executed in this case.
-   */
-  private PushCompute() {
-    if (this.Computing != null) {
-      this.Next = this.PushCompute.bind(this);
-      return;
-    }
-
-    this.Computing = this.Compute().finally(() => {
-      this.Computing = undefined;
-      if (!this.Next) return;
-
-      const n = this.Next;
-      this.Next = undefined;
-      n();
-    });
-  }
-
-  private RemoveDirtyBlocks() {
-    for (const el of this.DirtyBlocksSet.values()) {
-      this.ProgramCache.delete((el as any).id);
-    }
-    for (const [id, block] of this.ProgramCache.entries()) {
-      if (
-        block.isArtificial &&
-        block.artificiallyDerivedFrom != null &&
-        block.artificiallyDerivedFrom.some((blockId) =>
-          this.DirtyBlocksSet.has(blockId)
-        )
-      ) {
-        this.ProgramCache.delete(id);
+  private async PushCompute() {
+    return this.sendQueue.push(async () => {
+      if (this.isFirst) {
+        this.isFirst = false;
+        await this.DoublePass();
+        return;
       }
-    }
+
+      const changedProgram = await editorToProgram(
+        this.rootEditor,
+        this.DirtyBlocksSet.values() as Iterable<AnyElement>,
+        this.Computer
+      );
+
+      await this.Computer.pushComputeDelta({
+        program: {
+          upsert: changedProgram,
+          remove: this.RemovedNodes,
+        },
+      });
+
+      this.DirtyBlocksSet.clear();
+      this.RemovedNodes = [];
+    });
   }
 
   private RemovedNodes: string[] = [];
@@ -221,10 +172,9 @@ export class BlockProcessor {
         continue;
       }
       for (const blockId of allBlockIds(editor, id)) {
-        this.ProgramCache.delete(blockId);
         this.DirtyBlocksSet.delete(blockId);
         this.RemovedNodes.push(blockId);
-        for (const [nodeId, block] of this.ProgramCache.entries()) {
+        for (const block of this.Computer.blocks) {
           if (
             block.type === 'identified-block' &&
             block.isArtificial &&
@@ -233,7 +183,7 @@ export class BlockProcessor {
               (derivedFromBlockId) => derivedFromBlockId === blockId
             )
           ) {
-            this.RemoveNode(nodeId);
+            this.RemoveNode(block.id);
           }
         }
       }

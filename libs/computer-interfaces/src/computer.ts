@@ -45,6 +45,7 @@ export interface Computer {
     Parser.Parseable | Parser.ParseableDate | null | undefined
   >;
   getVarBlockId(varName: string): string | undefined;
+  blocks: Iterable<ProgramBlock>;
 
   // --------------- types --------------//
   expressionType(expression: AST.Expression): Promise<SerializedType>;

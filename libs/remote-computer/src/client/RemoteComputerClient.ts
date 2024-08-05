@@ -211,6 +211,10 @@ export const createRemoteComputerClientFromWorker = (
 
     #latestProgram: Map<string, ProgramBlock> = new Map();
 
+    get blocks() {
+      return this.#latestProgram.values();
+    }
+
     getBlockIdResult(
       blockId: string
     ): Readonly<IdentifiedError | IdentifiedResult> | undefined {
