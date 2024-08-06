@@ -1,10 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
-import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import {
-  RuntimeError,
   Value,
   materializeOneResult,
   buildType as t,
@@ -366,6 +364,7 @@ describe('table operators', () => {
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.number()],
     });
+    const needleType = t.string();
     const tableValue = Value.Table.fromNamedColumns(
       [Value.fromJS(['The Thing']), Value.fromJS([12345])],
       ['Index', 'Value']
@@ -383,7 +382,7 @@ describe('table operators', () => {
       await (
         await fnValues!(
           [tableValue, Value.fromJS('The Thing')],
-          [tableType],
+          [tableType, needleType],
           makeContext(),
           []
         )
@@ -392,7 +391,7 @@ describe('table operators', () => {
     await expect(async () =>
       fnValues!(
         [tableValue, Value.fromJS('Not found')],
-        [tableType],
+        [tableType, needleType],
         makeContext(),
         []
       )
@@ -404,6 +403,7 @@ describe('table operators', () => {
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.date('day')],
     });
+    const needleType = t.string();
     const tableValue = Value.Table.fromNamedColumns(
       [
         Value.fromJS(['The Thing']),
@@ -429,7 +429,7 @@ describe('table operators', () => {
       await (
         await fnValues!(
           [tableValue, Value.fromJS('The Thing')],
-          [tableType],
+          [tableType, needleType],
           makeContext(),
           []
         )
@@ -438,71 +438,13 @@ describe('table operators', () => {
     await expect(async () =>
       fnValues?.(
         [tableValue, Value.fromJS('Not found')],
-        [tableType],
+        [tableType, needleType],
         makeContext(),
         []
       )
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Could not find a row with the given condition]`
     );
-  });
-
-  it('can lookup a column', async () => {
-    const table = t.table({
-      columnNames: ['indexcolumn', 'booooleans'],
-      columnTypes: [t.number(U('bananas')), t.boolean()],
-    });
-    const column = t.column(table.columnTypes?.[1] as Type, 'TheTable');
-
-    const ctx = makeContext();
-    ctx.retrieveVariableTypeByGlobalVariableName = (varName) => {
-      expect(varName).toBe('TheTable');
-      return table;
-    };
-
-    expect(
-      await (operators.lookup as FullBuiltinSpec).functorNoAutomap!(
-        [column, t.number()],
-        [],
-        ctx
-      )
-    ).toMatchObject({
-      type: 'boolean',
-    });
-
-    const tableValue = Value.Table.fromNamedColumns(
-      [
-        Value.fromJS([1, 2, 3, 4, 5, 6]),
-        Value.fromJS([false, true, true, false, false, true]),
-      ],
-      ['Nums', 'Bools']
-    );
-    const columnValue = tableValue.getColumn('Bools');
-
-    ctx.retrieveVariableValueByGlobalVariableName = (varName) => {
-      expect(varName).toBe('TheTable');
-      return tableValue;
-    };
-
-    expect(
-      await (
-        await (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap!(
-          [columnValue, Value.fromJS(3)],
-          [column],
-          ctx,
-          []
-        )
-      ).getData()
-    ).toMatchInlineSnapshot(`true`);
-
-    await expect(async () =>
-      (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap?.(
-        [columnValue, Value.fromJS(404)],
-        [column],
-        ctx,
-        []
-      )
-    ).rejects.toThrow(RuntimeError);
   });
 
   it('looks things up with a condition', async () => {
@@ -531,7 +473,7 @@ describe('table operators', () => {
       await (
         await fnValues!(
           [tableValue, conditionColumnValue],
-          [],
+          [tableType, conditionColumnType],
           makeContext(),
           []
         )

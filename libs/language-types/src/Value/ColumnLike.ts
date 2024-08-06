@@ -3,7 +3,11 @@ import type { Value } from '@decipad/language-interfaces';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isColumnLike = (thing: any): thing is Value.ColumnLikeValue => {
   const col = thing as Value.ColumnLikeValue;
-  return typeof col === 'object' && typeof col?.lowLevelGet === 'function';
+  return (
+    col != null &&
+    typeof col === 'object' &&
+    typeof col?.lowLevelGet === 'function'
+  );
 };
 
 export const getColumnLike = (

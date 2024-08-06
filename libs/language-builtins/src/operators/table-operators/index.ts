@@ -7,13 +7,13 @@ import { joinFunctorNoAutomap, joinValuesNoAutomap } from './join';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
-    argCount: 2,
+    argCount: [2, 3],
     functorNoAutomap: lookupFunctorNoAutomap,
     fnValuesNoAutomap: lookupValuesNoAutomap,
     explanation: 'Lookup first row that matches a condition.',
     formulaGroup: 'Tables',
-    syntax: 'lookup(Table, Column Condition)',
-    example: 'lookup(Prices, Prices.Discount == 10%)',
+    syntax: 'lookup(Table, Column Condition, [Default Value])',
+    example: 'lookup(Prices, Prices.Discount == 10%, 0)',
   },
 
   sortby: {

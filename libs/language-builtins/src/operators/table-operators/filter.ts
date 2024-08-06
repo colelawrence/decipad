@@ -1,4 +1,4 @@
-import { produce, getInstanceof } from '@decipad/utils';
+import { produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, valueToResultValue } from '@decipad/language-types';
 import type { FullBuiltinSpec } from '../../types';
@@ -29,6 +29,6 @@ export const filterValuesNoAutomap: FullBuiltinSpec['fnValuesNoAutomap'] =
     if (subject instanceof Value.Column) {
       return applyFilterMap(subject, filterMap);
     }
-    const table = getInstanceof(subject, Value.Table);
+    const table = Value.getTableValue(subject);
     return table.mapColumns((col) => applyFilterMap(col, filterMap));
   };

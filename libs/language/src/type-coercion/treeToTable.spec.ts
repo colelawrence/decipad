@@ -225,13 +225,8 @@ describe('treeToTable value', () => {
           },
           Column {
             "_values": Array [
-              NumberValue {
-                "value": DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 1n,
-                  "s": 1n,
-                },
+              StringValue {
+                "value": "1",
               },
             ],
             "dataCache": undefined,
@@ -381,27 +376,91 @@ describe('treeToTable value', () => {
           },
           Column {
             "_values": Array [
-              NumberValue {
-                "value": DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 1n,
-                  "s": 1n,
-                },
+              StringValue {
+                "value": "1",
               },
-              NumberValue {
-                "value": DeciNumber {
-                  "d": 1n,
-                  "infinite": false,
-                  "n": 1n,
-                  "s": 1n,
-                },
+              StringValue {
+                "value": "1",
               },
+              StringValue {
+                "value": "1",
+              },
+            ],
+            "dataCache": undefined,
+            "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('works on a two column 1 row tree value with dates', async () => {
+    const tableValue = await treeToTable.value(
+      new ScopedRealm(undefined, makeInferContext()),
+      buildType.tree({
+        columnNames: ['Col1', 'Col2'],
+        columnTypes: [buildType.date('month'), buildType.number()],
+      }),
+      Value.Tree.from(
+        Unknown,
+        undefined,
+        [
+          Value.Tree.from(
+            1234567891234n,
+            undefined,
+            [
+              Value.Tree.from(
+                N(10),
+                undefined,
+                [],
+                [
+                  {
+                    name: 'Col2',
+                  },
+                ]
+              ),
+            ],
+            [
+              {
+                name: 'Col1',
+              },
+              {
+                name: 'Col2',
+              },
+            ]
+          ),
+        ],
+        []
+      )
+    );
+    expect(tableValue).toMatchInlineSnapshot(`
+      Table {
+        "columnNames": Array [
+          "Col1",
+          "Col2",
+        ],
+        "columns": Array [
+          Column {
+            "_values": Array [
+              DateValue {
+                "moment": 1233446400000n,
+                "specificity": "month",
+              },
+            ],
+            "dataCache": undefined,
+            "defaultValue": undefined,
+            "dimensionsCache": undefined,
+            "rowCountCache": undefined,
+          },
+          Column {
+            "_values": Array [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
                   "infinite": false,
-                  "n": 1n,
+                  "n": 10n,
                   "s": 1n,
                 },
               },

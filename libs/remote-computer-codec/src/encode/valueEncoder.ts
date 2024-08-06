@@ -38,7 +38,9 @@ export const recursiveEncoders: Record<
       offset += 1;
     } else {
       if (typeof value !== 'bigint') {
-        throw new TypeError('Expected bigint for date');
+        // eslint-disable-next-line no-console
+        console.warn(value);
+        throw new TypeError(`Expected bigint for date and got ${typeof value}`);
       }
       buffer.setUint8(offset, 1);
       offset += 1;

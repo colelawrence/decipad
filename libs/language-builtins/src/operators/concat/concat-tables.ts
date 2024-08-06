@@ -1,4 +1,4 @@
-import { dequal, getDefined, getInstanceof, zip } from '@decipad/utils';
+import { dequal, getDefined, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, buildType as t, Value } from '@decipad/language-types';
 import type { Evaluator, Functor } from '../../types';
@@ -33,14 +33,8 @@ export const concatTablesFunctor: Functor = async ([tab1, tab2]) =>
   });
 
 export const concatTablesValues: Evaluator = async ([tab1, tab2]) => {
-  const { columns: cols1, columnNames: names1 } = getInstanceof(
-    tab1,
-    Value.Table
-  );
-  const { columns: cols2, columnNames: names2 } = getInstanceof(
-    tab2,
-    Value.Table
-  );
+  const { columns: cols1, columnNames: names1 } = Value.getTableValue(tab1);
+  const { columns: cols2, columnNames: names2 } = Value.getTableValue(tab2);
 
   const tab2Sorted = zip(names2, cols2).sort((a, b) => {
     const aIndex = names1.indexOf(a[0]);

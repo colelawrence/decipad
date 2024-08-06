@@ -1,6 +1,12 @@
 import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
-import { RuntimeError, Value, buildType as t } from '@decipad/language-types';
+import {
+  RuntimeError,
+  Value,
+  resultToValue,
+  serializeType,
+  buildType as t,
+} from '@decipad/language-types';
 import type {
   Result,
   Type,
@@ -131,12 +137,15 @@ const treeToTableValue = async (
       sourceValue.columns[0]?.aggregation
     )
   ).slice(1);
+  const tableType = treeToTableType(_realm, sourceType);
+  const columnTypes = getDefined(tableType.columnTypes);
   return Value.Table.fromNamedColumns(
-    columns.map((col) =>
-      Value.Column.fromValues(
-        col.map((cell) => Value.fromJS(cell as Value.FromJSArg))
-      )
-    ),
+    columns.map((col, colIndex) => {
+      const columnType = serializeType(columnTypes[colIndex]);
+      return Value.Column.fromValues(
+        col.map((cell) => resultToValue({ type: columnType, value: cell }))
+      );
+    }),
     fixColumnNames(getDefined(sourceType.columnNames))
   );
 };

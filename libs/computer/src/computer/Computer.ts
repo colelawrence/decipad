@@ -475,10 +475,11 @@ export class Computer implements ComputerInterface {
         value: Result.OneResult
       ): Promise<number[]> => {
         if (isResultGenerator(value)) {
-          return [
-            await count(value()),
-            ...(await getDeepLengths(await first(value()))),
-          ];
+          const firstCount = await count(value());
+          if (firstCount === 0) {
+            return [0];
+          }
+          return [firstCount, ...(await getDeepLengths(await first(value())))];
         }
         return Array.isArray(value)
           ? [value.length, ...(await getDeepLengths(value[0]))]
@@ -505,7 +506,7 @@ export class Computer implements ComputerInterface {
           undefined;
         return {
           indexedBy,
-          labels: results.indexLabels.get(indexedBy ?? ''),
+          labels: indexedBy ? results.indexLabels.get(indexedBy) : undefined,
           dimensionLength,
         };
       });

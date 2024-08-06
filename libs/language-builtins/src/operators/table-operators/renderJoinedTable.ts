@@ -15,7 +15,7 @@ import {
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import { getDefined, getInstanceof, getTrue } from '@decipad/utils';
+import { getDefined, getTrue } from '@decipad/utils';
 
 const validateRenderJoinedTableParams = (
   sourceTables: ValueTypes.Value[],
@@ -54,7 +54,7 @@ async function* renderUnknownColumnValues(
 }
 
 const renderJoinedColumns = async (
-  sourceTables: Value.Table[],
+  sourceTables: Value.TableValue[],
   sourceTableTypes: Type[],
   conditions: Result.OneResult,
   indent = 0
@@ -129,7 +129,7 @@ export const joinedTable = async (
     (start = 0, end = Infinity) => {
       const genP = condition.getData().then(async (conditionData) => {
         return renderJoinedColumns(
-          sourceTables.map((table) => getInstanceof(table, Value.Table)),
+          sourceTables.map((table) => Value.getTableValue(table)),
           sourceTableTypes,
           conditionData
         );

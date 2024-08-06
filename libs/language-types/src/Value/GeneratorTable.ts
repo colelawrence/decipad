@@ -1,4 +1,4 @@
-import type { Result } from '@decipad/language-interfaces';
+import { Result, Value } from '@decipad/language-interfaces';
 import { RuntimeError } from '../RuntimeError';
 import type { TableValue } from './TableValue';
 import { count, first, map, slice, unzip } from '@decipad/generator-utils';
@@ -9,6 +9,9 @@ import {
   fromGeneratorFunctionPromiseToGeneratorFunction,
   fromGeneratorFunctionsPromiseToGeneratorFunctions,
 } from '../utils/fromGeneratorFunctionPromiseToGeneratorFunction';
+import { PromiseOrType } from '@decipad/utils';
+import { Table } from './Table';
+import { ColumnLikeValue } from 'libs/language-interfaces/src/Value';
 
 type TableRowGenerator = (
   start?: number,
@@ -62,7 +65,7 @@ export class GeneratorTable implements TableValue {
     );
   }
 
-  get columns() {
+  get columns(): ColumnLikeValue[] {
     const genFnsPromises = this.columnTypes.map(typedResultToValue);
     const genFns = Promise.all(genFnsPromises).then(async (convFns) =>
       this.getColumnsOneResultGenFunctions(convFns)
@@ -111,16 +114,28 @@ export class GeneratorTable implements TableValue {
     );
   }
 
+  private async getCoumnGenerators() {
+    return first(unzip(this.generateRows(), this.columnNames.length));
+  }
+
   async getData(): Promise<Result.ResultGenerator[]> {
     // we need to transform the data from row-oriented to column-oriented
     // here, unzip emits an array of generators as its first and sole value, each of which emits a column
-    return first(unzip(this.generateRows(), this.columnNames.length)).then(
-      (colGens) =>
-        colGens.map(
-          (colGen): Result.ResultGenerator =>
-            (start = 0, end = Infinity) =>
-              slice(colGen, start, end)
-        )
+    return this.getCoumnGenerators().then((colGens) =>
+      colGens.map(
+        (colGen): Result.ResultGenerator =>
+          (start = 0, end = Infinity) =>
+            slice(colGen, start, end)
+      )
     );
+  }
+
+  async mapColumns(
+    mapFn: (
+      col: Value.ColumnLikeValue,
+      index: number
+    ) => PromiseOrType<Value.ColumnLikeValue>
+  ) {
+    return Table.fromNamedColumns(await Promise.all(this.columns.map(mapFn)));
   }
 }

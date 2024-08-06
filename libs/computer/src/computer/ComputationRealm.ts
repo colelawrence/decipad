@@ -128,7 +128,7 @@ export class ComputationRealm {
     ] of this.inferContext.stack.globalVariables.entries()) {
       const tableOrColumn = this.interpreterRealm.stack.get(name);
 
-      if (tableOrColumn instanceof Value.Table) {
+      if (Value.isTableValue(tableOrColumn)) {
         const tableType = this.inferContext.stack.get(name);
         if (tableType) {
           const [sortedTableType, sortedTableValue] = Value.sortValue(
@@ -142,7 +142,7 @@ export class ComputationRealm {
             sortedTableType.columnTypes?.[0]
           );
         }
-      } else if (tableOrColumn != null && Value.isColumnLike(tableOrColumn)) {
+      } else if (Value.isColumnLike(tableOrColumn)) {
         // eslint-disable-next-line no-await-in-loop
         await addLabels(
           type.indexedBy ?? name,
