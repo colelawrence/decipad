@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import {
-  EditorChangeContextProvider,
   EditorReadOnlyContext,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
@@ -56,27 +55,25 @@ export const NoDocSyncEmbedInternal: FC = () => {
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
 
   return (
-    <EditorChangeContextProvider changeSubject={changeSubject}>
-      <EditorReadOnlyContext.Provider value={{ readOnly: true, lockWriting }}>
-        <LoadingFilter loading={isWritingLocked}>
-          <EditorLayout ref={containerRef}>
-            <BlockLengthSynchronizationProvider editor={editor}>
-              <TeleportEditor editor={editor}>
-                <Plate<MyValue>
-                  editor={editor}
-                  onChange={onChange}
-                  initialValue={embedNotebook()}
-                  readOnly={true}
-                >
-                  <PlateContent />
-                  <Tooltip />
-                </Plate>
-              </TeleportEditor>
-            </BlockLengthSynchronizationProvider>
-          </EditorLayout>
-        </LoadingFilter>
-      </EditorReadOnlyContext.Provider>
-    </EditorChangeContextProvider>
+    <EditorReadOnlyContext.Provider value={{ readOnly: true, lockWriting }}>
+      <LoadingFilter loading={isWritingLocked}>
+        <EditorLayout ref={containerRef}>
+          <BlockLengthSynchronizationProvider editor={editor}>
+            <TeleportEditor editor={editor}>
+              <Plate<MyValue>
+                editor={editor}
+                onChange={onChange}
+                initialValue={embedNotebook()}
+                readOnly={true}
+              >
+                <PlateContent />
+                <Tooltip />
+              </Plate>
+            </TeleportEditor>
+          </BlockLengthSynchronizationProvider>
+        </EditorLayout>
+      </LoadingFilter>
+    </EditorReadOnlyContext.Provider>
   );
 };
 

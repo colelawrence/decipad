@@ -13,6 +13,7 @@
     { "path": "../react-contexts" },
     { "path": "../notebook-tabs" },
     { "path": "../computer" },
-    { "path": "../live-connect" }
+    { "path": "../live-connect" },
+    { "path": "../routing" }
   ]
 }

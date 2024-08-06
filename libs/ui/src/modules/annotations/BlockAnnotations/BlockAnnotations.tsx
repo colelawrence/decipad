@@ -2,7 +2,6 @@ import {
   GetNotebookAnnotationsQuery,
   useDeleteAnnotationMutation,
 } from '@decipad/graphql-client';
-import { useAnnotations, useNotebookId } from '@decipad/react-contexts';
 import { CollapsedAnnotation } from '../CollapsedAnnotation/CollapsedAnnotation';
 import { useVerticalOffset } from 'libs/ui/src/hooks';
 
@@ -12,6 +11,8 @@ import { SingleAnnotation } from '../SingleAnnotation/SingleAnnotation';
 import * as Styled from './styles';
 import { AnimatePresence } from 'framer-motion';
 import { useCallback, FC } from 'react';
+import { useAnnotations } from '@decipad/notebook-state';
+import { useNotebookRoute } from '@decipad/routing';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -36,7 +37,7 @@ const useAnnotationActions = (blockId: string): UseAnnotationActionsReturn => {
 
   const onCollapseAnnotation = useCallback(() => {
     if (blockId === expandedBlockId) {
-      handleExpandedBlockId(null);
+      handleExpandedBlockId(undefined);
     }
   }, [handleExpandedBlockId, blockId, expandedBlockId]);
 
@@ -75,10 +76,10 @@ const CurrentBlockAnnotations: FC<
   blockAnnotations,
 }) => {
   const offset = useVerticalOffset(blockRef);
-  const notebookId = useNotebookId();
   const { onExpandAnnotation, onDeleteAnnotation } =
     useAnnotationActions(blockId);
-  const { scenarioId } = useAnnotations();
+
+  const { notebookId, scenarioId, aliasId } = useNotebookRoute();
 
   if (offset == null) {
     return null;
@@ -118,6 +119,7 @@ const CurrentBlockAnnotations: FC<
               blockId={blockId}
               notebookId={notebookId}
               scenarioId={scenarioId}
+              aliasId={aliasId}
             />
           </>
         )}
@@ -131,8 +133,7 @@ const NewBlockAnnotations: FC<BlockAnnotationsProps> = ({
   blockRef,
 }) => {
   const offset = useVerticalOffset(blockRef);
-  const { scenarioId } = useAnnotations();
-  const notebookId = useNotebookId();
+  const { scenarioId, notebookId, aliasId } = useNotebookRoute();
 
   if (offset == null) {
     return null;
@@ -146,6 +147,7 @@ const NewBlockAnnotations: FC<BlockAnnotationsProps> = ({
           blockId={blockId}
           notebookId={notebookId}
           scenarioId={scenarioId}
+          aliasId={aliasId}
         />
       </Styled.Annotation>
     </AnimatePresence>
@@ -153,7 +155,8 @@ const NewBlockAnnotations: FC<BlockAnnotationsProps> = ({
 };
 
 export const BlockAnnotations: FC<BlockAnnotationsProps> = (props) => {
-  const { annotations, expandedBlockId, scenarioId } = useAnnotations();
+  const { annotations, expandedBlockId } = useAnnotations();
+  const { scenarioId } = useNotebookRoute();
 
   const collapsed = expandedBlockId !== props.blockId;
 

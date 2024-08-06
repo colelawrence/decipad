@@ -31,14 +31,13 @@ import {
   URLRunner,
   useRunner as useIntegrationRunner,
 } from '../runners';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import { IntegrationList } from './IntegrationList';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { Close } from 'libs/ui/src/icons';
 import { Result } from '@decipad/remote-computer';
 import {
   useComputer,
-  useEditorController,
   useGlobalFindNode,
   useGlobalFindNodeEntry,
   useLiveConnectionWorker,
@@ -47,6 +46,7 @@ import { ResultPreview } from './ResultPreview';
 import { getNodeString } from '@udecode/plate-common';
 import omit from 'lodash/omit';
 import { Computer } from '@decipad/computer-interfaces';
+import { useEditorController } from '@decipad/notebook-state';
 
 interface IntegrationProps {
   readonly workspaceId: string;
@@ -114,9 +114,7 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
 
   useAnalytics();
 
-  const {
-    notebook: { id: notebookId },
-  } = useRouteParams(notebooks({}).notebook);
+  const { notebookId } = useNotebookRoute();
 
   const computer = useComputer();
   const runner = useRunner(notebookId, computer, connectionType!);
@@ -228,6 +226,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
 
   const findNode = useGlobalFindNode();
   const findNodeEntry = useGlobalFindNodeEntry();
+
   const controller = useEditorController();
 
   if (findNode == null || findNodeEntry == null || controller == null) {

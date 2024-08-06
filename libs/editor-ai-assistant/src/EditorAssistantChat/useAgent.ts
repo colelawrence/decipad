@@ -4,13 +4,9 @@ import type {
   Message,
   UserMessage,
 } from '@decipad/react-contexts';
-import {
-  ControllerProvider,
-  useAIChatHistory,
-  useResourceUsage,
-} from '@decipad/react-contexts';
+import { useAIChatHistory, useResourceUsage } from '@decipad/react-contexts';
 import * as Sentry from '@sentry/react';
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { nanoid } from 'nanoid';
 
@@ -25,6 +21,7 @@ import type { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from './parseIntegration';
 import { objectToHumanReadableString } from './helpers';
 import { useRemoteAgent } from './useRemoteAgent';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 type AgentParams = {
   notebookId: string;
@@ -45,9 +42,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
   const handleAddEventToMessage = addEventToMessage(notebookId);
 
   const computer = useComputer();
-  const controller = useContext(ControllerProvider);
-
-  const subEditor = useActiveEditor(controller);
+  const controller = useNotebookWithIdState((s) => s.controller);
+  const subEditor = useActiveEditor();
 
   const { ai } = useResourceUsage();
 

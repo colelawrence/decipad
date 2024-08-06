@@ -4,6 +4,9 @@ import { LiveConnectionWorker } from '@decipad/live-connect';
 
 export const useLiveConnectionWorker = (): LiveConnectionWorker => {
   const notebookId = useNotebookId();
-  const notebook = useNotebookState(notebookId);
-  return notebook.liveConnectionWorker();
+  const liveConnectionWorker = useNotebookState(
+    notebookId,
+    (s) => s.liveConnectionWorker
+  );
+  return liveConnectionWorker();
 };

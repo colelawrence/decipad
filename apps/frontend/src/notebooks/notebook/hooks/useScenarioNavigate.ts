@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { notebooks, useNotebookRoute } from '@decipad/routing';
 
 export const useScenarioNavigate = () => {
-  const routeParams = useRouteParams(notebooks({}).notebook);
+  const routeParams = useNotebookRoute();
+
   const selectedScenario = routeParams.scenario;
   const nav = useNavigate();
   const notebookNav = notebooks({}).notebook;

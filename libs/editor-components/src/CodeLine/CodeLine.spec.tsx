@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { CodeLine } from '@decipad/editor-components';
 import type { CodeLineElement } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 import { render, screen } from '@testing-library/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import type { PropsWithChildren } from 'react';
@@ -35,24 +34,12 @@ describe('Placeholders', () => {
 });
 
 const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
-  <AnnotationsProvider
-    value={{
-      annotations: [],
-      setAnnotations: () => {},
-      scenarioId: null,
-      expandedBlockId: null,
-      handleExpandedBlockId: () => {},
-      aliasId: null,
-      permission: 'WRITE',
-    }}
-  >
-    <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>
-        <Plate>
-          <PlateContent />
-          {children}
-        </Plate>
-      </BrowserRouter>
-    </DndProvider>
-  </AnnotationsProvider>
+  <DndProvider backend={HTML5Backend}>
+    <BrowserRouter>
+      <Plate>
+        <PlateContent />
+        {children}
+      </Plate>
+    </BrowserRouter>
+  </DndProvider>
 );

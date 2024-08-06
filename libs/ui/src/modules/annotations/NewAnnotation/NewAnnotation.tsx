@@ -1,6 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { useCreateAnnotationMutation } from '@decipad/graphql-client';
-import { useAnnotations } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Send } from 'libs/ui/src/icons';
 import {
@@ -12,17 +11,21 @@ import {
   useState,
 } from 'react';
 import * as Styled from './styles';
+import { useAnnotations } from '@decipad/notebook-state';
 
 type NewAnnotationProps = {
   blockId: string;
   notebookId: string;
 
-  scenarioId: string | null;
+  scenarioId: string | undefined;
+  aliasId: string | undefined;
+
   isReply: boolean;
 };
 
 export const NewAnnotation: React.FC<NewAnnotationProps> = ({
   blockId,
+  aliasId,
   notebookId,
   isReply,
 }) => {
@@ -33,7 +36,7 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
 
   const userEvents = useContext(ClientEventsContext);
 
-  const { permission, aliasId } = useAnnotations();
+  const { permission } = useAnnotations();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 

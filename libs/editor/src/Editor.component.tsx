@@ -14,12 +14,11 @@ import { EditorLayout, EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import type { FC, PropsWithChildren, ReactNode, RefObject } from 'react';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BaseEditor } from 'slate';
 import { Editor as SlateEditor, Scrubber } from 'slate';
 import type { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
-import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
@@ -27,6 +26,7 @@ import { editorOnCopy } from './utils/editorOnCopy';
 import { editorOnPaste } from './utils/editorOnPaste';
 import { useWriteLock } from './utils/useWriteLock';
 import { useComputer } from '@decipad/editor-hooks';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 export interface EditorProps {
   notebookId: string;
@@ -100,7 +100,8 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
   }, [editor]);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const changeSubject = useContext(EditorChangeContext);
+  const changeSubject = useNotebookWithIdState((s) => s.editorChanges);
+
   const onChange = useDebouncedCallback(
     useCallback(() => {
       // Make sure all components have been updated with the new change.

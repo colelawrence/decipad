@@ -1,6 +1,6 @@
 import type { UserMessage } from '@decipad/react-contexts';
-import { ControllerProvider, useAIChatHistory } from '@decipad/react-contexts';
-import { useCallback, useContext, useMemo, useRef } from 'react';
+import { useAIChatHistory } from '@decipad/react-contexts';
+import { useCallback, useMemo, useRef } from 'react';
 import type { Action } from 'libs/notebook-open-api/src/actions';
 import { actions } from 'libs/notebook-open-api/src/actions';
 import { callAction } from 'libs/notebook-open-api/src/callAction';
@@ -11,6 +11,7 @@ import type {
 } from 'openai/resources/beta/threads/runs/runs';
 import { useComputer } from '@decipad/editor-hooks';
 import { MessageCreateParams } from 'openai/resources/beta/threads/messages';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 type ModelAgentOptions = {
   notebookId: string;
@@ -28,7 +29,7 @@ export const useAssistant = ({ notebookId }: ModelAgentOptions) => {
   const threadId = useMemo(() => threads[notebookId], [threads, notebookId]);
 
   const computer = useComputer();
-  const controller = useContext(ControllerProvider);
+  const controller = useNotebookWithIdState((s) => s.controller);
 
   const abortController = useRef(new AbortController());
 

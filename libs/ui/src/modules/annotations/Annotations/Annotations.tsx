@@ -1,49 +1,16 @@
-import { useAnnotations } from '@decipad/react-contexts';
-
-import { useEffect, useMemo } from 'react';
+import { useMemo, FC } from 'react';
 import * as Styled from './styles';
 import { ThumbnailChat } from 'libs/ui/src/icons/thumbnail-icons';
 import { DragHandle } from 'libs/ui/src/icons';
-import {
-  GetNotebookAnnotationsQuery,
-  useGetNotebookAnnotationsQuery,
-} from '@decipad/graphql-client';
 import { useActiveElement } from '@decipad/react-utils';
+import { useAnnotations } from '@decipad/notebook-state';
 
-type AnnotationArray = NonNullable<
-  GetNotebookAnnotationsQuery['getAnnotationsByPadId']
->;
+export const Annotations: FC = () => {
+  // TODO THIS ONE
+  const { annotations, expandedBlockId, handleExpandedBlockId } =
+    useAnnotations();
 
-type Annotation = NonNullable<AnnotationArray[number]>;
-
-type AnnotationsProps = {
-  notebookId: string;
-};
-
-export const Annotations: React.FC<AnnotationsProps> = ({ notebookId }) => {
-  const {
-    annotations,
-    setAnnotations,
-    expandedBlockId,
-    handleExpandedBlockId,
-  } = useAnnotations();
-
-  const containerRef = useActiveElement(() => handleExpandedBlockId(null));
-
-  const [annotationData] = useGetNotebookAnnotationsQuery({
-    variables: {
-      notebookId,
-    },
-    requestPolicy: 'network-only',
-  });
-
-  useEffect(() => {
-    if (annotationData) {
-      setAnnotations(
-        annotationData.data?.getAnnotationsByPadId as Annotation[]
-      );
-    }
-  }, [annotationData, setAnnotations]);
+  const containerRef = useActiveElement(() => handleExpandedBlockId(undefined));
 
   const showPlaceholder = useMemo(
     () =>

@@ -15,6 +15,8 @@ import storybook from './storybook';
 
 export { docs, storybook };
 
+export * from './hooks';
+
 /**
  * All routes that are not included in the main frontend bundle
  * and must thus be loaded from the server using a full-page navigation.

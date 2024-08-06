@@ -5,7 +5,6 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import type {
@@ -66,21 +65,9 @@ describe('Variable def expression element', () => {
     });
 
     wrapper = ({ children }) => (
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <DndProvider backend={HTML5Backend}>
-          <BrowserRouter>{children}</BrowserRouter>
-        </DndProvider>
-      </AnnotationsProvider>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
     );
   });
 
@@ -145,21 +132,9 @@ describe('Variable def slider element', () => {
     });
 
     wrapper = ({ children }) => (
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <DndProvider backend={HTML5Backend}>
-          <BrowserRouter>{children}</BrowserRouter>
-        </DndProvider>
-      </AnnotationsProvider>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
     );
   });
 

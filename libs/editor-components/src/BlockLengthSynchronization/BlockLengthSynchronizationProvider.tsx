@@ -1,16 +1,8 @@
 import type { MyEditor } from '@decipad/editor-types';
-import { EditorChangeContext } from '@decipad/react-contexts';
 import { createSelectableContext } from '@decipad/react-utils';
 import { noop, dequal } from '@decipad/utils';
 import type { ReactNode } from 'react';
-import {
-  useState,
-  useMemo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import {
   combineLatestWith,
   debounceTime,
@@ -27,6 +19,7 @@ import {
   setIn,
 } from './helpers';
 import type { ColumnGroupName, ColumnWidths } from './types';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 /** Finds contiguous groups of blocks with type {blockTypes},
  * each of which will mount a BlockLengthSynchronizationProvider,
@@ -39,13 +32,13 @@ export const BlockLengthSynchronizationProvider = ({
   editor: MyEditor;
   children: ReactNode;
 }) => {
-  const measuredLengths = useRef(new Map() as MeasuredLengths);
+  const measuredLengths = useRef<MeasuredLengths>(new Map());
   const [targetWidths, setTargetWidths] = useState(
     () => new Map<string, ColumnWidths>()
   );
 
   const [updatedLength$] = useState(() => new Subject<undefined>());
-  const editorChange$ = useContext(EditorChangeContext);
+  const editorChange$ = useNotebookWithIdState((s) => s.editorChanges);
 
   useEffect(() => {
     let terminated = false;

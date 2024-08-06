@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { useNotebookRouterId } from '../hooks';
-import { useNotebookState } from '@decipad/notebook-state';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
 import {
   CreateVariableDataDrawer,
@@ -9,15 +8,13 @@ import {
 import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const DataDrawer: FC = () => {
-  const notebookId = useNotebookRouterId();
   const [
     isAddingOrEditingVariable,
     editingId,
     closeDataDrawer,
     computer,
     editor,
-  ] = useNotebookState(
-    notebookId,
+  ] = useNotebookWithIdState(
     (state) =>
       [
         state.isAddingOrEditingVariable,

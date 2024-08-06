@@ -11,7 +11,10 @@ export const useNotebookWarning = ({ notebookId }: UseNotebookWarningProps) => {
   const toast = useToast();
   const { data: session } = useSession();
 
-  const { editor, hasLocalChanges } = useNotebookState(notebookId);
+  const [editor, hasLocalChanges] = useNotebookState(
+    notebookId,
+    (s) => [s.editor, s.hasLocalChanges] as const
+  );
 
   const warning: string | false =
     editor != null &&

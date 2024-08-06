@@ -19,7 +19,6 @@ import type { PropsWithChildren } from 'react';
 import { timeout } from '@decipad/utils';
 import { Paragraph } from './Paragraph';
 import { BrowserRouter } from 'react-router-dom';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
@@ -37,21 +36,9 @@ beforeEach(() => {
   editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        scenarioId: null,
-        expandedBlockId: null,
-        handleExpandedBlockId: () => {},
-        permission: 'WRITE',
-        aliasId: null,
-      }}
-    >
-      <DndProvider backend={HTML5Backend}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </DndProvider>
-    </AnnotationsProvider>
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </DndProvider>
   );
 });
 

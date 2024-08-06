@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, beforeEach, it, expect } from 'vitest';
 import type { PlateComponent } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -18,7 +18,6 @@ import type { PropsWithChildren } from 'react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 import { DraggableBlock } from '@decipad/editor-components';
 import { BrowserRouter } from 'react-router-dom';
 import { createDndBlockPlugin } from './createDndBlockPlugin';
@@ -54,21 +53,9 @@ beforeEach(() => {
   editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        scenarioId: null,
-        expandedBlockId: null,
-        handleExpandedBlockId: () => {},
-        permission: 'WRITE',
-        aliasId: null,
-      }}
-    >
-      <DndProvider backend={HTML5Backend}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </DndProvider>
-    </AnnotationsProvider>
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </DndProvider>
   );
 });
 

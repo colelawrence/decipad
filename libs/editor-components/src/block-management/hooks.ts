@@ -26,9 +26,9 @@ import {
   blockSelectionSelectors,
   blockSelectionStore,
 } from '@udecode/plate-selection';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import utils from './utils';
-import { ControllerProvider } from '@decipad/react-contexts';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 type OnDelete = (() => void) | 'none' | undefined;
 
@@ -93,7 +93,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
   );
 
   const moveTab = useMoveToTab();
-  const controller = useContext(ControllerProvider);
+  const controller = useNotebookWithIdState((s) => s.controller);
 
   const onMoveTab = useCallback(
     (tabId: string) =>

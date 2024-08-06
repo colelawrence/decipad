@@ -11,8 +11,7 @@ import { useNotebookWarning } from './useNotebookWarning';
 import type { NotebookProps } from './types';
 import { useLocalBackupNotice } from './useLocalBackupNotice';
 import { TabEditorComponent } from '@decipad/editor';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import { OutsideTabHiddenLanguageElements } from './OutsideTabHiddenLanguageElements';
 import { useEditorEvents } from './useEditorEvents';
 
@@ -29,12 +28,11 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   secret,
   connectionParams,
   initialState,
-  onDocsync,
   onNotebookTitleChange,
 }) => {
   const { data: session } = useSession();
 
-  const {
+  const [
     notebookLoadedPromise,
     initEditor,
     editor,
@@ -43,7 +41,20 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     timedOutLoadingFromRemote,
     destroy,
     hasNotSavedRemotelyInAWhile,
-  } = useNotebookState(notebookId);
+  ] = useNotebookState(
+    notebookId,
+    (s) =>
+      [
+        s.notebookLoadedPromise,
+        s.initEditor,
+        s.editor,
+        s.computer,
+        s.loadedFromRemote,
+        s.timedOutLoadingFromRemote,
+        s.destroy,
+        s.hasNotSavedRemotelyInAWhile,
+      ] as const
+  );
 
   const loaded = loadedFromRemote || timedOutLoadingFromRemote;
   const interactions = useEditorUserInteractionsContext();
@@ -108,16 +119,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     };
   }, [destroy, notebookId]);
 
-  // docSync
-
-  useEffect(() => {
-    if (editor) {
-      onDocsync(editor);
-    }
-  }, [editor, onDocsync]);
-
   useNotebookWarning({ notebookId });
-
   useLocalBackupNotice(editor, hasNotSavedRemotelyInAWhile);
 
   const readOrSuspendEditor = useMemo(
@@ -140,7 +142,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     throw lastValueFrom(computer.results);
   }
 
-  const { tab: tabId } = useRouteParams(notebooks({}).notebook);
+  const { tabId } = useNotebookRoute();
 
   if (editor) {
     return (

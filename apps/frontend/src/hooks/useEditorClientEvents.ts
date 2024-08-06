@@ -9,7 +9,10 @@ import { useCallback, useContext } from 'react';
 export const useEditorClientEvents = (
   notebookId: string
 ): ClientEventContextType => {
-  const notebookState = useNotebookState(notebookId);
+  const [loadedFromLocal, loadedFromRemote] = useNotebookState(
+    notebookId,
+    (s) => [s.loadedFromLocal, s.loadedFromRemote] as const
+  );
   const parentHandler = useContext(ClientEventsContext);
 
   return useCallback(
@@ -18,13 +21,13 @@ export const useEditorClientEvents = (
       // Ignores all non-page events if the notebook is not loaded
       if (
         segmentEvent &&
-        !(notebookState.loadedFromLocal || notebookState.loadedFromRemote) &&
+        !(loadedFromLocal || loadedFromRemote) &&
         segmentEvent?.type !== 'page'
       ) {
         return Promise.resolve();
       }
       return parentHandler(event);
     },
-    [notebookState, parentHandler]
+    [loadedFromLocal, loadedFromRemote, parentHandler]
   );
 };

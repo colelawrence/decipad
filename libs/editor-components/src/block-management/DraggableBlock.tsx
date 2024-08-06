@@ -28,7 +28,6 @@ import {
 } from '@decipad/editor-utils';
 import {
   dndPreviewActions,
-  useAnnotations,
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -73,6 +72,7 @@ import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
+import { useAnnotations } from '@decipad/notebook-state';
 import { Chat } from 'libs/ui/src/icons';
 
 const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
@@ -242,7 +242,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const canComment = isCommentableProp && !!permission && !insideLayout;
 
     const handleAnnotation = useCallback(() => {
-      handleExpandedBlockId(element.id ?? null);
+      if (element.id == null) {
+        return;
+      }
+
+      handleExpandedBlockId(element.id);
     }, [element.id, handleExpandedBlockId]);
 
     const handleDuplicate = useCallback(() => {

@@ -1,5 +1,3 @@
-import type { DocSyncEditor } from '@decipad/docsync';
-
 export interface NotebookConnectionParams {
   url: string;
   token: string;
@@ -14,7 +12,6 @@ export interface NotebookProps {
   secret?: string;
   connectionParams: NotebookConnectionParams | undefined;
   initialState?: string;
-  onDocsync: (docsync: DocSyncEditor) => void;
   getAttachmentForm: (
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;

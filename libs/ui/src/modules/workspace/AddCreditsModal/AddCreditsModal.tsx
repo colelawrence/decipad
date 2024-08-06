@@ -5,7 +5,7 @@ import {
   useGetCreditsPlansQuery,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import { env } from '@decipad/client-env';
 import { Modal } from '../../../shared';
 import { cssVar, p14Regular, p18Medium } from '../../../primitives';
@@ -21,9 +21,9 @@ const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
   closeAction,
   credits,
 }) => {
-  const { notebook } = useRouteParams(notebooks({}).notebook);
+  const { notebookId } = useNotebookRoute();
   const [meta] = useGetNotebookMetaQuery({
-    variables: { id: notebook.id },
+    variables: { id: notebookId },
   });
   const workspaceId = meta.data?.getPadById?.workspace?.id ?? '';
 

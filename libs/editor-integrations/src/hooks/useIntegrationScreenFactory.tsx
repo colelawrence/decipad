@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useConnectionStore } from '@decipad/react-contexts';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { Connection } from '../connections/Connection';
 import { ResultPreview } from '../connections/ResultPreview';
@@ -21,9 +21,7 @@ export const useIntegrationScreenFactory = (
 ): ReactNode => {
   const { Set, ...store } = useConnectionStore();
 
-  const {
-    notebook: { id: notebookId },
-  } = useRouteParams(notebooks({}).notebook);
+  const { notebookId } = useNotebookRoute();
 
   const screen = useMemo(() => {
     switch (store.stage) {

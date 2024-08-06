@@ -1,5 +1,5 @@
 import type { MyElement, MyNode } from '@decipad/editor-types';
-import { useEditorController } from './useActiveEditor';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 import type { TNode, TNodeEntry } from '@udecode/plate-common';
 import { isElement } from '@udecode/plate-common';
 import type { Path } from 'slate';
@@ -24,17 +24,18 @@ const findGlobalNode = <TN extends TNode>(
 };
 
 export const useGlobalParentNode = (el: MyElement): MyNode | undefined => {
-  const controller = useEditorController();
-  if (controller) {
-    return findGlobalNode(controller.children, (node) => {
-      return (
-        isElement(node) &&
-        isElement(el) &&
-        node.children.some((child) => isElement(child) && child.id === el.id)
-      );
-    });
+  const controller = useNotebookWithIdState((s) => s.controller);
+  if (controller == null) {
+    return undefined;
   }
-  return undefined;
+
+  return findGlobalNode(controller.children, (node) => {
+    return (
+      isElement(node) &&
+      isElement(el) &&
+      node.children.some((child) => isElement(child) && child.id === el.id)
+    );
+  });
 };
 
 const findGlobalNodeEntry = <TN extends TNode>(
@@ -68,21 +69,21 @@ const findGlobalNodeEntry = <TN extends TNode>(
 export const useGlobalParentNodeEntry = (
   el: MyElement
 ): TNodeEntry<MyNode> | undefined => {
-  const controller = useEditorController();
-  if (controller) {
-    return findGlobalNodeEntry(controller.children, (node) => {
-      return (
-        isElement(node) &&
-        isElement(el) &&
-        node.children.some((child) => isElement(child) && child.id === el.id)
-      );
-    });
+  const controller = useNotebookWithIdState((s) => s.controller);
+  if (controller == null) {
+    return undefined;
   }
-  return undefined;
+  return findGlobalNodeEntry(controller.children, (node) => {
+    return (
+      isElement(node) &&
+      isElement(el) &&
+      node.children.some((child) => isElement(child) && child.id === el.id)
+    );
+  });
 };
 
 export const useGlobalFindNodeEntry = () => {
-  const controller = useEditorController();
+  const controller = useNotebookWithIdState((s) => s.controller);
   if (controller == null) {
     return undefined;
   }
@@ -92,7 +93,7 @@ export const useGlobalFindNodeEntry = () => {
 };
 
 export const useGlobalFindNode = () => {
-  const controller = useEditorController();
+  const controller = useNotebookWithIdState((s) => s.controller);
   if (controller == null) {
     return undefined;
   }

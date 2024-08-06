@@ -43,8 +43,10 @@ export const useInitialSelection = (
   editor?: MyEditor
 ) => {
   const selection = useEditorChange(useCallback((ed) => ed.selection, []));
-  const { initialFocusDone, setInitialFocusDone } =
-    useNotebookState(notebookId);
+  const [initialFocusDone, setInitialFocusDone] = useNotebookState(
+    notebookId,
+    (s) => [s.initialFocusDone, s.setInitialFocusDone] as const
+  );
   const readOnly = useIsEditorReadOnly();
 
   useEffect(() => {

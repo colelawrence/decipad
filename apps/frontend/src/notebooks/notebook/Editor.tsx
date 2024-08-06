@@ -1,9 +1,8 @@
 import type { FC } from 'react';
-import { useEffect, useMemo } from 'react';
-import { useRouteParams } from 'typesafe-routes/react-router';
+import { useEffect } from 'react';
 import type { DocSyncEditor } from '@decipad/docsync';
 import { Notebook as NotebookEditor } from '@decipad/notebook';
-import { notebooks } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import {
   EditorStylesContext,
   ExternalDataSourcesContextProvider,
@@ -11,13 +10,11 @@ import {
 import { EditorIcon, GlobalThemeStyles } from '@decipad/ui';
 import { useNotebookStateAndActions } from './hooks';
 import { useNotebookTitleChange, useSetWorkspaceQuota } from './Editor.helpers';
-import { Frame } from '../../meta';
+import { notebookErrorFactory } from './Errors';
 
 export interface EditorProps {
   readonly notebookId: string;
   readonly docsync: DocSyncEditor | undefined;
-  readonly setDocsync: (docsync: DocSyncEditor) => void;
-  readonly setError: (error: Error | undefined) => void;
 }
 
 /**
@@ -25,12 +22,7 @@ export interface EditorProps {
  *
  * Responsible for loading all backend data it needs.
  */
-const AppEditor: FC<EditorProps> = ({
-  notebookId,
-  docsync,
-  setDocsync,
-  setError,
-}) => {
+const AppEditor: FC<EditorProps> = ({ notebookId, docsync }) => {
   const actions = useNotebookStateAndActions({
     notebookId,
     docsync,
@@ -38,9 +30,9 @@ const AppEditor: FC<EditorProps> = ({
 
   useEffect(() => {
     if (actions.error) {
-      setError(actions.error);
+      throw notebookErrorFactory(actions.error.message);
     }
-  }, [actions.error, setError]);
+  }, [actions.error]);
 
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
@@ -48,45 +40,51 @@ const AppEditor: FC<EditorProps> = ({
     notebookId,
     actions.notebook?.name
   );
-  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(_embed);
+  const { isEmbed } = useNotebookRoute();
 
-  const pageTitle = useMemo(() => actions.notebook?.name, [actions.notebook]);
+  //
+  // Ugly hack.
+  //
+  // But Helmet doesn't work without side-effects.
+  // I removed some re-renders from the top components and it stopped worked.
+  //
+  useEffect(() => {
+    setTimeout(() => {
+      if (actions.notebook?.name == null) {
+        return;
+      }
+
+      document.title = `${actions.notebook.name} | Decipad`;
+    }, 0);
+  }, [actions.notebook?.name]);
 
   return (
-    <Frame
-      Heading="h1"
-      suspenseFallback={null}
-      title={pageTitle ?? 'New Notebook'}
-    >
-      <ExternalDataSourcesContextProvider provider={actions.externalData}>
-        <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
-          <GlobalThemeStyles color={actions.iconColor} />
-          {!isEmbed && (
-            <EditorIcon
-              icon={actions.icon ?? 'Deci'}
-              color={actions.iconColor}
-              onChangeIcon={actions.updateIcon}
-              onChangeColor={actions.updateIconColor}
-              readOnly={actions.isReadOnly}
-            />
-          )}
-          <NotebookEditor
-            secret={undefined}
-            notebookId={notebookId}
-            onNotebookTitleChange={onNotebookTitleChange}
-            onDocsync={setDocsync}
-            notebookMetaLoaded={actions.notebook != null}
-            workspaceId={actions.notebook?.workspace?.id ?? ''}
+    <ExternalDataSourcesContextProvider provider={actions.externalData}>
+      <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
+        <GlobalThemeStyles color={actions.iconColor} />
+        {!isEmbed && (
+          <EditorIcon
+            icon={actions.icon ?? 'Deci'}
+            color={actions.iconColor}
+            onChangeIcon={actions.updateIcon}
+            onChangeColor={actions.updateIconColor}
             readOnly={actions.isReadOnly}
-            connectionParams={actions.connectionParams}
-            initialState={actions.initialState}
-            getAttachmentForm={actions.getAttachmentForm}
-            onAttached={actions.onAttached}
           />
-        </EditorStylesContext.Provider>
-      </ExternalDataSourcesContextProvider>
-    </Frame>
+        )}
+        <NotebookEditor
+          secret={undefined}
+          notebookId={notebookId}
+          onNotebookTitleChange={onNotebookTitleChange}
+          notebookMetaLoaded={actions.notebook != null}
+          workspaceId={actions.notebook?.workspace?.id ?? ''}
+          readOnly={actions.isReadOnly}
+          connectionParams={actions.connectionParams}
+          initialState={actions.initialState}
+          getAttachmentForm={actions.getAttachmentForm}
+          onAttached={actions.onAttached}
+        />
+      </EditorStylesContext.Provider>
+    </ExternalDataSourcesContextProvider>
   );
 };
 

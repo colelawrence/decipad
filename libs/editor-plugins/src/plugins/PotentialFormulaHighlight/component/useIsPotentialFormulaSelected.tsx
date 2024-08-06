@@ -1,19 +1,19 @@
 import type { MyEditor } from '@decipad/editor-types';
-import { EditorChangeContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { isCollapsed } from '@udecode/plate-common';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { concat, of } from 'rxjs';
 import { useSelected } from 'slate-react';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 /** Do we show the tooltip? */
 export function useIsPotentialFormulaSelected(
   editor: MyEditor,
   decoration: PotentialFormulaDecoration
 ) {
-  const editorChange$ = useContext(EditorChangeContext);
   const parentSelected = useSelected();
+  const editorChange$ = useNotebookWithIdState((s) => s.editorChanges);
 
   const [selected, setSelected] = useState(false);
 

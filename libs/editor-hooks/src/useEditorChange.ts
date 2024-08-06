@@ -1,11 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { type Observable } from 'rxjs';
 import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash/debounce';
-import { EditorChangeContext } from '@decipad/react-contexts';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
+import { useNotebookRoute } from '@decipad/routing';
+import { useNotebookState } from '@decipad/notebook-state';
 
 export interface UseEditorChangeOptions {
   debounceTimeMs?: number;
@@ -16,9 +17,11 @@ export function useExternalEditorChange<T>(
   selector: (ed: MyEditor) => T,
   { debounceTimeMs = 100 }: UseEditorChangeOptions = {}
 ): T | undefined {
-  const editorChanges = useContext(EditorChangeContext);
   const [state, setState] = useState(editor && selector(editor));
   const lastState = useRef<T | undefined>(state);
+
+  const { notebookId } = useNotebookRoute();
+  const editorChanges = useNotebookState(notebookId, (s) => s.editorChanges);
 
   const setStateSafe = useCallback((v: T) => {
     if (!dequal(lastState.current, v)) {

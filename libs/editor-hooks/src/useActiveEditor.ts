@@ -1,38 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
-import type {
-  MyEditor,
-  MinimalRootEditorWithEventsAndTabs,
-} from '@decipad/editor-types';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
-import { ControllerProvider } from '@decipad/react-contexts';
-/**
- * Reactive hook that returns the existing tabs.
- */
-/**
- * Returns the `MyEditor` object the user is currently looking at.
- */
-export function useActiveEditor(
-  controller: MinimalRootEditorWithEventsAndTabs | undefined
-): MyEditor | undefined {
-  const { tab } = useRouteParams(notebooks({}).notebook);
+import { useMemo } from 'react';
+import type { MyEditor } from '@decipad/editor-types';
+import { useNotebookRoute } from '@decipad/routing';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
-  const [editor, setEditor] = useState<MyEditor | undefined>(undefined);
+export function useActiveEditor(): MyEditor | undefined {
+  const { tabId } = useNotebookRoute();
+  const controller = useNotebookWithIdState((s) => s.controller);
 
-  useEffect(() => {
-    if (!controller) {
-      setEditor(undefined);
-      return;
+  return useMemo(() => {
+    if (controller == null) {
+      return undefined;
     }
 
-    setEditor(controller.getTabEditor(tab));
-  }, [controller, tab]);
-
-  return editor;
-}
-
-export function useEditorController():
-  | MinimalRootEditorWithEventsAndTabs
-  | undefined {
-  return useContext(ControllerProvider);
+    return controller.getTabEditor(tabId);
+  }, [controller, tabId]);
 }

@@ -2,7 +2,7 @@ import type { IntegrationTypes } from '@decipad/editor-types';
 import { CodeRunner, GenericContainerRunner, URLRunner } from './types';
 import type { Computer } from '@decipad/computer-interfaces';
 import { useMemo } from 'react';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import { useComputer, useLiveConnectionWorker } from '@decipad/editor-hooks';
 import type { LiveConnectionWorker } from '@decipad/live-connect';
 
@@ -102,9 +102,7 @@ export function useRunner(
   const computer = useComputer();
   const worker = useLiveConnectionWorker();
 
-  const {
-    notebook: { id: notebookId },
-  } = useRouteParams(notebooks({}).notebook);
+  const { notebookId } = useNotebookRoute();
 
   return useMemo(
     () =>

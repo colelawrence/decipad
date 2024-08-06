@@ -53,13 +53,13 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 }) => {
   const toast = useToast();
   const computer = useComputer();
-  const { editor } = useNotebookState(notebookId);
+  const editor = useNotebookState(notebookId, (s) => s.editor);
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
   );
   const canDropState = dndStore.use.canDrop();
 
-  const activeEditor = useActiveEditor(editor);
+  const activeEditor = useActiveEditor();
 
   const onUploadProgress = useCallback(
     (file: File) => (progressEvent: AxiosProgressEvent) => {

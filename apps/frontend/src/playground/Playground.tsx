@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { lazyLoad } from '@decipad/react-utils';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 
 const loadEditor = () =>
   import(/* webpackChunkName: "playground-editor" */ './Editor');
@@ -29,45 +28,33 @@ const Playground: React.FC = () => {
   const articleRef = useSetCssVarWidth('editorWidth');
 
   return (
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        scenarioId: null,
-        expandedBlockId: null,
-        handleExpandedBlockId: () => {},
-        permission: 'WRITE',
-        aliasId: null,
-      }}
-    >
-      <NotebookPage
-        topbar={<PlaygroundTopBar />}
-        notebook={
-          <div data-editorloaded data-hydrated={!isServerSideRendering()}>
-            <Frame
-              Heading="h1"
-              title={null}
-              suspenseFallback={<EditorPlaceholder />}
-            >
-              <GlobalThemeStyles color={iconColor} />
-              <EditorIcon
-                icon={icon}
-                color={iconColor}
-                onChangeIcon={setIcon}
-                onChangeColor={setIconColor}
-              />
-              <Editor />
-            </Frame>
-          </div>
-        }
-        articleRef={articleRef}
-        sidebar={null}
-        tabs={null}
-        dataDrawer={null}
-        isEmbed={false}
-        isReadOnly={false}
-      />
-    </AnnotationsProvider>
+    <NotebookPage
+      articleRef={articleRef}
+      topbar={<PlaygroundTopBar />}
+      notebook={
+        <div data-editorloaded data-hydrated={!isServerSideRendering()}>
+          <Frame
+            Heading="h1"
+            title={null}
+            suspenseFallback={<EditorPlaceholder />}
+          >
+            <GlobalThemeStyles color={iconColor} />
+            <EditorIcon
+              icon={icon}
+              color={iconColor}
+              onChangeIcon={setIcon}
+              onChangeColor={setIconColor}
+            />
+            <Editor />
+          </Frame>
+        </div>
+      }
+      sidebar={null}
+      tabs={null}
+      dataDrawer={null}
+      isEmbed={false}
+      isReadOnly={false}
+    />
   );
 };
 export default Playground;

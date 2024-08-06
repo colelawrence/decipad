@@ -1,7 +1,7 @@
 /* eslint-disable no-labels */
 import { createStore } from 'zustand';
 import { UAParser } from 'ua-parser-js';
-import { take } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { createDocSyncEditor } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
@@ -33,6 +33,12 @@ const initialState = (): Omit<
   | 'setAddVariable'
   | 'setEditingVariable'
   | 'closeDataDrawer'
+  | 'handleExpandedBlockId'
+  | 'setPermission'
+  | 'setAnnotations'
+  | 'permission'
+  | 'expandedBlockId'
+  | 'annotations'
 > => {
   let resolveNotebookLoadedPromise: (e: DocSyncEditor) => void;
   const notebookLoadedPromise: EnhancedPromise<DocSyncEditor> =
@@ -46,6 +52,7 @@ const initialState = (): Omit<
     }) as unknown as EnhancedPromise<DocSyncEditor>;
   return {
     blockProcessor: undefined,
+    controller: undefined,
     syncClientState: 'idle',
     editor: undefined,
     loadedFromLocal: false,
@@ -60,6 +67,7 @@ const initialState = (): Omit<
       return resolveNotebookLoadedPromise;
     },
     liveConnectionWorker: once(() => createLiveConnectWorker()),
+    editorChanges: new Subject(),
   };
 };
 
@@ -266,6 +274,7 @@ export const createNotebookStore = (
 
       set({
         editor: docSyncEditor,
+        controller,
         notebookHref: isServerSideRendering() ? '' : window.location.pathname,
         syncClientState: 'created',
         loadedFromLocal: false,
@@ -292,6 +301,8 @@ export const createNotebookStore = (
       }
     },
 
+    // Data Drawer
+
     isAddingOrEditingVariable: undefined,
     editingVariableId: undefined,
 
@@ -314,5 +325,23 @@ export const createNotebookStore = (
         isAddingOrEditingVariable: undefined,
         editingVariableId: undefined,
       }));
+    },
+
+    // Annotations
+
+    annotations: [],
+    expandedBlockId: undefined,
+    permission: undefined,
+
+    handleExpandedBlockId(id) {
+      set(() => ({ expandedBlockId: id }));
+    },
+
+    setPermission(permission) {
+      set(() => ({ permission }));
+    },
+
+    setAnnotations(annotations) {
+      set(() => ({ annotations }));
     },
   }));

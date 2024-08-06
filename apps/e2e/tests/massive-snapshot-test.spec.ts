@@ -79,6 +79,8 @@ test('Loading and snapshot of big notebook', async ({
   await test.step('navigates to notebook and loads it', async () => {
     await testUser.navigateToNotebook(notebookId);
     await testUser.notebook.waitForEditorToLoad();
+    await testUser.page.reload();
+
     await waitForPageLoad(testUser.page);
     await testUser.notebook.checkNotebookTitle(
       'Everything, everywhere, all at once'

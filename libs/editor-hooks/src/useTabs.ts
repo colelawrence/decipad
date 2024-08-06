@@ -1,19 +1,13 @@
-import type {
-  MinimalRootEditorWithEventsAndTabs,
-  TabElement,
-  TopLevelValue,
-} from '@decipad/editor-types';
-import { ControllerProvider } from '@decipad/react-contexts';
-import { notebooks } from '@decipad/routing';
+import type { TabElement, TopLevelValue } from '@decipad/editor-types';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { useNotebookRoute } from '@decipad/routing';
 import { insertNodes } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useRouteParams } from 'typesafe-routes/react-router';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 // eslint-disable-next-line no-underscore-dangle
-function _useTabs(
-  controller: MinimalRootEditorWithEventsAndTabs | undefined
-): Array<TabElement> {
+function _useTabs(): Array<TabElement> {
   const [renderKey, setRenderKey] = useState(0);
+  const controller = useNotebookWithIdState((s) => s.controller);
 
   useEffect(() => {
     if (!controller) return;
@@ -42,8 +36,7 @@ function _useTabs(
  * if `isReadOnly` is true, then hidden tabs will not be returned;
  */
 export const useTabs = (isReadOnly?: boolean): ReturnType<typeof _useTabs> => {
-  const controller = useContext(ControllerProvider);
-  const tabs = _useTabs(controller);
+  const tabs = _useTabs();
 
   if (!isReadOnly) {
     return tabs;
@@ -56,13 +49,14 @@ export const useTabs = (isReadOnly?: boolean): ReturnType<typeof _useTabs> => {
  * Returns an active tab id, or null if there is no active tab.
  */
 export const useActiveTabId = (): string | undefined => {
-  const controller = useContext(ControllerProvider);
-  const tabs = _useTabs(controller);
-  const { tab } = useRouteParams(notebooks({}).notebook);
+  const tabs = _useTabs();
+  const { tabId } = useNotebookRoute();
 
   if (tabs.length === 0) return undefined;
 
-  const activeTabId = !tab ? tabs[0].id : tabs.find((t) => t.id === tab)?.id;
+  const activeTabId = !tabId
+    ? tabs[0].id
+    : tabs.find((t) => t.id === tabId)?.id;
 
   return activeTabId;
 };
@@ -71,8 +65,7 @@ export const useActiveTabId = (): string | undefined => {
  * Returns all tabs that are not the one the user is currently looking at.
  */
 export const useFilteredTabs = (): ReturnType<typeof _useTabs> => {
-  const controller = useContext(ControllerProvider);
-  const tabs = _useTabs(controller);
+  const tabs = _useTabs();
   const activeTabId = useActiveTabId();
 
   return tabs.filter((t) => t.id !== activeTabId);
@@ -81,16 +74,16 @@ export const useFilteredTabs = (): ReturnType<typeof _useTabs> => {
 type MoveTabCallback = (tabId: string, node: TopLevelValue) => void;
 
 export const useMoveToTab = (): MoveTabCallback => {
-  const controller = useContext(ControllerProvider);
+  const tabs = _useTabs();
+  const controller = useNotebookWithIdState((s) => s.controller);
+  const { tabId } = useNotebookRoute();
 
-  const tabs = _useTabs(controller);
-  const { tab } = useRouteParams(notebooks({}).notebook);
-
-  const activeTabIndex = tab == null ? 0 : tabs.findIndex((t) => t.id === tab);
+  const activeTabIndex =
+    tabId == null ? 0 : tabs.findIndex((t) => t.id === tabId);
 
   const callback = useCallback(
-    (tabId: string, node: TopLevelValue): void => {
-      const tabIndex = tabs.findIndex((t) => t.id === tabId);
+    (newTabId: string, node: TopLevelValue): void => {
+      const tabIndex = tabs.findIndex((t) => t.id === newTabId);
       if (tabIndex === -1) {
         throw new Error(
           'TabID could not be found in tabs, look out for parameters.'

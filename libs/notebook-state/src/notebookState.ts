@@ -1,6 +1,5 @@
 import { captureException } from '@sentry/browser';
 import { setErrorReporter } from '@decipad/remote-computer';
-import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi } from 'zustand';
 import type { NotebookState } from './state';
 import { createNotebookStore } from './oneNotebookState';
@@ -37,16 +36,4 @@ export const getNotebookStore = (
   notebooks.set(notebookId, store);
 
   return store;
-};
-
-export const useNotebookState = <U = NotebookState>(
-  notebookId: string,
-  selector: Parameters<
-    typeof useStoreWithEqualityFn<ReturnType<typeof getNotebookStore>, U>
-  >[1] = (state) => state as U
-) => {
-  const notebookStore = getNotebookStore(notebookId);
-  const partialStore = useStoreWithEqualityFn(notebookStore, selector);
-
-  return partialStore;
 };

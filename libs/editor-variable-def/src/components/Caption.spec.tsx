@@ -1,3 +1,4 @@
+import { it, beforeEach, expect } from 'vitest';
 import { ELEMENT_CAPTION } from '@decipad/editor-types';
 import { ToastDisplay } from '@decipad/ui';
 import { noop } from '@decipad/utils';
@@ -14,6 +15,7 @@ import {
   createPlugins,
 } from '@udecode/plate-common';
 import { Caption } from './Caption';
+import { BrowserRouter } from 'react-router-dom';
 
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
@@ -42,7 +44,12 @@ it('renders the element properties', () => {
       <Plate {...plateProps} editor={editor}>
         <PlateContent scrollSelectionIntoView={noop} />
       </Plate>
-    </ToastDisplay>
+    </ToastDisplay>,
+    {
+      wrapper({ children }) {
+        return <BrowserRouter>{children}</BrowserRouter>;
+      },
+    }
   );
 
   const { innerHTML } = container;

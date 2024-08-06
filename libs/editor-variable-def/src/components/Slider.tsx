@@ -2,11 +2,7 @@ import type { PlateComponent } from '@decipad/editor-types';
 import { ClientEventsContext } from '@decipad/client-events';
 import { ELEMENT_SLIDER, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import {
-  useAnnotations,
-  useIsEditorReadOnly,
-  useNotebookId,
-} from '@decipad/react-contexts';
+import { useIsEditorReadOnly, useNotebookId } from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
 import { useCallback, useContext } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
@@ -18,6 +14,7 @@ import {
 import { useParentNodeEntry } from '@decipad/editor-hooks';
 import { getAnonUserMetadata } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useNotebookRoute } from '@decipad/routing';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_SLIDER);
@@ -33,7 +30,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const [, createAnnotation] = useCreateAnnotationMutation();
   const [, recordPadEvent] = useRecordPadEventMutation();
 
-  const { aliasId } = useAnnotations();
+  const { aliasId } = useNotebookRoute();
 
   // Analytics
   const userEvents = useContext(ClientEventsContext);

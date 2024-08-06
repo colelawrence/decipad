@@ -6,6 +6,6 @@ import { useNotebookId } from './useNotebookId';
 export const useComputer = (myNotebookId?: string): Computer => {
   const notebookId = useNotebookId();
   const effectiveId = myNotebookId ?? notebookId;
-  const notebook = useNotebookState(effectiveId);
-  return getDefined(notebook.computer);
+  const computer = useNotebookState(effectiveId, (s) => s.computer);
+  return getDefined(computer);
 };

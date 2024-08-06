@@ -7,10 +7,10 @@ import { useCallback } from 'react';
 
 import * as Styled from './styles';
 import { Ellipsis } from 'libs/ui/src/icons';
-import { useAnnotations } from '@decipad/react-contexts';
 import { useSession } from 'next-auth/react';
 import { User } from 'next-auth';
 import { cssVar, p14Medium } from 'libs/ui/src/primitives';
+import { useAnnotations } from '@decipad/notebook-state';
 
 type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']

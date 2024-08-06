@@ -19,8 +19,7 @@ import {
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
-import { useNotebookState } from '@decipad/notebook-state';
-import { useNotebookRouterId } from '../hooks';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 type OpenDataDrawerCommonProps = {
   computer: Computer;
@@ -114,10 +113,7 @@ export const CreateVariableDataDrawer: FC<CreateVariableDataDrawerProps> = ({
   const [codeEditor] = useState(() => createDataDrawerEditor(computer));
   const [error, setError] = useState<'var-exists' | undefined>(undefined);
 
-  const notebookId = useNotebookRouterId();
-
-  const setEditingVariable = useNotebookState(
-    notebookId,
+  const setEditingVariable = useNotebookWithIdState(
     (state) => state.setEditingVariable
   );
 

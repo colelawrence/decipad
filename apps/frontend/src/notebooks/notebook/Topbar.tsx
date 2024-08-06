@@ -6,7 +6,7 @@ import {
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
 import { useNotebookMetaData } from '@decipad/react-contexts';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import type { TColorStatus } from '@decipad/ui';
 import {
   AIModeSwitch,
@@ -84,8 +84,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
 
   const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 
-  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(_embed);
+  const { isEmbed } = useNotebookRoute();
 
   const [, claimNotebook] = useClaimNotebookMutation();
 

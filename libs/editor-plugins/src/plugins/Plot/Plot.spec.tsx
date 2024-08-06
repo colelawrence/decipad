@@ -3,7 +3,6 @@ import type { PlotElement } from '@decipad/editor-types';
 import { ELEMENT_PLOT, PlotDefaultColorScheme } from '@decipad/editor-types';
 import { Result } from '@decipad/language-interfaces';
 import { N } from '@decipad/number';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 import { type SerializedType } from '@decipad/remote-computer';
 import { ToastDisplay } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
@@ -157,34 +156,22 @@ const PlotWithProviders = ({
   };
 
   return (
-    <AnnotationsProvider
-      value={{
-        annotations: [],
-        setAnnotations: () => {},
-        scenarioId: null,
-        expandedBlockId: null,
-        handleExpandedBlockId: () => {},
-        permission: 'WRITE',
-        aliasId: null,
-      }}
-    >
-      <ToastDisplay>
-        <DndProvider backend={HTML5Backend}>
-          <BrowserRouter>
-            <Plate>
-              <PlateContent />
-              <Plot
-                attributes={{
-                  'data-slate-node': 'element',
-                  ref: createRef(),
-                }}
-                element={element}
-              />
-            </Plate>
-          </BrowserRouter>
-        </DndProvider>
-      </ToastDisplay>
-    </AnnotationsProvider>
+    <ToastDisplay>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>
+          <Plate>
+            <PlateContent />
+            <Plot
+              attributes={{
+                'data-slate-node': 'element',
+                ref: createRef(),
+              }}
+              element={element}
+            />
+          </Plate>
+        </BrowserRouter>
+      </DndProvider>
+    </ToastDisplay>
   );
 };
 

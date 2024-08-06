@@ -1,4 +1,4 @@
-import { it, expect, describe } from 'vitest';
+import { it, expect, describe, afterEach } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
@@ -16,7 +16,6 @@ import type { PlatePlugin } from '@udecode/plate-common';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import { defaultComputerResults, parseBlock } from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
-import { AnnotationsProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
@@ -98,19 +97,7 @@ describe.sequential('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
+      <PlateWrapper children={children} />,
       {
         wrapper: ComputerWrapper({
           id: nanoid(),
@@ -150,30 +137,15 @@ describe.sequential('variable highlights', () => {
       } as CodeLineElement,
     ];
 
-    const { getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
-      {
-        wrapper: ComputerWrapper({
-          id: nanoid(),
-          initialProgram: [
-            getIdentifiedBlock('x1', 'x=42'),
-            getIdentifiedBlock('x2', 'y=x'),
-          ],
-        }),
-      }
-    );
+    const { getAllByText } = render(<PlateWrapper children={children} />, {
+      wrapper: ComputerWrapper({
+        id: nanoid(),
+        initialProgram: [
+          getIdentifiedBlock('x1', 'x=42'),
+          getIdentifiedBlock('x2', 'y=x'),
+        ],
+      }),
+    });
 
     await act(() => timeout(100));
 
@@ -212,19 +184,7 @@ describe.sequential('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
+      <PlateWrapper children={children} />,
       {
         wrapper: ComputerWrapper({
           id: nanoid(),
@@ -267,30 +227,15 @@ describe.sequential('variable highlights', () => {
       } as CodeLineElement,
     ];
 
-    const { getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
-      {
-        wrapper: ComputerWrapper({
-          id: nanoid(),
-          initialProgram: [
-            getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
-            getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
-          ],
-        }),
-      }
-    );
+    const { getAllByText } = render(<PlateWrapper children={children} />, {
+      wrapper: ComputerWrapper({
+        id: nanoid(),
+        initialProgram: [
+          getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
+          getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
+        ],
+      }),
+    });
 
     await act(() => timeout(1000));
 
@@ -318,29 +263,14 @@ describe.sequential('variable highlights', () => {
       } as CodeLineElement,
     ];
 
-    const { getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
-      {
-        wrapper: ComputerWrapper({
-          id: nanoid(),
-          initialProgram: [
-            getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}'),
-          ],
-        }),
-      }
-    );
+    const { getAllByText } = render(<PlateWrapper children={children} />, {
+      wrapper: ComputerWrapper({
+        id: nanoid(),
+        initialProgram: [
+          getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}'),
+        ],
+      }),
+    });
 
     await act(() => timeout(100));
 
@@ -414,30 +344,15 @@ describe.sequential('variable highlights', () => {
       } as CodeLineElement,
     ];
 
-    const { getAllByText } = render(
-      <AnnotationsProvider
-        value={{
-          aliasId: null,
-          annotations: [],
-          setAnnotations: () => {},
-          scenarioId: null,
-          expandedBlockId: null,
-          handleExpandedBlockId: () => {},
-          permission: 'WRITE',
-        }}
-      >
-        <PlateWrapper children={children} />
-      </AnnotationsProvider>,
-      {
-        wrapper: ComputerWrapper({
-          id: nanoid(),
-          initialProgram: [
-            getIdentifiedBlock('x1', 'X=3'),
-            getIdentifiedBlock('x2', 'F(A) = A+X'),
-          ],
-        }),
-      }
-    );
+    const { getAllByText } = render(<PlateWrapper children={children} />, {
+      wrapper: ComputerWrapper({
+        id: nanoid(),
+        initialProgram: [
+          getIdentifiedBlock('x1', 'X=3'),
+          getIdentifiedBlock('x2', 'F(A) = A+X'),
+        ],
+      }),
+    });
 
     await act(() => timeout(100));
 

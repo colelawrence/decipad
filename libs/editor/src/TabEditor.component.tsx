@@ -7,7 +7,7 @@ import {
   useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { captureException } from '@decipad/remote-computer';
-import { notebooks } from '@decipad/routing';
+import { useNotebookRoute } from '@decipad/routing';
 import {
   Button,
   EditorPlaceholder,
@@ -23,7 +23,6 @@ import type { ComponentProps, FC, PropsWithChildren } from 'react';
 import { useEffect, useMemo } from 'react';
 import { useIntercom } from 'react-use-intercom';
 import { withReact } from 'slate-react';
-import { useRouteParams } from 'typesafe-routes/react-router';
 import { Editor } from './Editor.component';
 import { TitleEditor } from './TitleEditor.component';
 import { useRecoverNotebook } from './hooks';
@@ -44,7 +43,7 @@ type TabEditorComponentProps = Omit<
 export const TabEditorComponent: FC<
   PropsWithChildren<TabEditorComponentProps>
 > = ({ children, controller, readOnly, notebookId, workspaceId, loaded }) => {
-  const { tab: tabId } = useRouteParams(notebooks({}).notebook);
+  const { tabId } = useNotebookRoute();
   const tabs = useTabs(readOnly);
 
   useUndo(controller);

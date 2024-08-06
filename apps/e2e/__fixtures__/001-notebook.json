@@ -359,31 +359,6 @@
                           "text": ""
                         }
                       ],
-                      "id": "gE_bzqijFqgWPOCTr5_Uz",
-                      "type": "smart-ref",
-                      "blockId": "gBsalJPCVlG2PYFhzIkQh",
-                      "columnId": null,
-                      "lastSeenVariableName": "Column2"
-                    },
-                    {
-                      "text": " + 1"
-                    }
-                  ],
-                  "id": "RBTkKEZjAAdtCi-YPwGNV",
-                  "type": "table-column-formula",
-                  "columnId": "no1HlaSKDQldjf_Oe6tBF"
-                },
-                {
-                  "children": [
-                    {
-                      "text": " "
-                    },
-                    {
-                      "children": [
-                        {
-                          "text": ""
-                        }
-                      ],
                       "id": "NgzUyxKz9EAH742sXMTVc",
                       "type": "smart-ref",
                       "blockId": "gBsalJPCVlG2PYFhzIkQh",
@@ -442,18 +417,6 @@
                     "date": "day"
                   },
                   "id": "tsKre-hanQwKcGEzYLJLC"
-                },
-                {
-                  "children": [
-                    {
-                      "text": "Column4"
-                    }
-                  ],
-                  "id": "no1HlaSKDQldjf_Oe6tBF",
-                  "type": "th",
-                  "cellType": {
-                    "kind": "table-formula"
-                  }
                 },
                 {
                   "children": [

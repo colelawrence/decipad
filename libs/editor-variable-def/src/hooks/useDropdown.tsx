@@ -16,7 +16,6 @@ import { useMyEditorRef } from '@decipad/editor-types';
 import { formatResultPreview } from '@decipad/format';
 import {
   CategoriesContext,
-  EditorChangeContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
@@ -27,6 +26,7 @@ import { insertText, isElement, nanoid } from '@udecode/plate-common';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 interface UseDropdownResult {
   dropdownOpen: boolean;
@@ -41,7 +41,7 @@ interface UseDropdownResult {
 export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const editor = useMyEditorRef();
   const computer = useComputer();
-  const editorChanges = useContext(EditorChangeContext);
+  const editorChanges = useNotebookWithIdState((s) => s.editorChanges);
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);

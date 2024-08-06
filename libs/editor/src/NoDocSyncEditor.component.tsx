@@ -7,7 +7,6 @@ import { plugins } from '@decipad/editor-config';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import {
-  EditorChangeContextProvider,
   EditorIdContext,
   EditorReadOnlyContext,
   useEditorUserInteractionsContext,
@@ -87,50 +86,48 @@ export const NoDocSyncEditorInternal: FC = () => {
     window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true';
 
   return (
-    <EditorChangeContextProvider changeSubject={changeSubject}>
-      <EditorIdContext.Provider value={editor.id}>
-        <EditorReadOnlyContext.Provider
-          value={{ readOnly: isWritingLocked, lockWriting }}
-        >
-          <LoadingFilter loading={isWritingLocked}>
-            <EditorLayout>
-              <TitleEditor
-                tab={undefined}
-                editor={titleEditor}
-                initialValue={[
-                  {
-                    type: 'title',
-                    children: [
-                      { text: populateNotebook ? introNotebookTitle : '' },
-                    ],
-                  } as any,
-                ]}
-                readOnly={isWritingLocked}
-                onUndo={() => {}}
-                onRedo={() => {}}
-              />
-              <div ref={containerRef}>
-                <BlockLengthSynchronizationProvider editor={editor}>
-                  <TeleportEditor editor={editor}>
-                    <Plate<MyValue>
-                      editor={editor}
-                      onChange={onChange}
-                      initialValue={
-                        populateNotebook ? introNotebook() : emptyNotebook()
-                      }
-                      readOnly={isWritingLocked}
-                    >
-                      <PlateContent />
-                      <Tooltip />
-                    </Plate>
-                  </TeleportEditor>
-                </BlockLengthSynchronizationProvider>
-              </div>
-            </EditorLayout>
-          </LoadingFilter>
-        </EditorReadOnlyContext.Provider>
-      </EditorIdContext.Provider>
-    </EditorChangeContextProvider>
+    <EditorIdContext.Provider value={editor.id}>
+      <EditorReadOnlyContext.Provider
+        value={{ readOnly: isWritingLocked, lockWriting }}
+      >
+        <LoadingFilter loading={isWritingLocked}>
+          <EditorLayout>
+            <TitleEditor
+              tab={undefined}
+              editor={titleEditor}
+              initialValue={[
+                {
+                  type: 'title',
+                  children: [
+                    { text: populateNotebook ? introNotebookTitle : '' },
+                  ],
+                } as any,
+              ]}
+              readOnly={isWritingLocked}
+              onUndo={() => {}}
+              onRedo={() => {}}
+            />
+            <div ref={containerRef}>
+              <BlockLengthSynchronizationProvider editor={editor}>
+                <TeleportEditor editor={editor}>
+                  <Plate<MyValue>
+                    editor={editor}
+                    onChange={onChange}
+                    initialValue={
+                      populateNotebook ? introNotebook() : emptyNotebook()
+                    }
+                    readOnly={isWritingLocked}
+                  >
+                    <PlateContent />
+                    <Tooltip />
+                  </Plate>
+                </TeleportEditor>
+              </BlockLengthSynchronizationProvider>
+            </div>
+          </EditorLayout>
+        </LoadingFilter>
+      </EditorReadOnlyContext.Provider>
+    </EditorIdContext.Provider>
   );
 };
 
