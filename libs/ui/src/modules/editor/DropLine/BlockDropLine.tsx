@@ -1,9 +1,22 @@
-/* eslint decipad/css-prop-named-variable: 0 */
+import { css } from '@emotion/react';
 import {
   dropLineThickness,
   dropLineCommonStyles,
 } from '../../../styles/drop-line';
 import { componentCssVars } from '../../../primitives';
+
+const blockDropLineStyles = css([
+  dropLineCommonStyles,
+  {
+    position: 'fixed',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: componentCssVars('DropLineBorderColor'),
+    boxSizing: 'content-box',
+    borderRadius: 2,
+    pointerEvents: 'none',
+  },
+]);
 
 export interface BlockDropLineProps {
   variant: 'horizontal' | 'vertical';
@@ -42,21 +55,9 @@ export const BlockDropLine = ({
 
   return (
     <div
-      css={[
-        dropLineCommonStyles,
-        {
-          position: 'fixed',
-          [thicknessProp]: dropLineThickness,
-          borderWidth: 1,
-          borderStyle: 'solid',
-          borderColor: componentCssVars('DropLineBorderColor'),
-          boxSizing: 'content-box',
-          borderRadius: 2,
-          pointerEvents: 'none',
-        },
-      ]}
-      // https://emotion.sh/docs/best-practices#use-the-style-prop-for-dynamic-styles
+      css={blockDropLineStyles}
       style={{
+        [thicknessProp]: dropLineThickness,
         [mainAxisProp]: mainAxis,
         [crossAxisStartProp]: crossAxisStart,
         [crossAxisLengthProp]: crossAxisEnd - crossAxisStart,

@@ -15,6 +15,7 @@ import { ELEMENT_DISPLAY, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
   useEditorStylesContext,
+  useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
@@ -37,6 +38,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const userEvents = useContext(ClientEventsContext);
   const readOnly = useIsEditorReadOnly();
+  const insideLayout = useInsideLayoutContext();
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
@@ -188,6 +190,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           color={color as AvailableSwatchColor}
           lineResult={res}
           formatting={element.formatting as ResultFormatting}
+          insideLayout={insideLayout}
         >
           <DisplayWidget
             openMenu={openMenu}

@@ -117,48 +117,48 @@
           "type": "def",
           "variant": "slider",
           "id": "_uLNoxVuRGQR7MLjjqQ4N"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "PriceUnit"
-                }
-              ],
-              "type": "caption",
-              "id": "F85nIumbm8Y3k5ohrv05u"
-            },
-            {
-              "children": [
-                {
-                  "text": "25$ /unit"
-                }
-              ],
-              "type": "exp",
-              "id": "6BVo4ypNhNKCE_TybtWnA"
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "type": "slider",
-              "max": "30",
-              "min": "0",
-              "step": "5",
-              "value": "25",
-              "id": "dQDbrF91vcH7tOOrMHnd-"
-            }
-          ],
-          "type": "def",
-          "variant": "slider",
-          "id": "ExNqIQEPGtXBMUDiZsoOs"
         }
       ],
       "type": "columns",
       "id": "HEVtiD74Cj99fChGtq88l"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "PriceUnit"
+            }
+          ],
+          "type": "caption",
+          "id": "F85nIumbm8Y3k5ohrv05u"
+        },
+        {
+          "children": [
+            {
+              "text": "25$ /unit"
+            }
+          ],
+          "type": "exp",
+          "id": "6BVo4ypNhNKCE_TybtWnA"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "slider",
+          "max": "30",
+          "min": "0",
+          "step": "5",
+          "value": "25",
+          "id": "dQDbrF91vcH7tOOrMHnd-"
+        }
+      ],
+      "type": "def",
+      "variant": "slider",
+      "id": "ExNqIQEPGtXBMUDiZsoOs"
     },
     {
       "children": [

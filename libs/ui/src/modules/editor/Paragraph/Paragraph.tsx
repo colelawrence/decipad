@@ -19,6 +19,9 @@ const placeholderStyles = css({
     lineHeight: 1.6,
     pointerEvents: 'none',
     userSelect: 'none',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 });
 

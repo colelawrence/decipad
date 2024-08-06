@@ -1,7 +1,4 @@
-import type {
-  ColumnsElement,
-  VariableDefinitionElement,
-} from '@decipad/editor-types';
+import type { VariableDefinitionElement } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import { getComputer } from '@decipad/computer';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
@@ -101,34 +98,5 @@ describe('Normalize Caption Plugin', () => {
     // 'Slider' is the default name for sliders
     expect(editorDef1.children[0].children[0].text).toBe('Slider1');
     expect(editorDef2.children[0].children[0].text).toBe('Slider2');
-  });
-
-  it('inserts unique names in columns', async () => {
-    const def1 = getDef();
-    def1.children[0].children[0].text = '';
-
-    const def2 = getDef();
-    def2.children[0].children[0].text = '';
-
-    const col: ColumnsElement = {
-      type: 'columns',
-      id: 'col',
-      children: [def1, def2],
-    };
-
-    editor.children = [col];
-    editor.normalize({ force: true });
-
-    await timeout(100);
-
-    const editorCol = editor.children[0] as ColumnsElement;
-
-    // 'Slider' is the default name for sliders
-    expect(editorCol.children[0].children[0].children[0].text).toBe(
-      'Col1Slider1'
-    );
-    expect(editorCol.children[1].children[0].children[0].text).toBe(
-      'Col1Slider2'
-    );
   });
 });

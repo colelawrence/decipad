@@ -73,10 +73,10 @@ beforeEach(() => {
 });
 
 // Return a drop line below the second block
-vi.mock('./getDropLineForMonitor', () => ({
-  getDropLineForMonitor: () =>
+vi.mock('./getDropLocationForMonitor', () => ({
+  getDropLocationForMonitor: () =>
     ({
-      type: 'horizontal',
+      type: 'horizontalDropLine',
       id: '1',
       path: [1],
       direction: 'after',

@@ -74,6 +74,7 @@ const gridStyles = once(() =>
 
 const handleButtonStyle = css({
   borderRadius: '6px',
+  background: cssVar('backgroundMain'),
 
   ':hover': {
     background: cssVar('backgroundDefault'),

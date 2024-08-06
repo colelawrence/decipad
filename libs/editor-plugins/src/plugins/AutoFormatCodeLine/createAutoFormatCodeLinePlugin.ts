@@ -33,16 +33,17 @@ import type {
 } from '@udecode/plate-common';
 import {
   getBlockAbove,
-  getEndPoint,
   getNodeString,
   insertText,
   isCollapsed,
   isElement,
+  removeNodes,
   select,
   setNodes,
   toDOMNode,
+  withoutNormalizing,
 } from '@udecode/plate-common';
-import type { BaseRange, Point } from 'slate';
+import { Path, type BaseRange } from 'slate';
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugin-factories';
 import { getTextBeforeCursor } from './utils';
 
@@ -114,7 +115,11 @@ export const createAutoFormatCodeLinePlugin = <
               code: '100$',
             }) as EElement<TV>;
 
-            insertNodes(editor, [newCodeLine], { at: paragraphPath });
+            withoutNormalizing(editor, () => {
+              removeNodes(editor, { at: paragraphPath });
+              insertNodes(editor, [newCodeLine], { at: paragraphPath });
+            });
+
             const codeTextPath = [...paragraphPath, 1];
             select(editor, codeTextPath);
           } else if (textBefore.endsWith(' =')) {
@@ -200,12 +205,12 @@ const commitPotentialFormula = <
   onCommit: (ref: ShadowCalcReference) => void,
   id?: string
 ) => {
-  const insertionPath = getAboveNodeSafe(editor as MyEditor, {
+  const paragraphEntry = getAboveNodeSafe(editor as MyEditor, {
     at: expressionRange,
     match: (x) => isElementOfType(x, ELEMENT_PARAGRAPH),
   });
-
-  if (!insertionPath) return;
+  if (!paragraphEntry) return;
+  const [, paragraphPath] = paragraphEntry;
 
   const codeLineBelow = createStructuredCodeLine({
     id,
@@ -225,11 +230,7 @@ const commitPotentialFormula = <
     at: expressionRange,
   });
 
-  const currentBlockEnd: Point = getEndPoint(editor, [
-    expressionRange.anchor.path[0],
-  ]);
-
-  insertNodes(editor, [codeLineBelow], { at: currentBlockEnd });
+  insertNodes(editor, [codeLineBelow], { at: Path.next(paragraphPath) });
 
   setTimeout(() => {
     const domNode = toDOMNode(editor, magicNumberInstead);

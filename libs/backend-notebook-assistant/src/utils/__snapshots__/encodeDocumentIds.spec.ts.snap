@@ -2232,6 +2232,7 @@ exports[`encodeDocumentIds encodes and decodes 1`] = `
       ],
       "id": "🍏EJ",
       "type": "columns",
+      "width": "full",
     },
     {
       "children": [

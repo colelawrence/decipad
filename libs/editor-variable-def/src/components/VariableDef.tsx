@@ -14,6 +14,7 @@ import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
 import { assertElementType, mutateText } from '@decipad/editor-utils';
 import {
   useEditorStylesContext,
+  useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
@@ -34,6 +35,7 @@ export const VariableDef: PlateComponent = ({
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
   const path = useNodePath(element);
+  const insideLayout = useInsideLayoutContext();
 
   const sliderElementPath = useNodePath(
     (element as VariableSliderElement).children[2]
@@ -174,6 +176,7 @@ export const VariableDef: PlateComponent = ({
               ? element.children[1].smartSelection
               : false
           }
+          insideLayout={insideLayout}
         >
           {children}
         </VariableEditor>

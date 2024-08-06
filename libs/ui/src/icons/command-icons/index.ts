@@ -19,6 +19,7 @@ export { CommandImportCopy } from './CommandImportCopy';
 export { CommandImportRangeCopies } from './CommandImportRangeCopies';
 export { CommandInput } from './CommandInput';
 export { CommandIntegrations } from './CommandIntegrations';
+export { CommandLayout } from './CommandLayout';
 export { CommandLine } from './CommandLine';
 export { CommandMixed } from './CommandMixed';
 export { CommandNotion } from './CommandNotion';

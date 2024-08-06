@@ -31,7 +31,6 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB,
   ELEMENT_DATA_TAB_CHILDREN,
-  ELEMENT_COLUMNS,
   ELEMENT_DIAMOND,
   ELEMENT_DRAW_IMAGE,
   ELEMENT_DROPDOWN,
@@ -87,7 +86,9 @@ import {
   ELEMENT_SUBMIT_FORM,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_INTEGRATION,
+  ELEMENT_LAYOUT,
 } from './element-kinds';
+import { UNCOLUMNABLE_KINDS } from './uncolumnable-kinds';
 import {
   AcceptableChartShapesForCombo,
   ChartColorSchemeKeys,
@@ -707,13 +708,17 @@ export interface SmartRefElement extends BaseElement {
 }
 
 // Layout
-export interface ColumnsElement extends BaseElement {
-  type: typeof ELEMENT_COLUMNS;
-  children: [
-    VariableDefinitionElement,
-    VariableDefinitionElement,
-    ...Array<VariableDefinitionElement>
-  ];
+export type ColumnableElement = Exclude<
+  TopLevelValue,
+  { type: typeof UNCOLUMNABLE_KINDS[number] }
+> & {
+  columnWidth?: number;
+};
+
+export interface LayoutElement extends BaseElement {
+  type: typeof ELEMENT_LAYOUT;
+  width?: 'full' | 'default';
+  children: [ColumnableElement, ...Array<ColumnableElement>];
 }
 
 type MarkKind = typeof markKinds[keyof typeof markKinds];
@@ -751,7 +756,7 @@ export type BlockElement =
   | ListItemElement
   | ListItemContentElement
   // Layout
-  | ColumnsElement
+  | LayoutElement
   // Special elements
   | InteractiveElement
   | LiveConnectionVarNameElement
@@ -833,7 +838,7 @@ export type TopLevelValue =
   | DeprecatedCodeBlockElement
   | UnorderedListElement
   | OrderedListElement
-  | ColumnsElement
+  | LayoutElement
   | InteractiveElement
   | DataViewElement
   | IframeEmbedElement
@@ -897,7 +902,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DATA_VIEW,
   ELEMENT_FETCH,
   ELEMENT_PLOT,
-  ELEMENT_COLUMNS,
+  ELEMENT_LAYOUT,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,

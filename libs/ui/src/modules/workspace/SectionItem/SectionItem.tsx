@@ -7,6 +7,7 @@ import { Anchor, DNDItemTypes } from '../../../utils';
 
 import * as Styled from './styles';
 import { OpaqueColor } from '@decipad/utils';
+import { droppablePatternStyles } from 'libs/ui/src/styles/droppablePattern';
 
 type DNDType = {
   target: string;
@@ -61,16 +62,7 @@ export const SectionItem = ({
     <Styled.ItemWrapper
       ref={drop}
       css={[
-        canDrop &&
-          css({
-            background: `repeating-linear-gradient(
-              45deg,
-              ${weakColor},
-              ${weakColor} 8px,
-              ${weakestColor} 8px,
-              ${weakestColor} 16px
-            )`,
-          }),
+        canDrop && droppablePatternStyles(weakColor, weakestColor),
         canDrop &&
           isOver &&
           css({

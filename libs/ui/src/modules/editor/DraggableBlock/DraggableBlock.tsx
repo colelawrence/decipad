@@ -15,10 +15,10 @@ import {
 } from '../../../primitives';
 import { MenuItem, MenuList, TriggerMenuItem } from '../../../shared';
 import { blockAlignment, editorLayout } from '../../../styles';
-import { slimBlockWidth } from '../../../styles/editor-layout';
 import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
 import { EditorBlock } from '../EditorBlock/EditorBlock';
 import { NewElementLine } from '../NewElementLine/NewElementLine';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -67,7 +67,8 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
 
   readonly children: ReactNode;
 
-  readonly disableDrag?: boolean;
+  readonly insideLayout?: boolean;
+  readonly hasPadding?: boolean;
   readonly isMultipleSelection?: boolean;
 
   /** Should the icons on the left be centered?
@@ -114,7 +115,9 @@ export const DraggableBlock = ({
   children,
 
   isMultipleSelection = false,
-  disableDrag = false,
+  insideLayout = false,
+  hasPadding = false,
+  fullWidth = false,
   isCentered = false,
   hasPreviousSibling,
 
@@ -131,12 +134,23 @@ export const DraggableBlock = ({
 
   const { typography } = blockAlignment[blockKind];
 
+  const handleInset = typography
+    ? // Align with first line of text in addition to paddingTop
+      `calc((
+          ${typography.lineHeight}
+          -
+          ${editorLayout.gutterHandleHeight()}
+        ) / 2
+      )`
+    : 0;
+
   const showEyeLabel = isHidden && !menuOpen;
 
   return (
     <EditorBlock
       isHidden={isHidden}
       blockKind={blockKind}
+      fullWidth={fullWidth}
       ref={blockRef}
       {...props}
     >
@@ -181,83 +195,79 @@ export const DraggableBlock = ({
                   },
                 },
             {
+              zIndex: 1,
               transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
-
-              paddingTop: typography
-                ? // Align with first line of text in addition to paddingTop
-                  `calc((
-                  ${typography.lineHeight}
-                  -
-                  ${editorLayout.gutterHandleHeight()}
-                ) / 2
-              )`
-                : 0,
-
+              paddingTop: handleInset,
               // Draw over following blocks instead of increasing the current block's height
               height: 0,
             },
             isCentered && {
               marginTop: 8,
-              marginLeft: '-32px',
             },
             draggableCss,
+            insideLayout && {
+              // TODO: Figure out where 36px comes from and deduplicate
+              transform: `translateX(36px) translateX(${handleInset})`,
+            },
           ]}
         >
-          {!disableDrag && (
-            <BlockDragHandle
-              menuOpen={menuOpen}
-              isHidden={isHidden}
-              isMultipleSelection={isMultipleSelection}
-              dependenciesForBlock={dependenciesForBlock}
-              onMouseDown={onMouseDown}
-              onChangeMenuOpen={setMenuOpen}
-              onPlus={onPlus}
-              onAnnotation={onAnnotation}
-              onDelete={onDelete}
-              onDuplicate={onDuplicate}
-              onShowHide={onShowHide}
-              onMoveToTab={onMoveToTab}
-              tabs={tabs}
-              showEyeLabel={showEyeLabel}
-              showAddBlock={!isHidden}
-              onCopyHref={onCopyHref}
-              aiPanel={aiPanel}
-              isDownloadable={isDownloadable}
-              onDownload={onDownload}
-              handleDownloadChart={handleDownloadChart}
-              needsUpgrade={needsUpgrade}
-              path={path}
-            >
-              {!isMultipleSelection &&
-                turnInto != null &&
-                turnInto.length > 0 && (
-                  <MenuList
-                    itemTrigger={
-                      <TriggerMenuItem icon={<Rotate />}>
-                        Turn into
-                      </TriggerMenuItem>
-                    }
-                  >
-                    {turnInto.map((option) => (
-                      <MenuItem
-                        key={option.value}
-                        onSelect={() => onTurnInto?.(option.value)}
-                      >
-                        {option.title}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                )}
-            </BlockDragHandle>
-          )}
+          <BlockDragHandle
+            menuOpen={menuOpen}
+            isHidden={isHidden}
+            isMultipleSelection={isMultipleSelection}
+            dependenciesForBlock={dependenciesForBlock}
+            onMouseDown={onMouseDown}
+            onChangeMenuOpen={setMenuOpen}
+            onPlus={onPlus}
+            onAnnotation={onAnnotation}
+            onDelete={onDelete}
+            onDuplicate={onDuplicate}
+            onShowHide={onShowHide}
+            onMoveToTab={onMoveToTab}
+            tabs={tabs}
+            showEyeLabel={showEyeLabel}
+            showAddBlock={!isHidden && !insideLayout}
+            onCopyHref={onCopyHref}
+            aiPanel={aiPanel}
+            isDownloadable={isDownloadable}
+            onDownload={onDownload}
+            handleDownloadChart={handleDownloadChart}
+            needsUpgrade={needsUpgrade}
+            path={path}
+          >
+            {!isMultipleSelection &&
+              turnInto != null &&
+              turnInto.length > 0 && (
+                <MenuList
+                  itemTrigger={
+                    <TriggerMenuItem icon={<Rotate />}>
+                      Turn into
+                    </TriggerMenuItem>
+                  }
+                >
+                  {turnInto.map((option) => (
+                    <MenuItem
+                      key={option.value}
+                      onSelect={() => onTurnInto?.(option.value)}
+                    >
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              )}
+          </BlockDragHandle>
         </div>
         <div
           css={[
             isHidden ? hiddenEditorBlockStyle : {},
             isSelected || menuOpen ? hiddenFocusedStyle : {},
             // Duplication from `EditorBlock` but forces any rogue elements not to overflow.
-            { maxWidth: slimBlockWidth, width: '100%' },
+            !insideLayout &&
+              !fullWidth && { maxWidth: slimBlockWidth, width: '100%' },
+            hasPadding && { padding: '0.75rem' },
           ]}
+          // See LayoutColumn in @decipad/editor-components
+          data-draggable-inside
         >
           <NewElementLine
             onAdd={onAdd}

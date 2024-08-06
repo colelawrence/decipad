@@ -13,22 +13,32 @@ import {
 interface StructuredInputLinesProps {
   children?: ReactNode;
   highlight?: boolean;
+  fadeLines?: boolean;
 }
 
 export const StructuredInputLines = ({
   children,
+  fadeLines = true,
 }: StructuredInputLinesProps): ReturnType<React.FC> => {
   return (
     <div className={'block-p'} css={structuredInputContainerStyles}>
-      <span css={fadeLineTopLeftStyles} contentEditable={false}></span>
-      <span css={borderTopStyles} contentEditable={false}></span>
-      <span css={fadeLineTopRightStyles} contentEditable={false}></span>
+      {fadeLines && (
+        <span css={fadeLineTopLeftStyles} contentEditable={false} />
+      )}
+      <span css={borderTopStyles} contentEditable={false} />
+      {fadeLines && (
+        <span css={fadeLineTopRightStyles} contentEditable={false} />
+      )}
 
       <div css={siChildrenStyles}>{children}</div>
 
-      <span css={fadeLineBotLeftStyles} contentEditable={false}></span>
-      <span css={borderBotStyles} contentEditable={false}></span>
-      <span css={fadeLineBotRightStyles} contentEditable={false}></span>
+      {fadeLines && (
+        <span css={fadeLineBotLeftStyles} contentEditable={false} />
+      )}
+      <span css={borderBotStyles} contentEditable={false} />
+      {fadeLines && (
+        <span css={fadeLineBotRightStyles} contentEditable={false} />
+      )}
     </div>
   );
 };

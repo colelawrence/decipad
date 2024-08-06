@@ -2,11 +2,12 @@ import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import type { Action } from './types';
 import { findElementByVariableName } from './utils/findElementByVariableName';
-import { findElementById } from './utils/findElementById';
+import { findElementById } from '@decipad/editor-utils';
 import { notAcceptable, notFound } from '@hapi/boom';
 import { getDefined } from '@decipad/utils';
 import { isElement } from '@udecode/plate-common';
 import { formatResult } from '@decipad/format';
+import { validateId } from './utils/validateId';
 
 extendZodWithOpenApi(z);
 
@@ -32,8 +33,9 @@ export const getElementResult: Action<'getElementResult'> = {
     if (!elementId && !varName) {
       throw notAcceptable('need either elementId or varName arguments');
     }
+    if (elementId) validateId(elementId);
     const entry = elementId
-      ? findElementById(editor, elementId)
+      ? findElementById(editor, elementId, { block: true })
       : findElementByVariableName(
           editor,
           getDefined(varName, 'missing varName argument')

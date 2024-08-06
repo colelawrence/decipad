@@ -14,6 +14,7 @@ import {
   insertBlockOfTypeBelow,
   insertCodeLineBelow,
   insertDividerBelow,
+  insertLayoutBelow,
   insertStructuredCodeLineBelow,
   withoutNormalizingAsync,
 } from '@decipad/editor-utils';
@@ -156,6 +157,9 @@ export const execute = async ({
         break;
       case 'sketch':
         await insertDrawBelow(editor, path);
+        break;
+      case 'layout':
+        insertLayoutBelow(editor, path);
         break;
       case 'upload-image':
         setFileType('image' as FileType);

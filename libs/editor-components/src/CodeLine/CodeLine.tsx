@@ -13,6 +13,7 @@ import {
 } from '@decipad/editor-utils';
 import {
   useEditorTeleportContext,
+  useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { ParagraphFormulaEditor, CodeLine as UICodeLine } from '@decipad/ui';
@@ -46,6 +47,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const editor = useMyEditorRef();
   const computer = useComputer();
+  const insideLayout = useInsideLayoutContext();
 
   useCodeLineClickReference(editor, selected, codeLineContent);
 
@@ -128,7 +130,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     closeEditor(element.id, focusNumber);
   }, [focusNumber, closeEditor, element.id]);
 
-  const [aPlaceholder] = useState(placeholderForCalculationLine());
+  const [aPlaceholder] = useState(placeholderForCalculationLine);
 
   const isPortalVisible = teleport != null && portal != null;
 
@@ -169,8 +171,13 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
             onDragStartCell={handleDragStartCell}
             onDragEnd={onDragEnd}
             onClickedResult={isReadOnly ? undefined : onClickedResult}
-            hasNextSibling={!teleport && siblingCodeLines?.hasNext}
-            hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}
+            hasNextSibling={
+              !teleport && !insideLayout && siblingCodeLines?.hasNext
+            }
+            hasPreviousSibling={
+              !teleport && !insideLayout && siblingCodeLines?.hasPrevious
+            }
+            insideLayout={insideLayout}
             element={element}
           >
             {children}

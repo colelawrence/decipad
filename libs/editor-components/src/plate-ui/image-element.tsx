@@ -22,6 +22,7 @@ import {
 } from './resizable';
 import { Caption, CaptionTextarea } from './caption';
 import { assertElementType } from '@decipad/editor-utils';
+import { useInsideLayoutContext } from '@decipad/react-contexts';
 
 export const draggableStyles = css({
   paddingTop: 8,
@@ -75,13 +76,17 @@ export const ImageElement: ImageComponent = withHOC(
     const { children, element } = props;
     assertElementType(element, ELEMENT_IMAGE);
 
+    const insideLayout = useInsideLayoutContext();
+    const resizable = !insideLayout && !readOnly;
+
     const { focused, selected, align = 'center' } = useMediaState();
-    const width = useResizableStore().get.width();
+    const resizableWidth = useResizableStore().get.width();
+    const width = insideLayout ? '100%' : resizableWidth;
     const isSelected = !readOnly && focused && selected;
 
     return (
       <MediaPopover pluginKey={ELEMENT_IMAGE}>
-        <PlateElement className={cn('py-2.5', className)} {...(props as any)}>
+        <PlateElement className={className} {...(props as any)}>
           <Draggable
             blockKind="media"
             element={element as ImageElementType}
@@ -103,13 +108,14 @@ export const ImageElement: ImageComponent = withHOC(
                   isSelected && resizableImagePlaceholderStyles,
                 ]}
                 align={align}
+                controlWidth={!insideLayout}
                 options={{
                   align,
                   readOnly,
                   minWidth: 200,
                 }}
               >
-                {!readOnly && (
+                {resizable && (
                   <ResizeHandle
                     options={{ direction: 'left' }}
                     className={mediaResizeHandleVariants({ direction: 'left' })}
@@ -129,7 +135,7 @@ export const ImageElement: ImageComponent = withHOC(
                   }}
                 />
 
-                {!readOnly && (
+                {resizable && (
                   <ResizeHandle
                     options={{ direction: 'right' }}
                     className={mediaResizeHandleVariants({

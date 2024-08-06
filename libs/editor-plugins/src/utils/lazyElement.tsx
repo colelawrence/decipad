@@ -2,7 +2,10 @@ import type { ComponentProps } from 'react';
 import { Suspense } from 'react';
 import type { PlateComponent } from '@decipad/editor-types';
 import { LoadingIndicator, ErrorBlock } from '@decipad/ui';
-import { useLockEditorWriting } from '@decipad/react-contexts';
+import {
+  useInsideLayoutContext,
+  useLockEditorWriting,
+} from '@decipad/react-contexts';
 import { ErrorBoundary } from '@sentry/react';
 import type { Loader } from '@decipad/react-utils';
 import { lazyLoad } from '@decipad/react-utils';
@@ -25,8 +28,11 @@ export const lazyElementComponent = (
   const LazyElementComponent = lazyLoad(factory) as unknown as PlateComponent;
 
   const LazyElementLoader: PlateComponent = (props) => {
+    const insideLayout = useInsideLayoutContext();
     return (
-      <ErrorBoundary fallback={<ErrorBlock type="error" />}>
+      <ErrorBoundary
+        fallback={<ErrorBlock type="error" insideLayout={insideLayout} />}
+      >
         <Suspense fallback={<EditorElementPlaceholder {...props} />}>
           <LazyElementComponent {...props} />
         </Suspense>

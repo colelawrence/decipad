@@ -78,7 +78,7 @@ interface NonInteractiveCodeVariableProps {
   readonly contentEditable: boolean;
   readonly type?: SerializedType | CellValueType;
   readonly readOnly?: boolean;
-  readonly isValue?: boolean;
+  readonly formulaIcon?: boolean;
   readonly onClick?: MouseEventHandler<HTMLSpanElement>;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragEnd?: (e: React.DragEvent) => void;
@@ -160,7 +160,7 @@ export const getCodeVariableDefinitionRootProps = ({
 };
 
 export const CodeVariableDefinition = ({
-  isValue = true,
+  formulaIcon = false,
   empty,
   children,
   type,
@@ -225,7 +225,7 @@ export const CodeVariableDefinition = ({
       contentEditable={!readOnly && contentEditable}
       {...rootProps}
     >
-      {!isValue && (
+      {formulaIcon && (
         <span
           css={[
             formulaIconStyles,

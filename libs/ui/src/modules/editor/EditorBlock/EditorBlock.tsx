@@ -2,8 +2,9 @@
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { forwardRef, ReactNode } from 'react';
-import { p16Regular } from '../../../primitives';
+import { cssVar, p16Regular } from '../../../primitives';
 import { blockAlignment } from '../../../styles';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
 const defaultVerticalSpacing = `calc(${p16Regular.lineHeight})`;
@@ -57,8 +58,15 @@ const spacingStyles = css({
     paddingTop: '40px',
   },
 
-  // Columns
-  '&[data-type$=columns]': {
+  // Layout
+
+  // Remove paddingTop on layout element
+  // '&[data-type$=layout]': {
+  //   paddingTop: 0,
+  // },
+
+  // Remove paddingTop on children of layout
+  '[data-type$=layout] &': {
     paddingTop: 0,
   },
 });
@@ -67,10 +75,11 @@ const isHiddenStyles = css({
   display: 'none',
 });
 
-interface EditorBlockProps {
+export interface EditorBlockProps {
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
   readonly isHidden?: boolean;
+  readonly fullWidth?: boolean;
   // This component is one of the main points of contact when integrating between editor and UI. As
   // such, we'll allow it to receive an arbitrary amount of props in order to facilitate said
   // integration.
@@ -79,11 +88,31 @@ interface EditorBlockProps {
 }
 
 const editorBlockOffset = 30;
+const fullWidthPadding = 60;
+
+// editorBlockOffset contributes additional padding on the right
+const fullWidthPaddingLeft = fullWidthPadding;
+const fullWidthPaddingRight = fullWidthPadding - editorBlockOffset;
+
+const fullWidthStyles = css({
+  transform: `translateX(min(
+    ${fullWidthPaddingLeft}px -
+    (
+      ${cssVar('editorWidth')} -
+      ${slimBlockWidth}px
+    ) / 2,
+    0px
+  ))`,
+  minWidth: `calc(
+    ${cssVar('editorWidth')} -
+    ${fullWidthPaddingLeft + fullWidthPaddingRight}px
+  )`,
+});
 
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
->(({ blockKind, children, isHidden, ...props }, ref) => {
+>(({ blockKind, children, isHidden, fullWidth, ...props }, ref) => {
   const readOnly = useIsEditorReadOnly();
 
   return (
@@ -98,6 +127,7 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
           transition: 'all 0.2s ease-out',
         },
         spacingStyles,
+        fullWidth && fullWidthStyles,
       ]}
       data-type={blockKind}
       ref={ref}

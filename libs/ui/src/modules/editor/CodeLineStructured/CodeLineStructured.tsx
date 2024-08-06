@@ -33,6 +33,7 @@ interface CodeLineStructuredProps {
   readonly codeChild: ReactNode;
   readonly unitPicker: ReactNode;
   readonly readOnly?: boolean;
+  readonly insideLayout?: boolean;
 }
 
 export const CodeLineStructured = ({
@@ -46,6 +47,7 @@ export const CodeLineStructured = ({
   codeChild,
   unitPicker,
   readOnly = false,
+  insideLayout = false,
   showResult = false,
   setShowResult,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
@@ -89,7 +91,7 @@ export const CodeLineStructured = ({
   };
 
   return (
-    <StructuredInputLines highlight={highlight}>
+    <StructuredInputLines highlight={highlight} fadeLines={!insideLayout}>
       <div
         css={[codeLineStyles, highlight && highlightedLineStyles]}
         spellCheck={false}

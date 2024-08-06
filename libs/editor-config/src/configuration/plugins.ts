@@ -26,7 +26,7 @@ import {
   createSubmitFormPlugin,
   createImagePlugin,
   createImportPlugin,
-  createLayoutColumnsPlugin,
+  createLayoutPlugin,
   createLinkPlugin,
   createLiveConnectionPlugin,
   createLiveDataSetPlugin,
@@ -36,7 +36,7 @@ import {
   createMigrateStructuredInputs,
   createMigrateTableDropdownToId,
   createNavigationPlugin,
-  createNormalizeColumnsPlugin,
+  createNormalizeLayoutPlugin,
   createNormalizeEditorPlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
@@ -130,7 +130,7 @@ export const plugins = ({
       createSubmitFormPlugin(),
 
       // Layout blocks
-      createLayoutColumnsPlugin(),
+      createLayoutPlugin(),
 
       // structure enforcement
       createNormalizeEditorPlugin(),
@@ -144,7 +144,7 @@ export const plugins = ({
       createDeduplicateElementIdsPlugin()(),
       createNormalizeTextPlugin(),
       createTrailingParagraphPlugin(),
-      createNormalizeColumnsPlugin(),
+      createNormalizeLayoutPlugin(),
 
       // Drag and drop entities
       createDndSmartRefPlugin(computer),

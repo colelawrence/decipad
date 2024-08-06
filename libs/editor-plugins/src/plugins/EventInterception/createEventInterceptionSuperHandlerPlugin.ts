@@ -4,11 +4,7 @@ import type {
   MyElementEntry,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import {
-  ELEMENT_COLUMNS,
-  ELEMENT_LIC,
-  ELEMENT_TD,
-} from '@decipad/editor-types';
+import { ELEMENT_LAYOUT, ELEMENT_LIC, ELEMENT_TD } from '@decipad/editor-types';
 import {
   getLevels,
   getNextNode,
@@ -150,7 +146,7 @@ function bubbleCancelableEvent(
   };
 
   for (const entry of elementsBubblePath) {
-    if (entry[0].type === ELEMENT_COLUMNS) {
+    if (entry[0].type === ELEMENT_LAYOUT) {
       return true;
     }
 

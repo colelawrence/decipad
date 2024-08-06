@@ -57,6 +57,7 @@ const EXPECTED_ELEMENT_PROPERTIES = [
   'children',
   'text',
   'isHidden',
+  'columnWidth',
 ];
 
 const withRemoveUnacceptableElementProperties = <

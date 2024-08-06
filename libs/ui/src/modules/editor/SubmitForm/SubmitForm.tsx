@@ -193,7 +193,7 @@ const Form = ({
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
   const formContainerStyles = [
-    wrapperStyles(baseSwatches[color as AvailableSwatchColor].rgb),
+    wrapperStyles({ color: baseSwatches[color as AvailableSwatchColor].rgb }),
     baseFormContainerStyles,
     formStatus.status === 'error' && formContainerErrorStyles,
   ];

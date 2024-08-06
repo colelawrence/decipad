@@ -4,7 +4,7 @@ import { createPlateEditor } from '@udecode/plate-common';
 import type { VariableDefinitionElement } from '@decipad/editor-types';
 import {
   ELEMENT_CAPTION,
-  ELEMENT_COLUMNS,
+  ELEMENT_LAYOUT,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
@@ -36,7 +36,7 @@ beforeEach(() => {
   editor.children = [
     { type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] },
     {
-      type: ELEMENT_COLUMNS,
+      type: ELEMENT_LAYOUT,
       children: [mkDef()],
     },
   ];
@@ -55,13 +55,13 @@ describe('hasLayoutAncestor', () => {
 describe('insertNodeIntoColumns', () => {
   it('wraps path and new element into a layout element', () => {
     insertNodeIntoColumns(editor as any, mkDef('second'), [0]);
-    expect(editor.children[0].type).toBe(ELEMENT_COLUMNS);
+    expect(editor.children[0].type).toBe(ELEMENT_LAYOUT);
     expect(editor.children[0].children).toHaveLength(2);
   });
 
   it('inserts element into existing layout element', () => {
     insertNodeIntoColumns(editor as any, mkDef('second'), [1, 0]);
-    expect(editor.children[1].type).toBe(ELEMENT_COLUMNS);
+    expect(editor.children[1].type).toBe(ELEMENT_LAYOUT);
     expect(editor.children[1].children).toHaveLength(2);
   });
 });

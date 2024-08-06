@@ -61,7 +61,7 @@ export const tableCaptionWrapperStyles = css({
   },
 });
 
-const tableWrapperTransformStyles = css({
+export const tableWrapperTransformStyles = css({
   position: 'relative',
   transform: `translateX(calc((((${cssVar(
     'editorWidth'

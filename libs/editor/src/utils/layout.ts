@@ -5,17 +5,17 @@ import {
 } from '@udecode/plate-common';
 import { Path } from 'slate';
 import type {
-  ColumnsElement,
+  LayoutElement,
   MyEditor,
   MyElementOrText,
 } from '@decipad/editor-types';
-import { ELEMENT_COLUMNS } from '@decipad/editor-types';
+import { ELEMENT_LAYOUT } from '@decipad/editor-types';
 import { getAboveNodeSafe, insertNodes } from '@decipad/editor-utils';
 
 export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
   return !!getAboveNodeSafe(editor, {
     at: path,
-    match: (node) => isElement(node) && node.type === ELEMENT_COLUMNS,
+    match: (node) => isElement(node) && node.type === ELEMENT_LAYOUT,
   });
 };
 
@@ -30,8 +30,8 @@ export const insertNodeIntoColumns = (
       wrapNodes(
         editor,
         {
-          type: ELEMENT_COLUMNS,
-        } as ColumnsElement,
+          type: ELEMENT_LAYOUT,
+        } as LayoutElement,
         { at: path }
       );
     }

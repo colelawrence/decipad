@@ -27,6 +27,7 @@ export type SlashCommand =
   | 'callout'
   | 'blockquote'
   | 'sketch'
+  | 'layout'
   | 'upload-image'
   | 'upload-embed'
   | 'upload-csv'

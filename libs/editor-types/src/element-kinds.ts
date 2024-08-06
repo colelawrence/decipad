@@ -17,7 +17,7 @@ export { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 // Layout
 export const ELEMENT_CALLOUT = 'callout';
-export const ELEMENT_COLUMNS = 'columns';
+export const ELEMENT_LAYOUT = 'columns';
 export const ELEMENT_HR = 'divider';
 
 // inputs

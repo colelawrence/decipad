@@ -24,16 +24,19 @@ import {
   generateVarName,
   getCodeLineSource,
   insertNodes,
+  showColumnBorder,
 } from '@decipad/editor-utils';
 import {
   dndPreviewActions,
   useAnnotations,
+  useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { parseSimpleValue } from '@decipad/remote-computer';
 import {
   BlockAnnotations,
-  BlockCommentButton,
+  BlockContextualActions,
+  BlockContextualActionsProps,
   EditorBlock,
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
@@ -70,6 +73,7 @@ import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
+import { Chat } from 'libs/ui/src/icons';
 
 const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
   '> div': {
@@ -108,11 +112,13 @@ type DraggableBlockProps = {
   readonly id?: string; // element id for variable def
   readonly onceDeleted?: () => void;
   readonly hasPreviousSibling?: boolean; // used for code line blocks
+  readonly fullWidth?: boolean;
   readonly onDownloadChart?: () => void;
+  readonly contextualActions?: BlockContextualActionsProps['contextualActions'];
+  readonly isCommentable?: boolean;
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
   | 'blockKind'
-  | 'disableDrag'
   | 'onDelete'
   | 'onTurnInto'
   | 'turnInto'
@@ -126,6 +132,11 @@ const PLACEHOLDERS = {
   formula: '14 * 3',
 };
 
+/**
+ * FIXME: This component is pushing the limit of acceptable complexity as per
+ * the `complexity` eslint rule.
+ */
+
 export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
   HTMLDivElement,
   DraggableBlockProps
@@ -138,9 +149,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       onceDeleted = noop,
       hasPreviousSibling,
       isCentered,
+      isCommentable: isCommentableProp = true,
       dependencyId,
-      disableDrag,
+      fullWidth = false,
       onDownloadChart,
+      contextualActions: contextualActionsProp = [],
       ...props
     },
     forwardedRef
@@ -151,6 +164,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const readOnly = useIsEditorReadOnly();
     const computer = useComputer();
     const tabs = useFilteredTabs();
+    const insideLayout = useInsideLayoutContext();
+
+    const hasPadding = insideLayout && showColumnBorder(element.type as any);
 
     const notebookId = useNotebookId();
 
@@ -222,6 +238,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       onDelete(parentOnDelete);
       onceDeleted();
     }, [parentOnDelete, event, element, onDelete, onceDeleted]);
+
+    const canComment = isCommentableProp && !!permission && !insideLayout;
 
     const handleAnnotation = useCallback(() => {
       handleExpandedBlockId(element.id ?? null);
@@ -333,6 +351,15 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const [blockHighlighted, setBlockHighlighted] = useState(false);
 
+    const contextualActions = [...contextualActionsProp];
+    if (canComment) {
+      contextualActions.unshift({
+        id: 'comment',
+        icon: <Chat />,
+        onClick: handleAnnotation,
+      });
+    }
+
     if (deleted) {
       return null;
     }
@@ -341,6 +368,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         <EditorBlock
           {...props}
           isHidden={element.isHidden}
+          fullWidth={fullWidth}
           ref={ref}
           onAnnotation={handleAnnotation}
           contentEditable={
@@ -348,14 +376,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           }
           annotationsHovered={blockHighlighted}
         >
-          <BlockCommentButton
-            canComment={!!permission && !disableDrag}
-            onComment={handleAnnotation}
-          >
+          <BlockContextualActions contextualActions={contextualActions}>
             <BlockErrorBoundary element={element}>
               {children}
             </BlockErrorBoundary>
-          </BlockCommentButton>
+          </BlockContextualActions>
 
           {'getElementById' in document &&
             document.getElementById('annotations-container') &&
@@ -410,21 +435,20 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           }
           hasPreviousSibling={hasPreviousSibling}
           path={path}
-          disableDrag={disableDrag}
+          insideLayout={insideLayout}
+          hasPadding={hasPadding}
+          fullWidth={fullWidth}
         >
           <DraggableBlockStyled
             blockHighlighted={blockHighlighted}
             data-testid="draggable-block"
           >
             <BlockSelectable element={element}>
-              <BlockCommentButton
-                canComment={!!permission && !disableDrag}
-                onComment={handleAnnotation}
-              >
+              <BlockContextualActions contextualActions={contextualActions}>
                 <BlockErrorBoundary element={element}>
                   <div ref={previewHtmlRef}>{children}</div>
                 </BlockErrorBoundary>
-              </BlockCommentButton>
+              </BlockContextualActions>
             </BlockSelectable>
           </DraggableBlockStyled>
 

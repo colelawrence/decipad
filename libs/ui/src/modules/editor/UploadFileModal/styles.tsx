@@ -9,6 +9,7 @@ import {
   transparency,
   weakOpacity,
 } from 'libs/ui/src/primitives';
+import { droppablePatternStyles } from 'libs/ui/src/styles/droppablePattern';
 
 export const hiddenElement = css({
   display: 'none',
@@ -85,18 +86,6 @@ export const dndPlaceHolderStyles = css`
   border-radius: 8px;
 `;
 
-export const backgroundFor = (color1: string, color2: string) => {
-  return {
-    background: `repeating-linear-gradient(
-    45deg,
-    ${color1},
-    ${color1} 8px,
-    ${color2} 8px,
-    ${color2} 16px
-  )`,
-  };
-};
-
 export const uploadingButtonPlaceholderStyles = ({
   uploadProgress,
 }: {
@@ -135,19 +124,19 @@ export const uploadingButtonPlaceholderStyles = ({
       },
 
       '@keyframes loading': {
-        '0%': backgroundFor(
+        '0%': droppablePatternStyles(
           componentCssVars('ButtonPrimaryDefaultBackground'),
           componentCssVars('ButtonPrimaryHoverBackground')
         ),
-        '25%': backgroundFor(
+        '25%': droppablePatternStyles(
           componentCssVars('ButtonPrimaryHoverBackground'),
           componentCssVars('ButtonPrimaryDefaultBackground')
         ),
-        '50%': backgroundFor(
+        '50%': droppablePatternStyles(
           componentCssVars('ButtonPrimaryDefaultBackground'),
           componentCssVars('ButtonPrimaryHoverBackground')
         ),
-        '75%': backgroundFor(
+        '75%': droppablePatternStyles(
           componentCssVars('ButtonPrimaryHoverBackground'),
           componentCssVars('ButtonPrimaryDefaultBackground')
         ),

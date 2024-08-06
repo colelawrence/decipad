@@ -11,9 +11,10 @@ import {
 import { DragAreaProps } from './types';
 import { useFileDrop } from './useFileDrop';
 import { Add } from 'libs/ui/src/icons';
+import { droppablePatternStyles } from 'libs/ui/src/styles/droppablePattern';
 
 const weakestColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.08);
-const weakColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.16);
+const weakColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.2);
 const strongColor = transparencyHex(cssVarHex('backgroundHeavier'), 0.4);
 
 const DragArea = ({
@@ -28,16 +29,7 @@ const DragArea = ({
     uploadingButtonPlaceholderStyles({
       uploadProgress,
     }),
-    canDrop &&
-      css({
-        background: `repeating-linear-gradient(
-  45deg,
-  ${weakColor},
-  ${weakColor} 8px,
-  ${weakestColor} 8px,
-  ${weakestColor} 16px
-)`,
-      }),
+    canDrop && droppablePatternStyles(weakColor, weakestColor),
     canDrop &&
       isOver &&
       css({

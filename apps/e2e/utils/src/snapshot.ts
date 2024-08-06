@@ -22,14 +22,31 @@ export const snapshot = async (
   await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
   await page.evaluate(() => document.fonts.ready);
 
-  try {
-    await percySnapshot(page as Page, name, {
-      widths: [options.mobile && 375, options.midSize && 768, 1380].filter(
-        (n): n is number => Number.isInteger(n)
-      ),
+  const initialViewportSize = page.viewportSize()!;
+
+  for (const width of [options.mobile && 375, options.midSize && 768, 1380]) {
+    if (!width) continue;
+
+    await page.setViewportSize({
+      ...initialViewportSize,
+      width,
     });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('error taking snapshot:', err);
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
+
+    try {
+      await percySnapshot(page, name, {
+        widths: [width],
+      });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('error taking snapshot:', err);
+    }
   }
+
+  await page.setViewportSize(initialViewportSize);
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
 };

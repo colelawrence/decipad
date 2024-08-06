@@ -104,23 +104,27 @@ const codeLineStyles = (
         }),
   });
 
-const inlineStyles = css({
-  gridArea: 'inline-res',
-  maxWidth: '100%',
-  display: 'flex',
-  justifySelf: 'end',
-  alignSelf: 'flex-start',
-  padding: '5px 0',
+const inlineStyles = (insideLayout: boolean) =>
+  css({
+    gridArea: 'inline-res',
+    maxWidth: '100%',
+    display: 'flex',
+    justifySelf: 'end',
+    alignSelf: 'flex-start',
+    padding: '5px 0',
 
-  userSelect: 'all',
+    userSelect: 'all',
 
-  [smallScreenQuery]: {
-    // When in mobile, the inline result, if there is one,  will occupy the space dedicated to
-    // expanded results (i.e. tables, lists, etc.).
-    gridArea: 'expanded-res',
-    width: '100%',
-  },
-});
+    /**
+     * When on mobile or a in layout column, the inline result, if there is one,
+     * will occupy the space dedicated to expanded results (i.e. tables, lists,
+     * etc.).
+     */
+    [insideLayout ? '&' : smallScreenQuery]: {
+      gridArea: 'expanded-res',
+      width: '100%',
+    },
+  });
 
 const codeStyles = css(code, {
   gridArea: 'code',
@@ -137,6 +141,9 @@ const codeStyles = css(code, {
 const placeholderStyles = css(codeStyles, {
   opacity: 0.4,
   pointerEvents: 'none',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 
   [smallScreenQuery]: {
     position: 'absolute',
@@ -204,6 +211,7 @@ interface CodeLineProps {
   readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly hasNextSibling?: boolean;
   readonly hasPreviousSibling?: boolean;
+  readonly insideLayout?: boolean;
   readonly element?: AnyElement;
 }
 
@@ -221,6 +229,7 @@ export const CodeLine: FC<CodeLineProps> = ({
   onClickedResult,
   hasNextSibling,
   hasPreviousSibling,
+  insideLayout = false,
   element,
 }) => {
   const [grabbing, setGrabbing] = useState(false);
@@ -285,7 +294,7 @@ export const CodeLine: FC<CodeLineProps> = ({
       {!isEmpty && (
         <div
           css={[
-            inlineStyles,
+            inlineStyles(insideLayout),
             (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
               canGrabStyles,
             grabbing && grabbingStyles,

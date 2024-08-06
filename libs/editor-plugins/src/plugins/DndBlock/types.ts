@@ -4,14 +4,25 @@ import type { Path } from 'slate';
 type DragDropManager = ReturnType<typeof useDragDropManager>;
 export type DragDropMonitor = ReturnType<DragDropManager['getMonitor']>;
 
-export type DropLine = {
-  type: 'horizontal' | 'vertical';
+export type Rect = {
+  xStart: number;
+  yStart: number;
+  xEnd: number;
+  yEnd: number;
+};
 
-  // The ID of the node the drop line is anchored to
+export type BaseDropLocation = {
+  type: string;
+
+  // The ID of the node the drop location is anchored to
   id: string;
 
-  // The path of the node the drop line is anchored to
+  // The path of the node the drop location is anchored to
   path: Path;
+};
+
+export type DropLine = BaseDropLocation & {
+  type: 'horizontalDropLine' | 'verticalDropLine';
 
   // Which side of the node the drop line occupies
   direction: 'before' | 'after';
@@ -31,3 +42,15 @@ export type DropLine = {
    */
   confineToCrossAxis: boolean;
 };
+
+export type DropArea = BaseDropLocation & {
+  type: 'dropArea';
+
+  /**
+   * Regions of the screen that will trigger the drop area. If the mouse is
+   * within one of these, all of them will be highlighted.
+   */
+  rects: Rect[];
+};
+
+export type DropLocation = DropLine | DropArea;

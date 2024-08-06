@@ -13,6 +13,7 @@ import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin
 import { getComputer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import { createNormalizeCodeLinePlugin } from '@decipad/editor-plugin-factories';
+import { createTrailingParagraphPlugin } from '../TrailingParagraph';
 
 let editor: MyEditor;
 let plugin: MyPlatePlugin;
@@ -20,7 +21,11 @@ beforeEach(() => {
   const computer = getComputer();
   plugin = createAutoFormatCodeLinePlugin(computer)();
   editor = createMyPlateEditor({
-    plugins: [plugin, createNormalizeCodeLinePlugin(computer)],
+    plugins: [
+      plugin,
+      createTrailingParagraphPlugin(),
+      createNormalizeCodeLinePlugin(computer),
+    ],
   });
 });
 

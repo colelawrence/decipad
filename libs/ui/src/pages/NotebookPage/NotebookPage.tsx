@@ -19,6 +19,7 @@ interface NotebookPageProps {
   // Undefined means we haven't loaded yet
   readonly isReadOnly: boolean | undefined;
   readonly permission?: PermissionType | null | undefined;
+  readonly articleRef: React.RefObject<HTMLElement>;
 }
 
 const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent[] = ['annotations'];
@@ -54,8 +55,9 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     notebook,
     sidebar,
     tabs,
-    dataDrawer,
     isEmbed = false,
+    articleRef,
+    dataDrawer,
   } = props;
 
   const sidebarComponent = useNotebookMetaData(
@@ -84,6 +86,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
       >
         <S.ArticleWrapper
           isEmbed={isEmbed}
+          ref={articleRef}
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
         >

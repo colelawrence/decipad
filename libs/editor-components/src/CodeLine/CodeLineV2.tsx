@@ -24,6 +24,7 @@ import {
 } from '@decipad/editor-utils';
 import {
   useEditorTeleportContext,
+  useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import type {
@@ -109,6 +110,7 @@ export const CodeLineV2: PlateComponent = ({
     );
 
   const isReadOnly = useIsEditorReadOnly();
+  const insideLayout = useInsideLayoutContext();
 
   const handleDragStartCell = useMemo(
     () => (isReadOnly ? undefined : onDragStartTableCellResult(editor)),
@@ -211,6 +213,7 @@ export const CodeLineV2: PlateComponent = ({
             codeChild={childrenArray[1]}
             unitPicker={unitPicker}
             readOnly={isReadOnly}
+            insideLayout={insideLayout}
             showResult={element.showResult}
             setShowResult={setShowResult}
           />
@@ -239,6 +242,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const simpleValue = useContext(SimpleValueContext);
   const isReadOnly = useIsEditorReadOnly();
   const path = useNodePath(props.element);
+  const insideLayout = useInsideLayoutContext();
 
   const setLabel = useCallback(
     (newOption: string) => {
@@ -320,7 +324,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
                   ? { kind: 'number', unit: null }
                   : varResult?.result.type
               }
-              isValue={simpleValue != null}
+              formulaIcon={simpleValue == null && !insideLayout}
               contentEditable={contentEditable}
               readOnly={isReadOnly}
               onClick={handleCodeVariableDefinitionClick}

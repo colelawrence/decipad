@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { EditorColumns } from './EditorColumns';
+import { Layout } from './Layout';
 
 it('render children', () => {
-  render(<EditorColumns>text</EditorColumns>);
+  render(<Layout>text</Layout>);
   expect(screen.getByText('text')).toBeVisible();
 });

@@ -5,6 +5,7 @@ import {
   GlobalThemeStyles,
   NotebookPage,
   PlaygroundTopBar,
+  useSetCssVarWidth,
 } from '@decipad/ui';
 import type { ComponentProps } from 'react';
 import { useState } from 'react';
@@ -24,6 +25,8 @@ const Playground: React.FC = () => {
     useState<ComponentProps<typeof EditorIcon>['color']>('Catskill');
 
   useAnimateMutations();
+
+  const articleRef = useSetCssVarWidth('editorWidth');
 
   return (
     <AnnotationsProvider
@@ -57,6 +60,7 @@ const Playground: React.FC = () => {
             </Frame>
           </div>
         }
+        articleRef={articleRef}
         sidebar={null}
         tabs={null}
         dataDrawer={null}

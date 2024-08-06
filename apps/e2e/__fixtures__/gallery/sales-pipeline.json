@@ -270,7 +270,8 @@
         }
       ],
       "id": "ntFdyDWWbGrCLOxWUsNPn",
-      "type": "columns"
+      "type": "columns",
+      "width": "full"
     },
     {
       "children": [

@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { RefObject, useEffect, useRef } from 'react';
 import { DragHandle } from '../../../icons';
-import { slimBlockWidth } from '../../../styles/editor-layout';
 import { handleStyle } from '../BlockDragHandle/BlockDragHandle';
 import type { XYCoord } from 'react-dnd';
 
@@ -86,7 +85,7 @@ export const DraggableBlockOverlay = ({
             dangerouslySetInnerHTML={{
               __html: previewHtmlRef.current?.innerHTML ?? '',
             }}
-            css={{ maxWidth: slimBlockWidth, width: '100%' }}
+            style={{ width: previewHtmlRef.current?.clientWidth ?? 0 }}
           />
         </div>
       </div>

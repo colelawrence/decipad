@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { FC, forwardRef, ReactNode } from 'react';
-import { slimBlockWidth } from '../../../styles/editor-layout';
 
 export const EditorLayout = forwardRef<HTMLDivElement, { children: ReactNode }>(
   ({ children }, ref): ReturnType<FC> => {

@@ -19,6 +19,7 @@ import {
   TopbarPlaceholder,
   AddCreditsModal,
   PaywallModal,
+  useSetCssVarWidth,
 } from '@decipad/ui';
 import type { FC } from 'react';
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -110,6 +111,7 @@ export const Notebook: FC = () => {
     workspaceInfo,
   } = useCurrentWorkspaceStore();
 
+  const articleRef = useSetCssVarWidth('editorWidth');
   const [scenarioId] = useScenarioNavigate();
   const props = {
     notebookId,
@@ -175,6 +177,7 @@ export const Notebook: FC = () => {
                   <Topbar {...props} />
                 </Suspense>
               }
+              articleRef={articleRef}
               sidebar={
                 <Suspense>
                   <Sidebar {...props} />

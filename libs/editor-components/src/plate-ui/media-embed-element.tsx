@@ -19,6 +19,7 @@ import { Tweet } from 'react-tweet';
 import { DraggableBlock } from '../block-management/index';
 import { Caption, CaptionTextarea } from './caption';
 import { draggableStyles } from './image-element';
+import { useInsideLayoutContext } from '@decipad/react-contexts';
 import { MediaPopover } from './media-popover';
 import {
   Resizable,
@@ -46,6 +47,9 @@ export const MediaEmbedElement: Component = withHOC(
   ({ draggableBlock: Draggable, readOnly, className, ...props }) => {
     const { children, element } = props;
 
+    const insideLayout = useInsideLayoutContext();
+    const resizable = !insideLayout && !readOnly;
+
     const {
       align = 'center',
       focused,
@@ -57,17 +61,15 @@ export const MediaEmbedElement: Component = withHOC(
     } = useMediaState({
       urlParsers: [parseTwitterUrl, parseVideoUrl],
     });
-    const width = useResizableStore().get.width();
+    const resizableWidth = useResizableStore().get.width();
+    const width = insideLayout ? '100%' : resizableWidth;
     const provider = embed?.provider;
 
     const isSelected = !readOnly && focused && selected;
 
     return (
       <MediaPopover pluginKey={ELEMENT_MEDIA_EMBED}>
-        <PlateElement
-          className={cn('relative py-2.5', className)}
-          {...(props as any)}
-        >
+        <PlateElement className={cn('relative', className)} {...(props as any)}>
           <Draggable
             blockKind="media"
             element={element as MediaEmbedElementType}
@@ -80,6 +82,8 @@ export const MediaEmbedElement: Component = withHOC(
               <Resizable
                 css={isSelected && resizableSelectedStyles}
                 align={align}
+                controlWidth={!insideLayout}
+                hasPadding={false}
                 options={{
                   align,
                   readOnly,
@@ -87,7 +91,7 @@ export const MediaEmbedElement: Component = withHOC(
                   minWidth: isTweet ? 300 : 100,
                 }}
               >
-                {!readOnly && (
+                {resizable && (
                   <ResizeHandle
                     options={{ direction: 'left' }}
                     className={mediaResizeHandleVariants({ direction: 'left' })}
@@ -143,7 +147,7 @@ export const MediaEmbedElement: Component = withHOC(
                   </div>
                 )}
 
-                {!readOnly && (
+                {resizable && (
                   <ResizeHandle
                     options={{ direction: 'right' }}
                     className={mediaResizeHandleVariants({

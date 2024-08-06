@@ -57,6 +57,7 @@ export interface ErrorBlockProps {
   readonly onDelete?: () => void;
   readonly onUndo?: () => void;
   readonly message?: string;
+  readonly insideLayout?: boolean;
 }
 
 export const ErrorBlock: React.FC<ErrorBlockProps> = ({
@@ -64,11 +65,16 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
   onDelete = () => {},
   onUndo = () => {},
   message = '',
+  insideLayout = false,
 }: ErrorBlockProps) => (
-  <div css={errorBlock} contentEditable={false} data-testid="error-block">
+  <div
+    css={errorBlock(insideLayout)}
+    contentEditable={false}
+    data-testid="error-block"
+  >
     <div css={textRow}>
       <span>
-        <Warning />
+        <Warning css={{ flexShrink: 0 }} />
         Oops something is broken, and that's on us.
       </span>
       {getText(type, message)}
@@ -79,22 +85,26 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
   </div>
 );
 
-const errorBlock = css({
-  padding: '16px 24px',
-  gap: '16px',
-  borderRadius: '8px',
-  width: slimBlockWidth,
-  backgroundColor: cssVar('backgroundDefault'),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'start',
+// When inside a layout, remove the explicit width to prevent overflow
+const errorBlock = (insideLayout: boolean) =>
+  css({
+    padding: '16px 24px',
+    gap: '16px',
+    borderRadius: '8px',
+    width: insideLayout ? undefined : slimBlockWidth,
+    backgroundColor: cssVar('backgroundDefault'),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'start',
 
-  [smallScreenQuery]: {
-    minWidth: '360px',
-    maxWidth: slimBlockWidth,
-    width: '100%',
-  },
-});
+    [smallScreenQuery]: insideLayout
+      ? undefined
+      : {
+          minWidth: '360px',
+          maxWidth: slimBlockWidth,
+          width: '100%',
+        },
+  });
 
 const textRow = css(p13Medium, {
   display: 'flex',
@@ -118,6 +128,7 @@ const buttonRow = css({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'start',
     alignItems: 'center',
     gap: '8px',

@@ -27,7 +27,6 @@ import {
   smallestDesktop,
   transparency,
 } from '../../../primitives';
-import { columns } from '../../../styles';
 import {
   AvailableSwatchColor,
   getTypeIcon,
@@ -42,12 +41,23 @@ type Variant = Pick<
   'variant'
 >['variant'];
 
-export const wrapperStyles = (color: string) => {
+export const wrapperStyles = ({
+  color,
+  insideLayout = false,
+}: {
+  color: string;
+  insideLayout?: boolean;
+}) => {
   const bgColor = cssVar('backgroundMain');
 
   const finalColor = cssVar('borderSubdued');
   const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${color} 0%, ${finalColor} 18.71%)`;
+
   return css({
+    maxWidth: insideLayout ? 'none' : '262px',
+    minWidth: '175px',
+    width: '100%',
+
     // Because `borderImage` with a linear gradient and `borderRadius` cannot
     // work together, we mimic a border by setting a linear gradient in the
     // background and clipping the content box.
@@ -62,7 +72,6 @@ export const wrapperStyles = (color: string) => {
      0px 2px 8px ${transparency(offBlack, 0.02).rgba},
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
-    ...columns.styles,
   });
 };
 
@@ -162,6 +171,7 @@ interface VariableEditorProps
     value: string | undefined // only booleans for now
   ) => void;
   smartSelection?: boolean;
+  insideLayout?: boolean;
 }
 
 export const VariableEditor = ({
@@ -174,6 +184,7 @@ export const VariableEditor = ({
   lineResult,
   onChangeValue = noop,
   variant,
+  insideLayout = false,
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
@@ -230,7 +241,7 @@ export const VariableEditor = ({
     <div
       aria-roledescription="column-content"
       className={'block-table'}
-      css={wrapperStyles(baseSwatches[color].rgb)}
+      css={wrapperStyles({ color: baseSwatches[color].rgb, insideLayout })}
       data-testid="widget-editor"
     >
       <div css={widgetWrapperStyles}>

@@ -52,7 +52,7 @@ export const InteractiveParagraph =
                   execute({
                     editor,
                     computer,
-                    path: elementPath.slice(0, 1),
+                    path: elementPath,
                     deleteFragment,
                     command: command as SlashCommand,
                     getAvailableIdentifier:

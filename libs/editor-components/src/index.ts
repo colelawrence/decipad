@@ -9,6 +9,7 @@ export * from './EditorSidebar';
 export * from './Iframe/Iframe';
 export * from './Import/Import';
 export * from './InteractiveParagraph';
+export * from './Layout';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './SubmitForm/SubmitForm';

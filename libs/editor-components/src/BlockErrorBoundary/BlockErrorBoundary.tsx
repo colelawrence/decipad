@@ -7,7 +7,10 @@ import { ErrorBlock } from '@decipad/ui';
 import { useNodePath } from '@decipad/editor-hooks';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import * as Sentry from '@sentry/react';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  useInsideLayoutContext,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 
 interface FallbackProps {
   error: Error;
@@ -23,9 +26,11 @@ const DefaultFallback: FC<FallbackProps> = ({
   console.error(error);
   const editor = useMyEditorRef();
   const isReadOnly = useIsEditorReadOnly();
+  const insideLayout = useInsideLayoutContext();
 
   const delPath = useNodePath(element);
-  if (delPath == null) return <ErrorBlock type="complete-error" />;
+  if (delPath == null)
+    return <ErrorBlock type="complete-error" insideLayout={insideLayout} />;
 
   if (isReadOnly) {
     return null;
@@ -44,6 +49,7 @@ const DefaultFallback: FC<FallbackProps> = ({
         editor.undo();
         resetErrorBoundary();
       }}
+      insideLayout={insideLayout}
     />
   );
 };

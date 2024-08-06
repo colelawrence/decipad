@@ -1,5 +1,5 @@
 import type { MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import { ELEMENT_COLUMNS } from '@decipad/editor-types';
+import { ELEMENT_LAYOUT } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { last } from '@decipad/utils';
 import { getLevels, isElement } from '@udecode/plate-common';
@@ -18,7 +18,7 @@ export function findClosestBlockOrColumn(
   ] as MyNodeEntry[];
 
   return (
-    ancestors.find((entry) => isElementOfType(entry[0], ELEMENT_COLUMNS)) ??
+    ancestors.find((entry) => isElementOfType(entry[0], ELEMENT_LAYOUT)) ??
     last(ancestors)
   );
 }

@@ -5,7 +5,7 @@ import * as elementKindsModule from './element-kinds';
 import * as markKinds from './mark-kinds';
 import type { TableCellType } from './value';
 
-export * from './column-kinds';
+export * from './uncolumnable-kinds';
 export * from './components';
 export * from './data-view';
 export * from './decorator-kinds';
@@ -33,7 +33,7 @@ export type ElementKind =
 export const alwaysWritableElementTypes = [
   elementKindsModule.ELEMENT_TABLE,
   elementKindsModule.ELEMENT_VARIABLE_DEF,
-  elementKindsModule.ELEMENT_COLUMNS,
+  elementKindsModule.ELEMENT_LAYOUT,
 ];
 
 export const allElementKinds: readonly string[] = Object.freeze(

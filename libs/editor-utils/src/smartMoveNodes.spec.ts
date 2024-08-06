@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { createPlateEditor } from '@udecode/plate-common';
 import { smartMoveNode, smartMoveNodes } from './smartMoveNodes';
 

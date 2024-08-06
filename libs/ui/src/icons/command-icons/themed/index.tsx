@@ -40,6 +40,8 @@ export { CommandInputDark } from './CommandInputDark';
 export { CommandInputLight } from './CommandInputLight';
 export { CommandIntegrationsDark } from './CommandIntegrationsDark';
 export { CommandIntegrationsLight } from './CommandIntegrationsLight';
+export { CommandLayoutDark } from './CommandLayoutDark';
+export { CommandLayoutLight } from './CommandLayoutLight';
 export { CommandLineDark } from './CommandLineDark';
 export { CommandLineLight } from './CommandLineLight';
 export { CommandMixedDark } from './CommandMixedDark';

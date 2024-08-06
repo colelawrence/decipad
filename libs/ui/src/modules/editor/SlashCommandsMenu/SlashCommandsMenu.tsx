@@ -17,6 +17,7 @@ import {
   CommandImage,
   CommandInput,
   CommandIntegrations,
+  CommandLayout,
   CommandLine,
   CommandMixed,
   CommandNumber,
@@ -348,6 +349,14 @@ const writingGroup = {
       description: 'Express yourself with a drawing',
       enabled: true,
       extraSearchTerms: ['draw', 'paint'],
+    },
+    {
+      command: 'layout',
+      title: 'Layout',
+      icon: <CommandLayout />,
+      description: 'Structure notebook with columns and widths',
+      enabled: true,
+      extraSearchTerms: ['columns', 'full width'],
     },
   ],
 };

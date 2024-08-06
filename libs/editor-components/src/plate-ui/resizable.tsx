@@ -53,8 +53,11 @@ const ResizeHandle = React.forwardRef<
 ));
 ResizeHandle.displayName = 'ResizeHandle';
 
-const resizableVariants = cva('h-auto! p-2 rounded-[8px]', {
+const resizableVariants = cva('h-auto! rounded-[8px]', {
   variants: {
+    hasPadding: {
+      true: 'p-2',
+    },
     align: {
       left: 'mr-auto',
       center: 'mx-auto',
@@ -66,14 +69,42 @@ const resizableVariants = cva('h-auto! p-2 rounded-[8px]', {
 const Resizable = React.forwardRef<
   React.ElementRef<typeof ResizablePrimitive>,
   ComponentProps<typeof ResizablePrimitive> &
-    VariantProps<typeof resizableVariants>
->(({ className, align, ...props }, ref) => (
-  <ResizablePrimitive
-    ref={ref}
-    className={cn(resizableVariants({ align }), className)}
-    {...props}
-  />
-));
+    VariantProps<typeof resizableVariants> & {
+      controlWidth?: boolean;
+      hasPadding?: boolean;
+    }
+>(
+  (
+    {
+      className,
+      align,
+      options,
+      controlWidth = true,
+      hasPadding = true,
+      ...props
+    },
+    ref
+  ) => {
+    if (!controlWidth) {
+      return (
+        <div
+          ref={ref}
+          className={cn(resizableVariants({ hasPadding }), className)}
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <ResizablePrimitive
+        ref={ref}
+        className={cn(resizableVariants({ align, hasPadding }), className)}
+        options={options}
+        {...props}
+      />
+    );
+  }
+);
 Resizable.displayName = 'Resizable';
 
 export { Resizable, ResizeHandle };

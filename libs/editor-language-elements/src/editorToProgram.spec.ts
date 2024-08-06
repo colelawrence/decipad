@@ -1,6 +1,6 @@
 import type { Program } from '@decipad/computer-interfaces';
 import type {
-  ColumnsElement,
+  LayoutElement,
   ParagraphElement,
   TableElement,
   TableCaptionElement,
@@ -75,7 +75,7 @@ describe('editorToProgram', () => {
               mkVariableDef('columns/1', 'a', '12.34'),
               mkVariableDef('columns/2', 'b', '45.67'),
             ],
-          } as ColumnsElement,
+          } as LayoutElement,
           {
             type: ELEMENT_PARAGRAPH,
             id: 'paragraph',

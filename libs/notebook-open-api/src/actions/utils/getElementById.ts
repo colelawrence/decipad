@@ -1,14 +1,16 @@
 import type { TNodeEntry } from '@udecode/plate-common';
 import { notAcceptable, notFound } from '@hapi/boom';
 import type { AnyElement, MyEditor } from '@decipad/editor-types';
-import { findElementById } from './findElementById';
+import { findElementById } from '@decipad/editor-utils';
+import { validateId } from './validateId';
 
 export const getElementById = <T extends AnyElement>(
   editor: MyEditor,
   id: string,
   type?: T['type']
 ): TNodeEntry<T> => {
-  const entry = findElementById<AnyElement>(editor, id);
+  validateId(id);
+  const entry = findElementById<AnyElement>(editor, id, { block: true });
   if (!entry) {
     throw notFound(`Could not find an element with id ${id}`);
   }

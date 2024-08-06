@@ -16,6 +16,7 @@ export * from './editor-teleport';
 export * from './editor-teleport.hooks';
 export * from './editor-user-interactions';
 export * from './execution';
+export * from './layout';
 export * from './file-upload-store';
 export * from './tab-editor';
 export * from './theme';

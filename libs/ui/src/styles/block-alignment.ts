@@ -61,7 +61,7 @@ export const divider: StyleData = {
   typography: p8Regular,
 };
 export const dividerBlock: StyleData = {};
-export const columns: StyleData = {
+export const layout: StyleData = {
   spacingTop: '0',
   spacingBottom: '0',
 };
