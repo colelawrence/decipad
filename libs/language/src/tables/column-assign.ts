@@ -71,7 +71,7 @@ export async function evaluateColumnAssign(
     columns,
     expAst,
     tableName,
-    await table.tableRowCount()
+    assign.args[4] ?? (await table.tableRowCount())
   );
 
   realm.stack.setNamespaced(

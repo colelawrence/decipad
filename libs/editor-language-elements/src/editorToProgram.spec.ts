@@ -166,7 +166,7 @@ describe('editorToProgram', () => {
     expect(table).toMatchInlineSnapshot(`"(table TableName)"`);
 
     expect(tableCol).toMatchInlineSnapshot(
-      `"(table-column-assign (tablepartialdef TableName) (coldef ColName) (column "CellData") 0)"`
+      `"(table-column-assign (tablepartialdef TableName) (coldef ColName) (column "CellData") 0 1)"`
     );
   });
 });

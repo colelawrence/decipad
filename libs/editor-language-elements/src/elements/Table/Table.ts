@@ -55,6 +55,7 @@ export const Table: InteractiveLanguageElement = {
             { type: 'coldef', args: [columnName] },
             expression,
             columnIndex,
+            rowCount,
           ],
         };
 

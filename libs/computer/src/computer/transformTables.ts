@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { decilang } from '@decipad/language';
+import { astNode } from '@decipad/language';
 import type {
   IdentifiedBlock,
   ProgramBlock,
@@ -40,10 +40,7 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
     const tableName = getIdentifierString(tableDef);
 
     const tableItself: IdentifiedBlock = {
-      ...statementToIdentifiedBlock(
-        block.id,
-        decilang`${{ name: tableName }} = {}`
-      ),
+      ...statementToIdentifiedBlock(block.id, astNode('table', tableDef)),
       definesVariable: program.definesVariable,
       isArtificial: program.isArtificial,
       artificiallyDerivedFrom: program.artificiallyDerivedFrom,
@@ -64,6 +61,7 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
           { type: 'coldef', args: [colName] },
           expression,
           i,
+          tableDef.args[1],
         ],
       };
 

@@ -203,7 +203,8 @@ export interface TableColumnAssign extends BasicNode {
     tableName: TablePartialDef,
     columnName: ColDef,
     value: Expression,
-    sortOrder?: number
+    sortOrder?: number,
+    rowCount?: number
   ];
 }
 
