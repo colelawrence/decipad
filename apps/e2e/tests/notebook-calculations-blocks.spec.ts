@@ -2,8 +2,6 @@
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import { getClearText, snapshot, Timeouts } from '../utils/src';
-import { keyPress } from '../utils/page/Editor';
-import { getResult } from '../utils/page/Block';
 
 test.describe('structured input and calculations @calculation-blocks', () => {
   test('advanced calculation blocks (old codelines) @advanced-formulas', async ({
@@ -327,72 +325,6 @@ test.describe('structured input and calculations @calculation-blocks', () => {
           .last()
           .getByTestId('number-result:3,000')
       ).toBeVisible();
-    });
-  });
-
-  test('inline formula inspector @formulas @inline-numbers', async ({
-    testUser,
-  }) => {
-    const { page, notebook } = testUser;
-
-    const lineNo = -1;
-
-    await test.step('highlights a number while typing', async () => {
-      await page.click('[data-testid="paragraph-content"]');
-      await page.keyboard.type('We have bought 3');
-      const potentialFormula = await notebook.getFormulaInspectorContent();
-      expect(potentialFormula).toEqual('3');
-    });
-
-    await test.step('editable when TAB pressed', async () => {
-      await keyPress(page, 'Tab');
-      // Wait for line to be floaty before we start editing
-      await expect(
-        page.locator('[data-testid="inline-formula-editor"]')
-      ).toHaveText('3');
-      await page.keyboard.type('+1');
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await page.waitForTimeout(Timeouts.computerDelay);
-      await expect(async () => {
-        const potentialFormula = await notebook.getMagicNumberContent();
-        expect(potentialFormula).toEqual('4');
-      }).toPass();
-    });
-
-    await test.step('you can continue typing after pressing ENTER', async () => {
-      await keyPress(page, 'Enter');
-      await page.keyboard.type('tickets to Paris.');
-      const potentialFormula = await notebook.getMagicNumberContent();
-      expect(potentialFormula).toEqual('4');
-    });
-
-    await test.step('result could be dragged out', async () => {
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('ArrowDown');
-
-      const selector = '[data-type="paragraph"]:last-child';
-      const lastParagraphNode = page.locator(selector);
-
-      const resultEl = await getResult(page, lineNo);
-      await resultEl.dragTo(lastParagraphNode);
-    });
-
-    await test.step('second instance editable by click', async () => {
-      await page
-        .getByTestId('paragraph-content')
-        .nth(1)
-        .getByTestId('magic-number')
-        .click();
-
-      await page.waitForSelector('[data-testid="code-line-float"]');
-      await page.keyboard.type('+1');
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await page.waitForTimeout(Timeouts.computerDelay);
-      await expect(async () => {
-        const potentialFormula = await notebook.getMagicNumberContent();
-        expect(potentialFormula).toEqual('5');
-      }).toPass();
     });
   });
 });

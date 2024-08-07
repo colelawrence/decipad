@@ -43,7 +43,6 @@ export const NoDocSyncEditorInternal: FC = () => {
     () => [
       ...plugins({
         computer,
-        readOnly: false,
         events,
         interactions,
       }),

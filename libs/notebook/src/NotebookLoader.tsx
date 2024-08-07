@@ -61,7 +61,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
 
   const plugins = useEditorPlugins({
     computer,
-    readOnly,
     interactions,
   });
 

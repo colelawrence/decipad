@@ -47,7 +47,6 @@ import {
   createOperationsBlackboxPlugin,
   createPersistSelectionPlugin,
   createPlotPlugin,
-  createPotentialFormulaHighlightPlugin,
   createPreventInvalidSelectionPlugin,
   createRenderPerformanceStatsPlugin,
   createSelectionShortcutPlugin,
@@ -102,14 +101,12 @@ import { createCaptionPlugin } from '@udecode/plate-caption';
 interface PluginOptions {
   computer: Computer;
   events?: ClientEventContextType;
-  readOnly: boolean;
   interactions?: Subject<UserInteraction>;
 }
 
 export const plugins = ({
   computer,
   events = noopPromise,
-  readOnly,
   interactions,
 }: PluginOptions) =>
   createMyPlugins(
@@ -210,7 +207,6 @@ export const plugins = ({
         createCodeLineCodeTextPlugin(computer)
       ),
       createVariableDefPlugin(computer),
-      createPotentialFormulaHighlightPlugin(readOnly),
 
       // tables
       createTablePlugin(computer),

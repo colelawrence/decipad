@@ -7,13 +7,11 @@ import { ClientEventsContext } from '@decipad/client-events';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
-  readOnly: boolean;
   computer?: Computer;
   interactions: Subject<UserInteraction>;
 }
 
 export const useEditorPlugins = ({
-  readOnly = false,
   computer,
   interactions,
 }: CreateEditorProps): MyPlatePlugin[] | undefined => {
@@ -24,11 +22,10 @@ export const useEditorPlugins = ({
       !computer
         ? undefined
         : configuration.plugins({
-            readOnly,
             computer,
             events,
             interactions,
           }),
-    [computer, events, interactions, readOnly]
+    [computer, events, interactions]
   );
 };

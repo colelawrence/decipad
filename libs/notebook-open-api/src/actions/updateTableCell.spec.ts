@@ -22,7 +22,7 @@ describe('updateTableCell', () => {
 
   beforeEach(() => {
     computer = getComputer();
-    editor = new EditorController('id', plugins({ computer, readOnly: false }));
+    editor = new EditorController('id', plugins({ computer }));
     editor.forceNormalize();
     subEditor = editor.getTabEditorAt(0);
   });

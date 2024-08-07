@@ -33,7 +33,6 @@ export const NoDocSyncEmbedInternal: FC = () => {
     () =>
       plugins({
         computer,
-        readOnly: true,
         events,
         interactions,
       }),

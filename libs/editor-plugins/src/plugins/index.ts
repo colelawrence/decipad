@@ -39,7 +39,6 @@ export * from './NormalizeVoidPlugin';
 export * from './OperationsBlackboxPlugin';
 export * from './PersistSelection';
 export * from './Plot';
-export * from './PotentialFormulaHighlight';
 export * from './PreventInvalidSelection';
 export * from './RenderPerformanceStats';
 export * from './SelectionShortcutPlugin';
