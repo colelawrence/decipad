@@ -589,7 +589,6 @@
     "braces": "3.0.3",
     "trim-newlines": "5.0.0",
     "@mdx-js/mdx": "3.0.1",
-    "browserify-sign": "4.2.3",
     "fast-xml-parser": "4.4.1",
     "socks": "2.8.3"
   }
