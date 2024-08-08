@@ -1,12 +1,12 @@
 import { useWindowListener } from '@decipad/react-utils';
-import { useState } from 'react';
-import * as Styled from './styles';
-import { FramerateIndicator } from '../FramerateIndicator/FramerateIndicator';
-import { Deci } from '../../../icons';
-import { FeatureFlagsSwitcher } from '../FeatureFlagsSwitcher/FeatureFlagsSwitcher';
-import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
-import { CSSDebugToggle } from '../CSSDebugToggle/CSSDebugToggle';
 import { AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { Deci } from '../../../icons';
+import { CSSDebugToggle } from '../CSSDebugToggle/CSSDebugToggle';
+import { FeatureFlagsSwitcher } from '../FeatureFlagsSwitcher/FeatureFlagsSwitcher';
+import { FramerateIndicator } from '../FramerateIndicator/FramerateIndicator';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
+import * as Styled from './styles';
 
 export const Toolbar = () => {
   const [hidden, setHidden] = useState<boolean>(true);
@@ -37,7 +37,7 @@ export const Toolbar = () => {
               <Styled.ToolbarIcon>
                 <Deci />
               </Styled.ToolbarIcon>
-              Deci Tools
+              Deci Mate
             </Styled.ToolbarTitle>
             <Styled.Tools>
               <FramerateIndicator />

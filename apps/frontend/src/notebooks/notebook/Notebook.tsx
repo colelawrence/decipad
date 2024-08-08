@@ -1,25 +1,27 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   useFinishOnboarding,
   useGetNotebookMetaQuery,
   useRecordPadEventMutation,
 } from '@decipad/graphql-client';
 import {
-  useCurrentWorkspaceStore,
-  useAiCreditsStore,
-  useNotebookMetaData,
-} from '@decipad/react-contexts';
-import {
+  AddCreditsModal,
   EditorPlaceholder,
   NotebookPage,
-  TopbarPlaceholder,
-  AddCreditsModal,
   PaywallModal,
+  TopbarPlaceholder,
   useSetCssVarWidth,
 } from '@decipad/ui';
 import type { FC } from 'react';
 import { Suspense, useEffect, useCallback } from 'react';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
-import { Topbar, Tabs, Sidebar, Editor } from './LoadComponents';
+import {
+  Topbar,
+  Tabs,
+  Sidebar,
+  Editor,
+  NavigationSidebar,
+} from './LoadComponents';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useInitializeResourceUsage } from '../../hooks';
@@ -29,6 +31,11 @@ import { useNotebookRoute } from '@decipad/routing';
 import { useIsReadOnlyPermission } from './hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { NotebookErrorBoundary } from './Errors';
+import {
+  useAiCreditsStore,
+  useCurrentWorkspaceStore,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 
 /**
  * Entire Application Wrapper.
@@ -126,6 +133,13 @@ export const Notebook: FC = () => {
             <Suspense fallback={<EditorPlaceholder />}>
               <Editor notebookId={notebookId} docsync={docsync} />
             </Suspense>
+          }
+          leftSidebar={
+            isFlagEnabled('NAV_SIDEBAR') ? (
+              <Suspense fallback={<p>todo: loading state</p>}>
+                <NavigationSidebar {...props} workspaceInfo={workspaceInfo} />
+              </Suspense>
+            ) : null
           }
           topbar={
             <Suspense fallback={<TopbarPlaceholder />}>

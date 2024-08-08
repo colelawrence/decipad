@@ -1,15 +1,14 @@
-import { EditorSidebar as UIEditorSidebar } from '@decipad/editor-components';
+import { EditorSidebar as EditorComponentSidebar } from '@decipad/editor-components';
+import { EditorController } from '@decipad/notebook-tabs';
 import type { FC } from 'react';
 import type { SidebarComponentProps } from './types';
-import { EditorController } from '@decipad/notebook-tabs';
 
 const EditorSidebar: FC<SidebarComponentProps> = (props) => {
   if (props.docsync == null) {
     return null;
   }
-
   return (
-    <UIEditorSidebar
+    <EditorComponentSidebar
       {...props}
       controller={props.docsync as unknown as EditorController}
     />

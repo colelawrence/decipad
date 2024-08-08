@@ -28,6 +28,8 @@ export const availableFlags = [
   'PRIVATE_LINK_ANALYTICS',
 
   'DATA_DRAWER',
+
+  'NAV_SIDEBAR',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

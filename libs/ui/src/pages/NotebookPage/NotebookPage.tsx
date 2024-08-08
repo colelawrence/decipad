@@ -1,22 +1,21 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import React, { FC, ReactNode } from 'react';
-import { useDraggingScroll, useScrollToHash } from '../../hooks';
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
-import * as S from './styles';
-import { PermissionType } from '../../types';
-import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
 import { shouldRenderComponent } from '@decipad/react-utils';
+import React, { FC, ReactNode } from 'react';
+import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
+import { useDraggingScroll, useScrollToHash } from '../../hooks';
+import { PermissionType } from '../../types';
+import * as S from './styles';
 
 interface NotebookPageProps {
   readonly notebook: ReactNode;
   readonly topbar: ReactNode;
   readonly sidebar: ReactNode;
+  readonly leftSidebar?: ReactNode;
   readonly tabs: ReactNode;
   readonly dataDrawer: ReactNode;
 
   readonly isEmbed: boolean;
-
-  // Undefined means we haven't loaded yet
   readonly isReadOnly: boolean | undefined;
   readonly permission?: PermissionType | null | undefined;
   readonly articleRef: React.RefObject<HTMLElement>;
@@ -54,6 +53,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     topbar,
     notebook,
     sidebar,
+    leftSidebar,
     tabs,
     isEmbed = false,
     articleRef,
@@ -77,13 +77,19 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
   return (
     <S.AppWrapper isEmbed={isEmbed}>
       {topbar && <header>{topbar}</header>}
-
       <S.MainWrapper
         isEmbed={isEmbed}
         hasTabs={!!tabs}
         ref={scrollToRef}
         isInEditorSidebar={isInEditorSidebar}
       >
+        <SidebarExtra
+          showSidebar={!!leftSidebar}
+          sidebarComponent={'navigation-sidebar'}
+          position="left"
+        >
+          {leftSidebar}
+        </SidebarExtra>
         <S.ArticleWrapper
           isEmbed={isEmbed}
           ref={articleRef}
@@ -133,7 +139,8 @@ const SidebarExtra: FC<{
   showSidebar: boolean;
   sidebarComponent: SidebarComponent;
   children: ReactNode;
-}> = ({ showSidebar, sidebarComponent, children }) => {
+  position?: 'left' | 'right';
+}> = ({ showSidebar, sidebarComponent, children, position = 'right' }) => {
   if (!showSidebar) {
     return null;
   }
@@ -143,7 +150,7 @@ const SidebarExtra: FC<{
   }
 
   return (
-    <S.AsideWrapper sidebarComponent={sidebarComponent}>
+    <S.AsideWrapper sidebarComponent={sidebarComponent} position={position}>
       {children}
     </S.AsideWrapper>
   );

@@ -12,9 +12,13 @@ export const Editor = lazyLoad(loadEditor);
 const loadTabs = () => import('./Tabs');
 export const Tabs = lazyLoad(loadTabs);
 
+const loadNavigationSidebar = () => import('./NavigationSidebar');
+export const NavigationSidebar = lazyLoad(loadNavigationSidebar);
+
 export const Loaders = {
   loadTopbar,
   loadSidebar,
   loadEditor,
   loadTabs,
+  loadNavigationSidebar,
 } as const;

@@ -12,7 +12,6 @@ export const ItemWrapper = styled.div<ItemWrapperProps>((props) => [
     display: 'grid',
     alignItems: 'center',
     gridTemplateColumns: 'auto 24px',
-    paddingLeft: 20,
     paddingRight: 6,
     borderRadius: 8,
     color: cssVar('textDefault'),

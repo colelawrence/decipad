@@ -5,9 +5,9 @@ import { useDrop } from 'react-dnd';
 import { cssVar, transparency, transparencyHex } from '../../../primitives';
 import { Anchor, DNDItemTypes } from '../../../utils';
 
-import * as Styled from './styles';
 import { OpaqueColor } from '@decipad/utils';
 import { droppablePatternStyles } from 'libs/ui/src/styles/droppablePattern';
+import * as Styled from './styles';
 
 type DNDType = {
   target: string;
@@ -21,6 +21,7 @@ export type SectionItemProps = {
   readonly dndInfo: DNDType;
   readonly isActive: boolean;
   readonly href: string;
+  readonly ident?: number;
 };
 
 export const SectionItem = ({
@@ -30,6 +31,7 @@ export const SectionItem = ({
   isActive = false,
   href,
   color = cssVar('backgroundDefault'),
+  ident = 1,
 }: SectionItemProps): ReturnType<FC> => {
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -72,6 +74,7 @@ export const SectionItem = ({
           css({
             backgroundColor: weakColor,
           }),
+        css({ paddingLeft: ident * 20 }),
       ]}
       color={weakColor}
     >

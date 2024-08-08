@@ -4,7 +4,10 @@ import { persist } from 'zustand/middleware';
 
 export type SelectedTab = 'variable' | 'block';
 
-export type SidebarComponent = 'closed' | SidebarComponentsWithoutClosed;
+export type SidebarComponent =
+  | 'closed'
+  | 'navigation-sidebar'
+  | SidebarComponentsWithoutClosed;
 
 export type SidebarComponentsWithoutClosed =
   | 'default-sidebar'

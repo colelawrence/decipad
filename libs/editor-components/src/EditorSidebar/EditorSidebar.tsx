@@ -1,6 +1,10 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { type AutocompleteName } from '@decipad/language-interfaces';
+import { useComputer } from '@decipad/editor-hooks';
+import type { MyEditor, SlashCommand } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
+import { type AutocompleteName } from '@decipad/language-interfaces';
+import { useNotebookState } from '@decipad/notebook-state';
+import { EditorController } from '@decipad/notebook-tabs';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
   SlashCommandsMenu,
@@ -10,18 +14,13 @@ import {
 import { ErrorBoundary } from '@sentry/react';
 import type { FC } from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
+import { catalogDebounceTimeMs } from '../utils';
+import { catalogItems } from '../utils/catalogItems';
+import { groupByTab } from '../utils/groupByTab';
+import { selectCatalogNames } from '../utils/selectCatalogNames';
 import { execute } from '../utils/slashCommands';
+import { toVar } from '../utils/toVar';
 import { useOnDragEnd } from '../utils/useDnd';
-import { catalogItems } from './catalogItems';
-import { selectCatalogNames } from './selectCatalogNames';
-import { toVar } from './toVar';
-import type { MyEditor, SlashCommand } from '@decipad/editor-types';
-import { groupByTab } from './groupByTab';
-import { useComputer } from '@decipad/editor-hooks';
-import { useNotebookState } from '@decipad/notebook-state';
-import { EditorController } from '@decipad/notebook-tabs';
-
-const catalogDebounceTimeMs = 1_000;
 
 interface EditorSidebarProps {
   notebookId: string;

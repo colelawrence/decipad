@@ -1,3 +1,4 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { SidebarComponent } from '@decipad/react-contexts';
 import styled from '@emotion/styled';
 import {
@@ -67,7 +68,9 @@ export const MainWrapper = styled.main<{
   display: 'flex',
   justifyContent: 'flex-end',
 
-  padding: props.isInEditorSidebar ? '0px 0px 16px 24px' : '0px 24px 16px 24px',
+  padding: props.isInEditorSidebar
+    ? `0px 0px 16px ${!isFlagEnabled('NAV_SIDEBAR') ? '24' : '0'}px`
+    : `0px 24px 16px ${!isFlagEnabled('NAV_SIDEBAR') ? '24' : '0'}px`,
 
   gap: '24px',
   [tabletScreenQuery]: {
@@ -97,6 +100,7 @@ const ComponentWidths: Record<
   annotations: { default: '0px', tablet: '0px' },
   integrations: { default: INTEGRATIONS_WIDTH },
   'edit-integration': { default: INTEGRATIONS_WIDTH },
+  'navigation-sidebar': { default: SIDEBAR_WIDTH },
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
@@ -199,27 +203,26 @@ export const InEditorSidebar = styled.div({
 
 interface AsideWrapperProps {
   readonly sidebarComponent: SidebarComponent;
+  readonly position?: 'left' | 'right';
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>(
   hideOnPrint,
-  (props) => ({
+  ({ position = 'right', sidebarComponent }) => ({
     position: 'relative',
     display: 'flex',
     justifyContent: 'flex-end',
     overflowY: 'auto',
     flexShrink: 0,
-    width: ComponentWidths[props.sidebarComponent].default,
+    width: ComponentWidths[sidebarComponent].default,
     borderRadius: '16px',
     zIndex: 40,
     overflow: 'visible',
 
     '& > :first-child': {
-      width: ComponentWidths[props.sidebarComponent].default,
+      width: ComponentWidths[sidebarComponent].default,
       height:
-        props.sidebarComponent === 'publishing'
-          ? undefined
-          : 'calc(100vh - 80px)',
+        sidebarComponent === 'publishing' ? undefined : 'calc(100vh - 80px)',
     },
 
     [smallScreenQuery]: {
@@ -229,8 +232,8 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
     [tabletScreenQuery]: {
       position: 'absolute',
       background: cssVar('backgroundMain'),
-      ...(ComponentWidths[props.sidebarComponent].tablet && {
-        width: ComponentWidths[props.sidebarComponent].tablet,
+      ...(ComponentWidths[sidebarComponent].tablet && {
+        width: ComponentWidths[sidebarComponent].tablet,
       }),
 
       border: `solid 1px ${cssVar('borderDefault')}`,
@@ -238,6 +241,11 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
       boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
       padding: 0,
     },
+
+    ...(position === 'left' && {
+      order: -1,
+      borderRight: 'none',
+    }),
   })
 );
 

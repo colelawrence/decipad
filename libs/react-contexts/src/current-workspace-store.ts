@@ -4,6 +4,7 @@ export type WorkspaceInfo = {
   id?: string;
   isPremium: boolean;
   plan?: string;
+  name?: string;
 };
 
 interface CurrentWorkspaceStore {
@@ -21,6 +22,7 @@ export const useCurrentWorkspaceStore = create<CurrentWorkspaceStore>(
       id: undefined,
       isPremium: false,
       plan: 'free',
+      name: undefined,
     },
     isUpgradeWorkspaceModalOpen: false,
     setIsUpgradeWorkspaceModalOpen: (isModalOpen: boolean) =>

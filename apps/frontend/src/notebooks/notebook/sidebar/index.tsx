@@ -1,15 +1,15 @@
-import type { FC } from 'react';
-import { Suspense } from 'react';
+import { useActiveEditor } from '@decipad/editor-hooks';
 import type { SidebarComponentsWithoutClosed } from '@decipad/react-contexts';
 import { useNotebookMetaData } from '@decipad/react-contexts';
-import { useActiveEditor } from '@decipad/editor-hooks';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 
+import Annotations from './Annotations';
 import AssistantChat from './AssistantChat';
 import EditorSidebar from './EditorSidebar';
-import Publishing from './Publishing';
-import Annotations from './Annotations';
-import IntegrationsSidebar from './IntegrationsSidebar';
 import IntegrationEditSidebar from './IntegrationEditSidebar';
+import IntegrationsSidebar from './IntegrationsSidebar';
+import Publishing from './Publishing';
 
 import type { SidebarComponentProps } from './types';
 
@@ -35,7 +35,11 @@ const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
   const component = useNotebookMetaData((s) => s.sidebarComponent);
 
   const editor = useActiveEditor();
-  if (component === 'closed' || editor == null) {
+  if (
+    component === 'closed' ||
+    component === 'navigation-sidebar' ||
+    editor == null
+  ) {
     return null;
   }
 
