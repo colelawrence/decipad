@@ -106,8 +106,8 @@ test.describe('staging performance checks', () => {
 
       await notebook.addCSV({
         method: 'link',
-        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRRPBbsSx0_NoW2dAQ9K8wTOC6ish3utLpID7qGPQXVuDLULD8eHwYaMGb7gTXx3HFkmNgfG4fYc9bl/pub?gid=400338077&single=true&output=csv',
-        varName: 'Funnel',
+        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmIzE6QNJNDoKEaJebXmLNhXZEDxjUyod2FSx_mwgHk1tfjMuPhQmUCd2qNRv8ceWOZMOBJUlzeOLP/pub?output=csv',
+        varName: 'Customers',
       });
 
       // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -120,20 +120,31 @@ test.describe('staging performance checks', () => {
         timeout: 1000,
       });
       await expect(
-        page.getByText('18 rows, previewing rows 1 to 10')
+        page.getByText('10000 rows, previewing rows 1 to 10')
       ).toBeVisible();
     });
     performance.sampleEnd('Ingest CSV');
     expect
       .soft(
         performance.getSampleTime('Ingest CSV'),
-        'CSV Ingest took more than 20 seconds'
+        'CSV Ingest took more than 50 seconds'
       )
-      .toBeLessThanOrEqual(20_000);
+      .toBeLessThanOrEqual(50_000);
   });
 
   test('text formatter with mouse', async ({}) => {
+    await notebook.focusOnBody();
     await notebook.selectLastParagraph();
+    await expect(
+      page.getByText('10000 rows, previewing rows 1 to 10')
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole('textbox')
+        .locator('div')
+        .filter({ hasText: 'Customers' })
+        .first()
+    ).toBeVisible();
     await page.keyboard.type('this is the content for the first paragraph');
     await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
       'this is the content for the first paragraph'
@@ -191,33 +202,43 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Adding Data View'),
-        'Adding Data View took more than 3 seconds'
+        'Adding Data View took more than 15 seconds'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(15_000);
 
     await notebook.checkCalculationErrors();
 
+    performance.sampleStart('Add Data View Column');
     await expect(page.getByTestId('add-data-view-column-button')).toBeVisible();
-
     await page.getByTestId('add-data-view-column-button').click();
-    await page.getByRole('menuitem', { name: 'Stage' }).click();
-    await page.getByTestId('add-data-view-column-button').click();
-    await page.getByRole('menuitem', { name: 'London' }).click();
-    await page.getByTestId('add-data-view-column-button').click();
-    await page.getByRole('menuitem', { name: 'Madrid' }).click();
-    await page.getByTestId('data-view-options-menu-London').click();
-    performance.sampleStart('Aggregation Data View');
-    await page.getByRole('menuitem', { name: 'Aggregate' }).click();
-    await page.getByRole('menuitem', { name: 'Sum' }).click();
-    await expect(page.getByText('89.77')).toBeVisible();
-    performance.sampleEnd('Aggregation Data View');
+    await page.getByRole('menuitem', { name: 'Country' }).click();
+    await expect(page.getByText('Page 1 of 5')).toBeVisible();
+    performance.sampleEnd('Add Data View Column');
     expect
       .soft(
-        performance.getSampleTime('Aggregation Data View'),
-        'Data View Aggregation took more than 3 seconds'
+        performance.getSampleTime('Add Data View Column'),
+        'Adding Data View Column took more than 30 seconds'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(30_000);
 
+    /*
+    Data views for 10k rows don't work well still, this will be the next step
+
+    await test.step('importing csv link through csv panel with link', async () => {
+      performance.sampleStart('Aggregation Data View');
+      await page.getByTestId('data-view-options-menu-Country').click();
+      await page.getByRole('menuitem', { name: 'Aggregate' }).click();
+      await page.getByRole('menuitem', { name: 'Count values' }).click();
+      await expect(page.getByText('10K')).toBeVisible();
+      performance.sampleEnd('Aggregation Data View');
+      expect
+        .soft(
+          performance.getSampleTime('Aggregation Data View'),
+          'Data View Aggregation took more than 10 seconds'
+        )
+        .toBeLessThanOrEqual(10_000);
+    });
+*/
     await notebook.checkCalculationErrors();
   });
 

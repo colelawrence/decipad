@@ -1197,8 +1197,11 @@ export class Notebook {
     }
 
     if (option.varName != null) {
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await this.page.waitForTimeout(Timeouts.tableDelay);
       await this.page.getByTestId('result-preview-input').dblclick();
-      await this.page.keyboard.type(option.varName);
+      await this.page.keyboard.type(option.varName, { delay: 100 });
+      await expect(this.page.getByText(option.varName).first()).toBeVisible();
     }
 
     // A request is made before creating the integration. Which has to be waited for
