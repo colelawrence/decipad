@@ -4,6 +4,10 @@ use crate::types::types::{DateSpecificity, Row, Table};
 use crate::DeciResult;
 use chrono::NaiveDateTime;
 use js_sys::{BigUint64Array, Object, Uint8Array};
+use num_bigint::{BigInt, Sign};
+use std::str::FromStr;
+use num_traits::{One, Signed, ToPrimitive, Zero};
+use std::mem::size_of;
 use std::{collections::HashMap, io::ErrorKind};
 use wasm_bindgen::prelude::*;
 
@@ -53,7 +57,39 @@ enum ResultType {
     Row = 8,
     TypeError = 9,
     Pending = 10,
+    ArbitraryFraction = 11,
 }
+
+
+pub fn encode_big_int(buffer: &mut Vec<u8>, original_offset: usize, mut value: &BigInt) -> usize {
+    let offset = original_offset + size_of::<u32>();
+    let bytes = value.to_signed_bytes_le();
+    let len = bytes.len() as u32;
+    buffer.push((len) as u8);
+    buffer.push((len >> 8) as u8);
+    buffer.push((len >> 16) as u8);
+    buffer.push((len >> 24) as u8);
+    bytes.iter().for_each(|byte| buffer.push(*byte));
+    offset + len as usize
+}
+
+pub fn decode_big_int(buffer: &Uint8Array, mut offset: usize) -> (BigInt, usize) {
+    let length = u32::from_le_bytes([
+        buffer.get_index(offset as u32) as u8,
+        buffer.get_index((offset + 1) as u32) as u8,
+        buffer.get_index((offset + 2) as u32) as u8,
+        buffer.get_index((offset + 3) as u32) as u8,
+    ]) as usize;
+    offset += 4;
+    let mut vec = Vec::with_capacity(length);
+    for i in 0..length {
+        vec.push(buffer.get_index((offset + i) as u32) as u8);
+    }
+    offset += length;
+    let value = BigInt::from_signed_bytes_le(&vec);
+    (value, offset)
+}
+
 
 pub fn js_to_rust_serialized_result(value: &JsValue) -> Result<SerializedResult, JsValue> {
     // Check if the value is an object
@@ -109,6 +145,19 @@ fn serialize_result_iter(
                 ]);
                 *data_length += 16;
             }
+
+            DeciResult::ArbitraryFraction(n, d) => {
+                let numerator_offset = encode_big_int(data_array, *data_length, n);
+                let denominator_offset = encode_big_int(data_array, numerator_offset, d);
+
+                type_array.extend_from_slice(&[
+                    ResultType::ArbitraryFraction as usize,
+                    *data_length as usize,
+                    denominator_offset,
+                ]);
+                *data_length += denominator_offset;
+            }
+
             DeciResult::String(value) => {
                 let bytes = value.as_bytes();
                 data_array.extend_from_slice(bytes);
@@ -344,6 +393,11 @@ fn deserialize_data_iter(
             let denominator = read_i64_from_uint8array(data, offset + 8);
             Ok(DeciResult::Fraction(numerator, denominator))
         }
+        ResultType::ArbitraryFraction => {
+            let (numerator, numerator_offset) = decode_big_int(data, offset);
+            let (denominator, _denominator_offset) = decode_big_int(data, numerator_offset);
+            Ok(DeciResult::ArbitraryFraction(numerator, denominator))
+        }
         ResultType::String => {
             let buffer = data.slice(offset as u32, (offset + length) as u32);
             let value = String::from_utf8(buffer.to_vec())
@@ -540,6 +594,7 @@ fn decode_number(number: u64) -> (bool, ResultType) {
         8 => ResultType::Row,
         9 => ResultType::TypeError,
         10 => ResultType::Pending,
+        11 => ResultType::ArbitraryFraction,
         _ => panic!("Invalid ResultType value: {}", original_number),
     };
 
@@ -559,6 +614,8 @@ use wasm_bindgen_test::wasm_bindgen_test_configure;
 wasm_bindgen_test_configure!(run_in_browser);
 #[cfg(test)]
 mod serialize_result_tests {
+    use std::str::FromStr;
+
     use super::*;
     use wasm_bindgen_test::*;
 
@@ -620,6 +677,80 @@ mod serialize_result_tests {
         assert_eq!(
             result.data().to_vec(),
             vec![1, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255]
+        );
+    }
+
+    #[wasm_bindgen_test]
+    fn test_serialize_arbitrary_fraction() {
+        let result = serialize_result_internal(DeciResult::ArbitraryFraction(
+            BigInt::from(1),
+            BigInt::from(2),
+        ))
+        .unwrap();
+        assert_eq!(result.type_array().to_vec(), vec![11, 0, 10]);
+        assert_eq!(result.data().to_vec(), vec![1, 0, 0, 0, 1, 1, 0, 0, 0, 2]);
+    }
+
+    #[wasm_bindgen_test]
+    fn test_serialize_neg_arbitrary_fraction() {
+        let result = serialize_result_internal(DeciResult::ArbitraryFraction(
+            BigInt::from(-1),
+            BigInt::from(2),
+        ))
+        .unwrap();
+        assert_eq!(result.type_array().to_vec(), vec![11, 0, 10]);
+        assert_eq!(result.data().to_vec(), vec![1, 0, 0, 0, 255, 1, 0, 0, 0, 2]);
+    }
+
+    #[wasm_bindgen_test]
+    fn test_serialize_really_big_arbitrary_fraction() {
+        let numerator =
+            BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap();
+        let denominator =
+            BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap();
+        let result =
+            serialize_result_internal(DeciResult::ArbitraryFraction(numerator, denominator))
+                .unwrap();
+        assert_eq!(result.type_array().to_vec(), vec![11, 0, 620]);
+        assert_eq!(
+            result.data().to_vec(),
+            vec![
+                50, 1, 0, 0, 149, 247, 58, 207, 96, 154, 13, 183, 226, 124, 243, 26, 152, 182, 13,
+                166, 140, 224, 77, 217, 163, 190, 157, 13, 254, 2, 92, 225, 182, 176, 180, 157,
+                107, 252, 30, 104, 70, 151, 167, 37, 57, 91, 243, 229, 129, 9, 150, 127, 214, 191,
+                125, 141, 36, 22, 150, 118, 64, 94, 107, 49, 40, 162, 155, 84, 215, 5, 73, 202,
+                221, 103, 6, 232, 24, 100, 191, 186, 232, 52, 234, 129, 101, 177, 147, 89, 74, 183,
+                244, 199, 155, 59, 5, 213, 240, 249, 207, 54, 2, 40, 222, 167, 54, 185, 141, 210,
+                49, 80, 30, 195, 195, 61, 193, 76, 4, 110, 181, 96, 65, 114, 23, 80, 218, 100, 172,
+                31, 208, 223, 58, 191, 180, 81, 254, 98, 42, 167, 84, 93, 75, 231, 26, 231, 32,
+                148, 95, 29, 81, 177, 224, 254, 121, 70, 235, 99, 29, 73, 64, 199, 50, 17, 172,
+                237, 213, 148, 157, 185, 26, 43, 155, 61, 232, 109, 116, 42, 28, 60, 204, 41, 95,
+                135, 182, 177, 113, 62, 104, 141, 146, 249, 12, 249, 68, 38, 135, 166, 36, 123,
+                103, 73, 139, 72, 210, 46, 62, 215, 59, 100, 86, 42, 23, 123, 251, 49, 177, 99,
+                152, 116, 190, 128, 127, 1, 80, 114, 82, 133, 75, 41, 33, 102, 174, 52, 178, 82,
+                234, 73, 173, 172, 9, 199, 106, 1, 245, 92, 184, 132, 25, 201, 187, 243, 96, 163,
+                67, 111, 67, 84, 23, 40, 126, 164, 73, 205, 169, 36, 30, 185, 206, 246, 22, 126,
+                199, 55, 208, 180, 214, 205, 184, 230, 222, 15, 193, 18, 203, 165, 254, 109, 36,
+                243, 6, 157, 79, 154, 9, 169, 94, 6, 99, 103, 244, 250, 214, 79, 122, 183, 26, 72,
+                176, 241, 165, 3, 50, 1, 0, 0, 115, 102, 93, 127, 176, 245, 229, 130, 7, 137, 221,
+                83, 189, 165, 115, 36, 142, 198, 65, 194, 208, 51, 111, 134, 196, 145, 169, 69,
+                206, 136, 86, 47, 77, 69, 199, 25, 184, 251, 247, 206, 221, 41, 109, 183, 132, 28,
+                232, 224, 216, 210, 46, 18, 53, 249, 251, 22, 221, 30, 146, 42, 203, 140, 153, 73,
+                87, 39, 232, 200, 48, 176, 65, 10, 108, 173, 147, 16, 13, 68, 207, 133, 166, 101,
+                231, 197, 32, 105, 135, 255, 5, 40, 235, 161, 213, 77, 219, 53, 18, 100, 1, 174,
+                187, 156, 127, 1, 239, 224, 49, 157, 73, 163, 133, 221, 171, 50, 154, 22, 100, 128,
+                202, 159, 87, 14, 94, 209, 185, 48, 209, 41, 31, 74, 180, 51, 248, 241, 186, 75,
+                225, 158, 102, 133, 159, 68, 114, 55, 121, 7, 135, 143, 233, 146, 162, 50, 224,
+                156, 146, 203, 27, 34, 241, 104, 93, 152, 143, 124, 198, 240, 134, 108, 194, 162,
+                69, 252, 195, 110, 129, 145, 98, 144, 211, 185, 248, 54, 110, 79, 171, 69, 125, 58,
+                31, 80, 119, 160, 4, 99, 227, 82, 149, 103, 97, 166, 56, 225, 26, 188, 77, 132,
+                156, 43, 254, 195, 220, 154, 97, 104, 135, 142, 142, 72, 175, 23, 1, 5, 1, 239,
+                138, 126, 188, 10, 148, 189, 144, 222, 164, 246, 161, 27, 128, 13, 209, 207, 217,
+                204, 244, 5, 164, 233, 168, 124, 131, 164, 101, 60, 182, 47, 214, 74, 10, 100, 119,
+                210, 200, 182, 78, 59, 71, 52, 198, 135, 121, 132, 135, 218, 142, 171, 20, 13, 49,
+                65, 251, 57, 124, 162, 50, 157, 254, 6, 137, 224, 97, 60, 153, 10, 174, 135, 38,
+                59, 84, 189, 117, 143, 35, 186, 173, 54, 88, 15
+            ]
         );
     }
 
@@ -901,489 +1032,570 @@ mod serialize_result_tests {
         assert_eq!(result.type_array().to_vec(), vec![10, 0, 0]);
         assert_eq!(result.data().to_vec(), vec![]);
     }
+}
 
-    #[cfg(test)]
-    mod deserialize_result_tests {
-        use super::*;
-        use wasm_bindgen_test::*;
+#[cfg(test)]
+mod deserialize_result_tests {
+    use super::*;
+    use wasm_bindgen_test::*;
 
-        fn create_serialized_result(type_array: Vec<u64>, data: Vec<u8>) -> SerializedResult {
-            let type_array_js = BigUint64Array::new_with_length(type_array.len() as u32);
-            for (i, &value) in type_array.iter().enumerate() {
-                type_array_js.set_index(i as u32, value);
-            }
-
-            let data_array_js = Uint8Array::new_with_length(data.len() as u32);
-            data_array_js.copy_from(&data);
-
-            SerializedResult::new(type_array_js, data_array_js)
-        }
-        #[wasm_bindgen_test]
-        fn test_deserialize_boolean_true() {
-            let serialized = create_serialized_result(vec![0, 0, 1], vec![1]);
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Boolean(true));
+    fn create_serialized_result(type_array: Vec<u64>, data: Vec<u8>) -> SerializedResult {
+        let type_array_js = BigUint64Array::new_with_length(type_array.len() as u32);
+        for (i, &value) in type_array.iter().enumerate() {
+            type_array_js.set_index(i as u32, value);
         }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_boolean_false() {
-            let serialized = create_serialized_result(vec![0, 0, 1], vec![0]);
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Boolean(false));
-        }
+        let data_array_js = Uint8Array::new_with_length(data.len() as u32);
+        data_array_js.copy_from(&data);
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_positive_fraction() {
-            let serialized = create_serialized_result(
-                vec![1, 0, 16],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0],
+        SerializedResult::new(type_array_js, data_array_js)
+    }
+    #[wasm_bindgen_test]
+    fn test_deserialize_boolean_true() {
+        let serialized = create_serialized_result(vec![0, 0, 1], vec![1]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Boolean(true));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_boolean_false() {
+        let serialized = create_serialized_result(vec![0, 0, 1], vec![0]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Boolean(false));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_positive_fraction() {
+        let serialized = create_serialized_result(
+            vec![1, 0, 16],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Fraction(1, 3));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_negative_fraction() {
+        let serialized = create_serialized_result(
+            vec![1, 0, 16],
+            vec![
+                255, 255, 255, 255, 255, 255, 255, 255, 2, 0, 0, 0, 0, 0, 0, 0,
+            ],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Fraction(-1, 2));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_infinity() {
+        let serialized = create_serialized_result(
+            vec![1, 0, 16],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Fraction(1, 0));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_negative_infinity() {
+        let serialized = create_serialized_result(
+            vec![1, 0, 16],
+            vec![
+                255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0,
+            ],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Fraction(-1, 0));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_arbitrary_fraction() {
+        let serialized =
+            create_serialized_result(vec![11, 0, 10], vec![1, 0, 0, 0, 1, 1, 0, 0, 0, 2]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
+            assert_eq!(numerator, BigInt::from(1));
+            assert_eq!(denominator, BigInt::from(2));
+        } else {
+            panic!("Expected ArbitraryFraction result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_neg_arbitrary_fraction() {
+        let serialized =
+            create_serialized_result(vec![11, 0, 10], vec![1, 0, 0, 0, 255, 1, 0, 0, 0, 2]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
+            assert_eq!(numerator, BigInt::from(-1));
+            assert_eq!(denominator, BigInt::from(2));
+        } else {
+            panic!("Expected ArbitraryFraction result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_really_big_arbitrary_fraction() {
+        let serialized = create_serialized_result(
+            vec![11, 0, 620],
+            vec![
+                50, 1, 0, 0, 149, 247, 58, 207, 96, 154, 13, 183, 226, 124, 243, 26, 152, 182, 13,
+                166, 140, 224, 77, 217, 163, 190, 157, 13, 254, 2, 92, 225, 182, 176, 180, 157,
+                107, 252, 30, 104, 70, 151, 167, 37, 57, 91, 243, 229, 129, 9, 150, 127, 214, 191,
+                125, 141, 36, 22, 150, 118, 64, 94, 107, 49, 40, 162, 155, 84, 215, 5, 73, 202,
+                221, 103, 6, 232, 24, 100, 191, 186, 232, 52, 234, 129, 101, 177, 147, 89, 74, 183,
+                244, 199, 155, 59, 5, 213, 240, 249, 207, 54, 2, 40, 222, 167, 54, 185, 141, 210,
+                49, 80, 30, 195, 195, 61, 193, 76, 4, 110, 181, 96, 65, 114, 23, 80, 218, 100, 172,
+                31, 208, 223, 58, 191, 180, 81, 254, 98, 42, 167, 84, 93, 75, 231, 26, 231, 32,
+                148, 95, 29, 81, 177, 224, 254, 121, 70, 235, 99, 29, 73, 64, 199, 50, 17, 172,
+                237, 213, 148, 157, 185, 26, 43, 155, 61, 232, 109, 116, 42, 28, 60, 204, 41, 95,
+                135, 182, 177, 113, 62, 104, 141, 146, 249, 12, 249, 68, 38, 135, 166, 36, 123,
+                103, 73, 139, 72, 210, 46, 62, 215, 59, 100, 86, 42, 23, 123, 251, 49, 177, 99,
+                152, 116, 190, 128, 127, 1, 80, 114, 82, 133, 75, 41, 33, 102, 174, 52, 178, 82,
+                234, 73, 173, 172, 9, 199, 106, 1, 245, 92, 184, 132, 25, 201, 187, 243, 96, 163,
+                67, 111, 67, 84, 23, 40, 126, 164, 73, 205, 169, 36, 30, 185, 206, 246, 22, 126,
+                199, 55, 208, 180, 214, 205, 184, 230, 222, 15, 193, 18, 203, 165, 254, 109, 36,
+                243, 6, 157, 79, 154, 9, 169, 94, 6, 99, 103, 244, 250, 214, 79, 122, 183, 26, 72,
+                176, 241, 165, 3, 50, 1, 0, 0, 115, 102, 93, 127, 176, 245, 229, 130, 7, 137, 221,
+                83, 189, 165, 115, 36, 142, 198, 65, 194, 208, 51, 111, 134, 196, 145, 169, 69,
+                206, 136, 86, 47, 77, 69, 199, 25, 184, 251, 247, 206, 221, 41, 109, 183, 132, 28,
+                232, 224, 216, 210, 46, 18, 53, 249, 251, 22, 221, 30, 146, 42, 203, 140, 153, 73,
+                87, 39, 232, 200, 48, 176, 65, 10, 108, 173, 147, 16, 13, 68, 207, 133, 166, 101,
+                231, 197, 32, 105, 135, 255, 5, 40, 235, 161, 213, 77, 219, 53, 18, 100, 1, 174,
+                187, 156, 127, 1, 239, 224, 49, 157, 73, 163, 133, 221, 171, 50, 154, 22, 100, 128,
+                202, 159, 87, 14, 94, 209, 185, 48, 209, 41, 31, 74, 180, 51, 248, 241, 186, 75,
+                225, 158, 102, 133, 159, 68, 114, 55, 121, 7, 135, 143, 233, 146, 162, 50, 224,
+                156, 146, 203, 27, 34, 241, 104, 93, 152, 143, 124, 198, 240, 134, 108, 194, 162,
+                69, 252, 195, 110, 129, 145, 98, 144, 211, 185, 248, 54, 110, 79, 171, 69, 125, 58,
+                31, 80, 119, 160, 4, 99, 227, 82, 149, 103, 97, 166, 56, 225, 26, 188, 77, 132,
+                156, 43, 254, 195, 220, 154, 97, 104, 135, 142, 142, 72, 175, 23, 1, 5, 1, 239,
+                138, 126, 188, 10, 148, 189, 144, 222, 164, 246, 161, 27, 128, 13, 209, 207, 217,
+                204, 244, 5, 164, 233, 168, 124, 131, 164, 101, 60, 182, 47, 214, 74, 10, 100, 119,
+                210, 200, 182, 78, 59, 71, 52, 198, 135, 121, 132, 135, 218, 142, 171, 20, 13, 49,
+                65, 251, 57, 124, 162, 50, 157, 254, 6, 137, 224, 97, 60, 153, 10, 174, 135, 38,
+                59, 84, 189, 117, 143, 35, 186, 173, 54, 88, 15,
+            ],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
+            assert_eq!(numerator,
+                BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap()
             );
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Fraction(1, 3));
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_negative_fraction() {
-            let serialized = create_serialized_result(
-                vec![1, 0, 16],
-                vec![
-                    255, 255, 255, 255, 255, 255, 255, 255, 2, 0, 0, 0, 0, 0, 0, 0,
-                ],
+            assert_eq!(denominator,
+                BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap()
             );
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Fraction(-1, 2));
+        } else {
+            panic!("Expected ArbitraryFraction result");
         }
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_infinity() {
-            let serialized = create_serialized_result(
-                vec![1, 0, 16],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Fraction(1, 0));
-        }
+    #[wasm_bindgen_test]
+    fn test_deserialize_date_with_value() {
+        let serializde =
+            create_serialized_result(vec![5, 0, 9], vec![4, 192, 167, 107, 219, 144, 1, 0, 0]);
+        let result = deserialize_result_internal(serializde).unwrap();
+        assert_eq!(
+            result,
+            DeciResult::Date(
+                Some(NaiveDateTime::from_timestamp(1721668184, 0)),
+                DateSpecificity::Day
+            )
+        );
+    }
+    #[wasm_bindgen_test]
+    fn test_deserialize_date_without_value() {
+        let serialized = create_serialized_result(vec![5, 0, 1], vec![4]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::Date(None, DateSpecificity::Day));
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_negative_infinity() {
-            let serialized = create_serialized_result(
-                vec![1, 0, 16],
-                vec![
-                    255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0,
-                ],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Fraction(-1, 0));
-        }
+    #[wasm_bindgen_test]
+    fn test_deserialize_string() {
+        let serialized = create_serialized_result(vec![3, 0, 13], b"Hello, world!".to_vec());
+        let result = deserialize_result_internal(serialized).unwrap();
+        assert_eq!(result, DeciResult::String("Hello, world!".to_string()));
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_date_with_value() {
-            let serializde =
-                create_serialized_result(vec![5, 0, 9], vec![4, 192, 167, 107, 219, 144, 1, 0, 0]);
-            let result = deserialize_result_internal(serializde).unwrap();
+    #[wasm_bindgen_test]
+    fn test_deserialize_uncompressed_column_of_booleans() {
+        let serialized = create_serialized_result(
+            vec![4, 1, 4, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1],
+            vec![1, 0, 1, 0],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(values) = result {
             assert_eq!(
-                result,
-                DeciResult::Date(
-                    Some(NaiveDateTime::from_timestamp(1721668184, 0)),
-                    DateSpecificity::Day
-                )
-            );
-        }
-        #[wasm_bindgen_test]
-        fn test_deserialize_date_without_value() {
-            let serialized = create_serialized_result(vec![5, 0, 1], vec![4]);
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::Date(None, DateSpecificity::Day));
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_string() {
-            let serialized = create_serialized_result(vec![3, 0, 13], b"Hello, world!".to_vec());
-            let result = deserialize_result_internal(serialized).unwrap();
-            assert_eq!(result, DeciResult::String("Hello, world!".to_string()));
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_uncompressed_column_of_booleans() {
-            let serialized = create_serialized_result(
-                vec![4, 1, 4, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1],
-                vec![1, 0, 1, 0],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(values) = result {
-                assert_eq!(
-                    values,
-                    vec![
-                        DeciResult::Boolean(true),
-                        DeciResult::Boolean(false),
-                        DeciResult::Boolean(true),
-                        DeciResult::Boolean(false)
-                    ]
-                );
-            } else {
-                panic!("Expected Column result");
-            }
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_uncompressed_column_of_fractions() {
-            let serialized = create_serialized_result(
-                vec![4, 1, 3, 1, 0, 16, 1, 16, 16, 1, 32, 16],
+                values,
                 vec![
-                    1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0,
-                    0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
-                ],
+                    DeciResult::Boolean(true),
+                    DeciResult::Boolean(false),
+                    DeciResult::Boolean(true),
+                    DeciResult::Boolean(false)
+                ]
             );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(values) = result {
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_uncompressed_column_of_fractions() {
+        let serialized = create_serialized_result(
+            vec![4, 1, 3, 1, 0, 16, 1, 16, 16, 1, 32, 16],
+            vec![
+                1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+                0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
+            ],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(values) = result {
+            assert_eq!(
+                values,
+                vec![
+                    DeciResult::Fraction(1, 2),
+                    DeciResult::Fraction(3, 4),
+                    DeciResult::Fraction(5, 6)
+                ]
+            );
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_uncompressed_column_of_strings() {
+        let serialized = create_serialized_result(
+            vec![4, 1, 3, 3, 0, 5, 3, 5, 5, 3, 10, 4],
+            b"HelloWorldTest".to_vec(),
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(values) = result {
+            assert_eq!(
+                values,
+                vec![
+                    DeciResult::String("Hello".to_string()),
+                    DeciResult::String("World".to_string()),
+                    DeciResult::String("Test".to_string())
+                ]
+            );
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_compressed_column_of_booleans() {
+        let serialized =
+            create_serialized_result(vec![4, 0, 3, 9223372036854775808, 3, 1], vec![1, 0, 1]);
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(values) = result {
+            assert_eq!(
+                values,
+                vec![
+                    DeciResult::Boolean(true),
+                    DeciResult::Boolean(false),
+                    DeciResult::Boolean(true)
+                ]
+            );
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_compressed_column_of_fractions() {
+        let serialized = create_serialized_result(
+            vec![4, 0, 48, 9223372036854775809, 3, 16],
+            vec![
+                1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+                0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
+            ],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(values) = result {
+            assert_eq!(
+                values,
+                vec![
+                    DeciResult::Fraction(1, 2),
+                    DeciResult::Fraction(3, 4),
+                    DeciResult::Fraction(5, 6)
+                ]
+            );
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_nested_columns_uncompressed() {
+        let serialized = create_serialized_result(
+            vec![
+                4, 1, 2, 4, 3, 2, 4, 5, 2, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1,
+            ],
+            vec![1, 0, 0, 1],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(outer_values) = result {
+            assert_eq!(outer_values.len(), 2);
+            if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
+                (&outer_values[0], &outer_values[1])
+            {
                 assert_eq!(
-                    values,
-                    vec![
-                        DeciResult::Fraction(1, 2),
-                        DeciResult::Fraction(3, 4),
-                        DeciResult::Fraction(5, 6)
-                    ]
+                    inner1,
+                    &vec![DeciResult::Boolean(true), DeciResult::Boolean(false)]
+                );
+                assert_eq!(
+                    inner2,
+                    &vec![DeciResult::Boolean(false), DeciResult::Boolean(true)]
                 );
             } else {
-                panic!("Expected Column result");
+                panic!("Expected nested Columns");
             }
+        } else {
+            panic!("Expected Column result");
         }
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_uncompressed_column_of_strings() {
-            let serialized = create_serialized_result(
-                vec![4, 1, 3, 3, 0, 5, 3, 5, 5, 3, 10, 4],
-                b"HelloWorldTest".to_vec(),
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(values) = result {
+    #[wasm_bindgen_test]
+    fn test_deserialize_nested_columns_compressed() {
+        let serialized = create_serialized_result(
+            vec![
+                4,
+                0,
+                4,
+                9223372036854775812,
+                2,
+                2,
+                9223372036854775808,
+                2,
+                1,
+            ],
+            vec![1, 0, 0, 1],
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(outer_values) = result {
+            assert_eq!(outer_values.len(), 2);
+            if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
+                (&outer_values[0], &outer_values[1])
+            {
                 assert_eq!(
-                    values,
-                    vec![
+                    inner1,
+                    &vec![DeciResult::Boolean(true), DeciResult::Boolean(false)]
+                );
+                assert_eq!(
+                    inner2,
+                    &vec![DeciResult::Boolean(false), DeciResult::Boolean(true)]
+                );
+            } else {
+                panic!("Expected nested Columns");
+            }
+        } else {
+            panic!("Expected Column result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_column_of_columns_of_strings() {
+        let serialized = create_serialized_result(
+            vec![
+                4, 1, 2, 4, 3, 2, 4, 5, 2, 3, 0, 5, 3, 5, 6, 3, 11, 4, 3, 15, 3,
+            ],
+            b"HelloWorld!DeciPad".to_vec(),
+        );
+        let result = deserialize_result_internal(serialized).unwrap();
+        if let DeciResult::Column(outer_values) = result {
+            assert_eq!(outer_values.len(), 2);
+            if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
+                (&outer_values[0], &outer_values[1])
+            {
+                assert_eq!(
+                    inner1,
+                    &vec![
                         DeciResult::String("Hello".to_string()),
-                        DeciResult::String("World".to_string()),
-                        DeciResult::String("Test".to_string())
+                        DeciResult::String("World!".to_string())
                     ]
                 );
-            } else {
-                panic!("Expected Column result");
-            }
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_compressed_column_of_booleans() {
-            let serialized =
-                create_serialized_result(vec![4, 0, 3, 9223372036854775808, 3, 1], vec![1, 0, 1]);
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(values) = result {
                 assert_eq!(
-                    values,
-                    vec![
-                        DeciResult::Boolean(true),
-                        DeciResult::Boolean(false),
-                        DeciResult::Boolean(true)
+                    inner2,
+                    &vec![
+                        DeciResult::String("Deci".to_string()),
+                        DeciResult::String("Pad".to_string())
                     ]
                 );
             } else {
-                panic!("Expected Column result");
+                panic!("Expected nested Columns");
             }
+        } else {
+            panic!("Expected Column result");
         }
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_compressed_column_of_fractions() {
-            let serialized = create_serialized_result(
-                vec![4, 0, 48, 9223372036854775809, 3, 16],
-                vec![
-                    1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0,
-                    0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
-                ],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(values) = result {
-                assert_eq!(
-                    values,
-                    vec![
-                        DeciResult::Fraction(1, 2),
-                        DeciResult::Fraction(3, 4),
-                        DeciResult::Fraction(5, 6)
-                    ]
-                );
-            } else {
-                panic!("Expected Column result");
+    #[wasm_bindgen_test]
+    fn test_deserialize_range() {
+        // Prepare test data
+        let type_array = BigUint64Array::from(&[7, 0, 32][..]);
+        let data = Uint8Array::from(
+            &[
+                2, 0, 0, 0, 0, 0, 0, 0, // 2n
+                1, 0, 0, 0, 0, 0, 0, 0, // 1n
+                8, 0, 0, 0, 0, 0, 0, 0, // 8n
+                1, 0, 0, 0, 0, 0, 0, 0, // 1n
+            ][..],
+        );
+
+        let serialized_range = SerializedResult::new(type_array, data);
+
+        let result = deserialize_result_internal(serialized_range).unwrap();
+
+        match result {
+            DeciResult::Range(range) => {
+                assert_eq!(range.len(), 2);
+                assert_eq!(range[0], DeciResult::Fraction(2, 1));
+                assert_eq!(range[1], DeciResult::Fraction(8, 1));
             }
+            _ => panic!("Expected Range result"),
         }
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_nested_columns_uncompressed() {
-            let serialized = create_serialized_result(
-                vec![
-                    4, 1, 2, 4, 3, 2, 4, 5, 2, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1,
-                ],
-                vec![1, 0, 0, 1],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(outer_values) = result {
-                assert_eq!(outer_values.len(), 2);
-                if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
-                    (&outer_values[0], &outer_values[1])
-                {
-                    assert_eq!(
-                        inner1,
-                        &vec![DeciResult::Boolean(true), DeciResult::Boolean(false)]
-                    );
-                    assert_eq!(
-                        inner2,
-                        &vec![DeciResult::Boolean(false), DeciResult::Boolean(true)]
-                    );
-                } else {
-                    panic!("Expected nested Columns");
-                }
-            } else {
-                panic!("Expected Column result");
-            }
-        }
+    #[wasm_bindgen_test]
+    fn test_deserialize_row() {
+        // Prepare test data
+        let row_index_name_data = "rowIndexName".as_bytes();
+        let cell1_name_data = "String".as_bytes();
+        let cell1_data = "Hello there".as_bytes();
+        let cell2_name_data = "Number".as_bytes();
+        let cell2_data = &[1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0]; // 1/3 as two i64
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_nested_columns_compressed() {
-            let serialized = create_serialized_result(
-                vec![
-                    4,
-                    0,
-                    4,
-                    9223372036854775812,
-                    2,
-                    2,
-                    9223372036854775808,
-                    2,
-                    1,
-                ],
-                vec![1, 0, 0, 1],
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(outer_values) = result {
-                assert_eq!(outer_values.len(), 2);
-                if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
-                    (&outer_values[0], &outer_values[1])
-                {
-                    assert_eq!(
-                        inner1,
-                        &vec![DeciResult::Boolean(true), DeciResult::Boolean(false)]
-                    );
-                    assert_eq!(
-                        inner2,
-                        &vec![DeciResult::Boolean(false), DeciResult::Boolean(true)]
-                    );
-                } else {
-                    panic!("Expected nested Columns");
-                }
-            } else {
-                panic!("Expected Column result");
-            }
-        }
+        let mut data = Vec::new();
+        data.extend_from_slice(row_index_name_data);
+        data.extend_from_slice(cell1_name_data);
+        data.extend_from_slice(cell1_data);
+        data.extend_from_slice(cell2_name_data);
+        data.extend_from_slice(cell2_data);
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_column_of_columns_of_strings() {
-            let serialized = create_serialized_result(
-                vec![
-                    4, 1, 2, 4, 3, 2, 4, 5, 2, 3, 0, 5, 3, 5, 6, 3, 11, 4, 3, 15, 3,
-                ],
-                b"HelloWorld!DeciPad".to_vec(),
-            );
-            let result = deserialize_result_internal(serialized).unwrap();
-            if let DeciResult::Column(outer_values) = result {
-                assert_eq!(outer_values.len(), 2);
-                if let (DeciResult::Column(inner1), DeciResult::Column(inner2)) =
-                    (&outer_values[0], &outer_values[1])
-                {
-                    assert_eq!(
-                        inner1,
-                        &vec![
-                            DeciResult::String("Hello".to_string()),
-                            DeciResult::String("World!".to_string())
-                        ]
-                    );
-                    assert_eq!(
-                        inner2,
-                        &vec![
-                            DeciResult::String("Deci".to_string()),
-                            DeciResult::String("Pad".to_string())
-                        ]
-                    );
-                } else {
-                    panic!("Expected nested Columns");
-                }
-            } else {
-                panic!("Expected Column result");
-            }
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_range() {
-            // Prepare test data
-            let type_array = BigUint64Array::from(&[7, 0, 32][..]);
-            let data = Uint8Array::from(
+        let serialized_row = SerializedResult::new(
+            BigUint64Array::from(
                 &[
-                    2, 0, 0, 0, 0, 0, 0, 0, // 2n
-                    1, 0, 0, 0, 0, 0, 0, 0, // 1n
-                    8, 0, 0, 0, 0, 0, 0, 0, // 8n
-                    1, 0, 0, 0, 0, 0, 0, 0, // 1n
+                    8, 1, 2, // row
+                    3, 0, 12, // rowIndexName
+                    3, 12, 6, // String
+                    3, 18, 11, // Hello there
+                    3, 29, 6, // Number
+                    1, 35, 16, // 1/3
                 ][..],
+            ),
+            Uint8Array::from(&data[..]),
+        );
+
+        let result = deserialize_result_internal(serialized_row).unwrap();
+
+        if let DeciResult::Row(row) = result {
+            assert_eq!(row.row_index_name, "rowIndexName");
+            assert_eq!(row.cells.len(), 2);
+
+            let string_cell = row.cells.get("String").unwrap();
+            let number_cell = row.cells.get("Number").unwrap();
+
+            assert_eq!(*string_cell, DeciResult::String("Hello there".to_string()));
+            assert_eq!(*number_cell, DeciResult::Fraction(1, 3));
+        } else {
+            panic!("Expected Row result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_table() {
+        let data_string = [
+            "exprRef_block_0_ind",
+            "exprRef_block_0_del",
+            "T1",
+            "T2",
+            "Short",
+            "Longer string",
+            "Medium length",
+            "Very long string here",
+        ]
+        .join("");
+
+        let data_array = Uint8Array::new_with_length(data_string.len() as u32);
+        data_array.copy_from(&data_string.as_bytes());
+
+        let serialized_table = SerializedResult::new(
+            BigUint64Array::from(
+                &[
+                    6, 1, 2, // table
+                    3, 0, 19, // indexName
+                    3, 19, 19, // delegatesIndexTo
+                    3, 38, 2, // T1
+                    3, 40, 2, // T2
+                    4, 7, 2, // column
+                    4, 9, 2, // column
+                    3, 42, 5, // T1
+                    3, 47, 13, // T1
+                    3, 60, 13, // T2
+                    3, 73, 21, // T2
+                ][..],
+            ),
+            data_array,
+        );
+
+        // Deserialize the table
+        let result = deserialize_result_internal(serialized_table).unwrap();
+
+        // Check the deserialized result
+        if let DeciResult::Table(table) = result {
+            assert_eq!(table.index_name, Some("exprRef_block_0_ind".to_string()));
+            assert_eq!(
+                table.delegates_index_to,
+                Some("exprRef_block_0_del".to_string())
+            );
+            assert_eq!(table.column_names, vec!["T1".to_string(), "T2".to_string()]);
+
+            assert_eq!(table.columns.len(), 2);
+
+            // Check first column
+            assert_eq!(
+                table.columns[0],
+                vec![
+                    DeciResult::String("Short".to_string()),
+                    DeciResult::String("Longer string".to_string())
+                ]
             );
 
-            let serialized_range = SerializedResult::new(type_array, data);
-
-            let result = deserialize_result_internal(serialized_range).unwrap();
-
-            match result {
-                DeciResult::Range(range) => {
-                    assert_eq!(range.len(), 2);
-                    assert_eq!(range[0], DeciResult::Fraction(2, 1));
-                    assert_eq!(range[1], DeciResult::Fraction(8, 1));
-                }
-                _ => panic!("Expected Range result"),
-            }
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_row() {
-            // Prepare test data
-            let row_index_name_data = "rowIndexName".as_bytes();
-            let cell1_name_data = "String".as_bytes();
-            let cell1_data = "Hello there".as_bytes();
-            let cell2_name_data = "Number".as_bytes();
-            let cell2_data = &[1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0]; // 1/3 as two i64
-
-            let mut data = Vec::new();
-            data.extend_from_slice(row_index_name_data);
-            data.extend_from_slice(cell1_name_data);
-            data.extend_from_slice(cell1_data);
-            data.extend_from_slice(cell2_name_data);
-            data.extend_from_slice(cell2_data);
-
-            let serialized_row = SerializedResult::new(
-                BigUint64Array::from(
-                    &[
-                        8, 1, 2, // row
-                        3, 0, 12, // rowIndexName
-                        3, 12, 6, // String
-                        3, 18, 11, // Hello there
-                        3, 29, 6, // Number
-                        1, 35, 16, // 1/3
-                    ][..],
-                ),
-                Uint8Array::from(&data[..]),
+            // Check second column
+            assert_eq!(
+                table.columns[1],
+                vec![
+                    DeciResult::String("Medium length".to_string()),
+                    DeciResult::String("Very long string here".to_string())
+                ]
             );
-
-            let result = deserialize_result_internal(serialized_row).unwrap();
-
-            if let DeciResult::Row(row) = result {
-                assert_eq!(row.row_index_name, "rowIndexName");
-                assert_eq!(row.cells.len(), 2);
-
-                let string_cell = row.cells.get("String").unwrap();
-                let number_cell = row.cells.get("Number").unwrap();
-
-                assert_eq!(*string_cell, DeciResult::String("Hello there".to_string()));
-                assert_eq!(*number_cell, DeciResult::Fraction(1, 3));
-            } else {
-                panic!("Expected Row result");
-            }
+        } else {
+            panic!("Expected Table result");
         }
+    }
 
-        #[wasm_bindgen_test]
-        fn test_deserialize_table() {
-            let data_string = [
-                "exprRef_block_0_ind",
-                "exprRef_block_0_del",
-                "T1",
-                "T2",
-                "Short",
-                "Longer string",
-                "Medium length",
-                "Very long string here",
-            ]
-            .join("");
+    #[wasm_bindgen_test]
+    fn test_deserialize_type_error() {
+        let type_array = BigUint64Array::from(&[9, 0, 0][..]); // Pending
+        let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
 
-            let data_array = Uint8Array::new_with_length(data_string.len() as u32);
-            data_array.copy_from(&data_string.as_bytes());
+        let serialized_type_error = SerializedResult::new(type_array, data_array);
 
-            let serialized_table = SerializedResult::new(
-                BigUint64Array::from(
-                    &[
-                        6, 1, 2, // table
-                        3, 0, 19, // indexName
-                        3, 19, 19, // delegatesIndexTo
-                        3, 38, 2, // T1
-                        3, 40, 2, // T2
-                        4, 7, 2, // column
-                        4, 9, 2, // column
-                        3, 42, 5, // T1
-                        3, 47, 13, // T1
-                        3, 60, 13, // T2
-                        3, 73, 21, // T2
-                    ][..],
-                ),
-                data_array,
-            );
+        let result = deserialize_result_internal(serialized_type_error).unwrap();
 
-            // Deserialize the table
-            let result = deserialize_result_internal(serialized_table).unwrap();
+        assert_eq!(result, DeciResult::TypeError);
+    }
 
-            // Check the deserialized result
-            if let DeciResult::Table(table) = result {
-                assert_eq!(table.index_name, Some("exprRef_block_0_ind".to_string()));
-                assert_eq!(
-                    table.delegates_index_to,
-                    Some("exprRef_block_0_del".to_string())
-                );
-                assert_eq!(table.column_names, vec!["T1".to_string(), "T2".to_string()]);
+    #[wasm_bindgen_test]
+    fn test_deserialize_pending() {
+        let type_array = BigUint64Array::from(&[10, 0, 0][..]); // Pending
+        let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
 
-                assert_eq!(table.columns.len(), 2);
+        let serialized_pending = SerializedResult::new(type_array, data_array);
 
-                // Check first column
-                assert_eq!(
-                    table.columns[0],
-                    vec![
-                        DeciResult::String("Short".to_string()),
-                        DeciResult::String("Longer string".to_string())
-                    ]
-                );
+        let result = deserialize_result_internal(serialized_pending).unwrap();
 
-                // Check second column
-                assert_eq!(
-                    table.columns[1],
-                    vec![
-                        DeciResult::String("Medium length".to_string()),
-                        DeciResult::String("Very long string here".to_string())
-                    ]
-                );
-            } else {
-                panic!("Expected Table result");
-            }
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_type_error() {
-            let type_array = BigUint64Array::from(&[9, 0, 0][..]); // Pending
-            let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
-
-            let serialized_type_error = SerializedResult::new(type_array, data_array);
-
-            let result = deserialize_result_internal(serialized_type_error).unwrap();
-
-            assert_eq!(result, DeciResult::TypeError);
-        }
-
-        #[wasm_bindgen_test]
-        fn test_deserialize_pending() {
-            let type_array = BigUint64Array::from(&[10, 0, 0][..]); // Pending
-            let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
-
-            let serialized_pending = SerializedResult::new(type_array, data_array);
-
-            let result = deserialize_result_internal(serialized_pending).unwrap();
-
-            assert_eq!(result, DeciResult::Pending);
-        }
+        assert_eq!(result, DeciResult::Pending);
     }
 }

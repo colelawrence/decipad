@@ -38,8 +38,8 @@ describe('serializeResult', () => {
     });
 
     expect(one).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([1n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
     });
   });
 
@@ -50,8 +50,8 @@ describe('serializeResult', () => {
     });
 
     expect(oneThird).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([1n, 3n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 3]),
     });
   });
 
@@ -61,16 +61,30 @@ describe('serializeResult', () => {
       value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
     });
     expect(zero).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([0n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 1]),
     });
-    const negativeZero = await serializeResult({
+  });
+
+  it('should serialize 1000', async () => {
+    const result = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 0n, d: 1n, s: -1n }),
+      value: new DeciNumber({ n: 1000n, d: 1n, s: 1n }),
     });
-    expect(negativeZero).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([0n, 1n]).buffer),
+    expect(result).toEqual({
+      type: new BigUint64Array([11n, 0n, 11n]),
+      data: new Uint8Array([2, 0, 0, 0, 232, 3, 1, 0, 0, 0, 1]),
+    });
+  });
+
+  it('should serialize 54,320', async () => {
+    const result = await serializeResult({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 54_320n, d: 1n, s: 1n }),
+    });
+    expect(result).toEqual({
+      type: new BigUint64Array([11n, 0n, 12n]),
+      data: new Uint8Array([3, 0, 0, 0, 48, 212, 0, 1, 0, 0, 0, 1]),
     });
   });
 
@@ -80,32 +94,32 @@ describe('serializeResult', () => {
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
     expect(negativeOne).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([-1n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
     const negativeDenominator = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: 1n, infinite: false }),
     });
     expect(negativeDenominator).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([-1n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
     const negativeBoth = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: -1n, infinite: false }),
     });
     expect(negativeBoth).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([1n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
     });
     const negativeSign = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
     expect(negativeSign).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([-1n, 1n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
   });
 
@@ -115,17 +129,30 @@ describe('serializeResult', () => {
       value: new DeciNumber({ infinite: true }),
     });
     expect(positiveInfinity).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([1n, 0n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
     });
     const negativeInfinity = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ s: -1n, infinite: true }),
     });
     expect(negativeInfinity).toEqual({
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([-1n, 0n]).buffer),
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 0]),
     });
+  });
+
+  it('should serialize a really big number', async () => {
+    const result = await serializeResult({
+      type: { kind: 'number' },
+      value: new DeciNumber({
+        n: 1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005n,
+        d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
+        s: 1n,
+      }),
+    });
+
+    expect(result).toMatchSnapshot();
   });
 
   it('should serialize a string', async () => {
@@ -500,12 +527,14 @@ describe('serializeResult', () => {
   it('should serialize a range containing bigints', async () => {
     const range = await serializeResult({
       type: { kind: 'range', rangeOf: { kind: 'number' } },
-      value: [2n, 8n],
+      value: [1n, 4n],
     });
 
     expect(range).toEqual({
-      type: new BigUint64Array([7n, 0n, 32n]),
-      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+      type: new BigUint64Array([7n, 0n, 20n]),
+      data: new Uint8Array([
+        1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 4, 1, 0, 0, 0, 1,
+      ]),
     });
   });
 
@@ -513,14 +542,16 @@ describe('serializeResult', () => {
     const range = await serializeResult({
       type: { kind: 'range', rangeOf: { kind: 'number' } },
       value: [
-        new DeciNumber({ n: 2n, d: 1n, s: 1n }),
-        new DeciNumber({ n: 8n, d: 1n, s: 1n }),
+        new DeciNumber({ n: 1n, d: 1n, s: 1n }),
+        new DeciNumber({ n: 4n, d: 1n, s: 1n }),
       ],
     });
 
     expect(range).toEqual({
-      type: new BigUint64Array([7n, 0n, 32n]),
-      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+      type: new BigUint64Array([7n, 0n, 20n]),
+      data: new Uint8Array([
+        1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 4, 1, 0, 0, 0, 1,
+      ]),
     });
   });
 
@@ -538,14 +569,14 @@ describe('serializeResult', () => {
     const cell1NameData = new TextEncoder().encode('String');
     const cell1Data = new TextEncoder().encode('Hello there');
     const cell2NameData = new TextEncoder().encode('Number');
-    const cell2Data = new Uint8Array(new BigInt64Array([1n, 3n]).buffer);
+    const cell2Data = new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 3]);
     expect(chunk(row.type, 3)).toEqual([
       [8n, 1n, 2n], // row
       [3n, 0n, 12n], // rowIndexName
       [3n, 12n, 6n], // String
       [3n, 18n, 11n], // Hello there
       [3n, 29n, 6n], // Number
-      [1n, 35n, 16n], // 1/3
+      [11n, 35n, 10n], // 1/3
     ]);
     expect(row.data).toEqual(
       new Uint8Array([
@@ -622,48 +653,134 @@ describe('deserializeResult', () => {
     });
   });
 
-  it('should deserialize positive fractions', () => {
-    const serializedOneThird = {
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([1n, 3n]).buffer),
-    };
+  it('should deserialize positive integers', async () => {
+    const one = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
+    });
 
-    const result = deserializeResult(serializedOneThird);
-    expect(result).toMatchInlineSnapshot(`
-      {
-        "type": {
-          "kind": "number",
-        },
-        "value": DeciNumber {
-          "d": 3n,
-          "infinite": false,
-          "n": 1n,
-          "s": 1n,
-        },
-      }
-    `);
+    expect(one).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+    });
   });
 
-  it('should deserialize negative fractions', () => {
-    const serializedNegativeOneHalf = {
-      type: new BigUint64Array([1n, 0n, 16n]),
-      data: new Uint8Array(new BigInt64Array([-1n, 2n]).buffer),
-    };
+  it('should deserialize positive fractions', async () => {
+    const oneThird = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 3]),
+    });
 
-    const result = deserializeResult(serializedNegativeOneHalf);
-    expect(result).toMatchInlineSnapshot(`
-      {
-        "type": {
-          "kind": "number",
-        },
-        "value": DeciNumber {
-          "d": 2n,
-          "infinite": false,
-          "n": 1n,
-          "s": -1n,
-        },
-      }
-    `);
+    expect(oneThird).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 3n, s: 1n, infinite: false }),
+    });
+  });
+
+  it('should deserialize zero', async () => {
+    const zero = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 1]),
+    });
+    expect(zero).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
+    });
+  });
+
+  it('should deserialize 1000', async () => {
+    const result = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 11n]),
+      data: new Uint8Array([2, 0, 0, 0, 232, 3, 1, 0, 0, 0, 1]),
+    });
+    expect(result).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1000n, d: 1n, s: 1n }),
+    });
+  });
+
+  it('should deserialize 54,320', async () => {
+    const result = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 12n]),
+      data: new Uint8Array([3, 0, 0, 0, 48, 212, 0, 1, 0, 0, 0, 1]),
+    });
+    expect(result).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 54_320n, d: 1n, s: 1n }),
+    });
+  });
+
+  it('should deserialize negative numbers', async () => {
+    const negativeOne = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
+    });
+    expect(negativeOne).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+    });
+
+    const negativeDenominator = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
+    });
+    expect(negativeDenominator).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+    });
+
+    const negativeBoth = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
+    });
+    expect(negativeBoth).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+    });
+
+    const negativeSign = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
+    });
+    expect(negativeSign).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+    });
+  });
+
+  it('should deserialize infinity', async () => {
+    const positiveInfinity = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
+    });
+    expect(positiveInfinity).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ infinite: true }),
+    });
+
+    const negativeInfinity = await deserializeResult({
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 0]),
+    });
+    expect(negativeInfinity).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ s: -1n, infinite: true }),
+    });
+  });
+
+  it('should deserialize a really big number', async () => {
+    const n: Result.Result<'number'> = {
+      type: { kind: 'number' },
+      value: new DeciNumber({
+        n: 1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005n,
+        d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
+        s: 1n,
+      }),
+    };
+    const serialized = await serializeResult(n);
+    const deserialized = await deserializeResult(serialized);
+
+    expect(deserialized).toEqual(n);
   });
 
   it('should deserialize infinity', () => {
@@ -689,6 +806,63 @@ describe('deserializeResult', () => {
     expect(result).toEqual({
       type: { kind: 'number' },
       value: new DeciNumber({ s: -1n, infinite: true }),
+    });
+  });
+
+  it('should deserialize positive fractions', () => {
+    const serializedOneThird = {
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 2, 1, 0, 0, 0, 6]),
+    };
+
+    const result = deserializeResult(serializedOneThird);
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "type": {
+          "kind": "number",
+        },
+        "value": DeciNumber {
+          "d": 3n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+      }
+    `);
+  });
+
+  it('should deserialize negative fractions', () => {
+    const serializedNegativeOneHalf = {
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 2]),
+    };
+
+    const result = deserializeResult(serializedNegativeOneHalf);
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "type": {
+          "kind": "number",
+        },
+        "value": DeciNumber {
+          "d": 2n,
+          "infinite": false,
+          "n": 1n,
+          "s": -1n,
+        },
+      }
+    `);
+  });
+
+  it('should deserialize infinity', () => {
+    const serializedInfinity = {
+      type: new BigUint64Array([11n, 0n, 10n]),
+      data: new Uint8Array([1, 0, 0, 0, 2, 1, 0, 0, 0, 0]),
+    };
+
+    const result = deserializeResult(serializedInfinity);
+    expect(result).toEqual({
+      type: { kind: 'number' },
+      value: new DeciNumber({ infinite: true }),
     });
   });
 
@@ -1037,8 +1211,10 @@ describe('deserializeResult', () => {
 
   it('should deserialize a range', () => {
     const serializedRange: SerializedResult = {
-      type: new BigUint64Array([7n, 0n, 32n]),
-      data: new Uint8Array(new BigInt64Array([2n, 1n, 8n, 1n]).buffer),
+      type: new BigUint64Array([7n, 0n, 20n]),
+      data: new Uint8Array([
+        1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 4, 1, 0, 0, 0, 1,
+      ]),
     };
 
     const result = deserializeResult(serializedRange);
@@ -1047,7 +1223,7 @@ describe('deserializeResult', () => {
         kind: 'range',
         rangeOf: { kind: 'number' },
       },
-      value: [new DeciNumber(2n), new DeciNumber(8n)],
+      value: [new DeciNumber(1n), new DeciNumber(4n)],
     });
   });
 

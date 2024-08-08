@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 use chrono::NaiveDateTime;
 use std::{collections::HashMap, io::ErrorKind};
+use num_bigint::BigInt;
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 #[wasm_bindgen]
@@ -45,6 +46,7 @@ pub enum DeciResult {
     Boolean(bool),
     String(String),
     Fraction(i64, i64),
+    ArbitraryFraction(BigInt, BigInt),
     Float(f64),
     Column(Vec<DeciResult>),
     Date(Option<NaiveDateTime>, DateSpecificity),

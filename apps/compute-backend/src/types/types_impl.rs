@@ -119,6 +119,7 @@ impl DeciResult {
             DeciResult::String(s) => s.to_string(),
             DeciResult::Float(f) => f.to_string(),
             DeciResult::Fraction(n, d) => format!("{}/{}", *n, *d),
+            DeciResult::ArbitraryFraction(n, d) => format!("{}/{}", n, d),
             DeciResult::Boolean(b) => b.to_string(),
             DeciResult::Column(items) => format!(
                 "[{}]",

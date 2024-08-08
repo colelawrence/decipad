@@ -9,6 +9,10 @@ import {
   OneResult,
 } from 'libs/language-interfaces/src/Result';
 import { Specificity } from 'libs/language-interfaces/src/Time';
+
+const FULL_BYTE = 0xff;
+const FULL_NIBBLE = 0x80;
+
 // Warning: if you want to add values to this, you must update their corresponding values in Rust too!
 enum ResultType {
   Boolean = 0,
@@ -22,13 +26,11 @@ enum ResultType {
   Row = 8,
   TypeError = 9,
   Pending = 10,
-  // Function = 11,
-  // Tree = 12,
+  BigFraction = 11,
 }
 
 const fixedLengths = {
   [ResultType.Fraction]: 16,
-  [ResultType.Range]: 32,
   [ResultType.Float]: 8,
   [ResultType.Boolean]: 1,
   [ResultType.TypeError]: 0,
@@ -40,15 +42,104 @@ export type SerializedResult = {
   data: Uint8Array;
 };
 
-const deciNumberToUint8Array = (deciNumber: DeciNumber): Uint8Array => {
-  const { s, n = 1n, d = 1n, infinite = false } = deciNumber;
-  const ns = s === undefined ? 1 : s < 0 ? -1 : 1;
+const serializeBigIntToUint8Array = (value: bigint): Uint8Array => {
+  // Convert BigInt to little-endian byte array
+  const isNegative = value < 0n;
+  let absValue = isNegative ? -value : value;
+  let bytes: number[] = [];
 
-  const bigintArray = new BigInt64Array([
-    BigInt(ns) * (n || 0n),
-    infinite ? 0n : d || 0n,
-  ]);
-  return new Uint8Array(bigintArray.buffer);
+  do {
+    bytes.push(Number(absValue & 255n));
+    absValue >>= 8n;
+  } while (absValue > 0n);
+
+  // Handle two's complement for negative numbers
+  if (isNegative) {
+    let carry = 1;
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = (~bytes[i] & FULL_BYTE) + carry;
+      carry = bytes[i] >> 8;
+      bytes[i] &= FULL_BYTE;
+    }
+    if (carry || (bytes[bytes.length - 1] & FULL_NIBBLE) === 0) {
+      bytes.push(FULL_BYTE);
+    }
+  } else if ((bytes[bytes.length - 1] & FULL_NIBBLE) !== 0) {
+    bytes.push(0);
+  }
+
+  // Create buffer with 4 bytes for length + bytes for the value
+  const buffer = new Uint8Array(4 + bytes.length);
+
+  // Write length (4 bytes, big-endian)
+  const len = bytes.length;
+  buffer[0] = len & FULL_BYTE;
+  buffer[1] = (len >> 8) & FULL_BYTE;
+  buffer[2] = (len >> 16) & FULL_BYTE;
+  buffer[3] = (len >> 24) & FULL_BYTE;
+  // Write BigInt bytes
+  buffer.set(bytes, 4);
+
+  return buffer;
+};
+
+const deserializeUint8ArrayToBigInt = (
+  buffer: Uint8Array,
+  offset: number,
+  length: number
+): bigint => {
+  if (buffer.length < offset) {
+    throw new Error(
+      'Buffer is too short to contain a valid serialized BigInt at the given offset'
+    );
+  }
+
+  // Read the length (4 bytes, big-endian)
+
+  if (buffer.length < offset + length) {
+    throw new Error('Buffer length does not match the encoded length');
+  }
+
+  // Extract the BigInt bytes
+  const bytes = buffer.slice(offset, offset + length);
+
+  // Determine if the number is negative (check the most significant bit)
+  const isNegative = (bytes[bytes.length - 1] & FULL_NIBBLE) !== 0;
+
+  // Convert bytes to BigInt
+  let value = 0n;
+  for (let i = bytes.length - 1; i >= 0; i--) {
+    value = (value << 8n) | BigInt(bytes[i]);
+  }
+
+  // Handle two's complement for negative numbers
+  if (isNegative) {
+    const mask = (1n << BigInt(8 * bytes.length)) - 1n;
+    value = -((~value & mask) + 1n);
+  }
+
+  return value;
+};
+
+const serializeDeciNumber = (
+  deciNumber: DeciNumber
+): [Uint8Array, Uint8Array] => {
+  const { s, n = 1n, d = 1n, infinite = false } = deciNumber;
+  let numerator: bigint;
+  let denominator: bigint;
+  if (infinite) {
+    numerator = s || 1n;
+    denominator = 0n;
+  } else {
+    numerator = s ? n * s : n;
+    denominator = d;
+  }
+
+  const encodedNumerator = serializeBigIntToUint8Array(numerator);
+
+  const encodeDenominator = serializeBigIntToUint8Array(denominator);
+
+  return [encodedNumerator, encodeDenominator];
 };
 
 // Used to represent null values in metadata
@@ -85,14 +176,19 @@ export const serializeResultIter = async <T extends Result>(
         break;
       }
       case 'number': {
-        dataArray.push(
-          deciNumberToUint8Array((result as Result<'number'>).value)
+        const [encodedNumerator, encodedDenominator] = serializeDeciNumber(
+          (result as Result<'number'>).value
         );
 
-        typeArray.push(ResultType.Fraction);
+        dataArray.push(encodedNumerator);
+
+        dataArray.push(encodedDenominator);
+
+        const length = encodedNumerator.length + encodedDenominator.length;
+        typeArray.push(ResultType.BigFraction);
         typeArray.push(dataLength.n);
-        typeArray.push(fixedLengths[ResultType.Fraction]);
-        dataLength.n += fixedLengths[ResultType.Fraction];
+        typeArray.push(length);
+        dataLength.n += length;
         break;
       }
       case 'date': {
@@ -261,28 +357,39 @@ export const serializeResultIter = async <T extends Result>(
         const rangeResult = result as Result<'range'>;
         typeArray.push(ResultType.Range);
         typeArray.push(dataLength.n);
-        typeArray.push(fixedLengths[ResultType.Range]);
-        dataLength.n += fixedLengths[ResultType.Range];
 
+        let startDeciNumber: DeciNumber;
+        let endDeciNumber: DeciNumber;
         if (
           typeof rangeResult.value[0] === 'bigint' &&
           typeof rangeResult.value[1] === 'bigint'
         ) {
-          dataArray.push(
-            deciNumberToUint8Array(new DeciNumber(rangeResult.value[0]))
-          );
-          dataArray.push(
-            deciNumberToUint8Array(new DeciNumber(rangeResult.value[1]))
-          );
+          startDeciNumber = new DeciNumber(rangeResult.value[0]);
+          endDeciNumber = new DeciNumber(rangeResult.value[1]);
         } else if (
           rangeResult.value[0] instanceof DeciNumber &&
           rangeResult.value[1] instanceof DeciNumber
         ) {
-          dataArray.push(deciNumberToUint8Array(rangeResult.value[0]));
-          dataArray.push(deciNumberToUint8Array(rangeResult.value[1]));
+          startDeciNumber = rangeResult.value[0];
+          endDeciNumber = rangeResult.value[1];
         } else {
           throw new Error('Invalid range value');
         }
+
+        const startEncoded = serializeDeciNumber(startDeciNumber);
+        const endEncoded = serializeDeciNumber(endDeciNumber);
+
+        dataArray.push(startEncoded[0]);
+        dataArray.push(startEncoded[1]);
+        dataArray.push(endEncoded[0]);
+        dataArray.push(endEncoded[1]);
+        const length =
+          startEncoded[0].length +
+          startEncoded[1].length +
+          endEncoded[0].length +
+          endEncoded[1].length;
+        typeArray.push(length);
+        dataLength.n += length;
         break;
       }
 
@@ -421,6 +528,9 @@ function decodeNumber(number: bigint): [boolean, ResultType] {
     case 10:
       result = ResultType.Pending;
       break;
+    case 11:
+      result = ResultType.BigFraction;
+      break;
     default:
       throw new Error(`Invalid ResultType value: ${originalNumber}`);
   }
@@ -428,7 +538,7 @@ function decodeNumber(number: bigint): [boolean, ResultType] {
   return [firstBit, result];
 }
 
-function readBigIntFromUint8Array(array: Uint8Array, offset: number): bigint {
+function readInt64FromUint8Array(array: Uint8Array, offset: number): bigint {
   const buffer = array.slice(offset, offset + 8);
   return BigInt(new DataView(buffer.buffer).getBigInt64(0, true));
 }
@@ -503,8 +613,8 @@ const deserializeResultIter = (
     }
 
     case ResultType.Fraction: {
-      const numerator = readBigIntFromUint8Array(data, offset);
-      const denominator = readBigIntFromUint8Array(data, offset + 8);
+      const numerator = readInt64FromUint8Array(data, offset);
+      const denominator = readInt64FromUint8Array(data, offset + 8);
       let deciNumber: DeciNumber;
       if (denominator === 0n && numerator > 0n) {
         deciNumber = new DeciNumber({ infinite: true });
@@ -522,7 +632,7 @@ const deserializeResultIter = (
     case ResultType.Date: {
       const specificity = numberToTimeSpecificity(Number(data[offset]));
       const value =
-        length === 1 ? undefined : readBigIntFromUint8Array(data, offset + 1);
+        length === 1 ? undefined : readInt64FromUint8Array(data, offset + 1);
       return { type: { kind: 'date', date: specificity }, value };
     }
 
@@ -590,14 +700,30 @@ const deserializeResultIter = (
     }
 
     case ResultType.Range: {
+      deserializeUint8ArrayToBigInt;
+      const bigints: bigint[] = [];
+
+      let ptr = offset;
+      for (let i = 0; i < 4; i++) {
+        const length =
+          data[ptr] |
+          (data[ptr + 1] << 8) |
+          (data[ptr + 2] << 16) |
+          (data[ptr + 3] << 24);
+        ptr += 4;
+        bigints.push(deserializeUint8ArrayToBigInt(data, ptr, length));
+        ptr += length;
+      }
+      console.log(bigints);
+
       const start = new DeciNumber({
-        n: readBigIntFromUint8Array(data, offset),
-        d: readBigIntFromUint8Array(data, offset + 8),
+        n: bigints[0],
+        d: bigints[1],
         s: 1n,
       });
       const end = new DeciNumber({
-        n: readBigIntFromUint8Array(data, offset + 16),
-        d: readBigIntFromUint8Array(data, offset + 24),
+        n: bigints[2],
+        d: bigints[3],
         s: 1n,
       });
       return {
@@ -714,6 +840,44 @@ const deserializeResultIter = (
           rowIndexName,
         },
         value: rowCells,
+      };
+    }
+
+    case ResultType.BigFraction: {
+      const numeratorLength =
+        data[offset] |
+        (data[offset + 1] << 8) |
+        (data[offset + 2] << 16) |
+        (data[offset + 3] << 24);
+
+      const numerator = deserializeUint8ArrayToBigInt(
+        data,
+        offset + 4,
+        numeratorLength
+      );
+      const newOffset = offset + numeratorLength + 4;
+      const denominatorLength =
+        data[newOffset] |
+        (data[newOffset + 1] << 8) |
+        (data[newOffset + 2] << 16) |
+        (data[newOffset + 3] << 24);
+      const denominator = deserializeUint8ArrayToBigInt(
+        data,
+        newOffset + 4,
+        denominatorLength
+      );
+
+      let deciNumber: DeciNumber;
+      if (denominator === 0n && numerator > 0n) {
+        deciNumber = new DeciNumber({ infinite: true });
+      } else if (denominator === 0n && numerator < 0n) {
+        deciNumber = new DeciNumber({ infinite: true, s: -1 });
+      } else {
+        deciNumber = new DeciNumber({ n: numerator, d: denominator, s: 1n });
+      }
+      return {
+        type: { kind: 'number' },
+        value: deciNumber,
       };
     }
 
