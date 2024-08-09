@@ -848,3 +848,138 @@ test('Premium Feature - Allow duplicate, prevent users from duplicating', async 
     ).toBeVisible();
   });
 });
+
+test('basic publishing analytics test @publishing-v2', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  let notebookURL = '';
+  await test.step('Activate feature flag for testing', async () => {
+    const e2eFlags = {
+      PRIVATE_LINK_ANALYTICS: true,
+    };
+    const flags = JSON.stringify(e2eFlags);
+
+    await testUser.page.evaluate(
+      (f) => localStorage.setItem('deciFeatureFlags', f),
+      flags
+    );
+
+    await testUser.page.reload();
+  });
+
+  await test.step('create notebook', async () => {
+    await testUser.notebook.focusOnBody();
+    await testUser.notebook.addParagraph('testing publishing analytics');
+    notebookURL = await testUser.notebook.publishNotebookV2();
+  });
+
+  await unregisteredUser.page.goto(notebookURL);
+  await unregisteredUser.notebook.waitForEditorToLoad;
+  await expect(
+    testUser.page.getByText('testing publishing analytics')
+  ).toBeVisible();
+});
+
+test('basic private publishing analytics test @publishing-v2', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  let notebookURL = '';
+  await test.step('Activate feature flag for testing', async () => {
+    const e2eFlags = {
+      PRIVATE_LINK_ANALYTICS: true,
+      ALLOW_CREATE_NEW_WORKSPACE: true,
+    };
+    const flags = JSON.stringify(e2eFlags);
+
+    await testUser.page.evaluate(
+      (f) => localStorage.setItem('deciFeatureFlags', f),
+      flags
+    );
+
+    await testUser.page.reload();
+  });
+
+  await test.step('premium workspace since its a paid feature', async () => {
+    await testUser.goToWorkspace();
+    await testUser.workspace.newWorkspace('@n1n.co team');
+    await testUser.createNewNotebook();
+  });
+
+  await test.step('create notebook and publish a private link', async () => {
+    await testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.focusOnBody();
+    await testUser.notebook.addParagraph('testing publishing analytics');
+    notebookURL = await testUser.notebook.publishPrivateURLV2();
+  });
+
+  await test.step('check private link as a reader', async () => {
+    await unregisteredUser.page.goto(notebookURL);
+    await unregisteredUser.notebook.waitForEditorToLoad;
+    await expect(
+      testUser.page.getByText('testing publishing analytics')
+    ).toBeVisible();
+  });
+
+  await test.step('Create and check alias link work', async () => {
+    await expect(testUser.page.getByText('Add alias')).toBeDisabled();
+
+    await testUser.page
+      .getByTestId('publishing-sidebar')
+      .getByRole('textbox')
+      .fill('test link');
+
+    await testUser.page.getByText('Add alias').click();
+
+    await expect(
+      testUser.page.getByText(
+        'Manage your created links, keep an eye on the interactions and insights generated from them.'
+      )
+    ).toBeVisible();
+
+    await testUser.page
+      .getByRole('button', { name: 'test link Duplicate' })
+      .click();
+
+    let clipboardText = (
+      (await testUser.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+
+    /// this is a but we shouldn't need to publish again to be able to access the alias link
+    await testUser.page.getByTestId('publish-tab').click();
+    await testUser.page.getByText('Public Link').click();
+    await testUser.page.getByText('Make link public').click();
+    await testUser.page.getByText('Publish Link').click();
+    await testUser.page.getByText('Copy Link').click();
+    await testUser.page
+      .getByRole('button', { name: 'test link Duplicate' })
+      .click();
+
+    clipboardText = (
+      (await testUser.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+
+    expect(clipboardText).toContain('?alias');
+
+    await unregisteredUser.page.goto(clipboardText);
+    await unregisteredUser.notebook.waitForEditorToLoad;
+    await expect(
+      unregisteredUser.page.getByText('testing publishing analytics'),
+      'private link didnt load'
+    ).toBeVisible();
+  });
+
+  await test.step('check alias link tracking', async () => {
+    await testUser.page.reload();
+    await testUser.page.getByText('Public Link').click();
+    await expect(
+      unregisteredUser.page.getByText('testing publishing analytics'),
+      'private link didnt load'
+    ).toBeVisible();
+    await expect(
+      testUser.page.getByRole('button', { name: 'LineChart' }).getByText('1'),
+      "Private link tracking didn't work"
+    ).toBeVisible();
+  });
+});

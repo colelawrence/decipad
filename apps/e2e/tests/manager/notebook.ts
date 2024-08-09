@@ -1380,6 +1380,35 @@ export class Notebook {
     return clipboardText;
   }
 
+  /**
+   * Publish current notebook (Analytics version).
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.publishNotebookV2();
+   * ```
+   */
+  async publishNotebookV2(notebookTitle?: string) {
+    await this.openPublishingSidebar();
+
+    await this.page.getByTestId('publish-tab').click();
+
+    await this.page.getByText('Make link public').click();
+    await this.page.getByText('Publish Link').click();
+    await this.page.getByText('Copy Link').click();
+
+    const clipboardText = (
+      (await this.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+    if (notebookTitle) {
+      expect(clipboardText).toContain('Welcome-to-Decipad');
+    }
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.syncDelay);
+    return clipboardText;
+  }
+
   async publishPrivateURL(): Promise<void> {
     await this.openPublishingSidebar();
 
@@ -1391,6 +1420,32 @@ export class Notebook {
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(Timeouts.syncDelay);
+  }
+
+  async publishPrivateURLV2(notebookTitle?: string) {
+    await this.openPublishingSidebar();
+
+    await this.page.getByTestId('publish-tab').click();
+    await this.page.getByTestId('private-link-tab').click();
+    await expect(
+      this.page.getByText('Only people with the link can view this ')
+    ).toBeVisible();
+
+    await this.page.getByText('Make link private').click();
+    await this.page.getByText('Publish Link').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.chartsDelay);
+    await this.page.getByText('Copy Link').click();
+
+    const clipboardText = (
+      (await this.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+    if (notebookTitle) {
+      expect(clipboardText).toContain('Welcome-to-Decipad');
+    }
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.syncDelay);
+    return clipboardText;
   }
 
   /**
