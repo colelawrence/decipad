@@ -23,7 +23,6 @@ import {
 import { getAnalytics } from '@decipad/client-events';
 import { getDraggingIds } from './getDraggingIds';
 import type { DropLine } from './types';
-import { maybeLeaveBehindEmptyColumn } from 'libs/editor-components/src/Layout/LayoutColumn';
 
 export const onDropNode = (
   editor: MyEditor,
@@ -57,10 +56,7 @@ const onDropNodeHorizontal = (
     ([, path]) => path
   );
 
-  withoutNormalizing(editor, () => {
-    maybeLeaveBehindEmptyColumn(editor, draggingPaths[0], dropLine.path);
-    smartMoveNodes(editor, draggingPaths, dropLine.path, dropLine.direction);
-  });
+  smartMoveNodes(editor, draggingPaths, dropLine.path, dropLine.direction);
 
   getAnalytics().then((analytics) => analytics?.track('move block'));
 };
@@ -82,8 +78,6 @@ const onDropNodeVertical = (
   const dropPathRef = createPathRef(editor, originalDropPath);
 
   withoutNormalizing(editor, () => {
-    maybeLeaveBehindEmptyColumn(editor, dragPath, originalDropPath);
-
     // Wrap the node in a layout if it isn't already in one
     if (!hasLayoutAncestor(editor, originalDropPath)) {
       wrapIntoLayout(editor, originalDropPath);

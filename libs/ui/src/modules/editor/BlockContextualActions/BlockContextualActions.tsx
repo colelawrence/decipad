@@ -43,6 +43,7 @@ export const BlockContextualActions: React.FC<BlockContextualActionsProps> = ({
             variants={variants}
             transition={{ duration: 0.15 }}
             animate={hovering ? 'show' : 'hide'}
+            data-testid={`block-action-${id}`}
           >
             {icon}
           </Styled.Button>

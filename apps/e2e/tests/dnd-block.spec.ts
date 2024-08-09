@@ -1,4 +1,7 @@
-import { focusTrailingParagraph } from '../utils/page/Block';
+import {
+  createWithSlashCommand,
+  focusTrailingParagraph,
+} from '../utils/page/Block';
 import { Locator, Page, expect, test } from './manager/decipad-tests';
 
 const getParagraphByText = (page: Page, text: string) =>
@@ -210,14 +213,13 @@ test('Drag and drop blocks', async ({ testUser }) => {
 
     await dragTo(page, getParagraphByText(page, 'one'), layout, 'top');
 
-    expect(await getParagraphTexts(page, layout)).toEqual(['three', 'two', '']);
+    expect(await getParagraphTexts(page, layout)).toEqual(['three', 'two']);
 
     expect(await getParagraphTexts(page)).toEqual([
       'one',
       // BEGIN LAYOUT
       'three',
       'two',
-      '',
       // END LAYOUT
       'four',
       'five',
@@ -225,18 +227,23 @@ test('Drag and drop blocks', async ({ testUser }) => {
     ]);
   });
 
+  await test.step('add new column', async () => {
+    const layout = page.locator('[data-type="layout"]');
+    await layout.getByTestId('block-action-add-column').click();
+    expect(await getParagraphTexts(page, layout)).toEqual(['three', 'two', '']);
+  });
+
   await test.step('move block out of and below layout', async () => {
     const layout = page.locator('[data-type="layout"]');
 
     await dragTo(page, getParagraphByText(page, 'two'), layout, 'bottom');
 
-    expect(await getParagraphTexts(page, layout)).toEqual(['three', '', '']);
+    expect(await getParagraphTexts(page, layout)).toEqual(['three', '']);
 
     expect(await getParagraphTexts(page)).toEqual([
       'one',
       // BEGIN LAYOUT
       'three',
-      '',
       '',
       // END LAYOUT
       'two',
@@ -244,6 +251,12 @@ test('Drag and drop blocks', async ({ testUser }) => {
       'five',
       '',
     ]);
+  });
+
+  await test.step('add new column', async () => {
+    const layout = page.locator('[data-type="layout"]');
+    await layout.getByTestId('block-action-add-column').click();
+    expect(await getParagraphTexts(page, layout)).toEqual(['three', '', '']);
   });
 
   await test.step('move block from outside layout onto empty column', async () => {
@@ -295,5 +308,90 @@ test('Drag and drop blocks', async ({ testUser }) => {
     );
 
     expect(await getParagraphTexts(page, layout)).toEqual(['three', 'one', '']);
+  });
+
+  await test.step('create new layout', async () => {
+    await createWithSlashCommand(page, '/layout');
+
+    await page.keyboard.type('New layout');
+
+    expect(await getParagraphTexts(page)).toEqual([
+      // BEGIN LAYOUT
+      'three',
+      'one',
+      '',
+      // END LAYOUT
+      'two',
+      'four',
+      'five',
+      // BEGIN LAYOUT
+      'New layout',
+      '',
+      // END LAYOUT
+      '',
+    ]);
+  });
+
+  await test.step('move block from one layout onto empty column of another', async () => {
+    const firstLayout = page.locator('[data-type="layout"]').nth(0);
+    const secondLayout = page.locator('[data-type="layout"]').nth(1);
+
+    await dragTo(
+      page,
+      getParagraphByText(page, 'one'),
+      secondLayout.locator('[data-type="paragraph"]').nth(1),
+      'center'
+    );
+
+    expect(await getParagraphTexts(page, firstLayout)).toEqual(['three', '']);
+
+    expect(await getParagraphTexts(page, secondLayout)).toEqual([
+      'New layout',
+      'one',
+    ]);
+
+    expect(await getParagraphTexts(page)).toEqual([
+      // BEGIN LAYOUT
+      'three',
+      '',
+      // END LAYOUT
+      'two',
+      'four',
+      'five',
+      // BEGIN LAYOUT
+      'New layout',
+      'one',
+      // END LAYOUT
+      '',
+    ]);
+  });
+
+  await test.step('move block from one layout next to column of another', async () => {
+    const layout = page.locator('[data-type="layout"]');
+
+    // Second layout is automatically unwraped since it has only one column
+    await dragTo(
+      page,
+      getParagraphByText(page, 'one'),
+      getParagraphByText(page, 'three'),
+      'left'
+    );
+
+    expect(await layout.count()).toBe(1);
+
+    expect(await getParagraphTexts(page, layout)).toEqual(['one', 'three', '']);
+
+    expect(await getParagraphTexts(page)).toEqual([
+      // BEGIN LAYOUT
+      'one',
+      'three',
+      '',
+      // END LAYOUT
+      'two',
+      'four',
+      'five',
+      'New layout',
+      '',
+    ]);
   });
 });

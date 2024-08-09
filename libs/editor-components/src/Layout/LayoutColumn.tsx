@@ -36,23 +36,18 @@ import { nanoid } from 'nanoid';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 
 /**
- * If moving a node out of a layout, leave behind an empty paragraph in its
- * place.
+ * If dropping onto an empty column in the same layout, leave behind an empty
+ * column.
  */
-export const maybeLeaveBehindEmptyColumn = (
+const maybeLeaveBehindEmptyColumn = (
   editor: MyEditor,
   fromPath: Path,
-  toPath: Path,
-  {
-    skipSiblingCheck = false,
-  }: {
-    skipSiblingCheck?: boolean;
-  } = {}
+  toPath: Path
 ) => {
   if (
     hasLayoutAncestor(editor, fromPath) &&
     !Path.equals(fromPath, toPath) &&
-    (skipSiblingCheck || !Path.isSibling(fromPath, toPath))
+    Path.isSibling(fromPath, toPath)
   ) {
     const { columnWidth = 1 } =
       getNode<ColumnableElement>(editor, fromPath) ?? {};
@@ -117,9 +112,7 @@ export const LayoutColumn: FC<LayoutColumnProps> = ({
       const [, dragPath] = dragEntry;
 
       withoutNormalizing(editor, () => {
-        maybeLeaveBehindEmptyColumn(editor, dragPath, dropPath, {
-          skipSiblingCheck: true,
-        });
+        maybeLeaveBehindEmptyColumn(editor, dragPath, dropPath);
 
         // Copy columnWidth from empty column onto dragged node
         setNodes(
