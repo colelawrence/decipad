@@ -99,10 +99,10 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: 'performance',
+      name: 'staging',
       dependencies: ['setup_staging'],
-      testDir: './tests/performance',
-      testMatch: '**/**/*.performance.ts',
+      testDir: './tests/staging',
+      testMatch: '**/**/*.staging.ts',
       use: {
         ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE_STAGING,

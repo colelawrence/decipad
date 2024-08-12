@@ -27,7 +27,7 @@ services_setup
 echo "running E2E tests and snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
-  npx playwright test --project=performance --repeat-each 4 --retries 3
+  npx playwright test --project=staging --repeat-each 4 --retries 3
   npx playwright merge-reports --reporter github /home/runner/actions-runner/_work/decipad/decipad/blob-report
   npx playwright merge-reports --reporter html /home/runner/actions-runner/_work/decipad/decipad/blob-report
   

@@ -234,7 +234,7 @@ jobs:
           VITE_STRIPE_CUSTOMER_PORTAL_LINK: '${{vars.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           VITE_STRIPE_API_KEY: '${{secrets.DEV_STRIPE_API_KEY}}'
           DECI_VERBOSE: false
-        run: ./scripts/e2e-performance.sh
+        run: ./scripts/e2e-staging.sh
 
       - name: Upload
         uses: actions/upload-artifact@v4
