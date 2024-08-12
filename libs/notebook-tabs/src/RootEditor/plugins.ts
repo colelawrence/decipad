@@ -96,9 +96,11 @@ const ensureOneTabPlugin: CurriedNormalizePlugin = (editor) => (entry) => {
     );
   }
 
-  const tab = editor.children.find((n: any) => n.type === ELEMENT_TAB);
+  const tabIndex = editor.children.findIndex(
+    (n: any) => n.type === ELEMENT_TAB
+  );
 
-  if (tab == null) {
+  if (tabIndex === -1) {
     editor.apply({
       type: 'insert_node',
       path: [FIRST_TAB_INDEX],
@@ -108,6 +110,15 @@ const ensureOneTabPlugin: CurriedNormalizePlugin = (editor) => (entry) => {
         name: 'First tab',
         children: [],
       } as any,
+    });
+    return true;
+  }
+
+  if (tabIndex !== FIRST_TAB_INDEX) {
+    editor.apply({
+      type: 'move_node',
+      path: [tabIndex],
+      newPath: [FIRST_TAB_INDEX],
     });
     return true;
   }

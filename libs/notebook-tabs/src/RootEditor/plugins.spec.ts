@@ -6,9 +6,13 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import type { TEditor } from '@udecode/plate-common';
 import { vi, it, expect } from 'vitest';
 import {
+  DataTabElement,
   ELEMENT_DATA_TAB,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  ParagraphElement,
+  TabElement,
+  TitleElement,
 } from '@decipad/editor-types';
 
 vi.mock('nanoid', () => ({
@@ -501,4 +505,83 @@ it('Merges all children from all data tabs regarless of position.', () => {
       type: 'tab',
     },
   ]);
+});
+
+it('fixes out of order elements', () => {
+  const BROKEN_NOTEBOOK = [
+    {
+      id: 'title',
+      type: 'title',
+      children: [{ text: 'title' }],
+    } satisfies TitleElement,
+    {
+      id: 'data-tab',
+      type: 'data-tab',
+      children: [],
+    } satisfies DataTabElement,
+    {
+      id: 'p',
+      type: 'p',
+      children: [{ text: 'this is a paragraph' }],
+    } satisfies ParagraphElement,
+    {
+      id: 'tab',
+      type: 'tab',
+      name: 'tab',
+      children: [
+        {
+          id: 'p-2',
+          type: 'p',
+          children: [{ text: 'paragraph in tab' }],
+        },
+      ],
+    } satisfies TabElement,
+  ];
+
+  editor.children = BROKEN_NOTEBOOK;
+  editor.normalize();
+
+  expect(editor.children).toMatchInlineSnapshot(`
+    [
+      {
+        "children": [
+          {
+            "text": "title",
+          },
+        ],
+        "id": "title",
+        "type": "title",
+      },
+      {
+        "children": [],
+        "id": "data-tab",
+        "type": "data-tab",
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "text": "paragraph in tab",
+              },
+            ],
+            "id": "p-2",
+            "type": "p",
+          },
+          {
+            "children": [
+              {
+                "text": "this is a paragraph",
+              },
+            ],
+            "id": "p",
+            "type": "p",
+          },
+        ],
+        "id": "tab",
+        "name": "tab",
+        "type": "tab",
+      },
+    ]
+  `);
 });
