@@ -5,7 +5,9 @@ use compute_backend::tests::{sum_1d, sum_2d, sum_reciprocals};
 
 #[cfg(not(target_arch = "wasm32"))]
 fn bench_sum_1d(c: &mut Criterion) {
-    c.bench_function("bench_sum_1d", |b| {
+  let mut group = c.benchmark_group("smallsample");
+  group.sample_size(30);
+    group.bench_function("bench_sum_1d", |b| {
         b.iter(|| {
             std::hint::black_box(for i in 50000000..=50000000 {
                 if sum_1d(i) {
@@ -18,7 +20,9 @@ fn bench_sum_1d(c: &mut Criterion) {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn bench_sum_2d(c: &mut Criterion) {
-    c.bench_function("bench_sum_2d", |b| {
+  let mut group = c.benchmark_group("smallsample");
+  group.sample_size(30);
+    group.bench_function("bench_sum_2d", |b| {
         b.iter(|| {
             std::hint::black_box(for i in 10000..=10000 {
                 if sum_2d(i) {
@@ -31,9 +35,11 @@ fn bench_sum_2d(c: &mut Criterion) {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn bench_sum_recips(c: &mut Criterion) {
-    c.bench_function("bench_sum_recips", |b| {
+  let mut group = c.benchmark_group("smallsample");
+  group.sample_size(30);
+    group.bench_function("bench_sum_recips", |b| {
         b.iter(|| {
-            std::hint::black_box(for i in 50000000..=50000000 {
+            std::hint::black_box(for i in 10000..=10000 {
                 if sum_reciprocals(i) {
                     println!("error");
                 }

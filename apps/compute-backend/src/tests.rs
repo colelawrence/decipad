@@ -28,7 +28,7 @@ fn test_results() {
         ])
     );
     assert_eq!(
-        res1 + res2,
+        &res1 + &res2,
         DeciResult::Column(vec![
             dcolFromVec(vec![10, 10, 10]),
             dcolFromVec(vec![10, 10, 10]),

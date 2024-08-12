@@ -36,9 +36,9 @@ impl DeciResult {
                 for item in column {
                     match item {
                         DeciResult::Column(_) => {
-                            sum = sum + item.sum_float();
+                            sum = &sum + &item.sum_float();
                         }
-                        _ => sum = sum + item.clone(),
+                        _ => sum = &sum + item,
                     }
                 }
                 sum
@@ -56,9 +56,11 @@ impl DeciResult {
                 for item in items {
                     match item {
                         DeciResult::Column(_) => {
-                            sum = sum + item.sum_frac();
+                            sum = &sum + &item.sum_frac();
                         }
-                        _ => sum = sum + item.clone(),
+                        _ => {
+                          sum = &sum + item
+                        }
                     }
                 }
                 sum
