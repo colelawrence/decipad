@@ -27,7 +27,7 @@ export const CommandLayoutDark = (props: SVGProps<SVGSVGElement>) => {
         height={7.5}
         rx={1.55}
         stroke="#9B9AAC"
-        stroke-width={1.5}
+        strokeWidth={1.5}
       />
       <rect x={15} y={26.5} width={10} height={1.5} rx={0.75} fill="#9B9AAC" />
     </svg>
