@@ -28,6 +28,7 @@ import {
   Download,
   DragHandle,
   Duplicate,
+  Export,
   Hide,
   Link,
   Move,
@@ -146,6 +147,7 @@ interface BlockDragHandleProps {
   };
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
+  readonly onExportToExcel?: () => void;
   readonly handleDownloadChart?: () => void;
   readonly needsUpgrade?: boolean;
   readonly path?: Path;
@@ -173,6 +175,7 @@ export const BlockDragHandle = ({
   aiPanel,
   isDownloadable = false,
   onDownload = noop,
+  onExportToExcel = noop,
   handleDownloadChart,
   path,
 }: BlockDragHandleProps): ReturnType<FC> => {
@@ -320,9 +323,14 @@ export const BlockDragHandle = ({
             </MenuItem>
           )}
           {isDownloadable && (
-            <MenuItem icon={<Download />} onSelect={onDownload}>
-              <p>Download as CSV</p>
-            </MenuItem>
+            <>
+              <MenuItem icon={<Download />} onSelect={onDownload}>
+                <p>Download as CSV</p>
+              </MenuItem>
+              <MenuItem icon={<Export />} onSelect={onExportToExcel}>
+                <p>Open in Excel</p>
+              </MenuItem>
+            </>
           )}
           {children}
           {!isMultipleSelection ? aiButton : null}

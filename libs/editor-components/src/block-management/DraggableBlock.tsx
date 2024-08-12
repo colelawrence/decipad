@@ -114,6 +114,7 @@ type DraggableBlockProps = {
   readonly hasPreviousSibling?: boolean; // used for code line blocks
   readonly fullWidth?: boolean;
   readonly onDownloadChart?: () => void;
+  readonly onExportToExcel?: () => void;
   readonly contextualActions?: BlockContextualActionsProps['contextualActions'];
   readonly isCommentable?: boolean;
 } & Pick<
@@ -153,6 +154,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       dependencyId,
       fullWidth = false,
       onDownloadChart,
+      onExportToExcel,
       contextualActions: contextualActionsProp = [],
       ...props
     },
@@ -437,6 +439,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           handleDownloadChart={
             onDownloadChart ? handleDownloadChart : undefined
           }
+          onExportToExcel={onExportToExcel}
           hasPreviousSibling={hasPreviousSibling}
           path={path}
           insideLayout={insideLayout}
