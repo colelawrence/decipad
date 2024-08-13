@@ -280,6 +280,9 @@ fn serialize_result_iter(
                     0,
                 ]);
             }
+            DeciResult::ArbitraryFraction(_, _) => {
+              return Err(ErrorKind::Unsupported);
+            }
         }
     }
 

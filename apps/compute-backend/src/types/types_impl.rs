@@ -1,3 +1,4 @@
+use js_sys::Math::round;
 use num_bigint::BigInt;
 use std::ops::{Add, Div, Mul, Sub};
 
@@ -188,6 +189,26 @@ impl DeciResult {
             }
             _ => (),
         }
+    }
+
+    pub fn round(&mut self) {
+      match self {
+        DeciResult::Float(a) => (),
+        _ => {
+          *self = self.to_float();
+        }
+      }
+      match self {
+        DeciResult::Float(a) => {
+          *a = round(*a);
+        }
+        DeciResult::Column(i) => {
+          for item in i {
+            item.round();
+          }
+        }
+        _ => panic!("impossible type outcome")
+      }
     }
 
     pub fn to_frac(&self) -> DeciResult {

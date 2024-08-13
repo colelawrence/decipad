@@ -11,6 +11,7 @@ impl Zero for DeciResult {
         match self {
             DeciResult::Boolean(a) => !*a,
             DeciResult::String(_) => false,
+            DeciResult::ArbitraryFraction(n, d) => *n == BigInt::ZERO && *d != BigInt::ZERO,
             DeciResult::Fraction(n, d) => *n == 0 && *d != 0,
             DeciResult::ArbitraryFraction(n, d) => *n == BigInt::zero() && *d != BigInt::zero(),
             DeciResult::Float(a) => *a == 0.0,
