@@ -5,6 +5,10 @@ import { buildType, serializeType } from '../Type';
 import { all } from '@decipad/generator-utils';
 
 describe('Lean Column Spec', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   it('Generates simple static values', async () => {
     async function* basicGenerator(
       start = 0,
@@ -17,7 +21,8 @@ describe('Lean Column Spec', () => {
 
     const leanColumn = LeanColumn.fromGeneratorAndType(
       basicGenerator,
-      serializeType(buildType.column(buildType.number()))
+      serializeType(buildType.column(buildType.number())),
+      emptyMeta
     );
 
     const result = (await leanColumn.getData()) as Result.ResultColumn;

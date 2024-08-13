@@ -1,5 +1,5 @@
-import { map } from '@decipad/generator-utils';
-import { getDefined, type PromiseOrType } from '@decipad/utils';
+import { all, map } from '@decipad/generator-utils';
+import { getDefined, once, type PromiseOrType } from '@decipad/utils';
 import type { ContextUtils } from '../ContextUtils';
 import type { Type } from '../Type';
 import { isPendingType, serializeType, buildType as t } from '../Type';
@@ -14,11 +14,11 @@ import { groupTypesByDimension } from './groupTypesByDimension';
 import { createLazyOperation } from './LazyOperation';
 import { getReductionPlan } from './getReductionPlan';
 import { getColumnLike, isColumnLike } from '../Value/ColumnLike';
-import { Column, FMappedColumn } from '../Value';
+import { Column, FMappedColumn, isTableValue } from '../Value';
 import { buildResult } from '../utils/buildResult';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { resultToValue } from '../utils/resultToValue';
-import type { Value } from '@decipad/language-interfaces';
+import type { Result, Value } from '@decipad/language-interfaces';
 
 // Minor hack: use the automaptypes function to retrieve the arg types
 // Better solution: Make Hypercube type-aware and pass the types from there.
@@ -117,6 +117,64 @@ export const automapTypes = async (
   }
 };
 
+const emptyLabelsMeta = { labels: undefined };
+
+const getMeta = (
+  value: Value.ColumnLikeValue | Value.TableValue
+): undefined | Result.ResultMetadataColumn => {
+  const existingMeta = value.meta?.();
+  if (existingMeta?.labels) {
+    return existingMeta;
+  }
+  if (isColumnLike(value)) {
+    return {
+      labels: Promise.all([
+        value
+          .getData()
+          .then(async (data) =>
+            all(map(getResultGenerator(data)(), (d) => d?.toString() ?? ''))
+          ),
+      ]),
+    };
+  }
+  return existingMeta;
+};
+
+const getDeepMetaRecursive = (
+  argValues: Array<Value.ColumnLikeValue | Value.TableValue>
+): undefined | Result.ResultMetadataColumn => {
+  if (argValues.length === 0) {
+    return emptyLabelsMeta;
+  }
+  const [argValue, ...rest] = argValues;
+  if (rest.length === 0) {
+    return argValue.meta?.();
+  }
+
+  let { labels } = getMeta(argValue) ?? {};
+  if (labels == null) {
+    labels = Promise.resolve([[]]);
+  }
+  const restLabels = getDeepMetaRecursive(rest)?.labels;
+  return {
+    labels: Promise.all([labels, restLabels]).then(([labels, restLabels]) =>
+      labels.concat(restLabels ?? [])
+    ),
+  };
+};
+
+const getDeepMeta = (
+  argValues: Value.Value[]
+): undefined | (() => undefined | Result.ResultMetadataColumn) => {
+  return once(() => {
+    return getDeepMetaRecursive(
+      argValues.filter((v) => isTableValue(v) || isColumnLike(v)) as Array<
+        Value.ColumnLikeValue | Value.TableValue
+      >
+    );
+  });
+};
+
 export const automapValues = async (
   ctx: ContextUtils,
   argTypes: Type[],
@@ -147,7 +205,13 @@ export const automapValues = async (
       return mapFn(values, reducedArgTypes, ctx);
     };
 
-    return createLazyOperation(ctx, mapFnAndTypes, argValues, argTypes);
+    return createLazyOperation(
+      ctx,
+      mapFnAndTypes,
+      argValues,
+      argTypes,
+      getDeepMeta(argValues)
+    );
   } else {
     const whichToReduce = getReductionPlan(argTypes, matchedCardinality);
 
@@ -172,6 +236,7 @@ export const automapValues = async (
                 mapFn
               )
             ).getData(),
+          argValue.meta?.bind(argValue),
           `automapValues`
         );
       }
@@ -233,15 +298,19 @@ export const automapValuesForReducer = async (
       'reducers always take columnar arguments'
     );
     // TODO: replace with a more efficient implementation that uses OneResult results
-    return Column.fromGenerator((start?: number, end?: number) => {
-      return map(argCol.values(start, end), async (v) => {
-        return automapValuesForReducer(
-          await argType.reduced(),
-          getColumnLike(v),
-          utils,
-          mapFn
-        );
-      });
-    }, `automapValuesForReducer<${serializeType(argType).kind}>`);
+    return Column.fromGenerator(
+      (start?: number, end?: number) => {
+        return map(argCol.values(start, end), async (v) => {
+          return automapValuesForReducer(
+            await argType.reduced(),
+            getColumnLike(v),
+            utils,
+            mapFn
+          );
+        });
+      },
+      argCol.meta?.bind(argCol),
+      `automapValuesForReducer<${serializeType(argType).kind}>`
+    );
   }
 };

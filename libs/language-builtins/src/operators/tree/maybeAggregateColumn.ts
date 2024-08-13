@@ -61,6 +61,7 @@ export const maybeAggregateColumn = async (
           [columnValue, fullColumnValue].slice(0, argCount)
         )
       ).getData(),
+      meta: undefined,
     };
   }
   return undefined;

@@ -12,7 +12,7 @@ export const decodeRemoteValue = async (
   buffer: DataView,
   _offset: number,
   type: SerializedType
-): Promise<[Result.OneResult, number]> => {
+): Promise<[Result.OneResult, number, string?]> => {
   let offset = _offset;
   switch (type.kind) {
     case 'anything':
@@ -38,7 +38,7 @@ export const decodeRemoteValue = async (
       const value = await streamingValue(ctx, type, valueId, decoders);
       ctx.finalizationRegistry.register(value, valueId);
       ctx.refCounter.set(valueId, (ctx.refCounter.get(valueId) || 0) + 1);
-      return [value, offset];
+      return [value, offset, valueId];
     }
   }
 };

@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
-import type { AST, Result } from '@decipad/language-interfaces';
+import { type AST, type Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { materializeOneResult } from '@decipad/language-types';
+import { materializeOneResult, Value } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { block } from '@decipad/language-utils';
 import { inferProgram } from '../infer';
@@ -16,16 +16,16 @@ export const run = async (
   desiredTargets: Array<string | number | [number, number]>,
   realm?: TRealm,
   doNotMaterialiseResults?: boolean
-): Promise<Result.OneResult[]> => {
+): Promise<Array<[Result.OneResult, Result.ResultMetadata]>> => {
   realm = realm ?? new ScopedRealm(undefined, await inferProgram(program));
 
   return Promise.all(
     (await evaluateTargets(program, desiredTargets, realm)).map(async (v) =>
       v != null
         ? doNotMaterialiseResults
-          ? v.getData()
-          : materializeOneResult(v.getData())
-        : undefined
+          ? [await v.getData(), Value.getValueMeta(v)]
+          : [await materializeOneResult(v.getData()), Value.getValueMeta(v)]
+        : [undefined, undefined]
     )
   );
 };

@@ -448,7 +448,7 @@ describe('Tables', () => {
           Column2 = Column1 + previous(0)
         }
       `)
-    ).toEqual({
+    ).toMatchObject({
       type: objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
@@ -794,6 +794,7 @@ describe('Tables', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -843,6 +844,9 @@ describe('Tables', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -1447,6 +1451,9 @@ describe('Tables', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
@@ -1530,6 +1537,7 @@ describe('Tables', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -2494,6 +2502,7 @@ describe('Dates', () => {
 });
 
 describe('Injected external data', () => {
+  const meta = undefined;
   it('can be injected into the language', async () => {
     expect(
       await runAST(block(n('externalref', 'random-id')), {
@@ -2501,6 +2510,7 @@ describe('Injected external data', () => {
           'random-id': {
             type: serializeType(t.column(t.string())),
             value: ['Hello', 'World'],
+            meta,
           },
         },
       })
@@ -2834,6 +2844,7 @@ describe('number units work together', () => {
     expect(await runCode('100 centimeter^3 in cubicmetre'))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3393,6 +3404,7 @@ describe('type coercion', () => {
   it('can coerce imprecise numbers', async () => {
     expect(await runCode('(30 days in month) + 1')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3528,6 +3540,7 @@ describe('percentages', () => {
     });
     expect(await runCode('3% + 2')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3570,6 +3583,7 @@ describe('percentages', () => {
     `);
     expect(await runCode('2 + 3%')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3612,6 +3626,7 @@ describe('percentages', () => {
     `);
     expect(await runCode('3% + 1%')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3655,6 +3670,7 @@ describe('percentages', () => {
 
     expect(await runCode('100 - 10%')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3749,6 +3765,7 @@ describe('percentages', () => {
   it('can be converted from a number', async () => {
     expect(await runCode('0.1 in %')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3804,6 +3821,7 @@ describe('tiered function', () => {
     T(5)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3857,6 +3875,7 @@ describe('tiered function', () => {
     T(5 interviews/month)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3929,6 +3948,7 @@ describe('tiered function', () => {
     T(60 interviews/year)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -3998,6 +4018,7 @@ describe('tiered function', () => {
     }`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -4068,6 +4089,7 @@ describe('grammar extensions', () => {
     `;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -4208,6 +4230,7 @@ describe('lookup syntactic sugar', () => {
     `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -4338,6 +4361,7 @@ describe('lookup syntactic sugar', () => {
     `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -4469,6 +4493,7 @@ describe('lookup syntactic sugar', () => {
     `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,

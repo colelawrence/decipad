@@ -217,6 +217,7 @@ async function internalEvaluate(
 
       return Value.Column.fromValues(
         values,
+        undefined,
         Value.defaultValue(getDefined(node.inferredType))
       );
     }

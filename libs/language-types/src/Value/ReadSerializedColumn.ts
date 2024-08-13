@@ -36,18 +36,22 @@ export class ReadSerializedColumn<T extends Result.OneResult>
   private _allData: T[] | undefined;
   private initialOffset;
 
+  public meta: undefined | (() => Result.ResultMetadataColumn | undefined);
+
   constructor(
     type: SerializedType,
     decode: ReadSerializedColumnDecoder<T>,
     buffer: DataView,
     dimensions: Dimension[],
-    initialOffset: number
+    initialOffset: number,
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined)
   ) {
     this.typedResultToValue = typedResultToValue(deserializeType(type));
     this.decode = decode;
     this.buffer = buffer;
     this._dimensions = dimensions;
     this.initialOffset = initialOffset;
+    this.meta = meta;
   }
   async getData(): Promise<Result.GenericResultGenerator<T>> {
     return (start = 0, end = Infinity) => {

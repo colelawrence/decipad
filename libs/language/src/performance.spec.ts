@@ -80,6 +80,8 @@ const createProgram = (op: string): AST.Block => ({
 });
 // eslint-disable-next-line jest/no-disabled-tests
 describe.skip('language performance', () => {
+  const emptyMeta = undefined;
+
   it.each(OPS)('performs', async (op) => {
     const test = async () => {
       const columnValues: Result.Result = {
@@ -95,6 +97,7 @@ describe.skip('language performance', () => {
         value: [0, 1].map(() =>
           Array.from({ length: TEST_COLUMN_LENGTH }).map(randomDeciNumber)
         ),
+        meta: emptyMeta,
       };
 
       const externalData = {

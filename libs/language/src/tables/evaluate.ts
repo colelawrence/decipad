@@ -72,6 +72,7 @@ export const evaluateTableColumnIteratively = async (
 
       return Value.Column.fromValues(
         cells,
+        () => ({ labels: undefined }),
         Value.defaultValue(getDefined(column.inferredType))
       );
     },

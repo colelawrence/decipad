@@ -7,10 +7,15 @@ import type { TableValue } from './TableValue';
 import { isColumnLike } from './ColumnLike';
 
 describe('GeneratorTable', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   it('can be empty', async () => {
     const table = GeneratorTable.fromNamedColumns(
       // eslint-disable-next-line no-empty-function
-      async function* gen() {}
+      async function* gen() {},
+      emptyMeta
     );
     expect(await table.getData()).toHaveLength(0);
   });
@@ -19,6 +24,7 @@ describe('GeneratorTable', () => {
     const table = GeneratorTable.fromNamedColumns(
       // eslint-disable-next-line no-empty-function
       async function* gen() {},
+      emptyMeta,
       ['A', 'B'],
       [buildType.number(), buildType.string()]
     );
@@ -38,6 +44,7 @@ describe('GeneratorTable', () => {
         yield [N(1), 'a'];
         yield [N(2), 'b'];
       },
+      emptyMeta,
       ['A', 'B'],
       [buildType.number(), buildType.string()]
     );
@@ -54,6 +61,7 @@ describe('GeneratorTable', () => {
         yield [N(1), 'a'];
         yield [N(2), 'b'];
       },
+      emptyMeta,
       ['A', 'B'],
       [buildType.number(), buildType.string()]
     );
@@ -89,6 +97,7 @@ describe('GeneratorTable', () => {
         yield [N(1), 'a'];
         yield [N(2), 'b'];
       },
+      emptyMeta,
       ['A', 'B'],
       [buildType.number(), buildType.string()]
     ) as TableValue;
@@ -119,6 +128,7 @@ describe('GeneratorTable', () => {
         yield [N(1), 'a'];
         yield [N(2), 'b'];
       },
+      emptyMeta,
       ['A', 'B'],
       [buildType.number(), buildType.string()]
     ) as TableValue;

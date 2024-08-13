@@ -42,7 +42,13 @@ export async function columnFromSequence(
     array.push(Value.Scalar.fromValue(i));
   }
 
-  return Value.Column.fromValues(array, Value.defaultValue('column'));
+  return Value.Column.fromValues(
+    array,
+    () => ({
+      labels: undefined,
+    }),
+    Value.defaultValue('column')
+  );
 }
 
 // helper to allow decreasing date sequences
@@ -93,5 +99,7 @@ export async function columnFromDateSequence(
     array.push(Value.DateValue.fromDateAndSpecificity(cur, spec));
   }
 
-  return Value.Column.fromValues(array);
+  return Value.Column.fromValues(array, () => ({
+    labels: undefined,
+  }));
 }

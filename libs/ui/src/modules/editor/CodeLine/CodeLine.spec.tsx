@@ -30,6 +30,7 @@ describe('CodeLine', () => {
             message: 'some error',
           },
         },
+        meta: undefined,
       },
     };
   });

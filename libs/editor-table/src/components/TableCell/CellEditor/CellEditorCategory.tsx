@@ -94,7 +94,7 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
   }, [updateList, open]);
 
   const isReadOnly = useIsEditorReadOnly();
-  const result = computer.getBlockIdResult(value);
+  const result = computer.getBlockIdResult(value)?.result;
   return (
     <div>
       <DropdownMenu
@@ -122,8 +122,12 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
         isEditingAllowed={!isReadOnly}
       >
         <div css={outterCellStyles}>
-          {result?.result != null && (
-            <CodeResult value={result.result.value} type={result.result.type} />
+          {result != null && (
+            <CodeResult
+              value={result.value}
+              type={result.type}
+              meta={result.meta}
+            />
           )}
           <div css={caretStyles}>{open ? <CaretUp /> : <CaretDown />}</div>
         </div>

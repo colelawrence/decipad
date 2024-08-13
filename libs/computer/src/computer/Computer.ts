@@ -29,15 +29,8 @@ import {
   deserializeType,
   serializeType,
   buildResult,
-  isResultGenerator,
 } from '@decipad/language';
-import {
-  anyMappingToMap,
-  dequal,
-  getDefined,
-  identity,
-  zip,
-} from '@decipad/utils';
+import { anyMappingToMap, dequal, getDefined, identity } from '@decipad/utils';
 import type {
   BlockResult,
   Computer as ComputerInterface,
@@ -83,10 +76,10 @@ import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import { statementToML } from '../mathML/statementToML';
-import { count, first } from '@decipad/generator-utils';
 import { updateProgram } from './updateProgram';
 import type { ComputeDeltaRequestWithDone } from '../../../computer-interfaces/src/types';
-import { serializeResult } from '@decipad/computer-utils';
+import { getDeepLengths, serializeResult } from '@decipad/computer-utils';
+import zip from 'lodash.zip';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -233,17 +226,17 @@ export class Computer implements ComputerInterface {
       });
   }
 
-  _getVarBlockId(varName: string): string | undefined {
+  getVarBlock(varName: string): ProgramBlock | undefined {
     const isColumnName = varName.includes('.');
     if (isColumnName) {
-      const columnBlockId = this.latestProgram.asSequence.find((p) => {
+      const columnBlock = this.latestProgram.asSequence.find((p) => {
         if (p.definesTableColumn) {
           return p.definesTableColumn.join('.') === varName;
         }
         return false;
-      })?.id;
-      if (columnBlockId) {
-        return columnBlockId;
+      });
+      if (columnBlock) {
+        return columnBlock;
       }
     }
     const mainIdentifier = isColumnName // table.columnName
@@ -256,10 +249,11 @@ export class Computer implements ComputerInterface {
       } else {
         return p.definesVariable === mainIdentifier;
       }
-    })?.id;
+    });
   }
-  getVarBlockId(varName: string) {
-    return this._getVarBlockId(varName);
+
+  getVarBlockId(varName: string): string | undefined {
+    return this.getVarBlock(varName)?.id;
   }
 
   results$ = listenerHelper(this.results, identity);
@@ -283,12 +277,17 @@ export class Computer implements ComputerInterface {
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
-    this._getVarBlockId(varName)
+    this.getVarBlockId(varName)
   );
+
+  getVarResult(varName: string): BlockResult | undefined {
+    const blockId = this.getVarBlockId(varName);
+    return blockId ? this.getBlockIdResult(blockId) : undefined;
+  }
 
   getVarResult$ = listenerHelper(
     (varName: string) => {
-      const blockId = this._getVarBlockId(varName);
+      const blockId = this.getVarBlockId(varName);
       return blockId
         ? this.resultStreams.blockSubject(blockId)
         : emptyBlockResultSubject();
@@ -353,7 +352,7 @@ export class Computer implements ComputerInterface {
 
       if (programBlock?.definesTableColumn) {
         const [tableName] = programBlock.definesTableColumn;
-        const tableId = this._getVarBlockId(tableName);
+        const tableId = this.getVarBlockId(tableName);
         if (!tableId) return undefined;
 
         return [tableId, blockId];
@@ -466,50 +465,54 @@ export class Computer implements ComputerInterface {
   explainDimensions$ = listenerHelper(
     this.results,
     async (
-      results,
+      _,
       result: Result.Result<'materialized-column'> | Result.Result<'column'>
     ): Promise<DimensionExplanation[] | undefined> => {
-      // We now have a column or matrix
-
-      const getDeepLengths = async (
-        value: Result.OneResult
-      ): Promise<number[]> => {
-        if (isResultGenerator(value)) {
-          const firstCount = await count(value());
-          if (firstCount === 0) {
-            return [0];
-          }
-          return [firstCount, ...(await getDeepLengths(await first(value())))];
-        }
-        return Array.isArray(value)
-          ? [value.length, ...(await getDeepLengths(value[0]))]
-          : [];
-      };
-
-      const deserialisedType = deserializeType(result.type);
-      const dimensions = linearizeType(deserialisedType);
+      const dimensions = linearizeType(deserializeType(result.type));
       dimensions.pop(); // remove tip
 
       const deepLengths = await getDeepLengths(result.value);
       if (dimensions.length !== deepLengths.length) {
+        console.log('MISMATCH', dimensions, deepLengths, result.type);
         return undefined;
       }
 
-      return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
-        const { indexedBy: tableAbstractName } = type;
-        const tableUserBlock =
-          tableAbstractName &&
-          this.latestVarNameToBlockMap.get(tableAbstractName);
-        const indexedBy =
-          (tableUserBlock && tableUserBlock.definesVariable) ??
-          tableAbstractName ??
-          undefined;
-        return {
-          indexedBy,
-          labels: indexedBy ? results.indexLabels.get(indexedBy) : undefined,
-          dimensionLength,
-        };
-      });
+      let labels: string[][] | undefined = await result.meta?.()?.labels;
+      if (!labels?.length || labels.length !== dimensions.length) {
+        labels = undefined;
+      }
+
+      labels ??= getDefined(
+        (
+          await Promise.all(
+            dimensions
+              .map((d) => d.indexedBy)
+              .filter(Boolean)
+              .map(
+                async (indexName) =>
+                  this.getVarResult(getDefined(indexName))?.result?.meta?.()
+                    ?.labels
+              )
+          )
+        ).reduce((acc, l) => acc?.concat(l ?? []), [])
+      );
+
+      return zip(dimensions, deepLengths, labels).map(
+        ([type, dimensionLength, thisDimLabels]) => {
+          const { indexedBy: tableAbstractName } = type ?? {};
+          const tableUserBlock =
+            (tableAbstractName && this.getVarBlock(tableAbstractName)) ||
+            undefined;
+          const indexedBy =
+            tableUserBlock?.definesVariable ?? tableAbstractName ?? undefined;
+
+          return {
+            indexedBy,
+            labels: thisDimLabels,
+            dimensionLength: dimensionLength ?? 0,
+          } satisfies DimensionExplanation;
+        }
+      );
     }
   );
 
@@ -627,11 +630,10 @@ export class Computer implements ComputerInterface {
               }
 
               const tableName = getIdentifierString(statement.args[0]);
-              const blockId: string | undefined =
-                this._getVarBlockId(tableName);
+              const blockId: string | undefined = this.getVarBlockId(tableName);
               readableTableName = this.getSymbolDefinedInBlock(blockId ?? '');
               if (filterForBlockId) {
-                const blockId = this._getVarBlockId(tableName);
+                const blockId = this.getVarBlockId(tableName);
                 if (blockId !== filterForBlockId) {
                   return [];
                 }
@@ -697,7 +699,9 @@ export class Computer implements ComputerInterface {
           realm: this.computationRealm.interpreterRealm,
         });
       }),
-      map((result) => serializeResult(result.type, result.value)),
+      map((result) =>
+        serializeResult(result.type, result.value, () => result.meta)
+      ),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     );
   }
@@ -783,6 +787,7 @@ export class Computer implements ComputerInterface {
               message: (err as Error).message,
             },
           },
+          meta: undefined,
         };
       }
     });
@@ -878,9 +883,6 @@ export class Computer implements ComputerInterface {
         return {
           blockResults: Object.fromEntries(
             updates.map((result) => [result.id, result])
-          ),
-          indexLabels: await this.computationRealm.getIndexLabels(
-            this.latestVarNameToBlockMap
           ),
         };
       } catch (error) {

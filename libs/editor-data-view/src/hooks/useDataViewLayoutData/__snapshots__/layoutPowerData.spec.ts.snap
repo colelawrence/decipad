@@ -2,6 +2,7 @@
 
 exports[`layoutPowerData > works with two column two groups tree and aggregation 1`] = `
 {
+  "meta": undefined,
   "type": {
     "columnNames": [
       "Column1",
@@ -50,6 +51,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
         "columns": [
           {
             "aggregation": {
+              "meta": undefined,
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -67,6 +69,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
         "originalCardinality": 2,
         "root": "A",
         "rootAggregation": {
+          "meta": undefined,
           "type": {
             "kind": "number",
             "unit": null,
@@ -97,6 +100,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
         "columns": [
           {
             "aggregation": {
+              "meta": undefined,
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -114,6 +118,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
         "originalCardinality": 1,
         "root": "B",
         "rootAggregation": {
+          "meta": undefined,
           "type": {
             "kind": "number",
             "unit": null,
@@ -130,6 +135,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
     "columns": [
       {
         "aggregation": {
+          "meta": undefined,
           "type": {
             "kind": "number",
             "unit": null,
@@ -145,6 +151,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
       },
       {
         "aggregation": {
+          "meta": undefined,
           "type": {
             "kind": "number",
             "unit": null,

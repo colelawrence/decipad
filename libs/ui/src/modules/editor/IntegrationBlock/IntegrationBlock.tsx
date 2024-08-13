@@ -109,7 +109,12 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
 
       <div contentEditable={false}>
         {displayResults && result && (
-          <CodeResult value={result.value} type={result.type} isLiveResult />
+          <CodeResult
+            value={result.value}
+            type={result.type}
+            meta={result.meta}
+            isLiveResult
+          />
         )}
       </div>
     </div>

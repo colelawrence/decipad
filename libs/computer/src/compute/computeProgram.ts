@@ -1,5 +1,5 @@
 import type { AST, Value as ValueTypes } from '@decipad/language-interfaces';
-import { Unknown } from '@decipad/language-interfaces';
+import { Value as TValue } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type {
   TScopedInferContext,
@@ -30,9 +30,11 @@ import type {
 } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef, toUserlandResult } from '../exprRefs';
-import { identifiedResultForTable } from './identifiedResultForTable';
 import type { Computer } from '../computer';
-import { serializeResult } from '@decipad/computer-utils';
+import { massageComputeResult } from './massageComputeResult';
+import { serializeComputeResult } from './serializeComputeResult';
+import { TStackFrame } from '../../../language/src/scopedRealm/stack';
+import { UnknownValue } from 'libs/language-types/src/Value';
 
 /*
  - Skip cached stuff
@@ -43,8 +45,10 @@ import { serializeResult } from '@decipad/computer-utils';
 const internalComputeStatement = async (
   program: ComputerProgram,
   blockId: string,
-  computer: Computer
-): Promise<[IdentifiedResult, ValueTypes.Value | undefined]> => {
+  computer: Computer,
+  interimValueStack: TStackFrame<TValue.Value>,
+  interimTypeStack: TStackFrame<Type>
+): Promise<[IdentifiedResult, ValueTypes.Value | undefined, Type]> => {
   const realm = computer.computationRealm;
   const cachedResult = realm.getFromCache(blockId);
   let value: ValueTypes.Value | undefined;
@@ -52,7 +56,11 @@ const internalComputeStatement = async (
   const block = getBlockFromProgram(program, blockId);
   if (block && cachedResult) {
     if (block?.inferredType) {
-      return [getDefined(cachedResult.result), cachedResult.value];
+      return [
+        getDefined(cachedResult.result),
+        cachedResult.value,
+        block?.inferredType,
+      ];
     }
   }
 
@@ -85,9 +93,10 @@ const internalComputeStatement = async (
           type: 'computer-result',
           id: blockId,
           epoch: realm.epoch,
-          result: serializeResult(
+          result: await serializeComputeResult(
             t.impossible((err as Error).message),
-            Unknown
+            Value.UnknownValue,
+            undefined
           ),
           visibleVariables: getVisibleVariables(
             program,
@@ -98,6 +107,7 @@ const internalComputeStatement = async (
           usedNames: getUsedNames(),
         },
         undefined,
+        valueType,
       ];
     }
   } else {
@@ -124,10 +134,18 @@ const internalComputeStatement = async (
     id: blockId,
     epoch: realm.epoch,
     get result() {
-      if (!valueType.errorCause && statement.type === 'table' && variableName) {
-        return identifiedResultForTable(realm, variableName, statement);
-      }
-      return serializeResult(valueType, data);
+      return serializeComputeResult(
+        ...massageComputeResult(
+          realm,
+          interimValueStack,
+          interimTypeStack,
+          valueType,
+          variableName,
+          statement,
+          value ?? UnknownValue,
+          data
+        )
+      );
     },
     get visibleVariables() {
       return getVisibleVariables(
@@ -140,21 +158,25 @@ const internalComputeStatement = async (
     usedNames: getUsedNames(),
   };
 
-  return [result, value];
+  return [result, value, valueType];
 };
 
 const computeStatement = async (
   program: ComputerProgram,
   blockId: string,
-  computer: Computer
-): Promise<[IdentifiedResult, ValueTypes.Value | undefined]> => {
-  const [resultWithAbstractRefs, value] = await internalComputeStatement(
+  computer: Computer,
+  interimValueStack: TStackFrame<TValue.Value>,
+  interimTypeStack: TStackFrame<Type>
+): Promise<[IdentifiedResult, ValueTypes.Value | undefined, Type]> => {
+  const [resultWithAbstractRefs, value, type] = await internalComputeStatement(
     program,
     blockId,
-    computer
+    computer,
+    interimValueStack,
+    interimTypeStack
   );
   const result = toUserlandResult(resultWithAbstractRefs, computer);
-  return [result, value];
+  return [result, value, type];
 };
 
 export const resultFromError = (
@@ -178,19 +200,24 @@ export const resultFromError = (
     type: 'computer-result',
     id: blockId,
     epoch: realm.epoch,
-    result: serializeResult(t.impossible(message), null),
+    result: serializeComputeResult(
+      t.impossible(message),
+      UnknownValue,
+      undefined
+    ),
     usedNames: [],
   };
 };
 
-/**
- * Seperate function because of debugging reasons
- */
 function resultsToCacheMap(result: CacheContents): CacheContents {
   return {
     result: { ...result.result },
     value: result.value,
   };
+}
+
+function cacheContentsToResult(cacheContents: CacheContents): IdentifiedResult {
+  return cacheContents.result;
 }
 
 export const computeProgram = async (
@@ -199,17 +226,27 @@ export const computeProgram = async (
 ): Promise<IdentifiedResult[]> => {
   const realm = computer.computationRealm;
 
+  const interimValueStack = realm.interpreterRealm.stack.push();
+  const interimTypeStack = realm.inferContext.stack.push();
+
   let resultsToCache: CacheContents[] = [];
   for (const block of program.asSequence) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const [result, value] = await computeStatement(
+      const [result, value, type] = await computeStatement(
         program,
         block.id,
-        computer
+        computer,
+        interimValueStack,
+        interimTypeStack
       );
 
       resultsToCache.push({ result, value });
+
+      if (block.definesVariable) {
+        interimValueStack.set(block.definesVariable, value);
+        interimTypeStack.set(block.definesVariable, type);
+      }
     } catch (err) {
       console.error('computeProgram: caught error', err);
       resultsToCache.push({
@@ -227,7 +264,7 @@ export const computeProgram = async (
     realm.addToCache(block.id, result);
   }
   // same here:
-  return resultsToCache.map((resultToCache) => resultToCache.result);
+  return resultsToCache.map(cacheContentsToResult);
 };
 
 const inferWhileRetrievingNames = async (

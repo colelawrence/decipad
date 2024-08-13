@@ -7,9 +7,12 @@ import { slice, sort, unique } from './valueTransforms';
 setupDeciNumberSnapshotSerializer();
 
 describe('column value', () => {
+  const emptyMeta = () => ({ labels: undefined });
+
   it('can be constructed from values', async () => {
     const column = Value.Column.fromValues(
-      [1, 2, 3].map((n) => Value.fromJS(n))
+      [1, 2, 3].map((n) => Value.fromJS(n)),
+      emptyMeta
     );
     expect(await materializeOneResult(await column.getData()))
       .toMatchInlineSnapshot(`
@@ -38,12 +41,14 @@ describe('column value', () => {
 
   it('can be constructed from other columns', async () => {
     const column1 = Value.Column.fromValues(
-      [1, 2, 3].map((n) => Value.fromJS(n))
+      [1, 2, 3].map((n) => Value.fromJS(n)),
+      emptyMeta
     );
     const column2 = Value.Column.fromValues(
-      [4, 5, 6].map((n) => Value.fromJS(n))
+      [4, 5, 6].map((n) => Value.fromJS(n)),
+      emptyMeta
     );
-    const column = Value.Column.fromValues([column1, column2]);
+    const column = Value.Column.fromValues([column1, column2], emptyMeta);
     expect(await materializeOneResult(await column.getData()))
       .toMatchInlineSnapshot(`
         [
@@ -93,7 +98,8 @@ describe('column value', () => {
 
   it('can be sorted', async () => {
     const originalColumn = Value.Column.fromValues(
-      [3, 1, 2].map((n) => Value.fromJS(n))
+      [3, 1, 2].map((n) => Value.fromJS(n)),
+      emptyMeta
     );
     const sortedColumn = await sort(originalColumn);
     expect(await materializeOneResult(await originalColumn.getData()))

@@ -5,13 +5,15 @@ import { getDimensionLength } from '../utils/getDimensionLength';
 import { implementColumnLike } from '../utils/implementColumnLike';
 import type { MinimalTensor } from './MinimalTensor';
 import { lowLevelGet } from './lowLevelGet';
-import type { Dimension, Value } from '@decipad/language-interfaces';
+import type { Dimension, Value, Result } from '@decipad/language-interfaces';
 
 const ConcatenatedColumn = implementColumnLike(
   class ConcatenatedColumn implements MinimalTensor {
     readonly _dimensions: Dimension[];
     readonly column1: Value.ColumnLikeValue;
     readonly column2: Value.ColumnLikeValue;
+
+    meta: () => Result.ResultMetadataColumn;
 
     /** Construct a column that concatenates the values of 2 columns. */
     constructor(
@@ -22,6 +24,17 @@ const ConcatenatedColumn = implementColumnLike(
       this._dimensions = dimensions;
       this.column1 = column1;
       this.column2 = column2;
+      this.meta = () => {
+        const labels = Promise.all([
+          this.column1.meta?.()?.labels,
+          this.column2.meta?.()?.labels,
+        ]);
+        return {
+          labels: labels.then(([labels1 = [], labels2 = []]) =>
+            labels1.map((label, i) => label.concat(labels2[i] ?? []))
+          ),
+        } satisfies Result.ResultMetadataColumn;
+      };
     }
 
     async dimensions() {

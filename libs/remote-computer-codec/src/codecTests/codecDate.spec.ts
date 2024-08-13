@@ -15,7 +15,7 @@ describe('encodes and decodes dates', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const date = BigInt(Date.now());
-    await encodeDate(view, 0, date);
+    await encodeDate(view, 0, date, undefined);
     const [decoded] = await decodeDate(view, 0);
     expect(decoded).toStrictEqual(date);
   });
@@ -24,7 +24,7 @@ describe('encodes and decodes dates', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const date = undefined;
-    await encodeDate(view, 0, date);
+    await encodeDate(view, 0, date, undefined);
     const [decoded] = await decodeDate(view, 0);
     expect(decoded).toStrictEqual(Unknown);
   });
@@ -43,7 +43,7 @@ describe('encodes and decodes dates', () => {
     let offset = 0;
     for (const date of dates) {
       // eslint-disable-next-line no-await-in-loop
-      offset = await encodeDate(view, offset, date);
+      offset = await encodeDate(view, offset, date, undefined);
     }
 
     // decode

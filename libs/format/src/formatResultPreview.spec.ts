@@ -13,6 +13,7 @@ it('can summarize longer lists', async () => {
         },
       },
       value: [N(1), N(2), N(3)],
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"column of number"`);
 
@@ -26,6 +27,7 @@ it('can summarize longer lists', async () => {
         },
       },
       value: ['hello', 'world'],
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"column of string"`);
 });
@@ -40,6 +42,7 @@ it('shows ranges', async () => {
         },
       },
       value: [N(1), N(10)],
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"range(1 through 10)"`);
 });
@@ -55,6 +58,7 @@ it('displays type errors', async () => {
         ],
       },
       value: N(1, 2),
+      meta: undefined,
     })
   ).toMatch(/unit|second|meter/i);
 });
@@ -74,6 +78,7 @@ it('displays numbers with units', async () => {
         ],
       },
       value: N(1_000_000_000),
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"1 gigasecond"`);
 });
@@ -85,6 +90,7 @@ it('random types', async () => {
         kind: 'nothing',
       },
       value: Unknown,
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"nothing"`);
   expect(
@@ -93,6 +99,7 @@ it('random types', async () => {
         kind: 'boolean',
       },
       value: true,
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"true"`);
   expect(
@@ -102,6 +109,7 @@ it('random types', async () => {
         date: 'year',
       },
       value: 1577836800000n,
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"2020"`);
   expect(
@@ -113,6 +121,7 @@ it('random types', async () => {
         body: undefined,
       },
       value: Unknown,
+      meta: undefined,
     })
   ).toMatchInlineSnapshot(`"function"`);
 });

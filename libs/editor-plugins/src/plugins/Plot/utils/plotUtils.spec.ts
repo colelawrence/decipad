@@ -79,7 +79,7 @@ describe('resultToPlotResultData', () => {
   it('picks columns', async () => {
     expect(
       await resultToPlotResultData(
-        { value: tableData, type: tableType },
+        { value: tableData, type: tableType, meta: undefined },
         displayProps({
           xColumnName: 'index',
           yColumnNames: ['date-day', 'date-month', 'date-year'],

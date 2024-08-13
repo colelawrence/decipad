@@ -78,6 +78,7 @@ const getColumnResult = async (
           cellType: result.type.columnTypes[columnIndex],
         },
         value,
+        meta: result.meta,
       };
     }
   }

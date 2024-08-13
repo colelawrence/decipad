@@ -415,12 +415,15 @@ describe('getValue', () => {
                 },
               ],
               "dataCache": undefined,
+              "meta": undefined,
               "rowCountCache": undefined,
             },
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });
@@ -468,9 +471,11 @@ describe('getValue', () => {
                 },
               ],
               "dataCache": undefined,
+              "meta": undefined,
               "rowCountCache": undefined,
             },
             "dimensionsCache": undefined,
+            "meta": [Function],
             "rowCountCache": 3,
           },
           Column {
@@ -508,12 +513,15 @@ describe('getValue', () => {
                 },
               ],
               "dataCache": undefined,
+              "meta": undefined,
               "rowCountCache": undefined,
             },
             "dimensionsCache": undefined,
+            "meta": [Function],
             "rowCountCache": 3,
           },
         ],
+        "meta": [Function],
       }
     `);
   });

@@ -17,6 +17,7 @@ import { getResultGenerator } from '../utils/getResultGenerator';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
 import type { Dimension, Result, Value } from '@decipad/language-interfaces';
+import { ResultMetadataColumn } from 'libs/language-interfaces/src/Result';
 
 type TGeneratorColumn = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 
@@ -28,9 +29,16 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   private partialMemo: undefined | boolean;
   private desc: string;
 
-  constructor(gen: PromiseOrType<ValueGeneratorFunction>, desc: string) {
+  public meta: undefined | (() => undefined | ResultMetadataColumn);
+
+  constructor(
+    gen: PromiseOrType<ValueGeneratorFunction>,
+    meta: undefined | (() => ResultMetadataColumn | undefined),
+    desc: string
+  ) {
     super();
     this.gen = gen;
+    this.meta = meta;
     this.desc = desc;
   }
 
@@ -101,8 +109,9 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
 
   static fromGenerator(
     gen: (start?: number, end?: number) => AsyncGenerator<Value.Value>,
+    meta: undefined | (() => ResultMetadataColumn | undefined),
     desc: string
   ) {
-    return new GeneratorColumn(gen, desc);
+    return new GeneratorColumn(gen, meta, desc);
   }
 }

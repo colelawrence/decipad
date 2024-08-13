@@ -33,6 +33,7 @@ const errorResult = (err: string): ImportResultWithMandatoryResult => {
         },
       },
       value: Unknown,
+      meta: undefined,
     },
     loading: false,
   };

@@ -21,7 +21,7 @@ describe('encode and decode column', () => {
     const column = (start = 0, end = Infinity) =>
       slice(from([N(1), N(2), N(3)]), start, end);
     const buffer = new Value.GrowableDataView(createResizableArrayBuffer(1024));
-    const length = await columnEncoder(buffer, 0, column);
+    const length = await columnEncoder(buffer, 0, column, undefined);
     const result = buffer.seal(length);
     const [decodedColumn] = await columnDecoder(new DataView(result), 0);
     expect(typeof decodedColumn).toBe('function');
@@ -49,7 +49,7 @@ describe('encode and decode column', () => {
     const column = (start = 0, end = Infinity) =>
       slice(from([col1, col2]), start, end);
     const buffer = new Value.GrowableDataView(createResizableArrayBuffer(1024));
-    const length = await columnEncoder(buffer, 0, column);
+    const length = await columnEncoder(buffer, 0, column, undefined);
     const result = buffer.seal(length);
     const [decodedColumn] = await columnDecoder(new DataView(result), 0);
     expect(typeof decodedColumn).toBe('function');

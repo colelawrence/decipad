@@ -32,4 +32,5 @@ export abstract class ColumnBase implements Value.ColumnLikeValue {
   abstract values(start?: number, end?: number): AsyncGenerator<Value.Value>;
   abstract atIndex(i: number): Promise<Value.Value | undefined>;
   abstract lowLevelGet(...keys: number[]): Promise<Value.Value>;
+  abstract meta: undefined | (() => undefined | Result.ResultMetadataColumn);
 }

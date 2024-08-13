@@ -110,6 +110,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
             <CodeResult
               type={result.type}
               value={result.value}
+              meta={result.meta}
               variant="block"
               isResultPreview
               isLiveResult

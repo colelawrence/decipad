@@ -28,6 +28,7 @@ export const selectErrorFromResult = (
         },
       },
       value: Unknown,
+      meta: undefined,
     };
   }
   if (

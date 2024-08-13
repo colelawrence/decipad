@@ -7,5 +7,8 @@ export async function runCode<T extends SerializedTypeKind>(
   options: RunAstOptions = {}
 ): Promise<Result.Result<T>> {
   const result = await run(code, options);
-  return serializeResult<T>(result.type, result.value);
+  const meta = (result.meta != null ? () => result.meta : undefined) as
+    | (() => Result.ResultMetadata<T>)
+    | undefined;
+  return serializeResult<T>(result.type, result.value, meta);
 }

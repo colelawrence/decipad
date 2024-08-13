@@ -169,3 +169,265 @@ describe('first works', () => {
     ]);
   });
 });
+
+describe('meta labels', () => {
+  it('works 1 D', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      'Initial = 7',
+      `Table = {
+        Id = [1 .. 10]
+        Total = if first then Initial else previous(0) + Initial
+      }`,
+      `JustOneColumn = Table.Total`,
+      `JustAnotherColumn = Table.Total`,
+      'YetAnotherColumn = Table.Total * 10'
+    );
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
+    const matResults = await Promise.all(
+      Array.from(Object.values(results.blockResults)).map(async (result) =>
+        materializeResult(getDefined(result.result))
+      )
+    );
+    const labels = await Promise.all(
+      matResults.map(async (r) => r.meta?.()?.labels)
+    );
+    expect(labels).toMatchInlineSnapshot(`
+      Array [
+        undefined,
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+      ]
+    `);
+  });
+
+  it('works 2 D', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      'Initial = 7',
+      `Table = {
+        Id = [1 .. 10]
+        Total = if first then Initial else previous(0) + Initial
+      }`,
+      `Table2 = {
+        Id = [100 .. 110]
+        Total = if first then Initial else previous(0) + Initial
+      }`,
+      'Combination = Table.Total * Table2.Total'
+    );
+    const results = getDefined(
+      await computer.computeDeltaRequest({ program: { upsert: program } })
+    );
+    const matResults = await Promise.all(
+      Array.from(Object.values(results.blockResults)).map(async (result) =>
+        materializeResult(getDefined(result.result))
+      )
+    );
+    const labels = await Promise.all(
+      matResults.map(async (r) => r.meta?.()?.labels)
+    );
+    expect(labels).toMatchInlineSnapshot(`
+      Array [
+        undefined,
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+        ],
+        Array [
+          Array [
+            "100",
+            "101",
+            "102",
+            "103",
+            "104",
+            "105",
+            "106",
+            "107",
+            "108",
+            "109",
+            "110",
+          ],
+        ],
+        Array [
+          Array [
+            "100",
+            "101",
+            "102",
+            "103",
+            "104",
+            "105",
+            "106",
+            "107",
+            "108",
+            "109",
+            "110",
+          ],
+        ],
+        Array [
+          Array [
+            "100",
+            "101",
+            "102",
+            "103",
+            "104",
+            "105",
+            "106",
+            "107",
+            "108",
+            "109",
+            "110",
+          ],
+        ],
+        Array [
+          Array [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+          ],
+          Array [
+            "100",
+            "101",
+            "102",
+            "103",
+            "104",
+            "105",
+            "106",
+            "107",
+            "108",
+            "109",
+            "110",
+          ],
+        ],
+      ]
+    `);
+  });
+});

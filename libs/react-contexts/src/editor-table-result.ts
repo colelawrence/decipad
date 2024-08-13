@@ -10,6 +10,7 @@ export const defaultTableResultValue: Result.Result<'pending'> = {
     kind: 'pending',
   },
   value: Unknown,
+  meta: undefined,
 };
 
 export const EditorTableResultContext =

@@ -77,6 +77,7 @@ const parsing = async (
     result = {
       type: { kind: 'string' },
       value: text,
+      meta: undefined,
     };
   }
 

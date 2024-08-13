@@ -37,7 +37,7 @@ describe('encodes and decodes functions', () => {
         },
       ],
     });
-    await encodeFunction(view, 0, fn);
+    await encodeFunction(view, 0, fn, undefined);
     const [decoded] = await decodeFunction(view, 0);
     expect(decoded).toMatchObject(fn);
   });

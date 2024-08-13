@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
-import { Result } from '@decipad/remote-computer';
+import { getResultGenerator, Result } from '@decipad/remote-computer';
 import { useResolved, useSimplePagination } from '@decipad/react-utils';
-import { from, all as allEntries, count } from '@decipad/generator-utils';
+import { all as allEntries, count } from '@decipad/generator-utils';
 import { cssVar } from '../../../primitives';
 import { CodeResultProps } from '../../../types';
 import { cellLeftPaddingStyles } from '../../../styles/table';
@@ -42,10 +42,9 @@ const MAX_CELLS_PER_PAGE = 10;
 
 export const SimpleColumnResult: FC<
   CodeResultProps<'column'> | CodeResultProps<'materialized-column'>
-> = ({ type, value, element }) => {
+> = ({ type, value, meta, element }) => {
   const all = useMemo(
-    (): Result.ResultColumn =>
-      Array.isArray(value) ? () => from(value) : value,
+    (): Result.ResultColumn => getResultGenerator(value),
     [value]
   );
   const totalCount = useResolved(useMemo(() => count(all()), [all])) ?? 0;
@@ -84,6 +83,7 @@ export const SimpleColumnResult: FC<
                     <CodeResult
                       type={type.cellType}
                       value={oneValue as Result.Result['value']}
+                      meta={meta}
                       element={element}
                     />
                   </span>

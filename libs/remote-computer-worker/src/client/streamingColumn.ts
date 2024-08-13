@@ -9,6 +9,7 @@ import type { RecursiveDecoder } from '@decipad/remote-computer-codec';
 import type { ClientWorkerContext } from './types';
 import type { ReadSerializedColumnDecoder } from 'libs/language-types/src/Value';
 import { getRemoteValue } from '../utils/getRemoteValue';
+import { getRemoteMeta } from '../utils/getRemoteMeta';
 
 const recursiveDecoderToReadSerializedColumnDecoder =
   (
@@ -35,7 +36,8 @@ export const streamingColumn = (
       recursiveDecoderToReadSerializedColumnDecoder(decode, cellType, decoders),
       new DataView(value),
       [],
-      0
+      0,
+      () => ({ labels: getRemoteMeta(ctx, valueId, start, end) })
     );
     yield* getResultGenerator(await column.getData())();
   };

@@ -4,7 +4,12 @@ import { getResultGenerator } from '../utils/getResultGenerator';
 
 export type WriteSerializedColumnEncoder<
   T extends Result.OneResult = Result.OneResult
-> = (buffer: DataView, offset: number, value: T) => PromiseOrType<number>; // returns the number of bytes written
+> = (
+  buffer: DataView,
+  offset: number,
+  value: T,
+  meta: undefined | (() => Result.ResultMetadata)
+) => PromiseOrType<number>; // returns the number of bytes written
 
 export class WriteSerializedColumn<T extends Result.OneResult>
   implements Value.ColumnLikeValue
@@ -18,6 +23,9 @@ export class WriteSerializedColumn<T extends Result.OneResult>
   ) {
     this.encoder = encoder;
     this.source = source;
+  }
+  get meta() {
+    return this.source.meta?.bind(this.source);
   }
   values(start?: number, end?: number) {
     return this.source.values(start, end);
@@ -49,7 +57,12 @@ export class WriteSerializedColumn<T extends Result.OneResult>
     let count = 0;
     for await (const value of data(start, end)) {
       count += 1;
-      offset = await this.encoder(buffer, offset, value as T);
+      offset = await this.encoder(
+        buffer,
+        offset,
+        value as T,
+        this.source.meta?.bind(this.source)
+      );
     }
     buffer.setUint32(initialOffset, count); // write the length (in number of elements)
 

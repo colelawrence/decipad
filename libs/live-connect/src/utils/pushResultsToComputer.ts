@@ -24,7 +24,7 @@ export async function pushResultToComputer(
     typeof computerResult.value !== 'symbol'
   ) {
     if (isTableResult(computerResult)) {
-      const { type, value } = computerResult as Result.Result<
+      const { type, value, meta } = computerResult as Result.Result<
         'table' | 'materialized-table'
       >;
 
@@ -84,6 +84,7 @@ export async function pushResultToComputer(
             buildType.column(deserializeType(colType), variableName, index)
           ),
           value: value[index],
+          meta,
         });
       }
 
@@ -99,6 +100,7 @@ export async function pushResultToComputer(
             [externalRef]: {
               type: serializeType(computerResult.type),
               value: computerResult.value,
+              meta: computerResult.meta,
             },
           },
         },

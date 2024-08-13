@@ -21,7 +21,7 @@ describe('encodes and decodes row', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const row = [BigInt(Date.now()), N(33, 2)];
-    await encodeRow(view, 0, row);
+    await encodeRow(view, 0, row, undefined);
     const [decoded] = await decodeRow(view, 0);
     expect(decoded).toMatchObject(row);
   });

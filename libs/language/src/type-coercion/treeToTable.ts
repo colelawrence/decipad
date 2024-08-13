@@ -120,6 +120,8 @@ const treeToColumnsValue = async (
   return [thisColumn, ...nextColumns];
 };
 
+const emptyMeta = undefined;
+
 const treeToTableValue = async (
   _realm: TRealm,
   sourceType: Type,
@@ -143,10 +145,14 @@ const treeToTableValue = async (
     columns.map((col, colIndex) => {
       const columnType = serializeType(columnTypes[colIndex]);
       return Value.Column.fromValues(
-        col.map((cell) => resultToValue({ type: columnType, value: cell }))
+        col.map((cell) =>
+          resultToValue({ type: columnType, value: cell, meta: undefined })
+        ),
+        emptyMeta
       );
     }),
-    fixColumnNames(getDefined(sourceType.columnNames))
+    fixColumnNames(getDefined(sourceType.columnNames)),
+    emptyMeta
   );
 };
 

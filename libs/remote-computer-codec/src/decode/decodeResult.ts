@@ -2,6 +2,7 @@
 import type { Result, SerializedType } from '@decipad/language-interfaces';
 import type { RecursiveDecoder } from './types';
 import { decodeType } from './decodeType';
+import { decodeResultMeta } from './decodeResultMeta';
 
 export const decodeResult = async (
   buffer: DataView,
@@ -17,5 +18,9 @@ export const decodeResult = async (
   let value: Result.OneResult;
   // eslint-disable-next-line prefer-const
   [value, offset] = await decoders[type.kind](type, buffer, offset, decoders);
-  return [{ type, value }, offset];
+
+  const [meta, newOffset] = await decodeResultMeta(buffer, offset);
+  offset = newOffset;
+
+  return [{ type, value, meta }, offset];
 };

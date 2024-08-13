@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import type { Dimension, Value } from '@decipad/language-interfaces';
+import type { Dimension, Result, Value } from '@decipad/language-interfaces';
 import { getDefined, zip } from '@decipad/utils';
 import type { MinimalTensor } from '../Value';
 import { isColumnLike } from '../Value';
@@ -24,9 +24,16 @@ const LazyOperation = implementColumnLike(
     readonly args: HypercubeArg[];
     private _uniqDimensions: DimensionId[] | undefined;
 
-    constructor(op: OperationFunction, args: HypercubeArg[]) {
+    public meta: undefined | (() => Result.ResultMetadataColumn | undefined);
+
+    constructor(
+      op: OperationFunction,
+      args: HypercubeArg[],
+      meta: undefined | (() => Result.ResultMetadataColumn | undefined)
+    ) {
       this.op = op;
       this.args = args;
+      this.meta = meta;
     }
 
     async dimensionIds(): Promise<DimensionId[]> {
@@ -104,9 +111,10 @@ const LazyOperation = implementColumnLike(
 
 export const createLazyOperationBase = async (
   op: OperationFunction,
-  args: HypercubeArg[]
+  args: HypercubeArg[],
+  meta: undefined | (() => Result.ResultMetadataColumn | undefined)
 ): Promise<Value.Value> => {
-  const lazyOperation = new LazyOperation(op, args);
+  const lazyOperation = new LazyOperation(op, args, meta);
   const dimensionCount = (await lazyOperation.dimensions()).length;
   if (dimensionCount > 0) {
     return lazyOperation;
@@ -119,8 +127,9 @@ export const createLazyOperation = async (
   utils: ContextUtils,
   op: OperationFunction,
   argValues: Value.Value[],
-  argTypes: Type[]
+  argTypes: Type[],
+  meta: undefined | (() => Result.ResultMetadataColumn | undefined)
 ) => {
   const args = zip(argValues, argTypes).map(getHypercubeArg(utils));
-  return createLazyOperationBase(op, args);
+  return createLazyOperationBase(op, args, meta);
 };

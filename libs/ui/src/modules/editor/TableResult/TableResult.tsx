@@ -74,6 +74,7 @@ export const TableResult: FC<TableResultProps> = ({
   parentType,
   type,
   value: _value,
+  meta,
   onDragStartCell,
   onDragEnd,
   onHideColumn,
@@ -220,6 +221,7 @@ export const TableResult: FC<TableResultProps> = ({
                         materializedValuesForPage?.[0][rowIndex]?.toString() ??
                         ''
                       }
+                      meta={meta}
                       element={element}
                       tooltip={tooltip}
                     />

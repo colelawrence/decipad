@@ -41,23 +41,30 @@ export const makeContext = (
 describe('treeToTable', async () => {
   const context = makeContext();
   const rowCount = 3000;
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
 
   const sourceTableOfStrings = Value.Table.fromMapping({
     Column1: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column2: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column3: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column4: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
   });
 

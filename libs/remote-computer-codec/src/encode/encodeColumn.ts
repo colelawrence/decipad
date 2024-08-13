@@ -6,18 +6,19 @@ import { valueEncoder } from './valueEncoder';
 import { initialBufferSize, maxBufferSize, pageSize } from '../defaultConfig';
 
 export const encodeColumn = async (
-  type: Result.Result['type'],
-  value: Result.Result['value'],
+  result: Result.Result,
   start: number,
   end: number
 ): Promise<ArrayBuffer> => {
+  const { type, value, meta } = result;
   if (type.kind !== 'column' && type.kind !== 'materialized-column') {
     throw new TypeError(`Expected column-like type and got ${type.kind}`);
   }
   const colValue: ValueTypes.ColumnLikeValue =
     Value.LeanColumn.fromGeneratorAndType(
       getResultGenerator(value ?? Unknown),
-      type
+      type,
+      () => meta as Result.ResultMetadataColumn
     );
   const col = new Value.WriteSerializedColumn(
     valueEncoder(type.cellType),

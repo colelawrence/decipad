@@ -22,19 +22,23 @@ export class GeneratorTable implements TableValue {
   generateRows: TableRowGenerator;
   columnNames: string[];
   columnTypes: Type[];
+  meta: undefined | (() => Result.ResultMetadataColumn | undefined);
 
   constructor(
     generateRows: TableRowGenerator,
     columnNames: string[],
-    columnTypes: Type[]
+    columnTypes: Type[],
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined)
   ) {
     this.generateRows = generateRows;
     this.columnNames = columnNames;
     this.columnTypes = columnTypes;
+    this.meta = meta;
   }
 
   static fromNamedColumns(
     gen: TableRowGenerator,
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined),
     columnNames: string[] = [],
     columnTypes: Type[] = []
   ) {
@@ -43,7 +47,7 @@ export class GeneratorTable implements TableValue {
         `Column count mismatch: column types (${columnTypes.length}) and column names (${columnNames.length}) do not match`
       );
     }
-    return new GeneratorTable(gen, columnNames, columnTypes);
+    return new GeneratorTable(gen, columnNames, columnTypes, meta);
   }
 
   async tableRowCount(): Promise<number | undefined> {
@@ -61,6 +65,7 @@ export class GeneratorTable implements TableValue {
     );
     return GeneratorColumn.fromGenerator(
       fromGeneratorFunctionPromiseToGeneratorFunction(colGenPromise),
+      this.meta?.bind(this),
       `GeneratorTable<${this.columnNames.join(',')}>`
     );
   }
@@ -80,6 +85,7 @@ export class GeneratorTable implements TableValue {
     return this.columnTypes.map((_, index) =>
       GeneratorColumn.fromGenerator(
         generators[index],
+        this.meta?.bind(this),
         `GeneratorTable<${this.columnNames.join(',')}>`
       )
     );
@@ -136,6 +142,10 @@ export class GeneratorTable implements TableValue {
       index: number
     ) => PromiseOrType<Value.ColumnLikeValue>
   ) {
-    return Table.fromNamedColumns(await Promise.all(this.columns.map(mapFn)));
+    return Table.fromNamedColumns(
+      await Promise.all(this.columns.map(mapFn)),
+      this.columnNames,
+      this.meta
+    );
   }
 }

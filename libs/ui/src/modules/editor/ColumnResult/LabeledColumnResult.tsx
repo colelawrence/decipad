@@ -65,6 +65,7 @@ const targetPageSize = (labels: DimensionExplanation[]) => {
 export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
   type,
   value,
+  meta,
   element,
   labels,
 }) => {
@@ -143,6 +144,7 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
                     <CodeResult
                       type={matrixValue.result.type}
                       value={matrixValue.result.value}
+                      meta={meta}
                       element={element}
                     />
                   </span>

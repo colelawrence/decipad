@@ -18,7 +18,7 @@ describe('encode and decode table', () => {
     const tableEncoder = valueEncoder(emptyTableType);
     const tableDecoder = valueDecoder(emptyTableType);
     const buffer = new DataView(createResizableArrayBuffer(1024));
-    await tableEncoder(buffer, 0, []);
+    await tableEncoder(buffer, 0, [], undefined);
     const [decodedTable] = await tableDecoder(buffer, 0);
     expect(decodedTable).toMatchObject([]);
   });
@@ -42,7 +42,7 @@ describe('encode and decode table', () => {
       [N(10), N(20), N(30)],
     ];
     const buffer = new Value.GrowableDataView(createResizableArrayBuffer(1024));
-    await tableEncoder(buffer, 0, table);
+    await tableEncoder(buffer, 0, table, undefined);
     const [decodedTable] = await tableDecoder(buffer, 0);
     expect(await materializeOneResult(decodedTable)).toMatchObject(table);
   });

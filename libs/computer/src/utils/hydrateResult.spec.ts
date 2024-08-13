@@ -31,6 +31,7 @@ describe('hydrateResult result', () => {
           ],
         },
         value: { n: 1, d: 1, s: 1 } as unknown as Result.OneResult,
+        meta: undefined,
       })
     ).toMatchInlineSnapshot(`
       Object {
@@ -115,6 +116,9 @@ describe('hydrateResult result', () => {
           { n: 1, d: 1, s: 1 },
           { n: 2, d: 1, s: 1 },
         ] as unknown as Result.OneResult,
+        meta: () => ({
+          labels: Promise.resolve([['1', '2']]),
+        }),
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
@@ -217,6 +221,9 @@ describe('hydrateResult result', () => {
             { n: 2, d: 1, s: 1 },
           ],
         ] as unknown as Result.OneResult,
+        meta: () => ({
+          labels: Promise.resolve([['1', '2']]),
+        }),
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
@@ -305,6 +312,9 @@ describe('hydrateResult result', () => {
           ],
         },
         value: [[230293223n, 2392302123n]] as unknown as Result.OneResult,
+        meta: () => ({
+          labels: Promise.resolve([['2020-01-01', '2020-01-02']]),
+        }),
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
@@ -372,6 +382,9 @@ describe('hydrateResult result', () => {
             [N(3), N(4)],
           ],
         ] as unknown as Result.OneResult,
+        meta: () => ({
+          labels: Promise.resolve([['1', '2']]),
+        }),
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`

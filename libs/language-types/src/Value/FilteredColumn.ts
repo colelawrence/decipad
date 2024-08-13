@@ -13,9 +13,17 @@ export class FilteredColumn
 {
   private sourceColumn2: Value.ColumnLikeValue;
 
+  meta: undefined | (() => Result.ResultMetadataColumn);
+
   constructor(column: Value.ColumnLikeValue, map: boolean[]) {
     super(column, map);
     this.sourceColumn2 = column;
+    this.meta = () => ({
+      labels: column.meta?.()?.labels?.then((labels) => {
+        const [thisLabel, ...restLabels] = labels ?? [];
+        return [thisLabel?.filter((_, i) => map[i]), ...restLabels];
+      }),
+    });
   }
 
   async getData(): Promise<Result.OneResult> {

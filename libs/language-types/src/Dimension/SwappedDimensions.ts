@@ -39,6 +39,14 @@ const SwappedDimensions = implementColumnLike(
       this.dominantDimensionIndex = dominantDimensionIndex;
     }
 
+    get meta() {
+      return this.unswappedHC.meta?.bind(this.unswappedHC);
+    }
+
+    set meta(meta) {
+      this.unswappedHC.meta = meta;
+    }
+
     async dimensions() {
       return Promise.resolve(getDefined(this._dimensions));
     }

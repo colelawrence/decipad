@@ -15,6 +15,7 @@ import type { FullBuiltinSpec } from '../types';
 setupDeciNumberSnapshotSerializer();
 
 describe('table operators', () => {
+  const emptyMeta = () => ({ labels: undefined });
   it('concatenates tables', async () => {
     expect(
       await materializeOneResult(
@@ -26,12 +27,14 @@ describe('table operators', () => {
                   Value.fromJS([1, 2, 3]),
                   Value.fromJS(['Hello', 'World', 'Sup']),
                 ],
-                ['Numbers', 'Strings']
+                ['Numbers', 'Strings'],
+                undefined
               ),
 
               Value.Table.fromNamedColumns(
                 [Value.fromJS([4]), Value.fromJS(['Mate'])],
-                ['Numbers', 'Strings']
+                ['Numbers', 'Strings'],
+                undefined
               ),
             ],
             [
@@ -92,7 +95,8 @@ describe('table operators', () => {
   it('concatenates tables whose column orders differ', async () => {
     const t1 = Value.Table.fromNamedColumns(
       [Value.fromJS([1, 2, 3]), Value.fromJS(['a', 'b', 'c'])],
-      ['numbers', 'strings']
+      ['numbers', 'strings'],
+      undefined
     );
 
     const t1Type = t.table({
@@ -103,7 +107,8 @@ describe('table operators', () => {
 
     const t2 = Value.Table.fromNamedColumns(
       [Value.fromJS(['d', 'e', 'f']), Value.fromJS([4, 5, 6])],
-      ['strings', 'numbers']
+      ['strings', 'numbers'],
+      undefined
     );
     const t2Type = t.table({
       indexName: 'numbers',
@@ -229,7 +234,8 @@ describe('table operators', () => {
 
     const tableValue = Value.Table.fromNamedColumns(
       [Value.fromJS([1, 2, 3]), Value.fromJS([6, 4, 5])],
-      ['A', 'B']
+      ['A', 'B'],
+      undefined
     );
     const columnValue = tableValue.getColumn('B');
 
@@ -314,7 +320,8 @@ describe('table operators', () => {
         Value.fromJS([1, 2, 3, 4, 5, 6]),
         Value.fromJS([false, true, true, false, false, true]),
       ],
-      ['Nums', 'Bools']
+      ['Nums', 'Bools'],
+      undefined
     );
     const columnValue = tableValue.getColumn('Bools');
     expect(
@@ -367,7 +374,8 @@ describe('table operators', () => {
     const needleType = t.string();
     const tableValue = Value.Table.fromNamedColumns(
       [Value.fromJS(['The Thing']), Value.fromJS([12345])],
-      ['Index', 'Value']
+      ['Index', 'Value'],
+      undefined
     );
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup as FullBuiltinSpec;
@@ -407,14 +415,18 @@ describe('table operators', () => {
     const tableValue = Value.Table.fromNamedColumns(
       [
         Value.fromJS(['The Thing']),
-        Value.Column.fromValues([
-          Value.DateValue.fromDateAndSpecificity(
-            BigInt(new Date('2022-03-01').getTime()),
-            'day'
-          ),
-        ]),
+        Value.Column.fromValues(
+          [
+            Value.DateValue.fromDateAndSpecificity(
+              BigInt(new Date('2022-03-01').getTime()),
+              'day'
+            ),
+          ],
+          emptyMeta
+        ),
       ],
-      ['Index', 'Value']
+      ['Index', 'Value'],
+      undefined
     );
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup as FullBuiltinSpec;
@@ -454,7 +466,8 @@ describe('table operators', () => {
     });
     const tableValue = Value.Table.fromNamedColumns(
       [Value.fromJS(['a', 'b', 'c']), Value.fromJS([1, 2, 3])],
-      ['Index', 'Value']
+      ['Index', 'Value'],
+      undefined
     );
 
     const conditionColumnType = t.column(t.boolean());

@@ -17,15 +17,16 @@ import type { RecursiveEncoder } from './types';
 const undefinedResult: Result.Result = {
   type: { kind: 'nothing' },
   value: Unknown,
+  meta: undefined,
 };
 
 export const encodeTree: RecursiveEncoder = async (
-  rootType,
+  rootResult,
   buffer,
-  rootValue,
   _offset,
   recursiveEncoders
 ) => {
+  const { type: rootType, value: rootValue, meta: rootMeta } = rootResult;
   let offset = _offset;
   const recursiveTreeEncode = async (
     currentRootType: SerializedType,
@@ -47,9 +48,8 @@ export const encodeTree: RecursiveEncoder = async (
     }
 
     offset = await recursiveEncoders[currentRootType.kind](
-      currentRootType,
+      { type: currentRootType, value: value.root, meta: rootMeta },
       buffer,
-      value.root,
       offset,
       recursiveEncoders
     );
@@ -96,6 +96,10 @@ export const encodeTree: RecursiveEncoder = async (
     }
   };
 
-  await recursiveTreeEncode(undefinedResult.type, rootType, rootValue);
+  await recursiveTreeEncode(
+    undefinedResult.type,
+    rootType,
+    rootValue ?? Unknown
+  );
   return offset;
 };

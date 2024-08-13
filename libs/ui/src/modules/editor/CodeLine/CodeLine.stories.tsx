@@ -16,14 +16,14 @@ export default {
 
 export const Normal: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLine {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLine {...props} result={{ type, value, meta }} />
 );
 
 export const WithHighlightedLine: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLine {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithHighlightedLine.args = {
   highlight: true,
@@ -31,8 +31,8 @@ WithHighlightedLine.args = {
 
 export const WithExpandedResult: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLine {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
 WithExpandedResult.args = {
@@ -41,8 +41,8 @@ WithExpandedResult.args = {
 
 export const WithError: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLine {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithError.args = {
   children: '[1, 2,',

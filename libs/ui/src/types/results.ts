@@ -21,6 +21,7 @@ export type ResultFormatting =
 export interface CodeResultProps<T extends SerializedTypeKind> {
   readonly type: Result.Result<T>['type'];
   readonly value: Result.Result<T>['value'];
+  readonly meta?: Result.Result<T>['meta'];
   readonly parentType?: SerializedType;
   readonly variant?: 'block' | 'inline';
   readonly expanded?: boolean;

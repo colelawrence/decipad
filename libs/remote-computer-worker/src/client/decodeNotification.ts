@@ -11,21 +11,31 @@ export const decodeNotification = async <TMeta extends object = object>(
   _notification: object
 ): Promise<TBaseNotificationParams<TMeta>> => {
   const notification = _notification as TSerializedNotificationParams<TMeta>;
+  const { result } = notification;
+  const { meta } = result ?? {};
   return {
     ...notification,
     result:
-      notification.result == null
+      result == null
         ? undefined
         : {
-            type: notification.result.type,
+            type: result.type,
             value: (
               await decodeRemoteValue(
                 ctx,
-                new DataView(notification.result.value),
+                new DataView(result.value),
                 0,
-                notification.result.type
+                result.type
               )
             )[0],
+            meta: meta
+              ? () => ({
+                  ...meta,
+                  labels: meta.labels
+                    ? Promise.resolve(meta.labels)
+                    : undefined,
+                })
+              : undefined,
           },
   };
 };

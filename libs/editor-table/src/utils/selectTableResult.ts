@@ -8,6 +8,7 @@ const unknownResult: Result.Result<'pending'> = {
     kind: 'pending',
   },
   value: Unknown,
+  meta: undefined,
 };
 
 type ColumnReplacement = Omit<TableColumn, 'blockId'> & {

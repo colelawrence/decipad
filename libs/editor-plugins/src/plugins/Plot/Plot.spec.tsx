@@ -203,6 +203,7 @@ describe.sequential('Plot', () => {
         injectResult={{
           type: tableType,
           value: tableData,
+          meta: undefined,
         }}
         resultVarName="varName"
       />

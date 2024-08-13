@@ -62,7 +62,11 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
     >
       {result ? (
         <span css={lineStyles}>
-          <CodeResult value={result.value} type={result.type} />
+          <CodeResult
+            value={result.value}
+            type={result.type}
+            meta={result.meta}
+          />
         </span>
       ) : (
         <span css={lineStyles}>{children}</span>

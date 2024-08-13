@@ -46,7 +46,9 @@ export const hydrateResult = <T extends Result.Result>(
       replaceValue = (start = 0, end = Infinity) =>
         map(
           valueGen(start, end),
-          (value) => hydrateResult({ type: type.cellType, value })?.value
+          (value) =>
+            hydrateResult({ type: type.cellType, value, meta: result.meta })
+              ?.value
         );
 
       break;
@@ -64,6 +66,7 @@ export const hydrateResult = <T extends Result.Result>(
                 : '',
           },
           value: (value as Result.OneResult[])?.[colIndex],
+          meta: result.meta,
         })
       );
       replaceType = {

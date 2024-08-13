@@ -46,6 +46,9 @@ export const coerceTableColumnIndices = async (
   if (!Value.isColumnLike(value)) {
     return Value.Column.fromValues(
       repeat(value, tableLength ?? 1),
+      () => ({
+        labels: undefined,
+      }),
       Value.defaultValue(type)
     );
   } else if (

@@ -6,15 +6,18 @@ import { Unknown } from '@decipad/language-interfaces';
 import { encodeColumn } from '@decipad/remote-computer-codec';
 import { RPC } from '@decipad/postmessage-rpc';
 // eslint-disable-next-line no-restricted-imports
-import type { TBaseNotificationParams } from '../types';
+import type { RemoteValueStore, TBaseNotificationParams } from '../types';
 import { encodeTable } from '../encode/encodeTable';
 import { createNotificationEncoder } from '../encode/createNotificationEncoder';
 import type { CreateWorkerWorkerOptions, TUnsubscribe } from './types';
 import { debug } from './debug';
+import { encodeMetaLabels } from '../encode/encodeMetaLabels';
+import { createRemoteValueStore } from './createRemoteValueStore';
 
 const unknownRemoteValue: Result.Result = {
   type: { kind: 'anything' },
   value: Unknown,
+  meta: undefined,
 };
 
 export const createWorkerWorker = <
@@ -32,7 +35,7 @@ export const createWorkerWorker = <
   TNotification,
   TSerializedNotification
 >) => {
-  const remoteValueStore: Map<string, Result.Result> = new Map();
+  const remoteValueStore: RemoteValueStore = createRemoteValueStore();
   const serializeNotification = (
     serializeNotificationFromStore ?? createNotificationEncoder
   )(remoteValueStore);
@@ -70,17 +73,37 @@ export const createWorkerWorker = <
         value.type.kind === 'materialized-column'
       ) {
         // serialize column
-        return encodeColumn(value.type, value.value, start, end);
+        return encodeColumn(value, start, end);
       }
 
       // serialize table
-      return encodeTable(remoteValueStore, value.type, value.value);
+      return encodeTable(remoteValueStore, value);
+    }
+  );
+
+  rpc.expose(
+    'getMeta',
+    async ({
+      valueId,
+      start = 0,
+      end = Infinity,
+    }: {
+      valueId: string;
+      start?: number;
+      end?: number;
+    }): Promise<ArrayBuffer> => {
+      debug('getMeta', valueId, { start, end });
+      await rpc.isReady;
+      const value = remoteValueStore.get(valueId) ?? unknownRemoteValue;
+      const labels = ((await value.meta?.()?.labels) ?? []).slice(start, end);
+      return encodeMetaLabels(labels);
     }
   );
 
   // This is called by the client to garbage-collect a value
   rpc.expose('releaseValue', ({ valueId }: { valueId: string }) => {
     debug('releaseValue', valueId);
+    console.log('releaseValue', valueId);
     remoteValueStore.delete(valueId);
   });
 

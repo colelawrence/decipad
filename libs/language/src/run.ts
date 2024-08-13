@@ -75,6 +75,7 @@ export interface RunAstOptions {
 export interface RunAstResult {
   type: Type;
   value: Result.OneResult;
+  meta: Result.ResultMetadata;
 }
 export type RunAstAndGetContextResult = RunAstResult & {
   context: TScopedInferContext;
@@ -99,28 +100,33 @@ export const runASTAndGetContext = async (
     if (throwOnError) {
       throw new TypeError(`Type error: ${type.errorCause.message}`);
     }
-    return { type, value: Unknown, context: ctx, realm };
+    return { type, value: Unknown, meta: undefined, context: ctx, realm };
   }
 
-  const results = await run([block], [0], realm, doNotMaterialiseResults);
+  const [[value, meta]] = await run(
+    [block],
+    [0],
+    realm,
+    doNotMaterialiseResults
+  );
   if (doNotMaterialiseResults) {
-    return { type, value: results[0], context: ctx, realm };
+    return { type, value, meta, context: ctx, realm };
   }
-  const [value] = await Promise.all(results.map(materializeOneResult));
+  const materializedValue = await materializeOneResult(value);
 
   if (!doNotValidateResults) {
-    validateResult(type, value);
+    validateResult(type, materializedValue);
   }
 
-  return { type, value, context: ctx, realm };
+  return { type, value, meta, context: ctx, realm };
 };
 
 export const runAST = async (
   block: AST.Block,
   options?: RunAstOptions
 ): Promise<RunAstResult> => {
-  const { type, value } = await runASTAndGetContext(block, options);
-  return { type, value };
+  const { type, value, meta } = await runASTAndGetContext(block, options);
+  return { type, value, meta };
 };
 
 export const runCode = async (source: string, opts: RunAstOptions = {}) => {

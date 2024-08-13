@@ -15,6 +15,10 @@ type WithLazyOperationArgs = {
   args: HypercubeArg[];
 };
 
+const emptyMeta = () => ({
+  labels: undefined,
+});
+
 const getArgs = async (
   val: Value.Value | Promise<Value.Value>
 ): Promise<HypercubeArg[]> => {
@@ -35,24 +39,28 @@ describe('nesting', () => {
 
   const multiDimX = createLazyOperationBase(
     op((a) => a),
-    [hcArg([1n, 2n, 3n], 'X')]
+    [hcArg([1n, 2n, 3n], 'X')],
+    emptyMeta
   );
 
   const multiDimXTwice = createLazyOperationBase(
     op((a, b) => a.div(b)),
-    [hcArg([1n, 2n, 3n], 'X'), hcArg([2n, 4n, 6n], 'X')]
+    [hcArg([1n, 2n, 3n], 'X'), hcArg([2n, 4n, 6n], 'X')],
+    emptyMeta
   );
 
   const multidimDivision = createLazyOperationBase(
     op((a, b) => a.div(b)),
-    [hcArg([100n, 200n, 300n], 'X'), hcArg([1n, 2n, 3n], 'Y')]
+    [hcArg([100n, 200n, 300n], 'X'), hcArg([1n, 2n, 3n], 'Y')],
+    emptyMeta
   );
 
   it('can lowLevelGet into nested hypercubes', async () => {
     const nested2 = getColumnLike(
       await createLazyOperationBase(
         op((a) => a.add(N(100))),
-        [[await multiDimX, ['X']]]
+        [[await multiDimX, ['X']]],
+        emptyMeta
       )
     );
     expect(await (await nested2.lowLevelGet(0)).getData()).toEqual(N(101));
@@ -63,7 +71,8 @@ describe('nesting', () => {
         [
           [await multiDimX, ['X']],
           [await multiDimX, ['X']],
-        ]
+        ],
+        emptyMeta
       )
     );
     expect(await (await nested3.lowLevelGet(0)).getData()).toEqual(N(101));
@@ -117,7 +126,8 @@ describe('nesting', () => {
   it('can operate with one column', async () => {
     const operateWithOneD = await createLazyOperationBase(
       op((a, b) => a.add(b)),
-      [hcArg([1n, 2n, 3n], 'X'), hcArg(100n, 0)]
+      [hcArg([1n, 2n, 3n], 'X'), hcArg(100n, 0)],
+      emptyMeta
     );
 
     expect(await materializeOneResult(operateWithOneD.getData()))
@@ -146,7 +156,8 @@ describe('nesting', () => {
 
     const operateWithOneDReversed = await createLazyOperationBase(
       op((a, b) => a.add(b)),
-      [hcArg(100n, 0), hcArg([1n, 2n, 3n], 'X')]
+      [hcArg(100n, 0), hcArg([1n, 2n, 3n], 'X')],
+      emptyMeta
     );
 
     expect(await materializeOneResult(operateWithOneDReversed.getData()))

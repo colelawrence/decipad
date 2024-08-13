@@ -26,7 +26,7 @@ it('can push a new table into the computer', async () => {
     computer,
     'blockid',
     'Table1',
-    serializeResult(type, value)
+    serializeResult(type, value, undefined)
   );
 
   await timeout(100);

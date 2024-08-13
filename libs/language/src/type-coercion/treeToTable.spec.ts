@@ -4,6 +4,8 @@ import { ScopedRealm, Value, buildType, makeInferContext } from '..';
 import { treeToTable } from './treeToTable';
 
 describe('treeToTable value', () => {
+  const emptyMeta = undefined;
+
   it('works on empty tree value', async () => {
     const tableValue = await treeToTable.value(
       new ScopedRealm(undefined, makeInferContext()),
@@ -17,6 +19,7 @@ describe('treeToTable value', () => {
       Table {
         "columnNames": Array [],
         "columns": Array [],
+        "meta": undefined,
       }
     `);
   });
@@ -35,7 +38,11 @@ describe('treeToTable value', () => {
         [
           {
             name: 'Col1',
-            aggregation: { type: { kind: 'number' }, value: N(1) },
+            aggregation: {
+              type: { kind: 'number' },
+              value: N(1),
+              meta: emptyMeta,
+            },
           },
         ]
       )
@@ -60,9 +67,11 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });
@@ -85,7 +94,11 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -96,7 +109,11 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -107,7 +124,11 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -151,9 +172,11 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });
@@ -180,7 +203,11 @@ describe('treeToTable value', () => {
                 [
                   {
                     name: 'Col2',
-                    aggregation: { type: { kind: 'number' }, value: N(1) },
+                    aggregation: {
+                      type: { kind: 'number' },
+                      value: N(1),
+                      meta: emptyMeta,
+                    },
                   },
                 ]
               ),
@@ -188,11 +215,19 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
               {
                 name: 'Col2',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -221,6 +256,7 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
           Column {
@@ -232,9 +268,11 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });
@@ -261,7 +299,11 @@ describe('treeToTable value', () => {
                 [
                   {
                     name: 'Col2',
-                    aggregation: { type: { kind: 'number' }, value: N(1) },
+                    aggregation: {
+                      type: { kind: 'number' },
+                      value: N(1),
+                      meta: emptyMeta,
+                    },
                   },
                 ]
               ),
@@ -269,11 +311,19 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
               {
                 name: 'Col2',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -288,7 +338,11 @@ describe('treeToTable value', () => {
                 [
                   {
                     name: 'Col2',
-                    aggregation: { type: { kind: 'number' }, value: N(1) },
+                    aggregation: {
+                      type: { kind: 'number' },
+                      value: N(1),
+                      meta: emptyMeta,
+                    },
                   },
                 ]
               ),
@@ -296,11 +350,19 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
               {
                 name: 'Col2',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -315,7 +377,11 @@ describe('treeToTable value', () => {
                 [
                   {
                     name: 'Col2',
-                    aggregation: { type: { kind: 'number' }, value: N(1) },
+                    aggregation: {
+                      type: { kind: 'number' },
+                      value: N(1),
+                      meta: emptyMeta,
+                    },
                   },
                 ]
               ),
@@ -323,11 +389,19 @@ describe('treeToTable value', () => {
             [
               {
                 name: 'Col1',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
               {
                 name: 'Col2',
-                aggregation: { type: { kind: 'number' }, value: N(1) },
+                aggregation: {
+                  type: { kind: 'number' },
+                  value: N(1),
+                  meta: emptyMeta,
+                },
               },
             ]
           ),
@@ -372,6 +446,7 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
           Column {
@@ -389,9 +464,11 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });
@@ -452,6 +529,7 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
           Column {
@@ -468,9 +546,11 @@ describe('treeToTable value', () => {
             "dataCache": undefined,
             "defaultValue": undefined,
             "dimensionsCache": undefined,
+            "meta": undefined,
             "rowCountCache": undefined,
           },
         ],
+        "meta": undefined,
       }
     `);
   });

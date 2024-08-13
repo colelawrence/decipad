@@ -45,7 +45,6 @@ const balancedFunctor =
 const unbalancedFunctor =
   (primitiveFunctor: Functor): Functor =>
   async ([a, b], ...rest) => {
-    // console.log('unbalanced functor', a, b, rest);
     // here the first arg is a column and the second is a number
     const newTypes = [await (await a.isColumn()).reduced(), b];
     return (await primitiveFunctor(newTypes, ...rest)).mapType(async (t) =>
@@ -83,6 +82,7 @@ const balancedEval =
       zipped,
       serializedResultType,
       async ([aValue, bValue]) => primitiveEval(aValue, bValue, types),
+      colA.meta?.bind(colA) ?? colB.meta?.bind(colB),
       `balancedEval<${fName}(${argTypes
         .map(serializeType)
         .map((t) => t.kind)
@@ -102,6 +102,7 @@ const unbalancedEval =
       getResultGenerator(await colA.getData()),
       serializedResultType,
       async (value) => primitiveEval(value, bValue, types),
+      colA.meta?.bind(colA),
       `unbalancedEval<${fName}(${[aType, bType]
         .map(serializeType)
         .map((t) => t.kind)

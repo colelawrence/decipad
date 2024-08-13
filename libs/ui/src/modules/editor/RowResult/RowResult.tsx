@@ -16,6 +16,7 @@ export const RowResult = ({
   parentType,
   type,
   value,
+  meta,
   element,
 }: CodeResultProps<'row'>): ReturnType<FC> => {
   const { rowCellNames, rowCellTypes } = type;
@@ -51,6 +52,7 @@ export const RowResult = ({
                     parentType={type}
                     type={rowCellTypes[colIndex]}
                     value={col as Result.Result['value']}
+                    meta={meta}
                     variant="block"
                     element={element}
                   />

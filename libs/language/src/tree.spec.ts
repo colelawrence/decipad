@@ -39,6 +39,7 @@ describe('tree builtin', () => {
       Array [
         Object {
           "aggregation": Object {
+            "meta": undefined,
             "type": Object {
               "kind": "number",
               "unit": null,
@@ -58,6 +59,7 @@ describe('tree builtin', () => {
         },
         Object {
           "aggregation": Object {
+            "meta": undefined,
             "type": Object {
               "kind": "number",
               "unit": null,

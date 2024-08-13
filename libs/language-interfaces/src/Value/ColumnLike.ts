@@ -1,6 +1,6 @@
 import type { ColumnLike } from '@decipad/column';
 import type { Value } from './Value';
-import type { OneResult } from '../Result';
+import type { OneResult, ResultMetadataColumn } from '../Result';
 import type { Dimension } from '../Dimension';
 
 export interface ColumnLikeValue extends Value, ColumnLike<Value> {
@@ -11,4 +11,5 @@ export interface ColumnLikeValue extends Value, ColumnLike<Value> {
    * By default the identity function is used and no index changes are assumed to exist */
   indexToLabelIndex?: (index: number) => number | Promise<number>;
   dimensions(): Promise<Dimension[]>;
+  meta: undefined | (() => undefined | ResultMetadataColumn);
 }

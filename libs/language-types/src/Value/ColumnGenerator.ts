@@ -18,14 +18,18 @@ export class ColumnGenerator implements Value.ColumnLikeValue {
   private gen: () => AsyncGenerator<Value.ColumnLikeValue>;
   private _dimensions: Dimension[];
 
+  public meta: () => Result.ResultMetadataColumn;
+
   constructor(
     type: Type,
     gen: () => AsyncGenerator<Value.ColumnLikeValue>,
-    dimensions: Dimension[]
+    dimensions: Dimension[],
+    meta: () => Result.ResultMetadataColumn
   ) {
     this._typedResultToValue = typedResultToValue(type);
     this.gen = gen;
     this._dimensions = dimensions;
+    this.meta = meta;
   }
 
   async getData(): Promise<Result.OneResult> {

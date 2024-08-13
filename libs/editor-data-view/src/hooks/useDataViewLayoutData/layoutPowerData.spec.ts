@@ -65,6 +65,7 @@ describe('layoutPowerData', () => {
     ) as Result.Result<'tree'>;
     expect(tree).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "columnNames": [
             "Column1",
@@ -158,6 +159,7 @@ describe('layoutPowerData', () => {
     ) as Result.Result<'tree'>;
     expect(tree).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "columnNames": [
             "Column1",
@@ -182,6 +184,7 @@ describe('layoutPowerData', () => {
           "columns": [
             {
               "aggregation": {
+                "meta": undefined,
                 "type": {
                   "kind": "number",
                   "unit": null,

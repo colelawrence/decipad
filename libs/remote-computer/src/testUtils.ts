@@ -148,6 +148,7 @@ export async function pushResultToComputer(
             buildType.column(deserializeType(colType), variableName, index)
           ),
           value: value[index],
+          meta: computerResult.meta,
         });
       }
 
@@ -162,6 +163,7 @@ export async function pushResultToComputer(
             [blockId]: {
               type: serializeType(computerResult.type),
               value: computerResult.value,
+              meta: computerResult.meta,
             },
           },
         },

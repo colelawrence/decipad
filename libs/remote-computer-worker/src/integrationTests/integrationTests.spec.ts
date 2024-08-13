@@ -124,6 +124,9 @@ describe('remote computer worker integration tests', () => {
                 indexedBy: null,
               },
               value: [N(10), N(11), N(12)],
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -174,6 +177,9 @@ describe('remote computer worker integration tests', () => {
                 indexedBy: null,
               },
               value: [N(10), N(11), N(12), N(13), N(14)],
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c', 'd', 'e']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -225,6 +231,9 @@ describe('remote computer worker integration tests', () => {
               },
               value: (start = 0, end = Infinity) =>
                 slice(from([N(10), N(11), N(12)]), start, end),
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -276,6 +285,9 @@ describe('remote computer worker integration tests', () => {
               },
               value: (start = 0, end = Infinity) =>
                 slice(from([N(10), N(11), N(12), N(13), N(14)]), start, end),
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c', 'd', 'e']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -330,6 +342,9 @@ describe('remote computer worker integration tests', () => {
                 [N(10), N(11), N(12)],
                 [N(13), N(14), N(15)],
               ],
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -388,6 +403,9 @@ describe('remote computer worker integration tests', () => {
                 [N(10), N(11), N(12), N(13), N(14), N(15)],
                 [N(16), N(17), N(18), N(19), N(20), N(21)],
               ],
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c', 'd', 'e', 'f']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -456,6 +474,9 @@ describe('remote computer worker integration tests', () => {
                 ],
                 [N(16), N(17), N(18), N(19), N(20), N(21)],
               ],
+              meta: () => ({
+                labels: Promise.resolve([['a', 'b', 'c', 'd', 'e', 'f']]),
+              }),
             };
             setTimeout(() => {
               notify({ result });
@@ -471,7 +492,7 @@ describe('remote computer worker integration tests', () => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               const { result } = notificationParams;
-              const { type, value } = result;
+              const { type, value, meta } = result;
               expect(type).toEqual({
                 kind: 'table',
                 columnTypes: [
@@ -500,6 +521,18 @@ describe('remote computer worker integration tests', () => {
               expect(col12ResultValue).toMatchObject([N(110), N(120)]);
               const col2ResultValue = await all(col2(1, 3));
               expect(col2ResultValue).toMatchObject([N(17), N(18)]);
+              await expect(meta().labels).resolves.toMatchInlineSnapshot(`
+                [
+                  [
+                    "a",
+                    "b",
+                    "c",
+                    "d",
+                    "e",
+                    "f",
+                  ],
+                ]
+              `);
               resolve();
             } catch (error) {
               reject(error);

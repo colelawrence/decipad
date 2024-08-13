@@ -209,6 +209,7 @@ describe('callBuiltin performance', () => {
   };
 
   describe('column to scalar', () => {
+    const emptyMeta = () => ({ labels: undefined });
     describe('unitless', () => {
       describe('addition', () => {
         test.each([
@@ -216,9 +217,13 @@ describe('callBuiltin performance', () => {
             'add a number unitless column to a number',
             '+',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
               Value.Scalar.fromValue(N(10)),
             ],
             [buildType.column(buildType.number()), buildType.number()],
@@ -229,9 +234,13 @@ describe('callBuiltin performance', () => {
             '+',
             [
               Value.Scalar.fromValue(N(10)),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [buildType.number(), buildType.column(buildType.number())],
             (n) => N(10).add(n),
@@ -245,9 +254,13 @@ describe('callBuiltin performance', () => {
             'subtract a number unitless column from a number',
             '-',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
               Value.Scalar.fromValue(N(10)),
             ],
             [buildType.column(buildType.number()), buildType.number()],
@@ -258,9 +271,13 @@ describe('callBuiltin performance', () => {
             '-',
             [
               Value.Scalar.fromValue(N(10)),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [buildType.number(), buildType.column(buildType.number())],
             (n) => N(10).sub(n),
@@ -274,9 +291,13 @@ describe('callBuiltin performance', () => {
             'multiply a number unitless column to a number',
             '*',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
               Value.Scalar.fromValue(N(10)),
             ],
             [buildType.column(buildType.number()), buildType.number()],
@@ -287,9 +308,13 @@ describe('callBuiltin performance', () => {
             '*',
             [
               Value.Scalar.fromValue(N(10)),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [buildType.number(), buildType.column(buildType.number())],
             (n) => N(10).mul(n),
@@ -303,9 +328,13 @@ describe('callBuiltin performance', () => {
             'divide a number unitless column to a number',
             '/',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
               Value.Scalar.fromValue(N(10)),
             ],
             [buildType.column(buildType.number()), buildType.number()],
@@ -316,9 +345,13 @@ describe('callBuiltin performance', () => {
             '/',
             [
               Value.Scalar.fromValue(N(10)),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [buildType.number(), buildType.column(buildType.number())],
             (n) => N(10).div(n),
@@ -336,9 +369,13 @@ describe('callBuiltin performance', () => {
             'add a unit number column to a unit number',
             '+',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
               Value.Scalar.fromValue(N(10)),
             ],
             [
@@ -355,6 +392,7 @@ describe('callBuiltin performance', () => {
   });
 
   describe('column to column', () => {
+    const emptyMeta = () => ({ labels: undefined });
     describe('unitless', () => {
       describe('addition', () => {
         test.each([
@@ -362,12 +400,20 @@ describe('callBuiltin performance', () => {
             'add a unitless column to a unitless column',
             '+',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [
               buildType.column(buildType.number()),
@@ -389,12 +435,20 @@ describe('callBuiltin performance', () => {
             'add a unitful column to a unitful column',
             '+',
             [
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
-              Value.LeanColumn.fromGeneratorAndType(numberGen(count), {
-                kind: 'number',
-              }),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
+              Value.LeanColumn.fromGeneratorAndType(
+                numberGen(count),
+                {
+                  kind: 'number',
+                },
+                emptyMeta
+              ),
             ],
             [
               buildType.column(buildType.number(U('grams'))),

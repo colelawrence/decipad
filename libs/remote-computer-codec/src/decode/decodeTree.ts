@@ -14,6 +14,7 @@ import type { RecursiveDecoder } from './types';
 const undefinedResult: Result.Result = {
   type: { kind: 'nothing' },
   value: Unknown,
+  meta: undefined,
 };
 
 export const decodeTree: RecursiveDecoder = async (

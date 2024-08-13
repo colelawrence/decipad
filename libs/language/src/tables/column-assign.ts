@@ -80,5 +80,17 @@ export async function evaluateColumnAssign(
     realm.statementId
   );
 
-  return getDefined(realm.stack.getNamespaced([tableName, columnName]));
+  const tableType = getDefined(realm.inferContext.stack.get(tableName));
+  const [, newTable] = Value.sortValue(
+    tableType,
+    getDefined(realm.stack.get(tableName))
+  );
+
+  if (!newTable || !Value.isTableValue(newTable)) {
+    throw new Error('table does not have table value');
+  }
+  const thisColumnIndex = newTable.columnNames.indexOf(columnName);
+  const thisColumn = getDefined(newTable.columns[thisColumnIndex]);
+
+  return thisColumn;
 }

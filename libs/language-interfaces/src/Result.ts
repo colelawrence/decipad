@@ -60,6 +60,15 @@ export type OneResult =
   | ResultUnknown
   | ResultFunction;
 
+export interface ResultMetadataColumn {
+  labels?: Promise<Array<Array<string>>> | undefined;
+}
+
+export type ResultMetadata<T extends SerializedTypeKind = SerializedTypeKind> =
+  T extends 'materialized-column' | 'column' | 'materialized-table' | 'table'
+    ? ResultMetadataColumn
+    : undefined;
+
 // Can be used as Result to represent the entire spectrum of possible result values and types or
 // Result<'number'> to represent a specific kind of result value and type.
 export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
@@ -93,6 +102,7 @@ export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
     ? ResultUnknown
     : never;
   type: T extends SerializedTypeKind ? Extract<SerializedType, { kind: T }> : T;
+  meta?: undefined | (() => ResultMetadata<T>);
 };
 
 export type AnyResult = Result<SerializedTypeKind>;

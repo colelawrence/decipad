@@ -14,7 +14,6 @@ describe('Export computer results', () => {
       await exportProgram(
         {
           blockResults: {},
-          indexLabels: new Map(),
         },
         mockedVarName
       )
@@ -25,7 +24,7 @@ describe('Export computer results', () => {
     const res: IdentifiedResult = {
       type: 'computer-result',
       id: '1',
-      result: serializeResult(statement.type, statement.value),
+      result: serializeResult(statement.type, statement.value, undefined),
       epoch: 1n,
     };
 
@@ -35,7 +34,6 @@ describe('Export computer results', () => {
           blockResults: {
             '1': res,
           },
-          indexLabels: new Map(),
         },
         mockedVarName
       )
@@ -68,7 +66,7 @@ describe('Export computer results', () => {
         [i.toString()]: {
           type: 'computer-result' as const,
           id: i.toString(),
-          result: serializeResult(s.type, s.value),
+          result: serializeResult(s.type, s.value, () => s.meta),
           epoch: 1n,
         },
       }),
@@ -78,7 +76,6 @@ describe('Export computer results', () => {
     const res = await exportProgram(
       {
         blockResults: results,
-        indexLabels: new Map(),
       },
       mockedVarName
     );
@@ -185,7 +182,7 @@ describe('Export computer results', () => {
         [i.toString()]: {
           type: 'computer-result' as const,
           id: i.toString(),
-          result: serializeResult(s.type, s.value),
+          result: serializeResult(s.type, s.value, undefined),
           epoch: 1n,
         },
       }),
@@ -195,7 +192,6 @@ describe('Export computer results', () => {
     const res = await exportProgram(
       {
         blockResults: results,
-        indexLabels: new Map(),
       },
       mockedVarName
     );
@@ -241,7 +237,7 @@ describe('Export computer results', () => {
         [i.toString()]: {
           type: 'computer-result' as const,
           id: i.toString(),
-          result: serializeResult(s.type, s.value),
+          result: serializeResult(s.type, s.value, undefined),
           epoch: 1n,
         },
       }),
@@ -251,7 +247,6 @@ describe('Export computer results', () => {
     const res = await exportProgram(
       {
         blockResults: results,
-        indexLabels: new Map(),
       },
       mockedVarName
     );
@@ -364,15 +359,13 @@ describe('it works with un-materialized tables and columns', () => {
           },
         },
         value: resultGenerator,
+        meta: () => ({ labels: Promise.resolve([['a', 'b', 'c']]) }),
       },
       epoch: 1n,
     };
 
     await expect(
-      exportProgram(
-        { blockResults: { '1': column }, indexLabels: new Map() },
-        mockedVarName
-      )
+      exportProgram({ blockResults: { '1': column } }, mockedVarName)
     ).resolves.toMatchInlineSnapshot(`
       [
         {
@@ -424,15 +417,15 @@ describe('it works with un-materialized tables and columns', () => {
           columnNames: ['1', '2'],
         },
         value: [generateResultGenerator(1), generateResultGenerator(2)],
+        meta: () => ({
+          labels: Promise.resolve([['1', '2', '3']]),
+        }),
       },
       epoch: 1n,
     };
 
     await expect(
-      exportProgram(
-        { blockResults: { '1': column }, indexLabels: new Map() },
-        mockedVarName
-      )
+      exportProgram({ blockResults: { '1': column } }, mockedVarName)
     ).resolves.toMatchInlineSnapshot(`
       [
         {

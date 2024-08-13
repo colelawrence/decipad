@@ -29,6 +29,14 @@ const ColumnSlice = implementColumnLike(
       ];
     }
 
+    meta() {
+      return {
+        labels: this.sourceColumn
+          .meta?.()
+          ?.labels?.then((labels) => labels.slice(this.begin, this.end)),
+      };
+    }
+
     async dimensions() {
       return Promise.resolve(this._dimensions);
     }

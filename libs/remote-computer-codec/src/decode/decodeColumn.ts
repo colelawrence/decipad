@@ -35,11 +35,16 @@ export const decodeColumn: RecursiveDecoder = async (
     cellDecoder,
     buffer,
     [],
-    offset
+    offset,
+    // TODO: get this data from the buffer
+    () => ({
+      labels: undefined,
+    })
   );
 
   const resultGen = getResultGenerator(await column.getData());
 
+  // we need to scan the column in order to get it serialized
   await scan(resultGen());
 
   return [resultGen, offset];

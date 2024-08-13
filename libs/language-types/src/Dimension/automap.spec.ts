@@ -257,11 +257,21 @@ describe('automapTypes', () => {
   });
 });
 
+const emptyMeta = () => ({
+  labels: undefined,
+});
+
 describe('automapValues', () => {
   it('can bump dimensions recursively', async () => {
-    const multiDim = Column.fromValues([
-      Column.fromValues([fromJS([2, 4]), fromJS([8, 16]), fromJS([32, 64])]),
-    ]);
+    const multiDim = Column.fromValues(
+      [
+        Column.fromValues(
+          [fromJS([2, 4]), fromJS([8, 16]), fromJS([32, 64])],
+          emptyMeta
+        ),
+      ],
+      emptyMeta
+    );
 
     const scalar = fromJS(2);
 
@@ -271,7 +281,7 @@ describe('automapValues', () => {
       [t.column(t.column(t.column(t.number()))), t.number()],
       [multiDim, scalar],
       async ([v1, v2]) => {
-        calledOnValues.push(Column.fromValues([v1, v2]));
+        calledOnValues.push(Column.fromValues([v1, v2], emptyMeta));
         return fromJS(
           ((await v1.getData()) as DeciNumber).mul(
             (await v2.getData()) as DeciNumber
@@ -704,8 +714,12 @@ describe('automapValues', () => {
       columnNames: ['Col'],
       columnTypes: [t.number()],
     });
-    const tableVal = Table.fromNamedColumns([fromJS([1])], ['Col']);
-    const otherTable = Table.fromNamedColumns([fromJS([2])], ['Col']);
+    const tableVal = Table.fromNamedColumns([fromJS([1])], ['Col'], undefined);
+    const otherTable = Table.fromNamedColumns(
+      [fromJS([2])],
+      ['Col'],
+      undefined
+    );
     const callee = jest.fn(() => otherTable);
 
     const ctx = makeContext();
@@ -715,7 +729,7 @@ describe('automapValues', () => {
     expect(callee).toHaveBeenCalledWith([tableVal], [table], ctx);
     callee.mockClear();
 
-    const colVal = Column.fromValues([tableVal]);
+    const colVal = Column.fromValues([tableVal], emptyMeta);
     const col = t.column(table);
     const ctx2 = makeContext();
     expect(
@@ -724,7 +738,7 @@ describe('automapValues', () => {
       )
     ).toEqual(
       await materializeOneResult(
-        await Column.fromValues([otherTable]).getData()
+        await Column.fromValues([otherTable], emptyMeta).getData()
       )
     );
     expect(callee).toHaveBeenCalledWith([tableVal], [table], ctx2);
@@ -749,7 +763,7 @@ describe('automapValues', () => {
     const reducedType = t.number();
     const type = t.column(reducedType);
     const reducedValue = fromJS(1n);
-    const value = Column.fromValues([reducedValue]);
+    const value = Column.fromValues([reducedValue], emptyMeta);
 
     const ctx = makeContext();
     const hc = await automapValues(ctx, [type], [value], mapFn);
@@ -916,7 +930,7 @@ describe('automap for reducers', () => {
       const oneDeeType = t.column(t.number(), 'X');
       const twoDeeType = t.column(oneDeeType, 'Y');
       const oneDeeValue = fromJS([1n, 2n]);
-      const twoDeeValue = Column.fromValues([oneDeeValue]);
+      const twoDeeValue = Column.fromValues([oneDeeValue], emptyMeta);
 
       const ctx = makeContext();
       await materializeOneResult(

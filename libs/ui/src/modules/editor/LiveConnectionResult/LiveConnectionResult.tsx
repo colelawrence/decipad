@@ -42,6 +42,7 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
         <CodeResult
           type={result.type}
           value={result.value}
+          meta={result.meta}
           variant="block"
           isLiveResult
           firstTableRowControls={

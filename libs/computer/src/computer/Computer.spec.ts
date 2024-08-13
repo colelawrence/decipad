@@ -307,6 +307,7 @@ it('can pass on injected data', async () => {
     'external-reference-id': {
       type: serializeType(t.column(t.string())),
       value: ['Hello', 'World'],
+      meta: undefined,
     },
   };
   expect(
@@ -712,6 +713,7 @@ it('can list tables and columns', async () => {
         "columnName": "A",
         "readableTableName": "table",
         "result": Object {
+          "meta": [Function],
           "type": Object {
             "cellType": Object {
               "kind": "number",
@@ -743,6 +745,7 @@ it('can list tables and columns', async () => {
         "columnName": "B",
         "readableTableName": "table",
         "result": Object {
+          "meta": [Function],
           "type": Object {
             "cellType": Object {
               "kind": "string",
@@ -769,6 +772,7 @@ it('can list tables and columns', async () => {
         "columnName": "C",
         "readableTableName": "table",
         "result": Object {
+          "meta": [Function],
           "type": Object {
             "cellType": Object {
               "date": "day",

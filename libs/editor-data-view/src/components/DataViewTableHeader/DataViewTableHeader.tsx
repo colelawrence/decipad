@@ -98,6 +98,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
             value={value as Result.Result['value']}
             variant="inline"
             type={type}
+            meta={undefined}
             element={element}
           />
           {collapsible && (

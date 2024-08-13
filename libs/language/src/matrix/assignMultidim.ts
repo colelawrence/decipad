@@ -64,5 +64,5 @@ export async function evaluateMultidimAssignment(
       }
     });
 
-  return Value.Column.fromGenerator(gen);
+  return Value.Column.fromGenerator(gen, dimension.meta?.bind(dimension));
 }

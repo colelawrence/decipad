@@ -67,13 +67,19 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
  * therefore subscribe to computer results.
  */
 const TooltipResult: FC<{ defBlockId: string }> = ({ defBlockId }) => {
-  const { type, value } =
+  const { type, value, meta } =
     useComputer().getBlockIdResult$.use(defBlockId)?.result ?? {};
 
   if (type == null || value == null) {
     return <></>;
   }
   return (
-    <CodeResult type={type} value={value} variant="inline" tooltip={false} />
+    <CodeResult
+      type={type}
+      value={value}
+      meta={meta}
+      variant="inline"
+      tooltip={false}
+    />
   );
 };

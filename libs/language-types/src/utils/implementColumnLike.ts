@@ -35,7 +35,7 @@ export function implementColumnLike<T extends Class<Value.MinimalTensor>>(
       if ((await this.dimensions()).length === 1) {
         return this.lowLevelGet(i);
       } else {
-        return createLazyAtIndex(this, i);
+        return createLazyAtIndex(this, i, this.meta?.bind(this));
       }
     }
 

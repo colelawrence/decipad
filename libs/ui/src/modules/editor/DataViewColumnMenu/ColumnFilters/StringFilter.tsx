@@ -79,7 +79,7 @@ export const StringFilter: FC<StringFilterProps> = ({
             )
           }
         >
-          <CodeResult value={value} type={type as any} />
+          <CodeResult value={value} type={type as any} meta={undefined} />
         </MenuItem>
       ))}
     </>

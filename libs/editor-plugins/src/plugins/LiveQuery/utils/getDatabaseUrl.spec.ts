@@ -11,6 +11,7 @@ test('should return the DB url if it exists', async () => {
       columnNames: ['url', 'type'],
     },
     value: ['x', 'dbConn'].map((i) => getResultGenerator([i])),
+    meta: undefined,
   };
   const dbUrl = await getDatabaseUrl(result as Result.Result);
 
@@ -26,6 +27,7 @@ test('should return undefined if the DB url does not exist', async () => {
       columnNames: ['bla', 'type'],
     },
     value: ['www.foo.bar', 'dbConn'].map((i) => getResultGenerator([i])),
+    meta: undefined,
   };
   const dbUrl = await getDatabaseUrl(result as Result.Result);
 
@@ -39,6 +41,7 @@ test('should return undefined if the result is not a table', async () => {
       unit: null,
     },
     value: null,
+    meta: undefined,
   };
   const dbUrl = await getDatabaseUrl(result);
 

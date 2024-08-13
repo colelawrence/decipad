@@ -103,8 +103,9 @@ export const listOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     coerceToColumn: true,
     fnValues: async ([a], [aType]) => {
+      const sourceCol = Value.getColumnLike(a);
       return Value.FMappedColumn.fromGeneratorAndType(
-        getResultGenerator(await a.getData()),
+        getResultGenerator(await sourceCol.getData()),
         serializeType(await aType.reduced()),
         (current, _, previous) => {
           const next = coherceToFraction(current).sub(
@@ -113,6 +114,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
           previous = next;
           return next;
         },
+        sourceCol.meta,
         `stepgrowth fnValues<${serializeType(aType).kind}>`
       );
     },
@@ -147,6 +149,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
             const grown = initial.mul(growth);
             return Value.Scalar.fromValue(grown);
           }),
+        () => ({ labels: undefined }),
         `grow fnValues`
       );
     },

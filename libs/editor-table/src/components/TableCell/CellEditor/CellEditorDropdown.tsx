@@ -64,6 +64,7 @@ export const CellEditorDropdown = (cellProps: CellProps) => {
             <CodeResult
               value={dropdownOptions.result.value}
               type={dropdownOptions.result.type}
+              meta={dropdownOptions.result.meta}
             />
           )}
           <div css={{ width: 16, height: 16, marginLeft: 'auto' }}>

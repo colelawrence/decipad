@@ -52,6 +52,7 @@ it('supports a variable name with the same name as a table', async () => {
   ).toMatchInlineSnapshot(`
     [
       {
+        "meta": undefined,
         "type": {
           "kind": "number",
           "unit": null,
@@ -64,6 +65,7 @@ it('supports a variable name with the same name as a table', async () => {
         },
       },
       {
+        "meta": [Function],
         "type": {
           "columnNames": [
             "Column1",
@@ -103,6 +105,7 @@ it('supports a variable name with the same name as a table', async () => {
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -121,6 +124,7 @@ it('supports a variable name with the same name as a table', async () => {
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -147,6 +151,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
     .toMatchInlineSnapshot(`
       [
         {
+          "meta": [Function],
           "type": {
             "columnNames": [
               "Column1",
@@ -186,6 +191,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
           ],
         },
         {
+          "meta": [Function],
           "type": {
             "cellType": {
               "kind": "number",
@@ -204,6 +210,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
           ],
         },
         {
+          "meta": [Function],
           "type": {
             "cellType": {
               "kind": "number",
@@ -230,6 +237,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
     .toMatchInlineSnapshot(`
       [
         {
+          "meta": [Function],
           "type": {
             "columnNames": [
               "Column1",
@@ -269,6 +277,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
           ],
         },
         {
+          "meta": [Function],
           "type": {
             "cellType": {
               "kind": "number",
@@ -287,6 +296,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
           ],
         },
         {
+          "meta": [Function],
           "type": {
             "cellType": {
               "kind": "number",
@@ -315,6 +325,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
   expect(result).toMatchInlineSnapshot(`
     [
       {
+        "meta": [Function],
         "type": {
           "columnNames": [
             "Column1",
@@ -367,6 +378,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -385,6 +397,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -403,6 +416,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -438,6 +452,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
   ).toMatchInlineSnapshot(`
     [
       {
+        "meta": [Function],
         "type": {
           "columnNames": [
             "Column1",
@@ -490,6 +505,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -508,6 +524,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -526,6 +543,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -561,6 +579,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
   ).toMatchInlineSnapshot(`
     [
       {
+        "meta": [Function],
         "type": {
           "columnNames": [
             "Column1",
@@ -600,6 +619,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -618,6 +638,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -649,6 +670,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
   ).toMatchInlineSnapshot(`
     [
       {
+        "meta": [Function],
         "type": {
           "columnNames": [
             "Column1",
@@ -688,6 +710,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -706,6 +729,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",
@@ -724,6 +748,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
         ],
       },
       {
+        "meta": [Function],
         "type": {
           "cellType": {
             "kind": "number",

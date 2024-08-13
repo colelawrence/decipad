@@ -8,10 +8,12 @@ import type { RemoteValueStore } from '../types';
 
 export const encodeTable = async (
   remoteValueStore: RemoteValueStore,
-  type: Result.Result['type'],
-  value: Result.Result['value']
+  result: Result.Result
 ): Promise<ArrayBuffer> => {
+  const { type, value, meta } = result;
   if (type.kind !== 'table' && type.kind !== 'materialized-table') {
+    // eslint-disable-next-line no-console
+    console.warn('Unexpected type', type);
     throw new TypeError(`Expected table-like type and got ${type.kind}`);
   }
   let offset = 0;
@@ -40,7 +42,11 @@ export const encodeTable = async (
       indexedBy: type.indexName,
     };
     const valueId = nanoid();
-    remoteValueStore.set(valueId, { type: encoderSType, value: col });
+    remoteValueStore.set(undefined, valueId, {
+      type: encoderSType,
+      value: col,
+      meta,
+    });
     // just send the id of the value so that it can be streamed later
     offset = encodeString(targetBuffer, offset, valueId);
   }

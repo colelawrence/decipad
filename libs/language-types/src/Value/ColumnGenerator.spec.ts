@@ -7,18 +7,24 @@ import { all, from } from '@decipad/generator-utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 
 describe('ColumnGenerator', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   it('can generate columns', async () => {
     const columns = Array.from({ length: 4 }, (_, i) =>
       Column.fromValues(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           .map((n) => N(n).mul(N(i + 1)))
-          .map(Scalar.fromValue)
+          .map(Scalar.fromValue),
+        emptyMeta
       )
     );
     const gen = new ColumnGenerator(
       buildType.number(),
       () => from(columns),
-      []
+      [],
+      emptyMeta
     );
 
     const generator = getResultGenerator(await gen.getData())();

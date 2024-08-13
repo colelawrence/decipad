@@ -75,6 +75,7 @@ export class ResultStreams {
             ).spec,
           },
           value: Unknown,
+          meta: undefined,
         },
         epoch: this.computer.computationRealm.epoch,
       });

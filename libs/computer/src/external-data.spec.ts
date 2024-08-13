@@ -61,6 +61,7 @@ function getProgram(
   externalDatas.set(externalColumnId, {
     type: serializeType(buildType.column(deserializeType({ kind: 'number' }))),
     value: [N(5)],
+    meta: undefined,
   });
 
   return [programBlocks, externalDatas];
@@ -91,6 +92,7 @@ it('pushes two external datas and removes the last one', async () => {
     )
   ).toMatchInlineSnapshot(`
     Object {
+      "meta": [Function],
       "type": Object {
         "columnNames": Array [
           "column-1-name",
@@ -140,6 +142,7 @@ it('pushes two external datas and removes the last one', async () => {
     )
   ).toMatchInlineSnapshot(`
     Object {
+      "meta": [Function],
       "type": Object {
         "columnNames": Array [
           "column-1-name",
@@ -181,6 +184,7 @@ it('pushes two external datas and removes the last one', async () => {
     )
   ).toMatchInlineSnapshot(`
     Object {
+      "meta": [Function],
       "type": Object {
         "columnNames": Array [
           "column-1-name",

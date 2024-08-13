@@ -13,7 +13,7 @@ describe('encodes and decodes booleans', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const bool = true;
-    await encodeBoolean(view, 0, bool);
+    await encodeBoolean(view, 0, bool, undefined);
     const [decoded] = await decodeBoolean(view, 0);
     expect(decoded).toStrictEqual(bool);
   });
@@ -22,7 +22,7 @@ describe('encodes and decodes booleans', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const bool = false;
-    await encodeBoolean(view, 0, bool);
+    await encodeBoolean(view, 0, bool, undefined);
     const [decoded] = await decodeBoolean(view, 0);
     expect(decoded).toStrictEqual(bool);
   });

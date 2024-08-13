@@ -103,6 +103,7 @@ describe('remote computer client', () => {
                       "epoch": 1n,
                       "id": "block-0",
                       "result": {
+                        "meta": [Function],
                         "type": {
                           "kind": "number",
                           "unit": null,
@@ -137,6 +138,7 @@ describe('remote computer client', () => {
                       "epoch": 1n,
                       "id": "block-1",
                       "result": {
+                        "meta": [Function],
                         "type": {
                           "kind": "number",
                           "unit": null,
@@ -171,6 +173,7 @@ describe('remote computer client', () => {
                       "epoch": 1n,
                       "id": "block-2",
                       "result": {
+                        "meta": [Function],
                         "type": {
                           "kind": "number",
                           "unit": null,
@@ -214,6 +217,7 @@ describe('remote computer client', () => {
                       "epoch": 1n,
                       "id": "block-3",
                       "result": {
+                        "meta": [Function],
                         "type": {
                           "columnNames": [
                             "C1",
@@ -257,6 +261,7 @@ describe('remote computer client', () => {
                       "epoch": 1n,
                       "id": "block-4",
                       "result": {
+                        "meta": [Function],
                         "type": {
                           "cellType": {
                             "kind": "number",
@@ -289,13 +294,6 @@ describe('remote computer client', () => {
                       },
                     },
                   },
-                  "indexLabels": Map {
-                    "T" => [
-                      "1",
-                      "2",
-                      "3",
-                    ],
-                  },
                 }
               `);
               subscription?.unsubscribe();
@@ -321,6 +319,7 @@ describe('remote computer client', () => {
                     "epoch": 1n,
                     "id": "block-0",
                     "result": {
+                      "meta": [Function],
                       "type": {
                         "kind": "number",
                         "unit": null,
@@ -355,6 +354,7 @@ describe('remote computer client', () => {
                     "epoch": 1n,
                     "id": "block-1",
                     "result": {
+                      "meta": [Function],
                       "type": {
                         "kind": "number",
                         "unit": null,
@@ -389,6 +389,7 @@ describe('remote computer client', () => {
                     "epoch": 1n,
                     "id": "block-2",
                     "result": {
+                      "meta": [Function],
                       "type": {
                         "kind": "number",
                         "unit": null,
@@ -432,6 +433,7 @@ describe('remote computer client', () => {
                     "epoch": 1n,
                     "id": "block-3",
                     "result": {
+                      "meta": [Function],
                       "type": {
                         "columnNames": [
                           "C1",
@@ -475,6 +477,7 @@ describe('remote computer client', () => {
                     "epoch": 1n,
                     "id": "block-4",
                     "result": {
+                      "meta": [Function],
                       "type": {
                         "cellType": {
                           "kind": "number",
@@ -507,13 +510,6 @@ describe('remote computer client', () => {
                     },
                   },
                 },
-                "indexLabels": Map {
-                  "T" => [
-                    "1",
-                    "2",
-                    "3",
-                  ],
-                },
               }
             `);
             subscription?.unsubscribe();
@@ -532,6 +528,7 @@ describe('remote computer client', () => {
         "epoch": 1n,
         "id": "block-0",
         "result": {
+          "meta": [Function],
           "type": {
             "kind": "number",
             "unit": null,
@@ -567,9 +564,11 @@ describe('remote computer client', () => {
     expect(await computer.expressionResult(r('A'))).toMatchInlineSnapshot(`
       {
         "__encoded": {
+          "meta": ArrayBuffer [],
           "type": ArrayBuffer [],
           "value": ArrayBuffer [],
         },
+        "meta": [Function],
         "type": {
           "kind": "number",
           "unit": null,
@@ -790,6 +789,7 @@ describe('remote computer client', () => {
               "epoch": 1n,
               "id": "block-2",
               "result": {
+                "meta": [Function],
                 "type": {
                   "kind": "number",
                   "unit": null,
@@ -845,9 +845,11 @@ describe('remote computer client', () => {
           expect(result).toMatchInlineSnapshot(`
             {
               "__encoded": {
+                "meta": ArrayBuffer [],
                 "type": ArrayBuffer [],
                 "value": ArrayBuffer [],
               },
+              "meta": [Function],
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -875,9 +877,11 @@ describe('remote computer client', () => {
           expect(result).toMatchInlineSnapshot(`
             {
               "__encoded": {
+                "meta": ArrayBuffer [],
                 "type": ArrayBuffer [],
                 "value": ArrayBuffer [],
               },
+              "meta": [Function],
               "type": {
                 "kind": "number",
                 "unit": [
@@ -944,6 +948,7 @@ describe('remote computer client', () => {
               "epoch": 1n,
               "id": "block-2",
               "result": {
+                "meta": [Function],
                 "type": {
                   "kind": "number",
                   "unit": null,
@@ -1171,9 +1176,11 @@ describe('remote computer client', () => {
                 "readableTableName": "T",
                 "result": {
                   "__encoded": {
+                    "meta": ArrayBuffer [],
                     "type": ArrayBuffer [],
                     "value": ArrayBuffer [],
                   },
+                  "meta": [Function],
                   "type": {
                     "cellType": {
                       "kind": "number",
@@ -1193,9 +1200,11 @@ describe('remote computer client', () => {
             .toMatchInlineSnapshot(`
               {
                 "__encoded": {
+                  "meta": ArrayBuffer [],
                   "type": ArrayBuffer [],
                   "value": ArrayBuffer [],
                 },
+                "meta": [Function],
                 "type": {
                   "cellType": {
                     "kind": "number",
@@ -1256,19 +1265,7 @@ describe('remote computer client', () => {
           if (!result) {
             return;
           }
-          expect(result).toMatchInlineSnapshot(`
-            [
-              {
-                "dimensionLength": 21,
-                "indexedBy": "T",
-                "labels": [
-                  "1",
-                  "2",
-                  "3",
-                ],
-              },
-            ]
-          `);
+          expect(result).toMatchInlineSnapshot(`Promise {}`);
           resolve();
         });
     });
@@ -1357,6 +1354,7 @@ describe('remote computer client', () => {
           expect(await materializeResult(getDefined(result.result)))
             .toMatchInlineSnapshot(`
               {
+                "meta": [Function],
                 "type": {
                   "cellType": {
                     "kind": "number",
@@ -1397,7 +1395,7 @@ describe('remote computer client', () => {
     const { type, value } = await runCode(
       'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'
     );
-    const result = serializeResult(type, value);
+    const result = serializeResult(type, value, undefined);
 
     pushResultToComputer(computer, 'block-id', 'varName', result);
 
@@ -1411,129 +1409,127 @@ describe('remote computer client', () => {
           }
           subscription?.unsubscribe();
           expect(results).toMatchInlineSnapshot(`
-              {
-                "blockResults": {
-                  "block-id": {
-                    "epoch": 1n,
-                    "id": "block-id",
-                    "result": {
-                      "type": {
-                        "columnNames": [
-                          "Column1",
-                          "Column2",
-                        ],
-                        "columnTypes": [
-                          {
-                            "kind": "number",
-                            "unit": null,
-                          },
-                          {
-                            "kind": "number",
-                            "unit": null,
-                          },
-                        ],
-                        "delegatesIndexTo": "exprRef_block_id",
-                        "indexName": "exprRef_block_id",
-                        "kind": "table",
-                      },
-                      "value": [
-                        [Function],
-                        [Function],
+            {
+              "blockResults": {
+                "block-id": {
+                  "epoch": 1n,
+                  "id": "block-id",
+                  "result": {
+                    "meta": [Function],
+                    "type": {
+                      "columnNames": [
+                        "Column1",
+                        "Column2",
                       ],
-                    },
-                    "type": "computer-result",
-                    "usedNames": [],
-                    "visibleVariables": {
-                      "global": Set {
-                        "exprRef_block_id",
-                        "exprRef_block_id.Column1",
-                        "exprRef_block_id.Column2",
-                        "varName.Column1",
-                        "varName.Column2",
-                        "varName",
-                        "exprRef_block_id__0",
-                        "exprRef_block_id__1",
-                      },
-                      "local": Set {
-                        "Column1",
-                        "Column2",
-                      },
-                    },
-                  },
-                  "block-id--0": {
-                    "epoch": 1n,
-                    "id": "block-id--0",
-                    "result": {
-                      "type": {
-                        "cellType": {
+                      "columnTypes": [
+                        {
                           "kind": "number",
                           "unit": null,
                         },
-                        "indexedBy": "exprRef_block_id",
-                        "kind": "column",
-                      },
-                      "value": [Function],
-                    },
-                    "type": "computer-result",
-                    "usedNames": [],
-                    "visibleVariables": {
-                      "global": Set {
-                        "exprRef_block_id",
-                        "exprRef_block_id.Column1",
-                        "exprRef_block_id.Column2",
-                        "varName.Column1",
-                        "varName.Column2",
-                        "varName",
-                        "exprRef_block_id__0",
-                        "exprRef_block_id__1",
-                      },
-                      "local": Set {
-                        "Column1",
-                        "Column2",
-                      },
-                    },
-                  },
-                  "block-id--1": {
-                    "epoch": 1n,
-                    "id": "block-id--1",
-                    "result": {
-                      "type": {
-                        "cellType": {
+                        {
                           "kind": "number",
                           "unit": null,
                         },
-                        "indexedBy": "exprRef_block_id",
-                        "kind": "column",
-                      },
-                      "value": [Function],
+                      ],
+                      "delegatesIndexTo": "exprRef_block_id",
+                      "indexName": "exprRef_block_id",
+                      "kind": "table",
                     },
-                    "type": "computer-result",
-                    "usedNames": [],
-                    "visibleVariables": {
-                      "global": Set {
-                        "exprRef_block_id",
-                        "exprRef_block_id.Column1",
-                        "exprRef_block_id.Column2",
-                        "varName.Column1",
-                        "varName.Column2",
-                        "varName",
-                        "exprRef_block_id__0",
-                        "exprRef_block_id__1",
-                      },
-                      "local": Set {
-                        "Column1",
-                        "Column2",
-                      },
+                    "value": [
+                      [Function],
+                      [Function],
+                    ],
+                  },
+                  "type": "computer-result",
+                  "usedNames": [],
+                  "visibleVariables": {
+                    "global": Set {
+                      "exprRef_block_id",
+                      "exprRef_block_id.Column1",
+                      "exprRef_block_id.Column2",
+                      "varName.Column1",
+                      "varName.Column2",
+                      "varName",
+                      "exprRef_block_id__0",
+                      "exprRef_block_id__1",
+                    },
+                    "local": Set {
+                      "Column1",
+                      "Column2",
                     },
                   },
                 },
-                "indexLabels": Map {
-                  "varName" => [
-                    "1",
-                  ],
+                "block-id--0": {
+                  "epoch": 1n,
+                  "id": "block-id--0",
+                  "result": {
+                    "meta": [Function],
+                    "type": {
+                      "cellType": {
+                        "kind": "number",
+                        "unit": null,
+                      },
+                      "indexedBy": "exprRef_block_id",
+                      "kind": "column",
+                    },
+                    "value": [Function],
+                  },
+                  "type": "computer-result",
+                  "usedNames": [],
+                  "visibleVariables": {
+                    "global": Set {
+                      "exprRef_block_id",
+                      "exprRef_block_id.Column1",
+                      "exprRef_block_id.Column2",
+                      "varName.Column1",
+                      "varName.Column2",
+                      "varName",
+                      "exprRef_block_id__0",
+                      "exprRef_block_id__1",
+                    },
+                    "local": Set {
+                      "Column1",
+                      "Column2",
+                    },
+                  },
                 },
-              }
-            `);
+                "block-id--1": {
+                  "epoch": 1n,
+                  "id": "block-id--1",
+                  "result": {
+                    "meta": [Function],
+                    "type": {
+                      "cellType": {
+                        "kind": "number",
+                        "unit": null,
+                      },
+                      "indexedBy": "exprRef_block_id",
+                      "kind": "column",
+                    },
+                    "value": [Function],
+                  },
+                  "type": "computer-result",
+                  "usedNames": [],
+                  "visibleVariables": {
+                    "global": Set {
+                      "exprRef_block_id",
+                      "exprRef_block_id.Column1",
+                      "exprRef_block_id.Column2",
+                      "varName.Column1",
+                      "varName.Column2",
+                      "varName",
+                      "exprRef_block_id__0",
+                      "exprRef_block_id__1",
+                    },
+                    "local": Set {
+                      "Column1",
+                      "Column2",
+                    },
+                  },
+                },
+              },
+            }
+          `);
           resolve();
         } catch (err) {
           return reject(err);

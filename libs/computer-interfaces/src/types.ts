@@ -97,7 +97,6 @@ export interface NotebookResults {
   readonly blockResults: {
     readonly [blockId: string]: BlockResult;
   };
-  readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
 }
 
 export type NotebookResultStream = BehaviorSubject<NotebookResults>;

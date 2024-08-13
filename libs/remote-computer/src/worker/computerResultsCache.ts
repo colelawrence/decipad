@@ -19,7 +19,7 @@ export const createComputerResultsCache = (
   notebookId: string
 ): ComputerResultsCache => {
   const cache = createCache<NotebookResults, SerializedNotebookResults>({
-    rootValueKeys: ['blockResults', 'indexLabels'],
+    rootValueKeys: ['blockResults'],
     encode: encodeFullNotebookResults,
     decode: decodeFullNotebookResults,
   });

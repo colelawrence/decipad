@@ -9,6 +9,10 @@ import { WriteSerializedColumn } from './WriteSerializedColumn';
 import { GrowableDataView } from './GrowableDataView';
 
 describe('WriteSerializedColumn', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   const encoder: WriteSerializedColumnEncoder<DeciNumber> = (
     buffer,
     _offset,
@@ -24,7 +28,8 @@ describe('WriteSerializedColumn', () => {
 
   it('can be serialized', async () => {
     const source = Column.fromValues(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => N(n)).map(Scalar.fromValue)
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => N(n)).map(Scalar.fromValue),
+      emptyMeta
     );
     const column = new WriteSerializedColumn(encoder, source);
     const buffer = new GrowableDataView(createResizableArrayBuffer(2));

@@ -5,6 +5,7 @@ import { CodeResultProps } from '../../../types';
 export const RangeResult = ({
   type: { rangeOf },
   value,
+  meta,
   variant,
   element,
 }: CodeResultProps<'range'>): ReturnType<FC> => {
@@ -17,6 +18,7 @@ export const RangeResult = ({
       <CodeResult
         type={rangeOf}
         value={value[0]}
+        meta={meta}
         variant={variant}
         element={element}
       />{' '}
@@ -24,6 +26,7 @@ export const RangeResult = ({
       <CodeResult
         type={rangeOf}
         value={value[1]}
+        meta={meta}
         variant={variant}
         element={element}
       />

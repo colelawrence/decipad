@@ -3,7 +3,7 @@ import { isResultGenerator } from './isResultGenerator';
 import type { Result } from '@decipad/language-interfaces';
 
 export const getResultGenerator = (
-  v: Result.OneResult
+  v: Result.OneResult | null
 ): Result.ResultGenerator => {
   if (!isResultGenerator(v)) {
     if (Array.isArray(v)) {

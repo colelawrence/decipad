@@ -29,6 +29,7 @@ export const rowsToColumns = (result: Result.Result): Result.Result => {
     return {
       type: result.type.cellType,
       value: table,
+      meta: result.meta,
     };
   }
   return result;

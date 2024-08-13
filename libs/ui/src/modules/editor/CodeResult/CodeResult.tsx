@@ -153,6 +153,7 @@ function UnmemoedCodeResult<T extends SerializedTypeKind>(
   const {
     type,
     value,
+    meta,
     variant = 'block',
     element,
     tooltip,
@@ -165,12 +166,13 @@ function UnmemoedCodeResult<T extends SerializedTypeKind>(
         value,
         variant,
         type,
+        meta,
         element,
         tooltip,
         isLiveResult,
         expanded,
       }),
-    [element, expanded, isLiveResult, tooltip, type, value, variant]
+    [element, expanded, isLiveResult, tooltip, type, meta, value, variant]
   );
   // Does not present result when result is not present, except for type errors.
   if (

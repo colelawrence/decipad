@@ -11,5 +11,6 @@ export const errorResult = (message: string): Result.Result => {
       },
     },
     value: Unknown,
+    meta: undefined,
   };
 };

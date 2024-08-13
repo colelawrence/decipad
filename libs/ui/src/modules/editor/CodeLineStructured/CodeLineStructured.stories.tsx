@@ -17,14 +17,14 @@ export default {
 
 export const Normal: StoryFn<
   ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLineStructured {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 
 export const WithHighlightedLine: StoryFn<
   ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLineStructured {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithHighlightedLine.args = {
   highlight: true,
@@ -32,8 +32,8 @@ WithHighlightedLine.args = {
 
 export const WithExpandedResult: StoryFn<
   ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLineStructured {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
 WithExpandedResult.args = {
@@ -43,8 +43,8 @@ WithExpandedResult.args = {
 
 export const WithError: StoryFn<
   ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, ...props }) => (
-  <CodeLineStructured {...props} result={{ type, value }} />
+> = ({ type, value, meta, ...props }) => (
+  <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithError.args = {
   variableNameChild: 'Distance',

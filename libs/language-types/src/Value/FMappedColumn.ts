@@ -45,16 +45,20 @@ export class FMappedColumn<T = Result.OneResult>
   private partialMemo: undefined | boolean;
   private desc: string;
 
+  public meta: undefined | (() => Result.ResultMetadataColumn | undefined);
+
   constructor(
     gen: PromiseOrType<Result.GenericResultGenerator<T>>,
     type: SerializedType,
     map: MapFunction<T>,
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined),
     desc: string
   ) {
     super();
     this.gen = gen;
     this.type = type;
     this.map = map;
+    this.meta = meta;
     this.desc = desc;
   }
   async getDimensions(): Promise<Dimension[]> {
@@ -139,8 +143,9 @@ export class FMappedColumn<T = Result.OneResult>
     gen: (start?: number, end?: number) => AsyncGenerator<Result.OneResult>,
     type: SerializedType,
     mapFn: MapFunction,
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined),
     desc: string
   ) {
-    return new FMappedColumn(gen, type, mapFn, desc);
+    return new FMappedColumn(gen, type, mapFn, meta, desc);
   }
 }

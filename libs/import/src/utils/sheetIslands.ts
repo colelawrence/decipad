@@ -66,6 +66,7 @@ const islandToResult =
           columnIndex >= island.firstCol && columnIndex <= island.lastCol
       )
       .map((column) => column.slice(island.firstRow, island.lastRow + 1)),
+    meta: sheet.meta,
   });
 
 const partition = (

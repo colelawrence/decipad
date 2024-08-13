@@ -118,24 +118,26 @@ const renderJoinedColumns = async (
   })();
 };
 export const joinedTable = async (
-  sourceTables: ValueTypes.Value[],
+  _sourceTables: ValueTypes.Value[],
   sourceTableTypes: Type[],
   targetColumnType: Type,
   condition: ValueTypes.ColumnLikeValue
 ): Promise<Value.TableValue> => {
+  const sourceTables = _sourceTables.map((table) => Value.getTableValue(table));
   validateRenderJoinedTableParams(sourceTables, sourceTableTypes);
 
   return Value.GeneratorTable.fromNamedColumns(
     (start = 0, end = Infinity) => {
       const genP = condition.getData().then(async (conditionData) => {
         return renderJoinedColumns(
-          sourceTables.map((table) => Value.getTableValue(table)),
+          sourceTables,
           sourceTableTypes,
           conditionData
         );
       });
       return slice(fromGeneratorPromise(genP), start, end);
     },
+    sourceTables[0]?.meta?.bind(sourceTables[0]),
     getDefined(targetColumnType.columnNames),
     getDefined(targetColumnType.columnTypes)
   );

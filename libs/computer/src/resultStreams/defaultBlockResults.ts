@@ -12,6 +12,7 @@ export const defaultBlockResults = (
       kind: 'pending',
     },
     value: Unknown,
+    meta: undefined,
   },
   epoch,
 });

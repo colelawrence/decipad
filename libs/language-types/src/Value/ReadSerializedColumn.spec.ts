@@ -7,6 +7,10 @@ import { ReadSerializedColumn } from './ReadSerializedColumn';
 import { getResultGenerator } from '../utils/getResultGenerator';
 
 describe('SerializedColumn', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   const decoder: ReadSerializedColumnDecoder<bigint> = (buffer, offset) => [
     buffer.getBigInt64(offset),
     offset + 8,
@@ -25,7 +29,8 @@ describe('SerializedColumn', () => {
       decoder,
       buffer,
       [],
-      0
+      0,
+      emptyMeta
     );
 
     const values = await all(getResultGenerator(await column.getData())());
@@ -53,7 +58,8 @@ describe('SerializedColumn', () => {
       decoder,
       buffer,
       [],
-      0
+      0,
+      emptyMeta
     );
 
     const values = await all(

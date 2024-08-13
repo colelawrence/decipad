@@ -12,6 +12,7 @@ import { createResizableArrayBuffer } from '@decipad/language-utils';
 import type { SerializedBlockResult } from '../types/serializedTypes';
 import { encodeBracketError } from './encodeBracketError';
 import { encodeMooToken } from './encodeMooToken';
+import { encodeResultMeta } from './encodeResultMeta';
 
 export const encodeBlockResult = async (
   result: BlockResult | undefined,
@@ -31,7 +32,8 @@ export const encodeBlockResult = async (
       ...result,
       result: {
         type: typeBuffer.seal(typeSize),
-        value: await encodeResult(result.result),
+        value: await encodeResult(result.id, result.result),
+        meta: await encodeResultMeta(result.result.meta),
       },
     };
   }

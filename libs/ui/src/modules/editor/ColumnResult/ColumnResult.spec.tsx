@@ -82,6 +82,7 @@ describe.sequential('ColumnResult', () => {
           <ColumnResult
             type={result.result.type as SerializedTypes.Column}
             value={result.result.value as Result.ResultGenerator}
+            meta={result.result.meta as () => Result.ResultMetadataColumn}
           />
         ) : null;
       };

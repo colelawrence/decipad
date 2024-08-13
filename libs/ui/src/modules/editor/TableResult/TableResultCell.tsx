@@ -2,6 +2,7 @@
 import { FC, useRef } from 'react';
 import { css } from '@emotion/react';
 import type {
+  Result,
   SerializedType,
   SerializedTypes,
 } from '@decipad/language-interfaces';
@@ -24,6 +25,7 @@ interface TableResultCellProps {
   tableType: SerializedTypes.MaterializedTable | SerializedTypes.Table;
   columnName: string;
   columnType: SerializedType;
+  meta: Result.Result['meta'];
   value: string;
   element?: AnyElement;
   tooltip?: boolean;
@@ -40,6 +42,7 @@ export const TableResultCell: FC<TableResultCellProps> = ({
   columnName,
   columnType,
   value,
+  meta,
   element,
   tooltip,
 }) => {
@@ -68,6 +71,7 @@ export const TableResultCell: FC<TableResultCellProps> = ({
               result: {
                 type: columnType,
                 value: cellValue,
+                meta: undefined,
               },
             }
           )(e);
@@ -113,6 +117,7 @@ export const TableResultCell: FC<TableResultCellProps> = ({
             parentType={tableType}
             type={columnType}
             value={cellValue}
+            meta={meta}
             variant="block"
             tooltip={tooltip}
             isLiveResult={isLiveResult}

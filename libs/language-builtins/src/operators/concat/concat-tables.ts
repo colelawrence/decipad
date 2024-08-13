@@ -32,9 +32,10 @@ export const concatTablesFunctor: Functor = async ([tab1, tab2]) =>
     return tab1;
   });
 
-export const concatTablesValues: Evaluator = async ([tab1, tab2]) => {
-  const { columns: cols1, columnNames: names1 } = Value.getTableValue(tab1);
-  const { columns: cols2, columnNames: names2 } = Value.getTableValue(tab2);
+export const concatTablesValues: Evaluator = async (tables) => {
+  const [tab1, tab2] = tables.map((table) => Value.getTableValue(table));
+  const { columns: cols1, columnNames: names1 } = tab1;
+  const { columns: cols2, columnNames: names2 } = tab2;
 
   const tab2Sorted = zip(names2, cols2).sort((a, b) => {
     const aIndex = names1.indexOf(a[0]);
@@ -51,6 +52,15 @@ export const concatTablesValues: Evaluator = async ([tab1, tab2]) => {
         tab2Sorted.map((x) => x[1])
       ).map(async ([c1, c2]) => Value.createConcatenatedColumn(c1, c2))
     ),
-    getDefined(names1)
+    getDefined(names1),
+    () => ({
+      labels: tab1
+        .meta?.()
+        ?.labels?.then(
+          async (labels1) =>
+            tab2.meta?.()?.labels?.then((labels2) => labels1.concat(labels2)) ??
+            []
+        ),
+    })
   );
 };

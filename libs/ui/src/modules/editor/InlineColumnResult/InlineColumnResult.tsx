@@ -11,6 +11,7 @@ const maxElements = 3;
 export const InlineColumnResult = ({
   value,
   type,
+  meta,
   element,
 }: CodeResultProps<'materialized-column'>): ReturnType<React.FC> => {
   const { cellType } = type;
@@ -36,6 +37,7 @@ export const InlineColumnResult = ({
               value={row as Result.Result['value']}
               variant="inline"
               type={cellType}
+              meta={meta}
               element={element}
               tooltip={false}
             />

@@ -24,7 +24,7 @@ export default {
 
 export const Normal: StoryFn<
   ComponentProps<typeof DisplayWidget> & Result.Result
-> = ({ type, value, ...props }) => {
+> = ({ type, value, meta, ...props }) => {
   return (
     <div css={{ maxWidth: 300, maxHeight: 200, padding: 32 }}>
       <DisplayWidget
@@ -35,6 +35,7 @@ export const Normal: StoryFn<
           result: {
             type,
             value,
+            meta,
           },
           epoch: 1n,
         }}

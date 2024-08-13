@@ -3,6 +3,7 @@ import { runCode } from '../run';
 it('can un-unit stuff', async () => {
   expect(await runCode('stripunit(10 kilometers)')).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -46,6 +47,7 @@ it('can un-unit stuff', async () => {
   expect(await runCode('stripunit(32891 bananas per johns miles)'))
     .toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -88,6 +90,7 @@ it('can un-unit stuff', async () => {
   `);
   expect(await runCode('stripunit(420 bruhs)')).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -135,6 +138,7 @@ it('can un-unit stuff', async () => {
     `)
   ).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -180,6 +184,7 @@ it('can un-unit stuff', async () => {
 it('should throw error when un-uniting non numbers', async () => {
   expect(await runCode('stripunit("not a number")')).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -314,6 +319,7 @@ it('should throw error when un-uniting non numbers', async () => {
 it('removes the value and shows only the units', async () => {
   expect(await runCode('getunit(10 kilometers)')).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -374,6 +380,7 @@ it('removes the value and shows only the units', async () => {
   expect(await runCode('getunit(32891 bananas per johns miles)'))
     .toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -467,6 +474,7 @@ it('removes the value and shows only the units', async () => {
   `);
   expect(await runCode('getunit(420 bruhs)')).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -531,6 +539,7 @@ it('removes the value and shows only the units', async () => {
     `)
   ).toMatchInlineSnapshot(`
     Object {
+      "meta": undefined,
       "type": Type {
         "anythingness": false,
         "atParentIndex": null,

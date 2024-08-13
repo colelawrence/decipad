@@ -15,6 +15,7 @@ it('should sum first 10,000 ints', async () => {
         yield new DeciNumber({ n: BigInt(i), d: 1n, s: 1n });
       }
     },
+    meta: undefined,
   });
   const x =
     computeBackendSingleton.computeBackend.sum_result_fraction_column(column);

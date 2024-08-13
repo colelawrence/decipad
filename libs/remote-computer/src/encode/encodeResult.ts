@@ -7,11 +7,12 @@ import { Value } from '@decipad/language-types';
 import { createResizableArrayBuffer } from '@decipad/language-utils';
 import type { SerializedResult } from '../types/serializedTypes';
 import { WithEncoded } from '../types/WithEncoded';
+import { encodeResultMeta } from './encodeResultMeta';
 
 export const encodeResult = async (
   result: WithEncoded<Result.Result, SerializedResult>
 ): Promise<SerializedResult> => {
-  const { type, value, __encoded } = result;
+  const { type, value, meta, __encoded } = result;
   if (__encoded) {
     return __encoded;
   }
@@ -24,10 +25,11 @@ export const encodeResult = async (
     createResizableArrayBuffer(1024)
   );
   const encodeValue = valueEncoder(type);
-  const valueLength = await encodeValue(valueBuffer, 0, value ?? Unknown);
+  const valueLength = await encodeValue(valueBuffer, 0, value ?? Unknown, meta);
 
   return {
     type: typeBuffer.seal(typeLength),
     value: valueBuffer.seal(valueLength),
+    meta: await encodeResultMeta(meta),
   };
 };

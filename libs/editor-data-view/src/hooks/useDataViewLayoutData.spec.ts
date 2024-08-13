@@ -15,6 +15,7 @@ describe('layoutPowerData', () => {
             columnNames: [],
           },
           value: Value.Tree.empty(Unknown),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],
@@ -48,6 +49,7 @@ describe('layoutPowerData', () => {
 
             1
           ),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],
@@ -100,6 +102,7 @@ describe('layoutPowerData', () => {
 
             1
           ),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],
@@ -197,6 +200,7 @@ describe('layoutPowerData', () => {
 
             1
           ),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],
@@ -298,6 +302,7 @@ describe('layoutPowerData', () => {
 
             1
           ),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],
@@ -475,6 +480,7 @@ describe('layoutPowerData', () => {
 
             1
           ),
+          meta: undefined,
         },
         aggregationTypes: [],
         roundings: [],

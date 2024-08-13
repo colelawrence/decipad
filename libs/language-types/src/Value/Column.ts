@@ -10,14 +10,22 @@ import { UnknownValue } from './Unknown';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { once } from '@decipad/utils';
 import { ColumnBase } from './ColumnBase';
+import { ResultMetadataColumn } from 'libs/language-interfaces/src/Result';
 
 export class Column extends ColumnBase {
   readonly _values: ReadonlyArray<Value.Value>;
   private defaultValue?: Value.Value;
 
-  constructor(values: ReadonlyArray<Value.Value>, defaultValue?: Value.Value) {
+  public meta: undefined | (() => undefined | ResultMetadataColumn);
+
+  constructor(
+    values: ReadonlyArray<Value.Value>,
+    meta: undefined | (() => ResultMetadataColumn | undefined),
+    defaultValue?: Value.Value
+  ) {
     super();
     this._values = values;
+    this.meta = meta;
     this.defaultValue = defaultValue;
   }
 
@@ -39,6 +47,7 @@ export class Column extends ColumnBase {
    */
   static fromValues(
     values: ReadonlyArray<Value.Value>,
+    meta: undefined | (() => undefined | ResultMetadataColumn),
     defaultValue?: Value.Value,
     innerDimensions?: Dimension[]
   ): Value.ColumnLikeValue {
@@ -49,14 +58,15 @@ export class Column extends ColumnBase {
       }
       throw new Error('panic: Empty columns are forbidden');
     }
-    return new Column(values, defaultValue);
+    return new Column(values, meta, defaultValue);
   }
 
   static fromGenerator(
     gen: ValueGeneratorFunction,
+    meta: undefined | (() => ResultMetadataColumn | undefined),
     desc = `Column.fromGenerator(${gen.name})`
   ): Value.ColumnLikeValue {
-    return GeneratorColumn.fromGenerator(gen, desc);
+    return GeneratorColumn.fromGenerator(gen, meta, desc);
   }
 
   values(start = 0, end = Infinity) {

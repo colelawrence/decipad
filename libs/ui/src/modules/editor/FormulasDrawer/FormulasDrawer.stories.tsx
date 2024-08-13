@@ -21,6 +21,7 @@ const lines = [
         cellType: { kind: 'string' },
         indexedBy: null,
       } as SerializedType,
+      meta: undefined,
     },
   },
 ];

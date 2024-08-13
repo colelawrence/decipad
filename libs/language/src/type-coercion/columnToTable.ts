@@ -85,7 +85,8 @@ const columnToTableValue = (
 
   return Value.Table.fromNamedColumns(
     dimensions.map(([, value]) => value).concat(sourceValue),
-    dimensions.map(([name]) => name).concat(columnName)
+    dimensions.map(([name]) => name).concat(columnName),
+    sourceValue.meta
   );
 };
 

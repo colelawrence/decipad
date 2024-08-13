@@ -4,6 +4,7 @@ describe('contract operators', () => {
   it('assert to exist', async () => {
     expect(await runCode('assert(1)')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,

@@ -16,6 +16,7 @@ describe('abstract refs', () => {
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": null,
@@ -39,6 +40,7 @@ describe('abstract refs', () => {
     const result = results.blockResults['block-1']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": null,
@@ -81,6 +83,7 @@ describe('abstract refs', () => {
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": null,
@@ -114,6 +117,7 @@ describe('abstract refs', () => {
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "errorCause": Object {
             "context": "in operation \\"+\\" (type-error, number)",
@@ -154,6 +158,7 @@ describe('abstract refs', () => {
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "cellType": Object {
             "kind": "number",
@@ -201,6 +206,7 @@ describe('abstract refs', () => {
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "cellType": Object {
             "kind": "number",
@@ -247,6 +253,7 @@ describe('abstract refs', () => {
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "cellType": Object {
             "kind": "number",
@@ -289,6 +296,7 @@ describe('abstract refs', () => {
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": null,
@@ -323,6 +331,7 @@ describe('abstract refs', () => {
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": null,
@@ -350,6 +359,7 @@ describe('abstract refs', () => {
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "columnNames": Array [
             "T1",
@@ -422,6 +432,7 @@ describe('abstract refs', () => {
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "columnNames": Array [
             "A",
@@ -517,6 +528,7 @@ describe('abstract refs', () => {
     const result = results.blockResults['block-1']?.result;
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": Array [
@@ -595,6 +607,7 @@ describe('abstract refs', () => {
     );
     expect(totalResult).toMatchInlineSnapshot(`
       Object {
+        "meta": [Function],
         "type": Object {
           "cellType": Object {
             "kind": "number",
@@ -662,6 +675,7 @@ describe('abstract refs', () => {
     );
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Object {
           "kind": "number",
           "unit": Array [

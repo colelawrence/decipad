@@ -51,6 +51,7 @@ const importFromArray = async (
         kind: 'anything',
       },
       value: Unknown,
+      meta: undefined,
     };
   }
 
@@ -153,6 +154,7 @@ const importSingleValueWithCohersion = async (
           kind: 'string',
         },
         value: value.toString(),
+        meta: undefined,
       };
     case 'date': {
       let unixDate = 0n;
@@ -172,6 +174,7 @@ const importSingleValueWithCohersion = async (
       return {
         type: cohersion,
         value: unixDate,
+        meta: undefined,
       };
     }
     case 'number': {
@@ -183,6 +186,7 @@ const importSingleValueWithCohersion = async (
       return {
         type: cohersion,
         value: newValue.toString(),
+        meta: undefined,
       };
     }
 
@@ -192,6 +196,7 @@ const importSingleValueWithCohersion = async (
       return {
         type: cohersion,
         value: booleanValue,
+        meta: undefined,
       };
     }
     default: {
@@ -215,6 +220,7 @@ const importSingleValue = async (
           unit: null,
         },
         value: value.toString(),
+        meta: undefined,
       };
     case 'boolean':
       return {
@@ -222,6 +228,7 @@ const importSingleValue = async (
           kind: 'boolean',
         },
         value: Boolean(value),
+        meta: undefined,
       };
     case 'string': {
       if (value.length === 0) {
@@ -230,6 +237,7 @@ const importSingleValue = async (
             kind: 'string',
           },
           value,
+          meta: undefined,
         };
       }
 
@@ -239,6 +247,7 @@ const importSingleValue = async (
         return {
           type: inferredDate.type,
           value: BigInt(date.getTime()),
+          meta: undefined,
         };
       }
 
@@ -250,6 +259,7 @@ const importSingleValue = async (
             date: 'second',
           },
           value: BigInt(parsedDate.getTime()),
+          meta: undefined,
         };
       }
 
@@ -258,6 +268,7 @@ const importSingleValue = async (
         return {
           type: inferredBoolean.type,
           value: Boolean(value.toLowerCase()),
+          meta: undefined,
         };
       }
 
@@ -283,6 +294,7 @@ const importSingleValue = async (
         return {
           type: inferredType.type,
           value: value.replaceAll(/[^0-9.]*/g, ''),
+          meta: undefined,
         };
       }
 
@@ -291,6 +303,7 @@ const importSingleValue = async (
         return {
           type: generalInferredDate.type,
           value: BigInt(new Date(value).getTime()),
+          meta: undefined,
         };
       }
 
@@ -298,8 +311,8 @@ const importSingleValue = async (
         type: {
           kind: 'string',
         },
-
         value,
+        meta: undefined,
       };
     }
     default: {

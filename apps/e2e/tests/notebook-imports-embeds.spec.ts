@@ -196,14 +196,17 @@ test('check calculations from CSVs imported with link work across tabs @imports 
   });
 
   await test.step('add formula that uses the integration table', async () => {
+    await notebook.selectLastParagraph();
     await notebook.addFormula(
       'CalculationIntegrationTable',
       'count(Variable.A)'
     );
-    await expect(page.getByTestId('number-result:20')).toBeVisible();
+    await expect(
+      page.getByTestId('code-line-result:20').getByTestId('number-result:20')
+    ).toBeVisible();
   });
 
-  await test.step('seperate calculation and source table into different tabs', async () => {
+  await test.step('separate calculation and source table into different tabs', async () => {
     await notebook.createTab('Another Tab');
     await notebook.selectTab('New Tab');
     await notebook.moveToTab(1, 'Another Tab');

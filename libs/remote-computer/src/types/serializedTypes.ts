@@ -17,6 +17,7 @@ import type {
 export type SerializedResult = {
   type: ArrayBuffer;
   value: ArrayBuffer;
+  meta?: undefined | ArrayBuffer;
 };
 export type SerializedIdentifiedResult = Omit<IdentifiedResult, 'result'> & {
   result: SerializedResult;

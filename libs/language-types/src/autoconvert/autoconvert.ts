@@ -7,10 +7,9 @@ import {
   getUnitByName,
 } from '@decipad/language-units';
 import type { ContextUtils } from '../ContextUtils';
-import { FMappedColumn, NumberValue } from '../Value';
+import { FMappedColumn, isColumnLike, NumberValue } from '../Value';
 import { serializeType, type Type } from '../Type';
 import { automapValues } from '../Dimension';
-import { isColumnLike } from '@decipad/column';
 import { getResultGenerator } from '../utils';
 import stringify from 'json-stringify-safe';
 
@@ -35,6 +34,7 @@ async function autoconvertArgument(
             getResultGenerator(await value.getData()),
             serializeType(await type.reduced()),
             async (value) => expander(getInstanceof(value, DeciNumber)),
+            value.meta?.bind(value),
             `autoconvertArgument<${stringify(serializeType(type))}>`
           );
         } else if (value instanceof NumberValue) {
@@ -137,6 +137,7 @@ export async function autoconvertResult(
             getResultGenerator(await value.getData()),
             serializeType(await type.reduced()),
             async (value) => contractor(getInstanceof(value, DeciNumber)),
+            value.meta?.bind(value),
             `autoconvertResult<${fName}(type: ${stringify(
               serializeType(type)
             )}, value: ${stringify(value)})>`

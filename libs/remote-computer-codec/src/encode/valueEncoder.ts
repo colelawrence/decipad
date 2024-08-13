@@ -12,12 +12,7 @@ import { encodeTree } from './encodeTree';
 import type { RecursiveEncoder } from './types';
 import { recursiveEncodeColumn } from './recursiveEncodeColumn';
 
-const recNoop = (
-  _: SerializedType,
-  __: DataView,
-  ___: Result.OneResult,
-  offset: number
-) => offset;
+const recNoop = (_: Result.Result, __: DataView, offset: number) => offset;
 
 export const recursiveEncoders: Record<
   SerializedType['kind'],
@@ -27,11 +22,11 @@ export const recursiveEncoders: Record<
   nothing: recNoop,
   pending: recNoop,
   'type-error': recNoop,
-  boolean: (_, buffer, value, offset) => {
+  boolean: ({ value }, buffer, offset) => {
     buffer.setUint8(offset, value ? 1 : 0);
     return offset + 1;
   },
-  date: (_, buffer, value, _offset) => {
+  date: ({ value }, buffer, _offset) => {
     let offset = _offset;
     if (value == null) {
       buffer.setUint8(offset, 0);
@@ -49,7 +44,7 @@ export const recursiveEncoders: Record<
     }
     return offset;
   },
-  function: (_, buffer, value, _offset) => {
+  function: ({ value }, buffer, _offset) => {
     if (!Value.isFunctionValue(value)) {
       throw new TypeError('Expected function value');
     }
@@ -64,8 +59,8 @@ export const recursiveEncoders: Record<
     const bodyAsString = stringify(value.body);
     return encodeString(buffer, offset, bodyAsString);
   },
-  number: (_, buffer, value, offset) => encodeNumber(buffer, offset, N(value)),
-  range: async (type, buffer, value, _offset) => {
+  number: ({ value }, buffer, offset) => encodeNumber(buffer, offset, N(value)),
+  range: async ({ type, value }, buffer, _offset) => {
     let offset = _offset;
     if (!Array.isArray(value)) {
       throw new TypeError('Range: Expected array for range');
@@ -76,11 +71,21 @@ export const recursiveEncoders: Record<
     const [from, to] = value;
     const ofType = type.rangeOf;
     const encode = recursiveEncoders[ofType.kind];
-    offset = await encode(ofType, buffer, from, offset, recursiveEncoders);
-    offset = await encode(ofType, buffer, to, offset, recursiveEncoders);
+    offset = await encode(
+      { type: ofType, value: from, meta: undefined },
+      buffer,
+      offset,
+      recursiveEncoders
+    );
+    offset = await encode(
+      { type: ofType, value: to, meta: undefined },
+      buffer,
+      offset,
+      recursiveEncoders
+    );
     return offset;
   },
-  row: async (type, buffer, value, _offset) => {
+  row: async ({ type, value }, buffer, _offset) => {
     if (!Array.isArray(value)) {
       throw new TypeError('Row: Expected array for row');
     }
@@ -93,9 +98,8 @@ export const recursiveEncoders: Record<
     for (const [v, subType] of zip(value, type.rowCellTypes)) {
       // eslint-disable-next-line no-await-in-loop
       offset = await recursiveEncoders[subType.kind](
-        subType,
+        { type: subType, value: v, meta: undefined },
         buffer,
-        v,
         offset,
         recursiveEncoders
       );
@@ -104,13 +108,13 @@ export const recursiveEncoders: Record<
   },
   'materialized-column': recursiveEncodeColumn,
   column: recursiveEncodeColumn,
-  string: (_, buffer, value, offset) => {
+  string: ({ value }, buffer, offset) => {
     return encodeString(buffer, offset, value?.toString() ?? '');
   },
-  table: async (type, buffer, value, _offset) =>
-    encodeTable(type, buffer, value, _offset, recursiveEncoders),
-  'materialized-table': async (type, buffer, value, _offset) =>
-    encodeTable(type, buffer, value, _offset, recursiveEncoders),
+  table: async (result, buffer, _offset) =>
+    encodeTable(result, buffer, _offset, recursiveEncoders),
+  'materialized-table': async (result, buffer, _offset) =>
+    encodeTable(result, buffer, _offset, recursiveEncoders),
   tree: encodeTree,
 };
 
@@ -119,50 +123,52 @@ const noop = () => 0;
 const encoders: Record<
   SerializedType['kind'],
   (
-    type: SerializedType,
+    result: Result.Result,
     buffer: DataView,
-    offset: number,
-    value: Result.OneResult
+    offset: number
   ) => PromiseOrType<number>
 > = {
   anything: noop,
   nothing: noop,
   pending: noop,
   'type-error': noop,
-  boolean: (type, buffer, offset, value) =>
-    recursiveEncoders.boolean(type, buffer, value, offset, recursiveEncoders),
-  date: (type, buffer, offset, value) =>
-    recursiveEncoders.date(type, buffer, value, offset, recursiveEncoders),
-  function: (type, buffer, offset, value) =>
-    recursiveEncoders.function(type, buffer, value, offset, recursiveEncoders),
-  number: (type, buffer, offset, value) =>
-    recursiveEncoders.number(type, buffer, value, offset, recursiveEncoders),
-  string: (type, buffer, offset, value) =>
-    recursiveEncoders.string(type, buffer, value, offset, recursiveEncoders),
-  range: (type, buffer, offset, value) =>
-    recursiveEncoders.range(type, buffer, value, offset, recursiveEncoders),
-  row: (type, buffer, offset, value) =>
-    recursiveEncoders.row(type, buffer, value, offset, recursiveEncoders),
-  column: (type, buffer, offset, value) =>
-    recursiveEncoders.column(type, buffer, value, offset, recursiveEncoders),
-  'materialized-column': (type, buffer, offset, value) =>
-    recursiveEncoders.column(type, buffer, value, offset, recursiveEncoders),
-  table: (type, buffer, offset, value) =>
-    recursiveEncoders.table(type, buffer, value, offset, recursiveEncoders),
-  'materialized-table': (type, buffer, offset, value) =>
+  boolean: (result, buffer, offset) =>
+    recursiveEncoders.boolean(result, buffer, offset, recursiveEncoders),
+  date: (result, buffer, offset) =>
+    recursiveEncoders.date(result, buffer, offset, recursiveEncoders),
+  function: (result, buffer, offset) =>
+    recursiveEncoders.function(result, buffer, offset, recursiveEncoders),
+  number: (result, buffer, offset) =>
+    recursiveEncoders.number(result, buffer, offset, recursiveEncoders),
+  string: (result, buffer, offset) =>
+    recursiveEncoders.string(result, buffer, offset, recursiveEncoders),
+  range: (result, buffer, offset) =>
+    recursiveEncoders.range(result, buffer, offset, recursiveEncoders),
+  row: (result, buffer, offset) =>
+    recursiveEncoders.row(result, buffer, offset, recursiveEncoders),
+  column: (result, buffer, offset) =>
+    recursiveEncoders.column(result, buffer, offset, recursiveEncoders),
+  'materialized-column': (result, buffer, offset) =>
+    recursiveEncoders.column(result, buffer, offset, recursiveEncoders),
+  table: (result, buffer, offset) =>
+    recursiveEncoders.table(result, buffer, offset, recursiveEncoders),
+  'materialized-table': (result, buffer, offset) =>
     recursiveEncoders['materialized-table'](
-      type,
+      result,
       buffer,
-      value,
       offset,
       recursiveEncoders
     ),
-  tree: (type, buffer, offset, value) =>
-    recursiveEncoders.tree(type, buffer, value, offset, recursiveEncoders),
+  tree: (result, buffer, offset) =>
+    recursiveEncoders.tree(result, buffer, offset, recursiveEncoders),
 };
 
 export const valueEncoder = (type: SerializedType) => {
   const encoder = encoders[type.kind];
-  return (buffer: DataView, offset: number, value: Result.OneResult) =>
-    encoder(type, buffer, offset, value);
+  return (
+    buffer: DataView,
+    offset: number,
+    value: Result.OneResult,
+    meta: undefined | (() => Result.ResultMetadata)
+  ) => encoder({ type, value, meta }, buffer, offset);
 };

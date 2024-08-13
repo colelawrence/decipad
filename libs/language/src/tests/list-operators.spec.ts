@@ -4,6 +4,9 @@ describe('list operators', () => {
   it('concatenates lists', async () => {
     expect(await runCode('cat([1, 2], [3, 4])')).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": Promise {},
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -100,6 +103,7 @@ describe('list operators', () => {
   it('calculates columns lengths', async () => {
     expect(await runCode('len([1, 2, 3])')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -145,6 +149,7 @@ describe('list operators', () => {
   it('retrieves the first element of a list', async () => {
     expect(await runCode('first([1, 2, 3] meters)')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -209,6 +214,7 @@ describe('list operators', () => {
   it('retrieves the last element of a list', async () => {
     expect(await runCode('last([1, 2, 3] meters)')).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -274,6 +280,7 @@ describe('list operators', () => {
     expect(await runCode('countif([true, false, true])'))
       .toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -319,6 +326,9 @@ describe('list operators', () => {
   it('sorts a list', async () => {
     expect(await runCode('sort([2, -1, 11])')).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -409,6 +419,9 @@ describe('list operators', () => {
   it('uniques list', async () => {
     expect(await runCode('unique([1, 3, 2, 1, 3, 4])')).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -505,6 +518,9 @@ describe('list operators', () => {
   it('reverses a list', async () => {
     expect(await runCode('reverse([3, 2, 1])')).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -600,6 +616,9 @@ describe('list operators', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": Promise {},
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,

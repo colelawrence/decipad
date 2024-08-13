@@ -19,6 +19,7 @@ const column = await serializeResult({
       yield new DeciNumber({ n: BigInt(i), d: 1n, s: 1n });
     }
   },
+  meta: undefined,
 });
 
 bench('wasm sum first million ints', async () => {

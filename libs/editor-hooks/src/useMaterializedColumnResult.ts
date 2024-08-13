@@ -23,12 +23,14 @@ export const useMaterializedColumnResult = (
               kind: 'materialized-column',
             },
             value: newValue,
+            meta: result.meta,
           }
         : {
             type: {
               kind: 'pending',
             },
             value: Unknown,
+            meta: undefined,
           },
     [newValue, result]
   );

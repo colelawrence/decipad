@@ -47,11 +47,16 @@ export const runAST = async (
   const erroredType = isErrorType(inferResult) ? inferResult : null;
   expect(erroredType).toEqual(null);
 
-  const [value] = await run([block], [0], new ScopedRealm(undefined, ctx));
+  const [[value, meta]] = await run(
+    [block],
+    [0],
+    new ScopedRealm(undefined, ctx)
+  );
 
   return {
     value: await materializeOneResult(value),
     type: inferResult,
+    meta,
   };
 };
 
@@ -84,11 +89,13 @@ export const runCodeForVariables = async (
     );
   }
 
-  const variables = await run(program, wantedVariables, realm);
+  const results = (await run(program, wantedVariables, realm)).map(
+    (v) => v[0] // discard meta
+  );
 
   return {
     types,
-    variables: Object.fromEntries(zip(wantedVariables, variables)),
+    variables: Object.fromEntries(zip(wantedVariables, results)),
   };
 };
 
@@ -103,27 +110,39 @@ const userValue = (type: Type, value: Result.OneResult): Result.OneResult => {
 interface TypeAndValuePair {
   type: Type | SerializedType;
   value: Result.OneResult;
+  meta: Result.ResultMetadata;
 }
+
+const intersection = <T>(a: Set<T>, b: Set<T>): Set<T> => {
+  const result = new Set<T>();
+  for (const item of a) {
+    if (b.has(item)) {
+      result.add(item);
+    }
+  }
+  return result;
+};
 
 const typeAndValuePairs = (
   types: Record<string, Type>,
-  values: Record<string, Result.OneResult>,
+  values: Record<string, [Result.OneResult, Result.ResultMetadata]>,
   valueAsUser = true,
   typeAsUser = false
 ): Record<string, TypeAndValuePair> => {
-  const keys = new Set(Object.keys(types));
-  for (const key of Object.keys(values)) {
-    keys.add(key);
-  }
+  const keys = intersection(
+    new Set(Object.keys(types)),
+    new Set(Object.keys(values))
+  );
   const pairs: [string, TypeAndValuePair][] = [];
   for (const key of keys) {
     const type = types[key];
-    const value = values[key];
+    const [value, meta] = values[key];
     pairs.push([
       key,
       {
         type: typeAsUser ? serializeType(type) : type,
         value: valueAsUser ? userValue(type, value) : value,
+        meta,
       },
     ]);
   }
@@ -164,14 +183,10 @@ export const evaluateForVariables = async (
     );
   }
 
-  const variables = await run(program, wantedVariables, realm);
+  const results = await run(program, wantedVariables, realm);
+  const values = Object.fromEntries(zip(wantedVariables, results));
 
-  return typeAndValuePairs(
-    types,
-    Object.fromEntries(zip(wantedVariables, variables)),
-    valuesAsUser,
-    typesAsUser
-  );
+  return typeAndValuePairs(types, values, valuesAsUser, typesAsUser);
 };
 
 export const objectToTableType = (
@@ -194,7 +209,11 @@ export const objectToTableValue = async (
 ) => {
   const values = Object.values(obj).map((v) => Value.fromJS(v));
 
-  return Value.Table.fromNamedColumns(values, Object.keys(obj)).getData();
+  return Value.Table.fromNamedColumns(
+    values,
+    Object.keys(obj),
+    undefined
+  ).getData();
 };
 
 type ObjectOf<V> = {

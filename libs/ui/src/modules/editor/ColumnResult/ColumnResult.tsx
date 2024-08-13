@@ -1,24 +1,36 @@
-import { FC } from 'react';
-import { concatMap, distinctUntilChanged, map } from 'rxjs';
-import { useObservable } from 'rxjs-hooks';
-import { dequal } from '@decipad/utils';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { concatMap } from 'rxjs';
 import { CodeResultProps } from '../../../types';
 import { LabeledColumnResult } from './LabeledColumnResult';
 import { SimpleColumnResult } from './SimpleColumnResult';
 import { useComputer } from '@decipad/editor-hooks';
+import { DimensionExplanation } from '@decipad/computer-interfaces';
+import { dequal } from '@decipad/utils';
 
 export const ColumnResult: FC<
   CodeResultProps<'materialized-column'> | CodeResultProps<'column'>
 > = ({ element, ...result }) => {
   const computer = useComputer();
-
-  const labels = useObservable(() =>
-    computer.explainDimensions$.observe(result).pipe(
-      map((p) => Promise.resolve(p)),
-      concatMap((p) => p),
-      distinctUntilChanged((a, b) => dequal(a, b))
-    )
+  const [labels, setLabels] = useState<DimensionExplanation[] | undefined>(
+    undefined
   );
+
+  const setLabelsSafe = useCallback(
+    (newLabels: DimensionExplanation[] | undefined) => {
+      if (newLabels && !dequal(newLabels, labels)) {
+        setLabels(newLabels);
+      }
+    },
+    [labels]
+  );
+
+  useEffect(() => {
+    const sub = computer.explainDimensions$
+      .observe(result)
+      .pipe(concatMap(async (explanation) => explanation))
+      .subscribe(setLabelsSafe);
+    return () => sub.unsubscribe();
+  }, [computer.explainDimensions$, result, setLabelsSafe]);
 
   return labels ? (
     <LabeledColumnResult labels={labels} element={element} {...result} />

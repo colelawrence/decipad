@@ -5,6 +5,26 @@ import { getDefined } from '@decipad/utils';
 import type { Result } from '@decipad/language-interfaces';
 import { type BuiltinContextUtils } from '../../types';
 import { maybeAggregateColumn } from './maybeAggregateColumn';
+import { ResultMetadata } from 'libs/language-interfaces/src/Result';
+import { ColumnLikeValue } from 'libs/language-interfaces/src/Value';
+
+const getColumnMetaSlice = (
+  column: ColumnLikeValue,
+  start: number,
+  end: number
+): undefined | (() => Result.ResultMetadataColumn) => {
+  return (): Result.ResultMetadataColumn => {
+    const meta: ResultMetadata | undefined = column.meta?.();
+    if (!meta?.labels) {
+      return {
+        labels: undefined,
+      } satisfies Result.ResultMetadataColumn;
+    }
+    return {
+      labels: meta?.labels.then((labels) => labels.slice(start, end + 1)),
+    };
+  };
+};
 
 export const makeRecursiveTreeValue = async (
   fullTable: Value.Table,
@@ -39,10 +59,13 @@ export const makeRecursiveTreeValue = async (
   const firstColumnName = getDefined(tableType.columnNames)[0];
 
   // create all the children slices, which will later constitute the children nodes
+
   const childrenSlices = await Promise.all(
     slicesMap.map(async ([start, end]) => {
+      const meta = getColumnMetaSlice(firstSortedColumn, 0, 0);
       const slicedFirstColumn = Value.Column.fromGenerator(
         () => firstColumn.values(start, end + 1),
+        meta,
         'makeRecursiveTreeValue'
       );
       return {
@@ -59,6 +82,7 @@ export const makeRecursiveTreeValue = async (
         childColumns: restSortedColumns.map((column) =>
           Value.Column.fromGenerator(
             () => column.values(start, end + 1),
+            meta,
             'makeRecursiveTreeValue'
           )
         ),
@@ -77,7 +101,11 @@ export const makeRecursiveTreeValue = async (
           await root.getData(),
           rootAggregation,
           originalCardinality,
-          Value.Table.fromNamedColumns(childColumns, childrenColumnNames),
+          Value.Table.fromNamedColumns(
+            childColumns,
+            childrenColumnNames,
+            table.meta
+          ),
           // create a new table type for the children so that we can recurse into them
           buildType.table({
             indexName: tableType.indexName,

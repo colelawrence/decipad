@@ -56,7 +56,8 @@ export const applyTableFilters = async (
               )
             )
           ),
-          resultTable.columnNames
+          resultTable.columnNames,
+          resultTable.meta
         );
       }
       return resultTable;

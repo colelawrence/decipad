@@ -6,7 +6,7 @@ import type { SerializedResult } from '../types/serializedTypes';
 export const decodePlainResult = async (
   result: SerializedResult
 ): Promise<Result.Result> => {
-  const { type, value } = result;
+  const { type, value, meta } = result;
   const [decodedType] = decodeType(new DataView(type), 0);
   const [decodedValue] = await valueDecoder(decodedType)(
     new DataView(value),
@@ -15,5 +15,6 @@ export const decodePlainResult = async (
   return {
     type: decodedType,
     value: decodedValue,
+    meta: meta ? JSON.parse(new TextDecoder().decode(meta)) : undefined,
   };
 };

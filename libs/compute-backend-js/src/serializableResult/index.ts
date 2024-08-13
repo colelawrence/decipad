@@ -9,6 +9,7 @@ import {
   OneResult,
 } from 'libs/language-interfaces/src/Result';
 import { Specificity } from 'libs/language-interfaces/src/Time';
+import { columnToMeta } from './columnToMeta';
 
 const FULL_BYTE = 0xff;
 const FULL_NIBBLE = 0x80;
@@ -46,7 +47,7 @@ const serializeBigIntToUint8Array = (value: bigint): Uint8Array => {
   // Convert BigInt to little-endian byte array
   const isNegative = value < 0n;
   let absValue = isNegative ? -value : value;
-  let bytes: number[] = [];
+  const bytes: number[] = [];
 
   do {
     bytes.push(Number(absValue & 255n));
@@ -143,15 +144,16 @@ const serializeDeciNumber = (
 };
 
 // Used to represent null values in metadata
-const nullColumn: Result<'column'> = {
+const nullColumn: Result<'materialized-column'> = {
   type: {
-    kind: 'column',
+    kind: 'materialized-column',
     cellType: { kind: 'anything' },
     indexedBy: null,
   },
-  value: [] as any,
+  value: [],
 };
 
+// eslint-disable-next-line complexity
 export const serializeResultIter = async <T extends Result>(
   results: T[],
   typeArray: number[],
@@ -165,7 +167,7 @@ export const serializeResultIter = async <T extends Result>(
   for (const result of results) {
     switch (result.type.kind) {
       case 'boolean': {
-        const value = (result as Result<'boolean'>).value;
+        const { value } = result as Result<'boolean'>;
         const data = new Uint8Array([value ? 1 : 0]);
         dataArray.push(data);
 
@@ -192,7 +194,7 @@ export const serializeResultIter = async <T extends Result>(
         break;
       }
       case 'date': {
-        const value = (result as Result<'date'>).value;
+        const { value } = result as Result<'date'>;
         const specificity = result.type.date;
         dataArray.push(new Uint8Array([timeSpecificityToNumber(specificity)]));
         let contentLength = 1; // 1 is length of specificity
@@ -209,7 +211,7 @@ export const serializeResultIter = async <T extends Result>(
         break;
       }
       case 'string': {
-        const value = (result as Result<'string'>).value;
+        const { value } = result as Result<'string'>;
         const data = new TextEncoder().encode(value);
         dataArray.push(data);
 
@@ -249,6 +251,7 @@ export const serializeResultIter = async <T extends Result>(
             : {
                 type: { kind: 'string' },
                 value: tableResult.type.indexName,
+                meta: tableResult.meta,
               }
         );
         nextResults.push(
@@ -257,12 +260,14 @@ export const serializeResultIter = async <T extends Result>(
             : {
                 type: { kind: 'string' },
                 value: tableResult.type.delegatesIndexTo,
+                meta: undefined,
               }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
             type: { kind: 'string' },
             value: columnName,
+            meta: undefined,
           });
         }
 
@@ -280,6 +285,7 @@ export const serializeResultIter = async <T extends Result>(
               cellType,
               indexedBy: 'number',
             },
+            meta: tableResult.meta?.bind(tableResult),
           });
           childCount += 1;
         }
@@ -297,6 +303,7 @@ export const serializeResultIter = async <T extends Result>(
           nextResults.push({
             value,
             type: columnResult.type.cellType,
+            meta: columnResult.meta,
           });
         }
         typeArray.push(columnResult.value.length);
@@ -317,6 +324,7 @@ export const serializeResultIter = async <T extends Result>(
             : {
                 type: { kind: 'string' },
                 value: tableResult.type.indexName,
+                meta: undefined,
               }
         );
         nextResults.push(
@@ -325,12 +333,14 @@ export const serializeResultIter = async <T extends Result>(
             : {
                 type: { kind: 'string' },
                 value: tableResult.type.delegatesIndexTo,
+                meta: undefined,
               }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
             type: { kind: 'string' },
             value: columnName,
+            meta: undefined,
           });
         }
 
@@ -348,6 +358,7 @@ export const serializeResultIter = async <T extends Result>(
               cellType,
               indexedBy: 'number',
             },
+            meta: columnToMeta(value),
           });
         }
         break;
@@ -403,6 +414,7 @@ export const serializeResultIter = async <T extends Result>(
         nextResults.push({
           value: rowResult.type.rowIndexName,
           type: { kind: 'string' },
+          meta: undefined,
         });
 
         for (let i = 0; i < rowResult.value.length; i++) {
@@ -414,12 +426,14 @@ export const serializeResultIter = async <T extends Result>(
           nextResults.push({
             value: cellName,
             type: { kind: 'string' },
+            meta: undefined,
           });
 
           const value = rowResult.value[i];
           nextResults.push({
             value,
             type,
+            meta: undefined,
           });
         }
         break;
@@ -591,6 +605,7 @@ const numberToTimeSpecificity = (number: number): Specificity => {
   }
 };
 
+// eslint-disable-next-line complexity
 const deserializeResultIter = (
   data: Uint8Array,
   typeDescription: bigint[],
@@ -609,7 +624,11 @@ const deserializeResultIter = (
 
   switch (resultType) {
     case ResultType.Boolean: {
-      return { type: { kind: 'boolean' }, value: data[offset] !== 0 };
+      return {
+        type: { kind: 'boolean' },
+        value: data[offset] !== 0,
+        meta: undefined,
+      };
     }
 
     case ResultType.Fraction: {
@@ -626,6 +645,7 @@ const deserializeResultIter = (
       return {
         type: { kind: 'number' },
         value: deciNumber,
+        meta: undefined,
       };
     }
 
@@ -633,13 +653,17 @@ const deserializeResultIter = (
       const specificity = numberToTimeSpecificity(Number(data[offset]));
       const value =
         length === 1 ? undefined : readInt64FromUint8Array(data, offset + 1);
-      return { type: { kind: 'date', date: specificity }, value };
+      return {
+        type: { kind: 'date', date: specificity },
+        value,
+        meta: undefined,
+      };
     }
 
     case ResultType.String: {
       const buffer = data.slice(offset, offset + length);
       const value = new TextDecoder().decode(buffer);
-      return { type: { kind: 'string' }, value };
+      return { type: { kind: 'string' }, value, meta: undefined };
     }
 
     case ResultType.Float: {
@@ -670,8 +694,7 @@ const deserializeResultIter = (
           for (let i = 0; i < itemCount; i++) {
             const newOffset = offset + i * itemLength;
             const typeDescriptionSlice = [...typeDescription.slice(3)];
-            typeDescriptionSlice[0] =
-              typeDescriptionSlice[0] & ((BigInt(1) << BigInt(63)) - BigInt(1));
+            typeDescriptionSlice[0] &= (BigInt(1) << BigInt(63)) - BigInt(1);
             typeDescriptionSlice[1] = BigInt(newOffset);
             typeDescriptionSlice[2] = BigInt(itemLength);
 
@@ -696,6 +719,7 @@ const deserializeResultIter = (
           indexedBy: 'number',
         },
         value: generator,
+        meta: columnToMeta(generator),
       };
     }
 
@@ -734,6 +758,7 @@ const deserializeResultIter = (
           },
         },
         value: [start, end],
+        meta: undefined,
       };
     }
 
@@ -793,6 +818,7 @@ const deserializeResultIter = (
           indexName,
         },
         value: columns.map((col) => col.value),
+        meta: columnToMeta(columns[0].value),
       };
     }
 
@@ -840,6 +866,7 @@ const deserializeResultIter = (
           rowIndexName,
         },
         value: rowCells,
+        meta: undefined,
       };
     }
 
@@ -892,11 +919,12 @@ const deserializeResultIter = (
           },
         },
         value: undefined,
+        meta: undefined,
       };
     }
 
     case ResultType.Pending: {
-      return { type: { kind: 'pending' }, value: undefined };
+      return { type: { kind: 'pending' }, value: undefined, meta: undefined };
     }
   }
 };

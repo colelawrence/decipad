@@ -1229,6 +1229,9 @@ ${'' /* Get capital needed */}
 
       expect(await p).toMatchInlineSnapshot(`
         Object {
+          "meta": Object {
+            "labels": Promise {},
+          },
           "type": Type {
             "anythingness": false,
             "atParentIndex": null,
@@ -1383,6 +1386,9 @@ describe('column assignment integration', () => {
       T3`)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": Promise {},
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -1558,6 +1564,7 @@ describe('column assignment integration', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -1611,6 +1618,9 @@ describe('previous', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
@@ -1707,6 +1717,9 @@ describe('previous', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
@@ -1803,6 +1816,9 @@ describe('previous', () => {
       `)
     ).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": undefined,
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
@@ -1903,6 +1919,9 @@ describe('multi-dim ops', () => {
 
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": Promise {},
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
@@ -2042,6 +2061,9 @@ describe('multi-dim ops', () => {
 
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "meta": Object {
+          "labels": Promise {},
+        },
         "type": Type {
           "anythingness": false,
           "atParentIndex": 2,

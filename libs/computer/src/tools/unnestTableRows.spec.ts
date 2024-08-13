@@ -177,23 +177,26 @@ describe('unnestTableRows', () => {
         ?.result as Result.Result<'column'>;
       expect(await computer.explainDimensions$.get(result))
         .toMatchInlineSnapshot(`
-              Array [
-                Object {
-                  "dimensionLength": 2,
-                  "indexedBy": undefined,
-                  "labels": undefined,
-                },
-                Object {
-                  "dimensionLength": 3,
-                  "indexedBy": "Table",
-                  "labels": Array [
-                    "10",
-                    "20",
-                    "30",
-                  ],
-                },
-              ]
-          `);
+        Array [
+          Object {
+            "dimensionLength": 2,
+            "indexedBy": undefined,
+            "labels": Array [
+              "100",
+              "200",
+            ],
+          },
+          Object {
+            "dimensionLength": 3,
+            "indexedBy": "Table",
+            "labels": Array [
+              "10",
+              "20",
+              "30",
+            ],
+          },
+        ]
+      `);
     });
 
     it('can turn nested matrices to a tabular data format', async () => {
@@ -223,19 +226,19 @@ describe('unnestTableRows', () => {
       }
 
       expect(aTable.toString()).toMatchInlineSnapshot(`
-              ".-------------------------------.
-              |            Matrix             |
-              |-------------------------------|
-              | (no dimension) | Table |      |
-              |----------------|-------|------|
-              |              0 | 10    | 1000 |
-              |              0 | 20    | 2000 |
-              |              0 | 30    | 3000 |
-              |              1 | 10    | 2000 |
-              |              1 | 20    | 4000 |
-              |              1 | 30    | 6000 |
-              '-------------------------------'"
-          `);
+        ".-------------------------------.
+        |            Matrix             |
+        |-------------------------------|
+        | (no dimension) | Table |      |
+        |----------------|-------|------|
+        | 100            | 10    | 1000 |
+        | 100            | 20    | 2000 |
+        | 100            | 30    | 3000 |
+        | 200            | 10    | 2000 |
+        | 200            | 20    | 4000 |
+        | 200            | 30    | 6000 |
+        '-------------------------------'"
+      `);
     });
   });
 
@@ -282,5 +285,51 @@ describe('unnestTableRows', () => {
             },
           ]
       `);
+  });
+
+  it('can provide dimension information for rendering product of 2 columns inside a table', async () => {
+    const computer = new Computer({
+      initialProgram: getIdentifiedBlocks(
+        `Table1 = {
+            Label1 = ["a", "b", "c"]
+            Xs = [10, 20, 30]
+          }`,
+        `Table2 = {
+            Label2 = ["d", "e", "f"]
+            Ys = [40, 50, 60]
+            Matrix = Table1.Xs * Ys
+          }`,
+        `Table2.Matrix`
+      ),
+    });
+    await timeout(100);
+
+    const explanation = await computer.explainDimensions$.get(
+      getDefined(computer.getBlockIdResult$.get('block-2'))
+        .result as Result.Result<'materialized-column'>
+    );
+
+    expect(explanation).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "dimensionLength": 3,
+          "indexedBy": "Table2",
+          "labels": Array [
+            "d",
+            "e",
+            "f",
+          ],
+        },
+        Object {
+          "dimensionLength": 3,
+          "indexedBy": "Table1",
+          "labels": Array [
+            "a",
+            "b",
+            "c",
+          ],
+        },
+      ]
+    `);
   });
 });

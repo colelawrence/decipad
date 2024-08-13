@@ -1,10 +1,10 @@
+/* eslint-disable no-restricted-imports */
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
-import { nanoid } from 'nanoid';
 import type { Observable, Subscription } from 'rxjs';
 import isEmpty from 'lodash/isEmpty';
 import { createWorkerClient } from '@decipad/remote-computer-worker/client';
-import type {
+import {
   Computer,
   ComputeDeltaRequest,
   IdentifiedError,
@@ -13,6 +13,7 @@ import type {
   ProgramBlock,
   ResultType,
   NotebookResultStream,
+  DimensionExplanation,
 } from '@decipad/computer-interfaces';
 import { createComputerWorker } from '../worker/createComputerWorker';
 import { remoteListenerHelper } from './remoteListenerHelper';
@@ -25,7 +26,7 @@ import {
   AST,
 } from '@decipad/language-interfaces';
 import { listenerHelper } from '@decipad/listener-helper';
-import { identity, type PromiseOrType } from '@decipad/utils';
+import { identity, PromiseOrType, getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { getExprRef } from '@decipad/computer';
 import {
@@ -61,17 +62,21 @@ import { remotePlainSubject } from './remotePlainSubject';
 import { createSubscriptionCentral } from './SubscriptionCentral';
 import { decodeRemoteNotebookResults } from './decodeRemoteNotebookResults';
 import { PROTOCOL_VERSION } from '../constants';
+import { deserializeType } from '@decipad/language';
+import { linearizeType } from 'libs/language-types/src/Dimension';
+import zip from 'lodash.zip';
+import { getDeepLengths } from '@decipad/computer-utils';
 
 const unknownResult: ResultType = {
   type: { kind: 'anything' },
   value: Unknown,
+  meta: undefined,
 };
 
 const RemoteComputerClientSymbol = Symbol('RemoteComputerClient');
 
 const initialNotebookResults: NotebookResults = {
   blockResults: {},
-  indexLabels: new Map(),
 };
 
 const areNotebookResultsEmpty = (results: NotebookResults) =>
@@ -277,15 +282,16 @@ export const createRemoteComputerClientFromWorker = (
       const parsed = this.#latestProgram.get(blockId);
       return parsed?.definesVariable;
     }
-    getVarBlockId(varName: string): string | undefined {
+    getVarBlock(varName: string): ProgramBlock | undefined {
       const isColumnName = varName.includes('.');
       if (isColumnName) {
         for (const p of this.#latestProgram.values()) {
           if (
             p.definesTableColumn &&
-            p.definesTableColumn.join('.') === varName
+            p.definesTableColumn.join('.') === varName &&
+            p
           ) {
-            return p.id;
+            return p;
           }
         }
       }
@@ -299,16 +305,20 @@ export const createRemoteComputerClientFromWorker = (
           (block.definesVariable === identifier ||
             getExprRef(block.id) === identifier)
         ) {
-          return block.id;
+          return block;
         }
         if (
           block.definesTableColumn &&
           block.definesTableColumn.join('.') === varName
         ) {
-          return block.id;
+          return block;
         }
       }
       return undefined;
+    }
+
+    getVarBlockId(varName: string): string | undefined {
+      return this.getVarBlock(varName)?.id;
     }
     expressionType = calling<'expressionType'>('expressionType');
     pushExternalDataUpdate(values: [string, Result.Result][]): Promise<void> {
@@ -425,6 +435,11 @@ export const createRemoteComputerClientFromWorker = (
       (results, blockId: string) => results.blockResults[blockId]
     );
 
+    getVarResult(varName: string) {
+      const blockId = this.getVarBlockId(varName);
+      return blockId ? this.getBlockIdResult(blockId) : undefined;
+    }
+
     getVarResult$ = listenerHelper(this.results, (results, varName: string) => {
       const blockId = this.getVarBlockId(varName);
       return blockId ? results.blockResults[blockId] : undefined;
@@ -520,11 +535,63 @@ export const createRemoteComputerClientFromWorker = (
       ([blockId]) => blockId ?? ''
     );
 
-    explainDimensions$ = remoteListenerHelper(
-      'explainDimensions$',
-      subscriptionCentral,
-      undefined,
-      () => nanoid()
+    explainDimensions$ = listenerHelper(
+      this.results,
+      async (
+        _,
+        result: Result.Result<'materialized-column'> | Result.Result<'column'>
+      ): Promise<DimensionExplanation[] | undefined> => {
+        const deserialisedType = deserializeType(result.type);
+        const dimensions = linearizeType(deserialisedType);
+        dimensions.pop(); // remove tip
+
+        const deepLengths = await getDeepLengths(result.value);
+        if (dimensions.length !== deepLengths.length) {
+          console.warn(
+            'Mismatched dimensions and deep lengths',
+            dimensions.length,
+            deepLengths.length
+          );
+          return undefined;
+        }
+
+        let labels: string[][] | undefined = await result.meta?.()?.labels;
+        if (!labels?.length || labels.length !== dimensions.length) {
+          labels = undefined;
+        }
+
+        labels ??= getDefined(
+          (
+            await Promise.all(
+              dimensions
+                .map((d) => d.indexedBy)
+                .filter(Boolean)
+                .map(
+                  async (indexName) =>
+                    this.getVarResult(getDefined(indexName))?.result?.meta?.()
+                      ?.labels
+                )
+            )
+          ).reduce((acc, l) => acc?.concat(l ?? []), [])
+        );
+
+        return zip(dimensions, deepLengths, labels).map(
+          ([type, dimensionLength, thisDimLabels]) => {
+            const { indexedBy: tableAbstractName } = type ?? {};
+            const tableUserBlock =
+              (tableAbstractName && this.getVarBlock(tableAbstractName)) ||
+              undefined;
+            const indexedBy =
+              tableUserBlock?.definesVariable ?? tableAbstractName ?? undefined;
+
+            return {
+              indexedBy,
+              labels: thisDimLabels,
+              dimensionLength: dimensionLength ?? 0,
+            } satisfies DimensionExplanation;
+          }
+        );
+      }
     );
 
     _terminate = calling<'terminate'>('terminate');

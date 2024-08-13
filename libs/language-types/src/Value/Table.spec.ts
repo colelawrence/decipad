@@ -5,13 +5,18 @@ import { Column } from './Column';
 import { Scalar } from './Scalar';
 
 describe('Table', () => {
+  const emptyMeta = () => ({
+    labels: undefined,
+  });
+
   it('can materialize columns', async () => {
     const table = Table.fromNamedColumns(
       [
-        Column.fromValues([N(1), N(2)].map(Scalar.fromValue)),
-        Column.fromValues(['a', 'b'].map(Scalar.fromValue)),
+        Column.fromValues([N(1), N(2)].map(Scalar.fromValue), emptyMeta),
+        Column.fromValues(['a', 'b'].map(Scalar.fromValue), emptyMeta),
       ],
-      ['Col1', 'Col2']
+      ['Col1', 'Col2'],
+      undefined
     );
 
     const colGens = await table.getData();
@@ -42,10 +47,11 @@ describe('Table', () => {
   it('can retrieve columns', async () => {
     const table = Table.fromNamedColumns(
       [
-        Column.fromValues([N(1), N(2)].map(Scalar.fromValue)),
-        Column.fromValues(['a', 'b'].map(Scalar.fromValue)),
+        Column.fromValues([N(1), N(2)].map(Scalar.fromValue), emptyMeta),
+        Column.fromValues(['a', 'b'].map(Scalar.fromValue), emptyMeta),
       ],
-      ['Col1', 'Col2']
+      ['Col1', 'Col2'],
+      undefined
     );
     const { columns } = table;
     expect(

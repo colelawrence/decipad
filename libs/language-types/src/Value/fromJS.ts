@@ -51,6 +51,7 @@ export const fromJS = (
   if (typeof thing === 'function') {
     return Column.fromGenerator(
       thing as ValueGeneratorFunction,
+      undefined,
       `fromJS(${thing.toString()})`
     );
   }
@@ -61,10 +62,11 @@ export const fromJS = (
     return Scalar.fromValue(thing);
   }
   if (thing.length === 0) {
-    return Column.fromValues([], defaultValue, []);
+    return Column.fromValues([], undefined, defaultValue, []);
   }
   return Column.fromValues(
     thing.map((t) => fromJS(t, defaultValue)),
+    undefined,
     defaultValue
   );
 };

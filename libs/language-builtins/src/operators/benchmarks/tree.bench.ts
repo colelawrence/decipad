@@ -20,6 +20,7 @@ const generator = <T>(col: Array<T>) => {
 };
 
 describe('tree', () => {
+  const emptyMeta = () => ({ labels: undefined });
   let context: BuiltinContextUtils;
 
   const rowCount = 500;
@@ -27,38 +28,46 @@ describe('tree', () => {
   const sourceTableOfStrings = Value.Table.fromMapping({
     Column1: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column2: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column3: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column4: Value.LeanColumn.fromGeneratorAndType(
       generator(randomWords(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
   });
 
   const sourceTableOfNumbers = Value.Table.fromMapping({
     Column1: Value.LeanColumn.fromGeneratorAndType(
       generator(randomNumbers(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column2: Value.LeanColumn.fromGeneratorAndType(
       generator(randomNumbers(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column3: Value.LeanColumn.fromGeneratorAndType(
       generator(randomNumbers(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
     Column4: Value.LeanColumn.fromGeneratorAndType(
       generator(randomNumbers(rowCount)),
-      { kind: 'string' }
+      { kind: 'string' },
+      emptyMeta
     ),
   });
 

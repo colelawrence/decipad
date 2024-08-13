@@ -8,6 +8,8 @@ import { tree } from './tree';
 import { Unknown } from '@decipad/language-interfaces';
 
 describe('tree', () => {
+  const emptyMeta = () => ({ labels: undefined });
+
   it('needs a table as first arg', async () => {
     await expect(
       tree.fnValuesNoAutomap?.([], [], makeContext(), [])
@@ -50,7 +52,8 @@ describe('tree', () => {
         [
           Value.Table.fromMapping({
             a: Value.Column.fromValues(
-              [1, 2, 3].map(Value.NumberValue.fromValue)
+              [1, 2, 3].map(Value.NumberValue.fromValue),
+              emptyMeta
             ),
           }),
         ],
@@ -89,7 +92,8 @@ describe('tree', () => {
         [
           Value.Table.fromMapping({
             a: Value.Column.fromValues(
-              [1, 2, 2, 1].map(Value.NumberValue.fromValue)
+              [1, 2, 2, 1].map(Value.NumberValue.fromValue),
+              emptyMeta
             ),
           }),
         ],
@@ -128,10 +132,12 @@ describe('tree', () => {
         [
           Value.Table.fromMapping({
             a: Value.Column.fromValues(
-              [1, 3, 2, 3, 2, 3].map(Value.NumberValue.fromValue)
+              [1, 3, 2, 3, 2, 3].map(Value.NumberValue.fromValue),
+              emptyMeta
             ),
             b: Value.Column.fromValues(
-              [1, 3, 2, 3, 2, 3].map(Value.NumberValue.fromValue)
+              [1, 3, 2, 3, 2, 3].map(Value.NumberValue.fromValue),
+              emptyMeta
             ),
           }),
         ],
@@ -183,17 +189,20 @@ describe('tree', () => {
             a: Value.Column.fromValues(
               [1, 4, 2, 3, 2, 4, 1, 3, 1, 1, 4, 3, 5, 5].map(
                 Value.NumberValue.fromValue
-              )
+              ),
+              emptyMeta
             ),
             b: Value.Column.fromValues(
               [4, 1, 2, 3, 2, 1, 2, 3, 2, 1, 4, 2, 5, 2].map(
                 Value.NumberValue.fromValue
-              )
+              ),
+              emptyMeta
             ),
             c: Value.Column.fromValues(
               [3, 1, 2, 2, 1, 2, 3, 1, 5, 5, 1, 4, 3, 4].map(
                 Value.NumberValue.fromValue
-              )
+              ),
+              emptyMeta
             ),
           }),
         ],

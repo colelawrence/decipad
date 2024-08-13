@@ -24,6 +24,10 @@ const testLazyOp = async (...args: Parameters<typeof createLazyOperation>) =>
 
 const toAdd = jsCol([0, 1, 2]);
 
+const emptyMeta = () => ({
+  labels: undefined,
+});
+
 describe.each(
   Object.entries({
     Column: jsCol([1, 2, 3]),
@@ -32,7 +36,8 @@ describe.each(
         [0n, 0n, 0n],
         [1n, 2n, 3n],
       ]),
-      1
+      1,
+      emptyMeta
     ),
     'SwappedDimensions (doing nothing because 1D)': createSwappedDimensions(
       jsCol([1, 2, 3]),
@@ -42,13 +47,15 @@ describe.each(
       makeContext(),
       addOne,
       [toAdd],
-      [t.column(t.number())]
+      [t.column(t.number())],
+      emptyMeta
     ),
     'createLazyOperation with named dims': testLazyOp(
       makeContext(),
       addOne,
       [toAdd],
-      [t.column(t.number(), 'X')]
+      [t.column(t.number(), 'X')],
+      emptyMeta
     ),
     ConcatenatedColumn: createConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
     ColumnSlice: createColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
@@ -161,7 +168,8 @@ describe.each(
           [4n, 5n, 6n],
         ],
       ]),
-      1
+      1,
+      emptyMeta
     ),
     SwappedDimensions: createSwappedDimensions(
       jsCol([
@@ -175,25 +183,29 @@ describe.each(
       makeContext(),
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number()))]
+      [t.column(t.column(t.number()))],
+      emptyMeta
     ),
     'createLazyOperation with named dims': testLazyOp(
       makeContext(),
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 'X'), 'Y')]
+      [t.column(t.column(t.number(), 'X'), 'Y')],
+      emptyMeta
     ),
     'createLazyOperation with named dims (one unnamed)': testLazyOp(
       makeContext(),
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 'X'))]
+      [t.column(t.column(t.number(), 'X'))],
+      emptyMeta
     ),
     'createLazyOperation with named dims (other unnamed)': testLazyOp(
       makeContext(),
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number()), 'X')]
+      [t.column(t.column(t.number()), 'X')],
+      emptyMeta
     ),
   })
 )('Two dimensional tests: %s', (_name, lazyThing) => {

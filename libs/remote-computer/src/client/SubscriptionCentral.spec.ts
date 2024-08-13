@@ -33,23 +33,13 @@ describe('SubscriptionCentral', () => {
     });
 
     const unsub1 = await central
-      .subscribe(
-        'results$',
-        { blockResults: {}, indexLabels: new Map() },
-        [],
-        () => ''
-      )
+      .subscribe('results$', { blockResults: {} }, [], () => '')
       .subscribe(() => {});
 
     expect(remoteSubscriptionCounts.get('results$')).toBe(1);
 
     const unsub2 = await central
-      .subscribe(
-        'results$',
-        { blockResults: {}, indexLabels: new Map() },
-        [],
-        () => ''
-      )
+      .subscribe('results$', { blockResults: {} }, [], () => '')
       .subscribe(() => {});
 
     expect(remoteSubscriptionCounts.get('results$')).toBe(1);

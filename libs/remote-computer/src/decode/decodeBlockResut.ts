@@ -1,16 +1,20 @@
 // eslint-disable-next-line no-restricted-imports
-
+import isArrayBuffer from 'lodash/isArrayBuffer';
 import type {
   BlockResult,
   IdentifiedError,
 } from '@decipad/computer-interfaces';
+import type { Result, Parser } from '@decipad/language-interfaces';
 import { decodeType } from '@decipad/remote-computer-codec';
 import type { ClientWorkerContext } from '@decipad/remote-computer-worker/client';
-import { decodeRemoteValue } from '@decipad/remote-computer-worker/client';
+import {
+  decodeMetaLabels,
+  decodeRemoteValue,
+} from '@decipad/remote-computer-worker/client';
 import type { SerializedBlockResult } from '../types/serializedTypes';
-import type { Parser } from '@decipad/language-interfaces';
 import { decodeMooToken } from './decodeMooToken';
 import { decodeBracketError } from './decodeBracketError';
+import { debug } from '../debug';
 
 export const decodeBlockResult = async (
   context: ClientWorkerContext,
@@ -20,9 +24,9 @@ export const decodeBlockResult = async (
     return blockResult;
   }
   if (blockResult?.type === 'computer-result') {
-    const { type, value } = blockResult.result;
+    const { type, value, meta: inlinedMeta } = blockResult.result;
     const [decodedType] = decodeType(new DataView(type), 0);
-    const [resultValue] = await decodeRemoteValue(
+    const [resultValue, , valueId] = await decodeRemoteValue(
       context,
       new DataView(value),
       0,
@@ -34,6 +38,38 @@ export const decodeBlockResult = async (
       result: {
         type: decodedType,
         value: resultValue,
+        meta: (): Result.ResultMetadata => {
+          if (inlinedMeta != null) {
+            return {
+              labels: Promise.resolve(decodeMetaLabels(inlinedMeta)),
+            };
+          }
+          if (!valueId) {
+            return undefined;
+          }
+
+          debug('going to call RPC for getting meta for value', valueId);
+          return {
+            labels: context.rpc
+              .call('getMeta', { valueId })
+              .then((meta) => {
+                if (!meta) {
+                  return [];
+                }
+                if (!isArrayBuffer(meta)) {
+                  throw new TypeError(
+                    'Expected ArrayBuffer as remote `getValue()` return type'
+                  );
+                }
+                return decodeMetaLabels(meta);
+              })
+              .catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error('Error getting meta', error);
+                return [];
+              }),
+          };
+        },
       },
     };
   }

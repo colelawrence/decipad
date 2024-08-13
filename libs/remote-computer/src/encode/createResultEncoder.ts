@@ -9,6 +9,7 @@ import type { RemoteValueStore } from '@decipad/remote-computer-worker/client';
 import { createValueEncoder } from '@decipad/remote-computer-worker/worker';
 import type { SerializedResult } from '../types/serializedTypes';
 import { WithEncoded } from '../types/WithEncoded';
+import { encodeResultMeta } from './encodeResultMeta';
 
 export const createResultEncoder = (store: RemoteValueStore) => {
   const encodeValue = createValueEncoder(store);
@@ -24,7 +25,8 @@ export const createResultEncoder = (store: RemoteValueStore) => {
     const typeLength = encodeType(typeBuffer, 0, result.type);
     return {
       type: typeBuffer.seal(typeLength),
-      value: await encodeValue(result),
+      value: await encodeValue(undefined, result),
+      meta: await encodeResultMeta(result.meta),
     };
   };
 };

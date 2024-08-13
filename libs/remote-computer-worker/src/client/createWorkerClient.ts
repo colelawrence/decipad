@@ -111,7 +111,6 @@ export const createWorkerClient = <
       const newRefCount = (context.refCounter.get(valueId) ?? 0) - 1;
       if (newRefCount <= 0) {
         context.refCounter.delete(valueId);
-        rpc.call('releaseValue', { valueId }, false);
       } else {
         context.refCounter.set(valueId, newRefCount);
       }

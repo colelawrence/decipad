@@ -40,32 +40,44 @@ export const resultToValue = (result: Result.Result): Value.Value => {
       const tableValue = value as Result.ResultMaterializedTable;
       const tableType = type as MaterializedTable;
       const columns = tableType.columnTypes.map((columnType, index) => {
+        const columnValue = tableValue[index];
         return resultToValue({
           type: {
             kind: 'materialized-column',
             indexedBy: tableType.columnNames[0],
             cellType: columnType,
           },
-          value: tableValue[index],
+          value: columnValue,
+          meta: result.meta,
         });
       });
-      return Table.fromNamedColumns(columns, tableType.columnNames);
+      return Table.fromNamedColumns(
+        columns,
+        tableType.columnNames,
+        result.meta
+      );
     }
 
     case 'table': {
       const tableValue = value as Result.ResultTable;
       const tableType = type as SerializedTypes.Table;
       const columns = tableType.columnTypes.map((columnType, index) => {
+        const columnValue = tableValue[index];
         return resultToValue({
           type: {
             kind: 'column',
             indexedBy: tableType.columnNames[0],
             cellType: columnType,
           },
-          value: tableValue[index],
+          value: columnValue,
+          meta: result.meta,
         });
       });
-      return Table.fromNamedColumns(columns, tableType.columnNames);
+      return Table.fromNamedColumns(
+        columns,
+        tableType.columnNames,
+        result.meta
+      );
     }
 
     case 'column':
@@ -76,7 +88,11 @@ export const resultToValue = (result: Result.Result): Value.Value => {
 
       if (columnValue == null) {
         const defaultV = defaultValue(type);
-        return Column.fromValues([fromJS(0, defaultV)], defaultV);
+        return Column.fromValues(
+          [fromJS(0, defaultV)],
+          () => result.meta as Result.ResultMetadataColumn,
+          defaultV
+        );
       }
 
       const columnType = type as SerializedTypes.Column;
@@ -95,6 +111,7 @@ export const resultToValue = (result: Result.Result): Value.Value => {
       return LeanColumn.fromGeneratorAndType(
         columnGen,
         columnType.cellType,
+        () => result.meta as Result.ResultMetadataColumn,
         `resultToValue<column<${columnType.cellType}>>`
       );
     }

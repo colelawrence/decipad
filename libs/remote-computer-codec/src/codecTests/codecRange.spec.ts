@@ -21,7 +21,7 @@ describe('encodes and decodes ranges', () => {
     const view = new Value.GrowableDataView(buffer);
     const now = BigInt(Date.now());
     const dateRange = [now, now + 1000n];
-    await encodeDateRange(view, 0, dateRange);
+    await encodeDateRange(view, 0, dateRange, undefined);
     const [decoded] = await decodeDateRange(view, 0);
     expect(decoded).toMatchObject(dateRange);
   });
@@ -38,7 +38,7 @@ describe('encodes and decodes ranges', () => {
     const buffer = createResizableArrayBuffer(2);
     const view = new Value.GrowableDataView(buffer);
     const range = [N(32, 44), N(21, 3)];
-    await encodeNumberRange(view, 0, range);
+    await encodeNumberRange(view, 0, range, undefined);
     const [decoded] = await decodeNumberRange(view, 0);
     expect(decoded).toMatchObject(range);
   });

@@ -6,12 +6,18 @@ export interface TBaseNotificationParams<TMeta extends object> {
   error?: string;
   loading?: boolean;
   result?: Result.AnyResult;
+  blockId?: string;
   [key: string]: unknown;
+}
+
+export interface SerializedResultMetadata {
+  labels?: Awaited<Result.ResultMetadataColumn['labels']>;
 }
 
 export type SerializedResult = {
   type: SerializedType;
   value: ArrayBuffer;
+  meta: undefined | SerializedResultMetadata;
 };
 
 export type TSerializedNotificationParams<TMeta extends object> = Omit<
@@ -21,4 +27,9 @@ export type TSerializedNotificationParams<TMeta extends object> = Omit<
   result?: SerializedResult;
 };
 
-export type RemoteValueStore = Map<string, Result.Result>;
+export interface RemoteValueStore {
+  set(blockId: string | undefined, key: string, value: Result.Result): void;
+  get(key: string): Result.Result | undefined;
+  delete(key: string): void;
+}
+// Map<string, Result.Result>;

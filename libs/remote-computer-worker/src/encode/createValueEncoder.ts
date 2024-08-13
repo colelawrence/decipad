@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { nanoid } from 'nanoid';
 import type { Result } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
@@ -9,11 +10,13 @@ import { encodeString, valueEncoder } from '@decipad/remote-computer-codec';
 
 export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
   const recursiveSerializeRemoteValue = async (
+    blockId: string | undefined,
     buffer: DataView,
     offset: number,
     result: Result.Result
   ): Promise<number> => {
     let { type, value } = result;
+    const { meta } = result;
     if (value == null) {
       value = Unknown;
       type = { kind: 'anything' };
@@ -31,21 +34,24 @@ export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
       case 'range':
       case 'string':
       case 'date':
-        return valueEncoder(type)(buffer, offset, value);
+        return valueEncoder(type)(buffer, offset, value, meta);
       // these following types are held in the remoteValueStore
       case 'table':
       case 'materialized-table':
       case 'materialized-column':
       case 'column': {
         const valueId = nanoid();
-        remoteValueStore.set(valueId, { type, value });
+        remoteValueStore.set(blockId, valueId, { type, value, meta });
         // just send the id of the value so that it can be streamed later
         return encodeString(buffer, offset, valueId);
       }
     }
   };
 
-  return async (result: Result.Result): Promise<ArrayBuffer> => {
+  return async (
+    blockId: string | undefined,
+    result: Result.Result
+  ): Promise<ArrayBuffer> => {
     const targetBuffer = new Value.GrowableDataView(
       new ArrayBuffer(initialBufferSize, {
         maxByteLength: maxBufferSize,
@@ -53,6 +59,7 @@ export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
       { pageSize }
     );
     const finalOffset = await recursiveSerializeRemoteValue(
+      blockId,
       targetBuffer,
       0,
       result

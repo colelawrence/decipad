@@ -36,5 +36,6 @@ export const applyTableFunctions = async (
         return column;
       })
     ),
-    table.columnNames
+    table.columnNames,
+    table.meta
   );

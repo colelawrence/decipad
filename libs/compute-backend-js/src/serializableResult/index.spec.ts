@@ -11,6 +11,7 @@ describe('serializeResult', () => {
     const resultTrue = await serializeResult({
       type: { kind: 'boolean' },
       value: true,
+      meta: undefined,
     });
 
     expect(resultTrue).toEqual({
@@ -23,6 +24,7 @@ describe('serializeResult', () => {
     const resultTrue = await serializeResult({
       type: { kind: 'boolean' },
       value: false,
+      meta: undefined,
     });
 
     expect(resultTrue).toEqual({
@@ -35,6 +37,7 @@ describe('serializeResult', () => {
     const one = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+      meta: undefined,
     });
 
     expect(one).toEqual({
@@ -47,6 +50,7 @@ describe('serializeResult', () => {
     const oneThird = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 3n, s: 1 }),
+      meta: undefined,
     });
 
     expect(oneThird).toEqual({
@@ -59,6 +63,7 @@ describe('serializeResult', () => {
     const zero = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
+      meta: undefined,
     });
     expect(zero).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -70,6 +75,7 @@ describe('serializeResult', () => {
     const result = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1000n, d: 1n, s: 1n }),
+      meta: undefined,
     });
     expect(result).toEqual({
       type: new BigUint64Array([11n, 0n, 11n]),
@@ -81,6 +87,7 @@ describe('serializeResult', () => {
     const result = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 54_320n, d: 1n, s: 1n }),
+      meta: undefined,
     });
     expect(result).toEqual({
       type: new BigUint64Array([11n, 0n, 12n]),
@@ -92,6 +99,7 @@ describe('serializeResult', () => {
     const negativeOne = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      meta: undefined,
     });
     expect(negativeOne).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -100,6 +108,7 @@ describe('serializeResult', () => {
     const negativeDenominator = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: 1n, infinite: false }),
+      meta: undefined,
     });
     expect(negativeDenominator).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -108,6 +117,7 @@ describe('serializeResult', () => {
     const negativeBoth = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: -1n, s: -1n, infinite: false }),
+      meta: undefined,
     });
     expect(negativeBoth).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -116,6 +126,7 @@ describe('serializeResult', () => {
     const negativeSign = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      meta: undefined,
     });
     expect(negativeSign).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -127,6 +138,7 @@ describe('serializeResult', () => {
     const positiveInfinity = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ infinite: true }),
+      meta: undefined,
     });
     expect(positiveInfinity).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -135,6 +147,7 @@ describe('serializeResult', () => {
     const negativeInfinity = await serializeResult({
       type: { kind: 'number' },
       value: new DeciNumber({ s: -1n, infinite: true }),
+      meta: undefined,
     });
     expect(negativeInfinity).toEqual({
       type: new BigUint64Array([11n, 0n, 10n]),
@@ -150,6 +163,7 @@ describe('serializeResult', () => {
         d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
         s: 1n,
       }),
+      meta: undefined,
     });
 
     expect(result).toMatchSnapshot();
@@ -159,6 +173,7 @@ describe('serializeResult', () => {
     const result = await serializeResult({
       type: { kind: 'string' },
       value: 'Hello, world!',
+      meta: undefined,
     });
 
     expect(result).toEqual({
@@ -171,6 +186,7 @@ describe('serializeResult', () => {
     const result = await serializeResult({
       type: { kind: 'date', date: 'day' },
       value: BigInt(new Date('2024-01-01T00:00:00.000Z').getTime()),
+      meta: undefined,
     });
 
     const data = new Uint8Array(9);
@@ -187,6 +203,7 @@ describe('serializeResult', () => {
     const result = await serializeResult({
       type: { kind: 'date', date: 'day' },
       value: undefined,
+      meta: undefined,
     });
 
     expect(result).toEqual({
@@ -202,11 +219,12 @@ describe('serializeResult', () => {
         indexedBy: 'number',
         cellType: { kind: 'boolean' },
       },
-      value: async function* () {
+      async *value() {
         yield true;
         yield false;
         yield true;
       },
+      meta: undefined,
     });
 
     expect(column).toEqual({
@@ -225,11 +243,12 @@ describe('serializeResult', () => {
         indexedBy: 'number',
         cellType: { kind: 'boolean' },
       },
-      value: async function* () {
+      async *value() {
         yield true;
         yield false;
         yield true;
       },
+      meta: undefined,
     });
 
     expect(chunk(Array.from(result.type), 3)).toEqual([
@@ -254,6 +273,7 @@ describe('serializeResult', () => {
         yield 'world';
         yield '!';
       },
+      meta: undefined,
     });
 
     expect(column).toEqual({
@@ -290,6 +310,7 @@ describe('serializeResult', () => {
           yield true;
         };
       },
+      meta: undefined,
     });
 
     expect(column).toEqual({
@@ -323,6 +344,7 @@ describe('serializeResult', () => {
           yield 'Pad';
         };
       },
+      meta: undefined,
     });
 
     expect(chunk(Array.from(column.type), 3)).toEqual([
@@ -374,6 +396,7 @@ describe('serializeResult', () => {
         };
       };
     },
+    meta: undefined,
   };
 
   it('should serialize a 3D column of strings with varying lengths', async () => {
@@ -432,6 +455,7 @@ describe('serializeResult', () => {
           yield 'Very long string here';
         },
       ],
+      meta: undefined,
     };
 
     const serialized = await serializeResult(table);
@@ -465,6 +489,7 @@ describe('serializeResult', () => {
         cellType: { kind: 'string' },
       },
       value: ['Hello', 'there', 'world', '!'],
+      meta: undefined,
     });
 
     expect(column).toEqual({
@@ -499,6 +524,7 @@ describe('serializeResult', () => {
         ['Short', 'Longer string'],
         ['Medium length', 'Very long string here'],
       ],
+      meta: undefined,
     };
 
     const serialized = await serializeResult(table);
@@ -528,6 +554,7 @@ describe('serializeResult', () => {
     const range = await serializeResult({
       type: { kind: 'range', rangeOf: { kind: 'number' } },
       value: [1n, 4n],
+      meta: undefined,
     });
 
     expect(range).toEqual({
@@ -545,6 +572,7 @@ describe('serializeResult', () => {
         new DeciNumber({ n: 1n, d: 1n, s: 1n }),
         new DeciNumber({ n: 4n, d: 1n, s: 1n }),
       ],
+      meta: undefined,
     });
 
     expect(range).toEqual({
@@ -564,6 +592,7 @@ describe('serializeResult', () => {
         rowCellNames: ['String', 'Number'],
       },
       value: ['Hello there', new DeciNumber({ n: 1n, d: 3n, s: 1n })],
+      meta: undefined,
     });
     const rowIndexNameData = new TextEncoder().encode('rowIndexName');
     const cell1NameData = new TextEncoder().encode('String');
@@ -603,6 +632,7 @@ describe('serializeResult', () => {
         },
       },
       value: null,
+      meta: undefined,
     });
 
     expect(result).toEqual({
@@ -617,6 +647,7 @@ describe('serializeResult', () => {
         kind: 'pending',
       },
       value: null,
+      meta: undefined,
     });
 
     expect(result).toEqual({
@@ -776,6 +807,7 @@ describe('deserializeResult', () => {
         d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
         s: 1n,
       }),
+      meta: undefined,
     };
     const serialized = await serializeResult(n);
     const deserialized = await deserializeResult(serialized);

@@ -34,7 +34,13 @@ const Preview: FC<PreviewProps> = ({ result }) => {
   }
   return (
     <div className={styles.playgroundPreview}>
-      {result && <CodeResult type={result.type} value={result.value} />}
+      {result && (
+        <CodeResult
+          type={result.type}
+          value={result.value}
+          meta={result.meta}
+        />
+      )}
     </div>
   );
 };

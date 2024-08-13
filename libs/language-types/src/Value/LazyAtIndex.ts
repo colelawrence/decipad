@@ -20,10 +20,16 @@ type TLazyAtIndex = Value.ColumnLikeValue & Value.LowLevelMinimalTensor;
 class LazyAtIndex implements TLazyAtIndex {
   index: number;
   innerHC: Value.ColumnLikeValue;
+  meta: undefined | (() => undefined | Result.ResultMetadataColumn);
 
-  constructor(innerHC: Value.ColumnLikeValue, index: number) {
+  constructor(
+    innerHC: Value.ColumnLikeValue,
+    index: number,
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined)
+  ) {
     this.innerHC = innerHC;
     this.index = index;
+    this.meta = meta;
   }
 
   async dimensions() {
@@ -60,7 +66,7 @@ class LazyAtIndex implements TLazyAtIndex {
     if ((await this.dimensions()).length === 1) {
       return this.lowLevelGet(i);
     } else {
-      return createLazyAtIndex(this, i);
+      return createLazyAtIndex(this, i, this.meta?.bind(this));
     }
   }
 
@@ -71,11 +77,12 @@ class LazyAtIndex implements TLazyAtIndex {
 
 export const createLazyAtIndex = async (
   innerHC: Value.ColumnLikeValue,
-  index: number
+  index: number,
+  meta: undefined | (() => Result.ResultMetadataColumn | undefined)
 ): Promise<Value.ColumnLikeValue> => {
   const { dimensionLength } = (await innerHC.dimensions())[0];
   if (index < 0 || index >= (await getDimensionLength(dimensionLength))) {
     throw new Error(`panic: index ${index} out of bounds`);
   }
-  return new LazyAtIndex(innerHC, index);
+  return new LazyAtIndex(innerHC, index, meta);
 };

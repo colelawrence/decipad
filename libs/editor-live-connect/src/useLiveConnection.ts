@@ -172,6 +172,7 @@ async function pushPendingResultToComputer(
             kind: 'pending',
           },
           value: Unknown,
+          meta: undefined,
         },
       },
     },

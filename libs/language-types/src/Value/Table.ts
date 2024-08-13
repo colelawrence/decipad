@@ -16,18 +16,27 @@ export class Table implements TableValue {
   columns: Value.ColumnLikeValue[];
   columnNames: string[];
 
-  constructor(columns: Value.ColumnLikeValue[], columnNames: string[]) {
+  meta;
+
+  constructor(
+    columns: Value.ColumnLikeValue[],
+    columnNames: string[],
+    meta?: undefined | (() => Result.ResultMetadataColumn | undefined)
+  ) {
     this.columns = columns;
     this.columnNames = columnNames;
+    this.meta = meta;
   }
 
   static fromNamedColumns(
-    columns: Value.Value[] = [],
-    columnNames: string[] = []
+    columns: Value.Value[],
+    columnNames: string[],
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined)
   ) {
     return new Table(
       columns.map((c) => (isColumnLike(c) ? c : new EmptyColumn([]))),
-      columnNames
+      columnNames ?? [],
+      meta
     );
   }
 
@@ -60,7 +69,8 @@ export class Table implements TableValue {
   ): Promise<Table> {
     return Table.fromNamedColumns(
       await Promise.all(this.columns.map(mapFn)),
-      this.columnNames
+      this.columnNames,
+      this.meta
     );
   }
 
@@ -69,18 +79,18 @@ export class Table implements TableValue {
   ): Table {
     const [names, columns] = filterUnzipped(this.columnNames, this.columns, fn);
 
-    return Table.fromNamedColumns(columns, names);
+    return Table.fromNamedColumns(columns, names, this.meta);
   }
 }
 
 export const isTableValue = (
   v: Value.Value | undefined | null
-): v is Table | GeneratorTable =>
+): v is Value.TableValue =>
   (v instanceof Table || v instanceof GeneratorTable) &&
   v.columnNames != null &&
   v.columns != null;
 
-export const getTableValue = (v: unknown): Table | GeneratorTable =>
+export const getTableValue = (v: unknown): Value.TableValue =>
   v instanceof Table
     ? getInstanceof(v, Table)
     : getInstanceof(v, GeneratorTable);

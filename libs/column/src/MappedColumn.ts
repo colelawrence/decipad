@@ -3,11 +3,13 @@ import { getDefined } from '@decipad/utils';
 import type { ColumnLike } from './ColumnLike';
 
 /* eslint-disable no-underscore-dangle */
-export class MappedColumn<TValue> implements ColumnLike<TValue> {
+export class MappedColumn<TValue, TColumn extends ColumnLike<TValue>>
+  implements ColumnLike<TValue>
+{
   readonly map: number[];
-  readonly source: ColumnLike<TValue>;
+  readonly source: TColumn;
 
-  constructor(col: ColumnLike<TValue>, map: number[]) {
+  constructor(col: TColumn, map: number[]) {
     this.source = col;
     this.map = map;
   }
@@ -43,10 +45,10 @@ export class MappedColumn<TValue> implements ColumnLike<TValue> {
     return this.source.atIndex(pos);
   }
 
-  static fromColumnAndMap<TV>(
-    column: ColumnLike<TV>,
+  static fromColumnAndMap<TV, TC extends ColumnLike<TV>>(
+    column: TC,
     map: number[]
-  ): MappedColumn<TV> {
+  ): MappedColumn<TV, TC> {
     return new MappedColumn(column, map);
   }
 }

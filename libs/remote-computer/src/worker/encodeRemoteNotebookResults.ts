@@ -11,7 +11,7 @@ export const encodeRemoteNotebookResults = async (
 ): Promise<ArrayBuffer> => {
   const partiallyEncoded = await encodeFullNotebookResults(results);
   const encode = encodingToBuffer({
-    rootValueKeys: ['blockResults', 'indexLabels'],
+    rootValueKeys: ['blockResults'],
   });
   const buffer = createResizableArrayBuffer(1024);
   const dataView = new Value.GrowableDataView(buffer);

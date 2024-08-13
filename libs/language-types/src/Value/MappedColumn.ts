@@ -10,15 +10,20 @@ import { columnValueToValueGeneratorFunction } from './columnValueToValueGenerat
 import { lowLevelGet } from './lowLevelGet';
 
 export class MappedColumn
-  extends MappedColumnBase<Value.Value>
+  extends MappedColumnBase<Value.Value, Value.ColumnLikeValue>
   implements Value.ColumnLikeValue
 {
-  private sourceColumn: Value.ColumnLikeValue;
-
-  constructor(source: Value.ColumnLikeValue, map: number[]) {
-    super(source, map);
-    this.sourceColumn = source;
+  meta(): Result.ResultMetadataColumn {
+    const meta = this.source.meta?.bind(this.source);
+    const { labels } = meta?.() ?? {};
+    return {
+      labels: labels?.then((labels) => {
+        const [thisLabel, ...restLabels] = labels ?? [];
+        return [this.map.map((index) => thisLabel[index]), ...restLabels];
+      }),
+    };
   }
+
   async getData(): Promise<Result.OneResult> {
     return columnValueToResultValue(this);
   }
@@ -43,6 +48,7 @@ export class MappedColumn
     return new MappedColumn(
       Column.fromGenerator(
         columnValueToValueGeneratorFunction(column),
+        column.meta?.bind(column),
         `MappedColumn`
       ),
       map
@@ -50,6 +56,6 @@ export class MappedColumn
   }
 
   async indexToLabelIndex(mappedIndex: number) {
-    return getLabelIndex(this.sourceColumn, this.map[mappedIndex]);
+    return getLabelIndex(this.source, this.map[mappedIndex]);
   }
 }

@@ -14,6 +14,7 @@ import { implementColumnLike } from '../utils/implementColumnLike';
 export const EmptyColumn = implementColumnLike(
   class EmptyColumn implements Value.LowLevelMinimalTensor {
     _dimensions: Dimension[];
+    meta = undefined;
 
     constructor(dimensions: Dimension[]) {
       this._dimensions = [{ dimensionLength: 0 }, ...dimensions];
