@@ -159,11 +159,11 @@ jobs:
           description: ${{github.event.head_commit.message}}
           include-details: true
 
-  performance-tests:
-    name: 🔬 Run Dev Performance Tests
+  staging-tests:
+    name: 🔬 Run Dev Staging Tests
     runs-on: buildjet-4vcpu-ubuntu-2204
     needs: deploy
-    timeout-minutes: 25
+    timeout-minutes: 35
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
@@ -241,10 +241,10 @@ jobs:
           UPLOAD_PERFORMANCE_RESULTS_GSHEETS_MACRO_URL: ${{ secrets.UPLOAD_PERFORMANCE_RESULTS_GSHEETS_MACRO_URL }}
         run: yarn upload-performance-results
 
-  notify-performance:
-    name: Discord Notification for Performance Tests
+  notify-staging:
+    name: Discord Notification for Staging Tests
     runs-on: ubuntu-latest
-    needs: performance-tests
+    needs: staging-tests
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
 
     steps:

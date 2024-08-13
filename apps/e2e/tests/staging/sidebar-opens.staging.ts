@@ -78,13 +78,13 @@ test.describe('sidebar opens for each new notebook', () => {
   });
 
   test('new notebook', async ({ performance }) => {
-    performance.sampleStart('New Norwbook');
+    performance.sampleStart('New Notebook');
     await workspace.clickNewPadButton();
     await notebook.waitForEditorToLoad();
-    performance.sampleEnd('New Norwbook');
+    performance.sampleEnd('New Notebook');
     expect
       .soft(
-        performance.getSampleTime('New Norwbook'),
+        performance.getSampleTime('New Notebook'),
         'Creating a Notebook took more than 5 seconds'
       )
       .toBeLessThanOrEqual(5000);
