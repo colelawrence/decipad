@@ -20,7 +20,7 @@ export const simpleMatrixFormatResult = (
     case 'nothing':
       return '';
     case 'string': {
-      return JSON.stringify(result);
+      return result?.toString() ?? '';
     }
     case 'number': {
       return Unit.convertToMultiplierUnit(result as DeciNumber, type.unit)
