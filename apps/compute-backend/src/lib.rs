@@ -12,10 +12,15 @@ use js_sys::Float64Array;
 use js_sys::{BigInt64Array, Object};
 use num::integer::lcm;
 use parse::csv_to_parsed;
+use rand::rngs::OsRng;
+use rand_unique::{RandomSequence, RandomSequenceBuilder};
+use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 use std::collections::HashMap;
 use types::types::{DeciResult, DeciType};
 use wasm_bindgen::prelude::*;
 pub mod deci_result;
+
+wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen]
 extern "C" {
@@ -102,14 +107,48 @@ pub fn parse_csv(csv: String, is_first_header_row: bool) -> Object {
 #[wasm_bindgen]
 pub struct ComputeBackend {
     values: HashMap<String, DeciResult>,
+    sequence: RandomSequence<u64>,
 }
 
 ///
 /// Utility functions to inject values into RustLand.
 ///
+///
+#[wasm_bindgen_test]
+pub fn test_csv_in() {
+  let mut a = ComputeBackend::new();
+  let csv = "c1, c2, c3, c4
+        7, 2, 5, 3
+        6, 6, 7, 1
+        1, 7, 3, 4
+        2, 1, 2, 2";
+  let serialized_keys = a.read_csv_in(csv.to_string(), true);
+  let deserialized_keys = deserialize_result(serialized_keys).unwrap();
+  log(deserialized_keys.get_string().as_str());
+  for (key, value) in a.values.clone() {
+    log(format!("{}: {}", key, value.get_string()).as_str());
+  }
+  let keystr = &deserialized_keys.as_column()[0].as_column()[1].get_string();
+  log(format!("{}", a.sum(keystr.clone())).as_str());
+  assert_eq!(a.sum(keystr.clone()), 16.0);
+}
 
 #[wasm_bindgen]
 impl ComputeBackend {
+    pub fn read_csv_in(&mut self, csv: String, is_first_header_row: bool) -> Object {
+        let (col_names, csv_cols) = internal_parse_csv(&csv, is_first_header_row).unwrap();
+        let mut colKeys = vec![];
+        for (col, i) in csv_cols.into_iter().zip(0..col_names.len()) {
+            let current_key = self.sequence.next().unwrap().to_string();
+            colKeys.push(DeciResult::Column(vec![
+                DeciResult::String(col_names[i].clone()),
+                DeciResult::String(current_key.clone()),
+            ]));
+            self.values.insert(current_key, col);
+        }
+        return serialize_result(DeciResult::Column(colKeys));
+    }
+
     pub fn insert_number_column_float(&mut self, id: String, value: &Float64Array) {
         let numbers = value.to_vec();
 
@@ -145,8 +184,11 @@ impl ComputeBackend {
 impl ComputeBackend {
     #[wasm_bindgen(constructor)]
     pub fn new() -> ComputeBackend {
+        let config = RandomSequenceBuilder::<u64>::rand(&mut OsRng);
+
         ComputeBackend {
             values: HashMap::new(),
+            sequence: config.into_iter(),
         }
     }
 

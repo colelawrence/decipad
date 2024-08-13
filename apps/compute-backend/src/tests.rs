@@ -1,11 +1,13 @@
 use js_sys::{Object, Uint8Array};
-
-use crate::DeciResult;
+use crate::deci_result::deserialize_result;
+use crate::ComputeBackend;
+use crate::{deci_result::serialize_result, DeciResult};
 use wasm_bindgen_test::*;
 
 pub fn dcolFromVec(input: Vec<i64>) -> DeciResult {
     DeciResult::Column(input.iter().map(|x| DeciResult::Float(*x as f64)).collect())
 }
+
 
 #[test]
 fn test_results() {

@@ -32,6 +32,8 @@ getrandom = { version = "0.2", features = ["js"] }
 rayon = { version = "1.5", default-features = false, optional = true}
 num-bigint = "0.4.6"
 num-integer = "0.1.46"
+rand-unique = "0.2.2"
+rand = "0.8.5"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 rayon = {version = "1.5", default-features = false, optional = true}
