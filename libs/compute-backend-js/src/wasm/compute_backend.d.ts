@@ -60,6 +60,12 @@ export enum DeciType {
 export class ComputeBackend {
   free(): void;
 /**
+* @param {string} csv
+* @param {boolean} is_first_header_row
+* @returns {object}
+*/
+  read_csv_in(csv: string, is_first_header_row: boolean): object;
+/**
 * @param {string} id
 * @param {Float64Array} value
 */

@@ -80,7 +80,6 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   // Downloadable
   readonly isDownloadable?: boolean;
   readonly onDownload?: () => void;
-  readonly onExportToExcel?: () => void;
   readonly handleDownloadChart?: () => void;
   readonly needsUpgrade?: boolean;
 }
@@ -126,7 +125,6 @@ export const DraggableBlock = ({
 
   isDownloadable,
   onDownload,
-  onExportToExcel,
   handleDownloadChart,
   needsUpgrade = false,
   path,
@@ -233,7 +231,6 @@ export const DraggableBlock = ({
             aiPanel={aiPanel}
             isDownloadable={isDownloadable}
             onDownload={onDownload}
-            onExportToExcel={onExportToExcel}
             handleDownloadChart={handleDownloadChart}
             needsUpgrade={needsUpgrade}
             path={path}

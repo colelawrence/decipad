@@ -49,7 +49,7 @@ import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useContext } from 'react';
 import { type Path } from 'slate';
 import * as Sentry from '@sentry/react';
-import { exportCsv, exportToSimpleMatrix } from '@decipad/export';
+import { exportCsv } from '@decipad/export';
 import type { Result } from '@decipad/language-interfaces';
 import { materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
@@ -81,7 +81,6 @@ export interface TableActions {
   onSaveIcon: (icon?: string) => void;
   onSaveColor: (color?: string) => void;
   onDownload: () => void;
-  onExportToExcel: () => void;
 }
 
 export const addColumn = <
@@ -571,93 +570,41 @@ export const useTableActions = (
   );
 
   const onDownload = useCallback(async () => {
-    try {
-      if (element) {
-        const tableName = getNodeString(element.children[0].children[0]);
-        const result = computer.getBlockIdResult(element.id ?? '');
-        if (
-          !result ||
-          result.error ||
-          !result.result ||
-          (result.result.type.kind !== 'materialized-table' &&
-            result.result.type.kind !== 'table')
-        ) {
-          toast.error(
-            `Cannot download table data${
-              result?.error ? `: ${result.error}` : ''
-            }`
-          );
-          return;
-        }
-        const rResult = await materializeResult(result.result);
-        if (!rResult) {
-          toast.error('Cannot download table data: no result');
-          return;
-        }
-        const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
-        forceDownload(`${tableName}.csv`, new Blob([csv]));
-        clientEvent({
-          segmentEvent: {
-            type: 'action',
-            action: 'Table CSV Downloaded',
-            props: {
-              analytics_source: 'frontend',
-            },
-          },
-        });
+    if (element) {
+      const tableName = getNodeString(element.children[0].children[0]);
+      const result = computer.getBlockIdResult(element.id ?? '');
+      if (
+        !result ||
+        result.error ||
+        !result.result ||
+        (result.result.type.kind !== 'materialized-table' &&
+          result.result.type.kind !== 'table')
+      ) {
+        toast.error(
+          `Cannot download table data${
+            result?.error ? `: ${result.error}` : ''
+          }`
+        );
+        return;
       }
-    } catch (err) {
-      Sentry.captureException(err);
-      toast.error('Error downloading table data');
+      const rResult = await materializeResult(result.result);
+      if (!rResult) {
+        toast.error('Cannot download table data: no result');
+        return;
+      }
+      const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
+      forceDownload(`${tableName}.csv`, new Blob([csv]));
+      clientEvent({
+        segmentEvent: {
+          type: 'action',
+          action: 'Table CSV Downloaded',
+          props: {
+            analytics_source: 'frontend',
+          },
+        },
+      });
     }
   }, [clientEvent, computer, element, toast]);
-
-  const onExportToExcel = useCallback(async () => {
-    try {
-      const { workbookManager } = await import(
-        '@microsoft/connected-workbooks'
-      );
-      if (element) {
-        const tableName = getNodeString(element.children[0].children[0]);
-        const result = computer.getBlockIdResult(element.id ?? '');
-        if (
-          !result ||
-          result.error ||
-          !result.result ||
-          (result.result.type.kind !== 'materialized-table' &&
-            result.result.type.kind !== 'table')
-        ) {
-          toast.error(
-            `Cannot download table data${
-              result?.error ? `: ${result.error}` : ''
-            }`
-          );
-          return;
-        }
-        const rResult = await materializeResult(result.result);
-        if (!rResult) {
-          toast.error('Cannot download table data: no result');
-          return;
-        }
-
-        const data = exportToSimpleMatrix(
-          rResult as Result.Result<'materialized-table'>
-        );
-        const blob = await workbookManager.generateTableWorkbookFromGrid({
-          data,
-          config: { promoteHeaders: true, adjustColumnNames: true },
-        });
-        workbookManager.openInExcelWeb(
-          blob,
-          `${tableName}.xlsx`,
-          true /* allowTyping */
-        );
-      }
-    } catch (err) {
-      Sentry.captureException(err);
-      toast.error('Error exporting table data to Excel');
-    }
-  }, [computer, element, toast]);
 
   return {
     onChangeColumnName,
@@ -677,6 +624,5 @@ export const useTableActions = (
     onSaveIcon,
     onSaveColor,
     onDownload,
-    onExportToExcel,
   };
 };
