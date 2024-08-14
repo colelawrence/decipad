@@ -83,13 +83,15 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
         ref={scrollToRef}
         isInEditorSidebar={isInEditorSidebar}
       >
-        <SidebarExtra
-          showSidebar={!!leftSidebar}
-          sidebarComponent={'navigation-sidebar'}
-          position="left"
-        >
-          {leftSidebar}
-        </SidebarExtra>
+        {leftSidebar && (
+          <SidebarExtra
+            showSidebar={!!leftSidebar}
+            sidebarComponent={'navigation-sidebar'}
+            position="left"
+          >
+            {leftSidebar}
+          </SidebarExtra>
+        )}
         <S.ArticleWrapper
           isEmbed={isEmbed}
           ref={articleRef}

@@ -229,18 +229,23 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
       display: 'none',
     },
 
-    [tabletScreenQuery]: {
-      position: 'absolute',
-      background: cssVar('backgroundMain'),
-      ...(ComponentWidths[sidebarComponent].tablet && {
-        width: ComponentWidths[sidebarComponent].tablet,
-      }),
+    [tabletScreenQuery]:
+      position === 'right'
+        ? {
+            position: 'absolute',
+            background: cssVar('backgroundMain'),
+            ...(ComponentWidths[sidebarComponent].tablet && {
+              width: ComponentWidths[sidebarComponent].tablet,
+            }),
 
-      border: `solid 1px ${cssVar('borderDefault')}`,
-      borderRight: 'none',
-      boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-      padding: 0,
-    },
+            border: `solid 1px ${cssVar('borderDefault')}`,
+            borderRight: 'none',
+            boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+            padding: 0,
+          }
+        : {
+            display: 'none',
+          },
 
     ...(position === 'left' && {
       order: -1,
