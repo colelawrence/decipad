@@ -409,9 +409,10 @@ export class EditorController implements RootEditorController {
    * Various error throwing, and its crutial this part works perfectly.
    */
   private handleTopLevelOps(op: TOperation): boolean {
-    if (op.type === 'set_selection' || op.path.length !== 1) {
-      return false;
-    }
+    if (op.type === 'set_selection') return false;
+    if (op.type !== 'move_node' && op.path.length !== 1) return false;
+
+    if (op.type === 'move_node' && op.path[0] === op.newPath[0]) return false;
 
     // Must be a top level operation.
     const [childIndex] = op.path;

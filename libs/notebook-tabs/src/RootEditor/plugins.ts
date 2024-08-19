@@ -1,4 +1,4 @@
-import { Editor, Element } from 'slate';
+import { Editor, Element, Text } from 'slate';
 import {
   ELEMENT_DATA_TAB,
   ELEMENT_H1,
@@ -206,6 +206,50 @@ const migrateOlderNodes: CurriedNormalizePlugin = (editor) => (entry) => {
 };
 
 //
+// Sometimes, we get extra titles. And even rarer, we can get elements inside these
+// titles, that shouldnt be there.
+//
+// We shouldn't just delete them. Instead of should empty out the inside of these titles.
+//
+const emptyTitleNodes: CurriedNormalizePlugin = (editor) => (entry) => {
+  const [node, path] = entry;
+
+  if (isEditor(node)) return false;
+  if (!Element.isElement(node) || node.type !== ELEMENT_TITLE) return false;
+
+  if (node.children.length === 0) {
+    return false;
+  }
+
+  let movingIndex = 1;
+
+  if (!Text.isText(node.children[0])) {
+    movingIndex = 0;
+  }
+
+  let numOfElementsToMove = node.children.length - movingIndex;
+
+  // This means we only have the text element.
+  // and therefore do not need to move anything.
+  if (numOfElementsToMove === 0) {
+    return false;
+  }
+
+  for (; numOfElementsToMove > 0; numOfElementsToMove--) {
+    editor.apply({
+      type: 'move_node',
+      path: [...path, 0],
+      newPath: [
+        FIRST_TAB_INDEX,
+        editor.children[FIRST_TAB_INDEX].children.length,
+      ],
+    });
+  }
+
+  return true;
+};
+
+//
 // Ensures that every tab has at least one paragraph inside.
 //
 const ensureParagraphInTab: CurriedNormalizePlugin = (editor) => (entry) => {
@@ -379,5 +423,6 @@ export const normalizers = (editor: TEditor): Array<NormalizePlugin> => [
   ensureOneTabPlugin(editor),
   migrateOlderNodes(editor),
   ensureParagraphInTab(editor),
+  emptyTitleNodes(editor),
   removeExtraTitles(editor),
 ];
