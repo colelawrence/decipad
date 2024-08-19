@@ -13,6 +13,7 @@ import { deciOverflowYStyles } from '../../styles/scrollbars';
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
+export const ANNOTATIONS_WIDTH = 320;
 export const SIDEBAR_WIDTH = '320px';
 const ASSISTANT_WIDTH = '640px';
 const INTEGRATIONS_WIDTH = '600px';
@@ -137,7 +138,9 @@ export const EditorAndTabWrapper = styled.div({
 export const TabWrapper = styled.div<{ isInEditorSidebar: boolean }>(
   (props) => ({
     display: 'flex',
-    width: props.isInEditorSidebar ? 'calc(100% - 320px - 32px)' : '100%',
+    width: props.isInEditorSidebar
+      ? `calc(100% - ${ANNOTATIONS_WIDTH}px - 32px)`
+      : '100%',
 
     [tabletScreenQuery]: {
       width: '100%',
@@ -150,7 +153,9 @@ export const DataDrawer = styled.div<{ isInEditorSidebar: boolean }>(
     position: 'relative',
     zIndex: 50, // Above `dropzoneDetector`
 
-    width: props.isInEditorSidebar ? 'calc(100% - 320px - 32px)' : '100%',
+    width: props.isInEditorSidebar
+      ? `calc(100% - ${ANNOTATIONS_WIDTH}px - 32px)`
+      : '100%',
     background: cssVar('backgroundMain'),
     borderRadius: '16px',
     padding: '16px',
@@ -161,16 +166,24 @@ export const DataDrawer = styled.div<{ isInEditorSidebar: boolean }>(
   })
 );
 
-export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
-  width: '100%',
-  height: '100%',
-  overflowX: 'hidden',
-  overflowY: 'scroll',
+export const NotebookSpacingWrapper = styled.div([
+  deciOverflowYStyles,
+  {
+    height: '100%',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
 
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: cssVar('backgroundMain'),
+    width: '100%',
+
+    [tabletScreenQuery]: {
+      width: '100%',
+    },
+
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: cssVar('backgroundMain'),
+    },
   },
-});
+]);
 
 export const OverflowingEditor = styled.div({
   minHeight: '100%',
@@ -193,11 +206,12 @@ export const InEditorSidebar = styled.div({
   flexGrow: 0,
   minHeight: '100%',
   position: 'relative',
-  backgroundColor: cssVar('backgroundAccent'),
   zIndex: 100,
+
   [tabletScreenQuery]: {
     position: 'absolute',
     right: 0,
+    width: '1px',
   },
 });
 
@@ -253,25 +267,3 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
     }),
   })
 );
-
-export const TopRightWrapper = styled.div({
-  position: 'absolute',
-  width: '16px',
-  height: '16px',
-  right: 0,
-  top: 0,
-
-  '> div': {
-    position: 'fixed',
-    width: '16px',
-    height: '16px',
-    backgroundColor: cssVar('backgroundAccent'),
-    '> div': {
-      position: 'fixed',
-      width: '16px',
-      height: '16px',
-      borderTopRightRadius: '16px',
-      backgroundColor: cssVar('backgroundMain'),
-    },
-  },
-});

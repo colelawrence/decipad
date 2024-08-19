@@ -2,17 +2,17 @@ import {
   GetNotebookAnnotationsQuery,
   useDeleteAnnotationMutation,
 } from '@decipad/graphql-client';
-import { CollapsedAnnotation } from '../CollapsedAnnotation/CollapsedAnnotation';
 import { useVerticalOffset } from 'libs/ui/src/hooks';
+import { CollapsedAnnotation } from '../CollapsedAnnotation/CollapsedAnnotation';
 
 import { NewAnnotation } from '../NewAnnotation/NewAnnotation';
 import { SingleAnnotation } from '../SingleAnnotation/SingleAnnotation';
 
-import * as Styled from './styles';
-import { AnimatePresence } from 'framer-motion';
-import { useCallback, FC } from 'react';
 import { useAnnotations } from '@decipad/notebook-state';
 import { useNotebookRoute } from '@decipad/routing';
+import { AnimatePresence } from 'framer-motion';
+import { FC, useCallback } from 'react';
+import * as Styled from './styles';
 
 export type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -102,7 +102,7 @@ const CurrentBlockAnnotations: FC<
         ) : (
           <>
             {blockAnnotations.map((annotation) => {
-              if (annotation.scenario_id !== scenarioId) {
+              if (annotation.scenario_id !== (scenarioId ?? null)) {
                 return null;
               }
 
@@ -173,7 +173,7 @@ export const BlockAnnotations: FC<BlockAnnotationsProps> = (props) => {
   const blockAnnotations = annotations.filter(
     (annotation): annotation is Annotation =>
       annotation?.block_id === props.blockId &&
-      annotation?.scenario_id === scenarioId
+      annotation?.scenario_id === (scenarioId ?? null)
   );
 
   blockAnnotations.sort((a, b) => {

@@ -1,9 +1,9 @@
-import { useMemo, FC } from 'react';
-import * as Styled from './styles';
-import { ThumbnailChat } from 'libs/ui/src/icons/thumbnail-icons';
-import { DragHandle } from 'libs/ui/src/icons';
-import { useActiveElement } from '@decipad/react-utils';
 import { useAnnotations } from '@decipad/notebook-state';
+import { useActiveElement } from '@decipad/react-utils';
+import { DragHandle } from 'libs/ui/src/icons';
+import { ThumbnailChat } from 'libs/ui/src/icons/thumbnail-icons';
+import { FC, useMemo } from 'react';
+import * as Styled from './styles';
 
 export const Annotations: FC = () => {
   // TODO THIS ONE
@@ -14,13 +14,13 @@ export const Annotations: FC = () => {
 
   const showPlaceholder = useMemo(
     () =>
-      (annotations === undefined || annotations.length === 0) &&
-      expandedBlockId === null,
+      (annotations == null || annotations.length === 0) &&
+      expandedBlockId == null,
     [annotations, expandedBlockId]
   );
 
   return (
-    <Styled.Container id="annotations-container" ref={containerRef}>
+    <Styled.AnnotationContainer id="annotations-container" ref={containerRef}>
       {showPlaceholder && (
         <Styled.Placeholder>
           <Styled.PlaceholderIcon>
@@ -36,6 +36,6 @@ export const Annotations: FC = () => {
           </Styled.HelperText>
         </Styled.Placeholder>
       )}
-    </Styled.Container>
+    </Styled.AnnotationContainer>
   );
 };

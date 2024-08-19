@@ -103,12 +103,8 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
               ref={overflowingDiv}
               id="overflowing-editor"
             >
-              {!isInEditorSidebar && <SketchyTopRightEditorCorner />}
               <S.OverflowingEditor id={OVERFLOWING_EDITOR_ID}>
-                <S.PaddingEditor>
-                  {isInEditorSidebar && <SketchyTopRightEditorCorner />}
-                  {notebook}
-                </S.PaddingEditor>
+                <S.PaddingEditor>{notebook}</S.PaddingEditor>
                 <S.InEditorSidebar
                   id={IN_EDITOR_SIDEBAR_ID}
                 ></S.InEditorSidebar>
@@ -157,11 +153,3 @@ const SidebarExtra: FC<{
     </S.AsideWrapper>
   );
 };
-
-const SketchyTopRightEditorCorner: FC = () => (
-  <S.TopRightWrapper>
-    <div>
-      <div />
-    </div>
-  </S.TopRightWrapper>
-);

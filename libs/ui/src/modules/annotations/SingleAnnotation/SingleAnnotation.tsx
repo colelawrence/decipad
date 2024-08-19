@@ -5,12 +5,12 @@ import { format, fromUnixTime } from 'date-fns';
 import { Avatar, MenuItem, MenuList, Tooltip } from 'libs/ui/src/shared';
 import { useCallback } from 'react';
 
-import * as Styled from './styles';
-import { Ellipsis } from 'libs/ui/src/icons';
-import { useSession } from 'next-auth/react';
-import { User } from 'next-auth';
-import { cssVar, p14Medium } from 'libs/ui/src/primitives';
 import { useAnnotations } from '@decipad/notebook-state';
+import { Ellipsis } from 'libs/ui/src/icons';
+import { cssVar, p14Medium } from 'libs/ui/src/primitives';
+import { User } from 'next-auth';
+import { useSession } from 'next-auth/react';
+import * as Styled from './styles';
 
 type AnnotationArray = NonNullable<
   GetNotebookAnnotationsQuery['getAnnotationsByPadId']
@@ -89,7 +89,7 @@ export const SingleAnnotation = ({
   );
 
   return (
-    <Styled.Wrapper>
+    <Styled.AnnotationWrapper>
       <Styled.Avatar>
         <Avatar
           name={user?.username || ''}
@@ -153,6 +153,6 @@ export const SingleAnnotation = ({
           ? renderAnnotationString(content)
           : renderSuggestionString(content)}
       </Styled.Content>
-    </Styled.Wrapper>
+    </Styled.AnnotationWrapper>
   );
 };

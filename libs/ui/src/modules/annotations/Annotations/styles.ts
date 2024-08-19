@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ANNOTATIONS_WIDTH } from 'libs/ui/src/pages/NotebookPage/styles';
 import {
   cssVar,
   p13Medium,
@@ -6,12 +7,8 @@ import {
   tabletScreenQuery,
 } from 'libs/ui/src/primitives';
 
-const ANNOTATIONS_WIDTH = '320px';
-
-export const Container = styled.div({
+export const AnnotationContainer = styled.div({
   width: ANNOTATIONS_WIDTH,
-  backgroundColor: cssVar('backgroundAccent'),
-
   height: '100%',
   position: 'relative',
 

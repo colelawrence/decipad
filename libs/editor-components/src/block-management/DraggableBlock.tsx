@@ -26,10 +26,12 @@ import {
   insertNodes,
   showColumnBorder,
 } from '@decipad/editor-utils';
+import { useAnnotations } from '@decipad/notebook-state';
 import {
   dndPreviewActions,
   useInsideLayoutContext,
   useIsEditorReadOnly,
+  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { parseSimpleValue } from '@decipad/remote-computer';
 import {
@@ -54,6 +56,7 @@ import {
 } from '@udecode/plate-common';
 import { blockSelectionSelectors } from '@udecode/plate-selection';
 import copyToClipboard from 'copy-to-clipboard';
+import { Chat } from 'libs/ui/src/icons';
 import { nanoid } from 'nanoid';
 import type { ComponentProps, ReactNode } from 'react';
 import {
@@ -72,8 +75,6 @@ import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
-import { useAnnotations } from '@decipad/notebook-state';
-import { Chat } from 'libs/ui/src/icons';
 
 const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
   '> div': {
@@ -169,6 +170,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const hasPadding = insideLayout && showColumnBorder(element.type as any);
 
     const notebookId = useNotebookId();
+    const setSidebar = useNotebookMetaData((s) => s.setSidebar);
 
     const event = useContext(ClientEventsContext);
 
@@ -246,8 +248,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         return;
       }
 
+      setSidebar('annotations');
       handleExpandedBlockId(element.id);
-    }, [element.id, handleExpandedBlockId]);
+    }, [element.id, handleExpandedBlockId, setSidebar]);
 
     const handleDuplicate = useCallback(() => {
       event({

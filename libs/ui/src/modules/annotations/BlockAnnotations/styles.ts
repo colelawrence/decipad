@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ANNOTATIONS_WIDTH } from 'libs/ui/src/pages/NotebookPage/styles';
 import {
   cssVar,
   normalShadow,
@@ -36,7 +37,7 @@ export const Annotation = styled.div<AnnotationProps>(
 
       [tabletScreenQuery]: {
         position: 'absolute',
-        right: 24,
+        right: ANNOTATIONS_WIDTH + 24, // 24px padding
         left: 'auto',
         top: offset,
         zIndex: 50,

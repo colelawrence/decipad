@@ -7,7 +7,7 @@ import {
   p14Regular,
 } from 'libs/ui/src/primitives';
 
-export const Wrapper = styled(motion.div)({
+export const AnnotationWrapper = styled(motion.div)({
   width: '100%',
   maxWidth: 320,
   display: 'grid',
@@ -46,7 +46,7 @@ export const HeaderWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
   gap: 2,
-  paddingBottom: 6,
+  paddingBottom: 2,
 });
 
 export const Username = styled.span(p14Medium, {
