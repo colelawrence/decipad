@@ -78,7 +78,7 @@ export interface SelectItems {
   group?: string;
   blockId?: string;
   type?: SelectItemTypes;
-  coherceToType?: CellValueType;
+  coerceToType?: CellValueType;
   icon?: ReactNode;
   blockType?: SerializedType;
 }

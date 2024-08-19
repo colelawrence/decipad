@@ -1,5 +1,5 @@
 import DeciNumber from '@decipad/number';
 import { getInstanceof } from '@decipad/utils';
 
-export const coherceToFraction = (value: unknown): DeciNumber =>
+export const coerceToFraction = (value: unknown): DeciNumber =>
   getInstanceof(value, DeciNumber);

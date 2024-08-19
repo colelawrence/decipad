@@ -3,7 +3,7 @@
 import { Value } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { BuiltinSpec } from '../types';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {
@@ -14,7 +14,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     fnValues: async ([nums]) => {
       let acc = 0;
       for await (const v of Value.getColumnLike(nums).values()) {
-        const f = coherceToFraction(await v.getData());
+        const f = coerceToFraction(await v.getData());
         if (f.infinite) {
           return Value.Scalar.fromValue(f);
         }
@@ -59,7 +59,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
           );
         }
         if (await b.value.getData()) {
-          const f = coherceToFraction(await n.getData());
+          const f = coerceToFraction(await n.getData());
           if (f.infinite) {
             return Value.Scalar.fromValue(f);
           }

@@ -3,7 +3,7 @@ import { ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import type { Type } from '@decipad/language-types';
 import type { Result } from '@decipad/language-interfaces';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
 import { dateOverloads } from '../dateOverloads';
@@ -18,10 +18,10 @@ const subtractPrimitive = async (
   types: Type[]
 ): Promise<DeciNumberBase> => {
   if (secondArgIsPercentage(types)) {
-    return coherceToFraction(n1).mul(ONE.sub(coherceToFraction(n2)));
+    return coerceToFraction(n1).mul(ONE.sub(coerceToFraction(n2)));
   }
 
-  return coherceToFraction(n1).sub(coherceToFraction(n2));
+  return coerceToFraction(n1).sub(coerceToFraction(n2));
 };
 
 export const subtract: FullBuiltinSpec = overloadBuiltin(

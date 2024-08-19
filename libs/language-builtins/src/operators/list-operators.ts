@@ -13,7 +13,7 @@ import {
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import type { BuiltinSpec } from '../types';
 import { reverse, sort, unique } from '../utils/valueTransforms';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 
 export const listOperators: Record<string, BuiltinSpec> = {
   len: {
@@ -108,8 +108,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
         getResultGenerator(await sourceCol.getData()),
         serializeType(await aType.reduced()),
         (current, _, previous) => {
-          const next = coherceToFraction(current).sub(
-            coherceToFraction(previous ?? ZERO)
+          const next = coerceToFraction(current).sub(
+            coerceToFraction(previous ?? ZERO)
           );
           previous = next;
           return next;

@@ -14,7 +14,7 @@ import {
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { type BuiltinSpec, type Functor } from '../types';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 import { binopFunctor } from '../utils/binopFunctor';
 import { add } from './add';
 import { subtract } from './subtract';
@@ -31,7 +31,7 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
   let u: DeciNumberBase;
   if (a.unit && a.unit.length > 0) {
     try {
-      u = coherceToFraction(
+      u = coerceToFraction(
         await (await utils.simpleExpressionEvaluate(bValue)).getData()
       );
     } catch (err) {
@@ -106,7 +106,7 @@ const average = async ([
   let count = 0n;
   for await (const val of value.values()) {
     count += 1n;
-    acc = acc.add(coherceToFraction(await val.getData()));
+    acc = acc.add(coerceToFraction(await val.getData()));
   }
   return Value.Scalar.fromValue(acc.div(N(count)));
 };
@@ -131,11 +131,11 @@ const median = async (
       Value.defaultValue(type)
     );
   }
-  const leftCenter = coherceToFraction(
+  const leftCenter = coerceToFraction(
     await getDefined(await sortedValues.atIndex(rightCenterPos - 1)).getData()
   );
   return Value.fromJS(
-    leftCenter.add(coherceToFraction(rightCenter)).div(TWO),
+    leftCenter.add(coerceToFraction(rightCenter)).div(TWO),
     Value.defaultValue(type)
   );
 };
@@ -146,12 +146,12 @@ const stddev = async ([
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(Value.NumberValue.fromValue(ZERO));
   }
-  const mean = coherceToFraction(await (await average([value])).getData());
+  const mean = coerceToFraction(await (await average([value])).getData());
   let acc = ZERO;
   let count = 0;
   for await (const val of value.values()) {
     count += 1;
-    const n = coherceToFraction(await val.getData());
+    const n = coerceToFraction(await val.getData());
     const diffSquared = n.sub(mean).pow(TWO);
     acc = acc.add(diffSquared);
   }
@@ -163,7 +163,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     noAutoconvert: true,
     fnValues: async ([n]) =>
-      Value.Scalar.fromValue(coherceToFraction(await n.getData()).abs()),
+      Value.Scalar.fromValue(coerceToFraction(await n.getData()).abs()),
     functionSignature: 'number:R -> R',
     explanation: 'Absolute value of a number.',
     formulaGroup: 'Numbers',
@@ -239,7 +239,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         }
         if (await b.value.getData()) {
           count += 1n;
-          acc = acc.add(coherceToFraction(await val.getData()));
+          acc = acc.add(coerceToFraction(await val.getData()));
         }
       }
       return Value.Scalar.fromValue(acc.div(N(count)));
@@ -290,7 +290,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: ([n]) => {
       let result: DeciNumberBase | undefined;
       try {
-        result = coherceToFraction(n).pow(N(1, 2));
+        result = coerceToFraction(n).pow(N(1, 2));
       } catch (err) {
         console.error(err);
       }

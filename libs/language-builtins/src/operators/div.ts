@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { Type } from '@decipad/language-types';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 import { binopBuiltin } from '../utils/binopBuiltin';
 import { overloadBuiltin } from '../overloadBuiltin';
 import type { Functor } from '../types';
@@ -17,9 +17,9 @@ export const div = overloadBuiltin(
   '/',
   2,
   binopBuiltin('/', {
-    primitiveEval: (n1, n2) => coherceToFraction(n1).div(coherceToFraction(n2)),
+    primitiveEval: (n1, n2) => coerceToFraction(n1).div(coerceToFraction(n2)),
     primitiveReverseEval: (n1, n2) =>
-      coherceToFraction(n2).div(coherceToFraction(n1)),
+      coerceToFraction(n2).div(coerceToFraction(n1)),
     primitiveFunctor: divFunctor,
     primitiveReverseFunctor: reverseFunctor(divFunctor),
   }),

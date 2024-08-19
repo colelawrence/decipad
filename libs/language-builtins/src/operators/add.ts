@@ -5,7 +5,7 @@ import type { Result } from '@decipad/language-interfaces';
 import { Type, Value } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
-import { coherceToFraction } from '../utils/coherceToFraction';
+import { coerceToFraction } from '../utils/coerceToFraction';
 import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
 import type { FullBuiltinSpec } from '../types';
 import { binopBuiltin } from '../utils/binopBuiltin';
@@ -17,10 +17,10 @@ const addPrimitive = async (
   types: Type[]
 ): Promise<DeciNumberBase> => {
   if (secondArgIsPercentage(types)) {
-    return coherceToFraction(n1).mul(coherceToFraction(n2).add(ONE));
+    return coerceToFraction(n1).mul(coerceToFraction(n2).add(ONE));
   }
 
-  return coherceToFraction(n1).add(coherceToFraction(n2));
+  return coerceToFraction(n1).add(coerceToFraction(n2));
 };
 
 export const add: FullBuiltinSpec = overloadBuiltin(
