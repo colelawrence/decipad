@@ -8,6 +8,7 @@ import type {
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_DISPLAY,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -50,6 +51,7 @@ const defaultMinColumnWidth = 150;
 const minColumnWidths: Partial<Record<ColumnableElementKind, number>> = {
   [ELEMENT_VARIABLE_DEF]: 185,
   [ELEMENT_CODE_LINE_V2]: 300,
+  [ELEMENT_DISPLAY]: 300,
 };
 
 export const minColumnWidth = (elementType: ColumnableElementKind) =>
