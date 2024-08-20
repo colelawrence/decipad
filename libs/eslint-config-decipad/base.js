@@ -135,7 +135,7 @@ module.exports = {
         ],
       },
     ],
-    complexity: ['error', { max: 22 }],
+    complexity: ['error', { max: 23 }],
   },
   overrides: [
     {

@@ -24,7 +24,10 @@ import {
   generateVarName,
   getCodeLineSource,
   insertNodes,
+  isColumnableKind,
+  isTopLevelBlock,
   showColumnBorder,
+  wrapIntoLayout,
 } from '@decipad/editor-utils';
 import { useAnnotations } from '@decipad/notebook-state';
 import {
@@ -64,6 +67,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -277,6 +281,20 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       [event, element, onMoveTab]
     );
 
+    const showMakeFullWidthButton = useMemo(
+      () =>
+        !insideLayout &&
+        path &&
+        isTopLevelBlock(element, path) &&
+        isColumnableKind(element.type),
+      [insideLayout, path, element]
+    );
+
+    const handleMakeFullWidth = useCallback(() => {
+      if (!path) return;
+      wrapIntoLayout(editor, path, 'full');
+    }, [editor, path]);
+
     const handleDownloadChart = useCallback(() => {
       if (!notebookId) {
         return;
@@ -431,6 +449,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           onDuplicate={handleDuplicate}
           onShowHide={handleShowHide}
           onMoveToTab={handleMoveTab}
+          onMakeFullWidth={
+            showMakeFullWidthButton ? handleMakeFullWidth : undefined
+          }
           tabs={tabs}
           onAdd={onAdd}
           onPlus={onPlus}

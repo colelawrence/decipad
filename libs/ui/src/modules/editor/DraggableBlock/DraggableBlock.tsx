@@ -53,6 +53,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly onPlus?: () => void;
   readonly onCopyHref?: () => void;
   readonly onMoveToTab?: (tabId: string) => void;
+  readonly onMakeFullWidth?: () => void;
   readonly tabs?: Array<TabElement>;
   readonly showLine?: boolean;
 
@@ -96,6 +97,7 @@ export const DraggableBlock = ({
   tabs = [],
 
   onMoveToTab,
+  onMakeFullWidth,
   onMouseDown,
   onAnnotation,
   onDelete,
@@ -224,6 +226,7 @@ export const DraggableBlock = ({
             onDuplicate={onDuplicate}
             onShowHide={onShowHide}
             onMoveToTab={onMoveToTab}
+            onMakeFullWidth={onMakeFullWidth}
             tabs={tabs}
             showEyeLabel={showEyeLabel}
             showAddBlock={!isHidden && !insideLayout}

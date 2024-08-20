@@ -28,6 +28,7 @@ import {
   Download,
   DragHandle,
   Duplicate,
+  FullWidthLayout,
   Hide,
   Link,
   Move,
@@ -138,6 +139,7 @@ interface BlockDragHandleProps {
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onCopyHref?: () => void;
   readonly onMoveToTab?: (tabId: string) => void;
+  readonly onMakeFullWidth?: () => void;
   readonly tabs?: Array<TabElement>;
   readonly aiPanel?: {
     text: string;
@@ -169,6 +171,7 @@ export const BlockDragHandle = ({
   onDuplicate = noop,
   onMoveToTab,
   onCopyHref,
+  onMakeFullWidth,
   dependenciesForBlock,
   aiPanel,
   isDownloadable = false,
@@ -329,6 +332,11 @@ export const BlockDragHandle = ({
           {isFlagEnabled('ENABLE_COMMENTS') && (
             <MenuItem icon={<Chat />} onSelect={onAnnotation}>
               Comment
+            </MenuItem>
+          )}
+          {onMakeFullWidth && (
+            <MenuItem icon={<FullWidthLayout />} onSelect={onMakeFullWidth}>
+              Full width
             </MenuItem>
           )}
           <MenuItem disabled>
