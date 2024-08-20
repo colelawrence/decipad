@@ -76,7 +76,7 @@ import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
 
-const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
+const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>({
   '> div': {
     position: 'relative',
     borderRadius: 8,
@@ -94,7 +94,7 @@ const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>(() => ({
     //     }
     //   : {}),
   },
-}));
+});
 
 interface AIPanel {
   text: string;
