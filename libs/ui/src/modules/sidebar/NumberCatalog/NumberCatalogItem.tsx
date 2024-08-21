@@ -8,7 +8,6 @@ import { DragHandle } from '../../../icons';
 import { cssVar, p14Medium } from '../../../primitives';
 import { CodeResult } from '../../editor';
 import { useComputer } from '@decipad/editor-hooks';
-import { noop } from '@decipad/utils';
 
 interface NumberProps {
   name: string;
@@ -17,6 +16,8 @@ interface NumberProps {
   onDragEnd?: (e: React.DragEvent) => void;
   onClick?: () => void;
   isDataTab?: boolean;
+
+  isSelected?: boolean;
 }
 
 export const NumberCatalogItem = ({
@@ -25,7 +26,8 @@ export const NumberCatalogItem = ({
   onDragStart,
   onDragEnd,
   onClick,
-  isDataTab = false,
+
+  isSelected = false,
 }: NumberProps) => {
   const computer = useComputer();
   const undebouncedResult = computer.getBlockIdResult$.use(blockId);
@@ -75,7 +77,7 @@ export const NumberCatalogItem = ({
   };
 
   return (
-    <div onClick={!isDataTab ? noop : onClick}>
+    <div onClick={onClick}>
       <div
         draggable
         onDragStart={
@@ -86,8 +88,10 @@ export const NumberCatalogItem = ({
             result: result.result,
           })
         }
+        aria-selected={isSelected}
         onDragEnd={onDragEnd}
         css={numberCatalogListItemStyles}
+        data-testid={`number-catalogue-${name}`}
       >
         <span data-drag-handle css={dragHandleStyles}>
           <DragHandle />
@@ -124,7 +128,8 @@ export const numberCatalogListItemStyles = css(p14Medium, {
   cursor: 'grab',
   minWidth: 0,
   minHeight: 0,
-  '&:hover': {
+
+  '&:hover, &[aria-selected="true"]': {
     backgroundColor: cssVar('backgroundDefault'),
     'span:first-of-type': {
       opacity: 1,

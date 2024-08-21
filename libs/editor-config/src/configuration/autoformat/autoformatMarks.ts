@@ -3,7 +3,6 @@ import {
   MARK_CODE,
   MARK_HIGHLIGHT,
   MARK_ITALIC,
-  MARK_MAGICNUMBER,
   MARK_SPOILER,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
@@ -76,12 +75,6 @@ export const autoformatMarks: MyAutoformatRule[] = [
     mode: 'mark',
     type: MARK_HIGHLIGHT,
     match: '==',
-    query: doesSelectionAllowTextStyling,
-  },
-  {
-    mode: 'mark',
-    type: MARK_MAGICNUMBER,
-    match: '%',
     query: doesSelectionAllowTextStyling,
   },
   {

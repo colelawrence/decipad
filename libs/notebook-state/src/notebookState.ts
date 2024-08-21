@@ -1,7 +1,5 @@
 import { captureException } from '@sentry/browser';
 import { setErrorReporter } from '@decipad/remote-computer';
-import type { StoreApi } from 'zustand';
-import type { NotebookState } from './state';
 import { createNotebookStore } from './oneNotebookState';
 
 const NOTEBOOK_DESTROY_DELAY_MS = 5000;
@@ -12,11 +10,15 @@ setErrorReporter((err) => {
   captureException(err);
 });
 
-const notebooks = new Map<string, StoreApi<NotebookState>>();
+export type NotebookStoreWithSubscribers = ReturnType<
+  typeof createNotebookStore
+>;
+
+const notebooks = new Map<string, NotebookStoreWithSubscribers>();
 
 export const getNotebookStore = (
   notebookId: string
-): StoreApi<NotebookState> => {
+): NotebookStoreWithSubscribers => {
   let store = notebooks.get(notebookId);
   if (store != null) return store;
 

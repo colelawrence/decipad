@@ -12,20 +12,16 @@ import {
   placeholderForCalculationLine,
 } from '@decipad/editor-utils';
 import {
-  useEditorTeleportContext,
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { ParagraphFormulaEditor, CodeLine as UICodeLine } from '@decipad/ui';
+import { CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath } from '@udecode/plate-common';
-import { Formula } from 'libs/ui/src/icons';
-import { codeBlock } from 'libs/ui/src/styles';
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { useOnDragEnd } from '../utils/useDnd';
-import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
@@ -111,28 +107,9 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const onDragEnd = useOnDragEnd();
 
-  const {
-    closeEditor,
-    focusNumber,
-    focusCodeLine,
-    portal,
-    editing,
-    useWatchTeleported,
-  } = useEditorTeleportContext();
-
-  useWatchTeleported(lineId ?? '', element);
-
-  const teleport = editing?.codeLineId === element.id ? portal : undefined;
-
   const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
 
-  const onTeleportDismiss = useCallback(() => {
-    closeEditor(element.id, focusNumber);
-  }, [focusNumber, closeEditor, element.id]);
-
   const [aPlaceholder] = useState(placeholderForCalculationLine);
-
-  const isPortalVisible = teleport != null && portal != null;
 
   return (
     <DraggableBlock
@@ -143,47 +120,23 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       dependencyId={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >
-      <CodeLineTeleport
-        codeLine={teleport}
-        onDismiss={onTeleportDismiss}
-        onBringBack={focusCodeLine}
+      <UICodeLine
+        highlight={selected}
+        result={lineResult}
+        placeholder={aPlaceholder}
+        syntaxError={syntaxError}
+        isEmpty={isEmpty}
+        onDragStartInlineResult={handleDragStartInlineResult}
+        onDragStartCell={handleDragStartCell}
+        onDragEnd={onDragEnd}
+        onClickedResult={isReadOnly ? undefined : onClickedResult}
+        hasNextSibling={!insideLayout && siblingCodeLines?.hasNext}
+        hasPreviousSibling={!insideLayout && siblingCodeLines?.hasPrevious}
+        insideLayout={insideLayout}
+        element={element}
       >
-        {isPortalVisible ? (
-          <ParagraphFormulaEditor
-            formula={children}
-            varName={
-              <div css={codeBlock.pAdvCalcStyles}>
-                <span css={codeBlock.pIconStyles}>
-                  <Formula />
-                </span>
-                <span>Formula</span>
-              </div>
-            }
-          />
-        ) : (
-          <UICodeLine
-            highlight={selected}
-            result={lineResult}
-            placeholder={aPlaceholder}
-            syntaxError={syntaxError}
-            isEmpty={isEmpty}
-            onDragStartInlineResult={handleDragStartInlineResult}
-            onDragStartCell={handleDragStartCell}
-            onDragEnd={onDragEnd}
-            onClickedResult={isReadOnly ? undefined : onClickedResult}
-            hasNextSibling={
-              !teleport && !insideLayout && siblingCodeLines?.hasNext
-            }
-            hasPreviousSibling={
-              !teleport && !insideLayout && siblingCodeLines?.hasPrevious
-            }
-            insideLayout={insideLayout}
-            element={element}
-          >
-            {children}
-          </UICodeLine>
-        )}
-      </CodeLineTeleport>
+        {children}
+      </UICodeLine>
     </DraggableBlock>
   );
 };

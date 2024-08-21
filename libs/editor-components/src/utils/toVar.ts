@@ -9,4 +9,5 @@ export const toVar = (
   name: name.name,
   blockId: getDefined(name.blockId),
   dataTab: false,
+  isSelected: false,
 });

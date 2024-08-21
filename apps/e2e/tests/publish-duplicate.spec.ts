@@ -729,6 +729,11 @@ test("checks big notebooks don't have issues publishing", async ({
   await testUser.notebook.waitForEditorToLoad();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay * 3);
+
+  await page.reload();
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay * 3);
+
   await notebook.publishNotebook();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.computerDelay);

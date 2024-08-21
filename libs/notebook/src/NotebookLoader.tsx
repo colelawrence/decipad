@@ -39,7 +39,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     computer,
     loadedFromRemote,
     timedOutLoadingFromRemote,
-    destroy,
     hasNotSavedRemotelyInAWhile,
   ] = useNotebookState(
     notebookId,
@@ -51,7 +50,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
         s.computer,
         s.loadedFromRemote,
         s.timedOutLoadingFromRemote,
-        s.destroy,
         s.hasNotSavedRemotelyInAWhile,
       ] as const
   );
@@ -68,9 +66,9 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
 
   const init = useCallback(() => {
     if (notebookMetaLoaded && plugins) {
-      initEditor(
+      initEditor({
         notebookId,
-        {
+        options: {
           plugins,
           docsync: {
             readOnly,
@@ -81,13 +79,15 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
           },
           onChangeTitle: onNotebookTitleChange,
         },
-        () => session ?? undefined
-      );
+        getSession: () => session ?? undefined,
+        interactions,
+      });
     }
   }, [
     connectionParams,
     initEditor,
     initialState,
+    interactions,
     notebookId,
     notebookMetaLoaded,
     onNotebookTitleChange,
@@ -107,16 +107,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     // we need this for SSR
     init();
   }
-
-  useEffect(() => {
-    return () => {
-      const { pathname } = window.location;
-      const match = pathname.match(/^\/n\/.*%3A(.*)/);
-      if (!match || match[1] !== notebookId) {
-        destroy(); // destroy the editor on unmount
-      }
-    };
-  }, [destroy, notebookId]);
 
   useNotebookWarning({ notebookId });
   useLocalBackupNotice(editor, hasNotSavedRemotelyInAWhile);

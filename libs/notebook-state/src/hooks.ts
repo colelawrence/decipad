@@ -4,6 +4,7 @@ import { NotebookState, AnnotationsState } from './state';
 import { useNotebookRoute } from '@decipad/routing';
 import { EditorController } from '@decipad/notebook-tabs';
 import { getDefined } from '@decipad/utils';
+import { shallow } from 'zustand/shallow';
 
 type StateSelectorType<U> = Parameters<
   typeof useStoreWithEqualityFn<ReturnType<typeof getNotebookStore>, U>
@@ -14,7 +15,7 @@ export const useNotebookState = <U = NotebookState>(
   selector: StateSelectorType<U>
 ) => {
   const notebookStore = getNotebookStore(notebookId);
-  const partialStore = useStoreWithEqualityFn(notebookStore, selector);
+  const partialStore = useStoreWithEqualityFn(notebookStore, selector, shallow);
 
   return partialStore;
 };

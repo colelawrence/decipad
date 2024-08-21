@@ -83,12 +83,16 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly onDownload?: () => void;
   readonly handleDownloadChart?: () => void;
   readonly needsUpgrade?: boolean;
+
+  readonly elementId?: string;
 }
 // eslint-disable-next-line complexity
 export const DraggableBlock = ({
   isSelected = false,
   isHidden = false,
   isBeingDragged = false,
+
+  elementId,
 
   dragSource,
   blockRef,
@@ -157,6 +161,7 @@ export const DraggableBlock = ({
       {...props}
     >
       <div
+        data-element-id={elementId}
         css={[
           {
             display: 'grid',

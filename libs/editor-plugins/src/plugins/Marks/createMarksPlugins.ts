@@ -13,7 +13,6 @@ import {
 
 import type { WithRequired } from '@udecode/plate-common';
 import { createMagicNumberPlugin } from '../MagicNumber';
-import { createInlineNumberPlugin } from '../MagicNumber/createInlineNumberPlugin';
 import { createSpoilerPlugin } from './createSpoilerPlugin';
 import { createHighlightPlugin } from '@udecode/plate-highlight';
 
@@ -68,11 +67,6 @@ const magicNumberPlugin = () =>
 const spoilerPlugin = () =>
   withHotkeyRestrictedToAllowedBlocks(createSpoilerPlugin() as StrictPlugin);
 
-const valueBubblePlugin = () =>
-  withHotkeyRestrictedToAllowedBlocks(
-    createInlineNumberPlugin() as StrictPlugin
-  );
-
 export const createMarksPlugins = (): StrictPlugin[] => [
   boldPlugin(),
   italicPlugin(),
@@ -82,5 +76,4 @@ export const createMarksPlugins = (): StrictPlugin[] => [
   highlightPlugin(),
   magicNumberPlugin(),
   spoilerPlugin(),
-  valueBubblePlugin(),
 ];

@@ -18,6 +18,5 @@ export * from './Media/MediaEmbed';
 export * from './NavigationSidebar';
 export * from './plate-ui';
 export * from './SubmitForm/SubmitForm';
-export * from './TeleportEditor';
 export * from './text';
 export * from './utils';

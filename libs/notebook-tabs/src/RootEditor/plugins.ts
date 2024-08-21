@@ -1,4 +1,4 @@
-import { Editor, Element, Text } from 'slate';
+import { Editor, Element, Text, Path } from 'slate';
 import {
   ELEMENT_DATA_TAB,
   ELEMENT_H1,
@@ -8,9 +8,23 @@ import {
   DataTabElement,
   TabElement,
   TitleElement,
+  ELEMENT_CALLOUT,
+  ELEMENT_LI,
+  ELEMENT_OL,
+  ELEMENT_LIC,
+  ELEMENT_UL,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_BLOCKQUOTE,
+  MARK_MAGICNUMBER,
+  PlainText,
+  DataTabChildrenElement,
+  ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { IsTitle } from '../utils';
+import { IsTab, IsTitle } from '../utils';
 import {
   type TNodeEntry,
   type TEditor,
@@ -19,9 +33,15 @@ import {
 } from '@udecode/plate-common';
 import { isFirstOfOldNodes } from './utils';
 import { DATA_TAB_INDEX, FIRST_TAB_INDEX } from '../constants';
+import { getExprRef, isExprRef } from '@decipad/computer';
+import { generatedNames } from '@decipad/utils';
 
 type NormalizePlugin = (entry: TNodeEntry) => boolean;
 type CurriedNormalizePlugin = (editor: TEditor) => NormalizePlugin;
+type CurriedNormalizerPluginWithIdGenerator = (
+  editor: TEditor,
+  idGenerator: () => string
+) => NormalizePlugin;
 
 //
 // Responsible for either:
@@ -417,7 +437,112 @@ const ensureDataTab: CurriedNormalizePlugin = (editor) => (entry) => {
   return true;
 };
 
-export const normalizers = (editor: TEditor): Array<NormalizePlugin> => [
+const TEXT_ELEMENTS_WITH_INLINE_NUMBERS = new Set([
+  ELEMENT_PARAGRAPH,
+  ELEMENT_CALLOUT,
+  ELEMENT_LI,
+  ELEMENT_OL,
+  ELEMENT_LIC,
+  ELEMENT_UL,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_BLOCKQUOTE,
+]);
+
+const isNonExprRefInlineNumber = (node: unknown): boolean => {
+  return (
+    typeof node === 'object' &&
+    node != null &&
+    'text' in node &&
+    MARK_MAGICNUMBER in node &&
+    typeof node.text === 'string' &&
+    node[MARK_MAGICNUMBER] === true &&
+    !isExprRef(node.text)
+  );
+};
+
+//
+// Migration plugin for inline numbers into the data tab.
+// 1. Inline numbers are now purely visual elements, they don't themselves define anything.
+// 2. Because of this, we need to migrate any inline number that ISNT a smart ref (exprRef_[a-Z]).
+// 3. This needs to be at the tabs level, because we want to migrate them TO the data tab.
+//
+const migrateInlineNumbers: CurriedNormalizerPluginWithIdGenerator =
+  (editor, idGenerator) => (entry) => {
+    const [node, path] = entry;
+
+    if (!IsTab(node)) return false;
+
+    const childrenToMigrate: Array<[Path, PlainText]> = [];
+
+    for (const [childIndex, child] of node.children.entries()) {
+      if (!TEXT_ELEMENTS_WITH_INLINE_NUMBERS.has(child.type)) {
+        continue;
+      }
+
+      const childChildren = child.children as Array<PlainText>;
+
+      for (const [inlineIndex, inlineChild] of childChildren.entries()) {
+        if (!isNonExprRefInlineNumber(inlineChild)) {
+          continue;
+        }
+
+        childrenToMigrate.push([[childIndex, inlineIndex], inlineChild]);
+      }
+    }
+
+    if (childrenToMigrate.length === 0) {
+      return false;
+    }
+
+    for (const [childPath, content] of childrenToMigrate) {
+      const dataTabDefinitionId = idGenerator();
+
+      editor.apply({
+        type: 'insert_node',
+        path: [DATA_TAB_INDEX, 0],
+        node: {
+          type: ELEMENT_DATA_TAB_CHILDREN,
+          id: dataTabDefinitionId,
+          children: [
+            {
+              id: idGenerator(),
+              type: ELEMENT_STRUCTURED_VARNAME,
+              children: [{ text: generatedNames() }],
+            },
+            {
+              id: idGenerator(),
+              type: ELEMENT_CODE_LINE_V2_CODE,
+              children: [{ text: content.text }],
+            },
+          ],
+        } satisfies DataTabChildrenElement,
+      });
+
+      const inlineNumberPath = [...path, ...childPath];
+
+      editor.apply({
+        type: 'insert_text',
+        path: inlineNumberPath,
+        offset: 0,
+        text: getExprRef(dataTabDefinitionId),
+      });
+
+      editor.apply({
+        type: 'remove_text',
+        path: inlineNumberPath,
+        offset: getExprRef(dataTabDefinitionId).length,
+        text: content.text,
+      });
+    }
+
+    return true;
+  };
+
+export const normalizers = (
+  editor: TEditor,
+  idGenerator: () => string = nanoid
+): Array<NormalizePlugin> => [
   findOrInsertTitlePlugin(editor),
   ensureDataTab(editor),
   ensureOneTabPlugin(editor),
@@ -425,4 +550,5 @@ export const normalizers = (editor: TEditor): Array<NormalizePlugin> => [
   ensureParagraphInTab(editor),
   emptyTitleNodes(editor),
   removeExtraTitles(editor),
+  migrateInlineNumbers(editor, idGenerator),
 ];

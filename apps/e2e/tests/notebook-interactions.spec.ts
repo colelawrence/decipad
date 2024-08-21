@@ -71,21 +71,6 @@ test('inserts a link using markdown syntax', async ({ testUser }) => {
   await expect(locator).toHaveAttribute('href', 'https://example.com/');
 });
 
-test('inserts a magic number', async ({ testUser }) => {
-  const { page, notebook } = testUser;
-
-  await notebook.focusOnBody();
-  await page.keyboard.press('Enter');
-
-  await notebook.addFormula('Foo', '4');
-
-  await notebook.selectLastParagraph();
-  await page.keyboard.type('The sentence meaning of life is %Foo%');
-  await expect(
-    page.getByText('The sentence meaning of life is 4Foo')
-  ).toBeVisible();
-});
-
 test('text formatter options', async ({ testUser }) => {
   const { page, notebook } = testUser;
 

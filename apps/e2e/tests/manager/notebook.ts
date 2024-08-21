@@ -36,6 +36,9 @@ export class Notebook {
   readonly topRightDuplicateNotebook: Locator;
   readonly republishNotification: Locator;
   readonly publishingSidebar: Locator;
+  readonly dataDrawer: Locator;
+  readonly dataDrawerWrapper: Locator;
+  readonly dataDrawerUnitPicker: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -69,6 +72,10 @@ export class Notebook {
     this.changeStatusMenu = page.getByRole('menuitem', {
       name: 'Change Status',
     });
+
+    this.dataDrawer = page.getByTestId('data-drawer');
+    this.dataDrawerWrapper = page.getByTestId('data-drawer-wrapper');
+    this.dataDrawerUnitPicker = page.getByTestId('data-drawer-unit-picker');
   }
 
   /**
@@ -1887,5 +1894,31 @@ export class Notebook {
         timeout: 20_000,
       });
     });
+  }
+
+  async dragMagicNumber(name: string) {
+    const getSelection = async (): Promise<
+      { x: number; y: number } | undefined
+    > => {
+      return this.page.evaluate(() => {
+        const selection = window.getSelection();
+        if (selection == null) {
+          return;
+        }
+
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+
+        return { x: rect.left, y: rect.top };
+      });
+    };
+
+    const selection = await getSelection();
+    expect(selection).toBeDefined();
+
+    await this.page
+      .getByTestId(`number-catalogue-${name}`)
+      .last()
+      .dragTo(this.page.locator('body'), { targetPosition: selection });
   }
 }

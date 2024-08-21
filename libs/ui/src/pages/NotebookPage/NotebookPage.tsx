@@ -6,6 +6,7 @@ import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
 import { useDraggingScroll, useScrollToHash } from '../../hooks';
 import { PermissionType } from '../../types';
 import * as S from './styles';
+import { useSetDataDrawerVar } from './hooks';
 
 interface NotebookPageProps {
   readonly notebook: ReactNode;
@@ -71,6 +72,8 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     onDragOver,
   } = useDraggingScroll<HTMLDivElement>();
 
+  useSetDataDrawerVar();
+
   const showSidebar = getShowSidebar(props, sidebarComponent);
   const isInEditorSidebar = sidebarComponent === 'annotations';
 
@@ -85,6 +88,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
       >
         {leftSidebar && (
           <SidebarExtra
+            isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
             showSidebar={!!leftSidebar}
             sidebarComponent={'navigation-sidebar'}
             position="left"
@@ -125,6 +129,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
         <SidebarExtra
           showSidebar={showSidebar}
           sidebarComponent={sidebarComponent}
+          isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
         >
           {sidebar}
         </SidebarExtra>
@@ -136,9 +141,16 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
 const SidebarExtra: FC<{
   showSidebar: boolean;
   sidebarComponent: SidebarComponent;
+  isDataDrawerOpen: boolean;
   children: ReactNode;
   position?: 'left' | 'right';
-}> = ({ showSidebar, sidebarComponent, children, position = 'right' }) => {
+}> = ({
+  showSidebar,
+  sidebarComponent,
+  children,
+  position = 'right',
+  isDataDrawerOpen,
+}) => {
   if (!showSidebar) {
     return null;
   }
@@ -148,7 +160,11 @@ const SidebarExtra: FC<{
   }
 
   return (
-    <S.AsideWrapper sidebarComponent={sidebarComponent} position={position}>
+    <S.AsideWrapper
+      sidebarComponent={sidebarComponent}
+      position={position}
+      isDataDrawerOpen={isDataDrawerOpen}
+    >
       {children}
     </S.AsideWrapper>
   );

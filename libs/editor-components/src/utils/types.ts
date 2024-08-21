@@ -8,6 +8,7 @@ export type CatalogHeadingItem = {
   path: Path;
   currentTab: boolean;
   dataTab: boolean;
+  isSelected?: boolean;
 };
 
 export type CatalogItemVar = {
@@ -16,6 +17,7 @@ export type CatalogItemVar = {
   blockId: string;
   currentTab: boolean;
   dataTab: boolean;
+  isSelected?: boolean;
 };
 
 export type CatalogItem = CatalogHeadingItem | CatalogItemVar;

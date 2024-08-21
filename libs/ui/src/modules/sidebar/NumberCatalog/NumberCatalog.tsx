@@ -14,6 +14,8 @@ export type NumberCatalogItemType = {
   type: 'h2' | 'h3' | 'var';
   currentTab: boolean;
   dataTab: boolean;
+
+  isSelected?: boolean;
 };
 
 interface NumberCatalogProps {
@@ -50,6 +52,7 @@ export const NumberCatalog = ({
             onDragEnd={onDragEnd}
             onClick={() => editVariable(item.blockId)}
             isDataTab={item.dataTab}
+            isSelected={item.isSelected}
           />
         );
       default:

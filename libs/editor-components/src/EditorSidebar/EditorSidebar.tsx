@@ -21,6 +21,10 @@ import { selectCatalogNames } from '../utils/selectCatalogNames';
 import { execute } from '../utils/slashCommands';
 import { toVar } from '../utils/toVar';
 import { useOnDragEnd } from '../utils/useDnd';
+import {
+  blockSelectionStore,
+  useBlockSelectionSelectors,
+} from '@udecode/plate-selection';
 
 interface EditorSidebarProps {
   notebookId: string;
@@ -35,10 +39,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
 }) => {
   const notebookMetaData = useNotebookMetaData();
 
-  const onDragStart = useMemo(
-    () => editor && onDragStartSmartRef(editor),
-    [editor]
-  );
+  const onDragStart = useMemo(() => onDragStartSmartRef(editor), [editor]);
   const onDragEnd = useOnDragEnd();
 
   const computer = useComputer();
@@ -50,19 +51,26 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     (s) => [s.setAddVariable, s.setEditingVariable] as const
   );
 
+  const selectedIds = useBlockSelectionSelectors().selectedIds() as Set<string>;
+
+  const onSetEditingVariable = useCallback(
+    (id: string) => {
+      setEditingVariable(id);
+      blockSelectionStore.set.selectedIds(new Set([id]));
+    },
+    [setEditingVariable]
+  );
+
   const catalog = useMemo(
-    () => editor && catalogItems(editor, controller),
+    () => catalogItems(editor, controller),
     [editor, controller]
   );
 
   const items = computer.getNamesDefined$.useWithSelectorDebounced(
     catalogDebounceTimeMs,
-    useCallback(
-      (_items: AutocompleteName[]) => {
-        return catalog ? catalog(selectCatalogNames(_items).map(toVar)) : [];
-      },
-      [catalog]
-    )
+    (_items: AutocompleteName[]) => {
+      return catalog(selectCatalogNames(_items).map(toVar));
+    }
   );
 
   const myOnExec = useCallback(
@@ -95,23 +103,30 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
 
   const [search, setSearch] = useState('');
 
-  const filteredItems = useMemo(
+  const filteredTransformedItems = useMemo(
     () =>
-      items.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      ),
-    [items, search]
+      items
+        .map((i) => {
+          if (selectedIds.has(i.blockId)) {
+            // eslint-disable-next-line no-param-reassign
+            i.isSelected = true;
+          }
+          return i;
+        })
+        .filter((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
+        ),
+    [items, search, selectedIds]
   );
 
   const groupedItems = useMemo(
-    () => groupByTab(filteredItems),
-    [filteredItems]
+    () => groupByTab(filteredTransformedItems),
+    [filteredTransformedItems]
   );
-
   return (
     <ErrorBoundary fallback={<></>}>
       <UIEditorSidebar
-        items={filteredItems}
+        items={filteredTransformedItems}
         search={search}
         setSearch={setSearch}
         {...notebookMetaData}
@@ -121,7 +136,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
           toggleAddNewVariable={setAddVariable}
-          editVariable={setEditingVariable}
+          editVariable={onSetEditingVariable}
         />
         <SlashCommandsMenu
           variant="inline"

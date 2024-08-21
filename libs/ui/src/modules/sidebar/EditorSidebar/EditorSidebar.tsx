@@ -102,22 +102,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
             icon={<MagnifyingGlass />}
           />
 
-          <div
-            css={css([
-              deciOverflowYStyles,
-              {
-                width: '100%',
-                overflowY: 'auto',
-                overflowX: 'hidden',
-              },
-              {
-                '& > div > div[role="menu"]': {
-                  margin: '-16px -8px',
-                  gridTemplateColumns: '1fr',
-                },
-              },
-            ])}
-          >
+          <div css={tabWrapperStyles}>
             <TabsContent name="variable">{variable}</TabsContent>
             <TabsContent name="block">{block}</TabsContent>
           </div>
@@ -126,3 +111,14 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     </div>
   );
 };
+
+const tabWrapperStyles = css(deciOverflowYStyles, {
+  width: '100%',
+  overflowY: 'auto',
+  overflowX: 'hidden',
+
+  '& > div > div[role="menu"]': {
+    margin: '-16px -8px',
+    gridTemplateColumns: '1fr',
+  },
+});

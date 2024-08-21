@@ -76,7 +76,6 @@ import {
   yellow200,
   yellow300,
   yellow500,
-  yellow600,
   yellow700,
   yellow800,
   yellow900,
@@ -371,7 +370,7 @@ export const ThemeColors: ThemeColorsType = {
   Yellow: {
     Light: {
       Text: {
-        Subdued: yellow600.hex,
+        Subdued: yellow800.hex,
         Default: yellow800.hex,
       },
       Background: {

@@ -63,6 +63,7 @@ export { Edit } from './Edit';
 export { Ellipsis } from './Ellipsis';
 export { Email } from './Email';
 export { Emoji } from './Emoji';
+export { Enter } from './Enter';
 export { Export } from './Export';
 export { File } from './File';
 export { Filter } from './Filter';

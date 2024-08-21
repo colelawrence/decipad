@@ -4,23 +4,23 @@ import { normalizers } from './plugins';
 import { ELEMENT_H1 } from '@udecode/plate-heading';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import type { TEditor } from '@udecode/plate-common';
-import { vi, it, expect } from 'vitest';
+import { vi, it, expect, describe, beforeEach } from 'vitest';
 import {
   DataTabElement,
   ELEMENT_DATA_TAB,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  MARK_MAGICNUMBER,
   ParagraphElement,
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
+import { getExprRef } from '@decipad/computer';
 
 vi.mock('nanoid', () => ({
   nanoid: () => 'mocked-id',
 }));
-
-const editor = createEditor() as TEditor;
-editor.normalize = normalizeCurried(editor, normalizers(editor as TEditor));
 
 const EXPECTED_NOTEBOOK = [
   {
@@ -50,164 +50,168 @@ const EXPECTED_NOTEBOOK = [
   },
 ];
 
-it('normalizes empty notebook', () => {
-  editor.children = [];
-  editor.normalize();
+describe('Normalize editor plugins', () => {
+  const editor = createEditor() as TEditor;
+  editor.normalize = normalizeCurried(editor, normalizers(editor as TEditor));
 
-  // Title + DataTab + Tab
-  expect(editor.children).toHaveLength(3);
-  expect(editor.children).toMatchObject(EXPECTED_NOTEBOOK);
-});
+  it('normalizes empty notebook', () => {
+    editor.children = [];
+    editor.normalize();
 
-it('shifts title to the correct place', () => {
-  editor.children = [
-    {
-      type: ELEMENT_DATA_TAB,
-      children: [],
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          type: 'p',
-        },
-      ],
-      type: 'tab',
-    },
-    {
-      children: [
-        {
-          text: 'Welcome to Decipad!',
-        },
-      ],
-      type: 'title',
-    },
-  ] as any;
-  editor.normalize();
+    // Title + DataTab + Tab
+    expect(editor.children).toHaveLength(3);
+    expect(editor.children).toMatchObject(EXPECTED_NOTEBOOK);
+  });
 
-  expect(editor.children).toHaveLength(3);
-  expect(editor.children).toMatchObject(EXPECTED_NOTEBOOK);
-});
+  it('shifts title to the correct place', () => {
+    editor.children = [
+      {
+        type: ELEMENT_DATA_TAB,
+        children: [],
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        type: 'tab',
+      },
+      {
+        children: [
+          {
+            text: 'Welcome to Decipad!',
+          },
+        ],
+        type: 'title',
+      },
+    ] as any;
+    editor.normalize();
 
-it('migrates old notebooks', () => {
-  editor.children = [
-    {
-      type: ELEMENT_H1,
-      children: [{ text: 'Old title' }],
-    },
-    {
-      type: ELEMENT_PARAGRAPH,
-      children: [{ text: 'Old paragraph' }],
-    },
-  ] as any;
+    expect(editor.children).toHaveLength(3);
+    expect(editor.children).toMatchObject(EXPECTED_NOTEBOOK);
+  });
 
-  editor.normalize();
+  it('migrates old notebooks', () => {
+    editor.children = [
+      {
+        type: ELEMENT_H1,
+        children: [{ text: 'Old title' }],
+      },
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: 'Old paragraph' }],
+      },
+    ] as any;
 
-  expect(editor.children).toHaveLength(3);
-  expect(editor.children).toMatchObject([
-    {
-      children: [
-        {
-          text: 'Old title',
-        },
-      ],
-      id: 'mocked-id',
-      type: 'title',
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      children: [],
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: 'Old paragraph',
-            },
-          ],
-          type: 'p',
-        },
-      ],
-      name: 'First tab',
-      id: 'mocked-id',
-      type: 'tab',
-    },
-  ]);
-});
+    editor.normalize();
 
-it('fixes different order notebooks', () => {
-  editor.children = [
-    {
-      type: 'tab',
-      children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
-    },
-    {
-      type: 'title',
-      children: [{ text: 'my title' }],
-    },
-  ] as any;
+    expect(editor.children).toHaveLength(3);
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'Old title',
+          },
+        ],
+        id: 'mocked-id',
+        type: 'title',
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        children: [],
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'Old paragraph',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        name: 'First tab',
+        id: 'mocked-id',
+        type: 'tab',
+      },
+    ]);
+  });
 
-  editor.normalize();
+  it('fixes different order notebooks', () => {
+    editor.children = [
+      {
+        type: 'tab',
+        children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
+      },
+      {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+    ] as any;
 
-  expect(editor.children).toMatchObject([
-    {
-      children: [
-        {
-          text: 'my title',
-        },
-      ],
-      type: 'title',
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      children: [],
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: 'tab paragraph',
-            },
-          ],
-          type: 'p',
-        },
-      ],
-      type: 'tab',
-    },
-  ]);
-});
+    editor.normalize();
 
-it('only allows one data tab per notebook', () => {
-  editor.children = [
-    {
-      type: 'tab',
-      children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'first-one',
-      children: [],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'second-one',
-      children: [],
-    },
-    {
-      type: 'title',
-      children: [{ text: 'my title' }],
-    },
-  ] as any;
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'my title',
+          },
+        ],
+        type: 'title',
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        children: [],
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'tab paragraph',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        type: 'tab',
+      },
+    ]);
+  });
 
-  editor.normalize();
+  it('only allows one data tab per notebook', () => {
+    editor.children = [
+      {
+        type: 'tab',
+        children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'second-one',
+        children: [],
+      },
+      {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+    ] as any;
 
-  expect(editor.children).toMatchInlineSnapshot(`
+    editor.normalize();
+
+    expect(editor.children).toMatchInlineSnapshot(`
     [
       {
         "children": [
@@ -237,37 +241,37 @@ it('only allows one data tab per notebook', () => {
       },
     ]
   `);
-});
+  });
 
-it('prefer to keep the data tab with most children', () => {
-  editor.children = [
-    {
-      type: 'tab',
-      children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'first-one',
-      children: [],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'second-one',
-      children: [
-        {
-          text: 'some claculation',
-        },
-      ],
-    },
-    {
-      type: 'title',
-      children: [{ text: 'my title' }],
-    },
-  ] as any;
+  it('prefer to keep the data tab with most children', () => {
+    editor.children = [
+      {
+        type: 'tab',
+        children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'second-one',
+        children: [
+          {
+            text: 'some claculation',
+          },
+        ],
+      },
+      {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+    ] as any;
 
-  editor.normalize();
+    editor.normalize();
 
-  expect(editor.children).toMatchInlineSnapshot(`
+    expect(editor.children).toMatchInlineSnapshot(`
     [
       {
         "children": [
@@ -301,247 +305,485 @@ it('prefer to keep the data tab with most children', () => {
       },
     ]
   `);
+  });
+
+  it('keeps the children from a data tab that is removed', () => {
+    editor.children = [
+      {
+        type: 'tab',
+        children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [
+          {
+            id: '1',
+            text: 'more calculations',
+          },
+          {
+            id: '2',
+            text: 'even more calculations',
+          },
+        ],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'second-one',
+        children: [
+          {
+            id: '3',
+            text: 'some claculation',
+          },
+        ],
+      },
+      {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+    ] as any;
+
+    editor.normalize();
+
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'my title',
+          },
+        ],
+        type: 'title',
+      },
+      {
+        children: [
+          {
+            id: '3',
+            text: 'some claculation',
+          },
+          {
+            id: '1',
+            text: 'more calculations',
+          },
+          {
+            id: '2',
+            text: 'even more calculations',
+          },
+        ],
+        id: 'first-one',
+        type: 'data-tab',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'tab paragraph',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        type: 'tab',
+      },
+    ]);
+  });
+
+  it('Merges all children from all data tabs regarless of position.', () => {
+    editor.children = [
+      {
+        type: 'tab',
+        children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [
+          {
+            id: '1',
+            text: 'more calculations',
+          },
+          {
+            id: '2',
+            text: 'even more calculations',
+          },
+        ],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'second-one',
+        children: [
+          {
+            id: '3',
+            text: 'some claculation',
+          },
+        ],
+      },
+      {
+        type: 'title',
+        children: [{ text: 'my title' }],
+      },
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'third-one',
+        children: [
+          {
+            id: '4',
+            text: '4',
+          },
+          {
+            id: '5',
+            text: '5',
+          },
+          {
+            id: '6',
+            text: '6',
+          },
+          {
+            id: '7',
+            text: '7',
+          },
+        ],
+      },
+    ] as any;
+
+    editor.normalize();
+
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'my title',
+          },
+        ],
+        type: 'title',
+      },
+      {
+        children: [
+          {
+            id: '3',
+            text: 'some claculation',
+          },
+          {
+            id: '3',
+            text: 'some claculation',
+          },
+          {
+            id: '2',
+            text: 'even more calculations',
+          },
+          {
+            id: '1',
+            text: 'more calculations',
+          },
+          {
+            id: '4',
+            text: '4',
+          },
+          {
+            id: '5',
+            text: '5',
+          },
+          {
+            id: '6',
+            text: '6',
+          },
+          {
+            id: '7',
+            text: '7',
+          },
+        ],
+        id: 'third-one',
+        type: 'data-tab',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'tab paragraph',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        type: 'tab',
+      },
+    ]);
+  });
 });
 
-it('keeps the children from a data tab that is removed', () => {
-  editor.children = [
-    {
-      type: 'tab',
-      children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'first-one',
-      children: [
-        {
-          id: '1',
-          text: 'more calculations',
-        },
-        {
-          id: '2',
-          text: 'even more calculations',
-        },
-      ],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'second-one',
-      children: [
-        {
-          id: '3',
-          text: 'some claculation',
-        },
-      ],
-    },
-    {
-      type: 'title',
-      children: [{ text: 'my title' }],
-    },
-  ] as any;
+describe('Migrate inline number expressions', () => {
+  let counter = 0;
+  const idGenerator = () => {
+    return (counter++).toString();
+  };
 
+  const editor = createEditor() as TEditor;
+  editor.normalize = normalizeCurried(
+    editor,
+    normalizers(editor as TEditor, idGenerator)
+  );
   editor.normalize();
 
-  expect(editor.children).toMatchObject([
-    {
-      children: [
-        {
-          text: 'my title',
-        },
-      ],
-      type: 'title',
-    },
-    {
-      children: [
-        {
-          id: '3',
-          text: 'some claculation',
-        },
-        {
-          id: '1',
-          text: 'more calculations',
-        },
-        {
-          id: '2',
-          text: 'even more calculations',
-        },
-      ],
-      id: 'first-one',
-      type: 'data-tab',
-    },
-    {
-      children: [
-        {
+  beforeEach(() => {
+    editor.children = [];
+    editor.normalize();
+  });
+
+  it('migrates single inline number expressions to data tab', () => {
+    editor.apply({
+      type: 'insert_node',
+      path: [2, 0],
+      node: {
+        id: nanoid(),
+        type: ELEMENT_PARAGRAPH,
+        children: [
+          { text: 'Here is an inline number: ' },
+          { text: '5 + 1', [MARK_MAGICNUMBER]: true },
+        ],
+      } satisfies ParagraphElement,
+    });
+
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'Welcome to Decipad!',
+          },
+        ],
+        id: 'mocked-id',
+        type: 'title',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: expect.any(String),
+                  },
+                ],
+                id: '1',
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: '5 + 1',
+                  },
+                ],
+                id: '2',
+                type: 'code_line_v2_code',
+              },
+            ],
+            id: '0',
+            type: 'data-tab-children',
+          },
+        ],
+        id: 'mocked-id',
+        type: 'data-tab',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'Here is an inline number: ',
+              },
+              {
+                magicnumberz: true,
+                text: 'exprRef_0',
+              },
+            ],
+            id: 'mocked-id',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        id: 'mocked-id',
+        name: 'First tab',
+        type: 'tab',
+      },
+    ]);
+  });
+
+  it('migrates multiple inline numbers only if they arent exprRefs', () => {
+    editor.withoutNormalizing(() => {
+      editor.apply({
+        type: 'insert_node',
+        path: [2, 0],
+        node: {
+          id: nanoid(),
+          type: ELEMENT_PARAGRAPH,
           children: [
-            {
-              text: 'tab paragraph',
-            },
+            { text: 'Here is an inline number: ' },
+            { text: '5 + 1', [MARK_MAGICNUMBER]: true },
+            { text: 'and here is another one ' },
+            { text: '100 - 200 + 2', [MARK_MAGICNUMBER]: true },
+            { text: 'but the next one shouldnt normalize away' },
+            { text: getExprRef('something'), [MARK_MAGICNUMBER]: true },
           ],
-          type: 'p',
-        },
-      ],
-      type: 'tab',
-    },
-  ]);
+        } satisfies ParagraphElement,
+      });
+    });
+
+    expect(editor.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'Welcome to Decipad!',
+          },
+        ],
+        id: 'mocked-id',
+        type: 'title',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: expect.any(String),
+                  },
+                ],
+                id: '7',
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: '100 - 200 + 2',
+                  },
+                ],
+                id: '8',
+                type: 'code_line_v2_code',
+              },
+            ],
+            id: '6',
+            type: 'data-tab-children',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: expect.any(String),
+                  },
+                ],
+                id: '4',
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: '5 + 1',
+                  },
+                ],
+                id: '5',
+                type: 'code_line_v2_code',
+              },
+            ],
+            id: '3',
+            type: 'data-tab-children',
+          },
+        ],
+        id: 'mocked-id',
+        type: 'data-tab',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'Here is an inline number: ',
+              },
+              {
+                magicnumberz: true,
+                text: 'exprRef_3',
+              },
+              {
+                text: 'and here is another one ',
+              },
+              {
+                magicnumberz: true,
+                text: 'exprRef_6',
+              },
+              {
+                text: 'but the next one shouldnt normalize away',
+              },
+              {
+                magicnumberz: true,
+                text: 'exprRef_something',
+              },
+            ],
+            id: 'mocked-id',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            type: 'p',
+          },
+        ],
+        id: 'mocked-id',
+        name: 'First tab',
+        type: 'tab',
+      },
+    ]);
+  });
 });
 
-it('Merges all children from all data tabs regarless of position.', () => {
-  editor.children = [
-    {
-      type: 'tab',
-      children: [{ type: 'p', children: [{ text: 'tab paragraph' }] }],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'first-one',
-      children: [
-        {
-          id: '1',
-          text: 'more calculations',
-        },
-        {
-          id: '2',
-          text: 'even more calculations',
-        },
-      ],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'second-one',
-      children: [
-        {
-          id: '3',
-          text: 'some claculation',
-        },
-      ],
-    },
-    {
-      type: 'title',
-      children: [{ text: 'my title' }],
-    },
-    {
-      type: ELEMENT_DATA_TAB,
-      id: 'third-one',
-      children: [
-        {
-          id: '4',
-          text: '4',
-        },
-        {
-          id: '5',
-          text: '5',
-        },
-        {
-          id: '6',
-          text: '6',
-        },
-        {
-          id: '7',
-          text: '7',
-        },
-      ],
-    },
-  ] as any;
+describe('Weird/broken notebooks', () => {
+  const editor = createEditor() as TEditor;
+  editor.normalize = normalizeCurried(editor, normalizers(editor as TEditor));
 
-  editor.normalize();
+  it('fixes out of order elements', () => {
+    const BROKEN_NOTEBOOK = [
+      {
+        id: 'title',
+        type: 'title',
+        children: [{ text: 'title' }],
+      } satisfies TitleElement,
+      {
+        id: 'data-tab',
+        type: 'data-tab',
+        children: [],
+      } satisfies DataTabElement,
+      {
+        id: 'p',
+        type: 'p',
+        children: [{ text: 'this is a paragraph' }],
+      } satisfies ParagraphElement,
+      {
+        id: 'tab',
+        type: 'tab',
+        name: 'tab',
+        children: [
+          {
+            id: 'p-2',
+            type: 'p',
+            children: [{ text: 'paragraph in tab' }],
+          },
+        ],
+      } satisfies TabElement,
+    ];
 
-  expect(editor.children).toMatchObject([
-    {
-      children: [
-        {
-          text: 'my title',
-        },
-      ],
-      type: 'title',
-    },
-    {
-      children: [
-        {
-          id: '3',
-          text: 'some claculation',
-        },
-        {
-          id: '3',
-          text: 'some claculation',
-        },
-        {
-          id: '2',
-          text: 'even more calculations',
-        },
-        {
-          id: '1',
-          text: 'more calculations',
-        },
-        {
-          id: '4',
-          text: '4',
-        },
-        {
-          id: '5',
-          text: '5',
-        },
-        {
-          id: '6',
-          text: '6',
-        },
-        {
-          id: '7',
-          text: '7',
-        },
-      ],
-      id: 'third-one',
-      type: 'data-tab',
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: 'tab paragraph',
-            },
-          ],
-          type: 'p',
-        },
-      ],
-      type: 'tab',
-    },
-  ]);
-});
+    editor.children = BROKEN_NOTEBOOK;
+    editor.normalize();
 
-it('fixes out of order elements', () => {
-  const BROKEN_NOTEBOOK = [
-    {
-      id: 'title',
-      type: 'title',
-      children: [{ text: 'title' }],
-    } satisfies TitleElement,
-    {
-      id: 'data-tab',
-      type: 'data-tab',
-      children: [],
-    } satisfies DataTabElement,
-    {
-      id: 'p',
-      type: 'p',
-      children: [{ text: 'this is a paragraph' }],
-    } satisfies ParagraphElement,
-    {
-      id: 'tab',
-      type: 'tab',
-      name: 'tab',
-      children: [
-        {
-          id: 'p-2',
-          type: 'p',
-          children: [{ text: 'paragraph in tab' }],
-        },
-      ],
-    } satisfies TabElement,
-  ];
-
-  editor.children = BROKEN_NOTEBOOK;
-  editor.normalize();
-
-  expect(editor.children).toMatchInlineSnapshot(`
+    expect(editor.children).toMatchInlineSnapshot(`
     [
       {
         "children": [
@@ -584,845 +826,845 @@ it('fixes out of order elements', () => {
       },
     ]
   `);
-});
+  });
 
-it('fixes elements that end up inside the title', () => {
-  const BROKEN_NOTEBOOK = [
-    {
-      children: [
-        {
-          text: 'Digital Operations (Calculadora V3)',
-        },
-      ],
-      type: 'title',
-      id: 'wCNkRVjFu_2HJ4pbp8Uyb',
-    },
-    {
-      children: [],
-      type: 'data-tab',
-      id: 'pC-A9RUdmUZ2J-hIeVFQE',
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          type: 'p',
-          id: 'lNKhlJ3W04K-TsdY_SUS0',
-        },
-      ],
-      type: 'tab',
-      id: 'x6ijjJ2CCsKPjGXH8SO-V',
-      name: 'New Tab',
-    },
-    {
-      children: [
-        {
-          text: '',
-        },
-      ],
-      type: 'title',
-      id: 'wCNkRVjFu_2HJ4pbp8Uyb',
-    },
-    {
-      children: [
-        {
-          children: [
-            {
-              text: 'Cotiza tu logística respondiendo a estas simples preguntas',
-              bold: true,
-            },
-            {
-              text: '. Nos comprometemos con la máxima transparencia al fijar nuestras tarifas de servicio',
-            },
-          ],
-          id: 'LDBThukTOAvT0dhHe3fs9',
-          type: 'callout',
-        },
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          id: 'G-RyENYy5LlXdbjxiJ-FN',
-          type: 'img',
-          url: 'https://app.decipad.com/api/pads/jlSqb8bvSJF1yod3DdJeI/attachments/KxKsFGeNKTbzegjusbUtc',
-          width: 578,
-        },
-        {
-          children: [
-            {
-              text: 'Responde el cuestionario indicando los valores correctos en las casillas',
-              bold: true,
-              highlight: true,
-            },
-            {
-              text: ' 👇',
-            },
-          ],
-          id: 'RNl-_4_PYyUDOAsd943r5',
-          type: 'p',
-        },
-        {
-          children: [
-            {
-              text: 'Mi marca gestiona',
-            },
-            {
-              text: 'exprRef_LGgSrLX9EAcZcTi_bHK2X',
-              magicnumberz: true,
-            },
-            {
-              text: ' pedidos por mes. En donde cada orden contiene un promedio de ',
-            },
-            {
-              text: 'exprRef_GsEhqV_nmnsdyEwjLT_Vt',
-              magicnumberz: true,
-            },
-            {
-              text: '  unidades por pedido. Cada mes tengo un ',
-            },
-            {
-              text: 'exprRef_4yJyddOxGdHmwwdupU7TN',
-              magicnumberz: true,
-            },
-            {
-              text: ' de devoluciones.',
-            },
-          ],
-          id: 'ffth0usuhYCySI-l1iD5v',
-          type: 'p',
-        },
-        {
-          children: [
-            {
-              text: 'En la gestión de pedidos, la mayoría de mis ordenes son tamaño ',
-            },
-            {
-              text: 'exprRef_G_TrICouAmLRp4BceZb8S',
-              magicnumberz: true,
-            },
-            {
-              text: ' y el material de empaque de los pedidos es ',
-            },
-            {
-              text: 'exprRef_O58uc7KsnLiUSzCERdFYF',
-              magicnumberz: true,
-            },
-            {
-              text: ' .',
-            },
-          ],
-          type: 'p',
-          id: 'HeWVsa4BjKkasEmJQwRFT',
-        },
-        {
-          children: [
-            {
-              text: 'De cara a contar con suficiente stock  envío ',
-            },
-            {
-              text: 'exprRef_2oycuPXPIy6Vz_FIYAcMn',
-              magicnumberz: true,
-            },
-            {
-              text: ' unidades al almacén por mes, y tengo un stock disponible equivalente a ',
-            },
-            {
-              text: 'exprRef_OzXYB3QHGwoyw67XoUuJG',
-              magicnumberz: true,
-            },
-            {
-              text: '  meses de venta en stock.',
-            },
-          ],
-          type: 'p',
-          id: 'PQ87Ug62skskdhGMbe9iw',
-        },
-        {
-          children: [
-            {
-              text: 'Por último, ',
-            },
-            {
-              text: 'exprRef_HYTef29u9tBQ6XUxxgv_b',
-              magicnumberz: true,
-            },
-            {
-              text: ' necesitare la gestión de envío a cliente (última milla) ',
-            },
-          ],
-          type: 'p',
-          id: 'ZiVHda-C3eyIdat1rd_zv',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'PedidosMes',
-                },
-              ],
-              id: 'VSKd22QNajMg-D6WCx2ek',
-              type: 'caption',
-            },
-            {
-              children: [
-                {
-                  text: '935',
-                },
-              ],
-              id: 'TrDeh9VEJTiFUOD8zaC__',
-              type: 'exp',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-              ],
-              id: 'j89Izy-gPBySgKCUkN5wm',
-              type: 'slider',
-              max: '3000',
-              min: '300',
-              step: '1',
-              value: '5',
-            },
-          ],
-          id: 'LGgSrLX9EAcZcTi-bHK2X',
-          type: 'def',
-          variant: 'slider',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'UnidsxPedido2',
-                },
-              ],
-              id: 'RMNuT8nf66-IydMdHng9G',
-              type: 'caption',
-            },
-            {
-              children: [
-                {
-                  text: '2',
-                },
-              ],
-              id: 'bB0wK-aX4r979XjvBYy4e',
-              type: 'exp',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-              ],
-              id: 'HYZbDGqtL8JlQk7hFkNfu',
-              type: 'slider',
-              max: '10',
-              min: '1',
-              step: '1',
-              value: '5',
-            },
-          ],
-          id: 'GsEhqV_nmnsdyEwjLT-Vt',
-          type: 'def',
-          variant: 'slider',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'Devolucionesxmes',
-                },
-              ],
-              type: 'structured_varname',
-              id: 'cTIv3lURF4FkUsBOw0mk0',
-            },
-            {
-              children: [
-                {
-                  text: '5%',
-                },
-              ],
-              type: 'code_line_v2_code',
-              id: 'deaWEesqVAjGpJaI8W6s9',
-            },
-          ],
-          id: '4yJyddOxGdHmwwdupU7TN',
-          type: 'code_line_v2',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'Tamaño',
-                    },
-                  ],
-                  id: 'b8qB6uOPjH-1W9HRyhf7s',
-                  type: 'caption',
-                },
-                {
-                  children: [
-                    {
-                      text: 'S',
-                    },
-                  ],
-                  id: 'd25ZlMmHNhop_OxgPhJSE',
-                  type: 'dropdown',
-                  options: [
-                    {
-                      id: 'Sh_DI0i3nYT3GtcLdBzXe',
-                      value: 'XS',
-                    },
-                    {
-                      id: 'der_MGN_CO-91CZJdoPgx',
-                      value: 'S',
-                    },
-                    {
-                      id: 'xFXnyAyZMYgtURVoZ8U4Q',
-                      value: 'M',
-                    },
-                    {
-                      id: 'puzGwHhE0tUxp-db0Mzwr',
-                      value: 'L',
-                    },
-                    {
-                      id: '5BmrvYGS7oyMPVPqJrC1w',
-                      value: 'XL',
-                    },
-                  ],
-                },
-              ],
-              id: 'G_TrICouAmLRp4BceZb8S',
-              type: 'def',
-              variant: 'dropdown',
-              coerceToType: {
-                kind: 'string',
-              },
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'Packaging',
-                    },
-                  ],
-                  id: 'BpyPs_P64YDl1VbtB0E6r',
-                  type: 'caption',
-                },
-                {
-                  children: [
-                    {
-                      text: 'Propio',
-                    },
-                  ],
-                  id: 'OLILTdZRGvVkHPx2G8pgr',
-                  type: 'dropdown',
-                  options: [
-                    {
-                      id: 'j7h20i4RI2qq2iVNd18_w',
-                      value: 'Propio',
-                    },
-                    {
-                      id: 'KMLaEdtK7Rwspo-p0ce19',
-                      value: 'Del Operador',
-                    },
-                  ],
-                },
-              ],
-              id: 'O58uc7KsnLiUSzCERdFYF',
-              type: 'def',
-              variant: 'dropdown',
-              coerceToType: {
-                kind: 'string',
-              },
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'In_Unids',
-                    },
-                  ],
-                  id: 'Go149EZfwTMFFQxLxmsrD',
-                  type: 'caption',
-                },
-                {
-                  children: [
-                    {
-                      text: '5',
-                    },
-                  ],
-                  id: 'vjGPA-BW6OCILg4c6MGnn',
-                  type: 'exp',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'iwVWGJRwdvJgJm1scC8H1',
-                  type: 'slider',
-                  max: '3000',
-                  min: '1',
-                  step: '1',
-                  value: '5',
-                },
-              ],
-              id: '2oycuPXPIy6Vz-FIYAcMn',
-              type: 'def',
-              variant: 'slider',
-            },
-          ],
-          id: 'srCH7DaYbd_ib9awRf2UT',
-          type: 'columns',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'Meses_Stock',
-                },
-              ],
-              id: '_LAFLyljKLXcWsFfWakjT',
-              type: 'caption',
-            },
-            {
-              children: [
-                {
-                  text: '2',
-                },
-              ],
-              id: 'IqPERmlUXolbfU35LcrBW',
-              type: 'exp',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-              ],
-              id: 'PPn8irLVcxxz3jua7jLXB',
-              type: 'slider',
-              max: '10',
-              min: '0',
-              step: '1',
-              value: '5',
-            },
-          ],
-          id: 'OzXYB3QHGwoyw67XoUuJG',
-          type: 'def',
-          variant: 'slider',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'LastMile',
-                },
-              ],
-              id: 'EnWDGj79sagh78PezYYve',
-              type: 'caption',
-            },
-            {
-              children: [
-                {
-                  text: 'Si',
-                },
-              ],
-              id: 'QAmXIH2cMHQJE93BB0jy2',
-              type: 'dropdown',
-              options: [
-                {
-                  id: 'joQXFowEGmPT0v1LIWXfs',
-                  value: 'Si',
-                },
-                {
-                  id: 'hi5jYS7iXh8uVaRLS57IC',
-                  value: 'No',
-                },
-              ],
-            },
-          ],
-          id: 'HYTef29u9tBQ6XUxxgv_b',
-          type: 'def',
-          variant: 'dropdown',
-          coerceToType: {
-            kind: 'string',
+  it('fixes elements that end up inside the title', () => {
+    const BROKEN_NOTEBOOK = [
+      {
+        children: [
+          {
+            text: 'Digital Operations (Calculadora V3)',
           },
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'Pcs_en_pallet',
-                    },
-                  ],
-                  id: 'OccxMkaMI8E_wPiYCA9to',
-                  type: 'table-var-name',
-                },
-              ],
-              id: 'CgCdbeAVtM4AI3HxPChdv',
-              type: 'table-caption',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'Column1',
-                    },
-                  ],
-                  id: 'O7kb58lwkyhsDH5Esh8U2',
-                  type: 'th',
-                  cellType: {
-                    kind: 'anything',
+        ],
+        type: 'title',
+        id: 'wCNkRVjFu_2HJ4pbp8Uyb',
+      },
+      {
+        children: [],
+        type: 'data-tab',
+        id: 'pC-A9RUdmUZ2J-hIeVFQE',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            type: 'p',
+            id: 'lNKhlJ3W04K-TsdY_SUS0',
+          },
+        ],
+        type: 'tab',
+        id: 'x6ijjJ2CCsKPjGXH8SO-V',
+        name: 'New Tab',
+      },
+      {
+        children: [
+          {
+            text: '',
+          },
+        ],
+        type: 'title',
+        id: 'wCNkRVjFu_2HJ4pbp8Uyb',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'Cotiza tu logística respondiendo a estas simples preguntas',
+                bold: true,
+              },
+              {
+                text: '. Nos comprometemos con la máxima transparencia al fijar nuestras tarifas de servicio',
+              },
+            ],
+            id: 'LDBThukTOAvT0dhHe3fs9',
+            type: 'callout',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: 'G-RyENYy5LlXdbjxiJ-FN',
+            type: 'img',
+            url: 'https://app.decipad.com/api/pads/jlSqb8bvSJF1yod3DdJeI/attachments/KxKsFGeNKTbzegjusbUtc',
+            width: 578,
+          },
+          {
+            children: [
+              {
+                text: 'Responde el cuestionario indicando los valores correctos en las casillas',
+                bold: true,
+                highlight: true,
+              },
+              {
+                text: ' 👇',
+              },
+            ],
+            id: 'RNl-_4_PYyUDOAsd943r5',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: 'Mi marca gestiona',
+              },
+              {
+                text: 'exprRef_LGgSrLX9EAcZcTi_bHK2X',
+                magicnumberz: true,
+              },
+              {
+                text: ' pedidos por mes. En donde cada orden contiene un promedio de ',
+              },
+              {
+                text: 'exprRef_GsEhqV_nmnsdyEwjLT_Vt',
+                magicnumberz: true,
+              },
+              {
+                text: '  unidades por pedido. Cada mes tengo un ',
+              },
+              {
+                text: 'exprRef_4yJyddOxGdHmwwdupU7TN',
+                magicnumberz: true,
+              },
+              {
+                text: ' de devoluciones.',
+              },
+            ],
+            id: 'ffth0usuhYCySI-l1iD5v',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: 'En la gestión de pedidos, la mayoría de mis ordenes son tamaño ',
+              },
+              {
+                text: 'exprRef_G_TrICouAmLRp4BceZb8S',
+                magicnumberz: true,
+              },
+              {
+                text: ' y el material de empaque de los pedidos es ',
+              },
+              {
+                text: 'exprRef_O58uc7KsnLiUSzCERdFYF',
+                magicnumberz: true,
+              },
+              {
+                text: ' .',
+              },
+            ],
+            type: 'p',
+            id: 'HeWVsa4BjKkasEmJQwRFT',
+          },
+          {
+            children: [
+              {
+                text: 'De cara a contar con suficiente stock  envío ',
+              },
+              {
+                text: 'exprRef_2oycuPXPIy6Vz_FIYAcMn',
+                magicnumberz: true,
+              },
+              {
+                text: ' unidades al almacén por mes, y tengo un stock disponible equivalente a ',
+              },
+              {
+                text: 'exprRef_OzXYB3QHGwoyw67XoUuJG',
+                magicnumberz: true,
+              },
+              {
+                text: '  meses de venta en stock.',
+              },
+            ],
+            type: 'p',
+            id: 'PQ87Ug62skskdhGMbe9iw',
+          },
+          {
+            children: [
+              {
+                text: 'Por último, ',
+              },
+              {
+                text: 'exprRef_HYTef29u9tBQ6XUxxgv_b',
+                magicnumberz: true,
+              },
+              {
+                text: ' necesitare la gestión de envío a cliente (última milla) ',
+              },
+            ],
+            type: 'p',
+            id: 'ZiVHda-C3eyIdat1rd_zv',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'PedidosMes',
                   },
-                },
-                {
-                  children: [
-                    {
-                      text: 'Column2',
-                    },
-                  ],
-                  id: '-HGNK66K6X0np27AZwJ9Q',
-                  type: 'th',
-                  cellType: {
-                    kind: 'anything',
+                ],
+                id: 'VSKd22QNajMg-D6WCx2ek',
+                type: 'caption',
+              },
+              {
+                children: [
+                  {
+                    text: '935',
                   },
+                ],
+                id: 'TrDeh9VEJTiFUOD8zaC__',
+                type: 'exp',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+                id: 'j89Izy-gPBySgKCUkN5wm',
+                type: 'slider',
+                max: '3000',
+                min: '300',
+                step: '1',
+                value: '5',
+              },
+            ],
+            id: 'LGgSrLX9EAcZcTi-bHK2X',
+            type: 'def',
+            variant: 'slider',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'UnidsxPedido2',
+                  },
+                ],
+                id: 'RMNuT8nf66-IydMdHng9G',
+                type: 'caption',
+              },
+              {
+                children: [
+                  {
+                    text: '2',
+                  },
+                ],
+                id: 'bB0wK-aX4r979XjvBYy4e',
+                type: 'exp',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+                id: 'HYZbDGqtL8JlQk7hFkNfu',
+                type: 'slider',
+                max: '10',
+                min: '1',
+                step: '1',
+                value: '5',
+              },
+            ],
+            id: 'GsEhqV_nmnsdyEwjLT-Vt',
+            type: 'def',
+            variant: 'slider',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'Devolucionesxmes',
+                  },
+                ],
+                type: 'structured_varname',
+                id: 'cTIv3lURF4FkUsBOw0mk0',
+              },
+              {
+                children: [
+                  {
+                    text: '5%',
+                  },
+                ],
+                type: 'code_line_v2_code',
+                id: 'deaWEesqVAjGpJaI8W6s9',
+              },
+            ],
+            id: '4yJyddOxGdHmwwdupU7TN',
+            type: 'code_line_v2',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'Tamaño',
+                      },
+                    ],
+                    id: 'b8qB6uOPjH-1W9HRyhf7s',
+                    type: 'caption',
+                  },
+                  {
+                    children: [
+                      {
+                        text: 'S',
+                      },
+                    ],
+                    id: 'd25ZlMmHNhop_OxgPhJSE',
+                    type: 'dropdown',
+                    options: [
+                      {
+                        id: 'Sh_DI0i3nYT3GtcLdBzXe',
+                        value: 'XS',
+                      },
+                      {
+                        id: 'der_MGN_CO-91CZJdoPgx',
+                        value: 'S',
+                      },
+                      {
+                        id: 'xFXnyAyZMYgtURVoZ8U4Q',
+                        value: 'M',
+                      },
+                      {
+                        id: 'puzGwHhE0tUxp-db0Mzwr',
+                        value: 'L',
+                      },
+                      {
+                        id: '5BmrvYGS7oyMPVPqJrC1w',
+                        value: 'XL',
+                      },
+                    ],
+                  },
+                ],
+                id: 'G_TrICouAmLRp4BceZb8S',
+                type: 'def',
+                variant: 'dropdown',
+                coerceToType: {
+                  kind: 'string',
                 },
-              ],
-              id: 'npyjyl7g1ize-KJCYpME1',
-              type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'Packaging',
+                      },
+                    ],
+                    id: 'BpyPs_P64YDl1VbtB0E6r',
+                    type: 'caption',
+                  },
+                  {
+                    children: [
+                      {
+                        text: 'Propio',
+                      },
+                    ],
+                    id: 'OLILTdZRGvVkHPx2G8pgr',
+                    type: 'dropdown',
+                    options: [
+                      {
+                        id: 'j7h20i4RI2qq2iVNd18_w',
+                        value: 'Propio',
+                      },
+                      {
+                        id: 'KMLaEdtK7Rwspo-p0ce19',
+                        value: 'Del Operador',
+                      },
+                    ],
+                  },
+                ],
+                id: 'O58uc7KsnLiUSzCERdFYF',
+                type: 'def',
+                variant: 'dropdown',
+                coerceToType: {
+                  kind: 'string',
+                },
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'In_Unids',
+                      },
+                    ],
+                    id: 'Go149EZfwTMFFQxLxmsrD',
+                    type: 'caption',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '5',
+                      },
+                    ],
+                    id: 'vjGPA-BW6OCILg4c6MGnn',
+                    type: 'exp',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'iwVWGJRwdvJgJm1scC8H1',
+                    type: 'slider',
+                    max: '3000',
+                    min: '1',
+                    step: '1',
+                    value: '5',
+                  },
+                ],
+                id: '2oycuPXPIy6Vz-FIYAcMn',
+                type: 'def',
+                variant: 'slider',
+              },
+            ],
+            id: 'srCH7DaYbd_ib9awRf2UT',
+            type: 'columns',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'Meses_Stock',
+                  },
+                ],
+                id: '_LAFLyljKLXcWsFfWakjT',
+                type: 'caption',
+              },
+              {
+                children: [
+                  {
+                    text: '2',
+                  },
+                ],
+                id: 'IqPERmlUXolbfU35LcrBW',
+                type: 'exp',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+                id: 'PPn8irLVcxxz3jua7jLXB',
+                type: 'slider',
+                max: '10',
+                min: '0',
+                step: '1',
+                value: '5',
+              },
+            ],
+            id: 'OzXYB3QHGwoyw67XoUuJG',
+            type: 'def',
+            variant: 'slider',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'LastMile',
+                  },
+                ],
+                id: 'EnWDGj79sagh78PezYYve',
+                type: 'caption',
+              },
+              {
+                children: [
+                  {
+                    text: 'Si',
+                  },
+                ],
+                id: 'QAmXIH2cMHQJE93BB0jy2',
+                type: 'dropdown',
+                options: [
+                  {
+                    id: 'joQXFowEGmPT0v1LIWXfs',
+                    value: 'Si',
+                  },
+                  {
+                    id: 'hi5jYS7iXh8uVaRLS57IC',
+                    value: 'No',
+                  },
+                ],
+              },
+            ],
+            id: 'HYTef29u9tBQ6XUxxgv_b',
+            type: 'def',
+            variant: 'dropdown',
+            coerceToType: {
+              kind: 'string',
             },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'XS',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'Pcs_en_pallet',
+                      },
+                    ],
+                    id: 'OccxMkaMI8E_wPiYCA9to',
+                    type: 'table-var-name',
+                  },
+                ],
+                id: 'CgCdbeAVtM4AI3HxPChdv',
+                type: 'table-caption',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'Column1',
+                      },
+                    ],
+                    id: 'O7kb58lwkyhsDH5Esh8U2',
+                    type: 'th',
+                    cellType: {
+                      kind: 'anything',
                     },
-                  ],
-                  id: 'CaZwvjS7ktlUf1TjcaZ9P',
-                  type: 'td',
-                },
-                {
-                  children: [
-                    {
-                      text: '1200',
+                  },
+                  {
+                    children: [
+                      {
+                        text: 'Column2',
+                      },
+                    ],
+                    id: '-HGNK66K6X0np27AZwJ9Q',
+                    type: 'th',
+                    cellType: {
+                      kind: 'anything',
                     },
-                  ],
-                  id: 'DIGlnb-0VHs81xJMisojf',
-                  type: 'td',
-                },
-              ],
-              id: 'ZBtbjxcdRWbwdqou_T6gJ',
-              type: 'tr',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'S',
-                    },
-                  ],
-                  id: 'fwPdDKFc9tcsLKhrXpa75',
-                  type: 'td',
-                },
-                {
-                  children: [
-                    {
-                      text: '800',
-                    },
-                  ],
-                  id: '6kuHrx45WKYfm3q3MXZIV',
-                  type: 'td',
-                },
-              ],
-              id: 'gekyuFV0oKf2JOF20zQ-b',
-              type: 'tr',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'M',
-                    },
-                  ],
-                  id: 'VJPyUCMd23AOTOiitH8tH',
-                  type: 'td',
-                },
-                {
-                  children: [
-                    {
-                      text: '400',
-                    },
-                  ],
-                  id: 'JnV9uaknIl0gByh_lqvaB',
-                  type: 'td',
-                },
-              ],
-              id: '1yy21T6Im1dxMVxpavawM',
-              type: 'tr',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'L',
-                    },
-                  ],
-                  id: 'qvSmNsssBhyMdorH3F6fS',
-                  type: 'td',
-                },
-                {
-                  children: [
-                    {
-                      text: '200',
-                    },
-                  ],
-                  id: 'iFyAmgpZ53Pm8FrkaQED9',
-                  type: 'td',
-                },
-              ],
-              id: 'Rpx59BBzsw4doBPFQAwj9',
-              type: 'tr',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'XL',
-                    },
-                  ],
-                  id: 'qLd_EV1tV0ZmyCUuyIjv6',
-                  type: 'td',
-                },
-                {
-                  children: [
-                    {
-                      text: '10',
-                    },
-                  ],
-                  id: 'IYnYnl_qsDOG-ogFohbRd',
-                  type: 'td',
-                },
-              ],
-              id: 'diUxOTA26GBqr-3tL-vIQ',
-              type: 'tr',
-            },
-          ],
-          id: 'Hk32-JGzOtCfviYzLqf8q',
-          type: 'table',
-          version: 2,
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'COST_Unit_Picking',
-                },
-              ],
-              type: 'structured_varname',
-              id: '-4KTiCmBUTwRodEkrWr5q',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'D77ASRke0xpJhGb44b6p4',
-                  type: 'smart-ref',
-                  blockId: 'LGgSrLX9EAcZcTi-bHK2X',
-                  columnId: null,
-                  lastSeenVariableName: 'PedidosMes',
-                },
-                {
-                  text: ' * ',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'C5_lkEozoDZd-QwxEtj2f',
-                  type: 'smart-ref',
-                  blockId: 'GsEhqV_nmnsdyEwjLT-Vt',
-                  columnId: null,
-                  lastSeenVariableName: 'UnidsxPedido2',
-                },
-                {
-                  text: ' * 0.33 EUR',
-                },
-              ],
-              type: 'code_line_v2_code',
-              id: '3KviXwvSjILLMY1M1h51K',
-            },
-          ],
-          id: 'sAEYChlaRRoMiUV02AHOZ',
-          type: 'code_line_v2',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'COST_Order_Processing',
-                },
-              ],
-              type: 'structured_varname',
-              id: 'JSjhIfKSQoMnQyc6T4laG',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'RoXrsJ5Rmbn_NSm3ZoP9g',
-                  type: 'smart-ref',
-                  blockId: 'LGgSrLX9EAcZcTi-bHK2X',
-                  columnId: null,
-                  lastSeenVariableName: 'PedidosMes',
-                },
-                {
-                  text: ' * 0.90 eur',
-                },
-              ],
-              type: 'code_line_v2_code',
-              id: 'JvpdBKSL58DTSTFWF7dWI',
-            },
-          ],
-          id: '44NQJ4Te-a4RLE27ds-dh',
-          type: 'code_line_v2',
-        },
-        {
-          children: [
-            {
-              children: [
-                {
-                  text: 'COST_Devs_Processing',
-                },
-              ],
-              type: 'structured_varname',
-              id: '_Clw6M0Fyk0HYMMWVunKA',
-            },
-            {
-              children: [
-                {
-                  text: '',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'HLY-GSRi87pIzrzTGcB4e',
-                  type: 'smart-ref',
-                  blockId: 'LGgSrLX9EAcZcTi-bHK2X',
-                  columnId: null,
-                  lastSeenVariableName: 'PedidosMes',
-                },
-                {
-                  text: '  * ',
-                },
-                {
-                  children: [
-                    {
-                      text: '',
-                    },
-                  ],
-                  id: 'xciz9h_j4iYpo59UmA8Rq',
-                  type: 'smart-ref',
-                  blockId: '4yJyddOxGdHmwwdupU7TN',
-                  columnId: null,
-                  lastSeenVariableName: 'Devolucionesxmes',
-                },
-                {
-                  text: ' * 1 EUR',
-                },
-              ],
-              type: 'code_line_v2_code',
-              id: '1e-iiYUzEud2DEHmVpjWz',
-            },
-          ],
-          id: 'tabbWI1Rsa0SMgzrgolwu',
-          type: 'code_line_v2',
-        },
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          id: 'HxfM8Z4tmmYlRlo5I73gj',
-          type: 'p',
-        },
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          type: 'p',
-          id: 'yBrMJmkiRCTYlGY1oOrT6',
-        },
-      ],
-      type: 'title',
-      id: 'wCNkRVjFu_2HJ4pbp8Uyb',
-    },
-    {
-      children: [
-        {
-          text: '',
-        },
-      ],
-      type: 'title',
-      id: 'wCNkRVjFu_2HJ4pbp8Uyb',
-    },
-  ] as any;
+                  },
+                ],
+                id: 'npyjyl7g1ize-KJCYpME1',
+                type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'XS',
+                      },
+                    ],
+                    id: 'CaZwvjS7ktlUf1TjcaZ9P',
+                    type: 'td',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '1200',
+                      },
+                    ],
+                    id: 'DIGlnb-0VHs81xJMisojf',
+                    type: 'td',
+                  },
+                ],
+                id: 'ZBtbjxcdRWbwdqou_T6gJ',
+                type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'S',
+                      },
+                    ],
+                    id: 'fwPdDKFc9tcsLKhrXpa75',
+                    type: 'td',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '800',
+                      },
+                    ],
+                    id: '6kuHrx45WKYfm3q3MXZIV',
+                    type: 'td',
+                  },
+                ],
+                id: 'gekyuFV0oKf2JOF20zQ-b',
+                type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'M',
+                      },
+                    ],
+                    id: 'VJPyUCMd23AOTOiitH8tH',
+                    type: 'td',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '400',
+                      },
+                    ],
+                    id: 'JnV9uaknIl0gByh_lqvaB',
+                    type: 'td',
+                  },
+                ],
+                id: '1yy21T6Im1dxMVxpavawM',
+                type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'L',
+                      },
+                    ],
+                    id: 'qvSmNsssBhyMdorH3F6fS',
+                    type: 'td',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '200',
+                      },
+                    ],
+                    id: 'iFyAmgpZ53Pm8FrkaQED9',
+                    type: 'td',
+                  },
+                ],
+                id: 'Rpx59BBzsw4doBPFQAwj9',
+                type: 'tr',
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        text: 'XL',
+                      },
+                    ],
+                    id: 'qLd_EV1tV0ZmyCUuyIjv6',
+                    type: 'td',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '10',
+                      },
+                    ],
+                    id: 'IYnYnl_qsDOG-ogFohbRd',
+                    type: 'td',
+                  },
+                ],
+                id: 'diUxOTA26GBqr-3tL-vIQ',
+                type: 'tr',
+              },
+            ],
+            id: 'Hk32-JGzOtCfviYzLqf8q',
+            type: 'table',
+            version: 2,
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'COST_Unit_Picking',
+                  },
+                ],
+                type: 'structured_varname',
+                id: '-4KTiCmBUTwRodEkrWr5q',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'D77ASRke0xpJhGb44b6p4',
+                    type: 'smart-ref',
+                    blockId: 'LGgSrLX9EAcZcTi-bHK2X',
+                    columnId: null,
+                    lastSeenVariableName: 'PedidosMes',
+                  },
+                  {
+                    text: ' * ',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'C5_lkEozoDZd-QwxEtj2f',
+                    type: 'smart-ref',
+                    blockId: 'GsEhqV_nmnsdyEwjLT-Vt',
+                    columnId: null,
+                    lastSeenVariableName: 'UnidsxPedido2',
+                  },
+                  {
+                    text: ' * 0.33 EUR',
+                  },
+                ],
+                type: 'code_line_v2_code',
+                id: '3KviXwvSjILLMY1M1h51K',
+              },
+            ],
+            id: 'sAEYChlaRRoMiUV02AHOZ',
+            type: 'code_line_v2',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'COST_Order_Processing',
+                  },
+                ],
+                type: 'structured_varname',
+                id: 'JSjhIfKSQoMnQyc6T4laG',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'RoXrsJ5Rmbn_NSm3ZoP9g',
+                    type: 'smart-ref',
+                    blockId: 'LGgSrLX9EAcZcTi-bHK2X',
+                    columnId: null,
+                    lastSeenVariableName: 'PedidosMes',
+                  },
+                  {
+                    text: ' * 0.90 eur',
+                  },
+                ],
+                type: 'code_line_v2_code',
+                id: 'JvpdBKSL58DTSTFWF7dWI',
+              },
+            ],
+            id: '44NQJ4Te-a4RLE27ds-dh',
+            type: 'code_line_v2',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'COST_Devs_Processing',
+                  },
+                ],
+                type: 'structured_varname',
+                id: '_Clw6M0Fyk0HYMMWVunKA',
+              },
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'HLY-GSRi87pIzrzTGcB4e',
+                    type: 'smart-ref',
+                    blockId: 'LGgSrLX9EAcZcTi-bHK2X',
+                    columnId: null,
+                    lastSeenVariableName: 'PedidosMes',
+                  },
+                  {
+                    text: '  * ',
+                  },
+                  {
+                    children: [
+                      {
+                        text: '',
+                      },
+                    ],
+                    id: 'xciz9h_j4iYpo59UmA8Rq',
+                    type: 'smart-ref',
+                    blockId: '4yJyddOxGdHmwwdupU7TN',
+                    columnId: null,
+                    lastSeenVariableName: 'Devolucionesxmes',
+                  },
+                  {
+                    text: ' * 1 EUR',
+                  },
+                ],
+                type: 'code_line_v2_code',
+                id: '1e-iiYUzEud2DEHmVpjWz',
+              },
+            ],
+            id: 'tabbWI1Rsa0SMgzrgolwu',
+            type: 'code_line_v2',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: 'HxfM8Z4tmmYlRlo5I73gj',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            type: 'p',
+            id: 'yBrMJmkiRCTYlGY1oOrT6',
+          },
+        ],
+        type: 'title',
+        id: 'wCNkRVjFu_2HJ4pbp8Uyb',
+      },
+      {
+        children: [
+          {
+            text: '',
+          },
+        ],
+        type: 'title',
+        id: 'wCNkRVjFu_2HJ4pbp8Uyb',
+      },
+    ] as any;
 
-  editor.children = BROKEN_NOTEBOOK;
-  editor.normalize();
+    editor.children = BROKEN_NOTEBOOK;
+    editor.normalize();
 
-  expect(editor.children).toMatchInlineSnapshot(`
+    expect(editor.children).toMatchInlineSnapshot(`
     [
       {
         "children": [
@@ -2231,4 +2473,5 @@ it('fixes elements that end up inside the title', () => {
       },
     ]
   `);
+  });
 });

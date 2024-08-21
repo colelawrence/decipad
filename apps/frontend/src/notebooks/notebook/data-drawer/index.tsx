@@ -3,6 +3,7 @@ import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
 import {
   CreateVariableDataDrawer,
+  DataDrawerComponent,
   EditVariableDataDrawer,
 } from './data-drawer';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -35,25 +36,19 @@ export const DataDrawer: FC = () => {
     return null;
   }
 
-  switch (isAddingOrEditingVariable) {
-    case 'create':
-      return (
-        <CreateVariableDataDrawer
-          computer={computer}
-          controller={editor}
-          mode={isAddingOrEditingVariable}
-          onClose={closeDataDrawer}
-        />
-      );
-    case 'edit':
-      return (
-        <EditVariableDataDrawer
-          computer={computer}
-          controller={editor}
-          mode={isAddingOrEditingVariable}
-          editingId={editingId!}
-          onClose={closeDataDrawer}
-        />
-      );
-  }
+  return (
+    <DataDrawerComponent
+      computer={computer}
+      controller={editor}
+      onClose={closeDataDrawer}
+      title={isAddingOrEditingVariable === 'create' ? 'Add Data' : 'Edit Data'}
+      isEditing={isAddingOrEditingVariable === 'edit'}
+    >
+      {isAddingOrEditingVariable === 'create' ? (
+        <CreateVariableDataDrawer />
+      ) : (
+        <EditVariableDataDrawer editingId={editingId!} />
+      )}
+    </DataDrawerComponent>
+  );
 };

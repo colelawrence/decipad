@@ -79,6 +79,7 @@ let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
   ENABLE_COMMENTS: true,
   NOTION_CONNECTIONS: true,
+  DATA_DRAWER: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

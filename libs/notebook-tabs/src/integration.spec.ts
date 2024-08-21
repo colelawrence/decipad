@@ -11,7 +11,7 @@ import {
 } from '@decipad/editor-types';
 import { BlockProcessor } from './BlockProcessor';
 import { getComputer } from '@decipad/computer';
-import { timeout } from '@decipad/utils';
+import { Computer, IdentifiedResult } from '@decipad/computer-interfaces';
 
 vi.mock('nanoid', () => {
   let mockedId = 0;
@@ -23,11 +23,41 @@ vi.mock('nanoid', () => {
   };
 });
 
+const promisifyBlockId =
+  (computer: Computer) =>
+  (id: string): Promise<IdentifiedResult> => {
+    return new Promise((resolve, reject) => {
+      const sub = computer.getBlockIdResult$.observe(id).subscribe((res) => {
+        if (res == null) {
+          return;
+        }
+
+        if (res.type === 'identified-error') {
+          sub.unsubscribe();
+          reject();
+          return;
+        }
+
+        if (
+          res.type === 'computer-result' &&
+          res.result.type.kind === 'pending'
+        ) {
+          return;
+        }
+
+        sub.unsubscribe();
+        resolve(res);
+      });
+    });
+  };
+
 describe('Integrations between BlockProcessor and EditorController', () => {
   it('Computes the program from an editor change', async () => {
     const computer = getComputer();
     const controller = new EditorController('id', []);
     new BlockProcessor(controller, computer, 0);
+
+    const getResult = promisifyBlockId(computer);
 
     controller.forceNormalize();
 
@@ -41,10 +71,7 @@ describe('Integrations between BlockProcessor and EditorController', () => {
       } satisfies CodeLineElement,
     });
 
-    // TODO: Change block processor to make it much more testable.
-    await timeout(1000);
-
-    expect(computer.getBlockIdResult('code-line-id')).toMatchObject({
+    await expect(getResult('code-line-id')).resolves.toMatchObject({
       id: 'code-line-id',
       result: {
         type: {
@@ -67,6 +94,8 @@ describe('Integrations between BlockProcessor and EditorController', () => {
     const controller = new EditorController('id', []);
     new BlockProcessor(controller, computer, 0);
 
+    const getResult = promisifyBlockId(computer);
+
     controller.forceNormalize();
 
     controller.apply({
@@ -88,9 +117,7 @@ describe('Integrations between BlockProcessor and EditorController', () => {
       } satisfies DataTabChildrenElement,
     });
 
-    await timeout(1000);
-
-    expect(computer.getBlockIdResult('calculation-1')).toMatchObject({
+    await expect(getResult('calculation-1')).resolves.toMatchObject({
       id: 'calculation-1',
       result: {
         type: {

@@ -112,7 +112,6 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
 
   [tabletScreenQuery]: {
     width: '100%',
@@ -124,9 +123,13 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   }),
 }));
 
+const MIN_DATA_DRAWER_HEIGHT = 160;
+
 export const EditorAndTabWrapper = styled.div({
   width: '100%',
   height: '100%',
+
+  minHeight: MIN_DATA_DRAWER_HEIGHT * 2,
 
   display: 'flex',
   flexDirection: 'column',
@@ -156,9 +159,7 @@ export const DataDrawer = styled.div<{ isInEditorSidebar: boolean }>(
     width: props.isInEditorSidebar
       ? `calc(100% - ${ANNOTATIONS_WIDTH}px - 32px)`
       : '100%',
-    background: cssVar('backgroundMain'),
     borderRadius: '16px',
-    padding: '16px',
 
     [tabletScreenQuery]: {
       width: '100%',
@@ -218,11 +219,12 @@ export const InEditorSidebar = styled.div({
 interface AsideWrapperProps {
   readonly sidebarComponent: SidebarComponent;
   readonly position?: 'left' | 'right';
+  readonly isDataDrawerOpen: boolean;
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>(
   hideOnPrint,
-  ({ position = 'right', sidebarComponent }) => ({
+  ({ position = 'right', sidebarComponent, isDataDrawerOpen }) => ({
     position: 'relative',
     display: 'flex',
     justifyContent: 'flex-end',
@@ -237,6 +239,15 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
       width: ComponentWidths[sidebarComponent].default,
       height:
         sidebarComponent === 'publishing' ? undefined : 'calc(100vh - 80px)',
+
+      [tabletScreenQuery]: {
+        height:
+          sidebarComponent === 'publishing'
+            ? undefined
+            : isDataDrawerOpen
+            ? `calc(100vh - 80px - ${cssVar('dataDrawerHeight')})`
+            : 'calc(100vh - 80px)',
+      },
     },
 
     [smallScreenQuery]: {

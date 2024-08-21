@@ -51,11 +51,11 @@ export class BlockProcessor {
 
     // eslint-disable-next-line no-param-reassign
     rootEditor.apply = (op) => {
-      if (op.type !== 'remove_node') {
+      if (op.type !== 'remove_node' || op.SKIP) {
         apply.bind(rootEditor)(op);
       }
       this.EditorOverride(op);
-      if (op.type === 'remove_node') {
+      if (op.type === 'remove_node' && !op.SKIP) {
         apply.bind(rootEditor)(op);
       }
     };

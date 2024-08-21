@@ -1,4 +1,11 @@
-import { cssVar, p13Medium } from '@decipad/ui';
+import {
+  cssVar,
+  p12Regular,
+  p13Bold,
+  p13Medium,
+  p14Regular,
+  red400,
+} from '@decipad/ui';
 import styled from '@emotion/styled';
 
 export const DataDrawerEditor = styled.div({
@@ -9,49 +16,55 @@ export const DataDrawerEditor = styled.div({
   height: '32px',
 
   color: cssVar('textTitle'),
-
-  '> div': {
-    width: '100%',
-  },
 });
 
-export const DataDrawerNameWrapper = styled.div({
+export const DataDrawerNameWrapper = styled.div(p14Regular, {
   borderRadius: '8px',
   border: `1px solid ${cssVar('borderDefault')}`,
 
-  flexBasis: '300px',
-
   display: 'flex',
+  color: cssVar('textTitle'),
 
   '> div:first-of-type': {
-    border: `1px solid ${cssVar('borderDefault')}`,
-    width: '100%',
+    borderRight: `1px solid ${cssVar('borderDefault')}`,
     borderRadius: '8px',
 
-    padding: '0px 8px',
-
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'left',
     alignItems: 'center',
+
+    paddingRight: '8px',
+    paddingLeft: '8px',
+
+    minWidth: '160px',
 
     whiteSpace: 'pre',
   },
 
   '> div:last-of-type': {
-    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: '0px 8px',
+    paddingRight: '4px',
+    paddingLeft: '6px',
+
+    color: cssVar('iconColorHeavy'),
   },
 });
 
-export const DataDrawerCodeWrapper = styled.div({
+export const DataDrawerCodeWrapper = styled.div(p14Regular, {
+  color: cssVar('textTitle'),
   borderRadius: '8px',
   border: `1px solid ${cssVar('borderDefault')}`,
-  padding: '8px 12px',
+
+  height: '100%',
+  width: '100%',
+
   display: 'flex',
+  alignItems: 'center',
+
+  paddingLeft: '8px',
 
   '::before': {
     content: '"="',
@@ -60,6 +73,26 @@ export const DataDrawerCodeWrapper = styled.div({
 
   '> aside': {
     marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+
+    svg: {
+      marginLeft: '8px',
+
+      width: '32px',
+      height: '32px',
+      transition: 'all 0.2s',
+
+      borderRadius: '8px',
+      borderLeft: '1px solid transparent',
+
+      cursor: 'pointer',
+
+      ':hover': {
+        borderLeft: `1px solid ${cssVar('borderDefault')}`,
+        backgroundColor: cssVar('iconBackground'),
+      },
+    },
   },
 });
 
@@ -68,15 +101,86 @@ export const FormulaUnitDrawer = styled.span(p13Medium, {
   alignItems: 'center',
   gap: '2px',
   color: cssVar('themeTextSubdued'),
+  paddingRight: '4px',
   svg: { width: '16px', height: '16px' },
   span: { display: 'inline-flex', alignItems: 'center' },
 });
 
+export const DataDrawerDragWrapper = styled.div<{ height: number }>(
+  (props) => ({
+    height: props.height,
+    overflow: 'hidden',
+
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  })
+);
+
+export const DRAG_PILL_HEIGHT = 32 - 4;
+
+export const DragPill = styled.div({
+  width: '100%',
+  height: DRAG_PILL_HEIGHT,
+
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  '> div': {
+    width: '76px',
+    height: '4px',
+    borderRadius: '4px',
+    backgroundColor: cssVar('iconBackground'),
+    cursor: 'n-resize',
+
+    transition: 'all 0.2s',
+
+    '&:hover': {
+      transform: 'scale(1.5)',
+    },
+  },
+});
+
+export const DataDrawerKeysWrapper = styled.div({
+  width: '100%',
+  height: '100%',
+
+  display: 'flex',
+  flexDirection: 'column',
+
+  background: cssVar('backgroundMain'),
+  borderRadius: '16px',
+
+  '> footer': {
+    ...p12Regular,
+    color: cssVar('textDefault'),
+
+    display: 'flex',
+    justifyContent: 'end',
+    alignItems: 'center',
+
+    height: '48px',
+
+    backgroundColor: cssVar('backgroundHeavy'),
+
+    borderBottomLeftRadius: '16px',
+    borderBottomRightRadius: '16px',
+
+    padding: '0px 16px',
+  },
+});
+
 export const DataDrawerWrapper = styled.div({
+  padding: '16px',
+
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
-  height: '200px',
+  height: '100%',
+  width: '100%',
 
   '> div:first-of-type': {
     width: '100%',
@@ -93,6 +197,26 @@ export const DataDrawerWrapper = styled.div({
   },
 });
 
+export const KeyWrapper = styled.div({
+  display: 'flex',
+  gap: '4px',
+});
+
+export const HotKey = styled.span({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  boxSizing: 'border-box',
+  borderRadius: '6px',
+  padding: '4px 4px',
+  margin: '0px 2px',
+
+  border: `1px ${cssVar('borderSubdued')} solid`,
+  backgroundColor: cssVar('backgroundMain'),
+  color: cssVar('textSubdued'),
+});
+
 export const DataDrawerCloseButton = styled.div({
   width: '24px',
   height: '24px',
@@ -100,12 +224,21 @@ export const DataDrawerCloseButton = styled.div({
   padding: '4px',
   marginLeft: 'auto',
 
-  border: `1px solid ${cssVar('borderDefault')}`,
-  backgroundColor: cssVar('backgroundAccent'),
-
   svg: {
     cursor: 'pointer',
     width: '100%',
     height: '100%',
   },
+});
+
+export const PaddingDiv = styled.div({ width: '8px', visibility: 'hidden' });
+
+export const CreateVariableWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
+});
+
+export const ErrorParagraph = styled.p(p13Bold, {
+  color: red400.rgb,
 });

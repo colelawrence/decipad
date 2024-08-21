@@ -23,7 +23,6 @@ import {
   isStructuredElement,
 } from '@decipad/editor-utils';
 import {
-  useEditorTeleportContext,
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -35,7 +34,6 @@ import type {
 import {
   CodeLineStructured,
   CodeVariableDefinition,
-  ParagraphFormulaEditor,
   StructuredInputUnits,
   Tooltip,
   focusMouseEventLocation,
@@ -64,7 +62,6 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 import { DraggableBlock } from '../block-management';
-import { CodeLineTeleport } from './CodeLineTeleport';
 import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -128,24 +125,7 @@ export const CodeLineV2: PlateComponent = ({
     [editor, element, isReadOnly, lineResult]
   );
 
-  const {
-    closeEditor,
-    focusNumber,
-    focusCodeLine,
-    portal,
-    editing,
-    useWatchTeleported,
-  } = useEditorTeleportContext();
-
-  useWatchTeleported(lineId ?? '', element);
-
-  const teleport = editing?.codeLineId === element.id ? portal : undefined;
-
   const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
-
-  const onTeleportDismiss = useCallback(() => {
-    closeEditor(element.id, focusNumber);
-  }, [focusNumber, closeEditor, element.id]);
 
   const childrenArray = Children.toArray(children);
   if (childrenArray.length !== 2) {
@@ -154,8 +134,6 @@ export const CodeLineV2: PlateComponent = ({
 
   const path = findNodePath(editor, element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
-
-  const isPortalVisible = teleport != null && portal != null;
 
   const setShowResult = usePathMutatorCallback<CodeLineV2Element, 'showResult'>(
     editor,
@@ -169,6 +147,7 @@ export const CodeLineV2: PlateComponent = ({
       unit={simpleValue.unit}
       onChangeUnit={onChangeUnit}
       readOnly={isReadOnly}
+      variant="normal"
     />
   );
 
@@ -190,35 +169,20 @@ export const CodeLineV2: PlateComponent = ({
       isCentered={true}
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}
     >
-      <CodeLineTeleport
-        codeLine={teleport}
-        onDismiss={onTeleportDismiss}
-        onBringBack={focusCodeLine}
-      >
-        {isPortalVisible ? (
-          <ParagraphFormulaEditor
-            type={simpleValue ? 'input' : 'formula'}
-            varName={varNameElem}
-            formula={childrenArray[1]}
-            units={unitPicker}
-          />
-        ) : (
-          <CodeLineStructured
-            highlight={selected}
-            result={lineResult?.result}
-            syntaxError={syntaxError}
-            onDragStartInlineResult={handleDragStartInlineResult}
-            onDragStartCell={handleDragStartCell}
-            variableNameChild={varNameElem}
-            codeChild={childrenArray[1]}
-            unitPicker={unitPicker}
-            readOnly={isReadOnly}
-            insideLayout={insideLayout}
-            showResult={element.showResult}
-            setShowResult={setShowResult}
-          />
-        )}
-      </CodeLineTeleport>
+      <CodeLineStructured
+        highlight={selected}
+        result={lineResult?.result}
+        syntaxError={syntaxError}
+        onDragStartInlineResult={handleDragStartInlineResult}
+        onDragStartCell={handleDragStartCell}
+        variableNameChild={varNameElem}
+        codeChild={childrenArray[1]}
+        unitPicker={unitPicker}
+        readOnly={isReadOnly}
+        insideLayout={insideLayout}
+        showResult={element.showResult}
+        setShowResult={setShowResult}
+      />
     </DraggableBlock>
   );
 };

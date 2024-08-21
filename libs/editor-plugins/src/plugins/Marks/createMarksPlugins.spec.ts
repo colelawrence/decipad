@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect } from 'vitest';
 import type { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
 import {
   createMyPlateEditor,

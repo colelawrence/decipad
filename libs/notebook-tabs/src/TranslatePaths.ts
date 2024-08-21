@@ -17,10 +17,16 @@ export function translateOpUp(tabIndex: number, _op: TOperation): TOperation {
   const op = cloneDeep(_op);
   if (op.type === 'set_selection') {
     op.properties?.focus?.path.unshift(tabIndex);
-    op.properties?.anchor?.path.unshift(tabIndex);
+
+    if (op.properties?.focus?.path !== op.properties?.anchor?.path) {
+      op.properties?.anchor?.path.unshift(tabIndex);
+    }
 
     op.newProperties?.focus?.path.unshift(tabIndex);
-    op.newProperties?.anchor?.path.unshift(tabIndex);
+
+    if (op.newProperties?.focus?.path !== op.newProperties?.anchor?.path) {
+      op.newProperties?.anchor?.path.unshift(tabIndex);
+    }
 
     return op;
   }
@@ -63,11 +69,17 @@ export const translateOpDown: OpDownTranslator = <T extends TOperation>(
       throw new Error('Path length cannot be 0');
     }
 
-    op.properties?.anchor?.path.shift();
     op.properties?.focus?.path.shift();
 
-    op.newProperties?.anchor?.path.shift();
+    if (op.properties?.focus?.path !== op.properties?.anchor?.path) {
+      op.properties?.anchor?.path.shift();
+    }
+
     op.newProperties?.focus?.path.shift();
+
+    if (op.newProperties?.focus?.path !== op.newProperties?.anchor?.path) {
+      op.newProperties?.anchor?.path.shift();
+    }
 
     return [tabIndex, op];
   }

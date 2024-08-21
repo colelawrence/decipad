@@ -31,17 +31,11 @@ const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();
     await page.getByTestId('integration-modal-continue').click();
 
-    const generatedVarName = await page.evaluate(
-      getClearText,
-      await page.getByTestId('result-preview-input').innerHTML()
-    );
-
     await page
       .getByTestId('result-preview-input')
-      .getByText(generatedVarName)
-      .dblclick();
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type(String.fromCharCode(x + 65));
+      .getByRole('textbox')
+      .fill(String.fromCharCode(x + 65));
+
     await page.getByTestId('integration-modal-continue').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.liveBlockDelay);
@@ -107,7 +101,7 @@ test('Make sure our js code templates work', async ({ randomFreeUser }) => {
       allSources.length - 1
     );
     await expect(
-      page.locator('span').filter({ hasText: 'Warning' }).nth(2)
+      page.locator('span').filter({ hasText: 'Warning' }).first()
     ).toBeVisible();
   });
 });

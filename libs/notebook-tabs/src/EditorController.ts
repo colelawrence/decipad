@@ -92,6 +92,8 @@ export class EditorController implements RootEditorController {
   public events: RootEditorController['events'];
   public isMoving: boolean;
 
+  public activeEditorIndex: number;
+
   private titleEditor: BaseEditor;
   private tabEditors: Array<MyTabEditor> = [];
   private selectedTab = 0;
@@ -112,6 +114,8 @@ export class EditorController implements RootEditorController {
     this.titleEditor = this.createTitleEditor();
     this.mirrorEditor = this.createMirrorEditor();
     this.dataTabEditor = this.createDataTabEditor();
+
+    this.activeEditorIndex = -1;
   }
 
   private debugPrintMirrorState() {
@@ -277,7 +281,11 @@ export class EditorController implements RootEditorController {
   // TEditor methods
   public get children(): NotebookValue {
     return [
-      this.titleEditor.children[0] as TitleElement,
+      (this.titleEditor.children[0] as TitleElement) ?? {
+        type: 'title',
+        id: nanoid(),
+        children: [{ text: '' }],
+      },
       {
         id: this.dataTabEditor.id,
         type: ELEMENT_DATA_TAB,
@@ -638,6 +646,8 @@ export class EditorController implements RootEditorController {
       return;
     }
 
+    this.events.next({ type: 'root-any-change', op });
+
     const isTopLevel = this.handleTopLevelOps(op);
     if (!isTopLevel) {
       const childIndex = childIndexForOp(op);
@@ -653,6 +663,8 @@ export class EditorController implements RootEditorController {
       } else {
         const [tabIndex, translatedOp] = translateOpDown(op);
         translatedOp.FROM_ROOT = true;
+
+        this.activeEditorIndex = tabIndex;
 
         const tabEditorIndex = getOffsetIndex(tabIndex);
         const tabEditor = this.tabEditors[tabEditorIndex];

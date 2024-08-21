@@ -446,6 +446,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
         <UIDraggableBlock
           {...props}
+          elementId={element.id}
           isHidden={element.isHidden}
           isMultipleSelection={isMultipleSelection}
           isSelected={selected}

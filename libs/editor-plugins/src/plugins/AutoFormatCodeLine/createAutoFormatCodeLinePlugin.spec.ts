@@ -19,7 +19,7 @@ let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
   const computer = getComputer();
-  plugin = createAutoFormatCodeLinePlugin(computer)();
+  plugin = createAutoFormatCodeLinePlugin(computer, undefined)();
   editor = createMyPlateEditor({
     plugins: [
       plugin,
@@ -56,15 +56,6 @@ const renderEditorParagraph = (text: string) => {
   editor.selection = {
     anchor: { path: [0, 0], offset: text.length },
     focus: { path: [0, 0], offset: text.length },
-  };
-};
-
-const renderEditorCodeLine = () => {
-  editor.children = makeCodeLine() as never;
-  const end = { path: [0, 1], offset: 0 };
-  editor.selection = {
-    anchor: end,
-    focus: end,
   };
 };
 
@@ -123,18 +114,5 @@ describe('Auto format code line plugin', () => {
     renderEditorParagraph('');
     pressKey('=', { altKey: true });
     expect(editor.children).toEqual(makeParagraph());
-  });
-
-  it.skip('goes back to a paragraph when pressing equal and backspace', () => {
-    renderEditorParagraph('');
-    pressKey('=');
-    pressKey('Backspace');
-    expect(editor.children).toMatchObject(makeParagraph('='));
-  });
-
-  it.skip('when removing a codeline it inserts a paragraph', () => {
-    renderEditorCodeLine();
-    pressKey('Backspace');
-    expect(editor.children).toMatchObject(makeParagraph(''));
   });
 });

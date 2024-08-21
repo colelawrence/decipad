@@ -1,38 +1,19 @@
-import { getExprRef } from '@decipad/remote-computer';
 import { useComputer, useEditorChange } from '@decipad/editor-hooks';
 import type {
   AnyElement,
   PlateComponent,
   RichText,
 } from '@decipad/editor-types';
-import { useMyEditorRef } from '@decipad/editor-types';
-import {
-  getAboveNodeSafe,
-  insertStructuredCodeLineBelow,
-  magicNumberId,
-} from '@decipad/editor-utils';
-import {
-  useIsEditorReadOnly,
-  useShadowCodeLine,
-} from '@decipad/react-contexts';
-import { useWindowListener } from '@decipad/react-utils';
-import { useToast } from '@decipad/toast';
-import {
-  Button,
-  CodeError,
-  CodeLineFloat,
-  ParagraphFormulaEditor,
-  MagicNumber as UIMagicNumber,
-  VoidBlock,
-} from '@decipad/ui';
+import { getAboveNodeSafe, magicNumberId } from '@decipad/editor-utils';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { CodeError, MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
+import { findNodePath, getNodeString } from '@udecode/plate-common';
 import { useCallback, useState } from 'react';
 import { Element } from 'slate';
-import { ReactEditor } from 'slate-react';
 import { BlockErrorBoundary } from '../../BlockErrorBoundary';
-import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 const UnprotectedMagicNumber: PlateComponent = ({
   attributes,
@@ -44,24 +25,20 @@ const UnprotectedMagicNumber: PlateComponent = ({
   const readOnly = useIsEditorReadOnly();
   const text = getDefined(_text);
   const exp = getNodeString(text);
-  const toast = useToast();
 
   const blockId = useMagicNumberId(text);
 
-  const shadow = useShadowCodeLine(blockId);
+  const setEditingVariable = useNotebookWithIdState(
+    (s) => s.setEditingVariable
+  );
 
   const result = computer.getBlockIdResult$.use(blockId)?.result;
 
-  const editor = useMyEditorRef();
-
   const [inlineExpEditorVisible, setInlineExpEditorVisible] = useState(false);
-  const [magicNumberInput, setMagicNumberInput] = useState(exp);
-
-  const { editSource, isEditing } = shadow;
 
   const isLoading = !result || result?.type.kind === 'pending';
   const hasError = result?.type.kind === 'type-error';
-  const userIsEditing = inlineExpEditorVisible || isEditing;
+  const userIsEditing = inlineExpEditorVisible;
   const loadingState = isLoading || (hasError && userIsEditing);
 
   // dont link to tables, because it makes
@@ -69,130 +46,28 @@ const UnprotectedMagicNumber: PlateComponent = ({
   const isTableReference = !exp.includes('.');
   const sourceId = computer.getVarBlockId$.use(exp);
 
-  useWindowListener(
-    'keydown',
-    (event) => {
-      if (inlineExpEditorVisible && DISMISS_KEYS.includes(event.key)) {
-        event.stopPropagation();
-        event.preventDefault();
-        setInlineExpEditorVisible(false);
-      }
-    },
-    true
-  );
-
-  const onCreateInput = useCallback(async () => {
-    if (!_text) return;
-    const path = ReactEditor.findPath(editor as ReactEditor, _text);
-    if (!path) return;
-
-    const newBlockId = await insertStructuredCodeLineBelow({
-      editor,
-      path,
-      select: true,
-      getAvailableIdentifier: computer.getAvailableIdentifier.bind(computer),
-      code: magicNumberInput,
-    });
-
-    insertText(editor, getExprRef(newBlockId), {
-      at: path,
-    });
-
-    setInlineExpEditorVisible(false);
-  }, [magicNumberInput, _text, editor, computer]);
-
   const onClick = useCallback(() => {
     if (typeof sourceId !== 'string' || !isTableReference) {
       setInlineExpEditorVisible(true);
       return;
     }
 
-    const isCodeline = editSource(sourceId, text);
-    if (!isCodeline) {
-      const el =
-        'getElementById' in document && document.getElementById(sourceId);
-      if (el) {
-        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        el?.focus();
-      } else {
-        toast('This number is not editable in this tab', 'warning');
-      }
-    }
-  }, [sourceId, isTableReference, editSource, text, toast]);
+    setEditingVariable(sourceId);
+  }, [sourceId, isTableReference, setEditingVariable]);
 
   return (
     <span {...attributes}>
-      <span ref={shadow.numberRef}>
-        <UIMagicNumber
-          tempId={blockId}
-          loadingState={loadingState}
-          result={result}
-          expression={exp}
-          onClick={onClick}
-          readOnly={readOnly}
-          element={element as AnyElement}
-          isReference={sourceId !== undefined}
-        />
-        {shadow.portal}
-      </span>
-      {inlineExpEditorVisible && (
-        <span
-          css={{
-            position: 'absolute',
-          }}
-        >
-          <VoidBlock dontPreventDefault>
-            <CodeLineFloat offsetTop={25}>
-              <ParagraphFormulaEditor
-                formula={
-                  <input
-                    css={{
-                      width: '100%',
-                      backgroundColor: 'inherit',
-                    }}
-                    value={magicNumberInput}
-                    autoFocus
-                    onChange={(ev) => {
-                      const newValue = ev.target.value;
-                      setMagicNumberInput(newValue);
-                      if (newValue.length <= 0) return;
-
-                      if (_text) {
-                        const getPath = ReactEditor.findPath(
-                          editor as ReactEditor,
-                          _text
-                        );
-                        if (getPath) {
-                          insertText(editor, newValue, { at: getPath });
-                        }
-                      } else {
-                        console.error('could not write');
-                      }
-                    }}
-                    onBlur={(evt) => {
-                      const domNodeRole =
-                        evt.relatedTarget?.getAttribute('data-testid') || '';
-                      if (!domNodeRole.includes('unnamed-label'))
-                        setInlineExpEditorVisible(false);
-                    }}
-                  />
-                }
-                varName={
-                  <Button
-                    type="primary"
-                    size="extraSlim"
-                    onClick={onCreateInput}
-                    testId="unnamed-label"
-                  >
-                    Turn into input
-                  </Button>
-                }
-              />
-            </CodeLineFloat>
-          </VoidBlock>
-        </span>
-      )}
-      <span contentEditable={false} css={css({ display: 'none' })}>
+      <UIMagicNumber
+        tempId={blockId}
+        loadingState={loadingState}
+        result={result}
+        expression={exp}
+        onClick={onClick}
+        readOnly={readOnly}
+        element={element as AnyElement}
+        isReference={sourceId !== undefined}
+      />
+      <span contentEditable={false} css={displayNone}>
         {children}
       </span>
     </span>
@@ -225,3 +100,5 @@ function useMagicNumberId(text: RichText) {
     return magicNumberId(entry[0] as AnyElement, path[path.length - 1]);
   });
 }
+
+const displayNone = css({ display: 'none' });

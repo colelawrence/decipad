@@ -32,6 +32,10 @@ export interface ObservableRootEditorNewTabEditorEvent {
   type: 'new-tab-editor';
   editor: TEditor;
 }
+export interface ObservableRootEditorRootEvent {
+  type: 'root-any-change';
+  op: TOperation;
+}
 
 export type ObservableRootEditorEvent =
   | ObservableRootEditorNewTabEvent
@@ -39,7 +43,8 @@ export type ObservableRootEditorEvent =
   | ObservableRootEditorRemoveTabEvent
   | ObservableRootEditorUndoEvent
   | ObservableRootEditorRedoEvent
-  | ObservableRootEditorNewTabEditorEvent;
+  | ObservableRootEditorNewTabEditorEvent
+  | ObservableRootEditorRootEvent;
 
 export interface ObservableRootEditor {
   events: Subject<ObservableRootEditorEvent>;

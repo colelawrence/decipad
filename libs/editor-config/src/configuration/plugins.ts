@@ -6,7 +6,6 @@ import {
   createCrossBlockSelection,
   createAttachmentPlugin,
   createAutoCompleteMenuPlugin,
-  createAutoFormatCodeLinePlugin,
   createAutoPairsPlugin,
   createBlockSelectionPlugin,
   createCalloutPlugin,
@@ -63,6 +62,7 @@ import {
   createCodeLineRootPlugin,
   createCodeLineVarnamePlugin,
   createCodeLineCodeTextPlugin,
+  createAutoFormatCodeLinePlugin,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -182,7 +182,6 @@ export const plugins = ({
       createMyAutoformatPlugin({
         options: { rules: autoformatRules(computer) },
       }),
-      createAutoFormatCodeLinePlugin(computer)(),
       createImportPlugin(interactions),
       createLiveConnectionPlugin()(),
       createLiveDataSetPlugin()(),
@@ -196,6 +195,7 @@ export const plugins = ({
       createAutoPairsPlugin(computer),
       createNavigationPlugin(),
       createSmartRefPlugin(),
+      createAutoFormatCodeLinePlugin(computer, interactions)(),
 
       // language
       createCodeLinePlugin(computer),

@@ -79,7 +79,12 @@ const handleNode = (
   }
   // smart ref
   if (node.type === ELEMENT_SMART_REF) {
-    return handleSmartRefNode(node, path, editor, idsToNames);
+    return handleSmartRefNode(
+      node as SmartRefElement,
+      path,
+      editor,
+      idsToNames
+    );
   }
 
   return false;

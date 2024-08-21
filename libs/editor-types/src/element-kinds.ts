@@ -41,6 +41,7 @@ export const ELEMENT_DISPLAY = 'display';
 export const DEPRECATED_ELEMENT_INPUT = 'input';
 
 // Inlines
+// @deprecated this element is no longer used.
 export const ELEMENT_INLINE_NUMBER = 'inline-number';
 
 // tables

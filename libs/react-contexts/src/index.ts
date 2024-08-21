@@ -11,8 +11,6 @@ export * from './editor-info';
 export * from './editor-styles';
 export * from './editor-table';
 export * from './editor-table-result';
-export * from './editor-teleport';
-export * from './editor-teleport.hooks';
 export * from './editor-user-interactions';
 export * from './execution';
 export * from './layout';

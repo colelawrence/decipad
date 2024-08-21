@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../../shared/atoms';
 import {
+  All,
   CaretDown,
   Dollar,
   Number,
@@ -13,7 +14,7 @@ import {
   Scale,
   Timer,
 } from '../../../icons';
-import { cssVar, p13Medium } from '../../../primitives';
+import { cssVar, p13Medium, p14Medium } from '../../../primitives';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { ASTUnitMenuItem } from '../ASTUnitMenuItem/ASTUnitMenuItem';
 import { MenuList } from '../../../shared/molecules/MenuList/MenuList';
@@ -99,7 +100,6 @@ const categoryAndCaretStyles = css([
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingLeft: '8px',
   },
 ]);
 
@@ -155,6 +155,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
         display: 'inline-flex',
         cursor: readOnly ? 'default' : 'pointer',
         userSelect: 'none',
+        marginLeft: variant === 'normal' ? '4px' : 0,
       }}
       contentEditable={false}
     >
@@ -172,7 +173,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
             <span css={categoryAndCaretStyles}>
               <span
                 css={[
-                  p13Medium,
+                  p14Medium,
                   {
                     display: 'inline-flex',
                   },
@@ -193,8 +194,10 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
                   }}
                 >
                   {(variant === 'colourful' &&
-                    CategoriesToIcon[stringUnit]) ?? <></>}
-                  {stringUnit || 'Units'}
+                    CategoriesToIcon[stringUnit]) ?? <All />}
+                  <span css={{ lineHeight: 0, marginTop: '1px' }}>
+                    {stringUnit ?? 'Units'}
+                  </span>
                 </span>
               </span>
               <span

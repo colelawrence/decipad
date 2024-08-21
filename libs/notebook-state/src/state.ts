@@ -4,11 +4,12 @@ import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import type { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import type { LiveConnectionWorker } from '@decipad/live-connect';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   GetNotebookAnnotationsQuery,
   PermissionType,
 } from '@decipad/graphql-client';
+import { UserInteraction } from '@decipad/react-contexts';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;
@@ -28,6 +29,11 @@ export type DataDrawerState = {
   setAddVariable: () => void;
   setEditingVariable: (id: string) => void;
   closeDataDrawer: () => void;
+
+  // cosmetics
+  height: number;
+  setHeight: (h: number) => void;
+  isClosing: boolean;
 };
 
 export type AnnotationsState = {
@@ -59,11 +65,12 @@ export type EditorState = {
   editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
   liveConnectionWorker: () => LiveConnectionWorker;
-  initEditor: (
-    notebookId: string,
-    options: InitNotebookStateOptions,
-    getSession: () => Session | undefined
-  ) => void;
+  initEditor: (props: {
+    notebookId: string;
+    options: InitNotebookStateOptions;
+    getSession: () => Session | undefined;
+    interactions: Subject<UserInteraction>;
+  }) => void;
   destroy: () => void;
   loadedFromLocal: boolean;
   loadedFromRemote: boolean;
@@ -77,6 +84,8 @@ export type EditorState = {
   isNewNotebook: boolean;
 
   editorChanges: Subject<undefined>;
+
+  interactionsSubscription: Subscription | undefined;
 };
 
 export type NotebookState = EditorState & DataDrawerState & AnnotationsState;

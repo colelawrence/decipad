@@ -1,8 +1,11 @@
-import { useSimpleValueInfo } from '@decipad/editor-components';
+import {
+  useAutoConvertToSmartRef,
+  useSimpleValueInfo,
+} from '@decipad/editor-components';
 import { ELEMENT_CODE_LINE_V2, PlateComponent } from '@decipad/editor-types';
 import { assertElementType, getCodeLineSource } from '@decipad/editor-utils';
 import { Children, useMemo } from 'react';
-import { useDataDrawerContext } from './types';
+import { useDataDrawerContext, useDataDrawerCreatingCallback } from './types';
 import { parseExpression } from '@decipad/remote-computer';
 import { useResolved } from '@decipad/react-utils';
 import {
@@ -10,9 +13,10 @@ import {
   DataDrawerEditor,
   DataDrawerNameWrapper,
   FormulaUnitDrawer,
+  PaddingDiv,
 } from './styles';
 import { CodeResult, StructuredInputUnits, cssVar } from '@decipad/ui';
-import { Formula } from 'libs/ui/src/icons';
+import { Enter, Formula } from 'libs/ui/src/icons';
 import { getNodeString } from '@udecode/plate-common';
 
 export const DataDrawerEditingComponent: PlateComponent = ({
@@ -21,11 +25,15 @@ export const DataDrawerEditingComponent: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
-  const { computer } = useDataDrawerContext();
+  const { computer, isEditing } = useDataDrawerContext();
   const [varName, code] = Children.toArray(children);
+
+  const onSubmitCreate = useDataDrawerCreatingCallback();
 
   const codeLineSource = getCodeLineSource(element.children[1]);
   const isEmpty = codeLineSource.trim().length === 0;
+
+  useAutoConvertToSmartRef(element.children[1]);
 
   const { simpleValue, onChangeUnit } = useSimpleValueInfo(
     computer,
@@ -53,16 +61,29 @@ export const DataDrawerEditingComponent: PlateComponent = ({
     }, [computer, expression])
   );
 
+  const isNameEmpty = getNodeString(element.children[0]).length === 0;
+
+  const unit = isSimpleValue ? (
+    <StructuredInputUnits
+      unit={simpleValue?.unit ?? expression}
+      onChangeUnit={simpleValue ? onChangeUnit : () => {}}
+      readOnly={false}
+      variant="colourful"
+    />
+  ) : (
+    <FormulaUnitDrawer>
+      <Formula /> <span>Formula</span>
+    </FormulaUnitDrawer>
+  );
+
   return (
-    <DataDrawerEditor spellCheck={false}>
+    <DataDrawerEditor spellCheck={false} data-testid="data-drawer-wrapper">
       <DataDrawerNameWrapper>
         <div
           css={{
             '::before': {
-              content:
-                getNodeString(element.children[0]).length === 0
-                  ? '"Enter name..."'
-                  : '""',
+              cursor: 'text',
+              content: isNameEmpty ? '"Name your calculation"' : '""',
               position: 'absolute',
               color: cssVar('textDisabled'),
             },
@@ -70,26 +91,19 @@ export const DataDrawerEditingComponent: PlateComponent = ({
         >
           {varName}
         </div>
-        <div contentEditable={false}>
-          {isSimpleValue ? (
-            <StructuredInputUnits
-              unit={simpleValue?.unit ?? expression}
-              onChangeUnit={simpleValue ? onChangeUnit : () => {}}
-              readOnly={false}
-              variant="colourful"
-            />
-          ) : (
-            <FormulaUnitDrawer>
-              <Formula /> <span>Formula</span>
-            </FormulaUnitDrawer>
-          )}
+        <div contentEditable={false} data-testid="data-drawer-unit-picker">
+          {unit}
         </div>
       </DataDrawerNameWrapper>
       <DataDrawerCodeWrapper>
-        <div>{code}</div>
+        <div data-testid="data-drawer">{code}</div>
         {result && !isEmpty && (
-          <aside contentEditable={false}>
-            <CodeResult {...result} />
+          <aside
+            contentEditable={false}
+            data-testid={`data-drawer-result:${String(result.value)}`}
+          >
+            <CodeResult {...result} variant="inline" />
+            {!isEditing ? <Enter onClick={onSubmitCreate} /> : <PaddingDiv />}
           </aside>
         )}
       </DataDrawerCodeWrapper>

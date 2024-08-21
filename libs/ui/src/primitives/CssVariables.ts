@@ -56,4 +56,5 @@ export interface CssVariables {
   readonly focusOutline: Property.Color;
 
   readonly editorWidth: string;
+  readonly dataDrawerHeight: string;
 }

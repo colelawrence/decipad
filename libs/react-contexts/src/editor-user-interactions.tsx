@@ -10,6 +10,7 @@ import type { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import type { ImportElementSource } from '@decipad/editor-types';
+import { Path } from 'slate';
 
 export interface PastedLinkUserInteraction {
   type: 'pasted-link';
@@ -17,12 +18,23 @@ export interface PastedLinkUserInteraction {
   source: ImportElementSource | undefined;
   blockId: string;
 }
+
 export interface ConsumedUserInteraction {
   type: 'consumed';
 }
+
+export interface InlineEqualsShortcut {
+  type: 'inline-equal';
+  blockId: string;
+  path: Path;
+  offset: number;
+}
+
 export type UserInteraction =
   | ConsumedUserInteraction
-  | PastedLinkUserInteraction;
+  | PastedLinkUserInteraction
+  | InlineEqualsShortcut;
+
 export type UserInteractionType = UserInteraction['type'];
 
 export type UserInteractionSubject = Subject<UserInteraction>;
