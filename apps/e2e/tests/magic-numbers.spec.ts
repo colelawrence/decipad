@@ -24,6 +24,8 @@ test('Testing magic numbers', async ({ testUser }) => {
       )
     ).toBeVisible();
 
+    await page.keyboard.press('Escape');
+
     // Clicking lookup(Letters, Letter) twice to close the other menu and open the right one
     await page.getByTestId('code-result:B,2').click();
     await page.getByTestId('code-result:B,2').click();

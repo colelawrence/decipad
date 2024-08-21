@@ -1,10 +1,10 @@
-import { css } from '@emotion/react';
 import { once } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { DragHandle } from '../icons';
 import { p14Regular } from '../primitives';
 import { getSvgAspectRatio } from '../utils';
 
-export const slimBlockWidth = 580;
+export const slimBlockWidth = 620;
 export const wideBlockWidth = 700;
 
 export const gutterHandleHeight = once(() => p14Regular.lineHeight);
