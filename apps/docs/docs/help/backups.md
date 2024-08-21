@@ -10,13 +10,12 @@ During the beta phase of Decipad, we are continuously improving the user experie
 
 To export a notebook and create a backup file, follow these steps:
 
-1. Go to your workspace.
-2. Hover over the notebook you want to export.
-3. Click the `•••` button.
-4. Select `Export` from the menu that appears.
-5. You can now export your notebook by either:
-   - Downloading a notebook JSON file that can be imported into Decipad at a later date.
-   - Printing the notebook to a PDF.
+1. Open your workspace.
+2. Hover over the notebook you want to export and click the `•••` button.
+3. Select `Export` from the menu.
+4. Choose to either:
+   - Download the notebook as a JSON file for future import into Decipad.
+   - Print the notebook as a PDF. Note: You must export each tab individually to PDF, so ensure you print all tabs.
 
 You can save these files to a secure location for backup purposes.
 

@@ -1,0 +1,37 @@
+---
+title: 'Custom Notebook Layouts'
+tags: [Fixed and Improved]
+hide_table_of_contents: true
+---
+
+import { Stars, Hammer, FancyTitle } from '@site/src/components/FancyTitle';
+import { ReleasePost } from '@site/src/components/ReleasePost';
+import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
+
+<AutoplayLoopVideo
+  src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/layouts.mov"
+  playbackSpeed={1.8}
+/>
+
+We're thrilled to bring you our latest update: improved layouts in Decipad. These enhancements are designed to make your notebook experience smoother, more organized, and visually appealing:
+
+- **Full-Width Blocks:** Enjoy a more streamlined and flexible experience with the option to use full-width blocks in your notebooks. This option eliminates excessive scrolling and reduces unnecessary whitespace, making it easier to read and navigate large models.
+
+- **Multiple Column Layouts:** Use your notebook to create powerful dashboards with the ability to arrange blocks, including input and result widgets, into multiple columns.
+
+- **Customizable Widget Sizes:** Achieve greater control over your notebook layout with adjustable widget sizes. When using multiple columns, you can now resize input and result widgets to fit your specific needs.
+
+[Learn more about Notebook Layouts](/quick-start/notebooks#notebook-layouts)
+
+<ReleasePost>
+
+### <FancyTitle icon={Hammer}>Fixes and Improvements</FancyTitle>
+
+- Increased the margins in notebooks to reduce unnecessary whitespace.
+- Removed the shortcut that allowed converting a number from paragraphs into inline results, making it accessible via a calculation.
+- Fixed an issue where new notebooks wouldn’t start with the block sidebar open.
+- Resolved an issue preventing updates to published notebooks.
+- Fixed the lookup formula issue when working with dates and data views.
+- Fixed an issue where published notebooks stopped loading.
+
+</ReleasePost>

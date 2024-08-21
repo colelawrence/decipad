@@ -25,7 +25,6 @@ Keyboard shortcuts can significantly improve your editing and writing speed in D
 - **Strike-through**: Wrap words between `~~`.
 - **Highlight**: Wrap words between `==`.
 - **Inline Code**: Wrap words between `` ` ``.
-- **Magic Number**: Wrap a variable name between `%`.
 - **Spoilers**: Wrap text between `||`.
 - **Link**: Use the notation `[link name](url)`.
 - **Image**: Use the notation `![Alt text](image URL)`.

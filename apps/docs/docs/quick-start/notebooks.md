@@ -8,6 +8,7 @@ Decipad Notebooks combine numbers and narrative to share insights on data. <br /
 Create a new notebook by clicking `+ New Notebook` on the top right of your [workspace](http://app.decipad.com/).
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
+import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
 
 <YouTubePlayer videoId="HgonzbhFWLA" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
 
@@ -63,6 +64,28 @@ On Decipad everything is a block, that you can combine to present and analyze yo
 6. **Transform Blocks**:
    To transform a block, hover over the block and click the `⸬` button that appears. Select "Turn into" to change the type of your block.
 
+## Notebook Layouts
+
+---
+
+<AutoplayLoopVideo
+  src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/layouts.mov"
+  playbackSpeed={1.8}
+/>
+
+Make your notebooks easier to read and navigate, place different types of blocks side by side and adjust their layout. Here’s how to create custom layouts:
+
+1. **Add columns:** 
+   Drag a widget or text block next to another until a vertical line appears. Note that tables, embeds, and sketches cannot be arranged into columns. Alternatively, you can type `/layout` in an empty paragraph, select `Layout` from the menu, and choose a multi-column layout to start adding content.
+
+2. **Adjust columns sizes:**
+   To adjust the columns sizes on your layout use the vertical spacers in between each column.
+
+3. **Make blocks and layouts full-width:**
+
+- **For paragraphs:** Click the `⸬` button on the left of the block, then select `Full width`.
+- **For layouts:** Hover over the layout stack and click the two-arrow icon next to the comment button.
+
 ## Notebook Tabs
 
 ---
@@ -86,7 +109,7 @@ Organize your notebook blocks into separate tabs.
 
 ---
 
-1. To add images to your notebook, simply type "/image" in an empty paragraph and select "Image" from the menu that appears. This will open the image uploader.
+1. To add images to your notebook, simply type `/image` in an empty paragraph and select `Image` from the menu that appears. This will open the image uploader.
 
 2. From there, you have several options:
    - Upload an image directly from your computer.
