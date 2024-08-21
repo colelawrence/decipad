@@ -23,16 +23,13 @@ const recReplaceIds = <T extends MyNode>(el: T): T => {
 
 const cloneAndReplaceElementIds = <T extends MyElement>(
   el: T,
-  transform: (e: T) => PromiseOrType<T> = identity
-): PromiseOrType<T> => {
+  transform: (e: T) => T = identity
+): T => {
   const clone = structuredClone(el);
   return transform(recReplaceIds(clone));
 };
 
-const cloneElement = <T extends MyElement>(
-  computer: Computer,
-  el: T
-): PromiseOrType<T> =>
+const cloneElement = <T extends MyElement>(computer: Computer, el: T): T =>
   cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
 export const clone = <T extends MyNode>(

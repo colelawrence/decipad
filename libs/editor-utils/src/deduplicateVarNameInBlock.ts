@@ -28,10 +28,7 @@ function deduplicateVarNameInDef(
   );
 }
 
-async function deduplicateAssignmentVarName(
-  computer: Computer,
-  e: CodeLineElement
-) {
+function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
   const code = getNodeString(e);
   const parsed = parseStatement(code);
   if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
@@ -76,10 +73,10 @@ function deduplicateIntegrationVarName(
   e.children[0].text = computer.getAvailableIdentifier(`${varName}Copy`);
 }
 
-export const deduplicateVarNameInBlock = async <T extends AnyElement>(
+export const deduplicateVarNameInBlock = <T extends AnyElement>(
   computer: Computer,
   el: T
-): Promise<T> => {
+): T => {
   switch (el.type) {
     case ELEMENT_VARIABLE_DEF:
       deduplicateVarNameInDef(computer, el);
