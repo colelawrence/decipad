@@ -76,6 +76,13 @@ type Action =
       };
     }
   | {
+      action: 'Toggle Width Button Clicked';
+      props: {
+        analytics_source: 'frontend' | 'backend';
+        button_location: 'block menu' | 'shortcut button';
+      };
+    }
+  | {
       action: 'Notebook Share Link Copied';
       props: {
         notebook_id?: string;

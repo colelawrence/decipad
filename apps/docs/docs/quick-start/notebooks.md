@@ -70,7 +70,7 @@ On Decipad everything is a block, that you can combine to present and analyze yo
 
 <AutoplayLoopVideo
   src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/layouts.mov"
-  playbackSpeed={1.8}
+  playbackSpeed={1}
 />
 
 Make your notebooks easier to read and navigate, place different types of blocks side by side and adjust their layout. Here’s how to create custom layouts:

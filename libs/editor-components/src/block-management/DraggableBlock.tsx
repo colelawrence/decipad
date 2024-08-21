@@ -293,7 +293,17 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const handleMakeFullWidth = useCallback(() => {
       if (!path) return;
       wrapIntoLayout(editor, path, 'full');
-    }, [editor, path]);
+      event({
+        segmentEvent: {
+          type: 'action',
+          action: 'Toggle Width Button Clicked',
+          props: {
+            analytics_source: 'frontend',
+            button_location: 'block menu',
+          },
+        },
+      });
+    }, [editor, event, path]);
 
     const handleDownloadChart = useCallback(() => {
       if (!notebookId) {

@@ -1,4 +1,12 @@
-import { Children, useCallback, useMemo, useRef, useState } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import {
+  Children,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { DraggableBlock } from '../block-management';
 import type { LayoutElement, PlateComponent } from '@decipad/editor-types';
 import {
@@ -142,6 +150,8 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
     );
   };
 
+  const event = useContext(ClientEventsContext);
+
   const toggleWidth = () => {
     const path = findNodePath(editor, element);
     if (!path) return;
@@ -160,6 +170,17 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
         at: path,
       }
     );
+
+    event({
+      segmentEvent: {
+        type: 'action',
+        action: 'Toggle Width Button Clicked',
+        props: {
+          analytics_source: 'frontend',
+          button_location: 'shortcut button',
+        },
+      },
+    });
   };
 
   const ref = useMergedRef(layoutRef, availableWidthRef);
