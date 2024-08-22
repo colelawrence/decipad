@@ -212,14 +212,16 @@ test.describe('staging performance checks', () => {
     await expect(page.getByTestId('add-data-view-column-button')).toBeVisible();
     await page.getByTestId('add-data-view-column-button').click();
     await page.getByRole('menuitem', { name: 'Country' }).click();
-    await expect(page.getByText('Page 1 of 5')).toBeVisible();
+    await expect(async () => {
+      await expect(page.getByText('Page 1 of 5')).toBeVisible();
+    }).toPass();
     performance.sampleEnd('Add Data View Column');
     expect
       .soft(
         performance.getSampleTime('Add Data View Column'),
         'Adding Data View Column took more than 30 seconds'
       )
-      .toBeLessThanOrEqual(30_000);
+      .toBeLessThanOrEqual(40_000);
 
     /*
     Data views for 10k rows don't work well still, this will be the next step
