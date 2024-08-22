@@ -94,7 +94,7 @@
     "@aws-sdk/client-dynamodb": "^3.635.0",
     "@aws-sdk/client-opensearch": "^3.635.0",
     "@aws-sdk/client-s3": "^3.635.0",
-    "@aws-sdk/client-ses": "^3.635.0",
+    "@aws-sdk/client-ses": "^3.636.0",
     "@aws-sdk/client-ssm": "^3.635.0",
     "@aws-sdk/credential-providers": "^3.635.0",
     "@aws-sdk/lib-dynamodb": "^3.635.0",
