@@ -1,42 +1,43 @@
 /* eslint-disable no-labels */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
+import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
 import type { Cache } from '@urql/exchange-graphcache';
+import { nanoid } from 'nanoid';
+import type { Session } from 'next-auth';
+import { gql } from 'urql';
 import type {
+  ExternalDataSourceFragmentFragment,
   GetExternalDataSourcesWorkspaceQuery,
   GetExternalDataSourcesWorkspaceQueryVariables,
   GetNotebookAnnotationsQuery,
   GetNotebookAnnotationsQueryVariables,
+  GetNotebookByIdQuery,
+  GetNotebookByIdQueryVariables,
   GetNotebookMetaQuery,
+  GetWorkspaceNotebooksQuery,
+  GetWorkspaceNotebooksQueryVariables,
   GetWorkspacesWithSharedNotebooksQuery,
   GraphCacheConfig,
   Pad,
+  PadAlias,
   Section,
   UserQuery,
   Workspace,
-  GetWorkspaceNotebooksQuery,
-  GetWorkspaceNotebooksQueryVariables,
   WorkspaceNotebookFragment,
-  GetNotebookByIdQuery,
-  GetNotebookByIdQueryVariables,
-  ExternalDataSourceFragmentFragment,
-  PadAlias,
+  WorkspaceSubscription,
 } from './generated';
 import {
   GetExternalDataSourcesWorkspaceDocument,
   GetNotebookAnnotationsDocument,
+  GetNotebookByIdDocument,
   GetNotebookMetaDocument,
+  GetWorkspaceNotebooksDocument,
   GetWorkspacesWithSharedNotebooksDocument,
   UserDocument,
-  GetWorkspaceNotebooksDocument,
-  GetNotebookByIdDocument,
 } from './generated';
-import * as schema from './schema.generated.json';
-import { nanoid } from 'nanoid';
 import { PublishedVersionName } from './PublishedStates';
-import { gql } from 'urql';
-import type { Session } from 'next-auth';
-import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
+import * as schema from './schema.generated.json';
 
 const PUBLISHED_SNAPSHOT = PublishedVersionName.Published;
 
@@ -570,6 +571,47 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
           }
           return data;
         });
+      },
+      unsafeDevOnlyPermissionOverride: (_, args, cache) => {
+        cache.writeFragment(
+          gql`
+            fragment _ on Pad {
+              id
+              myPermissionType
+            }
+          `,
+          { id: args.id, myPermissionType: args.permissionType ?? null }
+        );
+      },
+      unsafeDevOnlyPlanOverride: (_, args, cache) => {
+        const isPremium = !!(args.plan ?? null);
+        const newSubscription: WorkspaceSubscription | null = isPremium
+          ? {
+              credits: 10_000,
+              id: '123',
+              paymentStatus: 'paid',
+              queries: 100_000,
+              storage: 100_000,
+              readers: 20,
+              editors: 20,
+            }
+          : null;
+        cache.writeFragment(
+          gql`
+            fragment _ on Workspace {
+              id
+              plan
+              isPremium
+              workspaceSubscription
+            }
+          `,
+          {
+            id: args.workspaceId,
+            plan: args.plan ?? null,
+            isPremium,
+            workspaceSubscription: newSubscription,
+          }
+        );
       },
       updateSelf: (_result, args, cache) => {
         cache.updateQuery<UserQuery>({ query: UserDocument }, (data) => {

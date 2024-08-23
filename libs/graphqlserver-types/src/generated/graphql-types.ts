@@ -257,6 +257,8 @@ export type Mutation = {
   shareWorkspaceWithEmail: Workspace;
   syncWorkspaceSeats: WorkspaceSubscription;
   undeleteAttachment?: Maybe<Scalars['Boolean']['output']>;
+  unsafeDevOnlyPermissionOverride: Scalars['Boolean']['output'];
+  unsafeDevOnlyPlanOverride: Scalars['Boolean']['output'];
   unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
   unshareNotebookWithSecret?: Maybe<Scalars['Boolean']['output']>;
@@ -596,6 +598,19 @@ export type MutationSyncWorkspaceSeatsArgs = {
 
 export type MutationUndeleteAttachmentArgs = {
   attachmentId: Scalars['ID']['input'];
+};
+
+
+export type MutationUnsafeDevOnlyPermissionOverrideArgs = {
+  id: Scalars['String']['input'];
+  permissionType?: InputMaybe<PermissionType>;
+  resourceType: ExternalDataSourceOwnership;
+};
+
+
+export type MutationUnsafeDevOnlyPlanOverrideArgs = {
+  plan?: InputMaybe<SubscriptionPlansNames>;
+  workspaceId: Scalars['String']['input'];
 };
 
 
@@ -1707,6 +1722,8 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   shareWorkspaceWithEmail?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationShareWorkspaceWithEmailArgs, 'canComment' | 'email' | 'id' | 'permissionType'>>;
   syncWorkspaceSeats?: Resolver<ResolversTypes['WorkspaceSubscription'], ParentType, ContextType, RequireFields<MutationSyncWorkspaceSeatsArgs, 'id'>>;
   undeleteAttachment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUndeleteAttachmentArgs, 'attachmentId'>>;
+  unsafeDevOnlyPermissionOverride?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnsafeDevOnlyPermissionOverrideArgs, 'id' | 'resourceType'>>;
+  unsafeDevOnlyPlanOverride?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnsafeDevOnlyPlanOverrideArgs, 'workspaceId'>>;
   unshareExternalDataSourceWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithRoleArgs, 'id' | 'roleId'>>;
   unshareExternalDataSourceWithUser?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithUserArgs, 'id' | 'userId'>>;
   unshareNotebookWithSecret?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareNotebookWithSecretArgs, 'id' | 'secret'>>;

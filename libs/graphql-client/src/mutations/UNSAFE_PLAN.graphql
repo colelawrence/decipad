@@ -1,0 +1,3 @@
+mutation UnsafePlan($workspaceId: String!, $plan: SubscriptionPlansNames) {
+  unsafeDevOnlyPlanOverride(workspaceId: $workspaceId, plan: $plan)
+}

@@ -17,4 +17,8 @@ export default {
       },
     },
   },
+  Mutation: {
+    unsafeDevOnlyPermissionOverride: () => true,
+    unsafeDevOnlyPlanOverride: () => true,
+  },
 };

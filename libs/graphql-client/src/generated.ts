@@ -258,6 +258,8 @@ export type Mutation = {
   shareWorkspaceWithEmail: Workspace;
   syncWorkspaceSeats: WorkspaceSubscription;
   undeleteAttachment?: Maybe<Scalars['Boolean']['output']>;
+  unsafeDevOnlyPermissionOverride: Scalars['Boolean']['output'];
+  unsafeDevOnlyPlanOverride: Scalars['Boolean']['output'];
   unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
   unshareNotebookWithSecret?: Maybe<Scalars['Boolean']['output']>;
@@ -597,6 +599,19 @@ export type MutationSyncWorkspaceSeatsArgs = {
 
 export type MutationUndeleteAttachmentArgs = {
   attachmentId: Scalars['ID']['input'];
+};
+
+
+export type MutationUnsafeDevOnlyPermissionOverrideArgs = {
+  id: Scalars['String']['input'];
+  permissionType?: InputMaybe<PermissionType>;
+  resourceType: ExternalDataSourceOwnership;
+};
+
+
+export type MutationUnsafeDevOnlyPlanOverrideArgs = {
+  plan?: InputMaybe<SubscriptionPlansNames>;
+  workspaceId: Scalars['String']['input'];
 };
 
 
@@ -1611,6 +1626,23 @@ export type UnarchiveNotebookMutationVariables = Exact<{
 
 
 export type UnarchiveNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+
+export type UnsafePermissionsMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  permissionType?: InputMaybe<PermissionType>;
+  resourceType: ExternalDataSourceOwnership;
+}>;
+
+
+export type UnsafePermissionsMutation = { __typename?: 'Mutation', unsafeDevOnlyPermissionOverride: boolean };
+
+export type UnsafePlanMutationVariables = Exact<{
+  workspaceId: Scalars['String']['input'];
+  plan?: InputMaybe<SubscriptionPlansNames>;
+}>;
+
+
+export type UnsafePlanMutation = { __typename?: 'Mutation', unsafeDevOnlyPlanOverride: boolean };
 
 export type UnshareNotebookWithSecretMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2707,6 +2739,28 @@ export const UnarchiveNotebookDocument = gql`
 export function useUnarchiveNotebookMutation() {
   return Urql.useMutation<UnarchiveNotebookMutation, UnarchiveNotebookMutationVariables>(UnarchiveNotebookDocument);
 };
+export const UnsafePermissionsDocument = gql`
+    mutation UnsafePermissions($id: String!, $permissionType: PermissionType, $resourceType: ExternalDataSourceOwnership!) {
+  unsafeDevOnlyPermissionOverride(
+    id: $id
+    permissionType: $permissionType
+    resourceType: $resourceType
+  )
+}
+    `;
+
+export function useUnsafePermissionsMutation() {
+  return Urql.useMutation<UnsafePermissionsMutation, UnsafePermissionsMutationVariables>(UnsafePermissionsDocument);
+};
+export const UnsafePlanDocument = gql`
+    mutation UnsafePlan($workspaceId: String!, $plan: SubscriptionPlansNames) {
+  unsafeDevOnlyPlanOverride(workspaceId: $workspaceId, plan: $plan)
+}
+    `;
+
+export function useUnsafePlanMutation() {
+  return Urql.useMutation<UnsafePlanMutation, UnsafePlanMutationVariables>(UnsafePlanDocument);
+};
 export const UnshareNotebookWithSecretDocument = gql`
     mutation UnshareNotebookWithSecret($id: ID!, $secret: String!) {
   unshareNotebookWithSecret(id: $id, secret: $secret)
@@ -3688,6 +3742,8 @@ export type GraphCacheOptimisticUpdaters = {
   shareWorkspaceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareWorkspaceWithEmailArgs, WithTypename<Workspace>>,
   syncWorkspaceSeats?: GraphCacheOptimisticMutationResolver<MutationSyncWorkspaceSeatsArgs, WithTypename<WorkspaceSubscription>>,
   undeleteAttachment?: GraphCacheOptimisticMutationResolver<MutationUndeleteAttachmentArgs, Maybe<Scalars['Boolean']>>,
+  unsafeDevOnlyPermissionOverride?: GraphCacheOptimisticMutationResolver<MutationUnsafeDevOnlyPermissionOverrideArgs, Scalars['Boolean']>,
+  unsafeDevOnlyPlanOverride?: GraphCacheOptimisticMutationResolver<MutationUnsafeDevOnlyPlanOverrideArgs, Scalars['Boolean']>,
   unshareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
   unshareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithUserArgs, WithTypename<ExternalDataSource>>,
   unshareNotebookWithSecret?: GraphCacheOptimisticMutationResolver<MutationUnshareNotebookWithSecretArgs, Maybe<Scalars['Boolean']>>,
@@ -3786,6 +3842,8 @@ export type GraphCacheUpdaters = {
     shareWorkspaceWithEmail?: GraphCacheUpdateResolver<{ shareWorkspaceWithEmail: WithTypename<Workspace> }, MutationShareWorkspaceWithEmailArgs>,
     syncWorkspaceSeats?: GraphCacheUpdateResolver<{ syncWorkspaceSeats: WithTypename<WorkspaceSubscription> }, MutationSyncWorkspaceSeatsArgs>,
     undeleteAttachment?: GraphCacheUpdateResolver<{ undeleteAttachment: Maybe<Scalars['Boolean']> }, MutationUndeleteAttachmentArgs>,
+    unsafeDevOnlyPermissionOverride?: GraphCacheUpdateResolver<{ unsafeDevOnlyPermissionOverride: Scalars['Boolean'] }, MutationUnsafeDevOnlyPermissionOverrideArgs>,
+    unsafeDevOnlyPlanOverride?: GraphCacheUpdateResolver<{ unsafeDevOnlyPlanOverride: Scalars['Boolean'] }, MutationUnsafeDevOnlyPlanOverrideArgs>,
     unshareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithRoleArgs>,
     unshareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithUser: WithTypename<ExternalDataSource> }, MutationUnshareExternalDataSourceWithUserArgs>,
     unshareNotebookWithSecret?: GraphCacheUpdateResolver<{ unshareNotebookWithSecret: Maybe<Scalars['Boolean']> }, MutationUnshareNotebookWithSecretArgs>,

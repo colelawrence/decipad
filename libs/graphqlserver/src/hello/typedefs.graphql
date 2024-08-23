@@ -1,3 +1,15 @@
 extend type Subscription {
   hello: String
 }
+
+extend type Mutation {
+  unsafeDevOnlyPermissionOverride(
+    id: String!
+    permissionType: PermissionType
+    resourceType: ExternalDataSourceOwnership!
+  ): Boolean!
+  unsafeDevOnlyPlanOverride(
+    workspaceId: String!
+    plan: SubscriptionPlansNames
+  ): Boolean!
+}

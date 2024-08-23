@@ -1,23 +1,20 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
+import { useGAPageTracking } from '@decipad/client-events';
+import { lazyLoad } from '@decipad/react-utils';
 import {
   notebooks,
   onboard,
+  pay,
   playground,
   workspaces,
-  pay,
 } from '@decipad/routing';
-import { Toolbar } from '@decipad/ui';
+import { SubscriptionPayment } from 'libs/ui/src/shared/templates/PaywallModal/SubscriptionPayment';
 import { useMemo, type FC } from 'react';
-import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import { Onboard } from './Onboard/Onboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import Notebooks from './notebooks/Notebooks';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
-import { useGAPageTracking } from '@decipad/client-events';
-import { SubscriptionPayment } from 'libs/ui/src/shared/templates/PaywallModal/SubscriptionPayment';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
@@ -46,81 +43,73 @@ const NavigateToWorkspaces: FC = () => {
 };
 
 export const App: FC = () => {
-  const canUseDom = useCanUseDom();
   useGAPageTracking();
 
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<NavigateToWorkspaces />} />
-        <Route
-          path="/workspaces/:workspaceId/pads/*"
-          element={<NotebookRedirect />}
-        />
-        <Route path="/workspaces/*" element={<WorkspaceRedirect />} />
-        <Route
-          path={`${workspaces.template}/*`}
-          element={
-            <RequireSession>
-              <RouteEvents category="Workspace Loaded">
-                <LazyRoute>
-                  <RequireOnboard>
-                    <Workspaces />
-                  </RequireOnboard>
-                </LazyRoute>
-              </RouteEvents>
-            </RequireSession>
-          }
-        />
-        <Route
-          path={`${notebooks.template}/*`}
-          element={
-            <RequireOnboard>
-              <Notebooks />
-            </RequireOnboard>
-          }
-        />
-
-        <Route
-          path={playground.template}
-          element={
-            <RouteEvents category="Playground Loaded">
+    <Routes>
+      <Route path="/" element={<NavigateToWorkspaces />} />
+      <Route
+        path="/workspaces/:workspaceId/pads/*"
+        element={<NotebookRedirect />}
+      />
+      <Route path="/workspaces/*" element={<WorkspaceRedirect />} />
+      <Route
+        path={`${workspaces.template}/*`}
+        element={
+          <RequireSession>
+            <RouteEvents category="Workspace Loaded">
               <LazyRoute>
-                <Playground />
+                <RequireOnboard>
+                  <Workspaces />
+                </RequireOnboard>
               </LazyRoute>
             </RouteEvents>
-          }
-        />
+          </RequireSession>
+        }
+      />
+      <Route
+        path={`${notebooks.template}/*`}
+        element={
+          <RequireOnboard>
+            <Notebooks />
+          </RequireOnboard>
+        }
+      />
 
-        <Route
-          path={`${onboard.template}/*`}
-          element={
-            <RequireSession>
-              <LazyRoute>
-                <Onboard />
-              </LazyRoute>
-            </RequireSession>
-          }
-        />
+      <Route
+        path={playground.template}
+        element={
+          <RouteEvents category="Playground Loaded">
+            <LazyRoute>
+              <Playground />
+            </LazyRoute>
+          </RouteEvents>
+        }
+      />
 
-        <Route
-          path={`${pay.template}/*`}
-          element={
-            <RouteEvents category="Playground Loaded">
-              <LazyRoute>
-                <SubscriptionPayment />
-              </LazyRoute>
-            </RouteEvents>
-          }
-        />
+      <Route
+        path={`${onboard.template}/*`}
+        element={
+          <RequireSession>
+            <LazyRoute>
+              <Onboard />
+            </LazyRoute>
+          </RequireSession>
+        }
+      />
 
-        <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
-      </Routes>
-      {/* Feature flagging the feature flag switcher makes it unreacheable in
-      production, even if you press the shortcut, unless you know how */}
-      {canUseDom &&
-        isFlagEnabled('DEVELOPER_TOOLBAR') &&
-        createPortal(<Toolbar />, document.getElementById('root')!)}
-    </>
+      <Route
+        path={`${pay.template}/*`}
+        element={
+          <RouteEvents category="Playground Loaded">
+            <LazyRoute>
+              <SubscriptionPayment />
+            </LazyRoute>
+          </RouteEvents>
+        }
+      />
+
+      <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
+    </Routes>
   );
 };

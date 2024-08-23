@@ -11,6 +11,8 @@
 [![Lint & Typecheck](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml)
 [![Deploy dev](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml)
 
+In-app developer tools are available by using the konami code.
+
 # TOC
 
 - [Setup](#set-up)

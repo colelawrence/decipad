@@ -1,41 +1,44 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   useFinishOnboarding,
   useGetNotebookMetaQuery,
   useRecordPadEventMutation,
 } from '@decipad/graphql-client';
-import {
-  AddCreditsModal,
-  EditorPlaceholder,
-  NotebookPage,
-  PaywallModal,
-  TopbarPlaceholder,
-  useSetCssVarWidth,
-} from '@decipad/ui';
-import type { FC } from 'react';
-import { Suspense, useEffect, useCallback } from 'react';
-import { useAnimateMutations } from './hooks/useAnimateMutations';
-import {
-  Topbar,
-  Tabs,
-  Sidebar,
-  Editor,
-  NavigationSidebar,
-} from './LoadComponents';
-import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
-import { ClientEventsContext } from '@decipad/client-events';
-import { useInitializeResourceUsage } from '../../hooks';
-import { getAnonUserMetadata } from '@decipad/utils';
-import { DataDrawer } from './data-drawer';
-import { useNotebookRoute } from '@decipad/routing';
-import { useIsReadOnlyPermission } from './hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
-import { NotebookErrorBoundary } from './Errors';
 import {
   useAiCreditsStore,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
+import { useCanUseDom } from '@decipad/react-utils';
+import { useNotebookRoute } from '@decipad/routing';
+import {
+  AddCreditsModal,
+  EditorPlaceholder,
+  NotebookPage,
+  PaywallModal,
+  Toolbar,
+  TopbarPlaceholder,
+  useSetCssVarWidth,
+} from '@decipad/ui';
+import { getAnonUserMetadata } from '@decipad/utils';
+import type { FC } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useInitializeResourceUsage } from '../../hooks';
+import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
+import { DataDrawer } from './data-drawer';
+import { NotebookErrorBoundary } from './Errors';
+import { useIsReadOnlyPermission } from './hooks';
+import { useAnimateMutations } from './hooks/useAnimateMutations';
+import {
+  Editor,
+  NavigationSidebar,
+  Sidebar,
+  Tabs,
+  Topbar,
+} from './LoadComponents';
 
 /**
  * Entire Application Wrapper.
@@ -47,8 +50,8 @@ import {
  */
 export const Notebook: FC = () => {
   const { notebookId, isEmbed, aliasId } = useNotebookRoute();
-
   const { setWorkspacePlan } = useNotebookMetaData();
+  const canUseDom = useCanUseDom();
 
   const setPermission = useNotebookWithIdState((s) => s.setPermission);
 
@@ -182,6 +185,11 @@ export const Notebook: FC = () => {
           )}
         </Suspense>
       </ClientEventsContext.Provider>
+      {/* Feature flagging the feature flag switcher makes it unreacheable in
+      production, even if you press the shortcut, unless you know how */}
+      {canUseDom &&
+        isFlagEnabled('DEVELOPER_TOOLBAR') &&
+        createPortal(<Toolbar />, document.getElementById('root')!)}
     </NotebookErrorBoundary>
   );
 };

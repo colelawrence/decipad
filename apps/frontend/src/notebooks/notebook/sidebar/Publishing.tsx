@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
+import { isFlagEnabled } from '@decipad/feature-flags';
 import type {
   NotebookMetaDataFragment,
   Publish_State,
@@ -21,7 +22,6 @@ import {
 } from '../../../hooks';
 import { usePublishedVersionState } from '../hooks';
 import type { SidebarComponentProps } from './types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 function getPublishingState(
   data?: NotebookMetaDataFragment | null
@@ -163,7 +163,6 @@ const Publishing: FC<SidebarComponentProps> = ({ notebookId, docsync }) => {
 
   const notebookName = data?.name ?? 'My Notebook';
   const isPremiumWorkspace = Boolean(data?.workspace?.isPremium);
-
   const allowInviting = canInviteEditors || canInviteReaders;
 
   const publishingState =

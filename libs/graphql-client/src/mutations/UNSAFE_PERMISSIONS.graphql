@@ -1,0 +1,11 @@
+mutation UnsafePermissions(
+  $id: String!
+  $permissionType: PermissionType
+  $resourceType: ExternalDataSourceOwnership!
+) {
+  unsafeDevOnlyPermissionOverride(
+    id: $id
+    permissionType: $permissionType
+    resourceType: $resourceType
+  )
+}

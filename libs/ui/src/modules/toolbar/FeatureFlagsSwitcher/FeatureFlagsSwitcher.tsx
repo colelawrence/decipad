@@ -6,11 +6,11 @@ import {
   isFlagEnabled,
 } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
+import * as Popover from '@radix-ui/react-popover';
 import stringify from 'json-stringify-safe';
 import { useState } from 'react';
 import { Button, Toggle } from '../../../shared';
-import * as Popover from '@radix-ui/react-popover';
-import * as Styled from './styles';
+import * as Styled from '../styles';
 
 const setItem =
   'localStorage' in global
