@@ -10,6 +10,8 @@ import {
 } from 'libs/language-interfaces/src/Result';
 import { Specificity } from 'libs/language-interfaces/src/Time';
 import { columnToMeta } from './columnToMeta';
+import { getResultGenerator } from '@decipad/language-types';
+import { all } from '@decipad/generator-utils';
 
 const FULL_BYTE = 0xff;
 const FULL_NIBBLE = 0x80;
@@ -227,8 +229,8 @@ export const serializeResultIter = async <T extends Result>(
         typeArray.push(-1); // Placeholder value; fixed after loop.
 
         let childCount = 0;
-        // TODO use: all(columnResult.value());
-        for await (const value of columnResult.value()) {
+        const contents = await all(getResultGenerator(columnResult.value)());
+        for (const value of contents) {
           childCount += 1;
           nextResults.push({
             value,
@@ -297,7 +299,6 @@ export const serializeResultIter = async <T extends Result>(
         typeArray.push(ResultType.Column);
         typeArray.push(-1); // Placeholder value; fixed after loop.
 
-        // TODO use: all(columnResult.value());
         for (let i = 0; i < columnResult.value.length; i++) {
           const value = columnResult.value[i];
           nextResults.push({
