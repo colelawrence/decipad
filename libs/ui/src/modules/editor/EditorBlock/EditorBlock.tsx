@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
+import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { forwardRef, ReactNode } from 'react';
 import { cssVar, p16Regular } from '../../../primitives';
 import { blockAlignment } from '../../../styles';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
 const defaultVerticalSpacing = `calc(${p16Regular.lineHeight})`;
@@ -120,6 +120,7 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
       {...props}
       css={[
         readOnly && isHidden && isHiddenStyles,
+        isHidden && hideOnPrint,
         {
           position: 'relative',
           marginLeft: -editorBlockOffset,

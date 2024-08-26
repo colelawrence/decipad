@@ -51,6 +51,12 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
       padding: '4px 8px 0px',
     },
   },
+
+  '@media print': {
+    '& > header': hideOnPrint,
+
+    height: 'unset',
+  },
 }));
 
 /**
@@ -83,6 +89,9 @@ export const MainWrapper = styled.main<{
     ...(props.hasTabs && {
       paddingBottom: '0px',
     }),
+  },
+  '@media print': {
+    padding: 0,
   },
 }));
 
@@ -136,6 +145,9 @@ export const EditorAndTabWrapper = styled.div({
 
   borderRadius: '16px',
   overflow: 'hidden',
+  '@media print': {
+    overflow: 'visible',
+  },
 });
 
 export const TabWrapper = styled.div<{ isInEditorSidebar: boolean }>(
@@ -182,6 +194,11 @@ export const NotebookSpacingWrapper = styled.div([
 
     '&::-webkit-scrollbar-track': {
       backgroundColor: cssVar('backgroundMain'),
+    },
+
+    '@media print': {
+      overflowX: 'visible',
+      overflowY: 'visible',
     },
   },
 ]);

@@ -5,6 +5,7 @@ import { ComponentProps, FC, HTMLProps, ReactNode, Ref, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
 
 import { TabElement } from '@decipad/editor-types';
+import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { Path } from 'slate';
 import { Rotate } from '../../../icons';
 import {
@@ -18,7 +19,6 @@ import { blockAlignment, editorLayout } from '../../../styles';
 import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
 import { EditorBlock } from '../EditorBlock/EditorBlock';
 import { NewElementLine } from '../NewElementLine/NewElementLine';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -268,6 +268,7 @@ export const DraggableBlock = ({
         <div
           css={[
             isHidden ? hiddenEditorBlockStyle : {},
+            isHidden ? hideOnPrint : {},
             isSelected || menuOpen ? hiddenFocusedStyle : {},
             // Duplication from `EditorBlock` but forces any rogue elements not to overflow.
             !insideLayout &&

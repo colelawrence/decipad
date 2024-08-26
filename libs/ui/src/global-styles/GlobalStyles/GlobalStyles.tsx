@@ -18,16 +18,13 @@ import {
 
 const DarkThemeStyles = (): ReturnType<React.FC> => {
   const [darkThemeAllowed] = useThemeFromStore();
-  return darkThemeAllowed ? (
+  return (
     <Global
       styles={{
-        ':root': darkTheme,
-      }}
-    />
-  ) : (
-    <Global
-      styles={{
-        ':root': lightTheme,
+        ':root': darkThemeAllowed ? darkTheme : lightTheme,
+        '@media print': {
+          ':root': lightTheme,
+        },
       }}
     />
   );

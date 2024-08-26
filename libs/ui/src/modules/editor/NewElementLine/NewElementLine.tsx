@@ -1,5 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
 import { Add } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
@@ -23,7 +24,7 @@ const tableReverseStyles = css({
   bottom: 5,
 });
 
-const addElementLineWrapper = css({
+const addElementLineWrapper = css(hideOnPrint, {
   width: '100%',
   height: 10,
   paddingTop: 4,

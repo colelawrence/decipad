@@ -108,6 +108,9 @@ export const tableOverflowStyles = css({
   minWidth: `calc(((${cssVar(
     'editorWidth'
   )} - ${slimBlockWidth}px) / 2) - ${tableControlWidth}px)`,
+  '@media print': {
+    minWidth: 'auto',
+  },
 });
 
 const tableAddColumnButtonWrapperStyles = css({

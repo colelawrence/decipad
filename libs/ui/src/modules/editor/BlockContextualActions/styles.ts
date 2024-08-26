@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { cssVar } from 'libs/ui/src/primitives';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 
 export const BlockWrapper = styled.div({
   position: 'relative',
@@ -14,7 +15,7 @@ export const BlockWrapper = styled.div({
   },
 });
 
-export const ButtonsWrapper = styled.div({
+export const ButtonsWrapper = styled.div(hideOnPrint, {
   position: 'absolute',
   display: 'flex',
   gap: '2px',

@@ -787,10 +787,19 @@ export const GlobalComponentStyles: FC = () => {
     return componentVars;
   }, [mode]);
 
+  const lightCssVars = useMemo(() => {
+    const componentVars: Record<`--deci-${string}`, string> = {};
+    for (const [k, v] of Object.entries(ComponentColors.Light)) {
+      componentVars[`--deci-${k}`] = v;
+    }
+    return componentVars;
+  }, []);
+
   return (
     <Global
       styles={{
         ':root': CssVars,
+        '@media print': { ':root': lightCssVars },
       }}
     />
   );
@@ -839,6 +848,30 @@ export const GlobalThemeStyles: FC<{ color: AvailableSwatchColor }> = ({
             'themeBackgroundHeavy',
             ThemeColors[ThemeColor][mode].Background.Heavy
           ),
+        },
+        '@media print': {
+          ':root': {
+            ...setCssVar(
+              'themeTextSubdued',
+              ThemeColors.Teal.Light.Text.Subdued
+            ),
+            ...setCssVar(
+              'themeTextDefault',
+              ThemeColors.Teal.Light.Text.Default
+            ),
+            ...setCssVar(
+              'themeBackgroundSubdued',
+              ThemeColors.Teal.Light.Background.Subdued
+            ),
+            ...setCssVar(
+              'themeBackgroundDefault',
+              ThemeColors.Teal.Light.Background.Default
+            ),
+            ...setCssVar(
+              'themeBackgroundHeavy',
+              ThemeColors.Teal.Light.Background.Heavy
+            ),
+          },
         },
       }}
     />
