@@ -25,7 +25,9 @@ export async function createWithSlashCommand(
   await page.waitForTimeout(Timeouts.typing + Timeouts.menuOpenDelay);
 
   if (menuItem) {
-    await page.click(`[data-testid="menu-item-${menuItem}"]`);
+    await page.click(
+      `[data-slate-editor] >> [data-testid="menu-item-${menuItem}"]`
+    );
   } else {
     await page.keyboard.press('Enter');
   }

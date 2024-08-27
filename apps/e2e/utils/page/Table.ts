@@ -279,8 +279,8 @@ export async function changeColumnYear(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
-  await page.getByText('Year').click();
+  await page.getByTestId('menulist-dates').click();
+  await page.getByTestId('menuitem-year').click();
 }
 
 export async function changeColumnMonth(
@@ -289,8 +289,8 @@ export async function changeColumnMonth(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
-  await page.getByText('Month').click();
+  await page.getByTestId('menulist-dates').click();
+  await page.getByTestId('menuitem-month').click();
 }
 
 export async function changeColumnDay(
@@ -299,8 +299,8 @@ export async function changeColumnDay(
   tableName?: string
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByText(/Date/).click(); // do not mistake "Date" with "update"
-  await page.getByText('Day').click();
+  await page.getByTestId('menulist-dates').click();
+  await page.getByTestId('menuitem-day').click();
 }
 
 export async function removeColumn(
@@ -344,18 +344,14 @@ export async function updateDataType(
   subSubOption: string | undefined = undefined
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByRole('menuitem', { name: dataType }).click();
+  if (dataType) {
+    await page.getByTestId(dataType).click();
+  }
   if (subOption) {
-    await page
-      .locator(`div [data-side="right"] >> text='${subOption}'`)
-      .last()
-      .click();
+    await page.getByTestId(subOption).click();
 
     if (subSubOption) {
-      await page
-        .locator(`div [data-side="right"] >> text='${subSubOption}'`)
-        .last()
-        .click();
+      await page.getByTestId(subSubOption).click();
     }
   }
 }

@@ -96,6 +96,7 @@ export const MenuItem: FC<MenuItemProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       css={contentStyles}
+      data-testid={testid}
     >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span
@@ -127,7 +128,6 @@ export const MenuItem: FC<MenuItemProps> = ({
       onPointerMove={onPointerMove}
       onFocus={onFocus}
       disabled={disabled}
-      data-testid={testid}
       {...rest}
     >
       {tooltipContent ? (

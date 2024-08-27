@@ -56,14 +56,19 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
           <FigureButton
             onClick={disabled ? noop : onClick}
             key={`figure-segment-${i}`}
-            data-testid={`segment-button-trigger${testId ? `-${testId}` : ''}`}
             aria-disabled={disabled}
             variant={variant}
             selected={selected}
             padding={padding}
             iconSize={iconSize}
           >
-            <div>{children}</div>
+            <div
+              data-testid={`segment-button-trigger${
+                testId ? `-${testId}` : ''
+              }`}
+            >
+              {children}
+            </div>
           </FigureButton>
         );
 

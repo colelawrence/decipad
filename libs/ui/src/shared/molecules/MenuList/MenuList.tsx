@@ -202,7 +202,7 @@ export const MenuList: FC<MenuListProps> = ({
         onOpenChange={onChangeOpen}
         modal={modal ?? dropdown}
       >
-        <div css={triggerStyles} ref={triggerRef}>
+        <div css={triggerStyles} ref={triggerRef} data-testid={dataTestid}>
           {triggerNode}
         </div>
         <DropdownMenuPortalElement portal={portal} container={container}>
@@ -220,7 +220,6 @@ export const MenuList: FC<MenuListProps> = ({
               onClick={(e) => e.preventDefault()}
               side={side}
               sideOffset={sideOffset}
-              data-testid={dataTestid}
             >
               {children}
             </DropdownMenuContentElement>

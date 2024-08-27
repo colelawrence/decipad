@@ -34,7 +34,7 @@ export class Table implements TableValue {
     meta: undefined | (() => Result.ResultMetadataColumn | undefined)
   ) {
     return new Table(
-      columns.map((c) => (isColumnLike(c) ? c : new EmptyColumn([]))),
+      (columns ?? []).map((c) => (isColumnLike(c) ? c : new EmptyColumn([]))),
       columnNames ?? [],
       meta
     );

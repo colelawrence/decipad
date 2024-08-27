@@ -198,7 +198,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
 
   await test.step('You can open dropdown in the cell', async () => {
     await page.getByRole('menuitem').getByText('From Dropdown').click();
-    await page.getByText('Dropdown').nth(2).click();
+    await page.getByRole('menuitem', { name: 'ListBulleted Dropdown' }).click();
 
     await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
     await clickCell(page, 1, 2);
@@ -212,6 +212,8 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       .getByText('50%')
       .click();
     await expect(dropdownOptions).toBeHidden();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
     expect(await getFromTable(page, 1, 2)).toBe('50%');
   });
 

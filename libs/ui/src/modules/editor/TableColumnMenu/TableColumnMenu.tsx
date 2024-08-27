@@ -150,6 +150,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           <h3 css={dividerLabel}>Type</h3>
           <MenuList
             key="number-list"
+            dataTestid="menulist-numbers"
             itemTrigger={
               <TriggerMenuItem
                 icon={<Number />}
@@ -164,6 +165,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             <MenuItem
               key="number"
+              testid="menuitem-number"
               icon={<Number />}
               onSelect={() => onChangeColumnType(getNumberType())}
               selected={type.kind === 'number' && type.unit == null}
@@ -172,6 +174,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuList
               key="currency"
+              dataTestid="menulist-currencies"
               itemTrigger={
                 <TriggerMenuItem
                   icon={<Dollar />}
@@ -186,6 +189,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               {presentableCurrencyUnits.map((unit, index) => (
                 <MenuItem
                   key={index}
+                  testid={`menuitem-currency:${unit.baseQuantity}`}
                   icon={<span>{unit.pretty ?? unit.name}</span>}
                   onSelect={() =>
                     onChangeColumnType(
@@ -212,6 +216,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuList>
             {!isForImportedColumn && (
               <MenuItem
+                testid="menuitem-number-sequence"
                 icon={<ListNumbered />}
                 onSelect={() => onChangeColumnType(getSeriesType('number'))}
                 selected={
@@ -224,6 +229,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuList>
           <MenuList
             key="text-list"
+            dataTestid="menulist-text"
             itemTrigger={
               <TriggerMenuItem
                 icon={<Text />}
@@ -235,6 +241,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             <MenuItem
               key="string"
+              testid="menuitem-text"
               icon={<Text />}
               onSelect={() => onChangeColumnType(getStringType())}
               selected={type.kind === 'string'}
@@ -243,6 +250,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuItem
               key="category"
+              testid="menuitem-category"
               icon={<Category />}
               onSelect={() => onChangeColumnType({ kind: 'category' })}
               selected={type.kind === 'category'}
@@ -252,6 +260,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuList>
           <MenuList
             key="dates"
+            dataTestid="menulist-dates"
             itemTrigger={
               <TriggerMenuItem
                 icon={<Calendar />}
@@ -268,6 +277,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             <MenuItem
               key="year"
+              testid="menuitem-year"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('year'))}
               selected={type.kind === 'date' && type.date === 'year'}
@@ -276,6 +286,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuItem
               key="month"
+              testid="menuitem-month"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('month'))}
               selected={type.kind === 'date' && type.date === 'month'}
@@ -284,6 +295,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuItem
               key="day"
+              testid="menuitem-day"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('day'))}
               selected={type.kind === 'date' && type.date === 'day'}
@@ -292,6 +304,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             <MenuItem
               key="minute"
+              testid="menuitem-minute"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('minute'))}
               selected={type.kind === 'date' && type.date === 'minute'}
@@ -300,6 +313,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
             {!isForImportedColumn && (
               <MenuItem
+                testid="menuitem-date-sequence"
                 icon={<Calendar />}
                 onSelect={() => onChangeColumnType(getSeriesType('date'))}
                 selected={type.kind === 'series' && type.seriesType === 'date'}
@@ -310,6 +324,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuList>
           <MenuItem
             key="boolean"
+            testid="menuitem-boolean"
             icon={<CheckboxSelected />}
             onSelect={() => onChangeColumnType(getBooleanType())}
             selected={type.kind === 'boolean'}
@@ -319,6 +334,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
 
           {!isFirst && dropdownNames.length > 0 && (
             <MenuList
+              dataTestid="menulist-dropdowns"
               key="dropdown-tables"
               itemTrigger={
                 <TriggerMenuItem
@@ -334,6 +350,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               {dropdownNames.map((d, index) => (
                 <MenuItem
                   key={index}
+                  testid="menuitem-dropdown"
                   icon={<ListBulleted />}
                   onSelect={() =>
                     onChangeColumnType({
@@ -352,6 +369,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
 
           {!isForImportedColumn && (
             <MenuItem
+              testid="menuitem-formula"
               key="table-formula"
               icon={<Formula />}
               onSelect={() => onChangeColumnType(getFormulaType())}

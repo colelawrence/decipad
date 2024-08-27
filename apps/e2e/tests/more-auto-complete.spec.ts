@@ -57,7 +57,7 @@ test('Make sure auto-complete works', async ({ testUser }) => {
       .getByTestId('autocomplete-item:Revenue')
       .click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.tableDelay);
+    await page.waitForTimeout(Timeouts.computerDelay);
     await expect(
       page.getByTestId('editor-table').getByTestId('number-result:101')
     ).toBeVisible();
@@ -89,8 +89,10 @@ test('Make sure auto-complete works', async ({ testUser }) => {
     await page.keyboard.press('=');
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type('sum(Table2.RevenueNew)');
+
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.tableDelay);
+    await page.waitForTimeout(Timeouts.computerDelay);
+
     await expect(page.getByTitle('Error')).toBeHidden();
 
     // Checks previous()
@@ -99,18 +101,22 @@ test('Make sure auto-complete works', async ({ testUser }) => {
     await page.keyboard.press('=');
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type('(RevenueNew');
-    await page
-      .getByTestId('autocomplete-group:Variables')
-      .getByTestId('autocomplete-item:RevenueNew')
-      .click();
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
+    await page.getByRole('menuitem', { name: 'Number RevenueNew' }).click();
     await page.keyboard.type('/ previous(0, RevenueNew');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
     await page
-      .getByTestId('autocomplete-group:Table2')
-      .getByTestId('autocomplete-item:RevenueNew')
+      .getByRole('menuitem', { name: 'TableSmall Table2.Table2.' })
       .click({ timeout: Timeouts.maxSelectorWaitTime });
     await page.keyboard.type(')) - 1 in %');
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.tableDelay);
+    await page.waitForTimeout(Timeouts.computerDelay);
     // Any error in the formulas will fail this test
     await expect(page.getByTitle('Error')).toBeHidden();
   });

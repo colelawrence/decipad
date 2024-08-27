@@ -28,7 +28,7 @@ import {
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
-const COMPUTER_DEBOUNCE = 100;
+const COMPUTER_DEBOUNCE = 1000;
 
 const initialState = (): Omit<
   NotebookState,

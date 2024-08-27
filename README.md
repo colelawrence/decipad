@@ -194,14 +194,14 @@ yarn e2e
 ### Running individual e2e tests
 
 ```bash
-nx play e2e <<test-name-pattern>>  [--debug] [--ui]
+nx play e2e <<test-name-pattern>> [--debug] [--ui]
 ```
 
 > Interesting options are `--debug` (to play visually) and `--ui` (start an interactive visual test runner)
 
 > To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all:e2e` on a different terminal).
 
-## If your deployment failed
+## If your PR deployment failed
 
 You will see a message like this:
 
@@ -212,7 +212,7 @@ You will see a message like this:
 1. Just run the following command to delete the stack:
 
    ```bash
-   scripts/aws-delete-stack.sh DecipadBackendStagingXXXX
+   scripts/aws-delete-stack.sh <PR number>
    ```
 
 2. Then re-run the deployment github action.

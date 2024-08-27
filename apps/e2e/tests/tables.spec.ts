@@ -213,13 +213,37 @@ test('Basic Table Interactions + Collisions', async ({ testUser }) => {
   });
 
   await test.step('update 2 columns  data types from first table', async () => {
-    await updateDataType(testUser.page, 1, 'NewTableName', 'Text', 'Text');
-    await updateDataType(testUser.page, 2, 'NewTableName', 'Text', 'Text');
+    await updateDataType(
+      testUser.page,
+      1,
+      'NewTableName',
+      'menulist-text',
+      'menuitem-text'
+    );
+    await updateDataType(
+      testUser.page,
+      2,
+      'NewTableName',
+      'menulist-text',
+      'menuitem-text'
+    );
   });
 
   await test.step('update 2 columns  data types from second table', async () => {
-    await updateDataType(testUser.page, 1, 'NewTableName2', 'Text', 'Text');
-    await updateDataType(testUser.page, 2, 'NewTableName2', 'Text', 'Text');
+    await updateDataType(
+      testUser.page,
+      1,
+      'NewTableName2',
+      'menulist-text',
+      'menuitem-text'
+    );
+    await updateDataType(
+      testUser.page,
+      2,
+      'NewTableName2',
+      'menulist-text',
+      'menuitem-text'
+    );
   });
 
   await test.step('copy and paste', async () => {
@@ -393,7 +417,13 @@ test('Number Parsing Checks', async ({ testUser }) => {
   });
 
   await test.step('update data type to number', async () => {
-    await updateDataType(testUser.page, 1, undefined, 'Number', 'Number');
+    await updateDataType(
+      testUser.page,
+      1,
+      undefined,
+      'menulist-numbers',
+      'menuitem-number'
+    );
     await testUser.notebook.focusOnBody();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.syncDelay);
@@ -490,9 +520,9 @@ test('Make sure deleting decimals does not break parsing', async ({
       testUser.page,
       0,
       undefined,
-      'Number',
-      'Currency',
-      'GBP'
+      'menulist-numbers',
+      'menulist-currencies',
+      'menuitem-currency:GBP'
     );
   });
 
@@ -525,9 +555,9 @@ test('Make sure deleting decimals does not break parsing', async ({
       testUser.page,
       0,
       undefined,
-      'Number',
-      'Currency',
-      'GBP'
+      'menulist-numbers',
+      'menulist-currencies',
+      'menuitem-currency:GBP'
     );
     await checkForError(testUser.page, '13.22', 1, 1);
   });
@@ -594,9 +624,15 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
   await test.step('make changes in preparation for data view', async () => {
     await addColumn(page, 'Table');
     await renameColumn(page, 4, 'Checkbox', 'Table');
-    await updateDataType(page, 0, 'Table', 'Number', 'Number');
-    await updateDataType(page, 3, 'Table', 'Date', 'Year');
-    await updateDataType(page, 4, 'Table', 'Checkbox');
+    await updateDataType(
+      page,
+      0,
+      'Table',
+      'menulist-numbers',
+      'menuitem-number'
+    );
+    await updateDataType(page, 3, 'Table', 'menulist-dates', 'menuitem-year');
+    await updateDataType(page, 4, 'Table', 'menuitem-boolean');
     await page
       .getByRole('row', { name: 'DragHandle 2 Lewis Hamilton' })
       .getByRole('checkbox')
@@ -848,6 +884,9 @@ test('table categories', async ({ testUser }) => {
   await notebook.waitForEditorToLoad();
   await testUser.notebook.closeSidebar();
 
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.computerDelay);
+
   // check both tables still have categories
   for (const option of dropdownOptions) {
     await expect(
@@ -890,6 +929,10 @@ test('table column formulas autoresolve themselves', async ({ testUser }) => {
   await writeInTable(testUser.page, '150', 2, 1);
   await writeInTable(testUser.page, '160', 3, 1);
 
-  await expect(testUser.page.getByText('€610 per hour')).toBeVisible();
+  await expect(
+    testUser.page
+      .getByTestId('code-line-result:610')
+      .getByTestId('number-result:€610 per hour')
+  ).toBeVisible();
   await expect(testUser.page.getByTestId('loading-results')).toBeHidden();
 });

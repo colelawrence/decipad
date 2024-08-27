@@ -17,7 +17,7 @@ test('Data Views', async ({ testUser: { page, notebook } }) => {
   await test.step('fills table', async () => {
     // first column
     await renameColumn(page, 0, 'Year');
-    await updateDataType(page, 0, undefined, 'Date', 'Year');
+    await updateDataType(page, 0, undefined, 'menulist-dates', 'menuitem-year');
     await writeInTable(page, '2024', 1, 0);
     expect(await getFromTable(page, 1, 0)).toBe('2024');
     await writeInTable(page, '2024', 2, 0);
@@ -27,7 +27,13 @@ test('Data Views', async ({ testUser: { page, notebook } }) => {
 
     // second column
     await renameColumn(page, 1, 'Month');
-    await updateDataType(page, 1, undefined, 'Date', 'Date Sequence');
+    await updateDataType(
+      page,
+      1,
+      undefined,
+      'menulist-dates',
+      'menuitem-date-sequence'
+    );
     await writeInTable(page, '2024-01', 1, 1);
     expect(await getFromTable(page, 1, 1)).toBe('2024-01');
     expect(await getFromTable(page, 2, 1)).toBe('2024-02');

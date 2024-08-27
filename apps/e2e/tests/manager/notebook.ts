@@ -295,7 +295,7 @@ export class Notebook {
    */
   async deleteTab(selector: string | number) {
     await this.getTab(selector).getByTestId('tab-options-button').click();
-    await this.page.getByTestId('tab-options-menu').getByText('Delete').click();
+    await this.page.getByText('Delete Tab').click();
   }
 
   /**
@@ -337,10 +337,7 @@ export class Notebook {
   async hideTab(selector: string | number) {
     await expect(this.getTab(selector).getByTestId('tab-icon')).toBeVisible();
     await this.getTab(selector).getByTestId('tab-options-button').click();
-    await this.page
-      .getByTestId('tab-options-menu')
-      .getByText('Hide from reader')
-      .click();
+    await this.page.getByText('Hide from reader').click();
     await expect(this.getTab(selector).getByTestId('tab-icon')).toBeHidden();
     await expect(this.getTab(selector).getByTestId('tab-hidden')).toBeVisible();
   }
@@ -360,10 +357,7 @@ export class Notebook {
     await expect(
       this.page.getByRole('menuitem', { name: /Change icon/ })
     ).toBeDisabled();
-    await this.page
-      .getByTestId('tab-options-menu')
-      .getByText('Show to reader')
-      .click();
+    await this.page.getByText('Show to reader').click();
     await expect(this.getTab(selector).getByTestId('tab-hidden')).toBeHidden();
     await expect(this.getTab(selector).getByTestId('tab-icon')).toBeVisible();
   }
@@ -411,10 +405,7 @@ export class Notebook {
     option: 'To the left' | 'To the right' | 'To the start' | 'To the end'
   ) {
     await this.getTab(selector).getByTestId('tab-options-button').click();
-    await this.page
-      .getByTestId('tab-options-menu')
-      .getByRole('menuitem', { name: /Move tab/ })
-      .hover();
+    await this.page.getByRole('menuitem', { name: /Move tab/ }).hover();
     await this.page
       .getByRole('menuitem', { name: new RegExp(`${option}$`) })
       .first()

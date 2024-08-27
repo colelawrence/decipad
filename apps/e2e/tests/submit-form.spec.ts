@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import type { Server } from 'http';
 import { createSliderBelow } from '../utils/page/Block';
 import util from 'util';
+import { Timeouts } from '../utils/src/timeout';
 
 interface Payload {
   data: {
@@ -126,6 +127,8 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
   });
 
   await test.step('use submit form', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
     await page.getByRole('button', { name: 'Send Submit' }).click();
     await expect(
       page.getByText('Email is required').first(),
@@ -158,6 +161,8 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
 
   await test.step('update slider and check form sends new value', async () => {
     await notebook.updateSlider(sliderName, newSliderValue);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
     await page.getByTestId('close-submit-form').click();
     await page.getByPlaceholder('Email').fill(weebookEmail);
     await page.getByRole('button', { name: 'Send Submit' }).click();

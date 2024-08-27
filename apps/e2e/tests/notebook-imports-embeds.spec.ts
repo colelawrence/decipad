@@ -1,6 +1,6 @@
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
-import { snapshot } from '../utils/src';
+import { snapshot, Timeouts } from '../utils/src';
 import notebookSource from '../__fixtures__/013-new-welcome.json';
 import { doubleClickCell } from '../utils/page/Table';
 
@@ -242,6 +242,10 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await unregisteredUserNotebook.waitForEditorToLoad();
     await unregisteredUserPage.getByText('Try Decipad').waitFor();
     await unregisteredUserNotebook.selectTab('New Tab');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
     await expect(
       unregisteredUserPage.getByTestId('number-result:20'),
       'Formula that uses integration from another tab has a calculation error or never loads'
@@ -324,11 +328,17 @@ test('csv calculations propagate @csv', async ({
     varName: 'Funnel',
   });
 
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await testUser.page.waitForTimeout(Timeouts.computerDelay);
+
   // to be removed once smart refs autoresolve works on column refs
   await notebook.addFormula(
     'ClosedLookup',
     `lookup(Funnel, Funnel.Stage == "Closed").London`
   );
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await testUser.page.waitForTimeout(Timeouts.computerDelay);
 
   // to be removed when autosesolve smart refs work on charts
   await testUser.page.getByTestId('chart-settings-button').first().click();

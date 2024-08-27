@@ -19,9 +19,11 @@ const sortTableByType = (table: TableValue, type: Type): TableValue => {
   return Table.fromNamedColumns(
     columnValues as Value.ColumnLikeValue[],
     columnNames as string[],
-    (columnValues[0] as undefined | Value.ColumnLikeValue)?.meta?.bind(
-      columnValues[0]
-    )
+    columnValues?.[0]
+      ? (columnValues[0] as undefined | Value.ColumnLikeValue)?.meta?.bind(
+          columnValues[0]
+        )
+      : undefined
   );
 };
 

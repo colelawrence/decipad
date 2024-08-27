@@ -9,6 +9,7 @@ import {
   updateDataType,
   writeInTable,
 } from 'apps/e2e/utils/page/Table';
+import { Timeouts } from '../utils/src';
 
 const sanitise = (text: string | null) =>
   !!text && text.replaceAll(/[^a-zA-Z0-9£,.]/g, '');
@@ -45,32 +46,47 @@ test('Creating a basic model', async ({ testUser }) => {
     await addColumn(page);
 
     await renameColumn(page, 0, 'Index');
-    await updateDataType(page, 0, undefined, 'Numbers', 'Number Sequence');
+    await updateDataType(
+      page,
+      0,
+      undefined,
+      'menulist-numbers',
+      'menuitem-number-sequence'
+    );
     await writeInTable(page, '1', 1, 0);
 
     await renameColumn(page, 1, 'Year');
-    await updateDataType(page, 1, undefined, 'Date', 'Date Sequence');
+    await updateDataType(
+      page,
+      1,
+      undefined,
+      'menulist-dates',
+      'menuitem-date-sequence'
+    );
     await writeInTable(page, '2023', 1, 1);
 
     await renameColumn(page, 2, 'TotalInvested');
-    await updateDataType(page, 2, undefined, 'Formula');
+    await updateDataType(page, 2, undefined, 'menuitem-formula');
     await focusOnTableColumnFormula(page, 'TotalInvested');
     await page.keyboard.type(
       'previous(InitialInvestment) + MonthlyContribution'
     );
 
     await renameColumn(page, 3, 'TotalMoney');
-    await updateDataType(page, 3, undefined, 'Formula');
+    await updateDataType(page, 3, undefined, 'menuitem-formula');
     await focusOnTableColumnFormula(page, 'TotalMoney');
     await page.keyboard.type(
       '(previous(InitialInvestment) * (1 + InterestRate )) + MonthlyContribution'
     );
 
     await renameColumn(page, 4, 'TotalProfit');
-    await updateDataType(page, 4, undefined, 'Formula');
+    await updateDataType(page, 4, undefined, 'menuitem-formula');
     await focusOnTableColumnFormula(page, 'TotalProfit');
     await page.keyboard.type('TotalMoney - TotalInvested');
     await page.keyboard.press('Enter');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
 
     // check second row values are correct
     const [index, year, totalInvested, totalMoney, totalProfit] =
