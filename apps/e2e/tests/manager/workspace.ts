@@ -335,7 +335,10 @@ export class Workspace {
    */
   async deleteNotepad(index = 0) {
     await this.ellipsisSelector(index).click();
-    await this.page.click('div[role="menuitem"] span:has-text("Delete")');
+    await this.page
+      .locator('div[role="menuitem"] span:has-text("Delete")')
+      .first()
+      .click();
   }
 
   /**
@@ -456,7 +459,7 @@ export class Workspace {
       ) {
         await this.deleteNotepad(0);
         await expect(
-          this.page.getByText('Successfully deleted notebook.')
+          this.page.getByText('Successfully deleted notebook.').first()
         ).toBeVisible();
       }
 

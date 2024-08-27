@@ -1877,7 +1877,7 @@ export class Notebook {
 
         // check if integrations get stuck loading, the code base uses loading-results & loading-animation
         await expect(
-          this.page.getByTestId('loading-animation'),
+          this.page.getByTestId('loading-animation').first(),
           `loading blocks visible`
         ).toBeHidden();
       }).toPass({
