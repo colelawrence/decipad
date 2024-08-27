@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # URL of your Google Sheets script endpoint
 URL="${UPLOAD_PERFORMANCE_RESULTS_GSHEETS_MACRO_URL}"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 rm ./libs/graphqlserver-types/src/generated/typedefs.ts 2> /dev/null
 touch ./libs/graphqlserver-types/src/generated/typedefs.ts

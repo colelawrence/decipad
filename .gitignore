@@ -130,6 +130,9 @@ typings/
 .env.test
 .env*.local
 
+# direnv cache (https://direnv.net/)
+.direnv
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

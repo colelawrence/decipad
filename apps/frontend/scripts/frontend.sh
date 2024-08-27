@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Wait for the backend
 sleep_duration="${SLEEP_TIME:=12}"
