@@ -383,7 +383,7 @@
     "ua-parser-js": "^1.0.38",
     "unified": "11.0.4",
     "unist-util-visit": "5.0.0",
-    "unzip-stream": "^0.3.1",
+    "unzip-stream": "^0.3.4",
     "urql": "^4.0.5",
     "use-debounce": "^10.0.0",
     "use-query-params": "^2.2.0",

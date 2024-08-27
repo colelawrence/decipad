@@ -41,19 +41,19 @@ export function __wbgtest_console_warn(args: Array<any>): void;
 export function __wbgtest_console_error(args: Array<any>): void;
 /**
 */
-export enum ComputeErrors {
-  IncorrectType = 0,
-  UnknownId = 1,
-  InferError = 2,
-}
-/**
-*/
 export enum DeciType {
   Number = 0,
   String = 1,
   Boolean = 2,
   Column = 3,
   Table = 4,
+}
+/**
+*/
+export enum ComputeErrors {
+  IncorrectType = 0,
+  UnknownId = 1,
+  InferError = 2,
 }
 /**
 */
