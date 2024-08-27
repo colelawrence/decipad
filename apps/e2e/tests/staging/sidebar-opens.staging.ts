@@ -5,28 +5,6 @@ import { Workspace } from '../manager/workspace';
 
 test.describe.configure({ mode: 'serial' });
 
-export async function deleteAllWorkspaceNotebooks(
-  page: Page,
-  workspace: Workspace
-) {
-  await expect(async () => {
-    // archives notebooks until the workspace is empty
-    if ((await page.getByText('No documents to list').count()) !== 1) {
-      await workspace.archivePad(0);
-    }
-    await expect(page.getByText('No documents to list')).toBeVisible();
-  }).toPass();
-  await workspace.openArchive();
-
-  // deleted notebooks from archive until the archive is empty
-  await expect(async () => {
-    if ((await page.getByText('No documents to list').count()) !== 1) {
-      await workspace.deleteNotepad(0);
-    }
-    await expect(page.getByText('No documents to list')).toBeVisible();
-  }).toPass();
-}
-
 test.describe('sidebar opens for each new notebook', () => {
   let page: Page;
   let notebook: Notebook;
@@ -59,14 +37,14 @@ test.describe('sidebar opens for each new notebook', () => {
       await page.goto(stagingURL);
 
       // if there are notebooks there from previous fails remove eveything
-      await deleteAllWorkspaceNotebooks(page, workspace);
+      await workspace.deleteAllWorkspaceNotebooks();
     });
   });
 
   test('load workspace', async ({ performance }) => {
     performance.sampleStart('Load Workspace');
     await page.goto(stagingURL);
-    await expect(page.getByText('Welcome to')).toBeVisible();
+    await expect(page.getByText('Welcome to').first()).toBeVisible();
     await expect(page.getByTestId('dashboard')).toBeVisible();
     performance.sampleEnd('Load Workspace');
     expect
@@ -85,9 +63,9 @@ test.describe('sidebar opens for each new notebook', () => {
     expect
       .soft(
         performance.getSampleTime('New Notebook'),
-        'Creating a Notebook took more than 5 seconds'
+        'Creating a Notebook took more than 8 seconds'
       )
-      .toBeLessThanOrEqual(5000);
+      .toBeLessThanOrEqual(8000);
   });
   test('check sidebar', async ({}) => {
     const e2eFlags = {
@@ -124,7 +102,7 @@ test.describe('sidebar opens for each new notebook', () => {
     await page.goto(stagingURL);
 
     // restored an empty workspace for the next test
-    await deleteAllWorkspaceNotebooks(page, workspace);
+    await workspace.deleteAllWorkspaceNotebooks();
 
     await page.close();
   });

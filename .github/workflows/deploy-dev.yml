@@ -237,6 +237,7 @@ jobs:
           retention-days: 3
 
       - name: Upload Summary Results
+        if: always()
         env:
           UPLOAD_PERFORMANCE_RESULTS_GSHEETS_MACRO_URL: ${{ secrets.UPLOAD_PERFORMANCE_RESULTS_GSHEETS_MACRO_URL }}
         run: yarn upload-performance-results

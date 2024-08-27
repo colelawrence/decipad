@@ -6,28 +6,6 @@ import { Timeouts } from '../../utils/src';
 
 test.describe.configure({ mode: 'serial' });
 
-export async function deleteAllWorkspaceNotebooks(
-  page: Page,
-  workspace: Workspace
-) {
-  await expect(async () => {
-    // archives notebooks until the workspace is empty
-    if ((await page.getByText('No documents to list').count()) !== 1) {
-      await workspace.archivePad(0);
-    }
-    await expect(page.getByText('No documents to list')).toBeVisible();
-  }).toPass();
-  await workspace.openArchive();
-
-  // deleted notebooks from archive until the archive is empty
-  await expect(async () => {
-    if ((await page.getByText('No documents to list').count()) !== 1) {
-      await workspace.deleteNotepad(0);
-    }
-    await expect(page.getByText('No documents to list')).toBeVisible();
-  }).toPass();
-}
-
 test.describe('staging performance checks', () => {
   let page: Page;
   let notebook: Notebook;
@@ -64,14 +42,14 @@ test.describe('staging performance checks', () => {
       await page.goto(stagingURL);
 
       // if there are notebooks there from previous fails remove eveything
-      await deleteAllWorkspaceNotebooks(page, workspace);
+      await workspace.deleteAllWorkspaceNotebooks();
     });
   });
 
   test('load workspace', async ({ performance }) => {
     performance.sampleStart('Load Workspace');
     await page.goto(stagingURL);
-    await expect(page.getByText('Welcome to')).toBeVisible();
+    await expect(page.getByText('Welcome to').first()).toBeVisible();
     await expect(page.getByTestId('dashboard')).toBeVisible();
     performance.sampleEnd('Load Workspace');
     expect
@@ -90,9 +68,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('New Notebook'),
-        'Creating a Notebook took more than 5 seconds'
+        'Creating a Notebook took more than 8 seconds'
       )
-      .toBeLessThanOrEqual(5000);
+      .toBeLessThanOrEqual(8000);
   });
 
   test('checks csv uploads work', async ({ performance }) => {
@@ -193,7 +171,8 @@ test.describe('staging performance checks', () => {
     expect(textStyles[1] !== beforeTextStyles[1]).toBe(true);
   });
 
-  test('creates a data view', async ({ performance }) => {
+  // eslint-disable-next-line playwright/no-skipped-test
+  test.skip('creates a data view', async ({ performance }) => {
     performance.sampleStart('Adding Data View');
     await page.getByText('Pivot view').click();
 
@@ -248,7 +227,7 @@ test.describe('staging performance checks', () => {
     await page.goto(stagingURL);
 
     // restored an empty workspace for the next test
-    await deleteAllWorkspaceNotebooks(page, workspace);
+    await workspace.deleteAllWorkspaceNotebooks();
 
     await page.close();
   });

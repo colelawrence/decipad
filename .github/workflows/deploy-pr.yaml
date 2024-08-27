@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    name: 🚧 Deploy PR ${{ github.event.pull_request.number }}
+    name: 🚧 Deploy PR
     timeout-minutes: 90
     runs-on: buildjet-4vcpu-ubuntu-2204
     concurrency:

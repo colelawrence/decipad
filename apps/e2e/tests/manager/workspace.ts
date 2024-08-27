@@ -272,7 +272,7 @@ export class Workspace {
    * @param {number} [index=0] index of the notepad to be removed
    */
   async removePad(index = 0) {
-    await this.page.click(this.ellipsisSelector(index));
+    await this.ellipsisSelector(index).click();
     const removeButton = await this.page.waitForSelector(
       'div[role="menuitem"] span:has-text("Archive")'
     );
@@ -282,8 +282,8 @@ export class Workspace {
     ]);
   }
 
-  ellipsisSelector(n: number): string {
-    return `//main//li >> nth=${n} >> div[type=button] svg`;
+  ellipsisSelector(n: number): Locator {
+    return this.page.getByTestId('list-notebook-options').nth(n);
   }
 
   /**
@@ -293,7 +293,7 @@ export class Workspace {
    */
   async duplicatePad(index = 0, workspace = '') {
     const padstart = await this.getPadList();
-    await this.page.click(this.ellipsisSelector(index));
+    await this.ellipsisSelector(index).click();
     await this.page
       .getByRole('menuitem', { name: 'Duplicate Duplicate' })
       .click();
@@ -318,7 +318,7 @@ export class Workspace {
    * @param {number} [index=0] index of notepad to be archived
    */
   async archivePad(index = 0) {
-    await this.page.click(this.ellipsisSelector(index));
+    await this.ellipsisSelector(index).click();
     await this.page.click('div[role="menuitem"] span:has-text("Archive")');
   }
 
@@ -334,7 +334,7 @@ export class Workspace {
    * @param {number} [index=0] index of notepad to be deleted
    */
   async deleteNotepad(index = 0) {
-    await this.page.click(this.ellipsisSelector(index));
+    await this.ellipsisSelector(index).click();
     await this.page.click('div[role="menuitem"] span:has-text("Delete")');
   }
 
@@ -425,6 +425,43 @@ export class Workspace {
       await this.page.getByTestId('closable-modal').click();
       await expect(
         this.page.getByTestId('manage-workspace-members')
+      ).toBeVisible();
+    }).toPass();
+  }
+
+  /**
+   * Deleted all workspace notebooks
+   */
+  async deleteAllWorkspaceNotebooks() {
+    await expect(async () => {
+      // archives notebooks until the workspace is empty
+      while (
+        await this.page.getByTestId('list-notebook-options').first().isVisible()
+      ) {
+        await this.archivePad(0);
+        await expect(
+          this.page.getByText('Successfully archived notebook.').first()
+        ).toBeVisible();
+      }
+
+      await expect(this.page.getByText('No documents to list')).toBeVisible();
+    }).toPass();
+
+    await this.openArchive();
+
+    await expect(async () => {
+      // deleted notebooks from archive until the archive is empty
+      while (
+        await this.page.getByTestId('list-notebook-options').first().isVisible()
+      ) {
+        await this.deleteNotepad(0);
+        await expect(
+          this.page.getByText('Successfully deleted notebook.')
+        ).toBeVisible();
+      }
+
+      await expect(
+        this.page.getByText('No documents to list').first()
       ).toBeVisible();
     }).toPass();
   }
