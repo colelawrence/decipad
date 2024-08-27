@@ -187,7 +187,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
       method: 'link',
       link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlmKKmOm0b22FcmTTiLy44qz8TPtSipfvnd1hBpucDISH4p02r3QuCKn3LIOe2UFxotVpYdbG8KBSf/pub?gid=0&single=true&output=csv',
       firstRowHeader: false,
-      varName: 'Variable',
+      varName: 'TableImported',
     });
 
     await expect(
@@ -199,7 +199,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await notebook.selectLastParagraph();
     await notebook.addFormula(
       'CalculationIntegrationTable',
-      'count(Variable.A)'
+      'count(TableImported.A)'
     );
     await expect(
       page.getByTestId('code-line-result:20').getByTestId('number-result:20')
@@ -219,7 +219,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await notebook.selectTab('New Tab');
 
     await expect(
-      page.getByTestId('integration-block').filter({ hasText: /Variable/ })
+      page.getByTestId('integration-block').filter({ hasText: /TableImported/ })
     ).toBeHidden();
   });
 
