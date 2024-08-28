@@ -56,7 +56,6 @@ test('save storage state for reuse', async ({ browser }) => {
   const workspace = new Workspace(page);
   // if there are notebooks there from previous fails remove eveything
   await workspace.deleteAllWorkspaceNotebooks();
-  await expect(page.getByText('No documents to list')).toBeVisible();
   await page.context().storageState({ path: STORAGE_STATE_PRODUCTION });
   await page.close();
 });

@@ -445,6 +445,35 @@ export class Workspace {
         await expect(
           this.page.getByText('Successfully archived notebook.').first()
         ).toBeVisible();
+
+        // Locate the element
+        const element = this.page
+          .getByText('Successfully archived notebook.')
+          .first();
+
+        // Ensure the element is present and get its bounding box
+        const boundingBox = await element.boundingBox();
+
+        if (!boundingBox) {
+          throw new Error(
+            'Element is not visible or does not have a bounding box'
+          );
+        }
+
+        // Calculate the swipe destination
+        const startX = boundingBox.x + boundingBox.width / 2;
+        const startY = boundingBox.y + boundingBox.height / 2;
+        const endX = startX + 100; // Adjust the swipe distance as necessary
+
+        // Perform the swipe right action
+        await this.page.mouse.move(startX, startY);
+        await this.page.mouse.down();
+        await this.page.mouse.move(endX, startY, { steps: 10 }); // Adding steps makes the movement smoother
+        await this.page.mouse.up();
+
+        await expect(
+          this.page.getByText('Successfully archived notebook.').first()
+        ).toBeHidden();
       }
 
       await expect(this.page.getByText('No documents to list')).toBeVisible();
@@ -461,6 +490,35 @@ export class Workspace {
         await expect(
           this.page.getByText('Successfully deleted notebook.').first()
         ).toBeVisible();
+
+        // Locate the element
+        const element = this.page
+          .getByText('Successfully deleted notebook.')
+          .first();
+
+        // Ensure the element is present and get its bounding box
+        const boundingBox = await element.boundingBox();
+
+        if (!boundingBox) {
+          throw new Error(
+            'Element is not visible or does not have a bounding box'
+          );
+        }
+
+        // Calculate the swipe destination
+        const startX = boundingBox.x + boundingBox.width / 2;
+        const startY = boundingBox.y + boundingBox.height / 2;
+        const endX = startX + 100; // Adjust the swipe distance as necessary
+
+        // Perform the swipe right action
+        await this.page.mouse.move(startX, startY);
+        await this.page.mouse.down();
+        await this.page.mouse.move(endX, startY, { steps: 10 }); // Adding steps makes the movement smoother
+        await this.page.mouse.up();
+
+        await expect(
+          this.page.getByText('Successfully deleted notebook.').first()
+        ).toBeHidden();
       }
 
       await expect(

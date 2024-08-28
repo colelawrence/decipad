@@ -37,15 +37,6 @@ test.describe('staging performance checks', () => {
     workspace = new Workspace(page);
   });
 
-  test('check workspace is empty', async ({}) => {
-    await test.step('create new notebook for the test', async () => {
-      await page.goto(stagingURL);
-
-      // if there are notebooks there from previous fails remove eveything
-      await workspace.deleteAllWorkspaceNotebooks();
-    });
-  });
-
   test('load workspace', async ({ performance }) => {
     performance.sampleStart('Load Workspace');
     await page.goto(stagingURL);
@@ -222,15 +213,6 @@ test.describe('staging performance checks', () => {
 */
     await notebook.checkCalculationErrors();
   });
-
-  test('leaves workspace clean', async ({}) => {
-    await page.goto(stagingURL);
-
-    // restored an empty workspace for the next test
-    await workspace.deleteAllWorkspaceNotebooks();
-
-    await page.close();
-  });
 });
 
 test.describe('sidebar opens for each new notebook', () => {
@@ -258,15 +240,6 @@ test.describe('sidebar opens for each new notebook', () => {
 
     notebook = new Notebook(page);
     workspace = new Workspace(page);
-  });
-
-  test('check workspace is empty', async ({}) => {
-    await test.step('create new notebook for the test', async () => {
-      await page.goto(stagingURL);
-
-      // if there are notebooks there from previous fails remove eveything
-      await workspace.deleteAllWorkspaceNotebooks();
-    });
   });
 
   test('load workspace', async ({ performance }) => {
@@ -324,14 +297,5 @@ test.describe('sidebar opens for each new notebook', () => {
       "the sidebar didn't open by default as it should when you create a second notebook"
     ).toBeVisible();
     await expect(page.getByPlaceholder('Search for blocks...')).toBeVisible();
-  });
-
-  test('leaves workspace clean', async ({}) => {
-    await page.goto(stagingURL);
-
-    // restored an empty workspace for the next test
-    await workspace.deleteAllWorkspaceNotebooks();
-
-    await page.close();
   });
 });

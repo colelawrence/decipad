@@ -84,6 +84,20 @@ const config: PlaywrightTestConfig = {
       testDir: './utils/src',
     },
     {
+      name: 'staging_cleanup',
+      testMatch: '**/**/staging.teardown.ts',
+      testDir: './utils/src',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE_STAGING,
+        trace: 'retain-on-failure',
+        contextOptions: {
+          // chromium-specific permissions
+          permissions: ['clipboard-read', 'clipboard-write'],
+        },
+      },
+    },
+    {
       name: 'regression',
       dependencies: ['setup_production'],
       testDir: './tests/regression',
@@ -103,6 +117,7 @@ const config: PlaywrightTestConfig = {
       dependencies: ['setup_staging'],
       testDir: './tests/staging',
       testMatch: '**/**/*.staging.ts',
+      teardown: 'staging_cleanup',
       use: {
         ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE_STAGING,
