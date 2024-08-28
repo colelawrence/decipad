@@ -39,6 +39,7 @@ export class Notebook {
   readonly dataDrawer: Locator;
   readonly dataDrawerWrapper: Locator;
   readonly dataDrawerUnitPicker: Locator;
+  readonly commentsSidebar: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -76,6 +77,7 @@ export class Notebook {
     this.dataDrawer = page.getByTestId('data-drawer');
     this.dataDrawerWrapper = page.getByTestId('data-drawer-wrapper');
     this.dataDrawerUnitPicker = page.getByTestId('data-drawer-unit-picker');
+    this.commentsSidebar = page.getByTestId('comment-sidebar');
   }
 
   /**
@@ -1911,5 +1913,65 @@ export class Notebook {
       .getByTestId(`number-catalogue-${name}`)
       .last()
       .dragTo(this.page.locator('body'), { targetPosition: selection });
+  }
+
+  /**
+   * Add Comment to open comments thread
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.addCommentToOpenThread('this is my comment');
+   * ```
+   */
+  async addCommentToOpenThread(comment: string) {
+    await this.page.getByPlaceholder('Add a comment').fill(comment);
+    await this.page.keyboard.press('Enter');
+  }
+
+  /**
+   * Opens the comments sidebar
+   *
+   * Or it doesn't do anything if the comments sidebar is already opened.
+   *
+   */
+  public async openCommentsSidebar(): Promise<void> {
+    if (await this.isCommentSidebarOpen()) {
+      return;
+    }
+    await this.page
+      .getByTestId('segment-button-trigger-top-bar-annotations')
+      .click();
+  }
+
+  /**
+   * Add Comment to notebook block
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.addCommentToBlock(0,'this is my comment');
+   * ```
+   */
+  public async addCommentToBlock(
+    block: number,
+    comment: string
+  ): Promise<void> {
+    await this.page.getByTestId('drag-handle').nth(block).hover();
+    await this.page.getByRole('button', { name: 'Chat' }).nth(block).click();
+    await this.addCommentToOpenThread(comment);
+  }
+
+  public async closeCommentsSidebar(): Promise<void> {
+    if (!(await this.isCommentSidebarOpen())) {
+      return;
+    }
+    await this.page
+      .getByTestId('segment-button-trigger-top-bar-annotations')
+      .click();
+  }
+
+  public async isCommentSidebarOpen(): Promise<boolean> {
+    return this.commentsSidebar.isVisible();
   }
 }

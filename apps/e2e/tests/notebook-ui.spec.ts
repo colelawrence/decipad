@@ -567,3 +567,87 @@ test('check live collaboration same notebook', async ({
     );
   });
 });
+
+test('basic notebook comments @comments', async ({
+  testUser,
+  anotherTestUser,
+}) => {
+  await test.step('create basic notebook with a collaborator', async () => {
+    await testUser.goToWorkspace();
+    await testUser.workspace.newWorkspace('@n1n.co team');
+    await testUser.createNewNotebook();
+    await testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.focusOnBody();
+    await testUser.notebook.addParagraph('This is a pragraph');
+    await testUser.notebook.inviteUser(anotherTestUser.email, 'editor');
+  });
+
+  await test.step('make sure collaborator can comment', async () => {
+    const notebookURL = testUser.page.url();
+
+    await anotherTestUser.page.goto(notebookURL);
+    await anotherTestUser.notebook.waitForEditorToLoad();
+    await anotherTestUser.notebook.openCommentsSidebar();
+    await expect(
+      anotherTestUser.page.getByText('Be the first one to chat'),
+      "notebook without comments placeholder didn't load"
+    ).toBeVisible();
+    await anotherTestUser.notebook.closeCommentsSidebar();
+    await expect(
+      anotherTestUser.page.getByText('Be the first one to chat'),
+      "Comment sidebar didn't close"
+    ).toBeHidden();
+    await anotherTestUser.page.getByText('This is a pragraph').hover();
+
+    await anotherTestUser.notebook.addCommentToBlock(0, 'this is a comment');
+    await anotherTestUser.notebook.addCommentToOpenThread(
+      'this is a second comment'
+    );
+  });
+
+  await test.step('make sure author can comment', async () => {
+    await testUser.notebook.openCommentsSidebar();
+    await testUser.page.getByText(/2 comment/).click();
+    await expect(
+      testUser.page.getByText('this is a comment'),
+      "author can't see collaborator comment"
+    ).toBeVisible();
+
+    await testUser.notebook.addCommentToOpenThread('this is a third comment');
+
+    // right now collaborators need to refresh the notebook to get new comments
+    await anotherTestUser.page.reload();
+    await anotherTestUser.notebook.waitForEditorToLoad();
+    await anotherTestUser.page.getByText(/3 comment/).click();
+    await expect(
+      anotherTestUser.page.getByText('this is a third comment'),
+      "collaborator can't read authors reply comment"
+    ).toBeVisible();
+  });
+
+  await test.step('create a second comment block', async () => {
+    await testUser.page.reload();
+    await testUser.notebook.focusOnBody();
+    await testUser.notebook.addParagraph('This is a second pragraph');
+    await testUser.notebook.closeCommentsSidebar();
+    await testUser.notebook.addCommentToBlock(
+      1,
+      'this is a comment on a second block'
+    );
+    await testUser.notebook.addCommentToOpenThread(
+      'this is a second comment on a second block'
+    );
+
+    await expect(
+      testUser.page.getByText('this is a comment on a second block'),
+      "author can't comment on a second block"
+    ).toBeVisible();
+
+    await expect(
+      testUser.page.getByText('this is a second comment on a second block'),
+      "author can't comment the second block thread"
+    ).toBeVisible();
+  });
+
+  await snapshot(testUser.page, 'Notebook: Comments');
+});

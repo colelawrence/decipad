@@ -20,7 +20,11 @@ export const Annotations: FC = () => {
   );
 
   return (
-    <Styled.AnnotationContainer id="annotations-container" ref={containerRef}>
+    <Styled.AnnotationContainer
+      id="annotations-container"
+      data-testid={'comment-sidebar'}
+      ref={containerRef}
+    >
       {showPlaceholder && (
         <Styled.Placeholder>
           <Styled.PlaceholderIcon>

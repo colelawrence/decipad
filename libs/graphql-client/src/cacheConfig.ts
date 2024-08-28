@@ -127,10 +127,10 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
         dateCreated: new Date().getTime(),
         dateUpdated: new Date().getTime(),
         content: args.content,
-        alias_id: args.aliasId,
+        alias_id: args.aliasId ?? null,
+        scenario_id: args.scenarioId ?? null,
         pad_id: args.padId,
-        meta: args.meta,
-        scenario_id: null,
+        meta: args.meta ?? null,
         ...(session?.user
           ? {
               user: {
@@ -191,7 +191,10 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
               dateCreated: new Date().getTime(),
               type: args.type,
               content: args.content,
-              alias_id: args.aliasId,
+              alias_id: args.aliasId ?? null,
+              alias: null,
+              meta: args.meta ?? null,
+              scenario_id: args.scenarioId ?? null,
               pad_id: args.padId,
               block_id: args.blockId,
               id: nanoid(),

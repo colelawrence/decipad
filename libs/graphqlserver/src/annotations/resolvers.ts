@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+import md5 from 'md5';
 import { resource } from '@decipad/backend-resources';
 import type {
   Annotation,
@@ -5,7 +7,6 @@ import type {
   Resolvers,
 } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
-import { nanoid } from 'nanoid';
 
 const notebooks = resource('notebook');
 
@@ -95,7 +96,10 @@ const resolvers: Resolvers = {
       return {
         id: user.id,
         username: user.name,
-        avatar: user.image || undefined,
+        avatar:
+          user.image ||
+          (user.email && md5(user.email, { encoding: 'binary' })) ||
+          undefined,
       };
     },
     alias: async (annotation) => {
