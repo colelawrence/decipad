@@ -101,6 +101,149 @@ test.describe('staging performance checks', () => {
       .toBeLessThanOrEqual(50_000);
   });
 
+  test('checks reducers from imports', async ({ performance }) => {
+    // count
+    performance.sampleStart('Reducers count');
+    await notebook.addFormula('countCustomers', 'count(Customers.CustomerId');
+    performance.sampleStart('Reducers count');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:4999')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers count');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers count'),
+        'Reducers count took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // min
+    performance.sampleStart('Reducers min');
+    await notebook.addFormula('minCustomers', 'min(Customers.RandomNumber');
+    performance.sampleStart('Reducers min');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:9322')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers min');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers min'),
+        'Reducers min took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // max
+    performance.sampleStart('Reducers max');
+    await notebook.addFormula('maxCustomers', 'max(Customers.RandomNumber');
+    performance.sampleStart('Reducers max');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:99977244')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers max');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers max'),
+        'Reducers max took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // average
+    performance.sampleStart('Reducers average');
+    await notebook.addFormula(
+      'averageCustomers',
+      'average(Customers.RandomNumber'
+    );
+    performance.sampleStart('Reducers average');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId(
+          'code-line-result:49310004.(712342468493698739747949589917983596719343868773754750950190038007601520304060812162432486497299459891978395679135827165433086617323464692938587717543508701740348069613922784556911382276455291058211642328465693138627725545109021804360872174434886977395479095819163832766553310662132426485297059411882376475295059011802360472094418883776755351070214042808561)'
+        )
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers average');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers average'),
+        'Reducers average took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // meadian
+    performance.sampleStart('Reducers median');
+    await notebook.addFormula(
+      'medianCustomers',
+      'median(Customers.RandomNumber'
+    );
+    performance.sampleStart('Reducers median');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:48239232')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers median');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers median'),
+        'Reducers median took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // sum
+    performance.sampleStart('Reducers sum');
+    await notebook.addFormula('sumCustomers', 'sum(Customers.RandomNumber');
+    performance.sampleStart('Reducers sum');
+    await expect(
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:246500713557')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers sum');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers sum'),
+        'Reducers sum took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+
+    // sumif
+    performance.sampleStart('Reducers sumif');
+    await notebook.addFormula(
+      'sumifCustomers',
+      'sumif(Customers.RandomNumber, Customers.RandomNumber < 5'
+    );
+    performance.sampleStart('Reducers sumif');
+    await expect(
+      page.getByTestId('codeline-code').last().getByTestId('code-line-result:0')
+    ).toBeVisible();
+
+    performance.sampleEnd('Reducers sum');
+    expect
+      .soft(
+        performance.getSampleTime('Reducers sum'),
+        'Reducers sum took more than 3 second'
+      )
+      .toBeLessThanOrEqual(3_000);
+  });
+
   test('text formatter with mouse', async ({}) => {
     await notebook.focusOnBody();
     await notebook.selectLastParagraph();
