@@ -8,7 +8,7 @@ import type {
 } from '@decipad/computer-interfaces';
 import type {
   AST,
-  AutocompleteName,
+  AutocompleteNameWithSerializedType,
   Parser,
   SerializedType,
   Unit,
@@ -69,8 +69,11 @@ export type SerializedColumnDesc = Omit<ColumnDesc, 'result' | 'blockType'> & {
 
 export type SerializedColumnDescArray = SerializedColumnDesc[];
 
-export type SerializedAutocompleteName = Omit<AutocompleteName, 'type'> & {
-  type: ArrayBuffer;
+export type SerializedAutocompleteName = Omit<
+  AutocompleteNameWithSerializedType,
+  'serializedType'
+> & {
+  serializedType: ArrayBuffer;
 };
 
 export type SerializedAutocompleteNames = SerializedAutocompleteName[];

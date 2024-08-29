@@ -14,9 +14,9 @@ export const selectCatalogNames = (
   items: AutocompleteName[]
 ): Array<AutocompleteName> =>
   items.filter(
-    ({ kind, type, name, blockId }) =>
-      kind === 'variable' &&
+    ({ autocompleteGroup, kind, name, blockId }) =>
+      autocompleteGroup === 'variable' &&
       name &&
       blockId &&
-      acceptableNumberCatalogKinds.has(type.kind)
+      acceptableNumberCatalogKinds.has(kind)
   );

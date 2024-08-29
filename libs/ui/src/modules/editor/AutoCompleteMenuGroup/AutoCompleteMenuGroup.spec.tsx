@@ -2,6 +2,7 @@ import { mockConsoleError } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import { AutoCompleteMenuItem } from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup';
+import { expect, it } from 'vitest';
 
 mockConsoleError();
 
@@ -9,14 +10,18 @@ it('renders given items in a group', () => {
   render(
     <AutoCompleteMenuGroup title="group">
       <AutoCompleteMenuItem
-        kind="variable"
-        type="number"
-        identifier="ThisIsAVariable"
+        item={{
+          autocompleteGroup: 'variable',
+          kind: 'number',
+          name: 'ThisIsAVariable',
+        }}
       />
       <AutoCompleteMenuItem
-        kind="variable"
-        type="number"
-        identifier="ThisIsAnother"
+        item={{
+          autocompleteGroup: 'variable',
+          kind: 'number',
+          name: 'ThisIsAnother',
+        }}
       />
     </AutoCompleteMenuGroup>
   );

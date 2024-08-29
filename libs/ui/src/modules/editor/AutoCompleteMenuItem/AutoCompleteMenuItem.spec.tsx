@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
@@ -7,9 +7,11 @@ import { ComponentProps } from 'react';
 import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
 
 const props: ComponentProps<typeof AutoCompleteMenuItem> = {
-  kind: 'variable',
-  identifier: 'MyVariable',
-  type: 'number',
+  item: {
+    autocompleteGroup: 'variable',
+    kind: 'number',
+    name: 'MyVariable',
+  },
 };
 
 mockConsoleWarn();

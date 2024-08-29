@@ -67,8 +67,8 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
         return [];
       }
       return {
-        kind: 'function',
-        type: serializeType(t.functionPlaceholder(name, undefined)),
+        autocompleteGroup: 'function',
+        kind: serializeType(t.functionPlaceholder(name, undefined)).kind,
         name,
         blockId: undefined,
         explanation: operator.explanation,
@@ -88,6 +88,7 @@ export {
   type BuiltinSpec,
   type FullBuiltinSpec,
 } from '@decipad/language-builtins';
+export type { FormulaGroup } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 export * from '@decipad/language-types';
 

@@ -1,10 +1,10 @@
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import type { ACItemType } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
 import type { BasePoint } from 'slate';
 import { setSelection } from '@decipad/editor-utils';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
+import { beforeEach, expect, it } from 'vitest';
 
 let editor: MyEditor;
 beforeEach(() => {
@@ -28,9 +28,9 @@ it('inserts the item, surrounded by spaces as necessary', () => {
       focus: { path: [0, 0], offset: 8 },
     },
     {
-      identifier: 'INSERTED',
-      kind: 'variable',
-      type: 'string' as ACItemType,
+      name: 'INSERTED',
+      autocompleteGroup: 'variable',
+      kind: 'string',
     }
   );
 
@@ -62,9 +62,9 @@ it('removes spaces at the beginning of the line', () => {
       focus: { path: [0, 0], offset: 4 },
     },
     {
-      identifier: 'INSERTED',
-      kind: 'variable',
-      type: 'string' as ACItemType,
+      name: 'INSERTED',
+      autocompleteGroup: 'variable',
+      kind: 'string',
     }
   );
 
@@ -96,9 +96,9 @@ it('removes spaces after parens', () => {
       focus: { path: [0, 0], offset: 8 },
     },
     {
-      identifier: 'INSERTED',
-      kind: 'variable',
-      type: 'string' as ACItemType,
+      name: 'INSERTED',
+      autocompleteGroup: 'variable',
+      kind: 'string',
     }
   );
 

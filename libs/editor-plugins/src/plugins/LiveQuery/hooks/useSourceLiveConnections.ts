@@ -1,15 +1,19 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import { useComputer } from '@decipad/editor-hooks';
-import type { AutocompleteName, Result } from '@decipad/language-interfaces';
+import type {
+  AutocompleteName,
+  AutocompleteNameWithSerializedType,
+  Result,
+} from '@decipad/language-interfaces';
 import { isTable } from '@decipad/remote-computer';
 import { useEffect, useState } from 'react';
 
 const isSourceLiveConnection = (
   computer: Computer,
-  autoCompleteName: AutocompleteName
+  autoCompleteName: AutocompleteNameWithSerializedType
 ): boolean => {
-  if (autoCompleteName.blockId && isTable(autoCompleteName.type)) {
-    const { columnNames } = autoCompleteName.type;
+  if (autoCompleteName.blockId && isTable(autoCompleteName.serializedType)) {
+    const { columnNames } = autoCompleteName.serializedType;
     const indexOfTypeColumn = columnNames.indexOf('type');
     if (indexOfTypeColumn >= 0) {
       const result = computer.getBlockIdResult(autoCompleteName.blockId);

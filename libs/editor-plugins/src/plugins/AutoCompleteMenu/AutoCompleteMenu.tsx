@@ -1,4 +1,7 @@
-import type { AutocompleteName } from '@decipad/language-interfaces';
+import type {
+  AutocompleteName,
+  SerializedType,
+} from '@decipad/language-interfaces';
 import { getBuiltinsForAutocomplete } from '@decipad/remote-computer';
 import type { PlateComponent } from '@decipad/editor-types';
 import {
@@ -7,7 +10,7 @@ import {
 } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useWindowListener } from '@decipad/react-utils';
-import type { ACItemType, AutoCompleteMenuMode, Identifier } from '@decipad/ui';
+import type { AutoCompleteMenuMode } from '@decipad/ui';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
 import sortBy from 'lodash/sortBy';
 import type { ComponentProps } from 'react';
@@ -24,21 +27,7 @@ const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
 
 const autoCompleteDebounceMs = 500;
 
-const nameToIdentifier = (name: AutocompleteName): Identifier => ({
-  kind: name.kind,
-  identifier: name.name,
-  inTable: name.inTable,
-  type: name.type.kind,
-  blockId: name.blockId,
-  columnId: name.columnId,
-  explanation: name.explanation,
-  syntax: name.syntax,
-  example: name.example,
-  formulaGroup: name.formulaGroup,
-});
-
-const builtInIdentifiers: Identifier[] =
-  getBuiltinsForAutocomplete().map(nameToIdentifier);
+const builtInIdentifiers: AutocompleteName[] = getBuiltinsForAutocomplete();
 
 export const AutoCompleteMenu: PlateComponent<{
   leaf: AutocompleteDecorationProps;
@@ -107,7 +96,9 @@ export const AutoCompleteMenu: PlateComponent<{
   return <span {...attributes}>{children}</span>;
 };
 
-const autoCompleteTypes: Partial<Record<AutoCompleteMenuMode, ACItemType[]>> = {
+const autoCompleteTypes: Partial<
+  Record<AutoCompleteMenuMode, SerializedType['kind'][]>
+> = {
   tableCell: ['number', 'string', 'date', 'boolean'],
 };
 
@@ -122,7 +113,7 @@ const AutoCompleteWrapper = ({
 >) => {
   const identifiers = useComputer().getNamesDefined$.useWithSelectorDebounced(
     autoCompleteDebounceMs,
-    (names) => localNamesFirst(names).map(nameToIdentifier),
+    (names) => localNamesFirst(names),
     blockId
   );
 
@@ -136,7 +127,7 @@ const AutoCompleteWrapper = ({
     const allowedTypes = mode && autoCompleteTypes[mode];
     if (!allowedTypes) return identifiersWithBuiltIns;
     return identifiersWithBuiltIns.filter((id) =>
-      allowedTypes.includes(id.type)
+      allowedTypes.includes(id.kind)
     );
   }, [identifiersWithBuiltIns, mode]);
 

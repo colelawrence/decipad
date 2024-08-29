@@ -7,32 +7,32 @@ interface TestObject {
 }
 
 const menu: ItemBlockId[] = [
-  { identifier: 'revenue', blockId: '400', columnId: '600' },
-  { identifier: 'revenue.revenue', blockId: '400', columnId: '600' },
-  { identifier: 'revenue', blockId: '500' },
-  { identifier: 'revenue', blockId: '400' },
+  { name: 'revenue', blockId: '400', columnId: '600' },
+  { name: 'revenue.revenue', blockId: '400', columnId: '600' },
+  { name: 'revenue', blockId: '500' },
+  { name: 'revenue', blockId: '400' },
 ];
 
 const searches: TestObject[] = [
-  { secondItem: { identifier: 'revenue' }, menuIndexToMatch: 2 },
+  { secondItem: { name: 'revenue' }, menuIndexToMatch: 2 },
   {
-    secondItem: { identifier: 'revenue', blockId: '400', columnId: '600' },
+    secondItem: { name: 'revenue', blockId: '400', columnId: '600' },
     menuIndexToMatch: 0,
   },
   {
     secondItem: {
-      identifier: 'revenue.revenue',
+      name: 'revenue.revenue',
       blockId: '400',
       columnId: '600',
     },
     menuIndexToMatch: 1,
   },
   {
-    secondItem: { identifier: 'revenue', blockId: '400' },
+    secondItem: { name: 'revenue', blockId: '400' },
     menuIndexToMatch: 3,
   },
   {
-    secondItem: { identifier: 'revenue', blockId: '400', columnId: '700' },
+    secondItem: { name: 'revenue', blockId: '400', columnId: '700' },
   },
 ];
 

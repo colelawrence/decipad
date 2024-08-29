@@ -15,6 +15,7 @@ import { useResolved } from '@decipad/react-utils';
 import {
   getExprRef,
   isTable as isComputerTable,
+  isTableKind as isComputerTableKind,
   type AutocompleteName,
   type SerializedType,
 } from '@decipad/remote-computer';
@@ -43,7 +44,7 @@ const autocompleteNameToExprRef = (
 };
 
 const isTable = (name: AutocompleteName) =>
-  !name.name.includes('.') && isComputerTable(name.type);
+  !name.name.includes('.') && isComputerTableKind(name.kind);
 
 function isNumber(type: SerializedType) {
   return type.kind === 'number';

@@ -1,12 +1,14 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { inMenu } from '../../../storybook-utils';
-import { ACItemType, AutoCompleteMenuItem } from './AutoCompleteMenuItem';
+import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
+import { ComponentProps } from 'react';
 
-const args = {
-  title: 'Title',
-  kind: 'variable',
-  identifier: 'MyVariable',
-  type: 'number' as ACItemType,
+const args: ComponentProps<typeof AutoCompleteMenuItem> = {
+  item: {
+    autocompleteGroup: 'variable',
+    kind: 'number',
+    name: 'MyVariable',
+  },
 };
 
 export default {

@@ -3,6 +3,7 @@ export * from './client';
 export type {
   AST,
   AutocompleteName,
+  AutocompleteNameWithSerializedType,
   Constant,
   Parser,
   SerializedTypes,
@@ -49,6 +50,7 @@ export {
   isResultGenerator,
   isSyntaxError,
   isTable,
+  isTableKind,
   isTableColumn,
   isTableResult,
   materializeColumnDesc,
@@ -107,6 +109,7 @@ export type {
   SimpleValue,
   SimpleValueAST,
   Token,
+  FormulaGroup,
 } from '@decipad/computer';
 
 export * from './client';

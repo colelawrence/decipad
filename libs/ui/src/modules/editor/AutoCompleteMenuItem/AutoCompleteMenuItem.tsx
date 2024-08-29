@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SerializedType } from '@decipad/language-interfaces';
+import { AutocompleteName, SerializedType } from '@decipad/language-interfaces';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -53,13 +53,8 @@ const identifierStyles = css(p12Medium, {
   overflow: 'hidden',
 });
 
-export type ACItemType = SerializedType['kind'];
-
 interface AutoCompleteMenuItemProps {
-  readonly kind: string;
-  readonly identifier: string;
-  readonly type: ACItemType;
-  readonly explanation?: string;
+  readonly item: AutocompleteName;
 
   /**
    * Unfortunately, we cannot use real browser focus for this menu since we need the editor to stay focused.
@@ -72,8 +67,8 @@ interface AutoCompleteMenuItemProps {
   readonly onHover?: () => void;
 }
 
-const getAutocompleteIconFor = (type: ACItemType) => {
-  const icons: Partial<Record<ACItemType, ReactNode>> = {
+const getAutocompleteIconFor = (type: SerializedType['kind']) => {
+  const icons: Partial<Record<SerializedType['kind'], ReactNode>> = {
     number: <Number />,
     string: <Text />,
     date: <Calendar />,
@@ -86,8 +81,7 @@ const getAutocompleteIconFor = (type: ACItemType) => {
 };
 
 export const AutoCompleteMenuItem = ({
-  identifier,
-  type,
+  item,
   focused = false,
   onExecute = noop,
   onHover = noop,
@@ -139,9 +133,9 @@ export const AutoCompleteMenuItem = ({
         onMouseDown={useCancelingEvent(onExecute)}
         ref={itemRef}
       >
-        <span css={iconStyles}>{getAutocompleteIconFor(type)}</span>
-        <div css={textStyles} data-testid={`autocomplete-item:${identifier}`}>
-          <strong css={identifierStyles}>{identifier}</strong>
+        <span css={iconStyles}>{getAutocompleteIconFor(item.kind)}</span>
+        <div css={textStyles} data-testid={`autocomplete-item:${item.name}`}>
+          <strong css={identifierStyles}>{item.name}</strong>
         </div>
       </button>
     </div>

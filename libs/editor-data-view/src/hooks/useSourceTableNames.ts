@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { AutocompleteName } from '@decipad/language-interfaces';
-import { isTable as isComputerTable } from '@decipad/remote-computer';
+import { isTableKind as isComputerTableKind } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
 import { debounce } from 'lodash';
 import { useComputer } from '@decipad/editor-hooks';
@@ -8,7 +8,8 @@ import { useComputer } from '@decipad/editor-hooks';
 const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>
   name.name.indexOf('.') < 0;
 
-const isTable = (name: AutocompleteName): boolean => isComputerTable(name.type);
+const isTable = (name: AutocompleteName): boolean =>
+  isComputerTableKind(name.kind);
 
 export const useSourceTableNames = (): AutocompleteName[] => {
   const computer = useComputer();

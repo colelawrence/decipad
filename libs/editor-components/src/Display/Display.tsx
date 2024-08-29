@@ -89,7 +89,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         (names) =>
           Object.values(names).map((name, i): SelectItems | undefined => {
             if (!openMenu && loaded) return undefined;
-            const { kind } = name.type;
+            const { kind } = name;
             if (
               !(
                 kind === 'string' ||
@@ -97,7 +97,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
                 kind === 'boolean' ||
                 kind === 'type-error'
               ) ||
-              name.kind !== 'variable'
+              name.autocompleteGroup !== 'variable'
             ) {
               return undefined;
             }

@@ -50,6 +50,7 @@ export type {
   SimpleValue,
   SimpleValueAST,
   Token,
+  FormulaGroup,
 } from '@decipad/language';
 export * as Format from './format';
 export { materializeColumnDesc, memoizedColumnResultGenerator } from './result';
@@ -61,6 +62,7 @@ export {
   identifiedErrorToMessage,
   isBracketError,
   isTable,
+  isTableKind,
   isTableColumn,
   isTableResult,
   isSyntaxError,

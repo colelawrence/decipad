@@ -1,45 +1,45 @@
-import { describe, vi, it } from 'vitest';
+import { describe, vi, it, expect } from 'vitest';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ACItemType } from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { AutoCompleteMenu } from './AutoCompleteMenu';
+import { AutocompleteName } from '@decipad/language-interfaces';
 
 describe('AutoCompleteMenu', () => {
-  const identifiers = [
+  const identifiers: AutocompleteName[] = [
     {
-      kind: 'variable' as const,
-      identifier: 'Revenue',
-      type: 'number' as ACItemType,
+      autocompleteGroup: 'variable',
+      name: 'Revenue',
+      kind: 'number',
     },
     {
-      kind: 'variable' as const,
-      identifier: 'Profit',
-      type: 'number' as ACItemType,
+      autocompleteGroup: 'variable' as const,
+      name: 'Profit',
+      kind: 'number',
     },
     {
-      kind: 'variable' as const,
-      identifier: 'Losses',
-      type: 'number' as ACItemType,
+      autocompleteGroup: 'variable' as const,
+      name: 'Losses',
+      kind: 'number',
     },
     {
-      identifier: 'Sales',
-      kind: 'variable' as const,
-      type: 'table' as ACItemType,
+      name: 'Sales',
+      autocompleteGroup: 'variable' as const,
+      kind: 'table',
     },
     {
-      identifier: 'Client',
+      name: 'Client',
       blockId: 'table:sales',
       columnId: 'table:sales:column:client',
-      kind: 'column' as const,
-      type: 'number' as ACItemType,
+      autocompleteGroup: 'column' as const,
+      kind: 'number',
       inTable: 'Sales',
     },
     {
-      identifier: 'Profit',
+      name: 'Profit',
       blockId: 'table:sales',
       columnId: 'table:sales:column:profit',
-      kind: 'column' as const,
-      type: 'number' as ACItemType,
+      autocompleteGroup: 'column' as const,
+      kind: 'number',
       inTable: 'Sales',
     },
   ];
@@ -55,12 +55,18 @@ describe('AutoCompleteMenu', () => {
 
     await act(() => userEvent.click(getByText(/Revenue/i)));
     expect(handleExecute).toHaveBeenLastCalledWith(
-      expect.objectContaining({ kind: 'variable', identifier: 'Revenue' })
+      expect.objectContaining({
+        autocompleteGroup: 'variable',
+        name: 'Revenue',
+      })
     );
 
     await act(() => userEvent.click(getByText(/Losses/)));
     expect(handleExecute).toHaveBeenLastCalledWith(
-      expect.objectContaining({ kind: 'variable', identifier: 'Losses' })
+      expect.objectContaining({
+        autocompleteGroup: 'variable',
+        name: 'Losses',
+      })
     );
   });
 

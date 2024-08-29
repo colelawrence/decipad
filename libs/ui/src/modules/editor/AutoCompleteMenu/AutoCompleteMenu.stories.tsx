@@ -4,13 +4,29 @@ import { AutoCompleteMenu, AutoCompleteMenuProps } from './AutoCompleteMenu';
 const args: AutoCompleteMenuProps = {
   search: '',
   identifiers: [
-    { kind: 'variable', type: 'number', identifier: 'ThisIsAVar' },
-    { kind: 'variable', type: 'number', identifier: 'ThisIsAnotherVar' },
-    { kind: 'variable', type: 'number', identifier: 'Another' },
-    { kind: 'variable', type: 'number', identifier: 'OneMore' },
-    { kind: 'variable', type: 'number', identifier: 'Enough' },
-    { kind: 'variable', type: 'number', identifier: 'NoMore' },
-    { kind: 'variable', type: 'number', identifier: 'Hidden' },
+    {
+      autocompleteGroup: 'variable',
+      kind: 'number',
+      name: 'ThisIsAVar',
+    },
+    {
+      autocompleteGroup: 'variable',
+      kind: 'number',
+      name: 'ThisIsAnotherVar',
+    },
+    {
+      autocompleteGroup: 'variable',
+      kind: 'number',
+      name: 'Another',
+    },
+    {
+      autocompleteGroup: 'variable',
+      kind: 'number',
+      name: 'OneMore',
+    },
+    { autocompleteGroup: 'variable', kind: 'number', name: 'Enough' },
+    { autocompleteGroup: 'variable', kind: 'number', name: 'NoMore' },
+    { autocompleteGroup: 'variable', kind: 'number', name: 'Hidden' },
   ],
 };
 

@@ -15,7 +15,7 @@ import type {
   SerializedType,
   SerializedTypes,
   Unit,
-  AutocompleteName,
+  AutocompleteNameWithSerializedType,
 } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
@@ -407,7 +407,9 @@ export class Computer implements ComputerInterface {
     (_, blockId: string) => this.getParseableTypeInBlock(blockId)
   );
 
-  private _getNamesDefined(inBlockId?: string): AutocompleteName[] {
+  private _getNamesDefined(
+    inBlockId?: string
+  ): AutocompleteNameWithSerializedType[] {
     const program = getGoodBlocks(this.latestProgram.asSequence);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
     return Array.from(findNames(this, program, toIgnore, inBlockId));
@@ -416,7 +418,7 @@ export class Computer implements ComputerInterface {
   /**
    * Get names for the autocomplete, and information about them
    */
-  async getNamesDefined(inBlockId?: string): Promise<AutocompleteName[]> {
+  async getNamesDefined(inBlockId?: string) {
     return this._getNamesDefined(inBlockId);
   }
 

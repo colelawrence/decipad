@@ -1,4 +1,7 @@
-import type { AST, AutocompleteName } from '@decipad/language-interfaces';
+import type {
+  AST,
+  AutocompleteNameWithSerializedType,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { serializeType } from '@decipad/language';
 import type { Program } from '@decipad/computer-interfaces';
@@ -11,7 +14,7 @@ export function* findNames(
   program: Readonly<Program>,
   ignoreNames: Set<string>,
   inBlockId?: string
-): Iterable<AutocompleteName> {
+): Iterable<AutocompleteNameWithSerializedType> {
   for (const name of internalFindNames(
     computer,
     program,
@@ -31,7 +34,7 @@ function* internalFindNames(
   program: Readonly<Program>,
   ignoreNames: Set<string>,
   inBlockId?: string
-): Iterable<AutocompleteName> {
+): Iterable<AutocompleteNameWithSerializedType> {
   const seenSymbols = new Set<string>();
 
   const translateName = (name: string): string => {
@@ -73,9 +76,11 @@ function* internalFindNames(
       }
 
       if (statement.type === 'assign') {
+        const serializedType = serializeType(type);
         yield {
-          kind: 'variable',
-          type: serializeType(type),
+          autocompleteGroup: 'variable',
+          kind: serializedType.kind,
+          serializedType,
           name: translateName(statement.args[0].args[0]),
           blockId: block.id,
         };
@@ -83,10 +88,11 @@ function* internalFindNames(
 
       if (statement.type === 'table') {
         const [tName, ...colItems] = statement.args;
-
+        const serializedType = serializeType(type);
         yield {
-          kind: 'variable',
-          type: serializeType(type),
+          autocompleteGroup: 'variable',
+          kind: serializedType.kind,
+          serializedType,
           name: translateName(tName.args[0]),
           blockId: block.id,
         };
@@ -101,9 +107,11 @@ function* internalFindNames(
             const columnName = col.args[0].args[0];
             const isLocal = ownTableName === tableName;
             const name = isLocal ? columnName : `${tableName}.${columnName}`;
+            const serializedType = serializeType(colType);
             yield {
-              kind: 'column',
-              type: serializeType(colType),
+              autocompleteGroup: 'column',
+              kind: serializedType.kind,
+              serializedType,
               name,
               inTable: tableName,
               isLocal,
@@ -126,9 +134,11 @@ function* internalFindNames(
 
         const name = isLocal ? columnName : `${tableName}.${columnName}`;
 
+        const serializedType = serializeType(type);
         yield {
-          kind: 'column',
-          type: serializeType(type),
+          autocompleteGroup: 'column',
+          kind: serializedType.kind,
+          serializedType,
           name,
           blockId: tableIdsByName.get(tableName),
           columnId: block.id,
@@ -136,9 +146,11 @@ function* internalFindNames(
           isLocal,
         };
       } else if (statement.type === 'function-definition') {
+        const serializedType = serializeType(type);
         yield {
-          kind: 'function',
-          type: serializeType(type),
+          autocompleteGroup: 'function',
+          kind: serializedType.kind,
+          serializedType,
           name: translateName(getIdentifierString(statement.args[0])),
           blockId: block.id,
         };

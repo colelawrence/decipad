@@ -13,20 +13,22 @@ export function groupIdentifiers(
     function: functions = [],
     column: columns = [],
   } = groupBy(identifiers, (ident) =>
-    ident.kind === 'variable' && ident.type === 'table' ? 'column' : ident.kind
+    ident.autocompleteGroup === 'variable' && ident.kind === 'table'
+      ? 'column'
+      : ident.autocompleteGroup
   ) as {
     [key: string]: Identifier[] | undefined;
   };
 
   const tableGroups = groupBy(columns, (col) =>
-    col.type === 'table' ? col.identifier : col.inTable ?? ''
+    col.kind === 'table' ? col.name : col.inTable ?? ''
   );
 
   // Shouldn't happen, but just in case
   delete tableGroups[''];
 
   const isFocused = (i: Identifier) =>
-    isResult && i.kind === 'variable' && i.identifier === result;
+    isResult && i.autocompleteGroup === 'variable' && i.name === result;
 
   const toGroup = (idents: Identifier[], title: string) => ({
     title,
@@ -38,24 +40,24 @@ export function groupIdentifiers(
     title: `${tableName}`,
     tableName,
     items: idents.flatMap((ident): Identifier[] => {
-      const { identifier } = ident;
+      const { name } = ident;
 
-      if (ident.kind === 'column' && isInTable === tableName) {
+      if (ident.autocompleteGroup === 'column' && isInTable === tableName) {
         // In a table, we can call our columns "Column1" or "TableName.Column1".
-        const wholeColumn = `${tableName}.${identifier}`;
+        const wholeColumn = `${tableName}.${name}`;
 
         return [
           {
             ...ident,
-            explanation: `The cell ${identifier}`,
+            explanation: `The cell ${name}`,
             inTable: tableName,
             isCell: true,
             decoration: 'cell',
           },
           {
             ...ident,
-            identifier: wholeColumn,
-            explanation: `The column ${identifier} from table ${tableName} as a list.`,
+            name: wholeColumn,
+            explanation: `The column ${name} from table ${tableName} as a list.`,
             inTable: tableName,
             isCell: false,
           },

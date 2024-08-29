@@ -22,7 +22,7 @@ export const useAutoConvertToSmartRef = (element?: MyElement) => {
     1000,
     (autoCompleteNames) =>
       autoCompleteNames.flatMap((n): [VarAndCol, VarAndCol][] => {
-        if (n.kind === 'variable' && n.blockId) {
+        if (n.autocompleteGroup === 'variable' && n.blockId) {
           return [[[n.name], [n.blockId]]];
         }
         if (n.kind === 'column' && n.blockId && n.columnId) {

@@ -13,7 +13,7 @@ import type {
 } from './types';
 import type {
   AST,
-  AutocompleteName,
+  AutocompleteNameWithSerializedType,
   ExternalDataMap,
   Parser,
   Result,
@@ -74,10 +74,12 @@ export interface Computer {
 
   // --- symbols
   getSetOfNamesDefined$: ListenerHelper<[], Set<string>>;
-  getNamesDefined(inBlockId?: string): Promise<AutocompleteName[]>;
+  getNamesDefined(
+    inBlockId?: string
+  ): Promise<AutocompleteNameWithSerializedType[]>;
   getNamesDefined$: ListenerHelper<
     [inBlockId?: string | undefined],
-    AutocompleteName[]
+    AutocompleteNameWithSerializedType[]
   >;
   blocksInUse$: ListenerHelper<string[], BlockDependents[]>;
   getSymbolDefinedInBlock$: ListenerHelper<

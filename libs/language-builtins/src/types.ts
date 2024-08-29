@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { ContextUtils, Type } from '@decipad/language-types';
-import type { AST, Value } from '@decipad/language-interfaces';
+import type { AST, FormulaGroup, Value } from '@decipad/language-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 
 export type CallBuiltinFunctor = (
@@ -43,7 +43,7 @@ export interface GenericBuiltinSpec {
   explanation?: string;
   syntax?: string;
   example?: string;
-  formulaGroup?: string;
+  formulaGroup?: FormulaGroup;
   operatorKind?: 'infix' | 'prefix';
   hidden?: boolean;
 }

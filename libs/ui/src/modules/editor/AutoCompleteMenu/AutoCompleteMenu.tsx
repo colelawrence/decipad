@@ -69,7 +69,7 @@ const fuseFilterStrategy: FilterStrategy = (items, search) => {
   if (!search) return items;
 
   const fuse = new Fuse(items, {
-    keys: ['identifier', { name: 'explanation', weight: 0.5 }],
+    keys: ['name', { name: 'explanation', weight: 0.5 }],
     isCaseSensitive: false,
     shouldSort: true,
     threshold: 0.3,
@@ -81,7 +81,7 @@ const fuseFilterStrategy: FilterStrategy = (items, search) => {
 
 const prefixFilterStrategy: FilterStrategy = (items, search) =>
   items.filter((item) =>
-    item.identifier.toLowerCase().startsWith(search.toLowerCase())
+    item.name.toLowerCase().startsWith(search.toLowerCase())
   );
 
 const filterStrategyForMode: Record<AutoCompleteMenuMode, FilterStrategy> = {
@@ -136,8 +136,8 @@ export const AutoCompleteMenu = ({
     () =>
       groupsWithItemsFiltered
         .flatMap(groupItems)
-        .map(({ identifier, columnId, blockId }) => ({
-          identifier,
+        .map(({ name, columnId, blockId }) => ({
+          name,
           blockId,
           columnId,
         })),
@@ -152,7 +152,7 @@ export const AutoCompleteMenu = ({
     setHoveredItem(
       groupsWithItemsFiltered
         .flatMap(groupItems)
-        .find((item) => item.identifier === focusedItem?.identifier)
+        .find((item) => item.name === focusedItem?.name)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -174,7 +174,7 @@ export const AutoCompleteMenu = ({
           setHoveredItem(
             groupsWithItemsFiltered
               .flatMap(groupItems)
-              .find((item) => item.identifier === newFocusedItemUp?.identifier)
+              .find((item) => item.name === newFocusedItemUp?.name)
           );
           event.stopPropagation();
           event.preventDefault();
@@ -192,9 +192,7 @@ export const AutoCompleteMenu = ({
           setHoveredItem(
             groupsWithItemsFiltered
               .flatMap(groupItems)
-              .find(
-                (item) => item.identifier === newFocusedItemDown?.identifier
-              )
+              .find((item) => item.name === newFocusedItemDown?.name)
           );
           event.stopPropagation();
           event.preventDefault();
@@ -204,7 +202,7 @@ export const AutoCompleteMenu = ({
             setHoveredItem(
               groupsWithItemsFiltered
                 .flatMap(groupItems)
-                .find((item) => item.identifier === focusedItem?.identifier)
+                .find((item) => item.name === focusedItem?.name)
             );
           }
           break;
@@ -222,9 +220,7 @@ export const AutoCompleteMenu = ({
         setHoveredItem(
           groupsWithItemsFiltered
             .flatMap(groupItems)
-            .find(
-              (item) => item.identifier === matchingIdentifiers[0]?.identifier
-            )
+            .find((item) => item.name === matchingIdentifiers[0]?.name)
         );
       }
     }
@@ -283,11 +279,11 @@ export const AutoCompleteMenu = ({
                       {items.map(({ ...item }) => {
                         return (
                           <AutoCompleteMenuItem
-                            {...item}
+                            item={item}
                             key={
                               item.blockId
-                                ? `${item.blockId}__${item.identifier}`
-                                : item.identifier
+                                ? `${item.blockId}__${item.name}`
+                                : item.name
                             }
                             focused={
                               matchItemBlocks(item, focusedItem) || item.focused

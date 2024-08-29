@@ -22,9 +22,11 @@ export const Normal: StoryFn<typeof args> = ({ numberOfItems, ...props }) => (
       .map((_, i) => (
         <AutoCompleteMenuItem
           key={i}
-          kind="variable"
-          type="number"
-          identifier={`MyVariable${i}`}
+          item={{
+            autocompleteGroup: 'variable',
+            kind: 'number',
+            name: `MyVariable${i}`,
+          }}
         />
       ))}
   </AutoCompleteMenuGroup>

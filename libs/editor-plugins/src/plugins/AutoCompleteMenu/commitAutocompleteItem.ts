@@ -33,7 +33,7 @@ export const commitAutocompleteItem = (
     toInsert += ' ';
   }
 
-  toInsert += item.identifier;
+  toInsert += item.name;
 
   let moveCursorBack;
   if (item.kind !== 'function') {

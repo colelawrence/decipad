@@ -84,7 +84,7 @@ it('can turn text into smartrefs', async () => {
 
   const names = (await computer.getNamesDefined()).flatMap(
     (n): [VarAndCol, VarAndCol][] => {
-      if (n.kind === 'variable' && n.blockId) {
+      if (n.autocompleteGroup === 'variable' && n.blockId) {
         return [[[n.name], [n.blockId]]];
       }
       if (n.kind === 'column' && n.blockId && n.columnId) {
@@ -126,10 +126,10 @@ it('can turn text into smartrefs (columns edition)', async () => {
 
   const names = (await computer.getNamesDefined()).flatMap(
     (n): [VarAndCol, VarAndCol][] => {
-      if (n.kind === 'variable' && n.blockId) {
+      if (n.autocompleteGroup === 'variable' && n.blockId) {
         return [[[n.name], [n.blockId]]];
       }
-      if (n.kind === 'column' && n.blockId && n.columnId) {
+      if (n.autocompleteGroup === 'column' && n.blockId && n.columnId) {
         return [
           [n.name.split('.') as [string, string], [n.blockId, n.columnId]],
         ];

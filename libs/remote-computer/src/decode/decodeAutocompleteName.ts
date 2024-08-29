@@ -1,13 +1,15 @@
 // eslint-disable-next-line no-restricted-imports
 import { decodeType } from '@decipad/remote-computer-codec';
-import type { AutocompleteName } from '@decipad/language-interfaces';
+import type { AutocompleteNameWithSerializedType } from '@decipad/language-interfaces';
 import type { SerializedAutocompleteName } from '../types/serializedTypes';
 
 export const decodeAutocompleteName = (
   value: SerializedAutocompleteName
-): AutocompleteName => {
+): AutocompleteNameWithSerializedType => {
+  const serializedType = decodeType(new DataView(value.serializedType), 0)[0];
   return {
     ...value,
-    type: decodeType(new DataView(value.type), 0)[0],
+    kind: serializedType.kind,
+    serializedType,
   };
 };

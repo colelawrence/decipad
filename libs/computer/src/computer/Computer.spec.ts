@@ -1,6 +1,9 @@
 import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
-import type { Result } from '@decipad/language-interfaces';
+import type {
+  AutocompleteNameWithSerializedType,
+  Result,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   serializeType,
@@ -469,21 +472,31 @@ describe('tooling data', () => {
     const names = await computer.getNamesDefined();
     expect(names).toMatchObject([
       {
-        kind: 'variable',
+        autocompleteGroup: 'variable',
         name: 'A',
-        type: { kind: 'number' },
-      },
+        kind: 'number',
+        serializedType: {
+          kind: 'number',
+        },
+      } satisfies AutocompleteNameWithSerializedType<'number'>,
       {
-        kind: 'function',
+        autocompleteGroup: 'function',
         name: 'f',
-        type: { kind: 'function' },
-      },
+        kind: 'function',
+        serializedType: {
+          kind: 'function',
+          name: 'exprRef_block_1',
+        },
+      } satisfies AutocompleteNameWithSerializedType<'function'>,
       {
-        kind: 'variable',
+        autocompleteGroup: 'variable',
         name: 'C',
-        type: { kind: 'number' },
-      },
-    ]);
+        kind: 'number',
+        serializedType: {
+          kind: 'number',
+        },
+      } satisfies AutocompleteNameWithSerializedType<'number'>,
+    ] satisfies AutocompleteNameWithSerializedType[]);
   });
 
   it('can get a statement', async () => {

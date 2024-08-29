@@ -2,7 +2,7 @@
  * Represents an item block identifier.
  */
 export type ItemBlockId = {
-  identifier: string;
+  name: string;
   blockId?: string;
   columnId?: string;
   explanation?: string;
@@ -27,9 +27,7 @@ export const matchItemBlocks = (
       // If there are identifiers, make sure they match as well
       return (
         a.columnId === b.columnId &&
-        (!a?.identifier || !b?.identifier
-          ? true
-          : a.identifier === b.identifier)
+        (!a?.name || !b?.name ? true : a.name === b.name)
       );
     }
     // If `a` and `b` have matching `blockId` properties, compare their values.
@@ -37,14 +35,12 @@ export const matchItemBlocks = (
     // of `a` and `b` (if present).
     return (
       a.blockId === b.blockId &&
-      (!a?.identifier || !b?.identifier
-        ? true
-        : a.identifier === b.identifier) &&
+      (!a?.name || !b?.name ? true : a.name === b.name) &&
       (!a?.explanation || !b?.explanation
         ? true
         : a.explanation === b.explanation)
     );
   }
   // As a fallback, compare identifiers
-  return a.identifier === b?.identifier;
+  return a.name === b?.name;
 };

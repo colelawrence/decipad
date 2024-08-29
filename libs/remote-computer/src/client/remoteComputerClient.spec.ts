@@ -667,28 +667,31 @@ describe('remote computer client', () => {
     expect(await computer.getNamesDefined('block-0')).toMatchInlineSnapshot(`
       [
         {
+          "autocompleteGroup": "variable",
           "blockId": "block-1",
-          "kind": "variable",
+          "kind": "number",
           "name": "B",
-          "type": {
+          "serializedType": {
             "kind": "number",
             "unit": null,
           },
         },
         {
+          "autocompleteGroup": "variable",
           "blockId": "block-2",
-          "kind": "variable",
+          "kind": "number",
           "name": "C",
-          "type": {
+          "serializedType": {
             "kind": "number",
             "unit": null,
           },
         },
         {
+          "autocompleteGroup": "variable",
           "blockId": "block-3",
-          "kind": "variable",
+          "kind": "table",
           "name": "T",
-          "type": {
+          "serializedType": {
             "columnNames": [],
             "columnTypes": [],
             "indexName": "exprRef_block_3",
@@ -696,13 +699,14 @@ describe('remote computer client', () => {
           },
         },
         {
+          "autocompleteGroup": "column",
           "blockId": "block-3",
           "columnId": "block-4",
           "inTable": "T",
           "isLocal": false,
           "kind": "column",
           "name": "T.C1",
-          "type": {
+          "serializedType": {
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -1020,63 +1024,68 @@ describe('remote computer client', () => {
           return;
         }
         expect(result).toMatchInlineSnapshot(`
-            [
-              {
-                "blockId": "block-0",
-                "kind": "variable",
-                "name": "A",
-                "type": {
+          [
+            {
+              "autocompleteGroup": "variable",
+              "blockId": "block-0",
+              "kind": "number",
+              "name": "A",
+              "serializedType": {
+                "kind": "number",
+                "unit": null,
+              },
+            },
+            {
+              "autocompleteGroup": "variable",
+              "blockId": "block-1",
+              "kind": "number",
+              "name": "B",
+              "serializedType": {
+                "kind": "number",
+                "unit": null,
+              },
+            },
+            {
+              "autocompleteGroup": "variable",
+              "blockId": "block-2",
+              "kind": "number",
+              "name": "C",
+              "serializedType": {
+                "kind": "number",
+                "unit": null,
+              },
+            },
+            {
+              "autocompleteGroup": "variable",
+              "blockId": "block-3",
+              "kind": "table",
+              "name": "T",
+              "serializedType": {
+                "columnNames": [],
+                "columnTypes": [],
+                "indexName": "exprRef_block_3",
+                "kind": "table",
+              },
+            },
+            {
+              "autocompleteGroup": "column",
+              "blockId": "block-3",
+              "columnId": "block-4",
+              "inTable": "T",
+              "isLocal": false,
+              "kind": "column",
+              "name": "T.C1",
+              "serializedType": {
+                "cellType": {
                   "kind": "number",
                   "unit": null,
                 },
-              },
-              {
-                "blockId": "block-1",
-                "kind": "variable",
-                "name": "B",
-                "type": {
-                  "kind": "number",
-                  "unit": null,
-                },
-              },
-              {
-                "blockId": "block-2",
-                "kind": "variable",
-                "name": "C",
-                "type": {
-                  "kind": "number",
-                  "unit": null,
-                },
-              },
-              {
-                "blockId": "block-3",
-                "kind": "variable",
-                "name": "T",
-                "type": {
-                  "columnNames": [],
-                  "columnTypes": [],
-                  "indexName": "exprRef_block_3",
-                  "kind": "table",
-                },
-              },
-              {
-                "blockId": "block-3",
-                "columnId": "block-4",
-                "inTable": "T",
-                "isLocal": false,
+                "indexedBy": "exprRef_block_3",
                 "kind": "column",
-                "name": "T.C1",
-                "type": {
-                  "cellType": {
-                    "kind": "number",
-                    "unit": null,
-                  },
-                  "indexedBy": "exprRef_block_3",
-                  "kind": "column",
-                },
               },
-            ]
-          `);
+            },
+          ]
+        `);
         resolve();
       });
     });
