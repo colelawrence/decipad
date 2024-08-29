@@ -75,7 +75,7 @@ test.describe('staging performance checks', () => {
 
       await notebook.addCSV({
         method: 'link',
-        link: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmIzE6QNJNDoKEaJebXmLNhXZEDxjUyod2FSx_mwgHk1tfjMuPhQmUCd2qNRv8ceWOZMOBJUlzeOLP/pub?output=csv',
+        link: 'https://docs.google.com/spreadsheets/d/1rEnsyZJuGdBLeq2O8lOAJShK6rI8L1CM-g6NjNul1dg/pub?gid=885366347&single=true&output=csv',
         varName: 'Customers',
       });
 
@@ -89,7 +89,7 @@ test.describe('staging performance checks', () => {
         timeout: 1000,
       });
       await expect(
-        page.getByText('10000 rows, previewing rows 1 to 10')
+        page.getByText('4999 rows, previewing rows 1 to 10')
       ).toBeVisible();
     });
     performance.sampleEnd('Ingest CSV');
@@ -105,7 +105,7 @@ test.describe('staging performance checks', () => {
     await notebook.focusOnBody();
     await notebook.selectLastParagraph();
     await expect(
-      page.getByText('10000 rows, previewing rows 1 to 10')
+      page.getByText('4999 rows, previewing rows 1 to 10')
     ).toBeVisible();
     await expect(
       page
@@ -163,7 +163,7 @@ test.describe('staging performance checks', () => {
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('creates a data view', async ({ performance }) => {
+  test('creates a data view', async ({ performance }) => {
     performance.sampleStart('Adding Data View');
     await page.getByText('Pivot view').click();
 

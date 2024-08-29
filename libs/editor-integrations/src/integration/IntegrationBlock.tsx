@@ -1,3 +1,6 @@
+import { getNodeString, getPreviousNode } from '@udecode/plate-common';
+import type { ComponentProps } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
@@ -30,9 +33,7 @@ import {
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
-import { getNodeString, getPreviousNode } from '@udecode/plate-common';
-import type { ComponentProps } from 'react';
-import { useCallback, useState } from 'react';
+import { useToast } from '@decipad/toast';
 import { useIntegration } from '../hooks/useIntegration';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
@@ -52,9 +53,15 @@ export const IntegrationBlock: PlateComponent = ({
   assertElementType(element, ELEMENT_INTEGRATION);
 
   const [showData, setShowData] = useState(true);
-  const [animated, setAnimated] = useState(false);
+  const { onRefresh, loading, result, error } = useIntegration(element);
 
-  const { onRefresh, result } = useIntegration(element);
+  // error handling
+  const toast = useToast();
+  useEffect(() => {
+    if (error) {
+      toast.error(`Error in integration: ${error.message}`);
+    }
+  }, [error, toast]);
 
   const workspaceId = useCurrentWorkspaceStore((w) => w.workspaceInfo.id);
 
@@ -136,11 +143,6 @@ export const IntegrationBlock: PlateComponent = ({
 
     onRefresh();
 
-    setAnimated(true);
-    setTimeout(() => {
-      setAnimated(false);
-    }, 1000);
-
     track({
       segmentEvent: {
         type: 'action',
@@ -172,7 +174,7 @@ export const IntegrationBlock: PlateComponent = ({
         buttons={[
           {
             children: (
-              <AnimatedIcon icon={<icons.Refresh />} animated={animated} />
+              <AnimatedIcon icon={<icons.Refresh />} animated={loading} />
             ),
             onClick: handleClick,
             tooltip: (
