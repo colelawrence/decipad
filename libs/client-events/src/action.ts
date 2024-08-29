@@ -188,6 +188,14 @@ type Action =
         analytics_source: 'frontend' | 'backend';
       };
     }
+  | {
+      action: 'Data Drawer Opened';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+        drawer_trigger: 'sidebar' | 'inline number';
+      };
+    }
 
   // OLD TRACKER MIGHT GET DEPRECATED IN THE FUTURE
   // Notebook operations

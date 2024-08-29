@@ -1,7 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { ClientEventsContext } from '@decipad/client-events';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
@@ -60,9 +61,27 @@ export const NumberCatalog = ({
     }
   }
 
+  const event = useContext(ClientEventsContext);
+
   if (!Object.keys(items).length) {
     return isFlagEnabled('DATA_DRAWER') ? (
-      <button onClick={toggleAddNewVariable}>+ New Variable</button>
+      <button
+        onClick={() => {
+          toggleAddNewVariable();
+          event({
+            segmentEvent: {
+              type: 'action',
+              action: 'Data Drawer Opened',
+              props: {
+                analytics_source: 'frontend',
+                drawer_trigger: 'sidebar',
+              },
+            },
+          });
+        }}
+      >
+        + New Variable
+      </button>
     ) : null;
   }
 
@@ -81,7 +100,22 @@ export const NumberCatalog = ({
         </div>
 
         {isFlagEnabled('DATA_DRAWER') && (
-          <button css={newVariableButton} onClick={toggleAddNewVariable}>
+          <button
+            css={newVariableButton}
+            onClick={() => {
+              toggleAddNewVariable();
+              event({
+                segmentEvent: {
+                  type: 'action',
+                  action: 'Data Drawer Opened',
+                  props: {
+                    analytics_source: 'frontend',
+                    drawer_trigger: 'sidebar',
+                  },
+                },
+              });
+            }}
+          >
             + New Variable
           </button>
         )}
