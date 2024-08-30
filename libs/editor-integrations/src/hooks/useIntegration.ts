@@ -25,9 +25,6 @@ export const useIntegration = (
     element.typeMappings,
     element.isFirstRowHeader
   );
-  const latestVarNameInjectedToComputerRef = useRef<string | undefined>(
-    undefined
-  );
   const [loading, setLoading] = useState<boolean>(false);
   const firstTime = useRef(true);
 
@@ -83,21 +80,6 @@ export const useIntegration = (
       if (canceled) {
         return;
       }
-      if (
-        latestVarNameInjectedToComputerRef.current != null &&
-        latestVarNameInjectedToComputerRef.current !== varName
-      ) {
-        await pushResultToComputer(
-          computer,
-          element.id ?? '',
-          latestVarNameInjectedToComputerRef.current,
-          undefined
-        );
-      }
-      if (canceled) {
-        return;
-      }
-      latestVarNameInjectedToComputerRef.current = varName;
       await pushResultToComputer(computer, element.id ?? '', varName, result);
     })();
 
