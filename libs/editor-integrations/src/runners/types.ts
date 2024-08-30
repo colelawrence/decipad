@@ -194,40 +194,40 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
   public async import(): Promise<Result.Result | undefined> {
     const worker = await this.getWorker();
 
-    let resolveProm: (_: Result.Result | undefined) => void = () => {};
+    return new Promise<Result.Result | undefined>((resolve, reject) => {
+      const unsubPromise = worker.subscribe(
+        {
+          useFirstRowAsHeader: this.getIsFirstRowHeader(),
+          query: this.query,
 
-    const resultPromise = new Promise<Result.Result | undefined>((resolve) => {
-      resolveProm = resolve;
-    });
+          url: this.url,
+          columnTypeCoercions: this.getSubscribeTypes(),
+          proxy: this.proxy,
+          source: this.source,
+          maxCellCount: 10_000_000_000_000,
+          useCache: this.source === 'csv',
+          padId: this.padId,
+        },
+        async (error, __, res) => {
+          if (error) {
+            (await unsubPromise)();
+            return reject(error);
+          }
+          if (res.loading == null || res.loading) {
+            return;
+          }
 
-    const unsubPromise = worker.subscribe(
-      {
-        useFirstRowAsHeader: this.getIsFirstRowHeader(),
-        query: this.query,
+          const hydratedResult = hydrateResult(res.result);
+          if (!hydratedResult) {
+            return;
+          }
 
-        url: this.url,
-        columnTypeCoercions: this.getSubscribeTypes(),
-        proxy: this.proxy,
-        source: this.source,
-        maxCellCount: 10_000_000_000_000,
-        useCache: this.source === 'csv',
-        padId: this.padId,
-      },
-      async (_, __, res) => {
-        if (res.loading == null || res.loading) {
-          return;
+          this.setLatestResult(hydratedResult);
+          resolve(hydratedResult);
+          (await unsubPromise)();
         }
-        const unsubValue = await unsubPromise;
-
-        const hydratedResult = hydrateResult(res.result);
-
-        this.setLatestResult(hydratedResult);
-        resolveProm(hydratedResult);
-        unsubValue();
-      }
-    );
-
-    return resultPromise;
+      );
+    });
   }
 }
 

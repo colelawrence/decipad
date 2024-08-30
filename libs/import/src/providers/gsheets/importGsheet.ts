@@ -170,11 +170,11 @@ const importOneGsheet = async (
   options: ImportOptions
 ): Promise<ImportResult[]> => {
   const { sheetId, gid } = getSheetRequestDataFromUrl(params.url);
-  const meta = await getSheetMeta(sheetId, params);
-  const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
   try {
+    const meta = await getSheetMeta(sheetId, params);
+    const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
     const resp = await request(url, true, params);
-    return importOneGsheetFromResponse(
+    return await importOneGsheetFromResponse(
       resp,
       meta.properties.title,
       params,

@@ -5,6 +5,7 @@ import { Result } from '@decipad/language-interfaces';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRunner } from '../runners';
+import { formatError } from '@decipad/format';
 
 type UseIntegraionReturn = {
   onRefresh: () => void;
@@ -27,8 +28,8 @@ export const useIntegration = (
   const latestVarNameInjectedToComputerRef = useRef<string | undefined>(
     undefined
   );
-  const importState = useRef<'idle' | 'importing' | 'imported'>('idle');
   const [loading, setLoading] = useState<boolean>(false);
+  const firstTime = useRef(true);
 
   const varName = useMemo(
     () => getNodeString(element.children[0]),
@@ -38,10 +39,12 @@ export const useIntegration = (
 
   const runIntegration = useCallback(
     async (controller?: AbortController, force = false) => {
-      if (importState.current === 'importing' && !force) {
+      if (controller?.signal.aborted) {
         return;
       }
-      importState.current = 'importing';
+      if ((loading || error) && !force) {
+        return;
+      }
       try {
         setLoading(true);
         const res = await runner.import();
@@ -54,6 +57,9 @@ export const useIntegration = (
         if (res instanceof Error) {
           throw res;
         }
+        if (res.type.kind === 'type-error') {
+          throw new Error(formatError('en-US', res.type.errorCause));
+        }
 
         setResult(res);
         setError(undefined);
@@ -61,10 +67,9 @@ export const useIntegration = (
         setError(e as Error);
       } finally {
         setLoading(false);
-        importState.current = 'imported';
       }
     },
-    [runner]
+    [loading, error, runner]
   );
 
   useEffect(() => {
@@ -72,29 +77,41 @@ export const useIntegration = (
       return;
     }
 
-    if (
-      latestVarNameInjectedToComputerRef.current != null &&
-      latestVarNameInjectedToComputerRef.current !== varName
-    ) {
-      pushResultToComputer(
-        computer,
-        element.id ?? '',
-        latestVarNameInjectedToComputerRef.current,
-        undefined
-      );
-    }
-    latestVarNameInjectedToComputerRef.current = varName;
-    pushResultToComputer(computer, element.id ?? '', varName, result);
+    let canceled = false;
+
+    (async () => {
+      if (canceled) {
+        return;
+      }
+      if (
+        latestVarNameInjectedToComputerRef.current != null &&
+        latestVarNameInjectedToComputerRef.current !== varName
+      ) {
+        await pushResultToComputer(
+          computer,
+          element.id ?? '',
+          latestVarNameInjectedToComputerRef.current,
+          undefined
+        );
+      }
+      if (canceled) {
+        return;
+      }
+      latestVarNameInjectedToComputerRef.current = varName;
+      await pushResultToComputer(computer, element.id ?? '', varName, result);
+    })();
+
+    return () => {
+      canceled = true;
+    };
   }, [computer, element.id, result, varName]);
 
   useEffect(() => {
     const controller = new AbortController();
-    runIntegration(controller);
-
-    return () => {
-      // abort
-      controller.abort();
-    };
+    if (firstTime.current) {
+      firstTime.current = false;
+      runIntegration(controller);
+    }
   }, [runIntegration]);
 
   return {

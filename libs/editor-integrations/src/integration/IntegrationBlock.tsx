@@ -30,6 +30,7 @@ import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { Result, getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
+  CodeError,
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
@@ -202,6 +203,7 @@ export const IntegrationBlock: PlateComponent = ({
       >
         {children}
       </UIIntegrationBlock>
+      {error ? <CodeError message={error.message} /> : null}
     </DraggableBlock>
   );
 };

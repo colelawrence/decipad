@@ -47,6 +47,7 @@ import { getNodeString } from '@udecode/plate-common';
 import omit from 'lodash/omit';
 import { Computer } from '@decipad/computer-interfaces';
 import { useEditorController } from '@decipad/notebook-state';
+import { formatError } from '@decipad/format';
 
 interface IntegrationProps {
   readonly workspaceId: string;
@@ -133,6 +134,12 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
 
     if (res instanceof Error) {
       onExecute((v) => [...v, { status: 'error', err: res }]);
+      return;
+    }
+
+    if (res?.type.kind === 'type-error') {
+      const error = formatError('en-US', res.type.errorCause);
+      onExecute((v) => [...v, { status: 'error', err: error }]);
       return;
     }
 

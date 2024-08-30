@@ -298,7 +298,7 @@ test('Basic Table', async ({ testUser }) => {
   await test.step('updates table name', async () => {
     await testUser.page.getByTestId('table-name-input').dblclick();
     await testUser.page.keyboard.type('NewTableName');
-    await expect(testUser.page.getByText('NewTableName')).toBeVisible();
+    await expect(testUser.page.getByText('NewTableName').last()).toBeVisible();
   });
 
   await test.step('can insert a new row below', async () => {
