@@ -10,7 +10,7 @@ There are several ways to create Inline Results:
 
 1. **Creating Inline Results with the = Shortcut**
 
-   - You can embed any number or calculation within a sentence by using the `=` shortcut. Simply press the `=` key, and a formula bar will appear. Type your calculation, and the result will be embedded in your text.
+   - You can embed any number or calculation within a sentence by using the `=` shortcut. Simply press the `=` key, and the data drawer will appear. Type your calculation, and the result will be embedded in your text.
 
 2. **Drag & Drop Inline Results from the Data Tab**
 
@@ -26,6 +26,4 @@ There are several ways to create Inline Results:
 
 ### Editing Inline Results
 
-To edit an inline number derived from a calculation, click on it to open the formula bar for editing. Any changes made will be reflected once you exit edit mode.
-
-**Please note that some inline results cannot be edited**. Inline results created by dragging results from Data Views or Column Results only display their formula and cannot be edited, only deleted.
+To edit an inline number derived from a calculation, click on it to open the data drawer for editing. Any changes made will be reflected once you exit edit mode.

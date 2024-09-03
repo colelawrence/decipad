@@ -45,5 +45,5 @@ Card,
 
   <Card title="Inline Results" notebook="/docs/quick-start/inline-results" description="Explain results and conclusions." />
 
-  <Card title="Data Integrations" notebook="/docs/integrations/basics" description="Quickly import data to analyze and visualize." />
+  <Card title="Data Integrations" notebook="/docs/integrations/code" description="Quickly import data to analyze and visualize." />
 </GridContainer>
