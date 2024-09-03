@@ -773,7 +773,7 @@ const TabInput = styled.input({
   border: 'none',
 
   '&::placeholder': {
-    color: cssVar('textSubdued'),
+    color: cssVar('textDisabled'),
   },
 });
 

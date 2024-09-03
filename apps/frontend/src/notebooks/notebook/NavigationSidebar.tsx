@@ -97,6 +97,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
           onDragEnd={onDragEnd}
           toggleAddNewVariable={setAddVariable}
           editVariable={setEditingVariable}
+          overrideNewVarButtonBgColour={true}
         />
       </NavigationComponentSidebar>
     </ErrorBoundary>

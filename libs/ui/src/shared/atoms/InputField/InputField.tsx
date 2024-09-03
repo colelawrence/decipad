@@ -146,7 +146,7 @@ export const InputField = ({
         {
           color: cssVar('textDefault'),
           '::placeholder': {
-            color: cssVar('textSubdued'),
+            color: cssVar('textDisabled'),
           },
         },
         size === 'small' ? inputStylesSmall : inputStyles,

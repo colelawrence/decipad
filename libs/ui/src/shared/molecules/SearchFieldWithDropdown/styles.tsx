@@ -30,4 +30,5 @@ export const searchIconStyles = css({
   width: 16,
   height: 16,
   flexShrink: 0,
+  opacity: 0.5,
 });

@@ -11,7 +11,7 @@ const textAreaInputStyles = css(p13Medium, {
   border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   '::placeholder': {
-    color: cssVar('textSubdued'),
+    color: cssVar('textDisabled'),
   },
 });
 

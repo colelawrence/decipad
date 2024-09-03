@@ -83,7 +83,7 @@ const inputStyles = css(p14Medium, {
   backgroundColor: 'transparent',
 
   '&::placeholder': {
-    color: cssVar('textSubdued'),
+    color: cssVar('textDisabled'),
   },
 });
 

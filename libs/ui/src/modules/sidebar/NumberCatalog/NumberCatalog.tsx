@@ -2,12 +2,14 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { ReactNode, useContext } from 'react';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 import { cssVar, p13Medium, p14Medium } from '../../../primitives';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { Add } from 'libs/ui/src/icons';
 
 export type NumberCatalogItemType = {
   name: string;
@@ -24,6 +26,11 @@ interface NumberCatalogProps {
   onDragEnd?: (e: React.DragEvent) => void;
   items: Record<string, NumberCatalogItemType[]>;
   alignment?: 'right' | 'left';
+  /* This is needed because we're using the same component twice
+   * and in a specific case, the background is grey and to make the button
+   * sticky, we need to setup a background colour
+   */
+  overrideNewVarButtonBgColour?: boolean;
 
   toggleAddNewVariable: () => void;
   editVariable: (id: string) => void;
@@ -35,6 +42,7 @@ export const NumberCatalog = ({
   items = {},
   toggleAddNewVariable,
   editVariable,
+  overrideNewVarButtonBgColour,
 }: NumberCatalogProps) => {
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
@@ -65,7 +73,7 @@ export const NumberCatalog = ({
 
   if (!Object.keys(items).length) {
     return isFlagEnabled('DATA_DRAWER') ? (
-      <button
+      <NewVariableButton
         onClick={() => {
           toggleAddNewVariable();
           event({
@@ -80,28 +88,19 @@ export const NumberCatalog = ({
           });
         }}
       >
-        + New Variable
-      </button>
+        <NewVariableIcon>
+          <Add />
+        </NewVariableIcon>{' '}
+        New Variable
+      </NewVariableButton>
     ) : null;
   }
 
   return (
     <div css={wrapperStyles}>
       <div css={numberCatalogMenuStyles}>
-        <div css={menuBodyStyles}>
-          {Object.keys(items).map((tab) => (
-            <div key={tab} css={groupStyles}>
-              {Object.keys(items).length > 1 && (
-                <span css={groupHeadingStyles}>{tab}:</span>
-              )}
-              {items[tab].map((item) => getNumberCatalogItemComponent(item))}
-            </div>
-          ))}
-        </div>
-
         {isFlagEnabled('DATA_DRAWER') && (
-          <button
-            css={newVariableButton}
+          <NewVariableButton
             onClick={() => {
               toggleAddNewVariable();
               event({
@@ -115,10 +114,24 @@ export const NumberCatalog = ({
                 },
               });
             }}
+            isBackgroundGrey={overrideNewVarButtonBgColour}
           >
-            + New Variable
-          </button>
+            <NewVariableIcon>
+              <Add />
+            </NewVariableIcon>{' '}
+            New Variable
+          </NewVariableButton>
         )}
+        <div css={menuBodyStyles}>
+          {Object.keys(items).map((tab) => (
+            <div key={tab} css={groupStyles}>
+              {Object.keys(items).length > 1 && (
+                <span css={groupHeadingStyles}>{tab}:</span>
+              )}
+              {items[tab].map((item) => getNumberCatalogItemComponent(item))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -159,7 +172,26 @@ const groupHeadingStyles = css(p14Medium, {
   padding: '4px 8px',
 });
 
-const newVariableButton = css(p13Medium, {
-  paddingLeft: '16px',
-  color: cssVar('textDisabled'),
+const NewVariableIcon = styled.div({
+  marginRight: '8px',
+  width: '16px',
+  height: '16px',
 });
+
+const NewVariableButton = styled.button<{ isBackgroundGrey?: boolean }>(
+  p13Medium,
+  (props) => ({
+    padding: '8px 6px',
+    color: cssVar('textDisabled'),
+    backgroundColor: props.isBackgroundGrey
+      ? cssVar('backgroundAccent')
+      : cssVar('backgroundMain'),
+    bottom: '24px',
+    textAlign: 'left',
+    display: 'flex',
+    width: '100%',
+    position: 'sticky',
+    top: 0,
+    zIndex: '10',
+  })
+);
