@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import {
   createMyPlateEditor,
   ELEMENT_STRUCTURED_IN,

@@ -1,3 +1,4 @@
+import { expect, describe, it, test } from 'vitest';
 import { N } from '@decipad/number';
 import ptime from 'p-time';
 // eslint-disable-next-line no-restricted-imports
@@ -69,8 +70,8 @@ describe('use of funds document', () => {
     );
 
     expect(result.value).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           1609459200000n,
           1612137600000n,
           1614556800000n,
@@ -84,7 +85,7 @@ describe('use of funds document', () => {
           1635724800000n,
           1638316800000n,
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -158,7 +159,7 @@ describe('use of funds document', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -232,7 +233,7 @@ describe('use of funds document', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -306,7 +307,7 @@ describe('use of funds document', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -385,7 +386,6 @@ describe('use of funds document', () => {
     expect(time).toBeLessThanOrEqual(20000 * (process.env.CI ? 2 : 1));
   });
 
-  /* eslint-disable-next-line jest/no-disabled-tests */
   it.skip('Use of funds multidimensional', async () => {
     expect(
       await runCodeForVariables(
@@ -458,9 +458,9 @@ describe('use of funds document', () => {
         Overheads: [
           [50, 100, 150, 150],
           [2000, 2000, 2000, 0],
-          [2000, 2100, 2205, expect.toRoundEqual(2315)],
+          [2000, 2100, 2205, 2315],
         ],
-        TotalOverheads: [4050, 4200, 4355, expect.toRoundEqual(2465.25)],
+        TotalOverheads: [4050, 4200, 4355, 2465.25],
       },
     });
   });
@@ -620,45 +620,464 @@ ${'' /* Get capital needed */}
       )
     );
 
-    expect(result).toMatchObject({
-      variables: {
-        MonthlyRevenueGrowthRate: N(1, 20),
-        TimeToProfitability: expect.toRoundEqual(81),
-        CumulativeMonthlyRevenue: expect.toRoundEqual(-43395),
-        CumulativeMonthlyExpenses: expect.toRoundEqual(10527976),
-        CapitalNeeded: expect.toRoundEqual(-10571371),
-        IPOTargetMonthlyRevenue: N(10000000),
-        TimeToIPO: expect.toRoundEqual(170),
-      },
-      types: {
-        MonthlyRevenueGrowthRate: { type: 'number', unit: null },
-        TimeToProfitability: { type: 'number', unit: null },
-        CumulativeMonthlyRevenue: {
-          type: 'number',
-          unit: [{ unit: 'eur' }],
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "types": {
+          "CapitalNeeded": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "CumulativeMonthlyExpenses": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "CumulativeMonthlyRevenue": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "IPOTargetMonthlyRevenue": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "InitialMonthlyRevenue": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "MonthlyExpenses": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "EUR",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "eur",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "MonthlyRevenueGrowthRate": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": "percentage",
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "TimeToIPO": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "TimeToProfitability": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
         },
-        CumulativeMonthlyExpenses: {
-          type: 'number',
-          unit: [{ unit: 'eur' }],
+        "variables": {
+          "CapitalNeeded": DeciNumber {
+            "d": 30922905071323881n,
+            "infinite": false,
+            "n": 326897507755553430152000n,
+            "s": -1n,
+          },
+          "CumulativeMonthlyExpenses": DeciNumber {
+            "d": 33008268447n,
+            "infinite": false,
+            "n": 347510262073280000n,
+            "s": 1n,
+          },
+          "CumulativeMonthlyRevenue": DeciNumber {
+            "d": 936823n,
+            "infinite": false,
+            "n": 40653496000n,
+            "s": -1n,
+          },
+          "IPOTargetMonthlyRevenue": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10000000n,
+            "s": 1n,
+          },
+          "MonthlyRevenueGrowthRate": DeciNumber {
+            "d": 20n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          "TimeToIPO": DeciNumber {
+            "d": 471100893131n,
+            "infinite": false,
+            "n": 80084464966250n,
+            "s": 1n,
+          },
+          "TimeToProfitability": DeciNumber {
+            "d": 429107489811n,
+            "infinite": false,
+            "n": 34751026207328n,
+            "s": 1n,
+          },
         },
-        CapitalNeeded: {
-          type: 'number',
-          unit: [{ unit: 'eur' }],
-        },
-        IPOTargetMonthlyRevenue: {
-          type: 'number',
-          unit: [{ unit: 'eur' }],
-        },
-        TimeToIPO: { type: 'number', unit: null },
-      },
-    });
+      }
+    `);
 
     expect(time).toBeLessThanOrEqual(1600 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
-  // Three-dimensional ¯\_(ツ)_/¯
-  // eslint-disable-next-line jest/no-disabled-tests
+  // Three-dimensional ¯_(ツ)_/¯
   test.skip('Crypto portfolio tracker', async () => {
     expect(
       await runCodeForVariables(
@@ -867,7 +1286,6 @@ ${'' /* Get capital needed */}
   });
 
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
-  /* eslint-disable-next-line jest/no-disabled-tests */
   test.skip('New business line', async () => {
     const period = Array.from({ length: 5 }, (_, idx) =>
       Date.UTC(2022, idx, 1)
@@ -895,18 +1313,18 @@ ${'' /* Get capital needed */}
       variables: {
         Period: period,
         RevenuePerUser: [3, 80],
-        Users: expect.toRoundEqual([
+        Users: [
           [100_000, 110_000, 121_000, 133_100, 146_410],
           [2_500, 2_750, 3_025, 3_328, 3_660],
-        ]),
-        Revenue: expect.toRoundEqual([
+        ],
+        Revenue: [
           [300_000, 330_000, 363_000, 399_300, 439_230],
           [200_000, 220_000, 242_000, 266_200, 292_820],
-        ]),
-        Profit: expect.toRoundEqual([
+        ],
+        Profit: [
           [135_000, 148_500, 163_350, 179_685, 197_653.5],
           [90_000, 99_000, 108_900, 119_790, 131_769],
-        ]),
+        ],
       },
       types: {
         Period: {
@@ -1228,19 +1646,19 @@ ${'' /* Get capital needed */}
       )();
 
       expect(await p).toMatchInlineSnapshot(`
-        Object {
-          "meta": Object {
+        {
+          "meta": {
             "labels": Promise {},
           },
           "type": Type {
             "anythingness": false,
             "atParentIndex": null,
             "cellType": null,
-            "columnNames": Array [
+            "columnNames": [
               "Year",
               "Revenue",
             ],
-            "columnTypes": Array [
+            "columnTypes": [
               Type {
                 "anythingness": false,
                 "atParentIndex": null,
@@ -1332,14 +1750,14 @@ ${'' /* Get capital needed */}
             "unit": null,
             Symbol(immer-draftable): true,
           },
-          "value": Array [
-            Array [
+          "value": [
+            [
               1420070400000n,
               1451606400000n,
               1483228800000n,
               1514764800000n,
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 610351562500000000000n,
                 "infinite": false,
@@ -1385,19 +1803,19 @@ describe('column assignment integration', () => {
       T3.Col1 = [1, 2, 3]
       T3`)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "Col1",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -1489,8 +1907,8 @@ describe('column assignment integration', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1528,7 +1946,7 @@ describe('column assignment integration', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1563,7 +1981,7 @@ describe('column assignment integration', () => {
       myfun("b")
       `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -1617,8 +2035,8 @@ describe('previous', () => {
       T1.B = previous(1) * 10
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -1684,7 +2102,7 @@ describe('previous', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -1716,8 +2134,8 @@ describe('previous', () => {
       T1.B = previous(1, A) * 10
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -1783,7 +2201,7 @@ describe('previous', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -1815,8 +2233,8 @@ describe('previous', () => {
       T1.B = previous(1, A * 10)
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -1882,7 +2300,7 @@ describe('previous', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -1918,8 +2336,8 @@ describe('multi-dim ops', () => {
       Table.A / Table.B`);
 
     expect(result).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
@@ -1954,8 +2372,8 @@ describe('multi-dim ops', () => {
             "symbol": null,
             "tree": undefined,
             "type": "number",
-            "unit": Array [
-              Object {
+            "unit": [
+              {
                 "exp": DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -1971,7 +2389,7 @@ describe('multi-dim ops', () => {
                 },
                 "unit": "bananas",
               },
-              Object {
+              {
                 "exp": DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -2018,7 +2436,7 @@ describe('multi-dim ops', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 4n,
             "infinite": false,
@@ -2060,8 +2478,8 @@ describe('multi-dim ops', () => {
       `);
 
     expect(result).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
@@ -2099,8 +2517,8 @@ describe('multi-dim ops', () => {
               "symbol": null,
               "tree": undefined,
               "type": "number",
-              "unit": Array [
-                Object {
+              "unit": [
+                {
                   "baseQuantity": "USD",
                   "baseSuperQuantity": "currency",
                   "exp": DeciNumber {
@@ -2177,8 +2595,8 @@ describe('multi-dim ops', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,
@@ -2198,7 +2616,7 @@ describe('multi-dim ops', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,
@@ -2218,7 +2636,7 @@ describe('multi-dim ops', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,
@@ -2238,7 +2656,7 @@ describe('multi-dim ops', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,
@@ -2258,7 +2676,7 @@ describe('multi-dim ops', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,
@@ -2278,7 +2696,7 @@ describe('multi-dim ops', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 23n,
               "infinite": false,

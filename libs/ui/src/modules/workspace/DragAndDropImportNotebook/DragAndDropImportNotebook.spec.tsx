@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import stringify from 'json-stringify-safe';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';

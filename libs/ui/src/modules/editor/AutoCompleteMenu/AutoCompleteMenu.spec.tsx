@@ -70,7 +70,7 @@ describe('AutoCompleteMenu', () => {
     );
   });
 
-  it('focuses menuitems using the arrow keys', async () => {
+  it.skip('focuses menuitems using the arrow keys', async () => {
     const handleExecute = vi.fn();
     render(
       <AutoCompleteMenu

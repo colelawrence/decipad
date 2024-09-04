@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { createColumnSlice } from './ColumnSlice';
 import { getLabelIndex } from './getLabelIndex';
 import { jsCol } from './testUtils';

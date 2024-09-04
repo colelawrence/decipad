@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import DeciNumber from '@decipad/number';
 import { serializeType } from '.';
 import { runCodeForVariables } from './testUtils';
@@ -36,11 +37,11 @@ describe('tree builtin', () => {
     expect(treeResultValue.rootAggregation).toBe(undefined);
     expect(treeResultValue.columns).toHaveLength(3);
     expect(treeResultValue.columns).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "aggregation": Object {
+      [
+        {
+          "aggregation": {
             "meta": undefined,
-            "type": Object {
+            "type": {
               "kind": "number",
               "unit": null,
             },
@@ -53,14 +54,14 @@ describe('tree builtin', () => {
           },
           "name": "Col1",
         },
-        Object {
+        {
           "aggregation": undefined,
           "name": "Col2",
         },
-        Object {
-          "aggregation": Object {
+        {
+          "aggregation": {
             "meta": undefined,
-            "type": Object {
+            "type": {
               "kind": "number",
               "unit": null,
             },

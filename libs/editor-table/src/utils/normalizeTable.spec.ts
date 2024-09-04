@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { insertTableBelow } from '@decipad/editor-components';
 import type { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
@@ -26,7 +27,7 @@ describe('normalizeTable', () => {
   });
 
   it('should normalize a table', async () => {
-    await insertTableBelow(editor, [0], getAvailableIdentifier);
+    insertTableBelow(editor, [0], getAvailableIdentifier);
 
     const tableEntry = getDefined(
       getNodeEntrySafe(editor, {

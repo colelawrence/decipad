@@ -146,7 +146,7 @@ test('Creating a basic model', async ({ testUser }) => {
   await test.step('download table csv', async () => {
     const csvData = await downloadTableCSV(page, 'Table');
     expect(csvData).toBe(
-      'Index,Year,TotalInvested (£),TotalProfit (£),TotalMoney (£)\n1,2023,1100,50,1150\n2,2024,1200,107.5,1307.5\n3,2025,1300,172.875,1472.875'
+      'Index,Year,TotalInvested (£),TotalProfit (£),TotalMoney (£)n1,2023,1100,50,1150n2,2024,1200,107.5,1307.5n3,2025,1300,172.875,1472.875'
     );
   }); */
 });

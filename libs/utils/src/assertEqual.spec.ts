@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { assertEqual } from './assertEqual';
 
 it('doesnt through if objects are equal', () => {

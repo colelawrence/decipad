@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { ProgramBlock } from '@decipad/computer-interfaces';
 import {
   Computer,
@@ -91,14 +92,14 @@ it('pushes two external datas and removes the last one', async () => {
       getDefined(await computer.getBlockIdResult('table-1-id')?.result)
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": [Function],
-      "type": Object {
-        "columnNames": Array [
+      "type": {
+        "columnNames": [
           "column-1-name",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
@@ -107,8 +108,8 @@ it('pushes two external datas and removes the last one', async () => {
         "indexName": "exprRef_table_1_id",
         "kind": "table",
       },
-      "value": Array [
-        Array [
+      "value": [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -141,14 +142,14 @@ it('pushes two external datas and removes the last one', async () => {
       getDefined(await computer.getBlockIdResult('table-1-id')?.result)
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": [Function],
-      "type": Object {
-        "columnNames": Array [
+      "type": {
+        "columnNames": [
           "column-1-name",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
@@ -157,8 +158,8 @@ it('pushes two external datas and removes the last one', async () => {
         "indexName": "exprRef_table_1_id",
         "kind": "table",
       },
-      "value": Array [
-        Array [
+      "value": [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -183,14 +184,14 @@ it('pushes two external datas and removes the last one', async () => {
       getDefined(await computer.getBlockIdResult('table-1-id')?.result)
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": [Function],
-      "type": Object {
-        "columnNames": Array [
+      "type": {
+        "columnNames": [
           "column-1-name",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
@@ -199,8 +200,8 @@ it('pushes two external datas and removes the last one', async () => {
         "indexName": "exprRef_table_1_id",
         "kind": "table",
       },
-      "value": Array [
-        Array [
+      "value": [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,

@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';
 import { Label } from './Label';

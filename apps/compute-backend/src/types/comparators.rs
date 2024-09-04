@@ -9,15 +9,23 @@ impl PartialEq for DeciResult {
         match (self, other) {
             (DeciResult::Float(a), DeciResult::Float(b)) => *a == *b,
             (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self == &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => self == &other.to_float(),
+            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
+                self == &other.to_float()
+            }
             (DeciResult::Fraction(_n, _d), DeciResult::Float(_a)) => other == &self.to_float(),
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => *n1 * *d2 == *n2 * *d1,
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
                 &self.to_arb() == other
             }
-            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Float(_a)) => &self.to_float() == other,
-            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => self == &other.to_arb(),
-            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => n1 * d2 == n2 * d1,
+            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Float(_a)) => {
+                &self.to_float() == other
+            }
+            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
+                self == &other.to_arb()
+            }
+            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
+                n1 * d2 == n2 * d1
+            }
             (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => *b1 == *b2,
             (DeciResult::String(s1), DeciResult::String(s2)) => *s1 == *s2,
             (DeciResult::Column(items1), DeciResult::Column(items2)) => items1
@@ -56,15 +64,29 @@ impl PartialOrd for DeciResult {
         match (self, other) {
             (DeciResult::Float(a), DeciResult::Float(b)) => *a < *b,
             (DeciResult::Float(a), DeciResult::Fraction(n, d)) => *a < *n as f64 / *d as f64,
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => self < &other.to_float(),
+            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
+                self < &other.to_float()
+            }
             (DeciResult::Fraction(n, d), DeciResult::Float(a)) => (*n as f64 / *d as f64) < *a,
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => *n1 * *d2 < *n2 * *d1,
-            (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => &self.to_arb() < other,
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => &self.to_float() < other,
-            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => self < &other.to_arb(),
-            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => n1 * d2 < n2 * d1,
+            (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
+                &self.to_arb() < other
+            }
+            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
+                &self.to_float() < other
+            }
+            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
+                self < &other.to_arb()
+            }
+            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
+                n1 * d2 < n2 * d1
+            }
             (DeciResult::String(s1), DeciResult::String(s2)) => s1 < s2,
             (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => !*b1 && *b2,
+            (DeciResult::Date(d1, _), DeciResult::Date(d2, _)) => match (d1, d2) {
+                (Some(dd1), Some(dd2)) => dd1 < dd2,
+                _ => unreachable!(),
+            },
             _ => panic!("Can't compare these types"),
         }
     }
@@ -81,7 +103,6 @@ impl PartialOrd for DeciResult {
         return self > other || self == other;
     }
 }
-
 
 impl<T> PartialOrd<T> for DeciResult
 where

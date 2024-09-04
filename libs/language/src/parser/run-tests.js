@@ -3,6 +3,7 @@ import { zip } from '@decipad/utils';
 import { walkAst } from '@decipad/language-utils';
 import { parseBlock } from '.';
 import { prettyPrintAST } from './utils';
+import { test, expect } from 'vitest';
 
 function cleanSourceMap(ast) {
   walkAst(ast, (node) => {

@@ -1,3 +1,4 @@
+import { afterEach, it, expect } from 'vitest';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { render, screen } from '@testing-library/react';
 import { CodeVariable } from './CodeVariable';

@@ -1,3 +1,4 @@
+import { expect, it, vi } from 'vitest';
 import type {
   MyValue,
   TableCellType,
@@ -19,7 +20,6 @@ import { Editor } from 'slate';
 import { findNode } from '@udecode/plate-common';
 import { isElementOfType } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from '../createSmartRefPlugin';
-import { vi, it, expect } from 'vitest';
 
 vi.mock('nanoid', () => ({
   nanoid: () => 'nanoid()',

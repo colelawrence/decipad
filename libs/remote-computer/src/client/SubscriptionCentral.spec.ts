@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import { createSubscriptionCentral } from './SubscriptionCentral';
 import type { TSubscribeToRemote } from '../types/SubscriptionCentral';
 
@@ -28,7 +28,7 @@ describe('SubscriptionCentral', () => {
         },
       };
     };
-    const central = createSubscriptionCentral(subscribeToRemote, {
+    const central = await createSubscriptionCentral(subscribeToRemote, {
       waitForReleaseMs: 0,
     });
 

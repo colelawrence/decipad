@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { decilang, prettyPrintAST } from '..';
 import type { SimpleValueAST } from './common';
 import { getSimpleValueUnit } from './getSimpleValueUnit';
@@ -16,42 +17,42 @@ it('gets the unit part of the AST', () => {
 
   expect(getSimpleValueUnit(decilang<SimpleValueAST>`$10/hour`))
     .toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "args": Array [
+    {
+      "args": [
+        {
+          "args": [
             "/",
           ],
           "type": "funcref",
         },
-        Object {
-          "args": Array [
-            Object {
-              "args": Array [
+        {
+          "args": [
+            {
+              "args": [
                 "$",
               ],
-              "end": Object {
+              "end": {
                 "char": 0,
                 "column": 1,
                 "line": 1,
               },
-              "start": Object {
+              "start": {
                 "char": 0,
                 "column": 1,
                 "line": 1,
               },
               "type": "ref",
             },
-            Object {
-              "args": Array [
+            {
+              "args": [
                 "hour",
               ],
-              "end": Object {
+              "end": {
                 "char": 7,
                 "column": 8,
                 "line": 1,
               },
-              "start": Object {
+              "start": {
                 "char": 4,
                 "column": 5,
                 "line": 1,

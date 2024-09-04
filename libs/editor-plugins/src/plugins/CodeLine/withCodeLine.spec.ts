@@ -1,3 +1,4 @@
+import { describe, it, beforeEach, expect } from 'vitest';
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
@@ -42,17 +43,21 @@ describe('withCodeLine', () => {
 
       editor.insertText('\n');
 
-      expect(editor.children).toEqual([
-        {
-          id: '1',
-          type: ELEMENT_CODE_LINE,
-          children: [
-            {
-              text: 'a = {\n  \n}',
-            },
-          ],
-        },
-      ]);
+      expect(editor.children).toMatchInlineSnapshot(`
+        [
+          {
+            "children": [
+              {
+                "text": "a = {
+          
+        }",
+              },
+            ],
+            "id": "1",
+            "type": "code_line",
+          },
+        ]
+      `);
       expect(editor.selection).toEqual({
         anchor: {
           offset: 8,

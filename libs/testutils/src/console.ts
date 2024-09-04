@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 
 export const mockConsoleWarn = () => {
   const originalConsoleWarn = console.warn;

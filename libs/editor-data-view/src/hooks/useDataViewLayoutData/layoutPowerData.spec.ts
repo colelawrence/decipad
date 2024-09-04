@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { nanoid } from 'nanoid';
 import { type Result, type AST, Unknown } from '@decipad/language-interfaces';
 import type { IdentifiedBlock, Program } from '@decipad/computer-interfaces';

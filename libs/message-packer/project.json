@@ -28,10 +28,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/message-packer"],
       "options": {
-        "jestConfig": "libs/message-packer/jest.config.js"
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/message-packer"
       }
     }
   },

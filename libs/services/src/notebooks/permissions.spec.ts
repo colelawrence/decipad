@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { internalCanDuplicatePad } from './permissions';
 
 describe('Can duplicate pad', () => {

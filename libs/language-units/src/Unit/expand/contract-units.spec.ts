@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import { U, u } from '../../utils/testUtils';
 import { contractUnits } from '.';

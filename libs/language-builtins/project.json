@@ -18,7 +18,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/language-builtins"],
       "options": {
-        "command": "npx vitest --run && npx vitest bench --outputJson benchmark.json",
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/language-builtins"
       }
     },

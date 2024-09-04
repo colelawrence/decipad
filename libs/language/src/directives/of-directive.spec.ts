@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { l, genericIdent, ne, U, u } from '@decipad/language-utils';

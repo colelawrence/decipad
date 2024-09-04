@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { Table } from './Table';
 import { N } from '@decipad/number';
 import { materializeOneResult } from '../utils';
@@ -21,8 +22,8 @@ describe('Table', () => {
 
     const colGens = await table.getData();
     expect(await materializeOneResult(colGens)).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -36,7 +37,7 @@ describe('Table', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "a",
           "b",
         ],
@@ -59,8 +60,8 @@ describe('Table', () => {
         columns.map(async (col) => materializeOneResult(await col.getData()))
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -74,7 +75,7 @@ describe('Table', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "a",
           "b",
         ],

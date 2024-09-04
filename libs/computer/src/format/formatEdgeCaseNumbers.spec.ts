@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from '@decipad/number';
 import {
   isEdgeCaseNumber,
@@ -16,32 +17,32 @@ it('can detect super large and super smol numbers', () => {
 
 it('can print those numbers', () => {
   expect(formatEdgeCaseNumber(large, 2)).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "type": "integer",
         "value": "1000000000000000000000",
       },
     ]
   `);
   expect(formatEdgeCaseNumber(small, 2)).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "type": "integer",
         "value": "0",
       },
-      Object {
+      {
         "type": "decimal",
         "value": ".",
       },
-      Object {
+      {
         "type": "fraction",
         "value": "00",
       },
     ]
   `);
   expect(formatEdgeCaseNumber(N(100n), 2)).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "type": "integer",
         "value": "100",
       },
@@ -51,20 +52,20 @@ it('can print those numbers', () => {
 
 it('deals with repeating fractions', () => {
   expect(formatEdgeCaseNumber(N(1n, 3n), 2)).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "type": "integer",
         "value": "0",
       },
-      Object {
+      {
         "type": "decimal",
         "value": ".",
       },
-      Object {
+      {
         "type": "fraction",
         "value": "33",
       },
-      Object {
+      {
         "type": "ellipsis",
         "value": "...",
       },

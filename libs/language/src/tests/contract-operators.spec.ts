@@ -1,9 +1,10 @@
+import { expect, describe, it } from 'vitest';
 import { runCode } from '../run';
 
 describe('contract operators', () => {
   it('assert to exist', async () => {
     expect(await runCode('assert(1)')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -21,28 +22,28 @@ describe('contract operators', () => {
           "functionness": false,
           "indexName": null,
           "indexedBy": null,
-          "node": Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          "node": {
+            "args": [
+              {
+                "args": [
                   "assert",
                 ],
-                "end": Object {
+                "end": {
                   "char": 5,
                   "column": 6,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
                 },
                 "type": "funcref",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "number",
                       DeciNumber {
                         "d": 1n,
@@ -51,7 +52,7 @@ describe('contract operators', () => {
                         "s": 1n,
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 7,
                       "column": 8,
                       "line": 1,
@@ -88,7 +89,7 @@ describe('contract operators', () => {
                       "unit": null,
                       Symbol(immer-draftable): true,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 7,
                       "column": 8,
                       "line": 1,
@@ -96,12 +97,12 @@ describe('contract operators', () => {
                     "type": "literal",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 8,
                   "column": 9,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 6,
                   "column": 7,
                   "line": 1,
@@ -109,12 +110,12 @@ describe('contract operators', () => {
                 "type": "argument-list",
               },
             ],
-            "end": Object {
+            "end": {
               "char": 8,
               "column": 9,
               "line": 1,
             },
-            "start": Object {
+            "start": {
               "char": 0,
               "column": 1,
               "line": 1,

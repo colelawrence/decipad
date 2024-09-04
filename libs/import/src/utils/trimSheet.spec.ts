@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { trimSheet } from './trimSheet';
 
 test('trimSheet', () => {

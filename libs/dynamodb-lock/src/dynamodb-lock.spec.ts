@@ -3,7 +3,6 @@ import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { getDefined } from '../../utils/src';
 import { concurrentWrites } from './utils/concurrent-writes';
 
-/* eslint-disable jest/no-standalone-expect */
 test('dynamodb lock', (ctx) => {
   const { test: it } = ctx;
   it('works for an unexisting record', async () => {

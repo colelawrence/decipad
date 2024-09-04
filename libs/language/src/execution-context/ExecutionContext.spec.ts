@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import { Value, buildType } from '..';
 import { ExecutionContext } from './ExecutionContext';

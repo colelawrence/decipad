@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { parseIntegration, parseIntegrationJs } from './parseIntegration';
 
 const functionBody = `
@@ -51,10 +52,10 @@ describe('parseIntegration', () => {
     const parsed = await parseIntegration(mdString);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
+      {
         "content": "Certainly! To fetch data from an Airtable table, you'll need the Base ID of the Airtable Base, the Table Name, and an API key which should be stored securely in your environment variables. Here's a function that does just that:
       ",
-        "envVars": Array [
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -86,17 +87,17 @@ describe('parseIntegration', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {
-          "baseId": Object {
+        "jsDocParams": {
+          "baseId": {
             "description": "The unique identifier for the Airtable Base.",
             "type": "string",
           },
-          "tableName": Object {
+          "tableName": {
             "description": "The name of the table within the Airtable Base.",
             "type": "string",
           },
         },
-        "params": Array [
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -117,8 +118,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(arrowfunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -150,8 +151,8 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {},
-        "params": Array [
+        "jsDocParams": {},
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -162,8 +163,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(commentedArrowfunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -195,17 +196,17 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {
-          "baseId": Object {
+        "jsDocParams": {
+          "baseId": {
             "description": "The unique identifier for the Airtable Base.",
             "type": "string",
           },
-          "tableName": Object {
+          "tableName": {
             "description": "The name of the table within the Airtable Base.",
             "type": "string",
           },
         },
-        "params": Array [
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -217,8 +218,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(anonymousFunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -250,8 +251,8 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {},
-        "params": Array [
+        "jsDocParams": {},
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -263,8 +264,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(commentedAnonymousFunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -296,17 +297,17 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {
-          "baseId": Object {
+        "jsDocParams": {
+          "baseId": {
             "description": "The unique identifier for the Airtable Base.",
             "type": "string",
           },
-          "tableName": Object {
+          "tableName": {
             "description": "The name of the table within the Airtable Base.",
             "type": "string",
           },
         },
-        "params": Array [
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -318,8 +319,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(namedFunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -351,8 +352,8 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {},
-        "params": Array [
+        "jsDocParams": {},
+        "params": [
           "baseId",
           "tableName",
         ],
@@ -364,8 +365,8 @@ describe('parseIntegrationJs', () => {
     const parsed = parseIntegrationJs(commentedNamedFunction);
 
     expect(parsed).toMatchInlineSnapshot(`
-      Object {
-        "envVars": Array [
+      {
+        "envVars": [
           "AIRTABLE_API_KEY",
         ],
         "fnName": "fetchAirtableData",
@@ -397,17 +398,17 @@ describe('parseIntegrationJs', () => {
         }, {});
 
         return tabulatedData;",
-        "jsDocParams": Object {
-          "baseId": Object {
+        "jsDocParams": {
+          "baseId": {
             "description": "The unique identifier for the Airtable Base.",
             "type": "string",
           },
-          "tableName": Object {
+          "tableName": {
             "description": "The name of the table within the Airtable Base.",
             "type": "string",
           },
         },
-        "params": Array [
+        "params": [
           "baseId",
           "tableName",
         ],

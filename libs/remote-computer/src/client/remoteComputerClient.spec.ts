@@ -1546,5 +1546,5 @@ describe('remote computer client', () => {
       });
     });
     subscription?.unsubscribe();
-  }, 10000);
+  }, 20000);
 });

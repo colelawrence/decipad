@@ -49,7 +49,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/apps/frontend"],
       "options": {
-        "command": "npx vitest --run",
+        "command": "npx vitest --run --config ../../vitest.web.config.ts",
         "cwd": "apps/frontend"
       }
     }

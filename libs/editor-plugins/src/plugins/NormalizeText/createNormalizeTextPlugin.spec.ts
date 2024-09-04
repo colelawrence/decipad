@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import {
   createMyPlateEditor,
   ELEMENT_PARAGRAPH,

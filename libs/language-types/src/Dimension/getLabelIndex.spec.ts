@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { Value } from '@decipad/language-interfaces';
 import { getLabelIndex } from './getLabelIndex';
 import { jsCol } from './testUtils';

@@ -28,7 +28,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/repl"],
       "options": {
-        "command": "npx vitest --run",
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/repl"
       }
     }

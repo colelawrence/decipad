@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { anyMappingToMap } from './any-mapping-to-map';
 import { getDefined } from './get-defined';
 import { getOnly } from './get-only';
@@ -8,7 +9,6 @@ import { last } from './last';
 import { lenientZip } from './lenient-zip';
 import { noop } from './noop';
 import { thro } from './thro';
-import { timeout } from './timeout';
 import { unzip } from './unzip';
 import { zip } from './zip';
 import { assertDefined } from './assert-defined';
@@ -87,23 +87,6 @@ it('can unzip an array', () => {
     [1, 2],
     ['1', '2'],
   ]);
-});
-
-// eslint-disable-next-line jest/no-done-callback
-it('can timeout', (done) => {
-  expect.assertions(1);
-
-  const nums: number[] = [];
-
-  timeout(20).then(() => {
-    nums.push(1);
-
-    expect(nums).toEqual([0, 1]);
-    done();
-  });
-  setTimeout(() => {
-    nums.push(0);
-  }, 1);
 });
 
 it('asserts defined', () => {

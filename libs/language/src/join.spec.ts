@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { evaluateForVariables } from './testUtils';
 
 const evalOptions = {
@@ -54,17 +55,17 @@ describe('table join', () => {
     );
     const joinResult = results.JoinResult;
     expect(joinResult.type).toMatchInlineSnapshot(`
-      Object {
-        "columnNames": Array [
+      {
+        "columnNames": [
           "a",
           "b",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
-          Object {
+          {
             "kind": "boolean",
           },
         ],
@@ -75,8 +76,8 @@ describe('table join', () => {
     `);
 
     expect(joinResult.value).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -96,7 +97,7 @@ describe('table join', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           true,
           false,
           true,
@@ -117,25 +118,25 @@ describe('table join', () => {
     );
     const joinResult = results.JoinResult;
     expect(joinResult.type).toMatchInlineSnapshot(`
-      Object {
-        "columnNames": Array [
+      {
+        "columnNames": [
           "a",
           "b",
           "Table2_a",
           "Table2_b",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
-          Object {
+          {
             "kind": "boolean",
           },
-          Object {
+          {
             "kind": "string",
           },
-          Object {
+          {
             "kind": "number",
             "unit": null,
           },
@@ -148,8 +149,8 @@ describe('table join', () => {
 
     expect(joinResult.value).toHaveLength(4);
     expect(joinResult.value).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -163,15 +164,15 @@ describe('table join', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           true,
           false,
         ],
-        Array [
+        [
           "A",
           "B",
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -202,8 +203,8 @@ describe('table join', () => {
     );
     const joinResult = results.JoinResult;
     expect(joinResult.type).toMatchInlineSnapshot(`
-      Object {
-        "columnNames": Array [
+      {
+        "columnNames": [
           "a",
           "b",
           "Table2_a",
@@ -211,25 +212,25 @@ describe('table join', () => {
           "Table3_a",
           "Table3_c",
         ],
-        "columnTypes": Array [
-          Object {
+        "columnTypes": [
+          {
             "kind": "number",
             "unit": null,
           },
-          Object {
+          {
             "kind": "boolean",
           },
-          Object {
+          {
             "kind": "boolean",
           },
-          Object {
+          {
             "kind": "number",
             "unit": null,
           },
-          Object {
+          {
             "kind": "boolean",
           },
-          Object {
+          {
             "kind": "number",
             "unit": null,
           },
@@ -242,8 +243,8 @@ describe('table join', () => {
 
     expect(joinResult.value).toHaveLength(6);
     expect(joinResult.value).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -263,17 +264,17 @@ describe('table join', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           true,
           false,
           true,
         ],
-        Array [
+        [
           true,
           false,
           true,
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -293,12 +294,12 @@ describe('table join', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           true,
           false,
           true,
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,

@@ -1,6 +1,4 @@
-import { vi, beforeEach, it, expect } from 'vitest';
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable import/no-extraneous-dependencies */
+import { vi, describe, beforeEach, it, expect } from 'vitest';
 import type { MyEditor } from '@decipad/editor-types';
 import {
   createMyPlateEditor,

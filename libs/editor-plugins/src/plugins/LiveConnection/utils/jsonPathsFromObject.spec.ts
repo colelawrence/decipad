@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { jsonPathsFromObject } from './jsonPathsFromObject';
 
 test('jsonPathsFromObject', () => {

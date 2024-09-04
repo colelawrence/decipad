@@ -1,5 +1,5 @@
-/* eslint @typescript-eslint/no-explicit-any: 0 */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { expect, it } from 'vitest';
 import { isEmptyDelta } from './isEmptyDelta';
 
 it('returns false when some program is present', () => {

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { convertBetweenUnits, normalizeUnitName } from '.';
 import { U, u } from '../utils/testUtils';
@@ -581,7 +582,6 @@ describe('convert', () => {
     ).toMatchObject(N(2000));
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('converts ambigious volumes (ounce, etc) into volumes', () => {
     expect(convertBetweenUnits(N(1), U('ton'), U('grams'))).toMatchObject(
       N(10160469088, 10e6)

@@ -1,7 +1,8 @@
+import { test, expect, describe } from 'vitest';
 import type { ItemBlockId } from './match-item-blocks';
 import { matchItemBlocks } from './match-item-blocks';
 
-interface TestObject {
+interface Test {
   readonly secondItem: ItemBlockId;
   readonly menuIndexToMatch?: number;
 }
@@ -13,7 +14,7 @@ const menu: ItemBlockId[] = [
   { name: 'revenue', blockId: '400' },
 ];
 
-const searches: TestObject[] = [
+const searches: Test[] = [
   { secondItem: { name: 'revenue' }, menuIndexToMatch: 2 },
   {
     secondItem: { name: 'revenue', blockId: '400', columnId: '600' },
@@ -54,7 +55,7 @@ describe('ItemBlockId', () => {
   describe('Matching items', () => {
     matchingSearches.forEach((testObject) => {
       const { secondItem, menuIndexToMatch } = testObject;
-      test(`Object ${JSON.stringify(testObject)} matches in the menu`, () => {
+      test(`${JSON.stringify(testObject)} matches in the menu`, () => {
         const match = menu.some((firstItem) =>
           matchItemBlocks(firstItem, secondItem)
         );
@@ -77,9 +78,7 @@ describe('ItemBlockId', () => {
   describe('Non-matching items', () => {
     nonMatchingSearches.forEach((testObject) => {
       const { secondItem, menuIndexToMatch } = testObject;
-      test(`Object ${JSON.stringify(
-        testObject
-      )} does not matches in the menu`, () => {
+      test(`${JSON.stringify(test)} does not matches in the menu`, () => {
         const match = menu.some((firstItem) => {
           return matchItemBlocks(firstItem, secondItem);
         });

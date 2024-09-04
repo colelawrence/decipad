@@ -20,6 +20,9 @@
     },
     {
       "path": "../column"
+    },
+    {
+      "path": "../compute-backend-js"
     }
   ]
 }

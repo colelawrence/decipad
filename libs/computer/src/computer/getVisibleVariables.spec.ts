@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { inferProgram } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
@@ -15,7 +16,7 @@ it('finds variables that are in the context', async () => {
 
   expect(getVisibleVariables(program, 'block-2', inferContext))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "global": Set {
           "exprRef_block_0",
           "exprRef_block_1",
@@ -41,7 +42,7 @@ it('finds variables visible in a table column assign', async () => {
 
   expect(getVisibleVariables(program, 'block-1', inferContext))
     .toMatchInlineSnapshot(`
-      Object {
+      {
         "global": Set {
           "exprRef_block_0",
           "Table",

@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { getOpenApiSchema } from './schema';
 
 it('tests every action', () => {

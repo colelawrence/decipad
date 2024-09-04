@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getIdentifiedBlocks, prettyPrintProgram } from '../testUtils';
 import { programWithAbstractNamesAndReferences } from './programWithAbstractNamesAndReferences';
 
@@ -8,8 +9,8 @@ describe('programWithAbstractNamesAndReferences', () => {
         programWithAbstractNamesAndReferences(getIdentifiedBlocks('1')).program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (assign
           (def exprRef_block_0)
@@ -29,8 +30,8 @@ describe('programWithAbstractNamesAndReferences', () => {
           .program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (assign
           (def exprRef_block_0)
@@ -51,8 +52,8 @@ describe('programWithAbstractNamesAndReferences', () => {
         ).program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (assign
           (def exprRef_block_0)
@@ -61,7 +62,7 @@ describe('programWithAbstractNamesAndReferences', () => {
           "id": "block-0",
           "type": "identified-block",
         },
-        Object {
+        {
           "block": "(block
         (assign
           (def exprRef_block_1)
@@ -81,8 +82,8 @@ describe('programWithAbstractNamesAndReferences', () => {
           .program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (table exprRef_block_0))",
           "definesVariable": "A",
@@ -101,18 +102,18 @@ describe('programWithAbstractNamesAndReferences', () => {
         ).program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (table exprRef_block_0))",
           "definesVariable": "T",
           "id": "block-0",
           "type": "identified-block",
         },
-        Object {
+        {
           "block": "(block
         (table-column-assign (tablepartialdef exprRef_block_0) (coldef A) 3))",
-          "definesTableColumn": Array [
+          "definesTableColumn": [
             "T",
             "A",
           ],
@@ -131,25 +132,25 @@ describe('programWithAbstractNamesAndReferences', () => {
         ).program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (table exprRef_block_0))",
           "definesVariable": "T",
           "id": "block-0",
           "type": "identified-block",
         },
-        Object {
+        {
           "block": "(block
         (table-column-assign (tablepartialdef exprRef_block_0) (coldef A) 3))",
-          "definesTableColumn": Array [
+          "definesTableColumn": [
             "T",
             "A",
           ],
           "id": "block-1",
           "type": "identified-block",
         },
-        Object {
+        {
           "block": "(block
         (assign
           (def exprRef_block_2)
@@ -170,8 +171,8 @@ describe('programWithAbstractNamesAndReferences', () => {
         ).program
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "block": "(block
         (function-definition
           (funcdef exprRef_block_0)

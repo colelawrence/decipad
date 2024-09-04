@@ -21,7 +21,7 @@ beforeEach(() => {
 
 describe('insertInputBelow', () => {
   it('inserts an input element', async () => {
-    await insertInputBelow(editor, [0], 'number', () => 'Input1');
+    insertInputBelow(editor, [0], 'number', () => 'Input1');
     expect(editor.children[1]).toMatchObject({
       type: ELEMENT_VARIABLE_DEF,
       variant: 'expression',
@@ -41,7 +41,7 @@ describe('insertInputBelow', () => {
 
 describe('inserts slider below', () => {
   it('inserts a slider element', async () => {
-    await insertSliderInputBelow(editor, [0], () => 'Slider1');
+    insertSliderInputBelow(editor, [0], () => 'Slider1');
     expect(editor.children[1]).toMatchObject({
       type: ELEMENT_VARIABLE_DEF,
       variant: 'slider',

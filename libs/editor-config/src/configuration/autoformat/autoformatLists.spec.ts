@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { select, TEditor } from '@udecode/plate-common';
 import {
   createMyAutoformatPlugin,

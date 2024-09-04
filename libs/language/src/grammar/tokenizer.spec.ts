@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import stringify from 'json-stringify-safe';
 import { tokenizer, tokenize } from './tokenizer';
 
@@ -70,18 +71,18 @@ it('finds identifiers and keywords', () => {
 });
 
 it('does not crash when it sees an invalid token', () => {
-  expect(testTokenizer('"hi')).toMatchInlineSnapshot(`"error(\\"hi)"`);
+  expect(testTokenizer('"hi')).toMatchInlineSnapshot(`"error("hi)"`);
 });
 
 it('does not crash when it sees an invalid token in date mode', () => {
   expect(testTokenizer('date(")')).toMatchInlineSnapshot(
-    `"beginDate(date() error(\\"))"`
+    `"beginDate(date() error("))"`
   );
 });
 
 it('regression: does not crash with multiple line strings', () => {
   expect(testTokenizer('"hello\nworld"')).toMatchInlineSnapshot(
-    `"error(\\"hello<newline>world\\")"`
+    `"error("hello<newline>world")"`
   );
 });
 

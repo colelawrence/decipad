@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 /* eslint-disable no-underscore-dangle */
 import { all } from './all';
 import { count } from './count';

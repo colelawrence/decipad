@@ -1,5 +1,5 @@
+import { vi, expect, describe, it } from 'vitest';
 /* eslint-disable no-new */
-import { describe, it, vi, expect } from 'vitest';
 import { EditorController } from './EditorController';
 import {
   CodeLineElement,

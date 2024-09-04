@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from './DeciNumber';
 
 it('calculates valueOf', () => {

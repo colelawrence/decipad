@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-disabled-tests */
+import { it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { NotebookListHeader } from './NotebookListHeader';
 

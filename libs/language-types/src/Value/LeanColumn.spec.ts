@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { Result } from '@decipad/language-interfaces';
 import { LeanColumn } from './LeanColumn';
 import { N } from '@decipad/number';
@@ -28,7 +29,7 @@ describe('Lean Column Spec', () => {
     const result = (await leanColumn.getData()) as Result.ResultColumn;
 
     await expect(all(result(0, 3))).resolves.toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

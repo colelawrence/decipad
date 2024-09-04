@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from '@decipad/number';
 import { formatCell } from './formatCell';
 

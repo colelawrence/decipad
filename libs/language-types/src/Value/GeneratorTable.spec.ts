@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { all } from '@decipad/generator-utils';
 import { buildType } from '../Type';
 import { GeneratorTable } from './GeneratorTable';
@@ -67,8 +68,8 @@ describe('GeneratorTable', () => {
     );
     const colGens = await table.getData();
     expect(await materializeOneResult(colGens)).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -82,7 +83,7 @@ describe('GeneratorTable', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "a",
           "b",
         ],
@@ -104,7 +105,7 @@ describe('GeneratorTable', () => {
     const column = table.getColumn('A');
     expect(isColumnLike(column)).toBe(true);
     expect(await materializeOneResult(column.getData())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -142,8 +143,8 @@ describe('GeneratorTable', () => {
         columns.map(async (col) => materializeOneResult(await col.getData()))
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -157,7 +158,7 @@ describe('GeneratorTable', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           "a",
           "b",
         ],

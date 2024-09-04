@@ -1,10 +1,10 @@
+import { beforeEach, expect, it } from 'vitest';
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 import type { BasePoint } from 'slate';
 import { setSelection } from '@decipad/editor-utils';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
-import { beforeEach, expect, it } from 'vitest';
 
 let editor: MyEditor;
 beforeEach(() => {

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { Result, Unit } from '@decipad/language-interfaces';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { hydrateResult } from './hydrateResult';
@@ -34,13 +35,13 @@ describe('hydrateResult result', () => {
         meta: undefined,
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
+      {
+        "type": {
           "kind": "number",
-          "unit": Array [
-            Object {
-              "aliasFor": Array [
-                Object {
+          "unit": [
+            {
+              "aliasFor": [
+                {
                   "aliasFor": undefined,
                   "exp": DeciNumber {
                     "d": 1n,
@@ -122,14 +123,14 @@ describe('hydrateResult result', () => {
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "cellType": Object {
+      {
+        "type": {
+          "cellType": {
             "kind": "number",
-            "unit": Array [
-              Object {
-                "aliasFor": Array [
-                  Object {
+            "unit": [
+              {
+                "aliasFor": [
+                  {
                     "aliasFor": undefined,
                     "exp": DeciNumber {
                       "d": 1n,
@@ -167,7 +168,7 @@ describe('hydrateResult result', () => {
           "indexedBy": "",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -227,18 +228,18 @@ describe('hydrateResult result', () => {
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
-              "unit": Array [
-                Object {
-                  "aliasFor": Array [
-                    Object {
+              "unit": [
+                {
+                  "aliasFor": [
+                    {
                       "aliasFor": undefined,
                       "exp": DeciNumber {
                         "d": 1n,
@@ -277,8 +278,8 @@ describe('hydrateResult result', () => {
           "indexName": "Column1",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -318,13 +319,13 @@ describe('hydrateResult result', () => {
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "date": "day",
               "kind": "date",
             },
@@ -332,8 +333,8 @@ describe('hydrateResult result', () => {
           "indexName": "Column1",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             230293223n,
             2392302123n,
           ],
@@ -388,19 +389,19 @@ describe('hydrateResult result', () => {
       })
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
-      Object {
-        "type": Object {
-          "columnNames": Array [
+      {
+        "type": {
+          "columnNames": [
             "Column1",
           ],
-          "columnTypes": Array [
-            Object {
-              "cellType": Object {
+          "columnTypes": [
+            {
+              "cellType": {
                 "kind": "number",
-                "unit": Array [
-                  Object {
-                    "aliasFor": Array [
-                      Object {
+                "unit": [
+                  {
+                    "aliasFor": [
+                      {
                         "aliasFor": undefined,
                         "exp": DeciNumber {
                           "d": 1n,
@@ -442,9 +443,9 @@ describe('hydrateResult result', () => {
           "indexName": "Column1",
           "kind": "table",
         },
-        "value": Array [
-          Array [
-            Array [
+        "value": [
+          [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -458,7 +459,7 @@ describe('hydrateResult result', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,

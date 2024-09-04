@@ -163,7 +163,7 @@ test('basic tabs funcionality @tabs', async ({ testUser }) => {
   await test.step('rename first tab to Tab 1', async () => {
     await notebook.selectTab('New Tab');
     await notebook.renameTab('New Tab', 'Tab 1');
-    await expect(await notebook.getTabName(0)).toContain('Tab 1');
+    expect(await notebook.getTabName(0)).toContain('Tab 1');
     expect(await notebook.getTabNames()).toEqual([
       'Tab 1',
       'Tab 2',
@@ -196,16 +196,16 @@ test('basic tabs funcionality @tabs', async ({ testUser }) => {
     await page.keyboard.type(`Block 4`);
     await page.keyboard.press('Enter');
 
-    await expect(await page.getByText(/Block \d+/).count()).toBe(4);
+    expect(await page.getByText(/Block \d+/).count()).toBe(4);
   });
 
   await test.step('check Tab 2 is empty', async () => {
     await notebook.selectTab('Tab 2');
     await notebook.focusOnBody();
     await expect(notebook.notebookParagraph).toHaveText('');
-    await expect(await page.getByText(/Block \d+/).count()).toBe(0);
+    expect(await page.getByText(/Block \d+/).count()).toBe(0);
     await notebook.selectTab('Tab 1');
-    await expect(await page.getByText(/Block \d+/).count()).toBe(4);
+    expect(await page.getByText(/Block \d+/).count()).toBe(4);
   });
 
   await test.step('move single paragraph from Tab 1 to Tab 2', async () => {
@@ -386,7 +386,7 @@ test('check live collaboration same notebook', async ({
   await test.step('rename first tab to Tab 1', async () => {
     await userANotebook.selectTab('New Tab');
     await userANotebook.renameTab('New Tab', 'Tab 1');
-    await expect(await userANotebook.getTabName(0)).toContain('Tab 1');
+    expect(await userANotebook.getTabName(0)).toContain('Tab 1');
     expect(await userANotebook.getTabNames()).toEqual([
       'Tab 1',
       'Tab 2',
@@ -419,16 +419,16 @@ test('check live collaboration same notebook', async ({
     await userAPage.keyboard.type(`Block 4`);
     await userAPage.keyboard.press('Enter');
 
-    await expect(await userAPage.getByText(/Block \d+/).count()).toBe(4);
+    expect(await userAPage.getByText(/Block \d+/).count()).toBe(4);
   });
 
   await test.step('check Tab 2 is empty', async () => {
     await userANotebook.selectTab('Tab 2');
     await userANotebook.focusOnBody();
     await expect(userANotebook.notebookParagraph).toHaveText('');
-    await expect(await userAPage.getByText(/Block \d+/).count()).toBe(0);
+    expect(await userAPage.getByText(/Block \d+/).count()).toBe(0);
     await userANotebook.selectTab('Tab 1');
-    await expect(await userAPage.getByText(/Block \d+/).count()).toBe(4);
+    expect(await userAPage.getByText(/Block \d+/).count()).toBe(4);
   });
 
   await test.step('move single paragraph from Tab 1 to Tab 2', async () => {

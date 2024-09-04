@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { expect, describe, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useWindowListener } from './event-listener';
 

@@ -1,8 +1,4 @@
-/* eslint-env jest */
-
-// existing tests very granular
-/* eslint-disable jest/expect-expect */
-import { describe } from 'vitest';
+import { expect, describe } from 'vitest';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import type {
   Role,
@@ -504,7 +500,7 @@ describe.sequential('workspaces', () => {
     /*
      * TODO: enabled this when we find a way to make workspace paid in these tests
      */
-    it.skip('invitee can get workspace', async () => {
+    it.skip('invitee can get workspacee', async () => {
       const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
       const workspace2 = (

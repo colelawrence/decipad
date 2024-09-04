@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
 import type {
@@ -52,7 +53,7 @@ it('computes a thing', async () => {
   const res = await computeOnTestComputer({ program: { upsert: testProgram } });
 
   expect(res).toMatchInlineSnapshot(`
-    Array [
+    [
       "block-0 -> 0",
       "block-1 -> 1",
       "block-2 -> 11",
@@ -82,7 +83,7 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: { upsert: changedC } }))
       .toMatchInlineSnapshot(`
-        Array [
+        [
           "block-0 -> 0",
           "block-1 -> 1",
           "block-2 -> 11.1",
@@ -99,10 +100,10 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: { upsert: broken } }))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> 0.5",
-        "block-2 -> Error in operation \\"+\\" (type-error, number): Unknown reference: B1",
-        "block-3 -> Error in operation \\"+\\" (type-error, number): Unknown reference: B1",
+        "block-2 -> Error in operation "+" (type-error, number): Unknown reference: B1",
+        "block-3 -> Error in operation "+" (type-error, number): Unknown reference: B1",
       ]
     `);
 
@@ -111,7 +112,7 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: { upsert: noD } }))
       .toMatchInlineSnapshot(`
-        Array [
+        [
           "block-0 -> 0",
           "block-1 -> 1",
           "block-2 -> 11",
@@ -132,7 +133,7 @@ describe('caching', () => {
         program: { upsert: getIdentifiedBlocks('A = 1', 'A + 1') },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> 1",
         "block-1 -> 2",
       ]
@@ -146,7 +147,7 @@ describe('caching', () => {
         program: { upsert: getIdentifiedBlocks('A = 1', '', 'A + 1 + C') },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> 1",
         "block-1 -> undefined",
         "block-2 -> 3",
@@ -161,7 +162,7 @@ describe('caching', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> 1",
         "block-1 -> undefined",
         "block-3 -> 1",
@@ -184,7 +185,7 @@ describe('caching', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> [[1], [2]]",
         "block-1 -> [1]",
         "block-3 -> 1",
@@ -205,7 +206,7 @@ describe('caching', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> [[1], [3]]",
         "block-1 -> [1]",
         "block-3 -> 2",
@@ -225,7 +226,7 @@ describe('caching', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> [[1], [4]]",
         "block-1 -> [1]",
         "block-3 -> 2",
@@ -244,7 +245,7 @@ describe('expr refs', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-1 -> 2",
         "block-0 -> 2",
       ]
@@ -263,7 +264,7 @@ describe('expr refs', () => {
         },
       })
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0 -> [[2]]",
         "block-1 -> [2]",
         "block-2 -> [2]",
@@ -331,9 +332,9 @@ it('can pass on injected data', async () => {
       },
     })
   ).toMatchInlineSnapshot(`
-    Array [
-      "injectblock -> [\\"Hello\\", \\"World\\"]",
-      "block-0 -> [\\"Hello\\", \\"World\\"]",
+    [
+      "injectblock -> ["Hello", "World"]",
+      "block-0 -> ["Hello", "World"]",
     ]
   `);
 });
@@ -565,10 +566,10 @@ it('regression: can describe tables correctly', async () => {
   });
 
   expect(res).toMatchInlineSnapshot(`
-    Array [
-      "block-0 -> [[\\"A\\", \\"B\\"], [\\"c\\", \\"d\\"]]",
-      "block-1 -> [\\"A\\", \\"B\\"]",
-      "block-2 -> [\\"c\\", \\"d\\"]",
+    [
+      "block-0 -> [["A", "B"], ["c", "d"]]",
+      "block-1 -> ["A", "B"]",
+      "block-2 -> ["c", "d"]",
     ]
   `);
 });
@@ -585,10 +586,10 @@ it('regression: can describe partially good tables', async () => {
   });
 
   expect(res).toMatchInlineSnapshot(`
-    Array [
-      "block-0 -> [[], [\\"c\\", \\"d\\"]]",
-      "block-1 -> Error in operation \\"+\\" (number, string): The function + cannot be called with (number, string)",
-      "block-2 -> [\\"c\\", \\"d\\"]",
+    [
+      "block-0 -> [[], ["c", "d"]]",
+      "block-1 -> Error in operation "+" (number, string): The function + cannot be called with (number, string)",
+      "block-2 -> ["c", "d"]",
     ]
   `);
 });
@@ -685,7 +686,7 @@ describe('can retrieve columns indexed by a table', () => {
   it('can get columns indexed by a table', () => {
     expect(
       computer.getAllColumnsIndexedBy$.get('Table').map(({ id }) => id)
-    ).toMatchInlineSnapshot(`Array []`);
+    ).toMatchInlineSnapshot(`[]`);
   });
 });
 
@@ -712,11 +713,11 @@ it('can list tables and columns', async () => {
   const tables = computer.getAllTables$.get();
   expect(await Promise.all(columns.map(materializeColumnDesc)))
     .toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "blockId": "block-0_0",
-        "blockType": Object {
-          "cellType": Object {
+        "blockType": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
@@ -725,17 +726,17 @@ it('can list tables and columns', async () => {
         },
         "columnName": "A",
         "readableTableName": "table",
-        "result": Object {
+        "result": {
           "meta": [Function],
-          "type": Object {
-            "cellType": Object {
+          "type": {
+            "cellType": {
               "kind": "number",
               "unit": null,
             },
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": Array [
+          "value": [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -746,10 +747,10 @@ it('can list tables and columns', async () => {
         },
         "tableName": "exprRef_block_0",
       },
-      Object {
+      {
         "blockId": "block-0_1",
-        "blockType": Object {
-          "cellType": Object {
+        "blockType": {
+          "cellType": {
             "kind": "string",
           },
           "indexedBy": "exprRef_block_0",
@@ -757,25 +758,25 @@ it('can list tables and columns', async () => {
         },
         "columnName": "B",
         "readableTableName": "table",
-        "result": Object {
+        "result": {
           "meta": [Function],
-          "type": Object {
-            "cellType": Object {
+          "type": {
+            "cellType": {
               "kind": "string",
             },
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": Array [
+          "value": [
             "a",
           ],
         },
         "tableName": "exprRef_block_0",
       },
-      Object {
+      {
         "blockId": "block-1",
-        "blockType": Object {
-          "cellType": Object {
+        "blockType": {
+          "cellType": {
             "date": "day",
             "kind": "date",
           },
@@ -784,17 +785,17 @@ it('can list tables and columns', async () => {
         },
         "columnName": "C",
         "readableTableName": "table",
-        "result": Object {
+        "result": {
           "meta": [Function],
-          "type": Object {
-            "cellType": Object {
+          "type": {
+            "cellType": {
               "date": "day",
               "kind": "date",
             },
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": Array [
+          "value": [
             1577836800000n,
           ],
         },
@@ -803,8 +804,8 @@ it('can list tables and columns', async () => {
     ]
   `);
   expect(tables).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "id": "block-0",
         "tableName": "exprRef_block_0",
       },
@@ -845,13 +846,13 @@ it('can get table/column data by block id', async () => {
   });
 
   expect(computer.getBlockIdAndColumnId$.get('block-0')).toMatchInlineSnapshot(`
-    Array [
+    [
       "block-0",
       null,
     ]
   `);
   expect(computer.getBlockIdAndColumnId$.get('block-1')).toMatchInlineSnapshot(`
-    Array [
+    [
       "block-0",
       "block-1",
     ]

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { getDefined } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { materializeResult } from '@decipad/language';
@@ -15,9 +16,9 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-0']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -39,9 +40,9 @@ describe('abstract refs', () => {
     );
     const result = results.blockResults['block-1']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -82,9 +83,9 @@ describe('abstract refs', () => {
     );
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -116,21 +117,21 @@ describe('abstract refs', () => {
     );
     const result = results.blockResults['block-2']?.result;
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
-          "errorCause": Object {
-            "context": "in operation \\"+\\" (type-error, number)",
+        "type": {
+          "errorCause": {
+            "context": "in operation "+" (type-error, number)",
             "errType": "unknown-reference",
             "refName": "_A",
           },
-          "errorLocation": Object {
-            "end": Object {
+          "errorLocation": {
+            "end": {
               "char": 6,
               "column": 7,
               "line": 1,
             },
-            "start": Object {
+            "start": {
               "char": 5,
               "column": 6,
               "line": 1,
@@ -157,17 +158,17 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-3']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "cellType": Object {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_block_1",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -205,17 +206,17 @@ describe('abstract refs', () => {
     const columnResult1 = results.blockResults['block-3']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "cellType": Object {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_block_1",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -252,17 +253,17 @@ describe('abstract refs', () => {
     const columnResult1 = results.blockResults['block-2']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "cellType": Object {
+        "type": {
+          "cellType": {
             "kind": "number",
             "unit": null,
           },
           "indexedBy": "exprRef_block_0",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -295,9 +296,9 @@ describe('abstract refs', () => {
     const columnResult1 = results.blockResults['block-1']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -330,9 +331,9 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-1']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
           "unit": null,
         },
@@ -358,19 +359,19 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-0']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "columnNames": Array [
+        "type": {
+          "columnNames": [
             "T1",
             "T2",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -379,8 +380,8 @@ describe('abstract refs', () => {
           "indexName": "exprRef_block_0",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -394,7 +395,7 @@ describe('abstract refs', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -431,19 +432,19 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-6']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "columnNames": Array [
+        "type": {
+          "columnNames": [
             "A",
             "Col1",
           ],
-          "columnTypes": Array [
-            Object {
+          "columnTypes": [
+            {
               "kind": "number",
               "unit": null,
             },
-            Object {
+            {
               "kind": "number",
               "unit": null,
             },
@@ -452,8 +453,8 @@ describe('abstract refs', () => {
           "indexName": "exprRef_block_4",
           "kind": "table",
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -491,7 +492,7 @@ describe('abstract refs', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -527,14 +528,14 @@ describe('abstract refs', () => {
     );
     const result = results.blockResults['block-1']?.result;
     expect(result).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
-          "unit": Array [
-            Object {
-              "aliasFor": Array [
-                Object {
+          "unit": [
+            {
+              "aliasFor": [
+                {
                   "baseQuantity": "mass",
                   "baseSuperQuantity": "mass",
                   "exp": DeciNumber {
@@ -606,13 +607,13 @@ describe('abstract refs', () => {
       getDefined(results.blockResults['block-6']?.result)
     );
     expect(totalResult).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": [Function],
-        "type": Object {
-          "cellType": Object {
+        "type": {
+          "cellType": {
             "kind": "number",
-            "unit": Array [
-              Object {
+            "unit": [
+              {
                 "baseQuantity": "USD",
                 "baseSuperQuantity": "currency",
                 "exp": DeciNumber {
@@ -635,7 +636,7 @@ describe('abstract refs', () => {
           "indexedBy": "exprRef_block_0",
           "kind": "column",
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -674,12 +675,12 @@ describe('abstract refs', () => {
       getDefined(results.blockResults['block-2']?.result)
     );
     expect(result).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
-        "type": Object {
+        "type": {
           "kind": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "exp": DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -696,7 +697,7 @@ describe('abstract refs', () => {
               "quality": "flour",
               "unit": "g",
             },
-            Object {
+            {
               "baseQuantity": "mass",
               "baseSuperQuantity": "mass",
               "exp": DeciNumber {

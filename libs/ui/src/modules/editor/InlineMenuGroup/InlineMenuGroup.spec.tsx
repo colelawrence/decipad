@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { mockConsoleError } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import { InlineMenuItem } from '../InlineMenuItem/InlineMenuItem';

@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import { translateOpUp, translateOpDown } from './TranslatePaths';
 
 describe('Translating paths by adding tab index', () => {

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import { TableColumnHeader } from './TableColumnHeader';

@@ -1,5 +1,4 @@
 import { describe, expect, afterAll, test } from 'vitest';
-/* eslint-disable jest/expect-expect */
 import stringify from 'json-stringify-safe';
 // eslint-disable-next-line no-restricted-imports
 import type { Type } from '@decipad/language-types';
@@ -360,8 +359,6 @@ describe('callBuiltin performance', () => {
       });
     });
 
-    // TODO: make unitful conversions performant
-    // eslint-disable-next-line jest/no-disabled-tests
     describe('unitful', () => {
       describe('addition', () => {
         test.each([
@@ -426,8 +423,6 @@ describe('callBuiltin performance', () => {
       });
     });
 
-    // TODO: make unitful conversions performant
-    // eslint-disable-next-line jest/no-disabled-tests
     describe('unitful', () => {
       describe('addition', () => {
         test.each([

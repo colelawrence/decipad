@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { F, isFractionLike } from '.';
 
 test('isFractionLike', () => {

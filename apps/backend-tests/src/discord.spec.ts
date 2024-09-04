@@ -1,4 +1,4 @@
-import { describe } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import { Buffer } from 'buffer';
 import { nanoid } from 'nanoid';
 import nacl from 'tweetnacl';

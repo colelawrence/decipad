@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { addEnvVars } from './addEnvVars';
 
 describe('addEnvVars', () => {
@@ -42,8 +43,8 @@ describe('addEnvVars', () => {
     expect(res).toMatchInlineSnapshot(`
       "const process = {
         env: {
-          AIRTABLE_API_KEY: \\"{{{secrets.airtableApiKey}}}\\",
-          TEST_VAR: \\"{{{secrets.testVar}}}\\"
+          AIRTABLE_API_KEY: "{{{secrets.airtableApiKey}}}",
+          TEST_VAR: "{{{secrets.testVar}}}"
         }
       };
 

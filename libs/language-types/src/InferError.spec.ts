@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import * as t from './Type/Type';
 import { InferError } from './InferError';
 

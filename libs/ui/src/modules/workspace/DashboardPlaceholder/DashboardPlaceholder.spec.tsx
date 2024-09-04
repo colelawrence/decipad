@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { FC, PropsWithChildren } from 'react';
 import { QueryParamProvider } from 'use-query-params';

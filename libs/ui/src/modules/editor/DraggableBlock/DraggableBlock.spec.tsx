@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';

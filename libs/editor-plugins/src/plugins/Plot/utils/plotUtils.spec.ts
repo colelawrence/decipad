@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { BasePlotProps } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/language-interfaces';
 import { N } from '@decipad/number';

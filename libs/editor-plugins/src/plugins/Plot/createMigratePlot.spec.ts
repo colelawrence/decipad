@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import { createMigratePlotPlugin } from './createMigratePlot';
 

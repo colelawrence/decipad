@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { editorNodesFromValue } from './editorNodesFromValue';
 
 it('puts the text into a line node', () => {

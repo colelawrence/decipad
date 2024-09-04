@@ -1,6 +1,6 @@
 import { CodeLineV2Element, SmartRefElement } from '@decipad/editor-types';
 import { EditorController } from '@decipad/notebook-tabs';
-import { it, beforeEach } from 'vitest';
+import { it, beforeEach, expect } from 'vitest';
 import { resetChanges } from './reset-changes';
 import { createSmartRefPlugin } from '@decipad/editor-plugins';
 

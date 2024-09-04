@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { ErrSpec } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t } from '@decipad/language-types';

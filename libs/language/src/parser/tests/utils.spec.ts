@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { assign, block, c, col, l, prop, table } from '@decipad/language-utils';
 import { prettyPrintAST } from '../utils';

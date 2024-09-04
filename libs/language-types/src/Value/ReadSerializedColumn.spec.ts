@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { all } from '@decipad/generator-utils';
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports

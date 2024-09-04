@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';

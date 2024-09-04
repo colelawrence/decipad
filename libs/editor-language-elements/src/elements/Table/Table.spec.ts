@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import type { TableElement } from '@decipad/editor-types';
 import {

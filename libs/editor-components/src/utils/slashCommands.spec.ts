@@ -45,6 +45,6 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       command,
       getAvailableIdentifier,
     });
-    expect(editor.children[0]).toHaveType(expectedType);
+    expect(editor.children[0].type).toBe(expectedType);
   }
 );

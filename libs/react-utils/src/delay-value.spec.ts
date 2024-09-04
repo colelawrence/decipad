@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 import { useDelayedTrue, useDelayedValue } from './delay-value';
 
@@ -13,7 +13,7 @@ it('can delay a `true` value, but go `false` instantly', async () => {
   expect(renderedHook.result.current).toEqual(false);
   vi.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
-  await act(() => {
+  act(() => {
     vi.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(false);
@@ -23,7 +23,7 @@ it('can delay a `true` value, but go `false` instantly', async () => {
   expect(renderedHook.result.current).toEqual(false);
   vi.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
-  await act(() => {
+  act(() => {
     vi.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(true);
@@ -50,7 +50,7 @@ it('can delay a value as well', async () => {
   // Delays when `true`
   rerender({ value: 3, bool: true });
   expect(result.current).toEqual(2);
-  await act(() => {
+  act(() => {
     vi.advanceTimersByTime(2000);
   });
   expect(result.current).toEqual(3);

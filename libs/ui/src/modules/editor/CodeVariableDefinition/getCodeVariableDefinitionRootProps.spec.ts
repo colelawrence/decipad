@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { getCodeVariableDefinitionRootProps } from './CodeVariableDefinition';
 
 describe('getCodeVariableDefinitionRootProps', () => {

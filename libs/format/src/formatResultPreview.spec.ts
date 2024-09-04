@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from '@decipad/number';
 import { Unknown } from '@decipad/remote-computer';
 import { formatResultPreview } from './formatResultPreview';

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { render } from '@testing-library/react';
 import { EditorPlaceholder } from './EditorPlaceholder';

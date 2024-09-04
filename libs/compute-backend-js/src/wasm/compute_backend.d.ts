@@ -40,6 +40,10 @@ export function __wbgtest_console_warn(args: Array<any>): void;
 */
 export function __wbgtest_console_error(args: Array<any>): void;
 /**
+* @returns {Uint8Array | undefined}
+*/
+export function __wbgtest_cov_dump(): Uint8Array | undefined;
+/**
 */
 export enum DeciType {
   Number = 0,
@@ -105,36 +109,36 @@ export class ComputeBackend {
 */
   sum(id: string): number;
 /**
-* @param {Float64Array} value
-* @returns {number}
+* @param {object} result
+* @returns {object}
 */
-  sum_from_js(value: Float64Array): number;
-/**
-* @param {BigInt64Array} numerators
-* @param {BigInt64Array} denominator
-* @returns {BigInt64Array}
-*/
-  sum_from_js_frac(numerators: BigInt64Array, denominator: BigInt64Array): BigInt64Array;
+  sum_result_fraction_column(result: object): object;
 /**
 * @param {object} result
-* @returns {number}
+* @param {object} mask
+* @returns {object}
 */
-  sum_result_fraction_column(result: object): number;
+  sumif_result_fraction_column(result: object, mask: object): object;
 /**
 * @param {object} result
-* @returns {number}
+* @returns {object}
 */
-  min_result_fraction_column(result: object): number;
+  min_result_fraction_column(result: object): object;
 /**
 * @param {object} result
-* @returns {number}
+* @returns {object}
 */
-  max_result_fraction_column(result: object): number;
+  max_result_fraction_column(result: object): object;
 /**
 * @param {object} result
-* @returns {number}
+* @returns {object}
 */
-  mean_result_fraction_column(result: object): number;
+  mean_result_fraction_column(result: object): object;
+/**
+* @param {object} result
+* @returns {object}
+*/
+  median_result_fraction_column(result: object): object;
 /**
 * @param {object} result
 * @returns {boolean}

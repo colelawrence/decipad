@@ -1,3 +1,4 @@
+import { afterEach, expect, it } from 'vitest';
 import chalk from 'chalk';
 import repl from 'repl';
 

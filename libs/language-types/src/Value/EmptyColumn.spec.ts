@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { makeContext } from '../Dimension/testUtils';
 import { materializeOneResult } from '../utils/materializeOneResult';
 import { getColumnLike } from './ColumnLike';
@@ -21,7 +22,7 @@ describe('EmptyColumn', () => {
   it('can be materialized', async () => {
     expect(
       await materializeOneResult(await new EmptyColumn([]).getData())
-    ).toMatchInlineSnapshot(`Array []`);
+    ).toMatchInlineSnapshot(`[]`);
   });
 
   it('can be materialized by a lazy operation', async () => {
@@ -85,7 +86,7 @@ describe('EmptyColumn', () => {
         ).map(async (d) => getDimensionLength(d.dimensionLength))
       )
     ).toMatchInlineSnapshot(`
-    Array [
+    [
       2,
       0,
     ]

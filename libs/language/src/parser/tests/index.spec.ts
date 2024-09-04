@@ -1,4 +1,4 @@
-/* eslint-disable jest/expect-expect */
+import { expect, it } from 'vitest';
 import { getDefined } from '@decipad/utils';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports

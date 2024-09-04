@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { AST } from '@decipad/language-interfaces';
 import { inferStatement } from './infer';
 import { evaluateStatement } from './interpreter';
@@ -49,14 +50,14 @@ describe('lambdas', () => {
 
     expect(value).toMatchInlineSnapshot(`
       FunctionValue {
-        "argumentNames": Array [
+        "argumentNames": [
           "a",
           "b",
         ],
-        "body": Object {
-          "args": Array [
-            Object {
-              "args": Array [
+        "body": {
+          "args": [
+            {
+              "args": [
                 "number",
                 DeciNumber {
                   "d": 1n,

@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import type { PlatePlugin, TEditor } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';

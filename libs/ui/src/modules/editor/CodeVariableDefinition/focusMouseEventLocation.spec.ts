@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import * as plate from '@udecode/plate-common';
 import { TElement } from '@udecode/plate-common';
 import { createMyPlateEditor, MyEditor } from '@decipad/editor-types';

@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { isValue } from './isValue';
 
 it('returns true on empty expression', () => {

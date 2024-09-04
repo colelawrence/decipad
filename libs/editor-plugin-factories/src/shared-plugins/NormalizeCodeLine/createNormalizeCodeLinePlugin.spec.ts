@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import type { CodeLineElement } from '@decipad/editor-types';
 import {

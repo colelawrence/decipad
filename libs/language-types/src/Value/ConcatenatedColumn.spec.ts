@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { materializeOneResult } from '../utils/materializeOneResult';
 import { createConcatenatedColumn } from './ConcatenatedColumn';
@@ -19,7 +20,7 @@ describe('ConcatenatedColumn', () => {
   it('can concat columns', async () => {
     expect(await materializeOneResult(await (await concatenated).getData()))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -48,7 +49,7 @@ describe('ConcatenatedColumn', () => {
         ).map(async (d) => getDimensionLength(d.dimensionLength))
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         3,
       ]
     `);

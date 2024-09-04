@@ -1,8 +1,8 @@
+import { it, expect } from 'vitest';
 import { mockConsoleError } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import { AutoCompleteMenuItem } from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup';
-import { expect, it } from 'vitest';
 
 mockConsoleError();
 

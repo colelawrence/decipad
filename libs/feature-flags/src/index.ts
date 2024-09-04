@@ -95,7 +95,7 @@ const envDefaults: Record<string, boolean> = {
   development: true,
 };
 
-const inJest = typeof jest !== 'undefined' || process.env.NODE_ENV === 'test';
+const inJest = process.env.NODE_ENV === 'test';
 const inE2E = 'navigator' in globalThis && navigator.webdriver;
 
 export const isFlagEnabled = (flag: Flag): boolean =>

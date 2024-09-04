@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { Program } from '@decipad/computer-interfaces';
 import type {
   LayoutElement,

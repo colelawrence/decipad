@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { getExprRef, getComputer } from '@decipad/computer';
 import { inferColumn } from './inferColumn';

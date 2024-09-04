@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, expect, describe, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import type { MyEditor } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';

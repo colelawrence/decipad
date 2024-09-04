@@ -27,7 +27,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "(cd ../../apps/frontend && node build-live-connect-worker.mjs) && ./scripts/build-ssr-lambdas.mjs",
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/server-side-rendering"
       }
     },
@@ -42,7 +42,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/server-side-rendering"],
       "options": {
-        "command": "npx vitest --run",
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/server-side-rendering"
       }
     }

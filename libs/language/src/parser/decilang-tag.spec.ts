@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { AST } from '@decipad/language-interfaces';
 import { prettyPrintAST } from './utils';
 import { decilang } from './decilang-tag';

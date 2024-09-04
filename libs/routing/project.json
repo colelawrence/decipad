@@ -28,10 +28,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/routing"],
       "options": {
-        "jestConfig": "libs/routing/jest.config.js"
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/routing"
       }
     }
   },

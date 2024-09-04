@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import {
   ELEMENT_H1,
   ELEMENT_H2,

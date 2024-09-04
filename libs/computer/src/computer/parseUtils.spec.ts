@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { Program } from '@decipad/computer-interfaces';
 import { createProgramFromMultipleStatements } from './parseUtils';
 import { prettyPrintProgramBlock } from '../testUtils';
@@ -8,7 +9,7 @@ it('creates multiple statements for legacy multi-statement usage', () => {
 
   expect(prettyPrint(createProgramFromMultipleStatements('1\n2')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "1",
         "2",
       ]
@@ -16,14 +17,14 @@ it('creates multiple statements for legacy multi-statement usage', () => {
 
   expect(prettyPrint(createProgramFromMultipleStatements(' ')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "(noop)",
       ]
     `);
 
   expect(prettyPrint(createProgramFromMultipleStatements('syntax --/-- error')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "Syntax error: Syntax error",
       ]
     `);

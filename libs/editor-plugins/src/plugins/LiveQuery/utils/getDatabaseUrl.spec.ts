@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { getResultGenerator } from '@decipad/remote-computer';
 import { Result } from '@decipad/language-interfaces';
 import { getDatabaseUrl } from './getDatabaseUrl';

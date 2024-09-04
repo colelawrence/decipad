@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { UserAccessMetaFragment } from '@decipad/graphql-client';
 import { sortAvatars } from './sortAvatars';
 

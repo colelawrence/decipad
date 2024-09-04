@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import {
   ELEMENT_INTEGRATION,
   createMyPlateEditor,

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { runCode } from './run';
 
 describe('Contracts to be upheld', () => {

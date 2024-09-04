@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { max, F } from '.';
 
 test('max', () => {

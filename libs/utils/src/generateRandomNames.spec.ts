@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { generatedNames } from './generateRandomNames';
 
 it('generates random var name', () => {

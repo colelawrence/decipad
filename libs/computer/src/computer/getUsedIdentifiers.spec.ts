@@ -1,11 +1,12 @@
+import { expect, it } from 'vitest';
 import { getUsedIdentifiers } from './getUsedIdentifiers';
 
 it('does nothing when there are no identifiers (I)', () => {
-  expect(getUsedIdentifiers('1+1')).toMatchInlineSnapshot(`Array []`);
+  expect(getUsedIdentifiers('1+1')).toMatchInlineSnapshot(`[]`);
 });
 
 it('does nothing when there are no identifiers (II)', () => {
-  expect(getUsedIdentifiers('1+1')).toMatchInlineSnapshot(`Array []`);
+  expect(getUsedIdentifiers('1+1')).toMatchInlineSnapshot(`[]`);
 });
 
 it('finds variable refs', () => {

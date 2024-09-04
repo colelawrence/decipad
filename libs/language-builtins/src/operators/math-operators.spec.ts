@@ -13,7 +13,7 @@ describe('math operators', () => {
     expect(
       await (operators.max as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
-        [],
+        [t.column(t.number())],
         makeContext(),
         []
       )
@@ -24,18 +24,36 @@ describe('math operators', () => {
     expect(
       await (operators.min as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
-        [],
+        [t.column(t.number())],
         makeContext(),
         []
       )
     ).toEqual(Value.fromJS(2));
   });
 
+  it('max of a list of dates', async () => {
+    const dates = Value.fromJS([new Date(1000), new Date(2000)]);
+
+    expect(
+      await (operators.max as FullBuiltinSpec).fnValues?.(
+        [dates],
+        [t.column(t.date('millisecond'))],
+        makeContext(),
+        []
+      )
+    ).toMatchInlineSnapshot(`
+      DateValue {
+        "moment": 2000n,
+        "specificity": "millisecond",
+      }
+    `);
+  });
+
   it('average of a list of numbers', async () => {
     expect(
       await (operators.average as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([2, 4, 3])],
-        [],
+        [t.column(t.number())],
         makeContext(),
         []
       )
@@ -54,7 +72,7 @@ describe('math operators', () => {
     expect(
       await (operators.averageif as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([1, 2, 3]), Value.fromJS([true, false, true])],
-        [],
+        [t.column(t.number()), t.column(t.boolean())],
         makeContext(),
         []
       )
@@ -74,15 +92,16 @@ describe('math operators', () => {
     expect(
       await (operators.median as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([3, 4, 2])],
-        [],
+        [t.column(t.number())],
         makeContext(),
         []
       )
     ).toEqual(Value.fromJS(3));
+
     expect(
       await (operators.median as FullBuiltinSpec).fnValues?.(
         [Value.fromJS([3, 4, 2, 5])],
-        [],
+        [t.column(t.number())],
         makeContext(),
         []
       )

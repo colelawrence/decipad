@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import Fraction, { from } from '.';
 
 describe('fraction supports bigint', () => {

@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 import { BehaviorSubject, map } from 'rxjs';
 import { useBehaviorSubject } from './use-behavior-subject';

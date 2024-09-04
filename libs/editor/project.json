@@ -11,14 +11,6 @@
         "maxWarnings": 0
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/libs/editor"],
-      "options": {
-        "command": "npx vitest --run",
-        "cwd": "libs/editor"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
@@ -29,6 +21,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
+        "cwd": "libs/editor"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/editor"],
+      "options": {
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/editor"
       }
     }

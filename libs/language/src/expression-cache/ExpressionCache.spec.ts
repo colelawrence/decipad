@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { ExpressionCache } from './ExpressionCache';
 
 describe('expression cache', () => {

@@ -1,8 +1,4 @@
-/* eslint-env jest */
-
-// existing tests very granular
-/* eslint-disable jest/expect-expect */
-import { describe } from 'vitest';
+import { beforeAll, expect, describe } from 'vitest';
 import type { SecretRecord, Workspace, PadRecord } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import omit from 'lodash/omit';

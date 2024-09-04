@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { OAuthState } from './state';
 import { decodeState, encodeState } from './state';
 
@@ -9,7 +10,7 @@ describe('encodeState', () => {
     };
 
     expect(() => encodeState(state)).toThrowErrorMatchingInlineSnapshot(`
-      "state did not parse successfully: [
+      [Error: state did not parse successfully: [
         {
           "validation": "url",
           "code": "invalid_string",
@@ -18,7 +19,7 @@ describe('encodeState', () => {
             "completionUrl"
           ]
         }
-      ]"
+      ]]
     `);
   });
 
@@ -37,7 +38,7 @@ describe('encodeState', () => {
 describe('decodeState', () => {
   it('throws if random string', () => {
     expect(() => decodeState('not base 64')).toThrowErrorMatchingInlineSnapshot(
-      `"Could not parse JSON from state"`
+      `[Error: Could not parse JSON from state]`
     );
   });
 
@@ -47,7 +48,7 @@ describe('decodeState', () => {
     );
 
     expect(() => decodeState(base64)).toThrowErrorMatchingInlineSnapshot(`
-      "state did not parse successfully: [
+      [Error: state did not parse successfully: [
         {
           "code": "invalid_type",
           "expected": "string",
@@ -66,7 +67,7 @@ describe('decodeState', () => {
           ],
           "message": "Required"
         }
-      ]"
+      ]]
     `);
   });
 

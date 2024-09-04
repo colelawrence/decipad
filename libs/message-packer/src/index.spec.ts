@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import shuffle from 'lodash/shuffle';
 import { nanoid } from 'nanoid';
 import { Receiver, Sender } from '.';

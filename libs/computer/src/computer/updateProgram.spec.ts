@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import type { ComputerProgram, Program } from '@decipad/computer-interfaces';
 import { updateProgram } from './updateProgram';
 import { astNode } from '..';
@@ -35,20 +36,20 @@ it('prioritises adding instead of removing in same req', () => {
       program: { upsert: program, remove: ['1'] },
     }).program
   ).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "block": Object {
-          "args": Array [
-            Object {
-              "args": Array [
-                Object {
-                  "args": Array [
+    [
+      {
+        "block": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
                     "Variable",
                   ],
                   "type": "def",
                 },
-                Object {
-                  "args": Array [
+                {
+                  "args": [
                     "number",
                     DeciNumber {
                       "d": 1n,

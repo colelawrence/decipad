@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { EditorController } from '@decipad/notebook-tabs';
 import { callAction } from '../callAction';
 import type { MyEditor } from '@decipad/editor-types';

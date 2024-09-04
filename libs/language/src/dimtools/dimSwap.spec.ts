@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -35,8 +36,8 @@ it('can get the value too (1)', async () => {
       (await dimSwapValues('Y', twoDColumn, twoDColumnVal)).getData()
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -50,7 +51,7 @@ it('can get the value too (1)', async () => {
           "s": 1n,
         },
       ],
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -64,7 +65,7 @@ it('can get the value too (1)', async () => {
           "s": 1n,
         },
       ],
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -88,8 +89,8 @@ it('can get the value too (2)', async () => {
       (await dimSwapValues('X', twoDColumn, twoDColumnVal)).getData()
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -109,7 +110,7 @@ it('can get the value too (2)', async () => {
           "s": 1n,
         },
       ],
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

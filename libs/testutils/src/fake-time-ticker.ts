@@ -1,7 +1,11 @@
+import { vi } from 'vitest';
+
 export function createFakeTimeTicker(granularity: number) {
   let stopped = false;
 
-  return function doTickUntil(fn: () => Promise<unknown>): Promise<unknown> {
+  return async function doTickUntil(
+    fn: () => Promise<unknown>
+  ): Promise<unknown> {
     if (stopped) {
       throw new Error('ticker is already stopped');
     }
@@ -10,19 +14,17 @@ export function createFakeTimeTicker(granularity: number) {
       while (!stopped) {
         // eslint-disable-next-line no-await-in-loop
         await Promise.resolve().then(() => {
-          jest.advanceTimersByTime(granularity);
+          vi.advanceTimersByTime(granularity);
         });
       }
     }
 
     tick();
-    return fn()
-      .finally(() => {
-        stopped = true;
-      })
-      .catch((err) => {
-        throw err;
-      });
+    try {
+      return await fn();
+    } finally {
+      stopped = true;
+    }
   };
 }
 

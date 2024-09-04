@@ -342,9 +342,7 @@ for (const [testName, testFn] of Object.entries(typeDimTests)) {
   const build2D = (args: TestBuilderArgs) => t.column(build1D(args));
   const build3D = (args: TestBuilderArgs) => t.column(build2D(args));
 
-  // eslint-disable-next-line jest/valid-title
   describe(testName, () => {
-    /* eslint-disable jest/expect-expect */
     it(`${testName} - Scalar`, async () => {
       await testFn(buildScalar, buildScalar, buildScalar, buildScalar);
     });
@@ -372,6 +370,5 @@ for (const [testName, testFn] of Object.entries(typeDimTests)) {
     it(`${testName} - 1D mixed with 3D`, async () => {
       await testFn(build1D, build3D, build3D, build3D);
     });
-    /* eslint-enable jest/expect-expect */
   });
 }

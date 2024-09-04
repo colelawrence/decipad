@@ -1,8 +1,4 @@
-/* eslint-env jest */
-
-// existing sequential tests very granular
-/* eslint-disable jest/expect-expect */
-import { describe, it, expect } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import * as DataSnapshots from '../../../libs/services/src/external-data/external-data-snapshots';
 

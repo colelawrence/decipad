@@ -1,9 +1,10 @@
+import { expect, describe, it } from 'vitest';
 import { runCode } from '../run';
 
 describe('extract operators', () => {
   it('pick from date', async () => {
     expect(await runCode('pick(date(2020-03-15), day)')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -48,7 +49,7 @@ describe('extract operators', () => {
 
     expect(await runCode('pick(date(2020-03-15), year)'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -93,7 +94,7 @@ describe('extract operators', () => {
 
     expect(await runCode('pick(date(2020-03-15), month)'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -138,7 +139,7 @@ describe('extract operators', () => {
 
     expect(await runCode('pick(date(2020-03-15T18:32), hour)'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -183,7 +184,7 @@ describe('extract operators', () => {
 
     expect(await runCode('pick(date(2020-03-15T18:32), minute)'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -228,7 +229,7 @@ describe('extract operators', () => {
 
     expect(await runCode('pick(date(2020-03-15T18:32), second)'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,

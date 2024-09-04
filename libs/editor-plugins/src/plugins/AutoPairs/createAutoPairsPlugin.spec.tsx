@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import type { MyEditor } from '@decipad/editor-types';
 import {
   createMyPlateEditor,

@@ -5,7 +5,10 @@
   },
   "include": [
     "src",
-    "../language/src/expression-cache/ExpressionCache.spec.ts"
+    "../language/src/expression-cache/ExpressionCache.spec.ts",
+    "vitest.config.ts",
+    "../../vite.config.ts",
+    "../../vite.web.config.ts"
   ],
   "references": [
     {

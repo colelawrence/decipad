@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { astNode } from '@decipad/language';
@@ -127,7 +128,6 @@ describe('evictCache', () => {
     expect(getStatementsToEvict(evictOptions)).toEqual(expected);
   };
 
-  /* eslint-disable jest/expect-expect */
   it('evicts location and symbol cache for changed stuff and dependent stuff', () => {
     testEvictBlocks({
       oldProgram: testProgramBlocks('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
@@ -367,5 +367,4 @@ describe('evictCache', () => {
       expectEvicted: [],
     });
   });
-  /* eslint-enable jest/expect-expect */
 });

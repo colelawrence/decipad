@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { fnQueue } from './fn-queue';
 
 describe('fn-queue', () => {

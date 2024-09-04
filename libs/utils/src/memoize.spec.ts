@@ -1,10 +1,11 @@
+import { vi, it, expect, beforeEach } from 'vitest';
 import { memoize } from './memoize';
 
-const memoized = jest.fn((obj: { ret: number }) => obj.ret);
+const memoized = vi.fn((obj: { ret: number }) => obj.ret);
 const fn = memoize(memoized);
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 it('calls each time a new object is passed', () => {

@@ -1,3 +1,4 @@
+import { it, vi, expect, beforeEach } from 'vitest';
 import type { Computer } from '@decipad/computer-interfaces';
 import type {
   CodeLineElement,
@@ -20,7 +21,6 @@ import { editorToProgram } from '@decipad/editor-language-elements';
 import type { BaseEditor } from 'slate';
 import { Editor } from 'slate';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
-import { vi, expect, beforeEach, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 
 type VarAndCol = [string, string?];

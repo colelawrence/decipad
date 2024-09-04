@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { type SerializedType } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';

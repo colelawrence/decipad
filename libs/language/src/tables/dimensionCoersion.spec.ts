@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { runCode } from '..';
 
 describe('dimension coersion', () => {
@@ -5,19 +6,19 @@ describe('dimension coersion', () => {
     expect(
       await testGrowTable({ startingColumns: ['A = [1, 2]'], newColumn: '1' })
     ).toMatchInlineSnapshot(`
-          Object {
-            "meta": Object {
+          {
+            "meta": {
               "labels": Promise {},
             },
             "type": Type {
               "anythingness": false,
               "atParentIndex": null,
               "cellType": null,
-              "columnNames": Array [
+              "columnNames": [
                 "A",
                 "NewCol",
               ],
-              "columnTypes": Array [
+              "columnTypes": [
                 Type {
                   "anythingness": false,
                   "atParentIndex": null,
@@ -109,8 +110,8 @@ describe('dimension coersion', () => {
               "unit": null,
               Symbol(immer-draftable): true,
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -124,7 +125,7 @@ describe('dimension coersion', () => {
                   "s": 1n,
                 },
               ],
-              Array [
+              [
                 DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -150,19 +151,19 @@ describe('dimension coersion', () => {
         newColumn: '1',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -285,9 +286,9 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
-            Array [
+        "value": [
+          [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -295,7 +296,7 @@ describe('dimension coersion', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -304,7 +305,7 @@ describe('dimension coersion', () => {
               },
             ],
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -330,19 +331,19 @@ describe('dimension coersion', () => {
         newColumn: 'Table.Nums + OtherTable.Nums',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "Nums",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -465,8 +466,8 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -486,8 +487,8 @@ describe('dimension coersion', () => {
               "s": 1n,
             },
           ],
-          Array [
-            Array [
+          [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -501,7 +502,7 @@ describe('dimension coersion', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -515,7 +516,7 @@ describe('dimension coersion', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -542,19 +543,19 @@ describe('dimension coersion', () => {
         newColumn: 'OtherTable.Nums + Table.Nums',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "Nums",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -677,8 +678,8 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -698,8 +699,8 @@ describe('dimension coersion', () => {
               "s": 1n,
             },
           ],
-          Array [
-            Array [
+          [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -713,7 +714,7 @@ describe('dimension coersion', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -727,7 +728,7 @@ describe('dimension coersion', () => {
                 "s": 1n,
               },
             ],
-            Array [
+            [
               DeciNumber {
                 "d": 1n,
                 "infinite": false,
@@ -754,19 +755,19 @@ describe('dimension coersion', () => {
         newColumn: 'OtherTable.Nums + Table.Nums + [1, 2, 3]',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "Nums",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -920,8 +921,8 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 100n,
               "infinite": false,
@@ -929,9 +930,9 @@ describe('dimension coersion', () => {
               "s": 1n,
             },
           ],
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 DeciNumber {
                   "d": 100n,
                   "infinite": false,
@@ -951,7 +952,7 @@ describe('dimension coersion', () => {
                   "s": 1n,
                 },
               ],
-              Array [
+              [
                 DeciNumber {
                   "d": 100n,
                   "infinite": false,
@@ -985,19 +986,19 @@ describe('dimension coersion', () => {
         newColumn: 'previous(0) + 100',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -1089,8 +1090,8 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1098,7 +1099,7 @@ describe('dimension coersion', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1118,19 +1119,19 @@ describe('dimension coersion', () => {
         newColumn: 'previous(0) + 100',
       })
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "NewCol",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -1222,8 +1223,8 @@ describe('dimension coersion', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1237,7 +1238,7 @@ describe('dimension coersion', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1263,19 +1264,19 @@ describe('dimension coersion', () => {
         newColumn: 'previous(0) + 100',
       })
     ).toMatchInlineSnapshot(`
-          Object {
-            "meta": Object {
+          {
+            "meta": {
               "labels": undefined,
             },
             "type": Type {
               "anythingness": false,
               "atParentIndex": null,
               "cellType": null,
-              "columnNames": Array [
+              "columnNames": [
                 "A",
                 "NewCol",
               ],
-              "columnTypes": Array [
+              "columnTypes": [
                 Type {
                   "anythingness": false,
                   "atParentIndex": null,
@@ -1367,8 +1368,8 @@ describe('dimension coersion', () => {
               "unit": null,
               Symbol(immer-draftable): true,
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -1376,7 +1377,7 @@ describe('dimension coersion', () => {
                   "s": 1n,
                 },
               ],
-              Array [
+              [
                 DeciNumber {
                   "d": 1n,
                   "infinite": false,
@@ -1438,7 +1439,7 @@ describe('dimension coersion', () => {
     const codeColByCol = `
     ${prefixCode}
     Table = {}
-    ${startingColumns.map((colAssign) => `Table.${colAssign}`).join('\n')}
+    ${startingColumns.map((colAssign) => `Table.${colAssign}`).join('n')}
     Table.NewCol = ${newColumn}
     Table
   `;

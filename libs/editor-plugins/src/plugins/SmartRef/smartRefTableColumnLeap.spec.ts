@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 /**
  * To implement "full smart refs" we need a leap
  *

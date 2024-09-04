@@ -1,3 +1,4 @@
+import { beforeEach, it, expect } from 'vitest';
 import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';

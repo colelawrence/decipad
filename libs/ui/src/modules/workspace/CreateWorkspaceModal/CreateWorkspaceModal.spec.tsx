@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import { timeout } from '@decipad/utils';
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

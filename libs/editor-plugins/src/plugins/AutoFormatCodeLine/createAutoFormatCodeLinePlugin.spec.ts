@@ -1,5 +1,4 @@
-/* eslint-disable jest/no-disabled-tests */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, expect, describe, it } from 'vitest';
 import type React from 'react';
 import type { MyEditor, MyElement, MyPlatePlugin } from '@decipad/editor-types';
 import {

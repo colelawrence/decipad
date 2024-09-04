@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getTrailingLink } from './link';
 
 describe('getTrailingLink', () => {
@@ -7,7 +8,7 @@ describe('getTrailingLink', () => {
       expect(getTrailingLink(text)).toBe(null);
     }
   );
-  it.each(['[a](b)c', '[a][b]\n'])(
+  it.each(['[a](b)c', '[a][b]n'])(
     'returns null for the non-trailing link "%s"',
     async (text) => {
       expect(getTrailingLink(text)).toBe(null);

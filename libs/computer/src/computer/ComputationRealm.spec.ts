@@ -1,3 +1,4 @@
+import { it, expect, beforeEach } from 'vitest';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line no-restricted-imports
 import { testProgramBlocks } from '../testUtils';

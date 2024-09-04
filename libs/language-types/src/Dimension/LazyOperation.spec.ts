@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { DeciNumberBase } from '@decipad/number';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createLazyOperationBase } from './LazyOperation';
@@ -78,7 +79,7 @@ describe('nesting', () => {
     expect(await (await nested3.lowLevelGet(0)).getData()).toEqual(N(101));
     expect(await materializeOneResult(nested3.getData()))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -104,19 +105,19 @@ describe('nesting', () => {
   it('uniqDimensions can find out what dimensions are involved and give them to ya', async () => {
     expect(await uniqDimensions(await getArgs(multiDimX)))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         "X",
       ]
     `);
     expect(await uniqDimensions(await getArgs(multiDimXTwice)))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         "X",
       ]
     `);
     expect(await uniqDimensions(await getArgs(multidimDivision)))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         "X",
         "Y",
       ]
@@ -132,7 +133,7 @@ describe('nesting', () => {
 
     expect(await materializeOneResult(operateWithOneD.getData()))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -162,7 +163,7 @@ describe('nesting', () => {
 
     expect(await materializeOneResult(operateWithOneDReversed.getData()))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

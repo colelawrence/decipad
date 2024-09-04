@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { parseStatementOrThrow, prettyPrintAST } from '../..';
 
 it('parses simple of directive', () => {

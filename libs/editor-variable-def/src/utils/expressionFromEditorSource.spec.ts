@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from '@decipad/number';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 

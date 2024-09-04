@@ -169,11 +169,7 @@ export const callBuiltin: CallBuiltin = async (
       ? autoconvertResult(ctx, resultBeforeConvertingBack, returnType, funcName)
       : resultBeforeConvertingBack;
   } catch (err) {
-    if (
-      process.env.NODE_ENV !== 'test' &&
-      typeof jest === 'undefined' &&
-      !(err instanceof RuntimeError)
-    ) {
+    if (process.env.NODE_ENV !== 'test' && !(err instanceof RuntimeError)) {
       console.error(
         `callBuiltin "${funcName}": Error at stage ${stage} (${stages[stage]})`
       );

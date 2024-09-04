@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import {
   createMyAutoformatPlugin,
   createMyPlateEditor,

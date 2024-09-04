@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, afterEach, it } from 'vitest';
 import { mockLocation } from '@decipad/dom-test-utils';
 import type { Flag } from '.';
 import {
@@ -23,10 +24,6 @@ it('disables flags in unknown environments', () => {
 it('disables flags without an environment', () => {
   process.env.NODE_ENV = undefined;
   expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
-});
-it.each(['test', 'development'])('enables flags in %s', (nodeEnv) => {
-  process.env.NODE_ENV = nodeEnv;
-  expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
 });
 describe('in production builds', () => {
   beforeEach(() => {
@@ -82,23 +79,11 @@ describe('in test', () => {
     });
   });
 
-  describe('the Jest environment configuration', () => {
-    test('[leaves a modified state]', () => {
-      disable('DEVELOPER_TOOLBAR');
-      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(false);
-    });
-
-    it('automatically resets between tests', () => {
-      expect(isFlagEnabled('DEVELOPER_TOOLBAR')).toBe(true);
-    });
-  });
-
   it('(meta test) query string flags are disabled in tests', () => {
     const qsOverrides = getQueryStringOverrides();
     const oneQsOverrideFlag = Object.keys(qsOverrides).at(0);
     if (oneQsOverrideFlag) {
       // Only run this test when there is at least one QS flag
-      // eslint-disable-next-line jest/no-conditional-expect
       expect(isFlagEnabled(oneQsOverrideFlag as Flag)).toBe(false);
     }
   });

@@ -31,7 +31,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/editor-utils"],
       "options": {
-        "command": "npx vitest --run",
+        "command": "npx vitest --run --config ../../vitest.web.config.ts",
         "cwd": "libs/editor-utils"
       }
     }

@@ -1,6 +1,6 @@
+import { expect, describe, it } from 'vitest';
 /* eslint-disable func-names */
 /* eslint-disable no-bitwise */
-import { describe, expect, it } from 'vitest';
 import DeciNumber from '@decipad/number';
 import { Result, SerializedType } from '@decipad/language-interfaces';
 import chunk from 'lodash/chunk';
@@ -685,7 +685,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize positive integers', async () => {
-    const one = await deserializeResult({
+    const one = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
     });
@@ -697,7 +697,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize positive fractions', async () => {
-    const oneThird = await deserializeResult({
+    const oneThird = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 3]),
     });
@@ -709,7 +709,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize zero', async () => {
-    const zero = await deserializeResult({
+    const zero = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 1]),
     });
@@ -720,7 +720,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize 1000', async () => {
-    const result = await deserializeResult({
+    const result = deserializeResult({
       type: new BigUint64Array([11n, 0n, 11n]),
       data: new Uint8Array([2, 0, 0, 0, 232, 3, 1, 0, 0, 0, 1]),
     });
@@ -731,7 +731,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize 54,320', async () => {
-    const result = await deserializeResult({
+    const result = deserializeResult({
       type: new BigUint64Array([11n, 0n, 12n]),
       data: new Uint8Array([3, 0, 0, 0, 48, 212, 0, 1, 0, 0, 0, 1]),
     });
@@ -742,7 +742,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize negative numbers', async () => {
-    const negativeOne = await deserializeResult({
+    const negativeOne = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
@@ -751,7 +751,7 @@ describe('deserializeResult', () => {
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
 
-    const negativeDenominator = await deserializeResult({
+    const negativeDenominator = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
@@ -760,7 +760,7 @@ describe('deserializeResult', () => {
       value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
 
-    const negativeBoth = await deserializeResult({
+    const negativeBoth = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 1]),
     });
@@ -769,7 +769,7 @@ describe('deserializeResult', () => {
       value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
     });
 
-    const negativeSign = await deserializeResult({
+    const negativeSign = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 1]),
     });
@@ -780,7 +780,7 @@ describe('deserializeResult', () => {
   });
 
   it('should deserialize infinity', async () => {
-    const positiveInfinity = await deserializeResult({
+    const positiveInfinity = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
     });
@@ -789,7 +789,7 @@ describe('deserializeResult', () => {
       value: new DeciNumber({ infinite: true }),
     });
 
-    const negativeInfinity = await deserializeResult({
+    const negativeInfinity = deserializeResult({
       type: new BigUint64Array([11n, 0n, 10n]),
       data: new Uint8Array([1, 0, 0, 0, 255, 1, 0, 0, 0, 0]),
     });
@@ -810,7 +810,7 @@ describe('deserializeResult', () => {
       meta: undefined,
     };
     const serialized = await serializeResult(n);
-    const deserialized = await deserializeResult(serialized);
+    const deserialized = deserializeResult(serialized);
 
     expect(deserialized).toEqual(n);
   });

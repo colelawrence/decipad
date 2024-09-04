@@ -11,9 +11,7 @@ use num::{
 
 use conv::ApproxInto;
 
-
 use super::types::{DateSpecificity, DeciResult};
-
 
 ///
 /// This file contains the implementation functions for Rust primitives
@@ -152,7 +150,9 @@ impl DeciResult {
                 DateSpecificity::Hour => date.unwrap().format("%Y-%m-%d %H").to_string(),
                 DateSpecificity::Minute => date.unwrap().format("%Y-%m-%d %H:%M").to_string(),
                 DateSpecificity::Second => date.unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
-                DateSpecificity::Millisecond => date.unwrap().format("%Y-%m-%d %H:%M:%S.%f").to_string(),
+                DateSpecificity::Millisecond => {
+                    date.unwrap().format("%Y-%m-%d %H:%M:%S.%f").to_string()
+                }
             },
             DeciResult::Table(table) => format!("{:?}", table),
             DeciResult::Range(range) => format!("{:?}", range),
@@ -192,23 +192,23 @@ impl DeciResult {
     }
 
     pub fn round(&mut self) {
-      match self {
-        DeciResult::Float(a) => (),
-        _ => {
-          *self = self.to_float();
+        match self {
+            DeciResult::Float(a) => (),
+            _ => {
+                *self = self.to_float();
+            }
         }
-      }
-      match self {
-        DeciResult::Float(a) => {
-          *a = round(*a);
+        match self {
+            DeciResult::Float(a) => {
+                *a = round(*a);
+            }
+            DeciResult::Column(i) => {
+                for item in i {
+                    item.round();
+                }
+            }
+            _ => panic!("impossible type outcome"),
         }
-        DeciResult::Column(i) => {
-          for item in i {
-            item.round();
-          }
-        }
-        _ => panic!("impossible type outcome")
-      }
     }
 
     pub fn to_frac(&self) -> DeciResult {
@@ -268,7 +268,9 @@ impl DeciResult {
     pub fn negate(&self) -> DeciResult {
         match self {
             DeciResult::Float(a) => DeciResult::Float(-*a),
-            DeciResult::ArbitraryFraction(n, d) => DeciResult::ArbitraryFraction(-n.clone(), d.clone()),
+            DeciResult::ArbitraryFraction(n, d) => {
+                DeciResult::ArbitraryFraction(-n.clone(), d.clone())
+            }
             DeciResult::Fraction(n, d) => DeciResult::Fraction(-*n, *d),
             DeciResult::Column(items) => {
                 DeciResult::Column(items.iter().map(|x| x.negate()).collect())
@@ -283,7 +285,9 @@ impl DeciResult {
         match self {
             DeciResult::Float(a) => DeciResult::Float(1.0 / *a),
             DeciResult::Fraction(n, d) => DeciResult::Fraction(*d, *n),
-            DeciResult::ArbitraryFraction(n, d) => DeciResult::ArbitraryFraction(d.clone(), n.clone()),
+            DeciResult::ArbitraryFraction(n, d) => {
+                DeciResult::ArbitraryFraction(d.clone(), n.clone())
+            }
             DeciResult::Column(items) => {
                 DeciResult::Column(items.iter().map(|x| x.reciprocal()).collect())
             }
@@ -306,7 +310,9 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
         match (self, other) {
             (DeciResult::Float(a), DeciResult::Float(b)) => DeciResult::Float(a + b),
             (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self + &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => &self.to_arb() + other,
+            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
+                &self.to_arb() + other
+            }
             (DeciResult::Float(_a), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x + self).collect())
             }
@@ -375,7 +381,9 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
             (DeciResult::Fraction(_n, _d), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x + self).collect())
             }
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => self + &other.to_arb(),
+            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
+                self + &other.to_arb()
+            }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
                 self + &other.to_arb()
             }
@@ -458,7 +466,9 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
         match (self, other) {
             (DeciResult::Float(a), DeciResult::Float(b)) => DeciResult::Float(*a * *b),
             (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self * &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => &self.to_arb() * other,
+            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
+                &self.to_arb() * other
+            }
             (DeciResult::Float(_a), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x * self).collect())
             }
@@ -481,13 +491,13 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
                 DeciResult::Column(items.iter().map(|x| x * self).collect())
             }
             (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
-              &self.to_float() * other
+                &self.to_float() * other
             }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
-              self * &other.to_arb()
+                self * &other.to_arb()
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
-              DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
+                DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
             }
             (DeciResult::Column(items), DeciResult::Float(_a)) => {
                 DeciResult::Column(items.iter().map(|x| x * other).collect())
@@ -519,7 +529,6 @@ where
         &self * &DeciResult::Float(other.approx_into().unwrap())
     }
 }
-
 
 impl Div for DeciResult {
     type Output = DeciResult;

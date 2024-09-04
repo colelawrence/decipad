@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ToastStatus, useToast } from '@decipad/toast';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

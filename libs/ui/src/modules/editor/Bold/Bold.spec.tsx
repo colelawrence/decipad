@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { render, screen } from '@testing-library/react';
 import { Bold } from './Bold';

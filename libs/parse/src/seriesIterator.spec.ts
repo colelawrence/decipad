@@ -1,8 +1,9 @@
+import { expect, describe, it } from 'vitest';
 import { seriesIterator } from './seriesIterator';
 
-const iterate = (it: Iterable<string>, max = 10): Array<string> => {
+const iterate = (iter: Iterable<string>, max = 10): Array<string> => {
   const acc: string[] = [];
-  const iterator = it[Symbol.iterator]();
+  const iterator = iter[Symbol.iterator]();
   for (let i = 0; i < max; i += 1) {
     const next = iterator.next();
     if (typeof next.value === 'string') {

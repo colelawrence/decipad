@@ -21,10 +21,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/remote-computer-codec"],
       "options": {
-        "jestConfig": "libs/remote-computer-codec/jest.config.js"
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/remote-computer-codec"
       }
     },
     "depcheck": {

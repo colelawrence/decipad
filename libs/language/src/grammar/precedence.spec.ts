@@ -1,7 +1,7 @@
+import { expect, describe, it } from 'vitest';
 import { parseBlockOrThrow, prettyPrintAST, runCode } from '..';
 
 /* eslint-disable no-await-in-loop */
-/* eslint-disable jest/expect-expect */
 
 const binops = ['+', '-', '*', '/', '**'];
 const comparison = ['>', '<', '>=', '<='];
@@ -304,7 +304,7 @@ describe('operator/implicit mul precedence', () => {
 
 async function check(sourceCode: string) {
   const codeMsg = () =>
-    [`\`${sourceCode}\``, prettyPrintAST(parseBlockOrThrow(sourceCode))].join(
+    [`${sourceCode}`, prettyPrintAST(parseBlockOrThrow(sourceCode))].join(
       '\n\n'
     );
 

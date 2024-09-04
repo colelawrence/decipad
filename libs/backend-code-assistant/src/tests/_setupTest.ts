@@ -1,3 +1,4 @@
+import { beforeAll } from 'vitest';
 import stringify from 'json-stringify-safe';
 import type { TestContext } from '@decipad/backend-test-sandbox';
 import defaultDocument from './__fixtures__/no-code.json';

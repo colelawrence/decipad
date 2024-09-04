@@ -1,3 +1,4 @@
+import { vi, expect, describe, it } from 'vitest';
 import type DeciNumber from '@decipad/number';
 import { N, ZERO, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { Type, buildType as t } from '../Type';
@@ -111,7 +112,6 @@ describe('automapTypes', () => {
     });
   });
 
-  /* eslint-disable-next-line jest/no-disabled-tests */
   it.skip('can automap types', async () => {
     const total = async ([a]: Type[]) => a.reduced();
 
@@ -244,7 +244,7 @@ describe('automapTypes', () => {
 
   it('can take tables as arguments', async () => {
     const table = t.table({ columnNames: [], columnTypes: [] });
-    const callee = jest.fn(([x]: Type[]) => x);
+    const callee = vi.fn(([x]: Type[]) => x);
 
     expect(await automapTypes(makeContext(), [table], callee)).toEqual(table);
     expect(callee).toHaveBeenCalledWith([table]);
@@ -291,9 +291,9 @@ describe('automapValues', () => {
     );
 
     expect(await materializeOneResult(result.getData())).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Array [
+      [
+        [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -307,7 +307,7 @@ describe('automapValues', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -321,7 +321,7 @@ describe('automapValues', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -343,8 +343,8 @@ describe('automapValues', () => {
         await Promise.all(calledOnValues.map(async (v) => v.getData()))
       )
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -358,7 +358,7 @@ describe('automapValues', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -372,7 +372,7 @@ describe('automapValues', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -386,7 +386,7 @@ describe('automapValues', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -400,7 +400,7 @@ describe('automapValues', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -414,7 +414,7 @@ describe('automapValues', () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -466,7 +466,6 @@ describe('automapValues', () => {
       expect(await materializeOneResult(result.getData())).toEqual(N(7));
     });
 
-    /* eslint-disable-next-line jest/no-disabled-tests */
     it.skip('supports reducing the last of many dimensions', async () => {
       const deepValues = fromJS([
         [1n, 2n, 4n],
@@ -484,7 +483,6 @@ describe('automapValues', () => {
       expect(await materializeOneResult(result.getData())).toEqual([7, 56]);
     });
 
-    /* eslint-disable-next-line jest/no-disabled-tests */
     it.skip('supports reducing one of multiple args', async () => {
       const args = [fromJS([1, 2]), fromJS([1, 2, 3])];
 
@@ -551,13 +549,13 @@ describe('automapValues', () => {
             ).getData()
           )
         ).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "A1",
               "A2",
               "A3",
             ],
-            Array [
+            [
               "B1",
               "B2",
               "B3",
@@ -584,13 +582,13 @@ describe('automapValues', () => {
             ).getData()
           )
         ).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "A-1",
               "A-2",
               "A-3",
             ],
-            Array [
+            [
               "B-1",
               "B-2",
               "B-3",
@@ -617,14 +615,14 @@ describe('automapValues', () => {
             ).getData()
           )
         ).toMatchInlineSnapshot(`
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 "A1a",
                 "A1b",
                 "A1c",
               ],
-              Array [
+              [
                 "A2a",
                 "A2b",
                 "A2c",
@@ -652,12 +650,12 @@ describe('automapValues', () => {
             ).getData()
           )
         ).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "A,1",
               "A;1",
             ],
-            Array [
+            [
               "B,2",
               "B;2",
             ],
@@ -693,13 +691,13 @@ describe('automapValues', () => {
           ).getData()
         )
       ).toMatchInlineSnapshot(`
-        Array [
-          Array [
+        [
+          [
             "a1 A1",
             "b1 B1",
             "c1 C1",
           ],
-          Array [
+          [
             "a2 A2",
             "b2 B2",
             "c2 C2",
@@ -720,7 +718,7 @@ describe('automapValues', () => {
       ['Col'],
       undefined
     );
-    const callee = jest.fn(() => otherTable);
+    const callee = vi.fn(() => otherTable);
 
     const ctx = makeContext();
     expect(await automapValues(ctx, [table], [tableVal], callee)).toEqual(
@@ -746,7 +744,7 @@ describe('automapValues', () => {
   });
 
   it('can pass the correct types to the map function', async () => {
-    const mapFn = jest.fn(() => fromJS(1n));
+    const mapFn = vi.fn(() => fromJS(1n));
 
     const type = t.number();
     const value = fromJS(1n);
@@ -758,7 +756,7 @@ describe('automapValues', () => {
   });
 
   it('can pass the correct types to the map function (when reducing)', async () => {
-    const mapFn = jest.fn(() => fromJS(1n));
+    const mapFn = vi.fn(() => fromJS(1n));
 
     const reducedType = t.number();
     const type = t.column(reducedType);
@@ -863,7 +861,7 @@ describe('automap for reducers', () => {
           )?.getData()
         )
       ).toMatchInlineSnapshot(`
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -896,7 +894,7 @@ describe('automap for reducers', () => {
           )?.getData()
         )
       ).toMatchInlineSnapshot(`
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -908,7 +906,7 @@ describe('automap for reducers', () => {
     });
 
     it('can pass the correct types to the function', async () => {
-      const mapFn = jest.fn(() => fromJS(1));
+      const mapFn = vi.fn(() => fromJS(1));
 
       const oneDeeType = t.column(t.number(), 'X');
       const oneDeeValue = fromJS([1n, 2n]);
@@ -925,7 +923,7 @@ describe('automap for reducers', () => {
     });
 
     it('can pass the correct types to the function (with higher-dimensional args)', async () => {
-      const mapFn = jest.fn(() => fromJS(1));
+      const mapFn = vi.fn(() => fromJS(1));
 
       const oneDeeType = t.column(t.number(), 'X');
       const twoDeeType = t.column(oneDeeType, 'Y');

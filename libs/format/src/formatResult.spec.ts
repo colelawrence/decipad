@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { buildType as t, parseUnit, Time } from '@decipad/language-types';
 import { N } from '@decipad/number';

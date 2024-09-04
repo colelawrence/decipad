@@ -1,3 +1,4 @@
+import { it, describe, expect, vi } from 'vitest';
 import type { MyElement, PlateComponent } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -45,7 +46,7 @@ describe('usePathMutatorCallback', () => {
   };
 
   it('hook tests', async () => {
-    const sideEffects = jest.fn();
+    const sideEffects = vi.fn();
     const editor = createPlateEditor();
     const { getByText, getByLabelText } = render(
       <Plate

@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { afterEach, it, expect, vi } from 'vitest';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

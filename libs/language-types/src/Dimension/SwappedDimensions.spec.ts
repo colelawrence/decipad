@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createSwappedDimensions } from './SwappedDimensions';
 import { projectHypercube } from '../utils/projectHypercube';
@@ -23,8 +24,8 @@ it('can swap dimensions of a hypercube', async () => {
       projectHypercube(createSwappedDimensions(twoAnonDims, 1))
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -48,8 +49,8 @@ it('or left alone', async () => {
       projectHypercube(createSwappedDimensions(twoAnonDims, 0))
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -57,7 +58,7 @@ it('or left alone', async () => {
           "s": 1n,
         },
       ],
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -75,7 +76,7 @@ it('can swap nothing if the dimension is 1D', async () => {
       projectHypercube(createSwappedDimensions(multiDimX, 0))
     )
   ).toMatchInlineSnapshot(`
-    Array [
+    [
       DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -104,9 +105,9 @@ it('can work with 3d', async () => {
       projectHypercube(createSwappedDimensions(threeAnonDims, 0))
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        Array [
+    [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -126,7 +127,7 @@ it('can work with 3d', async () => {
             "s": 1n,
           },
         ],
-        Array [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -155,9 +156,9 @@ it('can work with 3d', async () => {
       projectHypercube(createSwappedDimensions(threeAnonDims, 1))
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        Array [
+    [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -178,8 +179,8 @@ it('can work with 3d', async () => {
           },
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -208,9 +209,9 @@ it('can work with 3d', async () => {
       projectHypercube(createSwappedDimensions(threeAnonDims, 2))
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        Array [
+    [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -225,8 +226,8 @@ it('can work with 3d', async () => {
           },
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -241,8 +242,8 @@ it('can work with 3d', async () => {
           },
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           DeciNumber {
             "d": 1n,
             "infinite": false,

@@ -1,3 +1,4 @@
+import { beforeEach, it, expect } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { Value, buildType as t } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports

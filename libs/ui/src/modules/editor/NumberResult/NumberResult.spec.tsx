@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { runCode } from '../../../test-utils';
 import { NumberResult } from './NumberResult';
@@ -195,7 +196,6 @@ it('renders percentage', async () => {
   expect(container.textContent).toMatchInlineSnapshot(`"11%"`);
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
 it.skip('does time conversions', async () => {
   const { container } = render(
     <NumberResult {...await runCode('1 minute in seconds')} />

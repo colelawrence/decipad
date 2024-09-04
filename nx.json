@@ -65,29 +65,20 @@
           "echo WORKSPACE_FREE_PLAN=$WORKSPACE_FREE_PLAN",
           "echo WORKSPACE_PRO_PLAN=$WORKSPACE_PRO_PLAN"
         ],
-        "parallel": 8
+        "parallel": 12
       }
     }
   },
   "defaultProject": "frontend",
   "targetDefaults": {
     "lint": {
-      "inputs": [
-        "default"
-      ]
+      "inputs": ["default"]
     },
     "build": {
-      "inputs": [
-        "production",
-        "^production"
-      ]
+      "inputs": ["production", "^production"]
     },
     "test": {
-      "inputs": [
-        "default",
-        "^production",
-        "{workspaceRoot}/jest.preset.js"
-      ]
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     },
     "build-storybook": {
       "inputs": [
@@ -100,11 +91,7 @@
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals",
-      "projectSpecificFiles"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals", "projectSpecificFiles"],
     "sharedGlobals": [
       "{workspaceRoot}/workspace.json",
       "{workspaceRoot}/tsconfig.json",

@@ -35,21 +35,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/backend-code-assistant"],
       "options": {
-        "jestConfig": "libs/backend-code-assistant/jest.config.js",
-        "bail": true
-      }
-    },
-    "test:local": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/backend-code-assistant"],
-      "options": {
-        "jestConfig": "libs/backend-code-assistant/jest.config.js",
-        "bail": true,
-        "testMatch": ["**/*.spec.disabled.ts"],
-        "testPathPattern": ["libs/backend-code-assistant/src/tests"]
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/backend-code-assistant"
       }
     }
   },

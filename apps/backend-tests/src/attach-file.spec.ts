@@ -1,14 +1,10 @@
-/* eslint-env jest */
-// existing sequential test "story" very granular
-/* eslint-disable jest/expect-expect */
-import { describe } from 'vitest';
+import { beforeAll, expect, describe, vi } from 'vitest';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { Attachment, Pad, Workspace } from '@decipad/graphqlserver-types';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import waitForExpect from 'wait-for-expect';
 
 describe.sequential('attach files', () => {
   test('attach files', (ctx) => {
@@ -62,7 +58,7 @@ describe.sequential('attach files', () => {
     });
 
     it('an unauthenticated user cannot upload an attachment', async () => {
-      await waitForExpect(async () => {
+      await vi.waitFor(async () => {
         const client = ctx.graphql.withoutAuth();
 
         await expect(
@@ -220,7 +216,7 @@ describe.sequential('attach files', () => {
     });
 
     it('other user can list attachment in pad', async () => {
-      await waitForExpect(async () => {
+      await vi.waitFor(async () => {
         const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
         const pad2: Pad = (
           await client.query({

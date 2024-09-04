@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { computerWithBlocks } from '../testUtils';
 
 it('tracks variable on empty computer', async () => {

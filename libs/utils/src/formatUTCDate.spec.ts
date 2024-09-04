@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { formatUTCDate } from './formatUTCDate';
 
 it('regression: formats dates correctly', () => {

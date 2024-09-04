@@ -481,7 +481,7 @@ test('workspace editor checks @workspace @roles', async ({
 
     await expect(async () => {
       const pads = await randomFreeUser.workspace.getPadList();
-      await expect(pads).toHaveLength(2);
+      expect(pads).toHaveLength(2);
       const copyIndex = pads.findIndex((pad) =>
         pad.name?.startsWith('Copy of')
       );

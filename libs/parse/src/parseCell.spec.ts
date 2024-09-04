@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N } from '@decipad/number';
 import type { TableCellType } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports

@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { descriptiveIdParser } from './descriptive-id';
 

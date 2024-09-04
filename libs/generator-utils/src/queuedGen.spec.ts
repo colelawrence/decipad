@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { all } from './all';
 import { queuedGen } from './queuedGen';
 

@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import type {
   CodeLineV2Element,

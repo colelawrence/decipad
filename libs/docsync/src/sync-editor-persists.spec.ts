@@ -1,7 +1,14 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  beforeEach,
+  afterEach,
+  vi,
+} from 'vitest';
 import { disable } from '@decipad/feature-flags';
 import { getDefined } from '@decipad/utils';
-import waitForExpect from 'wait-for-expect';
 import type { DocSyncEditor } from '.';
 import { createDocSyncEditor } from '.';
 import { createTestEditorController } from './testEditorController';
@@ -43,14 +50,13 @@ describe('pad editor persistence', () => {
 
   it('loads', async () => {
     let loaded = editor.isLoadedLocally;
+
     onLoadedImpl = (source: string) => {
       expect(source).toBe('local');
       loaded = true;
     };
 
-    await waitForExpect(() => {
-      expect(loaded).toBe(true);
-    });
+    await vi.waitUntil(() => loaded, { interval: 100 });
   });
 
   it('Saves some small changes', async () => {
@@ -95,9 +101,7 @@ describe('pad editor persistence', () => {
       },
     });
 
-    await waitForExpect(() => {
-      expect(saved).toBe(true);
-    });
+    await vi.waitUntil(() => saved, { interval: 100 });
 
     expect(e.children).toMatchObject([
       {
@@ -133,9 +137,7 @@ describe('pad editor persistence', () => {
     });
     editor2.onLoaded(onLoaded2);
 
-    await waitForExpect(() => {
-      expect(loaded).toBe(true);
-    });
+    await vi.waitUntil(() => loaded, { interval: 100 });
 
     expect(editor2.children).toMatchObject([
       {

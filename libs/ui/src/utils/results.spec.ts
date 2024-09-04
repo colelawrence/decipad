@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { type SerializedType } from '@decipad/language-interfaces';
 import { isTabularType } from './results';
 

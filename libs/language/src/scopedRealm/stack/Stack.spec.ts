@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import stringify from 'json-stringify-safe';
 import type { TStackFrame } from './index';
 import { createStack } from './index';
@@ -87,22 +88,22 @@ it('can use namespaces', () => {
   stack.set('A', 'No');
 
   expect(stack.get('Table')).toMatchInlineSnapshot(
-    `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"BVal\\"]]"`
+    `"[["A","AVal"],["B","BVal"]]"`
   );
   expect(stack.has('Table')).toMatchInlineSnapshot(`true`);
 
   expect(stack.globalVariables).toMatchInlineSnapshot(`
     Map {
       "A" => "No",
-      "Table" => "[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"BVal\\"]]",
-      "OtherNs" => "[[\\"A\\",\\"No\\"]]",
+      "Table" => "[["A","AVal"],["B","BVal"]]",
+      "OtherNs" => "[["A","No"]]",
     }
   `);
 
   stack.set('TableToSplit', stringify([['ColName', '1']]));
 
   expect(stack.get('TableToSplit')).toMatchInlineSnapshot(
-    `"[[\\"ColName\\",\\"1\\"]]"`
+    `"[["ColName","1"]]"`
   );
   expect(
     stack.getNamespaced(['TableToSplit', 'ColName'])
@@ -113,7 +114,7 @@ it('can expand an empty namespace', () => {
   stack.set('Table', stringify([]), 'global');
   expect(stack.get('Table')).toMatchInlineSnapshot(`"[]"`);
   expect(Object.fromEntries(stack.namespaces)).toMatchInlineSnapshot(`
-    Object {
+    {
       "Table": Map {},
     }
   `);
@@ -175,9 +176,7 @@ describe('can set with an ID', () => {
     stack.setNamespaced(['Table', 'B'], 'BVal', 'BId');
 
     expect(stack.get('A')).toEqual('AVal');
-    expect(stack.get('Table')).toMatchInlineSnapshot(
-      `"[[\\"B\\",\\"BVal\\"]]"`
-    );
+    expect(stack.get('Table')).toMatchInlineSnapshot(`"[["B","BVal"]]"`);
     expect(stack.getNamespaced(['Table', 'B'])).toEqual('BVal');
     expect(stack.get('AId')).toEqual('AVal');
     expect(stack.get('BId')).toEqual('BVal');
@@ -195,7 +194,7 @@ describe('can set with an ID', () => {
       `"ColumnVal"`
     );
     expect(stack.get('Table')).toMatchInlineSnapshot(
-      `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"ColumnVal\\"]]"`
+      `"[["A","AVal"],["B","ColumnVal"]]"`
     );
   });
 

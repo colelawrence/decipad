@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getTrailingImage } from './image';
 
 describe('getTrailingImage', () => {

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { getSvgAspectRatio } from './svg';
 
 describe('getSvgAspectRatio', () => {

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { sort, unique, slice } from '@decipad/column';
 import { all } from '@decipad/generator-utils';
@@ -14,7 +15,7 @@ describe('column value', () => {
     const column = Column.fromValues([1, 2, 3].map(toN));
     expect(await column.rowCount()).toBe(3);
     expect(await all(column.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -41,7 +42,7 @@ describe('column value', () => {
     const originalColumn = Column.fromValues([3, 1, 2].map(toN));
     const sortedColumn = await sort(originalColumn, compare);
     expect(await all(originalColumn.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -63,7 +64,7 @@ describe('column value', () => {
       ]
     `);
     expect(await all(sortedColumn.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -92,7 +93,7 @@ describe('column value', () => {
     ) as Column;
     const uniqueValuesColumn = await unique(originalColumn, compare);
     expect(await all(originalColumn.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -157,7 +158,7 @@ describe('column value', () => {
     `);
 
     expect(await all(uniqueValuesColumn.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -199,7 +200,7 @@ describe('column value', () => {
     const slice1 = slice(originalColumn, 3, 7);
     const slice2 = slice(originalColumn, 7, 9);
     expect(await all(originalColumn.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -257,7 +258,7 @@ describe('column value', () => {
       ]
     `);
     expect(await all(slice1.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -285,7 +286,7 @@ describe('column value', () => {
       ]
     `);
     expect(await all(slice2.values())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

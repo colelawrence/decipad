@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { isInternalEmail } from './email';
 
 it('is true for n1n and decipad emails', () => {

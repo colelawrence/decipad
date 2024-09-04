@@ -1,11 +1,7 @@
-/* eslint-disable no-console */
-/* eslint-disable jest/no-done-callback */
-/* eslint-disable jest/expect-expect */
 import { it, expect, vi, beforeAll, afterAll, describe } from 'vitest';
 import type { Pad } from '@decipad/backendtypes';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import fetchMocker from 'vitest-fetch-mock';
-import waitForExpect from 'wait-for-expect';
 import type { DocSyncEditor } from '.';
 import { createDocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
@@ -14,7 +10,6 @@ import { randomChangesToEditors } from './utils/random-changes';
 import { createTestEditorController } from './testEditorController';
 
 describe.sequential('docsync', () => {
-  waitForExpect.defaults.interval = 500;
   const replicaCount = 5;
   const randomChangeCountPerReplica = 50;
 
@@ -128,7 +123,7 @@ describe.sequential('docsync', () => {
 
       await randomChangesToEditors(editors, randomChangeCountPerReplica);
 
-      await waitForExpect(() => {
+      await vi.waitFor(() => {
         const firstEditor = editors[0].children;
         const expectedContents = clone(firstEditor);
 

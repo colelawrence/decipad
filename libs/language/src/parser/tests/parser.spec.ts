@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { SyntaxError } from '..';
 import { parse } from '../parser';
 

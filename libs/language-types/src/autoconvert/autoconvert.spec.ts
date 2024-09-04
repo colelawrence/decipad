@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import { autoconvertArguments, autoconvertResult } from './autoconvert';
 import { fromJS } from '../Value';

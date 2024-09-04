@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { parseNumberWithUnit } from './parseNumberWithUnit';
 
 it('can parse a number', () => {

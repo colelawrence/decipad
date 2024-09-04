@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { Unit, SerializedType } from '@decipad/language-interfaces';
 import { deserializeType, serializeType } from './serialization';
@@ -17,16 +18,16 @@ const errorCause = InferError.expectedButGot('A', 'B');
 
 it('can stringify a type', () => {
   expect(serializeType(t.number())).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "number",
       "unit": null,
     }
   `);
   expect(serializeType(t.number([meter]))).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "number",
-      "unit": Array [
-        Object {
+      "unit": [
+        {
           "exp": DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -46,22 +47,22 @@ it('can stringify a type', () => {
     }
   `);
   expect(serializeType(t.string())).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "string",
     }
   `);
   expect(serializeType(t.range(t.number()))).toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "range",
-      "rangeOf": Object {
+      "rangeOf": {
         "kind": "number",
         "unit": null,
       },
     }
   `);
   expect(serializeType(t.column(t.number(), 'Index'))).toMatchInlineSnapshot(`
-    Object {
-      "cellType": Object {
+    {
+      "cellType": {
         "kind": "number",
         "unit": null,
       },
@@ -79,12 +80,12 @@ it('can stringify a type', () => {
       })
     )
   ).toMatchInlineSnapshot(`
-    Object {
-      "columnNames": Array [
+    {
+      "columnNames": [
         "hi",
       ],
-      "columnTypes": Array [
-        Object {
+      "columnTypes": [
+        {
           "kind": "number",
           "unit": null,
         },
@@ -96,18 +97,18 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'], 'Index')))
     .toMatchInlineSnapshot(`
-    Object {
+    {
       "kind": "row",
-      "rowCellNames": Array [
+      "rowCellNames": [
         "Num",
         "S",
       ],
-      "rowCellTypes": Array [
-        Object {
+      "rowCellTypes": [
+        {
           "kind": "number",
           "unit": null,
         },
-        Object {
+        {
           "kind": "string",
         },
       ],
@@ -115,7 +116,7 @@ it('can stringify a type', () => {
     }
   `);
   expect(serializeType(t.date('month'))).toMatchInlineSnapshot(`
-    Object {
+    {
       "date": "month",
       "kind": "date",
     }
@@ -129,14 +130,14 @@ it('can stringify a type', () => {
       })
     )
   ).toMatchInlineSnapshot(`
-    Object {
-      "argNames": Array [
+    {
+      "argNames": [
         "a",
         "b",
       ],
       "ast": null,
-      "body": Object {
-        "args": Array [],
+      "body": {
+        "args": [],
         "id": "block-id",
         "type": "block",
       },
@@ -145,10 +146,10 @@ it('can stringify a type', () => {
     }
   `);
   expect(serializeType(t.impossible(errorCause))).toMatchInlineSnapshot(`
-    Object {
-      "errorCause": Object {
+    {
+      "errorCause": {
         "errType": "expected-but-got",
-        "expectedButGot": Array [
+        "expectedButGot": [
           "A",
           "B",
         ],

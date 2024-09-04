@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 // ============================================================
 //  TYPE INFERRING SPECIFICATION
 //
@@ -358,7 +359,6 @@ describe('Inferring numbers with units', () => {
   //
   // The reason we can't do this one, is because we cant pass the option.
   // `doNotTryExpressionNumbersParse`, which skips the attempt at parsing.
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('fails to parse large number with unit in time', async () => {
     await expect(
       inferType(computer, '6022520000000000000000000000000000000000 atoms')

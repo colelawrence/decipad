@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { schema } from './schema';
 
 describe('schema generator', () => {
@@ -173,7 +174,7 @@ describe('schema generator', () => {
           type: 'table-caption';
           children: [TableVariableNameElement, ...TableColumnFormulaElement[]];
         }
-        
+
 
       type Number =
         | {
@@ -225,7 +226,7 @@ describe('schema generator', () => {
           type: 'tr';
           children: TableHeaderElement[];
         }
-        
+
 
       interface TableCellElement {
           id: string;

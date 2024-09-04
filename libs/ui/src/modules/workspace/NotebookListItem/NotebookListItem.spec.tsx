@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { UserIconKey } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
 import { ToastDisplay } from 'libs/ui/src/shared';

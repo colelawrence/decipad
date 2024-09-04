@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { RuntimeError } from '@decipad/language';
@@ -17,8 +18,8 @@ it('creates a result from an error', () => {
   expect(
     resultFromError(new RuntimeError('Message!'), 'blockid', realm).result.type
   ).toMatchInlineSnapshot(`
-    Object {
-      "errorCause": Object {
+    {
+      "errorCause": {
         "errType": "free-form",
         "message": "Message!",
       },
@@ -30,8 +31,8 @@ it('creates a result from an error', () => {
   expect(
     resultFromError(new Error('panic: Message!'), 'blockid', realm).result.type
   ).toMatchInlineSnapshot(`
-    Object {
-      "errorCause": Object {
+    {
+      "errorCause": {
         "errType": "free-form",
         "message": "Internal Error: Message!. Please contact support",
       },
@@ -59,7 +60,7 @@ const testCompute = async (program: AST.Block[]) =>
 
 it('infers+evaluates a deep program', async () => {
   expect(await testCompute(deeperProgram)).toMatchInlineSnapshot(`
-    Array [
+    [
       "block-0 -> 1",
       "block-1 -> 123",
       "block-2 -> 2",
@@ -73,11 +74,11 @@ it('infers+evaluates a deep program', async () => {
 
 it('returns type errors', async () => {
   expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
-    Array [
+    [
       "block-0 -> 1",
-      "block-1 -> Error in operation \\"+\\" (number, string): The function + cannot be called with (number, string)",
+      "block-1 -> Error in operation "+" (number, string): The function + cannot be called with (number, string)",
       "block-2 -> 2",
-      "block-3 -> Error in operation \\"+\\" (number, string): The function + cannot be called with (number, string)",
+      "block-3 -> Error in operation "+" (number, string): The function + cannot be called with (number, string)",
     ]
   `);
 });

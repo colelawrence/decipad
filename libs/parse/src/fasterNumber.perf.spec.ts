@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { fasterNumber } from './fasterNumber';
 

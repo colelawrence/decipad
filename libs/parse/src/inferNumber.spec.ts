@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer, getExprRef } from '@decipad/computer';
 import { inferNumber } from './inferNumber';

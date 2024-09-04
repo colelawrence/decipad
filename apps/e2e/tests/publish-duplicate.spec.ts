@@ -439,7 +439,6 @@ test('duplicate in workspace with multiple workspaces', async ({
   });
 
   await test.step('check new notebook date', async () => {
-    await randomFreeUser.workspace.ellipsisSelector(0);
     const currentDate = new Date();
     const day = currentDate.getDate();
     const month = currentDate.toLocaleString('default', { month: 'short' });
@@ -880,7 +879,7 @@ test('basic publishing analytics test @publishing-v2', async ({
   });
 
   await unregisteredUser.page.goto(notebookURL);
-  await unregisteredUser.notebook.waitForEditorToLoad;
+  await unregisteredUser.notebook.waitForEditorToLoad();
   await expect(
     testUser.page.getByText('testing publishing analytics')
   ).toBeVisible();
@@ -921,7 +920,7 @@ test('basic private publishing analytics test @publishing-v2', async ({
 
   await test.step('check private link as a reader', async () => {
     await unregisteredUser.page.goto(notebookURL);
-    await unregisteredUser.notebook.waitForEditorToLoad;
+    await unregisteredUser.notebook.waitForEditorToLoad();
     await expect(
       testUser.page.getByText('testing publishing analytics')
     ).toBeVisible();
@@ -968,7 +967,7 @@ test('basic private publishing analytics test @publishing-v2', async ({
     expect(clipboardText).toContain('?alias');
 
     await unregisteredUser.page.goto(clipboardText);
-    await unregisteredUser.notebook.waitForEditorToLoad;
+    await unregisteredUser.notebook.waitForEditorToLoad();
     await expect(
       unregisteredUser.page.getByText('testing publishing analytics'),
       'private link didnt load'

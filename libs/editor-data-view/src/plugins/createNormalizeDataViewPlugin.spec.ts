@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import type { DataViewElement, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,

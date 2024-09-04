@@ -1,5 +1,6 @@
 import { ScopedRealm, makeInferContext } from '../scopedRealm';
 import { CURRENT_COLUMN_SYMBOL, mapWithPrevious } from './previous';
+import { test, expect, describe, beforeAll } from 'vitest';
 
 describe('mapWithPrevious', () => {
   const rows = [1, 2, 4];
@@ -29,17 +30,17 @@ describe('mapWithPrevious', () => {
 
   test('accumulator should work', () => {
     expect(rollySum).toMatchInlineSnapshot(`
-          Array [
-            1,
-            3,
-            7,
-          ]
-      `);
+      [
+        1,
+        3,
+        7,
+      ]
+    `);
   });
 
   test('list of previous values is correct', () => {
     expect(foundPrevious).toMatchInlineSnapshot(`
-      Array [
+      [
         null,
         1,
         3,

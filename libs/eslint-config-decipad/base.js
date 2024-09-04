@@ -1,9 +1,4 @@
-const {
-  defaults: { testMatch },
-  // eslint-disable-next-line import/no-extraneous-dependencies
-} = require('jest-config');
-
-const testFiles = [...testMatch, '**/*{{t,T}est,{s,S}pec}*.{js,jsx,ts,tsx}'];
+const testFiles = ['**/*{{t,T}est,{s,S}pec}*.{js,jsx,ts,tsx}'];
 
 module.exports = {
   ignorePatterns: ['**/*'],
@@ -22,8 +17,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'eslint-config-airbnb-base',
-    'plugin:jest/recommended',
-    'plugin:playwright/jest-playwright',
     'plugin:tailwindcss/recommended',
     'eslint-config-prettier',
     'plugin:prettier/recommended',

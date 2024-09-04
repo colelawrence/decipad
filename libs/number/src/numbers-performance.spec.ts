@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import type { DeciNumber as TDeciNumber } from './types';
 import { DeciNumber, N } from './DeciNumber';
 
@@ -6,7 +7,6 @@ const OPS = ['add', 'sub', 'div', 'mul', 'mod', 'pow'] as const;
 type OpName = typeof OPS[number];
 
 const CI_SUCKINESS_FACTOR = 5;
-const RETRIES = 5;
 const MIN_ROWS_PER_SEC = 1_000 / (process.env.CI ? CI_SUCKINESS_FACTOR : 1);
 const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
   Object.fromEntries(
@@ -21,12 +21,7 @@ const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
 const randomNumber = (max = 100_000) => BigInt(Math.floor(Math.random() * max));
 const randomDeciNumber = () => N(randomNumber(), randomNumber());
 
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('numbers performance', () => {
-  beforeAll(() => {
-    jest.retryTimes(RETRIES);
-  });
-
   it.each(OPS)('performs', async (operator: OpName) => {
     const run = () => {
       const columns = [0, 1].map(() =>

@@ -1,10 +1,10 @@
+import { beforeEach, vi, expect, describe, it } from 'vitest';
 import { createEditor } from 'slate';
 import { normalizeCurried } from './normalizeNode';
 import { normalizers } from './plugins';
 import { ELEMENT_H1 } from '@udecode/plate-heading';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import type { TEditor } from '@udecode/plate-common';
-import { vi, it, expect, describe, beforeEach } from 'vitest';
 import {
   DataTabElement,
   ELEMENT_DATA_TAB,

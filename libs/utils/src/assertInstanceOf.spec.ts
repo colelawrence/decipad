@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { assertInstanceOf } from './assertInstanceOf';
 
 class TestClass {}

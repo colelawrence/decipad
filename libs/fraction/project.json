@@ -18,10 +18,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/fraction"],
       "options": {
-        "jestConfig": "libs/fraction/jest.config.js"
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/fraction"
       }
     },
     "depcheck": {

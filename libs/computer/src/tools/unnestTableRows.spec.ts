@@ -1,3 +1,4 @@
+import { expect, describe, it, beforeEach } from 'vitest';
 import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildResult } from '@decipad/language';
@@ -33,10 +34,10 @@ describe('unnestTableRows', () => {
 
     expect([...(await all(unnestTableRows(explanation, result)))])
       .toMatchInlineSnapshot(`
-          Array [
-            Object {
-              "labelInfo": Array [
-                Object {
+          [
+            {
+              "labelInfo": [
+                {
                   "indexAtThisDimension": 0,
                   "indexName": "Table",
                   "indexesOfRemainingLengthsAreZero": true,
@@ -45,8 +46,8 @@ describe('unnestTableRows', () => {
                   "productOfRemainingLengths": 1,
                 },
               ],
-              "result": Object {
-                "type": Object {
+              "result": {
+                "type": {
                   "kind": "number",
                   "unit": null,
                 },
@@ -58,9 +59,9 @@ describe('unnestTableRows', () => {
                 },
               },
             },
-            Object {
-              "labelInfo": Array [
-                Object {
+            {
+              "labelInfo": [
+                {
                   "indexAtThisDimension": 1,
                   "indexName": "Table",
                   "indexesOfRemainingLengthsAreZero": true,
@@ -69,8 +70,8 @@ describe('unnestTableRows', () => {
                   "productOfRemainingLengths": 1,
                 },
               ],
-              "result": Object {
-                "type": Object {
+              "result": {
+                "type": {
                   "kind": "number",
                   "unit": null,
                 },
@@ -107,10 +108,10 @@ describe('unnestTableRows', () => {
 
     expect([...(await all(unnestTableRows(explanation, result)))])
       .toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "labelInfo": Array [
-            Object {
+      [
+        {
+          "labelInfo": [
+            {
               "indexAtThisDimension": 0,
               "indexName": "Table",
               "indexesOfRemainingLengthsAreZero": true,
@@ -119,8 +120,8 @@ describe('unnestTableRows', () => {
               "productOfRemainingLengths": 1,
             },
           ],
-          "result": Object {
-            "type": Object {
+          "result": {
+            "type": {
               "kind": "number",
               "unit": null,
             },
@@ -132,9 +133,9 @@ describe('unnestTableRows', () => {
             },
           },
         },
-        Object {
-          "labelInfo": Array [
-            Object {
+        {
+          "labelInfo": [
+            {
               "indexAtThisDimension": 1,
               "indexName": "Table",
               "indexesOfRemainingLengthsAreZero": true,
@@ -143,8 +144,8 @@ describe('unnestTableRows', () => {
               "productOfRemainingLengths": 1,
             },
           ],
-          "result": Object {
-            "type": Object {
+          "result": {
+            "type": {
               "kind": "number",
               "unit": null,
             },
@@ -177,19 +178,19 @@ describe('unnestTableRows', () => {
         ?.result as Result.Result<'column'>;
       expect(await computer.explainDimensions$.get(result))
         .toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "dimensionLength": 2,
             "indexedBy": undefined,
-            "labels": Array [
+            "labels": [
               "100",
               "200",
             ],
           },
-          Object {
+          {
             "dimensionLength": 3,
             "indexedBy": "Table",
-            "labels": Array [
+            "labels": [
               "10",
               "20",
               "30",
@@ -264,20 +265,20 @@ describe('unnestTableRows', () => {
     );
 
     expect(explanation).toMatchInlineSnapshot(`
-          Array [
-            Object {
+          [
+            {
               "dimensionLength": 3,
               "indexedBy": "Table1",
-              "labels": Array [
+              "labels": [
                 "a",
                 "b",
                 "c",
               ],
             },
-            Object {
+            {
               "dimensionLength": 3,
               "indexedBy": "Table2",
-              "labels": Array [
+              "labels": [
                 "d",
                 "e",
                 "f",
@@ -310,20 +311,20 @@ describe('unnestTableRows', () => {
     );
 
     expect(explanation).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "dimensionLength": 3,
           "indexedBy": "Table2",
-          "labels": Array [
+          "labels": [
             "d",
             "e",
             "f",
           ],
         },
-        Object {
+        {
           "dimensionLength": 3,
           "indexedBy": "Table1",
-          "labels": Array [
+          "labels": [
             "a",
             "b",
             "c",

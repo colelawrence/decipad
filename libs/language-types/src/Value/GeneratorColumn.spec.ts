@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { GeneratorColumn } from './GeneratorColumn';
 import { N } from '@decipad/number';
 import { materializeOneResult } from '../utils';
@@ -17,12 +18,12 @@ describe('GeneratorColumn', () => {
     );
     expect(
       await materializeOneResult(await column.getData())
-    ).toMatchInlineSnapshot(`Array []`);
+    ).toMatchInlineSnapshot(`[]`);
 
     // again
     expect(
       await materializeOneResult(await column.getData())
-    ).toMatchInlineSnapshot(`Array []`);
+    ).toMatchInlineSnapshot(`[]`);
   });
 
   it('can be materialized', async () => {
@@ -36,7 +37,7 @@ describe('GeneratorColumn', () => {
       'test'
     );
     expect(await materializeOneResult(column.getData())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -54,7 +55,7 @@ describe('GeneratorColumn', () => {
 
     // again
     expect(await materializeOneResult(column.getData())).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

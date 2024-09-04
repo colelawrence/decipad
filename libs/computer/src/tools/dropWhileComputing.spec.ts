@@ -1,3 +1,4 @@
+import { expect, it, vi } from 'vitest';
 import { Subject } from 'rxjs';
 import { dropWhileComputing } from './dropWhileComputing';
 import { timeout } from '@decipad/utils';
@@ -18,7 +19,7 @@ it('drops inputs while computing', async () => {
     )
     .subscribe((out) => outputs.push(out));
 
-  expect(outputs).toMatchInlineSnapshot(`Array []`);
+  expect(outputs).toMatchInlineSnapshot(`[]`);
 
   inputs.next('computed');
   inputs.next('dropped');
@@ -32,7 +33,7 @@ it('drops inputs while computing', async () => {
   await Promise.resolve(); // 'computed'
 
   expect(outputs).toMatchInlineSnapshot(`
-  Array [
+  [
     "input was: computed",
   ]
   `);
@@ -41,7 +42,7 @@ it('drops inputs while computing', async () => {
   await Promise.resolve(); // 'dropped but computed after'
 
   expect(outputs).toMatchInlineSnapshot(`
-    Array [
+    [
       "input was: computed",
       "input was: dropped but computed after",
     ]
@@ -57,7 +58,7 @@ it('drops inputs while computing', async () => {
   expect(pending).toBe(0);
 
   expect(outputs).toMatchInlineSnapshot(`
-    Array [
+    [
       "input was: computed",
       "input was: dropped but computed after",
       "input was: computed",
@@ -69,8 +70,8 @@ it('propagates errors and completion', async () => {
   const inputs = new Subject<string>();
   let pending: number | undefined;
 
-  const error = jest.fn();
-  const next = jest.fn();
+  const error = vi.fn();
+  const next = vi.fn();
 
   inputs
     .pipe(

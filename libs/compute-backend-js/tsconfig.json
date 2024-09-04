@@ -14,13 +14,10 @@
       "path": "../number"
     },
     {
-      "path": "../remote-computer"
-    },
-    {
-      "path": "../number"
-    },
-    {
       "path": "../language-interfaces"
+    },
+    {
+      "path": "../language-types"
     }
   ]
 }

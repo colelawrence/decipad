@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { columnNameFromIndex } from './columnNameFromIndex';
 
 it('starts on A', () => {

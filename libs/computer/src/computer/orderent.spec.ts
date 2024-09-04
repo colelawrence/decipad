@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import permutations from 'just-permutations';
 import type { ComputeDeltaRequest } from '@decipad/computer-interfaces';
 import { simplifyComputeResponse, getIdentifiedBlocks } from '../testUtils';
@@ -34,7 +35,7 @@ describe('computer is independent of block-order', () => {
         // eslint-disable-next-line no-await-in-loop
         (await computeOnTestComputer({ program: { upsert: program } })).sort()
       ).toMatchInlineSnapshot(`
-        Array [
+        [
           "block-0 -> 130000",
           "block-1 -> 2500",
           "block-2 -> 0.05",

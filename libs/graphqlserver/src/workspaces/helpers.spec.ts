@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { maybeThrowForbidden } from './helpers';
 
 it('doesnt throw if is internal email', () => {

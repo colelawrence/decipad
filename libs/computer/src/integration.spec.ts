@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getDefined } from '@decipad/utils';
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
@@ -18,7 +19,7 @@ describe('cache', () => {
         (r) => r.type === 'computer-result' && r.epoch
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         1n,
         1n,
         1n,
@@ -37,7 +38,7 @@ describe('cache', () => {
         (r) => r.type === 'computer-result' && r.epoch
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         1n,
         1n,
         1n,
@@ -52,7 +53,7 @@ describe('cache', () => {
         (r) => r.type === 'computer-result' && r.epoch
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         1n,
         1n,
         2n,
@@ -68,7 +69,7 @@ describe('cache', () => {
         (r) => r.type === 'computer-result' && r.epoch
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         3n,
         1n,
         3n,
@@ -91,7 +92,7 @@ describe('first works', () => {
       await computer.computeDeltaRequest({ program: { upsert: program } })
     );
     expect(Object.keys(results.blockResults)).toMatchInlineSnapshot(`
-      Array [
+      [
         "block-0",
         "block-1",
         "block-1_0",
@@ -195,10 +196,10 @@ describe('meta labels', () => {
       matResults.map(async (r) => r.meta?.()?.labels)
     );
     expect(labels).toMatchInlineSnapshot(`
-      Array [
+      [
         undefined,
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -211,8 +212,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -225,8 +226,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -239,8 +240,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -253,8 +254,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -267,8 +268,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -311,10 +312,10 @@ describe('meta labels', () => {
       matResults.map(async (r) => r.meta?.()?.labels)
     );
     expect(labels).toMatchInlineSnapshot(`
-      Array [
+      [
         undefined,
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -327,8 +328,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -341,8 +342,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -355,8 +356,8 @@ describe('meta labels', () => {
             "10",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "100",
             "101",
             "102",
@@ -370,8 +371,8 @@ describe('meta labels', () => {
             "110",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "100",
             "101",
             "102",
@@ -385,8 +386,8 @@ describe('meta labels', () => {
             "110",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "100",
             "101",
             "102",
@@ -400,8 +401,8 @@ describe('meta labels', () => {
             "110",
           ],
         ],
-        Array [
-          Array [
+        [
+          [
             "1",
             "2",
             "3",
@@ -413,7 +414,7 @@ describe('meta labels', () => {
             "9",
             "10",
           ],
-          Array [
+          [
             "100",
             "101",
             "102",

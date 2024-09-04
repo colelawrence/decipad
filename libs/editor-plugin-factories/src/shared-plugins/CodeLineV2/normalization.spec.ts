@@ -1,4 +1,4 @@
-import { vi, beforeEach, it, expect } from 'vitest';
+import { vi, beforeEach, expect, describe, it } from 'vitest';
 import type { CodeLineElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
@@ -291,7 +291,7 @@ describe('in a code line', () => {
   });
 
   describe('when code line has {}', () => {
-    it('should not insert "\n  " after {', () => {
+    it('should not insert newline after {', () => {
       editor.children = [codeLine('a', '{}')];
 
       normalizeEditor(editor, { force: true });

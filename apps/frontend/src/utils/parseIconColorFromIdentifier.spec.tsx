@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { swatchNames } from 'libs/ui/src/utils';
 import { parseIconColorFromIdentifier } from './parseIconColorFromIdentifier';
 import { userIconKeys } from '@decipad/editor-types';

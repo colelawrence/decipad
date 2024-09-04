@@ -1,10 +1,11 @@
+import { it, expect, beforeEach, vi } from 'vitest';
 import { memoizePrimitive } from './memoizePrimitive';
 
-const memoized = jest.fn((obj: number) => 100 + obj);
+const memoized = vi.fn((obj: number) => 100 + obj);
 const fn = memoizePrimitive(memoized);
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 it('one call if same thing is passed', () => {

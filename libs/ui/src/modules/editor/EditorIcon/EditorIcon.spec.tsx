@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { EditorIcon } from './EditorIcon';

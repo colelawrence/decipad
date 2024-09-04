@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { min, F } from '.';
 
 test('min', () => {

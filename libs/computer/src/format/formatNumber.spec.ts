@@ -1,3 +1,4 @@
+import { test, expect, describe, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { parseUnit, CurrencyUnits } from '@decipad/language';
 import { N } from '@decipad/number';
@@ -510,31 +511,31 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈0 kilometers');
 
         expect(formatNumber(locale, unit, value)).toMatchInlineSnapshot(`
-          Object {
+          {
             "asString": "≈0 kilometers",
             "asStringPrecise": "0.001",
-            "formatOptions": Object {
+            "formatOptions": {
               "financialString": "0.00",
               "preciseString": "0.001",
               "scientificString": "1×10⁻³",
             },
             "isPrecise": false,
-            "partsOf": Array [
-              Object {
+            "partsOf": [
+              {
                 "type": "roughly",
                 "value": "≈",
               },
-              Object {
+              {
                 "type": "integer",
                 "value": "0",
               },
-              Object {
-                "partsOf": Array [
-                  Object {
+              {
+                "partsOf": [
+                  {
                     "type": "unit-prefix",
                     "value": "kilo",
                   },
-                  Object {
+                  {
                     "base": "length",
                     "type": "unit",
                     "value": "meters",
@@ -1492,31 +1493,31 @@ describe('formatNumber', () => {
           F(100000000000000000000000000000000000n)
         );
         expect(partsOf).toMatchInlineSnapshot(`
-          Array [
-            Object {
+          [
+            {
               "type": "integer",
               "value": "100000000000000000000000000000000000",
             },
-            Object {
-              "partsOf": Array [
-                Object {
+            {
+              "partsOf": [
+                {
                   "base": "length",
                   "type": "unit",
                   "value": "meters",
                 },
-                Object {
+                {
                   "type": "unit-literal",
                   "value": " ",
                 },
-                Object {
+                {
                   "type": "unit-group",
                   "value": "per",
                 },
-                Object {
+                {
                   "type": "unit-literal",
                   "value": " ",
                 },
-                Object {
+                {
                   "base": "second",
                   "type": "unit",
                   "value": "second",
@@ -1611,16 +1612,16 @@ describe('formatNumber', () => {
       it('[fr] 100,000 eur = 100 k €', () => {
         const [nr, unit] = makeFractionUnitTuple(F(100000), 'eur');
         const { asString } = formatNumber('fr-FR', unit, nr);
-        expect((asString || '').replace(/\s/g, ' ')).toEqual(
-          '100 k €'.replace(/\s/g, ' ')
+        expect((asString || '').replace(/s/g, ' ')).toEqual(
+          '100 k €'.replace(/s/g, ' ')
         );
       });
 
       it('[de] 100,000 eur = 100.000 €', () => {
         const [nr, unit] = makeFractionUnitTuple(F(100000), 'eur');
         const { asString } = formatNumber('de-DE', unit, nr);
-        expect((asString || '').replace(/\s/g, ' ')).toEqual(
-          '100.000 €'.replace(/\s/g, ' ')
+        expect((asString || '').replace(/s/g, ' ')).toEqual(
+          '100.000 €'.replace(/s/g, ' ')
         );
       });
 

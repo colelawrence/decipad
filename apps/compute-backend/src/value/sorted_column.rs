@@ -18,7 +18,7 @@ pub struct SortedColumn {
 }
 
 impl SortedColumn {
-    fn sort_and_save(&mut self) {
+    pub fn sort_and_save(&mut self) {
         let binding = self.column.clone();
 
         let mut cloned_column: Vec<(usize, &DeciResult)> =
@@ -62,6 +62,21 @@ impl SortedColumn {
             column,
             sorted_column: None,
             sort_map: None,
+        }
+    }
+
+    pub fn median(&self) -> DeciResult {
+        match &self.sorted_column {
+            Some(item) => {
+                let col = item.as_column();
+                let l = item.len();
+                if l % 2 == 0 {
+                    (col[l / 2].clone() + col[(l - 2) / 2].clone()) * DeciResult::Fraction(1, 2)
+                } else {
+                    col[(l - 1) / 2].clone()
+                }
+            }
+            None => DeciResult::String("You must sort_and_save() first".to_string()),
         }
     }
 }

@@ -21,10 +21,11 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/libs/slate-yjs"],
       "options": {
-        "jestConfig": "libs/slate-yjs/jest.config.js"
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
+        "cwd": "libs/slate-yjs"
       }
     },
     "depcheck": {

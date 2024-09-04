@@ -1,12 +1,7 @@
-/* eslint-disable camelcase */
-/* eslint-env jest */
-import { describe } from 'vitest';
-import waitForExpect from 'wait-for-expect';
+import { vi, expect, describe } from 'vitest';
 import arc from '@architect/functions';
 import type { User } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-
-waitForExpect.defaults.interval = 250;
 
 type UserKeyValidation = {
   id: string;
@@ -38,9 +33,8 @@ describe.sequential('registration via magic link', () => {
     });
 
     // TODO: enable this and enable user key validation emails
-    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('a user key validation request was created', async () => {
-      await waitForExpect(async () => {
+      await vi.waitFor(async () => {
         const data = await arc.tables();
         const userKeys = (
           await data.userkeys.query({

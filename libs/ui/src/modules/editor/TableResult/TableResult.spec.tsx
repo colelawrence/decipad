@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import {
   act,

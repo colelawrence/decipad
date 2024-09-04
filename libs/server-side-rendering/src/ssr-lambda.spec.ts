@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // to run this test you need to
 // yarn build:backend:ssr
+import { it, beforeAll, expect } from 'vitest';
 import type { AuthReturnValue } from '@decipad/backend-test-sandbox';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import type { Pad } from '@decipad/backendtypes';

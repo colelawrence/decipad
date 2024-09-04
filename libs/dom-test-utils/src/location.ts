@@ -1,17 +1,13 @@
-interface LocationMocks {
-  mockGetLocation: jest.MockedFunction<() => URL>;
-  mockSetLocation: jest.MockedFunction<(_newLocation: string) => void>;
-  mockAssign: jest.MockedFunction<typeof globalThis.location.assign>;
-  mockReload: jest.MockedFunction<typeof globalThis.location.reload>;
-}
+import { beforeEach, afterEach, vi } from 'vitest';
+
 export const mockLocation = (
   initialUrl = 'http://localhost/page?search#hash'
-): LocationMocks => {
+) => {
   const originalLocation = globalThis.location;
-  const mockGetLocation: LocationMocks['mockGetLocation'] = jest.fn();
-  const mockSetLocation: LocationMocks['mockSetLocation'] = jest.fn();
-  const mockAssign: LocationMocks['mockAssign'] = jest.fn();
-  const mockReload: LocationMocks['mockReload'] = jest.fn();
+  const mockGetLocation = vi.fn();
+  const mockSetLocation = vi.fn();
+  const mockAssign = vi.fn();
+  const mockReload = vi.fn();
 
   beforeEach(() => {
     mockGetLocation.mockReset().mockReturnValue(new URL(initialUrl));

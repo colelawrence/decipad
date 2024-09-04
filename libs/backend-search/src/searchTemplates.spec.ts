@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-standalone-expect */
+import { beforeAll, expect, it } from 'vitest';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { searchTemplates } from './searchTemplates';
 import template from './__fixtures__/candle-business.json';

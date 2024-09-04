@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { type AST, prettyPrintAST } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { unitToAST } from './unitToAST';

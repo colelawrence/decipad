@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { getAllByRole, render, screen } from '@testing-library/react';
 import { UnorderedList } from './UnorderedList';
 

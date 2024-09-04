@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { getSmartRef, getStructuredCalc } from './test_utils';
 import utils from './structured_utils';
 

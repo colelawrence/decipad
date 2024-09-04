@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { createMyPlateEditor } from '@decipad/editor-types';
 import { select } from '@udecode/plate-common';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';

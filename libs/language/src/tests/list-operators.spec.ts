@@ -1,10 +1,11 @@
+import { expect, describe, it } from 'vitest';
 import { runCode } from '../run';
 
 describe('list operators', () => {
   it('concatenates lists', async () => {
     expect(await runCode('cat([1, 2], [3, 4])')).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
@@ -70,7 +71,7 @@ describe('list operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -102,7 +103,7 @@ describe('list operators', () => {
 
   it('calculates columns lengths', async () => {
     expect(await runCode('len([1, 2, 3])')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -148,7 +149,7 @@ describe('list operators', () => {
 
   it('retrieves the first element of a list', async () => {
     expect(await runCode('first([1, 2, 3] meters)')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -179,8 +180,8 @@ describe('list operators', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "length",
               "baseSuperQuantity": "length",
               "exp": DeciNumber {
@@ -213,7 +214,7 @@ describe('list operators', () => {
 
   it('retrieves the last element of a list', async () => {
     expect(await runCode('last([1, 2, 3] meters)')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -244,8 +245,8 @@ describe('list operators', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "length",
               "baseSuperQuantity": "length",
               "exp": DeciNumber {
@@ -279,7 +280,7 @@ describe('list operators', () => {
   it('countif: counts the true elements in a list', async () => {
     expect(await runCode('countif([true, false, true])'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -325,8 +326,8 @@ describe('list operators', () => {
 
   it('sorts a list', async () => {
     expect(await runCode('sort([2, -1, 11])')).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -392,7 +393,7 @@ describe('list operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -418,8 +419,8 @@ describe('list operators', () => {
 
   it('uniques list', async () => {
     expect(await runCode('unique([1, 3, 2, 1, 3, 4])')).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -485,7 +486,7 @@ describe('list operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -517,8 +518,8 @@ describe('list operators', () => {
 
   it('reverses a list', async () => {
     expect(await runCode('reverse([3, 2, 1])')).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -584,7 +585,7 @@ describe('list operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -615,19 +616,19 @@ describe('list operators', () => {
         reverse(Table)
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": Promise {},
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "B",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -719,8 +720,8 @@ describe('list operators', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -740,7 +741,7 @@ describe('list operators', () => {
               "s": 1n,
             },
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,

@@ -1,3 +1,4 @@
+import { test, expect, describe, it } from 'vitest';
 import { N, fromNumber, setupDeciNumberSnapshotSerializer } from '.';
 
 setupDeciNumberSnapshotSerializer();
@@ -1186,7 +1187,7 @@ describe('Deci number', () => {
 
   test('toLatex', () => {
     expect(fromNumber(-10, 15).toLatex()).toMatchInlineSnapshot(
-      `"-\\\\frac{2}{3}"`
+      `"-\\frac{2}{3}"`
     );
     expect(fromNumber(undefined).toLatex()).toMatchInlineSnapshot(`"—"`);
     expect(fromNumber(Infinity).toLatex()).toMatchInlineSnapshot(`"∞"`);
@@ -1202,23 +1203,21 @@ describe('Deci number', () => {
 
   test('toContinued', () => {
     expect(fromNumber(-10, 15).toContinued()).toMatchInlineSnapshot(`
-        Array [
+        [
           0n,
           1n,
           2n,
         ]
       `);
-    expect(fromNumber(undefined).toContinued()).toMatchInlineSnapshot(
-      `Array []`
-    );
+    expect(fromNumber(undefined).toContinued()).toMatchInlineSnapshot(`[]`);
     expect(fromNumber(Infinity).toContinued()).toMatchInlineSnapshot(`
-        Array [
+        [
           Infinity,
           1,
         ]
       `);
     expect(fromNumber(-Infinity).toContinued()).toMatchInlineSnapshot(`
-        Array [
+        [
           -Infinity,
           1,
         ]

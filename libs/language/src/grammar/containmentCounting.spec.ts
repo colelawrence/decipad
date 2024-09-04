@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { tokenize, BracketCounter } from './tokenizer'; // avoid import cycle
 
 const runBracketCounter = (source: string) => {

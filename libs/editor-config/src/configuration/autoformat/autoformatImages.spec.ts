@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { Image } from '@decipad/editor-components';
 import {
   createMyAutoformatPlugin,
@@ -89,12 +90,12 @@ describe('autoformatting images from markdown', () => {
   });
 
   it('can handle line breaks', () => {
-    editor.insertText('a\nb![c d](e');
+    editor.insertText('anb![c d](e');
     editor.insertText(')');
     expect(editor.children).toMatchObject([
       {
         type: ELEMENT_PARAGRAPH,
-        children: [{ text: 'a\nb' }],
+        children: [{ text: 'anb' }],
       },
       {
         type: ELEMENT_IMAGE,

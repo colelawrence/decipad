@@ -1,25 +1,31 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DeciNumberBase } from '@decipad/number';
 import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
 import { getDefined, produce, getInstanceof } from '@decipad/utils';
-import { sort } from '@decipad/column';
 // eslint-disable-next-line no-restricted-imports
 import {
   InferError,
   RuntimeError,
   Type,
   Value,
-  compare,
   buildType as t,
+  serializeType,
+  resultToValue,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
-import { type BuiltinSpec, type Functor } from '../types';
+import { FullBuiltinSpec, type BuiltinSpec, type Functor } from '../types';
 import { coerceToFraction } from '../utils/coerceToFraction';
 import { binopFunctor } from '../utils/binopFunctor';
 import { add } from './add';
 import { subtract } from './subtract';
 import { mult } from './mult';
 import { div } from './div';
+import {
+  computeBackendSingleton,
+  serializeResult,
+  deserializeResult,
+} from '@decipad/compute-backend-js';
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
@@ -55,48 +61,41 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
 
 const firstArgumentReducedFunctor = async ([t]: Type[]) => t.reduced();
 
-const max = async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
-  let max: ValueTypes.Value | undefined;
-  if (!Value.isColumnLike(value)) {
-    return Promise.resolve(value);
-  }
+const max: FullBuiltinSpec['fnValues'] = async (
+  [value],
+  [valueType]
+): Promise<ValueTypes.Value> => {
+  const column = Value.getColumnLike(value);
 
-  for await (const val of value.values()) {
-    if (max) {
-      if (compare(val, max) > 0) {
-        max = val;
-      }
-    } else {
-      max = val;
-    }
-  }
-  if (max == null) {
-    throw new RuntimeError('max: no elements');
-  }
-  return max;
+  const col = await serializeResult({
+    type: serializeType(valueType),
+    value: await column.getData(),
+  });
+
+  const max =
+    computeBackendSingleton.computeBackend.max_result_fraction_column(col);
+
+  return resultToValue(deserializeResult(max as any));
 };
 
-const min = async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
-  let min: ValueTypes.Value | undefined;
-  if (!Value.isColumnLike(value)) {
-    return Promise.resolve(value);
-  }
-  for await (const val of value.values()) {
-    if (min) {
-      if (compare(val, min) < 0) {
-        min = val;
-      }
-    } else {
-      min = val;
-    }
-  }
-  if (min == null) {
-    throw new RuntimeError('min: no elements');
-  }
-  return min;
+const min: FullBuiltinSpec['fnValues'] = async (
+  [value],
+  [valueType]
+): Promise<ValueTypes.Value> => {
+  const column = Value.getColumnLike(value);
+
+  const col = await serializeResult({
+    type: serializeType(valueType),
+    value: await column.getData(),
+  });
+
+  const min =
+    computeBackendSingleton.computeBackend.min_result_fraction_column(col);
+
+  return resultToValue(deserializeResult(min as any));
 };
 
-const average = async ([
+const average: FullBuiltinSpec['fnValues'] = async ([
   value,
 ]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
   let acc = ZERO;
@@ -111,42 +110,35 @@ const average = async ([
   return Value.Scalar.fromValue(acc.div(N(count)));
 };
 
-const median = async (
-  [value]: ValueTypes.Value[],
-  [type]: Type[] = []
+const median: FullBuiltinSpec['fnValues'] = async (
+  [value],
+  [type]
 ): Promise<ValueTypes.Value> => {
-  if (!Value.isColumnLike(value)) {
-    return Promise.resolve(value);
-  }
+  const column = Value.getColumnLike(value);
 
-  const sortedValues = await sort(value, compare);
-  const length = await sortedValues.rowCount();
-  const rightCenterPos = Math.floor(length / 2);
-  const rightCenter = await getDefined(
-    await sortedValues.atIndex(rightCenterPos)
-  ).getData();
-  if (length % 2 === 1) {
-    return Value.fromJS(
-      rightCenter as Value.FromJSArg,
-      Value.defaultValue(type)
-    );
-  }
-  const leftCenter = coerceToFraction(
-    await getDefined(await sortedValues.atIndex(rightCenterPos - 1)).getData()
-  );
-  return Value.fromJS(
-    leftCenter.add(coerceToFraction(rightCenter)).div(TWO),
-    Value.defaultValue(type)
-  );
+  const col = await serializeResult({
+    type: serializeType(type),
+    value: await column.getData(),
+  });
+
+  const median =
+    computeBackendSingleton.computeBackend.median_result_fraction_column(col);
+
+  return resultToValue(deserializeResult(median as any));
 };
 
-const stddev = async ([
-  value,
-]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
+const stddev: FullBuiltinSpec['fnValues'] = async (
+  [value],
+  [valueType],
+  utils,
+  ast
+): Promise<ValueTypes.Value> => {
   if (!Value.isColumnLike(value)) {
     return Promise.resolve(Value.NumberValue.fromValue(ZERO));
   }
-  const mean = coerceToFraction(await (await average([value])).getData());
+  const mean = coerceToFraction(
+    await (await average([value], [valueType], utils, ast)).getData()
+  );
   let acc = ZERO;
   let count = 0;
   for await (const val of value.values()) {

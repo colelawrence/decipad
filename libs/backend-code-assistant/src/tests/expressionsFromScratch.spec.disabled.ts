@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import type { RootDocument } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer } from '@decipad/computer';

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { serializeResult } from '@decipad/computer-utils';
 import type { IdentifiedResult } from '@decipad/computer-interfaces';
 import { runCode } from '@decipad/remote-computer';

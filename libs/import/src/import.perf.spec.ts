@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, expect, describe, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer, materializeResult } from '@decipad/computer';
 import type { Server } from 'http';
@@ -35,7 +36,7 @@ describe('import performance', () => {
 
   afterAll(() => {
     return new Promise((resolve) => {
-      server.close(resolve);
+      server.close(() => resolve());
     });
   });
 

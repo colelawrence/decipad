@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { encodeDocumentIds } from './encodeDocumentIds';
 import notebook from './__fixtures__/notebook.json';
 import type { RootDocument } from '@decipad/editor-types';

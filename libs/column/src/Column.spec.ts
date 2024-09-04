@@ -1,3 +1,4 @@
+import { test, expect, describe } from 'vitest';
 import { Column } from './Column';
 import { materialize } from './materialize';
 

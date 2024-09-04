@@ -9,6 +9,7 @@ import {
   anyMappingToMap,
   identity,
 } from '@decipad/utils';
+import { parseBlockOrThrow } from './run';
 // eslint-disable-next-line no-restricted-imports
 import {
   Type,
@@ -26,12 +27,13 @@ import type {
   Unit as TUnit,
 } from '@decipad/language-interfaces';
 import type { TScopedRealm } from '.';
-import { ScopedRealm, makeInferContext, parseBlockOrThrow } from '.';
+import { ScopedRealm, makeInferContext } from '.';
 import { inferBlock, inferProgram } from './infer';
 import { getErrSpec } from './type/getErrorSpec';
 import type { FromJSArg } from '../../language-types/src/Value';
 import { fromJS, getColumnLike } from '../../language-types/src/Value';
 import { functionCallValue, run } from './interpreter';
+import { expect } from 'vitest';
 
 export const runAST = async (
   block: AST.Block,

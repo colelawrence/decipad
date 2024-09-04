@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { useState } from 'react';
 import { act, renderHook } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
@@ -26,7 +27,7 @@ describe('useSafeState', () => {
   it('updates the state when the component is mounted', async () => {
     const { result } = renderHook(useSafeState);
     const [, setState] = result.current;
-    await act(() => setState(42));
+    act(() => setState(42));
     const [state] = result.current;
     expect(state).toBe(42);
   });
@@ -36,7 +37,7 @@ describe('useSafeState', () => {
     const { result, unmount } = renderHook(useState);
     const [, setState] = result.current;
     unmount();
-    await act(() => setState(42));
+    act(() => setState(42));
     expect(mockedConsoleError).not.toHaveBeenCalled();
   });
 });
@@ -45,7 +46,7 @@ describe('useOverridableState', () => {
   it('updates the state', async () => {
     const { result } = renderHook(() => useOverridableState(5));
     const [, setState] = result.current;
-    await act(() => setState(42));
+    act(() => setState(42));
     const [state] = result.current;
     expect(state).toBe(42);
   });
@@ -55,7 +56,7 @@ describe('useOverridableState', () => {
       useOverridableState(initialState)
     );
     const [, setState] = result.current;
-    await act(() => setState(42));
+    act(() => setState(42));
     rerender(5);
     const [state] = result.current;
     expect(state).toBe(5);

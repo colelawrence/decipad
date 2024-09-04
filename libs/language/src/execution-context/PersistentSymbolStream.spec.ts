@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { BehaviorSubject } from 'rxjs';
 import type { SymbolStream } from './ExecutionContextType';
 import { PersistentSymbolStream } from './PersistentSymbolStream';

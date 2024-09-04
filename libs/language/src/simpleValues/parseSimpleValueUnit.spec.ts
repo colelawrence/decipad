@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { parseSimpleValueUnit } from './parseSimpleValueUnit';
 
 it('doesnt read numbers', () => {
@@ -10,16 +11,16 @@ it('gets a unit from user input', () => {
   expect(parseSimpleValueUnit('%')).toMatchInlineSnapshot(`"%"`);
 
   expect(parseSimpleValueUnit('meter')).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
+    {
+      "args": [
         "meter",
       ],
-      "end": Object {
+      "end": {
         "char": 4,
         "column": 5,
         "line": 1,
       },
-      "start": Object {
+      "start": {
         "char": 0,
         "column": 1,
         "line": 1,
@@ -29,60 +30,60 @@ it('gets a unit from user input', () => {
   `);
 
   expect(parseSimpleValueUnit('km/second**2')).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "args": Array [
+    {
+      "args": [
+        {
+          "args": [
             "/",
           ],
           "type": "funcref",
         },
-        Object {
-          "args": Array [
-            Object {
-              "args": Array [
+        {
+          "args": [
+            {
+              "args": [
                 "km",
               ],
-              "end": Object {
+              "end": {
                 "char": 1,
                 "column": 2,
                 "line": 1,
               },
-              "start": Object {
+              "start": {
                 "char": 0,
                 "column": 1,
                 "line": 1,
               },
               "type": "ref",
             },
-            Object {
-              "args": Array [
-                Object {
-                  "args": Array [
+            {
+              "args": [
+                {
+                  "args": [
                     "**",
                   ],
                   "type": "funcref",
                 },
-                Object {
-                  "args": Array [
-                    Object {
-                      "args": Array [
+                {
+                  "args": [
+                    {
+                      "args": [
                         "second",
                       ],
-                      "end": Object {
+                      "end": {
                         "char": 8,
                         "column": 9,
                         "line": 1,
                       },
-                      "start": Object {
+                      "start": {
                         "char": 3,
                         "column": 4,
                         "line": 1,
                       },
                       "type": "ref",
                     },
-                    Object {
-                      "args": Array [
+                    {
+                      "args": [
                         "number",
                         DeciNumber {
                           "d": 1n,
@@ -91,12 +92,12 @@ it('gets a unit from user input', () => {
                           "s": 1n,
                         },
                       ],
-                      "end": Object {
+                      "end": {
                         "char": 11,
                         "column": 12,
                         "line": 1,
                       },
-                      "start": Object {
+                      "start": {
                         "char": 11,
                         "column": 12,
                         "line": 1,

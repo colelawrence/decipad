@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { expect, it } from 'vitest';
 import { createDataTabEditor } from './dataTabEditor';
 import { ELEMENT_DATA_TAB_CHILDREN } from '@decipad/editor-types';
 

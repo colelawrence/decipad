@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import { normalizeEditor } from '@udecode/plate-common';
 import { createMyPlateEditor, ELEMENT_SLIDER } from '@decipad/editor-types';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';

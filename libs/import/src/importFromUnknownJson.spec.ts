@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer, materializeResult } from '@decipad/computer';
 import { importFromUnknownJson } from './importFromUnknownJson';
@@ -340,7 +341,6 @@ describe('Infers dates', () => {
 });
 
 // Will come back to this feature in a later PR.
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ignore columns specified in options', () => {
   it('ignores specific columns', async () => {
     const toIgnore = new Set<string>(['col1', 'col3']);

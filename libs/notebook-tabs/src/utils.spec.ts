@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,

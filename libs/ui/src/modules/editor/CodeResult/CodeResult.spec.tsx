@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { timeout } from '@decipad/utils';
 import { act, render } from '@testing-library/react';
 import { runCode } from '../../../test-utils';

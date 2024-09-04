@@ -18,7 +18,7 @@ describe('inlineChildToString', () => {
         ],
         id: '7caTq-8mKj1Fuoh1ggjTQ',
       })
-    ).toEqual('[link](https://google.com)');
+    ).toMatchInlineSnapshot(`"[link](https://google.com)"`);
   });
 });
 
@@ -228,7 +228,11 @@ describe('valueToMarkup', () => {
           },
         ],
       })
-    ).toEqual('```decilang\nx = 3 * 12\n```');
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      x = 3 * 12
+      \`\`\`"
+    `);
   });
 
   it('should serialise a table', () => {
@@ -461,14 +465,16 @@ describe('valueToMarkup', () => {
         version: 2,
         hideFormulas: false,
       })
-    ).toEqual(`\`\`\`decilang
-Table1 = {
-  Column1 = [$100, $200, $300]
-  Column2 = ["hello", "world", "1"]
-  Column3 = Column1 * 10%
-  Column4 = [true, false, false]
-}
-\`\`\``);
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      Table1 = {
+        Column1 = [$100, $200, $300]
+        Column2 = ["hello", "world", "1"]
+        Column3 = Column1 * 10%
+        Column4 = [true, false, false]
+      }
+      \`\`\`"
+    `);
   });
 
   it('should serialise variable declarations', () => {
@@ -497,7 +503,11 @@ Table1 = {
           },
         ],
       })
-    ).toEqual('```decilang\nVariable = 100$\n```');
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      Variable = 100$
+      \`\`\`"
+    `);
   });
 
   it('should serialise a string input', () => {
@@ -530,7 +540,11 @@ Table1 = {
           },
         ],
       } as any)
-    ).toEqual('```decilang\nhellothere = "Hello, world!"\n```');
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      hellothere = "Hello, world!"
+      \`\`\`"
+    `);
   });
 
   it('should serialise a number input', () => {
@@ -564,7 +578,11 @@ Table1 = {
           },
         ],
       } as any)
-    ).toEqual('```decilang\nhellothere = 100$\n```');
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      hellothere = 100$
+      \`\`\`"
+    `);
   });
 
   it('should serialise a slider', () => {
@@ -607,7 +625,11 @@ Table1 = {
           },
         ],
       } as any)
-    ).toEqual('```decilang\nSlider = 5\n```');
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      Slider = 5
+      \`\`\`"
+    `);
   });
 
   it('should serialise a dropdown', () => {
@@ -654,7 +676,11 @@ Table1 = {
           },
         ],
       } as any)
-    ).toEqual(`\`\`\`decilang\nDropdown = "First"\n\`\`\``);
+    ).toMatchInlineSnapshot(`
+      "\`\`\`decilang
+      Dropdown = "First"
+      \`\`\`"
+    `);
   });
 
   it('should serialise bullet points', () => {
@@ -894,14 +920,13 @@ Table1 = {
             italic: true,
           },
           {
-            text: '\nand multiple lines',
+            text: 'nand multiple lines',
           },
         ],
       })
-    ).toMatchInlineSnapshot(`
-      "> Here is a quote with *italics*
-      > and multiple lines"
-    `);
+    ).toMatchInlineSnapshot(
+      `"> Here is a quote with *italics*nand multiple lines"`
+    );
   });
 });
 
@@ -933,7 +958,7 @@ it('valuesToMarkdown', () => {
         type: 'code_line',
         children: [
           {
-            text: 'Table1 = {\n  col1 = [1,2]\n  col2 = col1 + 1\n}',
+            text: 'Table1 = {n  col1 = [1,2]n  col2 = col1 + 1n}',
           },
         ],
       },
@@ -1019,17 +1044,14 @@ it('valuesToMarkdown', () => {
      3 | First paragraph
      4 | 
      5 | \`\`\`decilang
-     6 | Table1 = {
-     7 |   col1 = [1,2]
-     8 |   col2 = col1 + 1
-     9 | }
-    10 | x = 50
-    11 | y = 100
-    12 | \`\`\`
-    13 | Second paragraph
-    14 | 
-    15 | \`\`\`decilang
-    16 | 100
-    17 | \`\`\`"
+     6 | Table1 = {n  col1 = [1,2]n  col2 = col1 + 1n}
+     7 | x = 50
+     8 | y = 100
+     9 | \`\`\`
+    10 | Second paragraph
+    11 | 
+    12 | \`\`\`decilang
+    13 | 100
+    14 | \`\`\`"
   `);
 });

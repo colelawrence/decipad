@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import { createMyPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from './normalizerPlugin';

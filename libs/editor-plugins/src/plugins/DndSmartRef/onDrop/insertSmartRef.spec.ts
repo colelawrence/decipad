@@ -1,3 +1,4 @@
+import { expect, it, vi } from 'vitest';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_CODE_LINE,
@@ -5,7 +6,6 @@ import {
 } from '@decipad/editor-types';
 import type { Text } from 'slate';
 import { insertSmartRef } from './insertSmartRef';
-import { vi, it, expect } from 'vitest';
 
 vi.mock('nanoid', () => ({ nanoid: () => 'randomId' }));
 

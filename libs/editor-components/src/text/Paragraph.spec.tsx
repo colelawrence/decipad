@@ -60,7 +60,6 @@ it('shows a placeholder when notebook empty and not selected', async () => {
   await waitFor(() => expect(paragraphElement).toHaveTextContent('Type'));
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
 it.skip('shows a placeholder when empty and selected', async () => {
   const { getByText, getAllByTestId } = render(
     <Plate {...plateProps} editor={editor}>

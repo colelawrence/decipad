@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { Time, materializeOneResult } from '@decipad/language-types';
@@ -220,15 +221,15 @@ describe('interpreter', () => {
   describe('columns', () => {
     it('evaluates columns', async () => {
       const column = col(1, 2, 3);
-      const programWithArray = n(
+      const programWith = n(
         'block',
         n('assign', n('def', 'Array'), column),
         c('+', n('ref', 'Array'), col(3, c('+', l(1), l(1)), 1))
       );
 
-      expect(
-        await materializeOneResult(interpret([programWithArray], [0]))
-      ).toEqual([[N(4), N(4), N(4)]]);
+      expect(await materializeOneResult(interpret([programWith], [0]))).toEqual(
+        [[N(4), N(4), N(4)]]
+      );
     });
 
     it('can perform calculations between columns and single numbers', async () => {

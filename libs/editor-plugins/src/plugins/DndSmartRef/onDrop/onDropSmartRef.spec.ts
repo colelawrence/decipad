@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import type { CodeLineElement, MyElement } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { findTextBeforeAndAfterPoint } from './onDropSmartRef';

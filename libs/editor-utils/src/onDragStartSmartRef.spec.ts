@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { N } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';

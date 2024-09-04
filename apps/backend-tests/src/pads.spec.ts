@@ -1,8 +1,4 @@
-/* eslint-env jest */
-
-// existing sequential tests very granular
-/* eslint-disable jest/expect-expect */
-import { describe } from 'vitest';
+import { beforeAll, expect, describe } from 'vitest';
 import arc from '@architect/functions';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { timeout } from './utils/timeout';

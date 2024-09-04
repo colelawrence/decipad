@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { num } from '@decipad/language-utils';
@@ -8,7 +9,7 @@ setupDeciNumberSnapshotSerializer();
 it('parses a simple value and its unit', () => {
   expect(parseSimpleValue('')).toMatchInlineSnapshot(`undefined`);
   expect(parseSimpleValue('10')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -19,7 +20,7 @@ it('parses a simple value and its unit', () => {
     }
   `);
   expect(parseSimpleValue('10%')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -30,67 +31,67 @@ it('parses a simple value and its unit', () => {
     }
   `);
   expect(parseSimpleValue('10 km/s**-1')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
         "n": 10n,
         "s": 1n,
       },
-      "unit": Object {
-        "args": Array [
-          Object {
-            "args": Array [
+      "unit": {
+        "args": [
+          {
+            "args": [
               "/",
             ],
             "type": "funcref",
           },
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          {
+            "args": [
+              {
+                "args": [
                   "km",
                 ],
-                "end": Object {
+                "end": {
                   "char": 4,
                   "column": 5,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 3,
                   "column": 4,
                   "line": 1,
                 },
                 "type": "ref",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "**",
                     ],
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "s",
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 6,
                           "column": 7,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 6,
                           "column": 7,
                           "line": 1,
                         },
                         "type": "ref",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -99,12 +100,12 @@ it('parses a simple value and its unit', () => {
                             "s": -1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 10,
                           "column": 11,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 9,
                           "column": 10,
                           "line": 1,
@@ -126,49 +127,49 @@ it('parses a simple value and its unit', () => {
     }
   `);
   expect(parseSimpleValue('$10/hour')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
         "n": 10n,
         "s": 1n,
       },
-      "unit": Object {
-        "args": Array [
-          Object {
-            "args": Array [
+      "unit": {
+        "args": [
+          {
+            "args": [
               "/",
             ],
             "type": "funcref",
           },
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          {
+            "args": [
+              {
+                "args": [
                   "$",
                 ],
-                "end": Object {
+                "end": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
                 },
                 "type": "ref",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "hour",
                 ],
-                "end": Object {
+                "end": {
                   "char": 7,
                   "column": 8,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 4,
                   "column": 5,
                   "line": 1,
@@ -184,23 +185,23 @@ it('parses a simple value and its unit', () => {
     }
   `);
   expect(parseSimpleValue('10.33 seconds')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 100n,
         "infinite": false,
         "n": 1033n,
         "s": 1n,
       },
-      "unit": Object {
-        "args": Array [
+      "unit": {
+        "args": [
           "seconds",
         ],
-        "end": Object {
+        "end": {
           "char": 12,
           "column": 13,
           "line": 1,
         },
-        "start": Object {
+        "start": {
           "char": 6,
           "column": 7,
           "line": 1,
@@ -210,7 +211,7 @@ it('parses a simple value and its unit', () => {
     }
   `);
   expect(parseSimpleValue('10.33%')).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 100n,
         "infinite": false,

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { all } from './all';
 import { first } from './first';
 import { unzip } from './unzip';

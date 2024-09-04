@@ -119,7 +119,40 @@ it('can delete the block', async () => {
   const [, secondDragHandle] = dragHandles;
   await userEvent.click(secondDragHandle);
 
-  expect(editor.children).toHaveChildrenText(['first', 'second']);
+  expect(editor.children).toMatchInlineSnapshot(`
+    [
+      {
+        "children": [
+          {
+            "text": "first",
+          },
+        ],
+        "id": "0",
+        "type": "p",
+      },
+      {
+        "children": [
+          {
+            "text": "second",
+          },
+        ],
+        "id": "1",
+        "type": "p",
+      },
+    ]
+  `);
   await userEvent.click(getByTitle(/trash/i));
-  expect(editor.children).toHaveChildrenText(['first']);
+  expect(editor.children).toMatchInlineSnapshot(`
+    [
+      {
+        "children": [
+          {
+            "text": "first",
+          },
+        ],
+        "id": "0",
+        "type": "p",
+      },
+    ]
+  `);
 });

@@ -52,7 +52,6 @@ describe('remote computer worker integration tests', () => {
     await client.subscribe(subscribeParams, notify);
   };
 
-  // eslint-disable-next-line jest/no-focused-tests
   it(
     'can send and receive simple objects',
     () => {

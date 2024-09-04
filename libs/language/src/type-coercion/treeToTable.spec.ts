@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import { Unknown } from '@decipad/language-interfaces';
 import { ScopedRealm, Value, buildType, makeInferContext } from '..';
@@ -17,8 +18,8 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [],
-        "columns": Array [],
+        "columnNames": [],
+        "columns": [],
         "meta": undefined,
       }
     `);
@@ -49,12 +50,12 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -138,12 +139,12 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -237,13 +238,13 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
           "Col2",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -260,7 +261,7 @@ describe('treeToTable value', () => {
             "rowCountCache": undefined,
           },
           Column {
-            "_values": Array [
+            "_values": [
               StringValue {
                 "value": "1",
               },
@@ -411,13 +412,13 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
           "Col2",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -450,7 +451,7 @@ describe('treeToTable value', () => {
             "rowCountCache": undefined,
           },
           Column {
-            "_values": Array [
+            "_values": [
               StringValue {
                 "value": "1",
               },
@@ -514,13 +515,13 @@ describe('treeToTable value', () => {
     );
     expect(tableValue).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
           "Col2",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               DateValue {
                 "moment": 1233446400000n,
                 "specificity": "month",
@@ -533,7 +534,7 @@ describe('treeToTable value', () => {
             "rowCountCache": undefined,
           },
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,

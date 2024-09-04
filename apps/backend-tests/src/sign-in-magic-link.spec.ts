@@ -1,6 +1,4 @@
-/* eslint-env jest */
-import { describe } from 'vitest';
-import waitForExpect from 'wait-for-expect';
+import { expect, describe, vi } from 'vitest';
 import arc from '@architect/functions';
 import {
   stringify as encodeCookie,
@@ -11,8 +9,6 @@ import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import type { VerificationRequestRecord } from '@decipad/backendtypes';
 
 describe.sequential('sign-in via magic link', () => {
-  waitForExpect.defaults.interval = 250;
-
   test('sign-in via magic link', (ctx) => {
     const { test: it } = ctx;
     let verificationRequest: VerificationRequestRecord;
@@ -45,7 +41,7 @@ describe.sequential('sign-in via magic link', () => {
     });
 
     it('a user key validation request was created', async () => {
-      await waitForExpect(async () => {
+      await vi.waitFor(async () => {
         const data = await arc.tables();
         const verificationRequests = (
           await data.verificationrequests.query({

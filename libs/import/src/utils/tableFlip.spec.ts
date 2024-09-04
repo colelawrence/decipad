@@ -1,7 +1,8 @@
+import { expect, it } from 'vitest';
 import { tableFlip } from './tableFlip';
 
 it('flips array of objects to object with lists', () => {
-  const myArrayObject = [
+  const myArray = [
     {
       aKey: 123,
       anotherKey: 'hello',
@@ -12,7 +13,7 @@ it('flips array of objects to object with lists', () => {
     },
   ];
 
-  expect(tableFlip(myArrayObject)).toMatchInlineSnapshot(`
+  expect(tableFlip(myArray)).toMatchInlineSnapshot(`
     {
       "aKey": [
         123,
@@ -27,7 +28,7 @@ it('flips array of objects to object with lists', () => {
 });
 
 it('flips array with items of dodgy types', () => {
-  const myArrayObject = [
+  const myArray = [
     {
       aKey: () => {
         // eslint-disable-next-line
@@ -40,7 +41,7 @@ it('flips array with items of dodgy types', () => {
     },
   ];
 
-  expect(tableFlip(myArrayObject)).toMatchInlineSnapshot(`
+  expect(tableFlip(myArray)).toMatchInlineSnapshot(`
     {
       "aKey": [],
       "anotherKey": [

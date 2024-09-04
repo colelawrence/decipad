@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { Subject } from 'rxjs';
 import { onSubscribe } from './onSubscribe';
 import { noop } from '../noop';

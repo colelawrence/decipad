@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,

@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import type { Value } from '@decipad/language-types';
@@ -385,7 +386,7 @@ describe('Column assignment evaluation', () => {
       parseExpressionOrThrow('1meter + 1s')
     );
     expect(assigned).toMatchInlineSnapshot(`
-      Object {
+      {
         "getData": [Function],
       }
     `);

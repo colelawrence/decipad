@@ -1,4 +1,4 @@
-import { it, expect, beforeEach, describe } from 'vitest';
+import { it, expect, beforeEach, describe, vi } from 'vitest';
 import type {
   ClientEventContextType,
   HandleClientEventArgs,
@@ -25,7 +25,7 @@ import type {
 describe('createUserEventPlugin', () => {
   let editor: TEditor;
   let mockClientEvent: HandleClientEventArgs | null;
-  const mockEvents: ClientEventContextType = jest.fn((event) => {
+  const mockEvents: ClientEventContextType = vi.fn((event) => {
     // Casting is safe because plugin does not return anything except action events.
     mockClientEvent = event as HandleClientEventArgs;
     return Promise.resolve();
@@ -36,7 +36,7 @@ describe('createUserEventPlugin', () => {
       plugins: [createUserEventPlugin(mockEvents)],
     });
     mockClientEvent = null;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const pElement = () => ({

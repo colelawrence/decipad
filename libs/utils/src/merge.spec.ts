@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { merge } from './merge';
 
 it('merges two number arrays', () => {

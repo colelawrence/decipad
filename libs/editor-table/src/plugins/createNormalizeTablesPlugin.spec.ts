@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { beforeEach, expect, describe, it, vi } from 'vitest';
 import type { TEditor, TElement } from '@udecode/plate-common';
 import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import {

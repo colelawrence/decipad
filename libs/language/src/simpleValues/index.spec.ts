@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { getDefined } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { parseSimpleValue } from './parseSimpleValue';
@@ -9,7 +10,7 @@ it('can perform some operations on unitless numbers', () => {
   const num = getDefined(parseSimpleValue('1'));
 
   expect(num).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -30,67 +31,67 @@ it('can perform some operations on numbers with units', () => {
   const num = getDefined(parseSimpleValue('1 meter/second**2'));
 
   expect(num).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
         "n": 1n,
         "s": 1n,
       },
-      "unit": Object {
-        "args": Array [
-          Object {
-            "args": Array [
+      "unit": {
+        "args": [
+          {
+            "args": [
               "/",
             ],
             "type": "funcref",
           },
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          {
+            "args": [
+              {
+                "args": [
                   "meter",
                 ],
-                "end": Object {
+                "end": {
                   "char": 6,
                   "column": 7,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 2,
                   "column": 3,
                   "line": 1,
                 },
                 "type": "ref",
               },
-              Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              {
+                "args": [
+                  {
+                    "args": [
                       "**",
                     ],
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
                           "second",
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 13,
                           "column": 14,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 8,
                           "column": 9,
                           "line": 1,
                         },
                         "type": "ref",
                       },
-                      Object {
-                        "args": Array [
+                      {
+                        "args": [
                           "number",
                           DeciNumber {
                             "d": 1n,
@@ -99,12 +100,12 @@ it('can perform some operations on numbers with units', () => {
                             "s": 1n,
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 16,
                           "column": 17,
                           "line": 1,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 16,
                           "column": 17,
                           "line": 1,
@@ -135,7 +136,7 @@ it('can perform some operations on percentages', () => {
   const num = getDefined(parseSimpleValue('10%'));
 
   expect(num).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -153,49 +154,49 @@ it('simplifies expressions as we go', () => {
   const num = getDefined(parseSimpleValue('$10/sqft'));
 
   expect(num).toMatchInlineSnapshot(`
-    Object {
+    {
       "ast": DeciNumber {
         "d": 1n,
         "infinite": false,
         "n": 10n,
         "s": 1n,
       },
-      "unit": Object {
-        "args": Array [
-          Object {
-            "args": Array [
+      "unit": {
+        "args": [
+          {
+            "args": [
               "/",
             ],
             "type": "funcref",
           },
-          Object {
-            "args": Array [
-              Object {
-                "args": Array [
+          {
+            "args": [
+              {
+                "args": [
                   "$",
                 ],
-                "end": Object {
+                "end": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 0,
                   "column": 1,
                   "line": 1,
                 },
                 "type": "ref",
               },
-              Object {
-                "args": Array [
+              {
+                "args": [
                   "sqft",
                 ],
-                "end": Object {
+                "end": {
                   "char": 7,
                   "column": 8,
                   "line": 1,
                 },
-                "start": Object {
+                "start": {
                   "char": 4,
                   "column": 5,
                   "line": 1,

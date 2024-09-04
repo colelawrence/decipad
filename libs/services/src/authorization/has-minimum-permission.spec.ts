@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { hasMinimumPermission } from './minimum-permission';
 import { P } from './utils';
 

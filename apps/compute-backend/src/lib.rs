@@ -1,6 +1,5 @@
 mod infer;
 mod parse;
-pub mod tests;
 mod types;
 mod value;
 
@@ -10,13 +9,13 @@ use deci_result::{deserialize_result, serialize_result};
 use js_sys;
 use js_sys::Float64Array;
 use js_sys::{BigInt64Array, Object};
-use num::integer::lcm;
 use parse::csv_to_parsed;
 use rand::rngs::OsRng;
 use rand_unique::{RandomSequence, RandomSequenceBuilder};
 use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 use std::collections::HashMap;
 use types::types::{DeciResult, DeciType};
+use value::sorted_column::SortedColumn;
 use wasm_bindgen::prelude::*;
 pub mod deci_result;
 
@@ -267,46 +266,45 @@ impl ComputeBackend {
         column.sum_float().get_float()
     }
 
-    pub fn sum_from_js(&mut self, value: &Float64Array) -> f64 {
-        value.to_vec().iter().sum()
-    }
-
     // no floats here.
     // +-Infinity = +-1/0
     // Undefined = 0/0
-    pub fn sum_from_js_frac(&mut self, numerators: &[i64], denominator: &[i64]) -> Vec<i64> {
-        let mut my_lcm: i64 = 1;
-        for v in denominator.iter() {
-            my_lcm = lcm(my_lcm, *v);
-        }
 
-        let mut sum: i64 = 0;
-
-        for (index, numerator) in numerators.iter().enumerate() {
-            sum += numerator * (my_lcm / denominator[index])
-        }
-
-        return vec![sum, my_lcm];
+    pub fn sum_result_fraction_column(&self, result: js_sys::Object) -> Object {
+        let res = deserialize_result(result).unwrap();
+        serialize_result(res.sum_frac())
     }
 
-    pub fn sum_result_fraction_column(&self, result: js_sys::Object) -> f64 {
+    pub fn sumif_result_fraction_column(
+        &self,
+        result: js_sys::Object,
+        mask: js_sys::Object,
+    ) -> Object {
         let res = deserialize_result(result).unwrap();
-        res.sum_frac().get_float()
+        let boolmask = deserialize_result(mask).unwrap();
+        serialize_result(res.mask_with(boolmask).sum_frac())
     }
 
-    pub fn min_result_fraction_column(&self, result: js_sys::Object) -> f64 {
+    pub fn min_result_fraction_column(&self, result: js_sys::Object) -> Object {
         let res = deserialize_result(result).unwrap();
-        res.min_val().get_float()
+        serialize_result(res.min_val())
     }
 
-    pub fn max_result_fraction_column(&self, result: js_sys::Object) -> f64 {
+    pub fn max_result_fraction_column(&self, result: js_sys::Object) -> Object {
         let res = deserialize_result(result).unwrap();
-        res.max_val().get_float()
+        serialize_result(res.max_val())
     }
 
-    pub fn mean_result_fraction_column(&self, result: js_sys::Object) -> f64 {
+    pub fn mean_result_fraction_column(&self, result: js_sys::Object) -> Object {
         let res = deserialize_result(result).unwrap();
-        res.mean().get_float()
+        serialize_result(res.mean())
+    }
+
+    pub fn median_result_fraction_column(&self, result: js_sys::Object) -> Object {
+        let res = deserialize_result(result).unwrap();
+        let mut s = SortedColumn::new(res);
+        s.sort_and_save();
+        serialize_result(s.median())
     }
 
     pub fn test_deserialization(&mut self, result: js_sys::Object) -> bool {

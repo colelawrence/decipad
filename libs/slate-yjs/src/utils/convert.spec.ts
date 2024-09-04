@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { toSlateNode, toSyncElement } from './convert';

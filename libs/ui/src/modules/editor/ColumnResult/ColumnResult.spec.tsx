@@ -31,7 +31,6 @@ describe.sequential('ColumnResult', () => {
     cells.forEach((cell) => expect(cell).toBeVisible());
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it('renders padding on cells contents', async () => {
     const { getByText } = render(
       <ColumnResult {...((await runCode('[10, 20, 30]')) as any)} />
@@ -60,7 +59,6 @@ describe.sequential('ColumnResult', () => {
       `list + table.H2`,
     ];
 
-    // eslint-disable-next-line jest/no-disabled-tests
     it('renders a bidimensional column', async () => {
       const Wrapper: FC = () => {
         const computer = useComputer();

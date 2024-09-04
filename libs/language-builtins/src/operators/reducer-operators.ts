@@ -1,9 +1,14 @@
 /* eslint-disable no-bitwise */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line no-restricted-imports
-import { Value } from '@decipad/language-types';
-import type { Value as ValueTypes } from '@decipad/language-interfaces';
+import { Value, serializeType } from '@decipad/language-types';
 import type { BuiltinSpec } from '../types';
-import { coerceToFraction } from '../utils/coerceToFraction';
+import {
+  computeBackendSingleton,
+  deserializeResult,
+  serializeResult,
+} from '@decipad/compute-backend-js';
+import DeciNumber from '@decipad/number';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {
@@ -11,18 +16,20 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 1,
     argCardinalities: [[2]],
     isReducer: true,
-    fnValues: async ([nums]) => {
-      let acc = 0;
-      for await (const v of Value.getColumnLike(nums).values()) {
-        const f = coerceToFraction(await v.getData());
-        if (f.infinite) {
-          return Value.Scalar.fromValue(f);
-        }
-        const ff = f.valueOf();
-        acc += ff;
-      }
+    fnValues: async ([nums], [numsType]) => {
+      const column = Value.getColumnLike(nums);
 
-      return Value.Scalar.fromValue(acc);
+      const col = await serializeResult({
+        type: serializeType(numsType),
+        value: await column.getData(),
+      });
+
+      const sum =
+        computeBackendSingleton.computeBackend.sum_result_fraction_column(col);
+
+      const deserializedResult = deserializeResult(sum as any);
+
+      return Value.Scalar.fromValue(deserializedResult.value as DeciNumber);
     },
     functionSignature: 'column<number:R> -> R',
     explanation: 'Adds all the elements of a column.`',
@@ -41,34 +48,29 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     noAutoconvert: true,
     argCardinalities: [[2, 2]],
-    fnValues: async ([numbers, bools]: ValueTypes.Value[]) => {
-      if (!Value.isColumnLike(numbers)) {
-        return numbers;
-      }
-      if (!Value.isColumnLike(bools)) {
-        throw new Error('Expected second argument to be a column of booleans');
-      }
+    fnValues: async ([numbers, bools], [numbersType, boolsType]) => {
+      const column = Value.getColumnLike(numbers);
+      const mask = Value.getColumnLike(bools);
 
-      let acc = 0;
-      const boolsIt = bools.values();
-      for await (const n of numbers.values()) {
-        const b = await boolsIt.next();
-        if (b.done) {
-          throw new Error(
-            'sumif requires both arguments to have the same length'
-          );
-        }
-        if (await b.value.getData()) {
-          const f = coerceToFraction(await n.getData());
-          if (f.infinite) {
-            return Value.Scalar.fromValue(f);
-          }
-          const ff = f.valueOf();
-          acc += ff;
-        }
-      }
+      const serializedColumn = await serializeResult({
+        type: serializeType(numbersType),
+        value: await column.getData(),
+      });
 
-      return Value.Scalar.fromValue(acc);
+      const serializedMask = await serializeResult({
+        type: serializeType(boolsType),
+        value: await mask.getData(),
+      });
+
+      const sum =
+        computeBackendSingleton.computeBackend.sumif_result_fraction_column(
+          serializedColumn,
+          serializedMask
+        );
+
+      const deserializedResult = deserializeResult(sum as any);
+
+      return Value.Scalar.fromValue(deserializedResult.value as DeciNumber);
     },
     functionSignature: 'column<number:R>, column<boolean> -> R',
     explanation: 'Adds all the elements of a column that match condition.',

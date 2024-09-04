@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import { Unknown } from '@decipad/remote-computer';
 import { Value } from '@decipad/language-types';

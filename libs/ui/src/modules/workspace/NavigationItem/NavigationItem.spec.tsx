@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import { FC, PropsWithChildren } from 'react';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';

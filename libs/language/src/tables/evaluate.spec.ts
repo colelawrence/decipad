@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
@@ -14,7 +15,6 @@ import {
 } from '@decipad/language-utils';
 // eslint-disable-next-line no-restricted-imports
 import { runAST } from '..';
-
 import { usesRecursion } from './evaluate';
 
 setupDeciNumberSnapshotSerializer();
@@ -45,7 +45,7 @@ describe('evaluateTableColumn', () => {
   it('can emulate a quadratic function', async () => {
     expect(await testEvaluate(c('*', l(2), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -77,7 +77,7 @@ describe('evaluateTableColumn', () => {
   it('can be used in a column with inherent size', async () => {
     expect(await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

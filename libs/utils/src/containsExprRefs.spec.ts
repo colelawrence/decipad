@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 /* eslint-disable prefer-template */
 import { containsExprRef } from './containsExprRefs';
 import { nanoid } from 'nanoid';

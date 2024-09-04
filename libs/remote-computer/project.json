@@ -23,7 +23,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx vitest --run",
+        "command": "npx vitest --run --config ../../vitest.base.config.ts",
         "cwd": "libs/remote-computer"
       }
     },

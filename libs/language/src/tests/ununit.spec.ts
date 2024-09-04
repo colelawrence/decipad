@@ -1,8 +1,9 @@
+import { expect, it } from 'vitest';
 import { runCode } from '../run';
 
 it('can un-unit stuff', async () => {
   expect(await runCode('stripunit(10 kilometers)')).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -46,7 +47,7 @@ it('can un-unit stuff', async () => {
   `);
   expect(await runCode('stripunit(32891 bananas per johns miles)'))
     .toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -89,7 +90,7 @@ it('can un-unit stuff', async () => {
     }
   `);
   expect(await runCode('stripunit(420 bruhs)')).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -137,7 +138,7 @@ it('can un-unit stuff', async () => {
       stripunit(x)
     `)
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -183,7 +184,7 @@ it('can un-unit stuff', async () => {
 
 it('should throw error when un-uniting non numbers', async () => {
   expect(await runCode('stripunit("not a number")')).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -201,32 +202,32 @@ it('should throw error when un-uniting non numbers', async () => {
         "functionness": false,
         "indexName": null,
         "indexedBy": null,
-        "node": Object {
-          "args": Array [
-            Object {
-              "args": Array [
+        "node": {
+          "args": [
+            {
+              "args": [
                 "stripunit",
               ],
-              "end": Object {
+              "end": {
                 "char": 8,
                 "column": 9,
                 "line": 1,
               },
-              "start": Object {
+              "start": {
                 "char": 0,
                 "column": 1,
                 "line": 1,
               },
               "type": "funcref",
             },
-            Object {
-              "args": Array [
-                Object {
-                  "args": Array [
+            {
+              "args": [
+                {
+                  "args": [
                     "string",
                     "not a number",
                   ],
-                  "end": Object {
+                  "end": {
                     "char": 23,
                     "column": 24,
                     "line": 1,
@@ -263,7 +264,7 @@ it('should throw error when un-uniting non numbers', async () => {
                     "unit": null,
                     Symbol(immer-draftable): true,
                   },
-                  "start": Object {
+                  "start": {
                     "char": 10,
                     "column": 11,
                     "line": 1,
@@ -271,12 +272,12 @@ it('should throw error when un-uniting non numbers', async () => {
                   "type": "literal",
                 },
               ],
-              "end": Object {
+              "end": {
                 "char": 24,
                 "column": 25,
                 "line": 1,
               },
-              "start": Object {
+              "start": {
                 "char": 9,
                 "column": 10,
                 "line": 1,
@@ -284,12 +285,12 @@ it('should throw error when un-uniting non numbers', async () => {
               "type": "argument-list",
             },
           ],
-          "end": Object {
+          "end": {
             "char": 24,
             "column": 25,
             "line": 1,
           },
-          "start": Object {
+          "start": {
             "char": 0,
             "column": 1,
             "line": 1,
@@ -318,7 +319,7 @@ it('should throw error when un-uniting non numbers', async () => {
 
 it('removes the value and shows only the units', async () => {
   expect(await runCode('getunit(10 kilometers)')).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -349,8 +350,8 @@ it('removes the value and shows only the units', async () => {
         "symbol": null,
         "tree": undefined,
         "type": "number",
-        "unit": Array [
-          Object {
+        "unit": [
+          {
             "exp": DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -379,7 +380,7 @@ it('removes the value and shows only the units', async () => {
   `);
   expect(await runCode('getunit(32891 bananas per johns miles)'))
     .toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -410,8 +411,8 @@ it('removes the value and shows only the units', async () => {
         "symbol": null,
         "tree": undefined,
         "type": "number",
-        "unit": Array [
-          Object {
+        "unit": [
+          {
             "exp": DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -427,7 +428,7 @@ it('removes the value and shows only the units', async () => {
             },
             "unit": "bananas",
           },
-          Object {
+          {
             "exp": DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -443,7 +444,7 @@ it('removes the value and shows only the units', async () => {
             },
             "unit": "johns",
           },
-          Object {
+          {
             "baseQuantity": "length",
             "baseSuperQuantity": "length",
             "exp": DeciNumber {
@@ -473,7 +474,7 @@ it('removes the value and shows only the units', async () => {
     }
   `);
   expect(await runCode('getunit(420 bruhs)')).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -504,8 +505,8 @@ it('removes the value and shows only the units', async () => {
         "symbol": null,
         "tree": undefined,
         "type": "number",
-        "unit": Array [
-          Object {
+        "unit": [
+          {
             "exp": DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -538,7 +539,7 @@ it('removes the value and shows only the units', async () => {
       getunit(x)
     `)
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "meta": undefined,
       "type": Type {
         "anythingness": false,
@@ -569,8 +570,8 @@ it('removes the value and shows only the units', async () => {
         "symbol": null,
         "tree": undefined,
         "type": "number",
-        "unit": Array [
-          Object {
+        "unit": [
+          {
             "baseQuantity": "second",
             "baseSuperQuantity": "second",
             "exp": DeciNumber {

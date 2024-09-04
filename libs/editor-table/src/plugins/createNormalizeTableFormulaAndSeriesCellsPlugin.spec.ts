@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import { getComputer } from '@decipad/computer';
 import {
   ELEMENT_TABLE,

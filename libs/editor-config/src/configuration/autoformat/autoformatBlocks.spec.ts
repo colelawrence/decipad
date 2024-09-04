@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   createMyAutoformatPlugin,

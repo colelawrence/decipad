@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { getReductionPlan } from './getReductionPlan';
 import type { Type } from '../Type';
 import { buildType } from '../Type';

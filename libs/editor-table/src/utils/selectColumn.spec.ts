@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import {
   createMyPlateEditor,
   ELEMENT_TABLE_CAPTION,

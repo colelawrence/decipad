@@ -14,7 +14,7 @@ await build({
     'process.env.NODE_ENV': '"production"',
   },
   loader: {
-    '.wasm': 'file',
+    '.wasm': 'empty',
   },
 });
 
@@ -35,7 +35,7 @@ await build({
   },
 
   loader: {
-    '.wasm': 'file',
+    '.wasm': 'empty',
   },
 });
 

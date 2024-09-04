@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { timeout } from '@decipad/utils';

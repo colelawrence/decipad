@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { Doc } from 'yjs';
 import { createTestProvider } from './testUtils';
 import { readMessage } from './y-websocket';

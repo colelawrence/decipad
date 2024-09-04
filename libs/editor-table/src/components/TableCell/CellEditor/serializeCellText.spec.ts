@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import type { SmartRefElement } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';

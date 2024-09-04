@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import type { MyElement } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
@@ -103,7 +104,6 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
         },
       ]);
     });
-    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('can contain link elements', () => {
       editor.children = [
         {

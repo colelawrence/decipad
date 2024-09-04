@@ -1,3 +1,4 @@
+import { beforeEach, expect, describe, it } from 'vitest';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -47,7 +48,7 @@ describe('matrix op evaluation', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -73,7 +74,7 @@ describe('matrix op evaluation', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -95,7 +96,7 @@ describe('matrix op evaluation', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -127,7 +128,7 @@ describe('matrix op evaluation', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -296,7 +297,7 @@ describe('assigning multidimensional values', () => {
         await (await evaluateMatrixAssign(testRealm, assign)).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -325,7 +326,7 @@ describe('assigning multidimensional values', () => {
         await (await evaluateMatrixAssign(testRealm, assign)).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,

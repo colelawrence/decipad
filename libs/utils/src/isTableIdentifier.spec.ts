@@ -1,3 +1,4 @@
+import { test, expect, describe, it } from 'vitest';
 import { isTableIdentifier } from './isTableIdentifier';
 
 describe('isTableIdentifier', () => {

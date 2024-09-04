@@ -165,7 +165,8 @@ const viteConfig: UserConfig = {
   server: serverOptions,
   preview: serverOptions,
   worker: {
-    plugins: () => [tsconfigPaths()],
+    plugins: () => [tsconfigPaths(), wasm(), topLevelAwait()],
+    format: 'es',
   },
 };
 

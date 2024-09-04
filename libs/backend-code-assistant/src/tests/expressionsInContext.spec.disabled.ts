@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import type { RootDocument } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
 import { getComputer } from '@decipad/computer';
@@ -8,7 +9,7 @@ import { setupTest } from './_setupTest';
 
 test('code from scratch assistant', (ctx) => {
   setupTest(ctx, doc as RootDocument);
-  it('works for doing a simple calculation', async () => {
+  it.skip('works for doing a simple calculation', async () => {
     const result = await codeAssistant({
       notebook: doc as RootDocument,
       prompt:

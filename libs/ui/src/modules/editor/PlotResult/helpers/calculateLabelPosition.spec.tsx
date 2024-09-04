@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { calculateLabelPosition } from '.';
 import fixtureData from './calculateLabelPosition.fixtures.json'; // Adjust the path if needed
 

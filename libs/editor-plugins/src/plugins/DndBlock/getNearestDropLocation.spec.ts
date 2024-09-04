@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { verticalDropLineThreshold } from './constants';
 import { getNearestDropLocation } from './getNearestDropLocation';
 import type {

@@ -1,3 +1,4 @@
+import { beforeEach, expect, it } from 'vitest';
 import type { TEditor } from '@udecode/plate-common';
 import { normalizeEditor } from '@udecode/plate-common';
 import type { LayoutElement } from '@decipad/editor-types';

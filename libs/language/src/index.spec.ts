@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 // E2e tests
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { produce } from '@decipad/utils';
@@ -307,7 +308,7 @@ describe('Multidimensional operations', () => {
         X.Col / 2
       `);
 
-    await expect(result).toMatchObject({
+    expect(result).toMatchObject({
       type: makeColumn({
         tableName: 'X',
         cellType: t.number(),
@@ -325,7 +326,7 @@ describe('Multidimensional operations', () => {
         X.Col + Y.Col
       `);
 
-    await expect(result).toMatchObject({
+    expect(result).toMatchObject({
       type: makeColumn({
         tableName: 'X',
         cellType: makeColumn({
@@ -353,7 +354,7 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (X.Col / 10)
       `);
 
-    await expect(result).toMatchObject({
+    expect(result).toMatchObject({
       type: makeColumn({
         tableName: 'X',
         cellType: makeColumn({
@@ -407,7 +408,7 @@ describe('Multidimensional operations', () => {
     await expect(
       runCode(`total(1)`, { throwOnError: true })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Type error: Inference Error: expected-but-got : {\\"errType\\":\\"expected-but-got\\",\\"expectedButGot\\":[{\\"node\\":null,\\"errorCause\\":null,\\"type\\":null,\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":{\\"node\\":null,\\"errorCause\\":null,\\"type\\":null,\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":true,\\"symbol\\":null},\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null},{\\"node\\":null,\\"errorCause\\":null,\\"type\\":\\"number\\",\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null}]}"`
+      `[TypeError: Type error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":[{"node":null,"errorCause":null,"type":null,"unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":{"node":null,"errorCause":null,"type":null,"unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":true,"symbol":null},"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null},{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}]`
     );
   });
 
@@ -415,7 +416,7 @@ describe('Multidimensional operations', () => {
     await expect(
       runCode(`cat(1, 1)`, { throwOnError: true })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Type error: Inference Error: expected-but-got : {\\"errType\\":\\"expected-but-got\\",\\"expectedButGot\\":[\\"table\\",{\\"node\\":null,\\"errorCause\\":null,\\"type\\":\\"number\\",\\"unit\\":null,\\"numberFormat\\":null,\\"numberError\\":null,\\"date\\":null,\\"rangeOf\\":null,\\"indexName\\":null,\\"indexedBy\\":null,\\"cellType\\":null,\\"atParentIndex\\":null,\\"columnTypes\\":null,\\"columnNames\\":null,\\"rowIndexName\\":null,\\"rowCellTypes\\":null,\\"rowCellNames\\":null,\\"functionness\\":false,\\"pending\\":false,\\"nothingness\\":false,\\"anythingness\\":false,\\"symbol\\":null}]}"`
+      `[TypeError: Type error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["table",{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}]`
     );
   });
 });
@@ -427,7 +428,7 @@ describe('Tables', () => {
         `Table = { Column1 = [1.1, 2.2, 3.3], Column2 = Column1 * 2 }`
       )
     ).toMatchObject({
-      type: await objectToTableType('Table', {
+      type: objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
       }),
@@ -793,7 +794,7 @@ describe('Tables', () => {
         sum(Table.Formula)
       `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -843,19 +844,19 @@ describe('Tables', () => {
         Table = { A = 1 meter + 2 second, B = 2 }
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "A",
             "B",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -872,48 +873,48 @@ describe('Tables', () => {
               "functionness": false,
               "indexName": null,
               "indexedBy": "Table",
-              "node": Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              "node": {
+                "args": [
+                  {
+                    "args": [
                       "+",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 31,
                       "column": 31,
                       "line": 2,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 31,
                       "column": 31,
                       "line": 2,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 29,
                               "column": 29,
                               "line": 2,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 23,
                               "column": 23,
                               "line": 2,
                             },
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -922,7 +923,7 @@ describe('Tables', () => {
                                     "s": 1n,
                                   },
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 23,
                                   "column": 23,
                                   "line": 2,
@@ -959,18 +960,18 @@ describe('Tables', () => {
                                   "unit": null,
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 23,
                                   "column": 23,
                                   "line": 2,
                                 },
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "meter",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 29,
                                   "column": 29,
                                   "line": 2,
@@ -1004,8 +1005,8 @@ describe('Tables', () => {
                                   "symbol": null,
                                   "tree": undefined,
                                   "type": "number",
-                                  "unit": Array [
-                                    Object {
+                                  "unit": [
+                                    {
                                       "baseQuantity": "length",
                                       "baseSuperQuantity": "length",
                                       "exp": DeciNumber {
@@ -1026,7 +1027,7 @@ describe('Tables', () => {
                                   ],
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 25,
                                   "column": 25,
                                   "line": 2,
@@ -1034,12 +1035,12 @@ describe('Tables', () => {
                                 "type": "ref",
                               },
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 29,
                               "column": 29,
                               "line": 2,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 23,
                               "column": 23,
                               "line": 2,
@@ -1047,7 +1048,7 @@ describe('Tables', () => {
                             "type": "argument-list",
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 29,
                           "column": 29,
                           "line": 2,
@@ -1081,8 +1082,8 @@ describe('Tables', () => {
                           "symbol": null,
                           "tree": undefined,
                           "type": "number",
-                          "unit": Array [
-                            Object {
+                          "unit": [
+                            {
                               "baseQuantity": "length",
                               "baseSuperQuantity": "length",
                               "exp": DeciNumber {
@@ -1103,35 +1104,35 @@ describe('Tables', () => {
                           ],
                           Symbol(immer-draftable): true,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 23,
                           "column": 23,
                           "line": 2,
                         },
                         "type": "function-call",
                       },
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 40,
                               "column": 40,
                               "line": 2,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 33,
                               "column": 33,
                               "line": 2,
                             },
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -1140,7 +1141,7 @@ describe('Tables', () => {
                                     "s": 1n,
                                   },
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 33,
                                   "column": 33,
                                   "line": 2,
@@ -1177,18 +1178,18 @@ describe('Tables', () => {
                                   "unit": null,
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 33,
                                   "column": 33,
                                   "line": 2,
                                 },
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "second",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 40,
                                   "column": 40,
                                   "line": 2,
@@ -1222,8 +1223,8 @@ describe('Tables', () => {
                                   "symbol": null,
                                   "tree": undefined,
                                   "type": "number",
-                                  "unit": Array [
-                                    Object {
+                                  "unit": [
+                                    {
                                       "baseQuantity": "second",
                                       "baseSuperQuantity": "second",
                                       "exp": DeciNumber {
@@ -1244,7 +1245,7 @@ describe('Tables', () => {
                                   ],
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 35,
                                   "column": 35,
                                   "line": 2,
@@ -1252,12 +1253,12 @@ describe('Tables', () => {
                                 "type": "ref",
                               },
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 40,
                               "column": 40,
                               "line": 2,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 33,
                               "column": 33,
                               "line": 2,
@@ -1265,7 +1266,7 @@ describe('Tables', () => {
                             "type": "argument-list",
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 40,
                           "column": 40,
                           "line": 2,
@@ -1299,8 +1300,8 @@ describe('Tables', () => {
                           "symbol": null,
                           "tree": undefined,
                           "type": "number",
-                          "unit": Array [
-                            Object {
+                          "unit": [
+                            {
                               "baseQuantity": "second",
                               "baseSuperQuantity": "second",
                               "exp": DeciNumber {
@@ -1321,7 +1322,7 @@ describe('Tables', () => {
                           ],
                           Symbol(immer-draftable): true,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 33,
                           "column": 33,
                           "line": 2,
@@ -1329,12 +1330,12 @@ describe('Tables', () => {
                         "type": "function-call",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 40,
                       "column": 40,
                       "line": 2,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 23,
                       "column": 23,
                       "line": 2,
@@ -1342,12 +1343,12 @@ describe('Tables', () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 40,
                   "column": 40,
                   "line": 2,
                 },
-                "start": Object {
+                "start": {
                   "char": 23,
                   "column": 23,
                   "line": 2,
@@ -1428,11 +1429,11 @@ describe('Tables', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [
+        "value": [
+          [
             Symbol(unknown),
           ],
-          Array [
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -1450,8 +1451,8 @@ describe('Tables', () => {
         Table.Formula = 3
       `)
     ).toMatchInlineSnapshot(`
-      Object {
-        "meta": Object {
+      {
+        "meta": {
           "labels": undefined,
         },
         "type": Type {
@@ -1517,7 +1518,7 @@ describe('Tables', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -1536,17 +1537,17 @@ describe('Tables', () => {
         Table
       `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
           "cellType": null,
-          "columnNames": Array [
+          "columnNames": [
             "Index",
             "Formula",
           ],
-          "columnTypes": Array [
+          "columnTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -1563,48 +1564,48 @@ describe('Tables', () => {
               "functionness": false,
               "indexName": null,
               "indexedBy": "Table",
-              "node": Object {
-                "args": Array [
-                  Object {
-                    "args": Array [
+              "node": {
+                "args": [
+                  {
+                    "args": [
                       "+",
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 50,
                       "column": 31,
                       "line": 3,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 50,
                       "column": 31,
                       "line": 3,
                     },
                     "type": "funcref",
                   },
-                  Object {
-                    "args": Array [
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 48,
                               "column": 29,
                               "line": 3,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 42,
                               "column": 23,
                               "line": 3,
                             },
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -1613,7 +1614,7 @@ describe('Tables', () => {
                                     "s": 1n,
                                   },
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 42,
                                   "column": 23,
                                   "line": 3,
@@ -1650,18 +1651,18 @@ describe('Tables', () => {
                                   "unit": null,
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 42,
                                   "column": 23,
                                   "line": 3,
                                 },
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "meter",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 48,
                                   "column": 29,
                                   "line": 3,
@@ -1695,8 +1696,8 @@ describe('Tables', () => {
                                   "symbol": null,
                                   "tree": undefined,
                                   "type": "number",
-                                  "unit": Array [
-                                    Object {
+                                  "unit": [
+                                    {
                                       "baseQuantity": "length",
                                       "baseSuperQuantity": "length",
                                       "exp": DeciNumber {
@@ -1717,7 +1718,7 @@ describe('Tables', () => {
                                   ],
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 44,
                                   "column": 25,
                                   "line": 3,
@@ -1725,12 +1726,12 @@ describe('Tables', () => {
                                 "type": "ref",
                               },
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 48,
                               "column": 29,
                               "line": 3,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 42,
                               "column": 23,
                               "line": 3,
@@ -1738,7 +1739,7 @@ describe('Tables', () => {
                             "type": "argument-list",
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 48,
                           "column": 29,
                           "line": 3,
@@ -1772,8 +1773,8 @@ describe('Tables', () => {
                           "symbol": null,
                           "tree": undefined,
                           "type": "number",
-                          "unit": Array [
-                            Object {
+                          "unit": [
+                            {
                               "baseQuantity": "length",
                               "baseSuperQuantity": "length",
                               "exp": DeciNumber {
@@ -1794,35 +1795,35 @@ describe('Tables', () => {
                           ],
                           Symbol(immer-draftable): true,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 42,
                           "column": 23,
                           "line": 3,
                         },
                         "type": "function-call",
                       },
-                      Object {
-                        "args": Array [
-                          Object {
-                            "args": Array [
+                      {
+                        "args": [
+                          {
+                            "args": [
                               "implicit*",
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 59,
                               "column": 40,
                               "line": 3,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 52,
                               "column": 33,
                               "line": 3,
                             },
                             "type": "funcref",
                           },
-                          Object {
-                            "args": Array [
-                              Object {
-                                "args": Array [
+                          {
+                            "args": [
+                              {
+                                "args": [
                                   "number",
                                   DeciNumber {
                                     "d": 1n,
@@ -1831,7 +1832,7 @@ describe('Tables', () => {
                                     "s": 1n,
                                   },
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 52,
                                   "column": 33,
                                   "line": 3,
@@ -1868,18 +1869,18 @@ describe('Tables', () => {
                                   "unit": null,
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 52,
                                   "column": 33,
                                   "line": 3,
                                 },
                                 "type": "literal",
                               },
-                              Object {
-                                "args": Array [
+                              {
+                                "args": [
                                   "second",
                                 ],
-                                "end": Object {
+                                "end": {
                                   "char": 59,
                                   "column": 40,
                                   "line": 3,
@@ -1913,8 +1914,8 @@ describe('Tables', () => {
                                   "symbol": null,
                                   "tree": undefined,
                                   "type": "number",
-                                  "unit": Array [
-                                    Object {
+                                  "unit": [
+                                    {
                                       "baseQuantity": "second",
                                       "baseSuperQuantity": "second",
                                       "exp": DeciNumber {
@@ -1935,7 +1936,7 @@ describe('Tables', () => {
                                   ],
                                   Symbol(immer-draftable): true,
                                 },
-                                "start": Object {
+                                "start": {
                                   "char": 54,
                                   "column": 35,
                                   "line": 3,
@@ -1943,12 +1944,12 @@ describe('Tables', () => {
                                 "type": "ref",
                               },
                             ],
-                            "end": Object {
+                            "end": {
                               "char": 59,
                               "column": 40,
                               "line": 3,
                             },
-                            "start": Object {
+                            "start": {
                               "char": 52,
                               "column": 33,
                               "line": 3,
@@ -1956,7 +1957,7 @@ describe('Tables', () => {
                             "type": "argument-list",
                           },
                         ],
-                        "end": Object {
+                        "end": {
                           "char": 59,
                           "column": 40,
                           "line": 3,
@@ -1990,8 +1991,8 @@ describe('Tables', () => {
                           "symbol": null,
                           "tree": undefined,
                           "type": "number",
-                          "unit": Array [
-                            Object {
+                          "unit": [
+                            {
                               "baseQuantity": "second",
                               "baseSuperQuantity": "second",
                               "exp": DeciNumber {
@@ -2012,7 +2013,7 @@ describe('Tables', () => {
                           ],
                           Symbol(immer-draftable): true,
                         },
-                        "start": Object {
+                        "start": {
                           "char": 52,
                           "column": 33,
                           "line": 3,
@@ -2020,12 +2021,12 @@ describe('Tables', () => {
                         "type": "function-call",
                       },
                     ],
-                    "end": Object {
+                    "end": {
                       "char": 59,
                       "column": 40,
                       "line": 3,
                     },
-                    "start": Object {
+                    "start": {
                       "char": 42,
                       "column": 23,
                       "line": 3,
@@ -2033,12 +2034,12 @@ describe('Tables', () => {
                     "type": "argument-list",
                   },
                 ],
-                "end": Object {
+                "end": {
                   "char": 59,
                   "column": 40,
                   "line": 3,
                 },
-                "start": Object {
+                "start": {
                   "char": 42,
                   "column": 23,
                   "line": 3,
@@ -2119,9 +2120,9 @@ describe('Tables', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
-          Array [],
-          Array [
+        "value": [
+          [],
+          [
             DeciNumber {
               "d": 1n,
               "infinite": false,
@@ -2407,14 +2408,46 @@ describe('Dates', () => {
   });
 
   it('can get the max of a list of dates', async () => {
-    expect(
-      await runCode(`max([date(2050-Jan-01), date(2025-Jun-01)])`)
-    ).toMatchObject({
-      type: {
-        date: 'day',
-      },
-      value: 2524608000000n,
-    });
+    const result = await runCode(`max([date(2050-Jan-01), date(2025-Jun-01)])`);
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "meta": undefined,
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": "day",
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgNames": undefined,
+          "functionBody": undefined,
+          "functionName": undefined,
+          "functionScopeDepth": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "tree": undefined,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": 2524608000000n,
+      }
+    `);
   });
 
   it('can operate between dates', async () => {
@@ -2843,7 +2876,7 @@ describe('number units work together', () => {
   it('converts between exponentiated and non-exponentiated but expandable to same', async () => {
     expect(await runCode('100 centimeter^3 in cubicmetre'))
       .toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -2874,8 +2907,8 @@ describe('number units work together', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "volume",
               "baseSuperQuantity": "volume",
               "exp": DeciNumber {
@@ -3187,7 +3220,7 @@ describe('number units work together', () => {
 
   it("nonscalar unit conversions don't get in the way", async () => {
     expect(await runCode(`44 zettabytes/year`)).toMatchObject({
-      value: N(44000000000000000000000),
+      value: N(44000000000000000000000n),
       type: t.number(
         U([u('bytes', { multiplier: N(1e21) }), u('years', { exp: N(-1) })])
       ),
@@ -3403,7 +3436,7 @@ describe('type coercion', () => {
 
   it('can coerce imprecise numbers', async () => {
     expect(await runCode('(30 days in month) + 1')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3434,8 +3467,8 @@ describe('type coercion', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "month",
               "baseSuperQuantity": "month",
               "exp": DeciNumber {
@@ -3466,7 +3499,6 @@ describe('type coercion', () => {
     `);
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('can coerce the arguments of an autoconverted function', async () => {
     expect(await runCode(`1 centigram + 2`)).toMatchObject({
       value: N(3, 100),
@@ -3539,7 +3571,7 @@ describe('percentages', () => {
       type: t.number(null, 'percentage'),
     });
     expect(await runCode('3% + 2')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3582,7 +3614,7 @@ describe('percentages', () => {
       }
     `);
     expect(await runCode('2 + 3%')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3625,7 +3657,7 @@ describe('percentages', () => {
       }
     `);
     expect(await runCode('3% + 1%')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3669,7 +3701,7 @@ describe('percentages', () => {
     `);
 
     expect(await runCode('100 - 10%')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3764,7 +3796,7 @@ describe('percentages', () => {
 
   it('can be converted from a number', async () => {
     expect(await runCode('0.1 in %')).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3820,7 +3852,7 @@ describe('tiered function', () => {
     }
     T(5)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3874,7 +3906,7 @@ describe('tiered function', () => {
     }
     T(5 interviews/month)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3905,8 +3937,8 @@ describe('tiered function', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "EUR",
               "baseSuperQuantity": "currency",
               "exp": DeciNumber {
@@ -3947,7 +3979,7 @@ describe('tiered function', () => {
     }
     T(60 interviews/year)`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -3978,8 +4010,8 @@ describe('tiered function', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "EUR",
               "baseSuperQuantity": "currency",
               "exp": DeciNumber {
@@ -4017,7 +4049,7 @@ describe('tiered function', () => {
       2 : 2
     }`;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -4048,8 +4080,8 @@ describe('tiered function', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "USD",
               "baseSuperQuantity": "currency",
               "exp": DeciNumber {
@@ -4088,7 +4120,7 @@ describe('grammar extensions', () => {
     Yearly = Cost for 1 year
     `;
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -4119,8 +4151,8 @@ describe('grammar extensions', () => {
           "symbol": null,
           "tree": undefined,
           "type": "number",
-          "unit": Array [
-            Object {
+          "unit": [
+            {
               "baseQuantity": "USD",
               "baseSuperQuantity": "currency",
               "exp": DeciNumber {
@@ -4229,7 +4261,7 @@ describe('lookup syntactic sugar', () => {
       Table[3]
     `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -4253,11 +4285,11 @@ describe('lookup syntactic sugar', () => {
           "numberFormat": null,
           "pending": false,
           "rangeOf": null,
-          "rowCellNames": Array [
+          "rowCellNames": [
             "Col1",
             "Col2",
           ],
-          "rowCellTypes": Array [
+          "rowCellTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -4331,7 +4363,7 @@ describe('lookup syntactic sugar', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -4360,7 +4392,7 @@ describe('lookup syntactic sugar', () => {
       Table[Table.Col1 == 3]
     `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,
@@ -4384,11 +4416,11 @@ describe('lookup syntactic sugar', () => {
           "numberFormat": null,
           "pending": false,
           "rangeOf": null,
-          "rowCellNames": Array [
+          "rowCellNames": [
             "Col1",
             "Col2",
           ],
-          "rowCellTypes": Array [
+          "rowCellTypes": [
             Type {
               "anythingness": false,
               "atParentIndex": null,
@@ -4462,7 +4494,7 @@ describe('lookup syntactic sugar', () => {
           "unit": null,
           Symbol(immer-draftable): true,
         },
-        "value": Array [
+        "value": [
           DeciNumber {
             "d": 1n,
             "infinite": false,
@@ -4492,7 +4524,7 @@ describe('lookup syntactic sugar', () => {
       if BoolVar then Table[Table.Col1 == 3].Col2 else -1
     `)
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "meta": undefined,
         "type": Type {
           "anythingness": false,

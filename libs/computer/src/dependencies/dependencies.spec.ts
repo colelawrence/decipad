@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 // eslint-disable-next-line no-restricted-imports
 import { parseBlockOrThrow, parseStatementOrThrow } from '@decipad/language';
 import { dependencies, findAllTables } from './dependencies';
@@ -5,7 +6,7 @@ import { dependencies, findAllTables } from './dependencies';
 it('Finds variables depended upon by a statement', () => {
   expect(dependencies(parseStatementOrThrow('A = B / C')))
     .toMatchInlineSnapshot(`
-    Array [
+    [
       "/",
       "B",
       "C",
@@ -16,7 +17,7 @@ it('Finds variables depended upon by a statement', () => {
 it('Finds variables depended upon by a coulumn assignment', () => {
   expect(dependencies(parseStatementOrThrow('Table1.Col1 = 1')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "Table1",
       ]
     `);
@@ -28,7 +29,7 @@ it('does not show dependencies of function arguments, but does show deps inside 
       parseStatementOrThrow('Table = { Inner = 1, Col2 = Inner + Y }')
     )
   ).toMatchInlineSnapshot(`
-    Array [
+    [
       "+",
       "Table::Inner",
       "Y",
@@ -36,7 +37,7 @@ it('does not show dependencies of function arguments, but does show deps inside 
   `);
   expect(dependencies(parseStatementOrThrow('Fn(Inner) = Inner + Y')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "+",
         "Y",
       ]
@@ -53,7 +54,7 @@ it('treats table refs', () => {
 it('excludes func args', () => {
   expect(dependencies(parseStatementOrThrow('Fn(X) = X + 1')))
     .toMatchInlineSnapshot(`
-      Array [
+      [
         "+",
       ]
     `);

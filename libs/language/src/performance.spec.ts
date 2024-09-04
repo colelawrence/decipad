@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N } from '@decipad/number';
 import type { AST, Result } from '@decipad/language-interfaces';
 import { runAST, serializeType, validateResult } from '.';
@@ -78,7 +79,6 @@ const createProgram = (op: string): AST.Block => ({
     },
   ],
 });
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('language performance', () => {
   const emptyMeta = undefined;
 
@@ -119,7 +119,6 @@ describe.skip('language performance', () => {
       expect(serializedResult.type.kind).toBe('table');
       if (serializedResult.type.kind === 'table') {
         for (const columnType of serializedResult.type.columnTypes) {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(columnType.kind).toBe('number');
         }
       } else {

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import isPromise from 'is-promise';
 import { bind, sequence } from './PromiseOrType';
 

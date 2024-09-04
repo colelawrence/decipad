@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { materializeOneResult, buildType as t } from '@decipad/language-types';
@@ -113,11 +114,11 @@ describe('getType', () => {
         "anythingness": false,
         "atParentIndex": null,
         "cellType": null,
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
           "Value",
         ],
-        "columnTypes": Array [
+        "columnTypes": [
           Type {
             "anythingness": false,
             "atParentIndex": null,
@@ -258,7 +259,7 @@ describe('getValue', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 1n,
           "infinite": false,
@@ -301,7 +302,7 @@ describe('getValue', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 10n,
           "infinite": false,
@@ -334,7 +335,7 @@ describe('getValue', () => {
         ).getData()
       )
     ).toMatchInlineSnapshot(`
-      Array [
+      [
         DeciNumber {
           "d": 25146n,
           "infinite": false,
@@ -376,12 +377,12 @@ describe('getValue', () => {
     const table = await testGetValue(getValue, [col(1, 2, 3), ne(1, 'table')]);
     expect(table).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Value",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -409,8 +410,8 @@ describe('getValue', () => {
             ],
             "dataCache": undefined,
             "defaultValue": ColumnLikeMixin {
-              "_dimensions": Array [
-                Object {
+              "_dimensions": [
+                {
                   "dimensionLength": 0,
                 },
               ],
@@ -446,13 +447,13 @@ describe('getValue', () => {
     );
     expect(tableType).toMatchInlineSnapshot(`
       Table {
-        "columnNames": Array [
+        "columnNames": [
           "Col1",
           "Value",
         ],
-        "columns": Array [
+        "columns": [
           Column {
-            "_values": Array [
+            "_values": [
               StringValue {
                 "value": "a",
               },
@@ -465,8 +466,8 @@ describe('getValue', () => {
             ],
             "dataCache": Promise {},
             "defaultValue": ColumnLikeMixin {
-              "_dimensions": Array [
-                Object {
+              "_dimensions": [
+                {
                   "dimensionLength": 0,
                 },
               ],
@@ -479,7 +480,7 @@ describe('getValue', () => {
             "rowCountCache": 3,
           },
           Column {
-            "_values": Array [
+            "_values": [
               NumberValue {
                 "value": DeciNumber {
                   "d": 1n,
@@ -507,8 +508,8 @@ describe('getValue', () => {
             ],
             "dataCache": Promise {},
             "defaultValue": ColumnLikeMixin {
-              "_dimensions": Array [
-                Object {
+              "_dimensions": [
+                {
                   "dimensionLength": 0,
                 },
               ],
