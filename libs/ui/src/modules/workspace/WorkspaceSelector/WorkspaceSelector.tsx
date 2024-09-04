@@ -1,8 +1,9 @@
 import { pluralize } from '@decipad/language-units';
-import { FC, ReactNode, useMemo, useState } from 'react';
-import { Avatar, Tooltip } from '../../../shared/atoms';
-import { CaretDown, CaretUp } from '../../../icons';
 import * as Popover from '@radix-ui/react-popover';
+import { isLocalhostProPlan } from 'libs/ui/src/utils';
+import { FC, ReactNode, useMemo, useState } from 'react';
+import { CaretDown, CaretUp } from '../../../icons';
+import { Avatar, Tooltip } from '../../../shared/atoms';
 import * as Styled from './styles';
 
 type WorkspaceSelectorProps = {
@@ -24,6 +25,10 @@ export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
 
   // Show tooltip on truncated name
   const isLongName = useMemo(() => name.length > 20, [name]);
+  const isLocalhostPro = isLocalhostProPlan({
+    isPremium,
+    planName: plan || '',
+  });
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
@@ -49,7 +54,9 @@ export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
                 ? 'Private'
                 : `${membersCount} ${pluralize('member', membersCount)}`}
               {plan && (
-                <Styled.Badge isPremium={isPremium}>{plan}</Styled.Badge>
+                <Styled.Badge isPremium={isLocalhostPro || isPremium}>
+                  {isLocalhostPro ? 'Pro (legacy)' : plan}
+                </Styled.Badge>
               )}
             </Styled.Description>
           </Styled.Profile>

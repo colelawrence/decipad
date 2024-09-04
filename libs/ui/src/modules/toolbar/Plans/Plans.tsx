@@ -7,13 +7,13 @@ import * as Popover from '@radix-ui/react-popover';
 import { Toggle } from '../../../shared';
 import * as Styled from '../styles';
 
+// Update this if Stripe plans change
 const subscriptionPlansNames = [
-  'Enterprise',
-  'Free',
-  'Personal',
-  'Pro',
-  'Team',
-  'None',
+  { key: 'free', name: 'Free' },
+  { key: 'pro', name: 'Pro (legacy)' },
+  { key: 'personal', name: 'Plus' },
+  { key: 'team', name: 'Business' },
+  { key: 'none', name: 'None' },
 ];
 
 export const Plans = () => {
@@ -30,18 +30,18 @@ export const Plans = () => {
       <Popover.Content asChild align="end" sideOffset={16}>
         <Styled.Wrapper>
           {subscriptionPlansNames.map((plan) => (
-            <Styled.ToggleLabel key={plan}>
+            <Styled.ToggleLabel key={plan.key}>
               <Toggle
                 variant="checkbox"
                 active={
-                  (plan === 'None' && planType == null) ||
-                  plan.toLocaleLowerCase() === planType
+                  (plan.key === 'none' && planType == null) ||
+                  plan.key === planType
                 }
                 ariaRoleDescription={`Toggle ${plan}`}
                 onChange={(value) => {
                   if (!value) return;
-                  switch (plan) {
-                    case 'None':
+                  switch (plan.key) {
+                    case 'none':
                       unsafePlan({
                         workspaceId,
                         plan: null,
@@ -50,13 +50,13 @@ export const Plans = () => {
                     default:
                       unsafePlan({
                         workspaceId,
-                        plan: plan.toLocaleLowerCase() as any,
+                        plan: plan.key as any,
                       });
                       break;
                   }
                 }}
               />
-              {plan}
+              {plan.name}
             </Styled.ToggleLabel>
           ))}
         </Styled.Wrapper>

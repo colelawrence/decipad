@@ -3,9 +3,10 @@ import { noop } from '@decipad/utils';
 import { FC, useCallback, useMemo } from 'react';
 import { Avatar, Tooltip } from '../../../shared/atoms';
 
-import * as Styled from './styles';
+import { isLocalhostProPlan } from 'libs/ui/src/utils';
 import pluralize from 'pluralize';
 import { Check } from '../../../icons';
+import * as Styled from './styles';
 
 export interface WorkspaceItemProps {
   readonly id: string;
@@ -32,7 +33,10 @@ export const WorkspaceItem = ({
 
   // Show tooltip on truncated name
   const isLongName = useMemo(() => name.length > 20, [name]);
-
+  const isLocalhostPro = isLocalhostProPlan({
+    isPremium,
+    planName: plan || '',
+  });
   return (
     <Styled.ItemButton isSelected={isActive} onClick={handleNavigate}>
       <Styled.Avatar>
@@ -54,7 +58,11 @@ export const WorkspaceItem = ({
           {membersCount === 1
             ? 'Private'
             : `${membersCount} ${pluralize('member', membersCount)}`}
-          {plan && <Styled.Badge isPremium={isPremium}>{plan}</Styled.Badge>}
+          {plan && (
+            <Styled.Badge isPremium={isLocalhostPro || isPremium}>
+              {isLocalhostPro ? 'Pro (Legacy)' : plan}
+            </Styled.Badge>
+          )}
         </Styled.Description>
       </Styled.Profile>
 

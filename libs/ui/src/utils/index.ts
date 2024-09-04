@@ -1,6 +1,7 @@
 export * from './avatarColor';
 export * from './cn';
 export * from './counter';
+export * from './dev';
 export * from './dnd';
 export * from './getEmptyImage';
 export * from './heading';

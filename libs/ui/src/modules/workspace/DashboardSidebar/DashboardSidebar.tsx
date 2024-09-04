@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CreateSectionMutation,
   ShallowWorkspaceFragment,
 } from '@decipad/graphql-client';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { smallScreenQuery } from '../../../primitives';
 
@@ -12,16 +12,16 @@ import * as Styled from './styles';
 import { WorkspaceMenu } from '../WorkspaceMenu/WorkspaceMenu';
 import { WorkspaceSelector } from '../WorkspaceSelector/WorkspaceSelector';
 
-import { Drawer } from 'vaul';
-import useMediaQuery from '../../../hooks/useMediaQuery';
 import { useLocalStorage, useStripePlans } from '@decipad/react-utils';
-import { WorkspaceNavigation } from '../WorkspaceNavigation/WorkspaceNavigation';
-import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
-import { useLocation } from 'react-router-dom';
+import { workspaces as workspaceRouting } from '@decipad/routing';
 import { Sidebar } from 'libs/ui/src/icons';
 import { SectionRecord } from 'libs/ui/src/types/workspaces';
+import { useLocation } from 'react-router-dom';
 import { useRouteParams } from 'typesafe-routes/react-router';
-import { workspaces as workspaceRouting } from '@decipad/routing';
+import { Drawer } from 'vaul';
+import useMediaQuery from '../../../hooks/useMediaQuery';
+import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
+import { WorkspaceNavigation } from '../WorkspaceNavigation/WorkspaceNavigation';
 
 type DashboardSidebarProps = {
   readonly name: string | undefined;
@@ -46,7 +46,7 @@ const getPlanTitle =
     const title = stripePlans.find((p) => p?.key === workspace.plan);
 
     // small hack to support the old plan name
-    return title?.title ?? (workspace.isPremium ? 'Pro' : 'Free');
+    return title?.title ?? (workspace.isPremium ? 'Pro (Legacy)' : 'Free');
   };
 
 export const DashboardSidebar = ({

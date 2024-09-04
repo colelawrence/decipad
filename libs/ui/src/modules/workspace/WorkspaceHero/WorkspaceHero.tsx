@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PermissionType } from 'libs/ui/src/types';
+import { isLocalhostProPlan } from 'libs/ui/src/utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Deci } from '../../../icons';
 import {
@@ -39,9 +40,18 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   hasReachedAiLimit,
   aiCreditsLeft,
 }) => {
-  const plan = isPremium ? <span css={RainbowText}>{planName}</span> : planName;
   const members = <MembersCounter number={membersCount} />;
   const navigate = useNavigate();
+
+  const isLocalhostPro = isLocalhostProPlan({ isPremium, planName });
+  const plan =
+    isPremium || isLocalhostPro ? (
+      <span css={RainbowText}>
+        {isLocalhostPro ? 'Pro (Legacy)' : planName}
+      </span>
+    ) : (
+      planName
+    );
 
   const credits = (
     <>
