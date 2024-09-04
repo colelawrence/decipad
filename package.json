@@ -248,7 +248,7 @@
     "date-fns": "3.6.0",
     "deepmerge": "^4.3.1",
     "discord-api-types": "0.37.11",
-    "dom-loaded": "3.0.0",
+    "dom-loaded": "3.1.0",
     "dompurify": "^3.1.6",
     "dotenv": "^16.4.1",
     "emotion-normalize": "11.0.1",

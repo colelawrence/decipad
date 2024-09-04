@@ -16959,10 +16959,10 @@ dom-helpers@^5.0.1:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
 
-dom-loaded@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/dom-loaded/-/dom-loaded-3.0.0.tgz#0164b9bf60ac95ea00ff0d2c8abfe68fb7769759"
-  integrity sha512-XBByp17aE0owJhq5unCdzc9XeWdX7a5l6YaxL02j/kCK2AFjyUA/eKgLO+QqUvjOg3UkpN4dt5cuerUqVYnWoQ==
+dom-loaded@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/dom-loaded/-/dom-loaded-3.1.0.tgz#0ec23a74469f413004055f445d56de960b8c9447"
+  integrity sha512-dKa1kbseIZ5oC3A+UhYNtUZvZpf6vDgZVhBmg7EUAf5OSN8nofpbc+nqdm52h1Ylla2BTIcLfIdRQ/r6X6m5EA==
 
 dom-serializer@0:
   version "0.2.2"
