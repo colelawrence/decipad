@@ -22,6 +22,7 @@ impl Zero for DeciResult {
             DeciResult::Row(_) => false,
             DeciResult::TypeError => false,
             DeciResult::Pending => false,
+            DeciResult::Tree(_) => false,
         }
     }
 }

@@ -1,13 +1,14 @@
 // #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
-use crate::types::types::{DateSpecificity, Row, Table};
+use crate::types::types::{DateSpecificity, Row, Table, Tree, TreeColumn};
 use crate::DeciResult;
 use chrono::NaiveDateTime;
 use js_sys::{BigUint64Array, Object, Uint8Array};
-use num_bigint::{BigInt, Sign};
-use std::str::FromStr;
+use num_bigint::{BigInt, Sign, ToBigInt, ToBigUint};
 use num_traits::{One, Signed, ToPrimitive, Zero};
 use std::mem::size_of;
+use std::result;
+use std::str::FromStr;
 use std::{collections::HashMap, io::ErrorKind};
 use wasm_bindgen::prelude::*;
 
@@ -58,18 +59,22 @@ enum ResultType {
     TypeError = 9,
     Pending = 10,
     ArbitraryFraction = 11,
+    Tree = 12,
+    Undefined = 13,
 }
 
-
-pub fn encode_big_int(buffer: &mut Vec<u8>, original_offset: usize, mut value: &BigInt) -> usize {
+pub fn encode_big_int(buffer: &mut Vec<u8>, original_offset: usize, value: &BigInt) -> usize {
     let offset = original_offset + size_of::<u32>();
     let bytes = value.to_signed_bytes_le();
     let len = bytes.len() as u32;
+
     buffer.push((len) as u8);
     buffer.push((len >> 8) as u8);
     buffer.push((len >> 16) as u8);
     buffer.push((len >> 24) as u8);
+
     bytes.iter().for_each(|byte| buffer.push(*byte));
+
     offset + len as usize
 }
 
@@ -89,7 +94,6 @@ pub fn decode_big_int(buffer: &Uint8Array, mut offset: usize) -> (BigInt, usize)
     let value = BigInt::from_signed_bytes_le(&vec);
     (value, offset)
 }
-
 
 pub fn js_to_rust_serialized_result(value: &JsValue) -> Result<SerializedResult, JsValue> {
     // Check if the value is an object
@@ -116,18 +120,23 @@ pub fn js_to_rust_serialized_result(value: &JsValue) -> Result<SerializedResult,
 }
 
 fn serialize_result_iter(
-    results: &[DeciResult],
+    results: &[Option<DeciResult>],
     type_array: &mut Vec<usize>,
     data_array: &mut Vec<u8>,
     data_length: &mut usize,
 ) -> Result<(), ErrorKind> {
-    let mut next_results: Vec<DeciResult> = Vec::new();
+    let mut next_results: Vec<Option<DeciResult>> = Vec::new();
 
     let initial_type_array_length = type_array.len();
-    for result in results {
+    for result_option in results {
+        if result_option.is_none() {
+            type_array.extend_from_slice(&[ResultType::Undefined as usize, 0, 0]);
+            continue;
+        }
+        let result = result_option.clone().unwrap();
         match result {
             DeciResult::Boolean(value) => {
-                data_array.push(if *value { 1 } else { 0 });
+                data_array.push(if value { 1 } else { 0 });
                 type_array.extend_from_slice(&[
                     ResultType::Boolean as usize,
                     *data_length as usize,
@@ -147,15 +156,16 @@ fn serialize_result_iter(
             }
 
             DeciResult::ArbitraryFraction(n, d) => {
-                let numerator_offset = encode_big_int(data_array, *data_length, n);
-                let denominator_offset = encode_big_int(data_array, numerator_offset, d);
+                let numerator_offset = encode_big_int(data_array, *data_length, &n);
+                let denominator_offset = encode_big_int(data_array, numerator_offset, &d);
+                let length = denominator_offset - *data_length;
 
                 type_array.extend_from_slice(&[
                     ResultType::ArbitraryFraction as usize,
                     *data_length as usize,
-                    denominator_offset,
+                    length,
                 ]);
-                *data_length += denominator_offset;
+                *data_length += length;
             }
 
             DeciResult::String(value) => {
@@ -169,7 +179,7 @@ fn serialize_result_iter(
                 *data_length += bytes.len();
             }
             DeciResult::Date(date, specificity) => {
-                data_array.extend_from_slice(&[*specificity as u8]);
+                data_array.extend_from_slice(&[specificity as u8]);
 
                 let mut length = 1;
                 if let Some(date) = date {
@@ -194,7 +204,7 @@ fn serialize_result_iter(
                 ]);
 
                 for value in values {
-                    next_results.push(value.clone());
+                    next_results.push(Some(value.clone()));
                 }
             }
             DeciResult::Range(range_values) => {
@@ -230,22 +240,72 @@ fn serialize_result_iter(
                 ]);
 
                 if let Some(index_name) = &table.index_name {
-                    next_results.push(DeciResult::String(index_name.clone()));
+                    next_results.push(Some(DeciResult::String(index_name.clone())));
                 } else {
-                    next_results.push(DeciResult::Column(Vec::new()));
+                    next_results.push(Some(DeciResult::Column(Vec::new())));
                 }
 
                 if let Some(delegates_index_to) = &table.delegates_index_to {
-                    next_results.push(DeciResult::String(delegates_index_to.clone()));
+                    next_results.push(Some(DeciResult::String(delegates_index_to.clone())));
                 } else {
-                    next_results.push(DeciResult::Column(Vec::new()));
+                    next_results.push(Some(DeciResult::Column(Vec::new())));
                 }
 
                 for name in &table.column_names {
-                    next_results.push(DeciResult::String(name.clone()));
+                    next_results.push(Some(DeciResult::String(name.clone())));
                 }
                 for column in &table.columns {
-                    next_results.push(DeciResult::Column(column.clone()));
+                    next_results.push(Some(DeciResult::Column(column.clone())));
+                }
+            }
+
+            DeciResult::Tree(tree) => {
+                type_array.extend_from_slice(&[
+                    ResultType::Tree as usize,
+                    0, // placeholder value
+                    5 + 2 * tree.columns.len() + tree.children.len(),
+                ]);
+
+                // Serialize root
+                next_results.push(Some(*tree.root.clone()));
+
+                // Serialize root aggregation
+                next_results.push(
+                    (tree
+                        .root_aggregation
+                        .as_ref()
+                        .map(|boxed| (**boxed).clone())),
+                );
+
+                // Serialize original cardinality
+                next_results.push(Some(DeciResult::ArbitraryFraction(
+                    tree.original_cardinality.to_bigint().unwrap(),
+                    BigInt::from(1),
+                )));
+
+                // Serialize column length
+                next_results.push(Some(DeciResult::ArbitraryFraction(
+                    tree.columns.len().to_bigint().unwrap(),
+                    BigInt::from(1),
+                )));
+
+                // Serialize columns
+                for column in &tree.columns {
+                    next_results.push(Some(DeciResult::String(column.name.clone())));
+                    next_results.push(Some(
+                        column.aggregation.clone().unwrap_or((DeciResult::Pending)),
+                    ));
+                }
+
+                // Serialize child count
+                next_results.push(Some(DeciResult::ArbitraryFraction(
+                    tree.children.len().to_bigint().unwrap(),
+                    BigInt::from(1),
+                )));
+
+                // Serialize children
+                for child in &tree.children {
+                    next_results.push(Some(DeciResult::Tree(child.clone())));
                 }
             }
 
@@ -257,12 +317,12 @@ fn serialize_result_iter(
                 ]);
 
                 // Serialize row index name
-                next_results.push(DeciResult::String(row.row_index_name.clone()));
+                next_results.push(Some(DeciResult::String(row.row_index_name.clone())));
 
                 // Serialize each cell
                 for (name, value) in &row.cells {
-                    next_results.push(DeciResult::String(name.clone()));
-                    next_results.push(value.clone());
+                    next_results.push(Some(DeciResult::String(name.clone())));
+                    next_results.push(Some(value.clone()));
                 }
             }
 
@@ -281,7 +341,7 @@ fn serialize_result_iter(
                 ]);
             }
             DeciResult::ArbitraryFraction(_, _) => {
-              return Err(ErrorKind::Unsupported);
+                return Err(ErrorKind::Unsupported);
             }
         }
     }
@@ -292,6 +352,7 @@ fn serialize_result_iter(
         if type_array[i] != ResultType::Column as usize
             && type_array[i] != ResultType::Table as usize
             && type_array[i] != ResultType::Row as usize
+            && type_array[i] != ResultType::Tree as usize
         {
             continue;
         }
@@ -313,7 +374,7 @@ fn serialize_result_internal(result: DeciResult) -> Result<SerializedResult, Err
     let mut data_length = 0;
 
     serialize_result_iter(
-        &[result],
+        &[Some(result)],
         &mut type_array,
         &mut data_array,
         &mut data_length,
@@ -336,7 +397,7 @@ pub fn serialize_result(result: DeciResult) -> Object {
     let mut data_length = 0;
 
     serialize_result_iter(
-        &[result],
+        &[Some(result)],
         &mut type_array,
         &mut data_array,
         &mut data_length,
@@ -361,22 +422,22 @@ fn deserialize_result_internal(val: SerializedResult) -> Result<DeciResult, JsVa
     let type_description: Vec<u64> = val.type_array().to_vec();
     let data = val.data();
 
-    deserialize_data_iter(&data, &type_description, 0)
+    deserialize_data_iter(&data, &type_description, 0).map(|opt| opt.unwrap())
 }
 
 pub fn deserialize_result(val: Object) -> Result<DeciResult, JsValue> {
-    let serResult = js_to_rust_serialized_result(&val)?;
-    let type_description: Vec<u64> = serResult.type_array().to_vec();
-    let data = serResult.data();
+    let ser_result = js_to_rust_serialized_result(&val)?;
+    let type_description: Vec<u64> = ser_result.type_array().to_vec();
+    let data = ser_result.data();
 
-    deserialize_data_iter(&data, &type_description, 0)
+    deserialize_data_iter(&data, &type_description, 0).map(|opt| opt.unwrap())
 }
 
 fn deserialize_data_iter(
     data: &Uint8Array,
     type_description: &[u64],
     type_description_pointer: usize,
-) -> Result<DeciResult, JsValue> {
+) -> Result<Option<DeciResult>, JsValue> {
     let (is_compressed, result_type) =
         decode_number(type_description[3 * type_description_pointer]);
 
@@ -390,22 +451,26 @@ fn deserialize_data_iter(
     let length = type_description[3 * type_description_pointer + 2] as usize;
 
     match result_type {
-        ResultType::Boolean => Ok(DeciResult::Boolean(data.get_index(offset as u32) != 0)),
+        // TODO move this further down
+        ResultType::Undefined => Ok(None),
+        ResultType::Boolean => Ok(Some(DeciResult::Boolean(
+            data.get_index(offset as u32) != 0,
+        ))),
         ResultType::Fraction => {
             let numerator = read_i64_from_uint8array(data, offset);
             let denominator = read_i64_from_uint8array(data, offset + 8);
-            Ok(DeciResult::Fraction(numerator, denominator))
+            Ok(Some(DeciResult::Fraction(numerator, denominator)))
         }
         ResultType::ArbitraryFraction => {
             let (numerator, numerator_offset) = decode_big_int(data, offset);
             let (denominator, _denominator_offset) = decode_big_int(data, numerator_offset);
-            Ok(DeciResult::ArbitraryFraction(numerator, denominator))
+            Ok(Some(DeciResult::ArbitraryFraction(numerator, denominator)))
         }
         ResultType::String => {
             let buffer = data.slice(offset as u32, (offset + length) as u32);
             let value = String::from_utf8(buffer.to_vec())
                 .map_err(|e| JsValue::from_str(&format!("Invalid UTF-8 sequence: {}", e)))?;
-            Ok(DeciResult::String(value))
+            Ok(Some(DeciResult::String(value)))
         }
         ResultType::Float => Err(JsValue::from_str("Floats are not supported yet")),
         ResultType::Date => {
@@ -429,7 +494,7 @@ fn deserialize_data_iter(
             } else {
                 None
             };
-            Ok(DeciResult::Date(date, date_specificity))
+            Ok(Some(DeciResult::Date(date, date_specificity)))
         }
         ResultType::Column => {
             let (is_compressed, _) = decode_number(type_description[3]);
@@ -437,16 +502,16 @@ fn deserialize_data_iter(
             let data_type_length = length;
 
             if !is_compressed {
-                let mut column = Vec::new();
+                let mut column: Vec<DeciResult> = Vec::new();
                 for i in data_type_offset..data_type_offset + data_type_length {
-                    let item = deserialize_data_iter(data, type_description, i)?;
+                    let item = deserialize_data_iter(data, type_description, i)?.unwrap();
                     column.push(item);
                 }
-                Ok(DeciResult::Column(column))
+                Ok(Some(DeciResult::Column(column)))
             } else {
                 let item_count = type_description[4] as usize;
                 let item_length = type_description[5] as usize;
-                let mut column = Vec::with_capacity(item_count);
+                let mut column: Vec<DeciResult> = Vec::with_capacity(item_count);
 
                 for i in 0..item_count {
                     let new_offset = offset + i * item_length;
@@ -455,10 +520,10 @@ fn deserialize_data_iter(
                     type_description_slice[1] = new_offset as u64;
                     type_description_slice[2] = item_length as u64;
 
-                    let item = deserialize_data_iter(data, &type_description_slice, 0)?;
+                    let item = deserialize_data_iter(data, &type_description_slice, 0)?.unwrap();
                     column.push(item);
                 }
-                Ok(DeciResult::Column(column))
+                Ok(Some(DeciResult::Column(column)))
             }
         }
         ResultType::Range => {
@@ -474,7 +539,7 @@ fn deserialize_data_iter(
             let start = DeciResult::Fraction(start_numerator, start_denominator);
             let end = DeciResult::Fraction(end_numerator, end_denominator);
 
-            Ok(DeciResult::Range(vec![start, end]))
+            Ok(Some(DeciResult::Range(vec![start, end])))
         }
         ResultType::Table => {
             let child_count = length;
@@ -486,7 +551,7 @@ fn deserialize_data_iter(
             // Deserialize index_name
             let index_name_result =
                 deserialize_data_iter(data, type_description, type_description_pointer + 1)?;
-            if let DeciResult::String(name) = index_name_result {
+            if let Some(DeciResult::String(name)) = index_name_result {
                 if !name.is_empty() {
                     index_name = Some(name);
                 }
@@ -495,7 +560,7 @@ fn deserialize_data_iter(
             // Deserialize delegates_index_to
             let delegates_index_to_result =
                 deserialize_data_iter(data, type_description, type_description_pointer + 2)?;
-            if let DeciResult::String(name) = delegates_index_to_result {
+            if let Some(DeciResult::String(name)) = delegates_index_to_result {
                 if !name.is_empty() {
                     delegates_index_to = Some(name);
                 }
@@ -508,7 +573,7 @@ fn deserialize_data_iter(
                     type_description,
                     type_description_pointer + 3 + i,
                 )?;
-                if let DeciResult::String(name) = column_name_result {
+                if let Some(DeciResult::String(name)) = column_name_result {
                     column_names.push(name);
                 } else {
                     return Err(JsValue::from_str("Expected string for column name"));
@@ -522,30 +587,114 @@ fn deserialize_data_iter(
                     type_description,
                     type_description_pointer + 3 + child_count + i,
                 )?;
-                if let DeciResult::Column(column_data) = column_result {
+                if let Some(DeciResult::Column(column_data)) = column_result {
                     columns.push(column_data);
                 } else {
                     return Err(JsValue::from_str("Expected column in table"));
                 }
             }
 
-            Ok(DeciResult::Table(Table {
+            Ok(Some(DeciResult::Table(Table {
                 index_name,
                 delegates_index_to,
                 column_names,
                 columns,
-            }))
+            })))
+        }
+
+        ResultType::Tree => {
+            let mut tdp = offset;
+            let root = deserialize_data_iter(data, type_description, tdp)?;
+            tdp += 1;
+
+            let root_aggregation = deserialize_data_iter(data, type_description, tdp)?;
+            tdp += 1;
+
+            let original_cardinality = match deserialize_data_iter(data, type_description, tdp)? {
+                Some(DeciResult::ArbitraryFraction(n, _)) => n.to_usize().unwrap(),
+                _ => {
+                    return Err(JsValue::from_str(
+                        "Expected number for original cardinality",
+                    ))
+                }
+            };
+            tdp += 1;
+
+            let column_length = match deserialize_data_iter(data, type_description, tdp)? {
+                Some(DeciResult::ArbitraryFraction(n, _)) => n.to_usize().unwrap(),
+                _ => return Err(JsValue::from_str("Expected number for column length")),
+            };
+            tdp += 1;
+
+            let mut columns = Vec::with_capacity(column_length);
+            for _ in 0..column_length {
+                let column_name = match deserialize_data_iter(data, type_description, tdp)? {
+                    Some(DeciResult::String(name)) => name,
+                    _ => return Err(JsValue::from_str("Expected string for column name")),
+                };
+                tdp += 1;
+
+                let aggregation = match deserialize_data_iter(data, type_description, tdp)? {
+                    Some(DeciResult::Pending) => None,
+                    result => Some(result),
+                };
+                tdp += 1;
+
+                columns.push(TreeColumn {
+                    name: column_name,
+                    aggregation: aggregation.flatten(),
+                });
+            }
+
+            let child_count = match deserialize_data_iter(data, type_description, tdp)? {
+                Some(DeciResult::ArbitraryFraction(n, _)) => n.to_usize().unwrap(),
+                _ => return Err(JsValue::from_str("Expected number for child count")),
+            };
+            tdp += 1;
+
+            let mut children = Vec::with_capacity(child_count);
+            for _ in 0..child_count {
+                if let Some(DeciResult::Tree(child)) =
+                    deserialize_data_iter(data, type_description, tdp)?
+                {
+                    children.push(child);
+                } else {
+                    return Err(JsValue::from_str("Expected Tree for child"));
+                }
+                tdp += 1;
+            }
+
+            let matched = match root {
+                Some((root)) => {
+                    (Ok(Some(DeciResult::Tree(Tree {
+                        root: Box::new(root),
+                        root_aggregation: root_aggregation.map(|ra| Box::new(ra)),
+                        original_cardinality: if original_cardinality <= i64::MAX as usize {
+                            original_cardinality as i64
+                        } else {
+                            return Err(JsValue::from_str(
+                                "original_cardinality too large for i64",
+                            ));
+                        },
+                        children,
+                        columns,
+                    }))))
+                }
+                _ => (Err(JsValue::from_str("Expected root"))),
+            };
+
+            return matched;
         }
 
         ResultType::Row => {
             let row_length = length;
-            let mut cells = HashMap::new();
+            let mut cells: HashMap<String, DeciResult> = HashMap::new();
             let mut row_index_name = String::new();
 
             // Deserialize row index name
             let row_index_name_result =
                 deserialize_data_iter(data, type_description, type_description_pointer + 1)?;
-            if let DeciResult::String(name) = row_index_name_result {
+            if let Some(DeciResult::String(name)) = row_index_name_result {
                 row_index_name = name;
             } else {
                 return Err(JsValue::from_str("Row index name is not a string"));
@@ -564,20 +713,22 @@ fn deserialize_data_iter(
                     type_description_pointer + 2 + 2 * i + 1,
                 )?;
 
-                if let DeciResult::String(cell_name) = cell_name_result {
-                    cells.insert(cell_name, cell_value_result);
+                if let (Some(DeciResult::String(cell_name)), Some(cell_value)) =
+                    (cell_name_result, cell_value_result)
+                {
+                    cells.insert(cell_name, cell_value);
                 } else {
                     return Err(JsValue::from_str("Cell name is not a string"));
                 }
             }
 
-            Ok(DeciResult::Row(Row {
+            Ok(Some(DeciResult::Row(Row {
                 row_index_name,
                 cells,
-            }))
+            })))
         }
-        ResultType::TypeError => Ok(DeciResult::TypeError),
-        ResultType::Pending => Ok(DeciResult::Pending),
+        ResultType::TypeError => Ok(Some(DeciResult::TypeError)),
+        ResultType::Pending => Ok(Some(DeciResult::Pending)),
     }
 }
 
@@ -598,6 +749,8 @@ fn decode_number(number: u64) -> (bool, ResultType) {
         9 => ResultType::TypeError,
         10 => ResultType::Pending,
         11 => ResultType::ArbitraryFraction,
+        12 => ResultType::Tree,
+        13 => ResultType::Undefined,
         _ => panic!("Invalid ResultType value: {}", original_number),
     };
 
@@ -695,6 +848,29 @@ mod serialize_result_tests {
     }
 
     #[wasm_bindgen_test]
+    fn test_serialize_column_of_arbitrary_fractions() {
+        let result = serialize_result_internal(DeciResult::Column(vec![
+            DeciResult::ArbitraryFraction(BigInt::from(1), BigInt::from(2)),
+            DeciResult::ArbitraryFraction(BigInt::from(3), BigInt::from(4)),
+            DeciResult::ArbitraryFraction(BigInt::from(5), BigInt::from(6)),
+            DeciResult::ArbitraryFraction(BigInt::from(7), BigInt::from(8)),
+        ]))
+        .unwrap();
+
+        assert_eq!(
+            result.type_array().to_vec(),
+            vec![4, 1, 4, 11, 0, 10, 11, 10, 10, 11, 20, 10, 11, 30, 10]
+        );
+        assert_eq!(
+            result.data().to_vec(),
+            vec![
+                1, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 3, 1, 0, 0, 0, 4, 1, 0, 0, 0, 5, 1, 0, 0,
+                0, 6, 1, 0, 0, 0, 7, 1, 0, 0, 0, 8
+            ]
+        );
+    }
+
+    #[wasm_bindgen_test]
     fn test_serialize_neg_arbitrary_fraction() {
         let result = serialize_result_internal(DeciResult::ArbitraryFraction(
             BigInt::from(-1),
@@ -708,9 +884,9 @@ mod serialize_result_tests {
     #[wasm_bindgen_test]
     fn test_serialize_really_big_arbitrary_fraction() {
         let numerator =
-            BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap();
+        BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap();
         let denominator =
-            BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap();
+        BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap();
         let result =
             serialize_result_internal(DeciResult::ArbitraryFraction(numerator, denominator))
                 .unwrap();
@@ -1013,13 +1189,123 @@ mod serialize_result_tests {
         // Check data
         let data = result.data().to_vec();
         let expected_data = "exprRef_block_0_ind\
-                             exprRef_block_0_del\
-                             T1T2\
-                             ShortLonger string\
-                             Medium lengthVery long string here"
+                         exprRef_block_0_del\
+                         T1T2\
+                         ShortLonger string\
+                         Medium lengthVery long string here"
             .as_bytes()
             .to_vec();
         assert_eq!(data, expected_data);
+    }
+
+    #[wasm_bindgen_test]
+    fn test_serialize_tree_with_no_children() {
+        let tree = DeciResult::Tree(Tree {
+            root: Box::new(DeciResult::Boolean(true)),
+            root_aggregation: None,
+            children: vec![],
+            columns: vec![TreeColumn {
+                name: "Col1".to_string(),
+                aggregation: Some(DeciResult::ArbitraryFraction(
+                    BigInt::from(1),
+                    BigInt::from(1),
+                )),
+            }],
+            original_cardinality: 1,
+        });
+
+        let result = serialize_result_internal(tree).unwrap();
+
+        assert_eq!(
+            result.type_array().to_vec(),
+            vec![
+                12, 1, 7, // tree
+                0, 0, 1, // root
+                13, 0, 0, // root aggregation
+                11, 1, 10, // originalCardinality
+                11, 11, 10, // column length
+                3, 21, 4, // Col1 name
+                11, 25, 10, // Col1 aggregation
+                11, 35, 10, // child count
+            ]
+        );
+
+        assert_eq!(
+            result.data().to_vec(),
+            vec![
+                1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
+                0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            ]
+        );
+    }
+
+    #[wasm_bindgen_test]
+    fn test_serialize_tree() {
+        let tree = DeciResult::Tree(Tree {
+            root: Box::new(DeciResult::Boolean(true)),
+            root_aggregation: None,
+            children: vec![
+                Tree {
+                    root: Box::new(DeciResult::ArbitraryFraction(
+                        BigInt::from(1),
+                        BigInt::from(1),
+                    )),
+                    root_aggregation: None,
+                    children: vec![],
+                    columns: vec![],
+                    original_cardinality: 0,
+                },
+                Tree {
+                    root: Box::new(DeciResult::ArbitraryFraction(
+                        BigInt::from(1),
+                        BigInt::from(1),
+                    )),
+                    root_aggregation: None,
+                    children: vec![],
+                    columns: vec![],
+                    original_cardinality: 0,
+                },
+            ],
+            columns: vec![TreeColumn {
+                name: "Col1".to_string(),
+                aggregation: Some(DeciResult::ArbitraryFraction(
+                    BigInt::from(1),
+                    BigInt::from(1),
+                )),
+            }],
+            original_cardinality: 1,
+        });
+
+        let result = serialize_result_internal(tree).unwrap();
+
+        assert_eq!(
+            result.type_array().to_vec(),
+            vec![
+                12, 1, 9, // tree
+                0, 0, 1, // root
+                13, 0, 0, // root aggregation
+                11, 1, 10, // originalCardinality
+                11, 11, 10, // column length
+                3, 21, 4, // Col1 name
+                11, 25, 10, // Col1 aggregation
+                11, 35, 10, // child count
+                12, 10, 5, // tree 1
+                12, 15, 5, // tree 2
+                11, 45, 10, 13, 0, 0, 11, 55, 10, 11, 65, 10, 11, 75, 10, 11, 85, 10, 13, 0, 0, 11,
+                95, 10, 11, 105, 10, 11, 115, 10,
+            ]
+        );
+
+        assert_eq!(
+            result.data().to_vec(),
+            vec![
+                1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
+                0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0,
+                0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+                1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            ]
+        );
     }
 
     #[wasm_bindgen_test]
@@ -1053,6 +1339,7 @@ mod deserialize_result_tests {
 
         SerializedResult::new(type_array_js, data_array_js)
     }
+
     #[wasm_bindgen_test]
     fn test_deserialize_boolean_true() {
         let serialized = create_serialized_result(vec![0, 0, 1], vec![1]);
@@ -1182,11 +1469,11 @@ mod deserialize_result_tests {
         let result = deserialize_result_internal(serialized).unwrap();
         if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
             assert_eq!(numerator,
-                BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap()
-            );
+                    BigInt::from_str("1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005").unwrap()
+                );
             assert_eq!(denominator,
-                BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap()
-            );
+                    BigInt::from_str("5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811").unwrap()
+                );
         } else {
             panic!("Expected ArbitraryFraction result");
         }
@@ -1575,6 +1862,123 @@ mod deserialize_result_tests {
             );
         } else {
             panic!("Expected Table result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_tree_with_no_children() {
+        let serialized = create_serialized_result(
+            vec![
+                12, 1, 7, // tree
+                0, 0, 1, // root
+                13, 0, 0, // root aggregation
+                11, 1, 10, // originalCardinality
+                11, 11, 10, // column length
+                3, 21, 4, // Col1 name
+                11, 25, 10, // Col1 aggregation
+                11, 35, 10, // child count
+            ],
+            vec![
+                1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
+                0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            ],
+        );
+
+        let result = deserialize_result_internal(serialized).unwrap();
+
+        if let DeciResult::Tree(tree) = result {
+            assert_eq!(*tree.root, DeciResult::Boolean(true));
+            assert!(tree.root_aggregation.is_none());
+            assert!(tree.children.is_empty());
+            assert_eq!(tree.columns.len(), 1);
+            assert_eq!(tree.columns[0].name, "Col1");
+            assert_eq!(
+                tree.columns[0].aggregation,
+                Some(DeciResult::ArbitraryFraction(
+                    BigInt::from(1),
+                    BigInt::from(1)
+                ))
+            );
+            assert_eq!(tree.original_cardinality, 1);
+        } else {
+            panic!("Expected Tree result");
+        }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_tree() {
+        let serialized = create_serialized_result(
+            vec![
+                12, 1, 9, // tree
+                0, 0, 1, // root
+                13, 0, 0, // root aggregation
+                11, 1, 10, // originalCardinality
+                11, 11, 10, // column length
+                3, 21, 4, // Col1 name
+                11, 25, 10, // Col1 aggregation
+                11, 35, 10, // child count
+                12, 10, 5, // tree 1
+                12, 15, 5, // tree 2
+                11, 45, 10, // tree 1 root
+                13, 0, 0, // tree 1 root aggregation
+                11, 55, 10, // tree 1 originalCardinality
+                11, 65, 10, // tree 1 column length
+                11, 75, 10, // tree 1 child count
+                11, 85, 10, // tree 2 root
+                13, 0, 0, // tree 2 root aggregation
+                11, 95, 10, // tree 2 originalCardinality
+                11, 105, 10, // tree 2 column length
+                11, 115, 10, // tree 2 child count
+            ],
+            vec![
+                1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
+                0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0,
+                0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+                1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            ],
+        );
+
+        let result = deserialize_result_internal(serialized).unwrap();
+
+        if let DeciResult::Tree(tree) = result {
+            assert_eq!(*tree.root, DeciResult::Boolean(true));
+            assert!(tree.root_aggregation.is_none());
+            assert_eq!(tree.children.len(), 2);
+            assert_eq!(tree.columns.len(), 1);
+            assert_eq!(tree.columns[0].name, "Col1");
+            assert_eq!(
+                tree.columns[0].aggregation,
+                Some(DeciResult::ArbitraryFraction(
+                    BigInt::from(1),
+                    BigInt::from(1)
+                ))
+            );
+            assert_eq!(tree.original_cardinality, 1);
+
+            // Check first child
+            let child1 = &tree.children[0];
+            assert_eq!(
+                *child1.root,
+                DeciResult::ArbitraryFraction(BigInt::from(1), BigInt::from(1))
+            );
+            assert!(child1.root_aggregation.is_none());
+            assert!(child1.children.is_empty());
+            assert!(child1.columns.is_empty());
+            assert_eq!(child1.original_cardinality, 0);
+
+            // Check second child
+            let child2 = &tree.children[1];
+            assert_eq!(
+                *child2.root,
+                DeciResult::ArbitraryFraction(BigInt::from(1), BigInt::from(1))
+            );
+            assert!(child2.root_aggregation.is_none());
+            assert!(child2.children.is_empty());
+            assert!(child2.columns.is_empty());
+            assert_eq!(child2.original_cardinality, 0);
+        } else {
+            panic!("Expected Tree result");
         }
     }
 

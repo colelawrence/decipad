@@ -1,13 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function __wbg_serializedresult_free(a: number, b: number): void;
+export function __wbg_serializedresult_free(a: number): void;
 export function serializedresult_new(a: number, b: number): number;
 export function serializedresult_type_array(a: number): number;
 export function serializedresult_data(a: number): number;
 export function greet(): void;
 export function parse_csv(a: number, b: number, c: number): number;
-export function __wbg_computebackend_free(a: number, b: number): void;
+export function __wbg_computebackend_free(a: number): void;
 export function __wbgt_test_csv_in_0(a: number): void;
 export function computebackend_read_csv_in(a: number, b: number, c: number, d: number): number;
 export function computebackend_insert_number_column_float(a: number, b: number, c: number, d: number): void;
@@ -28,7 +28,7 @@ export function computebackend_ge_mask(a: number, b: number, c: number, d: numbe
 export function computebackend_lt_mask(a: number, b: number, c: number, d: number, e: number): number;
 export function computebackend_le_mask(a: number, b: number, c: number, d: number, e: number): number;
 export function computebackend_eq_mask(a: number, b: number, c: number, d: number, e: number): number;
-export function __wbg_wasmbindgentestcontext_free(a: number, b: number): void;
+export function __wbg_wasmbindgentestcontext_free(a: number): void;
 export function wasmbindgentestcontext_new(): number;
 export function wasmbindgentestcontext_args(a: number, b: number, c: number): void;
 export function wasmbindgentestcontext_run(a: number, b: number, c: number): number;
@@ -37,14 +37,13 @@ export function __wbgtest_console_debug(a: number): void;
 export function __wbgtest_console_info(a: number): void;
 export function __wbgtest_console_warn(a: number): void;
 export function __wbgtest_console_error(a: number): void;
-export function __wbgtest_cov_dump(a: number): void;
 export function __wbindgen_malloc(a: number, b: number): number;
 export function __wbindgen_realloc(a: number, b: number, c: number, d: number): number;
 export const __wbindgen_export_2: WebAssembly.Table;
-export function _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h99ba7dfc821c48f8(a: number, b: number, c: number): void;
+export function _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h02f6796a04877a0e(a: number, b: number, c: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_free(a: number, b: number, c: number): void;
 export function __wbindgen_exn_store(a: number): void;
-export function wasm_bindgen__convert__closures__invoke0_mut__ha017c0b1464d6f9b(a: number, b: number): void;
-export function wasm_bindgen__convert__closures__invoke3_mut__h17f8133985c5ef60(a: number, b: number, c: number, d: number, e: number): void;
-export function wasm_bindgen__convert__closures__invoke2_mut__h90cd0ca069499ca3(a: number, b: number, c: number, d: number): void;
+export function wasm_bindgen__convert__closures__invoke0_mut__hcdb4c8dde4c86c46(a: number, b: number): void;
+export function wasm_bindgen__convert__closures__invoke3_mut__h27fbc6d6755e1f58(a: number, b: number, c: number, d: number, e: number): void;
+export function wasm_bindgen__convert__closures__invoke2_mut__h7b422848723f859b(a: number, b: number, c: number, d: number): void;

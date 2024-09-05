@@ -40,10 +40,6 @@ export function __wbgtest_console_warn(args: Array<any>): void;
 */
 export function __wbgtest_console_error(args: Array<any>): void;
 /**
-* @returns {Uint8Array | undefined}
-*/
-export function __wbgtest_cov_dump(): Uint8Array | undefined;
-/**
 */
 export enum DeciType {
   Number = 0,

@@ -1,10 +1,11 @@
-import { expect, describe, it } from 'vitest';
 /* eslint-disable func-names */
 /* eslint-disable no-bitwise */
-import DeciNumber from '@decipad/number';
+import { describe, expect, it } from 'vitest';
+import { N } from '@decipad/number';
 import { Result, SerializedType } from '@decipad/language-interfaces';
 import chunk from 'lodash/chunk';
 import { deserializeResult, SerializedResult, serializeResult } from '.';
+import { Value } from '@decipad/language-types';
 
 describe('serializeResult', () => {
   it('should serialize true', async () => {
@@ -36,7 +37,7 @@ describe('serializeResult', () => {
   it('should serialize positive integers', async () => {
     const one = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: 1n, infinite: false }),
       meta: undefined,
     });
 
@@ -49,7 +50,7 @@ describe('serializeResult', () => {
   it('should serialize fractions', async () => {
     const oneThird = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 3n, s: 1 }),
+      value: N({ n: 1n, d: 3n, s: 1 }),
       meta: undefined,
     });
 
@@ -62,7 +63,7 @@ describe('serializeResult', () => {
   it('should serialize zero', async () => {
     const zero = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
+      value: N({ n: 0n, d: 1n, s: 1n }),
       meta: undefined,
     });
     expect(zero).toEqual({
@@ -74,7 +75,7 @@ describe('serializeResult', () => {
   it('should serialize 1000', async () => {
     const result = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1000n, d: 1n, s: 1n }),
+      value: N({ n: 1000n, d: 1n, s: 1n }),
       meta: undefined,
     });
     expect(result).toEqual({
@@ -86,7 +87,7 @@ describe('serializeResult', () => {
   it('should serialize 54,320', async () => {
     const result = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 54_320n, d: 1n, s: 1n }),
+      value: N({ n: 54_320n, d: 1n, s: 1n }),
       meta: undefined,
     });
     expect(result).toEqual({
@@ -98,7 +99,7 @@ describe('serializeResult', () => {
   it('should serialize negative numbers', async () => {
     const negativeOne = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: -1n, infinite: false }),
       meta: undefined,
     });
     expect(negativeOne).toEqual({
@@ -107,7 +108,7 @@ describe('serializeResult', () => {
     });
     const negativeDenominator = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: -1n, s: 1n, infinite: false }),
+      value: N({ n: 1n, d: -1n, s: 1n, infinite: false }),
       meta: undefined,
     });
     expect(negativeDenominator).toEqual({
@@ -116,7 +117,7 @@ describe('serializeResult', () => {
     });
     const negativeBoth = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: -1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: -1n, s: -1n, infinite: false }),
       meta: undefined,
     });
     expect(negativeBoth).toEqual({
@@ -125,7 +126,7 @@ describe('serializeResult', () => {
     });
     const negativeSign = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: -1n, infinite: false }),
       meta: undefined,
     });
     expect(negativeSign).toEqual({
@@ -137,7 +138,7 @@ describe('serializeResult', () => {
   it('should serialize infinity', async () => {
     const positiveInfinity = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ infinite: true }),
+      value: N({ infinite: true }),
       meta: undefined,
     });
     expect(positiveInfinity).toEqual({
@@ -146,7 +147,7 @@ describe('serializeResult', () => {
     });
     const negativeInfinity = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({ s: -1n, infinite: true }),
+      value: N({ s: -1n, infinite: true }),
       meta: undefined,
     });
     expect(negativeInfinity).toEqual({
@@ -158,7 +159,7 @@ describe('serializeResult', () => {
   it('should serialize a really big number', async () => {
     const result = await serializeResult({
       type: { kind: 'number' },
-      value: new DeciNumber({
+      value: N({
         n: 1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005n,
         d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
         s: 1n,
@@ -568,10 +569,7 @@ describe('serializeResult', () => {
   it('should serialize a range containing DeciNumbers', async () => {
     const range = await serializeResult({
       type: { kind: 'range', rangeOf: { kind: 'number' } },
-      value: [
-        new DeciNumber({ n: 1n, d: 1n, s: 1n }),
-        new DeciNumber({ n: 4n, d: 1n, s: 1n }),
-      ],
+      value: [N({ n: 1n, d: 1n, s: 1n }), N({ n: 4n, d: 1n, s: 1n })],
       meta: undefined,
     });
 
@@ -591,7 +589,7 @@ describe('serializeResult', () => {
         rowCellTypes: [{ kind: 'string' }, { kind: 'number' }],
         rowCellNames: ['String', 'Number'],
       },
-      value: ['Hello there', new DeciNumber({ n: 1n, d: 3n, s: 1n })],
+      value: ['Hello there', N({ n: 1n, d: 3n, s: 1n })],
       meta: undefined,
     });
     const rowIndexNameData = new TextEncoder().encode('rowIndexName');
@@ -614,6 +612,113 @@ describe('serializeResult', () => {
         ...cell1Data,
         ...cell2NameData,
         ...cell2Data,
+      ])
+    );
+  });
+
+  it('should serialize a tree with no children', async () => {
+    const result = await serializeResult({
+      type: {
+        kind: 'tree',
+        columnNames: [],
+        columnTypes: [],
+      },
+      value: Value.Tree.from(
+        true, // root
+        undefined, // rootAggregation
+        [], // children
+        [
+          {
+            name: 'Col1',
+            aggregation: {
+              type: { kind: 'number' },
+              value: N(1),
+              meta: undefined,
+            },
+          },
+        ], // columns
+        1 // originalCardinality
+      ),
+    });
+
+    expect(chunk(result.type, 3)).toEqual([
+      [12n, 1n, 7n], // tree
+      [0n, 0n, 1n], // root
+      [13n, 0n, 0n], // root aggregation
+      [11n, 1n, 10n], // originalCardinality
+      [11n, 11n, 10n], // column length
+      [3n, 21n, 4n], // Col1 name
+      [11n, 25n, 10n], // Col1 aggregation
+      [11n, 35n, 10n], // child count
+    ]);
+
+    expect(result.data).toEqual(
+      new Uint8Array([
+        1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111,
+        108, 49, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+      ])
+    );
+  });
+
+  it('should serialize a tree', async () => {
+    const result = await serializeResult({
+      type: {
+        kind: 'tree',
+        columnNames: [],
+        columnTypes: [],
+      },
+      value: Value.Tree.from(
+        true, // root
+        undefined, // rootAggregation
+        [
+          Value.Tree.from(N(1), undefined, [], [], 0),
+          Value.Tree.from(N(1), undefined, [], [], 0),
+        ], // children
+        [
+          {
+            name: 'Col1',
+            aggregation: {
+              type: { kind: 'number' },
+              value: N(1),
+              meta: undefined,
+            },
+          },
+        ], // columns
+        1 // originalCardinality
+      ),
+    });
+
+    expect(chunk(result.type, 3)).toEqual([
+      [12n, 1n, 9n], // tree
+      [0n, 0n, 1n], // root
+      [13n, 0n, 0n], // root aggregation
+      [11n, 1n, 10n], // originalCardinality
+      [11n, 11n, 10n], // column length
+      [3n, 21n, 4n], // Col1 name
+      [11n, 25n, 10n], // Col1 aggregation
+      [11n, 35n, 10n], // child count
+      [12n, 10n, 5n], // tree 1
+      [12n, 15n, 5n], // tree 2
+      [11n, 45n, 10n],
+      [13n, 0n, 0n],
+      [11n, 55n, 10n],
+      [11n, 65n, 10n],
+      [11n, 75n, 10n],
+      [11n, 85n, 10n],
+      [13n, 0n, 0n],
+      [11n, 95n, 10n],
+      [11n, 105n, 10n],
+      [11n, 115n, 10n],
+    ]);
+
+    expect(result.data).toEqual(
+      new Uint8Array([
+        1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111,
+        108, 49, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1,
+        0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0,
+        1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
+        0, 0, 1, 0, 0, 0, 1,
       ])
     );
   });
@@ -692,7 +797,7 @@ describe('deserializeResult', () => {
 
     expect(one).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: 1n, infinite: false }),
     });
   });
 
@@ -704,7 +809,7 @@ describe('deserializeResult', () => {
 
     expect(oneThird).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 3n, s: 1n, infinite: false }),
+      value: N({ n: 1n, d: 3n, s: 1n, infinite: false }),
     });
   });
 
@@ -715,7 +820,7 @@ describe('deserializeResult', () => {
     });
     expect(zero).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 0n, d: 1n, s: 1n }),
+      value: N({ n: 0n, d: 1n, s: 1n }),
     });
   });
 
@@ -726,7 +831,7 @@ describe('deserializeResult', () => {
     });
     expect(result).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1000n, d: 1n, s: 1n }),
+      value: N({ n: 1000n, d: 1n, s: 1n }),
     });
   });
 
@@ -737,7 +842,7 @@ describe('deserializeResult', () => {
     });
     expect(result).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 54_320n, d: 1n, s: 1n }),
+      value: N({ n: 54_320n, d: 1n, s: 1n }),
     });
   });
 
@@ -748,7 +853,7 @@ describe('deserializeResult', () => {
     });
     expect(negativeOne).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
 
     const negativeDenominator = deserializeResult({
@@ -757,7 +862,7 @@ describe('deserializeResult', () => {
     });
     expect(negativeDenominator).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
 
     const negativeBoth = deserializeResult({
@@ -766,7 +871,7 @@ describe('deserializeResult', () => {
     });
     expect(negativeBoth).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: 1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: 1n, infinite: false }),
     });
 
     const negativeSign = deserializeResult({
@@ -775,7 +880,7 @@ describe('deserializeResult', () => {
     });
     expect(negativeSign).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ n: 1n, d: 1n, s: -1n, infinite: false }),
+      value: N({ n: 1n, d: 1n, s: -1n, infinite: false }),
     });
   });
 
@@ -786,7 +891,7 @@ describe('deserializeResult', () => {
     });
     expect(positiveInfinity).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ infinite: true }),
+      value: N({ infinite: true }),
     });
 
     const negativeInfinity = deserializeResult({
@@ -795,14 +900,14 @@ describe('deserializeResult', () => {
     });
     expect(negativeInfinity).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ s: -1n, infinite: true }),
+      value: N({ s: -1n, infinite: true }),
     });
   });
 
   it('should deserialize a really big number', async () => {
     const n: Result.Result<'number'> = {
       type: { kind: 'number' },
-      value: new DeciNumber({
+      value: N({
         n: 1189242266311298097986843979979816113623218530233116691614040514185247022195204198844876946793466766585567122298245572035602893621548531436948744330144832666119212097765405084496547968754459777242608939559827078370950263955706569157083419454002858062607403313379631011615034719463198885425053041533214276391294462878131935095911843534875187464576281961384589513841015342209735295593913297743190460395256449946622801655683395632954250335746706067480413944004242291424530217131889736651046664964054688638890098197338088365806846439851589037623048762666183525318766710116134286078596383357206224471031968005664344925563908503787189022850264597092446163614487870622937450201279974025663717864690129860114283018454698869499915778776199002005n,
         d: 5002009916778775199949688964548103824110689210964687173665204799721020547392260787844163616442907954620582209817873058093655294434665008691301744226027533836958706824316110176678135253816662678403267309851589346486085638808337918900988368864504694666401566379881317120354241922424004493140847606076475330524592365933865561082266499446525930640913477923193955925379022435101483159854831691826754647815784353481195905391318782644921936724123351403505245888913649174305161101369733133047062608582004549143807519656075593620590738707289559398062427779544578697456944805045677902129116662384410334478496341358451263982065302755428922217655856676643976496784488914025912207425814150404161966113320358123263116189799793486897908921136622429811n,
         s: 1n,
@@ -824,7 +929,7 @@ describe('deserializeResult', () => {
     const result = deserializeResult(serializedInfinity);
     expect(result).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ infinite: true }),
+      value: N({ infinite: true }),
     });
   });
 
@@ -837,7 +942,7 @@ describe('deserializeResult', () => {
     const result = deserializeResult(serializedNegativeInfinity);
     expect(result).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ s: -1n, infinite: true }),
+      value: N({ s: -1n, infinite: true }),
     });
   });
 
@@ -894,7 +999,7 @@ describe('deserializeResult', () => {
     const result = deserializeResult(serializedInfinity);
     expect(result).toEqual({
       type: { kind: 'number' },
-      value: new DeciNumber({ infinite: true }),
+      value: N({ infinite: true }),
     });
   });
 
@@ -1211,6 +1316,116 @@ describe('deserializeResult', () => {
     ]);
   });
 
+  it('should deserialize a tree with no children', async () => {
+    const result = deserializeResult(
+      createSerializedResult(
+        [
+          ...[12n, 1n, 7n], // tree
+          ...[0n, 0n, 1n], // root
+          ...[13n, 0n, 0n], // root aggregation
+          ...[11n, 1n, 10n], // originalCardinality
+          ...[11n, 11n, 10n], // column length
+          ...[3n, 21n, 4n], // Col1 name
+          ...[11n, 25n, 10n], // Col1 aggregation
+          ...[11n, 35n, 10n], // child count
+        ],
+        [
+          1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67,
+          111, 108, 49, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+          1,
+        ]
+      )
+    );
+
+    expect(result).toEqual({
+      type: {
+        kind: 'tree',
+        columnNames: [],
+        columnTypes: [],
+      },
+      value: Value.Tree.from(
+        true, // root
+        undefined, // rootAggregation
+        [], // children
+        [
+          {
+            name: 'Col1',
+            aggregation: {
+              type: { kind: 'number' },
+              value: N(1),
+            },
+          },
+        ], // columns
+        undefined // originalCardinality
+      ),
+    });
+  });
+
+  it('should deserialize a tree', async () => {
+    const result = deserializeResult(
+      createSerializedResult(
+        [
+          ...[12n, 1n, 9n], // tree
+          ...[0n, 0n, 1n], // root
+          ...[13n, 0n, 0n], // root aggregation
+          ...[11n, 1n, 10n], // originalCardinality
+          ...[11n, 11n, 10n], // column length
+          ...[3n, 21n, 4n], // Col1 name
+          ...[11n, 25n, 10n], // Col1 aggregation
+          ...[11n, 35n, 10n], // child count
+          ...[12n, 10n, 5n], // tree 1
+          ...[12n, 15n, 5n], // tree 2
+          // tree 1
+          ...[11n, 45n, 10n], // tree 1 root
+          ...[13n, 0n, 0n], // tree 1 root aggregation
+          ...[11n, 55n, 10n], // tree 1 originalCardinality
+          ...[11n, 65n, 10n], // tree 1 column length
+          ...[11n, 75n, 10n], // tree 1 child count
+          // tree 2
+          ...[11n, 85n, 10n], // tree 2 root
+          ...[13n, 0n, 0n], // tree 2 root aggregation
+          ...[11n, 95n, 10n], // tree 2 originalCardinality
+          ...[11n, 105n, 10n], // tree 2 column length
+          ...[11n, 115n, 10n], // tree 2 child count
+        ],
+        [
+          1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67,
+          111, 108, 49, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0,
+          1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0,
+          0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+          1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0,
+          0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+        ]
+      )
+    );
+
+    expect(result).toEqual({
+      type: {
+        kind: 'tree',
+        columnNames: [],
+        columnTypes: [],
+      },
+      value: Value.Tree.from(
+        true, // root
+        undefined, // rootAggregation
+        [
+          Value.Tree.from(N(1), undefined, [], [], 0),
+          Value.Tree.from(N(1), undefined, [], [], 0),
+        ], // children
+        [
+          {
+            name: 'Col1',
+            aggregation: {
+              type: { kind: 'number' },
+              value: N(1),
+            },
+          },
+        ], // columns
+        1 // originalCardinality
+      ),
+    });
+  });
+
   it('should deserialize a date that has a value', () => {
     const data = new Uint8Array(9);
     data.set([4], 0);
@@ -1255,7 +1470,7 @@ describe('deserializeResult', () => {
         kind: 'range',
         rangeOf: { kind: 'number' },
       },
-      value: [new DeciNumber(1n), new DeciNumber(4n)],
+      value: [N(1n), N(4n)],
     });
   });
 
@@ -1332,7 +1547,7 @@ describe('deserializeResult', () => {
         rowCellTypes: [{ kind: 'string' }, { kind: 'number' }],
         rowCellNames: ['String', 'Number'],
       },
-      value: ['Hello there', new DeciNumber({ n: 1n, d: 3n, s: 1n })],
+      value: ['Hello there', N({ n: 1n, d: 3n, s: 1n })],
     });
   });
 

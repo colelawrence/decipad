@@ -27,6 +27,21 @@ pub struct Table {
     pub columns: Vec<Vec<DeciResult>>,
 }
 
+#[derive(Clone, PartialEq, Debug)]
+pub struct TreeColumn {
+    pub name: String,
+    pub aggregation: Option<DeciResult>,
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct Tree {
+    pub root: Box<DeciResult>,
+    pub root_aggregation: Option<Box<DeciResult>>,
+    pub original_cardinality: i64,
+    pub children: Vec<Tree>,
+    pub columns: Vec<TreeColumn>,
+}
+
 #[derive(Clone, PartialEq, Debug, Copy)]
 pub enum DateSpecificity {
     None = 0,
@@ -50,6 +65,7 @@ pub enum DeciResult {
     Column(Vec<DeciResult>),
     Date(Option<NaiveDateTime>, DateSpecificity),
     Table(Table),
+    Tree(Tree),
     Range(Vec<DeciResult>),
     Row(Row),
     TypeError,

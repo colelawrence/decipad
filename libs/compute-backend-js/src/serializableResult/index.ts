@@ -10,8 +10,12 @@ import {
 } from 'libs/language-interfaces/src/Result';
 import { Specificity } from 'libs/language-interfaces/src/Time';
 import { columnToMeta } from './columnToMeta';
+import { oneResultToResult } from './oneResultToResult';
 import { getResultGenerator } from '@decipad/language-types';
 import { all } from '@decipad/generator-utils';
+import { SerializedType } from '@decipad/language-interfaces';
+import { TreeColumn } from 'libs/language-interfaces/src/Value';
+import { Tree } from 'libs/language-types/src/Value';
 
 const FULL_BYTE = 0xff;
 const FULL_NIBBLE = 0x80;
@@ -30,6 +34,8 @@ enum ResultType {
   TypeError = 9,
   Pending = 10,
   BigFraction = 11,
+  Tree = 12,
+  Undefined = 13,
 }
 
 const fixedLengths = {
@@ -98,7 +104,6 @@ const deserializeUint8ArrayToBigInt = (
   }
 
   // Read the length (4 bytes, big-endian)
-
   if (buffer.length < offset + length) {
     throw new Error('Buffer length does not match the encoded length');
   }
@@ -157,16 +162,22 @@ const nullColumn: Result<'materialized-column'> = {
 
 // eslint-disable-next-line complexity
 export const serializeResultIter = async <T extends Result>(
-  results: T[],
+  results: (T | undefined)[],
   typeArray: number[],
   dataArray: Uint8Array[],
   dataLength = { n: 0 } // allow this value to be mutated globally
 ) => {
-  const nextResults: AnyResult[] = [];
+  const nextResults: (AnyResult | undefined)[] = [];
   const initialTypeArrayLength = typeArray.length;
 
   // leaving this unused for now; but will be needed to compress data at some point
   for (const result of results) {
+    if (result === undefined) {
+      typeArray.push(ResultType.Undefined);
+      typeArray.push(0);
+      typeArray.push(0);
+      continue;
+    }
     switch (result.type.kind) {
       case 'boolean': {
         const { value } = result as Result<'boolean'>;
@@ -294,6 +305,63 @@ export const serializeResultIter = async <T extends Result>(
         typeArray.push(childCount);
         break;
       }
+
+      case 'tree': {
+        // root
+        // rootAggregation | undefined
+        // originalCardinality
+        // columnLength
+        // ...([name, aggregation | undefined][])
+        // children[]
+        const treeResult = result as Result<'tree'>;
+
+        typeArray.push(ResultType.Tree);
+        typeArray.push(-1); // Placeholder value; fixed after loop.
+
+        const { value } = treeResult;
+
+        // write the root, OneResult
+        nextResults.push(oneResultToResult(value.root));
+
+        // write the root aggregation, Result | undefined
+        nextResults.push(value.rootAggregation);
+
+        // write the original cardinality, number
+        nextResults.push({
+          type: { kind: 'number' },
+          value: new DeciNumber(value.originalCardinality),
+        });
+
+        // write the coulumn length count
+        nextResults.push({
+          type: { kind: 'number' },
+          value: new DeciNumber(value.columns.length),
+        });
+
+        value.columns.forEach((column) => {
+          nextResults.push({
+            type: { kind: 'string' },
+            value: column.name,
+          });
+          nextResults.push(column.aggregation);
+        });
+
+        nextResults.push({
+          type: { kind: 'number' },
+          value: new DeciNumber(value.children.length),
+        });
+
+        value.children.forEach((child) => {
+          nextResults.push({
+            type: { kind: 'tree', columnNames: [], columnTypes: [] },
+            value: child,
+          });
+        });
+
+        typeArray.push(5 + 2 * value.columns.length + value.children.length);
+        break;
+      }
+
       case 'materialized-column': {
         const columnResult = result as Result<'materialized-column'>;
         typeArray.push(ResultType.Column);
@@ -461,7 +529,8 @@ export const serializeResultIter = async <T extends Result>(
     if (
       typeArray[i] !== ResultType.Column &&
       typeArray[i] !== ResultType.Table &&
-      typeArray[i] !== ResultType.Row
+      typeArray[i] !== ResultType.Row &&
+      typeArray[i] !== ResultType.Tree
     ) {
       continue;
     }
@@ -546,6 +615,12 @@ function decodeNumber(number: bigint): [boolean, ResultType] {
     case 11:
       result = ResultType.BigFraction;
       break;
+    case 12:
+      result = ResultType.Tree;
+      break;
+    case 13:
+      result = ResultType.Undefined;
+      break;
     default:
       throw new Error(`Invalid ResultType value: ${originalNumber}`);
   }
@@ -611,7 +686,7 @@ const deserializeResultIter = (
   data: Uint8Array,
   typeDescription: bigint[],
   typeDescriptionPointer = 0
-): Result => {
+): Result | undefined => {
   const [isCompressed, resultType] = decodeNumber(
     typeDescription[3 * typeDescriptionPointer]
   );
@@ -684,7 +759,7 @@ const deserializeResultIter = (
             i < dataTypeOffset + dataTypeLength;
             i++
           ) {
-            yield deserializeResultIter(data, typeDescription, i)
+            yield (deserializeResultIter(data, typeDescription, i) as AnyResult)
               .value as OneResult;
           }
         };
@@ -700,18 +775,30 @@ const deserializeResultIter = (
             typeDescriptionSlice[2] = BigInt(itemLength);
 
             // TODO get rid of "as"
-            yield deserializeResultIter(data, typeDescriptionSlice)
-              .value as OneResult;
+            yield (
+              deserializeResultIter(data, typeDescriptionSlice) as AnyResult
+            ).value as OneResult;
           }
         };
       }
 
-      const firstResult = deserializeResultIter(
-        data,
-        typeDescription,
-        dataTypeOffset
-      );
-      const cellType = firstResult.type;
+      let cellType: SerializedType;
+      if (dataTypeLength > 0) {
+        const firstResult = deserializeResultIter(
+          data,
+          typeDescription,
+          dataTypeOffset
+        );
+        if (firstResult === undefined) {
+          throw new Error('First result is undefined');
+        }
+
+        cellType = firstResult.type;
+      } else {
+        cellType = {
+          kind: 'anything',
+        };
+      }
 
       return {
         type: {
@@ -739,7 +826,6 @@ const deserializeResultIter = (
         bigints.push(deserializeUint8ArrayToBigInt(data, ptr, length));
         ptr += length;
       }
-      console.log(bigints);
 
       const start = new DeciNumber({
         n: bigints[0],
@@ -770,6 +856,9 @@ const deserializeResultIter = (
         typeDescription,
         typeDescriptionPointer + 1
       );
+      if (indexNameResult === undefined) {
+        throw new Error('Index name result is undefined');
+      }
       const indexName =
         indexNameResult.type.kind === 'string'
           ? (indexNameResult.value as string)
@@ -780,6 +869,9 @@ const deserializeResultIter = (
         typeDescription,
         typeDescriptionPointer + 2
       );
+      if (delegatesIndexToResult === undefined) {
+        throw new Error('Delegates index to result is undefined');
+      }
       const delegatesIndexTo =
         delegatesIndexToResult.type.kind === 'string'
           ? (delegatesIndexToResult.value as string)
@@ -792,6 +884,9 @@ const deserializeResultIter = (
           typeDescription,
           typeDescriptionPointer + 3 + i
         );
+        if (res === undefined) {
+          throw new Error('Column name result is undefined');
+        }
         if (res.type.kind !== 'string') {
           throw new Error('Expected string');
         }
@@ -823,6 +918,105 @@ const deserializeResultIter = (
       };
     }
 
+    case ResultType.Tree: {
+      let tdp = Number(typeDescription[typeDescriptionPointer * 3 + 1]);
+      const root = deserializeResultIter(data, typeDescription, tdp);
+      if (root === undefined) {
+        throw new Error('Root is undefined');
+      }
+      if (root.value === null) {
+        throw new Error('Root is null');
+      }
+      tdp += 1;
+      const rootAggregation = deserializeResultIter(data, typeDescription, tdp);
+
+      tdp += 1;
+      const originalCardinalityDeciNum = deserializeResultIter(
+        data,
+        typeDescription,
+        tdp
+      ) as Result<'number'>;
+      if (originalCardinalityDeciNum.type.kind !== 'number') {
+        throw new Error(
+          `Expected number, got ${originalCardinalityDeciNum.type.kind}`
+        );
+      }
+      const originalCardinality = Number(originalCardinalityDeciNum.value.n);
+
+      tdp += 1;
+      const columnLength = deserializeResultIter(
+        data,
+        typeDescription,
+        tdp
+      ) as Result<'number'>;
+
+      if (
+        columnLength.type.kind !== 'number' ||
+        columnLength.value.n === undefined
+      ) {
+        throw new Error('Expected number');
+      }
+
+      let i = 0;
+      let columns: TreeColumn[] = [];
+      const l = Number(columnLength.value.n);
+      while (i < l) {
+        tdp += 1;
+        const columnName = deserializeResultIter(
+          data,
+          typeDescription,
+          tdp
+        ) as Result<'string'>;
+
+        if (columnName.type.kind !== 'string') {
+          throw new Error('Expected string');
+        }
+
+        tdp += 1;
+        let aggregation = deserializeResultIter(data, typeDescription, tdp);
+        columns.push({ name: columnName.value, aggregation: aggregation });
+        i += 1;
+      }
+
+      tdp += 1;
+      let childCountDeciNum = deserializeResultIter(
+        data,
+        typeDescription,
+        tdp
+      ) as Result<'number'>;
+
+      const childCount = Number(childCountDeciNum.value.n);
+
+      let j = 0;
+      const children: Tree[] = [];
+      while (j < childCount) {
+        tdp += 1;
+        const child = deserializeResultIter(
+          data,
+          typeDescription,
+          tdp
+        ) as Result<'tree'>;
+        children.push(child.value);
+        j += 1;
+      }
+
+      const treeResult: Result<'tree'> = {
+        type: {
+          kind: 'tree',
+          columnNames: [], // TODO
+          columnTypes: [], // TODO
+        },
+        value: Tree.from(
+          root.value,
+          rootAggregation,
+          children,
+          columns,
+          originalCardinality
+        ),
+      };
+      return treeResult as Result;
+    }
+
     case ResultType.Row: {
       const rowLength = Number(typeDescription[3 * typeDescriptionPointer + 2]);
       const rowCells: OneResult[] = [];
@@ -834,6 +1028,9 @@ const deserializeResultIter = (
         typeDescription,
         typeDescriptionPointer + 1
       );
+      if (rowIndexNameResult === undefined) {
+        throw new Error('Row index name result is undefined');
+      }
       if (rowIndexNameResult.type.kind !== 'string') {
         throw new Error('Row index name is not a string');
       }
@@ -844,6 +1041,9 @@ const deserializeResultIter = (
           typeDescription,
           typeDescriptionPointer + 2 + 2 * i
         );
+        if (cellNameresult === undefined) {
+          throw new Error('Cell name result is undefined');
+        }
         if (cellNameresult.type.kind !== 'string') {
           throw new Error('Cell name is not a string');
         }
@@ -854,6 +1054,9 @@ const deserializeResultIter = (
           typeDescription,
           typeDescriptionPointer + 2 + 2 * i + 1
         );
+        if (cellResult === undefined) {
+          throw new Error('Cell result is undefined');
+        }
         rowCells.push(cellResult.value as OneResult);
         rowCellNames.push(cellName);
         rowCellTypes.push(cellResult.type);
@@ -927,6 +1130,9 @@ const deserializeResultIter = (
     case ResultType.Pending: {
       return { type: { kind: 'pending' }, value: undefined, meta: undefined };
     }
+    case ResultType.Undefined: {
+      return undefined;
+    }
   }
 };
 
@@ -936,5 +1142,9 @@ export const deserializeResult = (val: {
 }): Result => {
   const typeDescription = Array.from(val.type); // TODO consider passing BigUint64Array directly
   const result = deserializeResultIter(val.data, typeDescription);
+  // should never be undefined at the top level
+  if (result === undefined) {
+    throw new Error('Result is undefined');
+  }
   return result;
 };

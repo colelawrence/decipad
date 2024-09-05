@@ -155,6 +155,7 @@ impl DeciResult {
                 }
             },
             DeciResult::Table(table) => format!("{:?}", table),
+            DeciResult::Tree(tree) => format!("{:?}", tree),
             DeciResult::Range(range) => format!("{:?}", range),
             DeciResult::Row(row) => format!("{:?}", row),
             DeciResult::TypeError => format!("{:?}", self),
