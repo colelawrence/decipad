@@ -364,7 +364,7 @@
     "search-query-parser": "^1.6.0",
     "simple-cookie": "1.0.13",
     "slate": "0.103.0",
-    "slate-history": "0.100.0",
+    "slate-history": "0.109.0",
     "slate-hyperscript": "0.100.0",
     "slate-react": "0.107.1",
     "slug": "9.0.0",
