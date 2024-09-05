@@ -6,11 +6,11 @@ title: Submit Forms
 import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-# Submit Form Block (Team Plan Feature)
+# Submit Form Block (Plus Plan Feature)
 
 Effortlessly capture leads and their scenarios from your notebook using Decipad's submit button. This feature gathers data from input widgets like sliders and collects user emails, forwarding all information to any webhook of your choice.
 
-This feature is only available on the Team plan.
+This feature is only available on the Plus plan.
 For more information on each plan, please visit our [pricing page](https://www.decipad.com/pricing).
 
 ## How Decipad's Submit Button Works

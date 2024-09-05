@@ -109,33 +109,27 @@ Organize your notebook blocks into separate tabs.
 
 ---
 
-Quickly add notebook blocks or inspect all notebook data using the notebook sidebar.
+Inspect your notebook data and add new blocks quickly using the notebook sidebar.
 
-1. **Open the Sidebar:**
-   Click the `Sidebar` button in the topbar of your notebook to toggle the sidebar open or closed.
+1. **Insert New Blocks:**
+   In the sidebar's `Insert` tab, you can view and search for all available blocks. Simply click the `Sidebar` button in the topbar to open the sidebar, then choose a block to quickly add it to your notebook.
 
-2. **Insert Tab:**
-   Navigate to the `Insert` tab in the sidebar to view and search for all available blocks. Click on a block to quickly add it to your notebook.
-
-3. **Data Tab:**
-   Navigate to the `Data` tab in the sidebar to view and search all notebook variables. Use the `+ New Variable` button to create calculations that are stored only in the sidebar, helping you keep your notebook organized.
+2. **Inspect Variables:**
+   Use the sidebar's `Data` tab to view and search all notebook variables. Click the `Sidebar` button in the topbar to open the sidebar, then you can click them to inspect or edit or use the `+ New Variable` button to create new calculations that are stored only in the sidebar, keeping your notebook organized.
 
 ## Notebook Data Drawer
 
 ---
 
-Quickly edit all variables or create new ones that are stored only in the sidebar.
+Quickly edit notebook variables or create new ones.
 
 1. **Create Sidebar Variables:**
-   To add reusable variables to the notebook sidebar, open the sidebar by clicking the `Sidebar` button in the topbar and navigate to the `Data` tab. Click `+ New Variable` to create a new calculation. The data drawer will open, allowing you to name the variable and edit its formula.
+   Open the sidebar and go to the `Data` tab. Click `+ New Variable` to open the data drawer, where you can name the variable and edit its formula. These variables are stored in the sidebar, keeping your notebook clutter-free.
 
 2. **Edit Notebook Variables:**
-   To edit an existing variable, open the sidebar and go to the `Data` tab. Search for the variable you want to modify and click on it. The data drawer will open, where you can update the variable’s name, adjust its formula, or delete it entirely from the notebook.
+   Open the sidebar and go to the `Data` tab. Search for the variable you want to modify and click on it. The data drawer will open, where you can update the variable’s name, adjust its formula, or delete it entirely from the notebook using `Delete` (Windows) or `Backspace` (Mac).
 
-3. **Delete Notebook Variables:**
-   To delete a variable, open the sidebar and go to the `Data` tab. Select the variable you want to remove and press `Delete` (Windows) or `Backspace` (Mac).
-
-4. **Edit Inline Results:**
+3. **Edit Inline Results:**
    To edit inline results embedded in your notebook, simply click on the result. The data drawer will open, allowing you to edit any variable that appears as an inline result in the notebook.
 
 ## Notebook Images
