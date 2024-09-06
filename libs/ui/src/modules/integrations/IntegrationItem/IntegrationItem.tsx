@@ -1,7 +1,7 @@
 import { Prettify } from '@decipad/utils';
 import { p12Regular, p14Medium } from '../../../primitives';
 import { FC, ReactNode, useState } from 'react';
-import { Button } from '../../../shared';
+import { Button, Loading } from '../../../shared';
 import {
   IntegrationItemStyled,
   IntegrationItemIconWrapper,
@@ -20,7 +20,7 @@ type IntegrationItemProps = Readonly<{
   description: string;
 
   onClick: () => void;
-
+  isOperationInprogress?: boolean;
   testId?: string;
 }>;
 
@@ -30,27 +30,41 @@ export const IntegrationItem: FC<IntegrationItemProps> = ({
   description,
   onClick,
   testId,
-}) => (
-  <div css={IntegrationItemStyled}>
-    <div css={IntegrationItemIconWrapper}>{icon}</div>
-    <div css={IntegrationItemTextAndActions}>
-      <div>
-        <p css={p14Medium}>{title}</p>
-        {description.length > 0 && <p css={p12Regular}>{description}</p>}
+}) => {
+  const [isConnecting, setIsConnecting] = useState(false);
+  return (
+    <div css={IntegrationItemStyled}>
+      <div css={IntegrationItemIconWrapper}>{icon}</div>
+      <div css={IntegrationItemTextAndActions}>
+        <div>
+          <p css={p14Medium}>{title}</p>
+          {description.length > 0 && <p css={p12Regular}>{description}</p>}
+        </div>
+      </div>
+      <div css={IntegrationButton}>
+        <Button
+          type="secondary"
+          onClick={() => {
+            setIsConnecting(true);
+            onClick();
+          }}
+          testId={testId}
+          disabled={isConnecting}
+        >
+          Connect{' '}
+          {isConnecting && (
+            <Loading width="16px" style={{ marginLeft: '6px' }} />
+          )}
+        </Button>
       </div>
     </div>
-    <div css={IntegrationButton}>
-      <Button type="secondary" onClick={onClick} testId={testId}>
-        Connect
-      </Button>
-    </div>
-  </div>
-);
+  );
+};
 
 type IntegrationActionItemProps = Prettify<
   IntegrationItemProps & {
     onEdit: (() => void) | undefined;
-    onDelete: () => void;
+    onDelete: () => void | Promise<any>;
   }
 >;
 
@@ -63,11 +77,14 @@ export const IntegrationActionItem: FC<IntegrationActionItemProps> = ({
   onDelete,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteInProgress, setIsDeleteInProgress] = useState(false);
+  const [isEditInProgress, setIsEditInProgress] = useState(false);
 
-  const onConfirmDelete = () => {
+  const onConfirmDelete = async () => {
     setIsDeleting(false);
-
-    onDelete();
+    setIsDeleteInProgress(true);
+    await onDelete();
+    setIsDeleteInProgress(false);
   };
 
   if (isDeleting) {
@@ -86,7 +103,11 @@ export const IntegrationActionItem: FC<IntegrationActionItemProps> = ({
             <Button type="secondary" onClick={() => setIsDeleting(false)}>
               Cancel
             </Button>
-            <Button type="danger" onClick={onConfirmDelete}>
+            <Button
+              type="danger"
+              onClick={onConfirmDelete}
+              disabled={isDeleteInProgress || isEditInProgress}
+            >
               Delete
             </Button>
           </div>
@@ -105,12 +126,29 @@ export const IntegrationActionItem: FC<IntegrationActionItemProps> = ({
         </div>
         <div css={IntegrationButton}>
           {onEdit != null && (
-            <Button type="secondary" onClick={onEdit}>
+            <Button
+              type="secondary"
+              onClick={() => {
+                setIsEditInProgress(true);
+                onEdit();
+              }}
+              disabled={isDeleteInProgress || isEditInProgress}
+            >
               Edit
+              {isEditInProgress && (
+                <Loading width="16px" style={{ marginLeft: '6px' }} />
+              )}
             </Button>
           )}
-          <Button type="secondary" onClick={() => setIsDeleting(true)}>
-            Delete
+          <Button
+            type="secondary"
+            onClick={() => setIsDeleting(true)}
+            disabled={isDeleteInProgress || isEditInProgress}
+          >
+            Delete{' '}
+            {isDeleteInProgress && (
+              <Loading width="16px" style={{ marginLeft: '6px' }} />
+            )}
           </Button>
         </div>
       </div>

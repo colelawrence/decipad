@@ -134,7 +134,9 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
               title={externalDataSource.name}
               description={''}
               onClick={() => {}}
-              onEdit={() => OnAuth(externalDataSource)}
+              onEdit={() => {
+                OnAuth(externalDataSource);
+              }}
               onDelete={() => {
                 removeExternalData({
                   id: externalDataSource.id,
