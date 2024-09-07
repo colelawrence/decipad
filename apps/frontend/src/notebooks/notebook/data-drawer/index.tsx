@@ -1,12 +1,12 @@
-import { FC } from 'react';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
+import { FC } from 'react';
 import {
   CreateVariableDataDrawer,
   DataDrawerComponent,
   EditVariableDataDrawer,
 } from './data-drawer';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const DataDrawer: FC = () => {
   const [
@@ -41,7 +41,7 @@ export const DataDrawer: FC = () => {
       computer={computer}
       controller={editor}
       onClose={closeDataDrawer}
-      title={isAddingOrEditingVariable === 'create' ? 'Add Data' : 'Edit Data'}
+      title={isAddingOrEditingVariable === 'create' ? 'Add data' : 'Edit data'}
       isEditing={isAddingOrEditingVariable === 'edit'}
     >
       {isAddingOrEditingVariable === 'create' ? (

@@ -1,30 +1,33 @@
 /* eslint-disable no-labels */
-import { createStore } from 'zustand';
-import { nanoid } from 'nanoid';
-import { UAParser } from 'ua-parser-js';
-import { Subject, take } from 'rxjs';
+import { getComputer, getExprRef } from '@decipad/computer';
+import { type Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { createDocSyncEditor } from '@decipad/docsync';
-import { captureException } from '@sentry/browser';
-import { createRemoteComputerClient } from '@decipad/remote-computer';
-import { getComputer, getExprRef } from '@decipad/computer';
-import { isServerSideRendering } from '@decipad/support';
-import { type Computer } from '@decipad/computer-interfaces';
-import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
-import debounce from 'lodash/debounce';
-import * as idb from 'lib0/indexeddb';
-import { once } from '@decipad/utils';
-import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
-import type { EnhancedPromise, NotebookState } from './state';
-import { isNewNotebook } from './isNewNotebook';
-import { cursorAwareness } from './cursors';
-import { subscribeWithSelector } from 'zustand/middleware';
-import { closeDataDrawerAnimation } from './dataDrawer';
-import { DATA_TAB_INDEX } from 'libs/notebook-tabs/src/constants';
 import {
   DataTabChildrenElement,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_STRUCTURED_VARNAME,
   MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
+import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
+import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
+import { createRemoteComputerClient } from '@decipad/remote-computer';
+import { isServerSideRendering } from '@decipad/support';
+import { once } from '@decipad/utils';
+import { captureException } from '@sentry/browser';
+import * as idb from 'lib0/indexeddb';
+import { DATA_TAB_INDEX } from 'libs/notebook-tabs/src/constants';
+import debounce from 'lodash/debounce';
+import { nanoid } from 'nanoid';
+import { Subject, take } from 'rxjs';
+import { UAParser } from 'ua-parser-js';
+import { createStore } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
+import { cursorAwareness } from './cursors';
+import { closeDataDrawerAnimation } from './dataDrawer';
+import { isNewNotebook } from './isNewNotebook';
+import type { EnhancedPromise, NotebookState } from './state';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -165,16 +168,16 @@ export const createNotebookStore = (
             type: 'insert_node',
             path: [1, controller.children[DATA_TAB_INDEX].children.length],
             node: {
-              type: 'data-tab-children',
+              type: ELEMENT_DATA_TAB_CHILDREN,
               id: dataTabVarId,
               children: [
                 {
-                  type: 'structured_varname',
+                  type: ELEMENT_STRUCTURED_VARNAME,
                   id: nanoid(),
                   children: [{ text: '' }],
                 },
                 {
-                  type: 'code_line_v2_code',
+                  type: ELEMENT_CODE_LINE_V2_CODE,
                   id: nanoid(),
                   children: [{ text: '' }],
                 },

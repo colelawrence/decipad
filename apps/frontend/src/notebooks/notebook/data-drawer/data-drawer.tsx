@@ -1,6 +1,6 @@
 import { Computer } from '@decipad/computer-interfaces';
 import { EditorController } from '@decipad/notebook-tabs';
-import { FC, ReactNode, memo, useMemo } from 'react';
+import { FC, ReactNode, memo, useEffect, useMemo } from 'react';
 import {
   CREATING_VARIABLE_INITIAL_VALUE,
   useCreatingDataDrawer,
@@ -23,8 +23,9 @@ import {
 } from './styles';
 import { Close } from 'libs/ui/src/icons';
 import { p14Medium } from '@decipad/ui';
-import { Plate, PlateContent } from '@udecode/plate-common';
+import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { useMyEditorRef } from '@decipad/editor-types';
 
 type DataDrawerResizerProps = {
   height: number;
@@ -131,9 +132,20 @@ export const UnmemoEditVariableDataDrawer: FC<EditVariableDataDrawerProps> = ({
     <div ref={ref}>
       <Plate<DataDrawerEditorValue> editor={codeEditor}>
         <PlateContent />
+        <FocusEnd />
       </Plate>
     </div>
   );
+};
+
+const FocusEnd = () => {
+  const editor = useMyEditorRef();
+  useEffect(() => {
+    setTimeout(() => {
+      focusEditorEdge(editor, { edge: 'end' });
+    });
+  }, [editor]);
+  return null;
 };
 
 const CreateVariableError: FC<{

@@ -1,10 +1,27 @@
+/* eslint-disable no-console */
 /* eslint-disable complexity */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
-import { nanoid } from 'nanoid';
-import { Subject } from 'rxjs';
+import {
+  AnyElement,
+  createMyPlateEditor,
+  DataTabElement,
+  DataTabValue,
+  ELEMENT_DATA_TAB,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+  MyEditor,
+  MyPlatePlugin,
+  MyTabEditor,
+  NotebookValue,
+  TabElement,
+  TitleElement,
+  UserIconKey,
+} from '@decipad/editor-types';
+import { assertEqual, getDefined } from '@decipad/utils';
 import type {
   EElement,
   ENode,
@@ -25,31 +42,9 @@ import {
   isElement,
   removeNodes,
 } from '@udecode/plate-common';
-import {
-  AnyElement,
-  DataTabElement,
-  DataTabValue,
-  ELEMENT_DATA_TAB,
-  MyEditor,
-  MyPlatePlugin,
-  MyTabEditor,
-  NotebookValue,
-  TabElement,
-  TitleElement,
-  UserIconKey,
-  createMyPlateEditor,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
-} from '@decipad/editor-types';
-import { assertEqual, getDefined } from '@decipad/utils';
-import {
-  childIndexForOp,
-  translateOpDown,
-  translateOpUp,
-  translatePathUp,
-} from './TranslatePaths';
-import { IsDataTab, IsTab, IsTitle } from './utils';
+import stringify from 'json-stringify-safe';
+import { nanoid } from 'nanoid';
+import { Subject } from 'rxjs';
 import {
   type BaseEditor,
   createEditor,
@@ -57,17 +52,23 @@ import {
   type Path,
   setNormalizing,
 } from 'slate';
-import type { RootEditorController } from './types';
-import { withoutNormalizingEditors } from './withoutNormalizingEditors';
-import stringify from 'json-stringify-safe';
 import { normalizeCurried } from './RootEditor/normalizeNode';
 import { normalizers } from './RootEditor/plugins';
+import {
+  childIndexForOp,
+  translateOpDown,
+  translateOpUp,
+  translatePathUp,
+} from './TranslatePaths';
 import {
   DATA_TAB_INDEX,
   INITIAL_TAB_NAME,
   SUB_EDITOR_OFFSET,
   TITLE_INDEX,
 } from './constants';
+import type { RootEditorController } from './types';
+import { IsDataTab, IsTab, IsTitle } from './utils';
+import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 
 const isTesting = !!(
   process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
@@ -120,15 +121,21 @@ export class EditorController implements RootEditorController {
 
   private debugPrintMirrorState() {
     // eslint-disable-next-line no-console
-    console.log(
+    console.debug(
       'mirror editor children:',
       stringify(this.mirrorEditor.children)
     );
     // eslint-disable-next-line no-console
-    console.log('title editor children:', stringify(this.titleEditor.children));
+    console.debug(
+      'title editor children:',
+      stringify(this.titleEditor.children)
+    );
     this.tabEditors.forEach((editor, index) => {
       // eslint-disable-next-line no-console
-      console.log(`tab editor ${index} children:`, stringify(editor.children));
+      console.debug(
+        `tab editor ${index} children:`,
+        stringify(editor.children)
+      );
     });
   }
 
@@ -171,6 +178,7 @@ export class EditorController implements RootEditorController {
     const tryApplyingOpToMirror = (op: TOperation) => {
       try {
         apply(op);
+        console.log({ op });
       } catch (err) {
         console.error('Error applying op to mirror', stringify(op, null, '\t'));
         this.debugPrintMirrorState();
@@ -416,9 +424,11 @@ export class EditorController implements RootEditorController {
    * Helps declutter the `apply` function.
    * Various error throwing, and its crutial this part works perfectly.
    */
-  private handleTopLevelOps(op: TOperation): boolean {
+  private unsafePerformTopLevelOps(op: TOperation): boolean {
     if (op.type === 'set_selection') return false;
-    if (op.type !== 'move_node' && op.path.length !== 1) return false;
+    if (op.type !== 'move_node' && op.path.length !== 1) {
+      return false;
+    }
 
     if (op.type === 'move_node' && op.path[0] === op.newPath[0]) return false;
 
@@ -642,13 +652,17 @@ export class EditorController implements RootEditorController {
   }
 
   private unguardedApply(op: TOperation): void {
+    // console.debug('>>>>>>> EditorController unguardedApply', op);
+
     if (op.FROM_ROOT) {
       return;
     }
 
     this.events.next({ type: 'root-any-change', op });
 
-    const isTopLevel = this.handleTopLevelOps(op);
+    let cleanUp = () => {};
+
+    const isTopLevel = this.unsafePerformTopLevelOps(op);
     if (!isTopLevel) {
       const childIndex = childIndexForOp(op);
       // Remote event to the title (no need to translate down)
@@ -676,15 +690,31 @@ export class EditorController implements RootEditorController {
           throw new Error(`Could not find editor at index ${tabEditorIndex}`);
         }
 
+        /**
+         * Prevent the tabEditor from normalizing before we apply the operation
+         * to the mirror editor. This prevents operations from being applied in
+         * the wrong order and crashing the editor. See TABS.md for sequence
+         * diagram.
+         */
+        const tabEditorIsNormalizing = isNormalizing(tabEditor as any);
+        setNormalizing(tabEditor as any, false);
+
+        cleanUp = () => {
+          setNormalizing(tabEditor as any, tabEditorIsNormalizing);
+          tabEditor.normalize();
+        };
+
         tabEditor.apply(translatedOp);
       }
     }
 
     op.FROM_ROOT = true;
     if (!op.FROM_MIRROR) {
-      // console.log('going to apply to mirror', op);
+      // console.debug('going to apply to mirror', op);
       this.mirrorEditor.apply(op);
     }
+
+    cleanUp();
     // console.log('<<<<<<< EditorController unguardedApply', op);
   }
 

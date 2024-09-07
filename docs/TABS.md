@@ -14,6 +14,77 @@ You can see docsyncing overriding `EditorController.apply` in the file `yjsEdito
 
 Here is a small [diagram](https://imgur.com/a/uSTH1hc).
 
+Here are three sequence diagrams you can paste into https://sequencediagram.org for clarity
+
+```
+title Case 1: Operation originates in sub editor
+
+User->SubEditor: apply(op [0, 1])
+note over SubEditor: Decision: The operation\nis not FROM_ROOT, so\nwe forward it to the\nEditorController.
+SubEditor->SubEditor:translateOpUp\n=> op [2, 0, 1]
+note over SubEditor: IS_LOCAL = true
+SubEditor->EditorController: apply(op [2, 0, 1] IS_LOCAL)
+note over EditorController: Decision: The operation\nis not FROM_ROOT, so\nwe forward it to both the\nSubEditor and the \nMirrorEditor.
+EditorController->EditorController: translateOpDown\n=> op [0, 1] IS_LOCAL
+note over EditorController: FROM_ROOT = true\non translated op
+EditorController->SubEditor:apply(op [0, 1] IS_LOCAL FROM_ROOT)
+note over SubEditor: Decision: The operation\nis FROM_ROOT, so we\nprocess it without\nforwarding it anywhere.
+note over SubEditor: Slate processes\nthe operation here
+SubEditor-->EditorController:
+note over EditorController: FROM_ROOT = true\non original op
+note over EditorController: Decision: The operation\nis not FROM_MIRROR,\nso we forward it to the\nMirrorEditor.
+EditorController->MirrorEditor: apply(op [2, 0, 1] IS_LOCAL FROM_ROOT)
+note over MirrorEditor: Decision: The operation\nis not FROM_MIRROR,\nso we process it.
+note over MirrorEditor: Slate processes\nthe operation here
+note over MirrorEditor: Decision: The operation\nis FROM_ROOT, so we\ndo not forward it to the\nEditorController.
+MirrorEditor-->EditorController:
+EditorController-->SubEditor:
+SubEditor-->User:
+```
+
+```
+title Case 2: Operation originates in mirror editor
+
+User->MirrorEditor: apply(op [2, 0, 1])
+note over MirrorEditor: Decision: The operation\nis not FROM_MIRROR,\nso we process it.
+note over MirrorEditor: Slate processes\nthe operation here
+note over MirrorEditor: Decision: The operation\nis not FROM_ROOT, so\nwe forward it to the\nEditorController.
+note over MirrorEditor: FROM_MIRROR = true
+MirrorEditor->EditorController: apply(op [2, 0, 1] FROM_MIRROR)
+note over EditorController: Decision: The operation\nis not FROM_ROOT, so\nwe forward it to both the\nSubEditor and (maybe)\nthe MirrorEditor.
+EditorController->EditorController: translateOpDown\n=> op [0, 1] FROM_MIRROR
+note over EditorController: FROM_ROOT = true\non translated op
+EditorController->SubEditor:apply(op [0, 1] FROM_MIRROR FROM_ROOT)
+note over SubEditor: Decision: The operation\nis FROM_ROOT, so we\nprocess it without\nforwarding it anywhere.
+note over SubEditor: Slate processes\nthe operation here
+SubEditor-->EditorController:
+note over EditorController: FROM_ROOT = true\non original op
+note over EditorController: Decision: The operation\nis FROM_MIRROR, so\nwe do not forward it to\nthe MirrorEditor.
+EditorController-->MirrorEditor:
+MirrorEditor-->User:
+```
+
+```
+title Case 3: Operation originates in the EditorController
+
+User->EditorController: apply(op [2, 0, 1])
+note over EditorController: Decision: The operation\nis not FROM_ROOT, so\nwe forward it to both the\nSubEditor and (maybe)\nthe MirrorEditor.
+EditorController->EditorController: translateOpDown\n=> op [0, 1]
+note over EditorController: FROM_ROOT = true\non translated op
+EditorController->SubEditor:apply(op [0, 1] FROM_ROOT)
+note over SubEditor: Decision: The operation\nis FROM_ROOT, so we\nprocess it without\nforwarding it anywhere.
+note over SubEditor: Slate processes\nthe operation here
+SubEditor-->EditorController:
+note over EditorController: FROM_ROOT = true\non original op
+note over EditorController: Decision: The operation\nis not FROM_MIRROR,\nso we forward it to the\nMirrorEditor.
+EditorController->MirrorEditor: apply(op [2, 0, 1] FROM_ROOT)
+note over MirrorEditor: Decision: The operation\nis not FROM_MIRROR,\nso we process it.
+note over MirrorEditor: Slate processes\nthe operation here
+note over MirrorEditor: Decision: The operation\nis FROM_ROOT, so we\ndo not forward it to the\nEditorController.
+MirrorEditor-->EditorController:
+EditorController-->User:
+```
+
 ### How it works
 
 If you create a new paragraph in one of the tabs, the corresponding slate operation is:
