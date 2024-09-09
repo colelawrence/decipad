@@ -58,13 +58,9 @@ export { getExprRef, isExprRef, shadowExprRef } from './exprRefs';
 export {
   hasBracketError,
   hydrateResult,
-  isColumn,
   identifiedErrorToMessage,
   isBracketError,
-  isTable,
-  isTableKind,
   isTableColumn,
-  isTableResult,
   isSyntaxError,
   selectErrorFromResult,
   statementToIdentifiedBlock,

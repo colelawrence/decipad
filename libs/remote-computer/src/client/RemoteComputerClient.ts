@@ -37,7 +37,6 @@ import {
   getDefinedSymbol,
   getIdentifierString,
 } from '../../../computer/src/utils';
-import { isColumn } from '../../../computer/src/utils/isColumn';
 import type {
   TCommonSubjectName,
   TCommonTypedSubscriptionParams,
@@ -65,7 +64,9 @@ import { PROTOCOL_VERSION } from '../constants';
 import { deserializeType } from '@decipad/language';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import zip from 'lodash.zip';
-import { getDeepLengths } from '@decipad/computer-utils';
+import { getDeepLengths, isColumn } from '@decipad/computer-utils';
+
+const testing = !!(process.env.VITEST_WORKER_ID ?? process.env.VITEST);
 
 const unknownResult: ResultType = {
   type: { kind: 'anything' },
@@ -648,10 +649,12 @@ export const createRemoteComputerClientFromWorker = (
         }
       });
       this.#fetchNotebookResultsFromRemoteCache().catch((err) => {
-        console.error(
-          'Error trying to fetch notebook results from the remote cache',
-          err
-        );
+        if (!testing) {
+          console.error(
+            'Error trying to fetch notebook results from the remote cache',
+            err
+          );
+        }
       });
     }
   }

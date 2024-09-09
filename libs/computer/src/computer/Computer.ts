@@ -60,11 +60,8 @@ import {
   getDefinedSymbol,
   getGoodBlocks,
   getIdentifierString,
-  isTableResult,
   isEmptyDelta,
 } from '../utils';
-import { isColumn } from '../utils/isColumn';
-import { isTable } from '../utils/isTable';
 import { ComputationRealm } from './ComputationRealm';
 import { astToParseable } from './astToParseable';
 import { deduplicateColumnResults } from './deduplicateColumnResults';
@@ -78,7 +75,13 @@ import { linearizeType } from 'libs/language-types/src/Dimension';
 import { statementToML } from '../mathML/statementToML';
 import { updateProgram } from './updateProgram';
 import type { ComputeDeltaRequestWithDone } from '../../../computer-interfaces/src/types';
-import { getDeepLengths, serializeResult } from '@decipad/computer-utils';
+import {
+  getDeepLengths,
+  serializeResult,
+  isTableResult,
+  isTable,
+  isColumn,
+} from '@decipad/computer-utils';
 import zip from 'lodash.zip';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
@@ -765,7 +768,7 @@ export class Computer implements ComputerInterface {
       );
 
       if (type.errorCause) {
-        return buildResult(serializeType(type), Unknown, false);
+        return buildResult(serializeType(type), Unknown);
       }
 
       try {
@@ -776,8 +779,7 @@ export class Computer implements ComputerInterface {
 
         return buildResult(
           serializeType(type),
-          (await value.getData()) as Result.OneResult,
-          false
+          (await value.getData()) as Result.OneResult
         );
       } catch (err) {
         return {

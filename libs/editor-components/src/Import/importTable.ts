@@ -4,11 +4,6 @@ import { nanoid } from 'nanoid';
 import type { Path } from 'slate';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { Result, SerializedType } from '@decipad/language-interfaces';
-import {
-  buildResult,
-  isTableResult,
-  materializeResult,
-} from '@decipad/remote-computer';
 import type {
   MyEditor,
   TableCellElement,
@@ -27,6 +22,10 @@ import {
 import { generateTableName, insertNodes } from '@decipad/editor-utils';
 import type { ImportResult } from '@decipad/import';
 import { getDefined, varNamify } from '@decipad/utils';
+import { buildResult } from '@decipad/language-types';
+import { isTableResult } from '@decipad/computer-utils';
+// eslint-disable-next-line no-restricted-imports
+import { materializeResult } from '@decipad/language';
 
 interface ImportTableProps {
   editor: MyEditor;
@@ -111,9 +110,7 @@ const dataRows = (
       if (col.length < it) {
         hasMoreData = false;
       }
-      const text = valueToString(
-        buildResult(columnTypes[colIndex], col[it], false)
-      );
+      const text = valueToString(buildResult(columnTypes[colIndex], col[it]));
       return {
         type: ELEMENT_TD,
         id: nanoid(),

@@ -1,5 +1,4 @@
 export * from './assertElementType';
-export * from './astNode';
 export * from './block';
 export * from './clone';
 export * from './codeBlock';

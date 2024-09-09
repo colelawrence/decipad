@@ -36,6 +36,9 @@
     },
     {
       "path": "../live-connect"
+    },
+    {
+      "path": "../computer-utils"
     }
   ]
 }

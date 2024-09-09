@@ -8,7 +8,6 @@ import {
   buildType,
   getResultGenerator,
   isErrorType,
-  serializeType,
 } from '@decipad/language-types';
 import { all, slice } from '@decipad/generator-utils';
 import type { DeciNumberBase } from '@decipad/number';
@@ -80,10 +79,6 @@ describe('callBuiltin performance', () => {
         )}`
       );
     }
-    console.log(
-      'Return type:',
-      stringify(serializeType(returnType), null, '\t')
-    );
 
     // test speed ot calling the builtin
     let start = Date.now();

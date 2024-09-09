@@ -9,11 +9,7 @@ import type {
   TableRowElement,
 } from '@decipad/editor-types';
 import { ELEMENT_TABLE_COLUMN_FORMULA } from '@decipad/editor-types';
-import {
-  astColumn,
-  getCodeLineSource,
-  isElementOfType,
-} from '@decipad/editor-utils';
+import { getCodeLineSource, isElementOfType } from '@decipad/editor-utils';
 import {
   inferColumn,
   parseCell,
@@ -26,6 +22,7 @@ import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
 import { simpleArtifficialError } from './common';
 import type { ColumnParseReturn } from './types';
+import { astColumn } from '@decipad/language-utils';
 
 interface HeaderToColumnProps {
   computer: Computer;

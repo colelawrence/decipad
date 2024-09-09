@@ -17,7 +17,6 @@ const outputValue = (value: Result.OneResult): OutputValue => {
 export const outputResult = (result: Result.Result): Result.Result => {
   return buildResult(
     result.type,
-    outputValue(result.value as Result.OneResult),
-    false
+    outputValue(result.value as Result.OneResult)
   );
 };

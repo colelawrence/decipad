@@ -1,2 +1,6 @@
 export * from './serializeResult';
 export * from './getDeepLengths';
+export * from './isColumn';
+export * from './isTable';
+export * from './isTableResult';
+export * from './pushResultToComputer';

@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import type { Result } from '@decipad/language-interfaces';
-import { isTable } from '@decipad/remote-computer';
 import { getDefined, dequal } from '@decipad/utils';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
 import type { ImportResult, Island } from '../types';
 import { matrix } from './matrix';
+import { isTable } from '@decipad/computer-utils';
 
 interface VisitStackElement {
   col: number;

@@ -1,11 +1,11 @@
 import { useComputer } from '@decipad/editor-hooks';
-import { pushResultToComputer } from '@decipad/editor-live-connect';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { Result } from '@decipad/language-interfaces';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRunner } from '../runners';
 import { formatError } from '@decipad/format';
+import { pushResultToComputer } from '@decipad/computer-utils';
 
 type UseIntegraionReturn = {
   onRefresh: () => void;

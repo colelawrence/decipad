@@ -1,9 +1,13 @@
+/* eslint-disable no-console */
 import type {
   ExternalDataSourceRecord,
   ExternalKeyRecord,
   Handler,
 } from '@decipad/backendtypes';
-import { provider as externalDataProvider } from '@decipad/externaldata';
+import {
+  provider as externalDataProvider,
+  renewKey,
+} from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
@@ -60,7 +64,8 @@ const proxy = async (
   dataSource: ExternalDataSourceRecord,
   key: ExternalKeyRecord,
   url?: string,
-  method?: string
+  method?: string,
+  previousTryCount = 0
 ): Promise<APIGatewayProxyResultV2> => {
   const provider = getDefined(
     externalDataProvider(dataSource.provider),
@@ -91,7 +96,19 @@ const proxy = async (
     throw Boom.internal();
   }
 
+  console.log('Response status:', resp.status, typeof resp.status);
+
   const body = Buffer.from(await resp.arrayBuffer());
+
+  if (resp.status === 401 && previousTryCount < 1 && key.refresh_token) {
+    console.log('going to renew key', key);
+    const newKey = await renewKey(key, provider);
+    if (newKey) {
+      return proxy(dataSource, key, url, method, previousTryCount + 1);
+    }
+  } else {
+    console.log('will not renew key', key);
+  }
 
   if (resp.status >= 300) {
     await markKeyAsErrored(key, body.toString('utf-8'));

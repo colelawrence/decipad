@@ -98,6 +98,10 @@ export const notion = (): NotionProvider => {
       };
     },
 
+    async refreshAccessToken() {
+      throw new Error('Notion provider does not yet support refresh tokens');
+    },
+
     async getAllDatabases(authHeaders) {
       const results = [];
 

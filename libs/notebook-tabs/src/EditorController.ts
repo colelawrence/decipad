@@ -178,7 +178,6 @@ export class EditorController implements RootEditorController {
     const tryApplyingOpToMirror = (op: TOperation) => {
       try {
         apply(op);
-        console.log({ op });
       } catch (err) {
         console.error('Error applying op to mirror', stringify(op, null, '\t'));
         this.debugPrintMirrorState();

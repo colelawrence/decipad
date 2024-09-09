@@ -1,7 +1,12 @@
-import type { Result, SerializedType } from '@decipad/language-interfaces';
-import { Unknown, buildResult, isTableResult } from '@decipad/remote-computer';
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+} from '@decipad/language-interfaces';
 import { empty } from '@decipad/generator-utils';
 import type { TableColumn } from '..';
+import { buildResult } from '@decipad/language-types';
+import { isTableResult } from '@decipad/computer-utils';
 
 const unknownResult: Result.Result<'pending'> = {
   type: {

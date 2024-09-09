@@ -18,7 +18,7 @@ import type { ImportResult } from '@decipad/import';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
-import { pushResultToComputer } from './utils/pushResultToComputer';
+import { pushResultToComputer } from '@decipad/computer-utils';
 
 export interface LiveConnectionResult {
   error?: Error;

@@ -1,5 +1,4 @@
 import { type SerializedTypeKind, Unknown } from '@decipad/language-interfaces';
-import { isColumn, isTable } from '@decipad/computer';
 import { isDeciNumberInput } from '@decipad/number';
 import { CodeResultProps } from '../../../types';
 import { InlineCodeError } from '../InlineCodeError/InlineCodeError';
@@ -20,6 +19,7 @@ import { ExpandedFunctionResult } from '../ExpandedFunctionResult/ExpandedFuncti
 import { BlockCodeError } from '../BlockCodeError/BlockCodeError';
 import TextResult from '../TextResult/TextResult';
 import { memo, useMemo } from 'react';
+import { isColumn, isTable } from '@decipad/computer-utils';
 
 // Simple result components
 

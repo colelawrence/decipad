@@ -1,4 +1,3 @@
-import { isTableResult } from '@decipad/remote-computer';
 import type { ImportElement } from '@decipad/editor-types';
 import { useMyEditorRef, MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
@@ -16,6 +15,7 @@ import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { importTable } from './importTable';
 import { useComputer } from '@decipad/editor-hooks';
+import { isTableResult } from '@decipad/computer-utils';
 
 interface SuspendedImportProps {
   element: ImportElement;

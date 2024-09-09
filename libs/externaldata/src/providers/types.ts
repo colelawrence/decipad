@@ -1,3 +1,17 @@
+export interface WithResource {
+  resourceName: string;
+  resourceId: string;
+}
+
+export interface AccessToken {
+  accessToken: string;
+  tokenType: string;
+
+  scope?: string;
+  refreshToken?: string;
+  expiresIn?: string;
+}
+
 interface BaseProvider {
   id: string;
   accessTokenUrl: string;
@@ -13,26 +27,9 @@ interface BaseProvider {
    */
   dataHeaders?: Record<string, string>;
 
-  getAccessToken: (code: string) => Promise<{
-    accessToken: string;
-    tokenType: string;
+  getAccessToken: (code: string) => Promise<AccessToken & WithResource>;
 
-    resourceName: string;
-    resourceId: string;
-
-    scope?: string;
-    refreshToken?: string;
-    expiresIn?: string;
-  }>;
-}
-
-interface WithRefreshAccessToken {
-  refreshAccessToken: (refreshToken: string) => Promise<{
-    accessToken: string;
-    expiresIn?: string;
-    tokenType: string;
-    scope?: string;
-  }>;
+  refreshAccessToken: (refreshToken: string) => Promise<AccessToken>;
 }
 
 export type NotionProvider = BaseProvider & {
@@ -42,7 +39,8 @@ export type NotionProvider = BaseProvider & {
   ) => Promise<Array<object>>;
 };
 
-export type GoogleSheetProvider = BaseProvider &
-  WithRefreshAccessToken & {
-    type: 'gsheets';
-  };
+export type GoogleSheetProvider = BaseProvider & {
+  type: 'gsheets';
+};
+
+export type Provider = NotionProvider | GoogleSheetProvider;

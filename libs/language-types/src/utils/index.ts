@@ -7,3 +7,4 @@ export * from './columnValueToResultValue';
 export * from './resultToValue';
 export * from './isResultGenerator';
 export * from './getResultGenerator';
+export * from './buildResult';

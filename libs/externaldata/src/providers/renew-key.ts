@@ -58,7 +58,7 @@ export async function renewKey(
 
   const data = await tables();
   key.access_token = accessToken;
-  if (refreshToken) {
+  if (newRefreshToken) {
     key.refresh_token = newRefreshToken;
   }
   await data.externaldatasourcekeys.put(key);

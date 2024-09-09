@@ -1,13 +1,15 @@
 import { Computer, ProgramBlock } from '@decipad/computer-interfaces';
+import { Result } from '@decipad/language-interfaces';
+// eslint-disable-next-line no-restricted-imports
+import { astNode } from '@decipad/language-utils';
+// eslint-disable-next-line no-restricted-imports
 import {
-  astNode,
   buildType,
   deserializeType,
   serializeType,
-  isTableResult,
-} from '@decipad/remote-computer';
-import { Result } from '@decipad/language-interfaces';
+} from '@decipad/language-types';
 import { zip } from '@decipad/utils';
+import { isTableResult } from './isTableResult';
 /**
  * Inject a table into the computer so the rest of the notebook can read isTableResult
  * Pass `computerResult` as `undefined` if you want to erase the result.

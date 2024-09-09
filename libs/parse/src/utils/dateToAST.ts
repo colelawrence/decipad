@@ -2,7 +2,8 @@ import type { AST } from '@decipad/language-interfaces';
 import type { CellValueType } from '@decipad/editor-types';
 import { dateFromMillis } from '@decipad/utils';
 import type { DateTime } from 'luxon';
-import { astNode } from './astNode';
+// eslint-disable-next-line no-restricted-imports
+import { astNode } from '@decipad/language-utils';
 
 type DatePropName = 'year' | 'month' | 'day' | 'hour' | 'minute';
 

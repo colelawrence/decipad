@@ -14,6 +14,8 @@ import { debug } from '../debug';
 
 const CACHE_RESULTS_DEBOUNCE_TIME_MS = 3000;
 
+const testing = !!(process.env.VITEST_WORKER_ID ?? process.env.VITEST);
+
 export const createComputerResultsCache = (
   computer: Computer,
   notebookId: string
@@ -34,8 +36,10 @@ export const createComputerResultsCache = (
         debug('Cached results locally', results);
       })
       .catch((err) => {
-        console.error('Failed to save results to local cache', err);
-        captureException(err);
+        if (!testing) {
+          console.error('Failed to save results to local cache', err);
+          captureException(err);
+        }
       });
   };
 
@@ -50,8 +54,10 @@ export const createComputerResultsCache = (
         debug('Cached results remotely', results);
       })
       .catch((err) => {
-        console.error('Failed to save results to remote cache', err);
-        captureException(err);
+        if (!testing) {
+          console.error('Failed to save results to remote cache', err);
+          captureException(err);
+        }
       });
   };
 

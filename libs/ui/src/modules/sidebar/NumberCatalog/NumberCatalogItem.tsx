@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isTable, isTableColumn, Result } from '@decipad/remote-computer';
+import { isTableColumn, Result } from '@decipad/remote-computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
 import { useDelayedValue } from '@decipad/react-utils';
@@ -8,6 +8,7 @@ import { DragHandle } from '../../../icons';
 import { cssVar, p14Medium } from '../../../primitives';
 import { CodeResult } from '../../editor';
 import { useComputer } from '@decipad/editor-hooks';
+import { isTable } from '@decipad/computer-utils';
 
 interface NumberProps {
   name: string;

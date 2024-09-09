@@ -11,8 +11,8 @@ import {
 } from '@decipad/language';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { isColumn } from './isColumn';
 import { map } from '@decipad/generator-utils';
+import { isColumn } from '@decipad/computer-utils';
 
 // eslint-disable-next-line complexity
 export const hydrateResult = <T extends Result.Result>(

@@ -2,7 +2,7 @@
 import type { Result, SerializedTypes } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { isColumn, buildResult, hydrateResult } from '@decipad/computer';
+import { buildResult, hydrateResult } from '@decipad/computer';
 import type { ColIndex, TableCellType } from '@decipad/editor-types';
 import {
   columnNameFromIndex,
@@ -20,6 +20,7 @@ import omit from 'lodash/omit';
 import { isValid, parseISO } from 'date-fns';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { ImportOptions } from './types';
+import { isColumn } from '@decipad/computer-utils';
 
 const importTableFromArray = async (
   computer: Computer,
@@ -72,8 +73,7 @@ const importFromArray = async (
           kind: 'string',
         },
       },
-      results.map((r) => r.value as Result.OneResult),
-      false
+      results.map((r) => r.value as Result.OneResult)
     ) as Result.Result;
   }
 
@@ -83,8 +83,7 @@ const importFromArray = async (
       indexedBy: null,
       cellType: results[0].type,
     },
-    results.map((r) => r.value as Result.OneResult),
-    false
+    results.map((r) => r.value as Result.OneResult)
   ) as Result.Result;
 };
 
@@ -138,8 +137,7 @@ const importTableFromObject = async (
       }),
       indexName: columnNames[0],
     },
-    value,
-    false
+    value
   );
 };
 

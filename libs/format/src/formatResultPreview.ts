@@ -55,7 +55,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
       const [start, end] = value as Result.OneResult[];
       const innerType = type.rangeOf;
       return `range(${formatResultPreview(
-        buildResult(innerType, start, false)
+        buildResult(innerType, start)
       )} through ${formatResultPreview({
         type: innerType,
         value: end,
@@ -81,7 +81,7 @@ function limitedColumnSizePreview(
   const len = () => ret.reduce((accum, item) => accum + item.length + 2, 0);
 
   for (const cell of value) {
-    const fmt = formatResultPreview(buildResult(cellType, cell, false));
+    const fmt = formatResultPreview(buildResult(cellType, cell));
 
     if (len() + fmt.length > LOOSE_PREVIEW_LIMIT) {
       ret.push('...');

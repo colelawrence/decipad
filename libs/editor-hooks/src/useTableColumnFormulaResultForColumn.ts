@@ -1,6 +1,6 @@
+import { useMemo } from 'react';
 import { findNodePath } from '@udecode/plate-common';
 import type { Result } from '@decipad/language-interfaces';
-import { buildResult, isTableResult } from '@decipad/remote-computer';
 import type {
   MyReactEditor,
   TableCellElement,
@@ -8,9 +8,10 @@ import type {
 } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { useEditorTableResultContext } from '@decipad/react-contexts';
-import { useMemo } from 'react';
 import { all } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
+import { isTableResult } from '@decipad/computer-utils';
+import { buildResult } from '@decipad/language-types';
 
 export function useTableColumnFormulaResultForCell(
   element: TableCellElement | TableHeaderElement | undefined
@@ -23,8 +24,7 @@ export function useTableColumnFormulaResultForCell(
       rowIndex != null && columnResult?.type.kind === 'materialized-column'
         ? (buildResult(
             columnResult.type.cellType,
-            columnResult.value[rowIndex],
-            false
+            columnResult.value[rowIndex]
           ) as Result.Result)
         : undefined,
     [columnResult, rowIndex]

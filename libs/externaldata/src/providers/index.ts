@@ -1,9 +1,9 @@
 import type { ExternalDataSourceProvider } from '@decipad/backendtypes';
 import { gsheets } from './gsheets';
 import { notion } from './notion';
-import type { GoogleSheetProvider, NotionProvider } from './types';
+import type { Provider, AccessToken } from './types';
 
-export type Provider = NotionProvider | GoogleSheetProvider;
+export * from './renew-key';
 
 export const providers: Partial<
   Record<ExternalDataSourceProvider, () => Provider>
@@ -11,3 +11,5 @@ export const providers: Partial<
   gsheets,
   notion,
 };
+
+export type { Provider, AccessToken };

@@ -1,4 +1,10 @@
+import { useMemo } from 'react';
 import type { Computer } from '@decipad/computer-interfaces';
+import { AutocompleteName, SerializedType } from '@decipad/language-interfaces';
+import {
+  isTable as isComputerTable,
+  isTableKind as isComputerTableKind,
+} from '@decipad/computer-utils';
 import {
   useComputer,
   useNodePath,
@@ -12,16 +18,9 @@ import {
   type PlotParams,
 } from '@decipad/editor-types';
 import { useResolved } from '@decipad/react-utils';
-import {
-  getExprRef,
-  isTable as isComputerTable,
-  isTableKind as isComputerTableKind,
-  type AutocompleteName,
-  type SerializedType,
-} from '@decipad/remote-computer';
-import { useMemo } from 'react';
 import { resultToPlotResultData } from './plotUtils';
 import type { PlotData } from './plotUtils.interface';
+import { getExprRef } from '@decipad/computer';
 
 type UsePlotReturn = {
   data?: PlotData;

@@ -10,6 +10,8 @@ export const createOperationsBlackboxPlugin = createOverrideApplyPluginFactory({
   plugin: (editor, apply) => {
     if (
       (process.env.NODE_ENV === 'test' && !process.env.DEBUG) ||
+      process.env.VITEST_WORKER_ID ||
+      process.env.VITEST ||
       isServerSideRendering()
     ) {
       return apply;

@@ -1,10 +1,10 @@
 import type { Computer } from '@decipad/computer-interfaces';
+import type { Result } from '@decipad/language-interfaces';
+import { isColumn } from '@decipad/computer-utils';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
 import type { ImportOptions, ImportResult } from './types';
 import { sanitizeRawResult } from './utils/sanitizeRawResult';
-import type { Result } from '@decipad/language-interfaces';
-import { isColumn } from '@decipad/remote-computer';
 
 const unnestOneColumnOneCellIfNecessary = (
   result: Result.Result

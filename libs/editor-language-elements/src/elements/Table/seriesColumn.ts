@@ -1,10 +1,10 @@
 import type { SeriesType } from '@decipad/editor-types';
 import type { Computer, IdentifiedError } from '@decipad/computer-interfaces';
 import type { AST, SerializedType } from '@decipad/language-interfaces';
-import { astColumn, astNode } from '@decipad/editor-utils';
 import { enumerate, getDefined } from '@decipad/utils';
 import { parseCell, parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { simpleArtifficialError } from './common';
+import { astColumn, astNode } from '@decipad/language-utils';
 
 export async function seriesColumn(
   computer: Computer,

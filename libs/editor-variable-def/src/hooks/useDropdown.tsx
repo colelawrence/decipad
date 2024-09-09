@@ -261,7 +261,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
                 group: 'Values',
                 blockId: v?.toString(),
                 item: formatResultPreview(
-                  buildResult(colValues.result.type.cellType, v, false)
+                  buildResult(colValues.result.type.cellType, v)
                 ),
               })),
             ],

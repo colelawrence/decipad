@@ -7,10 +7,10 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
 } from '@decipad/editor-types';
-import { astNode } from '@decipad/editor-utils';
 import { N } from '@decipad/number';
 import { VariableDef } from './VariableDef';
 import { createTestEditorController } from '../testEditorController';
+import { astNode } from '@decipad/language-utils';
 
 describe('VariableDef expression element', () => {
   it('converts variable def expression document element into name and expression', async () => {

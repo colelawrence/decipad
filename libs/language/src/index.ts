@@ -54,7 +54,6 @@ export {
   mutateAst,
   isStatement,
 } from '@decipad/language-utils';
-export { buildResult } from './utils/buildResult';
 export { materializeResult } from './utils/materializeResult';
 export * from './simpleValues';
 

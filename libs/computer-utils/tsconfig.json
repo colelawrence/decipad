@@ -6,10 +6,19 @@
   "include": ["src"],
   "references": [
     {
+      "path": "../utils"
+    },
+    {
       "path": "../language-interfaces"
     },
     {
       "path": "../language-types"
+    },
+    {
+      "path": "../language-utils"
+    },
+    {
+      "path": "../computer-interfaces"
     }
   ]
 }
