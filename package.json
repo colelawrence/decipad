@@ -121,7 +121,7 @@
     "@notionhq/client": "^2.2.9",
     "@nx/vite": "^19.6.4",
     "@opensearch-project/opensearch": "^2.11.0",
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.47.0",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "2.0.5",
