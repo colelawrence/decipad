@@ -1,7 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import type { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
-import { keyPress } from './Editor';
 
 export async function focusTrailingParagraph(page: Page) {
   // Clicking once doesn't always work when running tests at full speed
@@ -31,38 +30,6 @@ export async function createWithSlashCommand(
   } else {
     await page.keyboard.press('Enter');
   }
-}
-
-export async function createNumberInputBelow(
-  page: Page,
-  identifier: string,
-  value: string
-) {
-  await createWithSlashCommand(page, '/number');
-
-  await page.dblclick(
-    '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
-  );
-
-  await page.keyboard.type(identifier);
-
-  await page.keyboard.press('ArrowRight');
-
-  await page.keyboard.press('ControlOrMeta+A');
-
-  await page.keyboard.type(value);
-
-  await page.waitForSelector('[data-slate-editor] code >> nth=-1');
-}
-
-export async function createDropdownBelow(page: Page, identifier: string) {
-  await createWithSlashCommand(page, '/dropdown');
-
-  await page.getByText('Dropdown', { exact: true }).last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
 export async function createResultBelow(page: Page) {
@@ -108,20 +75,20 @@ export async function createSliderBelow(
     .last()
     .dblclick();
 
-  await keyPress(page, 'Backspace');
+  await page.keyboard.press('Backspace');
 
   await page.keyboard.type(identifier);
 
   await page.click('div [data-testid="input-widget-name"] >> nth=-1');
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  await keyPress(page, 'ArrowDown');
+  await page.keyboard.press('ArrowDown');
   // erase 100$, then focus goes to title, we come back down
-  await keyPress(page, 'End');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
+  await page.keyboard.press('End');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
 
   await page.keyboard.type(value.toString(), { delay: Timeouts.typing });
 
@@ -160,7 +127,7 @@ export async function createDateBelow(page: Page, identifier: string) {
     .last()
     .dblclick();
 
-  await keyPress(page, 'Backspace');
+  await page.keyboard.press('Backspace');
 
   await page.keyboard.type(identifier);
 }

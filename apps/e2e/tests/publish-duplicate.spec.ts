@@ -2,7 +2,7 @@
 /* eslint-disable playwright/valid-title */
 /* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
-import { keyPress, editorLocator } from '../utils/page/Editor';
+import { editorLocator } from '../utils/page/Editor';
 import { Timeouts, getWorkspaces, timeout, snapshot } from '../utils/src';
 import oldNotebookJson from '../__fixtures__/011-old-notebook-json.json';
 
@@ -139,12 +139,12 @@ test('publish notebook, check logged out reader + logged in duplication', async 
 
   await test.step('add one more paragraph', async () => {
     await testUserNotebook.focusOnBody();
-    await keyPress(testUserPage, 'Enter');
+    await testUserPage.keyboard.press('Enter');
     await testUserPage.keyboard.type(justOneMore);
     await expect(testUserNotebook.notebookParagraph.nth(1)).toHaveText(
       justOneMore
     );
-    await keyPress(testUserPage, 'Enter');
+    await testUserPage.keyboard.press('Enter');
   });
 
   await test.step('re-publish notebook', async () => {

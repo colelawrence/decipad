@@ -9,11 +9,7 @@ import {
   openColTypeMenu,
   writeInTable,
 } from '../utils/page/Table';
-import {
-  createDropdownBelow,
-  createSliderBelow,
-  createResultBelow,
-} from '../utils/page/Block';
+import { createSliderBelow, createResultBelow } from '../utils/page/Block';
 
 import { Timeouts } from '../utils/src';
 
@@ -115,7 +111,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await notebook.waitForEditorToLoad();
     await randomFreeUser.notebook.closeSidebar();
     await notebook.focusOnBody();
-    await createDropdownBelow(page, 'Dropdown');
+    await notebook.addDropdownWidget('Dropdown');
     expect(await page.getByText('Dropdown').count()).toBe(1);
   });
 

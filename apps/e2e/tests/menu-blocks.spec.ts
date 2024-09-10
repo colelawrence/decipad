@@ -4,9 +4,7 @@ import {
   createBarChartBelow,
   createDataViewBelow,
   createDateBelow,
-  createDropdownBelow,
   createLineChartBelow,
-  createNumberInputBelow,
   createPieChartBelow,
   createResultBelow,
   createScatterChartBelow,
@@ -26,7 +24,7 @@ test('check menu blocks', async ({ testUser }) => {
   });
 
   await test.step('creates number input', async () => {
-    await createNumberInputBelow(page, 'FirstBlock', '$200');
+    await notebook.addFormula('FirstBlock', '$200');
   });
 
   await test.step('creates formula', async () => {
@@ -96,7 +94,7 @@ test('check menu blocks', async ({ testUser }) => {
   });
 
   await test.step('creates dropdown widget', async () => {
-    await createDropdownBelow(page, 'SixteenthBlock');
+    await notebook.addDropdownWidget('SixteenthBlock');
   });
 
   await test.step('creates data view', async () => {

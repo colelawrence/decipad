@@ -1,6 +1,5 @@
 import { expect, test } from './manager/decipad-tests';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
-import { waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
 import { snapshot, Timeouts } from '../utils/src';
 
@@ -10,7 +9,7 @@ test('Use case: building a candle business', async ({ testUser }) => {
 
   await test.step('loads and computes the "starting a candle business notebook"', async () => {
     await testUser.importNotebook(startingACandleBusiness);
-    await waitForEditorToLoad(page);
+    await notebook.waitForEditorToLoad();
     await expect(page).toHaveTitle('🕯Starting a Candle Business | Decipad');
 
     await expect(async () => {

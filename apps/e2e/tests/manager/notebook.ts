@@ -852,8 +852,11 @@ export class Notebook {
    * await notebook.addDropdownWidget();
    * ```
    */
-  async addDropdownWidget() {
+  async addDropdownWidget(identifier: string) {
     await this.addBlock('dropdown');
+    await this.page.getByText('Dropdown', { exact: true }).last().dblclick();
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.type(identifier);
   }
 
   /**

@@ -1,7 +1,6 @@
 /* eslint-disable playwright/no-force-option */
 import type { JSHandle, Locator, Page } from '@playwright/test';
 import { Timeouts } from '../src';
-import { keyPress } from './Editor';
 import { createWithSlashCommand } from './Block';
 
 export async function createTable(page: Page) {
@@ -322,7 +321,7 @@ export async function addColumnUnit(
   await page.getByText('Custom Unit').click();
   await page.getByPlaceholder('add custom unit').click();
   await page.keyboard.type(unit);
-  await keyPress(page, 'Enter');
+  await page.keyboard.press('Enter');
 }
 
 export async function addColRight(page: Page, col: number, tableName?: string) {
@@ -375,7 +374,9 @@ export async function renameColumn(
   tableName?: string
 ) {
   await selectColumnName(page, col, tableName);
-  await keyPress(page, 'Backspace');
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  await page.keyboard.press('Backspace');
   await page.keyboard.type(identifier);
 }
 

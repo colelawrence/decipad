@@ -1,101 +1,46 @@
-/* eslint-disable playwright/valid-describe-callback */
-/* eslint-disable playwright/valid-title */
-import type { BrowserContext, Page } from '@playwright/test';
-import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/004-testing-edit-permissions.json';
-import {
-  navigateToNotebook,
-  setUp,
-  waitForEditorToLoad,
-  waitForNotebookToLoad,
-} from '../utils/page/Editor';
-import { createWorkspace, importNotebook, withTestUser } from '../utils/src';
 
 export const typeTest = (currentPage: Page, input: string) =>
   test.step('Trying to add text to formulas', async () => {
     await currentPage.getByTestId('code-line').type(input);
   });
 
-// eslint-disable-next-line playwright/no-skipped-test
-test.describe.skip('Loading reference notebook', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let publishedNotebookPage: Page;
-  let notebookId: string;
-  let workspaceId: string;
-  let page: Page;
-  let context: BrowserContext;
-  let incognito: BrowserContext;
-  let randomUser: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-    incognito = await browser.newContext();
-    randomUser = await browser.newContext();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
-    workspaceId = await createWorkspace(page);
-    notebookId = await importNotebook(
-      workspaceId,
-      Buffer.from(JSON.stringify(notebookSource), 'utf-8').toString('base64'),
-      page
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Waiting for editor to be ready', async () => {
-    await navigateToNotebook(page, notebookId);
-    await waitForEditorToLoad(page);
+test('Loading reference notebook', async ({
+  testUser,
+  anotherRandomFreeUser,
+  unregisteredUser,
+}) => {
+  const notebookId = await testUser.importNotebook(notebookSource);
+  await testUser.notebook.waitForEditorToLoad();
+  await test.step('Waiting for editor to be ready', async () => {
     await expect(
-      page.getByTestId('[data-testid="editor-table"]')
+      testUser.page.getByTestId('[data-testid="editor-table"]')
     ).toBeDefined();
   });
 
-  test('Modifying table formula as notebook owner', async () => {
-    await page.getByTestId('code-line').click();
-    await page.getByTestId('code-line').fill('A + 2 + 5');
-    await expect(page.getByText('8')).toBeVisible();
+  await test.step('Modifying table formula as notebook owner', async () => {
+    await testUser.page.getByTestId('code-line').click();
+    await testUser.page.getByTestId('code-line').fill('A + 2 + 5');
+    await expect(testUser.page.getByText('8')).toBeVisible();
   });
 
-  test('Publish notebook and navigate to it as a random user', async () => {
-    await page.getByRole('button', { name: 'Share' }).click();
-    await page.getByTestId('publish-tab').click();
-    await page.locator('[aria-roledescription="enable publishing"]').click();
-
-    publishedNotebookPage = await randomUser.newPage();
-
-    await withTestUser({ context: randomUser, page: publishedNotebookPage });
-
-    await navigateToNotebook(publishedNotebookPage, notebookId);
-
-    await waitForNotebookToLoad(publishedNotebookPage);
-    expect(publishedNotebookPage).toBeDefined();
+  await test.step('Publish notebook and navigate to it as a random user', async () => {
+    await testUser.notebook.publishNotebook();
+    await anotherRandomFreeUser.navigateToNotebook(notebookId);
+    await anotherRandomFreeUser.notebook.waitForEditorToLoad();
   });
 
-  // Temporary
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('Random user tries to edit', async () => {
-    await typeTest(publishedNotebookPage, 'A');
-    await expect(publishedNotebookPage.getByText('8')).toBeVisible();
+  await test.step('Random user tries to edit', async () => {
+    await typeTest(anotherRandomFreeUser.page, 'A');
+    await expect(anotherRandomFreeUser.page.getByText('8')).toBeVisible();
   });
 
-  test('Navigating to notebook as an incognito user', async () => {
-    publishedNotebookPage = (await incognito.newPage()) as Page;
-    await navigateToNotebook(publishedNotebookPage, notebookId);
-    await waitForNotebookToLoad(publishedNotebookPage);
-    expect(publishedNotebookPage).toBeDefined();
-  });
-
-  test('Incognito user tries to edit', async () => {
-    await typeTest(publishedNotebookPage, 'A');
-    await expect(publishedNotebookPage.getByText('8')).toBeVisible();
+  await test.step('Incognito user tries to edit', async () => {
+    await unregisteredUser.navigateToNotebook(notebookId);
+    await unregisteredUser.notebook.waitForEditorToLoad();
+    await typeTest(unregisteredUser.page, 'A');
+    await expect(unregisteredUser.page.getByText('8')).toBeVisible();
   });
 });

@@ -1,7 +1,4 @@
-import {
-  createWithSlashCommand,
-  focusTrailingParagraph,
-} from '../utils/page/Block';
+import { focusTrailingParagraph } from '../utils/page/Block';
 import { Locator, Page, expect, test } from './manager/decipad-tests';
 
 const getParagraphByText = (page: Page, text: string) =>
@@ -53,7 +50,7 @@ const getParagraphTexts = async (
 };
 
 test('Drag and drop blocks', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
 
   await test.step('set up blocks', async () => {
     await focusTrailingParagraph(page);
@@ -311,7 +308,7 @@ test('Drag and drop blocks', async ({ testUser }) => {
   });
 
   await test.step('create new layout', async () => {
-    await createWithSlashCommand(page, '/layout');
+    await notebook.addBlockSlashCommand('layout');
 
     await page.keyboard.type('New layout');
 

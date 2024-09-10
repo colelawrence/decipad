@@ -1,11 +1,7 @@
 import os from 'node:os';
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
-import {
-  keyPress,
-  navigateToNotebook,
-  editorTitleLocator,
-} from '../utils/page/Editor';
+import { navigateToNotebook, editorTitleLocator } from '../utils/page/Editor';
 
 import {
   addColLeft,
@@ -253,7 +249,7 @@ test('Basic Table Interactions + Collisions', async ({ testUser }) => {
     await testUser.page.keyboard.press('ControlOrMeta+C');
     await writeInTable(testUser.page, '', 2, 0, 'NewTableName2');
     await testUser.page.keyboard.press('ControlOrMeta+V');
-    await keyPress(testUser.page, 'ArrowRight');
+    await testUser.page.keyboard.press('ArrowRight');
     await testUser.page.keyboard.press('ControlOrMeta+V');
   });
 });
