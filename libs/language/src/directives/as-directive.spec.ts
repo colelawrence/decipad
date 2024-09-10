@@ -113,6 +113,7 @@ describe('getType', () => {
       Type {
         "anythingness": false,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": [
           "Col1",
@@ -122,6 +123,7 @@ describe('getType', () => {
           Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -154,6 +156,7 @@ describe('getType', () => {
           Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,

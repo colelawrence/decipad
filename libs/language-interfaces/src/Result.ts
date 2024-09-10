@@ -11,6 +11,8 @@ export interface ResultGenerator {
   (start?: number, end?: number): AsyncGenerator<OneResult>;
   WASM_ID?: string;
   WASM_REALM_ID?: 'compute-backend';
+
+  cellCount?: number;
 }
 
 export type ResultNumber = DeciNumberBase;

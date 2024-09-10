@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import type { AST } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { RuntimeError } from '@decipad/language';
+import { astNode, RuntimeError } from '@decipad/language';
 import type { IdentifiedBlock } from '@decipad/computer-interfaces';
 import { computeProgram, resultFromError } from './computeProgram';
 import {
@@ -79,6 +79,111 @@ it('returns type errors', async () => {
       "block-1 -> Error in operation "+" (number, string): The function + cannot be called with (number, string)",
       "block-2 -> 2",
       "block-3 -> Error in operation "+" (number, string): The function + cannot be called with (number, string)",
+    ]
+  `);
+});
+
+it('preserves row count of generator tables', async () => {
+  const blocks: Array<AST.Block> = [
+    {
+      id: 'table',
+      type: 'block',
+      args: [astNode('table', astNode('tabledef', 'my-table'))],
+    },
+    {
+      id: 'column',
+      type: 'block',
+      args: [
+        astNode(
+          'table-column-assign',
+          astNode('tablepartialdef', 'my-table'),
+          astNode('coldef', 'my-column'),
+          astNode(
+            'column',
+            astNode('column-items', astNode('literal', 'string', 'some-string'))
+          ),
+          undefined,
+          10_000
+        ),
+      ],
+    },
+  ];
+
+  const evaluated = await computeProgram(
+    programToComputerProgram(
+      blocks.map((block) => ({ type: 'identified-block', id: block.id, block }))
+    ),
+    new Computer()
+  );
+
+  expect(evaluated).toMatchInlineSnapshot(`
+    [
+      {
+        "epoch": 0n,
+        "id": "table",
+        "result": {
+          "meta": [Function],
+          "type": {
+            "columnNames": [
+              "my-column",
+            ],
+            "columnTypes": [
+              {
+                "kind": "string",
+              },
+            ],
+            "delegatesIndexTo": "my-table",
+            "indexName": "my-table",
+            "kind": "table",
+            "rowCount": 10000,
+          },
+          "value": [
+            [Function],
+          ],
+        },
+        "type": "computer-result",
+        "usedNames": [],
+        "visibleVariables": {
+          "global": Set {
+            "exprRef_table",
+            "my-table",
+            "my-table.my-column",
+            "exprRef_column",
+          },
+          "local": Set {
+            "my-column",
+          },
+        },
+      },
+      {
+        "epoch": 0n,
+        "id": "column",
+        "result": {
+          "meta": [Function],
+          "type": {
+            "cellCount": 10000,
+            "cellType": {
+              "kind": "string",
+            },
+            "indexedBy": "my-table",
+            "kind": "column",
+          },
+          "value": [Function],
+        },
+        "type": "computer-result",
+        "usedNames": [],
+        "visibleVariables": {
+          "global": Set {
+            "exprRef_table",
+            "my-table",
+            "my-table.my-column",
+            "exprRef_column",
+          },
+          "local": Set {
+            "my-column",
+          },
+        },
+      },
     ]
   `);
 });

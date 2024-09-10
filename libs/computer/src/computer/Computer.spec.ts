@@ -713,22 +713,11 @@ it('can list tables and columns', async () => {
   const tables = computer.getAllTables$.get();
   expect(await Promise.all(columns.map(materializeColumnDesc)))
     .toMatchInlineSnapshot(`
-    [
-      {
-        "blockId": "block-0_0",
-        "blockType": {
-          "cellType": {
-            "kind": "number",
-            "unit": null,
-          },
-          "indexedBy": "exprRef_block_0",
-          "kind": "column",
-        },
-        "columnName": "A",
-        "readableTableName": "table",
-        "result": {
-          "meta": [Function],
-          "type": {
+      [
+        {
+          "blockId": "block-0_0",
+          "blockType": {
+            "cellCount": undefined,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -736,58 +725,62 @@ it('can list tables and columns', async () => {
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
+          "columnName": "A",
+          "readableTableName": "table",
+          "result": {
+            "meta": [Function],
+            "type": {
+              "cellCount": undefined,
+              "cellType": {
+                "kind": "number",
+                "unit": null,
+              },
+              "indexedBy": "exprRef_block_0",
+              "kind": "column",
             },
-          ],
-        },
-        "tableName": "exprRef_block_0",
-      },
-      {
-        "blockId": "block-0_1",
-        "blockType": {
-          "cellType": {
-            "kind": "string",
+            "value": [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+            ],
           },
-          "indexedBy": "exprRef_block_0",
-          "kind": "column",
+          "tableName": "exprRef_block_0",
         },
-        "columnName": "B",
-        "readableTableName": "table",
-        "result": {
-          "meta": [Function],
-          "type": {
+        {
+          "blockId": "block-0_1",
+          "blockType": {
+            "cellCount": undefined,
             "cellType": {
               "kind": "string",
             },
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": [
-            "a",
-          ],
-        },
-        "tableName": "exprRef_block_0",
-      },
-      {
-        "blockId": "block-1",
-        "blockType": {
-          "cellType": {
-            "date": "day",
-            "kind": "date",
+          "columnName": "B",
+          "readableTableName": "table",
+          "result": {
+            "meta": [Function],
+            "type": {
+              "cellCount": undefined,
+              "cellType": {
+                "kind": "string",
+              },
+              "indexedBy": "exprRef_block_0",
+              "kind": "column",
+            },
+            "value": [
+              "a",
+            ],
           },
-          "indexedBy": "exprRef_block_0",
-          "kind": "column",
+          "tableName": "exprRef_block_0",
         },
-        "columnName": "C",
-        "readableTableName": "table",
-        "result": {
-          "meta": [Function],
-          "type": {
+        {
+          "blockId": "block-1",
+          "blockType": {
+            "cellCount": undefined,
             "cellType": {
               "date": "day",
               "kind": "date",
@@ -795,14 +788,27 @@ it('can list tables and columns', async () => {
             "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
-          "value": [
-            1577836800000n,
-          ],
+          "columnName": "C",
+          "readableTableName": "table",
+          "result": {
+            "meta": [Function],
+            "type": {
+              "cellCount": undefined,
+              "cellType": {
+                "date": "day",
+                "kind": "date",
+              },
+              "indexedBy": "exprRef_block_0",
+              "kind": "column",
+            },
+            "value": [
+              1577836800000n,
+            ],
+          },
+          "tableName": "exprRef_block_0",
         },
-        "tableName": "exprRef_block_0",
-      },
-    ]
-  `);
+      ]
+    `);
   expect(tables).toMatchInlineSnapshot(`
     [
       {

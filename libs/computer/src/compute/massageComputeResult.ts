@@ -31,8 +31,8 @@ const massageTableComputeResult = (
   variableName: string,
   table: AST.Table
 ): MassageResults => {
-  let type = getDefined(realm.inferContext.stack.get(getDefined(variableName)));
-  let value = realm.interpreterRealm.stack.get(getDefined(variableName));
+  let type = getDefined(realm.inferContext.stack.get(variableName));
+  let value = realm.interpreterRealm.stack.get(variableName);
   if (type.columnNames?.length !== type.columnTypes?.length) {
     return [
       t.impossible("column names and column types don't match length", table),

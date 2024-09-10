@@ -72,6 +72,7 @@ describe('table join', () => {
         "delegatesIndexTo": "Table",
         "indexName": "JoinResult",
         "kind": "table",
+        "rowCount": undefined,
       }
     `);
 
@@ -144,6 +145,7 @@ describe('table join', () => {
         "delegatesIndexTo": "Table1",
         "indexName": "JoinResult",
         "kind": "table",
+        "rowCount": undefined,
       }
     `);
 
@@ -238,6 +240,7 @@ describe('table join', () => {
         "delegatesIndexTo": "Table1",
         "indexName": "JoinResult",
         "kind": "table",
+        "rowCount": undefined,
       }
     `);
 

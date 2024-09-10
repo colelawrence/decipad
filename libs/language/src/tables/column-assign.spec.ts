@@ -32,9 +32,11 @@ describe('Column assignment inference', () => {
       Type {
         "anythingness": false,
         "atParentIndex": 1,
+        "cellCount": undefined,
         "cellType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -103,9 +105,11 @@ describe('Column assignment inference', () => {
       Type {
         "anythingness": false,
         "atParentIndex": 1,
+        "cellCount": undefined,
         "cellType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -174,9 +178,11 @@ describe('Column assignment inference', () => {
       Type {
         "anythingness": false,
         "atParentIndex": 1,
+        "cellCount": undefined,
         "cellType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -245,9 +251,11 @@ describe('Column assignment inference', () => {
       Type {
         "anythingness": false,
         "atParentIndex": 1,
+        "cellCount": undefined,
         "cellType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,

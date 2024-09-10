@@ -158,38 +158,39 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-3']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      {
-        "meta": [Function],
-        "type": {
-          "cellType": {
-            "kind": "number",
-            "unit": null,
+        {
+          "meta": [Function],
+          "type": {
+            "cellCount": undefined,
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_block_1",
+            "kind": "column",
           },
-          "indexedBy": "exprRef_block_1",
-          "kind": "column",
-        },
-        "value": [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 11n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 12n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 13n,
-            "s": 1n,
-          },
-        ],
-      }
-    `);
+          "value": [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 11n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 12n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 13n,
+              "s": 1n,
+            },
+          ],
+        }
+      `);
   });
 
   it('column name equal to global name works (exprRefs)', async () => {
@@ -206,38 +207,39 @@ describe('abstract refs', () => {
     const columnResult1 = results.blockResults['block-3']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
-      {
-        "meta": [Function],
-        "type": {
-          "cellType": {
-            "kind": "number",
-            "unit": null,
+        {
+          "meta": [Function],
+          "type": {
+            "cellCount": undefined,
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_block_1",
+            "kind": "column",
           },
-          "indexedBy": "exprRef_block_1",
-          "kind": "column",
-        },
-        "value": [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 124n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 125n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 126n,
-            "s": 1n,
-          },
-        ],
-      }
-    `);
+          "value": [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 124n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 125n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 126n,
+              "s": 1n,
+            },
+          ],
+        }
+      `);
   });
 
   it('expression ref to column assign works', async () => {
@@ -253,38 +255,39 @@ describe('abstract refs', () => {
     const columnResult1 = results.blockResults['block-2']?.result;
     expect(columnResult1 && (await materializeResult(columnResult1)))
       .toMatchInlineSnapshot(`
-      {
-        "meta": [Function],
-        "type": {
-          "cellType": {
-            "kind": "number",
-            "unit": null,
+        {
+          "meta": [Function],
+          "type": {
+            "cellCount": undefined,
+            "cellType": {
+              "kind": "number",
+              "unit": null,
+            },
+            "indexedBy": "exprRef_block_0",
+            "kind": "column",
           },
-          "indexedBy": "exprRef_block_0",
-          "kind": "column",
-        },
-        "value": [
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 11n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 12n,
-            "s": 1n,
-          },
-          DeciNumber {
-            "d": 1n,
-            "infinite": false,
-            "n": 13n,
-            "s": 1n,
-          },
-        ],
-      }
-    `);
+          "value": [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 11n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 12n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 13n,
+              "s": 1n,
+            },
+          ],
+        }
+      `);
   });
 
   it('expression ref to block with expression works', async () => {
@@ -359,59 +362,60 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-0']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      {
-        "meta": [Function],
-        "type": {
-          "columnNames": [
-            "T1",
-            "T2",
+        {
+          "meta": [Function],
+          "type": {
+            "columnNames": [
+              "T1",
+              "T2",
+            ],
+            "columnTypes": [
+              {
+                "kind": "number",
+                "unit": null,
+              },
+              {
+                "kind": "number",
+                "unit": null,
+              },
+            ],
+            "delegatesIndexTo": "exprRef_block_0",
+            "indexName": "exprRef_block_0",
+            "kind": "table",
+            "rowCount": undefined,
+          },
+          "value": [
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            ],
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 11n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 12n,
+                "s": 1n,
+              },
+            ],
           ],
-          "columnTypes": [
-            {
-              "kind": "number",
-              "unit": null,
-            },
-            {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "delegatesIndexTo": "exprRef_block_0",
-          "indexName": "exprRef_block_0",
-          "kind": "table",
-        },
-        "value": [
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 2n,
-              "s": 1n,
-            },
-          ],
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 11n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 12n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
+        }
+      `);
   });
 
   it('column assignments with expr refs all over works', async () => {
@@ -432,89 +436,90 @@ describe('abstract refs', () => {
     const columnResult = results.blockResults['block-6']?.result;
     expect(columnResult && (await materializeResult(columnResult)))
       .toMatchInlineSnapshot(`
-      {
-        "meta": [Function],
-        "type": {
-          "columnNames": [
-            "A",
-            "Col1",
+        {
+          "meta": [Function],
+          "type": {
+            "columnNames": [
+              "A",
+              "Col1",
+            ],
+            "columnTypes": [
+              {
+                "kind": "number",
+                "unit": null,
+              },
+              {
+                "kind": "number",
+                "unit": null,
+              },
+            ],
+            "delegatesIndexTo": "exprRef_block_0",
+            "indexName": "exprRef_block_4",
+            "kind": "table",
+            "rowCount": undefined,
+          },
+          "value": [
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 3n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 4n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 5n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 6n,
+                "s": 1n,
+              },
+            ],
+            [
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+              DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 3n,
+                "s": 1n,
+              },
+            ],
           ],
-          "columnTypes": [
-            {
-              "kind": "number",
-              "unit": null,
-            },
-            {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "delegatesIndexTo": "exprRef_block_0",
-          "indexName": "exprRef_block_4",
-          "kind": "table",
-        },
-        "value": [
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 2n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 3n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 4n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 5n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 6n,
-              "s": 1n,
-            },
-          ],
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 1n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 2n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 3n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
+        }
+      `);
   });
 
   it('user units work', async () => {
@@ -610,6 +615,7 @@ describe('abstract refs', () => {
       {
         "meta": [Function],
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": [

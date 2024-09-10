@@ -11,9 +11,11 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -108,6 +110,7 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -154,6 +157,7 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -219,6 +223,7 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -280,48 +285,49 @@ describe('list operators', () => {
   it('countif: counts the true elements in a list', async () => {
     expect(await runCode('countif([true, false, true])'))
       .toMatchInlineSnapshot(`
-      {
-        "meta": undefined,
-        "type": Type {
-          "anythingness": false,
-          "atParentIndex": null,
-          "cellType": null,
-          "columnNames": null,
-          "columnTypes": null,
-          "date": null,
-          "delegatesIndexTo": undefined,
-          "errorCause": null,
-          "functionArgNames": undefined,
-          "functionBody": undefined,
-          "functionName": undefined,
-          "functionScopeDepth": undefined,
-          "functionness": false,
-          "indexName": null,
-          "indexedBy": null,
-          "node": null,
-          "nothingness": false,
-          "numberError": null,
-          "numberFormat": null,
-          "pending": false,
-          "rangeOf": null,
-          "rowCellNames": null,
-          "rowCellTypes": null,
-          "rowCount": undefined,
-          "rowIndexName": null,
-          "symbol": null,
-          "tree": undefined,
-          "type": "number",
-          "unit": null,
-          Symbol(immer-draftable): true,
-        },
-        "value": DeciNumber {
-          "d": 1n,
-          "infinite": false,
-          "n": 2n,
-          "s": 1n,
-        },
-      }
-    `);
+        {
+          "meta": undefined,
+          "type": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellCount": undefined,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+        }
+      `);
   });
 
   it('sorts a list', async () => {
@@ -333,9 +339,11 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -426,9 +434,11 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -525,9 +535,11 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -623,6 +635,7 @@ describe('list operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": [
             "A",
@@ -632,6 +645,7 @@ describe('list operators', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -664,6 +678,7 @@ describe('list operators', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,

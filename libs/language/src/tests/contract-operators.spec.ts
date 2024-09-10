@@ -9,6 +9,7 @@ describe('contract operators', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -60,6 +61,7 @@ describe('contract operators', () => {
                     "inferredType": Type {
                       "anythingness": false,
                       "atParentIndex": null,
+                      "cellCount": undefined,
                       "cellType": null,
                       "columnNames": null,
                       "columnTypes": null,

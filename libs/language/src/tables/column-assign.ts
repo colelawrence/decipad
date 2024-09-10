@@ -20,7 +20,7 @@ export const inferColumnAssign = async (
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const [tableNameAst, colNameAst, , sortOrder] = assign.args;
+  const [tableNameAst, colNameAst, , sortOrder, cellCount] = assign.args;
   const tableName = getIdentifierString(tableNameAst);
   const columnName = getIdentifierString(colNameAst);
 
@@ -43,7 +43,7 @@ export const inferColumnAssign = async (
     return newColumn;
   }
 
-  return t.column(newColumn, tableName, newColumnAtParentIndex);
+  return t.column(newColumn, tableName, newColumnAtParentIndex, cellCount);
 };
 
 export async function evaluateColumnAssign(

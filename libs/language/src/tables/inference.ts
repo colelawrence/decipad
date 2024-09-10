@@ -46,13 +46,7 @@ export const inferTable = async (realm: TRealm, table: AST.Table) => {
         }
       }
 
-      const tableType = sortType(
-        getDefined(tableRealm.inferContext.stack.get(tableName))
-      );
-
-      return produce(tableType, (type) => {
-        [, type.rowCount] = tableDef.args;
-      });
+      return sortType(getDefined(tableRealm.inferContext.stack.get(tableName)));
     },
     `table ${tableName}`
   );
@@ -129,17 +123,15 @@ const fixColumnExp = (
   return exp;
 };
 
+type InferTableColumnOptions = {
+  columnAst: AST.TableColumnAssign | AST.TableColumn;
+  tableName: string;
+  columnName: string;
+};
+
 export async function inferTableColumn(
   realm: TRealm,
-  {
-    columnAst,
-    tableName,
-    columnName,
-  }: {
-    columnAst: AST.TableColumnAssign | AST.TableColumn;
-    tableName: string;
-    columnName: string;
-  }
+  { columnAst, tableName, columnName }: InferTableColumnOptions
 ): Promise<Type> {
   const { inferContext: ctx } = realm;
   ctx.stack.createNamespace(tableName);
@@ -154,7 +146,9 @@ export async function inferTableColumn(
     async (columnRealm) => {
       columnRealm.inferContext.stack.set('first', buildType.boolean());
       columnRealm.stack.set('first', Value.Scalar.fromValue(false));
+
       const exp = fixColumnExp(_exp, tableName, otherColumns);
+
       if (refersToOtherColumnsByName(exp, otherColumns)) {
         return inferTableColumnPerCell(columnRealm, otherColumns, exp);
       } else {
@@ -170,8 +164,13 @@ export async function inferTableColumn(
   if (columnAst.type === 'table-column-assign') {
     type = produce(type, (t: Type) => {
       const sortOrder = columnAst.args[3];
+      const cellCount = columnAst.args[4];
       if (sortOrder != null) {
         t.atParentIndex = sortOrder;
+      }
+
+      if (cellCount != null) {
+        t.cellCount = cellCount;
       }
     });
   }

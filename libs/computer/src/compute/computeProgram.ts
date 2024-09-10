@@ -13,7 +13,6 @@ import {
   Value,
   evaluateStatement,
   inferBlock,
-  validateResult,
   isErrorType,
   isFunctionType,
 } from '@decipad/language';
@@ -93,7 +92,7 @@ const internalComputeStatement = async (
           type: 'computer-result',
           id: blockId,
           epoch: realm.epoch,
-          result: await serializeComputeResult(
+          result: serializeComputeResult(
             t.impossible((err as Error).message),
             Value.UnknownValue,
             undefined
@@ -114,15 +113,7 @@ const internalComputeStatement = async (
     value = Value.UnknownValue;
   }
 
-  let data = await value?.getData();
-
-  // causes a lot of pain and is very slow.
-  if (data) {
-    const newData = validateResult(valueType, data);
-    if (newData != null) {
-      data = newData;
-    }
-  }
+  const data = await value?.getData();
 
   const variableName =
     statement.type === 'assign' || statement.type === 'table'
@@ -184,7 +175,6 @@ export const resultFromError = (
   blockId: string,
   realm: ComputationRealm
 ): IdentifiedResult => {
-  console.log('resultFromError', error);
   // Not a user-facing error, so let's hide internal details
   const message = error.message.replace(
     /^panic: (.+)$/,
@@ -274,6 +264,7 @@ const inferWhileRetrievingNames = async (
   const { inferContext: ctx } = realm;
   try {
     ctx.usedNames = [];
+
     const valueType = await inferBlock(block, realm);
     const { usedNames } = ctx;
     return [valueType, usedNames];

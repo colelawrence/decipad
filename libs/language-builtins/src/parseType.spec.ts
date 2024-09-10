@@ -6,6 +6,7 @@ it('creates primitives', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -40,6 +41,7 @@ it('creates primitives', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -74,6 +76,7 @@ it('creates primitives', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -111,9 +114,11 @@ it('creates columns', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": false,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -176,12 +181,15 @@ it('creates columns', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": false,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -272,9 +280,11 @@ it('creates columns', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": false,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -337,9 +347,11 @@ it('creates columns', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": false,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -405,6 +417,7 @@ it('constructs anything', () => {
     Type {
       "anythingness": true,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -439,9 +452,11 @@ it('constructs anything', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": true,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -507,6 +522,7 @@ it('understands symbols', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -541,9 +557,11 @@ it('understands symbols', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": true,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -606,9 +624,11 @@ it('understands symbols', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": Type {
         "anythingness": true,
         "atParentIndex": null,
+        "cellCount": undefined,
         "cellType": null,
         "columnNames": null,
         "columnTypes": null,
@@ -671,6 +691,7 @@ it('understands symbols', () => {
     Type {
       "anythingness": true,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -708,6 +729,7 @@ it('understands nothing and anything', () => {
     Type {
       "anythingness": true,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -742,6 +764,7 @@ it('understands nothing and anything', () => {
     Type {
       "anythingness": false,
       "atParentIndex": null,
+      "cellCount": undefined,
       "cellType": null,
       "columnNames": null,
       "columnTypes": null,
@@ -782,6 +805,7 @@ it('parses function sigs', () => {
           Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -814,6 +838,7 @@ it('parses function sigs', () => {
           Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -847,6 +872,7 @@ it('parses function sigs', () => {
         "returnType": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,

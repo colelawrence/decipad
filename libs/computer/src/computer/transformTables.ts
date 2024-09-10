@@ -61,7 +61,6 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
           { type: 'coldef', args: [colName] },
           expression,
           i,
-          tableDef.args[1],
         ],
       };
 

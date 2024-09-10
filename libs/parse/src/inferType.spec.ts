@@ -907,6 +907,7 @@ describe('Infers columns', () => {
       {
         "coerced": "[1, 2, 3]",
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -921,6 +922,7 @@ describe('Infers columns', () => {
       {
         "coerced": "['hello', 'world', 'something']",
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "string",
           },
@@ -934,6 +936,7 @@ describe('Infers columns', () => {
       {
         "coerced": "[true, false, false]",
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "boolean",
           },
@@ -950,6 +953,7 @@ describe('Infers columns', () => {
       {
         "coerced": "[10$, 20$, 30$]",
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": [
@@ -986,6 +990,7 @@ describe('Infers columns', () => {
       {
         "coerced": "[10, 20, 30$]",
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": null,

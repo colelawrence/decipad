@@ -46,6 +46,7 @@ it('finds names', async () => {
           "delegatesIndexTo": undefined,
           "indexName": "exprRef_block_1",
           "kind": "table",
+          "rowCount": undefined,
         },
       },
       {
@@ -57,6 +58,7 @@ it('finds names', async () => {
         "kind": "column",
         "name": "Hello",
         "serializedType": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "string",
           },
@@ -73,6 +75,7 @@ it('finds names', async () => {
         "kind": "column",
         "name": "Column2",
         "serializedType": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -383,6 +386,7 @@ it('finds names', async () => {
           "delegatesIndexTo": "exprRef_block_1",
           "indexName": "exprRef_block_1",
           "kind": "table",
+          "rowCount": undefined,
         },
       },
     ]
@@ -421,6 +425,7 @@ it('places local vars first', async () => {
           "delegatesIndexTo": undefined,
           "indexName": "exprRef_block_0",
           "kind": "table",
+          "rowCount": undefined,
         },
       },
       {
@@ -442,6 +447,7 @@ it('places local vars first', async () => {
         "kind": "column",
         "name": "Column2",
         "serializedType": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": null,

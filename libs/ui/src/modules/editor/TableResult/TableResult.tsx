@@ -104,8 +104,11 @@ export const TableResult: FC<TableResultProps> = ({
   const tableLength =
     useResolved(
       useMemo(
-        () => (isExpectedValueType ? count(all[0]()) : Promise.resolve(0)),
-        [isExpectedValueType, all]
+        () =>
+          isExpectedValueType
+            ? type.rowCount ?? count(all[0]())
+            : Promise.resolve(0),
+        [isExpectedValueType, type.rowCount, all]
       )
     ) ?? 0;
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);

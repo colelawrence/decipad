@@ -154,7 +154,6 @@ describe('Table', () => {
               {
                 "args": [
                   "tableVariableName",
-                  3,
                 ],
                 "type": "tabledef",
               },
@@ -530,7 +529,6 @@ describe('Table', () => {
               {
                 "args": [
                   "tableVariableName",
-                  1,
                 ],
                 "type": "tabledef",
               },
@@ -769,7 +767,6 @@ describe('Table', () => {
               {
                 "args": [
                   "tableVariableName",
-                  2,
                 ],
                 "type": "tabledef",
               },
@@ -953,7 +950,6 @@ describe('Table', () => {
               {
                 "args": [
                   "Table",
-                  1,
                 ],
                 "type": "tabledef",
               },

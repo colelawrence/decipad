@@ -799,6 +799,7 @@ describe('Tables', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -851,6 +852,7 @@ describe('Tables', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": [
             "A",
@@ -860,6 +862,7 @@ describe('Tables', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -931,6 +934,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -979,6 +983,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1056,6 +1061,7 @@ describe('Tables', () => {
                         "inferredType": Type {
                           "anythingness": false,
                           "atParentIndex": null,
+                          "cellCount": undefined,
                           "cellType": null,
                           "columnNames": null,
                           "columnTypes": null,
@@ -1149,6 +1155,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1197,6 +1204,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1274,6 +1282,7 @@ describe('Tables', () => {
                         "inferredType": Type {
                           "anythingness": false,
                           "atParentIndex": null,
+                          "cellCount": undefined,
                           "cellType": null,
                           "columnNames": null,
                           "columnTypes": null,
@@ -1373,6 +1382,7 @@ describe('Tables', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -1458,9 +1468,11 @@ describe('Tables', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -1542,6 +1554,7 @@ describe('Tables', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": [
             "Index",
@@ -1551,6 +1564,7 @@ describe('Tables', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -1622,6 +1636,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1670,6 +1685,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1747,6 +1763,7 @@ describe('Tables', () => {
                         "inferredType": Type {
                           "anythingness": false,
                           "atParentIndex": null,
+                          "cellCount": undefined,
                           "cellType": null,
                           "columnNames": null,
                           "columnTypes": null,
@@ -1840,6 +1857,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1888,6 +1906,7 @@ describe('Tables', () => {
                                 "inferredType": Type {
                                   "anythingness": false,
                                   "atParentIndex": null,
+                                  "cellCount": undefined,
                                   "cellType": null,
                                   "columnNames": null,
                                   "columnTypes": null,
@@ -1965,6 +1984,7 @@ describe('Tables', () => {
                         "inferredType": Type {
                           "anythingness": false,
                           "atParentIndex": null,
+                          "cellCount": undefined,
                           "cellType": null,
                           "columnNames": null,
                           "columnTypes": null,
@@ -2064,6 +2084,7 @@ describe('Tables', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -2416,6 +2437,7 @@ describe('Dates', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -2876,67 +2898,68 @@ describe('number units work together', () => {
   it('converts between exponentiated and non-exponentiated but expandable to same', async () => {
     expect(await runCode('100 centimeter^3 in cubicmetre'))
       .toMatchInlineSnapshot(`
-      {
-        "meta": undefined,
-        "type": Type {
-          "anythingness": false,
-          "atParentIndex": null,
-          "cellType": null,
-          "columnNames": null,
-          "columnTypes": null,
-          "date": null,
-          "delegatesIndexTo": undefined,
-          "errorCause": null,
-          "functionArgNames": undefined,
-          "functionBody": undefined,
-          "functionName": undefined,
-          "functionScopeDepth": undefined,
-          "functionness": false,
-          "indexName": null,
-          "indexedBy": null,
-          "node": null,
-          "nothingness": false,
-          "numberError": null,
-          "numberFormat": null,
-          "pending": false,
-          "rangeOf": null,
-          "rowCellNames": null,
-          "rowCellTypes": null,
-          "rowCount": undefined,
-          "rowIndexName": null,
-          "symbol": null,
-          "tree": undefined,
-          "type": "number",
-          "unit": [
-            {
-              "baseQuantity": "volume",
-              "baseSuperQuantity": "volume",
-              "exp": DeciNumber {
-                "d": 1n,
-                "infinite": false,
-                "n": 1n,
-                "s": 1n,
+        {
+          "meta": undefined,
+          "type": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellCount": undefined,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgNames": undefined,
+            "functionBody": undefined,
+            "functionName": undefined,
+            "functionScopeDepth": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "tree": undefined,
+            "type": "number",
+            "unit": [
+              {
+                "baseQuantity": "volume",
+                "baseSuperQuantity": "volume",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "cubicmetre",
               },
-              "known": true,
-              "multiplier": DeciNumber {
-                "d": 1n,
-                "infinite": false,
-                "n": 1n,
-                "s": 1n,
-              },
-              "unit": "cubicmetre",
-            },
-          ],
-          Symbol(immer-draftable): true,
-        },
-        "value": DeciNumber {
-          "d": 10000n,
-          "infinite": false,
-          "n": 1n,
-          "s": 1n,
-        },
-      }
-    `);
+            ],
+            Symbol(immer-draftable): true,
+          },
+          "value": DeciNumber {
+            "d": 10000n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+        }
+      `);
   });
 
   it('autoconverts complex units', async () => {
@@ -3441,6 +3464,7 @@ describe('type coercion', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3576,6 +3600,7 @@ describe('percentages', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3619,6 +3644,7 @@ describe('percentages', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3662,6 +3688,7 @@ describe('percentages', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3706,6 +3733,7 @@ describe('percentages', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3801,6 +3829,7 @@ describe('percentages', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3857,6 +3886,7 @@ describe('tiered function', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3911,6 +3941,7 @@ describe('tiered function', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -3984,6 +4015,7 @@ describe('tiered function', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -4054,6 +4086,7 @@ describe('tiered function', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -4125,6 +4158,7 @@ describe('grammar extensions', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -4266,6 +4300,7 @@ describe('lookup syntactic sugar', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -4293,6 +4328,7 @@ describe('lookup syntactic sugar', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -4325,6 +4361,7 @@ describe('lookup syntactic sugar', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -4397,6 +4434,7 @@ describe('lookup syntactic sugar', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -4424,6 +4462,7 @@ describe('lookup syntactic sugar', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -4456,6 +4495,7 @@ describe('lookup syntactic sugar', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -4529,6 +4569,7 @@ describe('lookup syntactic sugar', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,

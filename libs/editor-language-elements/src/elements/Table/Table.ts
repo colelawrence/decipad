@@ -28,7 +28,7 @@ export const Table: InteractiveLanguageElement = {
 
     const tableItself = statementToIdentifiedBlock(table.id ?? '', {
       type: 'table',
-      args: [{ type: 'tabledef', args: [tableName, rowCount] }],
+      args: [{ type: 'tabledef', args: [tableName] }],
     } as AST.Table);
 
     const columnAssigns: Program = [];

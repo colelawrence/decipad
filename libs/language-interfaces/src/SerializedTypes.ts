@@ -35,6 +35,7 @@ export type SerializedTypeKind = SerializedType['kind'];
 export type Column = {
   readonly kind: 'column';
   readonly indexedBy: string | null;
+  readonly cellCount?: number;
   cellType: SerializedType;
 } & Common;
 export type MaterializedColumn = {
@@ -48,6 +49,7 @@ export type Table = {
   readonly delegatesIndexTo?: string | null;
   columnTypes: SerializedType[];
   readonly columnNames: string[];
+  readonly rowCount?: number;
 } & Common;
 export type Tree = {
   readonly kind: 'tree';
@@ -60,6 +62,7 @@ export type MaterializedTable = {
   readonly delegatesIndexTo?: string | null;
   columnTypes: SerializedType[];
   readonly columnNames: string[];
+  readonly rowCount?: number;
 } & Common;
 export type Row = {
   readonly kind: 'row';

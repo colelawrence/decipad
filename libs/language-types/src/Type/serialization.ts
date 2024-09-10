@@ -31,6 +31,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
       return {
         kind: 'column',
         indexedBy: type.indexedBy,
+        cellCount: type.cellCount,
         cellType: serializeType(type.cellType),
       };
     }
@@ -54,6 +55,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         indexName: type.indexName,
         columnTypes: type.columnTypes.map((t) => serializeType(t)),
         columnNames: type.columnNames,
+        rowCount: type.columnTypes.at(0)?.cellCount,
         delegatesIndexTo: type.delegatesIndexTo,
       };
     }

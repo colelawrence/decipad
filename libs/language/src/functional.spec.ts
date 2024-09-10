@@ -626,6 +626,7 @@ ${'' /* Get capital needed */}
           "CapitalNeeded": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -677,6 +678,7 @@ ${'' /* Get capital needed */}
           "CumulativeMonthlyExpenses": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -728,6 +730,7 @@ ${'' /* Get capital needed */}
           "CumulativeMonthlyRevenue": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -779,6 +782,7 @@ ${'' /* Get capital needed */}
           "IPOTargetMonthlyRevenue": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -830,6 +834,7 @@ ${'' /* Get capital needed */}
           "InitialMonthlyRevenue": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -881,6 +886,7 @@ ${'' /* Get capital needed */}
           "MonthlyExpenses": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -932,6 +938,7 @@ ${'' /* Get capital needed */}
           "MonthlyRevenueGrowthRate": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -964,6 +971,7 @@ ${'' /* Get capital needed */}
           "TimeToIPO": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -996,6 +1004,7 @@ ${'' /* Get capital needed */}
           "TimeToProfitability": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -1653,6 +1662,7 @@ ${'' /* Get capital needed */}
           "type": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": [
               "Year",
@@ -1662,6 +1672,7 @@ ${'' /* Get capital needed */}
               Type {
                 "anythingness": false,
                 "atParentIndex": null,
+                "cellCount": undefined,
                 "cellType": null,
                 "columnNames": null,
                 "columnTypes": null,
@@ -1694,6 +1705,7 @@ ${'' /* Get capital needed */}
               Type {
                 "anythingness": false,
                 "atParentIndex": null,
+                "cellCount": undefined,
                 "cellType": null,
                 "columnNames": null,
                 "columnTypes": null,
@@ -1810,6 +1822,7 @@ describe('column assignment integration', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": [
             "A",
@@ -1819,6 +1832,7 @@ describe('column assignment integration', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -1851,6 +1865,7 @@ describe('column assignment integration', () => {
             Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,
@@ -1986,6 +2001,7 @@ describe('column assignment integration', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": null,
           "columnNames": null,
           "columnTypes": null,
@@ -2042,9 +2058,11 @@ describe('previous', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -2141,9 +2159,11 @@ describe('previous', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -2240,9 +2260,11 @@ describe('previous', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": 1,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -2343,9 +2365,11 @@ describe('multi-dim ops', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": null,
             "columnNames": null,
             "columnTypes": null,
@@ -2485,12 +2509,15 @@ describe('multi-dim ops', () => {
         "type": Type {
           "anythingness": false,
           "atParentIndex": 2,
+          "cellCount": undefined,
           "cellType": Type {
             "anythingness": false,
             "atParentIndex": null,
+            "cellCount": undefined,
             "cellType": Type {
               "anythingness": false,
               "atParentIndex": null,
+              "cellCount": undefined,
               "cellType": null,
               "columnNames": null,
               "columnTypes": null,

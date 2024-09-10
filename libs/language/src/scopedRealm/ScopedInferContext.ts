@@ -27,11 +27,16 @@ export interface MakeContextArgs {
 }
 
 const typesToTable: StackNamespaceJoiner<Type> = (tableMapping, indexName) => {
+  const cellCounts = Array.from(tableMapping.values())
+    .map((t) => t.cellCount)
+    .filter((t): t is number => t != null);
+
   const sortedTable = sortType(
     t.table({
       indexName,
       columnNames: [...tableMapping.keys()],
       columnTypes: [...tableMapping.values()],
+      rowCount: cellCounts.length === 0 ? undefined : Math.max(...cellCounts),
     })
   );
   const indexColumnType = sortedTable.columnTypes?.[0];

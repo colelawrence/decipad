@@ -119,12 +119,14 @@ export const evaluateTable = async (
   } = table;
 
   const tableName = getIdentifierString(tName);
-  const indexName = getDefined(realm.getTypeAt(table).indexName);
+  const tableType = realm.getTypeAt(table);
+
+  const indexName = getDefined(tableType.indexName);
 
   realm.stack.createNamespace(tableName);
 
-  const tableDef = table.args[0];
-  let tableLength: number | undefined = tableDef.args[1];
+  let tableLength: number | undefined = tableType.rowCount;
+
   const addColumn = async (name: string, value: ValueTypes.ColumnLikeValue) => {
     const valueCount = await value.rowCount();
     if (tableLength != null && valueCount !== tableLength) {
@@ -159,7 +161,6 @@ export const evaluateTable = async (
     }
   }
 
-  const tableType = realm.getTypeAt(table);
   return Value.sortValue(
     tableType,
     getInstanceof(getDefined(realm.stack.get(tableName)), Value.Table)

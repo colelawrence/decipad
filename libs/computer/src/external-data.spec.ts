@@ -107,6 +107,7 @@ it('pushes two external datas and removes the last one', async () => {
         "delegatesIndexTo": "exprRef_table_1_id",
         "indexName": "exprRef_table_1_id",
         "kind": "table",
+        "rowCount": undefined,
       },
       "value": [
         [
@@ -157,6 +158,7 @@ it('pushes two external datas and removes the last one', async () => {
         "delegatesIndexTo": "exprRef_table_1_id",
         "indexName": "exprRef_table_1_id",
         "kind": "table",
+        "rowCount": undefined,
       },
       "value": [
         [
@@ -199,6 +201,7 @@ it('pushes two external datas and removes the last one', async () => {
         "delegatesIndexTo": "exprRef_table_1_id",
         "indexName": "exprRef_table_1_id",
         "kind": "table",
+        "rowCount": undefined,
       },
       "value": [
         [

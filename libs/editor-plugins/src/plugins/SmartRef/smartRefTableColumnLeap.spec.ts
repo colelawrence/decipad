@@ -85,6 +85,7 @@ it('supports a variable name with the same name as a table', async () => {
           "delegatesIndexTo": "exprRef_id_TableName",
           "indexName": "exprRef_id_TableName",
           "kind": "table",
+          "rowCount": 1,
         },
         "value": [
           [
@@ -108,6 +109,7 @@ it('supports a variable name with the same name as a table', async () => {
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -127,6 +129,7 @@ it('supports a variable name with the same name as a table', async () => {
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -171,6 +174,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
             "delegatesIndexTo": "exprRef_id_TableName",
             "indexName": "exprRef_id_TableName",
             "kind": "table",
+            "rowCount": 1,
           },
           "value": [
             [
@@ -194,6 +198,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
         {
           "meta": [Function],
           "type": {
+            "cellCount": 1,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -213,6 +218,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
         {
           "meta": [Function],
           "type": {
+            "cellCount": 1,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -257,6 +263,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
             "delegatesIndexTo": "exprRef_id_TableName",
             "indexName": "exprRef_id_TableName",
             "kind": "table",
+            "rowCount": 1,
           },
           "value": [
             [
@@ -280,6 +287,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
         {
           "meta": [Function],
           "type": {
+            "cellCount": 1,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -299,6 +307,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
         {
           "meta": [Function],
           "type": {
+            "cellCount": 1,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -350,6 +359,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
           "delegatesIndexTo": "exprRef_id_TableName",
           "indexName": "exprRef_id_TableName",
           "kind": "table",
+          "rowCount": 1,
         },
         "value": [
           [
@@ -381,6 +391,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -400,6 +411,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -419,6 +431,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -477,6 +490,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
           "delegatesIndexTo": "exprRef_id_TableName",
           "indexName": "exprRef_id_TableName",
           "kind": "table",
+          "rowCount": 1,
         },
         "value": [
           [
@@ -508,6 +522,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -527,6 +542,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -546,6 +562,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -599,6 +616,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
           "delegatesIndexTo": "exprRef_id_TableName",
           "indexName": "exprRef_id_TableName",
           "kind": "table",
+          "rowCount": 1,
         },
         "value": [
           [
@@ -622,6 +640,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -641,6 +660,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -690,6 +710,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
           "delegatesIndexTo": "exprRef_id_TableName",
           "indexName": "exprRef_id_TableName",
           "kind": "table",
+          "rowCount": 1,
         },
         "value": [
           [
@@ -713,6 +734,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -732,6 +754,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "cellCount": 1,
           "cellType": {
             "kind": "number",
             "unit": null,
@@ -751,6 +774,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "cellCount": undefined,
           "cellType": {
             "kind": "number",
             "unit": null,

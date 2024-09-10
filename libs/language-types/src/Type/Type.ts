@@ -43,12 +43,13 @@ export class Type implements TypeInterface {
   // Column
   cellType: Type | null = null;
   atParentIndex: number | null = null;
+  cellCount?: number;
 
   // Table
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
-  rowCount?: number;
   delegatesIndexTo?: string | null;
+  rowCount?: number;
 
   rowIndexName: string | null = null;
   rowCellTypes: Type[] | null = null;
@@ -277,6 +278,7 @@ interface BuildTableArgs {
   delegatesIndexTo?: string | null;
   columnTypes: Type[];
   columnNames: string[];
+  rowCount?: number;
 }
 
 export const table = ({
@@ -284,12 +286,14 @@ export const table = ({
   columnTypes,
   columnNames,
   delegatesIndexTo,
+  rowCount,
 }: BuildTableArgs) => {
   return produce(new Type(), (t) => {
     t.indexName = indexName ?? null;
     t.delegatesIndexTo = delegatesIndexTo;
     t.columnTypes = columnTypes;
     t.columnNames = columnNames;
+    t.rowCount = rowCount;
   });
 };
 
@@ -334,12 +338,14 @@ export const row = (
 export const column = (
   cellType: Type,
   indexedBy?: string | null,
-  atParentIndex?: number | null
+  atParentIndex?: number | null,
+  cellCount?: number
 ) => {
   const colT = produce(new Type(), (t) => {
     t.indexedBy = indexedBy ?? null;
     t.cellType = cellType;
     t.atParentIndex = atParentIndex ?? null;
+    t.cellCount = cellCount;
   });
 
   if (cellType.errorCause != null) {

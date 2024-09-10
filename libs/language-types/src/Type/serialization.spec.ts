@@ -62,6 +62,7 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.column(t.number(), 'Index'))).toMatchInlineSnapshot(`
     {
+      "cellCount": undefined,
       "cellType": {
         "kind": "number",
         "unit": null,
@@ -93,6 +94,7 @@ it('can stringify a type', () => {
       "delegatesIndexTo": undefined,
       "indexName": "Idx",
       "kind": "table",
+      "rowCount": undefined,
     }
   `);
   expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'], 'Index')))
