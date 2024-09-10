@@ -325,7 +325,9 @@ dev-dist
 # performance test results
 performance-results
 
+# WASM files and JS bindings
 *.wasm
+libs/compute-backend-js/src/wasm
 
 # E2E test artifacts
 

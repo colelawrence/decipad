@@ -44,6 +44,10 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Generates wasm files + JS bindings
+        id: wasm-generation
+        run: yarn build:wasm
+
       - name: Check if node_modules is cached
         id: cache-check
         run: |
