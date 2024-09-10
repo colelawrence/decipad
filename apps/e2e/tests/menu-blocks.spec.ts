@@ -5,14 +5,12 @@ import {
   createDataViewBelow,
   createDateBelow,
   createDropdownBelow,
-  createInputBelow,
   createLineChartBelow,
   createNumberInputBelow,
   createPieChartBelow,
   createResultBelow,
   createScatterChartBelow,
   createSliderBelow,
-  createToggleBelow,
 } from '../utils/page/Block';
 
 import { createTable } from '../utils/page/Table';
@@ -82,11 +80,11 @@ test('check menu blocks', async ({ testUser }) => {
   });
 
   await test.step('creates input widget', async () => {
-    await createInputBelow(page, 'EleventhBlock', '$200');
+    await notebook.addInputWidget('EleventhBlock', '$200');
   });
 
   await test.step('creates toggle widget', async () => {
-    await createToggleBelow(page, 'TwelvethBlock');
+    await notebook.addToggleWidget('TwelvethBlock');
   });
 
   await test.step('creates slider widget', async () => {

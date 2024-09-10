@@ -1,6 +1,5 @@
 import { expect, test } from './manager/decipad-tests';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
-import { createInputBelow } from '../utils/page/Block';
 
 test('Testing magic numbers', async ({ testUser }) => {
   const { page } = testUser;
@@ -93,7 +92,7 @@ test('Inputs and magic numbers', async ({ testUser }) => {
     await page.getByTestId('sidebar-Data').click();
 
     await notebook.focusOnBody();
-    await createInputBelow(page, 'Foo', 1337);
+    await notebook.addInputWidget('Foo', 1337);
     await page.keyboard.press('ArrowRight');
     await expect(page.getByText('1337')).toBeVisible();
   });

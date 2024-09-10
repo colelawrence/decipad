@@ -1269,8 +1269,17 @@ export class Notebook {
    * await notebook.addToggleWidget();
    * ```
    */
-  async addToggleWidget() {
+  async addToggleWidget(identifier: string) {
     await this.addBlock('toggle');
+
+    await this.page
+      .locator('[data-testid="widget-caption"] >> text=/Input/')
+      .last()
+      .dblclick();
+
+    await this.page.keyboard.press('Backspace');
+
+    await this.page.keyboard.type(identifier);
   }
 
   /**

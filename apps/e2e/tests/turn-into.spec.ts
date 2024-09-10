@@ -1,17 +1,11 @@
 import { expect, test } from './manager/decipad-tests';
-import {
-  createInputBelow,
-  createToggleBelow,
-  createWithSlashCommand,
-} from '../utils/page/Block';
-import { keyPress } from '../utils/page/Editor';
 import { Timeouts } from '../utils/src';
 
 test('Turn Into', async ({ testUser }) => {
-  const { page } = testUser;
+  const { page, notebook } = testUser;
   await test.step('Converts between widgets with different elements and sizes', async () => {
     await page.keyboard.press('ArrowDown');
-    await createInputBelow(page, 'Input1', 'true');
+    await notebook.addInputWidget('Input', 'true');
 
     await expect(page.getByRole('slider')).toBeHidden();
     await expect(page.getByRole('checkbox')).toBeHidden();
@@ -30,8 +24,8 @@ test('Turn Into', async ({ testUser }) => {
   });
 
   await test.step('Converts a Widget into a structured input', async () => {
-    await keyPress(page, 'ArrowDown');
-    await createToggleBelow(page, 'Input2');
+    await page.keyboard.press('ArrowDown');
+    await notebook.addToggleWidget('Input2');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -55,15 +49,11 @@ test('Turn Into', async ({ testUser }) => {
   });
 });
 
-test('Make sure the toggle conversion works', async ({ testUser }) => {
-  const { page } = testUser;
-  await createWithSlashCommand(page, '/input', 'input');
+test('make sure the toggle conversion works', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await notebook.addBlockSlashCommand('input');
   await page.locator('article').getByTestId('drag-handle').first().click();
-
-  await page.getByText('Turn into').waitFor();
   await page.getByText('Turn into').click();
-  await page.getByRole('menuitem').getByText('Toggle').waitFor();
   await page.getByRole('menuitem').getByText('Toggle').click();
-
   await expect(page.getByTestId('widget-editor:false')).toBeHidden();
 });

@@ -11,7 +11,6 @@ import {
 } from '../utils/page/Table';
 import {
   createDropdownBelow,
-  createToggleBelow,
   createSliderBelow,
   createResultBelow,
 } from '../utils/page/Block';
@@ -23,7 +22,7 @@ test('toggle Widget', async ({ testUser }) => {
 
   await test.step('can create a toggle', async () => {
     await notebook.focusOnBody();
-    await createToggleBelow(page, 'Input2');
+    await notebook.addToggleWidget('Input2');
     await page.keyboard.press('ArrowRight');
     await expect(page.getByText('Input2')).toBeVisible();
     await expect(

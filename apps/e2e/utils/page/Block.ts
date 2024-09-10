@@ -55,34 +55,6 @@ export async function createNumberInputBelow(
   await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
-export async function createInputBelow(
-  page: Page,
-  identifier: string,
-  value: number | string
-) {
-  await createWithSlashCommand(page, '/input', 'input');
-
-  await page
-    .locator('[data-testid="widget-caption"] >> text=/Input/')
-    .last()
-    .dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
-
-  await page.click('div [data-testid="input-widget-name"] >> nth=-1');
-  await keyPress(page, 'ArrowDown');
-  // erase 100$, then focus goes to title, we come back down
-  await keyPress(page, 'End');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(value.toString());
-}
-
 export async function createDropdownBelow(page: Page, identifier: string) {
   await createWithSlashCommand(page, '/dropdown');
 
@@ -121,19 +93,6 @@ export async function createAreaChartBelow(page: Page) {
 
 export async function createScatterChartBelow(page: Page) {
   await createWithSlashCommand(page, '/scatter chart');
-}
-
-export async function createToggleBelow(page: Page, identifier: string) {
-  await createWithSlashCommand(page, '/toggle');
-
-  await page
-    .locator('[data-testid="widget-caption"] >> text=/Input/')
-    .last()
-    .dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
 export async function createSliderBelow(
