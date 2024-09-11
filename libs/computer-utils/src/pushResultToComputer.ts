@@ -20,11 +20,7 @@ export async function pushResultToComputer(
   variableName: string,
   computerResult: Result.Result | undefined
 ) {
-  if (
-    computerResult?.type &&
-    computerResult?.value != null &&
-    typeof computerResult.value !== 'symbol'
-  ) {
+  if (computerResult?.type && computerResult?.value != null) {
     if (isTableResult(computerResult)) {
       const { type, value, meta } = computerResult as Result.Result<
         'table' | 'materialized-table'

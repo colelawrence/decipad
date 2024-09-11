@@ -1,6 +1,6 @@
 import { useComputer } from '@decipad/editor-hooks';
 import { IntegrationTypes } from '@decipad/editor-types';
-import { Result } from '@decipad/language-interfaces';
+import { Result, Unknown } from '@decipad/language-interfaces';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRunner } from '../runners';
@@ -27,6 +27,7 @@ export const useIntegration = (
   );
   const [loading, setLoading] = useState<boolean>(false);
   const firstTime = useRef(true);
+  const pushedCache = useRef(false);
 
   const varName = useMemo(
     () => getNodeString(element.children[0]),
@@ -68,6 +69,44 @@ export const useIntegration = (
     },
     [loading, error, runner]
   );
+
+  useEffect(() => {
+    // push cache if no result has come in yet
+    (async () => {
+      if (
+        !error &&
+        (!result || result.type.kind === 'pending') &&
+        computerResult != null &&
+        computerResult.result?.type.kind !== 'pending' &&
+        !pushedCache.current
+      ) {
+        pushedCache.current = true;
+        await pushResultToComputer(
+          computer,
+          element.id ?? '',
+          varName,
+          computerResult.result
+        );
+      }
+    })();
+  }, [error, computer, computerResult, element.id, result, varName]);
+
+  useEffect(() => {
+    // push error result if there an error
+    if (error) {
+      const errorResult: Result.Result = {
+        type: {
+          kind: 'type-error',
+          errorCause: {
+            errType: 'free-form',
+            message: error.message,
+          },
+        },
+        value: Unknown,
+      };
+      pushResultToComputer(computer, element.id ?? '', varName, errorResult);
+    }
+  }, [computer, element.id, error, varName]);
 
   useEffect(() => {
     if (result == null) {
