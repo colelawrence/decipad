@@ -100,7 +100,7 @@ type ArticleWrapperProps = {
 };
 
 const ComponentWidths: Record<
-  SidebarComponent,
+  SidebarComponent['type'],
   { default: string; tablet?: string; mobile?: string }
 > = {
   'default-sidebar': { default: SIDEBAR_WIDTH },
@@ -247,19 +247,21 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
     justifyContent: 'flex-end',
     overflowY: 'auto',
     flexShrink: 0,
-    width: ComponentWidths[sidebarComponent].default,
+    width: ComponentWidths[sidebarComponent.type].default,
     borderRadius: '16px',
     zIndex: 40,
     overflow: 'visible',
 
     '& > :first-child': {
-      width: ComponentWidths[sidebarComponent].default,
+      width: ComponentWidths[sidebarComponent.type].default,
       height:
-        sidebarComponent === 'publishing' ? undefined : 'calc(100vh - 80px)',
+        sidebarComponent.type === 'publishing'
+          ? undefined
+          : 'calc(100vh - 80px)',
 
       [tabletScreenQuery]: {
         height:
-          sidebarComponent === 'publishing'
+          sidebarComponent.type === 'publishing'
             ? undefined
             : isDataDrawerOpen
             ? `calc(100vh - 80px - ${cssVar('dataDrawerHeight')})`
@@ -276,8 +278,8 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
         ? {
             position: 'absolute',
             background: cssVar('backgroundMain'),
-            ...(ComponentWidths[sidebarComponent].tablet && {
-              width: ComponentWidths[sidebarComponent].tablet,
+            ...(ComponentWidths[sidebarComponent.type].tablet && {
+              width: ComponentWidths[sidebarComponent.type].tablet,
             }),
 
             border: `solid 1px ${cssVar('borderDefault')}`,

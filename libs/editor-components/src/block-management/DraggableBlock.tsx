@@ -252,7 +252,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         return;
       }
 
-      setSidebar('annotations');
+      setSidebar({ type: 'annotations' });
       handleExpandedBlockId(element.id);
     }, [element.id, handleExpandedBlockId, setSidebar]);
 

@@ -207,7 +207,9 @@ export const NotebookAliases: FC<NotebookAliasesProps> = ({
             <div css={insightContainerStyles}>
               <div
                 css={insightStyles}
-                onClick={() => sidebarData.toggleSidebar('annotations')}
+                onClick={() =>
+                  sidebarData.toggleSidebar({ type: 'annotations' })
+                }
               >
                 <span css={insightIconStyles}>
                   <Chat />

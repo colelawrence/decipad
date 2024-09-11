@@ -5,24 +5,27 @@ import { persist } from 'zustand/middleware';
 export type SelectedTab = 'variable' | 'block';
 
 export type SidebarComponent =
-  | 'closed'
-  | 'navigation-sidebar'
+  | { type: 'closed' }
+  | { type: 'navigation-sidebar' }
   | SidebarComponentsWithoutClosed;
 
 export type SidebarComponentsWithoutClosed =
-  | 'default-sidebar'
-  | 'ai'
-  | 'publishing'
-  | 'annotations'
-  | 'integrations'
-  | 'edit-integration';
+  | { type: 'default-sidebar' }
+  | { type: 'ai' }
+  | { type: 'publishing' }
+  | { type: 'annotations' }
+  | { type: 'integrations' }
+  | { type: 'edit-integration' };
 
 export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
 
 export interface NotebookMetaDataType {
   readonly sidebarComponent: SidebarComponent;
+  readonly sidebarHistory: SidebarComponent[];
   readonly toggleSidebar: (component: SidebarComponent) => void;
   readonly setSidebar: (component: SidebarComponent) => void;
+  readonly pushSidebar: (component: SidebarComponent) => void;
+  readonly popSidebar: () => void;
 
   readonly isSidebarOpen: () => boolean;
 
@@ -52,17 +55,18 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
           set({ integrationBlockId: blockId });
         },
 
-        sidebarComponent: isE2E() ? 'closed' : 'default-sidebar',
+        sidebarComponent: { type: isE2E() ? 'closed' : 'default-sidebar' },
+        sidebarHistory: [],
 
         isSidebarOpen() {
           const { sidebarComponent } = get();
-          return sidebarComponent !== 'closed';
+          return sidebarComponent.type !== 'closed';
         },
 
         toggleSidebar(sidebarComponent) {
           const { sidebarComponent: currentComponent } = get();
-          if (sidebarComponent === currentComponent) {
-            set(() => ({ sidebarComponent: 'closed' }));
+          if (sidebarComponent.type === currentComponent.type) {
+            set(() => ({ sidebarComponent: { type: 'closed' } }));
           } else {
             set(() => ({ sidebarComponent }));
           }
@@ -72,10 +76,32 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
           set(() => ({ sidebarComponent }));
         },
 
+        pushSidebar(sidebarComponent) {
+          set(() => {
+            const { sidebarHistory, sidebarComponent: prevSidebar } = get();
+            sidebarHistory.push(prevSidebar);
+            return {
+              sidebarHistory,
+              sidebarComponent,
+            };
+          });
+        },
+
+        popSidebar() {
+          set(() => {
+            const { sidebarHistory } = get();
+            const sidebarComponent = sidebarHistory.pop() ?? { type: 'closed' };
+            return {
+              sidebarHistory,
+              sidebarComponent,
+            };
+          });
+        },
+
         canEdit: true,
         setCanEdit(canEdit) {
-          if (!canEdit && get().sidebarComponent === 'ai') {
-            get().toggleSidebar('ai');
+          if (!canEdit && get().sidebarComponent.type === 'ai') {
+            get().toggleSidebar({ type: 'ai' });
           }
           set(() => ({ canEdit }));
         },

@@ -205,8 +205,8 @@ const Workspace: FC = () => {
 
       const { sidebarComponent, toggleSidebar } =
         useNotebookMetaData.getState();
-      if (sidebarComponent !== 'default-sidebar') {
-        toggleSidebar('default-sidebar');
+      if (sidebarComponent.type !== 'default-sidebar') {
+        toggleSidebar({ type: 'default-sidebar' });
       }
 
       navigate(

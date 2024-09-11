@@ -201,7 +201,7 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   const toggleSidebar = useNotebookMetaData((state) => state.toggleSidebar);
 
   const closeAssistant = useCallback(() => {
-    toggleSidebar('default-sidebar');
+    toggleSidebar({ type: 'default-sidebar' });
     if (isGenerating) {
       onStop();
     }

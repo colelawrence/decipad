@@ -176,7 +176,7 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
         }}
         onBack={back}
         onContinue={next}
-        onClose={() => setSidebar('closed')}
+        onClose={() => setSidebar({ type: 'closed' })}
       >
         {screen}
       </WrapperIntegrationModalDialog>
@@ -191,7 +191,7 @@ const EmptyWrapper: FC<{ children: ReactNode }> = ({ children }) => {
     <S.IntegrationWrapper>
       <S.CloseIconWrapper>
         {
-          <div onClick={() => setSidebar('closed')}>
+          <div onClick={() => setSidebar({ type: 'closed' })}>
             <Close />
           </div>
         }
@@ -272,7 +272,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
       } satisfies Partial<IntegrationTypes.IntegrationBlock>,
     });
 
-    setSidebar('closed');
+    setSidebar({ type: 'closed' });
   }, [block, controller, findNodeEntry, runner, setSidebar]);
 
   const onRun = useCallback(async () => {
@@ -311,9 +311,9 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
           workspaceId={workspaceId}
         />
       }
-      onBack={() => setSidebar('closed')}
+      onBack={() => setSidebar({ type: 'closed' })}
       onContinue={onEditBlock}
-      onClose={() => setSidebar('closed')}
+      onClose={() => setSidebar({ type: 'closed' })}
     >
       <ResultPreview
         result={result}

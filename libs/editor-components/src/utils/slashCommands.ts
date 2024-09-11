@@ -105,7 +105,7 @@ export const execute = async ({
         await insertDataViewBelow(editor, path, computer);
         break;
       case 'open-integration':
-        setSidebar('integrations');
+        setSidebar({ type: 'integrations' });
         break;
       case 'live-query':
         await insertLiveQueryBelow(editor, path, getAvailableIdentifier);

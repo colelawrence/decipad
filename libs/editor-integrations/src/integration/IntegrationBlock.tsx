@@ -107,7 +107,7 @@ export const IntegrationBlock: PlateComponent = ({
       type: 'button',
       text: 'Edit',
       onClick: () => {
-        setSidebar('edit-integration');
+        setSidebar({ type: 'edit-integration' });
         setIntegrationBlockId(element.id ?? '');
       },
       icon: <icons.Edit />,

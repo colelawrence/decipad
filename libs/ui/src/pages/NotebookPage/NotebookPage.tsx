@@ -22,7 +22,9 @@ interface NotebookPageProps {
   readonly articleRef: React.RefObject<HTMLElement>;
 }
 
-const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent[] = ['annotations'];
+const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent['type'][] = [
+  'annotations',
+];
 
 /**
  * Documentation function
@@ -40,11 +42,11 @@ function getShowSidebar(
 
   if (
     (props.isReadOnly == null || props.isReadOnly) &&
-    !ALLOWED_READER_SIDEBAR_COMPONENTS.includes(sidebarComponent)
+    !ALLOWED_READER_SIDEBAR_COMPONENTS.includes(sidebarComponent.type)
   )
     return false;
 
-  if (sidebarComponent === 'closed') return false;
+  if (sidebarComponent.type === 'closed') return false;
 
   return true;
 }
@@ -75,7 +77,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
   useSetDataDrawerVar();
 
   const showSidebar = getShowSidebar(props, sidebarComponent);
-  const isInEditorSidebar = sidebarComponent === 'annotations';
+  const isInEditorSidebar = sidebarComponent.type === 'annotations';
 
   return (
     <S.AppWrapper isEmbed={isEmbed}>
@@ -90,7 +92,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
           <SidebarExtra
             isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
             showSidebar={!!leftSidebar}
-            sidebarComponent={'navigation-sidebar'}
+            sidebarComponent={{ type: 'navigation-sidebar' }}
             position="left"
           >
             {leftSidebar}
@@ -155,7 +157,7 @@ const SidebarExtra: FC<{
     return null;
   }
 
-  if (sidebarComponent === 'annotations') {
+  if (sidebarComponent.type === 'annotations') {
     return <>{children}</>;
   }
 

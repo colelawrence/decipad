@@ -163,15 +163,15 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
       }
       AiModeSwitch={
         <AIModeSwitch
-          value={sidebarData.component === 'ai'}
-          onChange={() => sidebarData.toggleSidebar('ai')}
+          value={sidebarData.component.type === 'ai'}
+          onChange={() => sidebarData.toggleSidebar({ type: 'ai' })}
         />
       }
       NotebookPublishing={
         <Button
           type="primaryBrand"
           onClick={() => {
-            sidebarData.toggleSidebar('publishing');
+            sidebarData.toggleSidebar({ type: 'publishing' });
             if (needsUpdate) {
               sidebarData.setPublishingTab('publishing');
             }
@@ -212,7 +212,8 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
             },
           });
         },
-        onToggleSidebar: () => sidebarData.toggleSidebar('default-sidebar'),
+        onToggleSidebar: () =>
+          sidebarData.toggleSidebar({ type: 'default-sidebar' }),
         onTryDecipadClick: () => {
           clientEvent({
             segmentEvent: {
@@ -233,10 +234,10 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
               )
             : noop,
         onToggleAnnotations: () => {
-          sidebarData.toggleSidebar('annotations');
+          sidebarData.toggleSidebar({ type: 'annotations' });
         },
 
-        isSidebarOpen: sidebarData.component !== 'closed',
+        isSidebarOpen: sidebarData.component.type !== 'closed',
       }}
       authors={{
         adminName: data?.access.users.find((u) => u.permission === 'ADMIN')

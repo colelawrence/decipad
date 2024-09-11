@@ -73,7 +73,7 @@ export const LiveDataSetVarName: PlateComponent = ({
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   const onOptionsPress = useCallback(() => {
-    setSidebar('integrations');
+    setSidebar({ type: 'integrations' });
   }, [setSidebar]);
 
   const [loading, setLoading] = useState(false);

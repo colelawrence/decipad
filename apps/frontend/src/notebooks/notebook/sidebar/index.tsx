@@ -16,7 +16,7 @@ import type { SidebarComponentProps } from './types';
 type SidebarPropsWithoutEditor = Omit<SidebarComponentProps, 'editor'>;
 
 const SidebarComponents: Record<
-  SidebarComponentsWithoutClosed,
+  SidebarComponentsWithoutClosed['type'],
   FC<SidebarComponentProps>
 > = {
   ai: AssistantChat,
@@ -36,14 +36,14 @@ const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
 
   const editor = useActiveEditor();
   if (
-    component === 'closed' ||
-    component === 'navigation-sidebar' ||
+    component.type === 'closed' ||
+    component.type === 'navigation-sidebar' ||
     editor == null
   ) {
     return null;
   }
 
-  const SidebarComp = SidebarComponents[component];
+  const SidebarComp = SidebarComponents[component.type];
 
   return (
     <>

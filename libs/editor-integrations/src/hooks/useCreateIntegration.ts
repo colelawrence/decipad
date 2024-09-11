@@ -105,7 +105,7 @@ export const useCreateIntegration = (
       setTimeout(() => setSelection(editor, { anchor, focus: anchor }), 0);
 
       store.abort();
-      setSidebar('closed');
+      setSidebar({ type: 'closed' });
     }
 
     onCreateIntegration();
