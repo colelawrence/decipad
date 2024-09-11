@@ -1,27 +1,9 @@
-/* eslint-disable no-console */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable complexity */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
-import {
-  AnyElement,
-  createMyPlateEditor,
-  DataTabElement,
-  DataTabValue,
-  ELEMENT_DATA_TAB,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TAB,
-  ELEMENT_TITLE,
-  MyEditor,
-  MyPlatePlugin,
-  MyTabEditor,
-  NotebookValue,
-  TabElement,
-  TitleElement,
-  UserIconKey,
-} from '@decipad/editor-types';
-import { assertEqual, getDefined } from '@decipad/utils';
 import type {
   EElement,
   ENode,
@@ -42,9 +24,31 @@ import {
   isElement,
   removeNodes,
 } from '@udecode/plate-common';
-import stringify from 'json-stringify-safe';
-import { nanoid } from 'nanoid';
-import { Subject } from 'rxjs';
+import {
+  AnyElement,
+  DataTabElement,
+  DataTabValue,
+  ELEMENT_DATA_TAB,
+  MyEditor,
+  MyPlatePlugin,
+  MyTabEditor,
+  NotebookValue,
+  TabElement,
+  TitleElement,
+  UserIconKey,
+  createMyPlateEditor,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+} from '@decipad/editor-types';
+import { assert, assertEqual, getDefined } from '@decipad/utils';
+import {
+  childIndexForOp,
+  translateOpDown,
+  translateOpUp,
+  translatePathUp,
+} from './TranslatePaths';
+import { IsDataTab, IsTab, IsTitle } from './utils';
 import {
   type BaseEditor,
   createEditor,
@@ -55,20 +59,16 @@ import {
 import { normalizeCurried } from './RootEditor/normalizeNode';
 import { normalizers } from './RootEditor/plugins';
 import {
-  childIndexForOp,
-  translateOpDown,
-  translateOpUp,
-  translatePathUp,
-} from './TranslatePaths';
-import {
   DATA_TAB_INDEX,
   INITIAL_TAB_NAME,
   SUB_EDITOR_OFFSET,
   TITLE_INDEX,
 } from './constants';
 import type { RootEditorController } from './types';
-import { IsDataTab, IsTab, IsTitle } from './utils';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
+import { Subject } from 'rxjs';
+import stringify from 'json-stringify-safe';
+import { nanoid } from 'nanoid';
 
 const isTesting = !!(
   process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
@@ -419,6 +419,73 @@ export class EditorController implements RootEditorController {
     }
   }
 
+  private moveNode(op: TMoveNodeOperation): boolean {
+    // we must be moving a tab.
+    if (op.path.length === 1 && op.newPath.length === 1) {
+      this.MoveTab(op);
+      return true;
+    }
+
+    assert(op.path.length !== 0 && op.newPath.length !== 0);
+
+    const [fromIndex] = op.path;
+    const [toIndex] = op.newPath;
+
+    // We are moving an element within the same tab.
+    if (fromIndex === toIndex) {
+      return false;
+    }
+
+    // If the path for both is bigger than 0, but not zero (as asserted above).
+    // We are moving between editors. (Tab or data tab)
+    if (op.path.length > 1 && op.newPath.length > 1) {
+      const nodeToMove = this.getNode(op.path);
+      assert(nodeToMove != null);
+
+      //
+      // We have to use `FROM_ROOT`, otherwise we get a double apply
+      // of both the 'move_node' top level operation and the individual
+      // inserts and deletes.
+      //
+      // @note the title editor doesn't need to be translated down. Hence
+      // the ternary for this check.
+      //
+      this.apply({
+        type: 'insert_node',
+        path: op.newPath,
+        node: nodeToMove as TDescendant,
+        IS_LOCAL: true,
+        FROM_MIRROR: true,
+      });
+
+      this.apply({
+        type: 'remove_node',
+        path: op.path,
+        node: nodeToMove as TDescendant,
+        IS_LOCAL: true,
+        FROM_MIRROR: true,
+      });
+
+      return true;
+    }
+
+    // We use the `newPath` beacuse at this point the mirror editor has already
+    // applied the move operation.
+    const nodeToMove = getNode(this.mirrorEditor, op.newPath);
+    assert(nodeToMove != null);
+
+    const [, translateOp] = translateOpDown(op);
+
+    this.tabEditors[getOffsetIndex(toIndex)].apply({
+      type: 'insert_node',
+      path: translateOp.newPath,
+      node: nodeToMove as TDescendant,
+      FROM_ROOT: true,
+    });
+
+    return true;
+  }
+
   /**
    * Helps declutter the `apply` function.
    * Various error throwing, and its crutial this part works perfectly.
@@ -457,50 +524,7 @@ export class EditorController implements RootEditorController {
         this.RemoveTabOp(op as TRemoveNodeOperation<TabElement>);
       }
     } else if (op.type === 'move_node') {
-      const sourceBlock = getNode(this.mirrorEditor, [op.path[0]]);
-      const targetBlock = getNode(this.mirrorEditor, [op.newPath[0]]);
-      if (
-        op.path.length === 1 &&
-        op.newPath.length === 1 &&
-        IsTab(sourceBlock) &&
-        IsTab(targetBlock)
-      ) {
-        this.MoveTab(op);
-        return true;
-      }
-      if (!IsTab(sourceBlock) && !IsTab(targetBlock)) {
-        return true;
-      }
-      if (sourceBlock === targetBlock) {
-        const [tabIndex, translatedOp] = translateOpDown(op);
-        this.tabEditors[tabIndex - 1].apply(translatedOp);
-        return true;
-      }
-      // moving a node from one tab to another
-      const [tabIndex, translatedOp] = translateOpDown(op);
-
-      const sourceNode = getDefined(
-        getNode(this.mirrorEditor, op.newPath)
-      ) as TDescendant;
-
-      const offsetTabIndex = getOffsetIndex(tabIndex);
-
-      if (IsTab(sourceBlock) && translatedOp.path.length > 0) {
-        this.tabEditors[offsetTabIndex].apply({
-          type: 'remove_node',
-          path: translatedOp.path,
-          node: sourceNode,
-          FROM_ROOT: true,
-        });
-      }
-      if (IsTab(targetBlock)) {
-        this.tabEditors[offsetTabIndex].apply({
-          type: 'insert_node',
-          path: translatedOp.newPath,
-          node: sourceNode,
-          FROM_ROOT: true,
-        });
-      }
+      return this.moveNode(op);
     }
 
     return true;
@@ -557,12 +581,14 @@ export class EditorController implements RootEditorController {
   }
 
   private MoveTab(op: TMoveNodeOperation): void {
-    if (op.path[0] === 0 || op.newPath[0] === 0) {
-      return;
-    }
+    assert(op.path.length === 1);
+    assert(op.newPath.length === 1);
 
-    const originalIndex = getOffsetIndex(op.path[0]);
-    const newIndex = getOffsetIndex(op.newPath[0]);
+    const [fromTabIndex] = op.path;
+    const [toTabIndex] = op.newPath;
+
+    const originalIndex = getOffsetIndex(fromTabIndex);
+    const newIndex = getOffsetIndex(toTabIndex);
 
     [this.tabEditors[originalIndex], this.tabEditors[newIndex]] = [
       this.tabEditors[newIndex],

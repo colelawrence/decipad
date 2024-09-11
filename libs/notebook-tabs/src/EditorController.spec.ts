@@ -1,10 +1,11 @@
-import { vi, it, describe, expect } from 'vitest';
+import { vi, it, describe, expect, beforeEach } from 'vitest';
 import {
   DataTabChildrenElement,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB,
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_H1,
+  ELEMENT_H2,
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TAB,
@@ -1257,36 +1258,10 @@ describe.sequential('EditorController', () => {
       it('adds a paragraph to a tab if it is empty', () => {
         const controller = new EditorController('id', []);
 
-        controller.apply({
-          type: 'insert_node',
-          node: {
-            id: 'titleid',
-            type: 'title',
-            children: [{ text: 'title' }],
-          } satisfies TitleElement,
-          path: [0],
-        });
-
-        controller.apply({
-          type: 'insert_node',
-          node: {
-            id: 'tabid',
-            type: 'tab',
-            name: 'tabname',
-            children: [
-              {
-                type: ELEMENT_PARAGRAPH,
-                id: nanoid(),
-                children: [{ text: '' }],
-              },
-            ],
-          } satisfies TabElement,
-          path: [1],
-        });
+        controller.forceNormalize();
 
         expect(controller.children[FIRST_TAB_INDEX]).toMatchObject({
           type: 'tab',
-          name: 'tabname',
           children: [
             {
               type: 'p',
@@ -1461,6 +1436,156 @@ describe.sequential('EditorController', () => {
             },
           ],
         } satisfies DataTabChildrenElement,
+      });
+    });
+  });
+});
+
+describe('Actions', () => {
+  let controller = new EditorController('id', []);
+
+  beforeEach(() => {
+    controller = new EditorController('id', []);
+    controller.forceNormalize();
+  });
+
+  it('can move blocks across tabs', () => {
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'h2',
+        type: ELEMENT_H2,
+        children: [{ text: 'h2 text' }],
+      },
+    });
+
+    controller.insertTab();
+    controller.apply({
+      type: 'move_node',
+      path: [FIRST_TAB_INDEX, 0],
+      newPath: [FIRST_TAB_INDEX + 1, 0],
+    });
+
+    expect(controller.children[FIRST_TAB_INDEX]).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          type: 'p',
+        },
+      ],
+      name: 'First tab',
+      type: 'tab',
+    });
+
+    expect(controller.children[FIRST_TAB_INDEX + 1]).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: 'h2 text',
+            },
+          ],
+          id: 'h2',
+          type: 'h2',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          type: 'p',
+        },
+      ],
+      name: 'New tab',
+      type: 'tab',
+    });
+  });
+
+  //
+  // We don't want this to happen. But we must allow it to happen anyways,
+  // so that we can have normalizers fix it later on.
+  //
+  it('can move blocks into data title', () => {
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'h2',
+        type: ELEMENT_H2,
+        children: [{ text: 'h2 text' }],
+      },
+    });
+
+    expect(controller.children[DATA_TAB_INDEX].children).toHaveLength(0);
+    expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(2);
+
+    controller.withoutNormalizing(() => {
+      controller.apply({
+        type: 'move_node',
+        newPath: [DATA_TAB_INDEX, 0],
+        path: [FIRST_TAB_INDEX, 0],
+      });
+
+      expect(controller.children[DATA_TAB_INDEX]).toMatchObject({
+        children: [
+          {
+            children: [
+              {
+                text: 'h2 text',
+              },
+            ],
+            type: 'h2',
+          },
+        ],
+        type: 'data-tab',
+      });
+    });
+
+    expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(1);
+  });
+
+  it('can move blocks into title', () => {
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'h2',
+        type: ELEMENT_H2,
+        children: [{ text: 'h2 text' }],
+      },
+    });
+
+    expect(controller.children[DATA_TAB_INDEX].children).toHaveLength(0);
+    expect(controller.children[TITLE_INDEX].children).toHaveLength(1);
+
+    controller.withoutNormalizing(() => {
+      controller.apply({
+        type: 'move_node',
+        newPath: [TITLE_INDEX, 0],
+        path: [FIRST_TAB_INDEX, 0],
+      });
+
+      expect(controller.children[TITLE_INDEX]).toMatchObject({
+        children: [
+          {
+            children: [
+              {
+                text: 'h2 text',
+              },
+            ],
+            type: 'h2',
+          },
+          {
+            text: 'Welcome to Decipad!',
+          },
+        ],
+        type: 'title',
       });
     });
   });

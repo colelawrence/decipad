@@ -2,6 +2,7 @@ export * from './PromiseOrType';
 export * from './addEnvVars';
 export * from './any-mapping-to-map';
 export * from './assert-defined';
+export * from './assert';
 export * from './assertEqual';
 export * from './assertInstanceOf';
 export * from './backendUrl';
