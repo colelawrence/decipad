@@ -103,7 +103,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Last Updated: September 25, 2023
+                  Last Updated: September 09, 2024
                 </p>
               </center>
             </div>
@@ -157,11 +157,13 @@ export default function Terms() {
               If you choose to use our integration with Google Sheets, we will
               receive an authentication token from Google to access your Google
               Sheets and provide the Service to you. We will not store or use
-              any other Personal Data from Google. The Service's use and
-              transfer to any other app of information received from Google APIs
-              will adhere to Google API Services User Data Policy, including the
-              Limited Use requirements. The Google API Services User Data Policy
-              is available{' '}
+              any other Personal Data from Google and we do not use any data
+              obtained through Google Workspace APIs to develop, improve, or
+              train generalized AI or machine learning (ML) models. The
+              Service's use and transfer to any other app of information
+              received from Google APIs will adhere to Google API Services User
+              Data Policy, including the Limited Use requirements. The Google
+              API Services User Data Policy is available{' '}
               <u>
                 <a
                   target="_blank"
@@ -173,7 +175,6 @@ export default function Terms() {
               </u>
               .
             </p>
-
             <p>
               <b>
                 Personal Data We Receive Automatically From Your Use of the
