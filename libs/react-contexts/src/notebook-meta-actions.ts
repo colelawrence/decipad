@@ -119,6 +119,20 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
     },
     {
       name: 'notebook-ui-meta',
+      version: 1,
+      migrate: (state, version) => {
+        if (version === 0) {
+          const oldState = state as NotebookMetaDataType & {
+            sidebarComponent: string;
+          };
+          return {
+            ...(state as NotebookMetaDataType),
+            sidebarComponent: oldState.sidebarComponent,
+            sidebarHistory: [],
+          };
+        }
+        return state as NotebookMetaDataType;
+      },
       partialize(state) {
         return Object.fromEntries(
           Object.entries(state).filter(
