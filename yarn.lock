@@ -7082,10 +7082,10 @@
   resolved "https://registry.yarnpkg.com/@one-ini/wasm/-/wasm-0.1.1.tgz#6013659736c9dbfccc96e8a9c2b3de317df39323"
   integrity sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==
 
-"@opensearch-project/opensearch@^2.11.0", "@opensearch-project/opensearch@^2.2.0", "@opensearch-project/opensearch@^2.2.1":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@opensearch-project/opensearch/-/opensearch-2.11.0.tgz#e5539b49d9ccbc746d023f4f5f89b64501332d16"
-  integrity sha512-G+SZwtWRDv90IrtTSNnCt0MQjHVyqrcIXcpwN68vjHnfbun2+RHn+ux4K7dnG+s/KwWzVKIpPFoRjg2gfFX0Mw==
+"@opensearch-project/opensearch@^2.12.0", "@opensearch-project/opensearch@^2.2.0", "@opensearch-project/opensearch@^2.2.1":
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/@opensearch-project/opensearch/-/opensearch-2.12.0.tgz#decf1b1d72c00c6b0b436e44b29822bbebacd231"
+  integrity sha512-FNGWbWjvpWIZHVvAbv0FkSgvc1PnWnYEHnOTeIY08vMDp9QpXumGNDjNc1tZthJ3OEeoooqH0miGFORjWnRYsQ==
   dependencies:
     aws4 "^1.11.0"
     debug "^4.3.1"
