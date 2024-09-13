@@ -12,11 +12,11 @@ use js_sys::{BigInt64Array, Object};
 use parse::csv_to_parsed;
 use rand::rngs::OsRng;
 use rand_unique::{RandomSequence, RandomSequenceBuilder};
-use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 use std::collections::HashMap;
 use types::types::{DeciResult, DeciType};
 use value::sorted_column::SortedColumn;
 use wasm_bindgen::prelude::*;
+use wasm_bindgen_test::wasm_bindgen_test_configure;
 pub mod deci_result;
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -107,29 +107,6 @@ pub fn parse_csv(csv: String, is_first_header_row: bool) -> Object {
 pub struct ComputeBackend {
     values: HashMap<String, DeciResult>,
     sequence: RandomSequence<u64>,
-}
-
-///
-/// Utility functions to inject values into RustLand.
-///
-///
-#[wasm_bindgen_test]
-pub fn test_csv_in() {
-  let mut a = ComputeBackend::new();
-  let csv = "c1, c2, c3, c4
-        7, 2, 5, 3
-        6, 6, 7, 1
-        1, 7, 3, 4
-        2, 1, 2, 2";
-  let serialized_keys = a.read_csv_in(csv.to_string(), true);
-  let deserialized_keys = deserialize_result(serialized_keys).unwrap();
-  log(deserialized_keys.get_string().as_str());
-  for (key, value) in a.values.clone() {
-    log(format!("{}: {}", key, value.get_string()).as_str());
-  }
-  let keystr = &deserialized_keys.as_column()[0].as_column()[1].get_string();
-  log(format!("{}", a.sum(keystr.clone())).as_str());
-  assert_eq!(a.sum(keystr.clone()), 16.0);
 }
 
 #[wasm_bindgen]
@@ -247,7 +224,7 @@ impl ComputeBackend {
         )
     }
 
-    fn get_value(&mut self, id: String) -> Result<DeciResult, ComputeErrors> {
+    fn get_value(&self, id: String) -> Result<DeciResult, ComputeErrors> {
         match self.values.get(&id) {
             Some(v) => Ok(v.clone()),
             None => Err(ComputeErrors::UnknownId),
@@ -260,10 +237,36 @@ impl ComputeBackend {
      *
      * @throws Rust Result are exceptions in JS.
      */
-    pub fn sum(&mut self, id: String) -> f64 {
-        let column: DeciResult = self.get_value(id).unwrap();
+    pub fn sum(&self, id: String) -> Object {
+        let column: DeciResult = self.get_value(id).expect("should have ID in values");
 
-        column.sum_float().get_float()
+        serialize_result(column.sum_frac())
+    }
+
+    pub fn min(&self, id: String) -> Object {
+        let column: DeciResult = self.get_value(id).expect("should have ID in values");
+
+        serialize_result(column.min_val())
+    }
+
+    pub fn max(&self, id: String) -> Object {
+        let column: DeciResult = self.get_value(id).expect("should have ID in values");
+
+        serialize_result(column.max_val())
+    }
+
+    pub fn average(&self, id: String) -> Object {
+        let column: DeciResult = self.get_value(id).expect("should have ID in values");
+
+        serialize_result(column.mean())
+    }
+
+    pub fn median(&self, id: String) -> Object {
+        let column: DeciResult = self.get_value(id).expect("should have ID in values");
+
+        let mut s = SortedColumn::new(column);
+        s.sort_and_save();
+        serialize_result(s.median())
     }
 
     // no floats here.

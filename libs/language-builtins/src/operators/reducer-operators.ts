@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line no-restricted-imports
-import { Value, serializeType } from '@decipad/language-types';
+import { serializeType, Value } from '@decipad/language-types';
 import type { BuiltinSpec } from '../types';
 import {
   computeBackendSingleton,
@@ -9,6 +9,7 @@ import {
   serializeResult,
 } from '@decipad/compute-backend-js';
 import DeciNumber from '@decipad/number';
+import { createWasmEvaluator } from './wasm-evaluator';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {
@@ -16,21 +17,29 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 1,
     argCardinalities: [[2]],
     isReducer: true,
-    fnValues: async ([nums], [numsType]) => {
-      const column = Value.getColumnLike(nums);
+    fnValues: createWasmEvaluator(
+      (id) => computeBackendSingleton.computeBackend.sum(id),
+      (result) => {
+        return Value.Scalar.fromValue(result.value as DeciNumber);
+      },
+      async ([nums], [numsType]) => {
+        const column = Value.getColumnLike(nums);
 
-      const col = await serializeResult({
-        type: serializeType(numsType),
-        value: await column.getData(),
-      });
+        const col = await serializeResult({
+          type: serializeType(numsType),
+          value: await column.getData(),
+        });
 
-      const sum =
-        computeBackendSingleton.computeBackend.sum_result_fraction_column(col);
+        const sum =
+          computeBackendSingleton.computeBackend.sum_result_fraction_column(
+            col
+          );
 
-      const deserializedResult = deserializeResult(sum as any);
+        const deserializedResult = deserializeResult(sum as any);
 
-      return Value.Scalar.fromValue(deserializedResult.value as DeciNumber);
-    },
+        return Value.Scalar.fromValue(deserializedResult.value as DeciNumber);
+      }
+    ),
     functionSignature: 'column<number:R> -> R',
     explanation: 'Adds all the elements of a column.`',
     formulaGroup: 'Columns',

@@ -26,6 +26,7 @@ import {
   serializeResult,
   deserializeResult,
 } from '@decipad/compute-backend-js';
+import { createWasmEvaluator } from './wasm-evaluator';
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
@@ -61,71 +62,76 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
 
 const firstArgumentReducedFunctor = async ([t]: Type[]) => t.reduced();
 
-const max: FullBuiltinSpec['fnValues'] = async (
-  [value],
-  [valueType]
-): Promise<ValueTypes.Value> => {
-  const column = Value.getColumnLike(value);
+const max: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
+  (id) => computeBackendSingleton.computeBackend.max(id),
+  (res) => Value.Scalar.fromValue(res.value as DeciNumber),
+  async ([value], [valueType]): Promise<ValueTypes.Value> => {
+    const column = Value.getColumnLike(value);
 
-  const col = await serializeResult({
-    type: serializeType(valueType),
-    value: await column.getData(),
-  });
+    const col = await serializeResult({
+      type: serializeType(valueType),
+      value: await column.getData(),
+    });
 
-  const max =
-    computeBackendSingleton.computeBackend.max_result_fraction_column(col);
+    const max =
+      computeBackendSingleton.computeBackend.max_result_fraction_column(col);
 
-  return resultToValue(deserializeResult(max as any));
-};
-
-const min: FullBuiltinSpec['fnValues'] = async (
-  [value],
-  [valueType]
-): Promise<ValueTypes.Value> => {
-  const column = Value.getColumnLike(value);
-
-  const col = await serializeResult({
-    type: serializeType(valueType),
-    value: await column.getData(),
-  });
-
-  const min =
-    computeBackendSingleton.computeBackend.min_result_fraction_column(col);
-
-  return resultToValue(deserializeResult(min as any));
-};
-
-const average: FullBuiltinSpec['fnValues'] = async ([
-  value,
-]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
-  let acc = ZERO;
-  if (!Value.isColumnLike(value)) {
-    return Promise.resolve(value);
+    return resultToValue(deserializeResult(max as any));
   }
-  let count = 0n;
-  for await (const val of value.values()) {
-    count += 1n;
-    acc = acc.add(coerceToFraction(await val.getData()));
+);
+
+const min: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
+  (id) => computeBackendSingleton.computeBackend.min(id),
+  (res) => Value.Scalar.fromValue(res.value as DeciNumber),
+  async ([value], [valueType]): Promise<ValueTypes.Value> => {
+    const column = Value.getColumnLike(value);
+
+    const col = await serializeResult({
+      type: serializeType(valueType),
+      value: await column.getData(),
+    });
+
+    const max =
+      computeBackendSingleton.computeBackend.min_result_fraction_column(col);
+
+    return resultToValue(deserializeResult(max as any));
   }
-  return Value.Scalar.fromValue(acc.div(N(count)));
-};
+);
 
-const median: FullBuiltinSpec['fnValues'] = async (
-  [value],
-  [type]
-): Promise<ValueTypes.Value> => {
-  const column = Value.getColumnLike(value);
+const average: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
+  (id) => computeBackendSingleton.computeBackend.average(id),
+  (res) => Value.Scalar.fromValue(res.value as DeciNumber),
+  async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
+    let acc = ZERO;
+    if (!Value.isColumnLike(value)) {
+      return Promise.resolve(value);
+    }
+    let count = 0n;
+    for await (const val of value.values()) {
+      count += 1n;
+      acc = acc.add(coerceToFraction(await val.getData()));
+    }
+    return Value.Scalar.fromValue(acc.div(N(count)));
+  }
+);
 
-  const col = await serializeResult({
-    type: serializeType(type),
-    value: await column.getData(),
-  });
+const median: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
+  (id) => computeBackendSingleton.computeBackend.median(id),
+  (res) => Value.Scalar.fromValue(res.value as DeciNumber),
+  async ([value], [valueType]): Promise<ValueTypes.Value> => {
+    const column = Value.getColumnLike(value);
 
-  const median =
-    computeBackendSingleton.computeBackend.median_result_fraction_column(col);
+    const col = await serializeResult({
+      type: serializeType(valueType),
+      value: await column.getData(),
+    });
 
-  return resultToValue(deserializeResult(median as any));
-};
+    const max =
+      computeBackendSingleton.computeBackend.median_result_fraction_column(col);
+
+    return resultToValue(deserializeResult(max as any));
+  }
+);
 
 const stddev: FullBuiltinSpec['fnValues'] = async (
   [value],
