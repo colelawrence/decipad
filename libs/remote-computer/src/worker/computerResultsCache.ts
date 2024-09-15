@@ -99,6 +99,8 @@ export const createComputerResultsCache = (
     } catch (err) {
       console.error('Error decoding cached results', err);
       captureException(err);
+    } finally {
+      await computer.setTriedCache();
     }
   };
 

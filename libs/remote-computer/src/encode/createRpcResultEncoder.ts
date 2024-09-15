@@ -20,6 +20,8 @@ export const resultEncoders: TRPCResultEncoders = {
   getUnitFromText: (unit) => unit?.map(encodeUnit) ?? null,
   flush: identity,
   terminate: identity,
+  setTriedCache: identity,
+  waitForTriedCache: identity,
 };
 
 export const createRpcResultEncoder = <

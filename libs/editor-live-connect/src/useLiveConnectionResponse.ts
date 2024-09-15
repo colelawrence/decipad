@@ -47,7 +47,7 @@ export const useLiveConnectionResponse = ({
   useCache,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const worker = useLiveConnectionWorker();
-  const [gen, setGen] = useState(0);
+  const [gen, setGen] = useState(-1);
   const [error, setError] = useState<Error | undefined>();
   const [result, setResult] = useState<ImportResult | undefined>();
   const [loading, setLoading] = useState<boolean>(true);

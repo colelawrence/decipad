@@ -48,6 +48,7 @@ import omit from 'lodash/omit';
 import { Computer } from '@decipad/computer-interfaces';
 import { useEditorController } from '@decipad/notebook-state';
 import { formatError } from '@decipad/format';
+import { useToast } from '@decipad/toast';
 
 interface IntegrationProps {
   readonly workspaceId: string;
@@ -120,37 +121,57 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
   const computer = useComputer();
   const runner = useRunner(notebookId, computer, connectionType!);
   const [loading, setLoading] = useState(false);
+  const [gen, setGen] = useState(-1);
+  const lastGen = useRef(-1);
 
-  const onRun = useCallback(async () => {
-    if (queries.hasReachedLimit) return;
+  const resultListener = useCallback(
+    ([err, res]: [err: Error | undefined, res: Result.Result | undefined]) => {
+      if (err || res) {
+        lastGen.current = gen;
+        queries.incrementUsageWithBackend(workspaceId);
+      }
+      if (err) {
+        onExecute((v) => [...v, { status: 'error', err }]);
+      }
+      if (res) {
+        if (res.type.kind === 'type-error') {
+          const error = formatError('en-US', res.type.errorCause);
+          onExecute((v) => [...v, { status: 'error', err: error }]);
+        } else {
+          onExecute((v) => [...v, { status: 'success', ok: true }]);
+          setter({ rawResult: '', resultPreview: res });
+        }
+      }
+      setLoading(false);
+    },
+    [gen, queries, setter, workspaceId]
+  );
 
-    queries.incrementUsageWithBackend(workspaceId);
+  const reachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
+
+  useEffect(() => {
+    if (gen < 0 || gen <= lastGen.current || reachedLimit) return;
+
     onExecute([]);
-
     onExecute((v) => [...v, { status: 'run' }]);
     setLoading(true);
-    const res = await runner.import();
-    setLoading(false);
+    const unsubscribe = runner.import(resultListener);
 
-    if (res instanceof Error) {
-      onExecute((v) => [...v, { status: 'error', err: res }]);
-      return;
-    }
+    return () => {
+      (async () => {
+        (await unsubscribe)();
+      })();
+    };
+  }, [resultListener, runner, workspaceId, gen, reachedLimit]);
 
-    if (res?.type.kind === 'type-error') {
-      const error = formatError('en-US', res.type.errorCause);
-      onExecute((v) => [...v, { status: 'error', err: error }]);
-      return;
-    }
-
-    onExecute((v) => [...v, { status: 'success', ok: true }]);
-    setter({ rawResult: '', resultPreview: res });
-  }, [queries, runner, setter, workspaceId]);
+  const run = useCallback(() => {
+    setGen((v) => v + 1);
+  }, []);
 
   const screen = useIntegrationScreenFactory(
     workspaceId,
     runner,
-    onRun,
+    run,
     externalData,
     setExternalData,
     loading
@@ -275,31 +296,50 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
     setSidebar({ type: 'closed' });
   }, [block, controller, findNodeEntry, runner, setSidebar]);
 
-  const onRun = useCallback(async () => {
-    if (queries.hasReachedLimit) return;
+  const toast = useToast();
+  const [gen, setGen] = useState(-1);
+  const lastGen = useRef(-1);
 
-    queries.incrementUsageWithBackend(workspaceId);
-    const res = await runner.import();
-    setLoading(false);
+  const resultListener = useCallback(
+    ([err, res]: [err: Error | undefined, res: Result.Result | undefined]) => {
+      if (err || res) {
+        lastGen.current = gen;
+        queries.incrementUsageWithBackend(workspaceId);
+      }
+      if (err) {
+        toast.error(err.message);
+      }
+      if (res) {
+        if (res.type.kind === 'type-error') {
+          const error = formatError('en-US', res.type.errorCause);
+          toast.error(error);
+        } else {
+          setResult(res);
+        }
+      }
+      setLoading(false);
+    },
+    [gen, queries, toast, workspaceId]
+  );
 
-    if (res == null || res instanceof Error) {
-      // TODO: error handling
-      return;
-    }
+  const hasReachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
 
-    setResult(res);
-  }, [queries, runner, workspaceId]);
-
-  const initialRun = useRef(false);
   useEffect(() => {
-    if (initialRun.current) {
-      return;
-    }
+    if (gen < 0 || gen <= lastGen.current || hasReachedLimit) return;
 
-    initialRun.current = true;
+    setLoading(true);
+    const unsubscribe = runner.import(resultListener);
 
-    onRun();
-  }, [onRun, runner, block.integrationType]);
+    return () => {
+      (async () => {
+        (await unsubscribe)();
+      })();
+    };
+  }, [queries, resultListener, runner, workspaceId, gen, hasReachedLimit]);
+
+  const run = useCallback(() => {
+    setGen((v) => v + 1);
+  }, []);
 
   return (
     <WrapperIntegrationModalDialog
@@ -324,7 +364,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
         }}
         setTypeMapping={(index, type) => {
           runner.setTypeIndex(index, type);
-          onRun();
+          run();
         }}
         timeOfLastRun={undefined}
         columnsToHide={[]}

@@ -26,8 +26,8 @@ export const useIntegration = (
     element.isFirstRowHeader
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const firstTime = useRef(true);
   const pushedCache = useRef(false);
+  const [gen, setGen] = useState(-1);
 
   const varName = useMemo(
     () => getNodeString(element.children[0]),
@@ -35,40 +35,43 @@ export const useIntegration = (
   );
   const [error, setError] = useState<Error | undefined>();
 
-  const runIntegration = useCallback(
-    async (controller?: AbortController, force = false) => {
-      if (controller?.signal.aborted) {
-        return;
+  const importResultListener = useCallback(
+    ([err, importResult]: [
+      err: Error | undefined,
+      result: Result.Result | undefined
+    ]) => {
+      setError(err);
+      if (importResult) {
+        if (importResult.type.kind !== 'pending') {
+          if (importResult.type.kind === 'type-error') {
+            setError(
+              new Error(formatError('en-US', importResult.type.errorCause))
+            );
+          } else {
+            setResult(importResult);
+          }
+        }
       }
-      if ((loading || error) && !force) {
-        return;
-      }
-      try {
-        setLoading(true);
-        const res = await runner.import();
-        if (controller?.signal.aborted) {
-          return;
-        }
-        if (res == null) {
-          return;
-        }
-        if (res instanceof Error) {
-          throw res;
-        }
-        if (res.type.kind === 'type-error') {
-          throw new Error(formatError('en-US', res.type.errorCause));
-        }
-
-        setResult(res);
-        setError(undefined);
-      } catch (e) {
-        setError(e as Error);
-      } finally {
+      if (err || importResult) {
         setLoading(false);
       }
     },
-    [loading, error, runner]
+    []
   );
+
+  useEffect(() => {
+    if (gen < 0) {
+      return;
+    }
+    setLoading(true);
+    const unsubscribe = runner.import(importResultListener);
+
+    return () => {
+      (async () => {
+        (await unsubscribe)();
+      })();
+    };
+  }, [importResultListener, runner, gen]);
 
   useEffect(() => {
     // push cache if no result has come in yet
@@ -127,16 +130,31 @@ export const useIntegration = (
     };
   }, [computer, element.id, result, varName]);
 
+  const refresh = useCallback(() => {
+    setGen((g) => g + 1);
+  }, []);
+
   useEffect(() => {
-    const controller = new AbortController();
-    if (firstTime.current) {
-      firstTime.current = false;
-      runIntegration(controller);
+    if (gen >= 0) {
+      return;
     }
-  }, [runIntegration]);
+    // check if we need a refresh
+    let canceled = false;
+
+    (async () => {
+      await computer.waitForTriedCache();
+      if (!canceled && !computerResult && gen < 0) {
+        refresh();
+      }
+    })();
+
+    return () => {
+      canceled = true;
+    };
+  }, [computer, computerResult, gen, refresh]);
 
   return {
-    onRefresh: () => runIntegration(undefined, true),
+    onRefresh: refresh,
     result: computerResult?.result,
     loading,
     error,

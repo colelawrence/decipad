@@ -20,6 +20,8 @@ export const argEncoders: TRPCArgEncoders = {
   getUnitFromText: identity,
   flush: identity,
   terminate: identity,
+  waitForTriedCache: identity,
+  setTriedCache: identity,
 };
 
 export const createRPCArgEncoder = <TMethodName extends RPCMethodName>(

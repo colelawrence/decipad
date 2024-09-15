@@ -24,7 +24,9 @@ export type RPCMethodName =
   | 'computeDeltaRequest'
   | 'getUnitFromText'
   | 'flush'
-  | 'terminate';
+  | 'terminate'
+  | 'waitForTriedCache'
+  | 'setTriedCache';
 
 // Args
 

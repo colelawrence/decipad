@@ -88,6 +88,7 @@ export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
 export interface ComputerOpts {
   initialProgram?: Program;
+  willTryCache?: boolean;
 }
 
 export interface IngestComputeRequestResponse {
@@ -118,7 +119,19 @@ export class Computer implements ComputerInterface {
     },
   });
 
-  constructor({ initialProgram }: ComputerOpts = {}) {
+  // cache
+  private triedCache: Promise<void>;
+  private triedCacheCallback: (() => void) | undefined;
+
+  constructor({ initialProgram, willTryCache = false }: ComputerOpts = {}) {
+    if (willTryCache) {
+      this.triedCache = new Promise((resolve) => {
+        this.triedCacheCallback = resolve;
+      });
+    } else {
+      this.triedCache = Promise.resolve();
+    }
+
     this.wireRequestsToResults();
     if (initialProgram) {
       void this.pushComputeDelta({ program: { upsert: initialProgram } });
@@ -989,6 +1002,15 @@ export class Computer implements ComputerInterface {
 
   async terminate(): Promise<void> {
     // nothing to do here
+  }
+
+  // cache
+  public async waitForTriedCache(): Promise<void> {
+    return this.triedCache;
+  }
+
+  public async setTriedCache(): Promise<void> {
+    this.triedCacheCallback?.();
   }
 }
 

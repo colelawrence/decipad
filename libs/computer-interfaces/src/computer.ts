@@ -126,6 +126,10 @@ export interface Computer {
   // expression refs
   latestExprRefToVarNameMap: Map<string, string>;
 
+  // --------------- results --------------//
+  waitForTriedCache(): Promise<void>;
+  setTriedCache(): Promise<void>;
+
   // --------------- weird stuff for tests --------------//
   getExternalData(): Promise<ExternalDataMap>;
 

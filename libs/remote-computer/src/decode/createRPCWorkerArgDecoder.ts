@@ -29,6 +29,8 @@ export const argDecoders: TRPCArgDecoders = {
   getUnitFromText: noChangeArgEncoder,
   flush: noChangeArgEncoder,
   terminate: noChangeArgEncoder,
+  waitForTriedCache: noChangeArgEncoder,
+  setTriedCache: noChangeArgEncoder,
 };
 
 export const createRPCWorkerArgDecoder = <TMethodName extends RPCMethodName>(

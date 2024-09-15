@@ -8,20 +8,27 @@ import { codePlaceholder } from '@decipad/frontend-config';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { Result } from '@decipad/language-interfaces';
 import { SafeJs } from '@decipad/safejs';
-import { BackendUrl, assertInstanceOf } from '@decipad/utils';
+import { BackendUrl, assertInstanceOf, noop } from '@decipad/utils';
 import { LiveConnectionWorker } from 'libs/live-connect/src/types';
-import {
-  hydrateResult,
-  hydrateType,
-  safeNumberForPrecision,
-} from '@decipad/remote-computer';
+import { hydrateType, safeNumberForPrecision } from '@decipad/remote-computer';
 import DeciNumber from '@decipad/number';
 import { Computer } from '@decipad/computer-interfaces';
 
 type TypeArray = Array<SimpleTableCellType | undefined>;
 
+export type UnsubscribeFn = () => void;
+
+export type IntegrationRunnerImportResult = [
+  Error | undefined,
+  Result.Result | undefined
+];
+
+export type ImportListener = (result: IntegrationRunnerImportResult) => unknown;
+
+export type ImportUnsubscribe = () => void;
+
 export interface GenericRunner {
-  import: () => Promise<Result.Result | Error | undefined>;
+  import: (listener: ImportListener) => Promise<ImportUnsubscribe>;
 
   getRawResult: () => string;
   getLatestResult: () => Result.Result | undefined;
@@ -99,7 +106,7 @@ export abstract class GenericContainerRunner implements GenericRunner {
     );
   }
 
-  public async import(): Promise<Result.Result | Error | undefined> {
+  public async import(_listener: ImportListener): Promise<ImportUnsubscribe> {
     throw new Error('Cannot direclty use abstract methods import function');
   }
 }
@@ -191,43 +198,28 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
     return this.worker;
   }
 
-  public async import(): Promise<Result.Result | undefined> {
+  public async import(listener: ImportListener): Promise<ImportUnsubscribe> {
     const worker = await this.getWorker();
 
-    return new Promise<Result.Result | undefined>((resolve, reject) => {
-      const unsubPromise = worker.subscribe(
-        {
-          useFirstRowAsHeader: this.getIsFirstRowHeader(),
-          query: this.query,
+    return worker.subscribe(
+      {
+        useFirstRowAsHeader: this.getIsFirstRowHeader(),
+        query: this.query,
 
-          url: this.url,
-          columnTypeCoercions: this.getSubscribeTypes(),
-          proxy: this.proxy,
-          source: this.source,
-          maxCellCount: 10_000_000_000_000,
-          useCache: this.source === 'csv',
-          padId: this.padId,
-        },
-        async (error, __, res) => {
-          if (error) {
-            (await unsubPromise)();
-            return reject(error);
-          }
-          if (res.loading == null || res.loading) {
-            return;
-          }
-
-          const hydratedResult = hydrateResult(res.result);
-          if (!hydratedResult) {
-            return;
-          }
-
-          this.setLatestResult(hydratedResult);
-          resolve(hydratedResult);
-          (await unsubPromise)();
+        url: this.url,
+        columnTypeCoercions: this.getSubscribeTypes(),
+        proxy: this.proxy,
+        source: this.source,
+        maxCellCount: 10_000_000_000_000,
+        useCache: this.source === 'csv',
+        padId: this.padId,
+      },
+      async (error, __, res) => {
+        if (error || res?.result) {
+          listener([error, res?.result]);
         }
-      );
-    });
+      }
+    );
   }
 }
 
@@ -291,7 +283,7 @@ export class CodeRunner
     return resultMap;
   }
 
-  public async import(): Promise<Result.Result | Error | undefined> {
+  public async import(listener: ImportListener): Promise<UnsubscribeFn> {
     try {
       const value = await this.worker.execute(
         this.code,
@@ -299,22 +291,23 @@ export class CodeRunner
       );
 
       if (value instanceof Error || value == null) {
-        return undefined;
+        listener([value, undefined]);
+      } else {
+        const result = await importFromJSONAndCoercions(
+          this.computer,
+          value,
+          this.getTypes()
+        );
+        this.setLatestResult(result);
+
+        listener([undefined, result]);
       }
-
-      const result = await importFromJSONAndCoercions(
-        this.computer,
-        value,
-        this.getTypes()
-      );
-      this.setLatestResult(result);
-
-      return result;
     } catch (err: unknown) {
       assertInstanceOf(err, Error);
 
-      return err;
+      listener([err, undefined]);
     }
+    return noop;
   }
 
   public deinit(): void {

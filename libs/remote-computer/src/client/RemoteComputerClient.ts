@@ -637,6 +637,9 @@ export const createRemoteComputerClientFromWorker = (
       }
     }
 
+    waitForTriedCache = calling<'waitForTriedCache'>('waitForTriedCache');
+    setTriedCache = calling<'setTriedCache'>('setTriedCache');
+
     #resultsMonitorSubscription: Subscription;
     #gotFirstResults = false;
 
@@ -648,14 +651,22 @@ export const createRemoteComputerClientFromWorker = (
           this.#gotFirstResults = true;
         }
       });
-      this.#fetchNotebookResultsFromRemoteCache().catch((err) => {
-        if (!testing) {
-          console.error(
-            'Error trying to fetch notebook results from the remote cache',
-            err
-          );
-        }
-      });
+      this.#fetchNotebookResultsFromRemoteCache()
+        .catch((err) => {
+          if (!testing) {
+            console.error(
+              'Error trying to fetch notebook results from the remote cache',
+              err
+            );
+          }
+        })
+        .finally(() => {
+          this.setTriedCache().catch((err) => {
+            if (!testing) {
+              console.error('Error setting tried cache', err);
+            }
+          });
+        });
     }
   }
   return new RemoteComputerClient();

@@ -26,7 +26,7 @@ import { createComputerResultsCache } from './computerResultsCache';
 import { ComputerResultsCache } from './types';
 
 if (typeof importScripts === 'function') {
-  const computer = getComputer();
+  const computer = getComputer({ willTryCache: true });
 
   const initialized = new Promise<void>((initializationDone) => {
     const subscribe: CreateWorkerWorkerOptions<
@@ -177,6 +177,16 @@ if (typeof importScripts === 'function') {
           notebookId
         );
       }
+    );
+
+    rpc.expose(
+      'setTriedCache',
+      createWorkerHandler(computer, remoteValueStore, 'setTriedCache')
+    );
+
+    rpc.expose(
+      'waitForTriedCache',
+      createWorkerHandler(computer, remoteValueStore, 'waitForTriedCache')
     );
 
     // Termination

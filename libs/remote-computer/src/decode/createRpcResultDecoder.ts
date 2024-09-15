@@ -28,6 +28,8 @@ export const resultDecoders: TRPCResultDecoders = {
     unit != null ? unit.map(decodeUnit) : unit,
   flush: noopDecoder,
   terminate: noopDecoder,
+  setTriedCache: noopDecoder,
+  waitForTriedCache: noopDecoder,
 };
 
 export const createRPCResultDecoder = <TMethodName extends RPCMethodName>(
