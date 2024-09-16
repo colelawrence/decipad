@@ -562,7 +562,7 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   provider: ExternalDataSourceProvider;
   externalId: string;
   dataSourceName?: string;
-  expires_at?: number;
+  expiresAt?: number;
 }
 
 export interface ExternalDataSourceSnapshotRecord extends TableRecordBase {

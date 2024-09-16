@@ -1,6 +1,5 @@
 import tables, { timestamp } from '@decipad/tables';
 import type { Resolvers } from '@decipad/graphqlserver-types';
-import { getDefined } from '@decipad/utils';
 import {
   authUrlFor,
   dataUrlFor,
@@ -8,10 +7,12 @@ import {
 } from './externalDataResource';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
-import { provider as externalDataProvider } from '@decipad/externaldata';
+import {
+  provider as externalDataProvider,
+  renewKey,
+} from '@decipad/externaldata';
 import { getExternalDataWorkspace } from './helpers';
 import { externaldata } from '@decipad/services';
-import { renewKey } from '../../../externaldata/src/providers/renew-key';
 
 const notebooks = resource('notebook');
 
@@ -27,9 +28,15 @@ const FIVE_MINUTES = 5 * 60;
 const resolvers: Resolvers = {
   Query: {
     async getExternalDataSource(pad, input, context) {
-      return getDefined(
-        await externalDataResource.getById(pad, input, context)
+      const externalDataSource = await externalDataResource.getById(
+        pad,
+        input,
+        context
       );
+      if (externalDataSource == null) {
+        throw Boom.notFound('External data source not found');
+      }
+      return externalDataSource;
     },
     getExternalDataSources: async (_, { notebookId }, context) => {
       await notebooks.expectAuthorizedForGraphql({
@@ -78,7 +85,7 @@ const resolvers: Resolvers = {
       if (dataSource.name === TEMP_CONNECTION_NAME) {
         return externalDataResource.create(
           _,
-          { ...dataSource, expires_at: timestamp() + FIVE_MINUTES },
+          { ...dataSource, expiresAt: timestamp() + FIVE_MINUTES },
           context
         );
       }

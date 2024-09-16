@@ -90,7 +90,7 @@ const callbackWithThrows = async (
     externalDataSource = existentExternalData;
   } else {
     externalDataSource.name = acccessTokenResponse.resourceName;
-    externalDataSource.expires_at = undefined;
+    externalDataSource.expiresAt = undefined;
 
     await data.externaldatasources.put(externalDataSource);
   }

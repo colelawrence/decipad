@@ -10,6 +10,7 @@ import type {
   ExternalProvider,
 } from '@decipad/graphqlserver-types';
 import omit from 'lodash/omit';
+import { getDefined } from '@decipad/utils';
 
 const isDatabaseSource = new Set<ExternalProvider>([
   'postgresql',
@@ -38,7 +39,7 @@ export function authUrlFor(externalDataSource: ExternalDataSource): string {
 export const externalDataResource = Resource<
   ExternalDataSourceRecord,
   ExternalDataSource,
-  ExternalDataSourceCreateInput & { expires_at?: number },
+  ExternalDataSourceCreateInput & { expiresAt?: number },
   { dataSource: ExternalDataSourceUpdateInput }
 >({
   resourceTypeName: 'externaldatasources',
@@ -76,13 +77,7 @@ export const externalDataResource = Resource<
     throw new Error('Impossible branch');
   },
   newRecordFrom: (record) => {
-    const {
-      name,
-      provider,
-      externalId,
-      dataSourceName,
-      expires_at: expiresAt,
-    } = record;
+    const { name, provider, externalId, dataSourceName, expiresAt } = record;
 
     const eds: ExternalDataSourceRecord = {
       id: nanoid(),
@@ -92,7 +87,7 @@ export const externalDataResource = Resource<
       provider: provider as ExternalDataSourceRecord['provider'],
       externalId,
       dataSourceName,
-      expires_at: expiresAt,
+      expiresAt,
     };
 
     //
@@ -118,5 +113,9 @@ export const externalDataResource = Resource<
       ...dataSource,
     };
   },
-  skipPermissions: true,
+  delegateAccessToParentResource: true,
+  parentResourceUriFromRecord: (record) =>
+    record.padId
+      ? `/pads/${record.padId}`
+      : `/workspaces/${getDefined(record.workspace_id)}`,
 });
