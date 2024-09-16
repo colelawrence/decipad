@@ -68,13 +68,14 @@ if (typeof importScripts === 'function') {
 
   const schedule = (subscriptionId: SubscriptionId) => {
     const sub = subscriptions.get(subscriptionId);
-    if (sub) {
+    const pollTime = sub?.params.pollIntervalSeconds ?? -1;
+    if (sub && pollTime > 0) {
       setTimeout(
         () =>
           sub.import().finally(() => {
             schedule(subscriptionId);
           }),
-        (sub.params.pollIntervalSeconds || 60) * 1000
+        (pollTime || 60) * 1000
       );
     }
   };

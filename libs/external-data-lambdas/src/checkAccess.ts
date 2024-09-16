@@ -82,7 +82,7 @@ export const checkWorkspaceAccess = async (
   if (!user) {
     throw Boom.forbidden();
   }
-  workspaces.expectAuthorized({
+  await workspaces.expectAuthorized({
     recordId: workspaceId,
     minimumPermissionType: permissionType,
     user,

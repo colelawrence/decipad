@@ -297,7 +297,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
   }, [block, controller, findNodeEntry, runner, setSidebar]);
 
   const toast = useToast();
-  const [gen, setGen] = useState(-1);
+  const [gen, setGen] = useState(0);
   const lastGen = useRef(-1);
 
   const resultListener = useCallback(

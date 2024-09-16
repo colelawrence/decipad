@@ -213,6 +213,7 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
         maxCellCount: 10_000_000_000_000,
         useCache: this.source === 'csv',
         padId: this.padId,
+        pollIntervalSeconds: -1, // disable polling
       },
       async (error, __, res) => {
         if (error || res?.result) {

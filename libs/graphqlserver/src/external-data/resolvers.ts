@@ -8,12 +8,10 @@ import {
 } from './externalDataResource';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
-import {
-  provider as externalDataProvider,
-  saveExternalKey,
-} from '@decipad/externaldata';
+import { provider as externalDataProvider } from '@decipad/externaldata';
 import { getExternalDataWorkspace } from './helpers';
 import { externaldata } from '@decipad/services';
+import { renewKey } from '../../../externaldata/src/providers/renew-key';
 
 const notebooks = resource('notebook');
 
@@ -100,7 +98,7 @@ const resolvers: Resolvers = {
     unshareExternalDataSourceWithRole: externalDataResource.unshareWithRole,
     shareExternalDataSourceWithEmail: externalDataResource.shareWithEmail,
 
-    async refreshExternalDataToken(_, { id }, context) {
+    async refreshExternalDataToken(_, { id }) {
       const data = await tables();
       const externalData = await data.externaldatasources.get({ id });
       if (externalData == null) {
@@ -119,37 +117,23 @@ const resolvers: Resolvers = {
       const refreshKey = keys.find((k) => k.refresh_token != null);
 
       if (refreshKey == null) {
-        throw Boom.badRequest(
-          'No refresh key found, unable to refresh access token.'
+        throw Boom.notFound(
+          'Could not find a refresh key with a refresh token for this external data source.'
         );
       }
-
       const provider = externalDataProvider(externalData.provider);
       if (provider == null) {
         throw Boom.badRequest(
           `External data with ID ${id} does not have a provider.`
         );
       }
+      const renewedKey = await renewKey(refreshKey, provider);
 
-      // TODO: Refactor. Type narrowing should be done another way.
-      if (provider.type !== 'gsheets') {
-        throw Boom.badRequest('cant refresh this.');
+      if (renewedKey == null) {
+        throw Boom.badRequest('Could not renew access key');
       }
 
-      const { scope, accessToken, expiresIn, tokenType } =
-        await provider.refreshAccessToken(refreshKey.refresh_token!);
-
-      // TODO: Refactor to go into own provider
-      await saveExternalKey({
-        externalDataSource: externalData,
-        userId: context.user!.id,
-        tokenType,
-        scope,
-        accessToken,
-        expiresIn,
-      });
-
-      return accessToken;
+      return renewedKey.access_token;
     },
   },
 

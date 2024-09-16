@@ -154,6 +154,10 @@ export const data: Handler = async (event) => {
     .catch(() => false);
 
   if (hasWorkspaceAccess) {
+    console.log('will proxy for external data source key', key, {
+      url,
+      method,
+    });
     const response = await proxy(externalDataSource, key, url, method);
     if (typeof response !== 'object') {
       throw Boom.internal();
