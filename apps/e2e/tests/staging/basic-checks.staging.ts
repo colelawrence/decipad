@@ -304,6 +304,102 @@ test.describe('staging performance checks', () => {
     expect(textStyles[0] > beforeTextStyles[0]).toBe(true);
     expect(textStyles[1] !== beforeTextStyles[1]).toBe(true);
   });
+});
+
+test.describe('data views', () => {
+  let page: Page;
+  let notebook: Notebook;
+  let workspace: Workspace;
+
+  const deployName = process.env.DEPLOY_NAME;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
+
+  const currentDate = new Date().getTime();
+  const notebookTitle =
+    currentDate.toString() + Math.round(Math.random() * 10000);
+
+  test('login', async ({ browser }) => {
+    // get staging user agent string
+    const userAgent = process.env.USER_AGENT_KEY;
+
+    // Create a new browser context with the custom user agent
+    const context = await browser.newContext({
+      userAgent,
+    });
+
+    // Use the custom context to create a new page
+    page = await context.newPage();
+
+    notebook = new Notebook(page);
+    workspace = new Workspace(page);
+  });
+
+  test('load workspace', async ({ performance }) => {
+    performance.sampleStart('Load Workspace');
+    await page.goto(stagingURL);
+    await expect(page.getByText('Welcome to').first()).toBeVisible();
+    await expect(page.getByTestId('dashboard')).toBeVisible();
+    performance.sampleEnd('Load Workspace');
+    expect
+      .soft(
+        performance.getSampleTime('Load Workspace'),
+        'Loading workspace took more than 10 seconds'
+      )
+      .toBeLessThanOrEqual(10000);
+  });
+
+  test('new notebook', async ({ performance }) => {
+    performance.sampleStart('New Notebook');
+    await workspace.clickNewPadButton();
+    await notebook.waitForEditorToLoad();
+    performance.sampleEnd('New Notebook');
+    expect
+      .soft(
+        performance.getSampleTime('New Notebook'),
+        'Creating a Notebook took more than 8 seconds'
+      )
+      .toBeLessThanOrEqual(8000);
+  });
+
+  test('checks csv uploads work', async ({ performance }) => {
+    await test.step('importing csv link through csv panel with link', async () => {
+      await notebook.updateNotebookTitle(notebookTitle);
+      await notebook.closeSidebar();
+      await notebook.waitForEditorToLoad();
+      await notebook.selectLastParagraph();
+
+      performance.sampleStart('Ingest CSV');
+
+      await notebook.addCSV({
+        method: 'link',
+        link: 'https://docs.google.com/spreadsheets/d/1rEnsyZJuGdBLeq2O8lOAJShK6rI8L1CM-g6NjNul1dg/pub?gid=885366347&single=true&output=csv',
+        varName: 'Customers',
+      });
+
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await page.waitForTimeout(Timeouts.computerDelay);
+      await expect(async () => {
+        await expect(
+          page.getByTestId('live-code').getByTestId('loading-animation').first()
+        ).toBeHidden();
+      }).toPass({
+        timeout: 1000,
+      });
+      await expect(
+        page.getByText('4999 rows, previewing rows 1 to 10')
+      ).toBeVisible();
+    });
+    performance.sampleEnd('Ingest CSV');
+    expect
+      .soft(
+        performance.getSampleTime('Ingest CSV'),
+        'CSV Ingest took more than 50 seconds'
+      )
+      .toBeLessThanOrEqual(50_000);
+  });
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('creates a data view', async ({ performance }) => {
@@ -355,6 +451,196 @@ test.describe('staging performance checks', () => {
     });
 */
     await notebook.checkCalculationErrors();
+  });
+});
+
+test.describe('staging operation performance checks', () => {
+  let page: Page;
+  let notebook: Notebook;
+  let workspace: Workspace;
+
+  const deployName = process.env.DEPLOY_NAME;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
+
+  const currentDate = new Date().getTime();
+  const notebookTitle =
+    currentDate.toString() + Math.round(Math.random() * 10000);
+
+  test('login', async ({ browser }) => {
+    // get staging user agent string
+    const userAgent = process.env.USER_AGENT_KEY;
+
+    // Create a new browser context with the custom user agent
+    const context = await browser.newContext({
+      userAgent,
+    });
+
+    // Use the custom context to create a new page
+    page = await context.newPage();
+
+    notebook = new Notebook(page);
+    workspace = new Workspace(page);
+  });
+
+  test('load workspace', async ({ performance }) => {
+    performance.sampleStart('Load Workspace');
+    await page.goto(stagingURL);
+    await expect(page.getByText('Welcome to').first()).toBeVisible();
+    await expect(page.getByTestId('dashboard')).toBeVisible();
+    performance.sampleEnd('Load Workspace');
+    expect
+      .soft(
+        performance.getSampleTime('Load Workspace'),
+        'Loading workspace took more than 10 seconds'
+      )
+      .toBeLessThanOrEqual(10000);
+  });
+
+  test('new notebook', async ({ performance }) => {
+    performance.sampleStart('New Notebook');
+    await workspace.clickNewPadButton();
+    await notebook.waitForEditorToLoad();
+    performance.sampleEnd('New Notebook');
+    expect
+      .soft(
+        performance.getSampleTime('New Notebook'),
+        'Creating a Notebook took more than 8 seconds'
+      )
+      .toBeLessThanOrEqual(8000);
+  });
+
+  test('checks csv uploads work', async ({ performance }) => {
+    await test.step('importing csv link through csv panel with link', async () => {
+      await notebook.updateNotebookTitle(notebookTitle);
+      await notebook.closeSidebar();
+      await notebook.waitForEditorToLoad();
+      await notebook.selectLastParagraph();
+
+      performance.sampleStart('Ingest CSV');
+
+      await notebook.addCSV({
+        method: 'link',
+        link: 'https://docs.google.com/spreadsheets/d/1rEnsyZJuGdBLeq2O8lOAJShK6rI8L1CM-g6NjNul1dg/pub?gid=885366347&single=true&output=csv',
+        varName: 'Customers',
+      });
+
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await page.waitForTimeout(Timeouts.computerDelay);
+      await expect(async () => {
+        await expect(
+          page.getByTestId('live-code').getByTestId('loading-animation').first()
+        ).toBeHidden();
+      }).toPass({
+        timeout: 1000,
+      });
+      await expect(
+        page.getByText('4999 rows, previewing rows 1 to 10')
+      ).toBeVisible();
+    });
+    performance.sampleEnd('Ingest CSV');
+    expect
+      .soft(
+        performance.getSampleTime('Ingest CSV'),
+        'CSV Ingest took more than 50 seconds'
+      )
+      .toBeLessThanOrEqual(50_000);
+  });
+
+  test('checks operations from imports', async ({ performance }) => {
+    await test.step('Operations column + number unitless', async () => {
+      performance.sampleStart('Operations column + number unitless');
+      await notebook.addFormula(
+        'columnaddunitlessnumberCustomers',
+        'Customers.RandomNumber+1025'
+      );
+      performance.sampleStart('Operations column + number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈89.48 million')
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column + number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column + number unitless'),
+          'Operations column + number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+    });
+
+    await test.step('Operations column + another column unitless', async () => {
+      performance.sampleStart('Operations column + another column unitless');
+      await notebook.addFormula(
+        'columnaddunitlesscolumnCustomers',
+        'Customers.RandomNumber+Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column + another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈178.97 million')
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column + another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column + another column unitless'
+          ),
+          'Operations column + another column unitless took more than 4 seconds'
+        )
+        .toBeLessThanOrEqual(4_000);
+      await page.getByText('Hide data').last().click();
+    });
+
+    await test.step('Operations column - number unitless', async () => {
+      performance.sampleStart('Operations column - number unitless');
+      await notebook.addFormula(
+        'columnaddunitlessnumberCustomers',
+        'Customers.RandomNumber-1025'
+      );
+      performance.sampleStart('Operations column - number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈89.48 million')
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column - number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column - number unitless'),
+          'Operations column - number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+    });
+
+    /*
+    await test.step('Operations column - another column unitless', async () => {
+      performance.sampleStart('Operations column - another column unitless');
+      await notebook.addFormula(
+        'columnaddunitlesscolumnCustomers',
+        'Customers.RandomNumber-Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column - another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(page.getByTestId('number-result:0')).toBeVisible();
+
+      performance.sampleEnd('Operations column - another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column - another column unitless'
+          ),
+          'Operations column - another column unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+    });
+    */
   });
 });
 
