@@ -19,6 +19,7 @@ import { nanoid } from 'nanoid';
 import { IsTab } from './utils';
 import { createTrailingParagraphPlugin } from './testPlugins';
 import { DATA_TAB_INDEX, FIRST_TAB_INDEX, TITLE_INDEX } from './constants';
+import { controllerActionsFactory } from './actions';
 
 describe.sequential('EditorController', () => {
   vi.mock('nanoid', () => {
@@ -1587,6 +1588,42 @@ describe('Actions', () => {
         ],
         type: 'title',
       });
+    });
+  });
+
+  it('can move blocks between tabs even if a sub editor normalizes as a side effect', () => {
+    controller = new EditorController('id', [createTrailingParagraphPlugin()]);
+    controller.forceNormalize();
+    controller.insertTab('tab-2');
+
+    const actions = controllerActionsFactory(controller);
+
+    expect(controller.children).toHaveLength(4);
+    expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(1);
+    expect(controller.children[FIRST_TAB_INDEX + 1].children).toHaveLength(1);
+
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'h2',
+        type: ELEMENT_H2,
+        children: [{ text: 'h2 text' }],
+      },
+    });
+
+    actions.onMoveToTab('h2', 'tab-2');
+
+    expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(1);
+    expect(controller.children[FIRST_TAB_INDEX + 1].children).toHaveLength(3);
+    expect(controller.children[FIRST_TAB_INDEX + 1].children).toContainEqual({
+      children: [
+        {
+          text: 'h2 text',
+        },
+      ],
+      id: 'h2',
+      type: 'h2',
     });
   });
 });

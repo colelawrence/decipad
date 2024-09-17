@@ -69,6 +69,7 @@ import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import { Subject } from 'rxjs';
 import stringify from 'json-stringify-safe';
 import { nanoid } from 'nanoid';
+import { applyToMirrorAsRoot } from './controller-functions';
 
 const isTesting = !!(
   process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
@@ -442,6 +443,8 @@ export class EditorController implements RootEditorController {
       const nodeToMove = this.getNode(op.path);
       assert(nodeToMove != null);
 
+      applyToMirrorAsRoot(op, this.mirrorEditor);
+
       //
       // We have to use `FROM_ROOT`, otherwise we get a double apply
       // of both the 'move_node' top level operation and the individual
@@ -721,11 +724,11 @@ export class EditorController implements RootEditorController {
          * the wrong order and crashing the editor. See TABS.md for sequence
          * diagram.
          */
-        const tabEditorIsNormalizing = isNormalizing(tabEditor as any);
-        setNormalizing(tabEditor as any, false);
+        const tabEditorIsNormalizing = tabEditor.isNormalizing();
+        tabEditor.setNormalizing(false);
 
         cleanUp = () => {
-          setNormalizing(tabEditor as any, tabEditorIsNormalizing);
+          tabEditor.setNormalizing(tabEditorIsNormalizing);
           tabEditor.normalize();
         };
 
