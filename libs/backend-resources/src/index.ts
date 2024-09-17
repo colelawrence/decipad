@@ -52,6 +52,11 @@ export const resource = <TData extends ConcreteRecord>(
           throw err;
         }
         rec ??= await load(recordId);
+        if (!def.parentResourceUriFromRecord) {
+          throw new Error(
+            `parentResourceUriFromRecord is not defined in resource definition for ${name}`
+          );
+        }
         const parentResourceId = getDefined(def.parentResourceUriFromRecord)(
           rec
         );

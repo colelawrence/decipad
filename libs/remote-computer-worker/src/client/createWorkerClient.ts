@@ -10,6 +10,7 @@ import type { ClientWorkerContext } from './types';
 import { decodeNotification as defaultDecodeNotification } from './decodeNotification';
 import { debug } from './debug';
 import { nanoid } from 'nanoid';
+import { parseRemoteError } from '../utils/parseRemoteError';
 
 export type SubscriptionId = string;
 
@@ -129,7 +130,7 @@ export const createWorkerClient = <
       const subscriber = subscribers.get(subscriptionId);
       if (subscriber) {
         subscriber.listener(
-          (error != null && new Error(error)) || undefined,
+          (error != null && parseRemoteError(error)) || undefined,
           subscriber.subscriptionParams,
           await decodeNotification(
             context,

@@ -4,9 +4,11 @@ import type { Result } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import type { RemoteValueStore } from '../types';
-import { initialBufferSize, maxBufferSize, pageSize } from './defaultConfig';
 import { encodeString, valueEncoder } from '@decipad/remote-computer-codec';
+// eslint-disable-next-line no-restricted-imports
+import { createResizableArrayBuffer } from '@decipad/language-utils';
+import type { RemoteValueStore } from '../types';
+import { maxBufferSize, pageSize } from './defaultConfig';
 
 export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
   const recursiveSerializeRemoteValue = async (
@@ -53,9 +55,7 @@ export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
     result: Result.Result
   ): Promise<ArrayBuffer> => {
     const targetBuffer = new Value.GrowableDataView(
-      new ArrayBuffer(initialBufferSize, {
-        maxByteLength: maxBufferSize,
-      }),
+      createResizableArrayBuffer(maxBufferSize),
       { pageSize }
     );
     const finalOffset = await recursiveSerializeRemoteValue(

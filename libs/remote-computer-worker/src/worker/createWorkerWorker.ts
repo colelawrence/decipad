@@ -67,7 +67,12 @@ export const createWorkerWorker = <
     }): Promise<ArrayBuffer> => {
       debug('getValue', valueId, { start, end });
       await rpc.isReady;
-      const value = remoteValueStore.get(valueId) ?? unknownRemoteValue;
+      const value = remoteValueStore.get(valueId);
+
+      if (!value) {
+        return new ArrayBuffer(0);
+      }
+
       if (
         value.type.kind === 'column' ||
         value.type.kind === 'materialized-column'

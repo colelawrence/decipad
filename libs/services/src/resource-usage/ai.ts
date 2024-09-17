@@ -77,7 +77,7 @@ export class AiResourceTracker
     }
 
     return Math.min(
-      getDefined(subscription.credits),
+      subscription.credits ?? 0,
       storageUsed / limits().tokensToCredits
     );
   }

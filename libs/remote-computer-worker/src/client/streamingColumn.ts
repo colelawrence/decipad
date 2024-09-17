@@ -10,6 +10,7 @@ import type { ClientWorkerContext } from './types';
 import type { ReadSerializedColumnDecoder } from 'libs/language-types/src/Value';
 import { getRemoteValue } from '../utils/getRemoteValue';
 import { getRemoteMeta } from '../utils/getRemoteMeta';
+import { empty } from '@decipad/generator-utils';
 
 const recursiveDecoderToReadSerializedColumnDecoder =
   (
@@ -28,6 +29,11 @@ export const streamingColumn = (
 ): Result.ResultColumn => {
   return async function* generateValues(start = 0, end = Infinity) {
     const value = await getRemoteValue(ctx, valueId, start, end);
+
+    if (value.byteLength === 0) {
+      yield* empty();
+      return;
+    }
 
     const { cellType } = type;
     const decode = decoders[cellType.kind];

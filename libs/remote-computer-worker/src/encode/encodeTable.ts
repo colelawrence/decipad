@@ -3,7 +3,9 @@ import type { Result, SerializedType } from '@decipad/language-interfaces';
 import { encodeString } from '@decipad/remote-computer-codec';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
-import { initialBufferSize, maxBufferSize, pageSize } from './defaultConfig';
+// eslint-disable-next-line no-restricted-imports
+import { createResizableArrayBuffer } from '@decipad/language-utils';
+import { initialBufferSize, pageSize } from './defaultConfig';
 import type { RemoteValueStore } from '../types';
 
 export const encodeTable = async (
@@ -22,9 +24,7 @@ export const encodeTable = async (
   }
 
   const targetBuffer = new Value.GrowableDataView(
-    new ArrayBuffer(initialBufferSize, {
-      maxByteLength: maxBufferSize,
-    }),
+    createResizableArrayBuffer(initialBufferSize),
     { pageSize }
   );
 

@@ -10,6 +10,9 @@ import tables from '@decipad/tables';
 
 const notebooks = resource('notebook');
 
+const isValidAnnotation = (annotation: Annotation): boolean =>
+  annotation.type != null;
+
 const resolvers: Resolvers = {
   Query: {
     getAnnotationsByPadId: async (_, { padId }, context) => {
@@ -27,7 +30,7 @@ const resolvers: Resolvers = {
       };
       const annotations = await data.annotations.query(query);
 
-      return annotations.Items;
+      return annotations.Items.filter(isValidAnnotation);
     },
   },
   Mutation: {

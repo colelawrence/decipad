@@ -5,6 +5,7 @@ import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { getResources } from './utils/getResources';
 import pick from 'lodash/pick';
+import { notFound } from '@hapi/boom';
 
 export function remove<
   RecordT extends ConcreteRecord,
@@ -24,7 +25,7 @@ export function remove<
     // We do a pick, because sometimes Graphql will have extra parameters.
     const record = await data.get(pick(args, 'id'));
     if (record == null) {
-      throw new Error('Could not find record, and therefore cannot delete it.');
+      throw notFound('Could not find record, and therefore cannot delete it.');
     }
 
     await Promise.all([

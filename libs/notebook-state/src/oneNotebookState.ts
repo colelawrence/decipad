@@ -104,8 +104,10 @@ const supportsRemoteComputer = () => {
 const createComputer = (notebookId: string): Computer => {
   if (supportsRemoteComputer()) {
     return createRemoteComputerClient(notebookId, (err) => {
-      console.error('notebook store: Error in remote computer client', err);
-      captureException(err);
+      if (err) {
+        console.error('notebook store: Error in remote computer client', err);
+        captureException(err);
+      }
     });
   }
   return getComputer();

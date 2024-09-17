@@ -2,8 +2,10 @@ import type { Result, Value as ValueTypes } from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value, getResultGenerator } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { createResizableArrayBuffer } from '@decipad/language-utils';
 import { valueEncoder } from './valueEncoder';
-import { initialBufferSize, maxBufferSize, pageSize } from '../defaultConfig';
+import { initialBufferSize, pageSize } from '../defaultConfig';
 
 export const encodeColumn = async (
   result: Result.Result,
@@ -25,9 +27,7 @@ export const encodeColumn = async (
     colValue
   );
   const targetBuffer = new Value.GrowableDataView(
-    new ArrayBuffer(initialBufferSize, {
-      maxByteLength: maxBufferSize,
-    }),
+    createResizableArrayBuffer(initialBufferSize),
     { pageSize }
   );
   const finalSize = await col.serialize(targetBuffer, 0, start, end);

@@ -7,6 +7,8 @@ export function assertElementType<Type extends AnyElement['type']>(
   type: Type
 ): asserts node is Extract<MyElement, { type: Type }> {
   if (!isElement(node) || node.type !== type) {
+    // eslint-disable-next-line no-console
+    console.trace(`Expected element type to be ${type}. Element:`, node);
     throw new Error(
       `Expected element type to be ${type} and is ${
         (node as TElement | undefined)?.type
@@ -20,6 +22,11 @@ export function assertElementMultipleType<Type extends AnyElement['type']>(
   types: Type[]
 ): asserts node is Extract<AnyElement, { type: Type }> {
   if (!isElement(node) || !types.includes(node.type as Type)) {
+    // eslint-disable-next-line no-console
+    console.trace(
+      `Expected element type to be any of ${types.join(', ')}. Element:`,
+      node
+    );
     throw new Error(
       `Expected element type to be ${types.join(', ')} and is ${
         (node as AnyElement | undefined)?.type
