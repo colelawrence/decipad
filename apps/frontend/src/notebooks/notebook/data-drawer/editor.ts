@@ -22,8 +22,11 @@ import {
   PlatePlugin,
   TOperation,
   createPlateEditor,
+  getNode,
   getNodeString,
+  insertText,
   isElement,
+  isText,
   nanoid,
 } from '@udecode/plate-common';
 import { DataDrawerEditingComponent } from './editor-components';
@@ -46,6 +49,8 @@ import { useActiveElement, useWindowListener } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { resetChanges } from './reset-changes';
+import { useNotebookMetaData } from '@decipad/react-contexts';
+import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
 
 const isSingleLeafChild = (
   children: unknown
@@ -99,7 +104,7 @@ const createCodeLineRootPlugin = (): PlatePlugin => ({
 
 export const createDataDrawerEditor = (
   computer: Computer
-): PlateEditor<DataDrawerEditorValue> => {
+): PlateEditorWithSelectionHelpers<PlateEditor<DataDrawerEditorValue>> => {
   const plugins = [createDataDrawerInputPlugin(computer)];
 
   plugins.push(
@@ -117,11 +122,102 @@ export const createDataDrawerEditor = (
 
   const editor = createPlateEditor<
     DataDrawerEditorValue,
-    PlateEditor<DataDrawerEditorValue>
+    PlateEditorWithSelectionHelpers<PlateEditor<DataDrawerEditorValue>>
   >({
     plugins,
   });
+  const { apply } = editor;
 
+  editor.insertOrWrapFunction = (func, opts) => {
+    const at = opts?.at ?? editor.selection;
+    if (!at) return;
+
+    const [nodeA, nodeB] = [
+      getNode(editor, at.anchor.path),
+      getNode(editor, at.focus.path),
+    ];
+
+    const [pathA, pathB] = [at.anchor.path.at(-1), at.focus.path.at(-1)];
+    if (pathA == null || pathB == null)
+      throw new Error(`FIXME: is this possible?: ${pathA}/${pathB}`);
+
+    const [startNode, startPath, endNode, endPath] = (
+      pathA === pathB ? at.anchor.offset > at.focus.offset : pathA > pathB
+    )
+      ? [nodeB, at.focus, nodeA, at.anchor]
+      : [nodeA, at.anchor, nodeB, at.focus];
+
+    const isSmartRef = (n: unknown): n is SmartRefElement =>
+      isElement(n) && n.type === 'smart-ref';
+
+    // since text nodes can't be adjacent, we must be selecting across a SmartRef
+    if (isSmartRef(startNode)) {
+      // prepend the smartref with a text node `func(`
+      const path = [...startPath.path.slice(0, -1), startPath.path.at(-1)! - 1];
+      const prevNode = getNode(editor, path);
+      if (!isText(prevNode))
+        throw new Error('Node before a SmartRef is not text!');
+      insertText(editor, `${func}(`, {
+        at: {
+          path,
+          offset: prevNode.text.length,
+        },
+      });
+    } else if (isText(startNode)) {
+      if (pathA === pathB) {
+        insertText(editor, ')', {
+          at: endPath,
+        });
+      }
+      insertText(editor, `${func}(`, {
+        at: startPath,
+      });
+    } else {
+      throw new Error('unreachable');
+    }
+
+    if (isSmartRef(endNode)) {
+      // prepend the text node after the smart ref with a `)`
+      const path = [...endPath.path.slice(0, -1), endPath.path.at(-1)! + 1];
+      const nextNode = getNode(editor, path);
+      if (!isText(nextNode))
+        throw new Error(
+          `Node after a SmartRef is not text! ${JSON.stringify({ endPath })}`
+        );
+      insertText(editor, `)`, {
+        at: {
+          path,
+          offset: 0,
+        },
+      });
+    } else if (isText(endNode) && pathA !== pathB) {
+      insertText(editor, ')', {
+        at: endPath,
+      });
+    }
+  };
+
+  editor.apply = (operation) => {
+    apply.bind(editor, operation)();
+    if (operation.type === 'set_selection') {
+      const anchor =
+        operation.newProperties?.anchor ??
+        operation.properties?.anchor ??
+        editor.selection?.anchor;
+      const focus =
+        operation.newProperties?.focus ??
+        operation.properties?.focus ??
+        editor.selection?.focus;
+      if (!anchor || !focus) {
+        return;
+      }
+      const newSelection = {
+        anchor,
+        focus,
+      };
+      editor.lastRealSelection = newSelection ?? editor.lastRealSelection;
+    }
+  };
   return editor;
 };
 
@@ -187,7 +283,20 @@ export const useEditingDataDrawer = (
   editingId: string
 ): UseEditorDataDrawerReturn => {
   const { computer, controller } = useDataDrawerContext();
+
+  const [sidebar, setSidebar] = useNotebookMetaData((s) => [
+    s.sidebarComponent,
+    s.setSidebar,
+  ]);
+
   const [codeEditor] = useState(() => createDataDrawerEditor(computer));
+
+  useEffect(() => {
+    if (sidebar.type !== 'formula-helper' || sidebar.editor === codeEditor)
+      return;
+
+    setSidebar({ ...sidebar, editor: codeEditor });
+  }, [setSidebar, sidebar, codeEditor]);
 
   const block = useMemo(
     () => findTopLevelEntry(controller, editingId),
@@ -344,6 +453,11 @@ export const useCreatingDataDrawer = (): UseCreatingDataDrawerReturn => {
     (state) => [state.setEditingVariable, state.closeDataDrawer] as const
   );
 
+  const [sidebar, setSidebar] = useNotebookMetaData((s) => [
+    s.sidebarComponent,
+    s.setSidebar,
+  ]);
+
   const { computer, controller } = useDataDrawerContext();
   const toast = useToast();
 
@@ -364,6 +478,13 @@ export const useCreatingDataDrawer = (): UseCreatingDataDrawerReturn => {
 
     return editor;
   });
+
+  useEffect(() => {
+    if (sidebar.type !== 'formula-helper' || sidebar.editor === codeEditor)
+      return;
+
+    setSidebar({ ...sidebar, editor: codeEditor });
+  }, [setSidebar, sidebar, codeEditor]);
 
   //
   // Depends on codeEditor children.

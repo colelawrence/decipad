@@ -6,6 +6,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
     fn: ([a]) => !a,
     functionSignature: 'boolean -> boolean',
     operatorKind: 'prefix',
+    formulaGroup: 'Logical',
     toMathML: (args) => `<mo>!</mo><mo>(</mo>${args[0]}<mo>)</mo>`,
   },
   not: {
@@ -16,6 +17,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
     fn: ([a, b]) => a && b,
     functionSignature: 'boolean, boolean -> boolean',
     operatorKind: 'infix',
+    formulaGroup: 'Logical',
     toMathML: (args) => `${args[0]}<mspace /><mo>&&</mo><mspace />${args[1]}`,
   },
   and: {
@@ -26,6 +28,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
     fn: ([a, b]) => a || b,
     functionSignature: 'boolean, boolean -> boolean',
     operatorKind: 'infix',
+    formulaGroup: 'Logical',
     toMathML: (args) => `${args[0]}<mspace /><mo>||</mo><mspace />${args[1]}`,
   },
   or: {

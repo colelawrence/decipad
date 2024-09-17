@@ -111,6 +111,7 @@ const ComponentWidths: Record<
   integrations: { default: INTEGRATIONS_WIDTH },
   'edit-integration': { default: INTEGRATIONS_WIDTH },
   'navigation-sidebar': { default: SIDEBAR_WIDTH },
+  'formula-helper': { default: SIDEBAR_WIDTH },
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({

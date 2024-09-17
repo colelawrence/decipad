@@ -5,3 +5,4 @@ export * from './NotebookMetaActions';
 export * from './NotebookAccessActions';
 export * from './SubscriptionPlan';
 export * from './PublishedStates';
+export * from './EnrichedPlateEditors';

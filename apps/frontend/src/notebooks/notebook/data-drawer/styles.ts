@@ -187,6 +187,7 @@ export const DataDrawerWrapper = styled.div({
 
     display: 'flex',
     alignItems: 'center',
+    gap: '8px',
   },
 
   '> footer:last-of-type': {
@@ -194,6 +195,25 @@ export const DataDrawerWrapper = styled.div({
     flexDirection: 'column',
     gap: '4px',
     marginTop: 'auto',
+  },
+});
+
+export const DataDrawerFormulaHelperWrapper = styled.div(p12Regular, {
+  display: 'flex',
+  gap: '4px',
+  marginLeft: 'auto',
+  alignItems: 'center',
+  height: '24px',
+
+  borderRadius: '6px',
+  border: `1px solid ${cssVar('borderDefault')}`,
+  padding: '4px',
+  paddingLeft: '8px',
+
+  backgroundColor: cssVar('backgroundSubdued'),
+
+  '& > button': {
+    height: '16px',
   },
 });
 
@@ -218,11 +238,8 @@ export const HotKey = styled.span({
 });
 
 export const DataDrawerCloseButton = styled.div({
-  width: '24px',
-  height: '24px',
-  borderRadius: '8px',
-  padding: '4px',
-  marginLeft: 'auto',
+  width: '15px',
+  height: '15px',
 
   svg: {
     cursor: 'pointer',

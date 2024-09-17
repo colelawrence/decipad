@@ -1,4 +1,7 @@
+import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
 import { isE2E } from '@decipad/utils';
+import { TEditor } from '@udecode/plate-common';
+import { BaseRange } from 'slate';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -9,13 +12,20 @@ export type SidebarComponent =
   | { type: 'navigation-sidebar' }
   | SidebarComponentsWithoutClosed;
 
+type FormulaHelperType = {
+  type: 'formula-helper';
+  editor: PlateEditorWithSelectionHelpers<TEditor> | undefined;
+  selection: Partial<BaseRange> | undefined;
+};
+
 export type SidebarComponentsWithoutClosed =
   | { type: 'default-sidebar' }
   | { type: 'ai' }
   | { type: 'publishing' }
   | { type: 'annotations' }
   | { type: 'integrations' }
-  | { type: 'edit-integration' };
+  | { type: 'edit-integration' }
+  | FormulaHelperType;
 
 export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
 

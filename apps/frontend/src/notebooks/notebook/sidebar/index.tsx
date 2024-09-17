@@ -12,6 +12,8 @@ import IntegrationsSidebar from './IntegrationsSidebar';
 import Publishing from './Publishing';
 
 import type { SidebarComponentProps } from './types';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
+import FormulaHelper from './FormulaHelper';
 
 type SidebarPropsWithoutEditor = Omit<SidebarComponentProps, 'editor'>;
 
@@ -25,6 +27,7 @@ const SidebarComponents: Record<
   annotations: Annotations,
   integrations: IntegrationsSidebar,
   'edit-integration': IntegrationEditSidebar,
+  'formula-helper': FormulaHelper,
 };
 
 /**
@@ -32,7 +35,14 @@ const SidebarComponents: Record<
  * Deciding which one to show to the user.
  */
 const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
-  const component = useNotebookMetaData((s) => s.sidebarComponent);
+  const [component, setSidebar] = useNotebookMetaData((s) => [
+    s.sidebarComponent,
+    s.setSidebar,
+  ]);
+
+  const isAddingOrEditingVariable = useNotebookWithIdState(
+    (s) => s.isAddingOrEditingVariable
+  );
 
   const editor = useActiveEditor();
   if (
@@ -41,6 +51,10 @@ const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
     editor == null
   ) {
     return null;
+  }
+
+  if (component.type === 'formula-helper' && !isAddingOrEditingVariable) {
+    setSidebar({ type: 'closed' });
   }
 
   const SidebarComp = SidebarComponents[component.type];

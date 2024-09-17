@@ -435,6 +435,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     absoluteNumberInput: true,
     functor: exponentiationFunctor,
     operatorKind: 'infix',
+    formulaGroup: 'Numbers',
     toMathML: ([a, b]) =>
       `<msup><mrow><mo>(</mo>${a}<mo>)</mo></mrow>${b}</msup>`,
   },

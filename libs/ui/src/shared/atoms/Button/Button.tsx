@@ -18,7 +18,7 @@ import {
 } from '../../../primitives';
 import { Anchor, useCancelingEvent } from '../../../utils';
 
-const styles = css(p13Bold, {
+export const styles = css(p13Bold, {
   flexGrow: 1,
   lineHeight: '1rem',
   display: 'flex',
@@ -31,7 +31,7 @@ const styles = css(p13Bold, {
   boxShadow: `0px 1px 12px -4px ${transparency(grey700, 0.04).rgba}`,
 });
 
-const typeStyles: Record<
+export const typeStyles: Record<
   NonNullable<ButtonProps['type']>,
   { enabled: CSSObject; disabled: CSSObject }
 > = {
@@ -184,7 +184,7 @@ const typeStyles: Record<
   },
 };
 
-const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
+export const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
   normal: {
     padding: '8px 14px',
   },
@@ -202,8 +202,8 @@ const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
   },
 };
 
-const enabledStyles = css({ cursor: 'pointer' });
-const disabledStyles = css({ cursor: 'not-allowed' });
+export const enabledStyles = css({ cursor: 'pointer' });
+export const disabledStyles = css({ cursor: 'not-allowed' });
 
 type ButtonProps = {
   readonly type?:

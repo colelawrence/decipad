@@ -15,16 +15,19 @@ import {
   CreateVariableWrapper,
   DataDrawerCloseButton,
   DataDrawerDragWrapper,
+  DataDrawerFormulaHelperWrapper,
   DataDrawerKeysWrapper,
   DataDrawerWrapper,
   DragPill,
   ErrorParagraph,
   HotKey,
 } from './styles';
+
 import { Close } from 'libs/ui/src/icons';
-import { p14Medium } from '@decipad/ui';
+import { p14Medium, SegmentButtons, Toggle } from '@decipad/ui';
 import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useMyEditorRef } from '@decipad/editor-types';
 
 type DataDrawerResizerProps = {
@@ -89,6 +92,10 @@ export const DataDrawerComponent: FC<{
     (s) => [s.height, s.setHeight] as const
   );
 
+  const [sidebarComponent, pushSidebar, popSidebar] = useNotebookMetaData(
+    (s) => [s.sidebarComponent, s.pushSidebar, s.popSidebar]
+  );
+
   return (
     <DataDrawerContext.Provider
       value={useMemo(
@@ -102,9 +109,51 @@ export const DataDrawerComponent: FC<{
           <DataDrawerWrapper>
             <div>
               <p css={p14Medium}>{title}</p>
-              <DataDrawerCloseButton onClick={onClose}>
-                <Close />
-              </DataDrawerCloseButton>
+              <DataDrawerFormulaHelperWrapper>
+                Formula Helper
+                <Toggle
+                  active={
+                    sidebarComponent.type === 'formula-helper'
+                    // typeof sidebarComponent !== 'string' &&
+                    // sidebarComponent.type === 'formula-helper'
+                  }
+                  onChange={(v) => {
+                    if (v) {
+                      pushSidebar({
+                        type: 'formula-helper',
+                        editor: undefined,
+                        selection: undefined,
+                      });
+                    } else {
+                      popSidebar();
+                    }
+                  }}
+                  variant="small-toggle"
+                />
+              </DataDrawerFormulaHelperWrapper>
+              <SegmentButtons
+                border
+                variant="default"
+                padding="skinny"
+                buttons={[
+                  // {
+                  //  children: (
+                  //    <DataDrawerCloseButton>
+                  //      <QuestionMark />
+                  //    </DataDrawerCloseButton>
+                  //  ),
+                  //  onClick: () => {},
+                  // },
+                  {
+                    children: (
+                      <DataDrawerCloseButton>
+                        <Close />
+                      </DataDrawerCloseButton>
+                    ),
+                    onClick: onClose,
+                  },
+                ]}
+              />
             </div>
             {children}
           </DataDrawerWrapper>
