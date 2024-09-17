@@ -14,8 +14,8 @@ export type SidebarComponent =
 
 type FormulaHelperType = {
   type: 'formula-helper';
-  editor: PlateEditorWithSelectionHelpers<TEditor> | undefined;
-  selection: Partial<BaseRange> | undefined;
+  editor?: PlateEditorWithSelectionHelpers<TEditor> | undefined;
+  selection?: Partial<BaseRange> | undefined;
 };
 
 export type SidebarComponentsWithoutClosed =
@@ -129,15 +129,17 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
     },
     {
       name: 'notebook-ui-meta',
-      version: 1,
+      version: 2,
       migrate: (state, version) => {
-        if (version === 0) {
+        if (version === 0 || version === 1) {
           const oldState = state as NotebookMetaDataType & {
             sidebarComponent: string;
           };
           return {
             ...(state as NotebookMetaDataType),
-            sidebarComponent: oldState.sidebarComponent,
+            sidebarComponent: {
+              type: oldState.sidebarComponent as SidebarComponent['type'],
+            },
             sidebarHistory: [],
           };
         }
