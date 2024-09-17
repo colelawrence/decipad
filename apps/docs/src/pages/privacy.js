@@ -103,7 +103,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Last Updated: September 09, 2024
+                  Last Updated: September 16, 2024
                 </p>
               </center>
             </div>
@@ -156,14 +156,11 @@ export default function Terms() {
             <p>
               If you choose to use our integration with Google Sheets, we will
               receive an authentication token from Google to access your Google
-              Sheets and provide the Service to you. We will not store or use
-              any other Personal Data from Google and we do not use any data
-              obtained through Google Workspace APIs to develop, improve, or
-              train generalized AI or machine learning (ML) models. The
-              Service's use and transfer to any other app of information
-              received from Google APIs will adhere to Google API Services User
-              Data Policy, including the Limited Use requirements. The Google
-              API Services User Data Policy is available{' '}
+              Sheets and provide the Service to you. The Service's use and
+              transfer to any other app of information received from Google APIs
+              will adhere to Google API Services User Data Policy, including the
+              Limited Use requirements. The Google API Services User Data Policy
+              is available{' '}
               <u>
                 <a
                   target="_blank"
@@ -174,6 +171,17 @@ export default function Terms() {
                 </a>
               </u>
               .
+            </p>
+            <p>
+              We use Google Workspace APIs strictly to provide our Service to
+              you. We do not use any data accessed through Google Workspace APIs
+              to develop, improve, or train generalized artificial intelligence
+              (AI) or machine learning (ML) models. Your Personal Data is
+              processed solely for the purposes outlined in this Privacy Policy
+              and we are committed to maintaining the privacy and
+              confidentiality of all information accessed through Google
+              Workspace APIs in accordance with applicable laws and our
+              contractual obligations.
             </p>
             <p>
               <b>
