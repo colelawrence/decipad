@@ -11,6 +11,7 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_DATA_VIEW,
+  ELEMENT_INTEGRATION,
   ELEMENT_SMART_REF,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TABLE,
@@ -32,14 +33,7 @@ import {
 import { DataDrawerEditingComponent } from './editor-components';
 import { DataDrawerEditorValue, useDataDrawerContext } from './types';
 import { createCodeLineV2Normalizers } from '@decipad/editor-plugin-factories';
-import {
-  RefObject,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-} from 'react';
+import { RefObject, useEffect, useState, useMemo, useRef } from 'react';
 import {
   controllerProxy,
   controllerReverseProxy,
@@ -309,11 +303,6 @@ export const useEditingDataDrawer = (
 
   const onCloseDataDrawer = useNotebookWithIdState((s) => s.closeDataDrawer);
 
-  const onError = useCallback(() => {
-    toast.info('Sorry, but this block cannot be edited in the data drawer.');
-    onCloseDataDrawer();
-  }, [onCloseDataDrawer, toast]);
-
   useWindowListener('keyup', (e) => {
     switch (e.key) {
       case 'Delete': {
@@ -354,7 +343,8 @@ export const useEditingDataDrawer = (
     if (
       node.type === ELEMENT_CODE_LINE ||
       node.type === ELEMENT_TABLE ||
-      node.type === ELEMENT_DATA_VIEW
+      node.type === ELEMENT_DATA_VIEW ||
+      node.type === ELEMENT_INTEGRATION
     ) {
       onCloseDataDrawer();
 
@@ -419,15 +409,7 @@ export const useEditingDataDrawer = (
       resetChanges(controller, block as any, [codeEditor.children[0], [0]]);
       isResetting.current = false;
     };
-  }, [
-    codeEditor,
-    controller,
-    block,
-    editingId,
-    onError,
-    toast,
-    onCloseDataDrawer,
-  ]);
+  }, [codeEditor, controller, block, editingId, toast, onCloseDataDrawer]);
 
   const ref = useActiveElement(() => {
     codeEditor.deselect();
