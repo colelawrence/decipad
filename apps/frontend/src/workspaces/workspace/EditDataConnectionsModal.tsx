@@ -1,5 +1,4 @@
 import { useWorkspaceDatasets } from '@decipad/editor-integrations';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { workspaces } from '@decipad/routing';
 import {
   DatabaseConnectionScreen,
@@ -53,23 +52,19 @@ const EditDataConnectionsModal: FC<EditDataConnectionsModalProps> = (props) => {
             <DatabaseConnectionScreen workspaceId={props.currentWorkspace.id} />
           }
         />
-        {isFlagEnabled('NOTION_CONNECTIONS') && (
-          <>
-            <Route
-              path={currentWorkspaceRoute.connections({}).datasets.template}
-              element={
-                <Suspense>
-                  <SuspendedDatasets workspaceId={props.currentWorkspace.id} />
-                </Suspense>
-              }
-            />
+        <Route
+          path={currentWorkspaceRoute.connections({}).datasets.template}
+          element={
+            <Suspense>
+              <SuspendedDatasets workspaceId={props.currentWorkspace.id} />
+            </Suspense>
+          }
+        />
 
-            <Route
-              path={currentWorkspaceRoute.connections({}).integrations.template}
-              element={<Services workspaceId={props.currentWorkspace.id} />}
-            />
-          </>
-        )}
+        <Route
+          path={currentWorkspaceRoute.connections({}).integrations.template}
+          element={<Services workspaceId={props.currentWorkspace.id} />}
+        />
       </Route>
     </Routes>
   );

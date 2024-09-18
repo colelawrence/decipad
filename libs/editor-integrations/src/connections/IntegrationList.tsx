@@ -7,7 +7,6 @@ import {
   ThumbnailNotion,
   ThumbnailSql,
 } from '@decipad/ui/src/icons/thumbnail-icons';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
@@ -43,7 +42,7 @@ export const IntegrationList: ComponentProps<
       store.Set({ connectionType: 'notion' });
       store.Set({ stage: 'connect' });
     },
-    enabled: isFlagEnabled('NOTION_CONNECTIONS'),
+    enabled: true,
   },
   {
     icon: <ThumbnailGoogleSheet />,
@@ -52,7 +51,7 @@ export const IntegrationList: ComponentProps<
     onClick: () => {
       store.Set({ connectionType: 'gsheets', stage: 'connect' });
     },
-    enabled: isFlagEnabled('GOOGLE_SHEET_INTEGRATION'),
+    enabled: true,
   },
   {
     icon: <ThumbnailGoogleSheet />,

@@ -22,9 +22,7 @@ export const availableFlags = [
 
   'ENABLE_SCENARIOS',
   'POPULATED_NEW_NOTEBOOK',
-  'NOTION_CONNECTIONS',
   'ENABLE_COMMENTS',
-  'GOOGLE_SHEET_INTEGRATION',
   'PRIVATE_LINK_ANALYTICS',
 
   'DATA_DRAWER',
@@ -78,7 +76,6 @@ export const getQueryStringOverrides = (): Flags => {
 let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: false,
   ENABLE_COMMENTS: true,
-  NOTION_CONNECTIONS: true,
   DATA_DRAWER: true,
 };
 

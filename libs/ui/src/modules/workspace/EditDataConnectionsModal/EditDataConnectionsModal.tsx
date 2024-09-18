@@ -4,7 +4,6 @@ import { css } from '@emotion/react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Modal, TabsList, TabsRoot, TabsTrigger } from '../../../shared';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 type EditDataConnectionsModalProps = {
   readonly onClose: () => void;
@@ -60,24 +59,22 @@ export const EditDataConnectionsModal: React.FC<
           }}
         >
           <TabsList>
-            {isFlagEnabled('NOTION_CONNECTIONS') && (
-              <>
-                <TabsTrigger
-                  name="integrations"
-                  trigger={{
-                    label: 'Integrations',
-                    disabled: false,
-                  }}
-                />
-                <TabsTrigger
-                  name="datasets"
-                  trigger={{
-                    label: 'Datasets',
-                    disabled: false,
-                  }}
-                />
-              </>
-            )}
+            <>
+              <TabsTrigger
+                name="integrations"
+                trigger={{
+                  label: 'Integrations',
+                  disabled: false,
+                }}
+              />
+              <TabsTrigger
+                name="datasets"
+                trigger={{
+                  label: 'Datasets',
+                  disabled: false,
+                }}
+              />
+            </>
             <TabsTrigger
               name="code-secrets"
               trigger={{
