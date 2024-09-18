@@ -101,13 +101,7 @@ export const createDataDrawerEditor = (
 ): PlateEditorWithSelectionHelpers<PlateEditor<DataDrawerEditorValue>> => {
   const plugins = [createDataDrawerInputPlugin(computer)];
 
-  plugins.push(
-    createAutoCompleteMenuPlugin({
-      options: {
-        mode: 'tableCell',
-      },
-    })
-  );
+  plugins.push(createAutoCompleteMenuPlugin());
 
   plugins.push(createSmartRefPlugin());
   plugins.push(createCodeLineV2Normalizers(computer) as PlatePlugin);
