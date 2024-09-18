@@ -30,7 +30,7 @@ function getPublishingState(
     return 'PRIVATE';
   }
 
-  if (data.userAllowsPublicHighlighting) {
+  if (data.userConsentToFeatureOnGallery) {
     return 'PUBLICLY_HIGHLIGHTED';
   }
 

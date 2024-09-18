@@ -66,10 +66,10 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
   }
 
   const isPublic = publishState !== 'PRIVATE';
-  const userAllowsPublicHighlighting = publishState === 'PUBLICLY_HIGHLIGHTED';
+  const userConsentToFeatureOnGallery = publishState === 'PUBLICLY_HIGHLIGHTED';
 
   pad.isPublic = isPublic;
-  pad.userAllowsPublicHighlighting = userAllowsPublicHighlighting;
+  pad.userConsentToFeatureOnGallery = userConsentToFeatureOnGallery;
 
   if (isPublic) {
     // eslint-disable-next-line no-console

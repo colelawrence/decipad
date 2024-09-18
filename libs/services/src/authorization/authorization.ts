@@ -93,9 +93,6 @@ export const isAuthorized = async ({
         if (pad?.isPublic && minimumPermissionType === 'READ') {
           return 'READ';
         }
-        if (pad?.isPublicWritable) {
-          return 'WRITE';
-        }
       }
     }
   }

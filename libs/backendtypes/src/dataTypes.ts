@@ -159,7 +159,6 @@ export type PadInput = {
   archived?: boolean;
   isTemplate?: number;
   isPublic?: boolean;
-  isPublicWritable?: boolean;
   gist?: PadRecord['gist'];
 };
 
@@ -401,9 +400,8 @@ export interface PadRecord extends TableRecordBase {
   workspace_id?: ID;
 
   isPublic?: boolean;
-  isPublicWritable?: boolean;
 
-  userAllowsPublicHighlighting?: boolean;
+  userConsentToFeatureOnGallery?: boolean;
 
   icon?: string;
   createdAt: number;

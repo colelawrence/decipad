@@ -28,7 +28,7 @@ export async function featureNotebook(notebookId: string): Promise<void> {
     throw notFound('notebook not found');
   }
 
-  if (!notebook.userAllowsPublicHighlighting) {
+  if (!notebook.userConsentToFeatureOnGallery) {
     throw badRequest('notebook is not publicly highlighted');
   }
 

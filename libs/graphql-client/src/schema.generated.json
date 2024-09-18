@@ -5430,7 +5430,7 @@
             "deprecationReason": null
           },
           {
-            "name": "userAllowsPublicHighlighting",
+            "name": "userConsentToFeatureOnGallery",
             "description": null,
             "args": [],
             "type": {

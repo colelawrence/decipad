@@ -47,7 +47,7 @@ describe('Can duplicate pad', () => {
         name: 'id1',
         createdAt: 0,
         isPublic: false,
-        userAllowsPublicHighlighting: true,
+        userConsentToFeatureOnGallery: true,
       })
     ).toBeTruthy();
     expect(
@@ -56,7 +56,7 @@ describe('Can duplicate pad', () => {
         name: 'id1',
         createdAt: 0,
         isPublic: true,
-        userAllowsPublicHighlighting: true,
+        userConsentToFeatureOnGallery: true,
       })
     ).toBeTruthy();
   });

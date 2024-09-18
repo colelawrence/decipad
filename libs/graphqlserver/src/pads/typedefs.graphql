@@ -40,7 +40,7 @@ type Pad {
 
   # Has the user published to the internet?
   # And allow us to feature this notebook on our website.
-  userAllowsPublicHighlighting: Boolean
+  userConsentToFeatureOnGallery: Boolean
 
   icon: String
   status: String

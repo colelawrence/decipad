@@ -18,7 +18,7 @@ async function getPad(padId: string): Promise<PadRecord> {
 }
 
 export function internalCanDuplicatePad(pad: PadRecord): boolean {
-  if (pad.userAllowsPublicHighlighting) {
+  if (pad.userConsentToFeatureOnGallery) {
     return true;
   }
 

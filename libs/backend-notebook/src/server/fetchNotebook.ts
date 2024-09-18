@@ -15,9 +15,5 @@ export const fetchNotebook = async (notebookId: string) => {
     return notebook;
   }
 
-  if (!notebook.isPublicWritable) {
-    throw forbidden('Needs authentication');
-  }
-
-  return notebook;
+  throw forbidden('Needs authentication');
 };

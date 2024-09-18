@@ -113,7 +113,7 @@ describe.sequential('Publishing', () => {
 
       await putPad(padId, {
         isPublic: true,
-        userAllowsPublicHighlighting: true,
+        userConsentToFeatureOnGallery: true,
       });
 
       const res = await ensureGraphqlResponseIsErrorFree(
@@ -135,7 +135,7 @@ describe.sequential('Publishing', () => {
 
       await putPad(padId, {
         isPublic: true,
-        userAllowsPublicHighlighting: undefined,
+        userConsentToFeatureOnGallery: undefined,
       });
 
       const res = await ensureGraphqlResponseIsErrorFree(
@@ -157,7 +157,7 @@ describe.sequential('Publishing', () => {
 
       await putPad(padId, {
         isPublic: true,
-        userAllowsPublicHighlighting: false,
+        userConsentToFeatureOnGallery: false,
         canPublicDuplicate: false,
       });
 

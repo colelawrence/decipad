@@ -80,7 +80,7 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
     publishedVersionState != null &&
     publishedVersionState !== 'up-to-date' &&
     (meta.data?.getPadById?.isPublic ||
-      meta.data?.getPadById?.userAllowsPublicHighlighting);
+      meta.data?.getPadById?.userConsentToFeatureOnGallery);
 
   const isGPTGenerated = meta.data?.getPadById?.gist === 'AI';
 

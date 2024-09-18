@@ -45,7 +45,7 @@ export const padResource = Resource<
     workspaceId: d.workspace_id,
     sectionId: d.section_id,
     gist: d.gist === 'ai' ? 'AI' : undefined,
-    userAllowsPublicHighlighting: Boolean(d.userAllowsPublicHighlighting),
+    userConsentToFeatureOnGallery: Boolean(d.userConsentToFeatureOnGallery),
     banned: Boolean(d.banned),
   }),
   isPublic: (d) => Boolean(d.isPublic),

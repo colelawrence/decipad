@@ -343,19 +343,19 @@ export const graphCacheConfig = (session?: Session): GraphCacheConfig => ({
 
             if (args.publishState === 'PUBLICLY_HIGHLIGHTED') {
               data.getPadById.isPublic = true;
-              data.getPadById.userAllowsPublicHighlighting = true;
+              data.getPadById.userConsentToFeatureOnGallery = true;
               return data;
             }
 
             if (args.publishState === 'PUBLIC') {
               data.getPadById.isPublic = true;
-              data.getPadById.userAllowsPublicHighlighting = false;
+              data.getPadById.userConsentToFeatureOnGallery = false;
               return data;
             }
 
             if (args.publishState === 'PRIVATE') {
               data.getPadById.isPublic = false;
-              data.getPadById.userAllowsPublicHighlighting = false;
+              data.getPadById.userConsentToFeatureOnGallery = false;
 
               const snapshots = data.getPadById.snapshots.map((s) => ({
                 ...s,
