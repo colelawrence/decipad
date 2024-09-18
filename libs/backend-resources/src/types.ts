@@ -4,13 +4,29 @@ import type {
   PermissionType,
 } from '@decipad/graphqlserver-types';
 
-export type BackendResourceDef<DataTableType extends ConcreteRecord> = {
+export type BackendResourceDefBase<DataTableType extends ConcreteRecord> = {
   name: string;
-  delegateAccessToParentResource?: boolean;
-  parentResourceUriFromRecord?: (args: DataTableType) => string | undefined;
   dataTable: () => Promise<DataTable<DataTableType>>;
   isPublic?: (record: DataTableType) => boolean | undefined;
+  delegateAccessToParentResource?: boolean;
 };
+
+export type BackendResourceDefNoDelegatesToParentResource<
+  DataTableType extends ConcreteRecord
+> = BackendResourceDefBase<DataTableType> & {
+  delegateAccessToParentResource?: false;
+};
+
+export type BackendResourceDefDelegatesToParentResource<
+  DataTableType extends ConcreteRecord
+> = BackendResourceDefBase<DataTableType> & {
+  delegateAccessToParentResource: true;
+  parentResourceUriFromRecord: (args: DataTableType) => string | undefined;
+};
+
+export type BackendResourceDef<DataTableType extends ConcreteRecord> =
+  | BackendResourceDefNoDelegatesToParentResource<DataTableType>
+  | BackendResourceDefDelegatesToParentResource<DataTableType>;
 
 export interface AuthorizedResult {
   permissionType: PermissionType;

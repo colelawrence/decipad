@@ -99,7 +99,11 @@ export const resource = <TData extends ConcreteRecord>(
       if (recordId) {
         resourceIds.push(resourceId(recordId));
       }
-      if (def.parentResourceUriFromRecord && recordId) {
+      if (
+        def.delegateAccessToParentResource &&
+        def.parentResourceUriFromRecord &&
+        recordId
+      ) {
         const rec = await load(recordId);
         const resId = await def.parentResourceUriFromRecord(rec);
         if (resId) {

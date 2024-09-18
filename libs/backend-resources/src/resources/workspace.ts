@@ -4,7 +4,6 @@ import type { BackendResourceDef } from '../types';
 
 export const workspace: BackendResourceDef<WorkspaceRecord> = {
   name: 'workspaces',
-  delegateAccessToParentResource: true,
   dataTable: () => tables().then((d) => d.workspaces),
   isPublic: (n) => n.isPublic,
 };

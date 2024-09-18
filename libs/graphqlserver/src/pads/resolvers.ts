@@ -217,9 +217,11 @@ const resolvers: Resolvers = {
         context
       );
 
-      const workspaceRes = getDefined(notebook.parentResourceUriFromRecord)(
-        parent as PadRecord
-      );
+      const workspaceRes = getDefined(
+        notebook.delegateAccessToParentResource
+          ? notebook.parentResourceUriFromRecord
+          : undefined
+      )(parent as PadRecord);
       const workspacePermission =
         workspaceRes && (await isAuthorized(workspaceRes, context, 'READ'));
 
@@ -238,7 +240,9 @@ const resolvers: Resolvers = {
       const data = await tables();
 
       const workspaceResource = getDefined(
-        notebook.parentResourceUriFromRecord
+        notebook.delegateAccessToParentResource
+          ? notebook.parentResourceUriFromRecord
+          : undefined
       )(pad as PadRecord);
 
       if (
