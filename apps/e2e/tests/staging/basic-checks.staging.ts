@@ -570,6 +570,7 @@ test.describe('staging operation performance checks', () => {
         )
         .toBeLessThanOrEqual(3_000);
       await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
     });
 
     await test.step('Operations column + another column unitless', async () => {
@@ -594,6 +595,7 @@ test.describe('staging operation performance checks', () => {
         )
         .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
     });
 
     await test.step('Operations column - number unitless', async () => {
@@ -616,9 +618,9 @@ test.describe('staging operation performance checks', () => {
         )
         .toBeLessThanOrEqual(3_000);
       await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
     });
 
-    /*
     await test.step('Operations column - another column unitless', async () => {
       performance.sampleStart('Operations column - another column unitless');
       await notebook.addFormula(
@@ -627,7 +629,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column - another column unitless');
       await page.getByText('Show data').last().click();
-      await expect(page.getByTestId('number-result:0')).toBeVisible();
+      await expect(page.getByTestId('number-result:0').last()).toBeVisible();
 
       performance.sampleEnd('Operations column - another column unitless');
       expect
@@ -639,8 +641,100 @@ test.describe('staging operation performance checks', () => {
         )
         .toBeLessThanOrEqual(3_000);
       await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
     });
-    */
+
+    await test.step('Operations column * number unitless', async () => {
+      performance.sampleStart('Operations column * number unitless');
+      await notebook.addFormula(
+        'columnmulunitlessnumberCustomers',
+        'Customers.RandomNumber*1025'
+      );
+      performance.sampleStart('Operations column * number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈91.72 billion')
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column * number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column * number unitless'),
+          'Operations column * number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column * another column unitless', async () => {
+      performance.sampleStart('Operations column * another column unitless');
+      await notebook.addFormula(
+        'columnmulunitlesscolumnCustomers',
+        'Customers.RandomNumber*Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column * another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(page.getByTestId('number-result:≈8.01×10¹⁵')).toBeVisible();
+
+      performance.sampleEnd('Operations column * another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column * another column unitless'
+          ),
+          'Operations column * another column unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column / number unitless', async () => {
+      performance.sampleStart('Operations column / number unitless');
+      await notebook.addFormula(
+        'columndivideunitlessnumberCustomers',
+        'Customers.RandomNumber/1025'
+      );
+      performance.sampleStart('Operations column / number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈87.3 thousand')
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column / number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column / number unitless'),
+          'Operations column * number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column / another column unitless', async () => {
+      performance.sampleStart('Operations column / another column unitless');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'Customers.RandomNumber/Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column / another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(page.getByTestId('number-result:1')).toBeVisible();
+
+      performance.sampleEnd('Operations column / another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column / another column unitless'
+          ),
+          'Operations column / another column unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
   });
 });
 
