@@ -241,7 +241,8 @@ export type ExternalDataSourceProvider =
   | 'oracledb'
   | 'cockroachdb'
   | 'redshift'
-  | 'mariadb';
+  | 'mariadb'
+  | 'bigquery';
 
 /* Pricing */
 export interface CreditsPricePlan {

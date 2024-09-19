@@ -1,5 +1,6 @@
 import type { Knex } from 'knex';
 import { createDatabaseClient } from './createDatabaseClient';
+import { filterConfig } from './filterConfig';
 
 interface OkPingDatabaseResult {
   type: 'dbconn';
@@ -32,7 +33,7 @@ export const pingDatabase = async (
     return {
       type: 'dbconn' as const,
       ok: false,
-      clientConfig: config,
+      clientConfig: filterConfig(config),
       error: (err as Error).message,
     };
   } finally {

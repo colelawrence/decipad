@@ -1,7 +1,8 @@
 import Boom from '@hapi/boom';
 import stringify from 'json-stringify-safe';
-import type { Knex } from 'knex';
 import knex from 'knex';
+import { DatabaseClientConfig, type DatabaseClient } from './types';
+import { createBigQueryClient } from './createBigQueryClient';
 
 const supportedClients = new Set([
   'postgresql',
@@ -11,9 +12,20 @@ const supportedClients = new Set([
   'redshift',
   'mssql',
   'oracledb',
+  'bigquery',
 ]);
 
-const driverForClient: Record<string, string> = {
+const knexClients = new Set([
+  'postgresql',
+  'mysql',
+  'mariadb',
+  'cockroachdb',
+  'redshift',
+  'mssql',
+  'oracledb',
+]);
+
+const knexDrivers: Record<string, string> = {
   postgresql: 'pg',
   cockroachdb: 'pg',
   redshift: 'pg',
@@ -23,18 +35,9 @@ const driverForClient: Record<string, string> = {
   oracledb: 'oracledb',
 };
 
-const filterConfig = (config: Knex.Config): Knex.Config => {
-  const { connection = {} } = config;
-  // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-  const { password = undefined, ...restOfConnection } =
-    typeof connection === 'object' ? (connection as Knex.ConnectionConfig) : {};
-  return {
-    ...config,
-    connection: restOfConnection,
-  };
-};
-
-export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
+export const createDatabaseClient = (
+  _url: string
+): [DatabaseClient, DatabaseClientConfig] => {
   let url: URL;
   try {
     url = new URL(_url);
@@ -49,20 +52,30 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
       `We don't support databases of type ${stringify(client)}`
     );
   }
-  const clientConfig: Knex.Config = {
-    client: driverForClient[client] ?? client,
-    debug: true,
-    useNullAsDefault: true,
-    connection: {
-      user: url.username ? decodeURIComponent(url.username) : url.username,
-      password: url.password ? decodeURIComponent(url.password) : url.password,
-      host: url.hostname,
-      port: !url.port ? undefined : Number(url.port),
-      database: url.pathname.substring(1),
-      // ssl: {
-      //   rejectUnauthorized: false,
-      // },
-    },
-  };
-  return [knex(clientConfig), filterConfig(clientConfig)];
+
+  if (knexClients.has(client)) {
+    const clientConfig = {
+      client: knexDrivers[client] ?? client,
+      debug: true,
+      useNullAsDefault: true,
+      connection: {
+        user: url.username ? decodeURIComponent(url.username) : url.username,
+        password: url.password
+          ? decodeURIComponent(url.password)
+          : url.password,
+        host: url.hostname,
+        port: !url.port ? undefined : Number(url.port),
+        database: url.pathname.substring(1),
+        // ssl: {
+        //   rejectUnauthorized: false,
+        // },
+      },
+    };
+    return [knex(clientConfig), clientConfig];
+  }
+  switch (client) {
+    case 'bigquery':
+      return createBigQueryClient(url);
+  }
+  throw new TypeError(`Unknown client: ${client}`);
 };

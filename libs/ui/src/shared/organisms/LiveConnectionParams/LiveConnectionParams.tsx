@@ -63,6 +63,7 @@ const sourceTypes: ImportElementSource[] = [
   'cockroachdb',
   'redshift',
   'mariadb',
+  'bigquery',
 ];
 
 const delimiters = [',', ';'];

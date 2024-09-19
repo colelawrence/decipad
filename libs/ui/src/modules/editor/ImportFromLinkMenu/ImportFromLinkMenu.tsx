@@ -22,6 +22,7 @@ const sourceToName: Record<ImportElementSource, string> = {
   mssql: 'a SQL Server database',
   codeconnection: 'A code connection',
   notion: 'a Notion connection',
+  bigquery: 'a BigQuery database',
 };
 
 const databases = [
@@ -32,6 +33,7 @@ const databases = [
   'redshift',
   'mariadb',
   'mssql',
+  'bigquery',
 ];
 
 const groups = (

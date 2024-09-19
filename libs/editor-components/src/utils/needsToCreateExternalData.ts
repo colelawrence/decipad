@@ -11,6 +11,7 @@ const sourcesThatNeedExternalData = once(
       'cockroachdb',
       'redshift',
       'mariadb',
+      'bigquery',
     ])
 );
 

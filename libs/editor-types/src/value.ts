@@ -228,7 +228,8 @@ export type ImportElementSource =
   | 'redshift'
   | 'mssql'
   | 'mariadb'
-  | 'notion';
+  | 'notion'
+  | 'bigquery';
 
 export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   decipad: 'Decipad',
@@ -244,6 +245,7 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   mssql: 'MySQL',
   mariadb: 'MariaDB',
   notion: 'Notion',
+  bigquery: 'BigQuery',
 };
 
 export interface ImportElement extends BaseElement {

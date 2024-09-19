@@ -1,46 +1,23 @@
 // @ts-nocheck
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { GraphqlContext } from './context';
-export type Maybe<T> = T extends PromiseLike<infer U>
-  ? Promise<U | null | undefined>
-  : T | undefined;
-export type InputMaybe<T> = T extends PromiseLike<infer U>
-  ? Promise<U | null | undefined>
-  : T | undefined;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
-export type MakeEmpty<
-  T extends { [key: string]: unknown },
-  K extends keyof T
-> = { [_ in K]?: never };
-export type Incremental<T> =
-  | T
-  | {
-      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
-    };
+export type Maybe<T> = T extends PromiseLike<infer U> ? Promise<U | null | undefined> : T | undefined;
+export type InputMaybe<T> = T extends PromiseLike<infer U> ? Promise<U | null | undefined> : T | undefined;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
-  [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  DateTime: { input: any; output: any };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Annotation = {
@@ -83,7 +60,9 @@ export type Attachment = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
-export type AttachmentOwnership = 'PAD' | 'WORKSPACE';
+export type AttachmentOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
 
 export type AttachmentResource = Pad | Workspace;
 
@@ -152,7 +131,9 @@ export type ExternalDataSourceCreateInput = {
   workspaceId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type ExternalDataSourceOwnership = 'PAD' | 'WORKSPACE';
+export type ExternalDataSourceOwnership =
+  | 'PAD'
+  | 'WORKSPACE';
 
 export type ExternalDataSourceUpdateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
@@ -171,6 +152,7 @@ export type ExternalKey = {
 };
 
 export type ExternalProvider =
+  | 'bigquery'
   | 'cockroachdb'
   | 'csv'
   | 'decipad'
@@ -184,7 +166,8 @@ export type ExternalProvider =
   | 'postgresql'
   | 'redshift';
 
-export type Gist = 'AI';
+export type Gist =
+  | 'AI';
 
 export type GoalFulfilmentInput = {
   goalName: Scalars['String']['input'];
@@ -293,42 +276,51 @@ export type Mutation = {
   updateWorkspace: Workspace;
 };
 
+
 export type MutationAddAliasArgs = {
   alias: Scalars['String']['input'];
   padId: Scalars['ID']['input'];
 };
+
 
 export type MutationAddAttachmentToPadArgs = {
   attachmentId: Scalars['ID']['input'];
   padId: Scalars['ID']['input'];
 };
 
+
 export type MutationAddNotebookToSectionArgs = {
   notebookId: Scalars['ID']['input'];
   sectionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAddSectionToWorkspaceArgs = {
   section: SectionInput;
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationAddTagToPadArgs = {
   padId: Scalars['ID']['input'];
   tag: Scalars['String']['input'];
 };
 
+
 export type MutationAttachFileToPadArgs = {
   handle: Scalars['ID']['input'];
 };
+
 
 export type MutationAttachFileToWorkspaceArgs = {
   handle: Scalars['ID']['input'];
 };
 
+
 export type MutationClaimNotebookArgs = {
   notebookId: Scalars['ID']['input'];
 };
+
 
 export type MutationCreateAnnotationArgs = {
   aliasId?: InputMaybe<Scalars['String']['input']>;
@@ -340,17 +332,21 @@ export type MutationCreateAnnotationArgs = {
   type: Scalars['String']['input'];
 };
 
+
 export type MutationCreateExternalDataSourceArgs = {
   dataSource: ExternalDataSourceCreateInput;
 };
+
 
 export type MutationCreateLogsArgs = {
   input: LogInput;
 };
 
+
 export type MutationCreateOrUpdateSnapshotArgs = {
   params: CreateOrUpdateSnapshotInput;
 };
+
 
 export type MutationCreatePadArgs = {
   pad: PadInput;
@@ -358,30 +354,37 @@ export type MutationCreatePadArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationCreateRoleArgs = {
   role: RoleInput;
 };
+
 
 export type MutationCreateSecretArgs = {
   secret: SecretInput;
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationCreateSnapshotArgs = {
   notebookId: Scalars['ID']['input'];
 };
+
 
 export type MutationCreateUserViaMagicLinkArgs = {
   email: Scalars['String']['input'];
 };
 
+
 export type MutationCreateWorkspaceArgs = {
   workspace: WorkspaceInput;
 };
 
+
 export type MutationDeleteAnnotationArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDuplicatePadArgs = {
   document?: InputMaybe<Scalars['String']['input']>;
@@ -389,11 +392,13 @@ export type MutationDuplicatePadArgs = {
   targetWorkspace: Scalars['ID']['input'];
 };
 
+
 export type MutationGetCreateAttachmentFormArgs = {
   fileName: Scalars['String']['input'];
   fileType: Scalars['String']['input'];
   padId: Scalars['ID']['input'];
 };
+
 
 export type MutationGetCreateAttachmentFormWorkspaceArgs = {
   fileName: Scalars['String']['input'];
@@ -401,14 +406,17 @@ export type MutationGetCreateAttachmentFormWorkspaceArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationImportPadArgs = {
   source: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationIncrementQueryCountArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type MutationIncrementResourceUsageArgs = {
   amount: Scalars['Int']['input'];
@@ -416,17 +424,20 @@ export type MutationIncrementResourceUsageArgs = {
   workspaceId: Scalars['String']['input'];
 };
 
+
 export type MutationInviteUserToRoleArgs = {
   permission: PermissionType;
   roleId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
 
+
 export type MutationMovePadArgs = {
   fromWorkspaceId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordPadEventArgs = {
   aliasId: Scalars['ID']['input'];
@@ -435,74 +446,91 @@ export type MutationRecordPadEventArgs = {
   padId: Scalars['ID']['input'];
 };
 
+
 export type MutationRefreshExternalDataTokenArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAliasArgs = {
   id: Scalars['ID']['input'];
 };
 
+
 export type MutationRemoveAttachmentFromPadArgs = {
   attachmentId: Scalars['ID']['input'];
 };
 
+
 export type MutationRemoveAttachmentFromWorkspaceArgs = {
   attachmentId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveExternalDataSourceArgs = {
   id: Scalars['ID']['input'];
   workspaceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+
 export type MutationRemovePadArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveRoleArgs = {
   roleId: Scalars['ID']['input'];
 };
 
+
 export type MutationRemoveSecretArgs = {
   secretId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveSectionFromWorkspaceArgs = {
   sectionId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationRemoveSelfFromRoleArgs = {
   roleId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveTagFromPadArgs = {
   padId: Scalars['ID']['input'];
   tag: Scalars['String']['input'];
 };
 
+
 export type MutationRemoveUserFromRoleArgs = {
   roleId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
 
+
 export type MutationRemoveWorkspaceArgs = {
   id: Scalars['ID']['input'];
 };
 
+
 export type MutationResendRegistrationMagicLinkEmailArgs = {
   email: Scalars['String']['input'];
 };
+
 
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID']['input'];
   publishState: Publish_State;
 };
 
+
 export type MutationSetUsernameArgs = {
   props: UsernameInput;
 };
+
 
 export type MutationShareExternalDataSourceWithEmailArgs = {
   email: Scalars['String']['input'];
@@ -510,17 +538,20 @@ export type MutationShareExternalDataSourceWithEmailArgs = {
   permissionType: PermissionType;
 };
 
+
 export type MutationShareExternalDataSourceWithRoleArgs = {
   id: Scalars['ID']['input'];
   permissionType: PermissionType;
   roleId: Scalars['ID']['input'];
 };
 
+
 export type MutationShareExternalDataSourceWithUserArgs = {
   id: Scalars['ID']['input'];
   permissionType: PermissionType;
   userId: Scalars['ID']['input'];
 };
+
 
 export type MutationSharePadWithEmailArgs = {
   canComment: Scalars['Boolean']['input'];
@@ -529,6 +560,7 @@ export type MutationSharePadWithEmailArgs = {
   permissionType: PermissionType;
 };
 
+
 export type MutationSharePadWithRoleArgs = {
   canComment: Scalars['Boolean']['input'];
   id: Scalars['ID']['input'];
@@ -536,11 +568,13 @@ export type MutationSharePadWithRoleArgs = {
   roleId: Scalars['ID']['input'];
 };
 
+
 export type MutationSharePadWithSecretArgs = {
   canComment: Scalars['Boolean']['input'];
   id: Scalars['ID']['input'];
   permissionType: PermissionType;
 };
+
 
 export type MutationSharePadWithUserArgs = {
   canComment: Scalars['Boolean']['input'];
@@ -549,6 +583,7 @@ export type MutationSharePadWithUserArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
 export type MutationShareWorkspaceWithEmailArgs = {
   canComment: Scalars['Boolean']['input'];
   email: Scalars['String']['input'];
@@ -556,13 +591,16 @@ export type MutationShareWorkspaceWithEmailArgs = {
   permissionType: PermissionType;
 };
 
+
 export type MutationSyncWorkspaceSeatsArgs = {
   id: Scalars['ID']['input'];
 };
 
+
 export type MutationUndeleteAttachmentArgs = {
   attachmentId: Scalars['ID']['input'];
 };
+
 
 export type MutationUnsafeDevOnlyPermissionOverrideArgs = {
   id: Scalars['String']['input'];
@@ -570,50 +608,60 @@ export type MutationUnsafeDevOnlyPermissionOverrideArgs = {
   resourceType: ExternalDataSourceOwnership;
 };
 
+
 export type MutationUnsafeDevOnlyPlanOverrideArgs = {
   plan?: InputMaybe<SubscriptionPlansNames>;
   workspaceId: Scalars['String']['input'];
 };
+
 
 export type MutationUnshareExternalDataSourceWithRoleArgs = {
   id: Scalars['ID']['input'];
   roleId: Scalars['ID']['input'];
 };
 
+
 export type MutationUnshareExternalDataSourceWithUserArgs = {
   id: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
+
 
 export type MutationUnshareNotebookWithSecretArgs = {
   id: Scalars['ID']['input'];
   secret: Scalars['String']['input'];
 };
 
+
 export type MutationUnsharePadWithRoleArgs = {
   id: Scalars['ID']['input'];
   roleId: Scalars['ID']['input'];
 };
+
 
 export type MutationUnsharePadWithUserArgs = {
   id: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
 
+
 export type MutationUnshareWorkspaceWithUserArgs = {
   id: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateAnnotationArgs = {
   content: Scalars['String']['input'];
   id: Scalars['String']['input'];
 };
 
+
 export type MutationUpdateExternalDataSourceArgs = {
   dataSource: ExternalDataSourceUpdateInput;
   id: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateExtraAiAllowanceArgs = {
   paymentMethodId: Scalars['String']['input'];
@@ -621,15 +669,18 @@ export type MutationUpdateExtraAiAllowanceArgs = {
   resourceType: Scalars['String']['input'];
 };
 
+
 export type MutationUpdatePadArgs = {
   id: Scalars['ID']['input'];
   pad: PadInput;
 };
 
+
 export type MutationUpdateSecretArgs = {
   secret: Scalars['String']['input'];
   secretId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateSectionInWorkspaceArgs = {
   section: SectionInput;
@@ -637,9 +688,11 @@ export type MutationUpdateSectionInWorkspaceArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type MutationUpdateSelfArgs = {
   props: UserInput;
 };
+
 
 export type MutationUpdateWorkspaceArgs = {
   id: Scalars['ID']['input'];
@@ -651,7 +704,10 @@ export type NewResourceQuotaLimit = {
   newQuotaLimit: Scalars['Float']['output'];
 };
 
-export type Publish_State = 'PRIVATE' | 'PUBLIC' | 'PUBLICLY_HIGHLIGHTED';
+export type Publish_State =
+  | 'PRIVATE'
+  | 'PUBLIC'
+  | 'PUBLICLY_HIGHLIGHTED';
 
 export type Pad = {
   __typename?: 'Pad';
@@ -775,7 +831,10 @@ export type Permission = {
   user: User;
 };
 
-export type PermissionType = 'ADMIN' | 'READ' | 'WRITE';
+export type PermissionType =
+  | 'ADMIN'
+  | 'READ'
+  | 'WRITE';
 
 export type Query = {
   __typename?: 'Query';
@@ -804,48 +863,59 @@ export type Query = {
   workspaces: Array<Workspace>;
 };
 
+
 export type QueryGetAliasesByPadIdArgs = {
   padId: Scalars['String']['input'];
 };
+
 
 export type QueryGetAnnotationsByPadIdArgs = {
   padId: Scalars['String']['input'];
 };
 
+
 export type QueryGetExternalDataSourceArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type QueryGetExternalDataSourcesArgs = {
   notebookId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetExternalDataSourcesWorkspaceArgs = {
   workspaceId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPadByIdArgs = {
   id: Scalars['ID']['input'];
   snapshotName?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type QueryGetStripeCheckoutSessionInfoArgs = {
   priceId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetWorkspaceByIdArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type QueryGetWorkspaceSecretsArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type QueryPadsArgs = {
   page: PageInput;
   workspaceId: Scalars['ID']['input'];
 };
+
 
 export type QueryPadsByTagArgs = {
   page: PageInput;
@@ -853,13 +923,16 @@ export type QueryPadsByTagArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type QueryPadsSharedWithMeArgs = {
   page: PageInput;
 };
 
+
 export type QueryPubliclyHighlightedPadsArgs = {
   page: PageInput;
 };
+
 
 export type QuerySearchTemplatesArgs = {
   faster?: InputMaybe<Scalars['Boolean']['input']>;
@@ -867,9 +940,11 @@ export type QuerySearchTemplatesArgs = {
   prompt: Scalars['String']['input'];
 };
 
+
 export type QuerySectionsArgs = {
   workspaceId: Scalars['ID']['input'];
 };
+
 
 export type QueryTagsArgs = {
   workspaceId: Scalars['ID']['input'];
@@ -882,7 +957,10 @@ export type ResourceAccess = {
   users: Array<UserAccess>;
 };
 
-export type ResourceTypes = 'openai' | 'queries' | 'storage';
+export type ResourceTypes =
+  | 'openai'
+  | 'queries'
+  | 'storage';
 
 export type ResourceUsage = {
   __typename?: 'ResourceUsage';
@@ -1035,13 +1113,16 @@ export type Subscription = {
   workspacesChanged: WorkspacesChanges;
 };
 
+
 export type SubscriptionPadsChangedArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+
 export type SubscriptionSectionsChangedArgs = {
   workspaceId: Scalars['ID']['input'];
 };
+
 
 export type SubscriptionTagsChangedArgs = {
   workspaceId: Scalars['ID']['input'];
@@ -1179,6 +1260,7 @@ export type Workspace = {
   workspaceSubscription?: Maybe<WorkspaceSubscription>;
 };
 
+
 export type WorkspacePadsArgs = {
   page: PageInput;
 };
@@ -1224,14 +1306,15 @@ export type WorkspacesChanges = {
   updated: Array<Workspace>;
 };
 
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -1254,25 +1337,9 @@ export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs
-> {
-  subscribe: SubscriptionSubscribeFn<
-    { [key in TKey]: TResult },
-    TParent,
-    TContext,
-    TArgs
-  >;
-  resolve?: SubscriptionResolveFn<
-    TResult,
-    { [key in TKey]: TResult },
-    TContext,
-    TArgs
-  >;
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
@@ -1280,26 +1347,12 @@ export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
 }
 
-export type SubscriptionObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs
-> =
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<
-  TResult,
-  TKey extends string,
-  TParent = {},
-  TContext = {},
-  TArgs = {}
-> =
-  | ((
-      ...args: any[]
-    ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
@@ -1308,20 +1361,11 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<
-  TResult = {},
-  TParent = {},
-  TContext = {},
-  TArgs = {}
-> = (
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
@@ -1331,23 +1375,18 @@ export type DirectiveResolverFn<
 
 /** Mapping of union types */
 export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
-  AttachmentResource: Pad | Workspace;
-  Pageable: SharedResource;
+  AttachmentResource: ( Pad ) | ( Workspace );
+  Pageable: ( SharedResource );
 };
+
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Annotation: ResolverTypeWrapper<Annotation>;
   AnnotationUser: ResolverTypeWrapper<AnnotationUser>;
-  Attachment: ResolverTypeWrapper<
-    Omit<Attachment, 'resource'> & {
-      resource?: Maybe<ResolversTypes['AttachmentResource']>;
-    }
-  >;
+  Attachment: ResolverTypeWrapper<Omit<Attachment, 'resource'> & { resource?: Maybe<ResolversTypes['AttachmentResource']> }>;
   AttachmentOwnership: AttachmentOwnership;
-  AttachmentResource: ResolverTypeWrapper<
-    ResolversUnionTypes<ResolversTypes>['AttachmentResource']
-  >;
+  AttachmentResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['AttachmentResource']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CheckoutSessionInfo: ResolverTypeWrapper<CheckoutSessionInfo>;
   CreateAttachmentForm: ResolverTypeWrapper<CreateAttachmentForm>;
@@ -1381,13 +1420,9 @@ export type ResolversTypes = {
   PadInput: PadInput;
   PadSnapshot: ResolverTypeWrapper<PadSnapshot>;
   PageInput: PageInput;
-  Pageable: ResolverTypeWrapper<
-    ResolversUnionTypes<ResolversTypes>['Pageable']
-  >;
+  Pageable: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Pageable']>;
   PagedPadResult: ResolverTypeWrapper<PagedPadResult>;
-  PagedResult: ResolverTypeWrapper<
-    Omit<PagedResult, 'items'> & { items: Array<ResolversTypes['Pageable']> }
-  >;
+  PagedResult: ResolverTypeWrapper<Omit<PagedResult, 'items'> & { items: Array<ResolversTypes['Pageable']> }>;
   PagedTemplateSearchResult: ResolverTypeWrapper<PagedTemplateSearchResult>;
   Permission: ResolverTypeWrapper<Permission>;
   PermissionType: PermissionType;
@@ -1442,9 +1477,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Annotation: Annotation;
   AnnotationUser: AnnotationUser;
-  Attachment: Omit<Attachment, 'resource'> & {
-    resource?: Maybe<ResolversParentTypes['AttachmentResource']>;
-  };
+  Attachment: Omit<Attachment, 'resource'> & { resource?: Maybe<ResolversParentTypes['AttachmentResource']> };
   AttachmentResource: ResolversUnionTypes<ResolversParentTypes>['AttachmentResource'];
   Boolean: Scalars['Boolean']['output'];
   CheckoutSessionInfo: CheckoutSessionInfo;
@@ -1476,9 +1509,7 @@ export type ResolversParentTypes = {
   PageInput: PageInput;
   Pageable: ResolversUnionTypes<ResolversParentTypes>['Pageable'];
   PagedPadResult: PagedPadResult;
-  PagedResult: Omit<PagedResult, 'items'> & {
-    items: Array<ResolversParentTypes['Pageable']>;
-  };
+  PagedResult: Omit<PagedResult, 'items'> & { items: Array<ResolversParentTypes['Pageable']> };
   PagedTemplateSearchResult: PagedTemplateSearchResult;
   Permission: Permission;
   Query: {};
@@ -1524,851 +1555,249 @@ export type ResolversParentTypes = {
   WorkspacesChanges: WorkspacesChanges;
 };
 
-export type AnnotationResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Annotation'] = ResolversParentTypes['Annotation']
-> = {
+export type AnnotationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Annotation'] = ResolversParentTypes['Annotation']> = {
   alias?: Resolver<Maybe<ResolversTypes['PadAlias']>, ParentType, ContextType>;
   alias_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   block_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   dateCreated?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  dateUpdated?: Resolver<
-    Maybe<ResolversTypes['Float']>,
-    ParentType,
-    ContextType
-  >;
+  dateUpdated?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pad_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  scenario_id?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  scenario_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<
-    Maybe<ResolversTypes['AnnotationUser']>,
-    ParentType,
-    ContextType
-  >;
+  user?: Resolver<Maybe<ResolversTypes['AnnotationUser']>, ParentType, ContextType>;
   user_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AnnotationUserResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['AnnotationUser'] = ResolversParentTypes['AnnotationUser']
-> = {
+export type AnnotationUserResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['AnnotationUser'] = ResolversParentTypes['AnnotationUser']> = {
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AttachmentResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Attachment'] = ResolversParentTypes['Attachment']
-> = {
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+export type AttachmentResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Attachment'] = ResolversParentTypes['Attachment']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   fileName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fileSize?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fileType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   padId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  resource?: Resolver<
-    Maybe<ResolversTypes['AttachmentResource']>,
-    ParentType,
-    ContextType
-  >;
+  resource?: Resolver<Maybe<ResolversTypes['AttachmentResource']>, ParentType, ContextType>;
   resourceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  resourceType?: Resolver<
-    ResolversTypes['AttachmentOwnership'],
-    ParentType,
-    ContextType
-  >;
+  resourceType?: Resolver<ResolversTypes['AttachmentOwnership'], ParentType, ContextType>;
   uploadedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AttachmentResourceResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['AttachmentResource'] = ResolversParentTypes['AttachmentResource']
-> = {
+export type AttachmentResourceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['AttachmentResource'] = ResolversParentTypes['AttachmentResource']> = {
   __resolveType: TypeResolveFn<'Pad' | 'Workspace', ParentType, ContextType>;
 };
 
-export type CheckoutSessionInfoResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['CheckoutSessionInfo'] = ResolversParentTypes['CheckoutSessionInfo']
-> = {
-  clientSecret?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+export type CheckoutSessionInfoResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CheckoutSessionInfo'] = ResolversParentTypes['CheckoutSessionInfo']> = {
+  clientSecret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreateAttachmentFormResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['CreateAttachmentForm'] = ResolversParentTypes['CreateAttachmentForm']
-> = {
+export type CreateAttachmentFormResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CreateAttachmentForm'] = ResolversParentTypes['CreateAttachmentForm']> = {
   fields?: Resolver<Array<ResolversTypes['KeyValue']>, ParentType, ContextType>;
   handle?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreditPricePlanResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['CreditPricePlan'] = ResolversParentTypes['CreditPricePlan']
-> = {
+export type CreditPricePlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CreditPricePlan'] = ResolversParentTypes['CreditPricePlan']> = {
   credits?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  description?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isDefault?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
+  isDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  promotionTag?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  promotionTag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreditsPlanResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['CreditsPlan'] = ResolversParentTypes['CreditsPlan']
-> = {
-  description?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+export type CreditsPlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['CreditsPlan'] = ResolversParentTypes['CreditsPlan']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  plans?: Resolver<
-    Array<ResolversTypes['CreditPricePlan']>,
-    ParentType,
-    ContextType
-  >;
+  plans?: Resolver<Array<ResolversTypes['CreditPricePlan']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface DateTimeScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
 
-export type ExternalDataSourceResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ExternalDataSource'] = ResolversParentTypes['ExternalDataSource']
-> = {
+export type ExternalDataSourceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ExternalDataSource'] = ResolversParentTypes['ExternalDataSource']> = {
   access?: Resolver<ResolversTypes['ResourceAccess'], ParentType, ContextType>;
   authUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dataSourceName?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  dataSourceName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   dataUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  externalId?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  externalId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  keys?: Resolver<
-    Array<ResolversTypes['ExternalKey']>,
-    ParentType,
-    ContextType
-  >;
+  keys?: Resolver<Array<ResolversTypes['ExternalKey']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<
-    ResolversTypes['ExternalDataSourceOwnership'],
-    ParentType,
-    ContextType
-  >;
+  owner?: Resolver<ResolversTypes['ExternalDataSourceOwnership'], ParentType, ContextType>;
   ownerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider?: Resolver<
-    ResolversTypes['ExternalProvider'],
-    ParentType,
-    ContextType
-  >;
+  provider?: Resolver<ResolversTypes['ExternalProvider'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ExternalKeyResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ExternalKey'] = ResolversParentTypes['ExternalKey']
-> = {
+export type ExternalKeyResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ExternalKey'] = ResolversParentTypes['ExternalKey']> = {
   access?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  expiresAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  expiresAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  lastError?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  lastUsedAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  lastError?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastUsedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type KeyValueResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['KeyValue'] = ResolversParentTypes['KeyValue']
-> = {
+export type KeyValueResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['KeyValue'] = ResolversParentTypes['KeyValue']> = {
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
-> = {
-  addAlias?: Resolver<
-    ResolversTypes['PadAlias'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddAliasArgs, 'alias' | 'padId'>
-  >;
-  addAttachmentToPad?: Resolver<
-    Maybe<ResolversTypes['Attachment']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddAttachmentToPadArgs, 'attachmentId' | 'padId'>
-  >;
-  addNotebookToSection?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddNotebookToSectionArgs, 'notebookId' | 'sectionId'>
-  >;
-  addSectionToWorkspace?: Resolver<
-    Maybe<ResolversTypes['Section']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>
-  >;
-  addTagToPad?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>
-  >;
-  attachFileToPad?: Resolver<
-    Maybe<ResolversTypes['Attachment']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAttachFileToPadArgs, 'handle'>
-  >;
-  attachFileToWorkspace?: Resolver<
-    Maybe<ResolversTypes['Attachment']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAttachFileToWorkspaceArgs, 'handle'>
-  >;
-  claimNotebook?: Resolver<
-    Maybe<ResolversTypes['Pad']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationClaimNotebookArgs, 'notebookId'>
-  >;
-  createAnnotation?: Resolver<
-    Maybe<ResolversTypes['Annotation']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationCreateAnnotationArgs,
-      'blockId' | 'content' | 'padId' | 'type'
-    >
-  >;
-  createExternalDataSource?: Resolver<
-    Maybe<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>
-  >;
-  createLogs?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateLogsArgs, 'input'>
-  >;
-  createOrUpdateSnapshot?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>
-  >;
-  createPad?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreatePadArgs, 'pad' | 'workspaceId'>
-  >;
-  createRole?: Resolver<
-    ResolversTypes['Role'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateRoleArgs, 'role'>
-  >;
-  createSecret?: Resolver<
-    ResolversTypes['Secret'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateSecretArgs, 'secret' | 'workspaceId'>
-  >;
-  createSnapshot?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateSnapshotArgs, 'notebookId'>
-  >;
-  createUserViaMagicLink?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateUserViaMagicLinkArgs, 'email'>
-  >;
-  createWorkspace?: Resolver<
-    ResolversTypes['Workspace'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateWorkspaceArgs, 'workspace'>
-  >;
-  deleteAnnotation?: Resolver<
-    Maybe<ResolversTypes['Annotation']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteAnnotationArgs, 'id'>
-  >;
-  doNothing?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  duplicatePad?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDuplicatePadArgs, 'id' | 'targetWorkspace'>
-  >;
-  getCreateAttachmentForm?: Resolver<
-    ResolversTypes['CreateAttachmentForm'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationGetCreateAttachmentFormArgs,
-      'fileName' | 'fileType' | 'padId'
-    >
-  >;
-  getCreateAttachmentFormWorkspace?: Resolver<
-    ResolversTypes['CreateAttachmentForm'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationGetCreateAttachmentFormWorkspaceArgs,
-      'fileName' | 'fileType' | 'workspaceId'
-    >
-  >;
-  importPad?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>
-  >;
-  incrementQueryCount?: Resolver<
-    ResolversTypes['WorkspaceExecutedQuery'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationIncrementQueryCountArgs, 'id'>
-  >;
-  incrementResourceUsage?: Resolver<
-    Maybe<ResolversTypes['ResourceUsage']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationIncrementResourceUsageArgs,
-      'amount' | 'resourceType' | 'workspaceId'
-    >
-  >;
-  inviteUserToRole?: Resolver<
-    Array<ResolversTypes['RoleInvitation']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationInviteUserToRoleArgs,
-      'permission' | 'roleId' | 'userId'
-    >
-  >;
-  movePad?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>
-  >;
-  recordPadEvent?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRecordPadEventArgs, 'aliasId' | 'name' | 'padId'>
-  >;
-  refreshExternalDataToken?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>
-  >;
-  removeAlias?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveAliasArgs, 'id'>
-  >;
-  removeAttachmentFromPad?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>
-  >;
-  removeAttachmentFromWorkspace?: Resolver<
-    Maybe<ResolversTypes['AttachmentResource']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveAttachmentFromWorkspaceArgs, 'attachmentId'>
-  >;
-  removeExternalDataSource?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>
-  >;
-  removePad?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemovePadArgs, 'id'>
-  >;
-  removeRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveRoleArgs, 'roleId'>
-  >;
-  removeSecret?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveSecretArgs, 'secretId'>
-  >;
-  removeSectionFromWorkspace?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationRemoveSectionFromWorkspaceArgs,
-      'sectionId' | 'workspaceId'
-    >
-  >;
-  removeSelfFromRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveSelfFromRoleArgs, 'roleId'>
-  >;
-  removeTagFromPad?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveTagFromPadArgs, 'padId' | 'tag'>
-  >;
-  removeUserFromRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveUserFromRoleArgs, 'roleId' | 'userId'>
-  >;
-  removeWorkspace?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRemoveWorkspaceArgs, 'id'>
-  >;
-  resendRegistrationMagicLinkEmail?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationResendRegistrationMagicLinkEmailArgs, 'email'>
-  >;
-  setPadPublic?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationSetPadPublicArgs, 'id' | 'publishState'>
-  >;
-  setUsername?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationSetUsernameArgs, 'props'>
-  >;
-  shareExternalDataSourceWithEmail?: Resolver<
-    Maybe<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationShareExternalDataSourceWithEmailArgs,
-      'email' | 'id' | 'permissionType'
-    >
-  >;
-  shareExternalDataSourceWithRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationShareExternalDataSourceWithRoleArgs,
-      'id' | 'permissionType' | 'roleId'
-    >
-  >;
-  shareExternalDataSourceWithUser?: Resolver<
-    Maybe<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationShareExternalDataSourceWithUserArgs,
-      'id' | 'permissionType' | 'userId'
-    >
-  >;
-  sharePadWithEmail?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationSharePadWithEmailArgs,
-      'canComment' | 'email' | 'id' | 'permissionType'
-    >
-  >;
-  sharePadWithRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationSharePadWithRoleArgs,
-      'canComment' | 'id' | 'permissionType' | 'roleId'
-    >
-  >;
-  sharePadWithSecret?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationSharePadWithSecretArgs,
-      'canComment' | 'id' | 'permissionType'
-    >
-  >;
-  sharePadWithUser?: Resolver<
-    Maybe<ResolversTypes['Pad']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationSharePadWithUserArgs,
-      'canComment' | 'id' | 'permissionType' | 'userId'
-    >
-  >;
-  shareWorkspaceWithEmail?: Resolver<
-    ResolversTypes['Workspace'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationShareWorkspaceWithEmailArgs,
-      'canComment' | 'email' | 'id' | 'permissionType'
-    >
-  >;
-  syncWorkspaceSeats?: Resolver<
-    ResolversTypes['WorkspaceSubscription'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationSyncWorkspaceSeatsArgs, 'id'>
-  >;
-  undeleteAttachment?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUndeleteAttachmentArgs, 'attachmentId'>
-  >;
-  unsafeDevOnlyPermissionOverride?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUnsafeDevOnlyPermissionOverrideArgs,
-      'id' | 'resourceType'
-    >
-  >;
-  unsafeDevOnlyPlanOverride?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnsafeDevOnlyPlanOverrideArgs, 'workspaceId'>
-  >;
-  unshareExternalDataSourceWithRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUnshareExternalDataSourceWithRoleArgs,
-      'id' | 'roleId'
-    >
-  >;
-  unshareExternalDataSourceWithUser?: Resolver<
-    ResolversTypes['ExternalDataSource'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUnshareExternalDataSourceWithUserArgs,
-      'id' | 'userId'
-    >
-  >;
-  unshareNotebookWithSecret?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnshareNotebookWithSecretArgs, 'id' | 'secret'>
-  >;
-  unsharePadWithRole?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnsharePadWithRoleArgs, 'id' | 'roleId'>
-  >;
-  unsharePadWithUser?: Resolver<
-    Maybe<ResolversTypes['Pad']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnsharePadWithUserArgs, 'id' | 'userId'>
-  >;
-  unshareWorkspaceWithUser?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnshareWorkspaceWithUserArgs, 'id' | 'userId'>
-  >;
-  updateAnnotation?: Resolver<
-    Maybe<ResolversTypes['Annotation']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateAnnotationArgs, 'content' | 'id'>
-  >;
-  updateExternalDataSource?: Resolver<
-    Maybe<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateExternalDataSourceArgs, 'dataSource' | 'id'>
-  >;
-  updateExtraAiAllowance?: Resolver<
-    Maybe<ResolversTypes['NewResourceQuotaLimit']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUpdateExtraAiAllowanceArgs,
-      'paymentMethodId' | 'resourceId' | 'resourceType'
-    >
-  >;
-  updatePad?: Resolver<
-    ResolversTypes['Pad'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdatePadArgs, 'id' | 'pad'>
-  >;
-  updateSecret?: Resolver<
-    ResolversTypes['Secret'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateSecretArgs, 'secret' | 'secretId'>
-  >;
-  updateSectionInWorkspace?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUpdateSectionInWorkspaceArgs,
-      'section' | 'sectionId' | 'workspaceId'
-    >
-  >;
-  updateSelf?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateSelfArgs, 'props'>
-  >;
-  updateWorkspace?: Resolver<
-    ResolversTypes['Workspace'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateWorkspaceArgs, 'id' | 'workspace'>
-  >;
+export type MutationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addAlias?: Resolver<ResolversTypes['PadAlias'], ParentType, ContextType, RequireFields<MutationAddAliasArgs, 'alias' | 'padId'>>;
+  addAttachmentToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAddAttachmentToPadArgs, 'attachmentId' | 'padId'>>;
+  addNotebookToSection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNotebookToSectionArgs, 'notebookId' | 'sectionId'>>;
+  addSectionToWorkspace?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<MutationAddSectionToWorkspaceArgs, 'section' | 'workspaceId'>>;
+  addTagToPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTagToPadArgs, 'padId' | 'tag'>>;
+  attachFileToPad?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToPadArgs, 'handle'>>;
+  attachFileToWorkspace?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType, RequireFields<MutationAttachFileToWorkspaceArgs, 'handle'>>;
+  claimNotebook?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationClaimNotebookArgs, 'notebookId'>>;
+  createAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationCreateAnnotationArgs, 'blockId' | 'content' | 'padId' | 'type'>>;
+  createExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationCreateExternalDataSourceArgs, 'dataSource'>>;
+  createLogs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateLogsArgs, 'input'>>;
+  createOrUpdateSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateOrUpdateSnapshotArgs, 'params'>>;
+  createPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationCreatePadArgs, 'pad' | 'workspaceId'>>;
+  createRole?: Resolver<ResolversTypes['Role'], ParentType, ContextType, RequireFields<MutationCreateRoleArgs, 'role'>>;
+  createSecret?: Resolver<ResolversTypes['Secret'], ParentType, ContextType, RequireFields<MutationCreateSecretArgs, 'secret' | 'workspaceId'>>;
+  createSnapshot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateSnapshotArgs, 'notebookId'>>;
+  createUserViaMagicLink?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserViaMagicLinkArgs, 'email'>>;
+  createWorkspace?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationCreateWorkspaceArgs, 'workspace'>>;
+  deleteAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationDeleteAnnotationArgs, 'id'>>;
+  doNothing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  duplicatePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationDuplicatePadArgs, 'id' | 'targetWorkspace'>>;
+  getCreateAttachmentForm?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormArgs, 'fileName' | 'fileType' | 'padId'>>;
+  getCreateAttachmentFormWorkspace?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormWorkspaceArgs, 'fileName' | 'fileType' | 'workspaceId'>>;
+  importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
+  incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
+  incrementResourceUsage?: Resolver<Maybe<ResolversTypes['ResourceUsage']>, ParentType, ContextType, RequireFields<MutationIncrementResourceUsageArgs, 'amount' | 'resourceType' | 'workspaceId'>>;
+  inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
+  movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
+  recordPadEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRecordPadEventArgs, 'aliasId' | 'name' | 'padId'>>;
+  refreshExternalDataToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshExternalDataTokenArgs, 'id'>>;
+  removeAlias?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAliasArgs, 'id'>>;
+  removeAttachmentFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromPadArgs, 'attachmentId'>>;
+  removeAttachmentFromWorkspace?: Resolver<Maybe<ResolversTypes['AttachmentResource']>, ParentType, ContextType, RequireFields<MutationRemoveAttachmentFromWorkspaceArgs, 'attachmentId'>>;
+  removeExternalDataSource?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveExternalDataSourceArgs, 'id'>>;
+  removePad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemovePadArgs, 'id'>>;
+  removeRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveRoleArgs, 'roleId'>>;
+  removeSecret?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveSecretArgs, 'secretId'>>;
+  removeSectionFromWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveSectionFromWorkspaceArgs, 'sectionId' | 'workspaceId'>>;
+  removeSelfFromRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveSelfFromRoleArgs, 'roleId'>>;
+  removeTagFromPad?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTagFromPadArgs, 'padId' | 'tag'>>;
+  removeUserFromRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveUserFromRoleArgs, 'roleId' | 'userId'>>;
+  removeWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveWorkspaceArgs, 'id'>>;
+  resendRegistrationMagicLinkEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResendRegistrationMagicLinkEmailArgs, 'email'>>;
+  setPadPublic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetPadPublicArgs, 'id' | 'publishState'>>;
+  setUsername?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetUsernameArgs, 'props'>>;
+  shareExternalDataSourceWithEmail?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationShareExternalDataSourceWithEmailArgs, 'email' | 'id' | 'permissionType'>>;
+  shareExternalDataSourceWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationShareExternalDataSourceWithRoleArgs, 'id' | 'permissionType' | 'roleId'>>;
+  shareExternalDataSourceWithUser?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationShareExternalDataSourceWithUserArgs, 'id' | 'permissionType' | 'userId'>>;
+  sharePadWithEmail?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationSharePadWithEmailArgs, 'canComment' | 'email' | 'id' | 'permissionType'>>;
+  sharePadWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSharePadWithRoleArgs, 'canComment' | 'id' | 'permissionType' | 'roleId'>>;
+  sharePadWithSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationSharePadWithSecretArgs, 'canComment' | 'id' | 'permissionType'>>;
+  sharePadWithUser?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationSharePadWithUserArgs, 'canComment' | 'id' | 'permissionType' | 'userId'>>;
+  shareWorkspaceWithEmail?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationShareWorkspaceWithEmailArgs, 'canComment' | 'email' | 'id' | 'permissionType'>>;
+  syncWorkspaceSeats?: Resolver<ResolversTypes['WorkspaceSubscription'], ParentType, ContextType, RequireFields<MutationSyncWorkspaceSeatsArgs, 'id'>>;
+  undeleteAttachment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUndeleteAttachmentArgs, 'attachmentId'>>;
+  unsafeDevOnlyPermissionOverride?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnsafeDevOnlyPermissionOverrideArgs, 'id' | 'resourceType'>>;
+  unsafeDevOnlyPlanOverride?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnsafeDevOnlyPlanOverrideArgs, 'workspaceId'>>;
+  unshareExternalDataSourceWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithRoleArgs, 'id' | 'roleId'>>;
+  unshareExternalDataSourceWithUser?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<MutationUnshareExternalDataSourceWithUserArgs, 'id' | 'userId'>>;
+  unshareNotebookWithSecret?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnshareNotebookWithSecretArgs, 'id' | 'secret'>>;
+  unsharePadWithRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUnsharePadWithRoleArgs, 'id' | 'roleId'>>;
+  unsharePadWithUser?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationUnsharePadWithUserArgs, 'id' | 'userId'>>;
+  unshareWorkspaceWithUser?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<MutationUnshareWorkspaceWithUserArgs, 'id' | 'userId'>>;
+  updateAnnotation?: Resolver<Maybe<ResolversTypes['Annotation']>, ParentType, ContextType, RequireFields<MutationUpdateAnnotationArgs, 'content' | 'id'>>;
+  updateExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationUpdateExternalDataSourceArgs, 'dataSource' | 'id'>>;
+  updateExtraAiAllowance?: Resolver<Maybe<ResolversTypes['NewResourceQuotaLimit']>, ParentType, ContextType, RequireFields<MutationUpdateExtraAiAllowanceArgs, 'paymentMethodId' | 'resourceId' | 'resourceType'>>;
+  updatePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationUpdatePadArgs, 'id' | 'pad'>>;
+  updateSecret?: Resolver<ResolversTypes['Secret'], ParentType, ContextType, RequireFields<MutationUpdateSecretArgs, 'secret' | 'secretId'>>;
+  updateSectionInWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateSectionInWorkspaceArgs, 'section' | 'sectionId' | 'workspaceId'>>;
+  updateSelf?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateSelfArgs, 'props'>>;
+  updateWorkspace?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationUpdateWorkspaceArgs, 'id' | 'workspace'>>;
 };
 
-export type NewResourceQuotaLimitResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['NewResourceQuotaLimit'] = ResolversParentTypes['NewResourceQuotaLimit']
-> = {
+export type NewResourceQuotaLimitResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['NewResourceQuotaLimit'] = ResolversParentTypes['NewResourceQuotaLimit']> = {
   newQuotaLimit?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Pad'] = ResolversParentTypes['Pad']
-> = {
+export type PadResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Pad'] = ResolversParentTypes['Pad']> = {
   access?: Resolver<ResolversTypes['ResourceAccess'], ParentType, ContextType>;
-  aliases?: Resolver<
-    Array<ResolversTypes['PadAlias']>,
-    ParentType,
-    ContextType
-  >;
-  archived?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  attachments?: Resolver<
-    Array<ResolversTypes['Attachment']>,
-    ParentType,
-    ContextType
-  >;
+  aliases?: Resolver<Array<ResolversTypes['PadAlias']>, ParentType, ContextType>;
+  archived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
   banned?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  canPublicDuplicate?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
+  canPublicDuplicate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gist?: Resolver<Maybe<ResolversTypes['Gist']>, ParentType, ContextType>;
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  initialState?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  isPublic?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  isTemplate?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  myPermissionType?: Resolver<
-    Maybe<ResolversTypes['PermissionType']>,
-    ParentType,
-    ContextType
-  >;
+  initialState?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isPublic?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isTemplate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  myPermissionType?: Resolver<Maybe<ResolversTypes['PermissionType']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  padConnectionParams?: Resolver<
-    ResolversTypes['PadConnectionParams'],
-    ParentType,
-    ContextType
-  >;
+  padConnectionParams?: Resolver<ResolversTypes['PadConnectionParams'], ParentType, ContextType>;
   section?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType>;
   sectionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  snapshots?: Resolver<
-    Array<ResolversTypes['PadSnapshot']>,
-    ParentType,
-    ContextType
-  >;
+  snapshots?: Resolver<Array<ResolversTypes['PadSnapshot']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  userConsentToFeatureOnGallery?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  workspace?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  userConsentToFeatureOnGallery?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   workspaceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadAliasResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PadAlias'] = ResolversParentTypes['PadAlias']
-> = {
+export type PadAliasResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadAlias'] = ResolversParentTypes['PadAlias']> = {
   alias?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  annotations?: Resolver<
-    Maybe<Array<ResolversTypes['Annotation']>>,
-    ParentType,
-    ContextType
-  >;
-  events?: Resolver<
-    Maybe<Array<ResolversTypes['PadEvent']>>,
-    ParentType,
-    ContextType
-  >;
+  annotations?: Resolver<Maybe<Array<ResolversTypes['Annotation']>>, ParentType, ContextType>;
+  events?: Resolver<Maybe<Array<ResolversTypes['PadEvent']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   pad_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadChangesResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PadChanges'] = ResolversParentTypes['PadChanges']
-> = {
+export type PadChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadChanges'] = ResolversParentTypes['PadChanges']> = {
   added?: Resolver<Array<ResolversTypes['Pad']>, ParentType, ContextType>;
   removed?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   updated?: Resolver<Array<ResolversTypes['Pad']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadConnectionParamsResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PadConnectionParams'] = ResolversParentTypes['PadConnectionParams']
-> = {
+export type PadConnectionParamsResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadConnectionParams'] = ResolversParentTypes['PadConnectionParams']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadEventResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PadEvent'] = ResolversParentTypes['PadEvent']
-> = {
+export type PadEventResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadEvent'] = ResolversParentTypes['PadEvent']> = {
   alias_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -2377,37 +1806,20 @@ export type PadEventResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PadSnapshotResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PadSnapshot'] = ResolversParentTypes['PadSnapshot']
-> = {
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+export type PadSnapshotResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PadSnapshot'] = ResolversParentTypes['PadSnapshot']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   snapshotName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PageableResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Pageable'] = ResolversParentTypes['Pageable']
-> = {
+export type PageableResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Pageable'] = ResolversParentTypes['Pageable']> = {
   __resolveType: TypeResolveFn<'SharedResource', ParentType, ContextType>;
 };
 
-export type PagedPadResultResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PagedPadResult'] = ResolversParentTypes['PagedPadResult']
-> = {
+export type PagedPadResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PagedPadResult'] = ResolversParentTypes['PagedPadResult']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2415,10 +1827,7 @@ export type PagedPadResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PagedResultResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PagedResult'] = ResolversParentTypes['PagedResult']
-> = {
+export type PagedResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PagedResult'] = ResolversParentTypes['PagedResult']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2426,31 +1835,17 @@ export type PagedResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PagedTemplateSearchResultResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['PagedTemplateSearchResult'] = ResolversParentTypes['PagedTemplateSearchResult']
-> = {
+export type PagedTemplateSearchResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['PagedTemplateSearchResult'] = ResolversParentTypes['PagedTemplateSearchResult']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  items?: Resolver<
-    Array<ResolversTypes['TemplateSearchResult']>,
-    ParentType,
-    ContextType
-  >;
+  items?: Resolver<Array<ResolversTypes['TemplateSearchResult']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PermissionResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Permission'] = ResolversParentTypes['Permission']
-> = {
+export type PermissionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Permission'] = ResolversParentTypes['Permission']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   givenBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   resource?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2459,176 +1854,49 @@ export type PermissionResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
-> = {
+export type QueryResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   featuredPad?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType>;
-  getAliasesByPadId?: Resolver<
-    Maybe<Array<ResolversTypes['PadAlias']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetAliasesByPadIdArgs, 'padId'>
-  >;
-  getAnnotationsByPadId?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Annotation']>>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetAnnotationsByPadIdArgs, 'padId'>
-  >;
-  getCreditsPlans?: Resolver<
-    Maybe<ResolversTypes['CreditsPlan']>,
-    ParentType,
-    ContextType
-  >;
-  getExternalDataSource?: Resolver<
-    ResolversTypes['ExternalDataSource'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetExternalDataSourceArgs, 'id'>
-  >;
-  getExternalDataSources?: Resolver<
-    Array<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetExternalDataSourcesArgs, 'notebookId'>
-  >;
-  getExternalDataSourcesWorkspace?: Resolver<
-    Array<ResolversTypes['ExternalDataSource']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'workspaceId'>
-  >;
-  getPadById?: Resolver<
-    Maybe<ResolversTypes['Pad']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetPadByIdArgs, 'id'>
-  >;
-  getStripeCheckoutSessionInfo?: Resolver<
-    Maybe<ResolversTypes['CheckoutSessionInfo']>,
-    ParentType,
-    ContextType,
-    RequireFields<
-      QueryGetStripeCheckoutSessionInfoArgs,
-      'priceId' | 'workspaceId'
-    >
-  >;
-  getSubscriptionsPlans?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['SubscriptionPlan']>>>,
-    ParentType,
-    ContextType
-  >;
-  getWorkspaceById?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetWorkspaceByIdArgs, 'id'>
-  >;
-  getWorkspaceSecrets?: Resolver<
-    Array<ResolversTypes['Secret']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetWorkspaceSecretsArgs, 'workspaceId'>
-  >;
+  getAliasesByPadId?: Resolver<Maybe<Array<ResolversTypes['PadAlias']>>, ParentType, ContextType, RequireFields<QueryGetAliasesByPadIdArgs, 'padId'>>;
+  getAnnotationsByPadId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Annotation']>>>, ParentType, ContextType, RequireFields<QueryGetAnnotationsByPadIdArgs, 'padId'>>;
+  getCreditsPlans?: Resolver<Maybe<ResolversTypes['CreditsPlan']>, ParentType, ContextType>;
+  getExternalDataSource?: Resolver<ResolversTypes['ExternalDataSource'], ParentType, ContextType, RequireFields<QueryGetExternalDataSourceArgs, 'id'>>;
+  getExternalDataSources?: Resolver<Array<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesArgs, 'notebookId'>>;
+  getExternalDataSourcesWorkspace?: Resolver<Array<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<QueryGetExternalDataSourcesWorkspaceArgs, 'workspaceId'>>;
+  getPadById?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<QueryGetPadByIdArgs, 'id'>>;
+  getStripeCheckoutSessionInfo?: Resolver<Maybe<ResolversTypes['CheckoutSessionInfo']>, ParentType, ContextType, RequireFields<QueryGetStripeCheckoutSessionInfoArgs, 'priceId' | 'workspaceId'>>;
+  getSubscriptionsPlans?: Resolver<Maybe<Array<Maybe<ResolversTypes['SubscriptionPlan']>>>, ParentType, ContextType>;
+  getWorkspaceById?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceByIdArgs, 'id'>>;
+  getWorkspaceSecrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType, RequireFields<QueryGetWorkspaceSecretsArgs, 'workspaceId'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  pads?: Resolver<
-    ResolversTypes['PagedPadResult'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryPadsArgs, 'page' | 'workspaceId'>
-  >;
-  padsByTag?: Resolver<
-    ResolversTypes['PagedPadResult'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryPadsByTagArgs, 'page' | 'tag' | 'workspaceId'>
-  >;
-  padsSharedWithMe?: Resolver<
-    ResolversTypes['PagedPadResult'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryPadsSharedWithMeArgs, 'page'>
-  >;
-  publiclyHighlightedPads?: Resolver<
-    ResolversTypes['PagedPadResult'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryPubliclyHighlightedPadsArgs, 'page'>
-  >;
-  searchTemplates?: Resolver<
-    ResolversTypes['PagedTemplateSearchResult'],
-    ParentType,
-    ContextType,
-    RequireFields<QuerySearchTemplatesArgs, 'page' | 'prompt'>
-  >;
-  sections?: Resolver<
-    Array<ResolversTypes['Section']>,
-    ParentType,
-    ContextType,
-    RequireFields<QuerySectionsArgs, 'workspaceId'>
-  >;
+  pads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsArgs, 'page' | 'workspaceId'>>;
+  padsByTag?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsByTagArgs, 'page' | 'tag' | 'workspaceId'>>;
+  padsSharedWithMe?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPadsSharedWithMeArgs, 'page'>>;
+  publiclyHighlightedPads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<QueryPubliclyHighlightedPadsArgs, 'page'>>;
+  searchTemplates?: Resolver<ResolversTypes['PagedTemplateSearchResult'], ParentType, ContextType, RequireFields<QuerySearchTemplatesArgs, 'page' | 'prompt'>>;
+  sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType, RequireFields<QuerySectionsArgs, 'workspaceId'>>;
   self?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  tags?: Resolver<
-    Array<ResolversTypes['String']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryTagsArgs, 'workspaceId'>
-  >;
+  tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryTagsArgs, 'workspaceId'>>;
   version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  workspaces?: Resolver<
-    Array<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  workspaces?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
 };
 
-export type ResourceAccessResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ResourceAccess'] = ResolversParentTypes['ResourceAccess']
-> = {
+export type ResourceAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ResourceAccess'] = ResolversParentTypes['ResourceAccess']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  roles?: Resolver<
-    Array<ResolversTypes['RoleAccess']>,
-    ParentType,
-    ContextType
-  >;
-  users?: Resolver<
-    Array<ResolversTypes['UserAccess']>,
-    ParentType,
-    ContextType
-  >;
+  roles?: Resolver<Array<ResolversTypes['RoleAccess']>, ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['UserAccess']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ResourceUsageResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ResourceUsage'] = ResolversParentTypes['ResourceUsage']
-> = {
+export type ResourceUsageResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ResourceUsage'] = ResolversParentTypes['ResourceUsage']> = {
   consumption?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  originalAmount?: Resolver<
-    Maybe<ResolversTypes['Float']>,
-    ParentType,
-    ContextType
-  >;
-  resourceType?: Resolver<
-    ResolversTypes['ResourceTypes'],
-    ParentType,
-    ContextType
-  >;
+  originalAmount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  resourceType?: Resolver<ResolversTypes['ResourceTypes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type RoleResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Role'] = ResolversParentTypes['Role']
-> = {
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+export type RoleResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Role'] = ResolversParentTypes['Role']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
@@ -2637,75 +1905,40 @@ export type RoleResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type RoleAccessResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['RoleAccess'] = ResolversParentTypes['RoleAccess']
-> = {
+export type RoleAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['RoleAccess'] = ResolversParentTypes['RoleAccess']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  permission?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   resourceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   roleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type RoleInvitationResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['RoleInvitation'] = ResolversParentTypes['RoleInvitation']
-> = {
-  expires_at?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+export type RoleInvitationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['RoleInvitation'] = ResolversParentTypes['RoleInvitation']> = {
+  expires_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SecretResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Secret'] = ResolversParentTypes['Secret']
-> = {
+export type SecretResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Secret'] = ResolversParentTypes['Secret']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  workspace?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SecretAccessResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SecretAccess'] = ResolversParentTypes['SecretAccess']
-> = {
+export type SecretAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SecretAccess'] = ResolversParentTypes['SecretAccess']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  permission?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   secret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SectionResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Section'] = ResolversParentTypes['Section']
-> = {
+export type SectionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Section'] = ResolversParentTypes['Section']> = {
   color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pads?: Resolver<Array<ResolversTypes['Pad']>, ParentType, ContextType>;
@@ -2713,216 +1946,91 @@ export type SectionResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SectionChangesResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SectionChanges'] = ResolversParentTypes['SectionChanges']
-> = {
+export type SectionChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SectionChanges'] = ResolversParentTypes['SectionChanges']> = {
   added?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
   removed?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   updated?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ShareInvitationResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ShareInvitation'] = ResolversParentTypes['ShareInvitation']
-> = {
+export type ShareInvitationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ShareInvitation'] = ResolversParentTypes['ShareInvitation']> = {
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ShareWithEmailInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ShareWithEmailInput'] = ResolversParentTypes['ShareWithEmailInput']
-> = {
+export type ShareWithEmailInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ShareWithEmailInput'] = ResolversParentTypes['ShareWithEmailInput']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ShareWithRoleInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ShareWithRoleInput'] = ResolversParentTypes['ShareWithRoleInput']
-> = {
+export type ShareWithRoleInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ShareWithRoleInput'] = ResolversParentTypes['ShareWithRoleInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   roleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ShareWithSecretInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ShareWithSecretInput'] = ResolversParentTypes['ShareWithSecretInput']
-> = {
+export type ShareWithSecretInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ShareWithSecretInput'] = ResolversParentTypes['ShareWithSecretInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ShareWithUserInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['ShareWithUserInput'] = ResolversParentTypes['ShareWithUserInput']
-> = {
+export type ShareWithUserInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['ShareWithUserInput'] = ResolversParentTypes['ShareWithUserInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SharedResourceResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SharedResource'] = ResolversParentTypes['SharedResource']
-> = {
-  canComment?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  permission?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+export type SharedResourceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SharedResource'] = ResolversParentTypes['SharedResource']> = {
+  canComment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   resource?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SharedWithResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SharedWith'] = ResolversParentTypes['SharedWith']
-> = {
-  pendingInvitations?: Resolver<
-    Array<ResolversTypes['ShareInvitation']>,
-    ParentType,
-    ContextType
-  >;
-  roles?: Resolver<
-    Array<ResolversTypes['SharedWithRole']>,
-    ParentType,
-    ContextType
-  >;
-  users?: Resolver<
-    Array<ResolversTypes['SharedWithUser']>,
-    ParentType,
-    ContextType
-  >;
+export type SharedWithResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SharedWith'] = ResolversParentTypes['SharedWith']> = {
+  pendingInvitations?: Resolver<Array<ResolversTypes['ShareInvitation']>, ParentType, ContextType>;
+  roles?: Resolver<Array<ResolversTypes['SharedWithRole']>, ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['SharedWithUser']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SharedWithRoleResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SharedWithRole'] = ResolversParentTypes['SharedWithRole']
-> = {
+export type SharedWithRoleResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SharedWithRole'] = ResolversParentTypes['SharedWithRole']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SharedWithUserResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SharedWithUser'] = ResolversParentTypes['SharedWithUser']
-> = {
+export type SharedWithUserResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SharedWithUser'] = ResolversParentTypes['SharedWithUser']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  permissionType?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SubscriptionResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
-> = {
-  hello?: SubscriptionResolver<
-    Maybe<ResolversTypes['String']>,
-    'hello',
-    ParentType,
-    ContextType
-  >;
-  padsChanged?: SubscriptionResolver<
-    ResolversTypes['PadChanges'],
-    'padsChanged',
-    ParentType,
-    ContextType,
-    RequireFields<SubscriptionPadsChangedArgs, 'workspaceId'>
-  >;
-  sectionsChanged?: SubscriptionResolver<
-    ResolversTypes['SectionChanges'],
-    'sectionsChanged',
-    ParentType,
-    ContextType,
-    RequireFields<SubscriptionSectionsChangedArgs, 'workspaceId'>
-  >;
-  subscribeToNothing?: SubscriptionResolver<
-    Maybe<ResolversTypes['Boolean']>,
-    'subscribeToNothing',
-    ParentType,
-    ContextType
-  >;
-  tagsChanged?: SubscriptionResolver<
-    ResolversTypes['TagChanges'],
-    'tagsChanged',
-    ParentType,
-    ContextType,
-    RequireFields<SubscriptionTagsChangedArgs, 'workspaceId'>
-  >;
-  workspacesChanged?: SubscriptionResolver<
-    ResolversTypes['WorkspacesChanges'],
-    'workspacesChanged',
-    ParentType,
-    ContextType
-  >;
+export type SubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  hello?: SubscriptionResolver<Maybe<ResolversTypes['String']>, "hello", ParentType, ContextType>;
+  padsChanged?: SubscriptionResolver<ResolversTypes['PadChanges'], "padsChanged", ParentType, ContextType, RequireFields<SubscriptionPadsChangedArgs, 'workspaceId'>>;
+  sectionsChanged?: SubscriptionResolver<ResolversTypes['SectionChanges'], "sectionsChanged", ParentType, ContextType, RequireFields<SubscriptionSectionsChangedArgs, 'workspaceId'>>;
+  subscribeToNothing?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "subscribeToNothing", ParentType, ContextType>;
+  tagsChanged?: SubscriptionResolver<ResolversTypes['TagChanges'], "tagsChanged", ParentType, ContextType, RequireFields<SubscriptionTagsChangedArgs, 'workspaceId'>>;
+  workspacesChanged?: SubscriptionResolver<ResolversTypes['WorkspacesChanges'], "workspacesChanged", ParentType, ContextType>;
 };
 
-export type SubscriptionPlanResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['SubscriptionPlan'] = ResolversParentTypes['SubscriptionPlan']
-> = {
+export type SubscriptionPlanResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['SubscriptionPlan'] = ResolversParentTypes['SubscriptionPlan']> = {
   credits?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  description?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   editors?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isDefault?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
+  isDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  paymentLink?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  paymentLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   price?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   queries?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   readers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -2932,281 +2040,121 @@ export type SubscriptionPlanResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TagChangesResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['TagChanges'] = ResolversParentTypes['TagChanges']
-> = {
+export type TagChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TagChanges'] = ResolversParentTypes['TagChanges']> = {
   added?: Resolver<Array<ResolversTypes['TagRecord']>, ParentType, ContextType>;
-  removed?: Resolver<
-    Array<ResolversTypes['TagRecord']>,
-    ParentType,
-    ContextType
-  >;
+  removed?: Resolver<Array<ResolversTypes['TagRecord']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TagRecordResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['TagRecord'] = ResolversParentTypes['TagRecord']
-> = {
+export type TagRecordResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TagRecord'] = ResolversParentTypes['TagRecord']> = {
   tag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   workspaceId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TemplateSearchResultResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['TemplateSearchResult'] = ResolversParentTypes['TemplateSearchResult']
-> = {
-  notebook?: Resolver<
-    ResolversTypes['TemplateSearchResultNotebook'],
-    ParentType,
-    ContextType
-  >;
+export type TemplateSearchResultResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TemplateSearchResult'] = ResolversParentTypes['TemplateSearchResult']> = {
+  notebook?: Resolver<ResolversTypes['TemplateSearchResultNotebook'], ParentType, ContextType>;
   summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TemplateSearchResultNotebookResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['TemplateSearchResultNotebook'] = ResolversParentTypes['TemplateSearchResultNotebook']
-> = {
+export type TemplateSearchResultNotebookResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['TemplateSearchResultNotebook'] = ResolversParentTypes['TemplateSearchResultNotebook']> = {
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UnshareWithRoleInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['UnshareWithRoleInput'] = ResolversParentTypes['UnshareWithRoleInput']
-> = {
+export type UnshareWithRoleInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['UnshareWithRoleInput'] = ResolversParentTypes['UnshareWithRoleInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   roleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UnshareWithUserInputResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['UnshareWithUserInput'] = ResolversParentTypes['UnshareWithUserInput']
-> = {
+export type UnshareWithUserInputResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['UnshareWithUserInput'] = ResolversParentTypes['UnshareWithUserInput']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
-> = {
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
-  description?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+export type UserResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  emailValidatedAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  emailValidatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  onboarded?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  resourceUsages?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>,
-    ParentType,
-    ContextType
-  >;
+  onboarded?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  resourceUsages?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>, ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserAccessResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['UserAccess'] = ResolversParentTypes['UserAccess']
-> = {
+export type UserAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['UserAccess'] = ResolversParentTypes['UserAccess']> = {
   canComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  permission?: Resolver<
-    ResolversTypes['PermissionType'],
-    ParentType,
-    ContextType
-  >;
+  permission?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   resourceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspaceResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['Workspace'] = ResolversParentTypes['Workspace']
-> = {
-  access?: Resolver<
-    Maybe<ResolversTypes['WorkspaceAccess']>,
-    ParentType,
-    ContextType
-  >;
-  attachments?: Resolver<
-    Array<ResolversTypes['Attachment']>,
-    ParentType,
-    ContextType
-  >;
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+export type WorkspaceResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Workspace'] = ResolversParentTypes['Workspace']> = {
+  access?: Resolver<Maybe<ResolversTypes['WorkspaceAccess']>, ParentType, ContextType>;
+  attachments?: Resolver<Array<ResolversTypes['Attachment']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isPremium?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  isPublic?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  membersCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  myPermissionType?: Resolver<
-    Maybe<ResolversTypes['PermissionType']>,
-    ParentType,
-    ContextType
-  >;
+  isPremium?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isPublic?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  membersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  myPermissionType?: Resolver<Maybe<ResolversTypes['PermissionType']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  pads?: Resolver<
-    ResolversTypes['PagedPadResult'],
-    ParentType,
-    ContextType,
-    RequireFields<WorkspacePadsArgs, 'page'>
-  >;
-  plan?: Resolver<
-    Maybe<ResolversTypes['SubscriptionPlansNames']>,
-    ParentType,
-    ContextType
-  >;
-  resourceUsages?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>,
-    ParentType,
-    ContextType
-  >;
-  roles?: Resolver<
-    Maybe<Array<ResolversTypes['Role']>>,
-    ParentType,
-    ContextType
-  >;
+  pads?: Resolver<ResolversTypes['PagedPadResult'], ParentType, ContextType, RequireFields<WorkspacePadsArgs, 'page'>>;
+  plan?: Resolver<Maybe<ResolversTypes['SubscriptionPlansNames']>, ParentType, ContextType>;
+  resourceUsages?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResourceUsage']>>>, ParentType, ContextType>;
+  roles?: Resolver<Maybe<Array<ResolversTypes['Role']>>, ParentType, ContextType>;
   secrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType>;
-  sections?: Resolver<
-    Array<ResolversTypes['Section']>,
-    ParentType,
-    ContextType
-  >;
-  workspaceExecutedQuery?: Resolver<
-    Maybe<ResolversTypes['WorkspaceExecutedQuery']>,
-    ParentType,
-    ContextType
-  >;
-  workspaceSubscription?: Resolver<
-    Maybe<ResolversTypes['WorkspaceSubscription']>,
-    ParentType,
-    ContextType
-  >;
+  sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
+  workspaceExecutedQuery?: Resolver<Maybe<ResolversTypes['WorkspaceExecutedQuery']>, ParentType, ContextType>;
+  workspaceSubscription?: Resolver<Maybe<ResolversTypes['WorkspaceSubscription']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspaceAccessResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['WorkspaceAccess'] = ResolversParentTypes['WorkspaceAccess']
-> = {
+export type WorkspaceAccessResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceAccess'] = ResolversParentTypes['WorkspaceAccess']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  roles?: Resolver<
-    Maybe<Array<ResolversTypes['RoleAccess']>>,
-    ParentType,
-    ContextType
-  >;
-  users?: Resolver<
-    Maybe<Array<ResolversTypes['UserAccess']>>,
-    ParentType,
-    ContextType
-  >;
+  roles?: Resolver<Maybe<Array<ResolversTypes['RoleAccess']>>, ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<ResolversTypes['UserAccess']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspaceExecutedQueryResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['WorkspaceExecutedQuery'] = ResolversParentTypes['WorkspaceExecutedQuery']
-> = {
+export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceExecutedQuery'] = ResolversParentTypes['WorkspaceExecutedQuery']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   queryCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  query_reset_date?: Resolver<
-    Maybe<ResolversTypes['DateTime']>,
-    ParentType,
-    ContextType
-  >;
+  query_reset_date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   quotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  workspace?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspaceSubscriptionResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']
-> = {
+export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
   credits?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   editors?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  paymentStatus?: Resolver<
-    ResolversTypes['SubscriptionPaymentStatus'],
-    ParentType,
-    ContextType
-  >;
+  paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
   queries?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   readers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   seats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  status?: Resolver<
-    Maybe<ResolversTypes['SubscriptionStatus']>,
-    ParentType,
-    ContextType
-  >;
+  status?: Resolver<Maybe<ResolversTypes['SubscriptionStatus']>, ParentType, ContextType>;
   storage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  workspace?: Resolver<
-    Maybe<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspacesChangesResolvers<
-  ContextType = GraphqlContext,
-  ParentType extends ResolversParentTypes['WorkspacesChanges'] = ResolversParentTypes['WorkspacesChanges']
-> = {
+export type WorkspacesChangesResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspacesChanges'] = ResolversParentTypes['WorkspacesChanges']> = {
   added?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
   removed?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
-  updated?: Resolver<
-    Array<ResolversTypes['Workspace']>,
-    ParentType,
-    ContextType
-  >;
+  updated?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3271,3 +2219,4 @@ export type Resolvers<ContextType = GraphqlContext> = {
   WorkspaceSubscription?: WorkspaceSubscriptionResolvers<ContextType>;
   WorkspacesChanges?: WorkspacesChangesResolvers<ContextType>;
 };
+

@@ -5,7 +5,7 @@ import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useCallback, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageBlock } from '.';
 import {
@@ -16,12 +16,19 @@ import {
   TabsTrigger,
   Button,
   MenuItem,
+  Tooltip,
 } from '../../shared';
 import { IntegrationActionItem } from './IntegrationItem/IntegrationItem';
-import { cssVar, p13Bold, p14Medium } from '../../primitives';
+import {
+  cssVar,
+  p10Regular,
+  p12Regular,
+  p13Bold,
+  p14Medium,
+} from '../../primitives';
 import { ThumbnailSql } from '../../icons/thumbnail-icons';
 import { useCancelingEvent } from '../../utils';
-import { CaretDown, Warning } from '../../icons';
+import { CaretDown, Question, Warning } from '../../icons';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -34,6 +41,7 @@ type EditConnectionValues = {
 };
 
 const placeholderList: Partial<Record<ImportElementSource, string>> = {
+  bigquery: 'bigquery://',
   mysql: 'mysql://',
   oracledb: 'oracle://',
   postgresql: 'postgresql://',
@@ -132,6 +140,30 @@ interface NewDataConnectionProps {
 
 type ConnType = 'full-url' | 'manual';
 
+const helpStyles = css(p12Regular, {
+  color: cssVar('textSubdued'),
+  margin: 0,
+  paddingLeft: '124px',
+  marginTop: '-14px',
+  display: 'flex',
+});
+
+const tooltipHelpStyles = css(p10Regular, {
+  color: cssVar('backgroundAccent'),
+  padding: 0,
+  textAlign: 'left',
+  ol: {
+    paddingLeft: '20px',
+  },
+});
+
+const iconWrapper = css({
+  width: '16px',
+  height: '16px',
+  display: 'flex',
+  marginLeft: '104px',
+});
+
 function NewDataConnection({
   workspaceId,
   onExit,
@@ -147,6 +179,7 @@ function NewDataConnection({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [port, setPort] = useState('');
+  const [credentials, setCredentials] = useState<string | undefined>(undefined);
 
   const [connMethod, setConnMethod] = useState<ConnType>('full-url');
 
@@ -167,15 +200,20 @@ function NewDataConnection({
     setErrorMessage(undefined);
   }, []);
 
+  const composeConnectionUrl = () =>
+    protocol === 'bigquery'
+      ? `${protocol}:${Buffer.from(credentials ?? '').toString('base64')}`
+      : `${protocol}://${encodeURIComponent(username)}:${encodeURIComponent(
+          password
+        )}@${host}:${port}/${databaseName}`;
+
+  const generateUrl = () =>
+    connMethod === 'full-url' ? fullUrl : composeConnectionUrl();
+
   function pingDatabase() {
     setPingStatus('Pinging...');
 
-    const url =
-      connMethod === 'full-url'
-        ? fullUrl
-        : `${protocol}://${encodeURIComponent(username)}:${encodeURIComponent(
-            password
-          )}@${host}:${port}/${databaseName}`;
+    const url = generateUrl();
 
     fetch(BackendUrl.pingDatabase(), {
       method: 'POST',
@@ -184,6 +222,7 @@ function NewDataConnection({
       .then((res) => {
         if (res.status === 200) {
           setPingStatus('Connection Worked');
+          setErrorMessage(undefined);
         } else {
           res.json().then((body) => {
             setErrorMessage(body.message);
@@ -198,6 +237,12 @@ function NewDataConnection({
       });
   }
 
+  const validateFields = (): boolean =>
+    connMethod === 'full-url' ||
+    (protocol === 'bigquery'
+      ? !!credentials?.length
+      : host.length > 0 && databaseName.length > 0 && username.length > 0);
+
   // Function would get recreated too many times with `useCallback`
   const onSubmitConnection = useCancelingEvent(() => {
     if (!connMethod) return;
@@ -207,10 +252,7 @@ function NewDataConnection({
       return;
     }
 
-    if (
-      connMethod === 'manual' &&
-      !(host.length > 0 && databaseName.length > 0 && username.length > 0)
-    ) {
+    if (!validateFields()) {
       setErrorMessage('You must fill out all the fields');
       return;
     }
@@ -220,12 +262,7 @@ function NewDataConnection({
       return;
     }
 
-    const url =
-      connMethod === 'full-url'
-        ? fullUrl
-        : `${protocol}://${username}:${encodeURIComponent(
-            password
-          )}@${host}:${port}/${databaseName}`;
+    const url = generateUrl();
 
     if (initialValues) {
       update(initialValues.id as string, {
@@ -268,6 +305,18 @@ function NewDataConnection({
       }
     });
   });
+
+  const onChangeCredentials = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const file = ev.target.files?.item(0);
+      if (file) {
+        file.text().then((text) => {
+          setCredentials(text);
+        });
+      }
+    },
+    []
+  );
 
   return (
     <form
@@ -379,75 +428,130 @@ function NewDataConnection({
                       </MenuItem>
                     ))}
                   </MenuList>
-                  <input
-                    id="manual-conn-url"
-                    css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
-                    placeholder="database.com"
-                    value={host}
-                    onChange={(e) => setHost(e.target.value)}
-                    onFocus={resetOnFocus}
-                  />
+
+                  {protocol !== 'bigquery' ? (
+                    <>
+                      <input
+                        id="manual-conn-url"
+                        css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
+                        placeholder="database.com"
+                        value={host}
+                        onChange={(e) => setHost(e.target.value)}
+                        onFocus={resetOnFocus}
+                      />
+                    </>
+                  ) : (
+                    <input
+                      type="file"
+                      accept=".json"
+                      id="upload-json-credentials"
+                      css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
+                      onChange={onChangeCredentials}
+                    />
+                  )}
                 </div>
               </div>
 
-              <div css={inputGridStyles}>
-                <div css={inputFieldWrapper}>
-                  <label css={labelStyles} htmlFor="manual-conn-username">
-                    Username
-                  </label>
-                  <input
-                    id="manual-conn-username"
-                    css={inputStyles}
-                    placeholder="admin"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    onFocus={resetOnFocus}
-                  />
-                </div>
+              {protocol === 'bigquery' ? (
+                <Tooltip
+                  hoverOnly={false}
+                  trigger={
+                    <p>
+                      <span css={iconWrapper}>
+                        <Question />
+                      </span>
+                      <span css={helpStyles}>
+                        For help on how to setup service account and credentials
+                        using the Google Cloud console&nbsp;
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href="https://cloud.google.com/iam/docs/keys-create-delete#iam-service-account-keys-create-console"
+                        >
+                          click here
+                        </a>
+                      </span>
+                    </p>
+                  }
+                >
+                  <p css={tooltipHelpStyles}>
+                    To setup a BigQuery connection in Decipad you will need to
+                    follow these steps:
+                  </p>
+                  <p css={tooltipHelpStyles}>
+                    <ol>
+                      <li>
+                        1. Have a service account in Google Cloud with the
+                        sufficient permissions
+                      </li>
+                      <li>2. Create credentials for that service account</li>
+                      <li>3. Download a JSON file with these credentials</li>
+                      <li>4. Upload it here.</li>
+                    </ol>
+                  </p>
+                </Tooltip>
+              ) : null}
 
-                <div css={inputFieldWrapper}>
-                  <label css={labelStyles} htmlFor="manual-conn-password">
-                    Password
-                  </label>
-                  <input
-                    id="manual-conn-password"
-                    type="password"
-                    css={inputStyles}
-                    placeholder="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onFocus={resetOnFocus}
-                  />
-                </div>
+              {protocol !== 'bigquery' ? (
+                <div css={inputGridStyles}>
+                  <div css={inputFieldWrapper}>
+                    <label css={labelStyles} htmlFor="manual-conn-username">
+                      Username
+                    </label>
+                    <input
+                      id="manual-conn-username"
+                      css={inputStyles}
+                      placeholder="admin"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      onFocus={resetOnFocus}
+                    />
+                  </div>
 
-                <div css={inputFieldWrapper}>
-                  <label css={labelStyles} htmlFor="manual-conn-db">
-                    Database
-                  </label>
-                  <input
-                    id="manual-conn-db"
-                    css={inputStyles}
-                    placeholder="mydb"
-                    value={databaseName}
-                    onChange={(e) => setdatabaseName(e.target.value)}
-                    onFocus={resetOnFocus}
-                  />
-                </div>
+                  <div css={inputFieldWrapper}>
+                    <label css={labelStyles} htmlFor="manual-conn-password">
+                      Password
+                    </label>
+                    <input
+                      id="manual-conn-password"
+                      type="password"
+                      css={inputStyles}
+                      placeholder="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onFocus={resetOnFocus}
+                    />
+                  </div>
 
-                <div css={inputFieldWrapper}>
-                  <label css={labelStyles} htmlFor="manual-conn-port">
-                    Port
-                  </label>
-                  <input
-                    id="manual-conn-port"
-                    css={inputStyles}
-                    placeholder="5432"
-                    value={port}
-                    onChange={(e) => setPort(e.target.value)}
-                    onFocus={resetOnFocus}
-                  />
+                  <div css={inputFieldWrapper}>
+                    <label css={labelStyles} htmlFor="manual-conn-db">
+                      Database
+                    </label>
+                    <input
+                      id="manual-conn-db"
+                      css={inputStyles}
+                      placeholder="mydb"
+                      value={databaseName}
+                      onChange={(e) => setdatabaseName(e.target.value)}
+                      onFocus={resetOnFocus}
+                    />
+                  </div>
+
+                  <div css={inputFieldWrapper}>
+                    <label css={labelStyles} htmlFor="manual-conn-port">
+                      Port
+                    </label>
+                    <input
+                      id="manual-conn-port"
+                      css={inputStyles}
+                      placeholder="5432"
+                      value={port}
+                      onChange={(e) => setPort(e.target.value)}
+                      onFocus={resetOnFocus}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </TabsContent>
         </TabsRoot>

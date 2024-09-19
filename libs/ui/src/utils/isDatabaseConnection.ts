@@ -12,6 +12,7 @@ const databaseSources = new Set<ImportElementSource | undefined>([
   'cockroachdb',
   'redshift',
   'mariadb',
+  'bigquery',
 ]);
 
 export const isDatabaseConnection = (

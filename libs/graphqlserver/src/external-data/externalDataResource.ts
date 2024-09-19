@@ -19,6 +19,7 @@ const isDatabaseSource = new Set<ExternalProvider>([
   'cockroachdb',
   'redshift',
   'mariadb',
+  'bigquery',
 ]);
 
 function baseUrlFor(externalDataSource: ExternalDataSource): string {

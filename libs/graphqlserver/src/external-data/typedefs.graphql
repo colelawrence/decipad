@@ -11,6 +11,7 @@ enum ExternalProvider {
   mariadb
   mssql
   notion
+  bigquery
 }
 
 enum HTTPMethods {
