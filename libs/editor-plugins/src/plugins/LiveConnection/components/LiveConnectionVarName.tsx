@@ -19,7 +19,10 @@ import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { getExprRef } from '@decipad/remote-computer';
 import { useToast } from '@decipad/toast';
 
-import { IntegrationBlock as UIIntegrationBlock } from '@decipad/ui';
+import {
+  CodeResult,
+  IntegrationBlock as UIIntegrationBlock,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   findNodePath,
@@ -216,8 +219,9 @@ export const RealLiveConnectionVarName: PlateComponent = ({
           },
         ]}
         meta={meta}
-        integrationChildren={undefined}
-        displayResults={showData}
+        resultPreview={
+          result == null ? null : <CodeResult {...result} isLiveResult />
+        }
       />
     </div>
   );

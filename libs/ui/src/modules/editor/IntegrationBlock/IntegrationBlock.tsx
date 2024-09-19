@@ -11,7 +11,6 @@ import {
   integrationBlockStyles,
 } from '../../../styles/editor-layout';
 import { Height } from '../../../styles/spacings';
-import { CodeResult } from '../CodeResult/CodeResult';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
 
@@ -30,10 +29,9 @@ type IntegrationButton =
 type IntegrationBlockProps = {
   readonly children: ReactNode;
   readonly actionButtons?: IntegrationButton[];
-  readonly displayResults: boolean;
   readonly error?: string;
   readonly result?: Result.Result;
-  readonly integrationChildren?: ReactNode;
+  readonly resultPreview: ReactNode;
 } & LiveCodePartialProps &
   SegmentButtonsProps;
 
@@ -54,8 +52,8 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   text,
   buttons,
   actionButtons = [],
-  displayResults,
   result,
+  resultPreview,
 }) => {
   const readOnly = useIsEditorReadOnly();
 
@@ -107,16 +105,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
         </div>
       </div>
 
-      <div contentEditable={false}>
-        {displayResults && result && (
-          <CodeResult
-            value={result.value}
-            type={result.type}
-            meta={result.meta}
-            isLiveResult
-          />
-        )}
-      </div>
+      <div contentEditable={false}>{resultPreview}</div>
     </div>
   );
 };

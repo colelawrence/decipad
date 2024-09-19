@@ -31,6 +31,7 @@ import { Result, getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
   CodeError,
+  CodeResult,
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
@@ -198,8 +199,10 @@ export const IntegrationBlock: PlateComponent = ({
             tooltip: `${showData ? 'Hide' : 'Show'} table`,
           },
         ]}
-        displayResults={showData}
         result={result}
+        resultPreview={
+          result != null ? <CodeResult {...result} isLiveResult /> : null
+        }
       >
         {children}
       </UIIntegrationBlock>
