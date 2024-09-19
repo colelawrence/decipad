@@ -497,7 +497,12 @@ fn deserialize_data_iter(
             Ok(Some(DeciResult::Date(date, date_specificity)))
         }
         ResultType::Column => {
-            let (is_compressed, _) = decode_number(type_description[3]);
+            let is_compressed = if let Some(content_type) = type_description.get(3) {
+                decode_number(*content_type).0
+            } else {
+                false
+            };
+
             let data_type_offset = offset;
             let data_type_length = length;
 
@@ -1504,6 +1509,13 @@ mod deserialize_result_tests {
         let serialized = create_serialized_result(vec![3, 0, 13], b"Hello, world!".to_vec());
         let result = deserialize_result_internal(serialized).unwrap();
         assert_eq!(result, DeciResult::String("Hello, world!".to_string()));
+    }
+
+    #[wasm_bindgen_test]
+    fn test_empty_column() {
+        let serializd = create_serialized_result(vec![4, 1, 0], vec![]);
+        let result = deserialize_result_internal(serializd).unwrap();
+        assert_eq!(result, DeciResult::Column(vec![]));
     }
 
     #[wasm_bindgen_test]

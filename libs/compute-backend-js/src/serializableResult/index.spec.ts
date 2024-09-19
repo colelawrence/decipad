@@ -1056,6 +1056,29 @@ describe('deserializeResult', () => {
     });
   });
 
+  it('should deserialize empty column', async () => {
+    const serialized = createSerializedResult(
+      [
+        ...[4n, 1n, 0n], // column
+      ],
+      []
+    );
+
+    const result = deserializeResult(serialized);
+    const columnData = result.value as () => AsyncGenerator<Result.OneResult>;
+    const values = [];
+    for await (const value of columnData()) {
+      values.push(value);
+    }
+
+    expect(values).toEqual([]);
+    expect(result.type).toEqual({
+      kind: 'column',
+      indexedBy: 'number',
+      cellType: { kind: 'anything' },
+    });
+  });
+
   it('should deserialize uncompressed column of booleans', async () => {
     const serialized = createSerializedResult(
       [

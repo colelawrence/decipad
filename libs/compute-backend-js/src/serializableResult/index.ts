@@ -747,7 +747,12 @@ const deserializeResultIter = (
     }
 
     case ResultType.Column: {
-      const [isCompressed] = decodeNumber(typeDescription[3]);
+      const resultTypeNumber = typeDescription[3];
+      const isCompressed =
+        resultTypeNumber !== undefined
+          ? decodeNumber(resultTypeNumber)[0]
+          : false;
+
       const dataTypeOffset = offset;
       const dataTypeLength = length;
 
