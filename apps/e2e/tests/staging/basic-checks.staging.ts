@@ -736,22 +736,22 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  > number unitless', async () => {
-      performance.sampleStart('Operations column  > number unitless');
+    await test.step('Operations column > number unitless', async () => {
+      performance.sampleStart('Operations column > number unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber > 1'
       );
-      performance.sampleStart('Operations column  > number unitless');
+      performance.sampleStart('Operations column > number unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxSelected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  > number unitless');
+      performance.sampleEnd('Operations column > number unitless');
       expect
         .soft(
-          performance.getSampleTime('Operations column  > number unitless'),
+          performance.getSampleTime('Operations column > number unitless'),
           'Operations column > number unitless took more than 3 second'
         )
         .toBeLessThanOrEqual(3_000);
@@ -759,23 +759,23 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  > another column unitless', async () => {
-      performance.sampleStart('Operations column  > another column unitless');
+    await test.step('Operations column > another column unitless', async () => {
+      performance.sampleStart('Operations column > another column unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber > Customers.RandomNumber'
       );
-      performance.sampleStart('Operations column  > another column unitless');
+      performance.sampleStart('Operations column > another column unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxUnselected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  > another column unitless');
+      performance.sampleEnd('Operations column > another column unitless');
       expect
         .soft(
           performance.getSampleTime(
-            'Operations column  > another column unitless'
+            'Operations column > another column unitless'
           ),
           'Operations column > another column unitless took more than 3 second'
         )
@@ -784,22 +784,22 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  >= number unitless', async () => {
-      performance.sampleStart('Operations column  >= number unitless');
+    await test.step('Operations column >= number unitless', async () => {
+      performance.sampleStart('Operations column >= number unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber >= 1'
       );
-      performance.sampleStart('Operations column  >= number unitless');
+      performance.sampleStart('Operations column >= number unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxSelected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  >= number unitless');
+      performance.sampleEnd('Operations column >= number unitless');
       expect
         .soft(
-          performance.getSampleTime('Operations column  >= number unitless'),
+          performance.getSampleTime('Operations column >= number unitless'),
           'Operations column >= number unitless took more than 3 second'
         )
         .toBeLessThanOrEqual(3_000);
@@ -807,8 +807,8 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  >= another column unitless', async () => {
-      performance.sampleStart('Operations column  >= another column unitless');
+    await test.step('Operations column >= another column unitless', async () => {
+      performance.sampleStart('Operations column >= another column unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber >= Customers.RandomNumber'
@@ -832,46 +832,46 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  < number unitless', async () => {
-      performance.sampleStart('Operations column  < number unitless');
+    await test.step('Operations column < number unitless', async () => {
+      performance.sampleStart('Operations column < number unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber < 1'
       );
-      performance.sampleStart('Operations column  < number unitless');
+      performance.sampleStart('Operations column < number unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxUnselected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  < number unitless');
+      performance.sampleEnd('Operations column < number unitless');
       expect
         .soft(
-          performance.getSampleTime('Operations column  < number unitless'),
-          'Operations column > number unitless took more than 3 second'
+          performance.getSampleTime('Operations column < number unitless'),
+          'Operations column < number unitless took more than 3 second'
         )
         .toBeLessThanOrEqual(3_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  < another column unitless', async () => {
-      performance.sampleStart('Operations column  < another column unitless');
+    await test.step('Operations column < another column unitless', async () => {
+      performance.sampleStart('Operations column < another column unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber < Customers.RandomNumber'
       );
-      performance.sampleStart('Operations column  < another column unitless');
+      performance.sampleStart('Operations column < another column unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxUnselected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  < another column unitless');
+      performance.sampleEnd('Operations column < another column unitless');
       expect
         .soft(
           performance.getSampleTime(
-            'Operations column  < another column unitless'
+            'Operations column < another column unitless'
           ),
           'Operations column < another column unitless took more than 3 second'
         )
@@ -903,25 +903,121 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
-    await test.step('Operations column  <= another column unitless', async () => {
-      performance.sampleStart('Operations column  <= another column unitless');
+    await test.step('Operations column <= another column unitless', async () => {
+      performance.sampleStart('Operations column <= another column unitless');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
         'Customers.RandomNumber <= Customers.RandomNumber'
       );
-      performance.sampleStart('Operations column  <= another column unitless');
+      performance.sampleStart('Operations column <= another column unitless');
       await page.getByText('Show data').last().click();
       await expect(
         page.getByRole('row', { name: /CheckboxSelected/ }).first()
       ).toBeVisible();
 
-      performance.sampleEnd('Operations column  <= another column unitless');
+      performance.sampleEnd('Operations column <= another column unitless');
       expect
         .soft(
           performance.getSampleTime(
-            'Operations column  <= another column unitless'
+            'Operations column <= another column unitless'
           ),
           'Operations column <= another column unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column == number unitless', async () => {
+      performance.sampleStart('Operations column  == number unitless');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'Customers.RandomNumber == 1'
+      );
+      performance.sampleStart('Operations column == number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByRole('row', { name: /CheckboxUnselected/ }).first()
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column == number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column == number unitless'),
+          'Operations column == number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column == another column unitless', async () => {
+      performance.sampleStart('Operations column == another column unitless');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'Customers.RandomNumber == Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column == another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByRole('row', { name: /CheckboxSelected/ }).first()
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column == another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column == another column unitless'
+          ),
+          'Operations column == another column unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column != number unitless', async () => {
+      performance.sampleStart('Operations column  != number unitless');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'Customers.RandomNumber != 1'
+      );
+      performance.sampleStart('Operations column != number unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByRole('row', { name: /CheckboxSelected/ }).first()
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column != number unitless');
+      expect
+        .soft(
+          performance.getSampleTime('Operations column != number unitless'),
+          'Operations column != number unitless took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Operations column != another column unitless', async () => {
+      performance.sampleStart('Operations column != another column unitless');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'Customers.RandomNumber != Customers.RandomNumber'
+      );
+      performance.sampleStart('Operations column != another column unitless');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByRole('row', { name: /CheckboxUnselected/ }).first()
+      ).toBeVisible();
+
+      performance.sampleEnd('Operations column != another column unitless');
+      expect
+        .soft(
+          performance.getSampleTime(
+            'Operations column != another column unitless'
+          ),
+          'Operations column != another column unitless took more than 3 second'
         )
         .toBeLessThanOrEqual(3_000);
       await page.getByText('Hide data').last().click();
