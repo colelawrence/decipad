@@ -11,14 +11,7 @@ import { getComputer, setErrorReporter } from '@decipad/computer';
 import { createWorkerWorker } from '@decipad/remote-computer-worker/worker';
 import { caching } from '@decipad/client-cache';
 import type { Computer } from '@decipad/computer-interfaces';
-import {
-  Observe,
-  SubscribeParams,
-  Subscription,
-  SubscriptionId,
-} from '../types';
-import type { StartNotebook } from '../notebook';
-import { getNotebook, getURLComponents } from './getEditorDeps';
+import { SubscribeParams, Subscription, SubscriptionId } from '../types';
 import { encodeImportResult } from './encodeImportResult';
 import { SerializedImportResult } from './types';
 import { decodeImportResult } from './decodeImportResult';
@@ -93,56 +86,6 @@ if (typeof importScripts === 'function') {
     }
   };
 
-  const hasCircularDependency = (
-    subscriptionRequest: Omit<Subscription, 'id' | 'import'>
-  ): boolean => {
-    // detect find out if we're already subscribed
-    for (const subscription of subscriptions.values()) {
-      if (
-        subscription.params.source === subscriptionRequest.params.source &&
-        subscription.params.url === subscriptionRequest.params.url &&
-        subscription.params.proxy === subscriptionRequest.params.proxy
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const observe =
-    (parentSubscriptionId: string): Observe =>
-    async (subscriptionRequest, throwOnError = false) => {
-      try {
-        if (hasCircularDependency(subscriptionRequest)) {
-          throw new Error(
-            `Circular dependency detected for ${subscriptionRequest.params.url}`
-          );
-        }
-        const subscriptionId = nanoid();
-        await subscribeInternal(subscriptionId, {
-          id: subscriptionId,
-          import: async () => {}, // observing a notebook does not trigger import
-          ...subscriptionRequest,
-        });
-        let closed = false;
-        return {
-          get closed() {
-            return closed;
-          },
-          unsubscribe: () => {
-            closed = true;
-            unsubscribe(subscriptionId);
-          },
-        };
-      } catch (err) {
-        if (throwOnError) {
-          throw err;
-        }
-        await reply(parentSubscriptionId, err as Error);
-      }
-      return undefined;
-    };
-
   const onError =
     (subscriptionId: string, params: SubscribeParams) => async (err: Error) => {
       console.error(
@@ -154,49 +97,16 @@ if (typeof importScripts === 'function') {
       await reply(subscriptionId, err);
     };
 
-  const deferringError =
-    (subscriptionId: string, params: SubscribeParams) => (message: string) => {
-      setTimeout(() => {
-        onError(subscriptionId, params)(new Error(message));
-      }, 0);
-    };
-
   const subscribeInternal = async (
     subscriptionId: string,
     subscription: Subscription
   ) => {
-    const deferError = deferringError(subscriptionId, subscription.params);
     subscriptions.set(subscriptionId, subscription);
-    const { params } = subscription;
-    if (params.source === 'decipad') {
-      const { docId } = getURLComponents(subscription.params.url);
-      const { hasAccess, exists } = await getNotebook(docId);
-      const error = !exists
-        ? 'Notebook does not exist'
-        : !hasAccess
-        ? "You don't have access to this notebook"
-        : undefined;
-      if (error) {
-        deferError(error);
-        return;
-      }
-
-      const { startNotebook: _startNotebook } = await import('../notebook');
-
-      const startNotebook = _startNotebook as StartNotebook;
-
-      startNotebook(
-        subscription,
-        observe(subscriptionId),
-        onError(subscriptionId, params)
-      );
-    } else {
-      setTimeout(() => {
-        subscription.import().finally(() => {
-          schedule(subscriptionId);
-        });
-      }, 0);
-    }
+    setTimeout(() => {
+      subscription.import().finally(() => {
+        schedule(subscriptionId);
+      });
+    }, 0);
   };
 
   const subscribe = async (

@@ -48,10 +48,6 @@ import {
   ELEMENT_LINE,
   ELEMENT_LINEAR,
   ELEMENT_LINK,
-  ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-  ELEMENT_LIVE_DATASET_VARIABLE_NAME,
-  ELEMENT_LIVE_QUERY_QUERY,
-  ELEMENT_LIVE_QUERY_VARIABLE_NAME,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
@@ -78,15 +74,13 @@ import {
   ELEMENT_DRAW,
   ELEMENT_IFRAME,
   ELEMENT_IMPORT,
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_DATASET,
-  ELEMENT_LIVE_QUERY,
   ELEMENT_MATH,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_SUBMIT_FORM,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_INTEGRATION,
   ELEMENT_LAYOUT,
+  ELEMENT_LIVE_CONNECTION,
 } from './element-kinds';
 import { UNCOLUMNABLE_KINDS } from './uncolumnable-kinds';
 import {
@@ -256,72 +250,7 @@ export interface ImportElement extends BaseElement {
   children: [EmptyText];
 }
 
-// Live Connection
-
-export interface LiveConnectionVarNameElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_CONNECTION_VARIABLE_NAME;
-  children: [PlainText];
-}
-
-export interface LiveDataSetVarNameElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_DATASET_VARIABLE_NAME;
-  children: [PlainText];
-}
-
 export type ColIndex = number;
-export interface LiveConnectionElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_CONNECTION;
-  url: string;
-  proxy?: string;
-  source?: ImportElementSource;
-  externalDataSourceId?: string;
-  isFirstRowHeaderRow: boolean;
-  columnTypeCoercions: Record<ColIndex, TableCellType>;
-  jsonPath?: string;
-  delimiter?: string;
-  children: [LiveConnectionVarNameElement];
-}
-
-export interface LiveDataSetElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_DATASET;
-  url: string;
-  proxy?: string;
-  source?: ImportElementSource;
-  externalDataSourceId?: string;
-  isFirstRowHeaderRow: boolean;
-  columnTypeCoercions: Record<ColIndex, TableCellType>;
-  jsonPath?: string;
-  delimiter?: string;
-  children: [LiveDataSetVarNameElement, LiveQueryElement];
-  hideLiveQueryResults?: boolean;
-}
-
-export interface LiveDataSetQueryElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_CONNECTION_VARIABLE_NAME;
-  children: [PlainText];
-}
-
-// Live Query
-
-export interface LiveQueryVarNameElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_QUERY_VARIABLE_NAME;
-  children: [PlainText];
-  isHidden?: boolean;
-}
-
-export interface LiveQueryQueryElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_QUERY_QUERY;
-  connectionBlockId?: string;
-  children: [PlainText];
-  isHidden?: boolean;
-}
-
-export interface LiveQueryElement extends BaseElement {
-  type: typeof ELEMENT_LIVE_QUERY;
-  connectionBlockId?: string;
-  columnTypeCoercions: Record<ColIndex, TableCellType>;
-  children: [LiveQueryVarNameElement, LiveQueryQueryElement];
-}
 
 // legacy FetchElement
 export interface FetchElement extends BaseElement {
@@ -515,15 +444,12 @@ export type InteractiveElement =
   | TableElement
   | FetchElement
   | ImportElement
-  | LiveConnectionElement
-  | LiveDataSetElement
   | PlotElement
   | MathElement
   | DisplayElement
   | DeprecatedInputElement
   | ExpressionElement
   | VariableDefinitionElement
-  | LiveQueryElement
   | IntegrationBlock;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;
@@ -761,10 +687,6 @@ export type BlockElement =
   | LayoutElement
   // Special elements
   | InteractiveElement
-  | LiveConnectionVarNameElement
-  | LiveDataSetVarNameElement
-  | LiveQueryVarNameElement
-  | LiveQueryQueryElement
   // Table elements
   | DeprecatedTableInputElement
   | TableElement
@@ -902,19 +824,15 @@ export const topLevelBlockKinds: string[] = [
   DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE,
   ELEMENT_DATA_VIEW,
-  ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_LAYOUT,
   ELEMENT_VARIABLE_DEF,
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_DATASET,
-  ELEMENT_IMPORT,
   ELEMENT_DRAW,
-  ELEMENT_LIVE_QUERY,
   ELEMENT_INTEGRATION,
   ELEMENT_DISPLAY,
   ELEMENT_IFRAME,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_SUBMIT_FORM,
   ELEMENT_MATH,
+  ELEMENT_LIVE_CONNECTION,
 ];

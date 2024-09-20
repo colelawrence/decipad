@@ -1,9 +1,9 @@
-import type { Computer } from '@decipad/computer-interfaces';
 import {
   Blockquote,
   Bold,
   Callout,
   Code,
+  CrashingLiveConnection,
   Display,
   Divider,
   Heading1,
@@ -42,6 +42,7 @@ import {
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
+  ELEMENT_LIVE_CONNECTION,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
@@ -59,14 +60,14 @@ export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
 >;
 
-export const components = (computer: Computer): PlateComponents => ({
+export const components = {
   // Headings
   [ELEMENT_H1]: Title,
   [ELEMENT_H2]: Heading1,
   [ELEMENT_H3]: Heading2,
 
   // Text blocks
-  [ELEMENT_PARAGRAPH]: InteractiveParagraph(computer),
+  [ELEMENT_PARAGRAPH]: InteractiveParagraph,
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,
@@ -90,6 +91,9 @@ export const components = (computer: Computer): PlateComponents => ({
 
   [ELEMENT_DISPLAY]: Display,
 
+  // Deprecated
+  [ELEMENT_LIVE_CONNECTION]: CrashingLiveConnection,
+
   // Marks
   [MARK_BOLD]: Bold,
   [MARK_UNDERLINE]: Underline,
@@ -97,4 +101,4 @@ export const components = (computer: Computer): PlateComponents => ({
   [MARK_ITALIC]: Italic,
   [MARK_CODE]: Code,
   [MARK_HIGHLIGHT]: Highlight,
-});
+};

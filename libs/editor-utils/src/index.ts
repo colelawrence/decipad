@@ -29,7 +29,6 @@ export * from './hasPoint';
 export * from './hasTarget';
 export * from './insertNodes';
 export * from './isDOMNode';
-export * from './isDatabaseConnection';
 export * from './isDragAndDropHorizontal';
 export * from './isElementOfType';
 export * from './isEntryOfType';

@@ -21,8 +21,7 @@ export const ELEMENT_LAYOUT = 'columns';
 export const ELEMENT_HR = 'divider';
 
 // inputs
-export const ELEMENT_FETCH = 'fetch-data';
-export const ELEMENT_IMPORT = 'import';
+
 export const ELEMENT_PLOT = 'plot';
 export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_CODE_LINE_V2 = 'code_line_v2';
@@ -70,11 +69,6 @@ export const ELEMENT_LIVE_CONNECTION_VARIABLE_NAME = 'live-var-name';
 export const ELEMENT_LIVE_DATASET = 'live-dataset';
 export const ELEMENT_LIVE_DATASET_VARIABLE_NAME = 'live-dataset-var-name';
 
-// live query
-export const ELEMENT_LIVE_QUERY = 'live-query';
-export const ELEMENT_LIVE_QUERY_VARIABLE_NAME = 'live-query-var-name';
-export const ELEMENT_LIVE_QUERY_QUERY = 'live-query-query';
-
 // smart refs
 export const ELEMENT_SMART_REF = 'smart-ref';
 
@@ -100,3 +94,10 @@ export const ELEMENT_TAB = 'tab';
 export const ELEMENT_DATA_TAB = 'data-tab';
 export const ELEMENT_DATA_TAB_CHILDREN = 'data-tab-children';
 export const ELEMENT_TITLE = 'title';
+
+// Deprecation area.
+export const ELEMENT_FETCH = 'fetch-data';
+export const ELEMENT_IMPORT = 'import';
+export const ELEMENT_LIVE_QUERY = 'live-query';
+export const ELEMENT_LIVE_QUERY_VARIABLE_NAME = 'live-query-var-name';
+export const ELEMENT_LIVE_QUERY_QUERY = 'live-query-query';

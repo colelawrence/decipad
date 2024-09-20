@@ -3,7 +3,6 @@ import type { FileType, MyEditor, SlashCommand } from '@decipad/editor-types';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
-  ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
@@ -32,7 +31,6 @@ import {
   insertInputBelow,
   insertSliderInputBelow,
 } from './input';
-import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
 
@@ -62,7 +60,7 @@ export const execute = async ({
   await withoutNormalizingAsync(editor, async () => {
     switch (command) {
       case 'structured-input':
-        await insertStructuredCodeLineBelow({
+        insertStructuredCodeLineBelow({
           editor,
           path,
           code: '100$',
@@ -70,7 +68,7 @@ export const execute = async ({
         });
         break;
       case 'structured-code-line':
-        await insertStructuredCodeLineBelow({
+        insertStructuredCodeLineBelow({
           editor,
           path,
           code: '14 * 3',
@@ -78,28 +76,28 @@ export const execute = async ({
         });
         break;
       case 'calculation-block':
-        await insertCodeLineBelow(editor, path, false);
+        insertCodeLineBelow(editor, path, false);
         break;
       case 'input':
-        await insertInputBelow(editor, path, 'number', getAvailableIdentifier);
+        insertInputBelow(editor, path, 'number', getAvailableIdentifier);
         break;
       case 'toggle':
-        await insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
+        insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
         break;
       case 'datepicker':
-        await insertInputBelow(editor, path, 'date', getAvailableIdentifier);
+        insertInputBelow(editor, path, 'date', getAvailableIdentifier);
         break;
       case 'slider':
-        await insertSliderInputBelow(editor, path, getAvailableIdentifier);
+        insertSliderInputBelow(editor, path, getAvailableIdentifier);
         break;
       case 'display':
-        await insertDisplayBelow(editor, path);
+        insertDisplayBelow(editor, path);
         break;
       case 'dropdown':
-        await insertDropdownBelow(editor, path, getAvailableIdentifier);
+        insertDropdownBelow(editor, path, getAvailableIdentifier);
         break;
       case 'table':
-        await insertTableBelow(editor, path, getAvailableIdentifier);
+        insertTableBelow(editor, path, getAvailableIdentifier);
         break;
       case 'data-view':
         await insertDataViewBelow(editor, path, computer);
@@ -107,56 +105,50 @@ export const execute = async ({
       case 'open-integration':
         setSidebar({ type: 'integrations' });
         break;
-      case 'live-query':
-        await insertLiveQueryBelow(editor, path, getAvailableIdentifier);
-        break;
       case 'pie-chart':
-        await insertPlotBelow(editor, path, 'arc');
+        insertPlotBelow(editor, path, 'arc');
         break;
       case 'line-chart':
-        await insertPlotBelow(editor, path, 'line');
+        insertPlotBelow(editor, path, 'line');
         break;
       case 'bar-chart':
-        await insertPlotBelow(editor, path, 'bar');
+        insertPlotBelow(editor, path, 'bar');
         break;
       case 'area-chart':
-        await insertPlotBelow(editor, path, 'area');
+        insertPlotBelow(editor, path, 'area');
         break;
       case 'scatter-plot':
-        await insertPlotBelow(editor, path, 'point');
+        insertPlotBelow(editor, path, 'point');
         break;
       case 'radar-plot':
-        await insertPlotBelow(editor, path, 'radar');
+        insertPlotBelow(editor, path, 'radar');
         break;
       case 'funnel-plot':
-        await insertPlotBelow(editor, path, 'funnel');
+        insertPlotBelow(editor, path, 'funnel');
         break;
       case 'combo-chart':
-        await insertPlotBelow(editor, path, 'combo');
-        break;
-      case 'import':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);
+        insertPlotBelow(editor, path, 'combo');
         break;
       case 'submit-form':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_SUBMIT_FORM);
+        insertBlockOfTypeBelow(editor, path, ELEMENT_SUBMIT_FORM);
         break;
       case 'heading1':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_H2);
+        insertBlockOfTypeBelow(editor, path, ELEMENT_H2);
         break;
       case 'heading2':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
+        insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
         break;
       case 'divider':
-        await insertDividerBelow(editor, path, ELEMENT_HR);
+        insertDividerBelow(editor, path, ELEMENT_HR);
         break;
       case 'callout':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
+        insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
         break;
       case 'blockquote':
-        await insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
+        insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
         break;
       case 'sketch':
-        await insertDrawBelow(editor, path);
+        insertDrawBelow(editor, path);
         break;
       case 'layout':
         insertLayoutBelow(editor, path);

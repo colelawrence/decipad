@@ -1,7 +1,6 @@
 import {
   canDropFile,
   dndStore,
-  insertLiveConnection,
   validateItemAndGetFile,
 } from '@decipad/editor-components';
 import { insertImageBelow } from '@decipad/editor-utils';
@@ -30,8 +29,7 @@ import { isServerSideRendering } from '../../support/src/isServerSideRendering';
 import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
-import { maybeSourceFromFileType } from './maybeSourceFromFileType';
-import { useActiveEditor, useComputer } from '@decipad/editor-hooks';
+import { useActiveEditor } from '@decipad/editor-hooks';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -52,7 +50,6 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   children,
 }) => {
   const toast = useToast();
-  const computer = useComputer();
   const editor = useNotebookState(notebookId, (s) => s.editor);
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
@@ -120,17 +117,11 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         if (file.type.startsWith('image/')) {
           insertImageBelow(activeEditor, insertAt, url, file.name);
         } else {
-          insertLiveConnection({
-            computer,
-            editor: activeEditor,
-            url,
-            source: maybeSourceFromFileType(file.type) ?? undefined,
-            fileName: file.name,
-          });
+          toast.error('Cannot upload this file');
         }
       });
     },
-    [computer, activeEditor]
+    [activeEditor, toast]
   );
 
   const onAttach = useCallback(

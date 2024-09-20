@@ -55,7 +55,6 @@ export * from './MathBlock/MathBlock';
 export * from './PlotBlock/PlotBlock';
 export * from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export * from './SmartRef/SmartRef';
-export * from './LiveConnectionResult/LiveConnectionResult';
 export * from './VariableNameSelector/VariableNameSelector';
 export * from './EditableLiveDataCaption/EditableLiveDataCaption';
 export * from './LiveError/LiveError';

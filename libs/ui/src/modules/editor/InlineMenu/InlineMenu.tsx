@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { InlineMenuItem } from '../InlineMenuItem/InlineMenuItem';
 import { InlineMenuGroup } from '../InlineMenuGroup/InlineMenuGroup';
-import { cssVar, mediumShadow, p14Regular } from '../../../primitives';
+import { cssVar, mediumShadow } from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 
 const styles = css(
@@ -20,12 +20,6 @@ const styles = css(
     border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: '8px',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-
-    ':empty::before': {
-      ...p14Regular,
-
-      content: '"No matching items found"',
-    },
   },
   deciOverflowYStyles
 );
@@ -137,6 +131,15 @@ export const InlineMenu: FC<InlineMenuProps> = ({
   let foundFocusedItem = false;
 
   const slashContainerStyles = [styles, variant === 'inline' && inlineStyles];
+
+  const showSlashCommands =
+    groupsWithItemsFiltered
+      .map((group) => group.matchingItems.length)
+      .reduce((p, n) => p + n, 0) > 0;
+
+  if (!showSlashCommands) {
+    return null;
+  }
 
   return (
     <div role="menu" aria-orientation="vertical" css={slashContainerStyles}>

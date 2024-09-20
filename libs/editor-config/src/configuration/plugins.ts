@@ -24,12 +24,8 @@ import {
   createIframePlugin,
   createSubmitFormPlugin,
   createImagePlugin,
-  createImportPlugin,
   createLayoutPlugin,
   createLinkPlugin,
-  createLiveConnectionPlugin,
-  createLiveDataSetPlugin,
-  createLiveQueryPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
   createMigrateStructuredInputs,
@@ -63,6 +59,7 @@ import {
   createCodeLineVarnamePlugin,
   createCodeLineCodeTextPlugin,
   createAutoFormatCodeLinePlugin,
+  createCrashingBlock,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -182,10 +179,6 @@ export const plugins = ({
       createMyAutoformatPlugin({
         options: { rules: autoformatRules(computer) },
       }),
-      createImportPlugin(interactions),
-      createLiveConnectionPlugin()(),
-      createLiveDataSetPlugin()(),
-      createLiveQueryPlugin()(),
 
       // code editing
       createCodeVariableHighlightPlugin(),
@@ -244,11 +237,11 @@ export const plugins = ({
       createMigrateTableDropdownToId(),
       createPreventInvalidSelectionPlugin(),
       createTransformH1(),
-
+      createCrashingBlock(),
       // math display
       createMathPlugin(),
     ],
     {
-      components: components(computer),
+      components,
     }
   );

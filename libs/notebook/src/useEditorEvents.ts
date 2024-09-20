@@ -2,7 +2,6 @@ import type { DocSyncEditor } from '@decipad/docsync';
 import {
   ELEMENT_IMAGE,
   ELEMENT_LIVE_CONNECTION,
-  type LiveConnectionElement,
   type ImageElement,
   type TabElement,
   ELEMENT_TAB,
@@ -16,7 +15,7 @@ const singleAttachment =
     editor: DocSyncEditor | undefined,
     actions: ReturnType<typeof useDeleteAttachment>
   ) =>
-  (attachmentElement: ImageElement | LiveConnectionElement, op: TOperation) => {
+  (attachmentElement: ImageElement, op: TOperation) => {
     if (editor == null || editor.isMoving) {
       return;
     }
@@ -59,9 +58,7 @@ const singleAttachment =
       .map((t) => t.children)
       .flat()
       .filter(
-        (c) =>
-          (c.type === ELEMENT_IMAGE || c.type === ELEMENT_LIVE_CONNECTION) &&
-          c.url === attachmentElement.url
+        (c) => c.type === ELEMENT_IMAGE && c.url === attachmentElement.url
       );
 
     if (similarAttachmentElements.length > 1) {
@@ -98,18 +95,12 @@ const attachmentManagement = (
       const tab = op.node as TabElement;
 
       for (const child of tab.children) {
-        if (
-          child.type === ELEMENT_IMAGE ||
-          child.type === ELEMENT_LIVE_CONNECTION
-        ) {
+        if (child.type === ELEMENT_IMAGE) {
           singleAttachmentCurried(child, op);
         }
       }
     } else {
-      singleAttachmentCurried(
-        op.node as ImageElement | LiveConnectionElement,
-        op
-      );
+      singleAttachmentCurried(op.node as ImageElement, op);
     }
   };
 };

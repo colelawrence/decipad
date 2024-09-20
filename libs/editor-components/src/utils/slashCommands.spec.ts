@@ -3,7 +3,6 @@ import type { ElementKind, SlashCommand } from '@decipad/editor-types';
 import {
   createMyPlateEditor,
   ELEMENT_CODE_LINE,
-  ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
@@ -19,7 +18,6 @@ const expectedTypes = {
   table: ELEMENT_TABLE,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
-  import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_LINE,
   'pie-chart': ELEMENT_PLOT,
   input: ELEMENT_VARIABLE_DEF,

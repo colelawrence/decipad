@@ -3,9 +3,7 @@ import { getNotebookContent } from '@decipad/backend-notebook-content';
 import type { FileAttachmentRecord } from '@decipad/backendtypes';
 import {
   ELEMENT_IMAGE,
-  ELEMENT_LIVE_CONNECTION,
   type ImageElement,
-  type LiveConnectionElement,
   type TabElement,
 } from '@decipad/editor-types';
 import tables, { allPages, timestamp } from '@decipad/tables';
@@ -113,10 +111,7 @@ export const checkAttachments = async (notebookId: string) => {
   const allElements = tabs.map((t) => t.children ?? []).flat();
 
   const attachableElements = allElements.filter(
-    (e): e is ImageElement | LiveConnectionElement =>
-      e.type === ELEMENT_IMAGE ||
-      (e.type === ELEMENT_LIVE_CONNECTION &&
-        (e.source === 'csv' || e.source === 'json'))
+    (e): e is ImageElement => e.type === ELEMENT_IMAGE
   );
 
   await Promise.all(

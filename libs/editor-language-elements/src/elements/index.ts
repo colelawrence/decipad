@@ -5,7 +5,6 @@ export * from './TextElements';
 export * from './Table';
 export * from './Column';
 export * from './VariableDef';
-export * from './LiveQuery';
 export * from './Tabs';
 export * from './DataTab';
 export * from './DataTabChild';

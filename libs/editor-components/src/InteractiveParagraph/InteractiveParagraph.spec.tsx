@@ -21,7 +21,6 @@ import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, timeout } from '@decipad/utils';
 import { act, render, waitFor } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';
-import { getComputer } from '@decipad/computer';
 import userEvent from '@testing-library/user-event';
 import { InteractiveParagraph } from './InteractiveParagraph';
 import { ToastDisplay } from '@decipad/ui';
@@ -34,7 +33,7 @@ let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {
-      [ELEMENT_PARAGRAPH]: InteractiveParagraph(getComputer()),
+      [ELEMENT_PARAGRAPH]: InteractiveParagraph,
     },
   });
 
@@ -88,26 +87,6 @@ describe('InteractiveParagraph', () => {
     expect(getByText(/sub-head/i)).toBeVisible();
   });
 
-  it('does not render the menu when the editor is not focused', async () => {
-    const { getByText, queryByText } = render(
-      <Plate {...plateProps} editor={editor}>
-        <PlateContent scrollSelectionIntoView={noop} />
-      </Plate>,
-      { wrapper }
-    );
-
-    await act(async () => {
-      select(editor, {
-        path: findDomNodePath(editor, getByText('/'))!,
-        offset: '/'.length,
-      });
-      insertText(editor, 'a');
-      await timeout(500);
-    });
-
-    expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-  });
-
   it('does not render the menu when the paragraph is not selected', async () => {
     const { getByText, queryByText } = render(
       <Plate {...plateProps} editor={editor}>
@@ -125,26 +104,6 @@ describe('InteractiveParagraph', () => {
         },
       });
       deselect(editor);
-      await timeout(500);
-    });
-
-    expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-  });
-
-  it('does not render the menu before typing', async () => {
-    const { getByText, queryByText } = render(
-      <Plate {...plateProps} editor={editor}>
-        <PlateContent scrollSelectionIntoView={noop} />
-      </Plate>,
-      { wrapper }
-    );
-
-    await act(async () => {
-      focusEditor(editor);
-      select(editor, {
-        path: findDomNodePath(editor, getByText('/'))!,
-        offset: '/'.length,
-      });
       await timeout(500);
     });
 
@@ -248,31 +207,6 @@ describe('the menu', () => {
 });
 
 describe('the escape key', () => {
-  it('hides the menu until typing again', async () => {
-    const { getByText, queryByText, findByText } = render(
-      <Plate {...plateProps} editor={editor}>
-        <PlateContent scrollSelectionIntoView={noop} />
-      </Plate>,
-      { wrapper }
-    );
-
-    await act(async () => {
-      focusEditor(editor);
-      select(editor, {
-        path: findDomNodePath(editor, getByText('/'))!,
-        offset: '/'.length,
-      });
-      insertText(editor, 'h');
-      await timeout(500);
-    });
-
-    await act(() => userEvent.keyboard('{Escape}'));
-    expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
-
-    insertText(editor, 'e');
-    expect(await findByText(/sub-head/i)).toBeVisible();
-  });
-
   it('does not hide the menu while holding shift', async () => {
     const { getByText } = render(
       <Plate {...plateProps} editor={editor}>

@@ -72,9 +72,6 @@
       "path": "../support"
     },
     {
-      "path": "../editor-live-connect"
-    },
-    {
       "path": "../editor-plugin-factories"
     }
   ]

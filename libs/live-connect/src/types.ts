@@ -1,11 +1,5 @@
 import type { SubscriptionLike } from 'rxjs';
-import type {
-  ImportElementSource,
-  LiveConnectionElement,
-  LiveDataSetElement,
-  LiveQueryElement,
-  TableCellType,
-} from '@decipad/editor-types';
+import type { ImportElementSource, TableCellType } from '@decipad/editor-types';
 import type { ImportResult } from '@decipad/import';
 import type { RemoteWorker } from '@decipad/remote-computer-worker/client';
 
@@ -26,7 +20,6 @@ export interface SubscribeParams {
   maxCellCount?: number;
   jsonPath?: string;
   delimiter?: string;
-  liveQuery?: LiveQueryElement;
   padId?: string;
   query?: string;
   useCache?: boolean;
@@ -47,7 +40,6 @@ export type Observe = (
 ) => Promise<SubscriptionLike | undefined>;
 
 export type ConnectionResult = {
-  source: LiveConnectionElement | LiveDataSetElement;
   result: ImportResult;
 };
 

@@ -74,7 +74,7 @@ test('Count how many times table cells render', async ({ testUser }) => {
      * If this fails with a number less than what's currently expected, reduce
      * the expected count. Congratulations, you've made tables more efficient!
      */
-    expect(renderCount).toBe(process.env.CI ? 21 : 30);
+    expect(renderCount).toBe(27);
   });
 });
 
@@ -663,26 +663,24 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
   });
 
   await test.step('check data view values are correct', async () => {
-    await Promise.all([
-      expect(
-        page
-          .locator('output')
-          .filter({ hasText: 'Count:' })
-          .getByTestId('number-result:3')
-      ).toBeVisible(),
-      expect(
-        page
-          .locator('output')
-          .filter({ hasText: 'Span:' })
-          .getByTestId('number-result:5 years')
-      ).toBeVisible(),
-      expect(
-        page
-          .locator('output')
-          .filter({ hasText: 'Count true:' })
-          .getByTestId('number-result:1')
-      ).toBeVisible(),
-    ]);
+    await expect(
+      page
+        .locator('output')
+        .filter({ hasText: 'Count:' })
+        .getByTestId('number-result:3')
+    ).toBeVisible();
+    await expect(
+      page
+        .locator('output')
+        .filter({ hasText: 'Span:' })
+        .getByTestId('number-result:5 years')
+    ).toBeVisible();
+    await expect(
+      page
+        .locator('output')
+        .filter({ hasText: 'Count true:' })
+        .getByTestId('number-result:1')
+    ).toBeVisible();
   });
 
   await test.step("download csv and check it's correct", async () => {

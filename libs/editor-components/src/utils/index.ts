@@ -6,7 +6,6 @@ export * from './findParent';
 export * from './groupByTab';
 export * from './input';
 export * from './insertExternalData';
-export * from './live-query';
 export * from './plot';
 export * from './selectCatalogNames';
 export * from './slashCommands';
