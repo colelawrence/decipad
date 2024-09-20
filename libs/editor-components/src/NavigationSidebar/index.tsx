@@ -1,5 +1,9 @@
-import { useGetWorkspacesWithSharedNotebooksQuery } from '@decipad/graphql-client';
-import { WorkspaceInfo } from '@decipad/react-contexts';
+import {
+  useGetWorkspaceNotebooksQuery,
+  useGetWorkspacesWithSharedNotebooksQuery,
+  WorkspaceSwitcherWorkspaceFragment,
+} from '@decipad/graphql-client';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import {
   NumberCatalogItemType,
   Spinner,
@@ -10,30 +14,38 @@ import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 
 interface NavigationSidebarProps {
   readonly notebookId: string;
-  readonly workspaceInfo: WorkspaceInfo;
+  readonly workspaceId: string;
   readonly items?: NumberCatalogItemType[];
   readonly children: ReactNode;
   readonly search: string;
   readonly setSearch: Dispatch<SetStateAction<string>>;
+  readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly actions: NotebookMetaActionsReturn;
 }
 
 export const NavigationSidebar: FC<NavigationSidebarProps> = ({
-  workspaceInfo,
+  workspaceId,
   children,
+  notebookId,
+  workspaces,
+  actions,
 }) => {
   // todo: this should be a query for only sections
   const [result] = useGetWorkspacesWithSharedNotebooksQuery();
   const { data, fetching } = result;
   const isFetching = fetching || !data;
+  const [wsNotebookResult] = useGetWorkspaceNotebooksQuery({
+    variables: { workspaceId: workspaceId ?? '' },
+  });
 
   if (isFetching) {
     return <Spinner />;
   }
 
-  const { workspaces } = data;
-  const { id: workspaceId, name: workspaceName } = workspaceInfo;
+  // change this if we need to support pagination in the future
+  const workspaceNotebooks = wsNotebookResult.data?.pads.items;
 
-  const sections = workspaces.find(
+  const sections = data.workspaces.find(
     (workspace) => workspace.id === workspaceId
   )?.sections;
 
@@ -41,12 +53,21 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
     return <></>;
   }
 
+  const onDuplicate = (wsId: string) => {
+    actions.onDuplicateNotebook(notebookId, wsId);
+  };
+
   return (
     <ErrorBoundary fallback={<></>}>
       <UINavigationSidebar
+        notebookId={notebookId}
         sections={sections}
-        folderName={workspaceName ?? 'Folders'}
         numberCatalog={children}
+        notebooks={workspaceNotebooks}
+        workspaceId={workspaceId}
+        workspaces={workspaces}
+        onDuplicate={onDuplicate}
+        actions={actions}
       />
     </ErrorBoundary>
   );

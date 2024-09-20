@@ -8,6 +8,7 @@ import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import format from 'date-fns/format';
+import { Section } from 'libs/ui/src/types';
 import { FC, ReactNode, useContext, useState } from 'react';
 import {
   Archive,
@@ -36,6 +37,9 @@ export interface NotebookOptionsProps {
   readonly canDelete?: boolean;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
   readonly actions: NotebookMetaActionsReturn;
+  readonly sections?: Section[];
+  readonly popupSide?: 'bottom' | 'left' | 'right' | 'top';
+  readonly popupAlign?: 'center' | 'end' | 'start';
 
   // Custom onDuplicate for redirecting purposes.
   readonly onDuplicate: (workspaceId: string) => void;
@@ -46,6 +50,8 @@ export interface NotebookOptionsProps {
   // Show the 'draft', 'review', picker. Currently used
   // inside the notebook.
   readonly notebookStatus?: ReactNode;
+
+  readonly keepModalOpen?: (_: boolean) => void;
 }
 
 export const NotebookOptions: FC<NotebookOptionsProps> = ({
@@ -60,7 +66,10 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   notebookStatus,
   canDelete = true,
   actions,
+  sections,
   onDuplicate,
+  popupSide = 'bottom',
+  popupAlign = 'end',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const clientEvent = useContext(ClientEventsContext);
@@ -76,8 +85,8 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
       <MenuList
         root
         dropdown
-        align="end"
-        side="bottom"
+        align={popupAlign}
+        side={popupSide}
         sideOffset={10}
         open={isOpen}
         onChangeOpen={setIsOpen}
@@ -122,6 +131,28 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             </MenuItem>
           ))}
         {permissionType !== 'READ' && notebookStatus && <>{notebookStatus}</>}
+        {permissionType !== 'READ' && sections && (
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem icon={<Move />}>
+                <MinDiv>Move to folder</MinDiv>
+              </TriggerMenuItem>
+            }
+          >
+            {sections.map((section) => (
+              <MenuItem
+                key={section.id}
+                icon={<Move />}
+                onSelect={() => {
+                  actions.onMoveToSection(id, section.id);
+                  setIsOpen(false);
+                }}
+              >
+                {section.name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        )}
         {permissionType === 'ADMIN' && workspaces.length > 1 && (
           <MenuList
             itemTrigger={
@@ -228,7 +259,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             Unarchive
           </MenuItem>
         )}
-
         {permissionType !== 'READ' && (canDelete || !isArchived) && (
           <MenuItem
             icon={isArchived ? <Trash /> : <Archive />}
@@ -240,7 +270,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             {isArchived ? 'Delete' : 'Archive'}
           </MenuItem>
         )}
-
         {creationDate && (
           <li css={creationDateStyles}>
             <Dates>

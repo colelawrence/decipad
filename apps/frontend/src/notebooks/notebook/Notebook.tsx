@@ -21,12 +21,16 @@ import {
   Toolbar,
   TopbarPlaceholder,
   useSetCssVarWidth,
+  NotebookListPlaceholder,
 } from '@decipad/ui';
 import { getAnonUserMetadata } from '@decipad/utils';
 import type { FC } from 'react';
 import { Suspense, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useInitializeResourceUsage } from '../../hooks';
+import {
+  useInitializeResourceUsage,
+  useNotebookMetaActions,
+} from '../../hooks';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { DataDrawer } from './data-drawer';
 import { NotebookErrorBoundary } from './Errors';
@@ -52,6 +56,7 @@ export const Notebook: FC = () => {
   const { notebookId, isEmbed, aliasId } = useNotebookRoute();
   const { setWorkspacePlan } = useNotebookMetaData();
   const canUseDom = useCanUseDom();
+  const actions = useNotebookMetaActions();
 
   const setPermission = useNotebookWithIdState((s) => s.setPermission);
 
@@ -123,6 +128,9 @@ export const Notebook: FC = () => {
   const props = {
     notebookId,
     docsync,
+    workspaceId: workspaceInfo.id ?? '',
+    workspaces: notebookMetadaData?.workspaces ?? [],
+    actions,
   };
 
   const editorClientEvents = useEditorClientEvents(notebookId);
@@ -139,8 +147,8 @@ export const Notebook: FC = () => {
           }
           leftSidebar={
             isFlagEnabled('NAV_SIDEBAR') ? (
-              <Suspense fallback={<p>todo: loading state</p>}>
-                <NavigationSidebar {...props} workspaceInfo={workspaceInfo} />
+              <Suspense fallback={<NotebookListPlaceholder />}>
+                <NavigationSidebar {...props} />
               </Suspense>
             ) : null
           }

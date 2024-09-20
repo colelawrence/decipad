@@ -10,10 +10,11 @@ import {
 } from '@decipad/editor-components';
 import { useActiveEditor, useComputer } from '@decipad/editor-hooks';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
+import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { AutocompleteName } from '@decipad/language-interfaces';
 import { useNotebookState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
-import { WorkspaceInfo } from '@decipad/react-contexts';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 
@@ -21,14 +22,18 @@ import { FC, useCallback, useMemo, useState } from 'react';
 
 export interface NavigationSidebarProps {
   readonly notebookId: string;
-  readonly workspaceInfo: WorkspaceInfo;
+  readonly workspaceId: string;
   readonly docsync?: DocSyncEditor;
+  readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly actions: NotebookMetaActionsReturn;
 }
 
 const NavigationSidebar: FC<NavigationSidebarProps> = ({
   notebookId,
-  workspaceInfo,
+  workspaceId,
   docsync,
+  workspaces,
+  actions,
 }) => {
   const editor = useActiveEditor();
 
@@ -86,10 +91,12 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     <ErrorBoundary fallback={<></>}>
       <NavigationComponentSidebar
         notebookId={notebookId}
-        workspaceInfo={workspaceInfo}
+        workspaceId={workspaceId}
         items={filteredItems}
         search={search}
         setSearch={setSearch}
+        workspaces={workspaces}
+        actions={actions}
       >
         <UINumberCatalog
           items={groupedItems}

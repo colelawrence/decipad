@@ -20,8 +20,9 @@ export type SectionItemProps = {
   readonly MenuComponent: ReactNode;
   readonly dndInfo: DNDType;
   readonly isActive: boolean;
-  readonly href: string;
+  readonly href?: string;
   readonly ident?: number;
+  readonly hasChildren?: boolean;
 };
 
 export const SectionItem = ({
@@ -32,6 +33,7 @@ export const SectionItem = ({
   href,
   color = cssVar('backgroundDefault'),
   ident = 1,
+  hasChildren = false,
 }: SectionItemProps): ReturnType<FC> => {
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -76,9 +78,10 @@ export const SectionItem = ({
           }),
         css({ paddingLeft: ident * 20 }),
       ]}
+      hasChildren={hasChildren}
       color={weakColor}
     >
-      <Anchor href={href}>{children}</Anchor>
+      {href ? <Anchor href={href}>{children}</Anchor> : <div>{children}</div>}
       {MenuComponent}
     </Styled.ItemWrapper>
   );

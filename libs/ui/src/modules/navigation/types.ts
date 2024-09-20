@@ -1,8 +1,15 @@
+import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { ReactNode } from 'react';
-import { Section } from '../../types';
+import { Section, Notebook } from '../../types';
 
 export type NavigationSidebarProps = Readonly<{
   readonly sections: Section[];
-  readonly folderName: string;
   readonly numberCatalog: ReactNode;
+  readonly notebooks?: Notebook[] | null;
+  readonly workspaceId?: string;
+  readonly notebookId: string;
+  readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly actions: NotebookMetaActionsReturn;
+  readonly onDuplicate: (_: string) => void;
 }>;
