@@ -1023,6 +1023,73 @@ test.describe('staging operation performance checks', () => {
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
+
+    await test.step('Functions column filter() number', async () => {
+      performance.sampleStart('Functions column filter() number');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'filter(Customers, Customers.RandomNumber < 89482752'
+      );
+      performance.sampleStart('Functions column filter() number');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByText('4477 rows, previewing rows 1 to 10')
+      ).toBeVisible();
+
+      performance.sampleEnd('Functions column filter() number');
+      expect
+        .soft(
+          performance.getSampleTime('Functions column filter() number'),
+          'Functions column filter() number took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Functions column lookup() number', async () => {
+      performance.sampleStart('Functions column lookup() number');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'filter(Customers, Customers.RandomNumber == 44967639'
+      );
+      performance.sampleStart('Functions column lookup() number');
+      await page.getByText('Show data').last().click();
+      await expect(page.getByTestId('text-result:Teresa')).toBeVisible();
+
+      performance.sampleEnd('Functions column lookup() number');
+      expect
+        .soft(
+          performance.getSampleTime('Functions column lookup() number'),
+          'Functions column lookup() number took more than 3 second'
+        )
+        .toBeLessThanOrEqual(3_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
+
+    await test.step('Functions column sortby() number', async () => {
+      performance.sampleStart('Functions column sortby() number');
+      await notebook.addFormula(
+        'columndivideunitlesscolumnCustomers',
+        'sortby(Customers, Customers.SubscriptionDate'
+      );
+      performance.sampleStart('Functions column sortby() number');
+      await page.getByText('Show data').last().click();
+      await expect(
+        page.getByTestId('number-result:≈13.91 million')
+      ).toBeVisible();
+
+      performance.sampleEnd('Functions column sortby() number');
+      expect
+        .soft(
+          performance.getSampleTime('Functions column sortby() number'),
+          'Functions column sortby() number took more than 10 second'
+        )
+        .toBeLessThanOrEqual(10_000);
+      await page.getByText('Hide data').last().click();
+      await notebook.deleteBlock(2);
+    });
   });
 });
 
