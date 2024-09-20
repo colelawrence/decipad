@@ -200,7 +200,9 @@ export async function getWsSubscription(
   }
 
   if (workspaceSubscription.length !== 1) {
-    throw new Error('Workspace should only have 1 subscription');
+    throw new Error(
+      `Workspace with id ${workspaceId} should have 1 subscription and has ${workspaceSubscription.length}`
+    );
   }
 
   return workspaceSubscription[0];

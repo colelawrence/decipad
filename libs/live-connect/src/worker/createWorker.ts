@@ -14,9 +14,12 @@ export const createWorker = () => {
     name: 'live-connect',
     type: 'module',
   });
-  worker.onerror = (err: unknown) => {
-    console.error('Error caught on worker', err);
-    captureException(err);
+  worker.onerror = (ev) => {
+    const { error } = ev;
+    if (error instanceof Error) {
+      console.error('Error caught on worker', error);
+      captureException(error);
+    }
   };
   return createWorkerClient<SubscribeParams>(worker, 'live-connect');
 };

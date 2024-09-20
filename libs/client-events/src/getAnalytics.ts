@@ -44,7 +44,7 @@ export const getAnalytics = async (): Promise<Analytics | undefined> => {
       });
     } catch (err) {
       console.error('Error loading analytics', err);
-      throw new Error('Error loading analytics');
+      return undefined;
     }
   }
 

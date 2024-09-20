@@ -22,8 +22,9 @@ export const PlotBlock = ({
 }: PlotBlockProps): ReturnType<FC> => {
   const caption = useMemo(() => title || '', [title]);
   const noAxis = useMemo(
-    () => !!plotParams.xColumnName && plotParams.yColumnNames.length > 0,
-    [plotParams.xColumnName, plotParams.yColumnNames.length]
+    () =>
+      !!plotParams.xColumnName && (plotParams.yColumnNames?.length ?? 0) > 0,
+    [plotParams.xColumnName, plotParams.yColumnNames?.length]
   );
   const canRenderChart = useMemo(
     () => plotParams.sourceVarName && result && noAxis,
