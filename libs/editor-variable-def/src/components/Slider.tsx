@@ -23,8 +23,6 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const parentEntry = useParentNodeEntry(element);
   const parentElement = parentEntry && parentEntry[0];
 
-  assertElementType(parentElement, ELEMENT_VARIABLE_DEF);
-
   const notebookId = useNotebookId();
 
   const [, createAnnotation] = useCreateAnnotationMutation();
@@ -37,6 +35,8 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const isReadOnly = useIsEditorReadOnly();
   const onCommit = useCallback(async () => {
     if (isFlagEnabled('PRIVATE_LINK_ANALYTICS')) {
+      assertElementType(parentElement, ELEMENT_VARIABLE_DEF);
+
       const meta = (await getAnonUserMetadata()).join(', ');
       if (parentElement && isReadOnly && aliasId) {
         await recordPadEvent({
