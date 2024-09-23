@@ -45,6 +45,7 @@ import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { resetChanges } from './reset-changes';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
+import { noop } from '@decipad/utils';
 
 const isSingleLeafChild = (
   children: unknown
@@ -355,7 +356,7 @@ export const useEditingDataDrawer = (
       htmlElement.scrollIntoView();
     }
 
-    const { apply } = codeEditor;
+    const { apply, normalize } = codeEditor;
 
     const proxy = controllerProxy(controller, editingId);
 
@@ -389,8 +390,17 @@ export const useEditingDataDrawer = (
 
     insertEditingBlock(codeEditor, block, apply);
 
+    //
+    // We don't normalize the code editor,
+    // because any normalization that needs to take place will happen
+    // through the controller and be proxied in.
+    //
+    codeEditor.normalize = noop;
+
     return () => {
       codeEditor.apply = apply;
+      codeEditor.normalize = normalize;
+
       reverseProxySub.unsubscribe();
 
       if (!isResetting.current) return;
