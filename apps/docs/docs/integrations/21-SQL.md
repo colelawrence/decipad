@@ -18,7 +18,7 @@ To import data into your Decipad Notebook using SQL, you need to start by connec
 
 1. Go to your [workspace](https://app.decipad.com/w).
 2. Select `Settings and Members` and then click on `Data Connections`.
-3. Choose the `SQL` tab and click `Add new connection`.
+3. Choose the `SQL` tab and click `Add new connection`. You can pick from **mysql**, **bigquery**, **oracle**, **postgresql**, **mariadb**, **mssql**, **redshift** and **cockroachdb**.
 4. Provide either a link or your access credentials to connect your database.
 5. After configuring, test your connection. If successful, click `Add` to integrate it into your workspace.
 
