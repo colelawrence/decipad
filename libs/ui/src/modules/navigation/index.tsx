@@ -7,7 +7,15 @@ import {
 } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { initNewDocument } from '@decipad/docsync';
-import { Folder, Sheet, Add, Ellipsis } from '../../icons';
+import {
+  Folder,
+  Sheet,
+  Add,
+  Ellipsis,
+  CaretDown,
+  CaretUp,
+  FolderOpen,
+} from '../../icons';
 import { hexToOpaqueColor } from '../../primitives';
 import { Divider, Spinner, Tooltip } from '../../shared';
 import { Anchor, colorSwatches, DNDItemTypes } from '../../utils';
@@ -34,6 +42,7 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
     (nb) => nb.id === notebookId
   )?.sectionId;
   const [isCreatingNotebook, setIsCreatingNotebook] = useState(false);
+  const [isNavigationExpanded, setIsNavigationExpanded] = useState(true);
   const [selectedSection, setSelectedSection] = useState<string | undefined>(
     sectionFromCurrentNotebook ?? undefined
   );
@@ -92,147 +101,165 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   return (
     <Styled.NavigationSidebarWrapperStyles data-testid="editor-navigation-bar">
       <Styled.NavigationTitleWrapper>
-        <Styled.NavigationTitle>Navigation</Styled.NavigationTitle>
+        <Styled.NavigationTitleInnerWrapper>
+          <Styled.IconWrapper>
+            {isNavigationExpanded && (
+              <CaretDown
+                onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
+              />
+            )}
+            {!isNavigationExpanded && (
+              <CaretUp
+                onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
+              />
+            )}
+          </Styled.IconWrapper>
+          <Styled.NavigationTitle>Navigation</Styled.NavigationTitle>
+        </Styled.NavigationTitleInnerWrapper>
         <Tooltip side="top" hoverOnly trigger={tooltipTrigger}>
           <Styled.TooltipText>Add Notebook</Styled.TooltipText>
         </Tooltip>
       </Styled.NavigationTitleWrapper>
-      <NavigationList>
-        {[
-          sections.map((section) => {
-            const notebooksPerSection =
-              notebooks?.filter(
-                (notebook) => notebook.sectionId === section.id
-              ) || [];
-
-            return (
-              <SectionItem
-                ident={0}
-                dndInfo={{
-                  target: DNDItemTypes.ICON,
-                  id: section.id,
-                }}
-                hasChildren={true}
-                isActive={false}
-                color={
-                  hexToOpaqueColor(section.color) || colorSwatches.Catskill.base
-                }
-                key={`section-item-${section.id}`}
-                MenuComponent={undefined}
-              >
-                <Styled.ItemWrapper
-                  isSelected={section.id === selectedSection}
-                  onClick={() => {
-                    setSelectedSection(
-                      section.id !== selectedSection ? section.id : undefined
-                    );
-                  }}
-                  role="button"
-                >
-                  <Styled.IconWrapper color={section.color}>
-                    <Folder />
-                  </Styled.IconWrapper>
-                  <Styled.TextWrapper>{section.name}</Styled.TextWrapper>
-                </Styled.ItemWrapper>
-                {section.id === selectedSection && [
-                  notebooksPerSection.map((notebook) => {
-                    const { id, name } = notebook;
-                    const href = notebooksRouting({}).notebook({
-                      notebook: { id, name },
-                    }).$;
-                    return (
-                      <Styled.NotebookWrapper
-                        isSelected={notebook.id === notebookId}
-                      >
-                        <Anchor
-                          href={href}
-                          key={`notebook-item-${notebook.id}`}
-                        >
-                          <Styled.ItemWrapper marginLeft={22}>
-                            <Styled.IconWrapper>
-                              <Sheet />
-                            </Styled.IconWrapper>
-                            <Styled.TextWrapper>
-                              {notebook.name}
-                            </Styled.TextWrapper>
-                          </Styled.ItemWrapper>
-                        </Anchor>
-                        <Styled.NotebookOptionsWrapper>
-                          {notebook.id === notebookId && (
-                            <NotebookOptions
-                              permissionType={
-                                notebook.myPermissionType as PermissionType
-                              }
-                              onDuplicate={onDuplicate}
-                              trigger={
-                                <Styled.EllipsisWrapper data-testid="list-notebook-options">
-                                  <Ellipsis />
-                                </Styled.EllipsisWrapper>
-                              }
-                              workspaces={workspaces}
-                              notebookId={id}
-                              creationDate={new Date(notebook.createdAt)}
-                              isArchived={!!notebook.archived}
-                              actions={actions}
-                              sections={sections}
-                              workspaceId={workspaceId ?? ''}
-                              popupAlign="start"
-                              popupSide="right"
-                            />
-                          )}
-                        </Styled.NotebookOptionsWrapper>
-                      </Styled.NotebookWrapper>
-                    );
-                  }),
-                ]}
-              </SectionItem>
-            );
-          }),
-        ]}
-        <Styled.UnsectionedNotebooksWrapper>
+      {isNavigationExpanded && (
+        <NavigationList>
           {[
-            noSectionNotebooks.map((notebook) => {
-              const { id, name } = notebook;
-              const href = notebooksRouting({}).notebook({
-                notebook: { id, name },
-              }).$;
+            sections.map((section) => {
+              const notebooksPerSection =
+                notebooks?.filter(
+                  (notebook) => notebook.sectionId === section.id
+                ) || [];
+
               return (
-                <Styled.NotebookWrapper key={`notebook-item-${notebook.id}`}>
-                  <Anchor href={href}>
-                    <Styled.ItemWrapper>
-                      <Styled.IconWrapper>
-                        <Sheet />
-                      </Styled.IconWrapper>
-                      <Styled.TextWrapper>{notebook.name}</Styled.TextWrapper>
-                    </Styled.ItemWrapper>
-                  </Anchor>
-                  <Styled.NotebookOptionsWrapper>
-                    {notebook.id === notebookId && (
-                      <NotebookOptions
-                        permissionType={
-                          notebook.myPermissionType as PermissionType
-                        }
-                        onDuplicate={onDuplicate}
-                        trigger={
-                          <Styled.EllipsisWrapper data-testid="list-notebook-options">
-                            <Ellipsis />
-                          </Styled.EllipsisWrapper>
-                        }
-                        workspaces={workspaces}
-                        notebookId={id}
-                        creationDate={new Date(notebook.createdAt)}
-                        isArchived={!!notebook.archived}
-                        actions={actions}
-                        workspaceId={workspaceId ?? ''}
-                      />
-                    )}
-                  </Styled.NotebookOptionsWrapper>
-                </Styled.NotebookWrapper>
+                <SectionItem
+                  ident={0}
+                  dndInfo={{
+                    target: DNDItemTypes.ICON,
+                    id: section.id,
+                  }}
+                  hasChildren={true}
+                  isActive={false}
+                  color={
+                    hexToOpaqueColor(section.color) ||
+                    colorSwatches.Catskill.base
+                  }
+                  key={`section-item-${section.id}`}
+                  MenuComponent={undefined}
+                >
+                  <Styled.ItemWrapper
+                    isSelected={section.id === selectedSection}
+                    onClick={() => {
+                      setSelectedSection(
+                        section.id !== selectedSection ? section.id : undefined
+                      );
+                    }}
+                    role="button"
+                  >
+                    <Styled.IconWrapper color={section.color}>
+                      {section.id !== selectedSection && <Folder />}
+                      {section.id === selectedSection && <FolderOpen />}
+                    </Styled.IconWrapper>
+                    <Styled.TextWrapper>{section.name}</Styled.TextWrapper>
+                  </Styled.ItemWrapper>
+                  {section.id === selectedSection && [
+                    notebooksPerSection.map((notebook) => {
+                      const { id, name } = notebook;
+                      const href = notebooksRouting({}).notebook({
+                        notebook: { id, name },
+                      }).$;
+                      return (
+                        <Styled.NotebookWrapper
+                          isSelected={notebook.id === notebookId}
+                        >
+                          <Anchor
+                            href={href}
+                            key={`notebook-item-${notebook.id}`}
+                          >
+                            <Styled.ItemWrapper marginLeft={22}>
+                              <Styled.IconWrapper>
+                                <Sheet />
+                              </Styled.IconWrapper>
+                              <Styled.TextWrapper>
+                                {notebook.name}
+                              </Styled.TextWrapper>
+                            </Styled.ItemWrapper>
+                          </Anchor>
+                          <Styled.NotebookOptionsWrapper>
+                            {notebook.id === notebookId && (
+                              <NotebookOptions
+                                permissionType={
+                                  notebook.myPermissionType as PermissionType
+                                }
+                                onDuplicate={onDuplicate}
+                                trigger={
+                                  <Styled.EllipsisWrapper data-testid="list-notebook-options">
+                                    <Ellipsis />
+                                  </Styled.EllipsisWrapper>
+                                }
+                                workspaces={workspaces}
+                                notebookId={id}
+                                creationDate={new Date(notebook.createdAt)}
+                                isArchived={!!notebook.archived}
+                                actions={actions}
+                                sections={sections}
+                                workspaceId={workspaceId ?? ''}
+                                popupAlign="start"
+                                popupSide="right"
+                              />
+                            )}
+                          </Styled.NotebookOptionsWrapper>
+                        </Styled.NotebookWrapper>
+                      );
+                    }),
+                  ]}
+                </SectionItem>
               );
             }),
           ]}
-        </Styled.UnsectionedNotebooksWrapper>
-      </NavigationList>
+          <Styled.UnsectionedNotebooksWrapper>
+            {[
+              noSectionNotebooks.map((notebook) => {
+                const { id, name } = notebook;
+                const href = notebooksRouting({}).notebook({
+                  notebook: { id, name },
+                }).$;
+                return (
+                  <Styled.NotebookWrapper key={`notebook-item-${notebook.id}`}>
+                    <Anchor href={href}>
+                      <Styled.ItemWrapper>
+                        <Styled.IconWrapper>
+                          <Sheet />
+                        </Styled.IconWrapper>
+                        <Styled.TextWrapper>{notebook.name}</Styled.TextWrapper>
+                      </Styled.ItemWrapper>
+                    </Anchor>
+                    <Styled.NotebookOptionsWrapper>
+                      {notebook.id === notebookId && (
+                        <NotebookOptions
+                          permissionType={
+                            notebook.myPermissionType as PermissionType
+                          }
+                          onDuplicate={onDuplicate}
+                          trigger={
+                            <Styled.EllipsisWrapper data-testid="list-notebook-options">
+                              <Ellipsis />
+                            </Styled.EllipsisWrapper>
+                          }
+                          workspaces={workspaces}
+                          notebookId={id}
+                          creationDate={new Date(notebook.createdAt)}
+                          isArchived={!!notebook.archived}
+                          actions={actions}
+                          workspaceId={workspaceId ?? ''}
+                        />
+                      )}
+                    </Styled.NotebookOptionsWrapper>
+                  </Styled.NotebookWrapper>
+                );
+              }),
+            ]}
+          </Styled.UnsectionedNotebooksWrapper>
+        </NavigationList>
+      )}
       <div css={{ padding: '10px 0' }}>
         <Divider />
       </div>

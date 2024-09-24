@@ -157,18 +157,23 @@ export const TextWrapper = styled.p(p14Medium, {
   },
 });
 
+export const NavigationTitleInnerWrapper = styled.div({
+  display: 'flex',
+});
+
 export const NavigationTitleWrapper = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
 });
 
-export const NavigationTitle = styled.div([
+export const NavigationTitle = styled.p([
   p14Bold,
   {
     color: cssVar('textHeavy'),
     lineHeight: '30px',
     flexShrink: 0,
     paddingBottom: 8,
+    display: 'inline',
   },
 ]);
 
