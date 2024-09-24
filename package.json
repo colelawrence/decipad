@@ -204,7 +204,7 @@
     "@udecode/plate-break": "^36.0.0",
     "@udecode/plate-caption": "^36.0.0",
     "@udecode/plate-code-block": "^36.0.0",
-    "@udecode/plate-common": "^36.0.6",
+    "@udecode/plate-common": "36.5.9",
     "@udecode/plate-cursor": "^36.0.0",
     "@udecode/plate-dnd": "^36.0.8",
     "@udecode/plate-excalidraw": "^36.0.0",

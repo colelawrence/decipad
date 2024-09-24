@@ -59,7 +59,7 @@ describe('usePathMutatorCallback', () => {
         onChange={noop}
       >
         <PlateContent
-          renderElement={(props) => (
+          renderElement={(props: unknown) => (
             <Link
               {...(props as ComponentProps<PlateComponent>)}
               sideEffects={sideEffects}

@@ -472,10 +472,7 @@ export async function pasteHtmlIntoCell(
     Object.assign(event, {
       inputType: 'insertFromPaste',
       dataTransfer: {
-        getData: (type: string) => {
-          if (type === 'text/html') return html;
-          return '';
-        },
+        getData: (type: string) => (type === 'text/html' ? html : ''),
         types: ['text/plain', 'text/html'],
         constructor: { name: 'DataTransfer' },
       },
@@ -504,7 +501,7 @@ export async function pastePlainTextIntoCell(
 
     Object.assign(event, {
       clipboardData: {
-        getData: () => text,
+        getData: (type: string) => (type === 'text/plain' ? text : ''),
         types: ['text/plain'],
       },
     });
