@@ -304,7 +304,7 @@
     "lru-cache": "^10.4.3",
     "lucide-react": "0.441.0",
     "luxon": "3.4.0",
-    "mailersend": "^2.2.0",
+    "mailersend": "^2.3.0",
     "md5": "^2.3.0",
     "mdast": "^3.0.0",
     "micro-memoize": "4.1.2",

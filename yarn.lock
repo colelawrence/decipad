@@ -23109,10 +23109,10 @@ magicast@^0.3.3:
     "@babel/types" "^7.24.0"
     source-map-js "^1.2.0"
 
-mailersend@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mailersend/-/mailersend-2.2.0.tgz#faab708e95cfee9ea0e905e0f6024cb72b44fdd6"
-  integrity sha512-U5d2RseMDm7oQIXqvMo1Xfvimh2k4O+nC27TA2tR4cwMDoAiZ9e0JpnbQ8mbT7gJoNdUittLs3n/kfRapu5tZg==
+mailersend@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/mailersend/-/mailersend-2.3.0.tgz#56e4511528441c25931bbe1edb51556085f8ac86"
+  integrity sha512-pe498Ry7VaAb+oqcYqmPw1V7FlECG/mcqahQ3SiK54en4ZkyRwjyxoQwA9VU4s3npB+I44LlQGUudObZQe4/jA==
   dependencies:
     gaxios "^5.0.1"
     isomorphic-unfetch "^3.1.0"
