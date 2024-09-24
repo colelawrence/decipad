@@ -1,6 +1,10 @@
 import {
   BigQuery,
   BigQueryDate,
+  BigQueryDatetime,
+  BigQueryTimestamp,
+  BigQueryTime,
+  BigQueryInt,
   type BigQueryOptions,
 } from '@google-cloud/bigquery';
 import { notAcceptable } from '@hapi/boom';
@@ -9,7 +13,13 @@ import { DatabaseClient, DatabaseClientConfig } from './types';
 import { rowsToColumns } from './rowsToColumns';
 
 const prepareCellForJSON = (cell: unknown): unknown => {
-  if (cell instanceof BigQueryDate) {
+  if (
+    cell instanceof BigQueryDate ||
+    cell instanceof BigQueryDatetime ||
+    cell instanceof BigQueryTimestamp ||
+    cell instanceof BigQueryTime ||
+    cell instanceof BigQueryInt
+  ) {
     return cell.value;
   }
   return cell;
