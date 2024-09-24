@@ -515,7 +515,7 @@
     "remark-gfm": "4.0.0",
     "remark-mdx": "3.0.1",
     "rimraf": "5.0.7",
-    "serve-handler": "^6.1.5",
+    "serve-static": "^1.16.2",
     "storybook": "8.1.11",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.6",

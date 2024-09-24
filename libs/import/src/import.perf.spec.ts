@@ -4,7 +4,7 @@ import { getComputer, materializeResult } from '@decipad/computer';
 import type { Server } from 'http';
 import { createServer } from 'http';
 import path from 'path';
-import handler from 'serve-handler';
+import serveStatic from 'serve-static';
 import getPort from 'get-port';
 import { getDefined, timeout } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
@@ -21,11 +21,13 @@ describe('import performance', () => {
   let server: Server;
   beforeAll(async () => {
     const publicPath = path.resolve(__dirname, '__fixtures__');
-    server = createServer((req, res) => {
-      handler(req, res, {
-        public: publicPath,
-      });
-    });
+    const serve = serveStatic(publicPath);
+    server = createServer((req, res) =>
+      serve(req, res, (err) => {
+        res.statusCode = err ? err.status || 500 : 404;
+        res.end(err ? err.stack : 'sorry!');
+      })
+    );
     const port = await getPort();
     await new Promise<void>((resolve, reject) => {
       server.once('error', reject);
