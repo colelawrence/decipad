@@ -83,7 +83,7 @@
     ]
   },
   "dependencies": {
-    "@20minutes/s3rver": "^4.0.0",
+    "@20minutes/s3rver": "^4.0.1",
     "@apollo/client": "3.11.1",
     "@apollo/server": "4.11.0",
     "@architect/architect": "10.16.2",
@@ -422,7 +422,7 @@
     "@nx/storybook": "16.10.0",
     "@nx/web": "16.10.0",
     "@nx/workspace": "16.10.0",
-    "@percy/cli": "1.27.4",
+    "@percy/cli": "1.29.4-beta.6",
     "@percy/playwright": "^1.0.4",
     "@storybook/addon-a11y": "^8.1.10",
     "@storybook/addon-interactions": "^8.1.10",
