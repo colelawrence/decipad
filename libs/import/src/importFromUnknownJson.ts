@@ -1,5 +1,9 @@
 /* eslint-disable no-restricted-globals */
-import type { Result, SerializedTypes } from '@decipad/language-interfaces';
+import type {
+  Result,
+  SerializedType,
+  SerializedTypes,
+} from '@decipad/language-interfaces';
 import { Unknown } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { buildResult, hydrateResult } from '@decipad/computer';
@@ -11,16 +15,24 @@ import {
   inferNumber,
 } from '@decipad/parse';
 import stringify from 'json-stringify-safe';
+import omit from 'lodash/omit';
+import { isValid, parseISO } from 'date-fns';
+import type { Computer } from '@decipad/computer-interfaces';
+import { isColumn } from '@decipad/computer-utils';
 import { errorResult } from './utils/errorResult';
 import { normalizeColumnName } from './utils/normalizeColumnName';
 import { rowsToColumns } from './utils/rowsToColumns';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
-import omit from 'lodash/omit';
-import { isValid, parseISO } from 'date-fns';
-import type { Computer } from '@decipad/computer-interfaces';
+import { N } from '@decipad/number';
 import type { ImportOptions } from './types';
-import { isColumn } from '@decipad/computer-utils';
+
+const unknownResult: Result.Result = {
+  type: {
+    kind: 'nothing',
+  },
+  value: Unknown,
+};
 
 const importTableFromArray = async (
   computer: Computer,
@@ -38,6 +50,43 @@ const importTableFromArray = async (
     ),
     options
   );
+};
+
+const defaultType = (type: TableCellType): Result.OneResult | undefined => {
+  switch (type.kind) {
+    case 'string':
+      return '';
+    case 'number':
+      return N(undefined);
+    case 'date':
+      return undefined;
+  }
+  return undefined;
+};
+
+const trySalvagingColumnResultFromUncongruentTypes = (
+  results: Array<Result.Result>,
+  type?: TableCellType
+): [TableCellType | undefined, Result.OneResult[]] | undefined => {
+  let congruentType: TableCellType | undefined = type;
+  const salvagedResult: Result.OneResult[] = [];
+
+  for (const result of results) {
+    const thisType = result.type;
+    if (thisType.kind === 'nothing' || result.value == null) {
+      if (congruentType != null) {
+        const defaulted = defaultType(congruentType);
+        if (defaulted != null) {
+          salvagedResult.push(defaulted);
+          continue;
+        }
+      }
+      return undefined;
+    }
+    congruentType = thisType as TableCellType;
+    salvagedResult.push(result.value as Result.OneResult);
+  }
+  return [congruentType, salvagedResult];
 };
 
 const importFromArray = async (
@@ -65,6 +114,23 @@ const importFromArray = async (
   );
 
   if (!sameType(results.map(({ type }) => type))) {
+    const salvagedResult = trySalvagingColumnResultFromUncongruentTypes(
+      results,
+      cohersion
+    );
+    if (salvagedResult) {
+      const [salvagedType, salvagedValues] = salvagedResult;
+      if (salvagedType != null) {
+        return {
+          type: {
+            kind: 'column',
+            indexedBy: null,
+            cellType: salvagedType as SerializedType,
+          },
+          value: salvagedValues,
+        };
+      }
+    }
     return buildResult(
       {
         kind: 'column',
@@ -142,7 +208,7 @@ const importTableFromObject = async (
 };
 
 const importSingleValueWithCohersion = async (
-  value: bigint | number | boolean | string,
+  value: bigint | number | boolean | string | symbol,
   cohersion: TableCellType
 ): Promise<Result.Result> => {
   switch (cohersion.kind) {
@@ -151,11 +217,11 @@ const importSingleValueWithCohersion = async (
         type: {
           kind: 'string',
         },
-        value: value.toString(),
+        value: value === Unknown ? '' : value.toString(),
         meta: undefined,
       };
     case 'date': {
-      let unixDate = 0n;
+      let unixDate: bigint | undefined;
       if (typeof value === 'string') {
         let parsedDate = new Date(value);
         if (parsedDate.toString() === 'Invalid Date') {
@@ -166,7 +232,10 @@ const importSingleValueWithCohersion = async (
       } else if (typeof value === 'boolean') {
         unixDate = BigInt(new Date(0).getTime());
       } else {
-        unixDate = BigInt(value);
+        unixDate =
+          value == null || value === Unknown
+            ? undefined
+            : BigInt(value as bigint);
       }
 
       return {
@@ -207,7 +276,7 @@ const importSingleValueWithCohersion = async (
 
 const importSingleValue = async (
   computer: Computer,
-  value: bigint | number | boolean | string
+  value: bigint | number | boolean | string | null | symbol
 ): Promise<Result.Result> => {
   switch (typeof value) {
     case 'bigint':
@@ -270,7 +339,9 @@ const importSingleValue = async (
         };
       }
 
-      const inferredType = await inferNumber(computer, value);
+      const inferredType = await inferNumber(computer, value, {
+        doNotTryExpressionNumbersParse: true,
+      });
       const numberType = inferredType?.type as SerializedTypes.Number;
 
       //
@@ -348,7 +419,7 @@ const internalImportFromUnknownJson = async (
 
   if (typeof json === 'object') {
     if (json == null) {
-      throw new Error("Don't know what to do with null");
+      return unknownResult;
     }
     return importTableFromObject(computer, json, options);
   }
@@ -359,11 +430,7 @@ const internalImportFromUnknownJson = async (
     return importSingleValue(computer, puntedJson);
   }
 
-  if (cohersion != null) {
-    return importSingleValueWithCohersion(puntedJson, cohersion);
-  }
-
-  throw new Error('Shouldnt reach end of function');
+  return importSingleValueWithCohersion(puntedJson, cohersion);
 };
 
 export const importFromUnknownJson = async (

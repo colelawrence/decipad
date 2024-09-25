@@ -98,64 +98,28 @@ describe('Inferring types', () => {
         )
       )
     ).resolves.toMatchInlineSnapshot(`
-      {
-        "type": {
-          "columnNames": [
-            "price",
-          ],
-          "columnTypes": [
             {
-              "kind": "number",
-              "unit": [
-                {
-                  "aliasFor": undefined,
-                  "baseQuantity": "USD",
-                  "baseSuperQuantity": "currency",
-                  "exp": DeciNumber {
-                    "d": 1n,
-                    "infinite": false,
-                    "n": 1n,
-                    "s": 1n,
+              "type": {
+                "columnNames": [
+                  "price",
+                ],
+                "columnTypes": [
+                  {
+                    "kind": "string",
                   },
-                  "known": true,
-                  "multiplier": DeciNumber {
-                    "d": 1n,
-                    "infinite": false,
-                    "n": 1n,
-                    "s": 1n,
-                  },
-                  "unit": "$",
-                },
+                ],
+                "indexName": "price",
+                "kind": "table",
+              },
+              "value": [
+                [
+                  "$100",
+                  "$200",
+                  "$300",
+                ],
               ],
-            },
-          ],
-          "indexName": "price",
-          "kind": "table",
-        },
-        "value": [
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 100n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 200n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 300n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
+            }
+          `);
   });
 });
 

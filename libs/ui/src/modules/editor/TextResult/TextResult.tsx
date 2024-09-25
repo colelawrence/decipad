@@ -1,17 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { characterLimitStyles } from '../../../styles/results';
 import { Tooltip } from '../../../shared';
+import { Unknown } from '@decipad/language-interfaces';
 
 function TextResult({
   value,
   variant,
   tooltip = true,
 }: {
-  value: string;
+  value: string | symbol;
   variant: string;
   tooltip: boolean;
 }) {
-  const serialisedValue = value.toString();
+  const serialisedValue = value === Unknown ? '?' : value.toString();
   const fullString = <span>{serialisedValue}</span>;
 
   if (!tooltip) {
@@ -20,7 +21,7 @@ function TextResult({
 
   const trigger = (
     <span
-      data-testid={`text-result:${value}`}
+      data-testid={`text-result:${serialisedValue}`}
       data-highlight-changes
       css={
         tooltip && [

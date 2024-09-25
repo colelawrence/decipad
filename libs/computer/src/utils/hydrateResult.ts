@@ -83,7 +83,7 @@ export const hydrateResult = <T extends Result.Result>(
     }
     case 'string': {
       if (typeof value !== 'string') {
-        replaceValue = value?.toString();
+        replaceValue = value === Unknown ? '' : value?.toString();
       }
     }
   }

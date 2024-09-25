@@ -89,6 +89,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
           ></Toggle>
         </div>
       )}
+      {loading ? <LoadingIndicator /> : null}
       {shouldDisplayPreview && (
         <LiveCode
           type={result.type.kind}
@@ -152,10 +153,8 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
               />
             )}
           </>
-        ) : loading ? (
-          <LoadingIndicator />
         ) : (
-          'No results to preview. Did you forget to run?'
+          'No results to preview'
         )}
       </div>
     </div>

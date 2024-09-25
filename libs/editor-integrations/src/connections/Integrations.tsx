@@ -263,8 +263,11 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
 
   const { queries } = useResourceUsage();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Result.Result | undefined>(undefined);
+
+  const computer = useComputer();
+  const notebookResult = computer.getBlockIdResult$.use(block.id);
 
   const varName = getNodeString(block.children[0]);
   const runner = useIntegrationRunner(
@@ -297,7 +300,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
   }, [block, controller, findNodeEntry, runner, setSidebar]);
 
   const toast = useToast();
-  const [gen, setGen] = useState(0);
+  const [gen, setGen] = useState(-1);
   const lastGen = useRef(-1);
 
   const resultListener = useCallback(
@@ -356,7 +359,7 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
       onClose={() => setSidebar({ type: 'closed' })}
     >
       <ResultPreview
-        result={result}
+        result={result ?? notebookResult?.result}
         name={varName}
         loading={loading}
         setName={() => {
