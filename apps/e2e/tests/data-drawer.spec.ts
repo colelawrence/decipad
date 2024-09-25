@@ -1,7 +1,34 @@
 import { expect, test } from './manager/decipad-tests';
+import type { Page } from './manager/decipad-tests';
+import { snapshot } from '../utils/src';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
 
-test('Testing magic numbers', async ({ testUser }) => {
+test('basic data drawer', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+
+  await notebook.focusOnBody();
+  await page.keyboard.type('this is a number =');
+  await expect(page.getByText('Edit Data')).toBeVisible();
+
+  await page.keyboard.type('500+1');
+  await expect(page.getByTestId('data-drawer-result:501')).toBeVisible();
+  await expect(page.getByTestId('number-result:501')).toBeVisible();
+  await page.getByRole('img', { name: 'Close' }).click();
+  await expect(page.getByText('Edit Data')).toBeHidden();
+});
+
+test('basic functions helper', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+
+  await notebook.focusOnBody();
+  await page.keyboard.type('this is a number =');
+  await expect(page.getByText('Edit Data')).toBeVisible();
+  await page.getByTestId('toggle-cell-editor').click();
+  await expect(page.getByText('abs()')).toBeVisible();
+  await expect(page.getByText('factorial()')).toBeVisible();
+  await snapshot(testUser.page as Page, 'Notebook: Functions Helper');
+});
+test('basic inline results', async ({ testUser }) => {
   const { page } = testUser;
   await testUser.importNotebook(notebookSource);
   await testUser.notebook.waitForEditorToLoad();
@@ -85,7 +112,7 @@ test('Testing magic numbers', async ({ testUser }) => {
   ).toBeHidden();
 });
 
-test('Inputs and magic numbers', async ({ testUser }) => {
+test('number inputs and inline reslults', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('can create an input', async () => {
     await testUser.notebook.openSidebar();

@@ -110,7 +110,7 @@ export const DataDrawerComponent: FC<{
             <div>
               <p css={p14Medium}>{title}</p>
               <DataDrawerFormulaHelperWrapper>
-                Formula Helper
+                Functions Helper
                 <Toggle
                   active={
                     sidebarComponent.type === 'formula-helper'
