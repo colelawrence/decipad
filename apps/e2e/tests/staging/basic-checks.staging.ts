@@ -432,9 +432,6 @@ test.describe('data views', () => {
       )
       .toBeLessThanOrEqual(40_000);
 
-    /*
-    Data views for 10k rows don't work well still, this will be the next step
-
     await test.step('importing csv link through csv panel with link', async () => {
       performance.sampleStart('Aggregation Data View');
       await page.getByTestId('data-view-options-menu-Country').click();
@@ -449,7 +446,7 @@ test.describe('data views', () => {
         )
         .toBeLessThanOrEqual(10_000);
     });
-*/
+
     await notebook.checkCalculationErrors();
   });
 });

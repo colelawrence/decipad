@@ -1,4 +1,4 @@
-import { empty, generate } from '@decipad/generator-utils';
+import { all, empty, from } from '@decipad/generator-utils';
 import { getDefined } from '@decipad/utils';
 import type { ColumnLike } from './ColumnLike';
 
@@ -8,13 +8,22 @@ export class MappedColumn<TValue, TColumn extends ColumnLike<TValue>>
 {
   readonly map: number[];
   readonly source: TColumn;
+  private sourceValues: TValue[] | undefined;
+  private memo: undefined | Array<TValue>;
 
   constructor(col: TColumn, map: number[]) {
     this.source = col;
     this.map = map;
   }
 
-  values(start = 0, end = Infinity): AsyncGenerator<TValue> {
+  private async getSourceValues() {
+    if (this.sourceValues == null) {
+      this.sourceValues = await all(this.source.values());
+    }
+    return this.sourceValues;
+  }
+
+  private internalValues(start = 0, end = Infinity): AsyncGenerator<TValue> {
     if (this.map.length < 1) {
       return empty();
     }
@@ -23,14 +32,32 @@ export class MappedColumn<TValue, TColumn extends ColumnLike<TValue>>
     if (index > stopAt) {
       return empty();
     }
-    return generate(async (done) => {
-      index += 1;
-      if (index > stopAt) {
-        return done;
+    const { map } = this;
+    const getSourceValues = this.getSourceValues.bind(this);
+
+    return (async function* generate() {
+      const sourceValues = await getSourceValues();
+      while (index < stopAt) {
+        index += 1;
+        const pos = getDefined(map[index], `no map at position ${index}`);
+        yield sourceValues[pos];
       }
-      const pos = getDefined(this.map[index], `no map at position ${index}`);
-      return this.source.atIndex(pos) as TValue;
-    });
+    })();
+  }
+
+  values(start = 0, end = Infinity): AsyncGenerator<TValue> {
+    if (this.memo) {
+      return from(this.memo.slice(start, end));
+    }
+    const setMemo = (m: TValue[]) => {
+      this.memo = m;
+    };
+    const getInternalValues = this.internalValues.bind(this);
+    return (async function* generate() {
+      const every = await all(getInternalValues());
+      setMemo(every);
+      return yield* from(every.slice(start, end));
+    })();
   }
 
   async rowCount() {

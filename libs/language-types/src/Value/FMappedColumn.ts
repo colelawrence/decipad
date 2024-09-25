@@ -101,6 +101,9 @@ export class FMappedColumn<T = Result.OneResult>
   }
 
   async getRowCount() {
+    if (this.memo) {
+      return this.memo.length;
+    }
     return count(this.values());
   }
 

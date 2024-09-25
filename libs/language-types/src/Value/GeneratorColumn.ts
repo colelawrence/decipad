@@ -76,6 +76,9 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
     return firstOrUndefined(this.values(i, i + 1));
   }
   async getRowCount(): Promise<number> {
+    if (this.memo) {
+      return this.memo.length;
+    }
     return count(this.values());
   }
 

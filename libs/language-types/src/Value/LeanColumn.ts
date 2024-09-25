@@ -90,6 +90,9 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
     return firstOrUndefined(this.values(i, i + 1));
   }
   async getRowCount(): Promise<number> {
+    if (this.memo) {
+      return this.memo.length;
+    }
     return count(this.values());
   }
 
