@@ -3,11 +3,11 @@ mod parse;
 mod types;
 mod value;
 
-use infer::infer_columns;
+use infer::{infer_column, infer_columns};
 
 use deci_result::{deserialize_result, serialize_result};
-use js_sys;
 use js_sys::Float64Array;
+use js_sys::{self, BigUint64Array, Uint8Array};
 use js_sys::{BigInt64Array, Object};
 use parse::csv_to_parsed;
 use rand::rngs::OsRng;
@@ -156,6 +156,24 @@ impl ComputeBackend {
     }
 }
 
+pub fn create_serialized_result(type_array: Vec<u64>, data: Vec<u8>) -> Object {
+    let type_array_js = BigUint64Array::new_with_length(type_array.len() as u32);
+    for (i, &value) in type_array.iter().enumerate() {
+        type_array_js.set_index(i as u32, value);
+    }
+
+    let data_array_js = Uint8Array::new_with_length(data.len() as u32);
+    data_array_js.copy_from(&data);
+
+    let objout = js_sys::Object::new();
+    js_sys::Reflect::set(&objout, &"type".into(), &JsValue::from(type_array_js))
+        .expect("set type buffer");
+    js_sys::Reflect::set(&objout, &"data".into(), &JsValue::from(data_array_js))
+        .expect("set data buffer");
+
+    objout
+}
+
 #[wasm_bindgen]
 impl ComputeBackend {
     #[wasm_bindgen(constructor)]
@@ -166,6 +184,89 @@ impl ComputeBackend {
             values: HashMap::new(),
             sequence: config.into_iter(),
         }
+    }
+
+    pub fn bench_serialize_nothing(&self) {
+        DeciResult::Boolean(true);
+    }
+
+    pub fn bench_serialize_boolean(&self) {
+        serialize_result(DeciResult::Boolean(true)); // I want to move the initialisation of DeciResult::Boolean out of the function
+    }
+
+    pub fn bench_serialize_number(&self) {
+        serialize_result(DeciResult::Fraction(1, 2));
+    }
+
+    pub fn bench_serialize_string(&self) {
+        serialize_result(DeciResult::String("hello".to_string()));
+    }
+
+    pub fn bench_serialize_bool_col(&self) {
+        serialize_result(DeciResult::Column(vec![DeciResult::Boolean(true); 10_000]));
+    }
+
+    pub fn bench_serialize_num_col(&self) {
+        serialize_result(DeciResult::Column(vec![DeciResult::Fraction(1, 2); 10_000]));
+    }
+
+    pub fn bench_serialize_string_col(&self) {
+        serialize_result(DeciResult::Column(vec![
+            DeciResult::String(
+                "hello".to_string()
+            );
+            10_000
+        ]));
+    }
+
+    pub fn bench_deserialize_nothing(&self) {}
+
+    pub fn bench_deserialize_bool(&self) {
+        let serialized = create_serialized_result(vec![0, 0, 1], vec![0]);
+        deserialize_result(serialized).unwrap();
+    }
+
+    pub fn bench_deserialize_number(&self) {
+        let serialized = create_serialized_result(
+            vec![1, 0, 16],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0],
+        );
+        deserialize_result(serialized).unwrap();
+    }
+
+    pub fn bench_deserialize_string(&self) {
+        let serialized = create_serialized_result(vec![3, 0, 13], b"Hello, world!".to_vec());
+        deserialize_result(serialized).unwrap();
+    }
+
+    pub fn bench_deserialize_bool_col(&self) {
+        // A lot of our benchmarking may just be testing how quickly Rust can make this...
+        let type_vec: Vec<u64> = vec![4, 1, 4]
+            .into_iter()
+            .chain((0..10_000).flat_map(|i| vec![0, i, 1]))
+            .collect();
+        let serialized = create_serialized_result(type_vec, vec![1; 10_000]);
+        deserialize_result(serialized).unwrap();
+    }
+
+    pub fn bench_deserialize_num_col(&self) {
+        let type_vec: Vec<u64> = vec![4, 1, 3]
+            .into_iter()
+            .chain((0..10_000).flat_map(|i| vec![1, i, 16]))
+            .collect();
+        let data = vec![1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0].repeat(10_000);
+        let serialized = create_serialized_result(type_vec, data);
+        deserialize_result(serialized).unwrap();
+    }
+
+    pub fn bench_deserialize_string_col(&self) {
+        let type_vec: Vec<u64> = vec![4, 1, 3]
+            .into_iter()
+            .chain((0..10_000).flat_map(|i| vec![3, i * 5, 5]))
+            .collect();
+        let data = b"hello".to_vec();
+        let serialized = create_serialized_result(type_vec, data);
+        deserialize_result(serialized).unwrap();
     }
 
     /*

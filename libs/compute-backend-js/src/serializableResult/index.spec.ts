@@ -7,6 +7,16 @@ import chunk from 'lodash/chunk';
 import { deserializeResult, SerializedResult, serializeResult } from '.';
 import { Value } from '@decipad/language-types';
 
+export const createSerializedResult = (
+  type: bigint[],
+  data: number[]
+): SerializedResult => {
+  return {
+    type: new BigUint64Array(type),
+    data: new Uint8Array(data),
+  };
+};
+
 describe('serializeResult', () => {
   it('should serialize true', async () => {
     const resultTrue = await serializeResult({
@@ -1015,16 +1025,6 @@ describe('deserializeResult', () => {
       value: 'Hello, world!',
     });
   });
-
-  function createSerializedResult(
-    type: bigint[],
-    data: number[]
-  ): SerializedResult {
-    return {
-      type: new BigUint64Array(type),
-      data: new Uint8Array(data),
-    };
-  }
 
   it('should deserialize a date with a value', () => {
     const data = new Uint8Array(9);
