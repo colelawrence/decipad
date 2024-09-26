@@ -1,4 +1,8 @@
-import type { Result, SerializedType } from '@decipad/language-interfaces';
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import { N } from '@decipad/number';
@@ -28,7 +32,7 @@ export const recursiveEncoders: Record<
   },
   date: ({ value }, buffer, _offset) => {
     let offset = _offset;
-    if (value == null) {
+    if (value == null || value === Unknown) {
       buffer.setUint8(offset, 0);
       offset += 1;
     } else {
