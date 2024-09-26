@@ -14,7 +14,7 @@ pub struct Tree {
 
 impl Tree {
     fn construct_node(result: &[DeciResult], start: usize, end: usize) -> Vec<TreeNode> {
-        let column = &result[0].get_slice(start, end+1);
+        let column = &result[0].get_slice(start, end + 1);
         let mut sorted_column = SortedColumn::new(column.clone());
         let slices = contiguous_slice(sorted_column.get_sorted().as_column());
 
@@ -27,19 +27,22 @@ impl Tree {
             .collect();
 
         if result.len() == 1 {
-          return nodes;
+            return nodes;
         }
 
         for index in 0..nodes.len() {
-          let (s, e) = slices[index];
-          nodes[index].children = Tree::construct_node(&result[1..], s + start, e + start);
+            let (s, e) = slices[index];
+            nodes[index].children = Tree::construct_node(&result[1..], s + start, e + start);
         }
 
         return nodes;
     }
 
     fn construct_tree(&mut self, result: &DeciResult) {
-        let column = &result.as_column()[0];
+        if result.as_column().is_empty() {
+            return;
+        }
+        let column = &result.as_column()[0]; // <- index out of bounds: the len is 0 but the index is 0
         let mut sorted_column = SortedColumn::new(column.clone());
 
         let slices = contiguous_slice(sorted_column.get_sorted().as_column());
