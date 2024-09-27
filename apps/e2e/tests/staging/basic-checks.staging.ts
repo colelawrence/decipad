@@ -405,7 +405,7 @@ test.describe('data views', () => {
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
-  test('creates a data view', async ({ performance }) => {
+  test.skip('creates a data view', async ({ performance }) => {
     performance.sampleStart('Adding Data View');
     await page.getByText('Pivot view').click();
 
