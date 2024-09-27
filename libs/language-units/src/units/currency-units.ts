@@ -1,7 +1,10 @@
 import { identity } from '@decipad/utils';
 import type { UnitOfMeasure } from '@decipad/language-interfaces';
+import { N } from '@decipad/number';
 
 const superBaseQuantity = 'currency';
+
+const ONE_HUNDRED = N(100);
 
 export const units: UnitOfMeasure[] = [
   {
@@ -31,6 +34,14 @@ export const units: UnitOfMeasure[] = [
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
     superBaseQuantity,
+  },
+  {
+    name: 'pence',
+    symbols: ['p'],
+    baseQuantity: 'GBP',
+    pretty: 'p',
+    toBaseQuantity: (pence) => pence.div(ONE_HUNDRED),
+    fromBaseQuantity: (pounds) => pounds.mul(ONE_HUNDRED),
   },
   {
     name: 'swedishkrona',
