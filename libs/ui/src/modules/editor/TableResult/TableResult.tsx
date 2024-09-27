@@ -10,7 +10,7 @@ import {
   isResultGenerator,
 } from '@decipad/remote-computer';
 import { all as allElements, count } from '@decipad/generator-utils';
-import { PaginationControl } from '../../../shared';
+import { LoadingIndicator, PaginationControl } from '../../../shared';
 import { Table } from '../Table/Table';
 import { TableHeader } from '../TableHeader/TableHeader';
 import { TableHeaderRow } from '../TableHeaderRow/TableHeaderRow';
@@ -194,7 +194,7 @@ export const TableResult: FC<TableResultProps> = ({
         }
         body={
           <>
-            {materializedValuesForPage &&
+            {materializedValuesForPage ? (
               Array.from({ length: presentRowCount }, (_, rowIndex) => (
                 <TableRow
                   key={rowIndex}
@@ -230,7 +230,14 @@ export const TableResult: FC<TableResultProps> = ({
                     />
                   ))}
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <TableRow>
+                <td colSpan={type.columnNames.length}>
+                  <LoadingIndicator />
+                </td>
+              </TableRow>
+            )}
           </>
         }
         footer={

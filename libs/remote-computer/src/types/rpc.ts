@@ -25,6 +25,8 @@ export type RPCMethodName =
   | 'getUnitFromText'
   | 'flush'
   | 'terminate'
+  | 'importExternalData'
+  | 'releaseExternalData'
   | 'waitForTriedCache'
   | 'setTriedCache';
 

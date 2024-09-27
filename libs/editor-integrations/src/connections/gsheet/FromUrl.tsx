@@ -2,11 +2,11 @@ import { Button, cssVar, isValidURL, sanitizeInput } from '@decipad/ui';
 import { assertInstanceOf } from '@decipad/utils';
 import styled from '@emotion/styled';
 import { FC, useCallback, useMemo, useRef, useState } from 'react';
-import { URLRunner } from '../../runners';
+import { LegacyRunner } from '../../runners';
 import { ConnectionProps } from '../types';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
-  assertInstanceOf(runner, URLRunner);
+  assertInstanceOf(runner, LegacyRunner);
 
   const inputUrlRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>('');

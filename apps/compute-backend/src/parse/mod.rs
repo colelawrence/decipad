@@ -1,5 +1,8 @@
 use csv::{Reader, StringRecord};
 
+mod date;
+pub use date::*;
+
 #[derive(Debug)]
 pub struct ParsedColumn {
     pub name: String,
@@ -24,26 +27,27 @@ fn get_headers(reader: &mut Reader<&[u8]>, is_first_header_row: bool) -> StringR
 pub fn csv_to_parsed(csv_string: &str, is_first_header_row: bool) -> Vec<ParsedColumn> {
     let mut reader = csv::ReaderBuilder::new()
         .has_headers(is_first_header_row)
+        .flexible(true)
         .from_reader(csv_string.as_bytes());
+
+    let rows = reader.records().map(|row| row.unwrap()).collect::<Vec<_>>();
 
     let headers = &get_headers(&mut reader, is_first_header_row);
     let mut data: Vec<ParsedColumn> = vec![];
 
-    for header in headers {
-        println!("Hello {}", header.to_string());
+    for (i, header) in headers.iter().enumerate() {
+        dbg!(i, &rows);
         data.push(ParsedColumn {
-            name: header.to_string(),
-            value: vec![],
+            name: header
+                .trim()
+                .chars()
+                .filter(|c| c.is_alphabetic() || c.is_numeric())
+                .collect(),
+            value: rows
+                .iter()
+                .map(|row| row.get(i).expect("csv must be rectangular").to_string())
+                .collect(),
         });
-    }
-
-    for record in reader.records() {
-        let record = record.unwrap();
-
-        for (index, item) in record.iter().enumerate() {
-            println!("Other {}", item.trim().to_owned());
-            data[index].value.push(item.trim().to_owned());
-        }
     }
 
     data
@@ -51,9 +55,12 @@ pub fn csv_to_parsed(csv_string: &str, is_first_header_row: bool) -> Vec<ParsedC
 
 #[test]
 fn test_simple_csv() {
-    let csv = "year,make,model,description
-        1948,Porsche,356,Luxury sports car
-        1967,Ford,Mustang fastback 1967,American car";
+    let csv = [
+        "year,make,model,description",
+        "1948,Porsche,356,Luxury sports car",
+        "1967,Ford,Mustang fastback 1967,American car",
+    ]
+    .join("\n");
 
     let columns = csv_to_parsed(&csv, true);
 
@@ -65,9 +72,32 @@ fn test_simple_csv() {
 }
 
 #[test]
+fn test_non_rectangular_csv() {
+    let csv = [
+        "year,make,model,description",
+        "1948,Porsche,356,",
+        "1967,Ford,Mustang fastback 1967,description",
+    ]
+    .join("\n");
+
+    let columns = csv_to_parsed(&csv, true);
+
+    assert_eq!(columns[0].name, "year");
+    assert_eq!(columns[1].name, "make");
+
+    assert_eq!(columns[0].value, vec!["1948", "1967"]);
+    assert_eq!(columns[1].value, vec!["Porsche", "Ford"]);
+    assert_eq!(columns[2].value, vec!["356", "Mustang fastback 1967"]);
+    assert_eq!(columns[3].value, vec!["", "description"]);
+}
+
+#[test]
 fn test_without_first_header_row() {
-    let csv = "1948,Porsche,356,Luxury sports car
-        1967,Ford,Mustang fastback 1967,American car";
+    let csv = [
+        "1948,Porsche,356,Luxury sports car",
+        "1967,Ford,Mustang fastback 1967,American car",
+    ]
+    .join("\n");
 
     let columns = csv_to_parsed(&csv, false);
 

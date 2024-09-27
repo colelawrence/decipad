@@ -20,8 +20,20 @@ import type {
   SerializedType,
   Unit,
 } from '@decipad/language-interfaces';
-import { type ListenerHelper } from '@decipad/listener-helper';
+import type { DeciType, Importer } from '@decipad/compute-backend-js';
+import type { ListenerHelper } from '@decipad/listener-helper';
 import type { PromiseOrType } from '@decipad/utils';
+
+export type ComputerImportExternalDataOptions = {
+  name: string;
+  id: string;
+  data: Uint8Array;
+  importer: Importer;
+  types: {
+    type: DeciType;
+    unit?: Unit[] | undefined;
+  }[];
+};
 
 export interface Computer {
   // --------------- results --------------//
@@ -56,6 +68,12 @@ export interface Computer {
   pushComputeDelta(req: ComputeDeltaRequest): Promise<void>;
   pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): Promise<void>;
   pushExtraProgramBlocksDelete(id: string[]): Promise<void>;
+
+  // ------------ external import ---------//
+  importExternalData(
+    options: ComputerImportExternalDataOptions
+  ): Promise<string>;
+  releaseExternalData(id: string): Promise<void>;
 
   // --------------- streams --------------//
   // --- results

@@ -336,6 +336,10 @@ export const createRemoteComputerClientFromWorker = (
     pushExtraProgramBlocksDelete(ids: string[]): Promise<void> {
       return this.pushComputeDelta({ extra: { remove: ids } });
     }
+
+    importExternalData = calling<'importExternalData'>('importExternalData');
+    releaseExternalData = calling<'releaseExternalData'>('releaseExternalData');
+
     getNamesDefined = calling<'getNamesDefined'>('getNamesDefined');
     computeDeltaRequest = calling<'computeDeltaRequest'>('computeDeltaRequest');
     getUnitFromText = calling<'getUnitFromText'>('getUnitFromText');

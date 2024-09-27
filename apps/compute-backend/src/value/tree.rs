@@ -101,7 +101,7 @@ impl Tree {
 
 #[test]
 fn tree_single_column() {
-    let column = DeciResult::from_float(vec![2.0, 1.0]);
+    let column = DeciResult::col_from_floats(vec![2.0, 1.0]);
     let column_of_columns = DeciResult::Column(vec![column.clone()]);
 
     let tree = Tree::new(column_of_columns);
@@ -115,8 +115,8 @@ fn tree_single_column() {
 
 #[test]
 fn tree_multiple_columns() {
-    let column1 = DeciResult::from_float(vec![1.0, 2.0]);
-    let column2 = DeciResult::from_float(vec![3.0, 4.0]);
+    let column1 = DeciResult::col_from_floats([1.0, 2.0]);
+    let column2 = DeciResult::col_from_floats([3.0, 4.0]);
 
     let column_of_columns = DeciResult::Column(vec![column1.clone(), column2.clone()]);
 
@@ -132,14 +132,14 @@ fn tree_multiple_columns() {
     assert!(child1.len() == 1);
     assert!(child2.len() == 1);
 
-    assert_eq!(child1[0].value, DeciResult::new_float(3.0));
-    assert_eq!(child2[0].value, DeciResult::new_float(4.0));
+    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
+    assert_eq!(child2[0].value, DeciResult::from_float(4.0));
 }
 
 #[test]
 fn tree_repeat_values() {
-    let column1 = DeciResult::from_float(vec![1.0, 1.0, 2.0, 2.0, 2.0]);
-    let column2 = DeciResult::from_float(vec![3.0, 4.0, 5.0, 6.0, 7.0]);
+    let column1 = DeciResult::col_from_floats([1.0, 1.0, 2.0, 2.0, 2.0]);
+    let column2 = DeciResult::col_from_floats([3.0, 4.0, 5.0, 6.0, 7.0]);
 
     let column_of_columns = DeciResult::Column(vec![column1.clone(), column2.clone()]);
 
@@ -152,18 +152,18 @@ fn tree_repeat_values() {
     assert_eq!(child1.len(), 2);
     assert_eq!(child2.len(), 3);
 
-    assert_eq!(child1[0].value, DeciResult::Float(3.0));
-    assert_eq!(child1[1].value, DeciResult::Float(4.0));
+    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
+    assert_eq!(child1[1].value, DeciResult::from_float(4.0));
 
-    assert_eq!(child2[0].value, DeciResult::Float(5.0));
-    assert_eq!(child2[1].value, DeciResult::Float(6.0));
-    assert_eq!(child2[2].value, DeciResult::Float(7.0));
+    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
+    assert_eq!(child2[1].value, DeciResult::from_float(6.0));
+    assert_eq!(child2[2].value, DeciResult::from_float(7.0));
 }
 
 #[test]
 fn tree_repeat_column_values() {
-    let column1 = DeciResult::from_float(vec![1.0, 1.0, 2.0, 2.0, 2.0]);
-    let column2 = DeciResult::from_float(vec![3.0, 3.0, 5.0, 5.0, 7.0]);
+    let column1 = DeciResult::col_from_floats([1.0, 1.0, 2.0, 2.0, 2.0]);
+    let column2 = DeciResult::col_from_floats([3.0, 3.0, 5.0, 5.0, 7.0]);
 
     let column_of_columns = DeciResult::Column(vec![column1.clone(), column2.clone()]);
 
@@ -176,10 +176,10 @@ fn tree_repeat_column_values() {
     assert_eq!(child1.len(), 1);
     assert_eq!(child2.len(), 2);
 
-    assert_eq!(child1[0].value, DeciResult::Float(3.0));
+    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
 
-    assert_eq!(child2[0].value, DeciResult::Float(5.0));
-    assert_eq!(child2[1].value, DeciResult::Float(7.0));
+    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
+    assert_eq!(child2[1].value, DeciResult::from_float(7.0));
 }
 
 //
@@ -189,9 +189,9 @@ fn tree_repeat_column_values() {
 
 #[test]
 fn tree_recursive_columns() {
-    let column1 = DeciResult::from_float(vec![1.0, 1.0, 2.0, 2.0, 2.0]);
-    let column2 = DeciResult::from_float(vec![3.0, 3.0, 5.0, 5.0, 7.0]);
-    let column3 = DeciResult::from_float(vec![10.0, 20.0, 30.0, 40.0, 50.0]);
+    let column1 = DeciResult::col_from_floats([1.0, 1.0, 2.0, 2.0, 2.0]);
+    let column2 = DeciResult::col_from_floats([3.0, 3.0, 5.0, 5.0, 7.0]);
+    let column3 = DeciResult::col_from_floats([10.0, 20.0, 30.0, 40.0, 50.0]);
 
     let column_of_columns =
         DeciResult::Column(vec![column1.clone(), column2.clone(), column3.clone()]);
@@ -205,15 +205,14 @@ fn tree_recursive_columns() {
     assert_eq!(child1.len(), 1);
     assert_eq!(child2.len(), 2);
 
-    assert_eq!(child1[0].value, DeciResult::Float(3.0));
-
-    assert_eq!(child2[0].value, DeciResult::Float(5.0));
-    assert_eq!(child2[1].value, DeciResult::Float(7.0));
+    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
+    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
+    assert_eq!(child2[1].value, DeciResult::from_float(7.0));
 
     let nested_child1 = &child1[0].children; // [10, 20]
 
     assert_eq!(nested_child1.len(), 2);
 
-    assert_eq!(nested_child1[0].value, DeciResult::Float(10.0));
-    assert_eq!(nested_child1[1].value, DeciResult::Float(20.0));
+    assert_eq!(nested_child1[0].value, DeciResult::from_float(10.0));
+    assert_eq!(nested_child1[1].value, DeciResult::from_float(20.0));
 }

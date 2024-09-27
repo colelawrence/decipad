@@ -12,7 +12,7 @@ import {
   WrapperIntegrationModalDialog,
 } from '@decipad/ui';
 import type { FC, ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   useAnalytics,
   useCreateIntegration,
@@ -27,15 +27,16 @@ import {
 import { UpgradeWarningBlock } from '@decipad/editor-components';
 import {
   CodeRunner,
+  CSVRunner,
   GenericContainerRunner,
-  URLRunner,
+  LegacyRunner,
   useRunner as useIntegrationRunner,
 } from '../runners';
 import { useNotebookRoute } from '@decipad/routing';
 import { IntegrationList } from './IntegrationList';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { Close } from 'libs/ui/src/icons';
-import { Result } from '@decipad/remote-computer';
+
 import {
   useComputer,
   useGlobalFindNode,
@@ -47,7 +48,7 @@ import { getNodeString } from '@udecode/plate-common';
 import omit from 'lodash/omit';
 import { Computer } from '@decipad/computer-interfaces';
 import { useEditorController } from '@decipad/notebook-state';
-import { formatError } from '@decipad/format';
+import { pushResultToComputer } from '@decipad/computer-utils';
 import { useToast } from '@decipad/toast';
 
 interface IntegrationProps {
@@ -58,14 +59,21 @@ interface IntegrationProps {
 const useRunner = (
   notebookId: string,
   computer: Computer,
+  name: string,
+  id: string,
   connectionType: ImportElementSource
 ): GenericContainerRunner => {
   const worker = useLiveConnectionWorker();
   return useMemo(() => {
     switch (connectionType) {
       case 'csv':
+        const csv = new CSVRunner(name, id, undefined, undefined, notebookId);
+        csv.setIsFirstRowHeader(true);
+        return csv;
       case 'gsheets':
-        const r = new URLRunner(
+        const r = new LegacyRunner(
+          name,
+          id,
           worker,
           undefined,
           undefined,
@@ -77,7 +85,9 @@ const useRunner = (
         return r;
       case 'notion':
       case 'mysql':
-        return new URLRunner(
+        return new LegacyRunner(
+          name,
+          id,
           worker,
           undefined,
           undefined,
@@ -85,24 +95,25 @@ const useRunner = (
           notebookId
         );
       case 'codeconnection':
-        return new CodeRunner(notebookId, computer, undefined);
+        return new CodeRunner(notebookId, computer, name, id, undefined);
       default:
         throw new Error('NOT IMPLEMENTED');
     }
-  }, [connectionType, worker, notebookId, computer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectionType, id, notebookId, computer, worker]);
 };
 
 const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
-  const [stage, connectionType, setter, next, back] = useConnectionStore(
-    (s) => [
+  const [stage, connectionType, setter, next, back, varName, blockId] =
+    useConnectionStore((s) => [
       s.stage,
       s.connectionType,
       s.Set,
       s.next,
       s.back,
-      s.existingIntegration,
-    ]
-  );
+      s.varName,
+      s.blockId,
+    ]);
 
   const setSidebar = useNotebookMetaData((s) => s.setSidebar);
 
@@ -119,54 +130,49 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
   const { notebookId } = useNotebookRoute();
 
   const computer = useComputer();
-  const runner = useRunner(notebookId, computer, connectionType!);
-  const [loading, setLoading] = useState(false);
-  const [gen, setGen] = useState(-1);
-  const lastGen = useRef(-1);
-
-  const resultListener = useCallback(
-    ([err, res]: [err: Error | undefined, res: Result.Result | undefined]) => {
-      if (err || res) {
-        lastGen.current = gen;
-        queries.incrementUsageWithBackend(workspaceId);
-      }
-      if (err) {
-        onExecute((v) => [...v, { status: 'error', err }]);
-      }
-      if (res) {
-        if (res.type.kind === 'type-error') {
-          const error = formatError('en-US', res.type.errorCause);
-          onExecute((v) => [...v, { status: 'error', err: error }]);
-        } else {
-          onExecute((v) => [...v, { status: 'success', ok: true }]);
-          setter({ rawResult: '', resultPreview: res });
-        }
-      }
-      setLoading(false);
-    },
-    [gen, queries, setter, workspaceId]
+  const runner = useRunner(
+    notebookId,
+    computer,
+    varName,
+    blockId,
+    connectionType!
   );
+  useEffect(() => {
+    runner.setName(varName);
+  }, [runner, varName]);
+  useEffect(() => {
+    return () => {
+      pushResultToComputer(computer, blockId, varName, undefined);
+      computer.releaseExternalData(blockId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const [loading, setLoading] = useState(false);
 
   const reachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
 
-  useEffect(() => {
-    if (gen < 0 || gen <= lastGen.current || reachedLimit) return;
+  const run = useCallback(() => {
+    if (reachedLimit) return;
 
     onExecute([]);
     onExecute((v) => [...v, { status: 'run' }]);
     setLoading(true);
-    const unsubscribe = runner.import(resultListener);
 
-    return () => {
-      (async () => {
-        (await unsubscribe)();
-      })();
-    };
-  }, [resultListener, runner, workspaceId, gen, reachedLimit]);
+    runner.import().then((res) => {
+      setLoading(false);
 
-  const run = useCallback(() => {
-    setGen((v) => v + 1);
-  }, []);
+      if (res instanceof Error) {
+        onExecute((v) => [...v, { status: 'error', err: blockId }]);
+        return;
+      }
+
+      if (res) {
+        queries.incrementUsageWithBackend(workspaceId);
+      }
+
+      onExecute((v) => [...v, { status: 'success', ok: true }]);
+    });
+  }, [blockId, queries, reachedLimit, runner, workspaceId]);
 
   const screen = useIntegrationScreenFactory(
     workspaceId,
@@ -264,13 +270,12 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
   const { queries } = useResourceUsage();
 
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<Result.Result | undefined>(undefined);
-
   const computer = useComputer();
-  const notebookResult = computer.getBlockIdResult$.use(block.id);
 
   const varName = getNodeString(block.children[0]);
   const runner = useIntegrationRunner(
+    varName,
+    block.id!,
     block.integrationType,
     block.typeMappings,
     block.isFirstRowHeader
@@ -300,49 +305,23 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
   }, [block, controller, findNodeEntry, runner, setSidebar]);
 
   const toast = useToast();
-  const [gen, setGen] = useState(-1);
-  const lastGen = useRef(-1);
-
-  const resultListener = useCallback(
-    ([err, res]: [err: Error | undefined, res: Result.Result | undefined]) => {
-      if (err || res) {
-        lastGen.current = gen;
-        queries.incrementUsageWithBackend(workspaceId);
-      }
-      if (err) {
-        toast.error(err.message);
-      }
-      if (res) {
-        if (res.type.kind === 'type-error') {
-          const error = formatError('en-US', res.type.errorCause);
-          toast.error(error);
-        } else {
-          setResult(res);
-        }
-      }
-      setLoading(false);
-    },
-    [gen, queries, toast, workspaceId]
-  );
 
   const hasReachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
 
-  useEffect(() => {
-    if (gen < 0 || gen <= lastGen.current || hasReachedLimit) return;
+  const run = useCallback(() => {
+    if (hasReachedLimit) return;
 
     setLoading(true);
-    const unsubscribe = runner.import(resultListener);
-
-    return () => {
-      (async () => {
-        (await unsubscribe)();
-      })();
-    };
-  }, [queries, resultListener, runner, workspaceId, gen, hasReachedLimit]);
-
-  const run = useCallback(() => {
-    setGen((v) => v + 1);
-  }, []);
+    runner.import().then((res) => {
+      if (res instanceof Error) {
+        toast.error(res.message);
+      }
+      if (res) {
+        queries.incrementUsageWithBackend(workspaceId);
+      }
+      setLoading(false);
+    });
+  }, [queries, runner, workspaceId, hasReachedLimit, toast]);
 
   return (
     <WrapperIntegrationModalDialog
@@ -359,7 +338,8 @@ const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
       onClose={() => setSidebar({ type: 'closed' })}
     >
       <ResultPreview
-        result={result ?? notebookResult?.result}
+        computer={computer}
+        blockId={block.id!}
         name={varName}
         loading={loading}
         setName={() => {

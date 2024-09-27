@@ -3,10 +3,8 @@ mod parse;
 mod types;
 mod value;
 
-use infer::{infer_column, infer_columns};
-
 use deci_result::{deserialize_result, serialize_result};
-use js_sys::Float64Array;
+use infer::infer_column;
 use js_sys::{self, BigUint64Array, Uint8Array};
 use js_sys::{BigInt64Array, Object};
 use parse::csv_to_parsed;
@@ -18,13 +16,27 @@ use value::sorted_column::SortedColumn;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_test::wasm_bindgen_test_configure;
 pub mod deci_result;
+pub mod import;
+#[cfg(test)]
+pub mod tests;
 
 wasm_bindgen_test_configure!(run_in_browser);
+
+#[wasm_bindgen]
+pub fn console_hook() {
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
+}
 
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
+}
+
+#[macro_export]
+macro_rules! log{
+    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
 #[wasm_bindgen]
@@ -47,51 +59,92 @@ pub enum ComputeErrors {
 pub fn internal_parse_csv(
     csv: &String,
     is_first_header_row: bool,
+    types: Option<Vec<DeciType>>,
 ) -> Result<(Vec<String>, Vec<DeciResult>), ComputeErrors> {
     let parsed_csv = csv_to_parsed(&csv, is_first_header_row);
-    let inferred_columns = infer_columns(&parsed_csv).expect("could not parse");
+    let mut column_types = types.unwrap_or_default();
+
+    // infer cols we weren't given types for
+    column_types.extend(
+        parsed_csv
+            .iter()
+            .skip(column_types.len())
+            .map(|col| infer_column(col).expect("valid column")),
+    );
 
     let mut injected_result_names: Vec<String> = Vec::new();
     let mut injested_result: Vec<DeciResult> = Vec::new();
 
-    for (index, col) in parsed_csv.iter().enumerate() {
-        let inferred_column_type = &inferred_columns[index];
-
-        let cohersed_column = match inferred_column_type {
-            DeciType::String => DeciResult::Column(
+    for (col, desired_type) in parsed_csv.into_iter().zip(column_types.into_iter()) {
+        let coerced_column = match desired_type {
+            DeciType::String | DeciType::Error => DeciResult::Column(
                 col.value
-                    .iter()
-                    .map(|x| DeciResult::String(x.to_string()))
+                    .into_iter()
+                    .map(|x| DeciResult::String(x))
                     .collect(),
             ),
             DeciType::Number => DeciResult::Column(
                 col.value
-                    .iter()
+                    .into_iter()
                     .map(|value| {
-                        DeciResult::Float(
-                            value.parse::<f64>().expect("could not parse inferred col"),
-                        )
+                        value
+                            .trim()
+                            .replace("r$", "")
+                            .replace("R$", "")
+                            .replace(['_', ' ', ',', '$', '£', '€'], "")
+                            .parse::<f64>()
+                            .map(|val| fraction::Fraction::from(val))
+                            .map(|frac| {
+                                let (&num, &den) = (frac.numer().unwrap(), frac.denom().unwrap());
+                                match frac.sign() {
+                                    Some(fraction::Sign::Minus) => (-(num as i64), (den as i64)),
+                                    _ => (num as i64, den as i64),
+                                }
+                            })
+                            .map(|(num, den)| DeciResult::Fraction(num, den))
+                            .unwrap_or_else(|err| {
+                                log!("error parsing number: {err:?}");
+                                DeciResult::TypeError
+                            })
                     })
                     .collect(),
             ),
             DeciType::Boolean => DeciResult::Column(
                 col.value
-                    .iter()
-                    .map(|value| {
+                    .into_iter()
+                    .map(|mut value| {
+                        value.make_ascii_lowercase();
                         DeciResult::Boolean(
-                            value
-                                .to_lowercase()
-                                .parse::<bool>()
-                                .expect("could not parse inferred col"),
+                            value.parse::<bool>().expect("could not parse inferred col"),
                         )
                     })
                     .collect(),
             ),
-            _ => unreachable!(),
+            DeciType::Date { specificity } => {
+                log!("parsing a date");
+                let mut memo = None;
+                DeciResult::Column(
+                    col.value
+                        .into_iter()
+                        .map(|value| {
+                            let (out, new_memo) = specificity
+                                .parse_str(value, memo)
+                                .map(|(date, memo)| {
+                                    (DeciResult::Date(Some(date), specificity), memo)
+                                })
+                                .unwrap_or_else(|_| (DeciResult::TypeError, None));
+                            memo = new_memo;
+                            out
+                        })
+                        .collect(),
+                )
+            }
+            DeciType::Column => unreachable!("can't coerce column type to column"),
+            DeciType::Table => unreachable!("can't coerce column type to table"),
         };
 
         injected_result_names.push(col.name.clone());
-        injested_result.push(cohersed_column);
+        injested_result.push(coerced_column);
     }
 
     Ok((injected_result_names, injested_result))
@@ -99,7 +152,7 @@ pub fn internal_parse_csv(
 
 #[wasm_bindgen]
 pub fn parse_csv(csv: String, is_first_header_row: bool) -> Object {
-    let (column_names, csv_columns) = internal_parse_csv(&csv, is_first_header_row).unwrap();
+    let (_column_names, csv_columns) = internal_parse_csv(&csv, is_first_header_row, None).unwrap();
 
     serialize_result(DeciResult::Column(csv_columns))
 }
@@ -112,26 +165,17 @@ pub struct ComputeBackend {
 #[wasm_bindgen]
 impl ComputeBackend {
     pub fn read_csv_in(&mut self, csv: String, is_first_header_row: bool) -> Object {
-        let (col_names, csv_cols) = internal_parse_csv(&csv, is_first_header_row).unwrap();
-        let mut colKeys = vec![];
+        let (col_names, csv_cols) = internal_parse_csv(&csv, is_first_header_row, None).unwrap();
+        let mut col_keys = vec![];
         for (col, i) in csv_cols.into_iter().zip(0..col_names.len()) {
             let current_key = self.sequence.next().unwrap().to_string();
-            colKeys.push(DeciResult::Column(vec![
+            col_keys.push(DeciResult::Column(vec![
                 DeciResult::String(col_names[i].clone()),
                 DeciResult::String(current_key.clone()),
             ]));
             self.values.insert(current_key, col);
         }
-        return serialize_result(DeciResult::Column(colKeys));
-    }
-
-    pub fn insert_number_column_float(&mut self, id: String, value: &Float64Array) {
-        let numbers = value.to_vec();
-
-        self.values.insert(
-            id,
-            DeciResult::Column(numbers.iter().map(|x| DeciResult::Float(*x)).collect()),
-        );
+        return serialize_result(DeciResult::Column(col_keys));
     }
 
     pub fn insert_number_column_frac(
@@ -140,15 +184,15 @@ impl ComputeBackend {
         nums: &BigInt64Array,
         dens: &BigInt64Array,
     ) {
-        let numsN = nums.to_vec();
-        let densN = dens.to_vec();
+        let nums_n = nums.to_vec();
+        let dens_n = dens.to_vec();
 
         self.values.insert(
             id,
             DeciResult::Column(
-                numsN
+                nums_n
                     .iter()
-                    .zip(densN.iter())
+                    .zip(dens_n.iter())
                     .map(|(n, d)| DeciResult::Fraction(*n, *d))
                     .collect(),
             ),
@@ -274,7 +318,7 @@ impl ComputeBackend {
      * It then returns the IDs of the columns or an error.
      */
 
-    pub fn get_slice(&mut self, id: String, start: i64, end: i64) -> Option<Vec<f64>> {
+    pub fn get_slice(&mut self, id: String, start: i64, end: i64) -> Option<Object> {
         let column = self.values.get(&id)?;
         let number_column = match column {
             DeciResult::Column(col) => col,
@@ -290,12 +334,9 @@ impl ComputeBackend {
 
         assert!(start_usize < end_usize);
 
-        Some(
-            number_column[start_usize..end_usize]
-                .iter()
-                .map(|x| x.get_float())
-                .collect(),
-        )
+        Some(serialize_result(DeciResult::Column(
+            number_column[start_usize..end_usize].to_vec(),
+        )))
     }
 
     /*
@@ -489,7 +530,7 @@ fn test_masking() {
     println!(
         "{}",
         my_deci
-            .mask_with(my_deci.lt_num(DeciResult::Float(5.0)))
+            .mask_with(my_deci.lt_num(DeciResult::from_float(5.0)))
             .get_string()
     );
 }

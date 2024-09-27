@@ -97,7 +97,7 @@ fn test_sort_col() {
 
 #[test]
 fn test_sort_map() {
-    let my_col = DeciResult::from_float(vec![1.0, 5.0, 3.0, 4.0]);
+    let my_col = DeciResult::col_from_floats([1.0, 5.0, 3.0, 4.0]);
 
     let sorted_column = SortedColumn::new(my_col);
 

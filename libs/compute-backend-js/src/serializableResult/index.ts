@@ -24,23 +24,21 @@ const FULL_NIBBLE = 0x80;
 enum ResultType {
   Boolean = 0,
   Fraction = 1,
-  Float = 2,
-  String = 3,
-  Column = 4, // All columns are materialized in Rust, so this is a materialized column too
-  Date = 5,
-  Table = 6,
-  Range = 7,
-  Row = 8,
-  TypeError = 9,
-  Pending = 10,
-  BigFraction = 11,
-  Tree = 12,
-  Undefined = 13,
+  String = 2,
+  Column = 3, // All columns are materialized in Rust, so this is a materialized column too
+  Date = 4,
+  Table = 5,
+  Range = 6,
+  Row = 7,
+  TypeError = 8,
+  Pending = 9,
+  BigFraction = 10,
+  Tree = 11,
+  Undefined = 12,
 }
 
 const fixedLengths = {
   [ResultType.Fraction]: 16,
-  [ResultType.Float]: 8,
   [ResultType.Boolean]: 1,
   [ResultType.TypeError]: 0,
   [ResultType.Pending]: 0,
@@ -262,19 +260,19 @@ export const serializeResultIter = async <T extends Result>(
           tableResult.type.indexName == null
             ? nullColumn
             : {
-                type: { kind: 'string' },
-                value: tableResult.type.indexName,
-                meta: tableResult.meta,
-              }
+              type: { kind: 'string' },
+              value: tableResult.type.indexName,
+              meta: tableResult.meta,
+            }
         );
         nextResults.push(
           tableResult.type.delegatesIndexTo == null // == because it can be undefined or null
             ? nullColumn
             : {
-                type: { kind: 'string' },
-                value: tableResult.type.delegatesIndexTo,
-                meta: undefined,
-              }
+              type: { kind: 'string' },
+              value: tableResult.type.delegatesIndexTo,
+              meta: undefined,
+            }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
@@ -391,19 +389,19 @@ export const serializeResultIter = async <T extends Result>(
           tableResult.type.indexName == null
             ? nullColumn
             : {
-                type: { kind: 'string' },
-                value: tableResult.type.indexName,
-                meta: undefined,
-              }
+              type: { kind: 'string' },
+              value: tableResult.type.indexName,
+              meta: undefined,
+            }
         );
         nextResults.push(
           tableResult.type.delegatesIndexTo == null // == because it can be undefined or null
             ? nullColumn
             : {
-                type: { kind: 'string' },
-                value: tableResult.type.delegatesIndexTo,
-                meta: undefined,
-              }
+              type: { kind: 'string' },
+              value: tableResult.type.delegatesIndexTo,
+              meta: undefined,
+            }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
@@ -586,39 +584,36 @@ function decodeNumber(number: bigint): [boolean, ResultType] {
       result = ResultType.Fraction;
       break;
     case 2:
-      result = ResultType.Float;
-      break;
-    case 3:
       result = ResultType.String;
       break;
-    case 4:
+    case 3:
       result = ResultType.Column;
       break;
-    case 5:
+    case 4:
       result = ResultType.Date;
       break;
-    case 6:
+    case 5:
       result = ResultType.Table;
       break;
-    case 7:
+    case 6:
       result = ResultType.Range;
       break;
-    case 8:
+    case 7:
       result = ResultType.Row;
       break;
-    case 9:
+    case 8:
       result = ResultType.TypeError;
       break;
-    case 10:
+    case 9:
       result = ResultType.Pending;
       break;
-    case 11:
+    case 10:
       result = ResultType.BigFraction;
       break;
-    case 12:
+    case 11:
       result = ResultType.Tree;
       break;
-    case 13:
+    case 12:
       result = ResultType.Undefined;
       break;
     default:
@@ -740,10 +735,6 @@ const deserializeResultIter = (
       const buffer = data.slice(offset, offset + length);
       const value = new TextDecoder().decode(buffer);
       return { type: { kind: 'string' }, value, meta: undefined };
-    }
-
-    case ResultType.Float: {
-      throw new Error('Floats are not supported yet');
     }
 
     case ResultType.Column: {

@@ -166,6 +166,15 @@ if (typeof importScripts === 'function') {
       createWorkerHandler(computer, remoteValueStore, 'flush')
     );
 
+    rpc.expose(
+      'importExternalData',
+      createWorkerHandler(computer, remoteValueStore, 'importExternalData')
+    );
+    rpc.expose(
+      'releaseExternalData',
+      createWorkerHandler(computer, remoteValueStore, 'releaseExternalData')
+    );
+
     // Cache results when initializing
     let resultsCache: ComputerResultsCache | undefined;
     rpc.expose<{ notebookId: string }>(

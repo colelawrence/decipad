@@ -8,7 +8,7 @@ import { Play } from 'libs/ui/src/icons';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { assertInstanceOf } from '@decipad/utils';
-import { URLRunner } from '../../runners/types';
+import { LegacyRunner } from '../../runners/types';
 import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 
 const SQL: Array<ExternalProvider> = ['mysql', 'postgresql'];
@@ -20,7 +20,7 @@ export const SQLConnection: FC<ConnectionProps> = ({
   setExternalData,
   onRun,
 }) => {
-  assertInstanceOf(runner, URLRunner);
+  assertInstanceOf(runner, LegacyRunner);
 
   const nav = useNavigate();
 

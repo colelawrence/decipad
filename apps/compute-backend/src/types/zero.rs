@@ -13,8 +13,6 @@ impl Zero for DeciResult {
             DeciResult::String(_) => false,
             DeciResult::ArbitraryFraction(n, d) => *n == BigInt::ZERO && *d != BigInt::ZERO,
             DeciResult::Fraction(n, d) => *n == 0 && *d != 0,
-            DeciResult::ArbitraryFraction(n, d) => *n == BigInt::zero() && *d != BigInt::zero(),
-            DeciResult::Float(a) => *a == 0.0,
             DeciResult::Column(_) => false,
             DeciResult::Date(_, _) => false,
             DeciResult::Table(_) => false,

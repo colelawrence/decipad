@@ -13,6 +13,9 @@
     },
     {
       "path": "../listener-helper"
+    },
+    {
+      "path": "../compute-backend-js"
     }
   ]
 }

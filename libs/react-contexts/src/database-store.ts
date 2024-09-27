@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { create } from 'zustand';
-import type { Result } from '@decipad/language-interfaces';
+
 import type {
   ImportElementSource,
   IntegrationTypes,
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { generatedNames } from '@decipad/utils';
+import { nanoid } from 'nanoid';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -27,8 +28,7 @@ export interface IntegrationStore {
   connectionType: ImportElementSource | undefined;
 
   varName: string;
-  rawResult: string | undefined;
-  resultPreview: Result.Result | undefined;
+  blockId: string;
 
   timeOfLastRun: string | undefined;
 
@@ -53,8 +53,7 @@ export interface IntegrationStore {
         | 'connectionType'
         | 'stage'
         | 'varName'
-        | 'rawResult'
-        | 'resultPreview'
+        | 'blockId'
         | 'createIntegration'
         | 'existingIntegration'
         | 'columnsToHide'
@@ -91,8 +90,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   existingIntegrationOptions: undefined,
 
   varName: generatedNames(),
-  rawResult: undefined,
-  resultPreview: undefined,
+  blockId: nanoid(),
 
   typeMapping: undefined,
   columnsToHide: [],
@@ -138,7 +136,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
       connectionType: undefined,
       createIntegration: false,
       varName: generatedNames(),
-      resultPreview: undefined,
+      blockId: nanoid(),
       existingIntegration: undefined,
       columnsToHide: [],
     });

@@ -1,10 +1,15 @@
 import type { IntegrationTypes } from '@decipad/editor-types';
-import { CodeRunner, GenericContainerRunner, URLRunner } from './types';
+import {
+  CodeRunner,
+  CSVRunner,
+  GenericContainerRunner,
+  LegacyRunner,
+} from './types';
 import type { Computer } from '@decipad/computer-interfaces';
 import { useMemo } from 'react';
 import { useNotebookRoute } from '@decipad/routing';
 import { useComputer, useLiveConnectionWorker } from '@decipad/editor-hooks';
-import type { LiveConnectionWorker } from '@decipad/live-connect';
+import { LiveConnectionWorker } from '@decipad/live-connect';
 
 type RunnerFactoryParams = {
   integration: IntegrationTypes.IntegrationBlock['integrationType'];
@@ -12,22 +17,26 @@ type RunnerFactoryParams = {
   notebookId: string;
   computer: Computer;
   isFirstRowHeader: boolean;
+  name: string;
+  id: string;
   worker: LiveConnectionWorker;
 };
 
 function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
   switch (options.integration.type) {
     case 'csv':
-      const csvRunner = new URLRunner(
-        options.worker,
+      const csvRunner = new CSVRunner(
+        options.name,
+        options.id,
         options.integration.csvUrl,
         options.types,
-        'csv',
         options.notebookId
       );
       return csvRunner;
     case 'notion':
-      return new URLRunner(
+      return new LegacyRunner(
+        options.name,
+        options.id,
         options.worker,
         options.integration.notionUrl,
         options.types,
@@ -35,7 +44,9 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
         options.notebookId
       );
     case 'gsheets':
-      const runner = new URLRunner(
+      const runner = new LegacyRunner(
+        options.name,
+        options.id,
         options.worker,
         options.integration.spreadsheetUrl,
         options.types,
@@ -62,7 +73,9 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
 
       return runner;
     case 'mysql':
-      const sqlRunner = new URLRunner(
+      const sqlRunner = new LegacyRunner(
+        options.name,
+        options.id,
         options.worker,
         options.integration.url,
         options.types,
@@ -76,6 +89,8 @@ function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
       return new CodeRunner(
         options.notebookId,
         options.computer,
+        options.name,
+        options.id,
         options.integration.code,
         options.types
       );
@@ -95,11 +110,14 @@ export function runnerFactory(
 }
 
 export function useRunner(
+  name: string,
+  id: string,
   integration: IntegrationTypes.IntegrationBlock['integrationType'],
   types: IntegrationTypes.IntegrationBlock['typeMappings'],
   isFirstRowHeader: boolean
 ): GenericContainerRunner {
   const computer = useComputer();
+
   const worker = useLiveConnectionWorker();
 
   const { notebookId } = useNotebookRoute();
@@ -107,13 +125,24 @@ export function useRunner(
   return useMemo(
     () =>
       runnerFactory({
-        worker,
+        name,
+        id,
         integration,
         types,
         notebookId,
         computer,
         isFirstRowHeader,
+        worker,
       }),
-    [computer, integration, isFirstRowHeader, notebookId, types, worker]
+    [
+      name,
+      worker,
+      id,
+      integration,
+      types,
+      notebookId,
+      computer,
+      isFirstRowHeader,
+    ]
   );
 }

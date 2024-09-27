@@ -104,7 +104,7 @@ test.describe('staging performance checks', () => {
   test('checks reducers from imports', async ({ performance }) => {
     // count
     performance.sampleStart('Reducers count');
-    await notebook.addFormula('countCustomers', 'count(Customers.CustomerId');
+    await notebook.addFormula('countCustomers', 'count(Customers.CustomerId)');
     performance.sampleStart('Reducers count');
     await expect(
       page
@@ -123,13 +123,13 @@ test.describe('staging performance checks', () => {
 
     // min
     performance.sampleStart('Reducers min');
-    await notebook.addFormula('minCustomers', 'min(Customers.RandomNumber');
+    await notebook.addFormula('minCustomers', 'min(Customers.RandomNumber)');
     performance.sampleStart('Reducers min');
     await expect(
       page
         .getByTestId('codeline-code')
         .last()
-        .getByTestId('code-line-result:9322')
+        .getByTestId('code-line-result:-99969062')
     ).toBeVisible();
 
     performance.sampleEnd('Reducers min');
@@ -142,7 +142,7 @@ test.describe('staging performance checks', () => {
 
     // max
     performance.sampleStart('Reducers max');
-    await notebook.addFormula('maxCustomers', 'max(Customers.RandomNumber');
+    await notebook.addFormula('maxCustomers', 'max(Customers.RandomNumber)');
     performance.sampleStart('Reducers max');
     await expect(
       page
@@ -163,7 +163,7 @@ test.describe('staging performance checks', () => {
     performance.sampleStart('Reducers average');
     await notebook.addFormula(
       'averageCustomers',
-      'average(Customers.RandomNumber'
+      'average(Customers.RandomNumber)'
     );
     performance.sampleStart('Reducers average');
     await expect(
@@ -171,7 +171,7 @@ test.describe('staging performance checks', () => {
         .getByTestId('codeline-code')
         .last()
         .getByTestId(
-          'code-line-result:49310004.(712342468493698739747949589917983596719343868773754750950190038007601520304060812162432486497299459891978395679135827165433086617323464692938587717543508701740348069613922784556911382276455291058211642328465693138627725545109021804360872174434886977395479095819163832766553310662132426485297059411882376475295059011802360472094418883776755351070214042808561)'
+          'code-line-result:225468.(437087417483496699339867973594718943788757751550310062012402480496099219843968793758751750350070014002800560112022404480896179235847169433886777355471094218843768753750750150030006001200240048009601920384076815363072614522904580916183236647329465893178635727145429085817163432686537307461492298459691938387677535507101420284056811362272454490898179635927185)'
         )
     ).toBeVisible();
 
@@ -187,14 +187,14 @@ test.describe('staging performance checks', () => {
     performance.sampleStart('Reducers median');
     await notebook.addFormula(
       'medianCustomers',
-      'median(Customers.RandomNumber'
+      'median(Customers.RandomNumber)'
     );
     performance.sampleStart('Reducers median');
     await expect(
       page
         .getByTestId('codeline-code')
         .last()
-        .getByTestId('code-line-result:48239232')
+        .getByTestId('code-line-result:313199')
     ).toBeVisible();
 
     performance.sampleEnd('Reducers median');
@@ -207,13 +207,13 @@ test.describe('staging performance checks', () => {
 
     // sum
     performance.sampleStart('Reducers sum');
-    await notebook.addFormula('sumCustomers', 'sum(Customers.RandomNumber');
+    await notebook.addFormula('sumCustomers', 'sum(Customers.RandomNumber)');
     performance.sampleStart('Reducers sum');
     await expect(
       page
         .getByTestId('codeline-code')
         .last()
-        .getByTestId('code-line-result:246500713557')
+        .getByTestId('code-line-result:1127116717')
     ).toBeVisible();
 
     performance.sampleEnd('Reducers sum');
@@ -228,11 +228,14 @@ test.describe('staging performance checks', () => {
     performance.sampleStart('Reducers sumif');
     await notebook.addFormula(
       'sumifCustomers',
-      'sumif(Customers.RandomNumber, Customers.RandomNumber < 5'
+      'sumif(Customers.RandomNumber, Customers.RandomNumber < 5)'
     );
     performance.sampleStart('Reducers sumif');
     await expect(
-      page.getByTestId('codeline-code').last().getByTestId('code-line-result:0')
+      page
+        .getByTestId('codeline-code')
+        .last()
+        .getByTestId('code-line-result:-122686798420')
     ).toBeVisible();
 
     performance.sampleEnd('Reducers sum');
@@ -1025,12 +1028,12 @@ test.describe('staging operation performance checks', () => {
       performance.sampleStart('Functions column filter() number');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
-        'filter(Customers, Customers.RandomNumber < 89482752'
+        'filter(Customers, Customers.RandomNumber < 89482752)'
       );
       performance.sampleStart('Functions column filter() number');
       await page.getByText('Show data').last().click();
       await expect(
-        page.getByText('4477 rows, previewing rows 1 to 10')
+        page.getByText('4733 rows, previewing rows 1 to 10')
       ).toBeVisible();
 
       performance.sampleEnd('Functions column filter() number');
@@ -1048,7 +1051,7 @@ test.describe('staging operation performance checks', () => {
       performance.sampleStart('Functions column lookup() number');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
-        'filter(Customers, Customers.RandomNumber == 44967639'
+        'filter(Customers, Customers.RandomNumber == -35728242)'
       );
       performance.sampleStart('Functions column lookup() number');
       await page.getByText('Show data').last().click();
@@ -1069,7 +1072,7 @@ test.describe('staging operation performance checks', () => {
       performance.sampleStart('Functions column sortby() number');
       await notebook.addFormula(
         'columndivideunitlesscolumnCustomers',
-        'sortby(Customers, Customers.SubscriptionDate'
+        'sortby(Customers, Customers.SubscriptionDate)'
       );
       performance.sampleStart('Functions column sortby() number');
       await page.getByText('Show data').last().click();

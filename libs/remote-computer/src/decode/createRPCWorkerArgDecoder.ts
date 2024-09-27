@@ -7,6 +7,9 @@ import type {
 import { decodeComputeDeltaRequest } from './decodeComputeDeltaRequest';
 import { decodeAST } from './decodeAST';
 
+// eslint-disable-next-line no-restricted-imports
+import { hydrateUnit } from '@decipad/computer';
+
 const noChangeArgEncoder = <Args extends Array<unknown>>(
   _store: RemoteValueStore,
   args: Args
@@ -29,6 +32,16 @@ export const argDecoders: TRPCArgDecoders = {
   getUnitFromText: noChangeArgEncoder,
   flush: noChangeArgEncoder,
   terminate: noChangeArgEncoder,
+  importExternalData: (_store, [options]) => {
+    // eslint-disable-next-line no-param-reassign
+    options.types = options.types.map((t) => {
+      // eslint-disable-next-line no-param-reassign
+      t.unit = t.unit && t.unit.map(hydrateUnit);
+      return t;
+    });
+    return [options];
+  },
+  releaseExternalData: noChangeArgEncoder,
   waitForTriedCache: noChangeArgEncoder,
   setTriedCache: noChangeArgEncoder,
 };

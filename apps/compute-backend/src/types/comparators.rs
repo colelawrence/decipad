@@ -7,18 +7,9 @@ use std::cmp::{PartialEq, PartialOrd};
 impl PartialEq for DeciResult {
     fn eq(&self, other: &DeciResult) -> bool {
         match (self, other) {
-            (DeciResult::Float(a), DeciResult::Float(b)) => *a == *b,
-            (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self == &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
-                self == &other.to_float()
-            }
-            (DeciResult::Fraction(_n, _d), DeciResult::Float(_a)) => other == &self.to_float(),
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => *n1 * *d2 == *n2 * *d1,
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
                 &self.to_arb() == other
-            }
-            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Float(_a)) => {
-                &self.to_float() == other
             }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
                 self == &other.to_arb()
@@ -46,15 +37,6 @@ impl PartialEq for DeciResult {
 
 impl Eq for DeciResult {}
 
-impl<T> PartialEq<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    fn eq(&self, other: &T) -> bool {
-        *self == DeciResult::Float(other.clone().approx_into().unwrap())
-    }
-}
-
 impl PartialOrd for DeciResult {
     fn partial_cmp(&self, _other: &Self) -> Option<std::cmp::Ordering> {
         None
@@ -62,18 +44,9 @@ impl PartialOrd for DeciResult {
 
     fn lt(&self, other: &DeciResult) -> bool {
         match (self, other) {
-            (DeciResult::Float(a), DeciResult::Float(b)) => *a < *b,
-            (DeciResult::Float(a), DeciResult::Fraction(n, d)) => *a < *n as f64 / *d as f64,
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
-                self < &other.to_float()
-            }
-            (DeciResult::Fraction(n, d), DeciResult::Float(a)) => (*n as f64 / *d as f64) < *a,
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => *n1 * *d2 < *n2 * *d1,
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
                 &self.to_arb() < other
-            }
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
-                &self.to_float() < other
             }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
                 self < &other.to_arb()
@@ -101,30 +74,5 @@ impl PartialOrd for DeciResult {
 
     fn ge(&self, other: &DeciResult) -> bool {
         return self > other || self == other;
-    }
-}
-
-impl<T> PartialOrd<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    fn partial_cmp(&self, _other: &T) -> Option<std::cmp::Ordering> {
-        return None;
-    }
-
-    fn lt(&self, other: &T) -> bool {
-        self < &DeciResult::Float(other.clone().approx_into().unwrap())
-    }
-
-    fn le(&self, other: &T) -> bool {
-        self <= &DeciResult::Float(other.clone().approx_into().unwrap())
-    }
-
-    fn gt(&self, other: &T) -> bool {
-        self > &DeciResult::Float(other.clone().approx_into().unwrap())
-    }
-
-    fn ge(&self, other: &T) -> bool {
-        self >= &DeciResult::Float(other.clone().approx_into().unwrap())
     }
 }

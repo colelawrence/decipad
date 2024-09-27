@@ -14,6 +14,7 @@
     { "path": "../generator-utils" },
     { "path": "../remote-computer-codec" },
     { "path": "../fnqueue" },
-    { "path": "../postmessage-rpc" }
+    { "path": "../postmessage-rpc" },
+    { "path": "../compute-backend-js"}
   ]
 }

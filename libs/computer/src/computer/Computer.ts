@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import type { Observable } from 'rxjs';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import {
   concatMap,
   distinctUntilChanged,
@@ -44,6 +44,7 @@ import type {
   DimensionExplanation,
   TableDesc,
   ComputeDeltaRequest,
+  ComputerImportExternalDataOptions,
 } from '@decipad/computer-interfaces';
 import { listenerHelper } from '@decipad/listener-helper';
 import { findNames } from '../autocomplete';
@@ -81,8 +82,17 @@ import {
   isTableResult,
   isTable,
   isColumn,
+  pushResultToComputer,
 } from '@decipad/computer-utils';
 import zip from 'lodash.zip';
+import {
+  computeBackendSingleton,
+  dateSpecificityFromWasm,
+  deserializeResult,
+  kindToDeciType,
+} from '@decipad/compute-backend-js';
+import { ResultGenerator } from 'libs/language-interfaces/src/Result';
+import { SerializedResult } from 'libs/compute-backend-js/src/serializableResult';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -116,6 +126,12 @@ export class Computer implements ComputerInterface {
   private deltaQueue = fnQueue({
     onError: (err) => {
       console.error('error on computer delta queue:', err);
+    },
+  });
+
+  private importQueue = fnQueue({
+    onError: (err) => {
+      console.error('error on import queue:', err);
     },
   });
 
@@ -212,6 +228,77 @@ export class Computer implements ComputerInterface {
         done: resolve,
         error: reject,
       });
+    });
+  }
+
+  public async releaseExternalData(id: string): Promise<void> {
+    computeBackendSingleton.computeBackend.release_external_data(id);
+  }
+  public async importExternalData({
+    id,
+    name,
+    data,
+    types,
+    importer,
+  }: ComputerImportExternalDataOptions): Promise<string> {
+    return this.importQueue.push(async () => {
+      const columns =
+        computeBackendSingleton.computeBackend.import_external_data_from_u8_arr(
+          data,
+          importer,
+          types.map((t) => t.type)
+        );
+
+      const table: Result.Result = {
+        type: {
+          kind: 'table',
+          columnTypes: columns.map((col, i): SerializedType => {
+            // not a fan of the as here
+            const deciType = types[i]?.type ?? kindToDeciType(col.column_type);
+            const date =
+              'specificity' in deciType ? deciType.specificity : undefined;
+            return {
+              kind: deciType.type,
+              date: date && dateSpecificityFromWasm(date),
+              unit: types[i]?.unit,
+            } as SerializedType;
+          }),
+          columnNames: columns.map((col) => col.name),
+          indexName: columns[0].name,
+        },
+        value: columns.map((col) => {
+          const columnsGenerator: ResultGenerator = async function* colGen(
+            start,
+            end
+          ) {
+            const slice =
+              computeBackendSingleton.computeBackend.get_slice(
+                col.id,
+                BigInt(start ?? 0),
+                BigInt((Number.isFinite(end ?? 0) ? end : -1) ?? -1)
+              ) ?? [];
+
+            const fullResult = deserializeResult(
+              slice as SerializedResult
+            ) as Result.Result<'column'>;
+
+            if (fullResult.type.kind !== 'column') {
+              throw new Error('oops');
+            }
+
+            yield* fullResult.value(start, end);
+          };
+
+          columnsGenerator.WASM_ID = col.id;
+          columnsGenerator.WASM_REALM_ID = 'compute-backend';
+
+          return columnsGenerator;
+        }),
+      };
+
+      await pushResultToComputer(this, id, name, table);
+      await firstValueFrom(this.getBlockIdResult$.observe(id));
+      return id;
     });
   }
 

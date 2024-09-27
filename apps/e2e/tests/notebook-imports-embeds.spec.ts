@@ -104,7 +104,7 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
     });
 
     await expect(
-      page.getByText('7109 rows, previewing rows 1 to 10')
+      page.getByText('7108 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
 
@@ -282,7 +282,7 @@ test('csv integrations work when duplicating a notebook', async ({
     });
 
     await expect(
-      page.getByText('7109 rows, previewing rows 1 to 10')
+      page.getByText('7108 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
 
@@ -299,7 +299,7 @@ test('csv integrations work when duplicating a notebook', async ({
     await anotherRandomFreeUser.page.goto(page.url());
 
     await expect(
-      page.getByText('7109 rows, previewing rows 1 to 10')
+      page.getByText('7108 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
 
@@ -308,7 +308,7 @@ test('csv integrations work when duplicating a notebook', async ({
     await expect(anotherRandomFreeUser.notebook.notebookActions).toBeVisible();
 
     await expect(
-      page.getByText('7109 rows, previewing rows 1 to 10')
+      page.getByText('7108 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
 });

@@ -4,8 +4,12 @@ import type {
 } from '@decipad/editor-types';
 import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
 import { useConnectionStore } from '@decipad/react-contexts';
-import { nanoid } from 'nanoid';
-import { CodeRunner, GenericContainerRunner, URLRunner } from '../runners';
+import {
+  CodeRunner,
+  CSVRunner,
+  GenericContainerRunner,
+  LegacyRunner,
+} from '../runners';
 import { assertInstanceOf } from '@decipad/utils';
 
 export function getNotionDbLink(url: string): string | undefined {
@@ -30,11 +34,10 @@ function getDefaultBlock(
   const store = useConnectionStore.getState();
 
   return {
-    id: nanoid(),
+    id: store.blockId,
     type: ELEMENT_INTEGRATION,
     children: [{ text: store.varName }],
     typeMappings: runner.getTypes(),
-    latestResult: store.rawResult!,
     timeOfLastRun: store.timeOfLastRun,
     columnsToHide: store.columnsToHide,
     isFirstRowHeader: runner.getIsFirstRowHeader(),
@@ -67,7 +70,7 @@ export function getNewIntegration(
       return defaultBlock;
     }
     case 'mysql': {
-      assertInstanceOf(runner, URLRunner);
+      assertInstanceOf(runner, LegacyRunner);
 
       defaultBlock.integrationType = {
         type: 'mysql',
@@ -80,7 +83,7 @@ export function getNewIntegration(
     }
 
     case 'notion': {
-      assertInstanceOf(runner, URLRunner);
+      assertInstanceOf(runner, LegacyRunner);
 
       defaultBlock.integrationType = {
         type: 'notion',
@@ -91,7 +94,7 @@ export function getNewIntegration(
     }
 
     case 'gsheets': {
-      assertInstanceOf(runner, URLRunner);
+      assertInstanceOf(runner, LegacyRunner);
 
       defaultBlock.integrationType = {
         type: 'gsheets',
@@ -105,8 +108,8 @@ export function getNewIntegration(
     }
 
     case 'csv': {
-      if (!(runner instanceof URLRunner)) {
-        throw new Error('Need URLRunner');
+      if (!(runner instanceof CSVRunner)) {
+        throw new Error('Need CSVRunner');
       }
 
       defaultBlock.typeMappings = runner.getTypes();

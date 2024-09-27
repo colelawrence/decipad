@@ -37,14 +37,6 @@ impl DeciResult {
         }
         DeciResult::Fraction(red_n, red_d)
     }
-
-    pub fn new_float(f: f64) -> DeciResult {
-        if (f * 100.0).fract() == 0.0 {
-            DeciResult::Fraction((f * 100.0) as i64, 100)
-        } else {
-            DeciResult::Float(f)
-        }
-    }
 }
 
 // -- Reducers--
@@ -118,20 +110,11 @@ impl DeciResult {
         }
     }
 
-    pub fn get_float(&self) -> f64 {
-        match self.to_float() {
-            DeciResult::Float(a) => a,
-            _ => panic!("Unreachable type error"),
-        }
-    }
-
     pub fn get_string(&self) -> String {
         match self {
             DeciResult::String(s) => s.to_string(),
-            DeciResult::Float(f) => f.to_string(),
             DeciResult::ArbitraryFraction(n, d) => format!("{}/{}", *n, *d),
             DeciResult::Fraction(n, d) => format!("{}/{}", *n, *d),
-            DeciResult::ArbitraryFraction(n, d) => format!("{}/{}", n, d),
             DeciResult::Boolean(b) => b.to_string(),
             DeciResult::Column(items) => format!(
                 "[{}]",
@@ -192,44 +175,9 @@ impl DeciResult {
         }
     }
 
-    pub fn round(&mut self) {
-        match self {
-            DeciResult::Float(a) => (),
-            _ => {
-                *self = self.to_float();
-            }
-        }
-        match self {
-            DeciResult::Float(a) => {
-                *a = round(*a);
-            }
-            DeciResult::Column(i) => {
-                for item in i {
-                    item.round();
-                }
-            }
-            _ => panic!("impossible type outcome"),
-        }
-    }
-
     pub fn to_frac(&self) -> DeciResult {
         match self {
             DeciResult::Fraction(n, d) => DeciResult::Fraction(*n, *d),
-            DeciResult::Float(a) => {
-                if *a == 0.0 {
-                    return DeciResult::Fraction(0, 1);
-                }
-
-                let mut exp = 0;
-                let mut frac = *a;
-
-                while frac.fract() != 0.0 {
-                    frac *= 2.0;
-                    exp += 1;
-                }
-
-                DeciResult::Fraction(frac as i64, 1 << exp)
-            }
             DeciResult::Column(items) => {
                 DeciResult::Column(items.iter().map(|x| x.to_frac()).collect())
             }
@@ -244,7 +192,6 @@ impl DeciResult {
                 BigInt::from_i64(*d).unwrap(),
             ),
             DeciResult::ArbitraryFraction(_n, _d) => self.clone(),
-            DeciResult::Float(_f) => self.to_frac().to_arb(),
             DeciResult::Column(items) => {
                 DeciResult::Column(items.iter().map(|x| x.to_arb()).collect())
             }
@@ -252,23 +199,8 @@ impl DeciResult {
         }
     }
 
-    pub fn to_float(&self) -> DeciResult {
-        match self {
-            DeciResult::Fraction(n, d) => DeciResult::Float(*n as f64 / *d as f64),
-            DeciResult::ArbitraryFraction(n, d) => {
-                DeciResult::Float(n.to_f64().unwrap() / d.to_f64().unwrap())
-            }
-            DeciResult::Float(a) => DeciResult::Float(*a),
-            DeciResult::Column(items) => {
-                DeciResult::Column(items.iter().map(|x| x.to_float()).collect())
-            }
-            _ => panic!("Cannot convert type to float"),
-        }
-    }
-
     pub fn negate(&self) -> DeciResult {
         match self {
-            DeciResult::Float(a) => DeciResult::Float(-*a),
             DeciResult::ArbitraryFraction(n, d) => {
                 DeciResult::ArbitraryFraction(-n.clone(), d.clone())
             }
@@ -284,7 +216,6 @@ impl DeciResult {
 
     pub fn reciprocal(&self) -> DeciResult {
         match self {
-            DeciResult::Float(a) => DeciResult::Float(1.0 / *a),
             DeciResult::Fraction(n, d) => DeciResult::Fraction(*d, *n),
             DeciResult::ArbitraryFraction(n, d) => {
                 DeciResult::ArbitraryFraction(d.clone(), n.clone())
@@ -309,16 +240,6 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
 
     fn add(self, other: &'b DeciResult) -> DeciResult {
         match (self, other) {
-            (DeciResult::Float(a), DeciResult::Float(b)) => DeciResult::Float(a + b),
-            (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self + &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
-                &self.to_arb() + other
-            }
-            (DeciResult::Float(_a), DeciResult::Column(items)) => {
-                DeciResult::Column(items.iter().map(|x| x + self).collect())
-            }
-
-            (DeciResult::Fraction(_n, _d), DeciResult::Float(_a)) => &self.to_float() + other,
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
                 if d1 == d2 {
                     let n = n1.checked_add(*n2);
@@ -382,9 +303,6 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
             (DeciResult::Fraction(_n, _d), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x + self).collect())
             }
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
-                self + &other.to_arb()
-            }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
                 self + &other.to_arb()
             }
@@ -401,9 +319,6 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
             }
             (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x + self).collect())
-            }
-            (DeciResult::Column(items), DeciResult::Float(_a)) => {
-                DeciResult::Column(items.iter().map(|x| x + other).collect())
             }
             (DeciResult::Column(items), DeciResult::Fraction(_n, _d)) => {
                 DeciResult::Column(items.iter().map(|x| x + other).collect())
@@ -423,33 +338,11 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
     }
 }
 
-impl<T> Add<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    type Output = DeciResult;
-
-    fn add(self, other: T) -> DeciResult {
-        &self + &DeciResult::Float(other.approx_into().unwrap())
-    }
-}
-
 impl Sub for DeciResult {
     type Output = DeciResult;
 
     fn sub(self, other: DeciResult) -> DeciResult {
         &self + &other.negate()
-    }
-}
-
-impl<T> Sub<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    type Output = DeciResult;
-
-    fn sub(self, other: T) -> DeciResult {
-        self - DeciResult::Float(other.approx_into().unwrap())
     }
 }
 
@@ -465,16 +358,6 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
 
     fn mul(self, other: &DeciResult) -> DeciResult {
         match (self, other) {
-            (DeciResult::Float(a), DeciResult::Float(b)) => DeciResult::Float(*a * *b),
-            (DeciResult::Float(_a), DeciResult::Fraction(_n, _d)) => self * &other.to_float(),
-            (DeciResult::Float(_a), DeciResult::ArbitraryFraction(_n, _d)) => {
-                &self.to_arb() * other
-            }
-            (DeciResult::Float(_a), DeciResult::Column(items)) => {
-                DeciResult::Column(items.iter().map(|x| x * self).collect())
-            }
-
-            (DeciResult::Fraction(_n, _d), DeciResult::Float(_a)) => &self.to_float() * other,
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
                 let newnum = n1.checked_mul(*n2);
                 let newden = d1.checked_mul(*d2);
@@ -491,17 +374,11 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
             (DeciResult::Fraction(_n, _d), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x * self).collect())
             }
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Float(_a)) => {
-                &self.to_float() * other
-            }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
                 self * &other.to_arb()
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
                 DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
-            }
-            (DeciResult::Column(items), DeciResult::Float(_a)) => {
-                DeciResult::Column(items.iter().map(|x| x * other).collect())
             }
             (DeciResult::Column(items), DeciResult::Fraction(_n, _d)) => {
                 DeciResult::Column(items.iter().map(|x| x * other).collect())
@@ -521,31 +398,10 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
     }
 }
 
-impl<T> Mul<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    type Output = DeciResult;
-    fn mul(self, other: T) -> DeciResult {
-        &self * &DeciResult::Float(other.approx_into().unwrap())
-    }
-}
-
 impl Div for DeciResult {
     type Output = DeciResult;
 
     fn div(self, other: DeciResult) -> DeciResult {
         &self * &other.reciprocal()
-    }
-}
-
-impl<T> Div<T> for DeciResult
-where
-    T: ApproxInto<f64> + Copy,
-{
-    type Output = DeciResult;
-
-    fn div(self, other: T) -> DeciResult {
-        self / DeciResult::Float(other.approx_into().unwrap())
     }
 }

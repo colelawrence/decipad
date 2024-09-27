@@ -8,39 +8,40 @@ import { codePlaceholder } from '@decipad/frontend-config';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { Result } from '@decipad/language-interfaces';
 import { SafeJs } from '@decipad/safejs';
-import { BackendUrl, assertInstanceOf, noop } from '@decipad/utils';
-import { LiveConnectionWorker } from 'libs/live-connect/src/types';
 import { hydrateType, safeNumberForPrecision } from '@decipad/remote-computer';
+import { BackendUrl, assertInstanceOf } from '@decipad/utils';
 import DeciNumber from '@decipad/number';
 import { Computer } from '@decipad/computer-interfaces';
+import { getNotebookStore } from '@decipad/notebook-state';
+import { LiveConnectionWorker } from '@decipad/live-connect';
+import { pushResultToComputer } from '@decipad/computer-utils';
+import { dateSpecificityToWasm } from '@decipad/compute-backend-js';
 
 type TypeArray = Array<SimpleTableCellType | undefined>;
 
 export type UnsubscribeFn = () => void;
 
-export type IntegrationRunnerImportResult = [
-  Error | undefined,
-  Result.Result | undefined
-];
-
-export type ImportListener = (result: IntegrationRunnerImportResult) => unknown;
-
 export type ImportUnsubscribe = () => void;
 
 export interface GenericRunner {
-  import: (listener: ImportListener) => Promise<ImportUnsubscribe>;
+  import: () => Promise<string | undefined | Error>;
 
   getRawResult: () => string;
   getLatestResult: () => Result.Result | undefined;
 }
 
 export abstract class GenericContainerRunner implements GenericRunner {
-  private types: TypeArray;
+  protected types: TypeArray;
   private rawResult: string;
   private latestResult: Result.Result | undefined;
   private isFirstRowHeader: boolean;
 
-  constructor(types?: TypeArray) {
+  protected name: string;
+  protected id: string;
+
+  constructor(name: string, id: string, types?: TypeArray) {
+    this.name = name;
+    this.id = id;
     this.types = [];
     if (types != null) {
       this.setTypes(types);
@@ -48,6 +49,16 @@ export abstract class GenericContainerRunner implements GenericRunner {
 
     this.rawResult = '';
     this.isFirstRowHeader = false;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+  public setName(name: string) {
+    this.name = name;
+  }
+  public getId(): string {
+    return this.id;
   }
 
   public getRawResult(): string {
@@ -106,12 +117,107 @@ export abstract class GenericContainerRunner implements GenericRunner {
     );
   }
 
-  public async import(_listener: ImportListener): Promise<ImportUnsubscribe> {
+  public async import(): Promise<string | undefined | Error> {
     throw new Error('Cannot direclty use abstract methods import function');
   }
 }
 
-export class URLRunner extends GenericContainerRunner implements GenericRunner {
+export class CSVRunner extends GenericContainerRunner implements GenericRunner {
+  private url: string;
+
+  // private source: ImportElementSource;
+  private proxy: string | undefined;
+
+  private resourceName: string | undefined;
+
+  private padId: string | undefined;
+
+  // TODO, this sucks, change to object
+  constructor(
+    name: string,
+    id: string,
+    url?: string,
+    types?: TypeArray,
+    padId?: string
+  ) {
+    super(name, id, types);
+
+    this.url = url ?? '';
+    this.padId = padId;
+  }
+
+  public setUrl(url: string): void {
+    this.url = url;
+  }
+
+  public getUrl(): string {
+    return this.url;
+  }
+
+  public getProxy(): string | undefined {
+    return this.proxy;
+  }
+
+  public setProxy(proxy: string | undefined): void {
+    this.proxy = proxy;
+  }
+
+  public getResourceName(): string | undefined {
+    return this.resourceName;
+  }
+
+  public setResourceName(resourceName: string | undefined): void {
+    this.resourceName = resourceName;
+  }
+
+  public async import(): Promise<string | undefined> {
+    const computer = getNotebookStore(this.padId!).getState().computer!;
+
+    const buf = await fetch(this.url).then((res) => res.arrayBuffer());
+    const data = new Uint8Array(buf);
+
+    return computer.importExternalData({
+      data,
+      name: this.name,
+      id: this.id,
+      importer: {
+        type: 'csv',
+        isFirstHeaderRow: this.getIsFirstRowHeader(),
+      },
+      // this.types can have empty spots in it which apparently can't be mapped over,
+      // so we spread ([...x]) it....
+      // javascript actually needs to be burned to the ground
+      types:
+        this.types &&
+        [...this.types].map((t) => {
+          if (!t) return { type: { type: 'string' } };
+          switch (t.kind) {
+            case 'date':
+              return {
+                type: {
+                  type: t.kind,
+                  specificity: dateSpecificityToWasm(t.date),
+                },
+              };
+            case 'string':
+            case 'number':
+            case 'boolean':
+              return {
+                type: { type: t.kind },
+                unit: 'unit' in t ? t.unit ?? undefined : undefined,
+              };
+            default:
+              return { type: { type: 'string' } };
+          }
+        }),
+    });
+  }
+}
+
+export class LegacyRunner
+  extends GenericContainerRunner
+  implements GenericRunner
+{
   // Specific to CSV
   private url: string;
 
@@ -139,13 +245,15 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
 
   // TODO, this sucks, change to object
   constructor(
+    name: string,
+    id: string,
     worker: LiveConnectionWorker,
     url?: string,
     types?: TypeArray,
     source?: ImportElementSource,
     padId?: string
   ) {
-    super(types);
+    super(name, id, types);
 
     this.worker = worker;
     this.url = url ?? '';
@@ -198,29 +306,42 @@ export class URLRunner extends GenericContainerRunner implements GenericRunner {
     return this.worker;
   }
 
-  public async import(listener: ImportListener): Promise<ImportUnsubscribe> {
+  public async import(): Promise<string | Error | undefined> {
     const worker = await this.getWorker();
 
-    return worker.subscribe(
-      {
-        useFirstRowAsHeader: this.getIsFirstRowHeader(),
-        query: this.query,
+    return new Promise<string | Error | undefined>((resolve, _reject) => {
+      const unsubPromise = worker.subscribe(
+        {
+          useFirstRowAsHeader: this.getIsFirstRowHeader(),
+          query: this.query,
 
-        url: this.url,
-        columnTypeCoercions: this.getSubscribeTypes(),
-        proxy: this.proxy,
-        source: this.source,
-        maxCellCount: 10_000_000_000_000,
-        useCache: this.source === 'csv',
-        padId: this.padId,
-        pollIntervalSeconds: -1, // disable polling
-      },
-      async (error, __, res) => {
-        if (error || res?.result) {
-          listener([error, res?.result]);
+          url: this.url,
+          columnTypeCoercions: this.getSubscribeTypes(),
+          proxy: this.proxy,
+          source: this.source,
+          maxCellCount: 10_000_000_000_000,
+          useCache: this.source === 'csv',
+          padId: this.padId,
+          pollIntervalSeconds: -1, // disable polling
+        },
+        async (error, __, res) => {
+          if (error) {
+            (await unsubPromise)();
+            return resolve(error);
+          }
+          if (res.loading == null || res.loading || !res.result) {
+            return;
+          }
+          const computer = getNotebookStore(this.padId!).getState().computer!;
+
+          this.setLatestResult(res.result);
+          await pushResultToComputer(computer, this.id, this.name, res.result);
+
+          resolve(this.id);
+          (await unsubPromise)();
         }
-      }
-    );
+      );
+    });
   }
 }
 
@@ -236,10 +357,12 @@ export class CodeRunner
   constructor(
     notebookId: string,
     computer: Computer,
+    name: string,
+    id: string,
     code?: string,
     types?: TypeArray
   ) {
-    super(types);
+    super(name, id, types);
 
     this.code = code ?? codePlaceholder();
     this.computer = computer;
@@ -284,7 +407,7 @@ export class CodeRunner
     return resultMap;
   }
 
-  public async import(listener: ImportListener): Promise<UnsubscribeFn> {
+  public async import(): Promise<string | Error | undefined> {
     try {
       const value = await this.worker.execute(
         this.code,
@@ -292,23 +415,20 @@ export class CodeRunner
       );
 
       if (value instanceof Error || value == null) {
-        listener([value, undefined]);
-      } else {
-        const result = await importFromJSONAndCoercions(
-          this.computer,
-          value,
-          this.getTypes()
-        );
-        this.setLatestResult(result);
-
-        listener([undefined, result]);
+        return value;
       }
+      const result = await importFromJSONAndCoercions(
+        this.computer,
+        value,
+        this.getTypes()
+      );
+      await pushResultToComputer(this.computer, this.id, this.name, result);
+      this.setLatestResult(result);
+      return this.id;
     } catch (err: unknown) {
       assertInstanceOf(err, Error);
-
-      listener([err, undefined]);
+      return err;
     }
-    return noop;
   }
 
   public deinit(): void {

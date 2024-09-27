@@ -1,16 +1,22 @@
 use chrono::NaiveDateTime;
 use num_bigint::BigInt;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use tsify_next::Tsify;
 use wasm_bindgen::prelude::*;
 
-#[derive(PartialEq, Debug, Clone, Copy)]
-#[wasm_bindgen]
+#[derive(PartialEq, Debug, Clone, Copy, Serialize, Deserialize, Tsify)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+#[serde(rename_all = "camelCase")]
+#[serde(tag = "type")]
 pub enum DeciType {
     Number,
     String,
     Boolean,
     Column,
     Table,
+    Date { specificity: DateSpecificity },
+    Error,
 }
 
 #[derive(Clone, PartialEq, Debug, Default)]
@@ -42,7 +48,9 @@ pub struct Tree {
     pub columns: Vec<TreeColumn>,
 }
 
-#[derive(Clone, PartialEq, Debug, Copy)]
+#[derive(PartialEq, Debug, Clone, Copy, Serialize, Deserialize, Tsify)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+#[serde(rename_all = "camelCase")]
 pub enum DateSpecificity {
     None = 0,
     Year,
@@ -61,7 +69,6 @@ pub enum DeciResult {
     String(String),
     Fraction(i64, i64),
     ArbitraryFraction(BigInt, BigInt),
-    Float(f64),
     Column(Vec<DeciResult>),
     Date(Option<NaiveDateTime>, DateSpecificity),
     Table(Table),

@@ -6,7 +6,7 @@ import { useCustomScript } from '@decipad/react-utils';
 import { useRefreshKeyMutation } from '@decipad/graphql-client';
 import { env } from '@decipad/client-env';
 import { getExternalDataUrl } from '../../utils';
-import { URLRunner } from '../../runners';
+import { LegacyRunner } from '../../runners';
 import { ImportParams, getGsheetMeta } from '@decipad/import';
 import { assertInstanceOf } from '@decipad/utils';
 import { useComputer } from '@decipad/editor-hooks';
@@ -60,7 +60,7 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
   onRun,
   runner,
 }) => {
-  assertInstanceOf(runner, URLRunner);
+  assertInstanceOf(runner, LegacyRunner);
   if (_externalData == null) {
     throw new Error('External data should never be null here');
   }

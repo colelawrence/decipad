@@ -6,6 +6,7 @@ import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { Connection } from '../connections/Connection';
 import { ResultPreview } from '../connections/ResultPreview';
 import { type GenericContainerRunner } from '../runners/types';
+import { useComputer } from '@decipad/editor-hooks';
 
 /**
  * Factory method to return different integrations based on state.
@@ -22,6 +23,7 @@ export const useIntegrationScreenFactory = (
   const { Set, ...store } = useConnectionStore();
 
   const { notebookId } = useNotebookRoute();
+  const computer = useComputer();
 
   const screen = useMemo(() => {
     switch (store.stage) {
@@ -40,8 +42,9 @@ export const useIntegrationScreenFactory = (
       case 'map':
         return (
           <ResultPreview
+            computer={computer}
             loading={loading}
-            result={store.rawResult != null ? store.resultPreview : undefined}
+            blockId={store.blockId}
             name={store.varName || ''}
             setName={(name) => Set({ varName: name })}
             setTypeMapping={(index, type) => {
@@ -63,6 +66,7 @@ export const useIntegrationScreenFactory = (
     }
   }, [
     Set,
+    computer,
     externalData,
     loading,
     notebookId,
@@ -71,8 +75,7 @@ export const useIntegrationScreenFactory = (
     setExternalData,
     store.columnsToHide,
     store.connectionType,
-    store.rawResult,
-    store.resultPreview,
+    store.blockId,
     store.stage,
     store.timeOfLastRun,
     store.varName,

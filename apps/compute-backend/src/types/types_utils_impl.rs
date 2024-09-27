@@ -14,6 +14,21 @@ impl Ord for DeciResult {
 }
 
 impl DeciResult {
+    pub fn col_from_floats(f: impl IntoIterator<Item = f32>) -> DeciResult {
+        DeciResult::Column(f.into_iter().map(DeciResult::from_float).collect())
+    }
+
+    pub fn from_float(f: f32) -> DeciResult {
+        let f = fraction::Fraction::from(f);
+        let (num, den) = (
+            match f.is_sign_positive() {
+                true => *f.numer().unwrap() as i64,
+                false => -(*f.numer().unwrap() as i64),
+            },
+            *f.denom().unwrap() as i64,
+        );
+        DeciResult::Fraction(num, den)
+    }
     pub fn from_frac(nums: Vec<i64>, dens: Vec<i64>) -> DeciResult {
         assert_eq!(nums.len(), dens.len());
         DeciResult::Column(
@@ -22,31 +37,6 @@ impl DeciResult {
                 .map(|(n, d)| DeciResult::Fraction(*n, *d))
                 .collect(),
         )
-    }
-
-    pub fn from_float(nums: Vec<f64>) -> DeciResult {
-        DeciResult::Column(nums.iter().map(|x| DeciResult::Float(*x)).collect())
-    }
-
-    pub fn sum_float(&self) -> DeciResult {
-        match self {
-            DeciResult::Column(column) => {
-                let mut sum = DeciResult::Float(0.0);
-
-                for item in column {
-                    match item {
-                        DeciResult::Column(_) => {
-                            sum = &sum + &item.sum_float();
-                        }
-                        _ => sum = &sum + item,
-                    }
-                }
-                sum
-            }
-            DeciResult::Float(f) => DeciResult::Float(*f),
-            DeciResult::Fraction(n, d) => DeciResult::Fraction(*n, *d).to_float(),
-            _ => panic!("Expected a Column of Fractions"),
-        }
     }
 
     pub fn sum_frac(&self) -> DeciResult {
@@ -58,9 +48,7 @@ impl DeciResult {
                         DeciResult::Column(_) => {
                             sum = &sum + &item.sum_frac();
                         }
-                        _ => {
-                          sum = &sum + item
-                        }
+                        _ => sum = &sum + item,
                     }
                 }
                 sum

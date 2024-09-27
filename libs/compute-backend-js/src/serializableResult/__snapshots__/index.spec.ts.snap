@@ -625,7 +625,7 @@ exports[`serializeResult > should serialize a really big number 1`] = `
     15,
   ],
   "type": BigUint64Array {
-    "0": 11n,
+    "0": 10n,
     "1": 0n,
     "2": 620n,
   },

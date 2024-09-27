@@ -8,7 +8,7 @@ import {
 import { LoadingIndicator, MenuItem, MenuList } from '@decipad/ui';
 import { Styles } from './styles';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
-import { URLRunner } from '../../runners';
+import { LegacyRunner } from '../../runners';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { importDatabases } from '@decipad/import';
 import { assertInstanceOf } from '@decipad/utils';
@@ -20,7 +20,7 @@ const NotionPrivateDatabasesSelector: FC<ConnectionProps> = ({
   runner,
   onRun,
 }) => {
-  assertInstanceOf(runner, URLRunner);
+  assertInstanceOf(runner, LegacyRunner);
   if (_externalData == null) {
     throw new Error('Checked in comp above');
   }

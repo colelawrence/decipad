@@ -55,7 +55,7 @@ export const IntegrationBlock: PlateComponent = ({
   assertElementType(element, ELEMENT_INTEGRATION);
 
   const [showData, setShowData] = useState(true);
-  const { onRefresh, loading, result, error } = useIntegration(element);
+  const { onRefresh, loading, error } = useIntegration(element);
 
   // error handling
   const toast = useToast();
@@ -77,6 +77,8 @@ export const IntegrationBlock: PlateComponent = ({
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
   const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
+
+  const result = computer.getBlockIdResult$.use(element.id!)?.result;
 
   const onAddDataViewButtonPress = useCallback(() => {
     return (

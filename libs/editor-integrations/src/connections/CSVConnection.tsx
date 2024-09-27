@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
 import { type ConnectionProps } from './types';
 import { UploadCSV, OptionsList } from '@decipad/ui';
-import { URLRunner } from '../runners';
+import { CSVRunner } from '../runners';
 import { assertInstanceOf } from '@decipad/utils';
 import { Loading } from './shared';
 import { useWorkspaceDatasets } from '../hooks/useWorkspaceDatasets';
@@ -33,7 +33,7 @@ export const CSVConnection: FC<ConnectionProps> = ({
   workspaceId,
   onRun,
 }) => {
-  assertInstanceOf(runner, URLRunner);
+  assertInstanceOf(runner, CSVRunner);
 
   const workspaceDatasets = useWorkspaceDatasets(workspaceId);
   const selections = workspaceDatasets.map(getDatasetNameAndId);

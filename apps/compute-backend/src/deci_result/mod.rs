@@ -4,22 +4,18 @@ use crate::types::types::{DateSpecificity, Row, Table, Tree, TreeColumn};
 use crate::DeciResult;
 use chrono::NaiveDateTime;
 use js_sys::{BigUint64Array, Object, Uint8Array};
-use num_bigint::{BigInt, Sign, ToBigInt, ToBigUint};
-use num_traits::{One, Signed, ToPrimitive, Zero};
+use num_bigint::{BigInt, ToBigInt};
+use num_traits::ToPrimitive;
+use serde::{Deserialize, Serialize};
 use std::mem::size_of;
-use std::result;
-use std::str::FromStr;
 use std::{collections::HashMap, io::ErrorKind};
+use tsify_next::Tsify;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
-}
-
-macro_rules! console_log {
-    ($($t:tt)*) => (log(&format!($($t)*)))
 }
 
 #[wasm_bindgen]
@@ -46,21 +42,23 @@ impl SerializedResult {
     }
 }
 
-enum ResultType {
+#[derive(Copy, Clone, Debug, Serialize, Deserialize, Tsify)]
+#[repr(u64)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+pub enum ResultType {
     Boolean = 0,
     Fraction = 1,
-    Float = 2,
-    String = 3,
-    Column = 4,
-    Date = 5,
-    Table = 6,
-    Range = 7,
-    Row = 8,
-    TypeError = 9,
-    Pending = 10,
-    ArbitraryFraction = 11,
-    Tree = 12,
-    Undefined = 13,
+    String = 2,
+    Column = 3,
+    Date = 4,
+    Table = 5,
+    Range = 6,
+    Row = 7,
+    TypeError = 8,
+    Pending = 9,
+    ArbitraryFraction = 10,
+    Tree = 11,
+    Undefined = 14,
 }
 
 pub fn encode_big_int(buffer: &mut Vec<u8>, original_offset: usize, value: &BigInt) -> usize {
@@ -230,8 +228,6 @@ fn serialize_result_iter(
                 }
             }
 
-            DeciResult::Float(_) => return Err(ErrorKind::InvalidData),
-
             DeciResult::Table(table) => {
                 type_array.extend_from_slice(&[
                     ResultType::Table as usize,
@@ -340,9 +336,6 @@ fn serialize_result_iter(
                     0,
                 ]);
             }
-            DeciResult::ArbitraryFraction(_, _) => {
-                return Err(ErrorKind::Unsupported);
-            }
         }
     }
 
@@ -412,8 +405,11 @@ pub fn serialize_result(result: DeciResult) -> Object {
     data_array_js.copy_from(&data_array);
 
     let objout = js_sys::Object::new();
-    js_sys::Reflect::set(&objout, &"type".into(), &JsValue::from(type_array_js));
-    js_sys::Reflect::set(&objout, &"data".into(), &JsValue::from(data_array_js));
+    js_sys::Reflect::set(&objout, &"type".into(), &JsValue::from(type_array_js))
+        .expect("set type buffer");
+    js_sys::Reflect::set(&objout, &"data".into(), &JsValue::from(data_array_js))
+        .expect("set data buffer");
+
     objout
 }
 
@@ -472,7 +468,6 @@ fn deserialize_data_iter(
                 .map_err(|e| JsValue::from_str(&format!("Invalid UTF-8 sequence: {}", e)))?;
             Ok(Some(DeciResult::String(value)))
         }
-        ResultType::Float => Err(JsValue::from_str("Floats are not supported yet")),
         ResultType::Date => {
             let date_specificity_number = data.get_index(offset as u32) as u8;
             let date_specificity = match date_specificity_number {
@@ -744,18 +739,17 @@ fn decode_number(number: u64) -> (bool, ResultType) {
     let result_type = match original_number {
         0 => ResultType::Boolean,
         1 => ResultType::Fraction,
-        2 => ResultType::Float,
-        3 => ResultType::String,
-        4 => ResultType::Column,
-        5 => ResultType::Date,
-        6 => ResultType::Table,
-        7 => ResultType::Range,
-        8 => ResultType::Row,
-        9 => ResultType::TypeError,
-        10 => ResultType::Pending,
-        11 => ResultType::ArbitraryFraction,
-        12 => ResultType::Tree,
-        13 => ResultType::Undefined,
+        2 => ResultType::String,
+        3 => ResultType::Column,
+        4 => ResultType::Date,
+        5 => ResultType::Table,
+        6 => ResultType::Range,
+        7 => ResultType::Row,
+        8 => ResultType::TypeError,
+        9 => ResultType::Pending,
+        10 => ResultType::ArbitraryFraction,
+        11 => ResultType::Tree,
+        12 => ResultType::Undefined,
         _ => panic!("Invalid ResultType value: {}", original_number),
     };
 
@@ -848,7 +842,7 @@ mod serialize_result_tests {
             BigInt::from(2),
         ))
         .unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![11, 0, 10]);
+        assert_eq!(result.type_array().to_vec(), vec![10, 0, 10]);
         assert_eq!(result.data().to_vec(), vec![1, 0, 0, 0, 1, 1, 0, 0, 0, 2]);
     }
 
@@ -864,7 +858,7 @@ mod serialize_result_tests {
 
         assert_eq!(
             result.type_array().to_vec(),
-            vec![4, 1, 4, 11, 0, 10, 11, 10, 10, 11, 20, 10, 11, 30, 10]
+            vec![3, 1, 4, 10, 0, 10, 10, 10, 10, 10, 20, 10, 10, 30, 10]
         );
         assert_eq!(
             result.data().to_vec(),
@@ -882,7 +876,7 @@ mod serialize_result_tests {
             BigInt::from(2),
         ))
         .unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![11, 0, 10]);
+        assert_eq!(result.type_array().to_vec(), vec![10, 0, 10]);
         assert_eq!(result.data().to_vec(), vec![1, 0, 0, 0, 255, 1, 0, 0, 0, 2]);
     }
 
@@ -895,7 +889,7 @@ mod serialize_result_tests {
         let result =
             serialize_result_internal(DeciResult::ArbitraryFraction(numerator, denominator))
                 .unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![11, 0, 620]);
+        assert_eq!(result.type_array().to_vec(), vec![10, 0, 620]);
         assert_eq!(
             result.data().to_vec(),
             vec![
@@ -943,7 +937,7 @@ mod serialize_result_tests {
         let date = NaiveDateTime::from_timestamp(1721668184, 0);
         let result =
             serialize_result_internal(DeciResult::Date(Some(date), DateSpecificity::Day)).unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![5, 0, 9]);
+        assert_eq!(result.type_array().to_vec(), vec![4, 0, 9]);
         assert_eq!(
             result.data().to_vec(),
             vec![4, 192, 167, 107, 219, 144, 1, 0, 0]
@@ -954,7 +948,7 @@ mod serialize_result_tests {
     fn test_serialize_date_without_value() {
         let result =
             serialize_result_internal(DeciResult::Date(None, DateSpecificity::Day)).unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![5, 0, 1]);
+        assert_eq!(result.type_array().to_vec(), vec![4, 0, 1]);
         assert_eq!(result.data().to_vec(), vec![4]);
     }
 
@@ -962,7 +956,7 @@ mod serialize_result_tests {
     fn test_serialize_string() {
         let result =
             serialize_result_internal(DeciResult::String("Hello, world!".to_string())).unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![3, 0, 13]);
+        assert_eq!(result.type_array().to_vec(), vec![2, 0, 13]);
         assert_eq!(result.data().to_vec(), "Hello, world!".as_bytes().to_vec());
     }
 
@@ -977,11 +971,11 @@ mod serialize_result_tests {
         let result = serialize_result_internal(column).unwrap();
 
         let expected_type = vec![
-            4, 1, 4, // column
-            3, 0, 5, // Hello
-            3, 5, 5, // there
-            3, 10, 5, // world
-            3, 15, 1, // !
+            3, 1, 4, // column
+            2, 0, 5, // Hello
+            2, 5, 5, // there
+            2, 10, 5, // world
+            2, 15, 1, // !
         ];
         assert_eq!(result.type_array().to_vec(), expected_type);
 
@@ -1004,13 +998,13 @@ mod serialize_result_tests {
         let result = serialize_result_internal(column).unwrap();
 
         let expected_type = vec![
-            4, 1, 2, // outer column
-            4, 3, 2, // first inner column
-            4, 5, 2, // second inner column
-            3, 0, 5, // Hello
-            3, 5, 6, // World!
-            3, 11, 4, // Deci
-            3, 15, 3, // Pad
+            3, 1, 2, // outer column
+            3, 3, 2, // first inner column
+            3, 5, 2, // second inner column
+            2, 0, 5, // Hello
+            2, 5, 6, // World!
+            2, 11, 4, // Deci
+            2, 15, 3, // Pad
         ];
         assert_eq!(result.type_array().to_vec(), expected_type);
 
@@ -1045,21 +1039,21 @@ mod serialize_result_tests {
         let result = serialize_result_internal(column).unwrap();
 
         let expected_type = vec![
-            4, 1, 2, // outer column
-            4, 3, 2, // first middle column
-            4, 5, 2, // second middle column
-            4, 7, 2, // first inner column
-            4, 9, 2, // second inner column
-            4, 11, 2, // third inner column
-            4, 13, 2, // fourth inner column
-            3, 0, 5, // "Short"
-            3, 5, 13, // "Longer string"
-            3, 18, 13, // "Medium length"
-            3, 31, 21, // "Very long string here"
-            3, 52, 7, // "Another"
-            3, 59, 17, // "Different lengths"
-            3, 76, 4, // "Test"
-            3, 80, 21, // "Variable string sizes"
+            3, 1, 2, // outer column
+            3, 3, 2, // first middle column
+            3, 5, 2, // second middle column
+            3, 7, 2, // first inner column
+            3, 9, 2, // second inner column
+            3, 11, 2, // third inner column
+            3, 13, 2, // fourth inner column
+            2, 0, 5, // "Short"
+            2, 5, 13, // "Longer string"
+            2, 18, 13, // "Medium length"
+            2, 31, 21, // "Very long string here"
+            2, 52, 7, // "Another"
+            2, 59, 17, // "Different lengths"
+            2, 76, 4, // "Test"
+            2, 80, 21, // "Variable string sizes"
         ];
         assert_eq!(result.type_array().to_vec(), expected_type);
 
@@ -1072,7 +1066,7 @@ mod serialize_result_tests {
         let range = DeciResult::Range(vec![DeciResult::Fraction(2, 1), DeciResult::Fraction(8, 1)]);
         let result = serialize_result_internal(range).unwrap();
 
-        assert_eq!(result.type_array().to_vec(), vec![7, 0, 32]);
+        assert_eq!(result.type_array().to_vec(), vec![6, 0, 32]);
         assert_eq!(
             result.data().to_vec(),
             vec![
@@ -1104,12 +1098,12 @@ mod serialize_result_tests {
         assert_eq!(result.type_array().length(), 6 * 3);
 
         // Check the first entry (Row type)
-        assert_eq!(result.type_array().get_index(0), 8);
+        assert_eq!(result.type_array().get_index(0), 7);
         assert_eq!(result.type_array().get_index(1), 1);
         assert_eq!(result.type_array().get_index(2), 2);
 
         // Check the second entry (rowIndexName)
-        assert_eq!(result.type_array().get_index(3), 3);
+        assert_eq!(result.type_array().get_index(3), 2);
         assert_eq!(result.type_array().get_index(4), 0);
         assert_eq!(result.type_array().get_index(5), 12);
 
@@ -1121,16 +1115,13 @@ mod serialize_result_tests {
             let entry_type = result.type_array().get_index(i * 3);
             let entry_length = result.type_array().get_index(i * 3 + 2);
 
-            if entry_type == 3 && entry_length == 6 {
+            if entry_type == ResultType::String as _ && entry_length == 6 {
                 // String key
                 found_string = true;
-            } else if entry_type == 3 && entry_length == 11 {
+            } else if entry_type == ResultType::String as _ && entry_length == 11 {
                 // String value
                 found_string = true;
-            } else if entry_type == 3 && entry_length == 6 {
-                // Number key
-                found_number = true;
-            } else if entry_type == 1 && entry_length == 16 {
+            } else if entry_type == ResultType::Fraction as _ && entry_length == 16 {
                 // Fraction value
                 found_number = true;
             }
@@ -1177,17 +1168,17 @@ mod serialize_result_tests {
 
         let chunked_type_array = type_array.chunks(3).collect::<Vec<_>>();
         let expected_type = vec![
-            [6, 1, 2],   // table
-            [3, 0, 19],  // indexName
-            [3, 19, 19], // delegatesIndexTo
-            [3, 38, 2],  // T1
-            [3, 40, 2],  // T2
-            [4, 7, 2],   // column
-            [4, 9, 2],   // column
-            [3, 42, 5],  // T1
-            [3, 47, 13], // T1
-            [3, 60, 13], // T2
-            [3, 73, 21], // T2
+            [5, 1, 2],   // table
+            [2, 0, 19],  // indexName
+            [2, 19, 19], // delegatesIndexTo
+            [2, 38, 2],  // T1
+            [2, 40, 2],  // T2
+            [3, 7, 2],   // column
+            [3, 9, 2],   // column
+            [2, 42, 5],  // T1
+            [2, 47, 13], // T1
+            [2, 60, 13], // T2
+            [2, 73, 21], // T2
         ];
         assert_eq!(chunked_type_array, expected_type);
 
@@ -1224,14 +1215,14 @@ mod serialize_result_tests {
         assert_eq!(
             result.type_array().to_vec(),
             vec![
-                12, 1, 7, // tree
+                11, 1, 7, // tree
                 0, 0, 1, // root
-                13, 0, 0, // root aggregation
-                11, 1, 10, // originalCardinality
-                11, 11, 10, // column length
-                3, 21, 4, // Col1 name
-                11, 25, 10, // Col1 aggregation
-                11, 35, 10, // child count
+                14, 0, 0, // root aggregation
+                10, 1, 10, // originalCardinality
+                10, 11, 10, // column length
+                2, 21, 4, // Col1 name
+                10, 25, 10, // Col1 aggregation
+                10, 35, 10, // child count
             ]
         );
 
@@ -1286,18 +1277,18 @@ mod serialize_result_tests {
         assert_eq!(
             result.type_array().to_vec(),
             vec![
-                12, 1, 9, // tree
+                11, 1, 9, // tree
                 0, 0, 1, // root
-                13, 0, 0, // root aggregation
-                11, 1, 10, // originalCardinality
-                11, 11, 10, // column length
-                3, 21, 4, // Col1 name
-                11, 25, 10, // Col1 aggregation
-                11, 35, 10, // child count
-                12, 10, 5, // tree 1
-                12, 15, 5, // tree 2
-                11, 45, 10, 13, 0, 0, 11, 55, 10, 11, 65, 10, 11, 75, 10, 11, 85, 10, 13, 0, 0, 11,
-                95, 10, 11, 105, 10, 11, 115, 10,
+                14, 0, 0, // root aggregation
+                10, 1, 10, // originalCardinality
+                10, 11, 10, // column length
+                2, 21, 4, // Col1 name
+                10, 25, 10, // Col1 aggregation
+                10, 35, 10, // child count
+                11, 10, 5, // tree 1
+                11, 15, 5, // tree 2
+                10, 45, 10, 14, 0, 0, 10, 55, 10, 10, 65, 10, 10, 75, 10, 10, 85, 10, 14, 0, 0, 10,
+                95, 10, 10, 105, 10, 10, 115, 10,
             ]
         );
 
@@ -1316,15 +1307,15 @@ mod serialize_result_tests {
     #[wasm_bindgen_test]
     fn test_serialize_type_error() {
         let result = serialize_result_internal(DeciResult::TypeError).unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![9, 0, 0]);
-        assert_eq!(result.data().to_vec(), vec![]);
+        assert_eq!(result.type_array().to_vec(), vec![8, 0, 0]);
+        assert!(result.data().to_vec().is_empty());
     }
 
     #[wasm_bindgen_test]
     fn test_serialize_pending() {
         let result = serialize_result_internal(DeciResult::Pending).unwrap();
-        assert_eq!(result.type_array().to_vec(), vec![10, 0, 0]);
-        assert_eq!(result.data().to_vec(), vec![]);
+        assert_eq!(result.type_array().to_vec(), vec![9, 0, 0]);
+        assert!(result.data().to_vec().is_empty());
     }
 }
 
@@ -1342,6 +1333,8 @@ pub fn create_serialized_result(type_array: Vec<u64>, data: Vec<u8>) -> Serializ
 
 #[cfg(test)]
 mod deserialize_result_tests {
+    use std::str::FromStr as _;
+
     use super::*;
     use wasm_bindgen_test::*;
 
@@ -1406,7 +1399,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_arbitrary_fraction() {
         let serialized =
-            create_serialized_result(vec![11, 0, 10], vec![1, 0, 0, 0, 1, 1, 0, 0, 0, 2]);
+            create_serialized_result(vec![10, 0, 10], vec![1, 0, 0, 0, 1, 1, 0, 0, 0, 2]);
         let result = deserialize_result_internal(serialized).unwrap();
         if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
             assert_eq!(numerator, BigInt::from(1));
@@ -1419,7 +1412,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_neg_arbitrary_fraction() {
         let serialized =
-            create_serialized_result(vec![11, 0, 10], vec![1, 0, 0, 0, 255, 1, 0, 0, 0, 2]);
+            create_serialized_result(vec![10, 0, 10], vec![1, 0, 0, 0, 255, 1, 0, 0, 0, 2]);
         let result = deserialize_result_internal(serialized).unwrap();
         if let DeciResult::ArbitraryFraction(numerator, denominator) = result {
             assert_eq!(numerator, BigInt::from(-1));
@@ -1432,7 +1425,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_really_big_arbitrary_fraction() {
         let serialized = create_serialized_result(
-            vec![11, 0, 620],
+            vec![10, 0, 620],
             vec![
                 50, 1, 0, 0, 149, 247, 58, 207, 96, 154, 13, 183, 226, 124, 243, 26, 152, 182, 13,
                 166, 140, 224, 77, 217, 163, 190, 157, 13, 254, 2, 92, 225, 182, 176, 180, 157,
@@ -1487,7 +1480,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_date_with_value() {
         let serializde =
-            create_serialized_result(vec![5, 0, 9], vec![4, 192, 167, 107, 219, 144, 1, 0, 0]);
+            create_serialized_result(vec![4, 0, 9], vec![4, 192, 167, 107, 219, 144, 1, 0, 0]);
         let result = deserialize_result_internal(serializde).unwrap();
         assert_eq!(
             result,
@@ -1499,21 +1492,21 @@ mod deserialize_result_tests {
     }
     #[wasm_bindgen_test]
     fn test_deserialize_date_without_value() {
-        let serialized = create_serialized_result(vec![5, 0, 1], vec![4]);
+        let serialized = create_serialized_result(vec![4, 0, 1], vec![4]);
         let result = deserialize_result_internal(serialized).unwrap();
         assert_eq!(result, DeciResult::Date(None, DateSpecificity::Day));
     }
 
     #[wasm_bindgen_test]
     fn test_deserialize_string() {
-        let serialized = create_serialized_result(vec![3, 0, 13], b"Hello, world!".to_vec());
+        let serialized = create_serialized_result(vec![2, 0, 13], b"Hello, world!".to_vec());
         let result = deserialize_result_internal(serialized).unwrap();
         assert_eq!(result, DeciResult::String("Hello, world!".to_string()));
     }
 
     #[wasm_bindgen_test]
     fn test_empty_column() {
-        let serializd = create_serialized_result(vec![4, 1, 0], vec![]);
+        let serializd = create_serialized_result(vec![3, 1, 0], vec![]);
         let result = deserialize_result_internal(serializd).unwrap();
         assert_eq!(result, DeciResult::Column(vec![]));
     }
@@ -1521,7 +1514,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_uncompressed_column_of_booleans() {
         let serialized = create_serialized_result(
-            vec![4, 1, 4, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1],
+            vec![3, 1, 4, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1],
             vec![1, 0, 1, 0],
         );
         let result = deserialize_result_internal(serialized).unwrap();
@@ -1543,7 +1536,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_uncompressed_column_of_fractions() {
         let serialized = create_serialized_result(
-            vec![4, 1, 3, 1, 0, 16, 1, 16, 16, 1, 32, 16],
+            vec![3, 1, 3, 1, 0, 16, 1, 16, 16, 1, 32, 16],
             vec![
                 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
                 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
@@ -1567,7 +1560,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_uncompressed_column_of_strings() {
         let serialized = create_serialized_result(
-            vec![4, 1, 3, 3, 0, 5, 3, 5, 5, 3, 10, 4],
+            vec![3, 1, 3, 2, 0, 5, 2, 5, 5, 2, 10, 4],
             b"HelloWorldTest".to_vec(),
         );
         let result = deserialize_result_internal(serialized).unwrap();
@@ -1588,7 +1581,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_compressed_column_of_booleans() {
         let serialized =
-            create_serialized_result(vec![4, 0, 3, 9223372036854775808, 3, 1], vec![1, 0, 1]);
+            create_serialized_result(vec![3, 0, 3, 9223372036854775808, 3, 1], vec![1, 0, 1]);
         let result = deserialize_result_internal(serialized).unwrap();
         if let DeciResult::Column(values) = result {
             assert_eq!(
@@ -1607,7 +1600,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_compressed_column_of_fractions() {
         let serialized = create_serialized_result(
-            vec![4, 0, 48, 9223372036854775809, 3, 16],
+            vec![3, 0, 48, 9223372036854775809, 3, 16],
             vec![
                 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
                 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0,
@@ -1632,7 +1625,7 @@ mod deserialize_result_tests {
     fn test_deserialize_nested_columns_uncompressed() {
         let serialized = create_serialized_result(
             vec![
-                4, 1, 2, 4, 3, 2, 4, 5, 2, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1,
+                3, 1, 2, 3, 3, 2, 3, 5, 2, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1,
             ],
             vec![1, 0, 0, 1],
         );
@@ -1662,10 +1655,10 @@ mod deserialize_result_tests {
     fn test_deserialize_nested_columns_compressed() {
         let serialized = create_serialized_result(
             vec![
-                4,
+                3,
                 0,
                 4,
-                9223372036854775812,
+                9223372036854775811,
                 2,
                 2,
                 9223372036854775808,
@@ -1700,7 +1693,7 @@ mod deserialize_result_tests {
     fn test_deserialize_column_of_columns_of_strings() {
         let serialized = create_serialized_result(
             vec![
-                4, 1, 2, 4, 3, 2, 4, 5, 2, 3, 0, 5, 3, 5, 6, 3, 11, 4, 3, 15, 3,
+                3, 1, 2, 3, 3, 2, 3, 5, 2, 2, 0, 5, 2, 5, 6, 2, 11, 4, 2, 15, 3,
             ],
             b"HelloWorld!DeciPad".to_vec(),
         );
@@ -1735,7 +1728,7 @@ mod deserialize_result_tests {
     #[wasm_bindgen_test]
     fn test_deserialize_range() {
         // Prepare test data
-        let type_array = BigUint64Array::from(&[7, 0, 32][..]);
+        let type_array = BigUint64Array::from(&[6, 0, 32][..]);
         let data = Uint8Array::from(
             &[
                 2, 0, 0, 0, 0, 0, 0, 0, // 2n
@@ -1778,11 +1771,11 @@ mod deserialize_result_tests {
         let serialized_row = SerializedResult::new(
             BigUint64Array::from(
                 &[
-                    8, 1, 2, // row
-                    3, 0, 12, // rowIndexName
-                    3, 12, 6, // String
-                    3, 18, 11, // Hello there
-                    3, 29, 6, // Number
+                    7, 1, 2, // row
+                    2, 0, 12, // rowIndexName
+                    2, 12, 6, // String
+                    2, 18, 11, // Hello there
+                    2, 29, 6, // Number
                     1, 35, 16, // 1/3
                 ][..],
             ),
@@ -1825,17 +1818,17 @@ mod deserialize_result_tests {
         let serialized_table = SerializedResult::new(
             BigUint64Array::from(
                 &[
-                    6, 1, 2, // table
-                    3, 0, 19, // indexName
-                    3, 19, 19, // delegatesIndexTo
-                    3, 38, 2, // T1
-                    3, 40, 2, // T2
-                    4, 7, 2, // column
-                    4, 9, 2, // column
-                    3, 42, 5, // T1
-                    3, 47, 13, // T1
-                    3, 60, 13, // T2
-                    3, 73, 21, // T2
+                    5, 1, 2, // table
+                    2, 0, 19, // indexName
+                    2, 19, 19, // delegatesIndexTo
+                    2, 38, 2, // T1
+                    2, 40, 2, // T2
+                    3, 7, 2, // column
+                    3, 9, 2, // column
+                    2, 42, 5, // T1
+                    2, 47, 13, // T1
+                    2, 60, 13, // T2
+                    2, 73, 21, // T2
                 ][..],
             ),
             data_array,
@@ -1881,14 +1874,14 @@ mod deserialize_result_tests {
     fn test_deserialize_tree_with_no_children() {
         let serialized = create_serialized_result(
             vec![
-                12, 1, 7, // tree
+                11, 1, 7, // tree
                 0, 0, 1, // root
-                13, 0, 0, // root aggregation
-                11, 1, 10, // originalCardinality
-                11, 11, 10, // column length
-                3, 21, 4, // Col1 name
-                11, 25, 10, // Col1 aggregation
-                11, 35, 10, // child count
+                12, 0, 0, // root aggregation
+                10, 1, 10, // originalCardinality
+                10, 11, 10, // column length
+                2, 21, 4, // Col1 name
+                10, 25, 10, // Col1 aggregation
+                10, 35, 10, // child count
             ],
             vec![
                 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
@@ -1921,26 +1914,26 @@ mod deserialize_result_tests {
     fn test_deserialize_tree() {
         let serialized = create_serialized_result(
             vec![
-                12, 1, 9, // tree
+                11, 1, 9, // tree
                 0, 0, 1, // root
-                13, 0, 0, // root aggregation
-                11, 1, 10, // originalCardinality
-                11, 11, 10, // column length
-                3, 21, 4, // Col1 name
-                11, 25, 10, // Col1 aggregation
-                11, 35, 10, // child count
-                12, 10, 5, // tree 1
-                12, 15, 5, // tree 2
-                11, 45, 10, // tree 1 root
-                13, 0, 0, // tree 1 root aggregation
-                11, 55, 10, // tree 1 originalCardinality
-                11, 65, 10, // tree 1 column length
-                11, 75, 10, // tree 1 child count
-                11, 85, 10, // tree 2 root
-                13, 0, 0, // tree 2 root aggregation
-                11, 95, 10, // tree 2 originalCardinality
-                11, 105, 10, // tree 2 column length
-                11, 115, 10, // tree 2 child count
+                12, 0, 0, // root aggregation
+                10, 1, 10, // originalCardinality
+                10, 11, 10, // column length
+                2, 21, 4, // Col1 name
+                10, 25, 10, // Col1 aggregation
+                10, 35, 10, // child count
+                11, 10, 5, // tree 1
+                11, 15, 5, // tree 2
+                10, 45, 10, // tree 1 root
+                12, 0, 0, // tree 1 root aggregation
+                10, 55, 10, // tree 1 originalCardinality
+                10, 65, 10, // tree 1 column length
+                10, 75, 10, // tree 1 child count
+                10, 85, 10, // tree 2 root
+                12, 0, 0, // tree 2 root aggregation
+                10, 95, 10, // tree 2 originalCardinality
+                10, 105, 10, // tree 2 column length
+                10, 115, 10, // tree 2 child count
             ],
             vec![
                 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 67, 111, 108, 49, 1,
@@ -1996,8 +1989,8 @@ mod deserialize_result_tests {
 
     #[wasm_bindgen_test]
     fn test_deserialize_type_error() {
-        let type_array = BigUint64Array::from(&[9, 0, 0][..]); // Pending
-        let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
+        let type_array = BigUint64Array::from(&[8, 0, 0][..]); // Type Error
+        let data_array = Uint8Array::new_with_length(0); // Empty data for Type Error
 
         let serialized_type_error = SerializedResult::new(type_array, data_array);
 
@@ -2008,7 +2001,7 @@ mod deserialize_result_tests {
 
     #[wasm_bindgen_test]
     fn test_deserialize_pending() {
-        let type_array = BigUint64Array::from(&[10, 0, 0][..]); // Pending
+        let type_array = BigUint64Array::from(&[9, 0, 0][..]); // Pending
         let data_array = Uint8Array::new_with_length(0); // Empty data for Pending
 
         let serialized_pending = SerializedResult::new(type_array, data_array);

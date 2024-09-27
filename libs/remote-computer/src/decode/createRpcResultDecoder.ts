@@ -28,6 +28,8 @@ export const resultDecoders: TRPCResultDecoders = {
     unit != null ? unit.map(decodeUnit) : unit,
   flush: noopDecoder,
   terminate: noopDecoder,
+  importExternalData: noopDecoder,
+  releaseExternalData: noopDecoder,
   setTriedCache: noopDecoder,
   waitForTriedCache: noopDecoder,
 };

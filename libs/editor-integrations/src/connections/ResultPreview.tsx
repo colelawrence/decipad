@@ -1,4 +1,3 @@
-import type { Result } from '@decipad/language-interfaces';
 import type { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import type { IntegrationStore } from '@decipad/react-contexts';
 import type { FC } from 'react';
@@ -19,9 +18,11 @@ import {
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
+import { Computer } from '@decipad/computer-interfaces';
 
 interface ResultPreviewProps {
-  result?: Result.Result;
+  computer: Computer;
+  blockId?: string;
   loading: boolean;
   name: string;
   setName: (n: string) => void;
@@ -38,7 +39,8 @@ interface ResultPreviewProps {
 }
 
 export const ResultPreview: FC<ResultPreviewProps> = ({
-  result,
+  computer,
+  blockId,
   loading,
   name,
   setName,
@@ -67,6 +69,8 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
     },
     [onChangeColumnType]
   );
+
+  const result = computer.getBlockIdResult$.use(blockId)?.result;
 
   const shouldDisplayPreview = result != null;
   const isVariableResult =

@@ -14,6 +14,7 @@ export {
   getResultGenerator,
   getUnitByName,
   hydrateType,
+  hydrateUnit,
   identifierRegExpGlobal,
   inferBlock,
   InferError,

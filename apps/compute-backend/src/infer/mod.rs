@@ -4,7 +4,7 @@ use crate::{parse::ParsedColumn, types::types::DeciType};
 pub fn infer_single(value: &str) -> DeciType {
     match value {
         "True" | "true" | "False" | "false" => DeciType::Boolean,
-        s if s.parse::<f64>().is_ok() => DeciType::Number,
+        s if s.trim().parse::<f64>().is_ok() => DeciType::Number,
         _ => DeciType::String,
     }
 }
@@ -26,18 +26,6 @@ pub fn infer_column(column: &ParsedColumn) -> Result<DeciType, String> {
     }
 
     return Ok(inferred_type);
-}
-
-pub fn infer_columns(columns: &Vec<ParsedColumn>) -> Result<Vec<DeciType>, String> {
-    let mut column_types: Vec<DeciType> = Vec::new();
-
-    for col in columns {
-        let col_type = infer_column(col)?;
-
-        column_types.push(col_type);
-    }
-
-    return Ok(column_types);
 }
 
 #[test]
@@ -183,7 +171,7 @@ fn columns_infer() {
         DeciType::String
     );
 
-    let column_types = infer_columns(&vec![
+    let column_types = vec![
         ParsedColumn {
             name: String::from("A"),
             value: boolean_vec,
@@ -196,8 +184,11 @@ fn columns_infer() {
             name: String::from("A"),
             value: string_vec,
         },
-    ])
-    .unwrap();
+    ]
+    .iter()
+    .map(|col| infer_column(col).expect("It to be defined"))
+    .collect::<Vec<_>>();
+
     assert_eq!(column_types[0], DeciType::Boolean);
     assert_eq!(column_types[1], DeciType::Number);
     assert_eq!(column_types[2], DeciType::String);

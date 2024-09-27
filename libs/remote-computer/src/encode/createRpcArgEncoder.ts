@@ -20,6 +20,8 @@ export const argEncoders: TRPCArgEncoders = {
   getUnitFromText: identity,
   flush: identity,
   terminate: identity,
+  importExternalData: identity,
+  releaseExternalData: identity,
   waitForTriedCache: identity,
   setTriedCache: identity,
 };
