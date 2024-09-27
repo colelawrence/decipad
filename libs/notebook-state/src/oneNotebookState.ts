@@ -88,8 +88,8 @@ const initialState = (): Omit<
 
 const supportsRemoteComputer = () => {
   if (typeof navigator !== 'undefined') {
-    const { browser, device } = UAParser(navigator.userAgent);
-    if (browser.name?.includes('Safari') && device.type === 'mobile') {
+    const { browser } = UAParser(navigator.userAgent);
+    if (browser.name?.includes('Safari')) {
       return false;
     }
   }
