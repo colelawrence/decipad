@@ -1,3 +1,4 @@
+use crate::types::ast::Node;
 use chrono::NaiveDateTime;
 use num_bigint::BigInt;
 use serde::{Deserialize, Serialize};
@@ -77,4 +78,9 @@ pub enum DeciResult {
     Row(Row),
     TypeError,
     Pending,
+    Function {
+        name: String,
+        argument_names: Vec<String>,
+        body: Node,
+    },
 }

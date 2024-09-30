@@ -2,10 +2,11 @@
 /* eslint-disable no-bitwise */
 import { describe, expect, it } from 'vitest';
 import { N } from '@decipad/number';
-import { Result, SerializedType } from '@decipad/language-interfaces';
+import { AST, Result, SerializedType } from '@decipad/language-interfaces';
 import chunk from 'lodash/chunk';
 import { deserializeResult, SerializedResult, serializeResult } from '.';
 import { Value } from '@decipad/language-types';
+import { FunctionValue } from 'libs/language-types/src/Value';
 
 export const createSerializedResult = (
   type: bigint[],
@@ -485,10 +486,10 @@ describe('serializeResult', () => {
     ]);
     expect(new TextDecoder().decode(serialized.data)).toEqual(
       'exprRef_block_0_ind' +
-      'exprRef_block_0_del' +
-      'T1' +
-      'T2' +
-      'ShortLonger stringMedium lengthVery long string here'
+        'exprRef_block_0_del' +
+        'T1' +
+        'T2' +
+        'ShortLonger stringMedium lengthVery long string here'
     );
   });
 
@@ -554,10 +555,10 @@ describe('serializeResult', () => {
     ]);
     expect(new TextDecoder().decode(serialized.data)).toEqual(
       'exprRef_block_0_ind' +
-      'exprRef_block_0_del' +
-      'T1' +
-      'T2' +
-      'ShortLonger stringMedium lengthVery long string here'
+        'exprRef_block_0_del' +
+        'T1' +
+        'T2' +
+        'ShortLonger stringMedium lengthVery long string here'
     );
   });
 
@@ -654,7 +655,7 @@ describe('serializeResult', () => {
     expect(chunk(result.type, 3)).toEqual([
       [11n, 1n, 7n], // tree
       [0n, 0n, 1n], // root
-      [12n, 0n, 0n], // root aggregation
+      [13n, 0n, 0n], // root aggregation
       [10n, 1n, 10n], // originalCardinality
       [10n, 11n, 10n], // column length
       [2n, 21n, 4n], // Col1 name
@@ -701,7 +702,7 @@ describe('serializeResult', () => {
     expect(chunk(result.type, 3)).toEqual([
       [11n, 1n, 9n], // tree
       [0n, 0n, 1n], // root
-      [12n, 0n, 0n], // root aggregation
+      [13n, 0n, 0n], // root aggregation
       [10n, 1n, 10n], // originalCardinality
       [10n, 11n, 10n], // column length
       [2n, 21n, 4n], // Col1 name
@@ -710,12 +711,12 @@ describe('serializeResult', () => {
       [11n, 10n, 5n], // tree 1
       [11n, 15n, 5n], // tree 2
       [10n, 45n, 10n],
-      [12n, 0n, 0n],
+      [13n, 0n, 0n],
       [10n, 55n, 10n],
       [10n, 65n, 10n],
       [10n, 75n, 10n],
       [10n, 85n, 10n],
-      [12n, 0n, 0n],
+      [13n, 0n, 0n],
       [10n, 95n, 10n],
       [10n, 105n, 10n],
       [10n, 115n, 10n],
@@ -768,6 +769,59 @@ describe('serializeResult', () => {
     expect(result).toEqual({
       type: new BigUint64Array([9n, 0n, 0n]),
       data: new Uint8Array(0),
+    });
+  });
+
+  it('should serialize a function', async () => {
+    const block: AST.Block = {
+      type: 'block',
+      id: 'block-id',
+      args: [
+        {
+          type: 'function-call',
+          args: [
+            { type: 'funcref', args: ['+'] },
+            {
+              type: 'argument-list',
+              args: [
+                { type: 'ref', args: ['arg1'] },
+                { type: 'ref', args: ['arg2'] },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const value: FunctionValue = {
+      argumentNames: ['arg1', 'arg2'],
+      body: block,
+      // not sure why we need this tbh, but the type checker complains otherwise
+      async getData() {
+        return this;
+      },
+    };
+
+    const result = await serializeResult({
+      type: {
+        kind: 'function',
+        name: 'add',
+        argNames: ['arg1', 'arg2'],
+      },
+      value,
+    });
+    expect(result).toEqual({
+      type: BigUint64Array.from([
+        ...[12n, 1n, 2n],
+        // function name
+        ...[2n, 0n, 3n],
+        ...[2n, 3n, 4n],
+        ...[2n, 7n, 4n],
+        ...[2n, 11n, 203n],
+      ]),
+      data: new TextEncoder().encode(
+        'addarg1arg2{"type":"block","id":"block-id","args":[{"type":"function-call","args":[{"type":"funcref","args":["+"]},{"type":"argument-list","args":[{"type":"ref","args":["arg1"]},{"type":"ref","args":["arg2"]}]}]}]}'
+      ),
     });
   });
 });
@@ -1345,7 +1399,7 @@ describe('deserializeResult', () => {
         [
           ...[11n, 1n, 7n], // tree
           ...[0n, 0n, 1n], // root
-          ...[12n, 0n, 0n], // root aggregation
+          ...[13n, 0n, 0n], // root aggregation
           ...[10n, 1n, 10n], // originalCardinality
           ...[10n, 11n, 10n], // column length
           ...[2n, 21n, 4n], // Col1 name
@@ -1390,7 +1444,7 @@ describe('deserializeResult', () => {
         [
           ...[11n, 1n, 9n], // tree
           ...[0n, 0n, 1n], // root
-          ...[12n, 0n, 0n], // root aggregation
+          ...[13n, 0n, 0n], // root aggregation
           ...[10n, 1n, 10n], // originalCardinality
           ...[10n, 11n, 10n], // column length
           ...[2n, 21n, 4n], // Col1 name
@@ -1400,13 +1454,13 @@ describe('deserializeResult', () => {
           ...[11n, 15n, 5n], // tree 2
           // tree 1
           ...[10n, 45n, 10n], // tree 1 root
-          ...[12n, 0n, 0n], // tree 1 root aggregation
+          ...[13n, 0n, 0n], // tree 1 root aggregation
           ...[10n, 55n, 10n], // tree 1 originalCardinality
           ...[10n, 65n, 10n], // tree 1 column length
           ...[10n, 75n, 10n], // tree 1 child count
           // tree 2
           ...[10n, 85n, 10n], // tree 2 root
-          ...[12n, 0n, 0n], // tree 2 root aggregation
+          ...[13n, 0n, 0n], // tree 2 root aggregation
           ...[10n, 95n, 10n], // tree 2 originalCardinality
           ...[10n, 105n, 10n], // tree 2 column length
           ...[10n, 115n, 10n], // tree 2 child count
@@ -1514,10 +1568,10 @@ describe('deserializeResult', () => {
       ]),
       data: new TextEncoder().encode(
         'exprRef_block_0_ind' +
-        'exprRef_block_0_del' +
-        'T1' +
-        'T2' +
-        'ShortLonger stringMedium lengthVery long string here'
+          'exprRef_block_0_del' +
+          'T1' +
+          'T2' +
+          'ShortLonger stringMedium lengthVery long string here'
       ),
     };
 
@@ -1605,5 +1659,53 @@ describe('deserializeResult', () => {
       type: { kind: 'pending' },
       value: undefined,
     });
+  });
+
+  it('should deserialize a function', () => {
+    const serializedFunction = {
+      type: BigUint64Array.from([
+        ...[12n, 1n, 2n],
+        // function name
+        ...[2n, 0n, 3n],
+        ...[2n, 3n, 4n],
+        ...[2n, 7n, 4n],
+        ...[2n, 11n, 203n],
+      ]),
+      data: new TextEncoder().encode(
+        'addarg1arg2{"type":"block","id":"block-id","args":[{"type":"function-call","args":[{"type":"funcref","args":["+"]},{"type":"argument-list","args":[{"type":"ref","args":["arg1"]},{"type":"ref","args":["arg2"]}]}]}]}'
+      ),
+    };
+    const result = deserializeResult(serializedFunction);
+
+    const expected = {
+      type: {
+        kind: 'function',
+        name: 'add',
+      },
+      value: {
+        argumentNames: ['arg1', 'arg2'],
+        // N.B. we're not testing for getData here because it makes the tests fail. But maybe we should be?
+        body: {
+          type: 'block',
+          id: 'block-id',
+          args: [
+            {
+              type: 'function-call',
+              args: [
+                { type: 'funcref', args: ['+'] },
+                {
+                  type: 'argument-list',
+                  args: [
+                    { type: 'ref', args: ['arg1'] },
+                    { type: 'ref', args: ['arg2'] },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+    expect(result).toMatchObject(expected);
   });
 });

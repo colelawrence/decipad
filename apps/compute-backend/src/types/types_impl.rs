@@ -143,6 +143,7 @@ impl DeciResult {
             DeciResult::Row(row) => format!("{:?}", row),
             DeciResult::TypeError => format!("{:?}", self),
             DeciResult::Pending => format!("{:?}", self),
+            DeciResult::Function { .. } => format!("{:?}", self),
         }
     }
 

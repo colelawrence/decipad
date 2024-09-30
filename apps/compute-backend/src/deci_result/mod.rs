@@ -1,12 +1,14 @@
 // #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
+use crate::types::ast::{BasicNode, Node};
 use crate::types::types::{DateSpecificity, Row, Table, Tree, TreeColumn};
 use crate::DeciResult;
 use chrono::NaiveDateTime;
 use js_sys::{BigUint64Array, Object, Uint8Array};
-use num_bigint::{BigInt, ToBigInt};
-use num_traits::ToPrimitive;
+use num_bigint::{BigInt, Sign, ToBigInt, ToBigUint};
+use num_traits::{One, Signed, ToPrimitive, Zero};
 use serde::{Deserialize, Serialize};
+use serde_json;
 use std::mem::size_of;
 use std::{collections::HashMap, io::ErrorKind};
 use tsify_next::Tsify;
@@ -58,7 +60,8 @@ pub enum ResultType {
     Pending = 9,
     ArbitraryFraction = 10,
     Tree = 11,
-    Undefined = 14,
+    Function = 12,
+    Undefined = 13,
 }
 
 pub fn encode_big_int(buffer: &mut Vec<u8>, original_offset: usize, value: &BigInt) -> usize {
@@ -329,6 +332,27 @@ fn serialize_result_iter(
                     0,
                 ]);
             }
+
+            DeciResult::Function {
+                name,
+                argument_names,
+                body,
+            } => {
+                type_array.extend_from_slice(&[
+                    ResultType::Function as usize,
+                    0, // placeholder value
+                    argument_names.len(),
+                ]);
+
+                next_results.push(Some(DeciResult::String(name.clone())));
+
+                for arg_name in &argument_names {
+                    next_results.push(Some(DeciResult::String(arg_name.clone())));
+                }
+                let block_json = serde_json::to_string(&body).unwrap();
+                next_results.push(Some(DeciResult::String(block_json)));
+            }
+
             DeciResult::Pending => {
                 type_array.extend_from_slice(&[
                     ResultType::Pending as usize,
@@ -346,6 +370,7 @@ fn serialize_result_iter(
             && type_array[i] != ResultType::Table as usize
             && type_array[i] != ResultType::Row as usize
             && type_array[i] != ResultType::Tree as usize
+            && type_array[i] != ResultType::Function as usize
         {
             continue;
         }
@@ -727,6 +752,53 @@ fn deserialize_data_iter(
                 cells,
             })))
         }
+        ResultType::Function => {
+            let arg_count = length as usize;
+
+            // Deserialize function name
+            let name_result =
+                deserialize_data_iter(data, type_description, type_description_pointer + 1)?;
+            let name = match name_result {
+                Some(DeciResult::String(name)) => name,
+                _ => return Err(JsValue::from_str("Function name is not a string")),
+            };
+
+            // Deserialize argument names
+            let mut argument_names = Vec::with_capacity(arg_count);
+            for i in 0..arg_count {
+                let arg_result = deserialize_data_iter(
+                    data,
+                    type_description,
+                    type_description_pointer + 2 + i,
+                )?;
+                match arg_result {
+                    Some(DeciResult::String(arg_name)) => {
+                        argument_names.push(arg_name);
+                    }
+                    _ => {
+                        return Err(JsValue::from_str("Function argument name is not a string"));
+                    }
+                }
+            }
+
+            // Deserialize function body
+            let body_result = deserialize_data_iter(
+                data,
+                type_description,
+                type_description_pointer + 2 + arg_count,
+            )?;
+            let body_string = match body_result {
+                Some(DeciResult::String(body)) => body,
+                _ => return Err(JsValue::from_str("Function body is not a string")),
+            };
+
+            let body = serde_json::from_str(&body_string).unwrap();
+            Ok(Some(DeciResult::Function {
+                name,
+                argument_names,
+                body,
+            }))
+        }
         ResultType::TypeError => Ok(Some(DeciResult::TypeError)),
         ResultType::Pending => Ok(Some(DeciResult::Pending)),
     }
@@ -749,7 +821,8 @@ fn decode_number(number: u64) -> (bool, ResultType) {
         9 => ResultType::Pending,
         10 => ResultType::ArbitraryFraction,
         11 => ResultType::Tree,
-        12 => ResultType::Undefined,
+        12 => ResultType::Function,
+        13 => ResultType::Undefined,
         _ => panic!("Invalid ResultType value: {}", original_number),
     };
 
@@ -1115,13 +1188,13 @@ mod serialize_result_tests {
             let entry_type = result.type_array().get_index(i * 3);
             let entry_length = result.type_array().get_index(i * 3 + 2);
 
-            if entry_type == ResultType::String as _ && entry_length == 6 {
+            if entry_type == ResultType::String as u64 && entry_length == 6 {
                 // String key
                 found_string = true;
-            } else if entry_type == ResultType::String as _ && entry_length == 11 {
+            } else if entry_type == ResultType::String as u64 && entry_length == 11 {
                 // String value
                 found_string = true;
-            } else if entry_type == ResultType::Fraction as _ && entry_length == 16 {
+            } else if entry_type == ResultType::Fraction as u64 && entry_length == 16 {
                 // Fraction value
                 found_number = true;
             }
@@ -1217,7 +1290,7 @@ mod serialize_result_tests {
             vec![
                 11, 1, 7, // tree
                 0, 0, 1, // root
-                14, 0, 0, // root aggregation
+                13, 0, 0, // root aggregation
                 10, 1, 10, // originalCardinality
                 10, 11, 10, // column length
                 2, 21, 4, // Col1 name
@@ -1279,7 +1352,7 @@ mod serialize_result_tests {
             vec![
                 11, 1, 9, // tree
                 0, 0, 1, // root
-                14, 0, 0, // root aggregation
+                13, 0, 0, // root aggregation
                 10, 1, 10, // originalCardinality
                 10, 11, 10, // column length
                 2, 21, 4, // Col1 name
@@ -1287,7 +1360,7 @@ mod serialize_result_tests {
                 10, 35, 10, // child count
                 11, 10, 5, // tree 1
                 11, 15, 5, // tree 2
-                10, 45, 10, 14, 0, 0, 10, 55, 10, 10, 65, 10, 10, 75, 10, 10, 85, 10, 14, 0, 0, 10,
+                10, 45, 10, 13, 0, 0, 10, 55, 10, 10, 65, 10, 10, 75, 10, 10, 85, 10, 13, 0, 0, 10,
                 95, 10, 10, 105, 10, 10, 115, 10,
             ]
         );
@@ -1305,17 +1378,125 @@ mod serialize_result_tests {
     }
 
     #[wasm_bindgen_test]
+    fn test_serialize_function() {
+        // Construct the AST.Block equivalent in Rust
+        // Here, we'll represent the AST as a JSON string to match the TypeScript example
+        let block = serde_json::json!({
+            "type": "block",
+            "id": "block-id",
+            "args": [
+                {
+                    "type": "function-call",
+                    "args": [
+                        { "type": "funcref", "args": ["+"] },
+                        {
+                            "type": "argument-list",
+                            "args": [
+                                { "type": "ref", "args": ["arg1"] },
+                                { "type": "ref", "args": ["arg2"] },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+
+        let body = serde_json::to_string(&block).unwrap();
+        let empty_basic_node = BasicNode {
+            cache_key: None,
+            start: None,
+            end: None,
+            inferred_type: None,
+        };
+
+        let arg1_ref = Node::RefNode {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["arg1".to_string()],
+            previous_var_name: None,
+            is_missing: None,
+        };
+
+        let arg2_ref = Node::RefNode {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["arg2".to_string()],
+            previous_var_name: None,
+            is_missing: None,
+        };
+
+        let arg_list = Node::ArgList {
+            basic_node: empty_basic_node.clone(),
+            args: vec![arg1_ref, arg2_ref],
+        };
+
+        let func_ref = Node::FuncRef {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["+".to_string()],
+        };
+
+        let function_call = Node::FunctionCall {
+            basic_node: empty_basic_node.clone(),
+            args: vec![func_ref, arg_list],
+        };
+
+        let block_node = Node::Block {
+            basic_node: empty_basic_node,
+            id: "block-id".to_string(),
+            args: vec![function_call],
+            has_duplicate_name: None,
+        };
+
+        let function_result = DeciResult::Function {
+            name: "add".to_string(),
+            argument_names: vec!["arg1".to_string(), "arg2".to_string()],
+            body: block_node,
+        };
+
+        // Serialize the result
+        let serialized = serialize_result_internal(function_result).unwrap();
+
+        // Expected serialized type array and data array
+        let expected_type_array: Vec<u64> = vec![
+            12,
+            1,
+            2, // ResultType::Function, offset placeholder, arg_count
+            2,
+            0,
+            3, // ResultType::String, offset, length ('add')
+            2,
+            3,
+            4, // ResultType::String, offset, length ('arg1')
+            2,
+            7,
+            4, // ResultType::String, offset, length ('arg2')
+            2,
+            11,
+            body.len() as u64,
+        ];
+
+        // Build the expected data array
+        let mut expected_data = Vec::new();
+        expected_data.extend_from_slice(b"add");
+        expected_data.extend_from_slice(b"arg1");
+        expected_data.extend_from_slice(b"arg2");
+        expected_data.extend_from_slice(b"{\"type\":\"block\",\"id\":\"block-id\",\"args\":[{\"type\":\"function-call\",\"args\":[{\"type\":\"funcref\",\"args\":[\"+\"]},{\"type\":\"argument-list\",\"args\":[{\"type\":\"ref\",\"args\":[\"arg1\"]},{\"type\":\"ref\",\"args\":[\"arg2\"]}]}]}]}");
+
+        // Verify the serialized type array and data array
+        assert_eq!(serialized.type_array().to_vec(), expected_type_array);
+        assert_eq!(serialized.data().to_vec(), expected_data);
+    }
+
+    #[wasm_bindgen_test]
     fn test_serialize_type_error() {
         let result = serialize_result_internal(DeciResult::TypeError).unwrap();
         assert_eq!(result.type_array().to_vec(), vec![8, 0, 0]);
-        assert!(result.data().to_vec().is_empty());
+        assert_eq!(result.data().to_vec(), Vec::<u8>::new());
     }
 
     #[wasm_bindgen_test]
     fn test_serialize_pending() {
         let result = serialize_result_internal(DeciResult::Pending).unwrap();
         assert_eq!(result.type_array().to_vec(), vec![9, 0, 0]);
-        assert!(result.data().to_vec().is_empty());
+        assert_eq!(result.data().to_vec(), Vec::<u8>::new());
     }
 }
 
@@ -1876,7 +2057,7 @@ mod deserialize_result_tests {
             vec![
                 11, 1, 7, // tree
                 0, 0, 1, // root
-                12, 0, 0, // root aggregation
+                13, 0, 0, // root aggregation
                 10, 1, 10, // originalCardinality
                 10, 11, 10, // column length
                 2, 21, 4, // Col1 name
@@ -1916,7 +2097,7 @@ mod deserialize_result_tests {
             vec![
                 11, 1, 9, // tree
                 0, 0, 1, // root
-                12, 0, 0, // root aggregation
+                13, 0, 0, // root aggregation
                 10, 1, 10, // originalCardinality
                 10, 11, 10, // column length
                 2, 21, 4, // Col1 name
@@ -1925,12 +2106,12 @@ mod deserialize_result_tests {
                 11, 10, 5, // tree 1
                 11, 15, 5, // tree 2
                 10, 45, 10, // tree 1 root
-                12, 0, 0, // tree 1 root aggregation
+                13, 0, 0, // tree 1 root aggregation
                 10, 55, 10, // tree 1 originalCardinality
                 10, 65, 10, // tree 1 column length
                 10, 75, 10, // tree 1 child count
                 10, 85, 10, // tree 2 root
-                12, 0, 0, // tree 2 root aggregation
+                13, 0, 0, // tree 2 root aggregation
                 10, 95, 10, // tree 2 originalCardinality
                 10, 105, 10, // tree 2 column length
                 10, 115, 10, // tree 2 child count
@@ -1985,6 +2166,80 @@ mod deserialize_result_tests {
         } else {
             panic!("Expected Tree result");
         }
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_function() {
+        let type_array: Vec<u64> = vec![
+            12, 1, 2, // ResultType::Function, offset placeholder, arg_count
+            2, 0, 3, // ResultType::String, offset, length ('add')
+            2, 3, 4, // ResultType::String, offset, length ('arg1')
+            2, 7, 4, // ResultType::String, offset, length ('arg2')
+            2, 11, 203, // ResultType::String, offset, length (body length)
+        ];
+
+        let data_string = "addarg1arg2{\"type\":\"block\",\"id\":\"block-id\",\"args\":[{\"type\":\"function-call\",\"args\":[{\"type\":\"funcref\",\"args\":[\"+\"]},{\"type\":\"argument-list\",\"args\":[{\"type\":\"ref\",\"args\":[\"arg1\"]},{\"type\":\"ref\",\"args\":[\"arg2\"]}]}]}]}";
+        let data_bytes = data_string.as_bytes().to_vec();
+
+        // Create the SerializedResult
+        let serialized_function = SerializedResult::new(
+            BigUint64Array::from(&type_array[..]),
+            Uint8Array::from(&data_bytes[..]),
+        );
+
+        // Deserialize the function
+        let result = deserialize_result_internal(serialized_function).unwrap();
+
+        let empty_basic_node = BasicNode {
+            cache_key: None,
+            start: None,
+            end: None,
+            inferred_type: None,
+        };
+
+        let arg1_ref = Node::RefNode {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["arg1".to_string()],
+            previous_var_name: None,
+            is_missing: None,
+        };
+
+        let arg2_ref = Node::RefNode {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["arg2".to_string()],
+            previous_var_name: None,
+            is_missing: None,
+        };
+
+        let arg_list = Node::ArgList {
+            basic_node: empty_basic_node.clone(),
+            args: vec![arg1_ref, arg2_ref],
+        };
+
+        let func_ref = Node::FuncRef {
+            basic_node: empty_basic_node.clone(),
+            args: vec!["+".to_string()],
+        };
+
+        let function_call = Node::FunctionCall {
+            basic_node: empty_basic_node.clone(),
+            args: vec![func_ref, arg_list],
+        };
+
+        let block_node = Node::Block {
+            basic_node: empty_basic_node,
+            id: "block-id".to_string(),
+            args: vec![function_call],
+            has_duplicate_name: None,
+        };
+
+        let expected = DeciResult::Function {
+            name: "add".to_string(),
+            argument_names: vec!["arg1".to_string(), "arg2".to_string()],
+            body: block_node,
+        };
+
+        assert_eq!(result, expected);
     }
 
     #[wasm_bindgen_test]

@@ -21,6 +21,7 @@ impl Zero for DeciResult {
             DeciResult::TypeError => false,
             DeciResult::Pending => false,
             DeciResult::Tree(_) => false,
+            DeciResult::Function { .. } => false,
         }
     }
 }

@@ -30,6 +30,18 @@ impl PartialEq for DeciResult {
             (DeciResult::Table(t1), DeciResult::Table(t2)) => t1 == t2,
             (DeciResult::Range(r1), DeciResult::Range(r2)) => r1 == r2,
             (DeciResult::Row(r1), DeciResult::Row(r2)) => r1 == r2,
+            (
+                DeciResult::Function {
+                    name: name_a,
+                    argument_names: argument_names_a,
+                    body: body_a,
+                },
+                DeciResult::Function {
+                    name: name_b,
+                    argument_names: argument_names_b,
+                    body: body_b,
+                },
+            ) => name_a == name_b && argument_names_a == argument_names_b && body_a == body_b,
             _ => false,
         }
     }

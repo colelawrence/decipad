@@ -38,6 +38,7 @@ fn type_to_kind(res: &DeciResult) -> Kind {
         DeciResult::Tree(_) => todo!(),
         DeciResult::Range(_) => todo!(),
         DeciResult::Row(_) => todo!(),
+        DeciResult::Function { .. } => todo!(),
         DeciResult::TypeError => Kind::Error,
         DeciResult::Pending => todo!(),
     }

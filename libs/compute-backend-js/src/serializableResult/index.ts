@@ -13,8 +13,8 @@ import { columnToMeta } from './columnToMeta';
 import { oneResultToResult } from './oneResultToResult';
 import { getResultGenerator } from '@decipad/language-types';
 import { all } from '@decipad/generator-utils';
-import { SerializedType } from '@decipad/language-interfaces';
-import { TreeColumn } from 'libs/language-interfaces/src/Value';
+import { AST, SerializedType } from '@decipad/language-interfaces';
+import { FunctionValue, TreeColumn } from 'libs/language-interfaces/src/Value';
 import { Tree } from 'libs/language-types/src/Value';
 
 const FULL_BYTE = 0xff;
@@ -34,7 +34,8 @@ enum ResultType {
   Pending = 9,
   BigFraction = 10,
   Tree = 11,
-  Undefined = 12,
+  Function = 12,
+  Undefined = 13,
 }
 
 const fixedLengths = {
@@ -260,19 +261,19 @@ export const serializeResultIter = async <T extends Result>(
           tableResult.type.indexName == null
             ? nullColumn
             : {
-              type: { kind: 'string' },
-              value: tableResult.type.indexName,
-              meta: tableResult.meta,
-            }
+                type: { kind: 'string' },
+                value: tableResult.type.indexName,
+                meta: tableResult.meta,
+              }
         );
         nextResults.push(
           tableResult.type.delegatesIndexTo == null // == because it can be undefined or null
             ? nullColumn
             : {
-              type: { kind: 'string' },
-              value: tableResult.type.delegatesIndexTo,
-              meta: undefined,
-            }
+                type: { kind: 'string' },
+                value: tableResult.type.delegatesIndexTo,
+                meta: undefined,
+              }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
@@ -389,19 +390,19 @@ export const serializeResultIter = async <T extends Result>(
           tableResult.type.indexName == null
             ? nullColumn
             : {
-              type: { kind: 'string' },
-              value: tableResult.type.indexName,
-              meta: undefined,
-            }
+                type: { kind: 'string' },
+                value: tableResult.type.indexName,
+                meta: undefined,
+              }
         );
         nextResults.push(
           tableResult.type.delegatesIndexTo == null // == because it can be undefined or null
             ? nullColumn
             : {
-              type: { kind: 'string' },
-              value: tableResult.type.delegatesIndexTo,
-              meta: undefined,
-            }
+                type: { kind: 'string' },
+                value: tableResult.type.delegatesIndexTo,
+                meta: undefined,
+              }
         );
         for (const columnName of tableResult.type.columnNames) {
           nextResults.push({
@@ -518,6 +519,31 @@ export const serializeResultIter = async <T extends Result>(
         typeArray.push(0);
         break;
       }
+      case 'function': {
+        const functionResult = result as Result<'function'>;
+        typeArray.push(ResultType.Function);
+        typeArray.push(-1); // Placeholder value; fixed after loop.
+        typeArray.push(functionResult.value.argumentNames.length);
+
+        nextResults.push({
+          value: functionResult.type.name,
+          type: { kind: 'string' },
+        });
+
+        // push argument names
+        for (const argName of functionResult.value.argumentNames) {
+          nextResults.push({
+            value: argName,
+            type: { kind: 'string' },
+          });
+        }
+
+        // push stringified body
+        nextResults.push({
+          type: { kind: 'string' },
+          value: JSON.stringify(functionResult.value.body),
+        });
+      }
     }
   }
 
@@ -528,7 +554,8 @@ export const serializeResultIter = async <T extends Result>(
       typeArray[i] !== ResultType.Column &&
       typeArray[i] !== ResultType.Table &&
       typeArray[i] !== ResultType.Row &&
-      typeArray[i] !== ResultType.Tree
+      typeArray[i] !== ResultType.Tree &&
+      typeArray[i] !== ResultType.Function
     ) {
       continue;
     }
@@ -614,6 +641,9 @@ function decodeNumber(number: bigint): [boolean, ResultType] {
       result = ResultType.Tree;
       break;
     case 12:
+      result = ResultType.Function;
+      break;
+    case 13:
       result = ResultType.Undefined;
       break;
     default:
@@ -1067,6 +1097,64 @@ const deserializeResultIter = (
         },
         value: rowCells,
         meta: undefined,
+      };
+    }
+
+    case ResultType.Function: {
+      const argCount = Number(typeDescription[3 * typeDescriptionPointer + 2]);
+
+      // get function name
+      const nameResult = deserializeResultIter(
+        data,
+        typeDescription,
+        typeDescriptionPointer + 1
+      );
+      if (nameResult?.type.kind !== 'string') {
+        throw new Error('Function name is not a string');
+      }
+      const fnName = (nameResult as Result<'string'>).value;
+
+      // get function arguments
+      const argNames: string[] = [];
+      const argsOffset = typeDescriptionPointer + 2;
+      for (let i = 0; i < argCount; i++) {
+        const argResult = deserializeResultIter(
+          data,
+          typeDescription,
+          argsOffset + i
+        );
+        if (argResult?.type.kind !== 'string') {
+          throw new Error('function argument name is not a string.');
+        }
+        argNames.push((argResult as Result<'string'>).value);
+      }
+
+      // get function body and deserialize
+      const fnBodyResult = deserializeResultIter(
+        data,
+        typeDescription,
+        typeDescriptionPointer + 2 + argCount
+      );
+      if (nameResult?.type.kind !== 'string') {
+        throw new Error('Function body is not a string');
+      }
+      const fnBodyString = (fnBodyResult as Result<'string'>).value;
+      let fnBody: AST.Block;
+      try {
+        fnBody = JSON.parse(fnBodyString);
+      } catch (e) {
+        throw new Error('Function body string is not valid JSON.');
+      }
+
+      return {
+        type: { kind: 'function', name: fnName },
+        value: {
+          argumentNames: argNames,
+          body: fnBody,
+          async getData() {
+            return this as FunctionValue;
+          },
+        },
       };
     }
 
